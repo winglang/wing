@@ -80,6 +80,8 @@ api.get("/error", loggingMiddleware(authMiddleware(inflight () => {
 })));
 ```
 
+The existing middleware pattern satisfies basic requirements: it allows the function to customize the request, customize the response, choose when to call the next handler, and even end the call chain early (for example, to return an error response).
+
 A few observations:
 - The user needs to provide a very long type signature for the middleware.
   - If the user omits the types of `handler` it will not be inferred.
