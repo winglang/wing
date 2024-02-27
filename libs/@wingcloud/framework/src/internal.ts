@@ -10,7 +10,6 @@ const MANAGED_TSCONFIG_OPTIONS = [
   "target",
   "module",
   "moduleResolution",
-  "baseUrl",
   "paths",
   "outDir",
 ];
@@ -19,23 +18,22 @@ export async function compile(options: CompileOptions) {
   const entrypointDir = dirname(options.entrypoint);
   const ts = (await import("typescript")).default;
   const outDir = join(options.workDir, "ts");
+  const wingsdkDir = dirname(require.resolve("@winglang/sdk"));
 
-  // load user's tsconfig
   const tsconfigPath = ts.findConfigFile(entrypointDir, ts.sys.fileExists);
   const compilerOptions: ts.CompilerOptions = {
     target: ts.ScriptTarget.ES2022,
     module: ts.ModuleKind.CommonJS,
     moduleResolution: ts.ModuleResolutionKind.Node10,
-    baseUrl: entrypointDir,
     paths: {
-      "@winglang/sdk/*": [dirname(require.resolve("@winglang/sdk")) + "/*"],
+      "@winglang/sdk": [wingsdkDir],
+      "@winglang/sdk/*": [wingsdkDir + "/*"],
     },
     outDir,
     alwaysStrict: true,
     allowSyntheticDefaultImports: true,
     esModuleInterop: true,
     strict: true,
-    jsx: ts.JsxEmit.Preserve,
     sourceMap: true,
     declaration: false,
     noEmitOnError: true,
