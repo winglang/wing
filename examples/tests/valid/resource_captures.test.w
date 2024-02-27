@@ -58,7 +58,7 @@ class MyResource {
       "k1" => 11,
       "k2" => 22
     };
-    this.setOfStr = {"s1", "s2", "s1"};
+    this.setOfStr = Set<str>["s1", "s2", "s1"];
 
     this.another = new Another();
     this.myQueue = new cloud.Queue();

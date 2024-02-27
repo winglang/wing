@@ -4,8 +4,8 @@ exports[`can obtain ui components 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"\\").",
-  "Invoke (payload=\\"\\").",
+  "Invoke (payload="").",
+  "Invoke (payload="").",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Function deleted.",
 ]

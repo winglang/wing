@@ -107,18 +107,20 @@ const LogEntryRow = memo(
           )}
 
           {log.timestamp && !log.ctx?.hideTimestamp && (
-            <div className={classNames(theme.text2, "flex-shrink-0")}>
+            <div
+              className={classNames(
+                theme.text2,
+                "flex-shrink-0 select-none pointer-events-none",
+              )}
+            >
               {dateTimeFormat.format(log.timestamp)}
             </div>
           )}
           <div
-            className={classNames(
-              "cursor-default select-text min-w-0 text-left grow",
-              {
-                truncate: !expanded,
-                "ml-2": log.timestamp && !log.ctx?.hideTimestamp,
-              },
-            )}
+            className={classNames("min-w-0 text-left grow", {
+              truncate: !expanded,
+              "ml-2": log.timestamp && !log.ctx?.hideTimestamp,
+            })}
           >
             {canBeExpanded && (
               <button
@@ -167,19 +169,21 @@ const LogEntryRow = memo(
           </div>
 
           {onResourceClick && (
-            <div className="justify-end ml-1 flex space-x-1">
+            <div className="justify-end ml-1 flex space-x-1 select-none">
               {log.ctx?.sourceType && (
-                <ResourceIcon
-                  resourceType={log.ctx.sourceType}
-                  resourcePath={log.ctx.sourcePath}
-                  className="h-4 w-4"
-                />
+                <span className="p-0.5">
+                  <ResourceIcon
+                    resourceType={log.ctx.sourceType}
+                    resourcePath={log.ctx.sourcePath}
+                    className="h-4 w-4"
+                  />
+                </span>
               )}
               <button
                 onClick={() => onResourceClick(log)}
                 className={classNames(
                   "flex cursor-pointer underline truncate",
-                  theme.text2,
+                  theme.text1,
                   theme.text3Hover,
                 )}
               >
@@ -210,7 +214,10 @@ export const ConsoleLogs = memo(
     const { theme } = useTheme();
 
     return (
-      <div className="w-full gap-x-2 text-2xs font-mono" data-testid="logs">
+      <div
+        className="w-full h-full gap-x-2 text-2xs font-mono select-text"
+        data-testid="logs"
+      >
         {logs.map((log) => (
           <LogEntryRow
             key={`${log.id}`}
@@ -221,7 +228,7 @@ export const ConsoleLogs = memo(
           />
         ))}
         {logs.length === 0 && (
-          <div className={classNames(theme.text1, "text-2xs px-2")}>
+          <div className={classNames(theme.text1, "text-2xs px-2 select-none")}>
             No logs
           </div>
         )}

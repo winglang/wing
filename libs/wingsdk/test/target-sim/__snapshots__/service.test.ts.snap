@@ -2,7 +2,7 @@
 
 exports[`create a service with on start method 1`] = `
 {
-  ".wing/my_service_c815f66e.js": "\\"use strict\\";
+  ".wing/my_service_c815f66e.js": ""use strict";
 let $obj;
 async function $initOnce() {
   $obj = $obj || (await (new ((function(){
@@ -13,7 +13,7 @@ return class Handler {
     }
   }
   async handle() {
-  console.log(\\"start!\\");
+  console.log("start!");
 }
 };
 })())({
