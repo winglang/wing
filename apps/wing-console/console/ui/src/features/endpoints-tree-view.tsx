@@ -4,7 +4,13 @@ import { useEndpoints } from "../services/use-endpoints.js";
 import { EndpointTree } from "../ui/endpoint-tree.js";
 
 export const EndpointsTreeView = memo(() => {
-  const { endpointList } = useEndpoints();
+  const { endpointList, exposeEndpoint, hideEndpoint } = useEndpoints();
 
-  return <EndpointTree endpointList={endpointList} />;
+  return (
+    <EndpointTree
+      endpointList={endpointList}
+      exposeEndpoint={exposeEndpoint}
+      hideEndpoint={hideEndpoint}
+    />
+  );
 });
