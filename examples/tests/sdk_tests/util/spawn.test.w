@@ -27,9 +27,11 @@ test "spawn() with successful execution" {
 test "spawn() with non-existent program" {
   let program = "no-such-program";
   let args = ["--help" ];
+  let child = util.spawn(program, args);
 
-  assertThrows("Error: spawn no-such-program ENOENT", () => {
-    util.spawn(program, args);
+
+  assertThrows("spawn no-such-program ENOENT", () => {
+    child.wait();
   });
 }
 
