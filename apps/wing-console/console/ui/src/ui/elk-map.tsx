@@ -390,8 +390,8 @@ const NodesContainer = memo(
 
 const MapBackground = (props: {}) => {
   const { viewTransform } = useZoomPane();
-  const patternSize = 20 * viewTransform.z;
-  const dotSize = 1.5 * viewTransform.z;
+  const patternSize = 12 * viewTransform.z;
+  const dotSize = 1 * viewTransform.z;
   const id = useId();
   return (
     // Reference: https://github.com/xyflow/xyflow/blob/13897512d3c57e72c2e27b14ffa129412289d948/packages/react/src/additional-components/Background/Background.tsx#L52-L86.
