@@ -58,7 +58,7 @@ export const EdgeItem = memo(
             opacity: 0,
           }}
           animate={{
-            opacity: 1,
+            opacity: fade ? 0.3 : 1,
           }}
           style={{ translateX: offset.x, translateY: offset.y }}
           transition={{ duration: transitionDuration }}
