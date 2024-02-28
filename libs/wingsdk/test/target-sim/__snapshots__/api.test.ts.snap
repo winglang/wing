@@ -2,10 +2,10 @@
 
 exports[`api allows duplicates routes with different methods 1`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -276,8 +276,8 @@ exports[`api handler can read the request params 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{\\\\\\"foo\\\\\\":\\\\\\"bar\\\\\\",\\\\\\"bar\\\\\\":\\\\\\"baz\\\\\\"},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -289,17 +289,17 @@ exports[`api handler can read the request params 1`] = `
 
 exports[`api handler can read the request params 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
       this[name] = client;
     }
   }
-  async handle(req) { return { body: JSON.stringify(req.query), headers: { \\"Content-Type\\": \\"application/json\\" } }; }
+  async handle(req) { return { body: JSON.stringify(req.query), headers: { "Content-Type": "application/json" } }; }
 };
 })())({
 
@@ -544,8 +544,8 @@ exports[`api handler can read the request path 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -557,10 +557,10 @@ exports[`api handler can read the request path 1`] = `
 
 exports[`api handler can read the request path 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -812,8 +812,8 @@ exports[`api handler can set response headers 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"foo\\\\\\":\\\\\\"bar\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -825,17 +825,17 @@ exports[`api handler can set response headers 1`] = `
 
 exports[`api handler can set response headers 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
       this[name] = client;
     }
   }
-  async handle(req) { return { body: req.headers, headers: { \\"x-wingnuts\\": \\"cloudy\\" } }; }
+  async handle(req) { return { body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }
 };
 })())({
 
@@ -1080,8 +1080,8 @@ exports[`api response returns Content-Type header from inflight 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -1093,17 +1093,17 @@ exports[`api response returns Content-Type header from inflight 1`] = `
 
 exports[`api response returns Content-Type header from inflight 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
       this[name] = client;
     }
   }
-  async handle(req) { return { body: req.headers, headers: { \\"Content-Type\\": \\"application/octet-stream; charset=utf-8\\" } }; }
+  async handle(req) { return { body: req.headers, headers: { "Content-Type": "application/octet-stream; charset=utf-8" } }; }
 };
 })())({
 
@@ -1348,8 +1348,8 @@ exports[`api response returns default Content-Type header 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -1361,10 +1361,10 @@ exports[`api response returns default Content-Type header 1`] = `
 
 exports[`api response returns default Content-Type header 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1616,26 +1616,26 @@ exports[`api supports every method type 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
-  "Processing \\"POST /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\",\\\\\\"content-length\\\\\\":\\\\\\"0\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"POST\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "POST /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "POST /hello - 200.",
-  "Processing \\"PUT /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\",\\\\\\"content-length\\\\\\":\\\\\\"0\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"PUT\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "PUT /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"PUT\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "PUT /hello - 200.",
-  "Processing \\"DELETE /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"DELETE\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "DELETE /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"DELETE\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "DELETE /hello - 200.",
-  "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"close\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"HEAD\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"close\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"HEAD\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
-  "Processing \\"OPTIONS /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"OPTIONS\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "OPTIONS /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"OPTIONS\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "OPTIONS /hello - 200.",
-  "Processing \\"PATCH /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\",\\\\\\"content-length\\\\\\":\\\\\\"0\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"PATCH\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "PATCH /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "PATCH /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -1647,10 +1647,10 @@ exports[`api supports every method type 1`] = `
 
 exports[`api supports every method type 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -2016,8 +2016,8 @@ exports[`api with 'name' & 'age' parameter 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /:name/:age\\" params={\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/akhil/23\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{\\\\\\"name\\\\\\":\\\\\\"akhil\\\\\\",\\\\\\"age\\\\\\":\\\\\\"23\\\\\\"}}\\").",
+  "Processing "GET /:name/:age" params={"name":"akhil","age":"23"}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil/23\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}}").",
   "GET /:name/:age - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -2029,10 +2029,10 @@ exports[`api with 'name' & 'age' parameter 1`] = `
 
 exports[`api with 'name' & 'age' parameter 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -2301,8 +2301,8 @@ exports[`api with 'name' parameter 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /:name\\" params={\\"name\\":\\"akhil\\"}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/akhil\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{\\\\\\"name\\\\\\":\\\\\\"akhil\\\\\\"}}\\").",
+  "Processing "GET /:name" params={"name":"akhil"}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\"}}").",
   "GET /:name - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -2314,10 +2314,10 @@ exports[`api with 'name' parameter 1`] = `
 
 exports[`api with 'name' parameter 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -2572,10 +2572,10 @@ return class Handler {
 
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -2845,11 +2845,11 @@ exports[`api with multiple methods on same route 1`] = `
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
-  "Processing \\"POST /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\",\\\\\\"content-length\\\\\\":\\\\\\"0\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"POST\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "POST /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "POST /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
@@ -2863,34 +2863,34 @@ exports[`api with multiple methods on same route 1`] = `
 
 exports[`api with multiple methods on same route 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
       this[name] = client;
     }
   }
-  async handle(req) { return { body: \\"boom\\" }; }
+  async handle(req) { return { body: "boom" }; }
 };
 })())({
 
 }), args: {} }));
   return await $handler.handle(event);
 };",
-  ".wing/onrequesthandler1_c84819d7.js": "\\"use strict\\";
+  ".wing/onrequesthandler1_c84819d7.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
       this[name] = client;
     }
   }
-  async handle(req) { return { body: \\"bang\\" }; }
+  async handle(req) { return { body: "bang" }; }
 };
 })())({
 
@@ -3207,11 +3207,11 @@ exports[`api with multiple routes 1`] = `
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /hello/world\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello/world\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello/world" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/world\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello/world - 200.",
-  "Processing \\"GET /hello/wingnuts\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello/wingnuts\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello/wingnuts" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/wingnuts\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello/wingnuts - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
@@ -3225,34 +3225,34 @@ exports[`api with multiple routes 1`] = `
 
 exports[`api with multiple routes 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
       this[name] = client;
     }
   }
-  async handle(req) { return { body: \\"boom\\" }; }
+  async handle(req) { return { body: "boom" }; }
 };
 })())({
 
 }), args: {} }));
   return await $handler.handle(event);
 };",
-  ".wing/onrequesthandler1_c84819d7.js": "\\"use strict\\";
+  ".wing/onrequesthandler1_c84819d7.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
       this[name] = client;
     }
   }
-  async handle(req) { return { body: \\"bang\\" }; }
+  async handle(req) { return { body: "bang" }; }
 };
 })())({
 
@@ -3569,8 +3569,8 @@ exports[`api with one GET route 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "GET /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -3582,17 +3582,17 @@ exports[`api with one GET route 1`] = `
 
 exports[`api with one GET route 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
       this[name] = client;
     }
   }
-  async handle(req) { return { body: \\"boom\\" }; }
+  async handle(req) { return { body: "boom" }; }
 };
 })())({
 
@@ -3837,8 +3837,8 @@ exports[`api with one GET route with request params 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"GET /users/:name\\" params={\\"name\\":\\"tsuf\\"}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"\\\\\\",\\\\\\"method\\\\\\":\\\\\\"GET\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/users/tsuf\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{\\\\\\"name\\\\\\":\\\\\\"tsuf\\\\\\"}}\\").",
+  "Processing "GET /users/:name" params={"name":"tsuf"}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}").",
   "GET /users/:name - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -3850,10 +3850,10 @@ exports[`api with one GET route with request params 1`] = `
 
 exports[`api with one GET route with request params 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -4114,8 +4114,8 @@ exports[`api with one POST route, with body 1`] = `
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
-  "Processing \\"POST /hello\\" params={}).",
-  "Invoke (payload=\\"{\\\\\\"headers\\\\\\":{\\\\\\"host\\\\\\":\\\\\\"127.0.0.1:<port>\\\\\\",\\\\\\"connection\\\\\\":\\\\\\"keep-alive\\\\\\",\\\\\\"content-type\\\\\\":\\\\\\"application/json\\\\\\",\\\\\\"accept\\\\\\":\\\\\\"*/*\\\\\\",\\\\\\"accept-language\\\\\\":\\\\\\"*\\\\\\",\\\\\\"sec-fetch-mode\\\\\\":\\\\\\"cors\\\\\\",\\\\\\"user-agent\\\\\\":\\\\\\"undici\\\\\\",\\\\\\"accept-encoding\\\\\\":\\\\\\"gzip, deflate\\\\\\",\\\\\\"content-length\\\\\\":\\\\\\"25\\\\\\"},\\\\\\"body\\\\\\":\\\\\\"{\\\\\\\\\\\\\\"message\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"hello world\\\\\\\\\\\\\\"}\\\\\\",\\\\\\"method\\\\\\":\\\\\\"POST\\\\\\",\\\\\\"path\\\\\\":\\\\\\"/hello\\\\\\",\\\\\\"query\\\\\\":{},\\\\\\"vars\\\\\\":{}}\\").",
+  "Processing "POST /hello" params={}).",
+  "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/json\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"25\\"},\\"body\\":\\"{\\\\\\"message\\\\\\":\\\\\\"hello world\\\\\\"}\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "POST /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -4127,10 +4127,10 @@ exports[`api with one POST route, with body 1`] = `
 
 exports[`api with one POST route, with body 2`] = `
 {
-  ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
+  ".wing/onrequesthandler0_c82d41b2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js\\")).ApiOnRequestHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {

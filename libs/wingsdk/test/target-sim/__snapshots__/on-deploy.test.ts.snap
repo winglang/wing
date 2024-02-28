@@ -2,7 +2,7 @@
 
 exports[`create an OnDeploy 1`] = `
 {
-  ".wing/function_c83fbf14.js": "\\"use strict\\";
+  ".wing/function_c83fbf14.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -12,7 +12,7 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle() { console.log(\\"super duper success\\"); }
+  async handle() { console.log("super duper success"); }
 };
 })())({
 

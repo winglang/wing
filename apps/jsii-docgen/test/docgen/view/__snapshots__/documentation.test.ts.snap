@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing single package 1`] = `
+exports[`wing > single package 1`] = `
 {
   "apiReference": {
     "classes": [],
@@ -1512,7 +1512,7 @@ for construct libraries.",
 }
 `;
 
-exports[`wing single package 2`] = `
+exports[`wing > single package 2`] = `
 "# construct-library
 
 This is a test project to make sure the \`jsii-docgen\` cli property renders API documentation

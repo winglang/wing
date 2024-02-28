@@ -70,7 +70,7 @@
       "description": "Synthesize project files",
       "steps": [
         {
-          "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
+          "exec": "tsx --tsconfig tsconfig.dev.json .projenrc.ts"
         }
       ]
     },
@@ -137,10 +137,6 @@
       "name": "post-compile",
       "description": "Runs after successful compilation"
     },
-    "post-upgrade": {
-      "name": "post-upgrade",
-      "description": "Runs after upgrading dependencies"
-    },
     "pre-compile": {
       "name": "pre-compile",
       "description": "Prepare the project for compilation"
@@ -151,45 +147,6 @@
       "steps": [
         {
           "spawn": "eslint"
-        }
-      ]
-    },
-    "upgrade": {
-      "name": "upgrade",
-      "description": "upgrade dependencies",
-      "env": {
-        "CI": "0"
-      },
-      "steps": [
-        {
-          "exec": "pnpm update npm-check-updates"
-        },
-        {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@wingconsole/app,@wingconsole/server,winglang'"
-        },
-        {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@wingconsole/app,@wingconsole/server,winglang'"
-        },
-        {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@wingconsole/app,@wingconsole/server,winglang'"
-        },
-        {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@wingconsole/app,@wingconsole/server,winglang'"
-        },
-        {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@wingconsole/app,@wingconsole/server,winglang'"
-        },
-        {
-          "exec": "pnpm i --no-frozen-lockfile"
-        },
-        {
-          "exec": "pnpm update @trpc/client @types/node-fetch @types/node @types/vscode @types/which @types/ws @typescript-eslint/eslint-plugin @typescript-eslint/parser @vscode/vsce @wingconsole/app @wingconsole/server eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint node-fetch npm-check-updates open prettier projen ts-node tsup typescript vscode-languageclient which winglang ws @types/node"
-        },
-        {
-          "exec": "pnpm exec projen"
-        },
-        {
-          "spawn": "post-upgrade"
         }
       ]
     },

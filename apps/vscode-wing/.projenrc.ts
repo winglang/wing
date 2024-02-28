@@ -35,6 +35,7 @@ const project = new TypeScriptAppProject({
   buildWorkflow: false,
   jest: false,
   github: false,
+  depsUpgrade: false,
   npmignoreEnabled: false,
   entrypoint: "lib/extension.js",
   eslintOptions: {
@@ -60,6 +61,7 @@ const project = new TypeScriptAppProject({
     "@trpc/client",
     "ws",
     "open",
+    "tsx",
     "node-fetch@^2.6.7",
     "@types/which",
     "@vscode/vsce",
@@ -70,6 +72,9 @@ const project = new TypeScriptAppProject({
     "winglang@workspace:^",
   ],
 });
+
+project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
+project.deps.removeDependency("ts-node");
 
 // because we're bundling, allow dev deps in src
 project.eslint?.allowDevDeps("src/**");

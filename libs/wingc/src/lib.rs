@@ -283,7 +283,7 @@ pub fn compile(
 	// Type check all files in topological order (start with files that don't bring any other
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
-		let mut scope = asts.remove(file).expect("matching AST not found");
+		let mut scope = asts.swap_remove(file).expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,

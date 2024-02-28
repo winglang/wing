@@ -22,7 +22,7 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
-    "@actions/core": "^1.10.0",
+    "@actions/core": "^1.10.1",
     "@pnpm/find-workspace-dir": "^6.0.2",
     "@pnpm/reviewing.dependencies-hierarchy": "^2.0.10",
     "@pnpm/workspace.find-packages": "^1.0.5",

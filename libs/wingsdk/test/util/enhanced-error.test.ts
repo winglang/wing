@@ -22,10 +22,10 @@ describe("prettyPrintError", () => {
     expect(interestingPart).toMatchInlineSnapshot(`
       "Error: message
          --> test/util/enhanced-error.test.ts:17:43
-         |   expect(result).toBe(\\"\\");
+         |   expect(result).toBe("");
          | });
-         | test(\\"error object\\", async () => {
-      17 |   const result = await prettyPrintError(new Error(\\"message\\"));
+         | test("error object", async () => {
+      17 |   const result = await prettyPrintError(new Error("message"));
          |                                         ^"
     `);
   });
@@ -40,9 +40,9 @@ describe("prettyPrintError", () => {
       with extra line
          --> test/util/enhanced-error.test.ts:34:7
          | });
-         | test(\\"stack\\", async () => {
+         | test("stack", async () => {
          |   const result = await prettyPrintError(
-      34 |     new Error(\\"message\\\\nwith extra line\\").stack!
+      34 |     new Error("message\\nwith extra line").stack!
          |     ^"
     `);
   });
