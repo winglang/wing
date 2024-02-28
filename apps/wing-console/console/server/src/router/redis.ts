@@ -32,6 +32,10 @@ export const createRedisRouter = () => {
         };
       }),
     "redis.exec": createProcedure
+      .meta({
+        action: "sendCommand",
+        resource: "Redis",
+      })
       .input(
         z.object({
           resourcePath: z.string(),

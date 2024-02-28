@@ -6,6 +6,10 @@ import { DynamodbTableSchema, IDynamodbTableClient, Json } from "../wingsdk.js";
 export const createDynamodbTableRouter = () => {
   return createRouter({
     "dynamodb-table.info": createProcedure
+      .meta({
+        resource: "DynamodbTable",
+        action: "scan",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -32,6 +36,10 @@ export const createDynamodbTableRouter = () => {
         };
       }),
     "dynamodb-table.get": createProcedure
+      .meta({
+        resource: "DynamodbTable",
+        action: "getItem",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -47,6 +55,10 @@ export const createDynamodbTableRouter = () => {
         return item;
       }),
     "dynamodb-table.insert": createProcedure
+      .meta({
+        resource: "DynamodbTable",
+        action: "putItem",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -62,6 +74,10 @@ export const createDynamodbTableRouter = () => {
         await client.putItem({ item: input.data as Json });
       }),
     "dynamodb-table.delete": createProcedure
+      .meta({
+        resource: "DynamodbTable",
+        action: "deleteItem",
+      })
       .input(
         z.object({
           resourcePath: z.string(),

@@ -8,6 +8,10 @@ import { IBucketClient } from "../wingsdk.js";
 export const createBucketRouter = () => {
   return createRouter({
     "bucket.put": createProcedure
+      .meta({
+        resource: "Bucket",
+        action: "put",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -24,6 +28,10 @@ export const createBucketRouter = () => {
         return response;
       }),
     "bucket.get": createProcedure
+      .meta({
+        resource: "Bucket",
+        action: "get",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -39,6 +47,10 @@ export const createBucketRouter = () => {
         return response;
       }),
     "bucket.download": createProcedure
+      .meta({
+        resource: "Bucket",
+        action: "get",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -54,6 +66,10 @@ export const createBucketRouter = () => {
         return response;
       }),
     "bucket.list": createProcedure
+      .meta({
+        resource: "Bucket",
+        action: "list",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -68,6 +84,10 @@ export const createBucketRouter = () => {
         return response;
       }),
     "bucket.delete": createProcedure
+      .meta({
+        resource: "Bucket",
+        action: "delete",
+      })
       .input(
         z.object({
           resourcePath: z.string(),

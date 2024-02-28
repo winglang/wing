@@ -6,6 +6,10 @@ import { ICounterClient } from "../wingsdk.js";
 export const createCounterRouter = () => {
   return createRouter({
     "counter.inc": createProcedure
+      .meta({
+        action: "inc",
+        resource: "Counter",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -21,6 +25,10 @@ export const createCounterRouter = () => {
         return response;
       }),
     "counter.dec": createProcedure
+      .meta({
+        action: "dec",
+        resource: "Counter",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -36,6 +44,10 @@ export const createCounterRouter = () => {
         return response;
       }),
     "counter.peek": createProcedure
+      .meta({
+        action: "peek",
+        resource: "Counter",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -53,6 +65,10 @@ export const createCounterRouter = () => {
         return response;
       }),
     "counter.set": createProcedure
+      .meta({
+        action: "set",
+        resource: "Counter",
+      })
       .input(
         z.object({
           resourcePath: z.string(),

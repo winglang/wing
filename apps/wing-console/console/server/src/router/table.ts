@@ -68,6 +68,10 @@ const parseRow = (row: any, schema: Column[]): any => {
 export const createTableRouter = () => {
   return createRouter({
     "table.info": createProcedure
+      .meta({
+        resource: "Table",
+        action: "list",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -91,6 +95,10 @@ export const createTableRouter = () => {
         };
       }),
     "table.get": createProcedure
+      .meta({
+        resource: "Table",
+        action: "get",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -105,6 +113,10 @@ export const createTableRouter = () => {
         return await client.get(input.id);
       }),
     "table.insert": createProcedure
+      .meta({
+        resource: "Table",
+        action: "insert",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -127,6 +139,10 @@ export const createTableRouter = () => {
         await client.insert(id, parseRow(input.data, columns));
       }),
     "table.update": createProcedure
+      .meta({
+        resource: "Table",
+        action: "update",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -149,6 +165,10 @@ export const createTableRouter = () => {
         return await client.update(id, parseRow(input.data, columns));
       }),
     "table.delete": createProcedure
+      .meta({
+        resource: "Table",
+        action: "delete",
+      })
       .input(
         z.object({
           resourcePath: z.string(),

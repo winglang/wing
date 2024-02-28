@@ -32,6 +32,10 @@ export const isErrorLike = (value: unknown): value is ErrorLike => {
 export const createFunctionRouter = () => {
   return createRouter({
     "function.invoke": createProcedure
+      .meta({
+        action: "invoke",
+        resource: "Function",
+      })
       .input(
         z.object({
           resourcePath: z.string(),
