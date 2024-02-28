@@ -474,13 +474,8 @@ export const ElkMap = <T extends unknown = undefined>({
 
   const isHighlighted = useCallback(
     (nodeId: string) => {
-      if (!highlighted) return true;
-      const highlightedId = `${highlighted}/`;
-      const nodeIdWithSlash = `${nodeId}/`;
-      return (
-        highlightedId.startsWith(nodeIdWithSlash) ||
-        nodeIdWithSlash.startsWith(highlightedId)
-      );
+      if (!highlighted || highlighted === "root") return true;
+      return highlighted === nodeId;
     },
     [highlighted],
   );
