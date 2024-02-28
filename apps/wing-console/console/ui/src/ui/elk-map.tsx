@@ -394,6 +394,7 @@ const MapBackground = (props: {}) => {
   const dotSize = 1.5 * viewTransform.z;
   const id = useId();
   return (
+    // Reference: https://github.com/xyflow/xyflow/blob/13897512d3c57e72c2e27b14ffa129412289d948/packages/react/src/additional-components/Background/Background.tsx#L52-L86.
     <svg className="absolute w-full h-full top-0 left-0 bg-white dark:bg-slate-500 text-slate-200 dark:text-slate-550">
       <pattern
         id={id}
