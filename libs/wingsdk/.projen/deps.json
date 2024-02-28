@@ -32,16 +32,12 @@
     },
     {
       "name": "@typescript-eslint/eslint-plugin",
-      "version": "^5",
+      "version": "^7",
       "type": "build"
     },
     {
       "name": "@typescript-eslint/parser",
-      "version": "^5",
-      "type": "build"
-    },
-    {
-      "name": "@vitest/coverage-v8",
+      "version": "^7",
       "type": "build"
     },
     {
@@ -102,7 +98,7 @@
     },
     {
       "name": "eslint",
-      "version": "^8",
+      "version": "^8.56.0",
       "type": "build"
     },
     {
@@ -132,11 +128,6 @@
       "type": "build"
     },
     {
-      "name": "npm-check-updates",
-      "version": "^16",
-      "type": "build"
-    },
-    {
       "name": "prettier",
       "type": "build"
     },
@@ -150,7 +141,7 @@
       "type": "build"
     },
     {
-      "name": "ts-node",
+      "name": "tsx",
       "type": "build"
     },
     {

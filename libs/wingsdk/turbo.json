@@ -12,7 +12,7 @@
     },
     "post-compile": {
       "dependsOn": ["^compile", "compile"],
-      "inputs": [".jsii", "src/**/*.md"],
+      "inputs": [".jsii", "src/**/*.md", "scripts/**"],
       "outputs": ["../../docs/docs/04-standard-library/*/*.md"]
     },
     "eslint": {

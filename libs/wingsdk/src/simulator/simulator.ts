@@ -496,8 +496,8 @@ export class Simulator {
         // be OK if the resource is still starting up or has already been cleaned up.
         // In that case, we return a 500 error with a message that explains what happened.
         if (!resource) {
+          res.writeHead(500, { "Content-Type": "application/json" });
           if (this._running === "starting") {
-            res.writeHead(500, { "Content-Type": "application/json" });
             res.end(
               serialize({
                 error: {
@@ -508,7 +508,6 @@ export class Simulator {
             );
             return;
           } else if (this._running === "stopping") {
-            res.writeHead(500, { "Content-Type": "application/json" });
             res.end(
               serialize({
                 error: {
@@ -519,7 +518,15 @@ export class Simulator {
             );
             return;
           } else {
-            throw new Error(`Internal error - resource ${handle} not found.`);
+            res.end(
+              serialize({
+                error: {
+                  message: `Internal error - resource ${handle} not found.`,
+                },
+              }),
+              "utf-8"
+            );
+            return;
           }
         }
 
@@ -548,7 +555,7 @@ export class Simulator {
             res.end(
               serialize({
                 error: {
-                  message: err.message ?? err,
+                  message: err?.message ?? `${err}`,
                   stack: err.stack,
                   name: err.name,
                 },
@@ -560,12 +567,12 @@ export class Simulator {
     };
 
     // only import "http" when this method is called to reduce the time it takes to load Wing SDK
-    const http = await import("http");
+    const http = await import("node:http");
 
     // start the server, and wait for it to be listening
     const server = http.createServer(requestListener);
     await new Promise<void>((resolve) => {
-      server!.listen(0, LOCALHOST_ADDRESS, () => {
+      server.listen(0, LOCALHOST_ADDRESS, () => {
         const addr = server.address();
         if (addr && typeof addr === "object" && (addr as any).port) {
           this._serverUrl = `http://${addr.address}:${addr.port}`;
@@ -581,8 +588,6 @@ export class Simulator {
    */
   private stopServer() {
     this._server!.close();
-    //@ts-ignore
-    this._server!.closeAllConnections();
   }
 
   /**

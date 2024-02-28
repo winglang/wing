@@ -32,7 +32,7 @@
     "@types/node": "^20.11.0",
     "@winglang/sdk": "workspace:^",
     "bump-pack": "workspace:^",
-    "tsup": "^8.0.1",
+    "tsup": "^8.0.2",
     "vitest": "^0.34.6"
   },
   "files": [

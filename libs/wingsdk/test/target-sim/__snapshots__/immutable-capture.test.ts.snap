@@ -2,7 +2,7 @@
 
 exports[`array 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -13,14 +13,14 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_capture.length === 2)) { throw new Error(\`assertion failed: \\"this.my_capture.length === 2\\"\`); }
-if (!(this.my_capture[0] === \\"hello\\")) { throw new Error(\`assertion failed: \\"this.my_capture[0] === \\\\\\"hello\\\\\\"\\"\`); }
-if (!(this.my_capture[1] === \\"dude\\")) { throw new Error(\`assertion failed: \\"this.my_capture[1] === \\\\\\"dude\\\\\\"\\"\`); }
+if (!(this.my_capture.length === 2)) { throw new Error(\`assertion failed: "this.my_capture.length === 2"\`); }
+if (!(this.my_capture[0] === "hello")) { throw new Error(\`assertion failed: "this.my_capture[0] === \\"hello\\""\`); }
+if (!(this.my_capture[1] === "dude")) { throw new Error(\`assertion failed: "this.my_capture[1] === \\"dude\\""\`); }
 
 }
 };
 })())({
-my_capture: [\\"hello\\",\\"dude\\"]
+my_capture: ["hello","dude"]
 }));
   return await $handler.handle(event);
 };",
@@ -157,7 +157,7 @@ my_capture: [\\"hello\\",\\"dude\\"]
 
 exports[`array of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -168,14 +168,14 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_array.length === 2)) { throw new Error(\`assertion failed: \\"this.my_array.length === 2\\"\`); }
-if (!(this.my_array[0].minutes === 10)) { throw new Error(\`assertion failed: \\"this.my_array[0].minutes === 10\\"\`); }
-if (!(this.my_array[1].minutes === 20)) { throw new Error(\`assertion failed: \\"this.my_array[1].minutes === 20\\"\`); }
+if (!(this.my_array.length === 2)) { throw new Error(\`assertion failed: "this.my_array.length === 2"\`); }
+if (!(this.my_array[0].minutes === 10)) { throw new Error(\`assertion failed: "this.my_array[0].minutes === 10"\`); }
+if (!(this.my_array[1].minutes === 20)) { throw new Error(\`assertion failed: "this.my_array[1].minutes === 20"\`); }
 
 }
 };
 })())({
-my_array: [(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(600)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))]
+my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))]
 }));
   return await $handler.handle(event);
 };",
@@ -312,7 +312,7 @@ my_array: [(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)
 
 exports[`array of maps 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -323,13 +323,13 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_array[0].get('foo') === 1)) { throw new Error(\`assertion failed: \\"this.my_array[0].get('foo') === 1\\"\`); }
-if (!(this.my_array[1].get('bar') === 4)) { throw new Error(\`assertion failed: \\"this.my_array[1].get('bar') === 4\\"\`); }
+if (!(this.my_array[0].get('foo') === 1)) { throw new Error(\`assertion failed: "this.my_array[0].get('foo') === 1"\`); }
+if (!(this.my_array[1].get('bar') === 4)) { throw new Error(\`assertion failed: "this.my_array[1].get('bar') === 4"\`); }
 
 }
 };
 })())({
-my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar\\",4]])]
+my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
 }));
   return await $handler.handle(event);
 };",
@@ -466,7 +466,7 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
 
 exports[`boolean 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -477,7 +477,7 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_capture === false)) { throw new Error(\`assertion failed: \\"this.my_capture === false\\"\`); }
+if (!(this.my_capture === false)) { throw new Error(\`assertion failed: "this.my_capture === false"\`); }
 
 }
 };
@@ -619,7 +619,7 @@ my_capture: false
 
 exports[`duration 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -630,14 +630,14 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_capture.minutes === 120)) { throw new Error(\`assertion failed: \\"this.my_capture.minutes === 120\\"\`); }
-if (!(this.my_capture.seconds === 7200)) { throw new Error(\`assertion failed: \\"this.my_capture.seconds === 7200\\"\`); }
-if (!(this.my_capture.hours === 2)) { throw new Error(\`assertion failed: \\"this.my_capture.hours === 2\\"\`); }
+if (!(this.my_capture.minutes === 120)) { throw new Error(\`assertion failed: "this.my_capture.minutes === 120"\`); }
+if (!(this.my_capture.seconds === 7200)) { throw new Error(\`assertion failed: "this.my_capture.seconds === 7200"\`); }
+if (!(this.my_capture.hours === 2)) { throw new Error(\`assertion failed: "this.my_capture.hours === 2"\`); }
 
 }
 };
 })())({
-my_capture: (new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(7200))
+my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(7200))
 }));
   return await $handler.handle(event);
 };",
@@ -774,7 +774,7 @@ my_capture: (new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration
 
 exports[`map 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -785,16 +785,16 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_capture.has(\\"foo\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"foo\\\\\\")\\"\`); }
-if (!(this.my_capture.has(\\"bar\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"bar\\\\\\")\\"\`); }
-if (!(this.my_capture.size === 2)) { throw new Error(\`assertion failed: \\"this.my_capture.size === 2\\"\`); }
-if (!(this.my_capture.get(\\"foo\\") === 123)) { throw new Error(\`assertion failed: \\"this.my_capture.get(\\\\\\"foo\\\\\\") === 123\\"\`); }
-if (!(this.my_capture.get(\\"bar\\") === 456)) { throw new Error(\`assertion failed: \\"this.my_capture.get(\\\\\\"bar\\\\\\") === 456\\"\`); }
+if (!(this.my_capture.has("foo"))) { throw new Error(\`assertion failed: "this.my_capture.has(\\"foo\\")"\`); }
+if (!(this.my_capture.has("bar"))) { throw new Error(\`assertion failed: "this.my_capture.has(\\"bar\\")"\`); }
+if (!(this.my_capture.size === 2)) { throw new Error(\`assertion failed: "this.my_capture.size === 2"\`); }
+if (!(this.my_capture.get("foo") === 123)) { throw new Error(\`assertion failed: "this.my_capture.get(\\"foo\\") === 123"\`); }
+if (!(this.my_capture.get("bar") === 456)) { throw new Error(\`assertion failed: "this.my_capture.get(\\"bar\\") === 456"\`); }
 
 }
 };
 })())({
-my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
+my_capture: new Map([["foo",123],["bar",456]])
 }));
   return await $handler.handle(event);
 };",
@@ -931,7 +931,7 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
 
 exports[`map of arrays 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -942,18 +942,18 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_map.has(\\"foo\\"))) { throw new Error(\`assertion failed: \\"this.my_map.has(\\\\\\"foo\\\\\\")\\"\`); }
-if (!(this.my_map.has(\\"bar\\"))) { throw new Error(\`assertion failed: \\"this.my_map.has(\\\\\\"bar\\\\\\")\\"\`); }
-if (!(this.my_map.size === 2)) { throw new Error(\`assertion failed: \\"this.my_map.size === 2\\"\`); }
-if (!(this.my_map.get(\\"foo\\")[0] === 1)) { throw new Error(\`assertion failed: \\"this.my_map.get(\\\\\\"foo\\\\\\")[0] === 1\\"\`); }
-if (!(this.my_map.get(\\"foo\\")[1] === 2)) { throw new Error(\`assertion failed: \\"this.my_map.get(\\\\\\"foo\\\\\\")[1] === 2\\"\`); }
-if (!(this.my_map.get(\\"bar\\")[0] === 3)) { throw new Error(\`assertion failed: \\"this.my_map.get(\\\\\\"bar\\\\\\")[0] === 3\\"\`); }
-if (!(this.my_map.get(\\"bar\\")[1] === 4)) { throw new Error(\`assertion failed: \\"this.my_map.get(\\\\\\"bar\\\\\\")[1] === 4\\"\`); }
+if (!(this.my_map.has("foo"))) { throw new Error(\`assertion failed: "this.my_map.has(\\"foo\\")"\`); }
+if (!(this.my_map.has("bar"))) { throw new Error(\`assertion failed: "this.my_map.has(\\"bar\\")"\`); }
+if (!(this.my_map.size === 2)) { throw new Error(\`assertion failed: "this.my_map.size === 2"\`); }
+if (!(this.my_map.get("foo")[0] === 1)) { throw new Error(\`assertion failed: "this.my_map.get(\\"foo\\")[0] === 1"\`); }
+if (!(this.my_map.get("foo")[1] === 2)) { throw new Error(\`assertion failed: "this.my_map.get(\\"foo\\")[1] === 2"\`); }
+if (!(this.my_map.get("bar")[0] === 3)) { throw new Error(\`assertion failed: "this.my_map.get(\\"bar\\")[0] === 3"\`); }
+if (!(this.my_map.get("bar")[1] === 4)) { throw new Error(\`assertion failed: "this.my_map.get(\\"bar\\")[1] === 4"\`); }
 
 }
 };
 })())({
-my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
+my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
 }));
   return await $handler.handle(event);
 };",
@@ -1090,7 +1090,7 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
 
 exports[`map of arrays of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1101,15 +1101,15 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_map.get('foo')[0].minutes === 10)) { throw new Error(\`assertion failed: \\"this.my_map.get('foo')[0].minutes === 10\\"\`); }
-if (!(this.my_map.get('foo')[1].seconds === 20 * 60)) { throw new Error(\`assertion failed: \\"this.my_map.get('foo')[1].seconds === 20 * 60\\"\`); }
-if (!(this.my_map.get('bar')[0].minutes === 30)) { throw new Error(\`assertion failed: \\"this.my_map.get('bar')[0].minutes === 30\\"\`); }
-if (!(this.my_map.get('bar')[1].seconds === 40 * 60)) { throw new Error(\`assertion failed: \\"this.my_map.get('bar')[1].seconds === 40 * 60\\"\`); }
+if (!(this.my_map.get('foo')[0].minutes === 10)) { throw new Error(\`assertion failed: "this.my_map.get('foo')[0].minutes === 10"\`); }
+if (!(this.my_map.get('foo')[1].seconds === 20 * 60)) { throw new Error(\`assertion failed: "this.my_map.get('foo')[1].seconds === 20 * 60"\`); }
+if (!(this.my_map.get('bar')[0].minutes === 30)) { throw new Error(\`assertion failed: "this.my_map.get('bar')[0].minutes === 30"\`); }
+if (!(this.my_map.get('bar')[1].seconds === 40 * 60)) { throw new Error(\`assertion failed: "this.my_map.get('bar')[1].seconds === 40 * 60"\`); }
 
 }
 };
 })())({
-my_map: new Map([[\\"foo\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(600)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))]],[\\"bar\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1800)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(2400))]]])
+my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))]],["bar",[(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1800)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(2400))]]])
 }));
   return await $handler.handle(event);
 };",
@@ -1246,7 +1246,7 @@ my_map: new Map([[\\"foo\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duratio
 
 exports[`number 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1257,7 +1257,7 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_capture + 20 === 143)) { throw new Error(\`assertion failed: \\"this.my_capture + 20 === 143\\"\`); }
+if (!(this.my_capture + 20 === 143)) { throw new Error(\`assertion failed: "this.my_capture + 20 === 143"\`); }
 
 }
 };
@@ -1399,7 +1399,7 @@ my_capture: 123
 
 exports[`set 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1410,15 +1410,15 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_capture.has(\\"boom\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"boom\\\\\\")\\"\`); }
-if (!(this.my_capture.has(\\"bam\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"bam\\\\\\")\\"\`); }
-if (!(this.my_capture.has(\\"bang\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"bang\\\\\\")\\"\`); }
-if (!(this.my_capture.size === 3)) { throw new Error(\`assertion failed: \\"this.my_capture.size === 3\\"\`); }
+if (!(this.my_capture.has("boom"))) { throw new Error(\`assertion failed: "this.my_capture.has(\\"boom\\")"\`); }
+if (!(this.my_capture.has("bam"))) { throw new Error(\`assertion failed: "this.my_capture.has(\\"bam\\")"\`); }
+if (!(this.my_capture.has("bang"))) { throw new Error(\`assertion failed: "this.my_capture.has(\\"bang\\")"\`); }
+if (!(this.my_capture.size === 3)) { throw new Error(\`assertion failed: "this.my_capture.size === 3"\`); }
 
 }
 };
 })())({
-my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
+my_capture: new Set(["boom","bam","bang"])
 }));
   return await $handler.handle(event);
 };",
@@ -1555,7 +1555,7 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
 
 exports[`set of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1566,14 +1566,14 @@ return class Handler {
     }
   }
   async handle() {
-if (!(Array.from(this.my_set)[0].minutes === 10)) { throw new Error(\`assertion failed: \\"Array.from(this.my_set)[0].minutes === 10\\"\`); }
-if (!(Array.from(this.my_set)[0].hours === 0.16666666666666666)) { throw new Error(\`assertion failed: \\"Array.from(this.my_set)[0].hours === 0.16666666666666666\\"\`); }
-if (!(Array.from(this.my_set)[1].seconds === 1200)) { throw new Error(\`assertion failed: \\"Array.from(this.my_set)[1].seconds === 1200\\"\`); }
+if (!(Array.from(this.my_set)[0].minutes === 10)) { throw new Error(\`assertion failed: "Array.from(this.my_set)[0].minutes === 10"\`); }
+if (!(Array.from(this.my_set)[0].hours === 0.16666666666666666)) { throw new Error(\`assertion failed: "Array.from(this.my_set)[0].hours === 0.16666666666666666"\`); }
+if (!(Array.from(this.my_set)[1].seconds === 1200)) { throw new Error(\`assertion failed: "Array.from(this.my_set)[1].seconds === 1200"\`); }
 
 }
 };
 })())({
-my_set: new Set([(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(600)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))])
+my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))])
 }));
   return await $handler.handle(event);
 };",
@@ -1710,7 +1710,7 @@ my_set: new Set([(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Dur
 
 exports[`string 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1721,13 +1721,13 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_capture.length === 11)) { throw new Error(\`assertion failed: \\"this.my_capture.length === 11\\"\`); }
-if (!(this.my_capture === \\"bam bam bam\\")) { throw new Error(\`assertion failed: \\"this.my_capture === \\\\\\"bam bam bam\\\\\\"\\"\`); }
+if (!(this.my_capture.length === 11)) { throw new Error(\`assertion failed: "this.my_capture.length === 11"\`); }
+if (!(this.my_capture === "bam bam bam")) { throw new Error(\`assertion failed: "this.my_capture === \\"bam bam bam\\""\`); }
 
 }
 };
 })())({
-my_capture: \\"bam bam bam\\"
+my_capture: "bam bam bam"
 }));
   return await $handler.handle(event);
 };",
@@ -1864,7 +1864,7 @@ my_capture: \\"bam bam bam\\"
 
 exports[`struct 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1875,15 +1875,15 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_capture.hello === \\"dude\\")) { throw new Error(\`assertion failed: \\"this.my_capture.hello === \\\\\\"dude\\\\\\"\\"\`); }
-if (!(this.my_capture.world === \\"cup\\")) { throw new Error(\`assertion failed: \\"this.my_capture.world === \\\\\\"cup\\\\\\"\\"\`); }
-if (!(this.my_capture.foo === \\"bar\\")) { throw new Error(\`assertion failed: \\"this.my_capture.foo === \\\\\\"bar\\\\\\"\\"\`); }
-if (!(Object.keys(this.my_capture).length === 3)) { throw new Error(\`assertion failed: \\"Object.keys(this.my_capture).length === 3\\"\`); }
+if (!(this.my_capture.hello === "dude")) { throw new Error(\`assertion failed: "this.my_capture.hello === \\"dude\\""\`); }
+if (!(this.my_capture.world === "cup")) { throw new Error(\`assertion failed: "this.my_capture.world === \\"cup\\""\`); }
+if (!(this.my_capture.foo === "bar")) { throw new Error(\`assertion failed: "this.my_capture.foo === \\"bar\\""\`); }
+if (!(Object.keys(this.my_capture).length === 3)) { throw new Error(\`assertion failed: "Object.keys(this.my_capture).length === 3"\`); }
 
 }
 };
 })())({
-my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\",}
+my_capture: {"hello": "dude","world": "cup","foo": "bar",}
 }));
   return await $handler.handle(event);
 };",
@@ -2020,7 +2020,7 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
 
 exports[`struct of maps 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "\\"use strict\\";
+  ".wing/function_c8e6b4af.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -2031,15 +2031,15 @@ return class Handler {
     }
   }
   async handle() {
-if (!(this.my_struct.foo.get('foo') === 1)) { throw new Error(\`assertion failed: \\"this.my_struct.foo.get('foo') === 1\\"\`); }
-if (!(this.my_struct.foo.get('bar') === 2)) { throw new Error(\`assertion failed: \\"this.my_struct.foo.get('bar') === 2\\"\`); }
-if (!(this.my_struct.bar.get('foo') === 3)) { throw new Error(\`assertion failed: \\"this.my_struct.bar.get('foo') === 3\\"\`); }
-if (!(this.my_struct.bar.get('bar') === 4)) { throw new Error(\`assertion failed: \\"this.my_struct.bar.get('bar') === 4\\"\`); }
+if (!(this.my_struct.foo.get('foo') === 1)) { throw new Error(\`assertion failed: "this.my_struct.foo.get('foo') === 1"\`); }
+if (!(this.my_struct.foo.get('bar') === 2)) { throw new Error(\`assertion failed: "this.my_struct.foo.get('bar') === 2"\`); }
+if (!(this.my_struct.bar.get('foo') === 3)) { throw new Error(\`assertion failed: "this.my_struct.bar.get('foo') === 3"\`); }
+if (!(this.my_struct.bar.get('bar') === 4)) { throw new Error(\`assertion failed: "this.my_struct.bar.get('bar') === 4"\`); }
 
 }
 };
 })())({
-my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map([[\\"foo\\",3],[\\"bar\\",4]]),}
+my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["bar",4]]),}
 }));
   return await $handler.handle(event);
 };",

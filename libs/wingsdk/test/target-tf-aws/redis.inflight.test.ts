@@ -3,14 +3,13 @@ import {
   DescribeCacheClustersCommand,
 } from "@aws-sdk/client-elasticache";
 import { mockClient } from "aws-sdk-client-mock";
-import { test, vi, beforeEach, expect } from "vitest";
+import { test, expect } from "vitest";
 import { RedisClient } from "../../src/target-tf-aws/redis.inflight";
 
-beforeEach(() => {
-  mockElastiCache.reset();
-  fakeRedisClient.items.clear();
-
-  mockElastiCache.on(DescribeCacheClustersCommand).resolves({
+const getMockClient = () => new RedisClient("fake-cluster", new MockRedis());
+mockClient(ElastiCacheClient)
+  .on(DescribeCacheClustersCommand)
+  .resolves({
     CacheClusters: [
       {
         CacheNodes: [
@@ -23,7 +22,6 @@ beforeEach(() => {
       },
     ],
   });
-});
 
 test("can set and get a value", async () => {
   // GIVEN
@@ -31,7 +29,7 @@ test("can set and get a value", async () => {
   const expectedValue = "does redis";
 
   // WHEN
-  const client = new RedisClient("fake-cluster", fakeRedisClient);
+  const client = getMockClient();
   await client.set(key, expectedValue);
   const value = await client.get(key);
 
@@ -48,7 +46,7 @@ test("can hset and hget values", async () => {
   const expectedValue2 = "world";
 
   // WHEN
-  const client = new RedisClient("fake-cluster", fakeRedisClient);
+  const client = getMockClient();
   await client.hset(key, field1, expectedValue1);
   await client.hset(key, field2, expectedValue2);
   const value1 = await client.hget(key, field1);
@@ -65,7 +63,7 @@ test("can sadd and smembers values", async () => {
   const expectedValues = ["a", "b", "c"];
 
   // WHEN
-  const client = new RedisClient("fake-cluster", fakeRedisClient);
+  const client = getMockClient();
   await client.sadd(key, "a");
   await client.sadd(key, "b");
   await client.sadd(key, "c");
@@ -80,7 +78,7 @@ test("can delete a key", async () => {
   const key = "wing";
 
   // WHEN
-  const client = new RedisClient("fake-cluster", fakeRedisClient);
+  const client = getMockClient();
   await client.set(key, "does redis");
   await client.del(key);
   const value = await client.get(key);
@@ -89,36 +87,50 @@ test("can delete a key", async () => {
   expect(value).toBeUndefined();
 });
 
-const fakeRedisClient = {
-  items: new Map<any, any>(),
-  set: (key: string, value: string) => {
-    fakeRedisClient.items.set(key, value);
-  },
-  get: (key: string) => {
-    return fakeRedisClient.items.get(key);
-  },
-  hset: (key: string, field: string, value: string) => {
-    fakeRedisClient.items.set(`${key}:${field}`, value);
-  },
-  hget: (key: string, field: string) => {
-    return fakeRedisClient.items.get(`${key}:${field}`);
-  },
-  sadd: (key: string, value: string) => {
-    if (!fakeRedisClient.items.has(key)) {
-      const set = new Set<string>();
-      set.add(value);
-      fakeRedisClient.items.set(key, set);
-    }
-    const set = fakeRedisClient.items.get(key);
-    set.add(value);
-  },
-  smembers: (key: string) => {
-    const set = fakeRedisClient.items.get(key);
-    return Array.from(set);
-  },
-  del: (key: string) => {
-    fakeRedisClient.items.delete(key);
-  },
-};
+class MockRedis {
+  public items: Map<string, string | Set<string>> = new Map();
 
-const mockElastiCache = mockClient(ElastiCacheClient);
+  public set(key: string, value: string) {
+    this.items.set(key, value);
+  }
+
+  public get(key: string) {
+    return this.items.get(key);
+  }
+
+  public hset(key: string, field: string, value: string) {
+    this.items.set(`${key}:${field}`, value);
+  }
+
+  public hget(key: string, field: string) {
+    return this.items.get(`${key}:${field}`);
+  }
+
+  public sadd(key: string, value: string) {
+    if (!this.items.has(key)) {
+      const set = new Set<string>();
+      this.items.set(key, set);
+    }
+
+    const set = this.items.get(key);
+    if (set === undefined || typeof set === "string") {
+      throw new Error("Not a set");
+    }
+    set.add(value);
+  }
+
+  public smembers(key: string) {
+    const set = this.items.get(key);
+    if (!set) {
+      return [];
+    } else if (typeof set === "string") {
+      throw new Error("Not a set");
+    } else {
+      return Array.from(set);
+    }
+  }
+
+  public del(key: string) {
+    this.items.delete(key);
+  }
+}

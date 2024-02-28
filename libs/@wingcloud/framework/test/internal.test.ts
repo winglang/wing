@@ -31,7 +31,8 @@ describe("compile", async () => {
           },
           {
             // The typescript compiler is quite slow, especially in CI
-            timeout: 30000,
+            // See https://github.com/winglang/wing/issues/5676
+            timeout: 60000,
           }
         );
       }

@@ -17,11 +17,8 @@
     "eslint": "pnpm exec projen eslint",
     "package": "pnpm exec projen package",
     "post-compile": "pnpm exec projen post-compile",
-    "post-upgrade": "pnpm exec projen post-upgrade",
     "pre-compile": "pnpm exec projen pre-compile",
     "test": "pnpm exec projen test",
-    "test:watch": "pnpm exec projen test:watch",
-    "upgrade": "pnpm exec projen upgrade",
     "watch": "pnpm exec projen watch",
     "projen": "pnpm exec projen"
   },
@@ -33,7 +30,6 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
-    "@types/jest": "^27.5.2",
     "@types/node": "^20.11.0",
     "@types/semver": "^7.5.1",
     "@types/yargs": "^16",
@@ -46,15 +42,12 @@
     "eslint-import-resolver-typescript": "^3.6.0",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-prettier": "^4.2.1",
-    "jest": "^29.7.0",
-    "jest-junit": "^15",
     "jsii": "~5.3.11",
-    "npm-check-updates": "^16",
     "prettier": "^2.8.8",
     "projen": "^0.71.163",
-    "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.1",
-    "typescript": "~5.3.3"
+    "tsx": "^4.7.0",
+    "typescript": "~5.3.3",
+    "vitest": "^1.3.1"
   },
   "dependencies": {
     "@jsii/spec": "^1.94.0",
@@ -69,45 +62,6 @@
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "version": "0.0.0",
-  "jest": {
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.ts?(x)",
-      "<rootDir>/(test|src)/**/*(*.)@(spec|test).ts?(x)"
-    ],
-    "clearMocks": true,
-    "collectCoverage": true,
-    "coverageReporters": [
-      "json",
-      "lcov",
-      "clover",
-      "cobertura"
-    ],
-    "coverageDirectory": "coverage",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "watchPathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "reporters": [
-      "default",
-      [
-        "jest-junit",
-        {
-          "outputDirectory": "test-reports"
-        }
-      ]
-    ],
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.dev.json"
-      }
-    }
-  },
   "types": "lib/index.d.ts",
   "volta": {
     "extends": "../../package.json"

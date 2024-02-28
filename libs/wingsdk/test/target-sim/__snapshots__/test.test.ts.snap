@@ -2,7 +2,7 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c86fc180.js": "\\"use strict\\";
+  ".wing/handler_c86fc180.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -14,7 +14,7 @@ return class Handler {
   }
   
 async handle(event) {
-  console.log(\\"this test should pass!\\");
+  console.log("this test should pass!");
 }
 };
 })())({
