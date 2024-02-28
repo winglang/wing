@@ -69,11 +69,11 @@ export class ChildProcess {
     //   });
     // }
 
-    this.child.on("error", (error: Error) => {
-      console.error(
-        `Failed to start child process for ${program}: ${error.message}`
-      );
-    });
+    // this.child.on("error", (error: Error) => {
+    //   console.error(
+    //     `Failed to start child process for ${program}: ${error.message}`
+    //   );
+    // });
 
     this.child.on("exit", (code) => {
       console.log(`Child process exited with code: ${code}`);
