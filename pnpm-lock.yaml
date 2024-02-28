@@ -1126,8 +1126,8 @@ importers:
         specifier: ^8.0.2
         version: 8.0.2(typescript@5.3.3)
       vitest:
-        specifier: ^0.34.6
-        version: 0.34.6(happy-dom@9.20.3)
+        specifier: ^1.3.1
+        version: 1.3.1(@types/node@20.11.0)
 
   libs/awscdk:
     dependencies:
@@ -14316,7 +14316,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240226
+      typescript: 5.5.0-dev.20240228
     dev: true
 
   /dset@3.1.2:
@@ -22886,8 +22886,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240226:
-    resolution: {integrity: sha512-mLY9/pjzSCr7JLkMKHS3KQUKX+LPO9WWjiR+mRcWKcskSdMBZ0j1TPhk/zUyuBklOf3YX4orkvamNiZWZEK0CQ==}
+  /typescript@5.5.0-dev.20240228:
+    resolution: {integrity: sha512-bdFIn0U4p7+PrnESpBPXDc6jRXynawwVQssEw2Pd2o/Mud34LwGgqHXOgIY5EEmZFPjzT3osXB7VKQP1cdHi3g==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

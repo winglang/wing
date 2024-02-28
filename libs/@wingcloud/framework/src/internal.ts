@@ -6,14 +6,6 @@ export interface CompileOptions {
   entrypoint: string;
 }
 
-const MANAGED_TSCONFIG_OPTIONS = [
-  "target",
-  "module",
-  "moduleResolution",
-  "paths",
-  "outDir",
-];
-
 export async function compile(options: CompileOptions) {
   const entrypointDir = dirname(options.entrypoint);
   const ts = (await import("typescript")).default;
@@ -21,7 +13,8 @@ export async function compile(options: CompileOptions) {
   const wingsdkDir = dirname(require.resolve("@winglang/sdk"));
 
   const tsconfigPath = ts.findConfigFile(entrypointDir, ts.sys.fileExists);
-  const compilerOptions: ts.CompilerOptions = {
+  const mandatoryCompilerOptions: ts.CompilerOptions = {
+    // Managed options
     target: ts.ScriptTarget.ES2022,
     module: ts.ModuleKind.CommonJS,
     moduleResolution: ts.ModuleResolutionKind.Node10,
@@ -30,19 +23,19 @@ export async function compile(options: CompileOptions) {
       "@winglang/sdk/*": [wingsdkDir + "/*"],
     },
     outDir,
-    alwaysStrict: true,
-    allowSyntheticDefaultImports: true,
-    esModuleInterop: true,
-    strict: true,
+    listEmittedFiles: true,
+    noEmitOnError: true,
+  };
+
+  const defaultCompilerOptions: ts.CompilerOptions = {
     sourceMap: true,
     declaration: false,
-    noEmitOnError: true,
-    listEmittedFiles: true,
-    allowJs: true,
     skipLibCheck: true,
-    resolveJsonModule: true,
     isolatedModules: true,
+    esModuleInterop: true,
   };
+
+  let compilerOptions: ts.CompilerOptions = defaultCompilerOptions;
 
   if (tsconfigPath) {
     const { config, error } = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
@@ -56,8 +49,9 @@ export async function compile(options: CompileOptions) {
       config,
       ts.sys,
       dirname(tsconfigPath),
-      {}
+      compilerOptions
     );
+    compilerOptions = options;
 
     if (errors.length > 0) {
       throw new Error(
@@ -67,17 +61,24 @@ export async function compile(options: CompileOptions) {
       );
     }
 
-    for (const managedOption of MANAGED_TSCONFIG_OPTIONS) {
+    let attemptedOverride = false;
+    for (const managedOption of Object.keys(mandatoryCompilerOptions)) {
       if (config?.compilerOptions?.[managedOption] !== undefined) {
         console.warn(
-          `'${managedOption}' in tsconfig is managed by wing, value is ${compilerOptions[managedOption]}`
+          `'${managedOption}' is managed by wing and will be ignored from ${tsconfigPath}`
         );
+        attemptedOverride = true;
         delete options[managedOption];
       }
     }
 
-    Object.assign(compilerOptions, options);
+    if (attemptedOverride) {
+      console.warn(`tsconfig options used:`);
+      console.warn(compilerOptions);
+    }
   }
+
+  Object.assign(compilerOptions, mandatoryCompilerOptions);
 
   const program = ts.createProgram([options.entrypoint], compilerOptions);
 
@@ -95,15 +96,13 @@ export async function compile(options: CompileOptions) {
     allDiagnostics.filter((d) => d.category === ts.DiagnosticCategory.Error)
       .length > 0
   ) {
-    console.error(
-      ts.formatDiagnosticsWithColorAndContext(allDiagnostics, {
-        getCanonicalFileName: (f) => f,
-        getCurrentDirectory: () => process.cwd(),
-        getNewLine: () => "\n",
-      })
-    );
+    const fullError = ts.formatDiagnosticsWithColorAndContext(allDiagnostics, {
+      getCanonicalFileName: (f) => f,
+      getCurrentDirectory: () => process.cwd(),
+      getNewLine: () => "\n",
+    });
 
-    throw new Error("TS compilation failed");
+    throw new Error(`TS compilation failed:\n${fullError}`);
   }
 
   // get the last .js file emitted, this should be the entrypoint

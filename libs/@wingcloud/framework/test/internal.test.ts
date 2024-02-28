@@ -7,6 +7,12 @@ import { tmpdir } from "node:os";
 
 const fixturesDir = join(__dirname, "fixtures");
 
+// add custom serializer to remove ansi sequences from error messages
+expect.addSnapshotSerializer({
+  test: (val) => val instanceof Error,
+  serialize: (val) => val.toString().replace(/\u001b\[.*?m/g, ""),
+});
+
 // The fixtures directory contains a pass and fail directory.
 describe("compile", async () => {
   for (const dir of ["pass", "fail"]) {
@@ -28,7 +34,7 @@ describe("compile", async () => {
             });
 
             if (shouldFail) {
-              await expect(compilePromise).rejects.toThrow();
+              await expect(compilePromise).rejects.toThrowErrorMatchingSnapshot();
             } else {
               await compilePromise;
             }
