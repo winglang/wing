@@ -17,6 +17,7 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { useKeyPressEvent } from "react-use";
 
 import { Edge } from "../shared/Edge.js";
 import { Node } from "../shared/Node.js";
@@ -576,6 +577,13 @@ export const ElkMap = <T extends unknown = undefined>({
   }, [offsets]);
 
   const mapBackgroundRef = useRef<HTMLDivElement>(null);
+
+  useKeyPressEvent(
+    "Escape",
+    useCallback(() => {
+      onSelectedNodeIdChange?.(undefined);
+    }, [onSelectedNodeIdChange]),
+  );
 
   return (
     <>
