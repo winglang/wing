@@ -1,10 +1,18 @@
 import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
-import { Bucket } from "../../src/cloud";
+import {
+  Api,
+  Bucket,
+  Function,
+  IBucketClient,
+  IFunctionClient,
+  Service,
+} from "../../src/cloud";
 import { InflightBindings } from "../../src/core";
 import { Testing } from "../../src/simulator";
 import { ITestRunnerClient, Test, TestResult } from "../../src/std";
 import { SimApp } from "../sim-app";
+import { mkdtemp } from "../util";
 
 describe("run single test", () => {
   test("test not found", async () => {
@@ -176,6 +184,125 @@ test("provides raw tree data", async () => {
   await sim.stop();
   expect(treeData).toBeDefined();
   expect(treeData).toMatchSnapshot();
+});
+
+describe("in-place updates", () => {
+  test("no change", async () => {
+    const stateDir = mkdtemp();
+
+    const app = new SimApp();
+    new Bucket(app, "Bucket1");
+    const sim = await app.startSimulator(stateDir);
+    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+
+    const app2 = new SimApp();
+    new Bucket(app2, "Bucket1");
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    await sim.stop();
+  });
+
+  test("add", async () => {
+    const stateDir = mkdtemp();
+
+    const app = new SimApp();
+
+    new Bucket(app, "Bucket1");
+    const sim = await app.startSimulator(stateDir);
+    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+
+    const app2 = new SimApp();
+    new Bucket(app2, "Bucket1");
+    new Bucket(app2, "Bucket2");
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
+    await sim.stop();
+  });
+
+  test("delete", async () => {
+    const stateDir = mkdtemp();
+
+    const app = new SimApp();
+    new Bucket(app, "Bucket1");
+    new Bucket(app, "Bucket2");
+    const sim = await app.startSimulator(stateDir);
+    expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
+
+    const app2 = new SimApp();
+    new Bucket(app2, "Bucket1");
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    await sim.stop();
+  });
+
+  test("update", async () => {
+    const stateDir = mkdtemp();
+
+    const app = new SimApp();
+    new Bucket(app, "Bucket1");
+    const sim = await app.startSimulator(stateDir);
+    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.getResourceConfig("root/Bucket1").props.public).toBeFalsy();
+
+    const app2 = new SimApp();
+    new Bucket(app2, "Bucket1", { public: true });
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.getResourceConfig("root/Bucket1").props.public).toBeTruthy();
+
+    await sim.stop();
+  });
+
+  test("add resource that depends on an existing resource", async () => {
+    const stateDir = mkdtemp();
+
+    const app = new SimApp();
+    new Bucket(app, "Bucket1");
+
+    const sim = await app.startSimulator(stateDir);
+    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.getResourceConfig("root/Bucket1").props.public).toBeFalsy();
+
+    const app2 = new SimApp();
+    const bucket1 = new Bucket(app2, "Bucket1");
+    const api = new Api(app2, "Api");
+    bucket1.addObject("url.txt", api.url);
+
+    const handler = `async handle() { return process.env.API_URL; }`;
+    new Function(app2, "Function", Testing.makeHandler(handler), {
+      env: { API_URL: api.url },
+    });
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(sim.listResources()).toEqual([
+      "root/Api",
+      "root/Api/Endpoint",
+      "root/Bucket1",
+      "root/Function",
+    ]);
+
+    const bucketClient = sim.getResource("root/Bucket1") as IBucketClient;
+    const urlFromBucket = await bucketClient.get("url.txt");
+    expect(urlFromBucket.startsWith("http://127.0.0")).toBeTruthy();
+
+    const functionClient = sim.getResource("root/Function") as IFunctionClient;
+    const ret = await functionClient.invoke();
+    expect(ret).toEqual(urlFromBucket);
+  });
 });
 
 function makeTest(

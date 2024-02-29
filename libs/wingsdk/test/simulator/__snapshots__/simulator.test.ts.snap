@@ -100,8 +100,8 @@ exports[`run single test > test failure 1`] = `
     at [src]/shared/sandbox.ts:<sanitized>
     at new Promise (<anonymous>)
     at Sandbox.call ([src]/shared/sandbox.ts:<sanitized>)
-    at Object.withTrace ([src]/simulator/simulator.ts:<sanitized>)
-    at TestRunner.runTest ([src]/target-sim/test-runner.inflight.ts:<sanitized>)",
+    at processTicksAndRejections (node:internal/process/task_queues:<sanitized>)
+    at Object.withTrace ([src]/simulator/simulator.ts:<sanitized>)",
   "pass": false,
   "path": "root/test",
   "traces": [
