@@ -386,15 +386,13 @@ export class Simulator {
     }
 
     const resourceConfig = this.getResourceConfig(path);
-    let event: Trace = {
+    this._addTrace({
       type: TraceType.RESOURCE,
       data: { message: `${resourceConfig.type} deleted.` },
       sourcePath: resourceConfig.path,
       sourceType: resourceConfig.type,
       timestamp: new Date().toISOString(),
-    };
-
-    this._addTrace(event);
+    });
   }
 
   /**
