@@ -364,7 +364,7 @@ const NodesContainer = memo(
             }}
             animate={{
               opacity:
-                isHighlighted(node.id) || hasHighlightedEdge(node) ? 1 : 0.35,
+                isHighlighted(node.id) || hasHighlightedEdge(node) ? 1 : 0.3,
             }}
             transition={{ ease: "easeOut", duration: 0.15 }}
             exit={{
