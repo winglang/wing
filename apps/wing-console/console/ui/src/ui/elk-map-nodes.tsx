@@ -8,40 +8,40 @@ const getResourceBackgroudColor = (
 ) => {
   switch (resourceType) {
     case "@winglang/sdk.cloud.Bucket": {
-      return "bg-orange-500";
+      return "bg-orange-500 dark:bg-orange-600";
     }
     case "@winglang/sdk.cloud.Function": {
-      return "bg-sky-500";
+      return "bg-sky-500 dark:bg-sky-600";
     }
     case "@winglang/sdk.cloud.Queue": {
-      return "bg-emerald-500";
+      return "bg-emerald-500 dark:bg-emerald-600";
     }
     case "@winglang/sdk.cloud.Counter": {
-      return "bg-lime-500";
+      return "bg-lime-500 dark:bg-lime-600";
     }
     case "@winglang/sdk.cloud.Topic": {
-      return "bg-pink-500";
+      return "bg-pink-500 dark:bg-pink-600";
     }
     case "@winglang/sdk.cloud.Api": {
-      return "bg-amber-500";
+      return "bg-amber-500 dark:bg-amber-600";
     }
     case "@winglang/sdk.ex.Table": {
-      return "bg-cyan-500";
+      return "bg-cyan-500 dark:bg-cyan-600";
     }
     case "@winglang/sdk.cloud.Schedule": {
-      return "bg-purple-500";
+      return "bg-purple-500 dark:bg-purple-600";
     }
     case "@winglang/sdk.ex.Redis": {
-      return "bg-red-700";
+      return "bg-red-700 dark:bg-red-600";
     }
     case "@winglang/sdk.cloud.Website": {
-      return "bg-violet-500";
+      return "bg-violet-500 dark:bg-violet-600";
     }
     case "@winglang/sdk.ex.ReactApp": {
-      return "bg-sky-500";
+      return "bg-sky-500 dark:bg-sky-600";
     }
     default: {
-      return "bg-slate-400";
+      return "bg-slate-400 dark:bg-slate-600";
     }
   }
 };
