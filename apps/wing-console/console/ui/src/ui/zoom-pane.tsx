@@ -155,6 +155,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   // Use ref to keep track of whether the user was dragging,
   // and stop emitting `onClick` events if the user was dragging.
   const wasDragging = useRef(false);
+
   // Keep track of whether the space key is pressed so we can show the user the grab cursor.
   // The map is draggable using click only when space is pressed.
   const [isSpacePressed, setSpacePressed] = useState(false);
@@ -168,7 +169,6 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       setDragging(false);
     }, []),
   );
-
 
   const dragStart = useRef({ x: 0, y: 0 });
   useEvent(
@@ -191,11 +191,11 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   useEvent(
     "mousemove",
     useCallback(
+      (event: MouseEvent) => {
         if (!isSpacePressed) {
           return;
         }
 
-      (event: MouseEvent) => {
         wasDragging.current = true;
 
         if (!isDragging) {
@@ -216,7 +216,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
           };
         });
       },
-      [isDragging, dragStart],
+      [isSpacePressed, isDragging],
     ) as (event: Event) => void,
   );
 
@@ -237,7 +237,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         onClick?.(event);
         wasDragging.current = false;
       },
-      [onClick],
+      [isSpacePressed, onClick],
     ),
     containerRef.current,
   );
@@ -377,10 +377,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     <div
       ref={containerRef}
       {...divProps}
-      className={classNames(className, "relative overflow-hidden", {
-        "cursor-grab": !isDragging,
-        "cursor-grabbing": isDragging,
-      })}
+      className={classNames(className, "relative overflow-hidden")}
     >
       <div ref={targetRef} className="absolute inset-0 origin-top-left">
         <context.Provider value={{ viewTransform }}>
@@ -417,6 +414,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
             </p>
             <div className="flex justify-around">
               <Button onClick={() => zoomToFit()}>Fit map to screen</Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isSpacePressed && (
         <div
@@ -425,10 +426,6 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
             "cursor-grabbing": isDragging,
           })}
         ></div>
-      )}
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );
