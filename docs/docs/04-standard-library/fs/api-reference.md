@@ -39,6 +39,7 @@ new fs.Util();
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.fs.Util.absolute">absolute</a></code> | The right-most parameter is considered {to}. Other parameters are considered an array of {from}. |
+| <code><a href="#@winglang/sdk.fs.Util.appendFile">appendFile</a></code> | Insert new data at the end of a file. |
 | <code><a href="#@winglang/sdk.fs.Util.basename">basename</a></code> | Retrieve the final segment of a given file path. |
 | <code><a href="#@winglang/sdk.fs.Util.dirname">dirname</a></code> | Retrieve the name of the directory from a given file path. |
 | <code><a href="#@winglang/sdk.fs.Util.exists">exists</a></code> | Check if the path exists. |
@@ -89,6 +90,43 @@ and trailing slashes are removed unless the path gets resolved to the root direc
 - *Type:* str
 
 A sequence of paths or path segments.
+
+---
+
+##### `appendFile` <a name="appendFile" id="@winglang/sdk.fs.Util.appendFile"></a>
+
+```wing
+bring fs;
+
+fs.appendFile(filepath: str, data: str, options?: WriteFileOptions);
+```
+
+Insert new data at the end of a file.
+
+###### `filepath`<sup>Required</sup> <a name="filepath" id="@winglang/sdk.fs.Util.appendFile.parameter.filepath"></a>
+
+- *Type:* str
+
+The file path that needs to be written.
+
+---
+
+###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.fs.Util.appendFile.parameter.data"></a>
+
+- *Type:* str
+
+The text to be appended to the file.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.fs.Util.appendFile.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.fs.WriteFileOptions">WriteFileOptions</a>
+
+The `encoding` can be set to specify the character encoding.
+
+And the `flag` can be set to specify the attributes.
+If a flag is not provided, it defaults to `"w"`.
 
 ---
 
