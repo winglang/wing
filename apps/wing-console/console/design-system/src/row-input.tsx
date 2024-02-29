@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import { RefObject, memo, useMemo, useState } from "react";
+import type { RefObject } from "react";
+import { memo, useMemo, useState } from "react";
 
 import { useTheme } from "./theme-provider.js";
 

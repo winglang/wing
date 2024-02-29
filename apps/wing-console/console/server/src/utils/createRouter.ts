@@ -1,10 +1,10 @@
 import { initTRPC } from "@trpc/server";
-import { simulator } from "@winglang/sdk";
+import type { simulator } from "@winglang/sdk";
 import type Emittery from "emittery";
 
-import { Config } from "../config.js";
-import { ConsoleLogger } from "../consoleLogger.js";
-import { HostUtils } from "../hostUtils.js";
+import type { Config } from "../config.js";
+import type { ConsoleLogger } from "../consoleLogger.js";
+import type { HostUtils } from "../hostUtils.js";
 import type { State, Trace } from "../types.js";
 import type { Updater } from "../updater.js";
 

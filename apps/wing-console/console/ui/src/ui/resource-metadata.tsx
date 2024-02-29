@@ -7,17 +7,17 @@ import {
   CubeTransparentIcon,
   CursorArrowRaysIcon,
 } from "@heroicons/react/24/outline";
+import type { IconComponent } from "@wingconsole/design-system";
 import {
   useTheme,
   InspectorSection,
   Pill,
-  IconComponent,
   ResourceIcon,
   getResourceIconComponent,
   Attribute,
   ScrollableArea,
 } from "@wingconsole/design-system";
-import { NodeDisplay } from "@wingconsole/server";
+import type { NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
 import { memo, useCallback, useMemo, useState } from "react";
 

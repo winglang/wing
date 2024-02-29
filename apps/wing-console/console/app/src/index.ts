@@ -1,14 +1,13 @@
-import {
-  createConsoleServer,
+import type {
   CreateConsoleServerOptions,
   LogInterface,
   Updater,
   Config,
   HostUtils,
   Trace,
-  isTermsAccepted,
   LayoutConfig,
 } from "@wingconsole/server";
+import { createConsoleServer, isTermsAccepted } from "@wingconsole/server";
 import express from "express";
 
 import { createAnalytics } from "./analytics.js";

@@ -3,7 +3,7 @@ import { createClient } from "redis";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { IRedisClient } from "../wingsdk.js";
+import type { IRedisClient } from "../wingsdk.js";
 
 const parseRedisErrorMessage = (response: string) => {
   const emptyArgumentsText = ", with args beginning with: ";
