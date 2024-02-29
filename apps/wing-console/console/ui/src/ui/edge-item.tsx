@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ElkExtendedEdge } from "elkjs/lib/elk.bundled.js";
+import type { ElkExtendedEdge } from "elkjs/lib/elk.bundled.js";
 import { motion } from "framer-motion";
 import { memo, useMemo, useState } from "react";
 

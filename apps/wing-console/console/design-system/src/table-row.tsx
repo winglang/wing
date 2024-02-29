@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ChangeEvent, RefObject } from "react";
+import type { ChangeEvent, RefObject } from "react";
 
 import { RowInput } from "./row-input.js";
 

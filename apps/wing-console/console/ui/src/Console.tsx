@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
-import { Mode } from "@wingconsole/design-system";
-import { Trace } from "@wingconsole/server";
+import type { Mode } from "@wingconsole/design-system";
+import type { Trace } from "@wingconsole/server";
 import { useEffect, useMemo } from "react";
 
 import { App } from "./App.js";

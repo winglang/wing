@@ -1,5 +1,5 @@
 import { useTheme, Loader } from "@wingconsole/design-system";
-import { State } from "@wingconsole/server";
+import type { State } from "@wingconsole/server";
 import classNames from "classnames";
 
 import { AutoUpdater } from "../features/auto-updater.js";

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { ICounterClient } from "../wingsdk.js";
+import type { ICounterClient } from "../wingsdk.js";
 
 export const createCounterRouter = () => {
   return createRouter({
