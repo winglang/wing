@@ -7,8 +7,10 @@ export const createDynamodbTableRouter = () => {
   return createRouter({
     "dynamodb-table.info": createProcedure
       .meta({
-        resource: "DynamodbTable",
-        action: "scan",
+        analytics: {
+          resource: "DynamodbTable",
+          action: "scan",
+        },
       })
       .input(
         z.object({
@@ -37,8 +39,10 @@ export const createDynamodbTableRouter = () => {
       }),
     "dynamodb-table.get": createProcedure
       .meta({
-        resource: "DynamodbTable",
-        action: "getItem",
+        analytics: {
+          resource: "DynamodbTable",
+          action: "getItem",
+        },
       })
       .input(
         z.object({
@@ -56,8 +60,10 @@ export const createDynamodbTableRouter = () => {
       }),
     "dynamodb-table.insert": createProcedure
       .meta({
-        resource: "DynamodbTable",
-        action: "putItem",
+        analytics: {
+          resource: "DynamodbTable",
+          action: "putItem",
+        },
       })
       .input(
         z.object({
@@ -75,8 +81,10 @@ export const createDynamodbTableRouter = () => {
       }),
     "dynamodb-table.delete": createProcedure
       .meta({
-        resource: "DynamodbTable",
-        action: "deleteItem",
+        analytics: {
+          resource: "DynamodbTable",
+          action: "deleteItem",
+        },
       })
       .input(
         z.object({

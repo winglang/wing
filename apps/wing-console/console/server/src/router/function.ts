@@ -33,8 +33,10 @@ export const createFunctionRouter = () => {
   return createRouter({
     "function.invoke": createProcedure
       .meta({
-        action: "invoke",
-        resource: "Function",
+        analytics: {
+          action: "invoke",
+          resource: "Function",
+        },
       })
       .input(
         z.object({

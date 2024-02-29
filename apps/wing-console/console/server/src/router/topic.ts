@@ -7,8 +7,10 @@ export const createTopicRouter = () => {
   return createRouter({
     "topic.publish": createProcedure
       .meta({
-        action: "publish",
-        resource: "Topic",
+        analytics: {
+          action: "publish",
+          resource: "Topic",
+        },
       })
       .input(
         z.object({

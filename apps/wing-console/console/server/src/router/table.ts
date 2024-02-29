@@ -69,8 +69,10 @@ export const createTableRouter = () => {
   return createRouter({
     "table.info": createProcedure
       .meta({
-        resource: "Table",
-        action: "list",
+        analytics: {
+          resource: "Table",
+          action: "list",
+        },
       })
       .input(
         z.object({
@@ -96,8 +98,10 @@ export const createTableRouter = () => {
       }),
     "table.get": createProcedure
       .meta({
-        resource: "Table",
-        action: "get",
+        analytics: {
+          resource: "Table",
+          action: "get",
+        },
       })
       .input(
         z.object({
@@ -114,8 +118,10 @@ export const createTableRouter = () => {
       }),
     "table.insert": createProcedure
       .meta({
-        resource: "Table",
-        action: "insert",
+        analytics: {
+          resource: "Table",
+          action: "insert",
+        },
       })
       .input(
         z.object({
@@ -140,8 +146,10 @@ export const createTableRouter = () => {
       }),
     "table.update": createProcedure
       .meta({
-        resource: "Table",
-        action: "update",
+        analytics: {
+          resource: "Table",
+          action: "update",
+        },
       })
       .input(
         z.object({
@@ -166,8 +174,10 @@ export const createTableRouter = () => {
       }),
     "table.delete": createProcedure
       .meta({
-        resource: "Table",
-        action: "delete",
+        analytics: {
+          resource: "Table",
+          action: "delete",
+        },
       })
       .input(
         z.object({

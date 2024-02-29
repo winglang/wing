@@ -77,8 +77,10 @@ export interface FileLink {
 }
 
 export interface RouterMeta {
-  action?: string;
-  resource?: string;
+  analytics?: {
+    action?: string;
+    resource?: string;
+  };
 }
 
 export interface RouterContext {
@@ -129,11 +131,11 @@ const sendUserResourceInteractionAnalyticsEvent = middleware(
   async (options) => {
     const analytics = options.ctx.analytics;
     if (analytics) {
-      const meta = options.meta;
-      if (meta?.resource && meta?.action) {
+      const analyticsMeta = options?.meta?.analytics;
+      if (analyticsMeta && analyticsMeta?.resource && analyticsMeta?.action) {
         analytics.track("user_resource_interaction", {
-          resource: meta.resource,
-          action: meta.action,
+          resource: analyticsMeta.resource,
+          action: analyticsMeta.action,
         });
       }
     }

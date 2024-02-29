@@ -9,8 +9,10 @@ export const createBucketRouter = () => {
   return createRouter({
     "bucket.put": createProcedure
       .meta({
-        resource: "Bucket",
-        action: "put",
+        analytics: {
+          resource: "Bucket",
+          action: "put",
+        },
       })
       .input(
         z.object({
@@ -29,8 +31,10 @@ export const createBucketRouter = () => {
       }),
     "bucket.get": createProcedure
       .meta({
-        resource: "Bucket",
-        action: "get",
+        analytics: {
+          resource: "Bucket",
+          action: "get",
+        },
       })
       .input(
         z.object({
@@ -48,8 +52,10 @@ export const createBucketRouter = () => {
       }),
     "bucket.download": createProcedure
       .meta({
-        resource: "Bucket",
-        action: "get",
+        analytics: {
+          resource: "Bucket",
+          action: "get",
+        },
       })
       .input(
         z.object({
@@ -67,8 +73,10 @@ export const createBucketRouter = () => {
       }),
     "bucket.list": createProcedure
       .meta({
-        resource: "Bucket",
-        action: "list",
+        analytics: {
+          resource: "Bucket",
+          action: "list",
+        },
       })
       .input(
         z.object({
@@ -85,8 +93,10 @@ export const createBucketRouter = () => {
       }),
     "bucket.delete": createProcedure
       .meta({
-        resource: "Bucket",
-        action: "delete",
+        analytics: {
+          resource: "Bucket",
+          action: "delete",
+        },
       })
       .input(
         z.object({

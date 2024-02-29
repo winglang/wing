@@ -33,8 +33,10 @@ export const createRedisRouter = () => {
       }),
     "redis.exec": createProcedure
       .meta({
-        action: "sendCommand",
-        resource: "Redis",
+        analytics: {
+          action: "sendCommand",
+          resource: "Redis",
+        },
       })
       .input(
         z.object({

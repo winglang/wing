@@ -7,8 +7,10 @@ export const createCounterRouter = () => {
   return createRouter({
     "counter.inc": createProcedure
       .meta({
-        action: "inc",
-        resource: "Counter",
+        analytics: {
+          action: "inc",
+          resource: "Counter",
+        },
       })
       .input(
         z.object({
@@ -26,8 +28,10 @@ export const createCounterRouter = () => {
       }),
     "counter.dec": createProcedure
       .meta({
-        action: "dec",
-        resource: "Counter",
+        analytics: {
+          action: "dec",
+          resource: "Counter",
+        },
       })
       .input(
         z.object({
@@ -45,8 +49,10 @@ export const createCounterRouter = () => {
       }),
     "counter.peek": createProcedure
       .meta({
-        action: "peek",
-        resource: "Counter",
+        analytics: {
+          action: "peek",
+          resource: "Counter",
+        },
       })
       .input(
         z.object({
@@ -66,8 +72,10 @@ export const createCounterRouter = () => {
       }),
     "counter.set": createProcedure
       .meta({
-        action: "set",
-        resource: "Counter",
+        analytics: {
+          action: "set",
+          resource: "Counter",
+        },
       })
       .input(
         z.object({

@@ -7,8 +7,10 @@ export const createQueueRouter = () => {
   return createRouter({
     "queue.purge": createProcedure
       .meta({
-        action: "purge",
-        resource: "Queue",
+        analytics: {
+          action: "purge",
+          resource: "Queue",
+        },
       })
       .input(
         z.object({
@@ -24,8 +26,10 @@ export const createQueueRouter = () => {
       }),
     "queue.approxSize": createProcedure
       .meta({
-        action: "approxSize",
-        resource: "Queue",
+        analytics: {
+          action: "approxSize",
+          resource: "Queue",
+        },
       })
       .input(
         z.object({
@@ -41,8 +45,10 @@ export const createQueueRouter = () => {
       }),
     "queue.push": createProcedure
       .meta({
-        action: "push",
-        resource: "Queue",
+        analytics: {
+          action: "push",
+          resource: "Queue",
+        },
       })
       .input(
         z.object({
