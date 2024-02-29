@@ -40,7 +40,7 @@ const layoutOptions: LayoutOptions = {
   "elk.nodeSize.constraints": "USE_MINIMUM_SIZE",
   "elk.layered.spacing.baseValue": "32",
   "elk.edgeRouting": "ORTHOGONAL",
-  "elk.padding": "[top=52,left=20,bottom=20,right=20]",
+  "elk.padding": "[top=68,left=20,bottom=20,right=20]",
 };
 
 export type NodeItemProps<T> = {

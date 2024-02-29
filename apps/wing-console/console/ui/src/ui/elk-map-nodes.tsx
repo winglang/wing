@@ -3,42 +3,45 @@ import { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
 import { PropsWithChildren, memo, useMemo } from "react";
 
-const getResourceBorderColor = (
+const getResourceBackgroudColor = (
   resourceType: BaseResourceSchema["type"] | undefined,
 ) => {
   switch (resourceType) {
     case "@winglang/sdk.cloud.Bucket": {
-      return "border-t border-t-orange-500 group-hover:border-t-orange-500 group-focus:border-t-orange-500 dark:border-t-orange-500 dark:group-hover:border-t-orange-500 dark:group-focus:border-t-orange-500";
+      return "bg-orange-500";
     }
     case "@winglang/sdk.cloud.Function": {
-      return "border-t border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500 dark:border-t-sky-500 dark:group-hover:border-t-sky-500 dark:group-focus:border-t-sky-500";
+      return "bg-sky-500";
     }
     case "@winglang/sdk.cloud.Queue": {
-      return "border-t border-t-emerald-500 group-hover:border-t-emerald-500 group-focus:border-t-emerald-500 dark:border-t-emerald-500 dark:group-hover:border-t-emerald-500 dark:group-focus:border-t-emerald-500";
+      return "bg-emerald-500";
     }
     case "@winglang/sdk.cloud.Counter": {
-      return "border-t border-t-lime-500 group-hover:border-t-lime-500 group-focus:border-t-lime-500 dark:border-t-lime-500 dark:group-hover:border-t-lime-500 dark:group-focus:border-t-lime-500";
+      return "bg-lime-500";
     }
     case "@winglang/sdk.cloud.Topic": {
-      return "border-t border-t-pink-500 group-hover:border-t-pink-500 group-focus:border-t-pink-500 dark:border-t-pink-500 dark:group-hover:border-t-pink-500 dark:group-focus:border-t-pink-500";
+      return "bg-pink-500";
     }
     case "@winglang/sdk.cloud.Api": {
-      return "border-t border-t-amber-500 group-hover:border-t-amber-500 group-focus:border-t-amber-500 dark:border-t-amber-500 dark:group-hover:border-t-amber-500 dark:group-focus:border-t-amber-500";
+      return "bg-amber-500";
     }
     case "@winglang/sdk.ex.Table": {
-      return "border-t border-t-cyan-500 group-hover:border-t-cyan-500 group-focus:border-t-cyan-500 dark:border-t-cyan-500 dark:group-hover:border-t-cyan-500 dark:group-focus:border-t-cyan-500";
+      return "bg-cyan-500";
     }
     case "@winglang/sdk.cloud.Schedule": {
-      return "border-t border-t-purple-500 group-hover:border-t-purple-500 group-focus:border-t-purple-500 dark:border-t-purple-500 dark:group-hover:border-t-purple-500 dark:group-focus:border-t-purple-500";
+      return "bg-purple-500";
     }
     case "@winglang/sdk.ex.Redis": {
-      return "border-t border-t-red-700 group-hover:border-t-red-700 group-focus:border-t-red-700 dark:border-t-red-700 dark:group-hover:border-t-red-700 dark:group-focus:border-t-red-700";
+      return "bg-red-700";
     }
     case "@winglang/sdk.cloud.Website": {
-      return "border-t border-t-violet-500 group-hover:border-t-violet-500 group-focus:border-t-violet-500 dark:border-t-violet-500 dark:group-hover:border-t-violet-500 dark:group-focus:border-t-violet-500";
+      return "bg-violet-500";
     }
     case "@winglang/sdk.ex.ReactApp": {
-      return "border-t border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500 dark:border-t-sky-500 dark:group-hover:border-t-sky-500 dark:group-focus:border-t-sky-500";
+      return "bg-sky-500";
+    }
+    default: {
+      return "bg-slate-400";
     }
   }
 };
@@ -71,8 +74,8 @@ export const ContainerNode = memo(
     ...props
   }: PropsWithChildren<ContainerNodeProps>) => {
     const { theme } = useTheme();
-    const borderColor = useMemo(
-      () => getResourceBorderColor(resourceType),
+    const bgColor = useMemo(
+      () => getResourceBackgroudColor(resourceType),
       [resourceType],
     );
 
@@ -91,12 +94,11 @@ export const ContainerNode = memo(
           "flex flex-col group flex-1",
           "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
           "transition-all",
-          "rounded",
+          "rounded-lg",
           "relative",
           "cursor-default",
           {
-            "outline-4": selected,
-            "hover:outline-2": !selected,
+            "outline-2": selected,
           },
         )}
         tabIndex={-1}
@@ -105,53 +107,48 @@ export const ContainerNode = memo(
       >
         <div
           className={classNames(
-            "flex relative",
-            "rounded overflow-hidden",
-            // borderColor,
-            // theme.border3,
+            "flex gap-1 items-center",
+            "px-3 py-2.5",
+            "relative",
+            "rounded-lg overflow-hidden",
             "group-focus:border-sky-300 dark:group-focus:border-sky-500",
-            theme.bg4,
+            "bg-white dark:bg-slate-700",
             {
               "rounded-b-none": open,
               "border-b-0": open,
               [theme.border3]: !selected,
               "border-sky-300 dark:border-sky-500": selected,
             },
-            "min-h-[32px]",
             "cursor-pointer",
           )}
         >
           {Icon && (
-            <div
-              className={classNames(
-                theme.bg4,
-                "pl-2 py-1",
-                "flex items-center",
-                "transition-all",
-                "rounded-bl",
-                open && "rounded-bl-none",
-                // "border-r",
-                {
-                  [theme.border3]: !selected,
-                  "border-sky-300 dark:border-sky-500": selected,
-                },
-              )}
-            >
-              <Icon className="w-5 h-5" />
+            <div>
+              <div
+                className={classNames(
+                  bgColor,
+                  "p-2",
+                  "flex items-center",
+                  "transition-all",
+                  "rounded-lg",
+                  {
+                    [theme.border3]: !selected,
+                    "border-sky-300 dark:border-sky-500": selected,
+                  },
+                )}
+              >
+                <Icon className="w-5 h-5 text-white dark:text-white" />
+              </div>
             </div>
           )}
           <div
             className={classNames(
               "flex-1 flex items-center",
-              "px-2.5 py-2",
-              "rounded-br",
-              !borderColor && "rounded-tr",
-              "group-focus:border-sky-300 dark:group-focus:border-sky-500",
+              "px-2 py-1",
+              "rounded-br-lg",
               "transition-all",
               {
-                "border-sky-300 dark:border-sky-500": selected,
                 "rounded-br-none": open,
-                "rounded-l": !Icon,
               },
             )}
             data-testid={`map-node:${props.nodeId}`}
@@ -162,9 +159,17 @@ export const ContainerNode = memo(
                   "leading-tight",
                   "truncate",
                   "transition-all",
-                  "text-xs",
-                  compilerNamed && ["text-slate-600 dark:text-slate-350"],
-                  !compilerNamed && [theme.text1],
+                  "text-sm",
+                  compilerNamed && [
+                    !selected && "text-slate-600 dark:text-slate-400",
+                    selected && "text-sky-600 dark:text-sky-400",
+                    "italic font-normal",
+                  ],
+                  !compilerNamed && [
+                    !selected && "text-slate-600 dark:text-slate-250",
+                    selected && "text-sky-600 dark:text-sky-400",
+                    "font-semibold",
+                  ],
                 )}
               >
                 {compilerNamed ? display?.title : props.name}
@@ -175,31 +180,17 @@ export const ContainerNode = memo(
 
         {open && (
           <div
-            className={classNames(
-              "flex-1 flex items-stretch",
-              "border-t",
-              "group-focus:border-sky-200 dark:group-focus:border-sky-400",
-              {
-                [theme.border3]: !selected,
-                "border-sky-200 dark:border-sky-400": selected,
-              },
-            )}
+            className={classNames("flex-1 flex items-stretch", "border-t", {
+              [theme.border3]: !selected,
+              "border-sky-200 dark:border-sky-400": selected,
+            })}
           >
             <div
               className={classNames(
-                "flex-1 rounded-b",
+                "flex-1 rounded-b-lg",
                 depth % 2 === 0
                   ? "bg-white dark:bg-slate-500"
                   : "bg-slate-50 dark:bg-slate-550",
-                // The classes below are commented out because they cause rendering flashes while zooming.
-                // "border-x border-b border-dashed",
-                // "group-focus:border-sky-300 dark:group-focus:border-sky-500",
-                // "transition-all",
-                // "shadow-inner",
-                // {
-                //   [theme.border3]: !selected,
-                //   "border-sky-300 dark:border-sky-500": selected,
-                // },
               )}
             />
           </div>
@@ -207,10 +198,11 @@ export const ContainerNode = memo(
 
         <div
           className={classNames(
-            "absolute inset-0 pointer-events-none border rounded",
-            theme.border4,
-            open && "shadow-lg",
-            !open && "shadow",
+            "absolute inset-0 pointer-events-none rounded-lg",
+            "border",
+            selected && "border-sky-500 dark:border-sky-500",
+            !selected && "border-slate-300 dark:border-slate-700",
+            "shadow-sm",
           )}
         ></div>
       </div>

@@ -51,7 +51,7 @@ export const DefaultTheme: Theme = {
   bg3Hover: "hover:bg-slate-150 dark:hover:bg-slate-650",
   bg4Hover: "hover:bg-slate-50 dark:hover:bg-slate-500",
   border3: "border-slate-300 dark:border-slate-800",
-  border4: "border-slate-200 dark:border-slate-800",
+  border4: "border-slate-200 dark:border-slate-600",
   text1: "text-slate-900 dark:text-slate-250",
   text2: "text-slate-500 dark:text-slate-400",
   text1Hover: "hover:text-slate-950 dark:hover:text-slate-200",
