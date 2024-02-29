@@ -54,6 +54,7 @@ export interface ContainerNodeProps {
   open?: boolean;
   hideBottomBar?: boolean;
   selected?: boolean;
+  fade?: boolean;
   resourceType: BaseResourceSchema["type"] | undefined;
   depth: number;
   onClick?: () => void;
@@ -66,6 +67,7 @@ export const ContainerNode = memo(
     icon: Icon,
     hideBottomBar,
     selected,
+    fade,
     onClick,
     onMouseEnter,
     resourceType,
@@ -134,6 +136,7 @@ export const ContainerNode = memo(
                   {
                     [theme.border3]: !selected,
                     "border-sky-300 dark:border-sky-500": selected,
+                    "opacity-30": fade,
                   },
                 )}
               >
@@ -170,6 +173,7 @@ export const ContainerNode = memo(
                     selected && "text-sky-600 dark:text-sky-400",
                     "font-semibold",
                   ],
+                  { "opacity-30": fade },
                 )}
               >
                 {compilerNamed ? display?.title : props.name}
