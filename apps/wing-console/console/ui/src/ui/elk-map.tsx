@@ -34,13 +34,16 @@ const layoutOptions: LayoutOptions = {
   "elk.alignment": "CENTER",
   "elk.algorithm": "org.eclipse.elk.layered",
   "elk.layered.layering.strategy": "MIN_WIDTH",
-  "elk.layered.layering.nodePromotion.strategy": "DUMMYNODE_PERCENTAGE",
-  "elk.layered.nodePlacement.strategy": "INTERACTIVE",
+  "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
   "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
-  "elk.nodeSize.constraints": "USE_MINIMUM_SIZE",
-  "elk.layered.spacing.baseValue": "32",
-  "elk.edgeRouting": "ORTHOGONAL",
-  "elk.padding": "[top=52,left=20,bottom=20,right=20]",
+  "elk.layered.spacing.baseValue": "0",
+  "elk.spacing.edgeEdge": "128",
+  "elk.spacing.edgeNode": "32",
+  "elk.spacing.nodeNode": "48",
+  "elk.layered.spacing.edgeEdgeBetweenLayers": "16",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "64",
+  "elk.layered.spacing.edgeNodeBetweenLayers": "16",
+  "elk.padding": "[top=68,left=20,bottom=20,right=20]",
 };
 
 export type NodeItemProps<T> = {
@@ -364,7 +367,7 @@ const NodesContainer = memo(
             }}
             animate={{
               opacity:
-                isHighlighted(node.id) || hasHighlightedEdge(node) ? 1 : 0.35,
+                isHighlighted(node.id) || hasHighlightedEdge(node) ? 1 : 0.3,
             }}
             transition={{ ease: "easeOut", duration: 0.15 }}
             exit={{
