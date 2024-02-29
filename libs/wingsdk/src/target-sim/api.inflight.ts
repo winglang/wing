@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { Server } from "http";
-import { AddressInfo, createServer } from "net";
+import { AddressInfo, Socket } from "net";
 import { join } from "path";
 import express from "express";
 import { IEventPublisher } from "./event-mapping";
@@ -294,19 +294,23 @@ function asyncMiddleware(
 
 async function isPortAvailable(port: number): Promise<boolean> {
   return new Promise((resolve, _reject) => {
-    let s = createServer();
+    const s = new Socket();
     s.once("error", (err) => {
-      s.close();
-      if ((err as any).code == "EADDRINUSE") {
+      s.destroy();
+      if ((err as any).code !== "ECONNREFUSED") {
         resolve(false);
       } else {
-        resolve(false);
+        // connection refused means the port is not used
+        resolve(true);
       }
     });
-    s.once("listening", () => {
-      s.close();
-      resolve(true);
+
+    s.once("connect", () => {
+      s.destroy();
+      // connection successful means the port is used
+      resolve(false);
     });
-    s.listen(port);
+
+    s.connect(port, LOCALHOST_ADDRESS);
   });
 }
