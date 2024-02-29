@@ -30,7 +30,7 @@ let a = A {
   x: "Sup"
 };
 log(a.badField);
-//    ^^^^^^^^ Unknown symbol "badField"
+//    ^^^^^^^^ Property "badField" doesn't exist on "A"
 
 // two inherits with same field name but different type
 struct Razzle {

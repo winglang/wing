@@ -2,4 +2,4 @@
 source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
-Unknown symbol "b" 3:13
+Property "b" doesn't not exist in "MyInflightClass" 3:13

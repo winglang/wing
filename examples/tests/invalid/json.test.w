@@ -17,7 +17,7 @@ let a: Array<str> = j;
 // Immutable Json
 let foreverJson = Json {a: "hello"};
 foreverJson.set("a", "world!");
-//          ^^^ Unknown symbol "set" (TODO: better error message https://github.com/winglang/wing/issues/1660)
+//          ^^^ Property "set" doesn't exist in "Json" (TODO: better error message https://github.com/winglang/wing/issues/1660)
 
 let bkt = new cloud.Bucket();
 let jArr = Json [bkt];
