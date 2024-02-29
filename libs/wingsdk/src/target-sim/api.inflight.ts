@@ -296,19 +296,19 @@ async function isPortAvailable(port: number): Promise<boolean> {
   return new Promise((resolve, _reject) => {
     const s = new Socket();
     s.once("error", (err) => {
+      s.destroy();
       if ((err as any).code !== "ECONNREFUSED") {
         resolve(false);
       } else {
         // connection refused means the port is not used
         resolve(true);
       }
-      s.destroy();
     });
 
     s.once("connect", () => {
+      s.destroy();
       // connection successful means the port is used
       resolve(false);
-      s.destroy();
     });
 
     s.connect(port, LOCALHOST_ADDRESS);
