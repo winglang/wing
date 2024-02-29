@@ -193,15 +193,13 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       },
       [isDragging, dragStart],
     ) as (event: Event) => void,
-    containerRef.current,
   );
 
   useEvent(
     "mouseup",
-    useCallback((event: MouseEvent) => {
+    useCallback(() => {
       setDragging(false);
-    }, []) as (event: Event) => void,
-    containerRef.current,
+    }, []),
   );
 
   useEvent(
