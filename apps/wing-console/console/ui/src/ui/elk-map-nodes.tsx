@@ -92,9 +92,8 @@ export const ContainerNode = memo(
           "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
           "transition-all",
           "rounded",
+          "relative",
           "cursor-default",
-          open && "shadow-lg",
-          !open && "shadow",
           {
             "outline-4": selected,
             "hover:outline-2": !selected,
@@ -108,9 +107,10 @@ export const ContainerNode = memo(
           className={classNames(
             "flex relative",
             "rounded overflow-hidden",
-            borderColor,
+            // borderColor,
+            // theme.border3,
             "group-focus:border-sky-300 dark:group-focus:border-sky-500",
-            theme.bg3,
+            theme.bg4,
             {
               "rounded-b-none": open,
               "border-b-0": open,
@@ -125,12 +125,12 @@ export const ContainerNode = memo(
             <div
               className={classNames(
                 theme.bg4,
-                "px-2 py-1",
+                "pl-2 py-1",
                 "flex items-center",
                 "transition-all",
                 "rounded-bl",
                 open && "rounded-bl-none",
-                "border-r",
+                // "border-r",
                 {
                   [theme.border3]: !selected,
                   "border-sky-300 dark:border-sky-500": selected,
@@ -172,6 +172,7 @@ export const ContainerNode = memo(
             </div>
           </div>
         </div>
+
         {open && (
           <div
             className={classNames(
@@ -203,6 +204,15 @@ export const ContainerNode = memo(
             />
           </div>
         )}
+
+        <div
+          className={classNames(
+            "absolute inset-0 pointer-events-none border rounded",
+            theme.border4,
+            open && "shadow-lg",
+            !open && "shadow",
+          )}
+        ></div>
       </div>
     );
   },
