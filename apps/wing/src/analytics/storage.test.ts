@@ -71,7 +71,7 @@ describe("storage tests", () => {
             os_release: "360",
             node_version: "a million",
           },
-        })
+        }),
       );
     });
 
@@ -103,7 +103,7 @@ describe("storage tests", () => {
 
 export function createStorageWithFakeConfig(
   config: AnalyticsConfig,
-  dirName: string
+  dirName: string,
 ): AnalyticsStorage {
   const tmpDir = path.join(os.tmpdir(), dirName);
   const configFile = path.join(tmpDir, "analytics-fake-config.json");

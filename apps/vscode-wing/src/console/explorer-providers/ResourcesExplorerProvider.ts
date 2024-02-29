@@ -113,7 +113,7 @@ export class ResourcesExplorerProvider
       parentItem.id,
       parentItem.label,
       parentItem.type,
-      TreeItemCollapsibleState.Expanded
+      TreeItemCollapsibleState.Expanded,
     );
   }
 
@@ -127,7 +127,7 @@ export class ResourcesExplorerProvider
           this.node.id,
           this.node.label,
           this.node.type,
-          TreeItemCollapsibleState.Expanded
+          TreeItemCollapsibleState.Expanded,
         ),
       ]);
     }
@@ -146,9 +146,9 @@ export class ResourcesExplorerProvider
           child.type || "",
           child.childItems?.length && child.childItems.length > 0
             ? TreeItemCollapsibleState.Expanded
-            : TreeItemCollapsibleState.None
+            : TreeItemCollapsibleState.None,
         );
-      })
+      }),
     );
   }
 }
@@ -158,7 +158,7 @@ export class ResourceItem extends TreeItem {
     id: string,
     label?: string,
     type?: string,
-    state?: TreeItemCollapsibleState
+    state?: TreeItemCollapsibleState,
   ) {
     super(label || "", state);
 
@@ -169,12 +169,12 @@ export class ResourceItem extends TreeItem {
       light: path.join(
         __filename,
         "../../resources/resource-icons/light",
-        `${this.getResourceIconName(type, id)}.svg`
+        `${this.getResourceIconName(type, id)}.svg`,
       ),
       dark: path.join(
         __filename,
         "../../resources/resource-icons/dark",
-        `${this.getResourceIconName(type, id)}.svg`
+        `${this.getResourceIconName(type, id)}.svg`,
       ),
     };
   }
@@ -188,7 +188,7 @@ export class ResourceItem extends TreeItem {
 
   private getResourceIconName = (
     resourceType: string | undefined,
-    resourceId?: string
+    resourceId?: string,
   ) => {
     if (resourceId && this.matchTest(resourceId)) {
       return "beaker";

@@ -35,7 +35,7 @@ export class Test extends Resource {
     scope: Construct,
     id: string,
     inflight: ITestHandler,
-    props: TestProps = {}
+    props: TestProps = {},
   ) {
     super(scope, id);
 
@@ -46,7 +46,7 @@ export class Test extends Resource {
       this,
       "Handler",
       inflight,
-      props
+      props,
     );
     if (!this._fn) {
       Node.of(this).hidden = true;

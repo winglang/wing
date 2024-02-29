@@ -14,7 +14,7 @@ export class Npm {
   public constructor(
     private readonly workingDirectory: string,
     private readonly logger = console.log,
-    npmCommand?: string
+    npmCommand?: string,
   ) {
     this.#npmCommand = npmCommand;
   }
@@ -47,7 +47,7 @@ export class Npm {
       {
         cwd: this.workingDirectory,
         shell: true,
-      }
+      },
     );
     return assertSuccess(result);
   }
@@ -71,7 +71,7 @@ export class Npm {
       const { exitCode, stdout } = await this.runCommand(
         "npm",
         ["version", "--json"],
-        chunksToObject
+        chunksToObject,
       );
       if (exitCode === 0 && major((stdout as any).npm) >= 7) {
         return (this.#npmCommand = "npm");
@@ -90,7 +90,7 @@ export class Npm {
       {
         cwd: this.workingDirectory,
         shell: true,
-      }
+      },
     );
     assertSuccess(result);
 
@@ -98,7 +98,7 @@ export class Npm {
       this.workingDirectory,
       "node_modules",
       ".bin",
-      "npm"
+      "npm",
     );
     this.logger(`Done installing npm@8 at ${this.#npmCommand}`);
     return this.#npmCommand;
@@ -122,7 +122,7 @@ export class Npm {
     command: string,
     args: readonly string[],
     outputTransform: (stderr: readonly Buffer[]) => T,
-    options?: SpawnOptionsWithoutStdio
+    options?: SpawnOptionsWithoutStdio,
   ): Promise<CommandResult<T>> {
     return new Promise<CommandResult<T>>((ok, ko) => {
       const child = spawn(command, args, {
@@ -171,7 +171,7 @@ interface SuccessfulCommandResult<T> extends CommandResult<T> {
  * either `NpmError` or `NoSpaceLeftOnDevice`.
  */
 function assertSuccess(
-  result: CommandResult<ResponseObject>
+  result: CommandResult<ResponseObject>,
 ): asserts result is SuccessfulCommandResult<ResponseObject> {
   const { command, exitCode, signal, stdout } = result;
   if (exitCode === 0) {
@@ -182,7 +182,7 @@ function assertSuccess(
   }
   if (exitCode === 228 || stdout.error?.code === "ENOSPC") {
     throw new NoSpaceLeftOnDevice(
-      `Command "${command}" failed due to insufficient available disk space`
+      `Command "${command}" failed due to insufficient available disk space`,
     );
   }
   const { code, detail, summary } = stdout.error;
@@ -233,7 +233,7 @@ function assertSuccess(
  */
 function chunksToObject(
   chunks: readonly Buffer[],
-  encoding: BufferEncoding = "utf-8"
+  encoding: BufferEncoding = "utf-8",
 ): ResponseObject {
   const raw = Buffer.concat(chunks).toString(encoding);
   try {

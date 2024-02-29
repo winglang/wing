@@ -30,7 +30,7 @@ export class Redis
     super();
     this.context = context;
     this.containerName = generateDockerContainerName(
-      `wing-sim-redis-${this.context.resourcePath}`
+      `wing-sim-redis-${this.context.resourcePath}`,
     );
   }
 

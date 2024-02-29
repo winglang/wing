@@ -12,7 +12,7 @@ test("throw error when no location provided", () => {
 
   // THEN
   expect(() => new tfazure.App(props)).toThrow(
-    /Location must be specified in the AZURE_LOCATION environment variable/
+    /Location must be specified in the AZURE_LOCATION environment variable/,
   );
 });
 

@@ -98,7 +98,7 @@ export class Counter extends cloud.Counter {
 
     host.addEnvironment(
       this.envAccountKeyVariable(),
-      this.storageAccount.primaryAccessKey
+      this.storageAccount.primaryAccessKey,
     );
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
     host.addEnvironment(this.envStorageTableName(), this.storageTable.name);
@@ -116,7 +116,7 @@ export class Counter extends cloud.Counter {
         `process.env["${this.envStorageTableName()}"]`,
         `"${this.envAccountKeyVariable()}"`,
         `${this.initial}`,
-      ]
+      ],
     );
   }
 

@@ -21,7 +21,7 @@ test("publishing messages to topic", async () => {
             obj: topic,
             ops: [cloud.TopicInflightMethods.PUBLISH],
           },
-        }
+        },
       );
       new cloud.Function(this, "Function", publisher);
 
@@ -38,7 +38,7 @@ test("publishing messages to topic", async () => {
   const s = await app.startSimulator();
 
   const publisher = s.getResource(
-    "/TopicTester/Function"
+    "/TopicTester/Function",
   ) as cloud.IFunctionClient;
 
   // WHEN

@@ -49,7 +49,7 @@ test("can get the secret value", async () => {
     JSON.stringify({
       ...secrets,
       "wing-sim-test-my-secret": "secret-value",
-    })
+    }),
   );
 
   const s = await app.startSimulator();

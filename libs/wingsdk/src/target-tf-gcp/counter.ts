@@ -78,7 +78,7 @@ export class Counter extends cloud.Counter {
       __dirname.replace("target-tf-gcp", "shared-gcp"),
       __filename,
       "CounterClient",
-      [`process.env["${this.envName()}"]`, `${this.initial}`]
+      [`process.env["${this.envName()}"]`, `${this.initial}`],
     );
   }
 

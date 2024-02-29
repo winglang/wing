@@ -80,7 +80,7 @@ captureTest("map", () => ({
         new Map([
           ["foo", 123],
           ["bar", 456],
-        ])
+        ]),
       ),
     },
   },
@@ -113,7 +113,7 @@ captureTest("map of arrays", () => ({
         new Map([
           ["foo", [1, 2]],
           ["bar", [3, 4]],
-        ])
+        ]),
       ),
     },
   },
@@ -137,13 +137,13 @@ captureTest("array of maps", () => ({
           new Map([
             ["foo", 1],
             ["bar", 2],
-          ])
+          ]),
         ),
         Object.freeze(
           new Map([
             ["foo", 3],
             ["bar", 4],
-          ])
+          ]),
         ),
       ],
     },
@@ -176,7 +176,7 @@ captureTest("map of arrays of durations", () => ({
         new Map([
           ["foo", [Duration.fromMinutes(10), Duration.fromMinutes(20)]],
           ["bar", [Duration.fromMinutes(30), Duration.fromMinutes(40)]],
-        ])
+        ]),
       ),
     },
   },
@@ -197,13 +197,13 @@ captureTest("struct of maps", () => ({
           new Map([
             ["foo", 1],
             ["bar", 2],
-          ])
+          ]),
         ),
         bar: Object.freeze(
           new Map([
             ["foo", 3],
             ["bar", 4],
-          ])
+          ]),
         ),
       },
     },
@@ -302,8 +302,8 @@ function captureTest(name: string, t: (scope: Construct) => CaptureTest) {
             `if (!(${
               match[1]
             })) { throw new Error(\`assertion failed: ${JSON.stringify(
-              match[1]
-            )}\`); }`
+              match[1],
+            )}\`); }`,
           );
         } else {
           lines.push(line);
@@ -325,8 +325,8 @@ function captureTest(name: string, t: (scope: Construct) => CaptureTest) {
             : "",
           "}",
         ].join("\n"),
-        options.bindings
-      )
+        options.bindings,
+      ),
     );
 
     const sim = await app.startSimulator();

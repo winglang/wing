@@ -24,7 +24,7 @@ export class ApiOnRequestHandlerClient {
     this.corsHeaders = args?.corsHeaders;
   }
   public async handle(
-    request: APIGatewayProxyEvent
+    request: APIGatewayProxyEvent,
   ): Promise<APIGatewayProxyResult> {
     const apiRequest: ApiRequest = mapApigatewayEventToCloudApiRequest(request);
     const apiResponse: ApiResponse =
@@ -42,7 +42,7 @@ export class ApiOnRequestHandlerClient {
  */
 function mapCloudApiResponseToApigatewayResponse(
   resp: ApiResponse,
-  corsHeaders?: Record<string, string>
+  corsHeaders?: Record<string, string>,
 ): APIGatewayProxyResult {
   return {
     statusCode: resp.status ?? DEFAULT_RESPONSE_STATUS,
@@ -61,7 +61,7 @@ function mapCloudApiResponseToApigatewayResponse(
  * @returns Cloud API request
  */
 function mapApigatewayEventToCloudApiRequest(
-  request: APIGatewayProxyEvent
+  request: APIGatewayProxyEvent,
 ): ApiRequest {
   const query = {
     ...request.queryStringParameters,
@@ -87,11 +87,11 @@ function parseBody(request: APIGatewayProxyEvent): string {
   if (!request.body) return "";
 
   const contentType = Object.entries(request.headers).find(
-    ([key, _]) => key.toLowerCase() === "content-type"
+    ([key, _]) => key.toLowerCase() === "content-type",
   )?.[1];
   if (contentType === "application/x-www-form-urlencoded") {
     return JSON.stringify(
-      Object.fromEntries(new URLSearchParams(request.body))
+      Object.fromEntries(new URLSearchParams(request.body)),
     );
   }
   return request.body;

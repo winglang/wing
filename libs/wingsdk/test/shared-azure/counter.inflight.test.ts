@@ -21,7 +21,7 @@ vi.spyOn(azureDataTables, "TableClient").mockImplementation(() => {
       }) => {
         counter[entity.rowKey] = entity.counterValue;
         return Promise.resolve();
-      }
+      },
     ),
   };
 });
@@ -93,7 +93,7 @@ describe("positive initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      10
+      10,
     );
 
     expect(await client.inc()).toBe(10);
@@ -107,7 +107,7 @@ describe("positive initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      10
+      10,
     );
 
     expect(await client.inc(2, "testKey")).toBe(10);
@@ -120,7 +120,7 @@ describe("positive initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      10
+      10,
     );
 
     expect(await client.dec()).toBe(10);
@@ -134,7 +134,7 @@ describe("positive initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      10
+      10,
     );
 
     expect(await client.dec(2, "testKey")).toBe(10);
@@ -147,7 +147,7 @@ describe("positive initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      10
+      10,
     );
 
     expect(await client.peek()).toBe(10);
@@ -165,7 +165,7 @@ describe("positive initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      10
+      10,
     );
 
     expect(await client.set(150)).toBe(undefined);
@@ -182,7 +182,7 @@ describe("negative initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      -5
+      -5,
     );
 
     expect(await client.inc()).toBe(-5);
@@ -196,7 +196,7 @@ describe("negative initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      -5
+      -5,
     );
 
     expect(await client.inc(2, "testKey")).toBe(-5);
@@ -209,7 +209,7 @@ describe("negative initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      -5
+      -5,
     );
 
     expect(await client.dec()).toBe(-5);
@@ -223,7 +223,7 @@ describe("negative initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      -5
+      -5,
     );
 
     expect(await client.dec(2, "testKey")).toBe(-5);
@@ -236,7 +236,7 @@ describe("negative initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      -5
+      -5,
     );
 
     expect(await client.peek()).toBe(-5);
@@ -254,7 +254,7 @@ describe("negative initial value", async () => {
       "dummyAccount",
       "dummyTable",
       "dummyKey",
-      -5
+      -5,
     );
 
     expect(await client.set(150)).toBe(undefined);

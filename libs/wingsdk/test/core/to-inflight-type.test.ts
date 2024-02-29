@@ -37,7 +37,7 @@ function makeTest(module: any, moduleName: string, className: string) {
   test(`${p}._toInflightType()`, () => {
     assert.isFunction(
       module[className]._toInflightType,
-      `${p} is missing _toInflightType()`
+      `${p} is missing _toInflightType()`,
     );
 
     const code = module[className]._toInflightType();
@@ -51,7 +51,7 @@ function makeTest(module: any, moduleName: string, className: string) {
     assert.equal(
       v,
       module[className],
-      "toInflightType() should return the same class"
+      "toInflightType() should return the same class",
     );
   });
 }

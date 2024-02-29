@@ -35,7 +35,7 @@ test("captures tokens", () => {
         obj: listVar.listValue,
         ops: [],
       },
-    }
+    },
   );
 
   api.get("/", inflight);
@@ -65,7 +65,7 @@ test("captures tokens inside plain objects", () => {
         obj: { str: api.url, num: numVar.numberValue },
         ops: [],
       },
-    }
+    },
   );
 
   api.get("/", inflight);

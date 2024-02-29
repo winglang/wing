@@ -15,7 +15,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
     scope: Construct,
     id: string,
     handler: cloud.IServiceHandler,
-    props: cloud.ServiceProps = {}
+    props: cloud.ServiceProps = {},
   ) {
     super(scope, id, handler, props);
     this.autoStart = props.autoStart ?? true;

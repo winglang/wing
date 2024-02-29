@@ -44,7 +44,7 @@ describe("convertDurationToCronExpression", () => {
 
     // THEN
     expect(() => convertDurationToCronExpression(dur)).toThrow(
-      /Cron expressions with second precision are not supported/
+      /Cron expressions with second precision are not supported/,
     );
   });
 
@@ -54,7 +54,7 @@ describe("convertDurationToCronExpression", () => {
 
     // THEN
     expect(() => convertDurationToCronExpression(dur)).toThrow(
-      /Cron expressions with second precision are not supported/
+      /Cron expressions with second precision are not supported/,
     );
   });
 });

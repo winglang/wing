@@ -64,6 +64,6 @@ test("execute OnDeploy before other resources", () => {
   const awsS3Bucket = getTfResource(output, "aws_s3_bucket", 1);
   expect(awsS3Bucket.depends_on).toBeDefined();
   expect(awsS3Bucket.depends_on).toContain(
-    "${data.aws_lambda_invocation.my_on_deploy_Invocation_1A26E3B9}"
+    "${data.aws_lambda_invocation.my_on_deploy_Invocation_1A26E3B9}",
   );
 });

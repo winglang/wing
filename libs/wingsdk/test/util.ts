@@ -18,7 +18,7 @@ export function tfDataSourcesOf(templateStr: string): string[] {
 
 export function tfResourcesOfCount(
   templateStr: string,
-  resourceId: string
+  resourceId: string,
 ): number {
   const template = JSON.parse(templateStr);
   const resource = template.resource[resourceId];
@@ -30,7 +30,7 @@ export function tfResourcesOfCount(
 
 export function tfDataSourcesOfCount(
   templateStr: string,
-  dataSourceId: string
+  dataSourceId: string,
 ): number {
   const template = JSON.parse(templateStr);
   const dataSource = template.data[dataSourceId];
@@ -43,7 +43,7 @@ export function tfDataSourcesOfCount(
 export function tfResourcesWithProperty(
   templateStr: string,
   resourceId: string,
-  properties: Record<string, string>
+  properties: Record<string, string>,
 ): Record<string, string> | undefined {
   return (
     Object.values(JSON.parse(templateStr).resource[resourceId]) as Record<
@@ -63,7 +63,7 @@ export function tfResourcesWithProperty(
 export function getTfResource(
   templateStr: string,
   resourceId: string,
-  index?: number
+  index?: number,
 ): any {
   const resources = JSON.parse(templateStr).resource[resourceId];
   if (!resources) {
@@ -76,7 +76,7 @@ export function getTfResource(
 export function getTfDataSource(
   templateStr: string,
   dataSourceId: string,
-  index?: number
+  index?: number,
 ): any {
   const dataSources = JSON.parse(templateStr).data[dataSourceId];
   if (!dataSources) {

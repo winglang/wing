@@ -34,7 +34,7 @@ export class ParameterRegistrar extends Construct {
       // attempt to read the value from the raw parameters, then cache it
       this.parameterValueByPath[path] = resolveValueFromPath(
         this._rawParameters,
-        path
+        path,
       );
     }
 
@@ -61,10 +61,10 @@ export class ParameterRegistrar extends Construct {
   public addParameterSchemaAtPath(
     schema: any,
     path: string,
-    recursiveRequire = false
+    recursiveRequire = false,
   ) {
     this.addParameterSchema(
-      this._nestSchemaUnderPath(schema, path, recursiveRequire)
+      this._nestSchemaUnderPath(schema, path, recursiveRequire),
     );
   }
 
@@ -84,7 +84,7 @@ export class ParameterRegistrar extends Construct {
   public _nestSchemaUnderPath(
     schema: any,
     path: string,
-    recursiveRequire = false
+    recursiveRequire = false,
   ): any {
     const parts = path.split("/");
 
@@ -103,7 +103,7 @@ export class ParameterRegistrar extends Construct {
         [currentKey]: this._nestSchemaUnderPath(
           schema,
           parts.slice(1).join("/"),
-          recursiveRequire
+          recursiveRequire,
         ),
       },
       required: recursiveRequire ? [currentKey] : [],
@@ -133,7 +133,7 @@ export class ParameterRegistrar extends Construct {
           .join("\n- ")}
 
 (hint: make sure to use --values to provide the required parameters file)
-        `
+        `,
       );
     }
   }
@@ -148,7 +148,7 @@ export class ParameterRegistrar extends Construct {
  */
 export function resolveValueFromPath(
   rawParameters: { [key: string]: any },
-  path: string
+  path: string,
 ): any {
   if (!rawParameters) {
     return undefined;

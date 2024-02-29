@@ -47,7 +47,7 @@ export class Endpoint extends Resource {
     scope: Construct,
     id: string,
     url: string,
-    props?: EndpointProps
+    props?: EndpointProps,
   ) {
     if (new.target === Endpoint) {
       return Resource._newFromFactory(ENDPOINT_FQN, scope, id, url, props);

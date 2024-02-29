@@ -108,7 +108,7 @@ export const createClient = (host: string): Client => {
   const onOpenFileInEditor = (options: SubscriptionOptions) => {
     return client["app.openFileInEditorSubscription"].subscribe(
       undefined,
-      options
+      options,
     );
   };
 

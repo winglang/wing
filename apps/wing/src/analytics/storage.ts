@@ -185,7 +185,7 @@ export class AnalyticsStorage {
    */
   private flattenProperties(
     properties: { [key: string]: any },
-    parentKey: string = ""
+    parentKey: string = "",
   ): { [key: string]: any } {
     return Object.keys(properties).reduce((accumulated: { [key: string]: any }, key) => {
       const newKey = parentKey ? `${parentKey}_${key}` : key;

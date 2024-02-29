@@ -25,7 +25,7 @@ export interface EnvLoadOptions {
 export function loadEnvVariables(options?: EnvLoadOptions): Record<string, string> | undefined {
   const envDir = options?.cwd ?? process.cwd();
   const envFiles = DEFAULT_ENV_FILES.concat(
-    options?.mode ? [`.env.${options.mode}`, `.env.${options.mode}.local`] : []
+    options?.mode ? [`.env.${options.mode}`, `.env.${options.mode}.local`] : [],
   ).map((file) => join(envDir, file));
 
   // Parse `envFiles` and combine their variables into a single object
@@ -36,7 +36,7 @@ export function loadEnvVariables(options?: EnvLoadOptions): Record<string, strin
       } catch (_) {
         return [];
       }
-    })
+    }),
   );
 
   // Expand and force load the environment variables

@@ -34,7 +34,7 @@ import { Datetime, Json } from "../std";
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
-    private readonly s3Client: S3Client = new S3Client({})
+    private readonly s3Client: S3Client = new S3Client({}),
   ) {}
 
   /**
@@ -68,7 +68,7 @@ export class BucketClient implements IBucketClient {
   public async put(
     key: string,
     body: string,
-    opts?: BucketPutOptions
+    opts?: BucketPutOptions,
   ): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
@@ -97,7 +97,7 @@ export class BucketClient implements IBucketClient {
    */
   private async getObjectContent(
     key: string,
-    options?: BucketGetOptions
+    options?: BucketGetOptions,
   ): Promise<string | undefined> {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
@@ -112,13 +112,13 @@ export class BucketClient implements IBucketClient {
       const objectContent = resp.Body as Readable;
       try {
         return new TextDecoder("utf8", { fatal: true }).decode(
-          await consumers.buffer(objectContent)
+          await consumers.buffer(objectContent),
         );
       } catch (e) {
         throw new Error(
           `Object content could not be read as text (key=${key}): ${
             (e as Error).stack
-          })}`
+          })}`,
         );
       }
     } catch (e) {
@@ -151,7 +151,7 @@ export class BucketClient implements IBucketClient {
    */
   public async tryGet(
     key: string,
-    options?: BucketTryGetOptions
+    options?: BucketTryGetOptions,
   ): Promise<string | undefined> {
     return this.getObjectContent(key, options);
   }
@@ -240,9 +240,8 @@ export class BucketClient implements IBucketClient {
         Prefix: prefix,
         StartAfter: marker,
       });
-      const resp: ListObjectsV2CommandOutput = await this.s3Client.send(
-        command
-      );
+      const resp: ListObjectsV2CommandOutput =
+        await this.s3Client.send(command);
       for (const content of resp.Contents ?? []) {
         if (content.Key === undefined) {
           continue;
@@ -268,7 +267,7 @@ export class BucketClient implements IBucketClient {
         new HeadObjectCommand({
           Bucket: this.bucketName,
           Key: srcKey,
-        })
+        }),
       );
 
       // Equivalent to `aws s3 cp --copy-props` in AWS CLI v2
@@ -307,7 +306,7 @@ export class BucketClient implements IBucketClient {
   public async rename(srcKey: string, dstKey: string): Promise<void> {
     if (srcKey === dstKey) {
       throw new Error(
-        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`
+        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`,
       );
     }
 
@@ -323,9 +322,8 @@ export class BucketClient implements IBucketClient {
     const command = new GetPublicAccessBlockCommand({
       Bucket: this.bucketName,
     });
-    const resp: GetPublicAccessBlockCommandOutput = await this.s3Client.send(
-      command
-    );
+    const resp: GetPublicAccessBlockCommandOutput =
+      await this.s3Client.send(command);
     return (
       !resp.PublicAccessBlockConfiguration?.BlockPublicAcls &&
       !resp.PublicAccessBlockConfiguration?.BlockPublicPolicy &&
@@ -345,14 +343,14 @@ export class BucketClient implements IBucketClient {
 
     if (!(await this.exists(key))) {
       throw new Error(
-        `Cannot provide public url for a non-existent key (key=${key})`
+        `Cannot provide public url for a non-existent key (key=${key})`,
       );
     }
 
     const region = await this.getLocation();
 
     return encodeURI(
-      `https://${this.bucketName}.s3.${region}.amazonaws.com/${key}`
+      `https://${this.bucketName}.s3.${region}.amazonaws.com/${key}`,
     );
   }
 
@@ -365,7 +363,7 @@ export class BucketClient implements IBucketClient {
    */
   public async signedUrl(
     key: string,
-    opts?: BucketSignedUrlOptions
+    opts?: BucketSignedUrlOptions,
   ): Promise<string> {
     let s3Command: GetObjectCommand | PutObjectCommand;
 
@@ -377,7 +375,7 @@ export class BucketClient implements IBucketClient {
       case BucketSignedUrlAction.DOWNLOAD:
         if (!(await this.exists(key))) {
           throw new Error(
-            `Cannot provide signed url for a non-existent key (key=${key})`
+            `Cannot provide signed url for a non-existent key (key=${key})`,
           );
         }
         s3Command = new GetObjectCommand({

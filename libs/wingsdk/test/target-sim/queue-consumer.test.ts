@@ -24,7 +24,7 @@ test("pushing messages through a queue", async () => {
             obj: queue,
             ops: [cloud.QueueInflightMethods.PUSH],
           },
-        }
+        },
       );
       new cloud.Function(this, "Function", pusher);
 
@@ -43,7 +43,7 @@ test("pushing messages through a queue", async () => {
 
   const pusher = s.getResource("/HelloWorld/Function") as cloud.IFunctionClient;
   const consumer = s.getResource(
-    helloWorld.consumerPath
+    helloWorld.consumerPath,
   ) as cloud.IFunctionClient;
 
   // warm up the consumer so timing is more predictable

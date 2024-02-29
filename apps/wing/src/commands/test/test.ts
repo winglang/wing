@@ -66,7 +66,7 @@ export async function collectTestFiles(entrypoints: string[] = []): Promise<stri
 
   // check if any of the entrypoints are exact files
   const exactEntrypoints = entrypoints.filter(
-    (e) => statSync(e, { throwIfNoEntry: false })?.isFile() === true
+    (e) => statSync(e, { throwIfNoEntry: false })?.isFile() === true,
   );
   const fuzzyEntrypoints = entrypoints.filter((e) => !exactEntrypoints.includes(e));
 
@@ -74,7 +74,7 @@ export async function collectTestFiles(entrypoints: string[] = []): Promise<stri
   if (fuzzyEntrypoints.length > 0) {
     // if entrypoints are specified, filter the expanded entrypoints to ones that contain them
     finalEntrypoints = finalEntrypoints.concat(
-      expandedEntrypoints.filter((e) => fuzzyEntrypoints.some((f) => e.includes(f)))
+      expandedEntrypoints.filter((e) => fuzzyEntrypoints.some((f) => e.includes(f))),
     );
   } else if (exactEntrypoints.length === 0) {
     finalEntrypoints = finalEntrypoints.concat(expandedEntrypoints);
@@ -149,7 +149,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
         ...options,
         rootId: options.rootId ?? `Test.${nanoid(10)}`,
         testing: true,
-      })
+      }),
   );
 
   switch (target) {
@@ -171,14 +171,14 @@ async function testOne(entrypoint: string, options: TestOptions) {
  */
 export async function renderTestReport(
   entrypoint: string,
-  results: std.TestResult[]
+  results: std.TestResult[],
 ): Promise<string> {
   const out = new Array<string>();
 
   // find the longest `path` of all the tests
   const longestPath = results.reduce(
     (longest, result) => (result.path.length > longest ? result.path.length : longest),
-    0
+    0,
   );
 
   // if there are no inflight tests, add a dummy "pass" result
@@ -256,7 +256,7 @@ function testResultsContainsFailure(results: std.TestResult[]): boolean {
 
 function noCleanUp(synthDir: string) {
   console.log(
-    chalk.yellowBright.bold(`Cleanup is disabled!\nOutput files available at ${resolve(synthDir)}`)
+    chalk.yellowBright.bold(`Cleanup is disabled!\nOutput files available at ${resolve(synthDir)}`),
   );
 }
 
@@ -278,7 +278,7 @@ export function filterTests(tests: Array<string>, regexString?: string): Array<s
 async function runTestsWithRetry(
   testRunner: std.ITestRunnerClient,
   tests: string[],
-  retries: number
+  retries: number,
 ): Promise<std.TestResult[]> {
   let runCount = retries + 1;
   let remainingTests = tests;
@@ -345,7 +345,7 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
     const installed = await isTerraformInstalled(synthDir);
     if (!installed) {
       throw new Error(
-        "Terraform is not installed. Please install Terraform to run tests in the cloud."
+        "Terraform is not installed. Please install Terraform to run tests in the cloud.",
       );
     }
 
@@ -408,7 +408,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const testArns = await awsCdkOutput(
         synthDir,
         ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK,
-        stackName
+        stackName,
       );
 
       const { TestRunnerClient } = await import(
@@ -455,7 +455,7 @@ async function isAwsCdkInstalled(synthDir: string) {
     await execCapture("cdk version --ci true", { cwd: synthDir });
   } catch (err) {
     throw new Error(
-      "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk)."
+      "AWS-CDK is not installed. Please install AWS-CDK to run tests in the cloud (npm i -g aws-cdk).",
     );
   }
 }

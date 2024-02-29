@@ -29,7 +29,7 @@ export async function lsp() {
     const data_buf = Buffer.from(
       (wingc.exports.memory as WebAssembly.Memory).buffer,
       data_ptr,
-      data_len
+      data_len,
     );
     const data_str = new TextDecoder().decode(data_buf);
     raw_diagnostics.push(JSON.parse(data_str));
@@ -108,7 +108,7 @@ export async function lsp() {
   async function handle_event_and_update_diagnostics(
     wingc_handler_name: wingCompiler.WingCompilerFunction,
     params: any,
-    _uri: DocumentUri
+    _uri: DocumentUri,
   ) {
     if (badState) {
       wingc = await wingCompiler.load({
@@ -145,10 +145,10 @@ export async function lsp() {
           rd.annotations.map((a) => ({
             location: Location.create(
               "file://" + a.span.file_id,
-              Range.create(a.span.start.line, a.span.start.col, a.span.end.line, a.span.end.col)
+              Range.create(a.span.start.line, a.span.start.col, a.span.end.line, a.span.end.col),
             ),
             message: a.message,
-          }))
+          })),
         );
 
         // Add annotations as notes hinting back to the original diagnostic
@@ -164,8 +164,8 @@ export async function lsp() {
                 location: Location.create(diagnosticUri, diag.range),
                 message: `(source) ${diag.message}`,
               },
-            ]
-          )
+            ],
+          ),
         );
 
         if (!allDiagnostics.has(diagnosticUri)) {
@@ -188,14 +188,14 @@ export async function lsp() {
     void handle_event_and_update_diagnostics(
       "wingc_on_did_open_text_document",
       params,
-      params.textDocument.uri
+      params.textDocument.uri,
     );
   });
   connection.onDidChangeTextDocument((params) => {
     void handle_event_and_update_diagnostics(
       "wingc_on_did_change_text_document",
       params,
-      params.textDocument.uri
+      params.textDocument.uri,
     );
   });
   connection.onCompletion(async (params) => {

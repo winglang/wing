@@ -33,7 +33,7 @@ export class TestRunnerClient implements ITestRunnerClient {
     const client = new FunctionClient(
       functionArn,
       process.env.GOOGLE_PROJECT_ID as string,
-      process.env.GOOGLE_REGION as string
+      process.env.GOOGLE_REGION as string,
     );
     let traces: Trace[] = [];
     let pass = false;

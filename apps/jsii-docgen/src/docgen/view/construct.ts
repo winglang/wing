@@ -10,7 +10,7 @@ export class Construct {
   constructor(
     transpile: Transpile,
     klass: reflect.ClassType,
-    inflight?: Interface
+    inflight?: Interface,
   ) {
     this.inflightInterface = inflight;
     this.construct = new Class(transpile, klass);

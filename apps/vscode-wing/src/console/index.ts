@@ -77,7 +77,7 @@ export class WingConsoleManager {
     // TODO: Use createConsoleApp from "bin-helper" instead of spawn to open the console after fixing after fixing https://github.com/winglang/wing/issues/3678
     if (!this.wingBin) {
       Loggers.default.appendLine(
-        `Unable to open console: no wing binary found`
+        `Unable to open console: no wing binary found`,
       );
       return;
     }
@@ -94,7 +94,7 @@ export class WingConsoleManager {
           // Ask the Wing Console to not show the sign in prompt.
           NO_SIGN_IN: "true",
         },
-      }
+      },
     );
 
     const onDidClose = () => {
@@ -103,7 +103,7 @@ export class WingConsoleManager {
           execSync(`taskkill /pid ${cp.pid} /T /F`);
         } catch (error) {
           Loggers.default.appendLine(
-            `Failed to kill the process with taskkill: ${error}`
+            `Failed to kill the process with taskkill: ${error}`,
           );
 
           cp.kill();

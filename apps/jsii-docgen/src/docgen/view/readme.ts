@@ -11,7 +11,7 @@ export class Readme {
   constructor(
     transpile: Transpile,
     assembly: reflect.Assembly,
-    submodule?: reflect.Submodule
+    submodule?: reflect.Submodule,
   ) {
     const readme = submodule ? submodule.readme : assembly.readme;
     this.readme = readme ? transpile.readme(readme.markdown) : undefined;

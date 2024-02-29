@@ -54,7 +54,7 @@ export class Counter extends cloud.Counter implements IAwsCounter {
     }
 
     host.addPolicyStatements(
-      ...calculateCounterPermissions(this.table.arn, ops)
+      ...calculateCounterPermissions(this.table.arn, ops),
     );
 
     host.addEnvironment(this.envName(), this.table.name);
@@ -68,7 +68,7 @@ export class Counter extends cloud.Counter implements IAwsCounter {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "CounterClient",
-      [`process.env["${this.envName()}"]`, `${this.initial}`]
+      [`process.env["${this.envName()}"]`, `${this.initial}`],
     );
   }
 

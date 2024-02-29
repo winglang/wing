@@ -49,7 +49,7 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
       return Promise.resolve(
         this.tests.map((test) => {
           return new TestItem(test.id, test.label, test.time, test.status);
-        })
+        }),
       );
     }
     return Promise.resolve([]);
@@ -61,7 +61,7 @@ export class TestItem extends TreeItem {
     public readonly id: string,
     public readonly label?: string,
     public readonly time?: number,
-    public readonly status?: TestStatus
+    public readonly status?: TestStatus,
   ) {
     super(label || "", TreeItemCollapsibleState.None);
     this.tooltip = this.label;

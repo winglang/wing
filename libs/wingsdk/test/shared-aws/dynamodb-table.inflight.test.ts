@@ -51,7 +51,7 @@ describe("inflight table tests", () => {
     expect(response.attributes).toEqual(undefined);
     expect(dynamoMock).toHaveReceivedCommandWith(
       PutItemCommand,
-      expectedRequest
+      expectedRequest,
     );
   });
 
@@ -85,7 +85,7 @@ describe("inflight table tests", () => {
     expect(response.attributes).toEqual({ id: key });
     expect(dynamoMock).toHaveReceivedCommandWith(
       UpdateItemCommand,
-      expectedRequest
+      expectedRequest,
     );
   });
 
@@ -104,7 +104,7 @@ describe("inflight table tests", () => {
     // THEN
     expect(dynamoMock).toHaveReceivedCommandWith(
       DeleteItemCommand,
-      expectedRequest
+      expectedRequest,
     );
   });
 
@@ -124,7 +124,7 @@ describe("inflight table tests", () => {
     expect(response.item).toBeUndefined();
     expect(dynamoMock).toHaveReceivedCommandWith(
       GetItemCommand,
-      expectedRequest
+      expectedRequest,
     );
   });
 
@@ -150,7 +150,7 @@ describe("inflight table tests", () => {
     expect(response.item).toEqual({ id: key, somenumber: row.somenumber });
     expect(dynamoMock).toHaveReceivedCommandWith(
       GetItemCommand,
-      expectedRequest
+      expectedRequest,
     );
   });
 });

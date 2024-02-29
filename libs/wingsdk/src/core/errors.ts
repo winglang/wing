@@ -14,7 +14,7 @@ export class NotImplementedError extends Error {
         options?.issue
           ? `\nFor more information see: ${options.issue}.\nContributions welcome ❤️`
           : ""
-      }`
+      }`,
     );
     this.resource = options?.resource;
     this.operation = options?.operation;

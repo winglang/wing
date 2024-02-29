@@ -40,7 +40,7 @@ export class TestRunner extends std.TestRunner {
     const testFunctions = this.getTestFunctionIdentifiers();
     host.addEnvironment(
       this.envTestFunctionIdentifiers(),
-      JSON.stringify([...testFunctions.entries()])
+      JSON.stringify([...testFunctions.entries()]),
     );
 
     host.addEnvironment(this.projectEnv(), projectId);
@@ -67,7 +67,7 @@ export class TestRunner extends std.TestRunner {
       if (test._fn) {
         if (!(test._fn instanceof GcpFunction)) {
           throw new Error(
-            `Unsupported test function type, ${test._fn.node.path} was not a tfgcp.Function`
+            `Unsupported test function type, ${test._fn.node.path} was not a tfgcp.Function`,
           );
         }
         arns.set(test.node.path, (test._fn as GcpFunction).functionName);

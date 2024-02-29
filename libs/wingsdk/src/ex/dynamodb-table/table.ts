@@ -157,7 +157,7 @@ export interface IDynamodbTableClient {
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html
    */
   putItem(
-    options: DynamodbTablePutItemOptions
+    options: DynamodbTablePutItemOptions,
   ): Promise<DynamodbTablePutItemResult>;
 
   /**
@@ -167,7 +167,7 @@ export interface IDynamodbTableClient {
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html
    */
   updateItem(
-    options: DynamodbTableUpdateItemOptions
+    options: DynamodbTableUpdateItemOptions,
   ): Promise<DynamodbTableUpdateItemResult>;
 
   /**
@@ -177,7 +177,7 @@ export interface IDynamodbTableClient {
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html
    */
   deleteItem(
-    options: DynamodbTableDeleteItemOptions
+    options: DynamodbTableDeleteItemOptions,
   ): Promise<DynamodbTableDeleteItemResult>;
 
   /**
@@ -187,7 +187,7 @@ export interface IDynamodbTableClient {
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
    */
   getItem(
-    options: DynamodbTableGetItemOptions
+    options: DynamodbTableGetItemOptions,
   ): Promise<DynamodbTableGetItemResult>;
 
   /**
@@ -213,7 +213,7 @@ export interface IDynamodbTableClient {
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactGetItems.html
    */
   transactGetItems(
-    options: DynamodbTransactGetItemsOptions
+    options: DynamodbTransactGetItemsOptions,
   ): Promise<DynamodbTableTransactGetItemsResult>;
 
   /**
@@ -223,7 +223,7 @@ export interface IDynamodbTableClient {
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_TransactWriteItems.html
    */
   transactWriteItems(
-    options: DynamodbTransactWriteItemsOptions
+    options: DynamodbTransactWriteItemsOptions,
   ): Promise<DynamodbTableTransactWriteItemsResult>;
 
   /**
@@ -233,7 +233,7 @@ export interface IDynamodbTableClient {
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html
    */
   batchGetItem(
-    options: DynamodbTableBatchGetItemOptions
+    options: DynamodbTableBatchGetItemOptions,
   ): Promise<DynamodbTableBatchGetItemResult>;
 
   /**
@@ -243,7 +243,7 @@ export interface IDynamodbTableClient {
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
    */
   batchWriteItem(
-    options: DynamodbTableBatchWriteItemOptions
+    options: DynamodbTableBatchWriteItemOptions,
   ): Promise<DynamodbTableBatchWriteItemResult>;
 }
 
@@ -290,7 +290,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   public abstract _rawClient(): Promise<DynamoDBClient>;
 
   public async putItem(
-    options: DynamodbTablePutItemOptions
+    options: DynamodbTablePutItemOptions,
   ): Promise<DynamodbTablePutItemResult> {
     const client = await this._rawClient();
     const response = await client.send(
@@ -308,7 +308,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         ReturnItemCollectionMetrics: options?.returnItemCollectionMetrics,
         ReturnValuesOnConditionCheckFailure:
           options?.returnValuesOnConditionCheckFailure,
-      })
+      }),
     );
     return {
       attributes: response.Attributes
@@ -320,7 +320,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async updateItem(
-    options: DynamodbTableUpdateItemOptions
+    options: DynamodbTableUpdateItemOptions,
   ): Promise<DynamodbTableUpdateItemResult> {
     const client = await this._rawClient();
     const result = await client.send(
@@ -340,7 +340,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         ReturnValues: options?.returnValues,
         ReturnValuesOnConditionCheckFailure:
           options?.returnValuesOnConditionCheckFailure,
-      })
+      }),
     );
     return {
       attributes: result.Attributes
@@ -352,7 +352,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async deleteItem(
-    options: DynamodbTableDeleteItemOptions
+    options: DynamodbTableDeleteItemOptions,
   ): Promise<DynamodbTableDeleteItemResult> {
     const client = await this._rawClient();
     const result = await client.send(
@@ -371,7 +371,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         ReturnValues: options?.returnValues,
         ReturnValuesOnConditionCheckFailure:
           options?.returnValuesOnConditionCheckFailure,
-      })
+      }),
     );
     return {
       attributes: result.Attributes
@@ -383,7 +383,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async getItem(
-    options: DynamodbTableGetItemOptions
+    options: DynamodbTableGetItemOptions,
   ): Promise<DynamodbTableGetItemResult> {
     const client = await this._rawClient();
     const result = await client.send(
@@ -396,7 +396,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         ExpressionAttributeNames: options.expressionAttributeNames as
           | Record<string, string>
           | undefined,
-      })
+      }),
     );
     return {
       consumedCapacity: result.ConsumedCapacity as Json | undefined,
@@ -405,7 +405,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async scan(
-    options?: DynamodbTableScanOptions
+    options?: DynamodbTableScanOptions,
   ): Promise<DynamodbTableScanResult> {
     const client = await this._rawClient();
     const result = await client.send(
@@ -427,7 +427,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         Segment: options?.segment,
         Select: options?.select,
         TotalSegments: options?.totalSegments,
-      })
+      }),
     );
     return {
       consumedCapacity: result.ConsumedCapacity as Json | undefined,
@@ -441,7 +441,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async query(
-    options: DynamodbTableQueryOptions
+    options: DynamodbTableQueryOptions,
   ): Promise<DynamodbTableQueryResult> {
     const client = await this._rawClient();
     const result = await client.send(
@@ -463,7 +463,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         ReturnConsumedCapacity: options.returnConsumedCapacity,
         ScanIndexForward: options.scanIndexForward,
         Select: options.select,
-      })
+      }),
     );
     return {
       consumedCapacity: result.ConsumedCapacity as Json | undefined,
@@ -477,7 +477,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async transactGetItems(
-    options: DynamodbTransactGetItemsOptions
+    options: DynamodbTransactGetItemsOptions,
   ): Promise<DynamodbTableTransactGetItemsResult> {
     const client = await this._rawClient();
 
@@ -502,7 +502,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
       new TransactGetItemsCommand({
         TransactItems: items,
         ReturnConsumedCapacity: options.returnConsumedCapacity,
-      })
+      }),
     );
 
     return {
@@ -515,7 +515,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async transactWriteItems(
-    options: DynamodbTransactWriteItemsOptions
+    options: DynamodbTransactWriteItemsOptions,
   ): Promise<DynamodbTableTransactWriteItemsResult> {
     const client = await this._rawClient();
 
@@ -579,7 +579,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
         };
       } else {
         throw Error(
-          "A write transact item must define either `put`, `update`, `delete` or `conditionCheck`."
+          "A write transact item must define either `put`, `update`, `delete` or `conditionCheck`.",
         );
       }
     });
@@ -587,7 +587,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
     const result = await client.send(
       new TransactWriteItemsCommand({
         TransactItems: items,
-      })
+      }),
     );
 
     return {
@@ -597,7 +597,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async batchGetItem(
-    options: DynamodbTableBatchGetItemOptions
+    options: DynamodbTableBatchGetItemOptions,
   ): Promise<DynamodbTableBatchGetItemResult> {
     const client = await this._rawClient();
     const result = await client.send(
@@ -612,14 +612,14 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
           },
         },
         ReturnConsumedCapacity: options.returnConsumedCapacity,
-      })
+      }),
     );
     const unprocessedKeys = result.UnprocessedKeys?.[this.tableName];
     return {
       consumedCapacity: result.ConsumedCapacity as Json | undefined,
       responses: result.Responses
         ? result.Responses[this.tableName].map(
-            (item) => unmarshall(item) as Json
+            (item) => unmarshall(item) as Json,
           )
         : undefined,
       unprocessedKeys: unprocessedKeys
@@ -635,7 +635,7 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
   }
 
   public async batchWriteItem(
-    options: DynamodbTableBatchWriteItemOptions
+    options: DynamodbTableBatchWriteItemOptions,
   ): Promise<DynamodbTableBatchWriteItemResult> {
     const client = await this._rawClient();
     const result = await client.send(
@@ -656,14 +656,14 @@ export abstract class DynamodbTableClientBase implements IDynamodbTableClient {
               };
             } else {
               throw Error(
-                "A batch write item must define either `deleteRequest` or `putRequest`."
+                "A batch write item must define either `deleteRequest` or `putRequest`.",
               );
             }
           }),
         },
         ReturnConsumedCapacity: options.returnConsumedCapacity,
         ReturnItemCollectionMetrics: options.returnItemCollectionMetrics,
-      })
+      }),
     );
     return {
       consumedCapacity: result.ConsumedCapacity as Json | undefined,

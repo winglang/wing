@@ -72,13 +72,13 @@ export class Bucket extends Resource {
   public addFile(
     key: string,
     path: string,
-    encoding: BufferEncoding = "utf-8"
+    encoding: BufferEncoding = "utf-8",
   ): void {
     const app = App.of(this);
 
     const data = fs.readFileSync(
       isAbsolute(path) ? path : resolve(app.entrypointDir, path),
-      { encoding: encoding }
+      { encoding: encoding },
     );
 
     this.addObject(key, data);
@@ -119,7 +119,7 @@ export class Bucket extends Resource {
    */
   protected eventHandlerLocation(): string {
     throw new Error(
-      "please specify under the target file (to get the right relative path)"
+      "please specify under the target file (to get the right relative path)",
     );
   }
 
@@ -130,14 +130,14 @@ export class Bucket extends Resource {
    */
   private createInflightHandler(
     eventType: BucketEventType,
-    inflight: IBucketEventHandler
+    inflight: IBucketEventHandler,
   ): IInflight {
     return convertBetweenHandlers(
       inflight,
       // since uses __dirname should be specified under the target directory
       this.eventHandlerLocation(),
       "BucketEventHandlerClient",
-      { eventType }
+      { eventType },
     );
   }
 
@@ -150,22 +150,22 @@ export class Bucket extends Resource {
   private createBucketEvent(
     eventNames: BucketEventType[],
     inflight: IBucketEventHandler,
-    opts?: BucketOnCreateOptions
+    opts?: BucketOnCreateOptions,
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
       this.getTopic(BucketEventType.CREATE).onMessage(
-        this.createInflightHandler(BucketEventType.CREATE, inflight)
+        this.createInflightHandler(BucketEventType.CREATE, inflight),
       );
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
       this.getTopic(BucketEventType.UPDATE).onMessage(
-        this.createInflightHandler(BucketEventType.UPDATE, inflight)
+        this.createInflightHandler(BucketEventType.UPDATE, inflight),
       );
     }
     if (eventNames.includes(BucketEventType.DELETE)) {
       this.getTopic(BucketEventType.DELETE).onMessage(
-        this.createInflightHandler(BucketEventType.DELETE, inflight)
+        this.createInflightHandler(BucketEventType.DELETE, inflight),
       );
     }
   }
@@ -210,7 +210,7 @@ export class Bucket extends Resource {
     this.createBucketEvent(
       [BucketEventType.CREATE, BucketEventType.UPDATE, BucketEventType.DELETE],
       fn,
-      opts
+      opts,
     );
   }
 }
@@ -355,7 +355,7 @@ export interface IBucketClient {
    */
   tryGet(
     key: string,
-    options?: BucketTryGetOptions
+    options?: BucketTryGetOptions,
   ): Promise<string | undefined>;
 
   /**

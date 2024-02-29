@@ -45,15 +45,15 @@ export class Schedule extends cloud.Schedule {
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props: cloud.ScheduleOnTickOptions = {}
+    props: cloud.ScheduleOnTickOptions = {},
   ): cloud.Function {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
         __dirname.replace("target-tf-aws", "shared-aws"),
-        "schedule.ontick.inflight.js"
+        "schedule.ontick.inflight.js",
       ),
-      "ScheduleOnTickHandlerClient"
+      "ScheduleOnTickHandlerClient",
     );
 
     let fn = this.handlers[inflight._id];
@@ -65,14 +65,14 @@ export class Schedule extends cloud.Schedule {
       this,
       App.of(this).makeId(this, "OnTick"),
       functionHandler,
-      props
+      props,
     );
     this.handlers[inflight._id] = fn;
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
       throw new Error(
-        "Schedule only supports creating tfaws.Function right now"
+        "Schedule only supports creating tfaws.Function right now",
       );
     }
 
@@ -84,7 +84,7 @@ export class Schedule extends cloud.Schedule {
       {
         arn: fn.qualifiedArn,
         rule: this.rule.name,
-      }
+      },
     );
 
     Node.of(this).addConnection({
@@ -102,7 +102,7 @@ export class Schedule extends cloud.Schedule {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "ScheduleClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"]`],
     );
   }
 

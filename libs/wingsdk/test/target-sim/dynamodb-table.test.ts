@@ -174,7 +174,7 @@ test("inserting the same id twice", async () => {
     client.putItem({
       item: { id: "1", name: "Joe Doe III" } as any,
       conditionExpression: "attribute_not_exists(id)",
-    })
+    }),
   ).rejects.toThrow(/The conditional request failed/);
 
   await s.stop();
@@ -190,7 +190,7 @@ test("update non-existent item", async () => {
   });
   const s = await app.startSimulator();
   const client = s.getResource(
-    "/update_non_existing_table"
+    "/update_non_existing_table",
   ) as ex.IDynamodbTableClient;
 
   await client.updateItem({
@@ -298,7 +298,7 @@ test("transact get items", async () => {
   });
   const s = await app.startSimulator();
   const client = s.getResource(
-    "/transact_get_items_table"
+    "/transact_get_items_table",
   ) as ex.IDynamodbTableClient;
 
   // WHEN
@@ -360,7 +360,7 @@ test("transact write items", async () => {
   });
   const s = await app.startSimulator();
   const client = s.getResource(
-    "/transact_write_items_table"
+    "/transact_write_items_table",
   ) as ex.IDynamodbTableClient;
 
   await client.putItem({ item: { id: "1", age: 50 } as any });
@@ -412,7 +412,7 @@ test("batch get item", async () => {
   });
   const s = await app.startSimulator();
   const client = s.getResource(
-    "/batch_get_item_table"
+    "/batch_get_item_table",
   ) as ex.IDynamodbTableClient;
 
   await client.putItem({ item: { id: "1", age: 50 } as any });
@@ -448,7 +448,7 @@ test("batch write item", async () => {
   });
   const s = await app.startSimulator();
   const client = s.getResource(
-    "/batch_write_item_table"
+    "/batch_write_item_table",
   ) as ex.IDynamodbTableClient;
 
   // WHEN

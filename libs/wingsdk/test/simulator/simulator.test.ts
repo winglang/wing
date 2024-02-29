@@ -11,10 +11,10 @@ describe("run single test", () => {
     const app = new SimApp({ isTestEnvironment: true });
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     await expect(testRunner.runTest("test_not_found")).rejects.toThrowError(
-      'No test found at path "test_not_found"'
+      'No test found at path "test_not_found"',
     );
     await sim.stop();
   });
@@ -25,7 +25,7 @@ describe("run single test", () => {
     app.synth();
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const result = await testRunner.runTest("root/test");
     await sim.stop();
@@ -41,7 +41,7 @@ describe("run single test", () => {
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const result = await testRunner.runTest("root/test");
     await sim.stop();
@@ -54,10 +54,10 @@ describe("run single test", () => {
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     await expect(testRunner.runTest("root/test")).rejects.toThrowError(
-      'No test found at path "root/test"'
+      'No test found at path "root/test"',
     );
     await sim.stop();
   });
@@ -68,7 +68,7 @@ describe("run all tests", () => {
     const app = new SimApp({ isTestEnvironment: true });
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const tests = await testRunner.listTests();
     await sim.stop();
@@ -81,7 +81,7 @@ describe("run all tests", () => {
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const results = await runAllTests(testRunner);
     await sim.stop();
@@ -101,7 +101,7 @@ describe("run all tests", () => {
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const results = await runAllTests(testRunner);
     await sim.stop();
@@ -134,7 +134,7 @@ describe("run all tests", () => {
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
-      "/cloud.TestRunner"
+      "/cloud.TestRunner",
     ) as ITestRunnerClient;
     const results = await runAllTests(testRunner);
     await sim.stop();
@@ -163,7 +163,7 @@ test("calling an invalid method returns an error to the client", async () => {
   const sim = await app.startSimulator();
   const bucketClient = sim.getResource("/test");
   await expect(bucketClient.invalidMethod()).rejects.toThrowError(
-    /Method invalidMethod not found on resource/
+    /Method invalidMethod not found on resource/,
   );
   await sim.stop();
 });
@@ -182,11 +182,11 @@ function makeTest(
   scope: Construct,
   id: string,
   code: string[],
-  bindings: InflightBindings = {}
+  bindings: InflightBindings = {},
 ) {
   const handler = Testing.makeHandler(
     `async handle() { ${code.join("\n")} }`,
-    bindings
+    bindings,
   );
   return new Test(scope, id, handler, bindings);
 }
@@ -223,7 +223,7 @@ function sanitizeResult(result: TestResult): TestResult {
 
     // remove all lines after "at Simulator.runTest" since they are platform-dependent
     let lastLine = lines.findIndex((line) =>
-      line?.includes("Simulator.runTest")
+      line?.includes("Simulator.runTest"),
     );
     if (lastLine !== -1) {
       lines = lines.slice(0, lastLine + 1);

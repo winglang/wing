@@ -32,7 +32,7 @@ async function guidedWingInstallation() {
           void window.showErrorMessage(`Failed to install Wing: ${e}`);
           return false;
         });
-    }
+    },
   );
 }
 
@@ -42,7 +42,7 @@ export async function updateStatusBar(wingBin: string) {
     version = await executeCommand(`"${wingBin}" -V --no-update-check`);
   } catch (e) {
     Loggers.default.appendLine(
-      `Failed to get wing version from ${wingBin}: ${e}`
+      `Failed to get wing version from ${wingBin}: ${e}`,
     );
   }
 
@@ -78,13 +78,13 @@ export async function getWingBin(): Promise<string | null> {
   try {
     const whichPath = await which(configuredWingBin);
     Loggers.default.appendLine(
-      `"which ${configuredWingBin}" => "${whichPath}"`
+      `"which ${configuredWingBin}" => "${whichPath}"`,
     );
     return await resolvePath(whichPath);
   } catch (e) {
     const choice = await window.showWarningMessage(
       `Unable to find wing from "${configuredWingBin}" (not in PATH). Install globally with \`npm install -g winglang@latest\`? (${e})`,
-      "Yes!"
+      "Yes!",
     );
 
     if (choice === "Yes!") {
@@ -111,10 +111,10 @@ export async function resolvePath(p: string) {
       const vResult = await executeCommand(`"${voltaPath}" which wing`).catch(
         async () => {
           void window.showWarningMessage(
-            `Failed to resolve volta from shim: ${real}`
+            `Failed to resolve volta from shim: ${real}`,
           );
           return null;
-        }
+        },
       );
 
       if (!vResult) {

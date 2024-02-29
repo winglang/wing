@@ -24,9 +24,12 @@ export const useLoading = ({ delay = 0, duration = 0 }: UseLoadingProps) => {
         }, delay);
       } else {
         const time = Date.now() - loadingTime;
-        timeoutIdRef.current = setTimeout(() => {
-          setLoading(false);
-        }, Math.max(0, duration - time));
+        timeoutIdRef.current = setTimeout(
+          () => {
+            setLoading(false);
+          },
+          Math.max(0, duration - time),
+        );
       }
     },
     [delay, duration, loadingTime],

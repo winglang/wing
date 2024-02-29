@@ -11,7 +11,7 @@ export class Parameter {
   private readonly transpiledCallable: TranspiledCallable;
   constructor(
     transpile: Transpile,
-    private readonly parameter: reflect.Parameter
+    private readonly parameter: reflect.Parameter,
   ) {
     this.transpiledParam = transpile.parameter(parameter);
     this.transpiledCallable = transpile.callable(parameter.method);

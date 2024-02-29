@@ -35,7 +35,7 @@ export class PlatformManager {
     this.platformInstances.push(
       isBuiltin
         ? this.loadBuiltinPlatform(pathToRead)
-        : _loadCustomPlatform(pathToRead)
+        : _loadCustomPlatform(pathToRead),
     );
   }
 
@@ -70,7 +70,7 @@ export class PlatformManager {
 
     if (!appCall) {
       throw new Error(
-        `No newApp method found on platform: ${this.platformPaths[0]} (Hint: The first platform provided must have a newApp method)`
+        `No newApp method found on platform: ${this.platformPaths[0]} (Hint: The first platform provided must have a newApp method)`,
       );
     }
 
@@ -146,8 +146,8 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
   const fullCustomPlatformPath = customPlatformPath.endsWith(".js")
     ? customPlatformPath
     : isScoped
-    ? join(platformDir, `${customPlatformPath}/lib/index.js`)
-    : `${customPlatformPath}/index.js`;
+      ? join(platformDir, `${customPlatformPath}/lib/index.js`)
+      : `${customPlatformPath}/index.js`;
 
   // enable relative imports from the platform file
   const customPlatformBaseDir = customPlatformPath.endsWith(".js")
@@ -198,7 +198,7 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
   } catch (error) {
     console.error(
       "An error occurred while loading the custom platform:",
-      error
+      error,
     );
   }
 }

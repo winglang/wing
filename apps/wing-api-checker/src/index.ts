@@ -14,7 +14,7 @@ async function generateWarnings(packageDir: string): Promise<number> {
   }
 
   const pkgJson = JSON.parse(
-    fs.readFileSync(path.join(packageDir, "package.json"), "utf8")
+    fs.readFileSync(path.join(packageDir, "package.json"), "utf8"),
   );
   const pkgName = pkgJson.name;
   const assembly = ts.findAssembly(pkgName);
@@ -36,7 +36,7 @@ async function generateWarnings(packageDir: string): Promise<number> {
     for (const member of cls.allMembers) {
       if (!member.docs.summary) {
         warn(
-          `Missing docstring for ${cls.fqn}.${member.name} (${loc(member)})`
+          `Missing docstring for ${cls.fqn}.${member.name} (${loc(member)})`,
         );
       }
     }
@@ -49,7 +49,7 @@ async function generateWarnings(packageDir: string): Promise<number> {
     for (const member of iface.allMembers) {
       if (!member.docs.summary) {
         warn(
-          `Missing docstring for ${iface.fqn}.${member.name} (${loc(member)})`
+          `Missing docstring for ${iface.fqn}.${member.name} (${loc(member)})`,
         );
       }
     }

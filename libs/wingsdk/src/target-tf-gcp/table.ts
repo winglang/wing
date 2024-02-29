@@ -45,7 +45,7 @@ export class Table extends ex.Table {
     if (props.initialRows) {
       throw new NotImplementedError(
         `Property initialRows is not supported for the GCP target`,
-        { resource: this.constructor.name, operation: "initialRows" }
+        { resource: this.constructor.name, operation: "initialRows" },
       );
     }
 
@@ -97,7 +97,7 @@ export class Table extends ex.Table {
   public addRow(_key: string, _row: Json): void {
     throw new NotImplementedError(
       "Method is not supported as a preflight for the GCP target.",
-      { resource: this.constructor.name, operation: "addRow" }
+      { resource: this.constructor.name, operation: "addRow" },
     );
   }
 
@@ -107,7 +107,7 @@ export class Table extends ex.Table {
 
   public _toInflight(): string {
     throw new NotImplementedError(
-      "Table's Inflight client is not implemented yet on tf-GCP target"
+      "Table's Inflight client is not implemented yet on tf-GCP target",
     );
   }
 }

@@ -55,15 +55,15 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
-    props: cloud.QueueSetConsumerOptions = {}
+    props: cloud.QueueSetConsumerOptions = {},
   ): cloud.Function {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
         __dirname.replace("target-tf-aws", "shared-aws"),
-        "queue.setconsumer.inflight.js"
+        "queue.setconsumer.inflight.js",
       ),
-      "QueueSetConsumerHandlerClient"
+      "QueueSetConsumerHandlerClient",
     );
 
     const fn = new Function(
@@ -74,9 +74,9 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       {
         ...props,
         timeout: Duration.fromSeconds(
-          this.queue.visibilityTimeoutSeconds ?? 30
+          this.queue.visibilityTimeoutSeconds ?? 30,
         ),
-      }
+      },
     );
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
@@ -132,7 +132,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "QueueClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"]`],
     );
   }
 

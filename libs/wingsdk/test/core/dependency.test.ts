@@ -35,7 +35,7 @@ test("cycle detection", () => {
   }).toThrowError(
     `Dependency cycle detected: ${Node.of(obj1).path} => ${
       Node.of(obj2).path
-    } => ${Node.of(obj3).path} => ${Node.of(obj1).path}`
+    } => ${Node.of(obj3).path} => ${Node.of(obj1).path}`,
   );
 });
 
@@ -65,7 +65,7 @@ test("children of root contains all orphans", () => {
   const expected = new Set<IConstruct>();
 
   new DependencyGraph(Node.of(group)).root.outbound.forEach((c) =>
-    expected.add(c.value!)
+    expected.add(c.value!),
   );
 
   // chart1 and obj1 are orphans because no one depends on them (no parents)

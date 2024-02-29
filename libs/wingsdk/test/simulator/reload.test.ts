@@ -19,7 +19,7 @@ test("reloading the simulator updates the state of the tree", async () => {
   await s.start();
   expect(s.getResourceConfig("/my_bucket").props.public).toEqual(false);
   expect(s.tree().rawData().tree.children?.my_bucket.display?.hidden).toEqual(
-    false
+    false,
   );
 
   // Update the .wsim file in-place
@@ -32,6 +32,6 @@ test("reloading the simulator updates the state of the tree", async () => {
   await s.reload();
   expect(s.getResourceConfig("/my_bucket").props.public).toEqual(true);
   expect(s.tree().rawData().tree.children?.my_bucket.display?.hidden).toEqual(
-    true
+    true,
   );
 });

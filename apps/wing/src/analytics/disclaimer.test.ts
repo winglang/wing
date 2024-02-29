@@ -43,7 +43,7 @@ describe("disclaimer", () => {
 
       // THEN
       expect(console.log).toHaveBeenCalledWith(
-        expect.stringContaining(WING_DISCLAIMER.split("\n")[0])
+        expect.stringContaining(WING_DISCLAIMER.split("\n")[0]),
       );
     });
 
@@ -93,7 +93,7 @@ describe("disclaimer", () => {
           shouldDisplayDisclaimer({
             anonymousId: "fake-id",
             disclaimerDisplayed: true,
-          })
+          }),
         ).toBe(true);
       });
 
@@ -103,7 +103,7 @@ describe("disclaimer", () => {
             anonymousId: "fake-id",
             disclaimerDisplayed: true,
             disclaimerVersion: "-100.0.0",
-          })
+          }),
         ).toBe(true);
       });
 
@@ -113,7 +113,7 @@ describe("disclaimer", () => {
             anonymousId: "fake-id",
             disclaimerDisplayed: true,
             disclaimerVersion: WING_DISCLAIMER_VERSION,
-          })
+          }),
         ).toBe(false);
       });
     });

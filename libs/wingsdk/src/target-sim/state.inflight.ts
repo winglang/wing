@@ -6,7 +6,7 @@ import { Json } from "../std";
 export class State implements IStateClient, ISimulatorResourceInstance {
   constructor(
     _props: StateSchema["props"],
-    private readonly context: ISimulatorContext
+    private readonly context: ISimulatorContext,
   ) {}
   public async init(): Promise<Record<string, any>> {
     return {};

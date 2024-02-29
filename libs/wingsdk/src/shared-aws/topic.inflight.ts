@@ -4,7 +4,7 @@ import { ITopicClient } from "../cloud";
 export class TopicClient implements ITopicClient {
   constructor(
     private readonly topicArn: string,
-    private readonly client: SNSClient = new SNSClient({})
+    private readonly client: SNSClient = new SNSClient({}),
   ) {}
 
   public async publish(message: string): Promise<void> {

@@ -9,14 +9,14 @@ export class CounterClient implements ICounterClient {
 
   constructor(
     private readonly databaseName: string,
-    private readonly initial: number = 0
+    private readonly initial: number = 0,
   ) {
     this.client = new Datastore({ databaseId: this.databaseName });
   }
 
   public async inc(
     amount: number = 1,
-    key: string = DEFAULT_COUNTER_KEY
+    key: string = DEFAULT_COUNTER_KEY,
   ): Promise<number> {
     const currentValue = await this._getCounterValue(key);
     const newValue = currentValue + amount;
@@ -29,7 +29,7 @@ export class CounterClient implements ICounterClient {
 
   public async dec(
     amount: number = 1,
-    key: string = DEFAULT_COUNTER_KEY
+    key: string = DEFAULT_COUNTER_KEY,
   ): Promise<number> {
     const currentValue = await this._getCounterValue(key);
     const newValue = currentValue - amount;
@@ -42,7 +42,7 @@ export class CounterClient implements ICounterClient {
 
   public async set(
     value: number,
-    key: string = DEFAULT_COUNTER_KEY
+    key: string = DEFAULT_COUNTER_KEY,
   ): Promise<void> {
     await this._updateCounter(key, value);
   }

@@ -67,7 +67,7 @@ test("get a non-existent object from the bucket", async () => {
   const client = new BucketClient(BUCKET_NAME, storage as any);
 
   await expect(() => client.get(NON_EXISTENT_KEY)).rejects.toThrowError(
-    `Failed to get object. (key=${NON_EXISTENT_KEY})`
+    `Failed to get object. (key=${NON_EXISTENT_KEY})`,
   );
 });
 
@@ -124,7 +124,7 @@ test("delete object from the bucket with mustExist option", async () => {
   const client = new BucketClient(BUCKET_NAME, storage as any);
 
   await expect(() =>
-    client.delete(NON_EXISTENT_KEY, { mustExist: true })
+    client.delete(NON_EXISTENT_KEY, { mustExist: true }),
   ).rejects.toThrowError(`Object does not exist (key=${NON_EXISTENT_KEY}).`);
 });
 
@@ -137,7 +137,7 @@ test("delete a non-existent object from the bucket with mustExist option", async
   const client = new BucketClient(BUCKET_NAME, storage as any);
 
   await expect(() =>
-    client.delete(NON_EXISTENT_KEY, { mustExist: true })
+    client.delete(NON_EXISTENT_KEY, { mustExist: true }),
   ).rejects.toThrowError(`Object does not exist (key=${NON_EXISTENT_KEY}).`);
 });
 
@@ -152,7 +152,7 @@ test("Given a non public bucket when reaching to a key public url it should thro
   await client.put(KEY, VALUE);
 
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    `Failed to check if bucket is public. (bucket=${BUCKET_NAME})`
+    `Failed to check if bucket is public. (bucket=${BUCKET_NAME})`,
   );
 });
 
@@ -165,7 +165,7 @@ test("Given a public bucket when reaching to a non existent key, public url it s
   const client = new BucketClient(BUCKET_NAME, storage as any);
 
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    `Failed to check if bucket is public. (bucket=${BUCKET_NAME})`
+    `Failed to check if bucket is public. (bucket=${BUCKET_NAME})`,
   );
 });
 
@@ -281,7 +281,7 @@ test("tryGetJson an existing non-Json object from the bucket", async () => {
   const client = new BucketClient(BUCKET_NAME, storage as any);
 
   await expect(() => client.tryGetJson(KEY)).rejects.toThrowError(
-    `Failed to tryGet JSON object. (key=${KEY})`
+    `Failed to tryGet JSON object. (key=${KEY})`,
   );
 });
 
@@ -379,7 +379,7 @@ test("copy non-existing object", async () => {
 
   // THEN
   await expect(client.copy(SRC_KEY, SRC_KEY)).rejects.toThrowError(
-    `Source object does not exist (srcKey=${SRC_KEY})`
+    `Source object does not exist (srcKey=${SRC_KEY})`,
   );
 });
 
@@ -437,7 +437,7 @@ test("renaming an object to its current name should throw an error", async () =>
 
   // THEN
   await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
-    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`
+    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`,
   );
 });
 
@@ -453,7 +453,7 @@ test("rename non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(
-    `Source object does not exist (srcKey=${SRC_KEY}).`
+    `Source object does not exist (srcKey=${SRC_KEY}).`,
   );
 });
 

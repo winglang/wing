@@ -9,7 +9,7 @@ describe("function with bucket binding", () => {
   const statementsContain = (
     config: any,
     actions: string[],
-    effect: string
+    effect: string,
   ): boolean => {
     const policies = config.resource.aws_iam_role_policy;
 
@@ -39,7 +39,7 @@ describe("function with bucket binding", () => {
           obj: bucket,
           ops: [cloud.BucketInflightMethods.PUT],
         },
-      }
+      },
     );
     new cloud.Function(app, "Function", inflight);
     const output = app.synth();
@@ -70,7 +70,7 @@ describe("function with bucket binding", () => {
           obj: bucket,
           ops: [cloud.BucketInflightMethods.PUT_JSON],
         },
-      }
+      },
     );
     new cloud.Function(app, "Function", inflight);
     const output = JSON.parse(app.synth());
@@ -91,14 +91,14 @@ describe("function with bucket binding", () => {
           obj: bucket,
           ops: [cloud.BucketInflightMethods.GET_JSON],
         },
-      }
+      },
     );
     new cloud.Function(app, "Function", inflight);
     const output = JSON.parse(app.synth());
     const hasActions = statementsContain(
       output,
       ["s3:GetObject*", "s3:GetBucket*"],
-      "Allow"
+      "Allow",
     );
 
     // THEN
@@ -110,7 +110,7 @@ test("function with a function binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight1 = Testing.makeHandler(
-    `async handle(event) { console.log(event); }`
+    `async handle(event) { console.log(event); }`,
   );
   const fn1 = new cloud.Function(app, "Function1", inflight1);
   const inflight2 = Testing.makeHandler(
@@ -123,7 +123,7 @@ test("function with a function binding", () => {
         obj: fn1,
         ops: [cloud.FunctionInflightMethods.INVOKE],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function2", inflight2);
   const output = app.synth();
@@ -148,7 +148,7 @@ test("two functions reusing the same IFunctionHandler", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler(
-    `async handle(event) { console.log(event); }`
+    `async handle(event) { console.log(event); }`,
   );
 
   new cloud.Function(app, "Function1", inflight);
@@ -180,12 +180,12 @@ test("function with a queue binding", () => {
         obj: queue,
         ops: [cloud.QueueInflightMethods.PUSH],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", pusher);
 
   const processor = Testing.makeHandler(
-    `async handle(event) { console.log("Received" + event); }`
+    `async handle(event) { console.log("Received" + event); }`,
   );
   queue.setConsumer(processor);
   const output = app.synth();

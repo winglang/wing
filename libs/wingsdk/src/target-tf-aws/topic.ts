@@ -46,15 +46,15 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageOptions = {}
+    props: cloud.TopicOnMessageOptions = {},
   ): cloud.Function {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
         __dirname.replace("target-tf-aws", "shared-aws"),
-        "topic.onmessage.inflight.js"
+        "topic.onmessage.inflight.js",
       ),
-      "TopicOnMessageHandlerClient"
+      "TopicOnMessageHandlerClient",
     );
 
     let fn = this.handlers[inflight._id];
@@ -67,7 +67,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       this.node.scope!,
       App.of(this).makeId(this, `${this.node.id}-OnMessage`),
       functionHandler,
-      props
+      props,
     );
     this.handlers[inflight._id] = fn;
 
@@ -83,7 +83,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
         topicArn: this.topic.arn,
         protocol: "lambda",
         endpoint: fn.functionArn,
-      }
+      },
     );
 
     fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn, {});
@@ -106,7 +106,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
   public addPermissionToPublish(
     source: Resource,
     principal: string,
-    sourceArn: string
+    sourceArn: string,
   ): void {
     this.permissions = new SnsTopicPolicy(
       this,
@@ -130,7 +130,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
             },
           ],
         }),
-      }
+      },
     );
   }
 
@@ -152,7 +152,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "TopicClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"]`],
     );
   }
   /** @internal */

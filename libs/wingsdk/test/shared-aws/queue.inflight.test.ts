@@ -81,7 +81,7 @@ test("push - sad path invalid message", async () => {
       new InvalidMessageContents({
         message: "InvalidMessageContents error",
         $metadata: {},
-      })
+      }),
     );
 
   // WHEN
@@ -89,7 +89,7 @@ test("push - sad path invalid message", async () => {
 
   // THEN
   await expect(() => client.push(MESSAGE)).rejects.toThrowError(
-    /The message contains characters outside the allowed set/
+    /The message contains characters outside the allowed set/,
   );
 });
 
@@ -103,11 +103,11 @@ test("push - sad path empty message", async () => {
 
   // THEN
   await expect(() => client.push(MESSAGE)).rejects.toThrowError(
-    /Empty messages are not allowed/
+    /Empty messages are not allowed/,
   );
   expect(sqsMock, "never invoked").toHaveReceivedCommandTimes(
     SendMessageCommand,
-    0
+    0,
   );
 });
 
@@ -125,7 +125,7 @@ test("push - sad path unknown error", async () => {
 
   // THEN
   await expect(() => client.push(MESSAGE)).rejects.toThrowError(
-    /unknown error/
+    /unknown error/,
   );
 });
 

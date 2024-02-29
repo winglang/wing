@@ -10,7 +10,9 @@ export class SecretClient implements ISecretClient {
 
   constructor(
     private readonly secretArn: string,
-    private readonly client: SecretsManagerClient = new SecretsManagerClient({})
+    private readonly client: SecretsManagerClient = new SecretsManagerClient(
+      {},
+    ),
   ) {}
 
   public async value(options: GetSecretValueOptions = {}): Promise<string> {

@@ -35,7 +35,7 @@ export class Topic
   private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {
       const fnClient = this.context.findInstance(
-        subscriber.functionHandle!
+        subscriber.functionHandle!,
       ) as IFunctionClient & ISimulatorResourceInstance;
 
       if (!fnClient) {
@@ -58,7 +58,7 @@ export class Topic
 
   public async addEventSubscription(
     subscriber: FunctionHandle,
-    subscriptionProps: EventSubscription
+    subscriptionProps: EventSubscription,
   ): Promise<void> {
     let s = {
       functionHandle: subscriber,
@@ -69,7 +69,7 @@ export class Topic
 
   public async removeEventSubscription(subscriber: string): Promise<void> {
     const index = this.subscribers.findIndex(
-      (s) => s.functionHandle === subscriber
+      (s) => s.functionHandle === subscriber,
     );
     if (index >= 0) {
       this.subscribers.splice(index, 1);

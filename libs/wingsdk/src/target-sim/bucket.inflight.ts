@@ -49,19 +49,19 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     }
 
     const metadataFileExists = await exists(
-      join(this.context.statedir, METADATA_FILENAME)
+      join(this.context.statedir, METADATA_FILENAME),
     );
     if (metadataFileExists) {
       const metadataContents = await fs.promises.readFile(
         join(this.context.statedir, METADATA_FILENAME),
-        "utf-8"
+        "utf-8",
       );
       const metadata = deserialize(metadataContents);
       this._metadata = new Map(metadata);
     } else {
       await fs.promises.writeFile(
         join(this.context.statedir, METADATA_FILENAME),
-        serialize({})
+        serialize({}),
       );
     }
 
@@ -84,20 +84,20 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     // during the bucket's lifecycle
     await fs.promises.writeFile(
       join(this.context.statedir, METADATA_FILENAME),
-      serialize(Array.from(this._metadata.entries())) // metadata contains Datetime values, so we need to serialize it
+      serialize(Array.from(this._metadata.entries())), // metadata contains Datetime values, so we need to serialize it
     );
   }
 
   private async notifyListeners(
     actionType: BucketEventType,
-    key: string
+    key: string,
   ): Promise<void> {
     if (!this.topicHandlers[actionType]) {
       return;
     }
 
     const topicClient = this.context.findInstance(
-      this.topicHandlers[actionType]!
+      this.topicHandlers[actionType]!,
     ) as ITopicClient & ISimulatorResourceInstance;
 
     return topicClient.publish(key);
@@ -115,7 +115,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   public async put(
     key: string,
     value: string,
-    opts?: BucketPutOptions
+    opts?: BucketPutOptions,
   ): Promise<void> {
     return this.context.withTrace({
       message: `Put (key=${key}).`,
@@ -132,7 +132,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         await this.addFile(
           key,
           JSON.stringify(body, null, 2),
-          "application/json"
+          "application/json",
         );
       },
     });
@@ -164,7 +164,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           return new TextDecoder("utf8", { fatal: true }).decode(buffer);
         } catch (e) {
           throw new Error(
-            `Object does not exist (key=${key}): ${(e as Error).stack}`
+            `Object does not exist (key=${key}): ${(e as Error).stack}`,
           );
         }
       },
@@ -173,7 +173,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   public async tryGet(
     key: string,
-    options?: BucketTryGetOptions
+    options?: BucketTryGetOptions,
   ): Promise<string | undefined> {
     if (await this.exists(key)) {
       return this.get(key, options);
@@ -259,7 +259,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
         if (!this._metadata.has(key)) {
           throw new Error(
-            `Cannot provide public url for an non-existent key (key=${key})`
+            `Cannot provide public url for an non-existent key (key=${key})`,
           );
         }
 
@@ -274,7 +274,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       message: `Signed URL (key=${key})`,
       activity: async () => {
         throw new Error(
-          `signedUrl is not implemented yet for sim (key=${key})`
+          `signedUrl is not implemented yet for sim (key=${key})`,
         );
       },
     });
@@ -318,7 +318,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   public async rename(srcKey: string, dstKey: string): Promise<void> {
     if (srcKey === dstKey) {
       throw new Error(
-        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`
+        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`,
       );
     }
 
@@ -329,7 +329,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private async addFile(
     key: string,
     value: string,
-    contentType?: string
+    contentType?: string,
   ): Promise<void> {
     const actionType: BucketEventType = this._metadata.has(key)
       ? BucketEventType.UPDATE

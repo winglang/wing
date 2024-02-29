@@ -64,12 +64,12 @@ export class Schedule extends Resource {
     }
     if (cron && cron.split(" ").length > 5) {
       throw new Error(
-        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
+        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]",
       );
     }
     if (cron && cron.split(" ")[2] == "*" && cron.split(" ")[4] == "*") {
       throw new Error(
-        "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other"
+        "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other",
       );
     }
   }
@@ -80,7 +80,7 @@ export class Schedule extends Resource {
    */
   public onTick(
     inflight: IScheduleOnTickHandler,
-    props?: ScheduleOnTickOptions
+    props?: ScheduleOnTickOptions,
   ): Function {
     inflight;
     props;

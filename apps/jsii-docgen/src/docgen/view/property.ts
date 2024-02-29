@@ -6,7 +6,7 @@ export class Property {
   private readonly transpiled: TranspiledProperty;
   constructor(
     transpile: Transpile,
-    private readonly property: reflect.Property
+    private readonly property: reflect.Property,
   ) {
     this.transpiled = transpile.property(property);
   }

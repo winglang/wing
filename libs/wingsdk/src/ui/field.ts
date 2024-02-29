@@ -34,7 +34,7 @@ export class Field extends VisualComponent {
     id: string,
     label: string,
     handler: IFieldHandler,
-    props: FieldProps = {}
+    props: FieldProps = {},
   ): Field {
     return App.of(scope).newAbstract(
       FIELD_FQN,
@@ -42,7 +42,7 @@ export class Field extends VisualComponent {
       id,
       label,
       handler,
-      props
+      props,
     );
   }
 
@@ -55,7 +55,7 @@ export class Field extends VisualComponent {
     id: string,
     label: string,
     handler: IFieldHandler,
-    props: FieldProps = {}
+    props: FieldProps = {},
   ) {
     super(scope, id);
 

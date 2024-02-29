@@ -111,7 +111,7 @@ export class Website extends Resource implements IWebsite {
   public addJson(path: string, data: Json): string {
     if (!path.endsWith(".json")) {
       throw new Error(
-        `key must have a .json suffix. (current: "${path.split(".").pop()}")`
+        `key must have a .json suffix. (current: "${path.split(".").pop()}")`,
       );
     }
     return this.addFile(path, JSON.stringify(data), {

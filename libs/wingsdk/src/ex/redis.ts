@@ -147,7 +147,7 @@ export abstract class RedisClientBase implements IRedisClient {
   public async hset(
     key: string,
     field: string,
-    value: string
+    value: string,
   ): Promise<number> {
     const redis = await this.rawClient();
     const result = await redis.hset(key, field, value);

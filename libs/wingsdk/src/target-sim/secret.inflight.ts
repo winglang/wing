@@ -20,7 +20,7 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
     this.secretsFile = path.join(os.homedir(), ".wing", "secrets.json");
     if (!fs.existsSync(this.secretsFile)) {
       throw new Error(
-        `No secrets file found at ${this.secretsFile} while looking for secret ${props.name}`
+        `No secrets file found at ${this.secretsFile} while looking for secret ${props.name}`,
       );
     }
 

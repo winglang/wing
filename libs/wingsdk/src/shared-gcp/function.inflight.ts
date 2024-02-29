@@ -7,7 +7,7 @@ export class FunctionClient implements IFunctionClient {
   constructor(
     private readonly functionName: string,
     private readonly projectId: string,
-    private readonly region: string
+    private readonly region: string,
   ) {}
 
   private get functionURL(): string {
@@ -16,7 +16,7 @@ export class FunctionClient implements IFunctionClient {
 
   private async _invokeLocally(
     payload: string,
-    token: string
+    token: string,
   ): Promise<string> {
     try {
       const res = await http.post(this.functionURL, {
@@ -35,7 +35,7 @@ export class FunctionClient implements IFunctionClient {
       throw new Error(
         `Error while invoking the function ${this.functionName}:\n${
           (error as Error).message
-        }`
+        }`,
       );
     }
   }
@@ -70,7 +70,7 @@ export class FunctionClient implements IFunctionClient {
       throw new Error(
         `Error while invoking the function ${this.functionName}:\n${
           (error as Error).message
-        }`
+        }`,
       );
     }
   }
@@ -86,7 +86,7 @@ export class FunctionClient implements IFunctionClient {
    */
   public async invokeWithLogs(
     payload: string,
-    token: string
+    token: string,
   ): Promise<[string, Trace[]]> {
     console.error("Test invocation on tf-gcp doesn't include logs yet");
     //TODO: add traces to tf-gcp tests- https://github.com/winglang/wing/issues/4904

@@ -15,7 +15,7 @@ test("mergeLiftDeps", () => {
     },
     {
       op1: new Map([["obj1", new Set(["m1", "m2"])]]),
-    }
+    },
   );
 
   // second argument empty
@@ -26,7 +26,7 @@ test("mergeLiftDeps", () => {
     {},
     {
       op1: new Map([["obj1", new Set(["m1", "m2"])]]),
-    }
+    },
   );
 
   // both arguments empty
@@ -42,7 +42,7 @@ test("mergeLiftDeps", () => {
     },
     {
       op1: new Map([["obj1", new Set(["m1", "m2"])]]),
-    }
+    },
   );
 
   // merging with multiple objects
@@ -58,7 +58,7 @@ test("mergeLiftDeps", () => {
         ["obj1", new Set(["m1"])],
         ["obj2", new Set(["m1"])],
       ]),
-    }
+    },
   );
 
   // merging with multiple primary ops
@@ -72,7 +72,7 @@ test("mergeLiftDeps", () => {
     {
       op1: new Map([["obj1", new Set(["m1"])]]),
       op2: new Map([["obj1", new Set(["m1"])]]),
-    }
+    },
   );
 
   // merging with variables referring to the same object
@@ -87,7 +87,7 @@ test("mergeLiftDeps", () => {
     },
     {
       op1: new Map([["obj", new Set(["m1"])]]),
-    }
+    },
   );
 
   // merging with variables referring to the same object
@@ -102,7 +102,7 @@ test("mergeLiftDeps", () => {
     },
     {
       op1: new Map([[c1, new Set(["m1"])]]),
-    }
+    },
   );
 });
 
@@ -157,7 +157,7 @@ describe("collectLifts", () => {
         ["hello", new Set()],
         [123, new Set()],
         [true, new Set()],
-      ])
+      ]),
     );
   });
 
@@ -184,7 +184,7 @@ describe("collectLifts", () => {
       new Map([
         [expect.any(Foo), new Set(["op1"])],
         [expect.any(Bucket), new Set(["list"])],
-      ])
+      ]),
     );
   });
 
@@ -233,7 +233,7 @@ describe("collectLifts", () => {
         [expect.any(MyBucket), new Set(["list"])],
         [expect.any(MyBucket), new Set(["list"])],
         [expect.any(Foo), new Set(["handle"])],
-      ])
+      ]),
     );
   });
 });
@@ -241,7 +241,7 @@ describe("collectLifts", () => {
 function expectMergeDeps(
   deps1: LiftDepsMatrix,
   deps2: LiftDepsMatrix,
-  expected: LiftDepsMatrix
+  expected: LiftDepsMatrix,
 ) {
   const result = mergeLiftDeps(deps1, deps2);
   expect(result).toEqual(expected);

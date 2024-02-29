@@ -22,7 +22,7 @@ export class Website extends cloud.Website implements ISimulatorResource {
       this,
       "Endpoint",
       simulatorAttrToken(this, "url"),
-      { label: `Website ${this.node.path}`, browserSupport: true }
+      { label: `Website ${this.node.path}`, browserSupport: true },
     );
 
     this.errorDocument = props.errorDocument;
@@ -36,7 +36,7 @@ export class Website extends cloud.Website implements ISimulatorResource {
   public addFile(
     path: string,
     data: string,
-    options?: cloud.AddFileOptions
+    options?: cloud.AddFileOptions,
   ): string {
     this.fileRoutes[path] = {
       data,

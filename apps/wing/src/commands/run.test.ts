@@ -71,7 +71,7 @@ test("wing it doesn't run the only entrypoint file ending with .test.w", async (
     writeFileSync("foo.test.w", "bring cloud;");
 
     await expect(run).rejects.toThrow(
-      "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+      "Cannot find entrypoint files (main.w or *.main.w) in the current directory.",
     );
   } finally {
     process.chdir(prevdir);
@@ -87,7 +87,7 @@ test("wing it throws error for a directory with a non-entrypoint file", async ()
     writeFileSync("foo.w", "bring cloud;");
 
     await expect(run).rejects.toThrow(
-      "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+      "Cannot find entrypoint files (main.w or *.main.w) in the current directory.",
     );
   } finally {
     process.chdir(prevdir);
@@ -104,7 +104,7 @@ test("wing it throws error for a directory with more than one entrypoint file", 
     writeFileSync("foo.main.w", "bring cloud;");
 
     await expect(run).rejects.toThrow(
-      "Multiple entrypoints found in the current directory (foo.main.w, main.w). Please specify which one to use."
+      "Multiple entrypoints found in the current directory (foo.main.w, main.w). Please specify which one to use.",
     );
   } finally {
     process.chdir(prevdir);
@@ -197,7 +197,7 @@ test("wing it throws when invalid platform is used", async () => {
     await expect(async () => {
       await run("foo.main.w", { platform: ["anyPlatform"] });
     }).rejects.toThrowError(
-      'The first platform in the list must be the sim platform (try "-t sim -t anyPlatform")'
+      'The first platform in the list must be the sim platform (try "-t sim -t anyPlatform")',
     );
   } finally {
     process.chdir(prevdir);

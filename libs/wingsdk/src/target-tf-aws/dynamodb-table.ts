@@ -57,17 +57,17 @@ export class DynamodbTable
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error(
-        "Dynamodb tables can only be bound by tfaws.Function for now"
+        "Dynamodb tables can only be bound by tfaws.Function for now",
       );
     }
 
     host.addPolicyStatements(
-      ...calculateDynamodbTablePermissions(this.table.arn, ops)
+      ...calculateDynamodbTablePermissions(this.table.arn, ops),
     );
 
     if (this.table.globalSecondaryIndex) {
       host.addPolicyStatements(
-        ...calculateDynamodbTablePermissions(`${this.table.arn}/index/*`, ops)
+        ...calculateDynamodbTablePermissions(`${this.table.arn}/index/*`, ops),
       );
     }
 
@@ -82,7 +82,7 @@ export class DynamodbTable
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "DynamodbTableClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"]`],
     );
   }
 

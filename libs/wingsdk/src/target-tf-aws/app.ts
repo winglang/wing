@@ -182,13 +182,13 @@ export class App extends CdktfApp {
 
   private importExistingVpc(): DataAwsVpc {
     const vpcId = this.platformParameters.getParameterValue(
-      `${this._target}/vpc_id`
+      `${this._target}/vpc_id`,
     );
     const privateSubnetIds = this.platformParameters.getParameterValue(
-      `${this._target}/private_subnet_ids`
+      `${this._target}/private_subnet_ids`,
     );
     const publicSubnetIds = this.platformParameters.getParameterValue(
-      `${this._target}/public_subnet_ids`
+      `${this._target}/public_subnet_ids`,
     );
 
     this._vpc = new DataAwsVpc(this, "ExistingVpc", {
@@ -200,7 +200,7 @@ export class App extends CdktfApp {
         new DataAwsSubnet(this, `PrivateSubnet${subnetId.slice(-8)}`, {
           vpcId: vpcId,
           id: subnetId,
-        })
+        }),
       );
     }
 
@@ -210,7 +210,7 @@ export class App extends CdktfApp {
           new DataAwsSubnet(this, `PublicSubnet${subnetId.slice(-8)}`, {
             vpcId: vpcId,
             id: subnetId,
-          })
+          }),
         );
       }
     }

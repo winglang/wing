@@ -25,7 +25,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps = {}
+    props: cloud.FunctionProps = {},
   ) {
     super(scope, id, inflight, props);
 

@@ -26,7 +26,7 @@ test("state can be resolved at any time", async () => {
       env: {
         MY_KEY: token,
       },
-    }
+    },
   );
 
   new OnDeploy(
@@ -44,8 +44,8 @@ test("state can be resolved at any time", async () => {
           obj: state,
           ops: ["set"],
         },
-      }
-    )
+      },
+    ),
   );
 
   const s = await app.startSimulator();

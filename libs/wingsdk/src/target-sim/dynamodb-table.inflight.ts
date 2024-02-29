@@ -33,13 +33,13 @@ export class DynamodbTable
 
   public constructor(
     private props: DynamodbTableSchema["props"],
-    context: ISimulatorContext
+    context: ISimulatorContext,
   ) {
     super(props.name);
 
     this.context = context;
     this.containerName = generateDockerContainerName(
-      `wing-sim-dynamodb-${this.context.resourcePath}`
+      `wing-sim-dynamodb-${this.context.resourcePath}`,
     );
   }
 
@@ -114,7 +114,7 @@ export class DynamodbTable
     const createTableCommand = new CreateTableCommand({
       TableName: this.tableName,
       AttributeDefinitions: Object.entries(this.props.attributeDefinitions).map(
-        ([k, v]) => ({ AttributeName: k, AttributeType: v })
+        ([k, v]) => ({ AttributeName: k, AttributeType: v }),
       ),
       KeySchema: keySchema,
       BillingMode: "PAY_PER_REQUEST",

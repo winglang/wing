@@ -93,7 +93,7 @@ vscodeIgnore.addPatterns(
   "!resources/",
   "!syntaxes/",
   "!language-configuration.json",
-  "!LICENSE"
+  "!LICENSE",
 );
 
 const contributes: VSCodeExtensionContributions = {
@@ -242,10 +242,10 @@ project.compileTask.exec("tsup");
 project.watchTask.reset("tsup --watch");
 
 project.packageTask.reset(
-  "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+  "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version",
 );
 project.packageTask.exec(
-  "vsce package --no-dependencies -o ../../dist/vscode-wing.vsix"
+  "vsce package --no-dependencies -o ../../dist/vscode-wing.vsix",
 );
 
 project.addFields({

@@ -113,7 +113,7 @@ export abstract class CdktfApp extends App {
     // rename `outdir/cdk.tf.json` to `outdir/main.tf.json`
     renameSync(
       join(this.outdir, "cdk.tf.json"),
-      join(this.outdir, `main.tf.json`)
+      join(this.outdir, `main.tf.json`),
     );
 
     // delete `outdir/.tmp.cdktf.out`
@@ -133,7 +133,7 @@ export abstract class CdktfApp extends App {
       this._synthHooks.postSynthesize.forEach((hook) => {
         writeFileSync(
           resolve(`${this.outdir}/main.tf.json`),
-          JSON.stringify(hook(tfConfig), null, 2)
+          JSON.stringify(hook(tfConfig), null, 2),
         );
       });
     }
@@ -156,7 +156,7 @@ export abstract class CdktfApp extends App {
     const cdktfOutdir = this.cdktfApp.outdir;
     const cdktfStackDir = join(
       cdktfOutdir,
-      this.cdktfApp.manifest.stacks[TERRAFORM_STACK_NAME].workingDirectory
+      this.cdktfApp.manifest.stacks[TERRAFORM_STACK_NAME].workingDirectory,
     );
 
     const files = readdirSync(cdktfStackDir, { withFileTypes: true });
@@ -197,7 +197,7 @@ function cleanTerraformConfig(template: any): any {
             ...acc,
             [key]: removeMetadata(value),
           }),
-          {}
+          {},
         );
 
       // Remove metadata

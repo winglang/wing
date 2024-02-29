@@ -16,7 +16,7 @@ export class OnDeploy extends cloud.OnDeploy {
     scope: Construct,
     id: string,
     handler: cloud.IOnDeployHandler,
-    props: cloud.OnDeployProps = {}
+    props: cloud.OnDeployProps = {},
   ) {
     super(scope, id, handler, props);
 
@@ -63,19 +63,19 @@ export class OnDeploy extends cloud.OnDeploy {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "OnDeployClient",
-      []
+      [],
     );
   }
 }
 
 function isTerraformDependable(
-  x: IConstruct
+  x: IConstruct,
 ): x is ITerraformDependable & IConstruct {
   return "fqn" in x;
 }
 
 function isTerraformResource(
-  x: IConstruct
+  x: IConstruct,
 ): x is ITerraformResource & IConstruct {
   return "terraformResourceType" in x;
 }

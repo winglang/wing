@@ -54,7 +54,7 @@ export class Service extends Resource implements IInflightHost {
     scope: Construct,
     id: string,
     handler: IServiceHandler,
-    props: ServiceProps = {}
+    props: ServiceProps = {},
   ) {
     if (new.target === Service) {
       return Resource._newFromFactory(SERVICE_FQN, scope, id, handler, props);
@@ -118,7 +118,7 @@ export class Service extends Resource implements IInflightHost {
   public addEnvironment(name: string, value: string) {
     if (this._env[name] !== undefined && this._env[name] !== value) {
       throw new Error(
-        `Environment variable "${name}" already set with a different value.`
+        `Environment variable "${name}" already set with a different value.`,
       );
     }
     this._env[name] = value;

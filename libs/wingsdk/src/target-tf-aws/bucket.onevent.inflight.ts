@@ -23,7 +23,7 @@ export class BucketEventHandlerClient implements IBucketEventHandlerClient {
       }
       return await this.handler.handle(
         message.Records[0].s3.object.key,
-        this.eventType
+        this.eventType,
       );
     } catch (error) {
       console.warn("Error parsing the notification event message: ", error);

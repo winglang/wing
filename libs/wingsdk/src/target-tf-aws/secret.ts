@@ -56,7 +56,7 @@ export class Secret extends cloud.Secret {
     }
 
     host.addPolicyStatements(
-      ...calculateSecretPermissions(this.secret.arn, ops)
+      ...calculateSecretPermissions(this.secret.arn, ops),
     );
 
     host.addEnvironment(this.envName(), this.secret.arn);
@@ -70,7 +70,7 @@ export class Secret extends cloud.Secret {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "SecretClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"]`],
     );
   }
 

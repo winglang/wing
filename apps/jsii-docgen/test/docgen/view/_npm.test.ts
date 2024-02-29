@@ -67,7 +67,7 @@ test("NpmError error (removed package)", async () => {
       Buffer.from('  "error": {\n'),
       Buffer.from('    "code": null,\n'),
       Buffer.from(
-        '    "summary": "Cannot convert undefined or null to object",\n'
+        '    "summary": "Cannot convert undefined or null to object",\n',
       ),
       Buffer.from('    "detail": ""\n'),
       Buffer.from("  }\n"),
@@ -98,7 +98,7 @@ test("NpmError error (invalid JSON output)", async () => {
   // THEN
   const err = await npm.install("foo").then(
     () => Promise.reject(fail("Expected an NpmError!")),
-    (e) => Promise.resolve(e)
+    (e) => Promise.resolve(e),
   );
   expect(err).toBeInstanceOf(NpmError);
   expect(err.name).toBe("@winglang/jsii-docgen.NpmError");
@@ -123,7 +123,7 @@ class MockChildProcess extends EventEmitter implements ChildProcess {
 
   public constructor(
     public readonly exitCode: number | null,
-    { stdout = [] }: { stdout?: readonly Buffer[] } = {}
+    { stdout = [] }: { stdout?: readonly Buffer[] } = {},
   ) {
     super();
 

@@ -32,7 +32,7 @@ test("new() defaults to just creating an instance", () => {
 test("newAbstract() throws if there is no implementation", () => {
   const app = new MyApp();
   expect(() => app.newAbstract(ANOTHER_FQN, app, "bar")).toThrow(
-    /Resource \"@winglang\/sdk\.another.Another\" is not yet implemented for "awscdk" target\. Please refer to the roadmap https:\/\/github\.com\/orgs\/winglang\/projects\/3\/views\/1\?filterQuery=another\.Another/
+    /Resource \"@winglang\/sdk\.another.Another\" is not yet implemented for "awscdk" target\. Please refer to the roadmap https:\/\/github\.com\/orgs\/winglang\/projects\/3\/views\/1\?filterQuery=another\.Another/,
   );
 });
 
@@ -62,7 +62,11 @@ class MyApp extends App {
 }
 
 class Foo extends Construct {
-  constructor(scope: Construct, id: string, public arg: number) {
+  constructor(
+    scope: Construct,
+    id: string,
+    public arg: number,
+  ) {
     super(scope, id);
   }
 }

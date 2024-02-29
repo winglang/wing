@@ -49,7 +49,7 @@ export interface MarkdownFormattingOptions {
    */
   readonly linkFormatter?: (
     type: JsiiEntity,
-    metadata: AssemblyMetadataSchema
+    metadata: AssemblyMetadataSchema,
   ) => string;
 
   /**
@@ -72,8 +72,8 @@ export interface MarkdownFormattingOptions {
     metadata: AssemblyMetadataSchema,
     linkFormatter: (
       type: JsiiEntity,
-      metadata: AssemblyMetadataSchema
-    ) => string
+      metadata: AssemblyMetadataSchema,
+    ) => string,
   ) => string;
 }
 
@@ -106,7 +106,7 @@ export interface MarkdownRendererOptions
 export class MarkdownRenderer {
   public static fromSchema(
     schema: Schema,
-    options: MarkdownFormattingOptions
+    options: MarkdownFormattingOptions,
   ): MarkdownDocument {
     const documentation = new MarkdownDocument();
 
@@ -133,8 +133,8 @@ export class MarkdownRenderer {
         renderer.visitApiReference(
           schema.apiReference,
           !!schema.metadata.submodule &&
-            HEADLESS_SUBMODULES.includes(schema.metadata.submodule)
-        )
+            HEADLESS_SUBMODULES.includes(schema.metadata.submodule),
+        ),
       );
     }
 
@@ -167,7 +167,7 @@ export class MarkdownRenderer {
 
   public visitApiReference(
     apiRef: ApiReferenceSchema,
-    headless: boolean
+    headless: boolean,
   ): MarkdownDocument {
     const md = new MarkdownDocument({
       ...(!headless && { header: { title: "API Reference" } }),
@@ -183,7 +183,7 @@ export class MarkdownRenderer {
 
   public visitConstructs(
     constructs: ConstructSchema[],
-    headless: boolean
+    headless: boolean,
   ): MarkdownDocument {
     if (constructs.length === 0) {
       return MarkdownDocument.EMPTY;
@@ -301,7 +301,7 @@ export class MarkdownRenderer {
         ifaces.push(this.linkFormatter(iface, this.metadata));
       }
       md.bullet(
-        `${MarkdownDocument.italic("Implements:")} ${ifaces.join(", ")}`
+        `${MarkdownDocument.italic("Implements:")} ${ifaces.join(", ")}`,
       );
       md.lines("");
     }
@@ -313,7 +313,7 @@ export class MarkdownRenderer {
           // removes the inflight client link when inflight interface is united with preflight's
           inflight: klass.inflight ? undefined : klass.docs.inflight,
         },
-        this.language
+        this.language,
       );
     }
 
@@ -324,8 +324,8 @@ export class MarkdownRenderer {
     md.section(
       this.visitInstanceMethods(
         klass.instanceMethods,
-        klass.inflight?.instanceMethods
-      )
+        klass.inflight?.instanceMethods,
+      ),
     );
     md.section(this.visitStaticFunctions(klass.staticMethods));
     md.section(this.visitProperties(klass.properties));
@@ -359,7 +359,7 @@ export class MarkdownRenderer {
         impls.push(this.linkFormatter(impl, this.metadata));
       }
       md.bullet(
-        `${MarkdownDocument.italic("Implemented By:")} ${impls.join(", ")}`
+        `${MarkdownDocument.italic("Implemented By:")} ${impls.join(", ")}`,
       );
       md.lines("");
     }
@@ -455,7 +455,7 @@ export class MarkdownRenderer {
 
   public visitInstanceMethods(
     methods: MethodSchema[],
-    inflightMethods?: MethodSchema[]
+    inflightMethods?: MethodSchema[],
   ): MarkdownDocument {
     if (!methods.length && !inflightMethods?.length) {
       return MarkdownDocument.EMPTY;
@@ -534,7 +534,7 @@ export class MarkdownRenderer {
 
     if (em.docs.deprecated) {
       md.bullet(
-        `${MarkdownDocument.italic("Deprecated:")} ${em.docs.deprecationReason}`
+        `${MarkdownDocument.italic("Deprecated:")} ${em.docs.deprecationReason}`,
       );
       md.lines("");
     }
@@ -571,7 +571,7 @@ export class MarkdownRenderer {
       md.bullet(
         `${MarkdownDocument.italic("Deprecated:")} ${
           prop.docs.deprecationReason
-        }`
+        }`,
       );
       md.lines("");
     }
@@ -625,7 +625,7 @@ export class MarkdownRenderer {
       md.bullet(
         `${MarkdownDocument.italic("Deprecated:")} ${
           parameter.docs.deprecationReason
-        }`
+        }`,
       );
       md.lines("");
     }
@@ -634,7 +634,7 @@ export class MarkdownRenderer {
       Type: this.typeFormatter(
         parameter.type,
         this.metadata,
-        this.linkFormatter
+        this.linkFormatter,
       ),
     };
 
@@ -734,8 +734,8 @@ export class MarkdownRenderer {
             id: item.id,
             ...this.metadata,
           },
-          this.metadata
-        )
+          this.metadata,
+        ),
       );
       const description =
         item.docs?.summary && item.docs?.summary.length > 0
@@ -760,11 +760,11 @@ export class MarkdownRenderer {
             id: item.id,
             ...this.metadata,
           },
-          this.metadata
-        )
+          this.metadata,
+        ),
       );
       const type = MarkdownDocument.pre(
-        this.typeFormatter(item.type, this.metadata, this.linkFormatter)
+        this.typeFormatter(item.type, this.metadata, this.linkFormatter),
       );
       const description =
         item.docs?.summary && item.docs?.summary.length > 0
@@ -799,7 +799,7 @@ export const defaultAnchorFormatter = (type: JsiiEntity) => {
 
 export const defaultLinkFormatter = (
   type: JsiiEntity,
-  metadata: AssemblyMetadataSchema
+  metadata: AssemblyMetadataSchema,
 ) => {
   if (type.packageName === metadata.packageName) {
     return `<a href="#${sanitize(type.id)}">${type.displayName}</a>`;
@@ -822,7 +822,7 @@ function isJsiiType(value: any): value is JsiiEntity {
 export const defaultTypeFormatter = (
   type: TypeSchema,
   metadata: AssemblyMetadataSchema,
-  linkFormatter: (type: JsiiEntity, metadata: AssemblyMetadataSchema) => string
+  linkFormatter: (type: JsiiEntity, metadata: AssemblyMetadataSchema) => string,
 ): string => {
   let result = type.formattingPattern;
   const typeRefs = [];

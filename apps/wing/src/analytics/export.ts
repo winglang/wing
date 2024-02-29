@@ -17,7 +17,7 @@ export async function exportAnalytics(filePath: Promise<string | undefined>) {
       env: {
         ...process.env,
       },
-    }
+    },
   );
 
   child.unref();

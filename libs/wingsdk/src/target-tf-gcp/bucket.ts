@@ -71,7 +71,7 @@ export class Bucket extends cloud.Bucket {
         service: "iamcredentials.googleapis.com",
         disableDependentServices: false,
         disableOnDestroy: false,
-      }
+      },
     );
 
     this.bucket = new StorageBucket(this, "Default", {
@@ -128,7 +128,7 @@ export class Bucket extends cloud.Bucket {
    */
   public onCreate(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnCreateOptions
+    opts?: cloud.BucketOnCreateOptions,
   ): void {
     fn;
     opts;
@@ -137,7 +137,7 @@ export class Bucket extends cloud.Bucket {
       {
         resource: this.constructor.name,
         operation: cloud.BucketEventType.CREATE,
-      }
+      },
     );
   }
 
@@ -146,7 +146,7 @@ export class Bucket extends cloud.Bucket {
    */
   public onDelete(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnDeleteOptions
+    opts?: cloud.BucketOnDeleteOptions,
   ): void {
     fn;
     opts;
@@ -155,7 +155,7 @@ export class Bucket extends cloud.Bucket {
       {
         resource: this.constructor.name,
         operation: cloud.BucketEventType.DELETE,
-      }
+      },
     );
   }
 
@@ -164,7 +164,7 @@ export class Bucket extends cloud.Bucket {
    */
   public onUpdate(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnUpdateOptions
+    opts?: cloud.BucketOnUpdateOptions,
   ): void {
     fn;
     opts;
@@ -173,7 +173,7 @@ export class Bucket extends cloud.Bucket {
       {
         resource: this.constructor.name,
         operation: cloud.BucketEventType.UPDATE,
-      }
+      },
     );
   }
 
@@ -182,13 +182,13 @@ export class Bucket extends cloud.Bucket {
    */
   public onEvent(
     fn: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnEventOptions
+    opts?: cloud.BucketOnEventOptions,
   ): void {
     fn;
     opts;
     throw new NotImplementedError(
       "onEvent method isn't implemented yet on the current target.",
-      { resource: this.constructor.name, operation: "onEvent" }
+      { resource: this.constructor.name, operation: "onEvent" },
     );
   }
 
@@ -210,7 +210,7 @@ export class Bucket extends cloud.Bucket {
       __dirname.replace("target-tf-gcp", "shared-gcp"),
       __filename,
       "BucketClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"]`],
     );
   }
 

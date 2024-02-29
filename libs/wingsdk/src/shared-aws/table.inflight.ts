@@ -17,7 +17,7 @@ export class TableClient implements ITableClient {
     private readonly tableName: string,
     private readonly primaryKey: string,
     private readonly columns: string,
-    private readonly client = new DynamoDBClient({})
+    private readonly client = new DynamoDBClient({}),
   ) {}
 
   public async insert(key: string, row: Json): Promise<void> {
@@ -38,7 +38,7 @@ export class TableClient implements ITableClient {
         throw new Error(
           `The primary key "${key}" already exists in the "${
             this.tableName
-          }" table: ${(e as Error).stack})}`
+          }" table: ${(e as Error).stack})}`,
         );
       }
       throw new Error((e as Error).stack);

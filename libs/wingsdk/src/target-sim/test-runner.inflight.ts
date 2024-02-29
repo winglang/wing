@@ -35,7 +35,7 @@ export class TestRunner
       throw new Error(`No test found at path "${path}"`);
     }
     const fnClient = this.context.findInstance(
-      functionHandle
+      functionHandle,
     ) as IFunctionClient & ISimulatorResourceInstance;
     if (!fnClient) {
       throw new Error(`No function client found for test path "${path}"`);

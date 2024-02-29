@@ -44,7 +44,7 @@ export class Connections {
         (c) =>
           c.source === connection.source &&
           c.target === connection.target &&
-          c.name === connection.name
+          c.name === connection.name,
       )
     ) {
       return;
@@ -71,7 +71,7 @@ export class Connections {
     fs.writeFileSync(
       path.join(outdir, CONNECTIONS_FILE_PATH),
       JSON.stringify(tree, undefined, 2),
-      { encoding: "utf8" }
+      { encoding: "utf8" },
     );
   }
 }

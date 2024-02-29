@@ -47,13 +47,13 @@ export class Domain extends cloud.Domain {
     parameters.addParameterSchemaAtPath(schema, this.node.path, true);
 
     const iamCertificate = parameters.getParameterValue(
-      `${this.node.path}/iamCertificate`
+      `${this.node.path}/iamCertificate`,
     );
     const acmCertificateArn = parameters.getParameterValue(
-      `${this.node.path}/acmCertificateArn`
+      `${this.node.path}/acmCertificateArn`,
     );
     const hostedZoneId = parameters.getParameterValue(
-      `${this.node.path}/hostedZoneId`
+      `${this.node.path}/hostedZoneId`,
     );
 
     this._iamCertificate = iamCertificate;
@@ -85,7 +85,7 @@ export class Domain extends cloud.Domain {
   /** @internal */
   public _toInflight(): string {
     throw new NotImplementedError(
-      "Domain inflight client is not implemented yet on this target."
+      "Domain inflight client is not implemented yet on this target.",
     );
   }
 }

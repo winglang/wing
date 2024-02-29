@@ -12,7 +12,7 @@ import { IQueueClient } from "../cloud";
 export class QueueClient implements IQueueClient {
   constructor(
     private readonly queueUrl: string,
-    private readonly client: SQSClient = new SQSClient({})
+    private readonly client: SQSClient = new SQSClient({}),
   ) {}
 
   public async push(...messages: string[]): Promise<void> {
@@ -31,7 +31,7 @@ export class QueueClient implements IQueueClient {
           throw new Error(
             `The message contains characters outside the allowed set (message=${message}): ${
               (e as Error).stack
-            })}`
+            })}`,
           );
         }
         throw new Error((e as Error).stack);
@@ -78,8 +78,8 @@ export class QueueClient implements IQueueClient {
     } else {
       console.warn(
         `No receipt handle found, message not deleted. Message: ${JSON.stringify(
-          message
-        )}`
+          message,
+        )}`,
       );
     }
 

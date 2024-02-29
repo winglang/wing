@@ -59,7 +59,7 @@ test("function with a counter binding", () => {
         obj: counter,
         ops: [cloud.CounterInflightMethods.INC],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
@@ -94,7 +94,7 @@ test("inc() policy statement", () => {
         obj: counter,
         ops: [cloud.CounterInflightMethods.INC],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
@@ -117,7 +117,7 @@ test("dec() policy statement", () => {
         obj: counter,
         ops: [cloud.CounterInflightMethods.DEC],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
@@ -140,7 +140,7 @@ test("peek() policy statement", () => {
         obj: counter,
         ops: [cloud.CounterInflightMethods.PEEK],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
@@ -163,7 +163,7 @@ test("set() policy statement", () => {
         obj: counter,
         ops: [cloud.CounterInflightMethods.SET],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
@@ -184,8 +184,8 @@ test("counter name valid", () => {
       "azurerm_storage_table",
       {
         name: `wingcounterx${counter.node.addr.substring(0, 8)}`,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -204,8 +204,8 @@ test("replace invalid character from counter name", () => {
       "azurerm_storage_table",
       {
         name: `thexamazingxcounterx01x${counter.node.addr.substring(0, 8)}`,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

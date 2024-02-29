@@ -27,7 +27,7 @@ export interface PrettyPrintErrorOptions {
  */
 export async function prettyPrintError(
   error: Error | string,
-  options?: PrettyPrintErrorOptions
+  options?: PrettyPrintErrorOptions,
 ): Promise<string> {
   const StackTracey = await import("stacktracey").then((m) => m.default);
 
@@ -75,7 +75,7 @@ export async function prettyPrintError(
     .filter(
       (item) =>
         !normalPath(item.file).includes("/libs/wingsdk/src/") &&
-        !normalPath(item.file).includes("/@winglang/sdk/")
+        !normalPath(item.file).includes("/@winglang/sdk/"),
     )
     // special: remove the handler wrapper (See `cloud.Function` entrypoint for where this comes from)
     .filter((item) => !normalPath(item.file).match(/\.wing\/handler_\w+\.js$/))
@@ -104,11 +104,11 @@ export async function prettyPrintError(
 
   if (interestingRoot !== undefined) {
     traceWithSources = traceWithSources.filter((item) =>
-      (item.sourceFile?.path ?? item.file).startsWith(interestingRoot!)
+      (item.sourceFile?.path ?? item.file).startsWith(interestingRoot!),
     );
     const targetDir = join(interestingRoot, "target") + sep;
     traceWithSources = traceWithSources.filter(
-      (item) => !(item.sourceFile?.path ?? item.file).startsWith(targetDir)
+      (item) => !(item.sourceFile?.path ?? item.file).startsWith(targetDir),
     );
   }
 
@@ -120,7 +120,7 @@ export async function prettyPrintError(
       item.sourceFile !== undefined &&
       item.sourceFile.lines.length > 0 &&
       !item.native &&
-      !item.thirdParty
+      !item.thirdParty,
   );
 
   if (firstGoodItem) {
@@ -138,8 +138,8 @@ export async function prettyPrintError(
       " ".repeat(maxDigits + 1) +
         `--> ${relative(
           process.cwd(),
-          sourceFile.path
-        )}:${originLine}:${originColumn}`
+          sourceFile.path,
+        )}:${originLine}:${originColumn}`,
     );
 
     let linesOfInterest = originLines;
@@ -215,11 +215,11 @@ export function rewriteCommonError(error: Error): Error {
     const newMessage = [];
     newMessage.push(error.message);
     newMessage.push(
-      "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:"
+      "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:",
     );
     newMessage.push('> new cloud.Bucket() as "MyBucket";');
     newMessage.push(
-      "For more information, see https://www.winglang.io/docs/concepts/application-tree"
+      "For more information, see https://www.winglang.io/docs/concepts/application-tree",
     );
     error.message = newMessage.join("\n\n");
   } else if (error.constructor.name === "NotImplementedError") {

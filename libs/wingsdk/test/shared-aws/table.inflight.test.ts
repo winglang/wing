@@ -37,7 +37,7 @@ describe("inflight table tests", () => {
     client = new TableClient(
       MOCK_TABLE_NAME,
       PRIMARY_KEY,
-      JSON.stringify(columns)
+      JSON.stringify(columns),
     );
   });
 

@@ -63,7 +63,7 @@ export class Function extends Resource implements IInflightHost {
     scope: Construct,
     id: string,
     handler: IFunctionHandler,
-    props: FunctionProps = {}
+    props: FunctionProps = {},
   ) {
     if (new.target === Function) {
       return Resource._newFromFactory(FUNCTION_FQN, scope, id, handler, props);
@@ -136,7 +136,7 @@ export class Function extends Resource implements IInflightHost {
   public addEnvironment(name: string, value: string) {
     if (this._env[name] !== undefined && this._env[name] !== value) {
       throw new Error(
-        `Environment variable "${name}" already set with a different value.`
+        `Environment variable "${name}" already set with a different value.`,
       );
     }
     this._env[name] = value;

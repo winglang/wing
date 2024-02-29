@@ -260,7 +260,7 @@ export class Util {
    */
   public static tryReadFile(
     filepath: string,
-    options?: ReadFileOptions
+    options?: ReadFileOptions,
   ): string | undefined {
     try {
       return Util.readFile(filepath, options);
@@ -337,7 +337,7 @@ export class Util {
   public static writeFile(
     filepath: string,
     data: string,
-    options?: WriteFileOptions
+    options?: WriteFileOptions,
   ): void {
     fs.writeFileSync(filepath, data, options);
   }
@@ -359,7 +359,7 @@ export class Util {
    */
   public static writeYaml(filepath: string, ...objs: Json[]): void {
     const contents = objs.map((o) =>
-      yaml.stringify(o, { aliasDuplicateObjects: false })
+      yaml.stringify(o, { aliasDuplicateObjects: false }),
     );
     fs.writeFileSync(filepath, contents.join("---\n"));
   }
@@ -441,7 +441,7 @@ export class Util {
   public static symlink(
     target: string,
     path: string,
-    type: SymlinkType = SymlinkType.FILE
+    type: SymlinkType = SymlinkType.FILE,
   ): void {
     fs.symlinkSync(target, path, type);
   }

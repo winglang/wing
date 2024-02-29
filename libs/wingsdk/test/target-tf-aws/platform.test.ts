@@ -78,7 +78,7 @@ describe("tf-aws platform parameters", () => {
     });
     // THEN
     expect(() => app.synth()).toThrow(
-      /must have required property 'private_subnet_ids'/
+      /must have required property 'private_subnet_ids'/,
     );
   });
 

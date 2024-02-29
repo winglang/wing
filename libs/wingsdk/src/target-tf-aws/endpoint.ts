@@ -13,7 +13,7 @@ export class Endpoint extends cloud.Endpoint {
     scope: Construct,
     id: string,
     url: string,
-    props: cloud.EndpointProps = {}
+    props: cloud.EndpointProps = {},
   ) {
     super(scope, id, url, props);
 
@@ -39,7 +39,7 @@ export class Endpoint extends cloud.Endpoint {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "EndpointClient",
-      [`process.env["${this.urlEnvName()}"]`]
+      [`process.env["${this.urlEnvName()}"]`],
     );
   }
 

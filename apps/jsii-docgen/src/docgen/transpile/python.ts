@@ -24,13 +24,13 @@ const formatArguments = (inputs: string[]) => {
 const formatInvocation = (
   type: transpile.TranspiledType,
   inputs: string[],
-  method?: string
+  method?: string,
 ) => {
   let target;
   if (type.submodule) {
     if (!type.namespace) {
       throw new Error(
-        `Invalid type: ${type.fqn}: Types defined in a submodule (${type.submodule}) must have a namespace. `
+        `Invalid type: ${type.fqn}: Types defined in a submodule (${type.submodule}) must have a namespace. `,
       );
     }
     // we don't include the submodule name here since it is
@@ -59,7 +59,7 @@ const formatSignature = (name: string, inputs: string[], returns?: string) => {
  */
 const propertyToParameter = (
   callable: reflect.Callable,
-  property: reflect.Property
+  property: reflect.Property,
 ): reflect.Parameter => {
   return {
     docs: property.docs,
@@ -159,7 +159,7 @@ export class PythonTranspile extends transpile.TranspileBase {
   }
 
   public parameter(
-    parameter: reflect.Parameter
+    parameter: reflect.Parameter,
   ): transpile.TranspiledParameter {
     const name = toSnakeCase(parameter.name);
     const typeRef = this.typeReference(parameter.type);
@@ -175,7 +175,7 @@ export class PythonTranspile extends transpile.TranspileBase {
   public struct(struct: reflect.InterfaceType): transpile.TranspiledStruct {
     const type = this.type(struct);
     const inputs = struct.allProperties.map((p) =>
-      this.formatParameters(this.property(p))
+      this.formatParameters(this.property(p)),
     );
     return {
       type: type,
@@ -205,7 +205,7 @@ export class PythonTranspile extends transpile.TranspileBase {
 
     const name = toSnakeCase(callable.name);
     const inputs = parameters.map((p) =>
-      this.formatParameters(this.parameter(p))
+      this.formatParameters(this.parameter(p)),
     );
 
     let returnType: transpile.TranspiledTypeReference | undefined;
@@ -228,7 +228,7 @@ export class PythonTranspile extends transpile.TranspileBase {
         formatInvocation(
           type,
           inputs,
-          callable.kind === reflect.MemberKind.Initializer ? undefined : name
+          callable.kind === reflect.MemberKind.Initializer ? undefined : name,
         ),
       ],
     };
@@ -258,7 +258,7 @@ export class PythonTranspile extends transpile.TranspileBase {
   }
 
   public moduleLike(
-    moduleLike: reflect.ModuleLike
+    moduleLike: reflect.ModuleLike,
   ): transpile.TranspiledModuleLike {
     const pythonModule = moduleLike.targets?.python?.module;
 
@@ -278,7 +278,7 @@ export class PythonTranspile extends transpile.TranspileBase {
 
     if (!pythonModule) {
       throw new Error(
-        `Python is not a supported target for module: ${moduleLike.fqn}`
+        `Python is not a supported target for module: ${moduleLike.fqn}`,
       );
     }
 
@@ -286,7 +286,7 @@ export class PythonTranspile extends transpile.TranspileBase {
   }
 
   public interface(
-    iface: reflect.InterfaceType
+    iface: reflect.InterfaceType,
   ): transpile.TranspiledInterface {
     return {
       name: iface.name,
@@ -303,7 +303,7 @@ export class PythonTranspile extends transpile.TranspileBase {
   }
 
   private formatParameters(
-    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty
+    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty,
   ): string {
     const tf = transpiled.typeReference.toString({
       typeFormatter: (t) => t.name,
@@ -313,7 +313,7 @@ export class PythonTranspile extends transpile.TranspileBase {
 
   private formatProperty(
     name: string,
-    typeReference: transpile.TranspiledTypeReference
+    typeReference: transpile.TranspiledTypeReference,
   ): string {
     const tf = typeReference.toString({
       typeFormatter: (t) => t.name,

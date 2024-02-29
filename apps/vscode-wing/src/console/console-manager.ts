@@ -45,7 +45,7 @@ export interface ConsoleManager {
 }
 
 export const createConsoleManager = (
-  context: ExtensionContext
+  context: ExtensionContext,
 ): ConsoleManager => {
   const instances: Record<string, ConsoleInstance> = {};
   const resourcesExplorer = new ResourcesExplorerProvider();
@@ -91,7 +91,7 @@ export const createConsoleManager = (
             };
           }
           return testItem;
-        })
+        }),
       );
       await activePanel.client.runTest(test.id);
     });
@@ -111,7 +111,7 @@ export const createConsoleManager = (
             ...testItem,
             status: "running",
           };
-        })
+        }),
       );
       await activePanel.client.runAllTests();
     });
@@ -143,7 +143,7 @@ export const createConsoleManager = (
 
   const addInstance = async (instance: ConsoleInstance) => {
     Loggers.console.appendLine(
-      `Wing Console is running at http://${instance.url}`
+      `Wing Console is running at http://${instance.url}`,
     );
 
     instance.client.onInvalidateQuery({
@@ -182,7 +182,7 @@ export const createConsoleManager = (
           await commands.executeCommand(
             "vscode.open",
             Uri.file(path),
-            new Position(line, column)
+            new Position(line, column),
           );
           return;
         }
@@ -194,7 +194,7 @@ export const createConsoleManager = (
         await window.showTextDocument(openEditor.document, {
           selection: new Range(
             new Position(line, column),
-            new Position(line, column)
+            new Position(line, column),
           ),
         });
       },
@@ -222,14 +222,14 @@ export const createConsoleManager = (
         {
           enableScripts: true,
           enableCommandUris: true,
-        }
+        },
       );
 
       webviewPanel.iconPath = {
         light: Uri.joinPath(
           context.extensionUri,
           "resources",
-          "icon-light.svg"
+          "icon-light.svg",
         ),
         dark: Uri.joinPath(context.extensionUri, "resources", "icon-dark.svg"),
       };
@@ -300,7 +300,7 @@ export const createConsoleManager = (
       webviewPanel,
       explorerView,
       testsExplorerView,
-      endpointsExplorerView
+      endpointsExplorerView,
     );
     activeInstanceId = instanceId;
   };
@@ -311,7 +311,7 @@ export const createConsoleManager = (
       return;
     }
     Loggers.console.appendLine(
-      `Closing Console instance: '${instance.wingfile}'`
+      `Closing Console instance: '${instance.wingfile}'`,
     );
 
     instance.client.close();

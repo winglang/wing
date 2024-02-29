@@ -97,7 +97,7 @@ export class Json {
    */
   public static stringify(
     json: Json | MutJson,
-    options?: JsonStringifyOptions
+    options?: JsonStringifyOptions,
   ): string {
     json;
     options;

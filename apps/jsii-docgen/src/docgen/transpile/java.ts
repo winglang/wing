@@ -30,7 +30,7 @@ const prefixArrays = <T>(arr: T[]): T[][] => {
  */
 const propertyToParameter = (
   callable: reflect.Callable,
-  property: reflect.Property
+  property: reflect.Property,
 ): reflect.Parameter => {
   return {
     docs: property.docs,
@@ -51,7 +51,7 @@ export class JavaTranspile extends transpile.TranspileBase {
   }
 
   public moduleLike(
-    moduleLike: reflect.ModuleLike
+    moduleLike: reflect.ModuleLike,
   ): transpile.TranspiledModuleLike {
     const javaPackage: string = moduleLike.targets?.java?.package;
 
@@ -127,7 +127,7 @@ export class JavaTranspile extends transpile.TranspileBase {
     // simulate Java method overloading
     const inputLists = prefixArrays(optionalParams).map((optionals) => {
       return [...requiredParams, ...optionals].map((p) =>
-        this.formatParameter(this.parameter(p))
+        this.formatParameter(this.parameter(p)),
       );
     });
 
@@ -163,7 +163,7 @@ export class JavaTranspile extends transpile.TranspileBase {
       invocations = reflect.Initializer.isInitializer(callable)
         ? // render with `new Class` syntax (showing all constructor overloads)
           inputLists.map((inputs) =>
-            this.formatClassInitialization(type, inputs)
+            this.formatClassInitialization(type, inputs),
           )
         : // render invocation as method calls (showing all method overloads)
           inputLists.map((inputs) => this.formatInvocation(type, inputs, name));
@@ -201,7 +201,7 @@ export class JavaTranspile extends transpile.TranspileBase {
   }
 
   public interface(
-    iface: reflect.InterfaceType
+    iface: reflect.InterfaceType,
   ): transpile.TranspiledInterface {
     return {
       name: iface.name,
@@ -210,7 +210,7 @@ export class JavaTranspile extends transpile.TranspileBase {
   }
 
   public parameter(
-    parameter: reflect.Parameter
+    parameter: reflect.Parameter,
   ): transpile.TranspiledParameter {
     const typeRef = this.typeReference(parameter.type);
     return {
@@ -296,7 +296,7 @@ export class JavaTranspile extends transpile.TranspileBase {
   }
 
   private formatParameter(
-    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty
+    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty,
   ): string {
     const tf = transpiled.typeReference.toString({
       typeFormatter: (t) => t.name,
@@ -310,7 +310,7 @@ export class JavaTranspile extends transpile.TranspileBase {
 
   private formatStructBuilder(
     type: transpile.TranspiledType,
-    methods: string[]
+    methods: string[],
   ): string {
     const builder = `${type.name}.builder()`;
     return [builder, ...methods, "    .build();"].join("\n");
@@ -318,7 +318,7 @@ export class JavaTranspile extends transpile.TranspileBase {
 
   private formatClassInitialization(
     type: transpile.TranspiledType,
-    inputs: string[]
+    inputs: string[],
   ): string {
     return `new ${type.name}(${this.formatInputs(inputs)});`;
   }
@@ -326,10 +326,10 @@ export class JavaTranspile extends transpile.TranspileBase {
   private formatClassBuilder(
     type: transpile.TranspiledType,
     parameters: reflect.Parameter[],
-    struct: reflect.InterfaceType
+    struct: reflect.InterfaceType,
   ): string {
     const createArgs = this.formatInputs(
-      parameters.map((p) => this.formatParameter(this.parameter(p)))
+      parameters.map((p) => this.formatParameter(this.parameter(p))),
     );
     const indent = " ".repeat(4);
     const methods: string[] = struct.allProperties
@@ -344,13 +344,13 @@ export class JavaTranspile extends transpile.TranspileBase {
 
   private formatSignature(name: string, inputs: string[], returns?: string) {
     return `public ${returns ? returns + " " : ""}${name}(${this.formatInputs(
-      inputs
+      inputs,
     )})`;
   }
 
   private formatBuilderMethod(
     transpiled: transpile.TranspiledParameter,
-    indent: string
+    indent: string,
   ): string[] {
     if (transpiled.optional) indent = "//" + indent.slice(2);
     const lowerCamel = toCamelCase(transpiled.name);
@@ -370,7 +370,7 @@ export class JavaTranspile extends transpile.TranspileBase {
   private formatInvocation(
     type: transpile.TranspiledType,
     inputs: string[],
-    method: string
+    method: string,
   ): string {
     let target = type.name;
     if (method) {
@@ -389,7 +389,7 @@ export class JavaTranspile extends transpile.TranspileBase {
     }
 
     const parameters: reflect.Parameter[] = callable.parameters.sort(
-      this.optionalityCompare
+      this.optionalityCompare,
     );
     const firstStruct = parameters.find((param) => this.isStruct(param));
 
@@ -406,14 +406,14 @@ export class JavaTranspile extends transpile.TranspileBase {
    * if there is none), removing it from the array.
    */
   private extractFirstStruct(
-    parameters: reflect.Parameter[]
+    parameters: reflect.Parameter[],
   ): reflect.InterfaceType {
     const firstStruct = parameters.find((param) => this.isStruct(param));
     if (!firstStruct) {
       throw new Error("No struct found in parameter list.");
     }
     const struct = firstStruct.parentType.system.findInterface(
-      firstStruct.type.fqn!
+      firstStruct.type.fqn!,
     );
     parameters.splice(parameters.indexOf(firstStruct), 1);
     return struct;
@@ -421,7 +421,7 @@ export class JavaTranspile extends transpile.TranspileBase {
 
   private formatProperty(
     name: string,
-    typeReference: transpile.TranspiledTypeReference
+    typeReference: transpile.TranspiledTypeReference,
   ): string {
     const tf = typeReference.toString({
       typeFormatter: (t) => t.name,

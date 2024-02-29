@@ -23,19 +23,19 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageOptions = {}
+    props: cloud.TopicOnMessageOptions = {},
   ): cloud.Function {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(__dirname, "topic.onmessage.inflight.js"),
-      "TopicOnMessageHandlerClient"
+      "TopicOnMessageHandlerClient",
     );
 
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnMessage"),
       functionHandler,
-      props
+      props,
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "onMessage()";

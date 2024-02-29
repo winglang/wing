@@ -241,7 +241,7 @@ export class Util {
    */
   public static async fetch(
     url: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Response> {
     const res = await fetch(url, { ...defaultOptions, ...options });
     return this._formatResponse(res);
@@ -255,7 +255,7 @@ export class Util {
    */
   public static async get(
     url: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Response> {
     return this.fetch(url, {
       ...options,
@@ -271,7 +271,7 @@ export class Util {
    */
   public static async post(
     url: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Response> {
     return this.fetch(url, {
       ...options,
@@ -287,7 +287,7 @@ export class Util {
    */
   public static async put(
     url: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Response> {
     return this.fetch(url, {
       ...options,
@@ -303,7 +303,7 @@ export class Util {
    */
   public static async patch(
     url: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Response> {
     return this.fetch(url, {
       ...options,
@@ -320,7 +320,7 @@ export class Util {
    */
   public static async delete(
     url: string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Response> {
     return this.fetch(url, {
       ...options,
@@ -372,14 +372,14 @@ export class Util {
         throw new Error(`Unable to format URL Struct: ${error.message}`);
       } else {
         throw new Error(
-          "Unable to format URL Struct: An unknown error occurred"
+          "Unable to format URL Struct: An unknown error occurred",
         );
       }
     }
   }
 
   private static async _formatResponse(
-    response: globalThis.Response
+    response: globalThis.Response,
   ): Promise<Response> {
     // convert Headers object into a plain JS object
     const headers: Record<string, string> = {};

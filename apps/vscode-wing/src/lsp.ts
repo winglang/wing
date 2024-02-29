@@ -58,7 +58,7 @@ export class LanguageServerManager {
       LANGUAGE_SERVER_ID,
       LANGUAGE_SERVER_NAME,
       serverOptions,
-      clientOptions
+      clientOptions,
     );
 
     await this.client.start();

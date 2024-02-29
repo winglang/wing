@@ -31,7 +31,7 @@ describe("ApiResponseMapper", () => {
 
     // WHEN
     const response = await requestHandlerClient.handle(
-      apiRequestEvent as APIGatewayProxyEvent
+      apiRequestEvent as APIGatewayProxyEvent,
     );
 
     // THEN
@@ -69,7 +69,7 @@ describe("ApiResponseMapper", () => {
 
     // WHEN
     const response = await requestHandlerClient.handle(
-      apiRequestEvent as APIGatewayProxyEvent
+      apiRequestEvent as APIGatewayProxyEvent,
     );
 
     // THEN
@@ -105,7 +105,7 @@ describe("ApiResponseMapper", () => {
 
     // WHEN
     const response = await requestHandlerClient.handle(
-      apiRequestEvent as APIGatewayProxyEvent
+      apiRequestEvent as APIGatewayProxyEvent,
     );
 
     // THEN
@@ -145,7 +145,7 @@ describe("ApiResponseMapper", () => {
 
     // WHEN
     const response = await requestHandlerClient.handle(
-      apiRequestEvent as APIGatewayProxyEvent
+      apiRequestEvent as APIGatewayProxyEvent,
     );
 
     // THEN
@@ -186,7 +186,7 @@ describe("ApiResponseMapper", () => {
 
     // WHEN
     const response = await requestHandlerClient.handle(
-      apiRequestEvent as APIGatewayProxyEvent
+      apiRequestEvent as APIGatewayProxyEvent,
     );
 
     // THEN

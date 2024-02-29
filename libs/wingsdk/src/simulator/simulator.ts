@@ -201,7 +201,7 @@ export class Simulator {
     const simJson = join(this.simdir, "simulator.json");
     if (!existsSync(simJson)) {
       throw new Error(
-        `Invalid Wing app (${simdir}) - simulator.json not found.`
+        `Invalid Wing app (${simdir}) - simulator.json not found.`,
       );
     }
 
@@ -211,19 +211,19 @@ export class Simulator {
     const expectedVersion = SDK_VERSION;
     if (foundVersion !== expectedVersion) {
       console.error(
-        `WARNING: The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+        `WARNING: The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`,
       );
     }
     if (config.resources === undefined) {
       throw new Error(
-        `Incompatible .wsim file. The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+        `Incompatible .wsim file. The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`,
       );
     }
 
     const treeJson = join(this.simdir, TREE_FILE_PATH);
     if (!existsSync(treeJson)) {
       throw new Error(
-        `Invalid Wing app (${simdir}) - ${TREE_FILE_PATH} not found.`
+        `Invalid Wing app (${simdir}) - ${TREE_FILE_PATH} not found.`,
       );
     }
     const treeData = readJsonSync(treeJson);
@@ -231,7 +231,7 @@ export class Simulator {
     const connectionJson = join(this.simdir, CONNECTIONS_FILE_PATH);
     if (!existsSync(connectionJson)) {
       throw new Error(
-        `Invalid Wing app (${simdir}) - ${CONNECTIONS_FILE_PATH} not found.`
+        `Invalid Wing app (${simdir}) - ${CONNECTIONS_FILE_PATH} not found.`,
       );
     }
     const connectionData = readJsonSync(connectionJson).connections;
@@ -245,7 +245,7 @@ export class Simulator {
   public async start(): Promise<void> {
     if (this._running !== "stopped") {
       throw new Error(
-        "A simulation is already running. Did you mean to call `await simulator.stop()` first?"
+        "A simulation is already running. Did you mean to call `await simulator.stop()` first?",
       );
     }
     this._running = "starting";
@@ -274,7 +274,7 @@ export class Simulator {
           // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
           if (next._attempts === 0) {
             throw new Error(
-              `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
+              `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`,
             );
           }
 
@@ -303,7 +303,7 @@ export class Simulator {
     }
     if (this._running === "stopped") {
       throw new Error(
-        "There is no running simulation to stop. Did you mean to call `await simulator.start()` first?"
+        "There is no running simulation to stop. Did you mean to call `await simulator.start()` first?",
       );
     }
     this._running = "stopping";
@@ -312,7 +312,7 @@ export class Simulator {
       const handle = resourceConfig.attrs?.handle;
       if (!handle) {
         throw new Error(
-          `Resource ${resourceConfig.path} could not be cleaned up, no handle for it was found.`
+          `Resource ${resourceConfig.path} could not be cleaned up, no handle for it was found.`,
         );
       }
 
@@ -504,7 +504,7 @@ export class Simulator {
                   message: `Resource ${handle} not found. It may not have been initialized yet.`,
                 },
               }),
-              "utf-8"
+              "utf-8",
             );
             return;
           } else if (this._running === "stopping") {
@@ -514,7 +514,7 @@ export class Simulator {
                   message: `Resource ${handle} not found. It may have been cleaned up already.`,
                 },
               }),
-              "utf-8"
+              "utf-8",
             );
             return;
           } else {
@@ -524,7 +524,7 @@ export class Simulator {
                   message: `Internal error - resource ${handle} not found.`,
                 },
               }),
-              "utf-8"
+              "utf-8",
             );
             return;
           }
@@ -539,7 +539,7 @@ export class Simulator {
                 message: `Method ${method} not found on resource ${handle}.`,
               },
             }),
-            "utf-8"
+            "utf-8",
           );
           return;
         }
@@ -560,7 +560,7 @@ export class Simulator {
                   name: err.name,
                 },
               }),
-              "utf-8"
+              "utf-8",
             );
           });
       });
@@ -601,12 +601,12 @@ export class Simulator {
   }
 
   private async tryStartResource(
-    resourceConfig: BaseResourceSchema
+    resourceConfig: BaseResourceSchema,
   ): Promise<boolean> {
     const context = this.createContext(resourceConfig);
 
     const { resolved, value: resolvedProps } = this.tryResolveTokens(
-      resourceConfig.props
+      resourceConfig.props,
     );
     if (!resolved) {
       this._addTrace({
@@ -740,14 +740,14 @@ export class Simulator {
     } else if (rest.startsWith("props.")) {
       if (!config.props) {
         throw new Error(
-          `Tried to resolve token "${s}" but resource ${path} has no props defined.`
+          `Tried to resolve token "${s}" but resource ${path} has no props defined.`,
         );
       }
       const propPath = rest.slice(6);
       const value = config.props[propPath];
       if (value === undefined) {
         throw new Error(
-          `Tried to resolve token "${s}" but resource ${path} has no prop "${propPath}".`
+          `Tried to resolve token "${s}" but resource ${path} has no prop "${propPath}".`,
         );
       }
       return { resolved: true, value };
@@ -796,7 +796,7 @@ export class Simulator {
           throw new Error(
             `Expected token "${
               match[0]
-            }" to resolve to a string, but it resolved to ${typeof value}.`
+            }" to resolve to a string, but it resolved to ${typeof value}.`,
           );
         }
         replacements.push({ match, value });
@@ -856,7 +856,7 @@ export interface ISimulatorFactory {
   resolve(
     type: string,
     props: any,
-    context: ISimulatorContext
+    context: ISimulatorContext,
   ): ISimulatorResourceInstance;
 }
 

@@ -79,13 +79,13 @@ describe("wing test (custom platform)", () => {
           return new tfaws.App(appProps);
         }
       }
-      module.exports = { Platform }`
+      module.exports = { Platform }`,
     );
 
     await wingTest([], { clean: true, platform: ["./custom-platform.js"] });
 
     expect(logSpy).toHaveBeenCalledWith(
-      expect.stringMatching(/^pass ─ foo\.test\.tfaws\.\d+ \(no tests\)$/)
+      expect.stringMatching(/^pass ─ foo\.test\.tfaws\.\d+ \(no tests\)$/),
     );
   });
 });
@@ -254,11 +254,11 @@ describe("output-file option", () => {
     expect(resultsFn.validateOutputFilePath("out.json")).toBeUndefined();
 
     expect(() => resultsFn.validateOutputFilePath("/path/out.csv")).toThrow(
-      'only .json output files are supported. (found ".csv")'
+      'only .json output files are supported. (found ".csv")',
     );
 
     expect(() => resultsFn.validateOutputFilePath("/path/json")).toThrow(
-      'only .json output files are supported. (found "")'
+      'only .json output files are supported. (found "")',
     );
   });
 });
@@ -316,7 +316,7 @@ describe("retry option", () => {
         test "alwaysFail" {
           assert(false);
         }
-      `
+      `,
     );
 
     await wingTest(["fail.test.w"], {
@@ -340,7 +340,7 @@ describe("retry option", () => {
         test "alwaysFail" {
           assert(false);
         }
-      `
+      `,
     );
 
     // Equivalent to `wing test --retry` (default 3 retries)

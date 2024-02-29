@@ -12,7 +12,7 @@ export class RedisClient extends RedisClientBase {
   constructor(
     private readonly clusterId: string,
     private connection?: any,
-    private readonly elasticacheClient = new ElastiCacheClient({})
+    private readonly elasticacheClient = new ElastiCacheClient({}),
   ) {
     super();
   }

@@ -12,7 +12,7 @@ export class Endpoint extends cloud.Endpoint {
     scope: Construct,
     id: string,
     url: string,
-    props: cloud.EndpointProps = {}
+    props: cloud.EndpointProps = {},
   ) {
     super(scope, id, url, props);
     this._inputUrl = url;

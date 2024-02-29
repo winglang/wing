@@ -67,7 +67,7 @@ export class Api extends cloud.Api implements IAwsApi {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions
+    props?: cloud.ApiGetOptions,
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
@@ -97,7 +97,7 @@ export class Api extends cloud.Api implements IAwsApi {
   public get(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions
+    props?: cloud.ApiGetOptions,
   ): void {
     this.httpRequests("GET", path, inflight, props);
   }
@@ -110,7 +110,7 @@ export class Api extends cloud.Api implements IAwsApi {
   public post(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPostOptions
+    props?: cloud.ApiPostOptions,
   ): void {
     this.httpRequests("POST", path, inflight, props);
   }
@@ -123,7 +123,7 @@ export class Api extends cloud.Api implements IAwsApi {
   public put(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPutOptions
+    props?: cloud.ApiPutOptions,
   ): void {
     this.httpRequests("PUT", path, inflight, props);
   }
@@ -136,7 +136,7 @@ export class Api extends cloud.Api implements IAwsApi {
   public delete(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiDeleteOptions
+    props?: cloud.ApiDeleteOptions,
   ): void {
     this.httpRequests("DELETE", path, inflight, props);
   }
@@ -149,7 +149,7 @@ export class Api extends cloud.Api implements IAwsApi {
   public patch(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPatchOptions
+    props?: cloud.ApiPatchOptions,
   ): void {
     this.httpRequests("PATCH", path, inflight, props);
   }
@@ -162,7 +162,7 @@ export class Api extends cloud.Api implements IAwsApi {
   public options(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiOptionsOptions
+    props?: cloud.ApiOptionsOptions,
   ): void {
     this.httpRequests("OPTIONS", path, inflight, props);
   }
@@ -175,7 +175,7 @@ export class Api extends cloud.Api implements IAwsApi {
   public head(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiHeadOptions
+    props?: cloud.ApiHeadOptions,
   ): void {
     this.httpRequests("HEAD", path, inflight, props);
   }
@@ -188,7 +188,7 @@ export class Api extends cloud.Api implements IAwsApi {
   public connect(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiConnectOptions
+    props?: cloud.ApiConnectOptions,
   ): void {
     this.httpRequests("CONNECT", path, inflight, props);
   }
@@ -202,7 +202,7 @@ export class Api extends cloud.Api implements IAwsApi {
   private addHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
   ): Function {
     let fn = this.addInflightHandler(inflight, method, path);
     if (!(fn instanceof Function)) {
@@ -220,7 +220,7 @@ export class Api extends cloud.Api implements IAwsApi {
   private addInflightHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
   ): Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
@@ -228,19 +228,19 @@ export class Api extends cloud.Api implements IAwsApi {
         inflight,
         join(
           __dirname.replace("target-tf-aws", "shared-aws"),
-          "api.onrequest.inflight.js"
+          "api.onrequest.inflight.js",
         ),
         "ApiOnRequestHandlerClient",
         {
           corsHeaders: this._generateCorsHeaders(this.corsOptions)
             ?.defaultResponse,
-        }
+        },
       );
       const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}`;
       handler = new Function(
         this,
         App.of(this).makeId(this, prefix),
-        newInflight
+        newInflight,
       );
       Node.of(handler).hidden = true;
       this.handlers[inflight._id] = handler;
@@ -266,7 +266,7 @@ export class Api extends cloud.Api implements IAwsApi {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "ApiClient",
-      [`process.env["${this.urlEnvName()}"]`]
+      [`process.env["${this.urlEnvName()}"]`],
     );
   }
 
@@ -324,7 +324,7 @@ class WingRestApi extends Construct {
     props: {
       getApiSpec: () => OpenApiSpec;
       cors?: cloud.ApiCorsOptions;
-    }
+    },
   ) {
     super(scope, id);
     const app = App.of(this) as App;
@@ -334,7 +334,7 @@ class WingRestApi extends Construct {
 
     // Check for PRIVATE API Gateway configuration
     let privateApiGateway = app.platformParameters.getParameterValue(
-      "tf-aws/vpc_api_gateway"
+      "tf-aws/vpc_api_gateway",
     );
     if (privateApiGateway === true) {
       this.privateVpc = true;
@@ -376,7 +376,7 @@ class WingRestApi extends Construct {
       `${this.id}ServiceLookup`,
       {
         service: "execute-api",
-      }
+      },
     );
 
     const vpcEndpoint = new VpcEndpoint(this, `${this.id}-vpc-endpoint`, {
@@ -396,7 +396,7 @@ class WingRestApi extends Construct {
     props: {
       getApiSpec: () => OpenApiSpec;
       cors?: cloud.ApiCorsOptions;
-    }
+    },
   ): ApiGatewayRestApi {
     /**
      * Configures the default response for requests to undefined routes (`/{proxy+}`).
@@ -550,7 +550,7 @@ class WingRestApi extends Construct {
   private _addHandlerPermissions = (
     path: string,
     method: string,
-    handler: Function
+    handler: Function,
   ) => {
     const pathHash = createHash("sha1").update(path).digest("hex").slice(-8);
     const permissionId = `${method}-${pathHash}`;
@@ -560,7 +560,7 @@ class WingRestApi extends Construct {
       functionName: handler.functionName,
       principal: "apigateway.amazonaws.com",
       sourceArn: `${this.api.executionArn}/*/${method}${Api._toOpenApiPath(
-        path
+        path,
       )}`,
     });
   };

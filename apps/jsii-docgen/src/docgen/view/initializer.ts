@@ -8,11 +8,11 @@ export class Initializer {
   private readonly parameters: Parameter[];
   constructor(
     private readonly transpile: Transpile,
-    private readonly initializer: reflect.Initializer
+    private readonly initializer: reflect.Initializer,
   ) {
     this.transpiled = transpile.callable(initializer);
     this.parameters = this.transpiled.parameters.map(
-      (p) => new Parameter(this.transpile, p)
+      (p) => new Parameter(this.transpile, p),
     );
   }
 

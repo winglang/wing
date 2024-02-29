@@ -14,7 +14,7 @@ export async function exists(filePath: string): Promise<boolean> {
   try {
     await promisify(access)(
       filePath,
-      constants.F_OK | constants.R_OK | constants.W_OK //eslint-disable-line no-bitwise
+      constants.F_OK | constants.R_OK | constants.W_OK, //eslint-disable-line no-bitwise
     );
     return true;
   } catch (er) {
@@ -31,7 +31,7 @@ function makeEnvVarName(type: string, resource: IConstruct): string {
 export function bindSimulatorResource(
   filename: string,
   resource: Resource,
-  host: IInflightHost
+  host: IInflightHost,
 ) {
   const type = basename(filename).split(".")[0];
   const env = makeEnvVarName(type, resource);

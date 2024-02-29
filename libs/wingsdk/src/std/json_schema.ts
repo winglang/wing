@@ -12,7 +12,7 @@ export class JsonSchema {
   public static _toInflightType(schema: Json) {
     return InflightClient.forType(
       __filename,
-      `${this.name}._createJsonSchema(${JSON.stringify(schema)})`
+      `${this.name}._createJsonSchema(${JSON.stringify(schema)})`,
     );
   }
 
@@ -49,8 +49,8 @@ export class JsonSchema {
       throw new Error(
         `unable to parse ${this.jsonSchema.id.replace(
           "/",
-          ""
-        )}:\n- ${result.errors.join("\n- ")}`
+          "",
+        )}:\n- ${result.errors.join("\n- ")}`,
       );
     }
   }

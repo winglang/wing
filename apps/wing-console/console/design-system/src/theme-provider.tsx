@@ -118,9 +118,7 @@ const applyThemeStyle = (newTheme: Theme) => {
 
     styles = {
       ...styles,
-      [`.${USE_EXTERNAL_THEME_COLOR} .${lightKey}${
-        hover ? ":hover" : ""
-      }`]: `{ background-color: ${lightColor} !important;}`,
+      [`.${USE_EXTERNAL_THEME_COLOR} .${lightKey}${hover ? ":hover" : ""}`]: `{ background-color: ${lightColor} !important;}`,
     };
 
     if (!darkClass) {

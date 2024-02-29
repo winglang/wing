@@ -17,7 +17,7 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
 
   public constructor(
     props: CounterSchema["props"],
-    context: ISimulatorContext
+    context: ISimulatorContext,
   ) {
     this.initial = props.initial ?? 0;
     this.values = new Map().set("default", this.initial);
@@ -40,13 +40,13 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
   public async save(): Promise<void> {
     await fs.promises.writeFile(
       join(this.context.statedir, VALUES_FILENAME),
-      JSON.stringify(Array.from(this.values.entries()))
+      JSON.stringify(Array.from(this.values.entries())),
     );
   }
 
   public async inc(
     amount: number = 1,
-    key: string = "default"
+    key: string = "default",
   ): Promise<number> {
     return this.context.withTrace({
       message: `Inc (amount=${amount}${
@@ -62,7 +62,7 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
 
   public async dec(
     amount: number = 1,
-    key: string = "default"
+    key: string = "default",
   ): Promise<number> {
     key;
     return this.context.withTrace({

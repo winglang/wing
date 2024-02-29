@@ -41,7 +41,7 @@ export class Topic extends Resource {
    */
   public onMessage(
     inflight: ITopicOnMessageHandler,
-    props?: TopicOnMessageOptions
+    props?: TopicOnMessageOptions,
   ): Function {
     inflight;
     props;

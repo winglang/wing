@@ -37,7 +37,7 @@ export class SimApp extends App {
     // symlink the node_modules so we can test imports and stuffs
     fs.symlinkSync(
       join(__dirname, "..", "node_modules"),
-      join(this.outdir, "node_modules")
+      join(this.outdir, "node_modules"),
     );
   }
 
@@ -54,7 +54,7 @@ export class SimApp extends App {
       id,
       Testing.makeHandler(`async handle() {
           ${code}
-        }`)
+        }`),
     );
 
     // returns an "invoker" for this function

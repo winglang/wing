@@ -63,14 +63,14 @@ test("invoke - sad path", async () => {
   // THEN
   const client = new FunctionClient("FUNCTION_NAME", "root/Function");
   await expect(client.invoke(PAYLOAD)).rejects.toThrow(
-    /Invoke failed with message: "I don't like your input!"/
+    /Invoke failed with message: "I don't like your input!"/,
   );
 });
 
 test("parse logs", () => {
   const traces = parseLogs(
     "START RequestId: 6beb7628-d0c3-4fe9-bf5a-d64c559aa25f Version: $LATEST\n2023-08-04T16:40:47.309Z\t6beb7628-d0c3-4fe9-bf5a-d64c559aa25f\tINFO\thello world\n2023-08-04T16:40:50.691Z\t6beb7628-d0c3-4fe9-bf5a-d64c559aa25f\tINFO\thello world\nEND RequestId: 6beb7628-d0c3-4fe9-bf5a-d64c559aa25f\nREPORT RequestId: 6beb7628-d0c3-4fe9-bf5a-d64c559aa25f\tDuration: 4958.93 ms\tBilled Duration: 4959 ms\tMemory Size: 128 MB\tMax Memory Used: 82 MB\tInit Duration: 249.40 ms\t\n",
-    "fake-source"
+    "fake-source",
   );
   expect(traces).toEqual([
     {

@@ -36,7 +36,7 @@ test(
               obj: bucket,
               ops: [cloud.BucketInflightMethods.PUT],
             },
-          }
+          },
         );
         this.processor = queue.setConsumer(processor);
       }
@@ -67,5 +67,5 @@ test(
 
     expect(app.snapshot()).toMatchSnapshot();
   },
-  { timeout: 20000 }
+  { timeout: 20000 },
 );

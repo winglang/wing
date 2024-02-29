@@ -4,7 +4,7 @@ import { Node } from "../std/node";
 import { Resource } from "../std/resource";
 
 export const VISUAL_COMPONENT_SYMBOL = Symbol.for(
-  "@winglang/sdk.ui.VisualComponent"
+  "@winglang/sdk.ui.VisualComponent",
 );
 
 /**

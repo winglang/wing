@@ -50,18 +50,18 @@ test("api will be private when vpc_api_gateway is true", () => {
   const parsedOutput = JSON.parse(output);
 
   const apiGatewayKey = Object.keys(
-    parsedOutput.resource.aws_api_gateway_rest_api
+    parsedOutput.resource.aws_api_gateway_rest_api,
   )[0];
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_vpc")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_vpc_endpoint")).toEqual(1);
   expect(
     parsedOutput.resource.aws_api_gateway_rest_api[apiGatewayKey]
-      .endpoint_configuration.types[0]
+      .endpoint_configuration.types[0],
   ).toEqual("PRIVATE");
   expect(
     parsedOutput.resource.aws_api_gateway_rest_api[apiGatewayKey]
-      .endpoint_configuration.vpc_endpoint_ids.length
+      .endpoint_configuration.vpc_endpoint_ids.length,
   ).toEqual(1); // uses vpc endpoint
   expect(tfSanitize(output)).toMatchSnapshot();
 });
@@ -380,9 +380,9 @@ test("api url can be used as environment variable", () => {
   // THEN
   const tfConfig = JSON.parse(output);
   expect(
-    tfConfig.resource.aws_lambda_function.Fn.environment.variables.API_URL
+    tfConfig.resource.aws_lambda_function.Fn.environment.variables.API_URL,
   ).toEqual(
-    "https://${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}"
+    "https://${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}",
   );
 });
 

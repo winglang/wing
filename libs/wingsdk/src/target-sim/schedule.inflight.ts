@@ -49,7 +49,7 @@ export class Schedule
 
   public async addEventSubscription(
     subscriber: string,
-    subscriptionProps: EventSubscription
+    subscriptionProps: EventSubscription,
   ) {
     const task = {
       functionHandle: subscriber,
@@ -68,7 +68,7 @@ export class Schedule
   private runTasks() {
     for (const task of this.tasks) {
       const fnClient = this.context.findInstance(
-        task.functionHandle!
+        task.functionHandle!,
       ) as IFunctionClient & ISimulatorResourceInstance;
       if (!fnClient) {
         throw new Error("No function client found for task.");

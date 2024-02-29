@@ -83,7 +83,7 @@ export class Sandbox {
       Object.defineProperty(context, name, {
         get: () => {
           throw new Error(
-            `${name} cannot be used within bundled cloud functions`
+            `${name} cannot be used within bundled cloud functions`,
           );
         },
       });

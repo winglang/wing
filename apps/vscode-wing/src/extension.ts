@@ -49,7 +49,7 @@ export async function activate(context: ExtensionContext) {
           await new Promise((resolve) => setTimeout(resolve, 1000, undefined));
 
           await wingBinChanged();
-        }
+        },
       );
 
       if (hasWingBin) {
@@ -65,7 +65,7 @@ export async function activate(context: ExtensionContext) {
           const chooseReload = await window.showInformationMessage(
             `Wing has been updated and there are open consoles. Would you like to close them? (This will reset their state)`,
             "Yes",
-            "No (Close and reopen console to use new version)"
+            "No (Close and reopen console to use new version)",
           );
 
           if (chooseReload === "Yes") {
@@ -93,11 +93,11 @@ export async function activate(context: ExtensionContext) {
   // add command to preview wing files
   context.subscriptions.push(
     commands.registerCommand("wing.openFile", () =>
-      wingConsoleContext?.openFile()
+      wingConsoleContext?.openFile(),
     ),
     commands.registerCommand("wing.openConsole", () =>
-      wingConsoleContext?.openConsole()
-    )
+      wingConsoleContext?.openConsole(),
+    ),
   );
 
   await wingBinChanged();

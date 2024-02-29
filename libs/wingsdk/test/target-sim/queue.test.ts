@@ -67,7 +67,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   // WHEN
   await queueClient.push("A", "B");
   await waitUntilTraceCount(s, 2, (trace) =>
-    trace.data.message.startsWith("Sending messages")
+    trace.data.message.startsWith("Sending messages"),
   );
 
   // THEN
@@ -131,7 +131,7 @@ async handle() {
         obj: queue,
         ops: [cloud.QueueInflightMethods.PUSH],
       },
-    }
+    },
   );
   new cloud.OnDeploy(app, "my_queue_messages", onDeployHandler);
 
@@ -142,7 +142,8 @@ async handle() {
     s,
     2,
     (trace) =>
-      trace.sourcePath === consumer.node.path && trace.data.status === "success"
+      trace.sourcePath === consumer.node.path &&
+      trace.data.status === "success",
   );
 
   // THEN
@@ -153,7 +154,7 @@ async handle() {
     .filter(
       (trace) =>
         trace.sourcePath === consumer.node.path &&
-        trace.data.message.startsWith("Invoke")
+        trace.data.message.startsWith("Invoke"),
     );
   expect(invokeMessages.length).toBeGreaterThanOrEqual(2); // queue messages are processed in multiple batches based on batch size
   expect(app.snapshot()).toMatchSnapshot();
@@ -181,7 +182,7 @@ test.skip("messages are requeued if the function fails after timeout", async () 
 
   // THEN
   await waitUntilTrace(s, (trace) =>
-    trace.data.message.startsWith(REQUEUE_MSG)
+    trace.data.message.startsWith(REQUEUE_MSG),
   );
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -190,7 +191,7 @@ test.skip("messages are requeued if the function fails after timeout", async () 
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.QUEUE_FQN)
-      .map((trace) => trace.data.message)
+      .map((trace) => trace.data.message),
   ).toContain(REQUEUE_MSG);
 });
 
@@ -211,7 +212,7 @@ test.skip("messages are not requeued if the function fails before timeout", asyn
     s,
     (trace) =>
       trace.data.message ==
-      "Subscriber error - returning 1 messages to queue: ERROR"
+      "Subscriber error - returning 1 messages to queue: ERROR",
   );
 
   // THEN
@@ -224,7 +225,7 @@ test.skip("messages are not requeued if the function fails before timeout", asyn
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.QUEUE_FQN)
-      .map((trace) => trace.data.message)
+      .map((trace) => trace.data.message),
   ).toMatchInlineSnapshot(`
     [
       "@winglang/sdk.cloud.Queue created.",
@@ -255,13 +256,13 @@ test.skip("messages are not requeued if the function fails after retention timeo
     s,
     (trace) =>
       trace.data.message ==
-      "1 messages pushed back to queue after visibility timeout."
+      "1 messages pushed back to queue after visibility timeout.",
   );
 
   // THEN
   await s.stop();
   expect(listMessages(s)).toContain(
-    "1 messages pushed back to queue after visibility timeout."
+    "1 messages pushed back to queue after visibility timeout.",
   );
   expect(app.snapshot()).toMatchSnapshot();
 });
@@ -363,7 +364,7 @@ test("push rejects empty message", async () => {
 
   // THEN
   await expect(() => queueClient.push("")).rejects.toThrowError(
-    /Empty messages are not allowed/
+    /Empty messages are not allowed/,
   );
   await s.stop();
 

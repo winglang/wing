@@ -13,7 +13,7 @@ import {
 
 export const containCertificate = (
   config: any,
-  certificate: string
+  certificate: string,
 ): boolean => {
   const website = config.resource.aws_cloudfront_distribution;
 
@@ -63,13 +63,13 @@ describe("cloud.Domain for tf-aws", () => {
     ]);
     const hasCertificate = containCertificate(
       JSON.parse(output),
-      "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+      "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
     );
     expect(hasCertificate).toEqual(true);
     expect(
       tfResourcesWithProperty(output, "aws_route53_record", {
         zone_id: "Z0111111111111111111F",
-      })
+      }),
     ).not.toBeUndefined();
     expect(tfSanitize(output)).toMatchSnapshot();
     expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -100,13 +100,13 @@ describe("cloud.Domain for tf-aws", () => {
     ]);
     const hasCertificate = containCertificate(
       JSON.parse(output),
-      "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+      "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
     );
     expect(hasCertificate).toEqual(true);
     expect(
       tfResourcesWithProperty(output, "aws_route53_record", {
         zone_id: "Z0111111111111111111F",
-      })
+      }),
     ).not.toBeUndefined();
     expect(tfSanitize(output)).toMatchSnapshot();
     expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -140,13 +140,13 @@ describe("cloud.Domain for tf-aws", () => {
     ]);
     const hasCertificate = containCertificate(
       JSON.parse(output),
-      "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+      "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
     );
     expect(hasCertificate).toEqual(true);
     expect(
       tfResourcesWithProperty(output, "aws_route53_record", {
         zone_id: "Z0111111111111111111F",
-      })
+      }),
     ).not.toBeUndefined();
     expect(tfSanitize(output)).toMatchSnapshot();
     expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -179,13 +179,13 @@ describe("cloud.Domain for tf-aws", () => {
     ]);
     const hasCertificate = containCertificate(
       JSON.parse(output),
-      "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+      "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
     );
     expect(hasCertificate).toEqual(true);
     expect(
       tfResourcesWithProperty(output, "aws_route53_record", {
         zone_id: "Z0111111111111111111F",
-      })
+      }),
     ).not.toBeUndefined();
     expect(tfSanitize(output)).toMatchSnapshot();
     expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -205,8 +205,8 @@ describe("cloud.Domain for tf-aws", () => {
     }).toThrowError(
       new RegExp(
         `Parameter validation errors:\\s*` +
-          `- must have required property 'root' \\s*`.replace(/\s+/g, "\\s*") // Normalize whitespace for comparison
-      )
+          `- must have required property 'root' \\s*`.replace(/\s+/g, "\\s*"), // Normalize whitespace for comparison
+      ),
     );
   });
 });

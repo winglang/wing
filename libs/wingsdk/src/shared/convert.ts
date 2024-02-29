@@ -12,7 +12,7 @@ export function convertBetweenHandlers(
   baseHandler: IInflight,
   newHandlerClientPath: string,
   newHandlerClientClassName: string,
-  args: Record<string, unknown> = {}
+  args: Record<string, unknown> = {},
 ): IInflight {
   const newHandler = {
     ...baseHandler,
@@ -21,9 +21,9 @@ export function convertBetweenHandlers(
       const handlerClient = baseHandler._toInflight();
       const newCode = `\
 new (require("${normalPath(
-        newHandlerClientPath
+        newHandlerClientPath,
       )}")).${newHandlerClientClassName}({ handler: ${handlerClient}, args: ${JSON.stringify(
-        args
+        args,
       )} })`;
       return newCode;
     },

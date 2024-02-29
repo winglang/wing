@@ -90,7 +90,7 @@ export class App extends CdktfApp {
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.location === undefined) {
       throw new Error(
-        "Location must be specified in the AZURE_LOCATION environment variable"
+        "Location must be specified in the AZURE_LOCATION environment variable",
       );
     }
 
@@ -118,9 +118,9 @@ export class App extends CdktfApp {
           resourceGroupName: this.resourceGroup.name,
           name: ResourceNames.generateName(
             this,
-            LOG_ANALYTICS_WORKSPACE_NAME_OPTS
+            LOG_ANALYTICS_WORKSPACE_NAME_OPTS,
           ),
-        }
+        },
       );
     }
     return this._logAnalyticsWorkspace;
@@ -137,7 +137,7 @@ export class App extends CdktfApp {
           location: this.resourceGroup.location,
           applicationType: "web",
           workspaceId: this.logAnalyticsWorkspace.id,
-        }
+        },
       );
     }
     return this._applicationInsights;

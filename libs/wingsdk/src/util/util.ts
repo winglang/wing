@@ -138,7 +138,7 @@ export class Util {
    */
   public static async shell(
     command: string,
-    opts?: ShellOptions
+    opts?: ShellOptions,
   ): Promise<String> {
     const shellOpts = {
       windowsHide: true,
@@ -181,7 +181,7 @@ export class Util {
   public static async exec(
     program: string,
     args: Array<string>,
-    opts?: ExecOptions
+    opts?: ExecOptions,
   ): Promise<Output> {
     const execOpts = {
       windowsHide: true,
@@ -252,7 +252,7 @@ export class Util {
    */
   public static base64Decode(stringToDecode: string, url?: boolean): string {
     return Buffer.from(stringToDecode, url ? "base64url" : "base64").toString(
-      "utf8"
+      "utf8",
     );
   }
 
@@ -275,7 +275,7 @@ export class Util {
    */
   public static async waitUntil(
     predicate: IPredicateHandler,
-    props: WaitUntilProps = {}
+    props: WaitUntilProps = {},
   ): Promise<boolean> {
     const timeout = props.timeout ?? Duration.fromMinutes(1);
     const interval = props.interval ?? Duration.fromSeconds(0.1);

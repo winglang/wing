@@ -160,7 +160,7 @@ test("api doesn't allow duplicated routes", () => {
 
   // THEN
   expect(() => api.get("/hello", inflight)).toThrowError(
-    "Endpoint for path '/hello' and method 'GET' already exists"
+    "Endpoint for path '/hello' and method 'GET' already exists",
   );
 });
 
@@ -191,7 +191,7 @@ test("api doesn't allow ambiguous routes", () => {
 
   // THEN
   expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
-    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`,
   );
 });
 
@@ -208,7 +208,7 @@ test("api doesn't allow ambiguous routes containing only variables", () => {
 
   // THEN
   expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
-    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`,
   );
 });
 
@@ -225,7 +225,7 @@ test("api doesn't allow ambiguous routes containing different number of varaible
 
   // THEN
   expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
-    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`
+    `Endpoint for path '${ambiguousPath}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '${path}'`,
   );
 });
 
@@ -470,7 +470,7 @@ test("api url can be used as environment variable", async () => {
   const app = new SimApp();
   const api = new cloud.Api(app, "my_api");
   const handler = Testing.makeHandler(
-    `async handle(req) { return process.env["API_URL"]; }`
+    `async handle(req) { return process.env["API_URL"]; }`,
   );
   new cloud.Function(app, "my_function", handler, {
     env: {
@@ -504,7 +504,7 @@ test("api response returns Content-Type header from inflight", async () => {
   const app = new SimApp();
   const api = new cloud.Api(app, "my_api");
   const inflight = Testing.makeHandler(
-    INFLIGHT_CODE_WITH_CONTENTTYPE_RESPONSE_HEADER
+    INFLIGHT_CODE_WITH_CONTENTTYPE_RESPONSE_HEADER,
   );
   api.get(ROUTE, inflight);
 
@@ -520,7 +520,7 @@ test("api response returns Content-Type header from inflight", async () => {
 
   expect(response.status).toEqual(200);
   expect(response.headers.get("Content-Type")).toEqual(
-    "application/octet-stream; charset=utf-8"
+    "application/octet-stream; charset=utf-8",
   );
 
   expect(listMessages(s)).toMatchSnapshot();
@@ -549,7 +549,7 @@ test("api response returns default Content-Type header", async () => {
   expect(response.status).toEqual(200);
   // the default for no body requests
   expect(response.headers.get("Content-Type")).toEqual(
-    "text/html; charset=utf-8"
+    "text/html; charset=utf-8",
   );
 
   expect(listMessages(s)).toMatchSnapshot();
@@ -656,7 +656,7 @@ test("api with CORS defaults", async () => {
   expect(await response.text()).toEqual(RESPONSE);
   expect(response.headers.get("access-control-allow-origin")).toEqual("*");
   expect(response.headers.get("access-control-allow-credentials")).toEqual(
-    "false"
+    "false",
   );
 });
 
@@ -688,13 +688,13 @@ test("api with custom CORS settings", async () => {
   expect(response.status).toEqual(200);
   expect(await response.text()).toEqual(RESPONSE);
   expect(response.headers.get("access-control-allow-origin")).toEqual(
-    "https://example.com"
+    "https://example.com",
   );
   expect(response.headers.get("access-control-allow-credentials")).toEqual(
-    "true"
+    "true",
   );
   expect(response.headers.get("access-control-expose-headers")).toEqual(
-    "x-wingnuts"
+    "x-wingnuts",
   );
 });
 
@@ -717,10 +717,10 @@ test("api with CORS settings responds to OPTIONS request", async () => {
 
   expect(response.status).toEqual(204);
   expect(response.headers.get("access-control-allow-headers")).toEqual(
-    "Content-Type,Authorization,X-Requested-With"
+    "Content-Type,Authorization,X-Requested-With",
   );
   expect(response.headers.get("access-control-allow-methods")).toEqual(
-    "GET,POST,PUT,DELETE,HEAD,OPTIONS"
+    "GET,POST,PUT,DELETE,HEAD,OPTIONS",
   );
   expect(response.headers.get("access-control-max-age")).toEqual("300");
 });

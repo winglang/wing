@@ -25,7 +25,7 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
    */
   addEventSubscription: (
     subscriber: FunctionHandle,
-    subscriptionProps: EventSubscription
+    subscriptionProps: EventSubscription,
   ) => Promise<void>;
 
   /**

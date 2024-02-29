@@ -118,7 +118,7 @@ export class Table extends ex.Table implements IAwsTable {
         `process.env["${this.envName()}"]`,
         `process.env["${this.primaryKeyEnvName()}"]`,
         `process.env["${this.columnsEnvName()}"]`,
-      ]
+      ],
     );
   }
 

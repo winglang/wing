@@ -82,7 +82,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps = {}
+    props: cloud.FunctionProps = {},
   ) {
     super(scope, id, inflight, props);
 
@@ -176,7 +176,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     // validate memory size
     if (props.memory && (props.memory < 128 || props.memory > 10240)) {
       throw new Error(
-        "Memory for AWS Lambda function should be in between 128 and 10240"
+        "Memory for AWS Lambda function should be in between 128 and 10240",
       );
     }
 
@@ -312,7 +312,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "FunctionClient",
-      [`process.env["${this.envName()}"], "${this.node.path}"`]
+      [`process.env["${this.envName()}"], "${this.node.path}"`],
     );
   }
 
@@ -372,7 +372,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     source: Resource,
     principal: string,
     sourceArn: string,
-    options: FunctionPermissionsOptions = { qualifier: this.function.version }
+    options: FunctionPermissionsOptions = { qualifier: this.function.version },
   ): void {
     this.permissions = new LambdaPermission(
       this,
@@ -383,7 +383,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         principal: principal,
         sourceArn: sourceArn,
         ...options,
-      }
+      },
     );
   }
 
@@ -416,7 +416,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     lines.push("exports.handler = async function(event) {");
     lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
     lines.push(
-      `  return await ${client}.handle(event === null ? undefined : event);`
+      `  return await ${client}.handle(event === null ? undefined : event);`,
     );
     lines.push("};");
 

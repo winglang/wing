@@ -90,7 +90,7 @@ test("function with a table binding", () => {
           ex.DynamodbTableInflightMethods.SCAN,
         ],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();

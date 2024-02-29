@@ -9,7 +9,7 @@ export class CSharpTranspile extends transpile.TranspileBase {
   }
 
   public moduleLike(
-    moduleLike: reflect.ModuleLike
+    moduleLike: reflect.ModuleLike,
   ): transpile.TranspiledModuleLike {
     const csharpPackage: string = moduleLike.targets?.dotnet?.namespace;
 
@@ -122,7 +122,7 @@ export class CSharpTranspile extends transpile.TranspileBase {
   }
 
   public interface(
-    iface: reflect.InterfaceType
+    iface: reflect.InterfaceType,
   ): transpile.TranspiledInterface {
     return {
       name: iface.name,
@@ -131,7 +131,7 @@ export class CSharpTranspile extends transpile.TranspileBase {
   }
 
   public parameter(
-    parameter: reflect.Parameter
+    parameter: reflect.Parameter,
   ): transpile.TranspiledParameter {
     const typeRef = this.typeReference(parameter.type);
     const name = Case.pascal(parameter.name);
@@ -219,7 +219,7 @@ export class CSharpTranspile extends transpile.TranspileBase {
   }
 
   private formatFnParam(
-    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty
+    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty,
   ): string {
     const tf = transpiled.typeReference.toString({
       typeFormatter: (t) => t.name,
@@ -230,7 +230,7 @@ export class CSharpTranspile extends transpile.TranspileBase {
 
   private formatStructBuilder(
     type: transpile.TranspiledType,
-    properties: string[]
+    properties: string[],
   ): string {
     const builder = `new ${type.name} {`;
     return [builder, properties.join(",\n"), "};"].join("\n");
@@ -238,7 +238,7 @@ export class CSharpTranspile extends transpile.TranspileBase {
 
   private formatParameter(
     name: string,
-    typeReference: transpile.TranspiledTypeReference
+    typeReference: transpile.TranspiledTypeReference,
   ) {
     const tf = typeReference.toString({
       typeFormatter: (t) => t.name,
@@ -250,7 +250,7 @@ export class CSharpTranspile extends transpile.TranspileBase {
   private formatProperty(
     name: string,
     typeReference: transpile.TranspiledTypeReference,
-    property: reflect.Property
+    property: reflect.Property,
   ): string {
     const tf = typeReference.toString({
       typeFormatter: (t) => t.name,

@@ -45,14 +45,14 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     const wingFiles = (await glob("{main,*.main}.{w,ts}")).sort();
     if (wingFiles.length === 0) {
       throw new Error(
-        "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+        "Cannot find entrypoint files (main.w or *.main.w) in the current directory.",
       );
     }
     if (wingFiles.length > 1) {
       throw new Error(
         `Multiple entrypoints found in the current directory (${wingFiles.join(
-          ", "
-        )}). Please specify which one to use.`
+          ", ",
+        )}). Please specify which one to use.`,
       );
     }
     entrypoint = wingFiles[0];
@@ -65,8 +65,8 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   if (options?.platform && options?.platform[0] !== BuiltinPlatform.SIM) {
     throw new Error(
       `The first platform in the list must be the sim platform (try "-t sim -t ${options.platform.join(
-        " -t"
-      )}")`
+        " -t",
+      )}")`,
     );
   }
 

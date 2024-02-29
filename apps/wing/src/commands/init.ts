@@ -64,8 +64,8 @@ export async function init(template: string, options: InitOptions = {}): Promise
       if ((err as any).isTtyError) {
         throw new Error(
           `Please select from one of the available choices:\n  ${templates.join(
-            "\n  "
-          )}\n\nHave an idea for a new template? Let us know at https://github.com/winglang/wing/issues/!`
+            "\n  ",
+          )}\n\nHave an idea for a new template? Let us know at https://github.com/winglang/wing/issues/!`,
         );
       }
     }
@@ -74,8 +74,8 @@ export async function init(template: string, options: InitOptions = {}): Promise
   if (!templates.includes(template)) {
     throw new Error(
       `Template "${template}" is not available. Please select from one of the available choices:\n  ${templates.join(
-        "\n  "
-      )}\n\nHave an idea for a new template? Let us know at https://github.com/winglang/wing/issues/!`
+        "\n  ",
+      )}\n\nHave an idea for a new template? Let us know at https://github.com/winglang/wing/issues/!`,
     );
   }
 
@@ -91,7 +91,7 @@ export async function init(template: string, options: InitOptions = {}): Promise
       break;
     default:
       throw new Error(
-        `Unknown language: "${language}". Please select from "wing" or "typescript".`
+        `Unknown language: "${language}". Please select from "wing" or "typescript".`,
       );
   }
   // Since this object is used by our analytics collector
@@ -102,7 +102,7 @@ export async function init(template: string, options: InitOptions = {}): Promise
   const templateExists = await exists(templatePath, constants.R_OK);
   if (!templateExists) {
     throw new Error(
-      `Template "${template}" is not available in ${language}. Please let us know you'd like to use this template in ${language} by opening an issue at https://github.com/winglang/wing/issues/!`
+      `Template "${template}" is not available in ${language}. Please let us know you'd like to use this template in ${language} by opening an issue at https://github.com/winglang/wing/issues/!`,
     );
   }
 
@@ -113,8 +113,8 @@ export async function init(template: string, options: InitOptions = {}): Promise
   if (overwrite.length > 0) {
     throw new Error(
       `The following files already exist in the current directory and will be overwritten:\n  ${overwrite.join(
-        "\n  "
-      )}\n\nPlease move or delete these files and try again.`
+        "\n  ",
+      )}\n\nPlease move or delete these files and try again.`,
     );
   }
 
@@ -159,8 +159,8 @@ export async function init(template: string, options: InitOptions = {}): Promise
   if (!npmExists) {
     console.log(
       `${chalk.yellow(
-        "warning:"
-      )} npm is not installed. Please install npm and run "npm install" to finish setting up any project dependencies.`
+        "warning:",
+      )} npm is not installed. Please install npm and run "npm install" to finish setting up any project dependencies.`,
     );
   }
 
@@ -170,8 +170,8 @@ export async function init(template: string, options: InitOptions = {}): Promise
   } catch (err) {
     console.log(
       `${chalk.yellow(
-        "warning:"
-      )} npm install failed. Please let us know there's an issue with this template by opening an issue at at https://github.com/winglang/wing/issues/.`
+        "warning:",
+      )} npm install failed. Please let us know there's an issue with this template by opening an issue at at https://github.com/winglang/wing/issues/.`,
     );
     console.log();
     console.error((err as any).stderr);
@@ -221,7 +221,7 @@ async function getFilesHelper(basedir: string, dir: string): Promise<string[]> {
     dirents.map(async (dirent) => {
       const res = join(dir, dirent.name);
       return dirent.isDirectory() ? getFilesHelper(basedir, res) : relative(basedir, res);
-    })
+    }),
   );
   return Array.prototype.concat(...files);
 }

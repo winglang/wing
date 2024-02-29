@@ -35,7 +35,7 @@ test("topic publishes messages as they are received", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(
-    `async handle(message) { console.log("Received " + message); }`
+    `async handle(message) { console.log("Received " + message); }`,
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
@@ -47,10 +47,10 @@ test("topic publishes messages as they are received", async () => {
   await topicClient.publish("Alpha");
   await topicClient.publish("Beta");
   await waitUntilTrace(s, (trace) =>
-    trace.data.message.startsWith("Received Alpha")
+    trace.data.message.startsWith("Received Alpha"),
   );
   await waitUntilTrace(s, (trace) =>
-    trace.data.message.startsWith("Received Beta")
+    trace.data.message.startsWith("Received Beta"),
   );
 
   // THEN
@@ -65,10 +65,10 @@ test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(
-    `async handle(message) { console.log("Received " + message); }`
+    `async handle(message) { console.log("Received " + message); }`,
   );
   const otherHandler = Testing.makeHandler(
-    `async handle(message) { console.log("Also received " + message); }`
+    `async handle(message) { console.log("Also received " + message); }`,
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
@@ -82,10 +82,10 @@ test("topic publishes messages to multiple subscribers", async () => {
 
   // THEN
   await waitUntilTrace(s, (trace) =>
-    trace.data.message.startsWith("Received Alpha")
+    trace.data.message.startsWith("Received Alpha"),
   );
   await waitUntilTrace(s, (trace) =>
-    trace.data.message.startsWith("Also received Alpha")
+    trace.data.message.startsWith("Also received Alpha"),
   );
   await s.stop();
 });

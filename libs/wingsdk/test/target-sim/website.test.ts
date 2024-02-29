@@ -27,20 +27,20 @@ test("website is serving static pages", async () => {
   expect(await indexPage.text()).toEqual(
     readFileSync(resolve(__dirname, "../test-files/website/index.html"), {
       encoding: "utf-8",
-    })
+    }),
   );
   expect(await aPage.text()).toEqual(
     readFileSync(resolve(__dirname, "../test-files/website/b.html"), {
       encoding: "utf-8",
-    })
+    }),
   );
   expect(await bPage.text()).toEqual(
     readFileSync(
       resolve(__dirname, "../test-files/website/inner-folder/a.html"),
       {
         encoding: "utf-8",
-      }
-    )
+      },
+    ),
   );
 });
 
@@ -151,7 +151,7 @@ test("multiple tokens are resolved in website config", async () => {
         "config.json": {
           contentType: "application/json",
           data: expect.stringMatching(
-            /{"api1":"http:\/\/127.0.0.1:\d+","api2":"http:\/\/127.0.0.1:\d+"}/
+            /{"api1":"http:\/\/127.0.0.1:\d+","api2":"http:\/\/127.0.0.1:\d+"}/,
           ),
         },
       },
@@ -194,6 +194,6 @@ test("custom error page", async () => {
   expect(await errorPage.text()).toEqual(
     readFileSync(resolve(__dirname, "../test-files/website/b.html"), {
       encoding: "utf-8",
-    })
+    }),
   );
 });

@@ -11,7 +11,7 @@ export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
 
   public constructor(
     props: OnDeploySchema["props"],
-    context: ISimulatorContext
+    context: ISimulatorContext,
   ) {
     this.functionHandle = props.functionHandle;
     this.context = context;
@@ -19,7 +19,7 @@ export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
 
   public async init(): Promise<OnDeployAttributes> {
     const functionClient = this.context.findInstance(
-      this.functionHandle
+      this.functionHandle,
     ) as IFunctionClient & ISimulatorResourceInstance;
     await this.context.withTrace({
       message: "OnDeploy invoked.",

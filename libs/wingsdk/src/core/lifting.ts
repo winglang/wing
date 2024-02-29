@@ -36,7 +36,7 @@ const INFLIGHT_CLOSURE_TYPE_PREFIX = "$Closure";
 export function toLiftableModuleType(
   type: any,
   moduleSpec: string,
-  path: string
+  path: string,
 ) {
   if (
     typeof type?._toInflightType === "function" ||
@@ -119,7 +119,7 @@ export type LiftDepsMatrix = Record<string, Map<any, Set<string>>>;
  */
 export function mergeLiftDeps(
   matrix1: LiftDepsMatrix,
-  matrix2: LiftDepsMatrix
+  matrix2: LiftDepsMatrix,
 ): LiftDepsMatrix {
   const result: LiftDepsMatrix = {};
   for (const [op, deps] of Object.entries(matrix1)) {
@@ -217,11 +217,11 @@ function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
  */
 export function collectLifts(
   initialObj: any,
-  initialOps: Array<string>
+  initialOps: Array<string>,
 ): Map<any, Set<string>> {
   if (initialOps.includes(INFLIGHT_INIT_METHOD_NAME)) {
     throw new Error(
-      `The operation ${INFLIGHT_INIT_METHOD_NAME} is implicit and should not be requested explicitly.`
+      `The operation ${INFLIGHT_INIT_METHOD_NAME} is implicit and should not be requested explicitly.`,
     );
   }
 
@@ -330,11 +330,11 @@ export function collectLifts(
         if (Construct.isConstruct(obj)) {
           throw new NotImplementedError(
             `Resource ${obj.node.path} does not support inflight operation ${op}.\nIt might not be implemented yet.`,
-            { resource: obj.constructor.name, operation: op }
+            { resource: obj.constructor.name, operation: op },
           );
         } else {
           throw new Error(
-            `Unknown operation ${op} requested for object ${obj} (${obj.constructor.name})`
+            `Unknown operation ${op} requested for object ${obj} (${obj.constructor.name})`,
           );
         }
       }
@@ -342,7 +342,7 @@ export function collectLifts(
       for (const [depObj, depOps] of objDeps.entries()) {
         if (depOps.has(INFLIGHT_INIT_METHOD_NAME)) {
           throw new Error(
-            `The operation ${INFLIGHT_INIT_METHOD_NAME} is implicit and should not be requested explicitly.`
+            `The operation ${INFLIGHT_INIT_METHOD_NAME} is implicit and should not be requested explicitly.`,
           );
         }
         queue.push([depObj, [...depOps]]);
@@ -404,7 +404,7 @@ export class Lifting {
   public static lift(
     obj: IHostedLiftable,
     host: IInflightHost,
-    ops: Array<string>
+    ops: Array<string>,
   ) {
     // obtain all of the objects that need lifting
     const lifts = collectLifts(obj, ops);

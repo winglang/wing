@@ -35,7 +35,7 @@ export class DynamodbTable {
    * @param dynamodb The ex.DynamodbTable.
    */
   public static from(
-    dynamodb: ex.DynamodbTable
+    dynamodb: ex.DynamodbTable,
   ): IAwsDynamodbTable | undefined {
     if (this.isAwsDynamodb(dynamodb)) {
       return dynamodb;

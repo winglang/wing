@@ -51,7 +51,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
         path: this._projectPath,
         startCommand: this._startCommand,
         environmentVariables: Object.fromEntries(
-          this._environmentVariables.entries()
+          this._environmentVariables.entries(),
         ),
         useBuildCommand: this._useBuildCommand,
         url: this.url,

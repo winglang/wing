@@ -48,7 +48,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
       activity: async () => {
         if (await this.tryGet(key)) {
           throw new Error(
-            `The primary key "${key}" already exists in the "${this.name}" table.`
+            `The primary key "${key}" already exists in the "${this.name}" table.`,
           );
         }
         let item: Record<string, any> = {};
@@ -92,7 +92,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
           this.table.set(key, item);
         } catch {
           throw new Error(
-            `The primary key "${key}" was not found in the "${this.name}" table.`
+            `The primary key "${key}" was not found in the "${this.name}" table.`,
           );
         }
       },
@@ -104,7 +104,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
       activity: async () => {
         if (!this.table.delete(key)) {
           throw new Error(
-            `The primary key "${key}" not found in the "${this.name}" table.`
+            `The primary key "${key}" not found in the "${this.name}" table.`,
           );
         }
       },

@@ -45,7 +45,7 @@ test("function with a counter binding", () => {
         obj: counter,
         ops: [cloud.CounterInflightMethods.INC],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
@@ -78,7 +78,7 @@ test("inc() policy statement", () => {
         obj: counter,
         ops: [cloud.CounterInflightMethods.INC],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
@@ -101,7 +101,7 @@ test("dec() policy statement", () => {
         obj: counter,
         ops: [cloud.CounterInflightMethods.DEC],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
@@ -124,7 +124,7 @@ test("peek() policy statement", () => {
         obj: counter,
         ops: [cloud.CounterInflightMethods.PEEK],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
@@ -147,7 +147,7 @@ test("set() policy statement", () => {
         obj: counter,
         ops: [cloud.CounterInflightMethods.SET],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
@@ -167,9 +167,9 @@ test("counter name valid", () => {
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_dynamodb_table", {
       name: `wing-counter-The.Amazing-Counter_01-${counter.node.addr.substring(
         0,
-        8
+        8,
       )}`,
-    })
+    }),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -186,9 +186,9 @@ test("replace invalid character from counter name", () => {
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_dynamodb_table", {
       name: `wing-counter-The-Amazing-Counter-01-${counter.node.addr.substring(
         0,
-        8
+        8,
       )}`,
-    })
+    }),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

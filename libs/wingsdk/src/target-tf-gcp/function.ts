@@ -46,7 +46,7 @@ export class Function extends cloud.Function {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps = {}
+    props: cloud.FunctionProps = {},
   ) {
     super(scope, id, inflight, props);
 
@@ -56,7 +56,7 @@ export class Function extends cloud.Function {
     // memory limits must be between 128 and 8192 MB
     if (props?.memory && (props.memory < 128 || props.memory > 8192)) {
       throw new Error(
-        "Memory must be between 128 and 8192 MB for GCP Cloud Functions"
+        "Memory must be between 128 and 8192 MB for GCP Cloud Functions",
       );
     }
 
@@ -66,7 +66,7 @@ export class Function extends cloud.Function {
       (props.timeout.seconds < 1 || props.timeout.seconds > 540)
     ) {
       throw new Error(
-        "Timeout must be between 1 and 540 seconds for GCP Cloud Functions"
+        "Timeout must be between 1 and 540 seconds for GCP Cloud Functions",
       );
     }
 
@@ -88,7 +88,7 @@ export class Function extends cloud.Function {
             return this.assetPath;
           },
         }),
-      }
+      },
     );
 
     // Step 1: Create Custom Service Account
@@ -98,9 +98,9 @@ export class Function extends cloud.Function {
       {
         accountId: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
         displayName: `Custom Service Account for Cloud Function ${this.node.addr.substring(
-          -8
+          -8,
         )}`,
-      }
+      },
     );
     // Step 2: Create Custom Role
     this.functionCustomRole = new ProjectIamCustomRole(
@@ -112,7 +112,7 @@ export class Function extends cloud.Function {
         permissions: Lazy.listValue({
           produce: () => Array.from(this.permissions),
         }),
-      }
+      },
     );
     // Step 3: Grant Custom Role to Custom Service Account on the Project
     new ProjectIamMember(this, "ProjectIamMember", {
@@ -155,7 +155,7 @@ export class Function extends cloud.Function {
 
     inflightClient;
     lines.push(
-      "const functions = require('@google-cloud/functions-framework');\n"
+      "const functions = require('@google-cloud/functions-framework');\n",
     );
     lines.push(`functions.http('handler', async (req, res) => {`);
     lines.push("  res.set('Access-Control-Allow-Origin', '*')");
@@ -163,7 +163,7 @@ export class Function extends cloud.Function {
 
     lines.push("  try {");
     lines.push(
-      `  const result = await (${inflightClient}).handle(req.body ?? "")`
+      `  const result = await (${inflightClient}).handle(req.body ?? "")`,
     );
     lines.push(`  res.send(result);`);
     lines.push(`  } catch (error) {`);
@@ -196,8 +196,8 @@ export class Function extends cloud.Function {
           },
         },
         null,
-        2
-      )
+        2,
+      ),
     );
 
     const asset = new TerraformAsset(this, "Asset", {
@@ -239,7 +239,7 @@ export class Function extends cloud.Function {
         `process.env["${this.envName()}"]`,
         `process.env["${this.projectEnv()}"]`,
         `process.env["${this.regionEnv()}"]`,
-      ]
+      ],
     );
   }
 
@@ -252,7 +252,7 @@ export class Function extends cloud.Function {
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error(
-        "tfgcp.Function can only be bound by tfgcp.Function for now"
+        "tfgcp.Function can only be bound by tfgcp.Function for now",
       );
     }
 

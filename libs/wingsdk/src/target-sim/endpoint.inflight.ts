@@ -5,7 +5,7 @@ import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
   constructor(
     private readonly _props: EndpointSchema["props"],
-    _context: ISimulatorContext
+    _context: ISimulatorContext,
   ) {}
   public async init(): Promise<EndpointAttributes> {
     return {

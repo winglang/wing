@@ -35,7 +35,7 @@ export class Redis extends ex.Redis {
       !process.env.REDIS_PARAMETER_GROUP_NAME
     ) {
       throw new Error(
-        "REDIS_PARAMETER_GROUP_NAME must be set if REDIS_ENGINE_VERSION is set"
+        "REDIS_PARAMETER_GROUP_NAME must be set if REDIS_ENGINE_VERSION is set",
       );
     }
 
@@ -73,7 +73,7 @@ export class Redis extends ex.Redis {
               protocol: "-1",
             },
           ],
-        })
+        }),
       );
     }
 

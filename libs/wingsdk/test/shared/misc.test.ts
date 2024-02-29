@@ -10,7 +10,7 @@ describe("generateDockerContainerName", () => {
 
   test("removes disallowed characters", () => {
     const actual = generateDockerContainerName(
-      "wing-container-type-App.Name With Spaces/And/Stuff"
+      "wing-container-type-App.Name With Spaces/And/Stuff",
     );
     expect(actual).not.contains(/[ \/]/);
   });

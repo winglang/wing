@@ -25,7 +25,7 @@ const formatStructInitialization = (type: transpile.TranspiledType) => {
 
 const formatClassInitialization = (
   type: transpile.TranspiledType,
-  inputs: string[]
+  inputs: string[],
 ) => {
   const target =
     type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
@@ -37,14 +37,14 @@ const formatClassInitialization = (
 const formatInvocation = (
   type: transpile.TranspiledType,
   inputs: string[],
-  method: string
+  method: string,
 ) => {
   let target =
     type.name === "Util"
       ? type.namespace
       : type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
-      ? `${type.namespace}.${type.name}`
-      : type.name;
+        ? `${type.namespace}.${type.name}`
+        : type.name;
   if (method) {
     target = `${target}.${method}`;
   }
@@ -71,7 +71,7 @@ const formatSignature = (
   name: string,
   inputs: string[],
   returns?: string,
-  isInflight?: boolean
+  isInflight?: boolean,
 ) => {
   return `${isInflight ? "inflight " : ""}${name}(${formatArguments(inputs)})${
     returns ? ": " + returns : ""
@@ -165,7 +165,7 @@ export class WingTranspile extends transpile.TranspileBase {
   }
 
   public parameter(
-    parameter: reflect.Parameter
+    parameter: reflect.Parameter,
   ): transpile.TranspiledParameter {
     const name = parameter.name;
     const typeRef = this.typeReference(parameter.type);
@@ -199,7 +199,7 @@ export class WingTranspile extends transpile.TranspileBase {
 
     const name = callable.name;
     const inputs = parameters.map((p) =>
-      this.formatParameters(this.parameter(p))
+      this.formatParameters(this.parameter(p)),
     );
 
     const invocation = reflect.Initializer.isInitializer(callable)
@@ -228,7 +228,7 @@ export class WingTranspile extends transpile.TranspileBase {
   }
 
   public interface(
-    iface: reflect.InterfaceType
+    iface: reflect.InterfaceType,
   ): transpile.TranspiledInterface {
     return {
       name: iface.name,
@@ -265,7 +265,7 @@ export class WingTranspile extends transpile.TranspileBase {
   }
 
   public moduleLike(
-    moduleLike: reflect.ModuleLike
+    moduleLike: reflect.ModuleLike,
   ): transpile.TranspiledModuleLike {
     if (moduleLike instanceof reflect.Submodule) {
       const fqnParts = moduleLike.fqn.split(".");
@@ -275,7 +275,7 @@ export class WingTranspile extends transpile.TranspileBase {
   }
 
   private formatParameters(
-    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty
+    transpiled: transpile.TranspiledParameter | transpile.TranspiledProperty,
   ): string {
     let tf = transpiled.typeReference.toString(typeToString);
     if (tf === "Inflight") {
@@ -293,7 +293,7 @@ export class WingTranspile extends transpile.TranspileBase {
 
   private formatProperty(
     name: string,
-    typeReference: transpile.TranspiledTypeReference
+    typeReference: transpile.TranspiledTypeReference,
   ): string {
     let tf = typeReference.toString(typeToString);
     if (tf === "Inflight") {

@@ -8,7 +8,7 @@ export class Enum {
   private readonly members: EnumMember[];
   constructor(
     private readonly transpile: Transpile,
-    private readonly enu: reflect.EnumType
+    private readonly enu: reflect.EnumType,
   ) {
     this.transpiled = this.transpile.enum(this.enu);
     this.members = enu.members.map((em) => new EnumMember(transpile, em));

@@ -48,7 +48,7 @@ const DEFAULT_WAIT_INTERVAL = 150;
 export async function waitUntilTrace(
   sim: Simulator,
   fn: (trace: Trace) => boolean,
-  timeout = DEFAULT_WAIT_TIMEOUT
+  timeout = DEFAULT_WAIT_TIMEOUT,
 ) {
   return waitUntilTraceCount(sim, 1, fn, timeout);
 }
@@ -60,7 +60,7 @@ export async function waitUntilTraceCount(
   sim: Simulator,
   count: number,
   fn: (trace: Trace) => boolean,
-  timeout = DEFAULT_WAIT_TIMEOUT
+  timeout = DEFAULT_WAIT_TIMEOUT,
 ) {
   // wait for a tiny amount of time because you likely want at least 1 event loop tick to pass
   await sleep(1);
@@ -75,7 +75,7 @@ export async function waitUntilTraceCount(
 
   throw new Error(
     `Timeout after ${timeout}ms waiting for ${count} traces that match \`${fn.toString()}\`\nSim Traces: ${JSON.stringify(
-      sim.listTraces()
-    )}`
+      sim.listTraces(),
+    )}`,
   );
 }

@@ -63,8 +63,8 @@ test("basic function with environment variables", () => {
           BOOM: "BAM",
           FOO: "BAR",
         },
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -88,8 +88,8 @@ test("basic function with timeout explicitly set", () => {
       "google_cloudfunctions_function",
       {
         timeout: 30,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -126,8 +126,8 @@ test("basic function with memory size specified", () => {
       "google_cloudfunctions_function",
       {
         available_memory_mb: 256,
-      }
-    )
+      },
+    ),
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

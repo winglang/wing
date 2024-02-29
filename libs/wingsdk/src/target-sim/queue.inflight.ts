@@ -42,7 +42,7 @@ export class Queue
 
   public async addEventSubscription(
     subscriber: FunctionHandle,
-    subscriptionProps: EventSubscription
+    subscriptionProps: EventSubscription,
   ): Promise<void> {
     const s = {
       functionHandle: subscriber,
@@ -52,10 +52,10 @@ export class Queue
   }
 
   public async removeEventSubscription(
-    subscriber: FunctionHandle
+    subscriber: FunctionHandle,
   ): Promise<void> {
     const index = this.subscribers.findIndex(
-      (s) => s.functionHandle === subscriber
+      (s) => s.functionHandle === subscriber,
     );
     if (index >= 0) {
       this.subscribers.splice(index, 1);
@@ -102,7 +102,7 @@ export class Queue
         // extract a random message from the queue
         const message = this.messages.splice(
           Math.floor(Math.random() * this.messages.length),
-          1
+          1,
         )[0];
         return message?.payload;
       },
@@ -132,7 +132,7 @@ export class Queue
         for (let i = 0; i < subscriber.batchSize; i++) {
           const message = this.messages.splice(
             Math.floor(Math.random() * this.messages.length),
-            1
+            1,
           )[0];
           if (message) {
             messages.push(message);
@@ -144,7 +144,7 @@ export class Queue
         }
 
         const fnClient = this.context.findInstance(
-          subscriber.functionHandle!
+          subscriber.functionHandle!,
         ) as IFunctionClient & ISimulatorResourceInstance;
         if (!fnClient) {
           throw new Error("No function client found");
@@ -153,7 +153,7 @@ export class Queue
           type: TraceType.RESOURCE,
           data: {
             message: `Sending messages (messages=${JSON.stringify(
-              messagesPayload
+              messagesPayload,
             )}, subscriber=${subscriber.functionHandle}).`,
           },
           sourcePath: this.context.resourcePath,
@@ -187,7 +187,7 @@ export class Queue
     setTimeout(() => {
       // Don't push back messages with retention timeouts that have expired
       const retainedMessages = messages.filter(
-        (message) => message.retentionTimeout > new Date()
+        (message) => message.retentionTimeout > new Date(),
       );
       this.messages.push(...retainedMessages);
       this.context.addTrace({
@@ -273,7 +273,7 @@ function runEvery(interval: number, fn: () => Promise<void>): LoopController {
       const endTime = Date.now();
       const elapsedTime = endTime - startTime;
       await new Promise((resolve) =>
-        setTimeout(resolve, Math.max(interval - elapsedTime, 0))
+        setTimeout(resolve, Math.max(interval - elapsedTime, 0)),
       );
     }
     resolveStopPromise(); // resolve the promise when the loop exits

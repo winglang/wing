@@ -30,7 +30,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
           issue: "https://github.com/winglang/wing/issues/1980",
           resource: this.constructor.name,
           operation: "timeout",
-        }
+        },
       );
     }
 
@@ -39,7 +39,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
     if (this.retentionPeriod.seconds < this.timeout.seconds) {
       throw new Error(
-        "Retention period must be greater than or equal to timeout"
+        "Retention period must be greater than or equal to timeout",
       );
     }
   }
@@ -56,7 +56,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
-    props: cloud.QueueSetConsumerOptions = {}
+    props: cloud.QueueSetConsumerOptions = {},
   ): cloud.Function {
     /**
      * The inflight function the user provided (via the `inflight` parameter) needs
@@ -83,14 +83,14 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(__dirname, "queue.setconsumer.inflight.js"),
-      "QueueSetConsumerHandlerClient"
+      "QueueSetConsumerHandlerClient",
     );
 
     const fn = new Function(
       this,
       App.of(this).makeId(this, "SetConsumer"),
       functionHandler,
-      props
+      props,
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "setConsumer()";

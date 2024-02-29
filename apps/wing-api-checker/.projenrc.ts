@@ -30,7 +30,7 @@ project.deps.removeDependency("ts-node");
 
 const bumpTask = project.tasks.tryFind("bump")!;
 bumpTask.reset(
-  "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+  "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version",
 );
 
 project.addFields({

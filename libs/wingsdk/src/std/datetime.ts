@@ -100,7 +100,7 @@ export class Datetime implements ILiftable {
    */
   public static fromComponents(c: DatetimeComponents): Datetime {
     const date = new Date(
-      Date.UTC(c.year, c.month, c.day, c.hour, c.min, c.sec, c.ms)
+      Date.UTC(c.year, c.month, c.day, c.hour, c.min, c.sec, c.ms),
     );
 
     return new Datetime(date, c.tz);
@@ -119,7 +119,7 @@ export class Datetime implements ILiftable {
   /** @internal */
   public _toInflight(): string {
     return `(require("${normalPath(
-      __filename
+      __filename,
     )}").Datetime.fromIso("${this.toIso()}"))`;
   }
 

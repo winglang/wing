@@ -97,7 +97,7 @@ test("get row", async () => {
   expect(joe).toEqual({ id: "joe-id", name: "Joe Doe", age: 50 });
 
   await expect(() => client.get("NON_EXISTENT_KEY")).rejects.toThrowError(
-    /Row does not exist/
+    /Row does not exist/,
   );
 
   expect(s.getResourceConfig("/my_table")).toEqual({
@@ -270,9 +270,9 @@ test("inserting the same id twice", async () => {
 
   await client.insert("joe-id", { name: "Joe Doe" } as any);
   await expect(() =>
-    client.insert("joe-id", { name: "Joe Doe II" } as any)
+    client.insert("joe-id", { name: "Joe Doe II" } as any),
   ).rejects.toThrow(
-    `The primary key "joe-id" already exists in the "my_insert_twice_table" table.`
+    `The primary key "joe-id" already exists in the "my_insert_twice_table" table.`,
   );
 });
 
@@ -290,9 +290,9 @@ test("update non-existent item", async () => {
   const client = s.getResource("/my_table") as ex.ITableClient;
 
   await expect(() =>
-    client.update("joe-id", { name: "Joe Doe" } as any)
+    client.update("joe-id", { name: "Joe Doe" } as any),
   ).rejects.toThrow(
-    `The primary key "joe-id" was not found in the "my_update_non_existent_table" table.`
+    `The primary key "joe-id" was not found in the "my_update_non_existent_table" table.`,
   );
 });
 
@@ -310,7 +310,7 @@ test("deleting non-existent item", async () => {
   const client = s.getResource("/my_table") as ex.ITableClient;
 
   await expect(() => client.delete("joe-id")).rejects.toThrow(
-    `The primary key "joe-id" not found in the "my_delete_non_existent_table" table.`
+    `The primary key "joe-id" not found in the "my_delete_non_existent_table" table.`,
   );
 });
 

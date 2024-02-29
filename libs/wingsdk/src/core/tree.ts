@@ -140,7 +140,7 @@ export interface ConstructInfo {
 }
 
 function constructInfoFromConstruct(
-  construct: IConstruct
+  construct: IConstruct,
 ): ConstructInfo | undefined {
   const jsiiRuntimeInfo =
     Object.getPrototypeOf(construct).constructor[JSII_RUNTIME_SYMBOL];
@@ -181,7 +181,7 @@ export function synthesizeTree(app: App, outdir: string) {
   fs.writeFileSync(
     path.join(outdir, TREE_FILE_PATH),
     JSON.stringify(tree, undefined, 2),
-    { encoding: "utf8" }
+    { encoding: "utf8" },
   );
 }
 

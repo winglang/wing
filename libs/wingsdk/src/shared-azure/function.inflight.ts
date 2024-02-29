@@ -13,7 +13,7 @@ export class FunctionClient implements IFunctionClient {
     try {
       const res = await http.post(
         `https://${this.functionName}.azurewebsites.net/api/${this.functionName}`,
-        { body: payload }
+        { body: payload },
       );
       if (!res.ok) {
         throw new Error(res.body || "Invocation Error");
@@ -23,7 +23,7 @@ export class FunctionClient implements IFunctionClient {
       throw new Error(
         `Error while invoking the function ${this.functionName}:\n${
           (error as Error).message
-        }`
+        }`,
       );
     }
   }
@@ -43,7 +43,7 @@ export class FunctionClient implements IFunctionClient {
    * @returns the function returned payload and logs
    */
   public async invokeWithLogs(
-    payload?: string
+    payload?: string,
   ): Promise<[string | undefined, Trace[]]> {
     console.error("Test invocation on tf-azure doesn't include logs yet");
     //TODO: add traces to tf-azure tests- https://github.com/winglang/wing/issues/4574

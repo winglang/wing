@@ -22,7 +22,7 @@ export class ApiReference {
     transpile: Transpile,
     assembly: reflect.Assembly,
     submodule?: reflect.Submodule,
-    allSubmodules?: boolean
+    allSubmodules?: boolean,
   ) {
     let classes: WingClassType[];
     let interfaces: reflect.InterfaceType[];
@@ -34,7 +34,7 @@ export class ApiReference {
     const wingSdkHacks = assembly.name === "@winglang/sdk";
     if (wingSdkHacks) {
       submodules = submodules.filter((s) =>
-        VISIBLE_SUBMODULES.includes(s.name)
+        VISIBLE_SUBMODULES.includes(s.name),
       );
     }
     if (allSubmodules ?? false) {
@@ -52,10 +52,10 @@ export class ApiReference {
       ]);
     } else {
       classes = this.sortByName(
-        submodule ? submodule.classes : assembly.classes
+        submodule ? submodule.classes : assembly.classes,
       );
       interfaces = this.sortByName(
-        submodule ? submodule.interfaces : assembly.interfaces
+        submodule ? submodule.interfaces : assembly.interfaces,
       );
       enums = this.sortByName(submodule ? submodule.enums : assembly.enums);
     }
@@ -78,13 +78,13 @@ export class ApiReference {
     this.constructs = new Constructs(
       transpile,
       classes,
-      this.searchableInterfaces(interfaces)
+      this.searchableInterfaces(interfaces),
     );
     this.classes = new Classes(transpile, classes);
     this.structs = new Structs(transpile, interfaces);
     this.interfaces = new Interfaces(
       transpile,
-      this.filterOutInflightInterfaces(interfaces, inflightFqns)
+      this.filterOutInflightInterfaces(interfaces, inflightFqns),
     );
     this.enums = new Enums(transpile, enums);
   }
@@ -103,20 +103,20 @@ export class ApiReference {
   }
 
   private searchableInterfaces(
-    interfaces: reflect.InterfaceType[]
+    interfaces: reflect.InterfaceType[],
   ): Record<string, reflect.InterfaceType> {
     return interfaces.reduce(
       (acc, iface) => ({ ...acc, [iface.fqn.replace(/ /g, "-")]: iface }),
-      {}
+      {},
     );
   }
 
   private filterOutInflightInterfaces(
     interfaces: reflect.InterfaceType[],
-    inflightFqns: string[]
+    inflightFqns: string[],
   ): reflect.InterfaceType[] {
     return interfaces.filter(
-      (iface) => !inflightFqns.includes(iface.fqn.replace(/ /g, "-"))
+      (iface) => !inflightFqns.includes(iface.fqn.replace(/ /g, "-")),
     );
   }
 
@@ -127,7 +127,7 @@ export class ApiReference {
 
 function flatMap<T, U>(
   xs: readonly T[],
-  fn: (value: T, index: number, array: readonly T[]) => U[]
+  fn: (value: T, index: number, array: readonly T[]) => U[],
 ): U[] {
   return Array.prototype.concat(...xs.map(fn));
 }

@@ -17,16 +17,16 @@ test("can obtain ui components", async () => {
 
       const section = new ui.Section(this, "Section", { label: "Overview" });
       const buttonHandler = Testing.makeHandler(
-        `async handle() { return "button worked"; }`
+        `async handle() { return "button worked"; }`,
       );
       const button = new ui.Button(
         this,
         "Button",
         "Button Label",
-        buttonHandler
+        buttonHandler,
       );
       const fieldHandler = Testing.makeHandler(
-        `async handle() { return "field worked"; }`
+        `async handle() { return "field worked"; }`,
       );
       const field = new ui.Field(this, "Field", "Field Label", fieldHandler);
       section.add(button, field);
@@ -37,10 +37,10 @@ test("can obtain ui components", async () => {
   // WHEN
   const s = await app.startSimulator();
   const buttonClient = s.getResource(
-    "/MyClass/Button/Handler"
+    "/MyClass/Button/Handler",
   ) as cloud.IFunctionClient;
   const fieldClient = s.getResource(
-    "/MyClass/Field/Handler"
+    "/MyClass/Field/Handler",
   ) as cloud.IFunctionClient;
 
   // WHEN

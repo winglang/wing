@@ -141,7 +141,7 @@ export abstract class Resource extends Construct implements IResource {
     log(
       `onLiftType called on a resource type (${
         this.constructor.name
-      }) with a host (${host.node.path}) and ops: ${JSON.stringify(ops)}`
+      }) with a host (${host.node.path}) and ops: ${JSON.stringify(ops)}`,
     );
   }
 
@@ -201,7 +201,7 @@ export abstract class Resource extends Construct implements IResource {
     log(
       `onLift called on a resource (${this.node.path}) with a host (${
         host.node.path
-      }) and ops: ${JSON.stringify(ops)}`
+      }) and ops: ${JSON.stringify(ops)}`,
     );
 
     for (const op of ops) {

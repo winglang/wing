@@ -128,7 +128,7 @@ test("get a non-existent object from the bucket", async () => {
 
   // THEN
   await expect(() => client.get(KEY)).rejects.toThrowError(
-    /Object does not exist/
+    /Object does not exist/,
   );
 });
 
@@ -220,7 +220,7 @@ test("delete non-existent object from the bucket with mustExist option", async (
 
   // THEN
   await expect(() =>
-    client.delete(KEY, { mustExist: true })
+    client.delete(KEY, { mustExist: true }),
   ).rejects.toThrowError("Object does not exist (key=KEY).");
 });
 
@@ -250,7 +250,7 @@ test("Given a non public bucket when reaching to a key public url it should thro
   }
   // THEN
   expect(error?.message).toBe(
-    "Cannot provide public url for a non-public bucket"
+    "Cannot provide public url for a non-public bucket",
   );
 });
 
@@ -282,7 +282,7 @@ test("Given a public bucket when reaching to a non-existent key, public url it s
 
   // THEN
   expect(error?.message).toBe(
-    "Cannot provide public url for a non-existent key (key=KEY)"
+    "Cannot provide public url for a non-existent key (key=KEY)",
   );
 });
 
@@ -319,7 +319,7 @@ test("Given a public bucket, when giving one of its keys, we should get its publ
 
   // THEN
   expect(response).toEqual(
-    `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${KEY}`
+    `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${KEY}`,
   );
 });
 
@@ -577,7 +577,7 @@ test("Given a bucket when reaching to a non-existent key, signed url it should t
 
   // THEN
   expect(error?.message).toBe(
-    `Cannot provide signed url for a non-existent key (key=${KEY})`
+    `Cannot provide signed url for a non-existent key (key=${KEY})`,
   );
 });
 
@@ -675,7 +675,7 @@ test("metadata fail on non-existent object", async () => {
 
   // THEN
   await expect(() => client.metadata(KEY)).rejects.toThrowError(
-    "Object does not exist (key=KEY)."
+    "Object does not exist (key=KEY).",
   );
 });
 
@@ -720,7 +720,7 @@ test("copy a non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
-    `Source object does not exist (srcKey=${SRC_KEY}).`
+    `Source object does not exist (srcKey=${SRC_KEY}).`,
   );
 });
 
@@ -758,7 +758,7 @@ test("renaming an object to its current name should throw an error", async () =>
 
   // THEN
   await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
-    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`
+    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`,
   );
 });
 
@@ -780,6 +780,6 @@ test("rename non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(
-    `Source object does not exist (srcKey=${SRC_KEY}).`
+    `Source object does not exist (srcKey=${SRC_KEY}).`,
   );
 });

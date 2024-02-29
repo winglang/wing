@@ -24,7 +24,7 @@ export class Testing {
    */
   public static makeHandler(
     code: string,
-    bindings: InflightBindings = {}
+    bindings: InflightBindings = {},
   ): IInflight {
     const liftDeps: LiftDepsMatrixRaw = {};
     liftDeps.handle = [];

@@ -61,7 +61,7 @@ export class Function extends cloud.Function {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps = {}
+    props: cloud.FunctionProps = {},
   ) {
     super(scope, id, inflight, props);
 
@@ -96,7 +96,7 @@ export class Function extends cloud.Function {
           issue: "https://github.com/winglang/wing/issues/4494",
           resource: this.constructor.name,
           operation: "timeout",
-        }
+        },
       );
     }
 
@@ -148,7 +148,7 @@ export class Function extends cloud.Function {
     // Apply permissions from bound resources
     for (const key of this.permissions.keys() || []) {
       const scopedRoleAssignment = this.permissions?.get(
-        key
+        key,
       ) as ScopedRoleAssignment;
       new RoleAssignment(this, `RoleAssignment${key}`, {
         scope: scopedRoleAssignment.scope,
@@ -169,7 +169,7 @@ export class Function extends cloud.Function {
       `${this.storageAccount.node.addr.substring(-8)}_${
         StorageAccountPermissions.READ
       }`,
-      roleAssignment
+      roleAssignment,
     );
   }
 
@@ -210,7 +210,7 @@ export class Function extends cloud.Function {
             name: "res",
           },
         ],
-      })
+      }),
     );
 
     // Write host.json file to set function timeout (must be set in root of function app)
@@ -223,7 +223,7 @@ export class Function extends cloud.Function {
         //TODO: need to read the documentation and parse the number in the right way,
         // while not surpassing the limits, since it will be resulted in a hard to detect error
         functionTimeout: `00:01:00`,
-      })
+      }),
     );
 
     // Create zip asset from function code
@@ -250,7 +250,7 @@ export class Function extends cloud.Function {
    */
   public addPermission(
     scopedResource: Construct,
-    scopedRoleAssignment: ScopedRoleAssignment
+    scopedRoleAssignment: ScopedRoleAssignment,
   ) {
     const uniqueId = scopedResource.node.addr.substring(-8);
     const permissionsKey = `${uniqueId}_${scopedRoleAssignment.roleDefinitionName}`;
@@ -276,7 +276,7 @@ export class Function extends cloud.Function {
     lines.push('"use strict";');
     lines.push("module.exports = async function(context, req) {");
     lines.push(
-      `  const body = await (${inflightClient}).handle(context.req.body ?? "");`
+      `  const body = await (${inflightClient}).handle(context.req.body ?? "");`,
     );
     lines.push(`  context.res = { body };`);
     lines.push(`};`);
@@ -302,7 +302,7 @@ export class Function extends cloud.Function {
       __dirname.replace("target-tf-azure", "shared-azure"),
       __filename,
       "FunctionClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"]`],
     );
   }
 

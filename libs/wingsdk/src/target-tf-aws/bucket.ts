@@ -136,7 +136,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     }
 
     host.addPolicyStatements(
-      ...calculateBucketPermissions(this.bucket.arn, ops)
+      ...calculateBucketPermissions(this.bucket.arn, ops),
     );
 
     // The bucket name needs to be passed through an environment variable since
@@ -152,7 +152,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "BucketClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"]`],
     );
   }
 
@@ -172,7 +172,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 export function createEncryptedBucket(
   scope: Construct,
   isPublic: boolean,
-  name: string = "Default"
+  name: string = "Default",
 ): S3Bucket {
   const bucketPrefix = ResourceNames.generateName(scope, BUCKET_PREFIX_OPTS);
 
@@ -207,7 +207,7 @@ export function createEncryptedBucket(
         blockPublicPolicy: false,
         ignorePublicAcls: false,
         restrictPublicBuckets: false,
-      }
+      },
     );
     const policy = {
       Version: "2012-10-17",

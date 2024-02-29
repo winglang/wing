@@ -126,7 +126,7 @@ export class MarkdownDocument {
           sanitized +
           "](#" +
           sanitized +
-          ")"
+          ")",
       );
       this.lines("");
     }
@@ -148,7 +148,7 @@ export class MarkdownDocument {
     if (docs.example) {
       if (!language) {
         throw new Error(
-          "language must be provided if docs.example has been specified"
+          "language must be provided if docs.example has been specified",
         );
       }
       const example = new MarkdownDocument({
@@ -191,7 +191,7 @@ export class MarkdownDocument {
     this.lines(
       `\`\`\`${language}`,
       ...snippet.map((s) => s.replace(/&lt;/g, "<").replace(/&gt;/g, ">")),
-      "```"
+      "```",
     );
     this.lines("");
   }
@@ -226,11 +226,11 @@ export class MarkdownDocument {
       const headerSpan = !!process.env.HEADER_SPAN;
       if (headerSpan) {
         content.push(
-          `${heading} <span data-heading-title="${this.options.header?.title}" data-heading-id="${this.id}"></span>`
+          `${heading} <span data-heading-title="${this.options.header?.title}" data-heading-id="${this.id}"></span>`,
         );
       } else {
         content.push(
-          `${heading} <a name="${this.options.header?.title}" id="${this.id}"></a>`
+          `${heading} <a name="${this.options.header?.title}" id="${this.id}"></a>`,
         );
       }
       content.push("");

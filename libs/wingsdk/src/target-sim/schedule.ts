@@ -32,19 +32,19 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props: cloud.ScheduleOnTickOptions = {}
+    props: cloud.ScheduleOnTickOptions = {},
   ): cloud.Function {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(__dirname, "schedule.ontick.inflight.js"),
-      "ScheduleOnTickHandlerClient"
+      "ScheduleOnTickHandlerClient",
     );
 
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnTick"),
       functionHandler,
-      props
+      props,
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "onTick()";

@@ -55,7 +55,7 @@ export class EndpointsExplorerProvider
       return Promise.resolve(
         this.endpoints.map((endpoint) => {
           return new EndpointItem(endpoint.id, endpoint.label, endpoint.url);
-        })
+        }),
       );
     }
     return Promise.resolve([]);
@@ -66,7 +66,7 @@ export class EndpointItem extends TreeItem {
   constructor(
     public readonly id: string,
     public readonly label: string,
-    public readonly url: string
+    public readonly url: string,
   ) {
     super(label || "", TreeItemCollapsibleState.None);
     this.tooltip = this.url;

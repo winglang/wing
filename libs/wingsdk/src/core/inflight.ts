@@ -35,12 +35,12 @@ export class InflightClient {
     dirname: string,
     filename: string,
     clientClass: string,
-    args: string[]
+    args: string[],
   ): string {
     const inflightDir = dirname;
     const inflightFile = basename(filename).split(".")[0] + ".inflight";
     return `new (require("${normalPath(
-      `${inflightDir}/${inflightFile}`
+      `${inflightDir}/${inflightFile}`,
     )}")).${clientClass}(${args.join(", ")})`;
   }
 

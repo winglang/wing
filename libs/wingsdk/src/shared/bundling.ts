@@ -23,7 +23,7 @@ export interface Bundle {
 export function createBundle(
   entrypoint: string,
   external: string[] = [],
-  outputDir?: string
+  outputDir?: string,
 ): Bundle {
   const outdir = resolve(outputDir ?? entrypoint + ".bundle");
   mkdirSync(outdir, { recursive: true });
@@ -69,14 +69,14 @@ export function createBundle(
 
   // ensure source paths have posix path separators
   const sourcemapData = JSON.parse(
-    new TextDecoder().decode(esbuild.outputFiles[0].contents)
+    new TextDecoder().decode(esbuild.outputFiles[0].contents),
   );
   if (sourcemapData.sourceRoot) {
     sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot);
   }
 
   for (const [idx, source] of Object.entries(
-    sourcemapData.sources as string[]
+    sourcemapData.sources as string[],
   )) {
     sourcemapData.sources[idx] = normalPath(source);
   }

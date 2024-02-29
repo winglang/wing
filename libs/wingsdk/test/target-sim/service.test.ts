@@ -47,7 +47,7 @@ test("create a service with a on stop method", async () => {
   new cloud.Service(
     app,
     "my_service",
-    Testing.makeHandler(HANDLER_WITH_START_AND_STOP)
+    Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
   );
 
   // WHEN
@@ -73,7 +73,7 @@ test("create a service with a on stop method", async () => {
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
-      .map((trace) => trace.data.message)
+      .map((trace) => trace.data.message),
   ).toEqual([
     "start!",
     "@winglang/sdk.cloud.Service created.",
@@ -89,7 +89,7 @@ test("create a service without autostart", async () => {
     app,
     "my_service",
     Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
-    { autoStart: false }
+    { autoStart: false },
   );
 
   // WHEN
@@ -115,7 +115,7 @@ test("create a service without autostart", async () => {
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
-      .map((trace) => trace.data.message)
+      .map((trace) => trace.data.message),
   ).toEqual([
     "@winglang/sdk.cloud.Service created.", // Service created never started
     "@winglang/sdk.cloud.Service deleted.",
@@ -132,7 +132,7 @@ test("start and stop service", async () => {
     Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
     {
       autoStart: false,
-    }
+    },
   );
   const s = await app.startSimulator();
   const service = s.getResource("/my_service") as cloud.IServiceClient;
@@ -148,7 +148,7 @@ test("start and stop service", async () => {
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
-      .map((trace) => trace.data.message)
+      .map((trace) => trace.data.message),
   ).toEqual([
     "@winglang/sdk.cloud.Service created.",
     "start!",
@@ -167,7 +167,7 @@ test("consecutive start and stop service", async () => {
     Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
     {
       autoStart: false,
-    }
+    },
   );
   const s = await app.startSimulator();
   const service = s.getResource("/my_service") as cloud.IServiceClient;
@@ -185,7 +185,7 @@ test("consecutive start and stop service", async () => {
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
-      .map((trace) => trace.data.message)
+      .map((trace) => trace.data.message),
   ).toEqual(["@winglang/sdk.cloud.Service created.", "start!", "stop!"]);
 });
 
@@ -199,7 +199,7 @@ test("throws during service start", async () => {
     async handle() {
       throw new Error("ThisIsAnError");
       return () => console.log("stop!");
-    }`)
+    }`),
   );
 
   const s = await app.startSimulator();

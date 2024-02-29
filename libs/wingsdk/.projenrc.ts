@@ -140,18 +140,18 @@ project.deps.removeDependency("ts-node");
  */
 project.deps.all
   .filter(
-    (dep) => dep.name.startsWith("@aws-sdk/") && dep.name !== "@aws-sdk/types"
+    (dep) => dep.name.startsWith("@aws-sdk/") && dep.name !== "@aws-sdk/types",
   )
   .map((dep) => project.addBundledDeps(`${dep.name}@${AWS_SDK_VERSION}`));
 
 project.deps.addDependency("eslint@^8.56.0", DependencyType.BUILD);
 project.deps.addDependency(
   "@typescript-eslint/eslint-plugin@^7",
-  DependencyType.BUILD
+  DependencyType.BUILD,
 );
 project.deps.addDependency(
   "@typescript-eslint/parser@^7",
-  DependencyType.BUILD
+  DependencyType.BUILD,
 );
 project.eslint!.addPlugins("sort-exports");
 project.eslint!.addOverride({

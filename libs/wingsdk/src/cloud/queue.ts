@@ -56,7 +56,7 @@ export class Queue extends Resource {
    */
   public setConsumer(
     handler: IQueueSetConsumerHandler,
-    props?: QueueSetConsumerOptions
+    props?: QueueSetConsumerOptions,
   ): Function {
     handler;
     props;

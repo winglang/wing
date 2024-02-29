@@ -191,7 +191,7 @@ export abstract class App extends Construct implements IApp {
     if (!this._platformParameters) {
       this._platformParameters = new ParameterRegistrar(
         this,
-        "ParameterRegistrar"
+        "ParameterRegistrar",
       );
     }
     return this._platformParameters!;
@@ -245,7 +245,7 @@ export abstract class App extends Construct implements IApp {
       const typeNameParts = typeName.split(".");
       throw new NotImplementedError(
         `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`,
-        { resource: typeNameParts[typeNameParts.length - 1] }
+        { resource: typeNameParts[typeNameParts.length - 1] },
       );
     }
 

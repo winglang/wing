@@ -5,29 +5,29 @@ import chalk from "chalk";
 
 export function printResults(
   testResults: { testName: string; results: std.TestResult[] }[],
-  duration: number
+  duration: number,
 ) {
   const durationInSeconds = duration / 1000;
   const totalSum = testResults.length;
   const unsupportedFiles = testResults.filter(({ results }) =>
-    results.some(({ unsupported }) => unsupported)
+    results.some(({ unsupported }) => unsupported),
   );
   const failing = testResults.filter(({ results }) =>
-    results.some(({ pass, unsupported }) => !pass && !unsupported)
+    results.some(({ pass, unsupported }) => !pass && !unsupported),
   );
   const passing = testResults.filter(({ results }) => results.every(({ pass }) => !!pass));
   const failingTestsNumber = failing.reduce(
     (acc, { results }) =>
       acc + results.filter(({ pass, unsupported }) => !pass && !unsupported).length,
-    0
+    0,
   );
   const unsupportedTestsNumber = unsupportedFiles.reduce(
     (acc, { results }) => acc + results.filter(({ unsupported }) => !!unsupported).length,
-    0
+    0,
   );
   const passingTestsNumber = testResults.reduce(
     (acc, { results }) => acc + results.filter(({ pass }) => !!pass).length,
-    0
+    0,
   );
   console.log(" "); // for getting a new line- \n does't seem to work :(
   const areErrors = failing.length + unsupportedFiles.length > 0 && totalSum > 1;
@@ -54,10 +54,10 @@ export function printResults(
           results.reduce(
             (acc: string[], { pass, error, unsupported }) =>
               pass ? acc : unsupported && error ? [...acc, error] : [...acc, chalk.red(error)],
-            []
+            [],
           ),
-        ].join("\n")
-      )
+        ].join("\n"),
+      ),
     );
   }
 
@@ -81,8 +81,8 @@ export function printResults(
 
   res.push(
     `${chalk.dim("Tests")}${testCount} ${chalk.dim(
-      `(${failingTestsNumber + passingTestsNumber + unsupportedTestsNumber})`
-    )}`
+      `(${failingTestsNumber + passingTestsNumber + unsupportedTestsNumber})`,
+    )}`,
   );
   // prints a summary of how many tests files passed and failed
   res.push(`${chalk.dim("Test Files")}${fileCount} ${chalk.dim(`(${totalSum})`)}`);
@@ -91,7 +91,7 @@ export function printResults(
   res.push(
     `${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(
       durationInSeconds % 60
-    ).toFixed(2)}s`
+    ).toFixed(2)}s`,
   );
 
   console.log(res.filter((value) => !!value).join("\n"));
@@ -107,13 +107,13 @@ export async function writeResultsToFile(
   testResults: { testName: string; results: std.TestResult[] }[],
   duration: number,
   filePath: string,
-  platforms: string[]
+  platforms: string[],
 ) {
   const output: TestResultsJson = { duration, platforms, results: {} };
   for (const result of testResults) {
     output.results[result.testName] = result.results.reduce(
       (acc, item) => ({ ...acc, [item.path.replace(/[\w+\/\\.-]+test:/, "")]: item }),
-      {}
+      {},
     );
   }
 

@@ -40,7 +40,7 @@ test("function with a table binding", () => {
         obj: table,
         ops: [ex.TableInflightMethods.INSERT],
       },
-    }
+    },
   );
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();

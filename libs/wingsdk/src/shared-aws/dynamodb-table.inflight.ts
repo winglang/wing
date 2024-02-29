@@ -4,7 +4,7 @@ import { DynamodbTableClientBase } from "../ex/dynamodb-table/table";
 export class DynamodbTableClient extends DynamodbTableClientBase {
   constructor(
     tableName: string,
-    private readonly _client = new DynamoDBClient({})
+    private readonly _client = new DynamoDBClient({}),
   ) {
     super(tableName);
   }

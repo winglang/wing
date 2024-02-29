@@ -163,7 +163,7 @@ export class DependencyVertex {
         `Dependency cycle detected: ${cycle
           .filter((d) => d.value)
           .map((d) => Node.of(d.value!).path)
-          .join(" => ")}`
+          .join(" => ")}`,
       );
     }
 
