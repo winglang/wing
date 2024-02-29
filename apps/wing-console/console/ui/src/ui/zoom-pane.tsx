@@ -15,7 +15,7 @@ import {
   useState,
 } from "react";
 import { ReactNode } from "react";
-import { useEvent } from "react-use";
+import { useEvent, useKeyPressEvent } from "react-use";
 
 import { MapControls } from "./map-controls.js";
 
@@ -155,21 +155,46 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   // Use ref to keep track of whether the user was dragging,
   // and stop emitting `onClick` events if the user was dragging.
   const wasDragging = useRef(false);
+  // Keep track of whether the space key is pressed so we can show the user the grab cursor.
+  // The map is draggable using click only when space is pressed.
+  const [isSpacePressed, setSpacePressed] = useState(false);
+  useKeyPressEvent(
+    " ",
+    useCallback(() => {
+      setSpacePressed(true);
+    }, []),
+    useCallback(() => {
+      setSpacePressed(false);
+      setDragging(false);
+    }, []),
+  );
+
 
   const dragStart = useRef({ x: 0, y: 0 });
   useEvent(
     "mousedown",
-    useCallback((event: MouseEvent) => {
-      setDragging(true);
-      dragStart.current = { x: event.x, y: event.y };
-      wasDragging.current = false;
-    }, []) as (event: Event) => void,
+    useCallback(
+      (event: MouseEvent) => {
+        if (!isSpacePressed) {
+          return;
+        }
+
+        setDragging(true);
+        dragStart.current = { x: event.x, y: event.y };
+        wasDragging.current = false;
+      },
+      [isSpacePressed],
+    ) as (event: Event) => void,
     containerRef.current,
   );
 
   useEvent(
     "mousemove",
     useCallback(
+        if (!isSpacePressed) {
+          return;
+        }
+
       (event: MouseEvent) => {
         wasDragging.current = true;
 
@@ -206,7 +231,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     "click",
     useCallback(
       (event: any): void => {
-        if (wasDragging.current) {
+        if (isSpacePressed) {
           return;
         }
         onClick?.(event);
@@ -392,6 +417,15 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
             </p>
             <div className="flex justify-around">
               <Button onClick={() => zoomToFit()}>Fit map to screen</Button>
+
+      {isSpacePressed && (
+        <div
+          className={classNames("absolute inset-0", {
+            "cursor-grab": !isDragging,
+            "cursor-grabbing": isDragging,
+          })}
+        ></div>
+      )}
             </div>
           </div>
         </div>
