@@ -47,6 +47,7 @@
     "lodash.throttle": "^4.1.1",
     "lodash.uniqby": "^4.7.0",
     "nanoid": "^4.0.2",
+    "react-dom": "^18.2.0",
     "react-markdown": "^9.0.1",
     "react-use": "^17.4.2",
     "zod": "^3.22.2"
@@ -67,6 +68,7 @@
     "@types/lodash.throttle": "^4.1.7",
     "@types/lodash.uniqby": "^4.7.7",
     "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "@wingconsole/design-system": "workspace:^",
     "@wingconsole/eslint-plugin": "workspace:^",

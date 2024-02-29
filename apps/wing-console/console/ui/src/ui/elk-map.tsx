@@ -11,22 +11,19 @@ import {
   memo,
   useCallback,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 
 import { Edge } from "../shared/Edge.js";
 import { Node } from "../shared/Node.js";
 
 import { EdgeItem } from "./edge-item.js";
 import { useNodeStaticData } from "./use-node-static-data.js";
-import {
-  IDENTITY_TRANSFORM,
-  Transform,
-  ZoomPane,
-  ZoomPaneRef,
-} from "./zoom-pane.js";
+import { ZoomPane, ZoomPaneRef, useZoomPane } from "./zoom-pane.js";
 
 const durationClass = "duration-500";
 
@@ -224,7 +221,7 @@ const EdgesContainer = memo(
           const isEdgeHighlighted =
             edge.sources[0] === selectedNodeId ||
             edge.targets[0] === selectedNodeId;
-          const visible = !highlighted || isNodeHighlighted;
+          const visible = highlighted || isNodeHighlighted;
           const selected = edge.id === selectedEdgeId;
 
           return (
@@ -237,13 +234,11 @@ const EdgesContainer = memo(
               fade={!visible}
               markerStart={
                 isEdgeHighlighted || selected ? "tee-selected" : "tee"
-                // "tee"
               }
               markerEnd={
                 isEdgeHighlighted || selected
                   ? "arrow-head-selected"
                   : "arrow-head"
-                // "arrow-head"
               }
               onClick={onClick}
             />
@@ -284,7 +279,6 @@ const Graph = memo(
           "relative",
           "transition-transform",
           "rounded-lg",
-          nodeList.length > 0 && "bg-white dark:bg-slate-500",
           durationClass,
         )}
         style={{
@@ -394,6 +388,35 @@ const NodesContainer = memo(
   },
 );
 
+const MapBackground = (props: {}) => {
+  const { viewTransform } = useZoomPane();
+  const patternSize = 12 * viewTransform.z;
+  const dotSize = 1 * viewTransform.z;
+  const id = useId();
+  return (
+    // Reference: https://github.com/xyflow/xyflow/blob/13897512d3c57e72c2e27b14ffa129412289d948/packages/react/src/additional-components/Background/Background.tsx#L52-L86.
+    <svg className="absolute w-full h-full top-0 left-0 bg-white dark:bg-slate-500 text-slate-200 dark:text-slate-550">
+      <pattern
+        id={id}
+        x={(-viewTransform.x * viewTransform.z) % patternSize}
+        y={(-viewTransform.y * viewTransform.z) % patternSize}
+        width={patternSize}
+        height={patternSize}
+        patternUnits="userSpaceOnUse"
+        patternTransform={`translate(-${viewTransform.z},-${viewTransform.z})`}
+      >
+        <circle
+          cx={dotSize}
+          cy={dotSize}
+          r={dotSize}
+          fill="currentColor"
+        ></circle>
+      </pattern>
+      <rect x="0" y="0" width="100%" height="100%" fill={`url(#${id})`}></rect>
+    </svg>
+  );
+};
+
 export const ElkMap = <T extends unknown = undefined>({
   nodes,
   edges,
@@ -474,13 +497,8 @@ export const ElkMap = <T extends unknown = undefined>({
 
   const isHighlighted = useCallback(
     (nodeId: string) => {
-      if (!highlighted) return true;
-      const highlightedId = `${highlighted}/`;
-      const nodeIdWithSlash = `${nodeId}/`;
-      return (
-        highlightedId.startsWith(nodeIdWithSlash) ||
-        nodeIdWithSlash.startsWith(highlightedId)
-      );
+      if (!highlighted || highlighted === "root") return true;
+      return highlighted === nodeId;
     },
     [highlighted],
   );
@@ -557,6 +575,8 @@ export const ElkMap = <T extends unknown = undefined>({
     zoomPaneRef.current?.zoomToFit();
   }, [offsets]);
 
+  const mapBackgroundRef = useRef<HTMLDivElement>(null);
+
   return (
     <>
       <InvisibleNodeSizeCalculator
@@ -565,13 +585,17 @@ export const ElkMap = <T extends unknown = undefined>({
         onSizesChange={setMinimumSizes}
       />
 
+      <div ref={mapBackgroundRef}></div>
+
       <ZoomPane
         ref={zoomPaneRef}
         boundingBox={mapSize}
-        className="w-full h-full bg-white dark:bg-slate-500"
+        className="w-full h-full"
         data-testid="map-pane"
         onClick={() => onSelectedNodeIdChange?.(undefined)}
       >
+        {mapBackgroundRef.current &&
+          createPortal(<MapBackground />, mapBackgroundRef.current)}
         {graph && (
           <Graph
             graph={graph}
