@@ -67,7 +67,7 @@ jobs:
             - Flakey tests (relying on one of the above)
           comment_tag: UnstableMutation
           GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-      
+
       - name: Unstable mutation fail
         if: steps.download-artifacts.outputs.found_artifact == 'true' && startsWith(github.event.workflow_run.head_commit.message, format('chore{0} self mutation', ':'))
         run: exit 1
@@ -79,16 +79,27 @@ jobs:
 
       - name: Update PR Branch
         uses: actions/github-script@v7
+        id: branch-update
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |
             // use API to get the PR data since we can't rely on the context across forks
+            let head = context.payload.workflow_run.head_branch;
+            if (`${context.repo.owner}/${context.repo.repo}` !== context.payload.workflow_run.head_repository.full_name) {
+              if (context.payload.workflow_run.head_repository.name === context.repo.repo) {
+                // head is in the short form since the repo name is the same
+                head = `${context.payload.workflow_run.head_repository.owner.login}:${head}`;
+              } else {
+                head = `${context.payload.workflow_run.head_repository.full_name}:${head}`;
+              }
+            }
+
             const pulls = await github.rest.pulls.list({
               per_page: 1,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
+              head,
             });
 
             const prContextData = pulls.data[0];
@@ -123,6 +134,8 @@ jobs:
               // That's fine, we tried our best
               console.warn(error);
             }
+
+            return prNumber;
 
       - name: Checkout Workflow Branch
         if: steps.download-artifacts.outputs.found_artifact == 'true'
@@ -166,19 +179,11 @@ jobs:
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |
-            // use API to get the PR number since we can't rely on the context across forks
-            const pulls = await github.rest.pulls.list({
-              per_page: 1,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
-            });
-            const prNumber = pulls.data[0].number;
-            const labels = ["⚠️ pr/review-mutation"];
+            const prNumber = ${{ steps.branch-update.outputs.result }};
 
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              labels: labels
+              labels: ["⚠️ pr/review-mutation"]
             });
