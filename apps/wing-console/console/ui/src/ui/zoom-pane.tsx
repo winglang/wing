@@ -4,8 +4,10 @@ import {
   DetailedHTMLProps,
   HTMLAttributes,
   MouseEventHandler,
+  createContext,
   forwardRef,
   useCallback,
+  useContext,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -79,6 +81,14 @@ export interface ZoomPaneProps
 export interface ZoomPaneRef {
   zoomToFit(viewport?: Viewport): void;
 }
+
+const context = createContext({
+  viewTransform: IDENTITY_TRANSFORM,
+});
+
+export const useZoomPane = () => {
+  return useContext(context);
+};
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   const { boundingBox, children, className, onClick, ...divProps } = props;
@@ -183,15 +193,13 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       },
       [isDragging, dragStart],
     ) as (event: Event) => void,
-    containerRef.current,
   );
 
   useEvent(
     "mouseup",
-    useCallback((event: MouseEvent) => {
+    useCallback(() => {
       setDragging(false);
-    }, []) as (event: Event) => void,
-    containerRef.current,
+    }, []),
   );
 
   useEvent(
@@ -350,7 +358,9 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       })}
     >
       <div ref={targetRef} className="absolute inset-0 origin-top-left">
-        {children}
+        <context.Provider value={{ viewTransform }}>
+          {children}
+        </context.Provider>
       </div>
 
       <div className="relative z-10 flex">
