@@ -16,13 +16,13 @@ export const useEndpoints = () => {
   const exposeEndpointMutation = trpc["endpoint.expose"].useMutation();
   const exposeEndpoint = (resourcePath: string) => {
     exposeEndpointMutation.mutate({ resourcePath });
-    endpointListQuery.refetch();
+    setTimeout(endpointListQuery.refetch);
   };
 
   const hideEndpointMutation = trpc["endpoint.hide"].useMutation();
   const hideEndpoint = (resourcePath: string) => {
     hideEndpointMutation.mutate({ resourcePath });
-    endpointListQuery.refetch();
+    setTimeout(endpointListQuery.refetch);
   };
 
   const getEndpoint = useCallback(

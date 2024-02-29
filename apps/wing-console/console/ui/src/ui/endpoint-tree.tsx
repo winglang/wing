@@ -70,22 +70,12 @@ export const EndpointTree = ({
                       <>
                         {endpoint.browserSupport && (
                           <GlobeAltIcon
-                            className={classNames(
-                              "w-4 h-4",
-                              endpoint.exposeStatus === "connected"
-                                ? "text-red-500"
-                                : theme.text1,
-                            )}
+                            className={classNames("w-4 h-4", theme.text1)}
                           />
                         )}
                         {!endpoint.browserSupport && (
                           <LinkIcon
-                            className={classNames(
-                              "w-4 h-4",
-                              endpoint.exposeStatus === "connected"
-                                ? "text-red-500"
-                                : theme.text1,
-                            )}
+                            className={classNames("w-4 h-4", theme.text1)}
                           />
                         )}
                       </>
