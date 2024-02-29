@@ -64,7 +64,7 @@ const boundingBoxOverlap = (a: BoundingBox, b: BoundingBox) => {
   );
 };
 const MIN_ZOOM_LEVEL = 0.125;
-const MAX_ZOOM_LEVEL = 1.5;
+const MAX_ZOOM_LEVEL = 1;
 const ZOOM_SENSITIVITY = 1.35;
 const MOVE_SENSITIVITY = 1.5;
 const WHEEL_SENSITIVITY = 0.01;
