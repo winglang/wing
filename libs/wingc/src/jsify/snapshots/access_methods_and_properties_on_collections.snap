@@ -82,6 +82,8 @@ class $Root extends $stdlib.std.Resource {
             [x.length, []],
           ],
           "$inflight_init": [
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(y, 0), []],
+            [x.length, []],
           ],
         });
       }

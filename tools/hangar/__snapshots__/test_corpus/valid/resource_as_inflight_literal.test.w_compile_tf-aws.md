@@ -31,7 +31,7 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(message) {
+    async handle() {
       return "hello world!";
     }
   }
@@ -239,6 +239,7 @@ class $Root extends $stdlib.std.Resource {
             [fn, ["invoke"]],
           ],
           "$inflight_init": [
+            [fn, []],
           ],
         });
       }

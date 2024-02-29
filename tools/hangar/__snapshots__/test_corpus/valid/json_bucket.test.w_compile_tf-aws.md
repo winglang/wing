@@ -11,7 +11,7 @@ module.exports = function({ $b, $fileName }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(msg) {
+    async handle() {
       const x = (await $b.getJson($fileName));
       $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(x, "persons"), 0), "fears"), 1), "failure"), "x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"");
     }
@@ -223,6 +223,8 @@ class $Root extends $stdlib.std.Resource {
             [fileName, []],
           ],
           "$inflight_init": [
+            [b, []],
+            [fileName, []],
           ],
         });
       }
@@ -263,6 +265,10 @@ class $Root extends $stdlib.std.Resource {
             [j, []],
           ],
           "$inflight_init": [
+            [b, []],
+            [fileName, []],
+            [getJson, []],
+            [j, []],
           ],
         });
       }

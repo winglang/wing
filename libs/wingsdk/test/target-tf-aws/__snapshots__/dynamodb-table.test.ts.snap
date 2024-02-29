@@ -29,12 +29,12 @@ return class Handler {
     }
   }
   async handle(event) {
-  await this.my_table.putItem({ item: { id: \\"test\\" } });
+  await this.my_table.putItem({ item: { id: "test" } });
   await this.my_table.scan();
 }
 };
 })())({
-my_table: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/dynamodb-table.inflight\\")).DynamodbTableClient(process.env[\\"DYNAMODB_TABLE_NAME_e7245baa\\"])
+my_table: new (require("[REDACTED]/wingsdk/src/shared-aws/dynamodb-table.inflight")).DynamodbTableClient(process.env["DYNAMODB_TABLE_NAME_e7245baa"])
 })"
 `;
 
@@ -62,12 +62,12 @@ exports[`function with a table binding 2`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:PutItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:Scan\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:PutItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}/index/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:Scan\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}/index/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:PutItem"],"Resource":["\${aws_dynamodb_table.Table.arn}"],"Effect":"Allow"},{"Action":["dynamodb:Scan"],"Resource":["\${aws_dynamodb_table.Table.arn}"],"Effect":"Allow"},{"Action":["dynamodb:PutItem"],"Resource":["\${aws_dynamodb_table.Table.arn}/index/*"],"Effect":"Allow"},{"Action":["dynamodb:Scan"],"Resource":["\${aws_dynamodb_table.Table.arn}/index/*"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -205,6 +205,14 @@ exports[`function with a table binding 3`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "Table": {
                 "children": {

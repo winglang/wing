@@ -20,8 +20,6 @@
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.26.0",
-    "jest": "^27",
-    "jest-junit": "^13",
     "jsii": "~5.3.11",
     "jsii-diff": "^1.94.0",
     "jsii-docgen": "^10.3.19",
@@ -30,7 +28,7 @@
     "npm-check-updates": "^15",
     "projen": "^0.62.3",
     "standard-version": "^9",
-    "ts-jest": "^27",
+    "ts-jest": "^29.1.2",
     "typescript": "^3.9.10"
   },
   "keywords": [
@@ -43,46 +41,6 @@
   "license": "Apache-2.0",
   "homepage": "https://github.com/aws/constructs",
   "version": "10.1.101",
-  "jest": {
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.ts?(x)",
-      "<rootDir>/(test|src)/**/*(*.)@(spec|test).ts?(x)"
-    ],
-    "clearMocks": true,
-    "collectCoverage": true,
-    "coverageReporters": [
-      "json",
-      "lcov",
-      "clover",
-      "cobertura",
-      "text"
-    ],
-    "coverageDirectory": "coverage",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "watchPathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "reporters": [
-      "default",
-      [
-        "jest-junit",
-        {
-          "outputDirectory": "test-reports"
-        }
-      ]
-    ],
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.dev.json"
-      }
-    }
-  },
   "types": "lib/index.d.ts",
   "stability": "stable",
   "jsii": {

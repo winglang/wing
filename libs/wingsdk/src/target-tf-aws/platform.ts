@@ -25,24 +25,38 @@ export class Platform implements IPlatform {
             description: "If using an existing VPC, provide the VPC ID",
             type: "string",
           },
-          private_subnet_id: {
+          private_subnet_ids: {
             description:
               "If using an existing VPC, provide the private subnet ID",
-            type: "string",
+            type: "array",
+            items: {
+              type: "string",
+            },
           },
-          public_subnet_id: {
+          public_subnet_ids: {
             description:
               "If using an existing VPC, provide the public subnet ID",
-            type: "string",
+            type: "array",
+            items: {
+              type: "string",
+            },
+          },
+          vpc_api_gateway: {
+            description: "Whether Api gateways should be deployed in a VPC",
+            type: "boolean",
+          },
+          vpc_lambda: {
+            description: "Whether Lambda functions should be deployed in a VPC",
+            type: "boolean",
           },
         },
         allOf: [
           {
             $comment:
-              "if vpc is existing, then we need to require the vpc_id, private_subnet_id, and public_subnet_id",
+              "if vpc is existing, then we need to require the vpc_id, private_subnet_ids",
             if: { properties: { vpc: { const: "existing" } } },
             then: {
-              required: ["vpc_id", "private_subnet_id", "public_subnet_id"],
+              required: ["vpc_id", "private_subnet_ids"],
             },
           },
         ],

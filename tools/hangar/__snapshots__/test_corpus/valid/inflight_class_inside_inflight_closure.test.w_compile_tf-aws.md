@@ -11,7 +11,7 @@ module.exports = function({ $__parent_this_1_b }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(payload) {
+    async handle() {
       (await $__parent_this_1_b.put("k", "v"));
       class InflightClass {
         async method() {
@@ -280,6 +280,7 @@ class $Root extends $stdlib.std.Resource {
                 [__parent_this_1.b, ["put"]],
               ],
               "$inflight_init": [
+                [__parent_this_1.b, []],
               ],
             });
           }
@@ -341,6 +342,7 @@ class $Root extends $stdlib.std.Resource {
             [f, ["invoke"]],
           ],
           "$inflight_init": [
+            [f, []],
           ],
         });
       }

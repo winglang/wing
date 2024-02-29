@@ -131,6 +131,7 @@ class $Root extends $stdlib.std.Resource {
             [t.b, ["put"]],
           ],
           "$inflight_init": [
+            [t.b, []],
           ],
         });
       }

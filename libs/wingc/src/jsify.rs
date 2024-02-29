@@ -12,9 +12,9 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Expr,
-		ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference, Scope,
-		Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Enum,
+		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference,
+		Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -139,9 +139,12 @@ impl<'a> JSifier<'a> {
 		jsify_context.visit_ctx.push_env(self.types.get_scope_env(&scope));
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
 			// Put type definitions first so JS won't complain of unknown types
-			(StmtKind::Class(AstClass { .. }), StmtKind::Class(AstClass { .. })) => Ordering::Equal,
-			(StmtKind::Class(AstClass { .. }), _) => Ordering::Less,
-			(_, StmtKind::Class(AstClass { .. })) => Ordering::Greater,
+			(StmtKind::Enum(_), StmtKind::Enum(_)) => Ordering::Equal,
+			(StmtKind::Enum(_), _) => Ordering::Less,
+			(_, StmtKind::Enum(_)) => Ordering::Greater,
+			(StmtKind::Class(_), StmtKind::Class(_)) => Ordering::Equal,
+			(StmtKind::Class(_), _) => Ordering::Less,
+			(_, StmtKind::Class(_)) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
 			let scope_env = self.types.get_scope_env(&scope);
@@ -918,17 +921,17 @@ impl<'a> JSifier<'a> {
 					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
 					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
 				}
-				BringSource::WingFile(name) => {
+				BringSource::WingFile(path) => {
 					// checked during type checking
 					let var_name = identifier.as_ref().expect("bring wing file requires an alias");
 					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
+					let preflight_file_name = preflight_file_map.get(path).unwrap();
 					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
 				}
-				BringSource::Directory(name) => {
+				BringSource::Directory(path) => {
 					// checked during type checking
 					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
+					let preflight_file_name = preflight_file_map.get(path).unwrap();
 					let var_name = identifier.as_ref().expect("bring wing directory requires an alias");
 					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
 				}
@@ -1155,10 +1158,15 @@ impl<'a> JSifier<'a> {
 			StmtKind::Interface { .. } => {
 				// This is a no-op in JS
 			}
-			StmtKind::Struct { .. } => {
+			StmtKind::Struct(_) => {
 				// Struct schemas are emitted before jsification phase
 			}
-			StmtKind::Enum { name, values, .. } => {
+			StmtKind::Enum(enu) => {
+				let Enum {
+					name,
+					values,
+					access: _,
+				} = enu;
 				code.open(format!("const {name} ="));
 				code.add_code(self.jsify_enum(name, values));
 				code.close(";");
@@ -1941,10 +1949,10 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Interface(_) => {}
 			// structs are bringable, but we don't emit anything for them
 			// unless a static method is called on them
-			StmtKind::Struct { .. } => {}
-			StmtKind::Enum { name, access, .. } => {
-				if *access == AccessModifier::Public {
-					symbols.push(name.clone());
+			StmtKind::Struct(_) => {}
+			StmtKind::Enum(enu) => {
+				if enu.access == AccessModifier::Public {
+					symbols.push(enu.name.clone());
 				}
 			}
 			StmtKind::TryCatch { .. } => {}

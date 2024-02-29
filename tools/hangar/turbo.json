@@ -19,11 +19,11 @@
     },
     "test": {
       "dependsOn": ["^package", "test:generate"],
-      "inputs": ["src/**"]
+      "env": ["CI"]
     },
     "bench": {
       "dependsOn": ["^package", "examples-valid#topo"],
-      "inputs": ["src/**"]
+      "env": ["CI"]
     }
   }
 }

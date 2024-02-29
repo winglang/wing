@@ -3,7 +3,6 @@ title: map
 id: map
 ---
 
-
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 
@@ -18,6 +17,7 @@ Immutable Map.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Map.copyMut">copyMut</a></code> | Create a mutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.Map.entries">entries</a></code> | Returns the entries from the map. |
 | <code><a href="#@winglang/sdk.std.Map.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.Map.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
 | <code><a href="#@winglang/sdk.std.Map.keys">keys</a></code> | Returns the keys of this map. |
@@ -34,6 +34,14 @@ copyMut(): MutMap
 ```
 
 Create a mutable shallow copy of this map.
+
+##### `entries` <a name="entries" id="@winglang/sdk.std.Map.entries"></a>
+
+```wing
+entries(): MutArray<ArrayEntry>
+```
+
+Returns the entries from the map.
 
 ##### `get` <a name="get" id="@winglang/sdk.std.Map.get"></a>
 
@@ -126,6 +134,7 @@ Mutable Map.
 | <code><a href="#@winglang/sdk.std.MutMap.clear">clear</a></code> | Removes all elements. |
 | <code><a href="#@winglang/sdk.std.MutMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.MutMap.delete">delete</a></code> | Removes the specified element from a map. |
+| <code><a href="#@winglang/sdk.std.MutMap.entries">entries</a></code> | Returns the entries from the map. |
 | <code><a href="#@winglang/sdk.std.MutMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.MutMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
 | <code><a href="#@winglang/sdk.std.MutMap.keys">keys</a></code> | Returns the keys of this map. |
@@ -167,6 +176,14 @@ Removes the specified element from a map.
 The key.
 
 ---
+
+##### `entries` <a name="entries" id="@winglang/sdk.std.MutMap.entries"></a>
+
+```wing
+entries(): MutArray<ArrayEntry>
+```
+
+Returns the entries from the map.
 
 ##### `get` <a name="get" id="@winglang/sdk.std.MutMap.get"></a>
 
@@ -274,5 +291,49 @@ Returns the values of this map.
 
 
 
+## Structs <a name="Structs" id="Structs"></a>
+
+### ArrayEntry <a name="ArrayEntry" id="@winglang/sdk.std.ArrayEntry"></a>
+
+Array entry representation.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.ArrayEntry.Initializer"></a>
+
+```wing
+let ArrayEntry = ArrayEntry{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.ArrayEntry.property.key">key</a></code> | <code>str</code> | The entry key. |
+| <code><a href="#@winglang/sdk.std.ArrayEntry.property.value">value</a></code> | <code><a href="#@winglang/sdk.std.T1">&lt;T&gt;</a></code> | The entry value. |
+
+---
+
+##### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.ArrayEntry.property.key"></a>
+
+```wing
+key: str;
+```
+
+- *Type:* str
+
+The entry key.
+
+---
+
+##### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.ArrayEntry.property.value"></a>
+
+```wing
+value: <T>;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
+
+The entry value.
+
+---
 
 

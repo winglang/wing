@@ -1,17 +1,17 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`csharp snapshot 1`] = `
-Object {
+{
   "default": undefined,
   "displayName": "Grantee",
-  "docs": Object {},
+  "docs": {},
   "fqn": "Amazon.CDK.AWS.ECR.AuthorizationToken.GrantRead.parameter.Grantee",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
   "optional": undefined,
-  "type": Object {
+  "type": {
     "formattingPattern": "%",
-    "types": Array [
-      Object {
+    "types": [
+      {
         "displayName": "IGrantable",
         "fqn": "Amazon.CDK.AWS.IAM.IGrantable",
         "id": "@aws-cdk/aws-iam.IGrantable",
@@ -24,7 +24,7 @@ Object {
 `;
 
 exports[`csharp snapshot 2`] = `
-" \`Grantee\`<sup>Required</sup> <a name=\\"Grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+" \`Grantee\`<sup>Required</sup> <a name="Grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* Amazon.CDK.AWS.IAM.IGrantable
 
@@ -33,17 +33,17 @@ exports[`csharp snapshot 2`] = `
 `;
 
 exports[`go snapshot 1`] = `
-Object {
+{
   "default": undefined,
   "displayName": "grantee",
-  "docs": Object {},
+  "docs": {},
   "fqn": "github.com/aws/aws-cdk-go/awscdkawsecr.AuthorizationToken.GrantRead.parameter.grantee",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
   "optional": undefined,
-  "type": Object {
+  "type": {
     "formattingPattern": "%",
-    "types": Array [
-      Object {
+    "types": [
+      {
         "displayName": "IGrantable",
         "fqn": "github.com/aws/aws-cdk-go/awscdk/awsiam/awscdkawsiam.IGrantable",
         "id": "@aws-cdk/aws-iam.IGrantable",
@@ -56,7 +56,7 @@ Object {
 `;
 
 exports[`go snapshot 2`] = `
-" \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+" \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* github.com/aws/aws-cdk-go/awscdk/awsiam/awscdkawsiam.IGrantable
 
@@ -65,17 +65,17 @@ exports[`go snapshot 2`] = `
 `;
 
 exports[`java snapshot 1`] = `
-Object {
+{
   "default": undefined,
   "displayName": "grantee",
-  "docs": Object {},
+  "docs": {},
   "fqn": "software.amazon.awscdk.services.ecr.AuthorizationToken.grantRead.parameter.grantee",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
   "optional": undefined,
-  "type": Object {
+  "type": {
     "formattingPattern": "%",
-    "types": Array [
-      Object {
+    "types": [
+      {
         "displayName": "IGrantable",
         "fqn": "software.amazon.awscdk.services.iam.IGrantable",
         "id": "@aws-cdk/aws-iam.IGrantable",
@@ -88,7 +88,7 @@ Object {
 `;
 
 exports[`java snapshot 2`] = `
-" \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+" \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* software.amazon.awscdk.services.iam.IGrantable
 
@@ -97,7 +97,7 @@ exports[`java snapshot 2`] = `
 `;
 
 exports[`newlines in "defaults" are removed 1`] = `
-" \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+" \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* @aws-cdk/aws-iam.IGrantable
 - *Default:* default option with a newline
@@ -107,17 +107,17 @@ exports[`newlines in "defaults" are removed 1`] = `
 `;
 
 exports[`python snapshot 1`] = `
-Object {
+{
   "default": undefined,
   "displayName": "grantee",
-  "docs": Object {},
+  "docs": {},
   "fqn": "aws_cdk.aws_ecr.AuthorizationToken.grant_read.parameter.grantee",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
   "optional": undefined,
-  "type": Object {
+  "type": {
     "formattingPattern": "%",
-    "types": Array [
-      Object {
+    "types": [
+      {
         "displayName": "IGrantable",
         "fqn": "aws_cdk.aws_iam.IGrantable",
         "id": "@aws-cdk/aws-iam.IGrantable",
@@ -130,7 +130,7 @@ Object {
 `;
 
 exports[`python snapshot 2`] = `
-" \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+" \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* aws_cdk.aws_iam.IGrantable
 
@@ -139,17 +139,17 @@ exports[`python snapshot 2`] = `
 `;
 
 exports[`typescript snapshot 1`] = `
-Object {
+{
   "default": undefined,
   "displayName": "grantee",
-  "docs": Object {},
+  "docs": {},
   "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
   "optional": undefined,
-  "type": Object {
+  "type": {
     "formattingPattern": "%",
-    "types": Array [
-      Object {
+    "types": [
+      {
         "displayName": "IGrantable",
         "fqn": "@aws-cdk/aws-iam.IGrantable",
         "id": "@aws-cdk/aws-iam.IGrantable",
@@ -162,7 +162,7 @@ Object {
 `;
 
 exports[`typescript snapshot 2`] = `
-" \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+" \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* @aws-cdk/aws-iam.IGrantable
 
@@ -171,17 +171,17 @@ exports[`typescript snapshot 2`] = `
 `;
 
 exports[`wing snapshot 1`] = `
-Object {
+{
   "default": undefined,
   "displayName": "grantee",
-  "docs": Object {},
+  "docs": {},
   "fqn": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
   "id": "@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee",
   "optional": undefined,
-  "type": Object {
+  "type": {
     "formattingPattern": "%",
-    "types": Array [
-      Object {
+    "types": [
+      {
         "displayName": "IGrantable",
         "fqn": "@aws-cdk/aws-iam.IGrantable",
         "id": "@aws-cdk/aws-iam.IGrantable",
@@ -194,7 +194,7 @@ Object {
 `;
 
 exports[`wing snapshot 2`] = `
-" \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
+" \`grantee\`<sup>Required</sup> <a name="grantee" id="@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee"></a>
 
 - *Type:* @aws-cdk/aws-iam.IGrantable
 

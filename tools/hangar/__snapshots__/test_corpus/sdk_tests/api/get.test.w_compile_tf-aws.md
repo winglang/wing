@@ -194,6 +194,19 @@
         "principal": "apigateway.amazonaws.com",
         "source_arn": "${aws_api_gateway_rest_api.Api_api_91C07D84.execution_arn}/*/GET/path",
         "statement_id": "AllowExecutionFromAPIGateway-GET-e2131352"
+      },
+      "cloudApi_api_permission-GET-eb193fe3_702F896F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/api/permission-GET-eb193fe3",
+            "uniqueId": "cloudApi_api_permission-GET-eb193fe3_702F896F"
+          }
+        },
+        "action": "lambda:InvokeFunction",
+        "function_name": "${aws_lambda_function.cloudApi_get_default-response0_39D65CAD.function_name}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/default-response",
+        "statement_id": "AllowExecutionFromAPIGateway-GET-eb193fe3"
       }
     },
     "aws_s3_bucket": {

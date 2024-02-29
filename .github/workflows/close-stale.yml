@@ -12,13 +12,14 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@v6
+      - uses: actions/stale@v9
         with:
+          days-before-issue-stale: 90
           days-before-pr-stale: 20
           stale-issue-message: |
             Hi,
 
-            This issue hasn't seen activity in 60 days. Therefore, we are marking this issue as stale for now. It will be closed after 7 days.
+            This issue hasn't seen activity in 90 days. Therefore, we are marking this issue as stale for now. It will be closed after 7 days.
             Feel free to re-open this issue when there's an update or relevant information to be added.
             Thanks!
           stale-pr-message: |
@@ -28,4 +29,3 @@ jobs:
             If you need help with the PR, do not hesitate to reach out in the winglang community slack at [winglang.slack.com](https://winglang.slack.com).
             Feel free to re-open this PR when it is still relevant and ready to be worked on again.
             Thanks!
-

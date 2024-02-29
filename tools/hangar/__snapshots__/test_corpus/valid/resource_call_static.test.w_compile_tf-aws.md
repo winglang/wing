@@ -115,6 +115,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "$inflight_init": [
+            [globalCounter, []],
           ],
         });
       }
@@ -156,6 +157,7 @@ class $Root extends $stdlib.std.Resource {
             [Another, ["myStaticMethod"]],
           ],
           "$inflight_init": [
+            [Another, []],
           ],
         });
       }

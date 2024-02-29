@@ -143,6 +143,7 @@ class $Root extends $stdlib.std.Resource {
                 [globalBucket, ["list"]],
               ],
               "$inflight_init": [
+                [globalBucket, []],
               ],
             });
           }
@@ -208,6 +209,7 @@ class $Root extends $stdlib.std.Resource {
             [x, ["foo"]],
           ],
           "$inflight_init": [
+            [x, []],
           ],
         });
       }

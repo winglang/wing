@@ -158,6 +158,7 @@ class $Root extends $stdlib.std.Resource {
             [t, ["checkIfEmpty"]],
           ],
           "$inflight_init": [
+            [t, []],
           ],
         });
       }

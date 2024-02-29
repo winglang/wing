@@ -11,9 +11,9 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Elifs, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
+	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
 	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
-	Scope, Spanned, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
+	Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
 	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
@@ -866,12 +866,12 @@ impl<'s> Parser<'s> {
 			)?;
 		}
 
-		Ok(StmtKind::Struct {
+		Ok(StmtKind::Struct(Struct {
 			name,
 			extends,
 			fields: members,
 			access,
-		})
+		}))
 	}
 
 	fn build_variable_def_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -948,10 +948,7 @@ impl<'s> Parser<'s> {
 				// parse error if no alias is provided
 				let module = if let Some(alias) = alias {
 					Ok(StmtKind::Bring {
-						source: BringSource::WingFile(Symbol {
-							name: source_path.to_string(),
-							span: module_name.span,
-						}),
+						source: BringSource::WingFile(source_path),
 						identifier: Some(alias),
 					})
 				} else {
@@ -973,10 +970,7 @@ impl<'s> Parser<'s> {
 				// parse error if no alias is provided
 				let module = if let Some(alias) = alias {
 					Ok(StmtKind::Bring {
-						source: BringSource::Directory(Symbol {
-							name: source_path.to_string(),
-							span: module_name.span,
-						}),
+						source: BringSource::Directory(source_path),
 						identifier: Some(alias),
 					})
 				} else {
@@ -1143,11 +1137,11 @@ impl<'s> Parser<'s> {
 			)?;
 		}
 
-		Ok(StmtKind::Enum {
+		Ok(StmtKind::Enum(Enum {
 			name: name.unwrap(),
 			values,
 			access,
-		})
+		}))
 	}
 
 	fn get_modifier<'a>(&'a self, modifier: &str, maybe_modifiers: &'a Option<Node>) -> DiagnosticResult<Option<Node>> {
@@ -1201,7 +1195,8 @@ impl<'s> Parser<'s> {
 						continue;
 					};
 
-					let Ok(func_def) = self.build_function_definition(Some(method_name.clone()), &class_element, class_phase)
+					let Ok(func_def) =
+						self.build_function_definition(Some(method_name.clone()), &class_element, class_phase, false)
 					else {
 						continue;
 					};
@@ -1243,7 +1238,7 @@ impl<'s> Parser<'s> {
 							.err();
 					}
 					let parameters_node = class_element.child_by_field_name("parameter_list").unwrap();
-					let parameters = self.build_parameter_list(&parameters_node, class_phase)?;
+					let parameters = self.build_parameter_list(&parameters_node, class_phase, false)?;
 					if !parameters.is_empty() && is_inflight && class_phase == Phase::Preflight {
 						self
 							.with_error::<Node>("Inflight initializers cannot have parameters", &parameters_node)
@@ -1541,10 +1536,7 @@ impl<'s> Parser<'s> {
 	) -> DiagnosticResult<(Symbol, FunctionSignature)> {
 		let name = interface_element.child_by_field_name("name").unwrap();
 		let method_name = self.node_symbol(&name)?;
-		let (func_sig, ret_type_inferred) = self.build_function_signature(&interface_element, phase)?;
-		if ret_type_inferred {
-			self.add_error("Expected function return type", &interface_element);
-		}
+		let func_sig = self.build_function_signature(&interface_element, phase, true)?;
 		Ok((method_name, func_sig))
 	}
 
@@ -1552,13 +1544,19 @@ impl<'s> Parser<'s> {
 		&self,
 		func_sig_node: &Node,
 		phase: Phase,
-	) -> DiagnosticResult<(FunctionSignature, bool)> {
-		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap(), phase)?;
-		let mut ret_typed_inferred = false;
+		require_annotations: bool,
+	) -> DiagnosticResult<FunctionSignature> {
+		let parameters = self.build_parameter_list(
+			&func_sig_node.child_by_field_name("parameter_list").unwrap(),
+			phase,
+			require_annotations,
+		)?;
 		let return_type = if let Some(rt) = get_actual_child_by_field_name(*func_sig_node, "type") {
 			self.build_type_annotation(Some(rt), phase)?
 		} else {
-			ret_typed_inferred = true;
+			if require_annotations {
+				self.add_error("Expected function return type", &func_sig_node);
+			}
 			let func_sig_kind = func_sig_node.kind();
 			if func_sig_kind == "closure" {
 				TypeAnnotation {
@@ -1573,18 +1571,15 @@ impl<'s> Parser<'s> {
 			}
 		};
 
-		Ok((
-			FunctionSignature {
-				parameters,
-				return_type: Box::new(return_type),
-				phase,
-			},
-			ret_typed_inferred,
-		))
+		Ok(FunctionSignature {
+			parameters,
+			return_type: Box::new(return_type),
+			phase,
+		})
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(None, anon_closure_node, phase)
+		self.build_function_definition(None, anon_closure_node, phase, false)
 	}
 
 	fn build_function_definition(
@@ -1592,6 +1587,7 @@ impl<'s> Parser<'s> {
 		name: Option<Symbol>,
 		func_def_node: &Node,
 		phase: Phase,
+		require_annotations: bool,
 	) -> DiagnosticResult<FunctionDefinition> {
 		let modifiers = func_def_node.child_by_field_name("modifiers");
 
@@ -1602,7 +1598,7 @@ impl<'s> Parser<'s> {
 
 		let is_static = self.get_modifier("static", &modifiers)?.is_some();
 
-		let (signature, ret_type_inferred) = self.build_function_signature(func_def_node, phase)?;
+		let signature = self.build_function_signature(func_def_node, phase, require_annotations)?;
 		let statements = if let Some(external) = self.get_modifier("extern_modifier", &modifiers)? {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
 			let file_path = Utf8Path::new(&node_text[1..node_text.len() - 1]);
@@ -1617,10 +1613,6 @@ impl<'s> Parser<'s> {
 					.build_error("Extern functions cannot have a body", &external)
 					.with_annotation("Body defined here", self.node_span(body))
 					.report();
-			}
-
-			if ret_type_inferred {
-				self.add_error("Expected function return type", &func_def_node);
 			}
 
 			FunctionBody::External(file_path.to_string())
@@ -1643,7 +1635,12 @@ impl<'s> Parser<'s> {
 	/// # Returns
 	/// A vector of tuples for each parameter in the list. The tuples are the name, type and a bool letting
 	/// us know whether the parameter is reassignable or not respectively.
-	fn build_parameter_list(&self, parameter_list_node: &Node, phase: Phase) -> DiagnosticResult<Vec<FunctionParameter>> {
+	fn build_parameter_list(
+		&self,
+		parameter_list_node: &Node,
+		phase: Phase,
+		require_annotations: bool,
+	) -> DiagnosticResult<Vec<FunctionParameter>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for definition_node in parameter_list_node.named_children(&mut cursor) {
@@ -1651,12 +1648,18 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 
-			res.push(FunctionParameter {
+			let param = FunctionParameter {
 				name: self.check_reserved_symbol(&definition_node.child_by_field_name("name").unwrap())?,
 				type_annotation: self.build_type_annotation(get_actual_child_by_field_name(definition_node, "type"), phase)?,
 				reassignable: definition_node.child_by_field_name("reassignable").is_some(),
 				variadic: definition_node.child_by_field_name("variadic").is_some(),
-			});
+			};
+
+			if require_annotations && matches!(param.type_annotation.kind, TypeAnnotationKind::Inferred) {
+				self.add_error("Expected type annotation", &definition_node);
+			}
+
+			res.push(param);
 		}
 
 		Ok(res)
@@ -2185,6 +2188,14 @@ impl<'s> Parser<'s> {
 					None
 				};
 
+				// check if the array type is annotated as a Set/MutSet
+				// if so, we should build a set literal instead
+				if let Some(TypeAnnotation { kind, .. }) = &array_type {
+					if matches!(kind, TypeAnnotationKind::Set(_) | TypeAnnotationKind::MutSet(_)) {
+						return self.build_set_literal(expression_node, phase);
+					}
+				}
+
 				let mut items = Vec::new();
 				let mut cursor = expression_node.walk();
 				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
@@ -2211,14 +2222,6 @@ impl<'s> Parser<'s> {
 				};
 
 				let fields = self.build_map_fields(expression_node, phase)?;
-
-				// Special case: empty {} (which is detected as map by tree-sitter) -
-				// if it is annotated as a Set/MutSet we should treat it as a set literal
-				if let Some(TypeAnnotation { kind, .. }) = &map_type {
-					if matches!(kind, TypeAnnotationKind::Set(_) | TypeAnnotationKind::MutSet(_)) && fields.is_empty() {
-						return self.build_set_literal(expression_node, phase);
-					}
-				}
 
 				Ok(Expr::new(
 					ExprKind::MapLiteral {
@@ -2275,7 +2278,6 @@ impl<'s> Parser<'s> {
 				let element = Box::new(exp);
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
-			"set_literal" => self.build_set_literal(expression_node, phase),
 			"struct_literal" => {
 				let type_ = self.build_type_annotation(get_actual_child_by_field_name(*expression_node, "type"), phase);
 				let mut fields = IndexMap::new();

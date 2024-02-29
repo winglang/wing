@@ -345,7 +345,10 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "users-tableex.Table-c840a49c"
+        "name": "users-tableex.Table-c840a49c",
+        "point_in_time_recovery": {
+          "enabled": true
+        }
       }
     },
     "aws_iam_role": {
@@ -663,6 +666,7 @@ class $Root extends $stdlib.std.Resource {
             [usersTable, ["list"]],
           ],
           "$inflight_init": [
+            [usersTable, []],
           ],
         });
       }
@@ -698,6 +702,7 @@ class $Root extends $stdlib.std.Resource {
             [usersTable, ["insert"]],
           ],
           "$inflight_init": [
+            [usersTable, []],
           ],
         });
       }
@@ -735,6 +740,7 @@ class $Root extends $stdlib.std.Resource {
             [api.url, []],
           ],
           "$inflight_init": [
+            [api.url, []],
           ],
         });
       }
@@ -772,6 +778,7 @@ class $Root extends $stdlib.std.Resource {
             [api.url, []],
           ],
           "$inflight_init": [
+            [api.url, []],
           ],
         });
       }

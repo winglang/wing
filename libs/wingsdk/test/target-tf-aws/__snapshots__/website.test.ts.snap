@@ -951,7 +951,7 @@ exports[`website with addJson 1`] = `
       },
       "Website_File-configjson_1F1498B9": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
-        "content": "{\\"version\\":\\"8.31.0\\"}",
+        "content": "{"version":"8.31.0"}",
         "content_type": "application/json",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",

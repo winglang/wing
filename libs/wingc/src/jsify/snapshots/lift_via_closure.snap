@@ -105,6 +105,7 @@ class $Root extends $stdlib.std.Resource {
             [bucket, ["put"]],
           ],
           "$inflight_init": [
+            [bucket, []],
           ],
         });
       }
@@ -139,6 +140,7 @@ class $Root extends $stdlib.std.Resource {
             [fn, ["handle"]],
           ],
           "$inflight_init": [
+            [fn, []],
           ],
         });
       }

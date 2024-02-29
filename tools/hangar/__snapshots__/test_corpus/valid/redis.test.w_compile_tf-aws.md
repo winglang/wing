@@ -133,7 +133,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.r2_securityGroup_35A75C2E.id}"
+          "${aws_security_group.r2_KEN24securityGroup_AFC21ADF.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.r2_RedisSubnetGroup_C415566B.name}"
       }
@@ -426,11 +426,11 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "name": "3542402a-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "r2_securityGroup_35A75C2E": {
+      "r2_KEN24securityGroup_AFC21ADF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/r2/securityGroup",
-            "uniqueId": "r2_securityGroup_35A75C2E"
+            "path": "root/Default/Default/r2/KEN.24]}securityGroup",
+            "uniqueId": "r2_KEN24securityGroup_AFC21ADF"
           }
         },
         "egress": [
@@ -575,6 +575,7 @@ class $Root extends $stdlib.std.Resource {
             [r, ["set"]],
           ],
           "$inflight_init": [
+            [r, []],
           ],
         });
       }
@@ -614,6 +615,9 @@ class $Root extends $stdlib.std.Resource {
             [r2, ["get", "set"]],
           ],
           "$inflight_init": [
+            [queue, []],
+            [r, []],
+            [r2, []],
           ],
         });
       }

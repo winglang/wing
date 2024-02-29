@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import { join } from "path";
+import { onTestFailed } from "vitest";
 import { directorySnapshot, mkdtemp } from "./util";
 import { Function, IFunctionClient } from "../src/cloud";
 import { Simulator, Testing } from "../src/simulator";
@@ -59,7 +60,7 @@ export class SimApp extends App {
     // returns an "invoker" for this function
     return async (s: Simulator) => {
       const fn = s.getResource("/" + id) as IFunctionClient;
-      return fn.invoke("");
+      return fn.invoke();
     };
   }
 
@@ -73,23 +74,15 @@ export class SimApp extends App {
     const simfile = this.synth();
     const s = new Simulator({ simfile, stateDir });
     await s.start();
-    return s;
-  }
 
-  /**
-   * Executes a code block with a simulator, will stop the simulator after the
-   * code block is done.
-   *
-   * @param cb code block closure to execute with the simulator
-   * @internal
-   */
-  public async _withSimulator(cb: (s: Simulator) => Promise<void>) {
-    const s = await this.startSimulator();
-    try {
-      await cb(s);
-    } finally {
-      await s.stop();
-    }
+    // When tests fail, we still want to make sure the simulator is stopped
+    onTestFailed(async () => {
+      if ((s as any)._running === "running") {
+        await s.stop();
+      }
+    });
+
+    return s;
   }
 
   /**

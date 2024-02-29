@@ -212,12 +212,12 @@ exports[`dec() policy statement 1`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Counter.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:UpdateItem"],"Resource":["\${aws_dynamodb_table.Counter.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -378,6 +378,14 @@ exports[`dec() policy statement 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -456,7 +464,7 @@ return class Handler {
 }
 };
 })())({
-my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0)
+my_counter: new (require("[REDACTED]/wingsdk/src/shared-aws/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_6cb5a3a4"], 0)
 })"
 `;
 
@@ -484,12 +492,12 @@ exports[`function with a counter binding 2`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Counter.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:UpdateItem"],"Resource":["\${aws_dynamodb_table.Counter.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -650,6 +658,14 @@ exports[`function with a counter binding 3`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -718,12 +734,12 @@ exports[`inc() policy statement 1`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Counter.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:UpdateItem"],"Resource":["\${aws_dynamodb_table.Counter.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -884,6 +900,14 @@ exports[`inc() policy statement 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -952,12 +976,12 @@ exports[`peek() policy statement 1`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Counter.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:GetItem"],"Resource":["\${aws_dynamodb_table.Counter.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -1117,6 +1141,14 @@ exports[`peek() policy statement 2`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {
@@ -1280,12 +1312,12 @@ exports[`set() policy statement 1`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Counter.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["dynamodb:UpdateItem"],"Resource":["\${aws_dynamodb_table.Counter.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -1445,6 +1477,14 @@ exports[`set() policy statement 2`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {

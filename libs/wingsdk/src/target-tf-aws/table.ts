@@ -1,5 +1,6 @@
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function } from "./function";
 import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import { DynamodbTableItem } from "../.gen/providers/aws/dynamodb-table-item";
@@ -29,6 +30,8 @@ export class Table extends ex.Table implements IAwsTable {
   constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
     super(scope, id, props);
 
+    const isTestEnvironment = App.of(scope).isTestEnvironment;
+
     this.table = new DynamodbTable(this, "Default", {
       name: ResourceNames.generateName(this, {
         prefix: this.name,
@@ -37,6 +40,7 @@ export class Table extends ex.Table implements IAwsTable {
       attribute: [{ name: this.primaryKey, type: "S" }],
       hashKey: this.primaryKey,
       billingMode: "PAY_PER_REQUEST",
+      pointInTimeRecovery: isTestEnvironment ? undefined : { enabled: true },
     });
   }
 

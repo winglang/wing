@@ -76,6 +76,7 @@ class $Root extends $stdlib.std.Resource {
             [b, []],
           ],
           "$inflight_init": [
+            [b, []],
           ],
         });
       }

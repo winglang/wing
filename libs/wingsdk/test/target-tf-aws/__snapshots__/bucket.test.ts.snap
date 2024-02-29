@@ -15,7 +15,7 @@ exports[`bucket is public 1`] = `
         "depends_on": [
           "aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0",
         ],
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\",\\"Action\\":[\\"s3:GetObject\\"],\\"Resource\\":[\\"\${aws_s3_bucket.my_bucket.arn}/*\\"]}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":["s3:GetObject"],"Resource":["\${aws_s3_bucket.my_bucket.arn}/*"]}]}",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -306,12 +306,12 @@ exports[`bucket with onCreate method 1`] = `
     },
     "aws_iam_role": {
       "my_bucket_oncreate-OnMessage0_IamRole_9CAD40D5": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "my_bucket_oncreate-OnMessage0_IamRolePolicy_CDE0CB68": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.my_bucket_oncreate-OnMessage0_IamRole_9CAD40D5.name}",
       },
     },
@@ -387,7 +387,7 @@ exports[`bucket with onCreate method 1`] = `
         "depends_on": [
           "aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0",
         ],
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\",\\"Action\\":[\\"s3:GetObject\\"],\\"Resource\\":[\\"\${aws_s3_bucket.my_bucket.arn}/*\\"]}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":["s3:GetObject"],"Resource":["\${aws_s3_bucket.my_bucket.arn}/*"]}]}",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -414,7 +414,7 @@ exports[`bucket with onCreate method 1`] = `
     "aws_sns_topic_policy": {
       "my_bucket_oncreate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_CE3B77A7": {
         "arn": "\${aws_sns_topic.my_bucket_oncreate_EF5D7ECA.arn}",
-        "policy": "{\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Action\\":\\"sns:Publish\\",\\"Resource\\":\\"\${aws_sns_topic.my_bucket_oncreate_EF5D7ECA.arn}\\",\\"Condition\\":{\\"ArnEquals\\":{\\"aws:SourceArn\\":\\"\${aws_s3_bucket.my_bucket.arn}\\"}}}]}",
+        "policy": "{"Statement":[{"Effect":"Allow","Principal":{"Service":"s3.amazonaws.com"},"Action":"sns:Publish","Resource":"\${aws_sns_topic.my_bucket_oncreate_EF5D7ECA.arn}","Condition":{"ArnEquals":{"aws:SourceArn":"\${aws_s3_bucket.my_bucket.arn}"}}}]}",
       },
     },
     "aws_sns_topic_subscription": {
@@ -443,6 +443,14 @@ exports[`bucket with onCreate method 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {
@@ -661,12 +669,12 @@ exports[`bucket with onDelete method 1`] = `
     },
     "aws_iam_role": {
       "my_bucket_ondelete-OnMessage0_IamRole_04EA7EBC": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "my_bucket_ondelete-OnMessage0_IamRolePolicy_635C2064": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.my_bucket_ondelete-OnMessage0_IamRole_04EA7EBC.name}",
       },
     },
@@ -742,7 +750,7 @@ exports[`bucket with onDelete method 1`] = `
         "depends_on": [
           "aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0",
         ],
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\",\\"Action\\":[\\"s3:GetObject\\"],\\"Resource\\":[\\"\${aws_s3_bucket.my_bucket.arn}/*\\"]}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":["s3:GetObject"],"Resource":["\${aws_s3_bucket.my_bucket.arn}/*"]}]}",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -769,7 +777,7 @@ exports[`bucket with onDelete method 1`] = `
     "aws_sns_topic_policy": {
       "my_bucket_ondelete_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_1B83A43C": {
         "arn": "\${aws_sns_topic.my_bucket_ondelete_C2E093CB.arn}",
-        "policy": "{\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Action\\":\\"sns:Publish\\",\\"Resource\\":\\"\${aws_sns_topic.my_bucket_ondelete_C2E093CB.arn}\\",\\"Condition\\":{\\"ArnEquals\\":{\\"aws:SourceArn\\":\\"\${aws_s3_bucket.my_bucket.arn}\\"}}}]}",
+        "policy": "{"Statement":[{"Effect":"Allow","Principal":{"Service":"s3.amazonaws.com"},"Action":"sns:Publish","Resource":"\${aws_sns_topic.my_bucket_ondelete_C2E093CB.arn}","Condition":{"ArnEquals":{"aws:SourceArn":"\${aws_s3_bucket.my_bucket.arn}"}}}]}",
       },
     },
     "aws_sns_topic_subscription": {
@@ -798,6 +806,14 @@ exports[`bucket with onDelete method 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {
@@ -1024,26 +1040,26 @@ exports[`bucket with onEvent method 1`] = `
     },
     "aws_iam_role": {
       "my_bucket_oncreate-OnMessage0_IamRole_9CAD40D5": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
       "my_bucket_ondelete-OnMessage0_IamRole_04EA7EBC": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
       "my_bucket_onupdate-OnMessage0_IamRole_9C1FBCBE": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "my_bucket_oncreate-OnMessage0_IamRolePolicy_CDE0CB68": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.my_bucket_oncreate-OnMessage0_IamRole_9CAD40D5.name}",
       },
       "my_bucket_ondelete-OnMessage0_IamRolePolicy_635C2064": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.my_bucket_ondelete-OnMessage0_IamRole_04EA7EBC.name}",
       },
       "my_bucket_onupdate-OnMessage0_IamRolePolicy_27D30DCE": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.my_bucket_onupdate-OnMessage0_IamRole_9C1FBCBE.name}",
       },
     },
@@ -1203,7 +1219,7 @@ exports[`bucket with onEvent method 1`] = `
         "depends_on": [
           "aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0",
         ],
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\",\\"Action\\":[\\"s3:GetObject\\"],\\"Resource\\":[\\"\${aws_s3_bucket.my_bucket.arn}/*\\"]}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":["s3:GetObject"],"Resource":["\${aws_s3_bucket.my_bucket.arn}/*"]}]}",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -1246,15 +1262,15 @@ exports[`bucket with onEvent method 1`] = `
     "aws_sns_topic_policy": {
       "my_bucket_oncreate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_CE3B77A7": {
         "arn": "\${aws_sns_topic.my_bucket_oncreate_EF5D7ECA.arn}",
-        "policy": "{\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Action\\":\\"sns:Publish\\",\\"Resource\\":\\"\${aws_sns_topic.my_bucket_oncreate_EF5D7ECA.arn}\\",\\"Condition\\":{\\"ArnEquals\\":{\\"aws:SourceArn\\":\\"\${aws_s3_bucket.my_bucket.arn}\\"}}}]}",
+        "policy": "{"Statement":[{"Effect":"Allow","Principal":{"Service":"s3.amazonaws.com"},"Action":"sns:Publish","Resource":"\${aws_sns_topic.my_bucket_oncreate_EF5D7ECA.arn}","Condition":{"ArnEquals":{"aws:SourceArn":"\${aws_s3_bucket.my_bucket.arn}"}}}]}",
       },
       "my_bucket_ondelete_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_1B83A43C": {
         "arn": "\${aws_sns_topic.my_bucket_ondelete_C2E093CB.arn}",
-        "policy": "{\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Action\\":\\"sns:Publish\\",\\"Resource\\":\\"\${aws_sns_topic.my_bucket_ondelete_C2E093CB.arn}\\",\\"Condition\\":{\\"ArnEquals\\":{\\"aws:SourceArn\\":\\"\${aws_s3_bucket.my_bucket.arn}\\"}}}]}",
+        "policy": "{"Statement":[{"Effect":"Allow","Principal":{"Service":"s3.amazonaws.com"},"Action":"sns:Publish","Resource":"\${aws_sns_topic.my_bucket_ondelete_C2E093CB.arn}","Condition":{"ArnEquals":{"aws:SourceArn":"\${aws_s3_bucket.my_bucket.arn}"}}}]}",
       },
       "my_bucket_onupdate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_C89A58B9": {
         "arn": "\${aws_sns_topic.my_bucket_onupdate_DF9292B4.arn}",
-        "policy": "{\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Action\\":\\"sns:Publish\\",\\"Resource\\":\\"\${aws_sns_topic.my_bucket_onupdate_DF9292B4.arn}\\",\\"Condition\\":{\\"ArnEquals\\":{\\"aws:SourceArn\\":\\"\${aws_s3_bucket.my_bucket.arn}\\"}}}]}",
+        "policy": "{"Statement":[{"Effect":"Allow","Principal":{"Service":"s3.amazonaws.com"},"Action":"sns:Publish","Resource":"\${aws_sns_topic.my_bucket_onupdate_DF9292B4.arn}","Condition":{"ArnEquals":{"aws:SourceArn":"\${aws_s3_bucket.my_bucket.arn}"}}}]}",
       },
     },
     "aws_sns_topic_subscription": {
@@ -1293,6 +1309,14 @@ exports[`bucket with onEvent method 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {
@@ -1743,12 +1767,12 @@ exports[`bucket with onUpdate method 1`] = `
     },
     "aws_iam_role": {
       "my_bucket_onupdate-OnMessage0_IamRole_9C1FBCBE": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "my_bucket_onupdate-OnMessage0_IamRolePolicy_27D30DCE": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.my_bucket_onupdate-OnMessage0_IamRole_9C1FBCBE.name}",
       },
     },
@@ -1824,7 +1848,7 @@ exports[`bucket with onUpdate method 1`] = `
         "depends_on": [
           "aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0",
         ],
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\",\\"Action\\":[\\"s3:GetObject\\"],\\"Resource\\":[\\"\${aws_s3_bucket.my_bucket.arn}/*\\"]}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":["s3:GetObject"],"Resource":["\${aws_s3_bucket.my_bucket.arn}/*"]}]}",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -1851,7 +1875,7 @@ exports[`bucket with onUpdate method 1`] = `
     "aws_sns_topic_policy": {
       "my_bucket_onupdate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_C89A58B9": {
         "arn": "\${aws_sns_topic.my_bucket_onupdate_DF9292B4.arn}",
-        "policy": "{\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":{\\"Service\\":\\"s3.amazonaws.com\\"},\\"Action\\":\\"sns:Publish\\",\\"Resource\\":\\"\${aws_sns_topic.my_bucket_onupdate_DF9292B4.arn}\\",\\"Condition\\":{\\"ArnEquals\\":{\\"aws:SourceArn\\":\\"\${aws_s3_bucket.my_bucket.arn}\\"}}}]}",
+        "policy": "{"Statement":[{"Effect":"Allow","Principal":{"Service":"s3.amazonaws.com"},"Action":"sns:Publish","Resource":"\${aws_sns_topic.my_bucket_onupdate_DF9292B4.arn}","Condition":{"ArnEquals":{"aws:SourceArn":"\${aws_s3_bucket.my_bucket.arn}"}}}]}",
       },
     },
     "aws_sns_topic_subscription": {
@@ -1880,6 +1904,14 @@ exports[`bucket with onUpdate method 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {
@@ -2102,7 +2134,7 @@ exports[`bucket with two preflight files 1`] = `
         "depends_on": [
           "aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0",
         ],
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\",\\"Action\\":[\\"s3:GetObject\\"],\\"Resource\\":[\\"\${aws_s3_bucket.my_bucket.arn}/*\\"]}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":["s3:GetObject"],"Resource":["\${aws_s3_bucket.my_bucket.arn}/*"]}]}",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -2251,7 +2283,7 @@ exports[`bucket with two preflight objects 1`] = `
         "depends_on": [
           "aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0",
         ],
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\",\\"Action\\":[\\"s3:GetObject\\"],\\"Resource\\":[\\"\${aws_s3_bucket.my_bucket.arn}/*\\"]}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":["s3:GetObject"],"Resource":["\${aws_s3_bucket.my_bucket.arn}/*"]}]}",
       },
     },
     "aws_s3_bucket_public_access_block": {

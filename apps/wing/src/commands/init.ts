@@ -1,7 +1,7 @@
 // This file and the main function are named "init" instead of "new"
 // to avoid a conflict with the "new" keyword in JavaScript
 import { exec } from "child_process";
-import { existsSync } from "fs";
+import { existsSync, constants } from "fs";
 import { copyFile, mkdir, readFile, readdir, writeFile } from "fs/promises";
 import { join, relative } from "path";
 import { promisify } from "util";
@@ -17,8 +17,8 @@ const execPromise = promisify(exec);
  * This is passed from Commander to the `init` function.
  */
 export interface InitOptions {
-  readonly template?: string;
-  readonly language?: string;
+  template?: string;
+  language?: string;
   readonly listTemplates?: boolean;
 }
 
@@ -94,10 +94,12 @@ export async function init(template: string, options: InitOptions = {}): Promise
         `Unknown language: "${language}". Please select from "wing" or "typescript".`
       );
   }
-
+  // Since this object is used by our analytics collector
+  options.language = language;
+  options.template = template;
   // Check if the template exists for the selected language
   const templatePath = join(PROJECT_TEMPLATES_DIR, language, template);
-  const templateExists = await exists(templatePath);
+  const templateExists = await exists(templatePath, constants.R_OK);
   if (!templateExists) {
     throw new Error(
       `Template "${template}" is not available in ${language}. Please let us know you'd like to use this template in ${language} by opening an issue at https://github.com/winglang/wing/issues/!`

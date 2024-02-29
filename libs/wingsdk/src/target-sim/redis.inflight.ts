@@ -1,9 +1,11 @@
-import { execSync } from "node:child_process";
 import IoRedis from "ioredis";
-import { v4 as uuidv4 } from "uuid";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
 import { RedisClientBase } from "../ex";
-import { runDockerImage } from "../shared/misc";
+import {
+  generateDockerContainerName,
+  runCommand,
+  runDockerImage,
+} from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -27,10 +29,9 @@ export class Redis
   public constructor(_props: RedisSchema["props"], context: ISimulatorContext) {
     super();
     this.context = context;
-    this.containerName = `wing-sim-redis-${this.context.resourcePath.replace(
-      /\//g,
-      "."
-    )}-${uuidv4()}`;
+    this.containerName = generateDockerContainerName(
+      `wing-sim-redis-${this.context.resourcePath}`
+    );
   }
 
   public async init(): Promise<RedisAttributes> {
@@ -59,7 +60,7 @@ export class Redis
     // disconnect from the redis server
     this.connection?.disconnect();
     // stop the redis container
-    execSync(`docker rm -f ${this.containerName}`);
+    await runCommand("docker", ["rm", "-f", this.containerName]);
   }
 
   public async save(): Promise<void> {}

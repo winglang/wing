@@ -208,6 +208,7 @@ class $Root extends $stdlib.std.Resource {
                 [__parent_this_1, ["bar"]],
               ],
               "$inflight_init": [
+                [__parent_this_1, []],
               ],
             });
           }

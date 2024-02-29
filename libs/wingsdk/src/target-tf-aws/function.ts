@@ -8,6 +8,7 @@ import { IamRolePolicyAttachment } from "../.gen/providers/aws/iam-role-policy-a
 import { LambdaFunction } from "../.gen/providers/aws/lambda-function";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import { S3Object } from "../.gen/providers/aws/s3-object";
+import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
@@ -228,6 +229,26 @@ export class Function extends cloud.Function implements IAwsFunction {
       architectures: ["arm64"],
     });
 
+    if (
+      app.platformParameters.getParameterValue("tf-aws/vpc_lambda") === true
+    ) {
+      const sg = new SecurityGroup(this, `${id}SecurityGroup`, {
+        vpcId: app.vpc.id,
+        egress: [
+          {
+            cidrBlocks: ["0.0.0.0/0"],
+            fromPort: 0,
+            toPort: 0,
+            protocol: "-1",
+          },
+        ],
+      });
+      this.addNetworkConfig({
+        subnetIds: [...app.subnets.private.map((s) => s.id)],
+        securityGroupIds: [sg.id],
+      });
+    }
+
     this.qualifiedArn = this.function.qualifiedArn;
     this.invokeArn = this.function.invokeArn;
 
@@ -380,5 +401,25 @@ export class Function extends cloud.Function implements IAwsFunction {
 
   public get functionName(): string {
     return this.function.functionName;
+  }
+
+  /**
+   * @internal
+   */
+  protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
+    const inflightClient = handler._toInflight();
+    const lines = new Array<string>();
+    const client = "$handler";
+
+    lines.push('"use strict";');
+    lines.push(`var ${client} = undefined;`);
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
+    lines.push(
+      `  return await ${client}.handle(event === null ? undefined : event);`
+    );
+    lines.push("};");
+
+    return lines;
   }
 }

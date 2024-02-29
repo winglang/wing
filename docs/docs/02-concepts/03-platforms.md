@@ -54,6 +54,42 @@ It is worth noting that the platform names are not guaranteed to match their tar
 
 Though not currently implemented, the platform target system is designed with extensibility in mind, as it will be used to determine compatibility between different platforms ([tracking issue](https://github.com/winglang/wing/issues/1474))
 
+#### Platform Parameters
+
+Some platform targets may require additional parameters to be provided. These parameters can be used to pass configuration values to the platform. For example, the platform target `tf-aws` has an optional parameter that can be specified to determine if a new VPC 
+should be created or if an existing VPC should be used. In order to provide this parameter, you can use the `--value` option in the cli to specify a key-value pair. For example:
+
+```sh
+wing compile app.main.w --platform tf-aws --value tf-aws/vpc=existing
+```
+
+which will tell the `tf-aws` platform to use an existing VPC. However this will result in an parameter validation error, since when using an existing VPC, you will be required to add additional parameters such as `vpcId` and subnets. As shown in the error below:
+
+```sh
+Error: Parameter validation errors:
+- must have required property 'vpc_id'
+- must have required property 'private_subnet_ids'
+- must have required property 'public_subnet_ids'
+```
+
+it is possible to provide these additional parameters using the `--value` option as well. For example:
+
+```sh
+wing compile app.main.w --platform tf-aws --value tf-aws/vpc=existing --value tf-aws/vpcId=vpc-1234567890 --value tf-aws/privateSubnetId=subnet-1234567890 --value tf-aws/publicSubnetId=subnet-1234567890
+```
+
+Though this may be a bit verbose. As an alternative you can use a values file. Value files are a way to provide multiple config values in a single file. By default the compiler will look for a file named `wing` with any of the following extensions `.json`, `.yaml`, `.yml`, `.toml` Though you can also specify a custom file using the `--values` option.
+
+Here is an example of using a `wing.toml` file to provide the same parameters as above:
+
+```toml
+[tf-aws]
+vpc = "existing"
+vpcId = "vpc-1234567890"
+privateSubnetId = "subnet-1234567890"
+publicSubnetId = "subnet-1234567890"
+```
+
 #### Target-specific code
 
 There might be times when you need to write code that is specific to a particular platform target. For example, you may want to activate a verbose logging service only when testing locally to save on cloud log storage costs.

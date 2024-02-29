@@ -32,7 +32,7 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
       return $obj;
     }
     async handle(x) {
-      const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })(x);
+      const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })((x ?? "NaN"));
       const y = (await $handler(xStr));
       const z = (await $handler(y));
       return ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(z);
@@ -360,6 +360,7 @@ class $Root extends $stdlib.std.Resource {
                 [handler, ["handle"]],
               ],
               "$inflight_init": [
+                [handler, []],
               ],
             });
           }
@@ -452,6 +453,7 @@ class $Root extends $stdlib.std.Resource {
             [f, ["invoke"]],
           ],
           "$inflight_init": [
+            [f, []],
           ],
         });
       }

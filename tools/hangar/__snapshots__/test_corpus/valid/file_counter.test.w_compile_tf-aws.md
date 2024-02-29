@@ -249,6 +249,8 @@ class $Root extends $stdlib.std.Resource {
             [counter, ["inc"]],
           ],
           "$inflight_init": [
+            [bucket, []],
+            [counter, []],
           ],
         });
       }
