@@ -251,7 +251,6 @@ export class Simulator {
     await this.startServer();
 
     try {
-      // create a copy of the resource list to be used as an init queue.
       await this.startResources(
         this._model.config.resources.map((x) => x.path)
       );
@@ -265,6 +264,7 @@ export class Simulator {
   }
 
   private async startResources(paths: string[]) {
+    // create a copy of the resource list to be used as an init queue.
     const initQueue: { path: string; _attempts?: number }[] = [
       ...paths.map((r) => ({ path: r })),
     ];
@@ -308,28 +308,34 @@ export class Simulator {
       newModel.config.resources
     );
 
-    // stop all deleted and updated
+    // stop all *deleted* and *updated* resources
     for (const c of [...plan.deleted, ...plan.updated]) {
       await this.stopResource(c);
     }
 
-    // ugly! copy retained resources from old model to new model (they have attributes and properties that we need)
+    // ugly! copy retained resources from old model to new model (they have attributes and
+    // properties that we need)
     for (const c of plan.retain) {
       const oldConfig = this._model.config.resources.find((x) => x.path === c);
       const newConfig = newModel.config.resources.find((x) => x.path === c);
+
+      // this shouldn't happen (because we are looking at "retained" resources, dah)
       if (!oldConfig || !newConfig) {
         throw new Error(
           `unexpected - resource ${c} was in the retain list but not found in either old or new model`
         );
       }
+
+      // copy the attributes and properties from the old resource to the new resource
       (newConfig.props as any) = oldConfig.props;
       (newConfig.attrs as any) = oldConfig.attrs;
     }
 
-    // update the model
+    // now update the internal model because startResources() looks up the resource configuration in
+    // there.
     this._model = newModel;
 
-    // start all added and updated resources
+    // start all *added* and *updated* resources
     await this.startResources([...plan.added, ...plan.updated]);
   }
 
