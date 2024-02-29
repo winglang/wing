@@ -365,6 +365,21 @@ export class Util {
   }
 
   /**
+   * Appends new data to the end of an existing file
+   * @param filepath The file path that needs to be written.
+   * @param data The text to be appended to the file.
+   * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
+   * If a flag is not provided, it defaults to `"w"`.
+   */
+  public static appendFile(
+    filepath: string,
+    data: string,
+    options?: WriteFileOptions
+  ): void {
+    fs.appendFileSync(filepath, data, options);
+  }
+
+  /**
    * Remove files and directories (modeled on the standard POSIX `rm`utility). Returns `undefined`.
    * @param path The path to the file or directory you want to remove.
    */
