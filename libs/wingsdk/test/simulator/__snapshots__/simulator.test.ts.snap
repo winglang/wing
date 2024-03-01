@@ -91,7 +91,7 @@ exports[`run single test > happy path 1`] = `
 
 exports[`run single test > test failure 1`] = `
 {
-  "error": "Error: test failed",
+  "error": undefined,
   "pass": false,
   "path": "root/test",
   "traces": [
