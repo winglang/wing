@@ -245,6 +245,7 @@ export class Simulator {
     }
     const connections = readJsonSync(connectionJson).connections;
     const graph = new Graph(schema.resources);
+
     return { schema, tree, connections, simdir, graph };
   }
 
@@ -376,7 +377,7 @@ export class Simulator {
 
     // first, stop all dependent resources
     for (const consumer of this._model.graph.find(path)?.dependents ?? []) {
-      await this.stopResource(consumer.path);
+      await this.stopResource(consumer);
     }
 
     const handle = this.tryGetResourceHandle(path);
@@ -801,12 +802,14 @@ export class Simulator {
         );
       }
 
+      const r = this.getResourceConfig(target.path);
+
       if (token.attr) {
-        return target.def.attrs[token.attr];
+        return r.attrs[token.attr];
       }
 
       if (token.prop) {
-        return target.def.props[token.prop];
+        return r.props[token.prop];
       }
 
       throw new Error(`Invalid token: ${token}`);

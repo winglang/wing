@@ -12,26 +12,26 @@ test("two disconnected nodes", () => {
   expect(graph.nodes.length).toBe(2);
 
   const a = graph.find("a");
-  expect(a?.def).toStrictEqual({ path: "a" });
-  expect(a?.dependencies).toStrictEqual([]);
-  expect(a?.dependents).toStrictEqual([]);
+  expect(a.def).toStrictEqual({ path: "a" });
+  expect(Array.from(a.dependencies)).toStrictEqual([]);
+  expect(Array.from(a.dependents)).toStrictEqual([]);
 
   const b = graph.find("b");
-  expect(b?.def).toStrictEqual({ path: "b" });
-  expect(b?.dependencies).toStrictEqual([]);
-  expect(b?.dependents).toStrictEqual([]);
+  expect(b.def).toStrictEqual({ path: "b" });
+  expect(Array.from(b.dependencies)).toStrictEqual([]);
+  expect(Array.from(b.dependents)).toStrictEqual([]);
 });
 
 test("explicit deps", () => {
   const graph = new Graph([{ path: "a", deps: ["b"] }, { path: "b" }]);
 
   const a = graph.find("a");
-  expect(a?.dependencies.length).toBe(1);
-  expect(a?.dependencies[0].def.path).toBe("b");
+  expect(a.dependencies.size).toBe(1);
+  expect(Array.from(a.dependencies)).toStrictEqual(["b"]);
 
   const b = graph.find("b");
-  expect(b?.dependents.length).toBe(1);
-  expect(b?.dependents[0].def.path).toBe("a");
+  expect(b.dependents.size).toBe(1);
+  expect(Array.from(b.dependents)).toStrictEqual(["a"]);
 });
 
 test("implicit deps", () => {
@@ -49,20 +49,20 @@ test("implicit deps", () => {
   ]);
 
   const a = graph.find("a");
-  expect(a?.dependencies.map((x) => x.def.path)).toStrictEqual(["b", "c/d/e"]);
-  expect(a?.dependents.map((x) => x.def.path)).toStrictEqual(["d"]);
+  expect(Array.from(a.dependencies)).toStrictEqual(["b", "c/d/e"]);
+  expect(Array.from(a.dependents)).toStrictEqual(["d"]);
 
   const b = graph.find("b");
-  expect(b?.dependencies.map((x) => x.def.path)).toStrictEqual(["c/d/e"]);
-  expect(b?.dependents.map((x) => x.def.path)).toStrictEqual(["a", "d"]);
+  expect(Array.from(b.dependencies)).toStrictEqual(["c/d/e"]);
+  expect(Array.from(b.dependents)).toStrictEqual(["a", "d"]);
 
   const c = graph.find("c/d/e");
-  expect(c?.dependencies.map((x) => x.def.path)).toStrictEqual([]);
-  expect(c?.dependents.map((x) => x.def.path)).toStrictEqual(["a", "b"]);
+  expect(Array.from(c.dependencies)).toStrictEqual([]);
+  expect(Array.from(c.dependents)).toStrictEqual(["a", "b"]);
 
   const d = graph.find("d");
-  expect(d?.dependencies.map((x) => x.def.path)).toStrictEqual(["b", "a"]);
-  expect(d?.dependents.map((x) => x.def.path)).toStrictEqual([]);
+  expect(Array.from(d.dependencies)).toStrictEqual(["b", "a"]);
+  expect(Array.from(d.dependents)).toStrictEqual([]);
 });
 
 test("fails on a direct cyclic dependency", () => {

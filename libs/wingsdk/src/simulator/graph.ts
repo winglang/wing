@@ -7,8 +7,8 @@ export interface Definition {
 }
 
 class Node<T extends Definition> {
-  public readonly dependencies: Node<T>[] = [];
-  public readonly dependents: Node<T>[] = [];
+  public readonly dependencies = new Set<string>();
+  public readonly dependents = new Set<string>();
   constructor(public readonly def: T) {}
 
   public get path() {
@@ -55,8 +55,13 @@ export class Graph<T extends Definition> {
     return Object.values(this.byPath);
   }
 
-  public find(path: string): Node<T> | undefined {
-    return this.byPath[path];
+  public find(path: string): Node<T> {
+    const node = this.byPath[path];
+    if (!node) {
+      throw new Error(`node not found: ${path}`);
+    }
+
+    return node;
   }
 
   public toposort(): Array<Array<string>> {
@@ -73,8 +78,8 @@ export class Graph<T extends Definition> {
 
       for (const path of pending) {
         const deps = []; // non-started dependencies
-        for (const dep of this.find(path)?.dependencies ?? []) {
-          if (!started.has(dep.path)) {
+        for (const dep of this.find(path).dependencies ?? []) {
+          if (!started.has(dep)) {
             deps.push(dep);
           }
         }
@@ -99,41 +104,39 @@ export class Graph<T extends Definition> {
   }
 
   private recordDependency(consumer: string, producer: string) {
-    const c = this.byPath[consumer];
-    const d = this.byPath[producer];
-    c.dependencies.push(d);
-    d.dependents.push(c);
+    this.find(consumer).dependencies.add(producer);
+    this.find(producer).dependents.add(consumer);
 
     // check for cyclic dependencies
-    this.checkCycle(c);
-    this.checkCycle(d);
+    this.checkCycle(consumer);
+    this.checkCycle(producer);
   }
 
-  private checkCycle(x: Node<T>) {
+  private checkCycle(root: string) {
     const visited = new Set<string>();
     const stack = new Set<string>();
 
-    const visit = (node: Node<T>) => {
-      if (stack.has(node.path)) {
+    const visit = (path: string) => {
+      if (stack.has(path)) {
         throw new Error(
-          `cyclic dependency detected: ${[...stack, node.path].join(" -> ")}`
+          `cyclic dependency detected: ${[...stack, path].join(" -> ")}`
         );
       }
 
-      if (visited.has(node.path)) {
+      if (visited.has(path)) {
         return;
       }
 
-      visited.add(node.path);
-      stack.add(node.path);
+      visited.add(path);
+      stack.add(path);
 
-      for (const dep of node.dependencies) {
+      for (const dep of this.find(path).dependencies) {
         visit(dep);
       }
 
-      stack.delete(node.path);
+      stack.delete(path);
     };
 
-    visit(x);
+    visit(root);
   }
 }
