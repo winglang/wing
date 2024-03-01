@@ -468,8 +468,7 @@ function removeLineNumbers(line?: string) {
 function sanitizeResult(result: TestResult): TestResult {
   let error: string | undefined;
   if (result.error) {
-    // take only the first line
-    error = result.error.split("\n")[0];
+    error = result.error.message;
   }
 
   return {
