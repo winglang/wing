@@ -98,7 +98,7 @@ Duration <DURATION>"
 `;
 
 exports[`repeat_construct_id.test.w 1`] = `
-"Error: There is already a Construct with name 'cloud.Bucket' in $Root [env0]
+"Error: There is already a Construct with name 'Bucket' in $Root [env0]
 
 hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:
 

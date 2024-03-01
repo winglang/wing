@@ -114,7 +114,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.Redis_securityGroup_BE4B8855.id}"
+          "${aws_security_group.Redis_KEN15securityGroup_9FF06889.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.Redis_RedisSubnetGroup_E7D796E2.name}"
       },
@@ -256,7 +256,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "timeout": "${aws_sqs_queue.Queue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [
-            "${aws_security_group.Redis_securityGroup_BE4B8855.id}"
+            "${aws_security_group.Redis_KEN15securityGroup_9FF06889.id}"
           ],
           "subnet_ids": [
             "${aws_subnet.PrivateSubnet.id}"
@@ -386,11 +386,11 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       }
     },
     "aws_security_group": {
-      "Redis_securityGroup_BE4B8855": {
+      "Redis_KEN15securityGroup_9FF06889": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Redis/securityGroup",
-            "uniqueId": "Redis_securityGroup_BE4B8855"
+            "path": "root/Default/Default/Redis/KEN.15]}securityGroup",
+            "uniqueId": "Redis_KEN15securityGroup_9FF06889"
           }
         },
         "egress": [

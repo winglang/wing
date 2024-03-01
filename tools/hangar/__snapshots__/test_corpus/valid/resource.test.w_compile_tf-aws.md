@@ -1121,14 +1121,6 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const MyEnum =
-      (function (tmp) {
-        tmp[tmp["A"] = 0] = ",A";
-        tmp[tmp["B"] = 1] = ",B";
-        tmp[tmp["C"] = 2] = ",C";
-        return tmp;
-      })({})
-    ;
     const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const res = new Bar(this, "Bar", "Arr", bucket, MyEnum.B);
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));

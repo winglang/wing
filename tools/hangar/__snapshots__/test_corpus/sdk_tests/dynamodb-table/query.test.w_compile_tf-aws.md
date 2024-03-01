@@ -18,11 +18,11 @@
   },
   "resource": {
     "aws_dynamodb_table": {
-      "exDynamodbTable": {
+      "DynamodbTable": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.DynamodbTable/Default",
-            "uniqueId": "exDynamodbTable"
+            "path": "root/Default/Default/DynamodbTable/Default",
+            "uniqueId": "DynamodbTable"
           }
         },
         "attribute": [
@@ -37,7 +37,7 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "k1",
-        "name": "test1ex.DynamodbTable-c8d9b5e7",
+        "name": "test1DynamodbTable-c84d1506",
         "range_key": "k2"
       }
     }

@@ -130,15 +130,15 @@ module.exports = function({  }) {
   },
   "data": {
     "aws_lambda_invocation": {
-      "file1Store_cloudOnDeploy_Invocation_0E6A2A64": {
+      "Store_OnDeploy_Invocation_E9660D82": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Invocation",
-            "uniqueId": "file1Store_cloudOnDeploy_Invocation_0E6A2A64"
+            "path": "root/Default/Default/Store/OnDeploy/Invocation",
+            "uniqueId": "Store_OnDeploy_Invocation_E9660D82"
           }
         },
         "depends_on": [],
-        "function_name": "${aws_lambda_function.file1Store_cloudOnDeploy_Function_9539541F.function_name}",
+        "function_name": "${aws_lambda_function.Store_OnDeploy_Function_6D11EEE6.function_name}",
         "input": "{}"
       }
     }
@@ -150,58 +150,58 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "file1Store_cloudOnDeploy_Function_CloudwatchLogGroup_624FDE3C": {
+      "Store_OnDeploy_Function_CloudwatchLogGroup_74529587": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/CloudwatchLogGroup",
-            "uniqueId": "file1Store_cloudOnDeploy_Function_CloudwatchLogGroup_624FDE3C"
+            "path": "root/Default/Default/Store/OnDeploy/Function/CloudwatchLogGroup",
+            "uniqueId": "Store_OnDeploy_Function_CloudwatchLogGroup_74529587"
           }
         },
-        "name": "/aws/lambda/Function-c8b7b48c",
+        "name": "/aws/lambda/Function-c81a83fe",
         "retention_in_days": 30
       }
     },
     "aws_iam_role": {
-      "file1Store_cloudOnDeploy_Function_IamRole_233573CC": {
+      "Store_OnDeploy_Function_IamRole_CD090388": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/IamRole",
-            "uniqueId": "file1Store_cloudOnDeploy_Function_IamRole_233573CC"
+            "path": "root/Default/Default/Store/OnDeploy/Function/IamRole",
+            "uniqueId": "Store_OnDeploy_Function_IamRole_CD090388"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "file1Store_cloudOnDeploy_Function_IamRolePolicy_8C128884": {
+      "Store_OnDeploy_Function_IamRolePolicy_C32885AE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/IamRolePolicy",
-            "uniqueId": "file1Store_cloudOnDeploy_Function_IamRolePolicy_8C128884"
+            "path": "root/Default/Default/Store/OnDeploy/Function/IamRolePolicy",
+            "uniqueId": "Store_OnDeploy_Function_IamRolePolicy_C32885AE"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.arn}\",\"${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.file1Store_cloudOnDeploy_Function_IamRole_233573CC.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.Store_Bucket_42A4CEFB.arn}\",\"${aws_s3_bucket.Store_Bucket_42A4CEFB.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.Store_OnDeploy_Function_IamRole_CD090388.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "file1Store_cloudOnDeploy_Function_IamRolePolicyAttachment_20F1BD40": {
+      "Store_OnDeploy_Function_IamRolePolicyAttachment_0AFCF1E8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/IamRolePolicyAttachment",
-            "uniqueId": "file1Store_cloudOnDeploy_Function_IamRolePolicyAttachment_20F1BD40"
+            "path": "root/Default/Default/Store/OnDeploy/Function/IamRolePolicyAttachment",
+            "uniqueId": "Store_OnDeploy_Function_IamRolePolicyAttachment_0AFCF1E8"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.file1Store_cloudOnDeploy_Function_IamRole_233573CC.name}"
+        "role": "${aws_iam_role.Store_OnDeploy_Function_IamRole_CD090388.name}"
       }
     },
     "aws_lambda_function": {
-      "file1Store_cloudOnDeploy_Function_9539541F": {
+      "Store_OnDeploy_Function_6D11EEE6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/Default",
-            "uniqueId": "file1Store_cloudOnDeploy_Function_9539541F"
+            "path": "root/Default/Default/Store/OnDeploy/Function/Default",
+            "uniqueId": "Store_OnDeploy_Function_6D11EEE6"
           }
         },
         "architectures": [
@@ -209,20 +209,20 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
-            "BUCKET_NAME_94dc4b3e": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
+            "BUCKET_NAME_af11ee62": "${aws_s3_bucket.Store_Bucket_42A4CEFB.bucket}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "Function-c8b7b48c",
+            "WING_FUNCTION_NAME": "Function-c81a83fe",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Function-c8b7b48c",
+        "function_name": "Function-c81a83fe",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.file1Store_cloudOnDeploy_Function_IamRole_233573CC.arn}",
+        "role": "${aws_iam_role.Store_OnDeploy_Function_IamRole_CD090388.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.file1Store_cloudOnDeploy_Function_S3Object_CBBF816B.key}",
+        "s3_key": "${aws_s3_object.Store_OnDeploy_Function_S3Object_95484A56.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -240,23 +240,23 @@ module.exports = function({  }) {
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "file1Store_cloudBucket_86CE87B1": {
+      "Store_Bucket_42A4CEFB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.Bucket/Default",
-            "uniqueId": "file1Store_cloudBucket_86CE87B1"
+            "path": "root/Default/Default/Store/Bucket/Default",
+            "uniqueId": "Store_Bucket_42A4CEFB"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8b6ef02-",
+        "bucket_prefix": "bucket-c843dbb0-",
         "force_destroy": false
       }
     },
     "aws_s3_object": {
-      "file1Store_cloudOnDeploy_Function_S3Object_CBBF816B": {
+      "Store_OnDeploy_Function_S3Object_95484A56": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/S3Object",
-            "uniqueId": "file1Store_cloudOnDeploy_Function_S3Object_CBBF816B"
+            "path": "root/Default/Default/Store/OnDeploy/Function/S3Object",
+            "uniqueId": "Store_OnDeploy_Function_S3Object_95484A56"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -388,8 +388,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const store = new file1.Store(this, "file1.Store");
-    const q = new file2.Q(this, "file2.Q");
+    const store = new file1.Store(this, "Store");
+    const q = new file2.Q(this, "Q");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:add data to store", new $Closure1(this, "$Closure1"));
     const s = ({"x": 1, "y": 2});
     const c = file1.Color.BLUE;
@@ -451,7 +451,7 @@ class Util extends $stdlib.std.Resource {
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-    this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const __parent_this_1 = this;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
@@ -488,7 +488,7 @@ class Store extends $stdlib.std.Resource {
         });
       }
     }
-    const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
+    const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "OnDeploy", new $Closure1(this, "$Closure1"));
   }
   static _toInflightType() {
     return `
