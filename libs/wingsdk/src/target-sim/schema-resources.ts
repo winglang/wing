@@ -263,6 +263,7 @@ export interface ReactAppSchema extends BaseResourceSchema {
     environmentVariables: Record<string, string>;
     useBuildCommand: boolean;
     url: string;
+    localPort: string | number;
   };
 }
 export interface ReactAppAttributes {
