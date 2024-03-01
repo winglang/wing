@@ -38,13 +38,6 @@ export interface SimulatorProps {
    * resources
    */
   readonly factory?: ISimulatorFactory;
-
-  /**
-   * Determins if resources should be started concurrently or not. Normally we would enable this in
-   * interactive environments where determinsm is not important.
-   * @default false
-   */
-  readonly concurrency?: boolean;
 }
 
 /**
@@ -188,14 +181,12 @@ export class Simulator {
   private _serverUrl: string | undefined;
   private _server: Server | undefined;
   private _model: Model;
-  private readonly concurrency: boolean;
 
   // a list of all resource paths that are currently started
   private started: Set<string> = new Set<string>();
 
   constructor(props: SimulatorProps) {
     const simdir = props.simfile;
-    this.concurrency = props.concurrency ?? false;
     this.statedir = props.stateDir ?? join(simdir, ".state");
     this._model = this._loadApp(simdir);
 
@@ -273,17 +264,8 @@ export class Simulator {
   }
 
   private async startResources() {
-    // create an execution graph and start all resources in topological order
-    const execution = this._model.graph.toposort();
-
-    for (const wave of execution) {
-      if (this.concurrency) {
-        await Promise.all(wave.map((r) => this.startResource(r)));
-      } else {
-        for (const r of wave) {
-          await this.startResource(r);
-        }
-      }
+    for (const n of this._model.graph.nodes) {
+      await this.startResource(n.path);
     }
   }
 
@@ -675,6 +657,11 @@ export class Simulator {
   private async startResource(path: string): Promise<void> {
     if (this.started.has(path)) {
       return; // already started
+    }
+
+    // first lets make sure all my dependencies have been started (depth-first)
+    for (const d of this._model.graph.find(path).dependencies) {
+      await this.startResource(d);
     }
 
     const resourceConfig = this.getResourceConfig(path);

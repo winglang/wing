@@ -362,8 +362,8 @@ describe("in-place updates", () => {
       "in-place update",
       "'root/Bucket1' stopped",
       "'root/Api' started",
-      "'root/Api/Endpoint' started",
       "'root/Bucket1' started",
+      "'root/Api/Endpoint' started",
       "'root/Function' started",
     ]);
 

@@ -84,45 +84,12 @@ test("fails on an indirect cyclic dependency", () => {
   }).toThrowError(/cyclic dependency detected: c -> a/);
 });
 
-describe("depthFirst", () => {
-  test("empty graph", () => {
-    const graph = new Graph();
-    expect(graph.toposort([])).toStrictEqual([]);
-  });
-
-  test("two disconnected nodes", () => {
-    const graph = new Graph([{ path: "a" }, { path: "b" }]);
-    expect(graph.toposort(["a", "b"])).toStrictEqual([["a", "b"]]);
-  });
-
-  test("two dependent nodes", () => {
-    const graph = new Graph([{ path: "a", deps: ["b"] }, { path: "b" }]);
-    expect(graph.toposort(["a", "b"])).toStrictEqual([["b"], ["a"]]);
-  });
-
-  test("two waves", () => {
-    const graph = new Graph([
-      { path: "a", deps: ["b", "c"] },
-      { path: "b" },
-      { path: "c" },
+test("cyclic deps introduced by token", () => {
+  expect(() => {
+    new Graph([
+      { path: "a", props: { foo: "${wsim#b#attrs.bar}" } },
+      { path: "b", props: { bar: "${wsim#c#attrs.baz}" } },
+      { path: "c", props: { baz: "${wsim#a#attrs.foo}" } },
     ]);
-
-    expect(graph.toposort(["a", "b", "c"])).toStrictEqual([["b", "c"], ["a"]]);
-  });
-
-  test("three waves", () => {
-    const graph = new Graph([
-      { path: "a", deps: ["b", "c"] },
-      { path: "b" },
-      { path: "c" },
-      { path: "d", deps: ["c", "a"] },
-      { path: "e", deps: ["a"] },
-    ]);
-
-    expect(graph.toposort(["a", "b", "c", "d", "e"])).toStrictEqual([
-      ["b", "c"],
-      ["a"],
-      ["d", "e"],
-    ]);
-  });
+  }).toThrowError(/cyclic dependency detected: c -> a -> b -> c/);
 });

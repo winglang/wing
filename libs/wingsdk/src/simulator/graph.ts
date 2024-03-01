@@ -64,55 +64,16 @@ export class Graph<T extends Definition> {
     return node;
   }
 
-  public toposort(): Array<Array<string>> {
-    const result: Array<Array<string>> = [];
-    const pending = new Set(this.nodes.map((x) => x.path));
-    const started = new Set<string>();
-
-    let i = 0;
-
-    while (pending.size > 0 && i++ < 10) {
-      // create an array of all the nodes that are ready to be started. this means that either they have
-      // no dependencies or all of their dependencies have already been started.
-      const ready = [];
-
-      for (const path of pending) {
-        const deps = []; // non-started dependencies
-        for (const dep of this.find(path).dependencies ?? []) {
-          if (!started.has(dep)) {
-            deps.push(dep);
-          }
-        }
-
-        // no remaining dependencies, move from "pending" to "ready"
-        if (deps.length === 0) {
-          ready.push(path);
-          pending.delete(path);
-        }
-      }
-
-      // start all resources that are ready (keep the order deterministic by sorting the paths in each wave)
-      result.push(ready.sort());
-
-      // mark the started resources
-      for (const path of ready) {
-        started.add(path);
-      }
-    }
-
-    return result;
-  }
-
   private recordDependency(consumer: string, producer: string) {
     this.find(consumer).dependencies.add(producer);
     this.find(producer).dependents.add(consumer);
 
     // check for cyclic dependencies
-    this.checkCycle(consumer);
-    this.checkCycle(producer);
+    this.detectCycles(consumer);
+    this.detectCycles(producer);
   }
 
-  private checkCycle(root: string) {
+  private detectCycles(root: string) {
     const visited = new Set<string>();
     const stack = new Set<string>();
 
