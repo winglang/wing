@@ -584,9 +584,9 @@ async handle(message) {
 
 exports[`push rejects empty message 1`] = `
 [
-  "@winglang/sdk.cloud.Queue created.",
+  "'root/my_queue' started",
   "Push (messages=).",
-  "@winglang/sdk.cloud.Queue deleted.",
+  "'root/my_queue' stopped",
 ]
 `;
 
@@ -723,13 +723,13 @@ exports[`push rejects empty message 2`] = `
 
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
-  "@winglang/sdk.cloud.Queue created.",
+  "'root/my_queue' started",
   "Push (messages=A).",
   "Push (messages=B).",
   "ApproxSize ().",
   "Purge ().",
   "ApproxSize ().",
-  "@winglang/sdk.cloud.Queue deleted.",
+  "'root/my_queue' stopped",
 ]
 `;
 

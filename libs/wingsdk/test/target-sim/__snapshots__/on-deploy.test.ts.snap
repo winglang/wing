@@ -176,12 +176,12 @@ return class Handler {
 
 exports[`create an OnDeploy 2`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
+  "'root/my_on_deploy/Function' started",
   "super duper success",
   "Invoke (payload=undefined).",
   "OnDeploy invoked.",
-  "@winglang/sdk.cloud.OnDeploy created.",
-  "@winglang/sdk.cloud.OnDeploy deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
+  "'root/my_on_deploy' started",
+  "'root/my_on_deploy' stopped",
+  "'root/my_on_deploy/Function' stopped",
 ]
 `;

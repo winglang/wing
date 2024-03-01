@@ -76,9 +76,9 @@ test("create a service with a on stop method", async () => {
       .map((trace) => trace.data.message)
   ).toEqual([
     "start!",
-    "@winglang/sdk.cloud.Service created.",
+    "'root/my_service' started",
     "stop!",
-    "@winglang/sdk.cloud.Service deleted.",
+    "'root/my_service' stopped",
   ]);
 });
 
@@ -116,10 +116,7 @@ test("create a service without autostart", async () => {
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual([
-    "@winglang/sdk.cloud.Service created.", // Service created never started
-    "@winglang/sdk.cloud.Service deleted.",
-  ]);
+  ).toEqual(["'root/my_service' started", "'root/my_service' stopped"]);
 });
 
 test("start and stop service", async () => {
@@ -150,7 +147,7 @@ test("start and stop service", async () => {
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
   ).toEqual([
-    "@winglang/sdk.cloud.Service created.",
+    "'root/my_service' started",
     "start!",
     "stop!",
     "start!",
@@ -186,7 +183,7 @@ test("consecutive start and stop service", async () => {
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual(["@winglang/sdk.cloud.Service created.", "start!", "stop!"]);
+  ).toEqual(["'root/my_service' started", "start!", "stop!"]);
 });
 
 test("throws during service start", async () => {

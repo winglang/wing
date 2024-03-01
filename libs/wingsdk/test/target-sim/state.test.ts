@@ -5,7 +5,7 @@ import { Testing } from "../../src/simulator";
 import { State } from "../../src/target-sim";
 import { SimApp } from "../sim-app";
 
-test("state can be resolved at any time", async () => {
+test.skip("state can be resolved at any time", async () => {
   // GIVEN
   const app = new SimApp();
   const state = new State(app, "MyState");

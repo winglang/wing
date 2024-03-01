@@ -9,8 +9,8 @@ import {
   Service,
 } from "../../src/cloud";
 import { InflightBindings } from "../../src/core";
-import { Testing } from "../../src/simulator";
-import { ITestRunnerClient, Test, TestResult } from "../../src/std";
+import { Simulator, Testing } from "../../src/simulator";
+import { ITestRunnerClient, Test, TestResult, TraceType } from "../../src/std";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
 
@@ -192,14 +192,29 @@ describe("in-place updates", () => {
 
     const app = new SimApp();
     new Bucket(app, "Bucket1");
+
     const sim = await app.startSimulator(stateDir);
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
+
+    expect(simTraces(sim)).toStrictEqual(["'root/Bucket1' started"]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1");
 
     const app2Dir = app2.synth();
+
     await sim.update(app2Dir);
+    expect(updateTrace(sim)).toStrictEqual({
+      added: [],
+      deleted: [],
+      retain: ["root/Bucket1"],
+      updated: [],
+    });
+
+    expect(simTraces(sim)).toStrictEqual([
+      "'root/Bucket1' started",
+      "in-place update",
+    ]);
 
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
     await sim.stop();
@@ -213,6 +228,7 @@ describe("in-place updates", () => {
     new Bucket(app, "Bucket1");
     const sim = await app.startSimulator(stateDir);
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(simTraces(sim)).toStrictEqual(["'root/Bucket1' started"]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1");
@@ -220,8 +236,20 @@ describe("in-place updates", () => {
 
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
+    expect(updateTrace(sim)).toStrictEqual({
+      added: ["root/Bucket2"],
+      deleted: [],
+      retain: ["root/Bucket1"],
+      updated: [],
+    });
 
     expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
+    expect(simTraces(sim)).toStrictEqual([
+      "'root/Bucket1' started",
+      "in-place update",
+      "'root/Bucket2' started",
+    ]);
+
     await sim.stop();
   });
 
@@ -233,14 +261,32 @@ describe("in-place updates", () => {
     new Bucket(app, "Bucket2");
     const sim = await app.startSimulator(stateDir);
     expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
+    expect(simTraces(sim)).toStrictEqual([
+      "'root/Bucket1' started",
+      "'root/Bucket2' started",
+    ]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1");
 
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
+    expect(updateTrace(sim)).toStrictEqual({
+      added: [],
+      deleted: ["root/Bucket2"],
+      retain: ["root/Bucket1"],
+      updated: [],
+    });
 
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
+
+    expect(simTraces(sim)).toStrictEqual([
+      "'root/Bucket1' started",
+      "'root/Bucket2' started",
+      "in-place update",
+      "'root/Bucket2' stopped",
+    ]);
+
     await sim.stop();
   });
 
@@ -252,15 +298,28 @@ describe("in-place updates", () => {
     const sim = await app.startSimulator(stateDir);
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeFalsy();
+    expect(simTraces(sim)).toStrictEqual(["'root/Bucket1' started"]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1", { public: true });
 
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
+    expect(updateTrace(sim)).toStrictEqual({
+      added: [],
+      deleted: [],
+      retain: [],
+      updated: ["root/Bucket1"],
+    });
 
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeTruthy();
+    expect(simTraces(sim)).toStrictEqual([
+      "'root/Bucket1' started",
+      "in-place update",
+      "'root/Bucket1' stopped",
+      "'root/Bucket1' started",
+    ]);
 
     await sim.stop();
   });
@@ -272,6 +331,9 @@ describe("in-place updates", () => {
     new Bucket(app, "Bucket1");
 
     const sim = await app.startSimulator(stateDir);
+
+    expect(simTraces(sim)).toStrictEqual(["'root/Bucket1' started"]);
+
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeFalsy();
 
@@ -286,7 +348,24 @@ describe("in-place updates", () => {
     });
 
     const app2Dir = app2.synth();
+
     await sim.update(app2Dir);
+    expect(updateTrace(sim)).toStrictEqual({
+      added: ["root/Api", "root/Api/Endpoint", "root/Function"],
+      deleted: [],
+      retain: [],
+      updated: ["root/Bucket1"],
+    });
+
+    expect(simTraces(sim)).toStrictEqual([
+      "'root/Bucket1' started",
+      "in-place update",
+      "'root/Bucket1' stopped",
+      "'root/Api' started",
+      "'root/Api/Endpoint' started",
+      "'root/Bucket1' started",
+      "'root/Function' started",
+    ]);
 
     expect(sim.listResources()).toEqual([
       "root/Api",
@@ -302,6 +381,52 @@ describe("in-place updates", () => {
     const functionClient = sim.getResource("root/Function") as IFunctionClient;
     const ret = await functionClient.invoke();
     expect(ret).toEqual(urlFromBucket);
+  });
+
+  test("dependent resource is replaced when a dependency is replaced", async () => {
+    const app = new SimApp();
+    const myApi = new Api(app, "Api1");
+    const myBucket = new Bucket(app, "Bucket1");
+
+    // BUCKET depends on API
+    myBucket.addObject("url.txt", myApi.url);
+
+    const sim = await app.startSimulator();
+
+    expect(simTraces(sim)).toEqual([
+      "'root/Api1' started",
+      "'root/Api1/Endpoint' started",
+      "'root/Bucket1' started",
+    ]);
+
+    // now let's change some configuration of Api1. we expect the bucket to be replaced as well
+
+    const app2 = new SimApp();
+    const myApi2 = new Api(app2, "Api1", { cors: true });
+    const myBucket2 = new Bucket(app2, "Bucket1");
+    myBucket2.addObject("url.txt", myApi2.url);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+    expect(updateTrace(sim)).toStrictEqual({
+      added: [],
+      deleted: [],
+      retain: [],
+      updated: ["root/Api1", "root/Api1/Endpoint", "root/Bucket1"],
+    });
+
+    expect(simTraces(sim)).toEqual([
+      "'root/Api1' started",
+      "'root/Api1/Endpoint' started",
+      "'root/Bucket1' started",
+      "in-place update",
+      "'root/Api1/Endpoint' stopped",
+      "'root/Bucket1' stopped",
+      "'root/Api1' stopped",
+      "'root/Api1' started",
+      "'root/Api1/Endpoint' started",
+      "'root/Bucket1' started",
+    ]);
   });
 });
 
@@ -343,20 +468,8 @@ function removeLineNumbers(line?: string) {
 function sanitizeResult(result: TestResult): TestResult {
   let error: string | undefined;
   if (result.error) {
-    let lines = result.error
-      .split("\n")
-      .map(removePathsFromTraceLine)
-      .map(removeLineNumbers);
-
-    // remove all lines after "at Simulator.runTest" since they are platform-dependent
-    let lastLine = lines.findIndex((line) =>
-      line?.includes("Simulator.runTest")
-    );
-    if (lastLine !== -1) {
-      lines = lines.slice(0, lastLine + 1);
-    }
-
-    error = lines.join("\n");
+    // take only the first line
+    error = result.error.split("\n")[0];
   }
 
   return {
@@ -376,4 +489,17 @@ async function runAllTests(runner: ITestRunnerClient): Promise<TestResult[]> {
     results.push(await runner.runTest(testName));
   }
   return results;
+}
+
+function simTraces(s: Simulator) {
+  return s
+    .listTraces()
+    .filter((t) => t.type === TraceType.SIMULATOR)
+    .map((t) => t.data.message);
+}
+
+function updateTrace(s: Simulator) {
+  return s
+    .listTraces()
+    .find((t) => t.type === TraceType.SIMULATOR && t.data.update)?.data.update;
 }

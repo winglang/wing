@@ -3,18 +3,15 @@ import { mkdir, rm } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join } from "path";
 import { makeSimulatorClient } from "./client";
+import { Graph } from "./graph";
 import { deserialize, serialize } from "./serialization";
+import { resolveTokens } from "./tokens";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
 import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
-import {
-  SIMULATOR_TOKEN_REGEX,
-  SIMULATOR_TOKEN_REGEX_FULL,
-} from "../target-sim/tokens";
 
-const START_ATTEMPT_COUNT = 10;
 const LOCALHOST_ADDRESS = "127.0.0.1";
 const HANDLE_ATTRIBUTE = "handle";
 
@@ -41,6 +38,13 @@ export interface SimulatorProps {
    * resources
    */
   readonly factory?: ISimulatorFactory;
+
+  /**
+   * Determins if resources should be started concurrently or not. Normally we would enable this in
+   * interactive environments where determinsm is not important.
+   * @default false
+   */
+  readonly concurrency?: boolean;
 }
 
 /**
@@ -165,7 +169,8 @@ interface Model {
   simdir: string;
   tree: Tree;
   connections: ConnectionData[];
-  config: WingSimulatorSchema;
+  schema: WingSimulatorSchema;
+  graph: Graph<BaseResourceSchema>;
 }
 
 /**
@@ -183,9 +188,14 @@ export class Simulator {
   private _serverUrl: string | undefined;
   private _server: Server | undefined;
   private _model: Model;
+  private readonly concurrency: boolean;
+
+  // a list of all resource paths that are currently started
+  private started: Set<string> = new Set<string>();
 
   constructor(props: SimulatorProps) {
     const simdir = props.simfile;
+    this.concurrency = props.concurrency ?? false;
     this.statedir = props.stateDir ?? join(simdir, ".state");
     this._model = this._loadApp(simdir);
 
@@ -203,16 +213,16 @@ export class Simulator {
       );
     }
 
-    const config: WingSimulatorSchema = readJsonSync(simJson);
+    const schema = readJsonSync(simJson) as WingSimulatorSchema;
 
-    const foundVersion = config.sdkVersion ?? "unknown";
+    const foundVersion = schema.sdkVersion ?? "unknown";
     const expectedVersion = SDK_VERSION;
     if (foundVersion !== expectedVersion) {
       console.error(
         `WARNING: The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
       );
     }
-    if (config.resources === undefined) {
+    if (schema.resources === undefined) {
       throw new Error(
         `Incompatible .wsim file. The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
       );
@@ -234,7 +244,8 @@ export class Simulator {
       );
     }
     const connections = readJsonSync(connectionJson).connections;
-    return { config, tree, connections, simdir };
+    const graph = new Graph(schema.resources);
+    return { schema, tree, connections, simdir, graph };
   }
 
   /**
@@ -251,10 +262,7 @@ export class Simulator {
     await this.startServer();
 
     try {
-      await this.startResources(
-        this._model.config.resources.map((x) => x.path)
-      );
-
+      await this.startResources();
       this._running = "running";
     } catch (err) {
       this.stopServer();
@@ -263,34 +271,17 @@ export class Simulator {
     }
   }
 
-  private async startResources(paths: string[]) {
-    // create a copy of the resource list to be used as an init queue.
-    const initQueue: { path: string; _attempts?: number }[] = [
-      ...paths.map((r) => ({ path: r })),
-    ];
+  private async startResources() {
+    // create an execution graph and start all resources in topological order
+    const execution = this._model.graph.toposort();
 
-    while (true) {
-      const next = initQueue.shift();
-      if (!next) {
-        break;
-      }
-
-      // we couldn't start this resource yet, so decrement the retry counter and put it back in
-      // the init queue.
-      if (!(await this.tryStartResource(next.path))) {
-        // we couldn't start this resource yet, so decrement the attempt counter
-        next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
-        next._attempts--;
-
-        // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
-        if (next._attempts === 0) {
-          throw new Error(
-            `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
-          );
+    for (const wave of execution) {
+      if (this.concurrency) {
+        await Promise.all(wave.map((r) => this.startResource(r)));
+      } else {
+        for (const r of wave) {
+          await this.startResource(r);
         }
-
-        // put back in the queue for another round
-        initQueue.push(next);
       }
     }
   }
@@ -304,20 +295,31 @@ export class Simulator {
     const newModel = this._loadApp(simDir);
 
     const plan = planUpdate(
-      this._model.config.resources,
-      newModel.config.resources
+      this._model.schema.resources,
+      newModel.schema.resources
     );
+
+    this._addTrace({
+      type: TraceType.SIMULATOR,
+      data: {
+        message: "in-place update",
+        update: plan,
+      },
+      sourcePath: "root",
+      sourceType: "Simulator",
+      timestamp: new Date().toISOString(),
+    });
 
     // stop all *deleted* and *updated* resources
     for (const c of [...plan.deleted, ...plan.updated]) {
-      await this.stopResource(c);
+      await this.stopResource(c); // <-- this also stops all dependent resources if needed
     }
 
     // ugly! copy retained resources from old model to new model (they have attributes and
     // properties that we need)
     for (const c of plan.retain) {
-      const oldConfig = this._model.config.resources.find((x) => x.path === c);
-      const newConfig = newModel.config.resources.find((x) => x.path === c);
+      const oldConfig = this._model.schema.resources.find((x) => x.path === c);
+      const newConfig = newModel.schema.resources.find((x) => x.path === c);
 
       // this shouldn't happen (because we are looking at "retained" resources, dah)
       if (!oldConfig || !newConfig) {
@@ -335,8 +337,8 @@ export class Simulator {
     // there.
     this._model = newModel;
 
-    // start all *added* and *updated* resources
-    await this.startResources([...plan.added, ...plan.updated]);
+    // start all *added* and *updated* resources (the updated model basically includes only these)
+    await this.startResources();
   }
 
   /**
@@ -356,10 +358,9 @@ export class Simulator {
     }
     this._running = "stopping";
 
-    for (const resourceConfig of this._model.config.resources
-      .slice()
-      .reverse()) {
-      await this.stopResource(resourceConfig.path);
+    // just call "stopResource" for all resources. it will stop all dependents as well.
+    for (const node of this._model.graph.nodes) {
+      await this.stopResource(node.path);
     }
 
     this.stopServer();
@@ -369,6 +370,15 @@ export class Simulator {
   }
 
   private async stopResource(path: string) {
+    if (!this.started.has(path)) {
+      return; // resource is not started
+    }
+
+    // first, stop all dependent resources
+    for (const consumer of this._model.graph.find(path)?.dependents ?? []) {
+      await this.stopResource(consumer.path);
+    }
+
     const handle = this.tryGetResourceHandle(path);
     if (!handle) {
       throw new Error(
@@ -385,10 +395,15 @@ export class Simulator {
       console.warn(err);
     }
 
+    this.addSimulatorTrace(path, { message: `'${path}' stopped` });
+    this.started.delete(path);
+  }
+
+  private addSimulatorTrace(path: string, data: any) {
     const resourceConfig = this.getResourceConfig(path);
     this._addTrace({
-      type: TraceType.RESOURCE,
-      data: { message: `${resourceConfig.type} deleted.` },
+      type: TraceType.SIMULATOR,
+      data: data,
       sourcePath: resourceConfig.path,
       sourceType: resourceConfig.type,
       timestamp: new Date().toISOString(),
@@ -415,7 +430,7 @@ export class Simulator {
    * Get a list of all resource paths.
    */
   public listResources(): string[] {
-    return this._model.config.resources.map((config) => config.path).sort();
+    return this._model.graph.nodes.map((x) => x.path).sort();
   }
 
   /**
@@ -463,7 +478,8 @@ export class Simulator {
     if (path.startsWith("/")) {
       path = `root${path}`;
     }
-    return this._model.config.resources.find((r) => r.path === path);
+
+    return this._model.graph.find(path)?.def;
   }
 
   /**
@@ -502,7 +518,7 @@ export class Simulator {
   }
 
   private typeInfo(fqn: string): TypeSchema {
-    return this._model.config.types[fqn];
+    return this._model.schema.types[fqn];
   }
 
   /**
@@ -655,27 +671,15 @@ export class Simulator {
     return this._serverUrl;
   }
 
-  private async tryStartResource(path: string): Promise<boolean> {
+  private async startResource(path: string): Promise<void> {
+    if (this.started.has(path)) {
+      return; // already started
+    }
+
     const resourceConfig = this.getResourceConfig(path);
     const context = this.createContext(resourceConfig);
 
-    const { resolved, value: resolvedProps } = this.tryResolveTokens(
-      resourceConfig.props
-    );
-
-    if (!resolved) {
-      this._addTrace({
-        type: TraceType.RESOURCE,
-        data: { message: `${resourceConfig.path} is waiting on a dependency` },
-        sourcePath: resourceConfig.path,
-        sourceType: resourceConfig.type,
-        timestamp: new Date().toISOString(),
-      });
-
-      // this means the resource has a dependency that hasn't been started yet (hopefully). return
-      // it to the init queue.
-      return false;
-    }
+    const resolvedProps = this.resolveTokens(resourceConfig.props);
 
     // update the resource's config with the resolved props
     (resourceConfig.props as any) = resolvedProps;
@@ -707,15 +711,10 @@ export class Simulator {
     });
 
     // trace the resource creation
-    this._addTrace({
-      type: TraceType.RESOURCE,
-      data: { message: `${resourceConfig.type} created.` },
-      sourcePath: resourceConfig.path,
-      sourceType: resourceConfig.type,
-      timestamp: new Date().toISOString(),
+    this.addSimulatorTrace(path, {
+      message: `'${resourceConfig.path}' started`,
     });
-
-    return true;
+    this.started.add(path);
   }
 
   private createContext(resourceConfig: BaseResourceSchema): ISimulatorContext {
@@ -779,40 +778,6 @@ export class Simulator {
     this._traces.push(event);
   }
 
-  private tryResolveToken(s: string): { resolved: boolean; value: any } {
-    const ref = s.slice(2, -1);
-    const [_, path, rest] = ref.split("#");
-    const config = this.getResourceConfig(path);
-    if (rest.startsWith("attrs.")) {
-      const attrName = rest.slice(6);
-      const attr = config?.attrs[attrName];
-
-      // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
-      // that this resource haven't been started yet. so return `undefined`, which will cause
-      // this resource to go back to the init queue.
-      if (!attr) {
-        return { resolved: false, value: undefined };
-      }
-      return { resolved: true, value: attr };
-    } else if (rest.startsWith("props.")) {
-      if (!config.props) {
-        throw new Error(
-          `Tried to resolve token "${s}" but resource ${path} has no props defined.`
-        );
-      }
-      const propPath = rest.slice(6);
-      const value = config.props[propPath];
-      if (value === undefined) {
-        throw new Error(
-          `Tried to resolve token "${s}" but resource ${path} has no prop "${propPath}".`
-        );
-      }
-      return { resolved: true, value };
-    } else {
-      throw new Error(`Invalid token reference: "${ref}"`);
-    }
-  }
-
   /**
    * Return an object with all tokens in it resolved to their appropriate values.
    *
@@ -827,79 +792,25 @@ export class Simulator {
    * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
    * the resolved value.
    */
-  private tryResolveTokens(obj: any): { resolved: boolean; value: any } {
-    if (typeof obj === "string") {
-      // there are two cases - a token can be the entire string, or it can be part of the string.
-      // first, check if the entire string is a token
-      if (SIMULATOR_TOKEN_REGEX_FULL.test(obj)) {
-        const { resolved, value } = this.tryResolveToken(obj);
-        if (!resolved) {
-          return { resolved: false, value: undefined };
-        }
-        return { resolved: true, value };
+  private resolveTokens(obj: any): any {
+    return resolveTokens(obj, (token) => {
+      const target = this._model.graph.find(token.path);
+      if (!target) {
+        throw new Error(
+          `Could not resolve token "${token}" because the resource at path "${token.path}" does not exist.`
+        );
       }
 
-      // otherwise, check if the string contains tokens inside it. if so, we need to resolve them
-      // and then check if the result is a string
-      const globalRegex = new RegExp(SIMULATOR_TOKEN_REGEX.source, "g");
-      const matches = obj.matchAll(globalRegex);
-      const replacements = [];
-      for (const match of matches) {
-        const { resolved, value } = this.tryResolveToken(match[0]);
-        if (!resolved) {
-          return { resolved: false, value: undefined };
-        }
-        if (typeof value !== "string") {
-          throw new Error(
-            `Expected token "${
-              match[0]
-            }" to resolve to a string, but it resolved to ${typeof value}.`
-          );
-        }
-        replacements.push({ match, value });
+      if (token.attr) {
+        return target.def.attrs[token.attr];
       }
 
-      // replace all the tokens in reverse order, and return the result
-      // if a token returns another token (god forbid), do not resolve it again
-      let result = obj;
-      for (const { match, value } of replacements.reverse()) {
-        if (match.index === undefined) {
-          throw new Error(`unexpected error: match.index is undefined`);
-        }
-        result =
-          result.slice(0, match.index) +
-          value +
-          result.slice(match.index + match[0].length);
-      }
-      return { resolved: true, value: result };
-    }
-
-    if (Array.isArray(obj)) {
-      const result = [];
-      for (const x of obj) {
-        const { resolved, value } = this.tryResolveTokens(x);
-        if (!resolved) {
-          return { resolved: false, value: undefined };
-        }
-        result.push(value);
+      if (token.prop) {
+        return target.def.props[token.prop];
       }
 
-      return { resolved: true, value: result };
-    }
-
-    if (typeof obj === "object") {
-      const ret: any = {};
-      for (const [key, v] of Object.entries(obj)) {
-        const { resolved, value } = this.tryResolveTokens(v);
-        if (!resolved) {
-          return { resolved: false, value: undefined };
-        }
-        ret[key] = value;
-      }
-      return { resolved: true, value: ret };
-    }
-
-    return { resolved: true, value: obj };
+      throw new Error(`Invalid token: ${token}`);
+    });
   }
 }
 
@@ -1011,7 +922,8 @@ export interface BaseResourceSchema {
   readonly props: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
   readonly attrs: Record<string, any>;
-  // TODO: model dependencies
+  /** Resources that should be deployed before this resource. */
+  readonly deps?: string[];
 }
 
 /** Schema for resource attributes */
