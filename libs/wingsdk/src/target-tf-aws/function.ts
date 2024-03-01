@@ -14,7 +14,12 @@ import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { Effect, IAwsFunction, PolicyStatement, externalLibraries } from "../shared-aws";
+import {
+  Effect,
+  IAwsFunction,
+  PolicyStatement,
+  externalLibraries,
+} from "../shared-aws";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 
