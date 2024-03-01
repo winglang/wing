@@ -106,8 +106,7 @@ where
 				BringSource::TrustedModule(name, _module_dir) => v.visit_symbol(name),
 				BringSource::WingLibrary(name, _module_dir) => v.visit_symbol(name),
 				BringSource::JsiiModule(name) => v.visit_symbol(name),
-				BringSource::WingFile(name) => v.visit_symbol(name),
-				BringSource::Directory(name) => v.visit_symbol(name),
+				BringSource::WingFile(_) | BringSource::Directory(_) => {}
 			}
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);

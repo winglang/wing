@@ -5,7 +5,7 @@
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
     "@winglang/compatibility-spy": "workspace:^",
-    "turbo": "^1.11.3"
+    "turbo": "^1.12.4"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",

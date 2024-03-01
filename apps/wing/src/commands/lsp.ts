@@ -80,16 +80,22 @@ export async function lsp() {
   };
 
   let connection = createConnection(process.stdin, process.stdout);
-  connection.onInitialize((_params: InitializeParams) => {
+  connection.onInitialize((params: InitializeParams) => {
+    // certain IDEs don't internally respect a `parameterHints` option, so we must check it ourselves
+    const signatureHelpProvider =
+      params.initializationOptions?.parameterHints ?? true
+        ? {
+            triggerCharacters: ["(", ",", ")"],
+          }
+        : undefined;
+
     const result: InitializeResult = {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Full,
         completionProvider: {
           triggerCharacters: [".", ":"],
         },
-        signatureHelpProvider: {
-          triggerCharacters: ["(", ",", ")"],
-        },
+        signatureHelpProvider,
         codeActionProvider: true,
         hoverProvider: true,
         documentSymbolProvider: true,

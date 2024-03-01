@@ -152,6 +152,9 @@ class $Root extends $stdlib.std.Resource {
             [Object.keys(map).length, []],
           ],
           "$inflight_init": [
+            [(!("bar" in (map))), []],
+            [("foo" in (map)), []],
+            [Object.keys(map).length, []],
           ],
         });
       }
@@ -186,6 +189,7 @@ class $Root extends $stdlib.std.Resource {
             [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(map, "foo"), []],
           ],
           "$inflight_init": [
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(map, "foo"), []],
           ],
         });
       }
@@ -220,6 +224,7 @@ class $Root extends $stdlib.std.Resource {
             [Object.entries(map).map(([key, value]) => ({ key, value })), []],
           ],
           "$inflight_init": [
+            [Object.entries(map).map(([key, value]) => ({ key, value })), []],
           ],
         });
       }

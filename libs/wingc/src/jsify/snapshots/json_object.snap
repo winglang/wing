@@ -78,6 +78,7 @@ class $Root extends $stdlib.std.Resource {
             [jsonObj1, []],
           ],
           "$inflight_init": [
+            [jsonObj1, []],
           ],
         });
       }

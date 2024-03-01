@@ -3431,8 +3431,8 @@ impl<'a> TypeChecker<'a> {
 				namespace_filter = vec![];
 				alias = identifier.as_ref().unwrap();
 			}
-			BringSource::WingFile(name) => {
-				let brought_env = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
+			BringSource::WingFile(path) => {
+				let brought_env = match self.types.source_file_envs.get(path) {
 					Some(SymbolEnvOrNamespace::SymbolEnv(env)) => *env,
 					Some(SymbolEnvOrNamespace::Namespace(_)) => {
 						panic!("Expected a symbol environment to be associated with the file")
@@ -3447,13 +3447,13 @@ impl<'a> TypeChecker<'a> {
 					None => {
 						self.spanned_error(
 							stmt,
-							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+							format!("Could not type check \"{}\" due to cyclic bring statements", path),
 						);
 						return;
 					}
 				};
 				let ns = self.types.add_namespace(Namespace {
-					name: name.name.to_string(),
+					name: path.to_string(),
 					envs: vec![brought_env],
 					loaded: true,
 					module_path: ResolveSource::WingFile,
@@ -3499,8 +3499,8 @@ impl<'a> TypeChecker<'a> {
 				}
 				return;
 			}
-			BringSource::Directory(name) => {
-				let brought_ns = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
+			BringSource::Directory(path) => {
+				let brought_ns = match self.types.source_file_envs.get(path) {
 					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
 						panic!("Expected a namespace to be associated with the directory")
 					}
@@ -3515,7 +3515,7 @@ impl<'a> TypeChecker<'a> {
 					None => {
 						self.spanned_error(
 							stmt,
-							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+							format!("Could not type check \"{}\" due to cyclic bring statements", path),
 						);
 						return;
 					}
@@ -5481,9 +5481,15 @@ impl<'a> TypeChecker<'a> {
 
 				// Try to resolve phase independent property's actual phase
 				property_phase = if property_phase == Phase::Independent {
+					// If the object is a string we treat the phase independent property based on our env.
+					// Strings might be tokens and not evaluated yet. Tokenized strings accessed inflight
+					// must be evaluated in inflight.
+					if instance_type.is_string() {
+						env.phase
+					}
 					// When the property is phase independent and either the object phase is inflight or we're
-					// passing inflight args to the method call, then we need treat the property as inflight too
-					if instance_phase == Phase::Inflight || callee_with_inflight_args {
+					// passing inflight args to the method call, then we need treat the property as inflight too.
+					else if instance_phase == Phase::Inflight || callee_with_inflight_args {
 						Phase::Inflight
 					} else {
 						// Default to instance phase

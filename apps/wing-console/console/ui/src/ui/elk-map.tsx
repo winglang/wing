@@ -11,22 +11,19 @@ import {
   memo,
   useCallback,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 
 import { Edge } from "../shared/Edge.js";
 import { Node } from "../shared/Node.js";
 
 import { EdgeItem } from "./edge-item.js";
 import { useNodeStaticData } from "./use-node-static-data.js";
-import {
-  IDENTITY_TRANSFORM,
-  Transform,
-  ZoomPane,
-  ZoomPaneRef,
-} from "./zoom-pane.js";
+import { ZoomPane, ZoomPaneRef, useZoomPane } from "./zoom-pane.js";
 
 const durationClass = "duration-500";
 
@@ -37,13 +34,16 @@ const layoutOptions: LayoutOptions = {
   "elk.alignment": "CENTER",
   "elk.algorithm": "org.eclipse.elk.layered",
   "elk.layered.layering.strategy": "MIN_WIDTH",
-  "elk.layered.layering.nodePromotion.strategy": "DUMMYNODE_PERCENTAGE",
-  "elk.layered.nodePlacement.strategy": "INTERACTIVE",
+  "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
   "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
-  "elk.nodeSize.constraints": "USE_MINIMUM_SIZE",
-  "elk.layered.spacing.baseValue": "32",
-  "elk.edgeRouting": "ORTHOGONAL",
-  "elk.padding": "[top=52,left=20,bottom=20,right=20]",
+  "elk.layered.spacing.baseValue": "0",
+  "elk.spacing.edgeEdge": "128",
+  "elk.spacing.edgeNode": "32",
+  "elk.spacing.nodeNode": "48",
+  "elk.layered.spacing.edgeEdgeBetweenLayers": "16",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "64",
+  "elk.layered.spacing.edgeNodeBetweenLayers": "16",
+  "elk.padding": "[top=68,left=20,bottom=20,right=20]",
 };
 
 export type NodeItemProps<T> = {
@@ -123,8 +123,8 @@ export interface ElkMapProps<T> {
   nodes: Node<T>[];
   edges?: Edge[];
   node: FC<NodeItemProps<T>>;
-  selectedNodeId?: string;
-  onSelectedNodeIdChange?: (id: string) => void;
+  selectedNodeId?: string | undefined;
+  onSelectedNodeIdChange?: (id: string | undefined) => void;
   selectedEdgeId?: string;
   onSelectedEdgeIdChange?: (id: string) => void;
 }
@@ -143,7 +143,6 @@ interface EdgesContainerProps {
   selectedEdgeId?: string;
   onClick?: (id: string) => void;
   isHighlighted(nodeId: string): boolean;
-  setHighlighted(nodeId: string | undefined): void;
   selectedNodeId?: string;
   highlighted?: string;
 }
@@ -157,7 +156,6 @@ const EdgesContainer = memo(
     selectedEdgeId,
     onClick,
     isHighlighted,
-    setHighlighted,
     selectedNodeId,
     highlighted,
   }: EdgesContainerProps) => {
@@ -226,7 +224,7 @@ const EdgesContainer = memo(
           const isEdgeHighlighted =
             edge.sources[0] === selectedNodeId ||
             edge.targets[0] === selectedNodeId;
-          const visible = !highlighted || isNodeHighlighted;
+          const visible = highlighted || isNodeHighlighted;
           const selected = edge.id === selectedEdgeId;
 
           return (
@@ -239,18 +237,12 @@ const EdgesContainer = memo(
               fade={!visible}
               markerStart={
                 isEdgeHighlighted || selected ? "tee-selected" : "tee"
-                // "tee"
               }
               markerEnd={
                 isEdgeHighlighted || selected
                   ? "arrow-head-selected"
                   : "arrow-head"
-                // "arrow-head"
               }
-              onMouseEnter={() => {
-                setHighlighted(edge.sources[0] ?? edge.targets[0]);
-              }}
-              onMouseLeave={() => setHighlighted(undefined)}
               onClick={onClick}
             />
           );
@@ -269,7 +261,6 @@ interface GraphProps {
   onSelectedNodeIdChange?(id: string): void;
   isHighlighted(nodeId: string): boolean;
   hasHighlightedEdge(node: NodeData): boolean;
-  setHighlighted(nodeId: string | undefined): void;
   onSelectedEdgeIdChange?(id: string): void;
 }
 
@@ -283,7 +274,6 @@ const Graph = memo(
     onSelectedNodeIdChange,
     isHighlighted,
     hasHighlightedEdge,
-    setHighlighted,
     onSelectedEdgeIdChange,
   }: GraphProps) => {
     return (
@@ -292,7 +282,6 @@ const Graph = memo(
           "relative",
           "transition-transform",
           "rounded-lg",
-          nodeList.length > 0 && "bg-white dark:bg-slate-500",
           durationClass,
         )}
         style={{
@@ -308,7 +297,6 @@ const Graph = memo(
             onSelectedNodeIdChange={onSelectedNodeIdChange}
             isHighlighted={isHighlighted}
             hasHighlightedEdge={hasHighlightedEdge}
-            setHighlighted={setHighlighted}
           />
         </AnimatePresence>
 
@@ -322,7 +310,6 @@ const Graph = memo(
               selectedNodeId={selectedNodeId}
               onClick={onSelectedEdgeIdChange}
               isHighlighted={isHighlighted}
-              setHighlighted={setHighlighted}
             />
           )}
         </AnimatePresence>
@@ -348,7 +335,6 @@ interface NodesContainerProps {
   onSelectedNodeIdChange?(id: string): void;
   isHighlighted(nodeId: string): boolean;
   hasHighlightedEdge(node: NodeData): boolean;
-  setHighlighted(nodeId: string | undefined): void;
 }
 
 const NodesContainer = memo(
@@ -359,7 +345,6 @@ const NodesContainer = memo(
     onSelectedNodeIdChange,
     isHighlighted,
     hasHighlightedEdge,
-    setHighlighted,
   }: NodesContainerProps) => {
     return (
       <>
@@ -382,15 +367,17 @@ const NodesContainer = memo(
             }}
             animate={{
               opacity:
-                isHighlighted(node.id) || hasHighlightedEdge(node) ? 1 : 0.35,
+                isHighlighted(node.id) || hasHighlightedEdge(node) ? 1 : 0.3,
             }}
             transition={{ ease: "easeOut", duration: 0.15 }}
             exit={{
               opacity: 0,
             }}
-            onClick={() => onSelectedNodeIdChange?.(node.id)}
-            onMouseEnter={() => setHighlighted(node.id)}
-            onMouseLeave={() => setHighlighted(undefined)}
+            onClick={(event) => {
+              // Stop the event from propagating to the background node.
+              event.stopPropagation();
+              onSelectedNodeIdChange?.(node.id);
+            }}
           >
             <NodeItem
               node={node.data}
@@ -403,6 +390,35 @@ const NodesContainer = memo(
     );
   },
 );
+
+const MapBackground = (props: {}) => {
+  const { viewTransform } = useZoomPane();
+  const patternSize = 12 * viewTransform.z;
+  const dotSize = 1 * viewTransform.z;
+  const id = useId();
+  return (
+    // Reference: https://github.com/xyflow/xyflow/blob/13897512d3c57e72c2e27b14ffa129412289d948/packages/react/src/additional-components/Background/Background.tsx#L52-L86.
+    <svg className="absolute w-full h-full top-0 left-0 bg-white dark:bg-slate-500 text-slate-200 dark:text-slate-550">
+      <pattern
+        id={id}
+        x={(-viewTransform.x * viewTransform.z) % patternSize}
+        y={(-viewTransform.y * viewTransform.z) % patternSize}
+        width={patternSize}
+        height={patternSize}
+        patternUnits="userSpaceOnUse"
+        patternTransform={`translate(-${viewTransform.z},-${viewTransform.z})`}
+      >
+        <circle
+          cx={dotSize}
+          cy={dotSize}
+          r={dotSize}
+          fill="currentColor"
+        ></circle>
+      </pattern>
+      <rect x="0" y="0" width="100%" height="100%" fill={`url(#${id})`}></rect>
+    </svg>
+  );
+};
 
 export const ElkMap = <T extends unknown = undefined>({
   nodes,
@@ -480,17 +496,12 @@ export const ElkMap = <T extends unknown = undefined>({
     };
   }, [nodes, edges, minimumSizes]);
 
-  const [highlighted, setHighlighted] = useState<string>();
+  const highlighted = selectedNodeId;
 
   const isHighlighted = useCallback(
     (nodeId: string) => {
-      if (!highlighted) return true;
-      const highlightedId = `${highlighted}/`;
-      const nodeIdWithSlash = `${nodeId}/`;
-      return (
-        highlightedId.startsWith(nodeIdWithSlash) ||
-        nodeIdWithSlash.startsWith(highlightedId)
-      );
+      if (!highlighted || highlighted === "root") return true;
+      return highlighted === nodeId;
     },
     [highlighted],
   );
@@ -567,6 +578,8 @@ export const ElkMap = <T extends unknown = undefined>({
     zoomPaneRef.current?.zoomToFit();
   }, [offsets]);
 
+  const mapBackgroundRef = useRef<HTMLDivElement>(null);
+
   return (
     <>
       <InvisibleNodeSizeCalculator
@@ -575,12 +588,17 @@ export const ElkMap = <T extends unknown = undefined>({
         onSizesChange={setMinimumSizes}
       />
 
+      <div ref={mapBackgroundRef}></div>
+
       <ZoomPane
         ref={zoomPaneRef}
         boundingBox={mapSize}
-        className="w-full h-full bg-white dark:bg-slate-500"
+        className="w-full h-full"
         data-testid="map-pane"
+        onClick={() => onSelectedNodeIdChange?.(undefined)}
       >
+        {mapBackgroundRef.current &&
+          createPortal(<MapBackground />, mapBackgroundRef.current)}
         {graph && (
           <Graph
             graph={graph}
@@ -592,7 +610,6 @@ export const ElkMap = <T extends unknown = undefined>({
             onSelectedEdgeIdChange={onSelectedEdgeIdChange}
             isHighlighted={isHighlighted}
             hasHighlightedEdge={hasHighlightedEdge}
-            setHighlighted={setHighlighted}
           />
         )}
       </ZoomPane>

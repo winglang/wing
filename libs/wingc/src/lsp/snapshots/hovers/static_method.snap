@@ -7,7 +7,7 @@ contents:
 range:
   start:
     line: 5
-    character: 0
+    character: 4
   end:
     line: 5
     character: 6

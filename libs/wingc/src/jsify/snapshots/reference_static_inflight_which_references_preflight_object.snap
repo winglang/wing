@@ -101,6 +101,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "$inflight_init": [
+            [b, []],
           ],
         });
       }
@@ -142,6 +143,7 @@ class $Root extends $stdlib.std.Resource {
             [MyType, ["staticMethod"]],
           ],
           "$inflight_init": [
+            [MyType, []],
           ],
         });
       }

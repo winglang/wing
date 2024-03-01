@@ -120,9 +120,9 @@ try {
 let num9 = 9;
 let m10 = {
   // Just a string
-  "a" => 1, 
+  "a" => 1,
   // Same string again (should overwrite)
-  "a" => 2, 
+  "a" => 2,
   // Interpolation
   "{num9+1}" => 9,
   // Same interpolation again (should overwrite)
@@ -136,20 +136,20 @@ assert(m10.get("10") == 10);
 assert(m10.get("99") == 99);
 
 //Set tests
-let emptySet = Set<num>{};
+let emptySet = Set<num>[];
 assert(emptySet.size == 0);
-let emptySet2 = MutSet<num>{};
+let emptySet2 = MutSet<num>[];
 assert(emptySet2.size == 0);
-let s2: Set<num> = {1, 2, 3};
+let s2: Set<num> = Set<num>[1, 2, 3];
 assert(s2.size == 3);
 assert(s2.has(1));
-let s3 = Set<num> {1, 2, 3};
+let s3 = Set<num>[1, 2, 3];
 assert(s3.size == 3);
 assert(s3.has(1));
-let s4: Set<num> = Set<num> {1, 2, 3};
+let s4: Set<num> = Set<num>[1, 2, 3];
 assert(s4.size == 3);
 assert(s4.has(1));
-let s6: Set<cloud.Bucket> = {bucket1, bucket2, bucket3};
+let s6: Set<cloud.Bucket> = Set<cloud.Bucket>[bucket1, bucket2, bucket3];
 assert(s6.size == 3);
 assert(s6.has(bucket2));
 let s7: Set<num> = s2;

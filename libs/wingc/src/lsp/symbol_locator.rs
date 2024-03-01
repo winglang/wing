@@ -194,9 +194,9 @@ impl<'a> SymbolLocator<'a> {
 			SymbolLocatorResult::Symbol(symbol) => Some(&symbol.span),
 			SymbolLocatorResult::StructField { field, .. } => Some(&field.span),
 			SymbolLocatorResult::LooseField { field, .. } => Some(&field.span),
-			SymbolLocatorResult::TypePropertyReference { span, .. }
-			| SymbolLocatorResult::ObjectPropertyReference { span, .. }
-			| SymbolLocatorResult::TypeReference { span, .. } => Some(&span),
+			SymbolLocatorResult::TypePropertyReference { property, .. }
+			| SymbolLocatorResult::ObjectPropertyReference { property, .. } => Some(&property.span),
+			SymbolLocatorResult::TypeReference { span, .. } => Some(&span),
 		}
 	}
 }

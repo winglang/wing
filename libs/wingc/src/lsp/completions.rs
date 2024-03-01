@@ -363,11 +363,23 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 						return filter_completions(completions);
 					}
+
+					if node_to_complete_kind == "type_identifier" {
+						// we're in an incomplete bare type (e.g. `new clou` or `extends clo`),
+						// we should attempt to use the text we have to match existing scope symbols
+						return filter_completions(get_current_scope_completions(
+							&types,
+							&scope_visitor,
+							&node_to_complete,
+							&preceding_text,
+						));
+					}
+
 					return vec![];
 				}
 			} else if matches!(
 				nearest_non_reference.kind(),
-				"struct_literal" | "json_map_literal" | "set_literal" | "struct_literal_member"
+				"struct_literal" | "json_map_literal" | "struct_literal_member"
 			) {
 				// check to see if ":" is the last character of the same line up to the cursor
 				// if it is, we want an expression instead of struct completions
@@ -520,7 +532,7 @@ fn get_current_scope_completions(
 
 		// { a: } or { a: 1, b: }
 		//     ^               ^
-		"set_literal" | "struct_literal" | "json_map_literal" | "json_literal_member" => {
+		"struct_literal" | "json_map_literal" | "json_literal_member" => {
 			in_type = false;
 		}
 
@@ -583,7 +595,6 @@ fn get_current_scope_completions(
 			"argument_list"
 			| "call"
 			| "struct_literal"
-			| "set_literal"
 			| "struct_literal_member"
 			| "new_expression"
 			| "keyword_argument_value" => {
@@ -1307,6 +1318,21 @@ new cloud.
 		// all items are preflight
 		// TODO https://github.com/winglang/wing/issues/2512
 		// assert!(new_expression_nested.iter().all(|item| item.detail.as_ref().unwrap().starts_with("preflight")))
+	);
+
+	test_completion_list!(
+		new_expression_partial_namespace,
+		r#"
+bring cloud;
+
+struct cloudy {}
+
+new clo
+     //^
+"#,
+		assert!(!new_expression_partial_namespace.is_empty())
+		assert!(new_expression_partial_namespace.len() == 1)
+		assert!(new_expression_partial_namespace.get(0).unwrap().label == "cloud")
 	);
 
 	test_completion_list!(

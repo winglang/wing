@@ -297,20 +297,12 @@ impl<'a> DTSifier<'a> {
 						code.line(format!("import * as {sym} from \"./{preflight_file_name}\";"))
 					}
 					BringSource::JsiiModule(sym) => code.line(format!("import * as {identifier} from \"{sym}\"")),
-					BringSource::WingFile(sym) => {
-						let preflight_file_name = self
-							.preflight_file_map
-							.get(Utf8Path::new(&sym.name))
-							.unwrap()
-							.replace(".js", "");
+					BringSource::WingFile(path) => {
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".js", "");
 						code.line(format!("import * as {identifier} from \"./{preflight_file_name}\";"))
 					}
-					BringSource::Directory(sym) => {
-						let preflight_file_name = self
-							.preflight_file_map
-							.get(Utf8Path::new(&sym.name))
-							.unwrap()
-							.replace(".js", "");
+					BringSource::Directory(path) => {
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".js", "");
 						code.line(format!("import * as {identifier} from \"./{preflight_file_name}\";"))
 					}
 				}

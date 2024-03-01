@@ -124,6 +124,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "$inflight_init": [
+            [b, []],
           ],
         });
       }
@@ -163,6 +164,7 @@ class $Root extends $stdlib.std.Resource {
             [MyType, ["putInBucket"]],
           ],
           "$inflight_init": [
+            [MyType, []],
           ],
         });
       }
@@ -197,6 +199,7 @@ class $Root extends $stdlib.std.Resource {
             [t, ["putIndirect"]],
           ],
           "$inflight_init": [
+            [t, []],
           ],
         });
       }

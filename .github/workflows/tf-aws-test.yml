@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test if is maintainer
-        uses: tspascoal/get-user-teams-membership@v2
+        uses: tspascoal/get-user-teams-membership@v3
         id: testUserGroup
         if: ${{ env.MANUAL == 'true' }}
         with:
@@ -60,7 +60,7 @@ jobs:
           echo "User ${{github.actor}} is not allowed to dispatch this action."
           exit 1
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: ${{env.REPO}}
           ref: ${{env.REF}}
@@ -102,14 +102,14 @@ jobs:
     name: ${{ matrix.test.name }} - ${{ matrix.target }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: ${{env.REPO}}
           ref: ${{env.REF}}
 
       - name: Setup pnpm
         if: ${{ env.MANUAL ==  'true' }}
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v3
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -138,7 +138,7 @@ jobs:
       #################### install a remote wing version ########################
       - name: Install winglang globally
         if: ${{ env.LOCAL_BUILD == 'false' && env.MANUAL == 'false'}}
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         with:
           max_attempts: 3
           retry_on: error
@@ -163,7 +163,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Execute wing test in matrix directory
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         env:
           TF_LOG: info
           TF_LOG_PATH: ${{ runner.workspace }}/terraform.log

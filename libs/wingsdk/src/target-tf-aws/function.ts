@@ -244,7 +244,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         ],
       });
       this.addNetworkConfig({
-        subnetIds: [app.subnets.private.id],
+        subnetIds: [...app.subnets.private.map((s) => s.id)],
         securityGroupIds: [sg.id],
       });
     }

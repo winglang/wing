@@ -15,26 +15,22 @@ export function makeSimulatorClient(url: string, handle: string) {
 
     return async function (...args: any[]) {
       const body: SimulatorServerRequest = { handle, method, args };
-      let resp;
-      try {
-        // import undici dynamically to reduce the time it takes to load Wing SDK
-        // undici is used instead of the built-in fetch so that we can customize the
-        // keep-alive and headers timeouts to be 15 minutes instead of the default 5 seconds
-        const { fetch, Agent } = await import("undici");
-        resp = await fetch(url + "/v1/call", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-          dispatcher: new Agent({
-            keepAliveTimeout: 15 * 60 * 1000,
-            keepAliveMaxTimeout: 15 * 60 * 1000,
-            headersTimeout: 15 * 60 * 1000,
-            bodyTimeout: 15 * 60 * 1000,
-          }),
-        });
-      } catch (e) {
-        throw e;
-      }
+
+      // import undici dynamically to reduce the time it takes to load Wing SDK
+      // undici is used instead of the built-in fetch so that we can customize the
+      // headers timeouts to be 10 minutes instead of the default 5 seconds
+      const { fetch, Agent } = await import("undici");
+      const resp = await fetch(url + "/v1/call", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        dispatcher: new Agent({
+          keepAliveTimeout: 15 * 60 * 1000,
+          keepAliveMaxTimeout: 15 * 60 * 1000,
+          headersTimeout: 15 * 60 * 1000,
+          bodyTimeout: 15 * 60 * 1000,
+        }),
+      });
 
       let parsed: SimulatorServerResponse = deserialize(await resp.text());
 

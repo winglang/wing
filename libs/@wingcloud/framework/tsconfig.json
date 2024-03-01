@@ -6,5 +6,6 @@
     "module": "CommonJS",
     "moduleResolution": "Node",
     "esModuleInterop": true,
+    "isolatedModules": true,
   }
 }

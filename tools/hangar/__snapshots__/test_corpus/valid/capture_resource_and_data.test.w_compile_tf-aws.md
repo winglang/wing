@@ -116,6 +116,9 @@ class $Root extends $stdlib.std.Resource {
             [res, ["get", "put"]],
           ],
           "$inflight_init": [
+            [data.size, []],
+            [queue, []],
+            [res, []],
           ],
         });
       }

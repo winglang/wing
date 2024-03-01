@@ -1,9 +1,11 @@
+import { createServer } from "net";
 import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
 import { Simulator, Testing } from "../../src/simulator";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
 import { SimApp } from "../sim-app";
+import { mkdtemp } from "../util";
 
 // Handler that responds to a request with a fixed string
 const INFLIGHT_CODE = (body: string) =>
@@ -721,4 +723,47 @@ test("api with CORS settings responds to OPTIONS request", async () => {
     "GET,POST,PUT,DELETE,HEAD,OPTIONS"
   );
   expect(response.headers.get("access-control-max-age")).toEqual("300");
+});
+
+test("api reuses ports between simulator runs", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Api(app, "my_api");
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl1 = getApiUrl(s, "/my_api");
+  await s.stop();
+  await s.start();
+  const apiUrl2 = getApiUrl(s, "/my_api");
+
+  // THEN
+  expect(apiUrl1).toEqual(apiUrl2);
+});
+
+test("api does not use a port that is already taken", async () => {
+  const app = new SimApp();
+  new cloud.Api(app, "my_api");
+
+  // start the simulator, allocating a random port for the API
+  const s = await app.startSimulator();
+  const apiUrl1 = getApiUrl(s, "/my_api");
+  await s.stop();
+
+  // start a server on the same port
+  const port = new URL(apiUrl1).port;
+  const server = createServer();
+  server.listen(port);
+
+  // wait for the server to start
+  await new Promise((resolve) => server.on("listening", resolve));
+
+  // start the simulator again, expecting a different port
+  await s.start();
+  const apiUrl2 = getApiUrl(s, "/my_api");
+
+  expect(apiUrl1).not.toEqual(apiUrl2);
+
+  // clean up the server
+  server.close();
 });

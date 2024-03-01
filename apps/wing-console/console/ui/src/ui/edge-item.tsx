@@ -46,9 +46,9 @@ export const EdgeItem = memo(
       <g
         className={classNames(
           "stroke-1 fill-none cursor-pointer hover:stroke-[1.5px]",
-          highlighted && "stroke-sky-500",
-          selected && "stroke-[1.5px] stroke-sky-500",
-          !highlighted && !selected && "stroke-slate-400 dark:stroke-slate-800",
+          (highlighted || selected) &&
+            "stroke-[1.5px] stroke-sky-500 dark:stroke-sky-400",
+          !highlighted && !selected && "stroke-slate-400 dark:stroke-slate-750",
           fade && "opacity-40",
           "transition-all",
         )}
@@ -58,7 +58,7 @@ export const EdgeItem = memo(
             opacity: 0,
           }}
           animate={{
-            opacity: 1,
+            opacity: fade ? 0.3 : 1,
           }}
           style={{ translateX: offset.x, translateY: offset.y }}
           transition={{ duration: transitionDuration }}
