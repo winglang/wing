@@ -30,7 +30,7 @@ function expectExecToBe(fn: SpyInstance, cmd: any, port?: number) {
   expect(lastCall[0]).toBe(cmd);
 
   if (port) {
-    expect(lastCall[1].env.PORT === `${port}`)
+    expect(lastCall[1].env.PORT === `${port}`);
   }
 }
 
