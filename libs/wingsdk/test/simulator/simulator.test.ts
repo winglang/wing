@@ -207,13 +207,12 @@ describe("in-place updates", () => {
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
       deleted: [],
-      retain: ["root/Bucket1"],
       updated: [],
     });
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
-      "in-place update",
+      "Update: 0 added, 0 updated, 0 deleted",
     ]);
 
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
@@ -239,14 +238,13 @@ describe("in-place updates", () => {
     expect(updateTrace(sim)).toStrictEqual({
       added: ["root/Bucket2"],
       deleted: [],
-      retain: ["root/Bucket1"],
       updated: [],
     });
 
     expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
-      "in-place update",
+      "Update: 1 added, 0 updated, 0 deleted",
       "root/Bucket2 started",
     ]);
 
@@ -274,7 +272,6 @@ describe("in-place updates", () => {
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
       deleted: ["root/Bucket2"],
-      retain: ["root/Bucket1"],
       updated: [],
     });
 
@@ -283,7 +280,7 @@ describe("in-place updates", () => {
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
       "root/Bucket2 started",
-      "in-place update",
+      "Update: 0 added, 0 updated, 1 deleted",
       "root/Bucket2 stopped",
     ]);
 
@@ -308,7 +305,6 @@ describe("in-place updates", () => {
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
       deleted: [],
-      retain: [],
       updated: ["root/Bucket1"],
     });
 
@@ -316,7 +312,7 @@ describe("in-place updates", () => {
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
-      "in-place update",
+      "Update: 0 added, 1 updated, 0 deleted",
       "root/Bucket1 stopped",
       "root/Bucket1 started",
     ]);
@@ -355,13 +351,12 @@ describe("in-place updates", () => {
     expect(updateTrace(sim)).toStrictEqual({
       added: ["root/Api", "root/Api/Endpoint", "root/Function"],
       deleted: [],
-      retain: [],
       updated: ["root/Bucket1"],
     });
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
-      "in-place update",
+      "Update: 3 added, 1 updated, 0 deleted",
       "root/Bucket1 stopped",
       "root/Api started",
       "root/Bucket1 started",
@@ -413,7 +408,6 @@ describe("in-place updates", () => {
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
       deleted: [],
-      retain: ["root/Api1/Endpoint", "root/Bucket1"],
       updated: ["root/Api1"],
     });
 
@@ -421,7 +415,7 @@ describe("in-place updates", () => {
       "root/Api1 started",
       "root/Api1/Endpoint started",
       "root/Bucket1 started",
-      "in-place update",
+      "Update: 0 added, 1 updated, 0 deleted",
       "root/Api1/Endpoint stopped",
       "root/Bucket1 stopped",
       "root/Api1 stopped",

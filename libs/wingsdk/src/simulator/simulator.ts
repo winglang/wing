@@ -187,9 +187,6 @@ export class Simulator {
   private _server: Server | undefined;
   private _model: Model;
 
-  // a list of all resource paths that are currently started
-  private started: Set<string> = new Set<string>();
-
   // keeps the actual resolved state (props and attrs) of all started resources. this state is
   // merged in when calling `getResourceConfig()`.
   private state: Record<string, ResourceState> = {};
@@ -294,7 +291,7 @@ export class Simulator {
     this._addTrace({
       type: TraceType.SIMULATOR,
       data: {
-        message: "in-place update",
+        message: `Update: ${plan.added.length} added, ${plan.updated.length} updated, ${plan.deleted.length} deleted`,
         update: plan,
       },
       sourcePath: "root",
@@ -307,29 +304,11 @@ export class Simulator {
       await this.stopResource(c); // <-- this also stops all dependent resources if needed
     }
 
-    // ugly! copy retained resources from old model to new model (they have attributes and
-    // properties that we need)
-    for (const c of plan.retain) {
-      const oldConfig = this._model.schema.resources.find((x) => x.path === c);
-      const newConfig = newModel.schema.resources.find((x) => x.path === c);
-
-      // this shouldn't happen (because we are looking at "retained" resources, dah)
-      if (!oldConfig || !newConfig) {
-        throw new Error(
-          `unexpected - resource ${c} was in the retain list but not found in either old or new model`
-        );
-      }
-
-      // copy the attributes and properties from the old resource to the new resource
-      (newConfig.props as any) = oldConfig.props;
-      (newConfig.attrs as any) = oldConfig.attrs;
-    }
-
-    // now update the internal model because startResources() looks up the resource configuration in
-    // there.
+    // now update the internal model to the new version
     this._model = newModel;
 
     // start all *added* and *updated* resources (the updated model basically includes only these)
+    // this will also start all dependencies as needed and not touch any resource that is already started
     await this.startResources();
   }
 
@@ -361,9 +340,13 @@ export class Simulator {
     this._running = "stopped";
   }
 
+  private isStarted(path: string): boolean {
+    return path in this.state;
+  }
+
   private async stopResource(path: string) {
-    if (!this.started.has(path)) {
-      return; // resource is not started
+    if (!this.isStarted(path)) {
+      return; // resource is already stopped
     }
 
     // first, stop all dependent resources
@@ -387,8 +370,7 @@ export class Simulator {
       console.warn(err);
     }
 
-    this.addSimulatorTrace(path, { message: `${path}' stopped` });
-    this.started.delete(path);
+    this.addSimulatorTrace(path, { message: `${path} stopped` });
     delete this.state[path]; // delete the state of the resource
   }
 
@@ -673,7 +655,7 @@ export class Simulator {
   }
 
   private async startResource(path: string): Promise<void> {
-    if (this.started.has(path)) {
+    if (this.isStarted(path)) {
       return; // already started
     }
 
@@ -708,6 +690,7 @@ export class Simulator {
     const handle = this._handles.allocate(resourceObject);
 
     // update the resource configuration with new attrs returned after initialization
+    // this indicates that the resource is started
     this.state[path] = {
       props: resolvedProps,
       attrs: {
@@ -720,8 +703,6 @@ export class Simulator {
     this.addSimulatorTrace(path, {
       message: `${resourceConfig.path} started`,
     });
-
-    this.started.add(path);
   }
 
   private createContext(resourceConfig: BaseResourceSchema): ISimulatorContext {
@@ -975,7 +956,7 @@ export interface SimulatorServerResponse {
 
 /**
  * Given the "current" set of resources and a "next" set of resources, calculate the diff and
- * determine which resources need to be added, updated, deleted or retained.
+ * determine which resources need to be added, updated or deleted.
  *
  * Note that dependencies are not considered here but they are implicitly handled by the
  * `startResource` and `stopResource` methods. So, for example, when a resource is updated,
@@ -988,7 +969,6 @@ function planUpdate(current: BaseResourceSchema[], next: BaseResourceSchema[]) {
   const added: string[] = [];
   const updated: string[] = [];
   const deleted: string[] = [];
-  const retain: string[] = [];
 
   for (const [path, nextConfig] of Object.entries(nextByPath)) {
     const currConfig = currentByPath[path];
@@ -1008,8 +988,6 @@ function planUpdate(current: BaseResourceSchema[], next: BaseResourceSchema[]) {
 
     if (state(currConfig) !== state(nextConfig)) {
       updated.push(nextConfig.path);
-    } else {
-      retain.push(nextConfig.path);
     }
 
     // remove it from "current" so we know what's left to be deleted
@@ -1021,7 +999,7 @@ function planUpdate(current: BaseResourceSchema[], next: BaseResourceSchema[]) {
     deleted.push(config.path);
   }
 
-  return { added, updated, deleted, retain };
+  return { added, updated, deleted };
 
   function toMap(list: BaseResourceSchema[]): {
     [path: string]: BaseResourceSchema;
