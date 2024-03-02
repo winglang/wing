@@ -166,6 +166,11 @@ interface Model {
   graph: Graph<BaseResourceSchema>;
 }
 
+interface ResourceState {
+  props: Record<string, any>;
+  attrs: Record<string, any>;
+}
+
 /**
  * A simulator that can be used to test your application locally.
  */
@@ -184,6 +189,8 @@ export class Simulator {
 
   // a list of all resource paths that are currently started
   private started: Set<string> = new Set<string>();
+
+  private state: Record<string, ResourceState> = {};
 
   constructor(props: SimulatorProps) {
     const simdir = props.simfile;
@@ -380,6 +387,7 @@ export class Simulator {
 
     this.addSimulatorTrace(path, { message: `'${path}' stopped` });
     this.started.delete(path);
+    delete this.state[path]; // delete the state of the resource
   }
 
   private addSimulatorTrace(path: string, data: any) {
@@ -462,7 +470,15 @@ export class Simulator {
       path = `root${path}`;
     }
 
-    return this._model.graph.find(path)?.def;
+    const def = this._model.graph.find(path).def;
+    const state = this.state[path];
+
+    return {
+      ...def,
+
+      // merge the actual state (props and attrs) over the desired state in `def`
+      ...state,
+    };
   }
 
   /**
@@ -669,9 +685,6 @@ export class Simulator {
 
     const resolvedProps = this.resolveTokens(resourceConfig.props);
 
-    // update the resource's config with the resolved props
-    (resourceConfig.props as any) = resolvedProps;
-
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
 
@@ -693,15 +706,19 @@ export class Simulator {
     const handle = this._handles.allocate(resourceObject);
 
     // update the resource configuration with new attrs returned after initialization
-    context.setResourceAttributes(path, {
-      ...attrs,
-      [HANDLE_ATTRIBUTE]: handle,
-    });
+    this.state[path] = {
+      props: resolvedProps,
+      attrs: {
+        ...attrs,
+        [HANDLE_ATTRIBUTE]: handle,
+      },
+    };
 
     // trace the resource creation
     this.addSimulatorTrace(path, {
       message: `'${resourceConfig.path}' started`,
     });
+
     this.started.add(path);
   }
 
@@ -748,12 +765,10 @@ export class Simulator {
         return [...this._traces];
       },
       setResourceAttributes: (path: string, attrs: Record<string, any>) => {
-        const config = this.getResourceConfig(path);
-        const prev = config.attrs;
-        (config as any).attrs = { ...prev, ...attrs };
+        this.state[path].attrs = { ...this.state[path].attrs, ...attrs };
       },
       resourceAttributes: (path: string) => {
-        return this.getResourceConfig(path).attrs;
+        return this.state[path].attrs;
       },
     };
   }
@@ -956,9 +971,17 @@ export interface SimulatorServerResponse {
   readonly error?: any;
 }
 
+/**
+ * Given the "current" set of resources and a "next" set of resources, calculate the diff and
+ * determine which resources need to be added, updated, deleted or retained.
+ *
+ * Note that dependencies are not considered here but they are implicitly handled by the
+ * `startResource` and `stopResource` methods. So, for example, when a resource is updated,
+ * all of it's dependents will be stopped and started again.
+ */
 function planUpdate(current: BaseResourceSchema[], next: BaseResourceSchema[]) {
-  const currentByPath = resourceByPath(current);
-  const nextByPath = resourceByPath(next);
+  const currentByPath = toMap(current);
+  const nextByPath = toMap(next);
 
   const added: string[] = [];
   const updated: string[] = [];
@@ -997,19 +1020,20 @@ function planUpdate(current: BaseResourceSchema[], next: BaseResourceSchema[]) {
   }
 
   return { added, updated, deleted, retain };
+
+  function toMap(list: BaseResourceSchema[]): {
+    [path: string]: BaseResourceSchema;
+  } {
+    const ret: { [path: string]: BaseResourceSchema } = {};
+    for (const resource of list) {
+      if (ret[resource.path]) {
+        throw new Error(
+          `unexpected - duplicate resources with the same path: ${resource.path}`
+        );
+      }
+      ret[resource.path] = resource;
+    }
+    return ret;
+  }  
 }
 
-function resourceByPath(list: BaseResourceSchema[]): {
-  [path: string]: BaseResourceSchema;
-} {
-  const ret: { [path: string]: BaseResourceSchema } = {};
-  for (const resource of list) {
-    if (ret[resource.path]) {
-      throw new Error(
-        `unexpected - duplicate resources with the same path: ${resource.path}`
-      );
-    }
-    ret[resource.path] = resource;
-  }
-  return ret;
-}

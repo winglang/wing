@@ -56,7 +56,6 @@ export class Api
   private port: number | undefined;
 
   constructor(props: ApiSchema["props"], context: ISimulatorContext) {
-    props;
     this.routes = [];
     this.context = context;
     const { corsHeaders } = props;

@@ -52,7 +52,6 @@ test("create a service with a on stop method", async () => {
 
   // WHEN
   const s = await app.startSimulator();
-  await s.stop();
 
   // THEN
   expect(s.getResourceConfig("/my_service")).toEqual({
@@ -68,6 +67,8 @@ test("create a service with a on stop method", async () => {
     },
     type: cloud.SERVICE_FQN,
   });
+
+  await s.stop();
 
   expect(
     s
@@ -94,7 +95,6 @@ test("create a service without autostart", async () => {
 
   // WHEN
   const s = await app.startSimulator();
-  await s.stop();
 
   // THEN
   expect(s.getResourceConfig("/my_service")).toEqual({
@@ -111,12 +111,15 @@ test("create a service without autostart", async () => {
     type: cloud.SERVICE_FQN,
   });
 
+  await s.stop();
+
   expect(
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
   ).toEqual(["'root/my_service' started", "'root/my_service' stopped"]);
+
 });
 
 test("start and stop service", async () => {

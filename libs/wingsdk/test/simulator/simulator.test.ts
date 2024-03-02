@@ -313,13 +313,16 @@ describe("in-place updates", () => {
     });
 
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
-    expect(sim.getResourceConfig("root/Bucket1").props.public).toBeTruthy();
+    console.log(sim.getResourceConfig("root/Bucket1").props);
+
     expect(simTraces(sim)).toStrictEqual([
       "'root/Bucket1' started",
       "in-place update",
       "'root/Bucket1' stopped",
       "'root/Bucket1' started",
     ]);
+
+    expect(sim.getResourceConfig("root/Bucket1").props.public).toBeTruthy();
 
     await sim.stop();
   });
@@ -411,8 +414,8 @@ describe("in-place updates", () => {
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
       deleted: [],
-      retain: [],
-      updated: ["root/Api1", "root/Api1/Endpoint", "root/Bucket1"],
+      retain: ["root/Api1/Endpoint", "root/Bucket1"],
+      updated: ["root/Api1"],
     });
 
     expect(simTraces(sim)).toEqual([
