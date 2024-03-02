@@ -190,6 +190,8 @@ export class Simulator {
   // a list of all resource paths that are currently started
   private started: Set<string> = new Set<string>();
 
+  // keeps the actual resolved state (props and attrs) of all started resources. this state is
+  // merged in when calling `getResourceConfig()`.
   private state: Record<string, ResourceState> = {};
 
   constructor(props: SimulatorProps) {
@@ -385,7 +387,7 @@ export class Simulator {
       console.warn(err);
     }
 
-    this.addSimulatorTrace(path, { message: `'${path}' stopped` });
+    this.addSimulatorTrace(path, { message: `${path}' stopped` });
     this.started.delete(path);
     delete this.state[path]; // delete the state of the resource
   }
@@ -716,7 +718,7 @@ export class Simulator {
 
     // trace the resource creation
     this.addSimulatorTrace(path, {
-      message: `'${resourceConfig.path}' started`,
+      message: `${resourceConfig.path} started`,
     });
 
     this.started.add(path);

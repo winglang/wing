@@ -196,7 +196,7 @@ describe("in-place updates", () => {
     const sim = await app.startSimulator(stateDir);
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
 
-    expect(simTraces(sim)).toStrictEqual(["'root/Bucket1' started"]);
+    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1");
@@ -212,7 +212,7 @@ describe("in-place updates", () => {
     });
 
     expect(simTraces(sim)).toStrictEqual([
-      "'root/Bucket1' started",
+      "root/Bucket1 started",
       "in-place update",
     ]);
 
@@ -228,7 +228,7 @@ describe("in-place updates", () => {
     new Bucket(app, "Bucket1");
     const sim = await app.startSimulator(stateDir);
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
-    expect(simTraces(sim)).toStrictEqual(["'root/Bucket1' started"]);
+    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1");
@@ -245,9 +245,9 @@ describe("in-place updates", () => {
 
     expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
     expect(simTraces(sim)).toStrictEqual([
-      "'root/Bucket1' started",
+      "root/Bucket1 started",
       "in-place update",
-      "'root/Bucket2' started",
+      "root/Bucket2 started",
     ]);
 
     await sim.stop();
@@ -262,8 +262,8 @@ describe("in-place updates", () => {
     const sim = await app.startSimulator(stateDir);
     expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
     expect(simTraces(sim)).toStrictEqual([
-      "'root/Bucket1' started",
-      "'root/Bucket2' started",
+      "root/Bucket1 started",
+      "root/Bucket2 started",
     ]);
 
     const app2 = new SimApp();
@@ -281,10 +281,10 @@ describe("in-place updates", () => {
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
 
     expect(simTraces(sim)).toStrictEqual([
-      "'root/Bucket1' started",
-      "'root/Bucket2' started",
+      "root/Bucket1 started",
+      "root/Bucket2 started",
       "in-place update",
-      "'root/Bucket2' stopped",
+      "root/Bucket2 stopped",
     ]);
 
     await sim.stop();
@@ -298,7 +298,7 @@ describe("in-place updates", () => {
     const sim = await app.startSimulator(stateDir);
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeFalsy();
-    expect(simTraces(sim)).toStrictEqual(["'root/Bucket1' started"]);
+    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1", { public: true });
@@ -313,13 +313,12 @@ describe("in-place updates", () => {
     });
 
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
-    console.log(sim.getResourceConfig("root/Bucket1").props);
 
     expect(simTraces(sim)).toStrictEqual([
-      "'root/Bucket1' started",
+      "root/Bucket1 started",
       "in-place update",
-      "'root/Bucket1' stopped",
-      "'root/Bucket1' started",
+      "root/Bucket1 stopped",
+      "root/Bucket1 started",
     ]);
 
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeTruthy();
@@ -335,7 +334,7 @@ describe("in-place updates", () => {
 
     const sim = await app.startSimulator(stateDir);
 
-    expect(simTraces(sim)).toStrictEqual(["'root/Bucket1' started"]);
+    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
 
     expect(sim.listResources()).toEqual(["root/Bucket1"]);
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeFalsy();
@@ -361,13 +360,13 @@ describe("in-place updates", () => {
     });
 
     expect(simTraces(sim)).toStrictEqual([
-      "'root/Bucket1' started",
+      "root/Bucket1 started",
       "in-place update",
-      "'root/Bucket1' stopped",
-      "'root/Api' started",
-      "'root/Bucket1' started",
-      "'root/Api/Endpoint' started",
-      "'root/Function' started",
+      "root/Bucket1 stopped",
+      "root/Api started",
+      "root/Bucket1 started",
+      "root/Api/Endpoint started",
+      "root/Function started",
     ]);
 
     expect(sim.listResources()).toEqual([
@@ -397,12 +396,12 @@ describe("in-place updates", () => {
     const sim = await app.startSimulator();
 
     expect(simTraces(sim)).toEqual([
-      "'root/Api1' started",
-      "'root/Api1/Endpoint' started",
-      "'root/Bucket1' started",
+      "root/Api1 started",
+      "root/Api1/Endpoint started",
+      "root/Bucket1 started",
     ]);
 
-    // now let's change some configuration of Api1. we expect the bucket to be replaced as well
+    // now lets change some configuration of Api1. we expect the bucket to be replaced as well
 
     const app2 = new SimApp();
     const myApi2 = new Api(app2, "Api1", { cors: true });
@@ -419,16 +418,16 @@ describe("in-place updates", () => {
     });
 
     expect(simTraces(sim)).toEqual([
-      "'root/Api1' started",
-      "'root/Api1/Endpoint' started",
-      "'root/Bucket1' started",
+      "root/Api1 started",
+      "root/Api1/Endpoint started",
+      "root/Bucket1 started",
       "in-place update",
-      "'root/Api1/Endpoint' stopped",
-      "'root/Bucket1' stopped",
-      "'root/Api1' stopped",
-      "'root/Api1' started",
-      "'root/Api1/Endpoint' started",
-      "'root/Bucket1' started",
+      "root/Api1/Endpoint stopped",
+      "root/Bucket1 stopped",
+      "root/Api1 stopped",
+      "root/Api1 started",
+      "root/Api1/Endpoint started",
+      "root/Bucket1 started",
     ]);
   });
 });

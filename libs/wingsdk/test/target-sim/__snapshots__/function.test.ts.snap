@@ -167,9 +167,9 @@ async handle(event) {
 
 exports[`invoke function fails 1`] = `
 [
-  "'root/my_function' started",
+  "root/my_function started",
   "Invoke (payload="{\\"name\\":\\"alice\\"}").",
-  "'root/my_function' stopped",
+  "root/my_function stopped",
 ]
 `;
 
@@ -338,9 +338,9 @@ async handle(event) {
 
 exports[`invoke function succeeds 1`] = `
 [
-  "'root/my_function' started",
+  "root/my_function started",
   "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
-  "'root/my_function' stopped",
+  "root/my_function stopped",
 ]
 `;
 
@@ -509,9 +509,9 @@ async handle(event) {
 
 exports[`invoke function with environment variables 1`] = `
 [
-  "'root/my_function' started",
+  "root/my_function started",
   "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
-  "'root/my_function' stopped",
+  "root/my_function stopped",
 ]
 `;
 
@@ -682,9 +682,9 @@ async handle(event) {
 
 exports[`invoke function with process.exit(1) 1`] = `
 [
-  "'root/my_function' started",
+  "root/my_function started",
   "Invoke (payload="{}").",
-  "'root/my_function' stopped",
+  "root/my_function stopped",
 ]
 `;
 

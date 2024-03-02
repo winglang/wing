@@ -584,9 +584,9 @@ async handle(message) {
 
 exports[`push rejects empty message 1`] = `
 [
-  "'root/my_queue' started",
+  "root/my_queue started",
   "Push (messages=).",
-  "'root/my_queue' stopped",
+  "root/my_queue stopped",
 ]
 `;
 
@@ -723,13 +723,13 @@ exports[`push rejects empty message 2`] = `
 
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
-  "'root/my_queue' started",
+  "root/my_queue started",
   "Push (messages=A).",
   "Push (messages=B).",
   "ApproxSize ().",
   "Purge ().",
   "ApproxSize ().",
-  "'root/my_queue' stopped",
+  "root/my_queue stopped",
 ]
 `;
 

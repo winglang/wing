@@ -77,9 +77,9 @@ test("create a service with a on stop method", async () => {
       .map((trace) => trace.data.message)
   ).toEqual([
     "start!",
-    "'root/my_service' started",
+    "root/my_service started",
     "stop!",
-    "'root/my_service' stopped",
+    "root/my_service stopped",
   ]);
 });
 
@@ -118,7 +118,7 @@ test("create a service without autostart", async () => {
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual(["'root/my_service' started", "'root/my_service' stopped"]);
+  ).toEqual(["root/my_service started", "root/my_service stopped"]);
 
 });
 
@@ -150,7 +150,7 @@ test("start and stop service", async () => {
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
   ).toEqual([
-    "'root/my_service' started",
+    "root/my_service started",
     "start!",
     "stop!",
     "start!",
@@ -186,7 +186,7 @@ test("consecutive start and stop service", async () => {
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual(["'root/my_service' started", "start!", "stop!"]);
+  ).toEqual(["root/my_service started", "start!", "stop!"]);
 });
 
 test("throws during service start", async () => {
