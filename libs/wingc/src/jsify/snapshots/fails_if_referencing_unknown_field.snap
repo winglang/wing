@@ -2,4 +2,4 @@
 source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
-Property "b" doesn't not exist in "MyInflightClass" 3:13
+Member "b" doesn't exist in "MyInflightClass" 3:13
