@@ -5,8 +5,11 @@ use std::{error::Error, io::Write, time::Instant};
 use camino::{Utf8Path, Utf8PathBuf};
 use clap::Parser;
 use cli::{print_compiled, print_compiling, print_installing};
+use home::home_dir;
 use strum::{Display, EnumString};
 use wingc::compile;
+
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[derive(Parser, Debug)]
 #[clap(version, styles=get_styles())]
@@ -40,6 +43,7 @@ fn as_dir_prefix(target: &Target) -> &'static str {
 }
 
 fn main() {
+	initialize_logger();
 	let stderr = cli::stderr_buffer_writer();
 	let result = match Command::parse() {
 		Command::Compile { file, target } => command_build(file, target),
@@ -75,7 +79,11 @@ fn command_build(file: String, target: Option<Target>) -> Result<(), Box<dyn Err
 	// Print that work is being done
 	print_compiling(source_file.as_str());
 
-	link_sdk(&project_dir)?;
+	let sdk_root = find_sdk(&project_dir)?;
+	tracing::info!("Using SDK at {}", sdk_root);
+
+	// Special pragma used by wingc to find the SDK types
+	std::env::set_var("WINGSDK_MANIFEST_ROOT", &sdk_root);
 
 	let result = compile(&project_dir, source_file, None, &work_dir);
 
@@ -93,7 +101,7 @@ fn command_build(file: String, target: Option<Target>) -> Result<(), Box<dyn Err
 	Ok(())
 }
 
-fn link_sdk(project_dir: &Utf8Path) -> Result<(), Box<dyn Error>> {
+fn find_sdk(project_dir: &Utf8Path) -> Result<Utf8PathBuf, Box<dyn Error>> {
 	// Check if we have a version of the SDK to link to
 	// by running `node -e 'require.resolve("@winglang/sdk")'`
 	let mut command = std::process::Command::new("node");
@@ -109,14 +117,22 @@ fn link_sdk(project_dir: &Utf8Path) -> Result<(), Box<dyn Error>> {
 		let sdk_root = Utf8Path::new(std::str::from_utf8(&stdout).unwrap().trim());
 		// path ends in lib/index.js, so remove those parts
 		let sdk_root = sdk_root.parent().unwrap().parent().unwrap();
-		std::env::set_var("WINGSDK_MANIFEST_ROOT", sdk_root);
-	} else {
-		// If the SDK is not installed, we need to install it
+		return Ok(sdk_root.to_owned());
+	}
+
+	let home_dir = Utf8PathBuf::from_path_buf(home_dir().expect("Could not find home directory")).expect("invalid utf8");
+
+	// Check if the SDK is installed at ~/.wing/cache/
+	let sdk_cache_dir = home_dir.join(".wing").join("cache");
+	let sdk_root = sdk_cache_dir.join("node_modules").join("@winglang").join("sdk");
+	if !sdk_root.exists() {
+		// If the SDK is not installed, install it in ~/.wing/cache/
 		print_installing("Wing SDK");
 
+		std::fs::create_dir_all(&sdk_cache_dir)?;
 		let mut install_command = std::process::Command::new("npm");
-		install_command.arg("install").arg("@winglang/sdk");
-		install_command.current_dir(project_dir);
+		install_command.arg("install").arg(format!("@winglang/sdk@{VERSION}"));
+		install_command.current_dir(&sdk_cache_dir);
 		install_command.stdout(std::process::Stdio::piped());
 		install_command.stderr(std::process::Stdio::piped());
 		let status = install_command.status()?;
@@ -124,10 +140,27 @@ fn link_sdk(project_dir: &Utf8Path) -> Result<(), Box<dyn Error>> {
 			// TODO better error handling
 			return Err("Failed to install SDK".into());
 		}
-
-		let sdk_root = project_dir.join("node_modules/@winglang/sdk");
-		std::env::set_var("WINGSDK_MANIFEST_ROOT", sdk_root);
+	} else {
+		// TODO: Check if the SDK installed matches the version of the CLI
 	}
+
+	let sdk_root = sdk_cache_dir.join("node_modules").join("@winglang").join("sdk");
+	link_sdk(&sdk_root, project_dir)?;
+	Ok(sdk_root)
+}
+
+fn link_sdk(sdk_root: &Utf8Path, project_dir: &Utf8Path) -> Result<(), Box<dyn Error>> {
+	// Symlink the SDK into the work directory
+	let sdk_link = project_dir.join("node_modules").join("@winglang").join("sdk");
+	if sdk_link.exists() {
+		std::fs::remove_file(&sdk_link)?;
+	}
+	std::fs::create_dir_all(sdk_link.parent().unwrap()).expect("Could not create directory");
+
+	#[cfg(target_family = "windows")]
+	std::os::windows::fs::symlink_dir(sdk_root, sdk_link)?;
+	#[cfg(not(target_family = "windows"))]
+	std::os::unix::fs::symlink(sdk_root, sdk_link)?;
 
 	Ok(())
 }
@@ -149,6 +182,19 @@ fn run_javascript_node(source_file: &Utf8Path, target_dir: &Utf8Path, target: Ta
 		return Err("Node.js failed".into());
 	}
 	Ok(())
+}
+
+fn initialize_logger() {
+	let enable_logs = std::env::var("WING_LOG").is_ok_and(|x| !x.is_empty() && x != "off" && x != "0");
+	let enable_colours = std::env::var("WING_LOG_NOCOLOR").is_err();
+	if enable_logs {
+		tracing_subscriber::fmt()
+			.with_writer(std::io::stderr)
+			.with_target(false)
+			.with_ansi(enable_colours)
+			.without_time()
+			.init();
+	}
 }
 
 pub fn get_styles() -> clap::builder::Styles {
