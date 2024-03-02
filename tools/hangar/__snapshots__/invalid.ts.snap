@@ -389,18 +389,18 @@ error: Cannot access static property \\"m\\" from instance
    |     ^ Cannot access static property \\"m\\" from instance
 
 
-error: Property \\"instanceField\\" doesn't not exist in \\"Construct\\"
+error: Member \\"instanceField\\" doesn't exist in \\"Construct\\"
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:10
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |          ^^^^^^^^^^^^^ Property \\"instanceField\\" doesn't not exist in \\"Construct\\"
+  |          ^^^^^^^^^^^^^ Member \\"instanceField\\" doesn't exist in \\"Construct\\"
 
 
-error: Property \\"f\\" doesn't not exist in \\"Construct\\"
+error: Member \\"f\\" doesn't exist in \\"Construct\\"
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:10
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
-  |          ^ Property \\"f\\" doesn't not exist in \\"Construct\\"
+  |          ^ Member \\"f\\" doesn't exist in \\"Construct\\"
 
 
  
@@ -1125,11 +1125,11 @@ error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
   |                        ^^^^ Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
 
 
-error: Property \\"someRandomMethod\\" doesn't not exist in \\"Array\\"
+error: Member \\"someRandomMethod\\" doesn't exist in \\"Array\\"
   --> ../../../examples/tests/invalid/container_types.test.w:6:6
   |
 6 | arr1.someRandomMethod();
-  |      ^^^^^^^^^^^^^^^^ Property \\"someRandomMethod\\" doesn't not exist in \\"Array\\"
+  |      ^^^^^^^^^^^^^^^^ Member \\"someRandomMethod\\" doesn't exist in \\"Array\\"
 
 
 error: Expected type to be \\"num\\", but got \\"num?\\" instead
@@ -1160,11 +1160,11 @@ error: Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
    |                    ^^ Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
 
 
-error: Property \\"someRandomMethod\\" doesn't not exist in \\"Map\\"
+error: Member \\"someRandomMethod\\" doesn't exist in \\"Map\\"
    --> ../../../examples/tests/invalid/container_types.test.w:17:4
    |
 17 | m1.someRandomMethod();
-   |    ^^^^^^^^^^^^^^^^ Property \\"someRandomMethod\\" doesn't not exist in \\"Map\\"
+   |    ^^^^^^^^^^^^^^^^ Member \\"someRandomMethod\\" doesn't exist in \\"Map\\"
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
@@ -1216,11 +1216,11 @@ error: Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
    |                    ^^ Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
 
 
-error: Property \\"someRandomMethod\\" doesn't not exist in \\"Set\\"
+error: Member \\"someRandomMethod\\" doesn't exist in \\"Set\\"
    --> ../../../examples/tests/invalid/container_types.test.w:29:4
    |
 29 | s1.someRandomMethod();
-   |    ^^^^^^^^^^^^^^^^ Property \\"someRandomMethod\\" doesn't not exist in \\"Set\\"
+   |    ^^^^^^^^^^^^^^^^ Member \\"someRandomMethod\\" doesn't exist in \\"Set\\"
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
@@ -1237,11 +1237,11 @@ error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
 
 
-error: Property \\"copyMut\\" doesn't not exist in \\"MutMap\\"
+error: Member \\"copyMut\\" doesn't exist in \\"MutMap\\"
    --> ../../../examples/tests/invalid/container_types.test.w:37:15
    |
 37 | let mm3 = mm2.copyMut();
-   |               ^^^^^^^ Property \\"copyMut\\" doesn't not exist in \\"MutMap\\"
+   |               ^^^^^^^ Member \\"copyMut\\" doesn't exist in \\"MutMap\\"
 
 
 error: Expected type to be \\"MutSet<str>\\", but got \\"Array<str>\\" instead
@@ -1258,11 +1258,11 @@ error: Expected type to be \\"num\\", but got \\"bool\\" instead
    |                                    ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
 
 
-error: Property \\"copyMut\\" doesn't not exist in \\"MutSet\\"
+error: Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
    --> ../../../examples/tests/invalid/container_types.test.w:46:15
    |
 46 | let ss4 = ss3.copyMut();
-   |               ^^^^^^^ Property \\"copyMut\\" doesn't not exist in \\"MutSet\\"
+   |               ^^^^^^^ Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
 
 
  
@@ -1788,11 +1788,11 @@ Duration <DURATION>"
 `;
 
 exports[`immutable_container_types.test.w 1`] = `
-"error: Property \\"set\\" doesn't not exist in \\"Map\\"
+"error: Member \\"set\\" doesn't exist in \\"Map\\"
   --> ../../../examples/tests/invalid/immutable_container_types.test.w:3:4
   |
 3 | m1.set(\\"a\\", \\"bye\\");
-  |    ^^^ Property \\"set\\" doesn't not exist in \\"Map\\"
+  |    ^^^ Member \\"set\\" doesn't exist in \\"Map\\"
 
 
 error: Expected type to be \\"Map<str>\\", but got \\"MutMap<str>\\" instead
@@ -1809,32 +1809,32 @@ error: Expected type to be \\"bool\\", but got \\"str\\" instead
   |                             ^^^ Expected type to be \\"bool\\", but got \\"str\\" instead
 
 
-error: Property \\"set\\" doesn't not exist in \\"Map\\"
+error: Member \\"set\\" doesn't exist in \\"Map\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
    |
 11 | m4.set(\\"2\\", 3);
-   |    ^^^ Property \\"set\\" doesn't not exist in \\"Map\\"
+   |    ^^^ Member \\"set\\" doesn't exist in \\"Map\\"
 
 
-error: Property \\"copy\\" doesn't not exist in \\"Map\\"
+error: Member \\"copy\\" doesn't exist in \\"Map\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:13:13
    |
 13 | let m5 = m4.copy();
-   |             ^^^^ Property \\"copy\\" doesn't not exist in \\"Map\\"
+   |             ^^^^ Member \\"copy\\" doesn't exist in \\"Map\\"
 
 
-error: Property \\"delete\\" doesn't not exist in \\"Map\\"
+error: Member \\"delete\\" doesn't exist in \\"Map\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:15:4
    |
 15 | m4.delete(\\"1\\");
-   |    ^^^^^^ Property \\"delete\\" doesn't not exist in \\"Map\\"
+   |    ^^^^^^ Member \\"delete\\" doesn't exist in \\"Map\\"
 
 
-error: Property \\"clear\\" doesn't not exist in \\"Map\\"
+error: Member \\"clear\\" doesn't exist in \\"Map\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:17:4
    |
 17 | m4.clear();
-   |    ^^^^^ Property \\"clear\\" doesn't not exist in \\"Map\\"
+   |    ^^^^^ Member \\"clear\\" doesn't exist in \\"Map\\"
 
 
 error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
@@ -1844,32 +1844,32 @@ error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\
    |                           ^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
 
 
-error: Property \\"delete\\" doesn't not exist in \\"Set\\"
+error: Member \\"delete\\" doesn't exist in \\"Set\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:24:4
    |
 24 | s2.delete(\\"a\\");
-   |    ^^^^^^ Property \\"delete\\" doesn't not exist in \\"Set\\"
+   |    ^^^^^^ Member \\"delete\\" doesn't exist in \\"Set\\"
 
 
-error: Property \\"add\\" doesn't not exist in \\"Set\\"
+error: Member \\"add\\" doesn't exist in \\"Set\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:26:4
    |
 26 | s2.add(\\"d\\");
-   |    ^^^ Property \\"add\\" doesn't not exist in \\"Set\\"
+   |    ^^^ Member \\"add\\" doesn't exist in \\"Set\\"
 
 
-error: Property \\"copy\\" doesn't not exist in \\"Set\\"
+error: Member \\"copy\\" doesn't exist in \\"Set\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:28:13
    |
 28 | let s3 = s2.copy();
-   |             ^^^^ Property \\"copy\\" doesn't not exist in \\"Set\\"
+   |             ^^^^ Member \\"copy\\" doesn't exist in \\"Set\\"
 
 
-error: Property \\"clear\\" doesn't not exist in \\"Set\\"
+error: Member \\"clear\\" doesn't exist in \\"Set\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:30:4
    |
 30 | s2.clear();
-   |    ^^^^^ Property \\"clear\\" doesn't not exist in \\"Set\\"
+   |    ^^^^^ Member \\"clear\\" doesn't exist in \\"Set\\"
 
 
 error: Expected type to be \\"bool\\", but got \\"Array<num>\\" instead
@@ -2486,11 +2486,11 @@ error: Expected type to be \\"Array<str>\\", but got \\"str\\" instead
    |                     ^ Expected type to be \\"Array<str>\\", but got \\"str\\" instead
 
 
-error: Property \\"set\\" doesn't not exist in \\"Json\\"
+error: Member \\"set\\" doesn't exist in \\"Json\\"
    --> ../../../examples/tests/invalid/json.test.w:19:13
    |
 19 | foreverJson.set(\\"a\\", \\"world!\\");
-   |             ^^^ Property \\"set\\" doesn't not exist in \\"Json\\"
+   |             ^^^ Member \\"set\\" doesn't exist in \\"Json\\"
 
 
 error: Expected type to be \\"num?\\", but got \\"str?\\" instead
@@ -2601,11 +2601,11 @@ Duration <DURATION>"
 `;
 
 exports[`json_static.test.w 1`] = `
-"error: Property \\"set\\" doesn't not exist in \\"Json\\"
+"error: Member \\"set\\" doesn't exist in \\"Json\\"
   --> ../../../examples/tests/invalid/json_static.test.w:4:10
   |
 4 | immutObj.set(\\"a\\", \\"foo\\");
-  |          ^^^ Property \\"set\\" doesn't not exist in \\"Json\\"
+  |          ^^^ Member \\"set\\" doesn't exist in \\"Json\\"
 
 
  
@@ -2699,11 +2699,11 @@ error: Expected type to be \\"MutArray<num>\\", but got \\"MutArray<str>\\" inst
   |                           ^^^^ Expected type to be \\"MutArray<num>\\", but got \\"MutArray<str>\\" instead
 
 
-error: Property \\"someMethod\\" doesn't not exist in \\"MutArray\\"
+error: Member \\"someMethod\\" doesn't exist in \\"MutArray\\"
   --> ../../../examples/tests/invalid/mut_container_types.test.w:6:6
   |
 6 | arr1.someMethod();
-  |      ^^^^^^^^^^ Property \\"someMethod\\" doesn't not exist in \\"MutArray\\"
+  |      ^^^^^^^^^^ Member \\"someMethod\\" doesn't exist in \\"MutArray\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -2727,11 +2727,11 @@ error: Expected type to be \\"MutSet<num>\\", but got \\"MutSet<str>\\" instead
    |                       ^^ Expected type to be \\"MutSet<num>\\", but got \\"MutSet<str>\\" instead
 
 
-error: Property \\"someMethod\\" doesn't not exist in \\"MutSet\\"
+error: Member \\"someMethod\\" doesn't exist in \\"MutSet\\"
    --> ../../../examples/tests/invalid/mut_container_types.test.w:14:4
    |
 14 | s3.someMethod();
-   |    ^^^^^^^^^^ Property \\"someMethod\\" doesn't not exist in \\"MutSet\\"
+   |    ^^^^^^^^^^ Member \\"someMethod\\" doesn't exist in \\"MutSet\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -3064,18 +3064,18 @@ exports[`primitives.test.w 1`] = `
   |     ^^^^ Unexpected reference \\"structured_access_expression\\"
 
 
-error: Property \\"blabla\\" doesn't not exist in \\"Array\\"
+error: Member \\"blabla\\" doesn't exist in \\"Array\\"
   --> ../../../examples/tests/invalid/primitives.test.w:9:16
   |
 9 | let join = arr.blabla(\\",\\");
-  |                ^^^^^^ Property \\"blabla\\" doesn't not exist in \\"Array\\"
+  |                ^^^^^^ Member \\"blabla\\" doesn't exist in \\"Array\\"
 
 
-error: Property \\"push\\" doesn't not exist in \\"Array\\"
+error: Member \\"push\\" doesn't exist in \\"Array\\"
    --> ../../../examples/tests/invalid/primitives.test.w:11:5
    |
 11 | arr.push(4);
-   |     ^^^^ Property \\"push\\" doesn't not exist in \\"Array\\"
+   |     ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
@@ -3716,11 +3716,11 @@ error: Struct fields must have immutable types
    |   ^ Struct fields must have immutable types
 
 
-error: Property \\"badField\\" doesn't not exist in \\"A\\"
+error: Member \\"badField\\" doesn't exist in \\"A\\"
    --> ../../../examples/tests/invalid/structs.test.w:32:7
    |
 32 | log(a.badField);
-   |       ^^^^^^^^ Property \\"badField\\" doesn't not exist in \\"A\\"
+   |       ^^^^^^^^ Member \\"badField\\" doesn't exist in \\"A\\"
 
 
 error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != str)
@@ -3949,11 +3949,11 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_field.test.w 1`] = `
-"error: Property \\"a\\" doesn't not exist in \\"String\\"
+"error: Member \\"a\\" doesn't exist in \\"String\\"
   --> ../../../examples/tests/invalid/unknown_field.test.w:1:12
   |
 1 | std.String.a.b.c.fromJson();
-  |            ^ Property \\"a\\" doesn't not exist in \\"String\\"
+  |            ^ Member \\"a\\" doesn't exist in \\"String\\"
 
 
  
@@ -4014,11 +4014,11 @@ error: Unknown symbol \\"B\\"
    |                 ^ Unknown symbol \\"B\\"
 
 
-error: Property \\"dodo\\" doesn't not exist in \\"SomeResourceChild\\"
+error: Member \\"dodo\\" doesn't exist in \\"SomeResourceChild\\"
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:37:5
    |
 37 | src.dodo();
-   |     ^^^^ Property \\"dodo\\" doesn't not exist in \\"SomeResourceChild\\"
+   |     ^^^^ Member \\"dodo\\" doesn't exist in \\"SomeResourceChild\\"
 
 
 error: Unknown symbol \\"unknown\\"
@@ -4035,18 +4035,18 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
    |                        ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
 
 
-error: Property \\"assert\\" doesn't not exist in \\"Bucket\\"
+error: Member \\"assert\\" doesn't exist in \\"Bucket\\"
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
    |
 20 |     this.bucket.assert(2 + \\"2\\");
-   |                 ^^^^^^ Property \\"assert\\" doesn't not exist in \\"Bucket\\"
+   |                 ^^^^^^ Member \\"assert\\" doesn't exist in \\"Bucket\\"
 
 
-error: Property \\"methodWhichIsNotPartOfBucketApi\\" doesn't not exist in \\"Bucket\\"
+error: Member \\"methodWhichIsNotPartOfBucketApi\\" doesn't exist in \\"Bucket\\"
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:23:24
    |
 23 |     return this.bucket.methodWhichIsNotPartOfBucketApi(id);
-   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Property \\"methodWhichIsNotPartOfBucketApi\\" doesn't not exist in \\"Bucket\\"
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Member \\"methodWhichIsNotPartOfBucketApi\\" doesn't exist in \\"Bucket\\"
 
 
  
