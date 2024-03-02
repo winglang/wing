@@ -114,7 +114,7 @@ pub enum LookupResult<'a> {
 	/// A matching symbol was found but it's not public
 	NotPublic(reference([a], [SymbolKind]), SymbolLookupInfo),
 	/// The symbol was not found in the environment, contains the name of the symbol or part of it that was not found
-	/// If the lookup environment was a type environment, the type is also included
+	/// If the lookup environment was a type environment (SymbolEnvKind::Type) such as a class, the type is also included
 	NotFound(Symbol, Option<TypeRef>),
 	/// A symbol with a matching name was found in multiple environments.
 	MultipleFound,

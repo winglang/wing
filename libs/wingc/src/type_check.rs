@@ -6023,7 +6023,7 @@ where
 	match lookup_result {
 		LookupResult::NotFound(s, maybe_t) => {
 			let message = if let Some(env_type) = maybe_t {
-				format!("Property \"{s}\" doesn't not exist in \"{env_type}\"")
+				format!("Member \"{s}\" doesn't exist in \"{env_type}\"")
 			} else {
 				format!("Unknown symbol \"{s}\"")
 			};
