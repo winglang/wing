@@ -32,6 +32,13 @@ enum Target {
 	TfAws,
 }
 
+fn as_dir_prefix(target: &Target) -> &'static str {
+	match target {
+		Target::Sim => "sim",
+		Target::TfAws => "tfaws",
+	}
+}
+
 fn main() {
 	let stderr = cli::stderr_buffer_writer();
 	let result = match Command::parse() {
@@ -54,17 +61,23 @@ fn main() {
 
 fn command_build(file: String, target: Option<Target>) -> Result<(), Box<dyn Error>> {
 	let start = Instant::now();
+	let target = target.unwrap_or(Target::Sim);
 
 	let project_dir = Utf8PathBuf::from_path_buf(std::env::current_dir()?).expect("invalid utf8");
 	let source_file = Utf8Path::new(&file);
-	let target_dir = project_dir.join("target");
+	let target_dir = project_dir.join("target").join(format!(
+		"{}.{}",
+		source_file.file_stem().unwrap_or("main"),
+		as_dir_prefix(&target),
+	));
+	let work_dir = target_dir.join(".wing");
 
 	// Print that work is being done
 	print_compiling(source_file.as_str());
 
 	link_sdk(&project_dir)?;
 
-	let result = compile(&project_dir, source_file, None, &target_dir);
+	let result = compile(&project_dir, source_file, None, &work_dir);
 
 	match result {
 		Ok(_) => {}
@@ -74,7 +87,6 @@ fn command_build(file: String, target: Option<Target>) -> Result<(), Box<dyn Err
 		}
 	}
 
-	let target = target.unwrap_or(Target::Sim);
 	run_javascript_node(source_file, &target_dir, target)?;
 
 	print_compiled(start.elapsed());
@@ -122,7 +134,7 @@ fn link_sdk(project_dir: &Utf8Path) -> Result<(), Box<dyn Error>> {
 
 fn run_javascript_node(source_file: &Utf8Path, target_dir: &Utf8Path, target: Target) -> Result<(), Box<dyn Error>> {
 	let mut command = std::process::Command::new("node");
-	command.arg(target_dir.join("preflight.js"));
+	command.arg(target_dir.join(".wing").join("preflight.js"));
 	command.env("WING_PLATFORMS", target.to_string());
 	command.env(
 		"WING_SOURCE_DIR",
@@ -131,6 +143,7 @@ fn run_javascript_node(source_file: &Utf8Path, target_dir: &Utf8Path, target: Ta
 			.parent()
 			.expect("source file has no parent"),
 	);
+	command.env("WING_SYNTH_DIR", target_dir);
 	let status = command.status()?;
 	if !status.success() {
 		return Err("Node.js failed".into());
