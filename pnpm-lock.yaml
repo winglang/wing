@@ -1003,6 +1003,12 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
+  apps/wingcli-v2:
+    dependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../../libs/wingsdk
+
   docs/docs: {}
 
   examples/jsii-fixture:
@@ -12980,6 +12986,7 @@ packages:
     dependencies:
       cdk8s: 2.68.43(constructs@10.3.0)
       constructs: 10.3.0
+      minimatch: 3.1.2
     optionalDependencies:
       backport: 8.5.0
     transitivePeerDependencies:
@@ -12996,6 +13003,9 @@ packages:
       constructs: ^10
     dependencies:
       constructs: 10.3.0
+      fast-json-patch: 3.1.1
+      follow-redirects: 1.15.5
+      yaml: 2.3.2
     optionalDependencies:
       backport: 8.5.0
     transitivePeerDependencies:
@@ -14336,7 +14346,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240228
+      typescript: 5.5.0-dev.20240301
     dev: true
 
   /dset@3.1.2:
@@ -22906,8 +22916,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240228:
-    resolution: {integrity: sha512-bdFIn0U4p7+PrnESpBPXDc6jRXynawwVQssEw2Pd2o/Mud34LwGgqHXOgIY5EEmZFPjzT3osXB7VKQP1cdHi3g==}
+  /typescript@5.5.0-dev.20240301:
+    resolution: {integrity: sha512-2d5wSd1gEdj2cI/d6PTglOGPgIszrnI20znF3EyerbO3TNe33q+XVN5LNxVAkllrINCw9dITdfyvbJuA/F5itg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

@@ -1,0 +1,9 @@
+{
+  "name": "wingcli-v2",
+  "dependencies": {
+    "@winglang/sdk": "workspace:^"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

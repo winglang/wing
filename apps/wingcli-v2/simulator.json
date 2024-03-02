@@ -1,0 +1,98 @@
+{
+  "types": {
+    "@winglang/sdk.cloud.Api": {
+      "className": "Api",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/api.inflight.js"
+    },
+    "@winglang/sdk.cloud.Bucket": {
+      "className": "Bucket",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/bucket.inflight.js"
+    },
+    "@winglang/sdk.cloud.Counter": {
+      "className": "Counter",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/counter.inflight.js"
+    },
+    "@winglang/sdk.cloud.Domain": {
+      "className": "Domain",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/domain.inflight.js"
+    },
+    "@winglang/sdk.ex.DynamodbTable": {
+      "className": "DynamodbTable",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/dynamodb-table.inflight.js"
+    },
+    "@winglang/sdk.cloud.Endpoint": {
+      "className": "Endpoint",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/endpoint.inflight.js"
+    },
+    "@winglang/sdk.sim.EventMapping": {
+      "className": "EventMapping",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/event-mapping.inflight.js"
+    },
+    "@winglang/sdk.cloud.Function": {
+      "className": "Function",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/function.inflight.js"
+    },
+    "@winglang/sdk.cloud.OnDeploy": {
+      "className": "OnDeploy",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/on-deploy.inflight.js"
+    },
+    "@winglang/sdk.cloud.Queue": {
+      "className": "Queue",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/queue.inflight.js"
+    },
+    "@winglang/sdk.ex.ReactApp": {
+      "className": "ReactApp",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/react-app.inflight.js"
+    },
+    "@winglang/sdk.ex.Redis": {
+      "className": "Redis",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/redis.inflight.js"
+    },
+    "@winglang/sdk.cloud.Schedule": {
+      "className": "Schedule",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/schedule.inflight.js"
+    },
+    "@winglang/sdk.cloud.Secret": {
+      "className": "Secret",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/secret.inflight.js"
+    },
+    "@winglang/sdk.cloud.Service": {
+      "className": "Service",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/service.inflight.js"
+    },
+    "@winglang/sdk.sim.State": {
+      "className": "State",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/state.inflight.js"
+    },
+    "@winglang/sdk.ex.Table": {
+      "className": "Table",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/table.inflight.js"
+    },
+    "@winglang/sdk.std.TestRunner": {
+      "className": "TestRunner",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/test-runner.inflight.js"
+    },
+    "@winglang/sdk.cloud.Topic": {
+      "className": "Topic",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/topic.inflight.js"
+    },
+    "@winglang/sdk.cloud.Website": {
+      "className": "Website",
+      "sourcePath": "/Users/chrisr/dev/wing1/libs/wingsdk/lib/target-sim/website.inflight.js"
+    }
+  },
+  "resources": [
+    {
+      "type": "@winglang/sdk.cloud.Bucket",
+      "path": "root/Default/cloud.Bucket",
+      "addr": "c8d5c5263203cf6b320a1e9e004e73aef72cd0933d",
+      "props": {
+        "public": false,
+        "initialObjects": {},
+        "topics": {}
+      },
+      "attrs": {}
+    }
+  ],
+  "sdkVersion": "0.0.0"
+}
