@@ -379,7 +379,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				}
 			} else if matches!(
 				nearest_non_reference.kind(),
-				"struct_literal" | "json_map_literal" | "set_literal" | "struct_literal_member"
+				"struct_literal" | "json_map_literal" | "struct_literal_member"
 			) {
 				// check to see if ":" is the last character of the same line up to the cursor
 				// if it is, we want an expression instead of struct completions
@@ -532,7 +532,7 @@ fn get_current_scope_completions(
 
 		// { a: } or { a: 1, b: }
 		//     ^               ^
-		"set_literal" | "struct_literal" | "json_map_literal" | "json_literal_member" => {
+		"struct_literal" | "json_map_literal" | "json_literal_member" => {
 			in_type = false;
 		}
 
@@ -595,7 +595,6 @@ fn get_current_scope_completions(
 			"argument_list"
 			| "call"
 			| "struct_literal"
-			| "set_literal"
 			| "struct_literal_member"
 			| "new_expression"
 			| "keyword_argument_value" => {

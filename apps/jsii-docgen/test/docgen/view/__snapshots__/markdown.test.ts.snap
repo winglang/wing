@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`complex link formatter wing snapshot 1`] = `
+exports[`complex link formatter > wing snapshot 1`] = `
 "# construct-library
 
 This is a test project to make sure the \`jsii-docgen\` cli property renders API documentation
@@ -973,7 +973,7 @@ first call to addToResourcePolicy(s).
 "
 `;
 
-exports[`simple link formatter wing snapshot 1`] = `
+exports[`simple link formatter > wing snapshot 1`] = `
 "# construct-library
 
 This is a test project to make sure the \`jsii-docgen\` cli property renders API documentation

@@ -176,7 +176,7 @@ exports[`queue name valid 2`] = `
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_fd688af4\\"], \\"root/Default/Queue-SetConsumer0\\")"`;
+exports[`queue with a consumer function 1`] = `"new (require("[REDACTED]/wingsdk/src/shared-aws/function.inflight")).FunctionClient(process.env["FUNCTION_NAME_fd688af4"], "root/Default/Queue-SetConsumer0")"`;
 
 exports[`queue with a consumer function 2`] = `
 {
@@ -189,12 +189,12 @@ exports[`queue with a consumer function 2`] = `
     },
     "aws_iam_role": {
       "Queue-SetConsumer0_IamRole_7F9ED9ED": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Queue-SetConsumer0_IamRolePolicy_0299B5AB": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
       },
     },

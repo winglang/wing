@@ -1,5 +1,5 @@
 let words = ["wing", "lang", "dang"];
-let uniqueNumbers = { 1, 2, 3 };
+let uniqueNumbers = Set<num>[ 1, 2, 3 ];
 
 for word in words {
   for number in uniqueNumbers {

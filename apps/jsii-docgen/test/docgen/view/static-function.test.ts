@@ -23,7 +23,7 @@ const findStaticFunction = (): reflect.Method => {
   throw new Error("Assembly does not contain a static function");
 };
 
-test.each(Language.values())("%s snapshot", (language) => {
+test.each(Language.values().map((l) => l.name))("%s snapshot", (language) => {
   const { transpile } = LANGUAGE_SPECIFIC[language.toString()];
   const markdown = new MarkdownRenderer({ language, ...metadata });
   const func = new StaticFunction(transpile, findStaticFunction()).toJson();

@@ -68,8 +68,8 @@ which will tell the `tf-aws` platform to use an existing VPC. However this will 
 ```sh
 Error: Parameter validation errors:
 - must have required property 'vpc_id'
-- must have required property 'private_subnet_id'
-- must have required property 'public_subnet_id'
+- must have required property 'private_subnet_ids'
+- must have required property 'public_subnet_ids'
 ```
 
 it is possible to provide these additional parameters using the `--value` option as well. For example:
