@@ -1,4 +1,5 @@
-export type Action = "INITIALIZE" | "INITIALIZED" | "FORWARD_REQUEST" | "FORWARD_RESPONSE";
+export type Action = "INITIALIZE" | "INITIALIZED" | "FORWARD_REQUEST" | "FORWARD_RESPONSE" | "ERROR";
+export type ErrorType = "SUBDOMAIN_IN_USE";
 
 export interface InitializeMessage {
   action: "INITIALIZE";
@@ -29,4 +30,10 @@ export interface ForwardResponseMessage {
   method: string;
   headers: Record<string, string | string[] | undefined>;
   body: string | undefined;
+}
+
+export interface ErrorMessage {
+  action: "ERROR";
+  type: ErrorType;
+  message: string;
 }

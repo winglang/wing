@@ -2,7 +2,7 @@ import { WebSocket } from "ws";
 import { initialize } from "./initialize.js";
 import { eventHandler, Events } from "./events.js";
 import { onMessage } from "./onmessage.js";
-import { InitializedMessage } from "./messages.js";
+import { ErrorMessage, InitializedMessage } from "./messages.js";
 
 const WING_CLOUD_URL = "wss://cq0rccz8mc.execute-api.us-east-1.amazonaws.com/prod";
 
@@ -42,6 +42,11 @@ export const connect = (targetUrl: string, props?: ConnectProps): Promise<Connec
         resolve({ url, subdomain, close: () => {
           ws.close();
         } });
+      });
+
+      eventHandler.on(Events.SubdomainInUse, ({ message }: ErrorMessage) => {
+        ws.close();
+        reject(message);
       });
     } catch (error) {
       reject(error);
