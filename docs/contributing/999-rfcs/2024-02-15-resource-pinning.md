@@ -19,6 +19,7 @@ Introduce a mechanism to protect resources from accidental deletion/moves in the
 - Provide default for a resource's "pinned" state in it's implementation
 - Git-trackable way to store changes to pinned resources between compilations, per target platform (e.g. "pinfile")
 - User-ability to manually and declaratively override a pinned resource's path in the resource tree
+- User-ability to manually and declaratively override a pinned resource's attributes used by the platform
 - Compilation failure when a pinned resource is deleted without explicit removal from the pinfile
 - Compilation failure when a pinned resource is moved without explicit mapping of a previous path to a new path
 - Compilation failure when a resource is no longer pinned in source but is still present in the pinfile
