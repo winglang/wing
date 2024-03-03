@@ -183,7 +183,7 @@ This information will be available to the target platform/app which can choose w
         // The platform type of the resource. Together with uniqueId, this must uniquely identify the resource.
         "type": "aws_s3_bucket",
         
-        // The logical path to the resource. If moved this can by updated.
+        // The logical path to the resource. If moved this can be updated.
         "path": "/root/CoolBucket",
 
         // The resulting attributes of the resource.
