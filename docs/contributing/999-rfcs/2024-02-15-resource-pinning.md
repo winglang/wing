@@ -50,9 +50,9 @@ bring cloud;
 new cloud.Bucket() as "CoolBucket";
 ```
 
-They run `wing compile` and then `wing test`, nice looks like everything works.
+They run `wing compile` and then `wing test`. Nice, looks like everything works.
 
-Running `wing compile -t tf-aws` also succeeds with the following output and automatically generates a pinfile next to the entrypoint file.
+Running `wing compile -t tf-aws` also succeeds with the following output and a new file called main.w.pin.json appears:
 
 ```shell
 # (output)
@@ -60,14 +60,15 @@ Running `wing compile -t tf-aws` also succeeds with the following output and aut
 ```
 
 ```json
-// main.w.pin.json, comments added for clarity
+// main.w.pin.json
 {
   "version": "1",
   "pinned": {
     "tf-aws": {
       "/root/CoolBucket": {
         "type": "aws_s3_bucket",
-        "uniqueId": "CoolBucket"
+        "uniqueId": "CoolBucket",
+        "path": "/root/CoolBucket",
       }
     }
   }
@@ -100,17 +101,17 @@ let myBucket = new MyBucket();
 
 ```shell
 # (output)
-[+pin] /root/MyBucket
+[-pin] /root/CoolBucket
 [+pin] /root/MyBucket/cloud.Bucket
 
 Error: The following pin has been moved or deleted:
   - /root/CoolBucket
 
-If moved, add "fromPath" to their pinfile entry.
+If moved, update "path" property in the pinfile to the new path.
 If deleted, remove the entry from the pinfile.
 ```
 
-So Sally adds fromPath to the pinfile:
+For now, Sally wants to avoid the destructive move of the bucket so she updates the `path` in the pinfile.
 
 ```json
 // main.w.pin.json
@@ -118,10 +119,10 @@ So Sally adds fromPath to the pinfile:
   "version": "1",
   "pinned": {
     "tf-aws": {
-      "/root/MyBucket/cloud.Bucket": {
+      "/root/CoolBucket": {
         "type": "aws_s3_bucket",
         "uniqueId": "CoolBucket",
-        "fromPath": "/root/CoolBucket"
+        "path": "/root/MyBucket/cloud.Bucket"
       }
     }
   }
@@ -129,6 +130,31 @@ So Sally adds fromPath to the pinfile:
 ```
 
 Running `wing compile -t tf-aws` now succeeds and nothing is deleted or moved in the resulting compiled output.
+
+Later, Sally decides the bucket has no need to be so protected, so they remove the default pin on `cloud.Bucket`:
+
+```wing
+// main.w
+bring cloud;
+
+class MyBucket {
+  bucket: cloud.Bucket;
+
+  new() {
+    this.bucket = new cloud.Bucket();
+    this.bucket.pinned = false;
+  }
+}
+
+let myBucket = new MyBucket();
+```
+
+Running `wing compile -t tf-aws` automatically updates the pinfile (because the resource is otherwise unchanged):
+
+```shell
+# (output)
+[-pin] /root/CoolBucket
+```
 
 ## Implementation
 
@@ -138,28 +164,33 @@ The `pinned` property is used to mark a created resource as "pinned" in the reso
 
 This information will be available to the target platform/app which can choose what to do with this information. For example, the sim target can simply ignore this while the terraform target can manage a pinfile to inform the user when this changes between compilation and allow them to resolve any renames.
 
-### Proposal for pinfile schema
+### Annotated Pinfile
 
 ```json
 {
   "version": "1",
   "pinned": {
     "tf-aws": {
-      // The current (not remapped) logical path to the resource. These will only be leaves of the resource tree
+      // The original logical path to the resource. These will only be leaves of the resource tree
       "/root/CoolBucket": {
         // These attributes have platform-specific values and only make sense in that context.
         // The keys however are platform-agnostic.
 
-        // a string that uniquely identify the resource.
+        // a string to identify the resource. Often matches the id but this value is platform-specific.
         "uniqueId": "CoolBucket",
 
-        // The type of the resource.  
+        // The platform type of the resource. Together with uniqueId, this must uniquely identify the resource.
         "type": "aws_s3_bucket",
+        
+        // The logical path to the resource. If moved this can by updated.
+        "path": "/root/CoolBucket",
 
-        "overrides": [
-          // a json path that maps to a new value
-          [".name", "newName"]
-        ]
+        // The resulting attributes of the resource.
+        // Data provided here will overwrite the resource's attributes.
+        // e.g. For terraform this is effectively an escape hatch for the user write their own.
+        "attributes": {
+          "name": "cool-bucket",
+        }
       }
     }
   }
@@ -186,13 +217,11 @@ Sometimes your statefulness is intentionally volatile so you don't care about wa
 Sometimes it isn't actually stateful but is treated as so by requiring additional mitigation to avoid downtime/corruption during replacement.
 Designing distributed systems requires balancing the trade-offs of statefulness and statelessness against factors like cost and reliability so it's not always obvious what the right choice is.
 
-Given all this, I think it's important to avoid the word "stateful" and to provide tools to express the true intent for API consumers rather than as an intrinsic property of the resource.
+With all this said, it's important to give consumers tools to express their intent for pinning even if a resource is typically considered stateful/stateless.
 
 ## Out-of-scope Thoughts
 
-### `unpin`
-
-### Attaching more meaning to `pin`
+### Attaching more meaning to `pinned`
 
 #### At a platform level
 
@@ -200,7 +229,7 @@ There are tools that provisioning engines have for managing resources you intend
 
 #### At a resource level
 
-`pin` could be used in resource abstractions to ensure it's capable of handling a deletion/replacement in a safe way. For example, a pinned bucket could provide a mechanism to create new bucket and transfer the contents to it before deleting the old one. These are useful to have as an opt-in mechanism because more safety often increases complexity and cost.
+`pinned` could be used in resource abstractions to ensure it's capable of handling a deletion/replacement in a safe way. For example, a pinned bucket could provide a mechanism to create new bucket and transfer the contents to it before deleting the old one. These are useful to have as an opt-in mechanism because more safety often increases complexity and cost.
 
 ### CLI commands
 
