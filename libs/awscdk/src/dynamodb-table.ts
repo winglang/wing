@@ -1,5 +1,5 @@
 import { RemovalPolicy } from "aws-cdk-lib";
-import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
+import { AttributeType, Billing, TableV2 } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import { core, ex, std } from "@winglang/sdk";
@@ -13,14 +13,14 @@ import { calculateDynamodbTablePermissions } from "@winglang/sdk/lib/shared-aws/
  * @inflight `@winglang/sdk.ex.IDynamodbTableClient`
  */
 export class DynamodbTable extends ex.DynamodbTable implements IAwsDynamodbTable {
-  private readonly table: Table;
+  private readonly table: TableV2;
 
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
     super(scope, id, props);
 
     const attributeDefinitions = props.attributeDefinitions as any;
 
-    this.table = new Table(this, "Default", {
+    this.table = new TableV2(this, "Default", {
       tableName: ResourceNames.generateName(this, {
         prefix: this.name,
         ...NAME_OPTS,
@@ -35,7 +35,7 @@ export class DynamodbTable extends ex.DynamodbTable implements IAwsDynamodbTable
           type: attributeDefinitions[props.rangeKey] as AttributeType,
         }
         : undefined,
-      billingMode: BillingMode.PAY_PER_REQUEST,
+      billing: Billing.onDemand(),
       removalPolicy: RemovalPolicy.DESTROY,
     });
   }

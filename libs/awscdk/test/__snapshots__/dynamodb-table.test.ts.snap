@@ -26,9 +26,16 @@ exports[`default dynamodb table behavior 1`] = `
             "KeyType": "HASH",
           },
         ],
+        "Replicas": [
+          {
+            "Region": {
+              "Ref": "AWS::Region",
+            },
+          },
+        ],
         "TableName": "my-wing-tableTable-c85e6383",
       },
-      "Type": "AWS::DynamoDB::Table",
+      "Type": "AWS::DynamoDB::GlobalTable",
       "UpdateReplacePolicy": "Delete",
     },
   },
@@ -204,9 +211,16 @@ exports[`function with a table binding 1`] = `
             "KeyType": "HASH",
           },
         ],
+        "Replicas": [
+          {
+            "Region": {
+              "Ref": "AWS::Region",
+            },
+          },
+        ],
         "TableName": "my-wing-tableTable-c85e6383",
       },
-      "Type": "AWS::DynamoDB::Table",
+      "Type": "AWS::DynamoDB::GlobalTable",
       "UpdateReplacePolicy": "Delete",
     },
   },

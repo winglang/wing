@@ -1,4 +1,4 @@
-import { Match, Template } from "aws-cdk-lib/assertions";
+import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud, simulator, ex } from "@winglang/sdk";
 import * as awscdk from "../src";
@@ -22,7 +22,7 @@ test("default dynamodb table behavior", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  template.hasResource("AWS::DynamoDB::Table", 1);
+  template.hasResource("AWS::DynamoDB::GlobalTable", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -52,7 +52,7 @@ test("function with a table binding", () => {
 
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::Logs::LogGroup", 1);
-  template.hasResource("AWS::DynamoDB::Table", 1);
+  template.hasResource("AWS::DynamoDB::GlobalTable", 1);
   template.hasResource("AWS::IAM::Role", 1);
   template.hasResource("AWS::IAM::Policy", 1);
   template.hasResource("AWS::Lambda::Function", 1);
