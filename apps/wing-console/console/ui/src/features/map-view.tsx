@@ -24,10 +24,12 @@ const Node = memo(
     node,
     depth,
     selected,
+    fade,
   }: {
     node: MapNode;
     depth: number;
     selected: boolean;
+    fade: boolean;
   }) => {
     return (
       <div className="h-full flex flex-col relative">
@@ -38,6 +40,7 @@ const Node = memo(
           open={node.children && node.children?.length > 0}
           selected={selected}
           resourceType={node.data?.type}
+          fade={fade}
           icon={(props) => (
             <ResourceIcon
               resourceType={node.data?.type}
