@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { IFunctionClient } from "../wingsdk.js";
+import type { IFunctionClient } from "../wingsdk.js";
 
 export type ResponseEnvelope =
   | {

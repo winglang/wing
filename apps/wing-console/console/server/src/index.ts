@@ -16,7 +16,7 @@ import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
 import type { Analytics } from "./utils/analytics.js";
 import { createCompiler } from "./utils/compiler.js";
-import {
+import type {
   FileLink,
   LayoutConfig,
   TestItem,

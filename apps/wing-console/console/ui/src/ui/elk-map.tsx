@@ -1,12 +1,13 @@
 import classNames from "classnames";
-import ELK, {
+import type {
   ElkExtendedEdge,
   ElkNode,
   LayoutOptions,
 } from "elkjs/lib/elk.bundled.js";
+import ELK from "elkjs/lib/elk.bundled.js";
 import { AnimatePresence } from "framer-motion";
+import type { FC } from "react";
 import {
-  FC,
   Fragment,
   memo,
   useCallback,
@@ -19,12 +20,13 @@ import {
 import { createPortal } from "react-dom";
 import { useKeyPressEvent } from "react-use";
 
-import { Edge } from "../shared/Edge.js";
-import { Node } from "../shared/Node.js";
+import type { Edge } from "../shared/Edge.js";
+import type { Node } from "../shared/Node.js";
 
 import { EdgeItem } from "./edge-item.js";
 import { useNodeStaticData } from "./use-node-static-data.js";
-import { ZoomPane, ZoomPaneRef, useZoomPane } from "./zoom-pane.js";
+import type { ZoomPaneRef } from "./zoom-pane.js";
+import { ZoomPane, useZoomPane } from "./zoom-pane.js";
 
 const durationClass = "duration-500";
 

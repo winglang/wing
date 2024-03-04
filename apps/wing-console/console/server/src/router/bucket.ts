@@ -3,7 +3,7 @@ import fs from "node:fs";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { IBucketClient } from "../wingsdk.js";
+import type { IBucketClient } from "../wingsdk.js";
 
 export const createBucketRouter = () => {
   return createRouter({

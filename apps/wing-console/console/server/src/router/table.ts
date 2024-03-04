@@ -2,7 +2,8 @@ import { ColumnType as SdkColumnType } from "@winglang/sdk/lib/ex/table.js";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { TableSchema, ITableClient, Json } from "../wingsdk.js";
+import type { TableSchema, ITableClient } from "../wingsdk.js";
+import { Json } from "../wingsdk.js";
 
 type ColumnType = "string" | "number" | "boolean" | "date" | "json";
 

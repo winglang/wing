@@ -3,7 +3,7 @@ import {
   USE_EXTERNAL_THEME_COLOR,
   useTheme,
 } from "@wingconsole/design-system";
-import { LogEntry, LogLevel } from "@wingconsole/server";
+import type { LogEntry, LogLevel } from "@wingconsole/server";
 import classNames from "classnames";
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 
