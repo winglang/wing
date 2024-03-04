@@ -6,6 +6,12 @@ import type { IQueueClient } from "../wingsdk.js";
 export const createQueueRouter = () => {
   return createRouter({
     "queue.purge": createProcedure
+      .meta({
+        analytics: {
+          action: "purge",
+          resource: "Queue",
+        },
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -19,6 +25,12 @@ export const createQueueRouter = () => {
         return client.purge();
       }),
     "queue.approxSize": createProcedure
+      .meta({
+        analytics: {
+          action: "approxSize",
+          resource: "Queue",
+        },
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -32,6 +44,12 @@ export const createQueueRouter = () => {
         return client.approxSize();
       }),
     "queue.push": createProcedure
+      .meta({
+        analytics: {
+          action: "push",
+          resource: "Queue",
+        },
+      })
       .input(
         z.object({
           resourcePath: z.string(),

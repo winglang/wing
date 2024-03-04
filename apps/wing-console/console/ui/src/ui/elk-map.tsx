@@ -5,7 +5,7 @@ import type {
   LayoutOptions,
 } from "elkjs/lib/elk.bundled.js";
 import ELK from "elkjs/lib/elk.bundled.js";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import type { FC } from "react";
 import {
   Fragment,
@@ -18,6 +18,7 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { useKeyPressEvent } from "react-use";
 
 import type { Edge } from "../shared/Edge.js";
 import type { Node } from "../shared/Node.js";
@@ -52,6 +53,7 @@ export type NodeItemProps<T> = {
   node: Node<T>;
   depth: number;
   selected: boolean;
+  fade: boolean;
 };
 
 type Sizes = Record<string, { width: number; height: number }>;
@@ -102,7 +104,12 @@ const InvisibleNodeSizeCalculator = memo(
                 className={classNames("h-full relative")}
                 ref={(element) => (refs.current[node.id] = element)}
               >
-                <NodeItem node={node} depth={depth} selected={false} />
+                <NodeItem
+                  node={node}
+                  depth={depth}
+                  selected={false}
+                  fade={false}
+                />
               </div>
             </div>
 
@@ -351,7 +358,8 @@ const NodesContainer = memo(
     return (
       <>
         {nodeList.map((node) => (
-          <motion.div
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+          <div
             key={node.id}
             className={classNames(
               "absolute origin-top",
@@ -359,21 +367,9 @@ const NodesContainer = memo(
               durationClass,
             )}
             style={{
-              translateX: node.offset.x,
-              translateY: node.offset.y,
+              transform: `translate(${node.offset.x}px, ${node.offset.y}px)`,
               width: `${node.width}px`,
               height: `${node.height}px`,
-            }}
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity:
-                isHighlighted(node.id) || hasHighlightedEdge(node) ? 1 : 0.3,
-            }}
-            transition={{ ease: "easeOut", duration: 0.15 }}
-            exit={{
-              opacity: 0,
             }}
             onClick={(event) => {
               // Stop the event from propagating to the background node.
@@ -385,8 +381,9 @@ const NodesContainer = memo(
               node={node.data}
               depth={node.depth}
               selected={node.id === selectedNodeId}
+              fade={!isHighlighted(node.id) && !hasHighlightedEdge(node)}
             />
-          </motion.div>
+          </div>
         ))}
       </>
     );
@@ -581,6 +578,13 @@ export const ElkMap = <T extends unknown = undefined>({
   }, [offsets]);
 
   const mapBackgroundRef = useRef<HTMLDivElement>(null);
+
+  useKeyPressEvent(
+    "Escape",
+    useCallback(() => {
+      onSelectedNodeIdChange?.(undefined);
+    }, [onSelectedNodeIdChange]),
+  );
 
   return (
     <>
