@@ -112,7 +112,6 @@ fn command_build(file: String, target: Option<Target>) -> Result<(), Box<dyn Err
 }
 
 fn install_sdk() -> Result<(), Box<dyn Error>> {
-	// If the SDK is not installed, install it in ~/.wing/cache/
 	print_installing("Wing SDK");
 
 	std::fs::create_dir_all(WING_CACHE_DIR.as_str())?;
@@ -121,10 +120,13 @@ fn install_sdk() -> Result<(), Box<dyn Error>> {
 	install_command.current_dir(WING_CACHE_DIR.as_str());
 	install_command.stdout(std::process::Stdio::piped());
 	install_command.stderr(std::process::Stdio::piped());
-	let status = install_command.status()?;
-	if !status.success() {
-		// TODO better error handling
-		return Err("Failed to install SDK".into());
+
+	let output = install_command.output()?;
+	if !output.status.success() {
+		let stdout = String::from_utf8_lossy(&output.stdout);
+		let stderr = String::from_utf8_lossy(&output.stderr);
+		let error_message = format!("Failed to install SDK. stdout: {}. stderr: {}", stdout, stderr);
+		return Err(error_message.into());
 	}
 	Ok(())
 }
