@@ -27,6 +27,12 @@ export const createApiRouter = () => {
       }),
 
     "api.fetch": createProcedure
+      .meta({
+        analytics: {
+          action: "fetch",
+          resource: "Api",
+        },
+      })
       .input(
         z.object({
           url: z.string(),
