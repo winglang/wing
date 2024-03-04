@@ -33,7 +33,7 @@ export const WebSocketState = () => {
               </h3>
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
-                  The websocket connection to the server was lost.
+                  The connection to the server was lost.
                 </p>
               </div>
               <div className="mt-2">
