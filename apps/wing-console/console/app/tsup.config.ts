@@ -5,12 +5,7 @@ import { viteConfig } from "./scripts/config.mjs";
 
 export default defineConfig({
   entry: ["src/index.ts"],
-  external: [
-    "fsevents",
-    // We want to keep the contents of the `scripts/` directory,
-    // which include an applescript file.
-    /scripts\/open\.mjs$/i,
-  ],
+  external: ["fsevents"],
   format: ["cjs"],
   env: {
     SEGMENT_WRITE_KEY: process.env.SEGMENT_WRITE_KEY ?? "",
