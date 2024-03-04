@@ -1008,9 +1008,12 @@ importers:
 
   apps/wingcli-v2:
     dependencies:
-      '@winglang/sdk':
+      '@winglang/wingc':
         specifier: workspace:^
-        version: link:../../libs/wingsdk
+        version: link:../../libs/wingc
+      '@winglang/wingii':
+        specifier: workspace:^
+        version: link:../../libs/wingii
 
   docs/docs: {}
 
@@ -4275,6 +4278,7 @@ packages:
 
   /@babel/parser@7.23.3:
     resolution: {integrity: sha512-uVsWNvlVsIninV2prNz/3lHCb+5CJ+e+IUBfbjToAHODtfGYLfCFuY4AU7TskI+dAKk+njsPiBjq1gKTvZOBaw==}
+    engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
       '@babel/types': 7.23.9
@@ -12988,6 +12992,7 @@ packages:
 
   /cdk8s-plus-27@2.7.81(cdk8s@2.68.43)(constructs@10.3.0):
     resolution: {integrity: sha512-udabjGUObc0nJKI/Q+HfRPM5nCNnTEqR0SUMYhnGyVjZDxrrr52eNbGPvFiuYPm+Pul4jEyVB+1A3PWYVR2oTw==}
+    engines: {node: '>= 16.20.0'}
     peerDependencies:
       cdk8s: ^2.68.11
       constructs: ^10.3.0
@@ -14356,7 +14361,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240301
+      typescript: 5.5.0-dev.20240304
     dev: true
 
   /dset@3.1.2:
@@ -22931,8 +22936,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240301:
-    resolution: {integrity: sha512-2d5wSd1gEdj2cI/d6PTglOGPgIszrnI20znF3EyerbO3TNe33q+XVN5LNxVAkllrINCw9dITdfyvbJuA/F5itg==}
+  /typescript@5.5.0-dev.20240304:
+    resolution: {integrity: sha512-nu7H0CgsNe6Q9dJLsRRKB4E7KNBHuhJVJtC6vwC0GNnunJLGh8ZGtEZzcFx+feNnpAC/TWLs/H5EAea1wruBUg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
