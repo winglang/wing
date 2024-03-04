@@ -1,12 +1,13 @@
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 import { createConsoleServer } from "@wingconsole/server";
 import { createServer as createViteServer } from "vite";
 
-import { openBrowser } from "../src/open.js";
+import { viteConfig } from "./config.mjs";
 
-import { viteConfig } from "./config.js";
+const require = createRequire(import.meta.url);
 
 const options = parseArgs({
   options: {
@@ -37,6 +38,7 @@ const options = parseArgs({
     },
     hostUtils: {
       async openExternal(url) {
+        const { openBrowser } = require("../src/open.js");
         openBrowser(url);
       },
     },

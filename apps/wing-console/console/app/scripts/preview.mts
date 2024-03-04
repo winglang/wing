@@ -1,8 +1,10 @@
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 import { createConsoleApp } from "../dist/index.js";
-import { openBrowser } from "../src/open.js";
+
+const require = createRequire(import.meta.url);
 
 const options = parseArgs({
   options: {
@@ -20,6 +22,7 @@ const options = parseArgs({
     requestedPort: 1214,
     hostUtils: {
       async openExternal(url) {
+        const { openBrowser } = require("../src/open.js");
         openBrowser(url);
       },
     },

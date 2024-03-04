@@ -11,8 +11,8 @@
     "dist"
   ],
   "scripts": {
-    "preview": "tsx scripts/preview.ts",
-    "dev": "tsx watch scripts/dev.ts",
+    "preview": "tsx scripts/preview.mts",
+    "dev": "tsx watch scripts/dev.mts",
     "compile": "tsup",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
     "test:playwright": "playwright test --update-snapshots",
