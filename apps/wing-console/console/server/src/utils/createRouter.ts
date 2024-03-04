@@ -76,6 +76,13 @@ export interface FileLink {
   column?: number;
 }
 
+export interface RouterMeta {
+  analytics?: {
+    action: string;
+    resource: string;
+  };
+}
+
 export interface RouterContext {
   simulator(): Promise<simulator.Simulator>;
   testSimulator(): Promise<simulator.Simulator>;
@@ -105,7 +112,7 @@ export interface RouterContext {
   analytics?: Analytics;
 }
 
-const t = initTRPC.context<RouterContext>().create();
+const t = initTRPC.context<RouterContext>().meta<RouterMeta>().create();
 export const createRouter = t.router;
 export const mergeRouters = t.mergeRouters;
 export const middleware = t.middleware;
@@ -120,6 +127,20 @@ const invalidateQueriesAfterMutation = middleware(async (options) => {
   return result;
 });
 
-export const createProcedure = t.procedure.use(
-  invalidateQueriesAfterMutation,
-) as typeof t.procedure;
+const sendUserResourceInteractionAnalyticsEvent = middleware(
+  async (options) => {
+    const analytics = options.ctx.analytics;
+    const meta = options.meta?.analytics;
+    if (analytics && meta) {
+      analytics.track("user_resource_interaction", {
+        resource: meta.resource,
+        action: meta.action,
+      });
+    }
+    return await options.next();
+  },
+);
+
+export const createProcedure = t.procedure
+  .use(invalidateQueriesAfterMutation)
+  .use(sendUserResourceInteractionAnalyticsEvent) as typeof t.procedure;

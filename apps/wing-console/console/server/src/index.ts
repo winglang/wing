@@ -42,6 +42,7 @@ export type { Config } from "./config.js";
 export type { Router } from "./router/index.js";
 export type { HostUtils } from "./hostUtils.js";
 export type { RouterContext } from "./utils/createRouter.js";
+export type { RouterMeta } from "./utils/createRouter.js";
 export type { MapNode, MapEdge } from "./router/app.js";
 export type { InternalTestResult } from "./router/test.js";
 export type { Column } from "./router/table.js";
