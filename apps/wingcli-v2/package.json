@@ -1,5 +1,9 @@
 {
   "name": "wingcli-v2",
+  "scripts": {
+    "compile": "cargo build --release",
+    "test": "cargo test"
+  },
   "dependencies": {
     "@winglang/wingii": "workspace:^",
     "@winglang/wingc": "workspace:^"
