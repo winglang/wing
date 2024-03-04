@@ -16,6 +16,8 @@ camino = "1.1.6"
 clap = { version = "4.5.1", features = ["derive", "color"] }
 # Home directories
 home = "0.5.9"
+# Lazily evaluated static variables
+lazy_static = "1.4.0"
 # Enum parsing
 strum = { version = "0.26.1", features = ["derive"] }
 # Colors in terminal

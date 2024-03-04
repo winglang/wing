@@ -2197,6 +2197,7 @@ dependencies = [
  "camino",
  "clap 4.5.1",
  "home",
+ "lazy_static",
  "strum",
  "termcolor",
  "tracing",
