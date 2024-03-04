@@ -366,7 +366,7 @@ export class Util {
 
   /**
    * Appends new data to the end of an existing file
-   * @param filepath The file path that needs to be written.
+   * @param filepath The file path that needs to be appended.
    * @param data The text to be appended to the file.
    * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
    * If a flag is not provided, it defaults to `"w"`.
