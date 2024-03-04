@@ -2,12 +2,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
 import type { Mode } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { App } from "./App.js";
 import { AppContext } from "./AppContext.js";
 import { LayoutType } from "./layout/layout-provider.js";
 import { trpc } from "./services/trpc.js";
+import { WebSocketProvider } from "./services/use-websocket.js";
 
 export const Console = ({
   trpcUrl,
@@ -30,36 +31,43 @@ export const Console = ({
   wingCloudSignInUrl?: string;
   googleSignInURL?: string;
 }) => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        networkMode: "always",
-        refetchOnWindowFocus: false,
-        keepPreviousData: true,
-      },
-      mutations: {
-        networkMode: "always",
-      },
-    },
-  });
-  const wsClient = createWSClient({
-    url: wsUrl,
-  });
-  const trpcClient = trpc.createClient({
-    links: [
-      splitLink({
-        condition(op) {
-          return op.type === "subscription";
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            networkMode: "always",
+            refetchOnWindowFocus: false,
+            keepPreviousData: true,
+          },
+          mutations: {
+            networkMode: "always",
+          },
         },
-        true: wsLink({
-          client: wsClient,
-        }),
-        false: httpLink({
-          url: trpcUrl,
-        }),
       }),
-    ],
-  });
+  );
+  const [wsClient] = useState(() =>
+    createWSClient({
+      url: wsUrl,
+    }),
+  );
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        splitLink({
+          condition(op) {
+            return op.type === "subscription";
+          },
+          true: wsLink({
+            client: wsClient,
+          }),
+          false: httpLink({
+            url: trpcUrl,
+          }),
+        }),
+      ],
+    }),
+  );
 
   let windowTitle = title ?? "Wing Console";
 
@@ -116,7 +124,14 @@ export const Console = ({
     >
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          <App layout={layout} theme={theme} color={color} onTrace={onTrace} />
+          <WebSocketProvider webSocket={wsClient.getConnection()}>
+            <App
+              layout={layout}
+              theme={theme}
+              color={color}
+              onTrace={onTrace}
+            />
+          </WebSocketProvider>
         </QueryClientProvider>
       </trpc.Provider>
     </AppContext.Provider>

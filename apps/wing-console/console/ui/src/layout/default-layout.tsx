@@ -23,6 +23,7 @@ import { LogsWidget } from "../widgets/logs.js";
 import { SignInModal } from "./sign-in.js";
 import { StatusBar } from "./status-bar.js";
 import { useLayout } from "./use-layout.js";
+import { WebSocketState } from "./websocket-state.js";
 
 export interface LayoutProps {
   cloudAppState: State;
@@ -199,6 +200,7 @@ export const DefaultLayout = ({
   return (
     <>
       <SignInModal />
+      <WebSocketState />
 
       <div className={classNames("w-full h-full", theme.bg1)}>
         <div

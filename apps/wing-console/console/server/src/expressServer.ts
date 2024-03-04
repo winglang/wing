@@ -146,10 +146,15 @@ export const createExpressServer = async ({
   log.info(`Server is listening on port ${port}`);
 
   const wss = new WebSocketServer({ server });
-  applyWSSHandler({
+  const handler = applyWSSHandler({
     wss,
     router,
     createContext,
+  });
+
+  process.on("SIGTERM", () => {
+    handler.broadcastReconnectNotification();
+    wss.close();
   });
 
   return { port, server };
