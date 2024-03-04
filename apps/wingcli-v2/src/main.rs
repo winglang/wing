@@ -24,7 +24,7 @@ enum Command {
 	/// Compile one or more Wing files
 	Compile {
 		/// Source file or directory to compile
-		file: String,
+		file: Utf8PathBuf,
 
 		/// The platform to target
 		#[clap(short, long)]
@@ -70,12 +70,11 @@ fn main() {
 	}
 }
 
-fn command_build(file: String, target: Option<Target>) -> Result<(), Box<dyn Error>> {
+fn command_build(source_file: Utf8PathBuf, target: Option<Target>) -> Result<(), Box<dyn Error>> {
 	let start = Instant::now();
 	let target = target.unwrap_or(Target::Sim);
 
 	let project_dir = Utf8PathBuf::from_path_buf(std::env::current_dir()?).expect("invalid utf8");
-	let source_file = Utf8Path::new(&file);
 	let target_dir = project_dir.join("target").join(format!(
 		"{}.{}",
 		source_file.file_stem().unwrap_or("main"),
@@ -95,7 +94,7 @@ fn command_build(file: String, target: Option<Target>) -> Result<(), Box<dyn Err
 	// Special pragma used by wingc to find the SDK types
 	std::env::set_var("WINGSDK_MANIFEST_ROOT", &sdk_root);
 
-	let result = compile(&project_dir, source_file, None, &work_dir);
+	let result = compile(&project_dir, &source_file, None, &work_dir);
 
 	match result {
 		Ok(_) => {}
@@ -105,7 +104,7 @@ fn command_build(file: String, target: Option<Target>) -> Result<(), Box<dyn Err
 		}
 	}
 
-	run_javascript_node(source_file, &target_dir, target)?;
+	run_javascript_node(&source_file, &target_dir, target)?;
 
 	print_compiled(start.elapsed());
 	Ok(())
@@ -183,4 +182,21 @@ pub fn get_styles() -> clap::builder::Styles {
 				.fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Green))),
 		)
 		.placeholder(anstyle::Style::new().fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::White))))
+}
+
+#[cfg(test)]
+mod test {
+	use super::*;
+
+	#[test]
+	fn test_compile_sim() {
+		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::Sim));
+		assert!(res.is_ok());
+	}
+
+	#[test]
+	fn test_compile_tfaws() {
+		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::TfAws));
+		assert!(res.is_ok());
+	}
 }
