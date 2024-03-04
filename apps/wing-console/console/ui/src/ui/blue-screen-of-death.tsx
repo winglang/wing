@@ -19,7 +19,6 @@ export const BlueScreenOfDeath = memo(
     displayWingTitle?: boolean;
   }) => {
     const [formattedPathsError, setFormattedPathsError] = useState("");
-
     useEffect(() => {
       if (!displayLinks) {
         setFormattedPathsError(error);
@@ -28,7 +27,7 @@ export const BlueScreenOfDeath = memo(
       setFormattedPathsError(
         createHtmlLink(
           error,
-          "underline text-slate-300 hover:text-slate-400",
+          "underline text-slate-300 hover:text-slate-400 cursor-pointer",
           true,
         ),
       );
@@ -50,7 +49,7 @@ export const BlueScreenOfDeath = memo(
           <div className="space-y-4">
             <div>{title}</div>
             <div className="py-4">
-              <OpenFileInEditorButton>
+              <OpenFileInEditorButton className="cursor-text">
                 <span
                   className="outline-none select-text whitespace-pre-wrap"
                   dangerouslySetInnerHTML={{ __html: formattedPathsError }}
