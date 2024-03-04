@@ -13,11 +13,9 @@ import { createPersistentState } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { memo, useCallback, useEffect, useId, useState } from "react";
 
-import { AppMode } from "../AppContext.js";
+import type { AppMode } from "../AppContext.js";
+import type { ApiRequest, ApiResponse, ApiRoute } from "../shared/api.js";
 import {
-  ApiRequest,
-  ApiResponse,
-  ApiRoute,
   getHeaderValues,
   getRoutesFromOpenApi,
   HTTP_HEADERS,

@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url";
+
 import { createConsoleApp } from "@wingconsole/app";
 
 await createConsoleApp({

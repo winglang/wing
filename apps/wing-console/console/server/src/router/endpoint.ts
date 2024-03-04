@@ -1,8 +1,8 @@
 import { ENDPOINT_FQN } from "@winglang/sdk/lib/cloud/endpoint.js";
-import { EndpointSchema } from "@winglang/sdk/lib/target-sim/schema-resources.js";
+import type { EndpointSchema } from "@winglang/sdk/lib/target-sim/schema-resources.js";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { Simulator } from "../wingsdk.js";
+import type { Simulator } from "../wingsdk.js";
 
 const listEndpoints = (simulator: Simulator) => {
   const endpoints = simulator
@@ -25,8 +25,10 @@ export const createEndpointRouter = () => {
       return endpoints.map((endpoint) => {
         return {
           id: endpoint.path,
-          label: endpoint.attrs.label || `${endpoint.path}`,
+          // The slice is for removing `"root/Default/"` from `endpoint.path`.
+          label: endpoint.attrs.label ?? endpoint.path.slice(13),
           url: endpoint.attrs.url,
+          browserSupport: endpoint.props.browserSupport ?? false,
         };
       });
     }),

@@ -23,7 +23,7 @@ const findInstanceMethod = (): reflect.Method => {
   throw new Error("Assembly does not contain an instance method");
 };
 
-test.each(Language.values())("%s snapshot", (language) => {
+test.each(Language.values().map((l) => l.name))("%s snapshot", (language) => {
   const { transpile } = LANGUAGE_SPECIFIC[language.toString()];
   const markdown = new MarkdownRenderer({ language, ...metadata });
   const method = new InstanceMethod(transpile, findInstanceMethod()).toJson();

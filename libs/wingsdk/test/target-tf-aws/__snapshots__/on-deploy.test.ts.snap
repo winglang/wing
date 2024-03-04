@@ -20,12 +20,12 @@ exports[`create an OnDeploy 1`] = `
     },
     "aws_iam_role": {
       "my_on_deploy_Function_IamRole_76DF13CA": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "my_on_deploy_Function_IamRolePolicy_AA6273E9": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}",
       },
     },
@@ -259,12 +259,12 @@ exports[`execute OnDeploy after other resources 1`] = `
     },
     "aws_iam_role": {
       "my_on_deploy_Function_IamRole_76DF13CA": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "my_on_deploy_Function_IamRolePolicy_AA6273E9": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}",
       },
     },
@@ -522,12 +522,12 @@ exports[`execute OnDeploy before other resources 1`] = `
     },
     "aws_iam_role": {
       "my_on_deploy_Function_IamRole_76DF13CA": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "my_on_deploy_Function_IamRolePolicy_AA6273E9": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}",
       },
     },

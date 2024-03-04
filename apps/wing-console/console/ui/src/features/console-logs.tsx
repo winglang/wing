@@ -4,7 +4,7 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useTheme, ResourceIcon } from "@wingconsole/design-system";
-import { LogEntry } from "@wingconsole/server";
+import type { LogEntry } from "@wingconsole/server";
 import classNames from "classnames";
 import Linkify from "linkify-react";
 import throttle from "lodash.throttle";

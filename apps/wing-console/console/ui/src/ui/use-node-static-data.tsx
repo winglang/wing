@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Node } from "../shared/Node.js";
+import type { Node } from "../shared/Node.js";
 
 export interface NodeStaticDataOptions<T> {
   /**

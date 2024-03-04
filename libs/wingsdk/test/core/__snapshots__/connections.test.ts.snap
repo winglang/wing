@@ -2,7 +2,7 @@
 
 exports[`create a bucket 1`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){

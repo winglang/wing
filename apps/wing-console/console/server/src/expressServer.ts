@@ -1,6 +1,6 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
-import { simulator } from "@winglang/sdk";
+import type { simulator } from "@winglang/sdk";
 import cors from "cors";
 import type Emittery from "emittery";
 import express from "express";
@@ -13,7 +13,7 @@ import type { HostUtils } from "./hostUtils.js";
 import { mergeAllRouters } from "./router/index.js";
 import type { State, Trace } from "./types.js";
 import type { Updater } from "./updater.js";
-import { Analytics } from "./utils/analytics.js";
+import type { Analytics } from "./utils/analytics.js";
 import type {
   FileLink,
   LayoutConfig,

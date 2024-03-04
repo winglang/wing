@@ -577,7 +577,7 @@ return class Handler {
 }
 };
 })())({
-my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-azure/counter.inflight\\")).CounterClient(process.env[\\"STORAGE_ACCOUNT_0a1532c6\\"], process.env[\\"TABLE_NAME_0a1532c6\\"], \\"STORAGE_ACCOUNT_KEY_0a1532c6\\", 0)
+my_counter: new (require("[REDACTED]/wingsdk/src/shared-azure/counter.inflight")).CounterClient(process.env["STORAGE_ACCOUNT_0a1532c6"], process.env["TABLE_NAME_0a1532c6"], "STORAGE_ACCOUNT_KEY_0a1532c6", 0)
 })"
 `;
 

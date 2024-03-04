@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import { PropsWithChildren, useId } from "react";
+import type { PropsWithChildren } from "react";
+import { useId } from "react";
 
 import { Link } from "./link.js";
 import { useTheme } from "./theme-provider.js";

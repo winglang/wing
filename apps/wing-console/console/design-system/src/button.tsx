@@ -1,7 +1,8 @@
 import classNames from "classnames";
-import { PropsWithChildren, forwardRef } from "react";
+import type { PropsWithChildren } from "react";
+import { forwardRef } from "react";
 
-import { IconComponent } from "./resource-icon.js";
+import type { IconComponent } from "./resource-icon.js";
 import { useTheme } from "./theme-provider.js";
 
 interface ButtonProps {
@@ -49,7 +50,7 @@ export const Button = forwardRef<
         ref={ref}
         type={type}
         className={classNames(
-          "inline-flex gap-2 items-center text-xs font-medium outline-none rounded",
+          "inline-flex gap-2 items-center text-xs font-normal outline-none rounded",
           theme.focusInput,
           primary &&
             !transparent && [

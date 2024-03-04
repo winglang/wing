@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
-import { Mode } from "@wingconsole/design-system";
-import { Trace } from "@wingconsole/server";
+import type { Mode } from "@wingconsole/design-system";
+import type { Trace } from "@wingconsole/server";
 import { useEffect, useMemo, useState } from "react";
 
 import { App } from "./App.js";
@@ -18,7 +18,8 @@ export const Console = ({
   theme,
   color,
   onTrace,
-  wingCloudSignInUrl,
+  wingCloudSignInUrl: githubSignInURL,
+  googleSignInURL,
 }: {
   trpcUrl: string;
   wsUrl: string;
@@ -28,6 +29,7 @@ export const Console = ({
   color?: string;
   onTrace?: (trace: Trace) => void;
   wingCloudSignInUrl?: string;
+  googleSignInURL?: string;
 }) => {
   const [queryClient] = useState(
     () =>
@@ -113,7 +115,12 @@ export const Console = ({
 
   return (
     <AppContext.Provider
-      value={{ appMode, title: windowTitle, wingCloudSignInUrl }}
+      value={{
+        appMode,
+        title: windowTitle,
+        githubSignInURL,
+        googleSignInURL,
+      }}
     >
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>

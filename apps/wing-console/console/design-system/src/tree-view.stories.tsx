@@ -1,5 +1,5 @@
 import { CubeIcon } from "@heroicons/react/24/outline";
-import { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 
 import { TreeItem } from "./tree-item.js";
 import { TreeView } from "./tree-view.js";

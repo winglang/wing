@@ -1,11 +1,21 @@
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { DynamodbTableSchema, IDynamodbTableClient, Json } from "../wingsdk.js";
+import type {
+  DynamodbTableSchema,
+  IDynamodbTableClient,
+  Json,
+} from "../wingsdk.js";
 
 export const createDynamodbTableRouter = () => {
   return createRouter({
     "dynamodb-table.info": createProcedure
+      .meta({
+        analytics: {
+          resource: "DynamodbTable",
+          action: "scan",
+        },
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -32,6 +42,12 @@ export const createDynamodbTableRouter = () => {
         };
       }),
     "dynamodb-table.get": createProcedure
+      .meta({
+        analytics: {
+          resource: "DynamodbTable",
+          action: "getItem",
+        },
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -47,6 +63,12 @@ export const createDynamodbTableRouter = () => {
         return item;
       }),
     "dynamodb-table.insert": createProcedure
+      .meta({
+        analytics: {
+          resource: "DynamodbTable",
+          action: "putItem",
+        },
+      })
       .input(
         z.object({
           resourcePath: z.string(),
@@ -62,6 +84,12 @@ export const createDynamodbTableRouter = () => {
         await client.putItem({ item: input.data as Json });
       }),
     "dynamodb-table.delete": createProcedure
+      .meta({
+        analytics: {
+          resource: "DynamodbTable",
+          action: "deleteItem",
+        },
+      })
       .input(
         z.object({
           resourcePath: z.string(),
