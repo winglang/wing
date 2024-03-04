@@ -88,6 +88,8 @@ fn command_build(source_file: Utf8PathBuf, target: Option<Target>) -> Result<(),
 	let sdk_root = WING_CACHE_DIR.join("node_modules").join("@winglang").join("sdk");
 	if !sdk_root.exists() {
 		install_sdk()?;
+	} else {
+		// TODO: check that the SDK version matches the CLI version
 	}
 	tracing::info!("Using SDK at {}", sdk_root);
 
