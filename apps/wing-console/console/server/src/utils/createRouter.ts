@@ -78,8 +78,8 @@ export interface FileLink {
 
 export interface RouterMeta {
   analytics?: {
-    action?: string;
-    resource?: string;
+    action: string;
+    resource: string;
   };
 }
 
@@ -130,14 +130,12 @@ const invalidateQueriesAfterMutation = middleware(async (options) => {
 const sendUserResourceInteractionAnalyticsEvent = middleware(
   async (options) => {
     const analytics = options.ctx.analytics;
-    if (analytics) {
-      const analyticsMeta = options?.meta?.analytics;
-      if (analyticsMeta && analyticsMeta?.resource && analyticsMeta?.action) {
-        analytics.track("user_resource_interaction", {
-          resource: analyticsMeta.resource,
-          action: analyticsMeta.action,
-        });
-      }
+    const meta = options.meta?.analytics;
+    if (analytics && meta) {
+      analytics.track("user_resource_interaction", {
+        resource: meta.resource,
+        action: meta.action,
+      });
     }
     return await options.next();
   },
