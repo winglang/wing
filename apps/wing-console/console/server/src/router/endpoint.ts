@@ -1,8 +1,8 @@
 import { ENDPOINT_FQN } from "@winglang/sdk/lib/cloud/endpoint.js";
-import { EndpointSchema } from "@winglang/sdk/lib/target-sim/schema-resources.js";
+import type { EndpointSchema } from "@winglang/sdk/lib/target-sim/schema-resources.js";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { Simulator } from "../wingsdk.js";
+import type { Simulator } from "../wingsdk.js";
 
 const listEndpoints = (simulator: Simulator) => {
   const endpoints = simulator

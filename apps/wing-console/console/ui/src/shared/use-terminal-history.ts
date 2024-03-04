@@ -1,6 +1,6 @@
 import { useCallback, useState as useReactState } from "react";
 
-import { TerminalHistoryItem } from "./ternimal.js";
+import type { TerminalHistoryItem } from "./ternimal.js";
 
 export interface UseTerminalHistoryOptions {
   useState?: typeof useReactState;

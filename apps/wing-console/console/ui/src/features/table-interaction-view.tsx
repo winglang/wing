@@ -2,7 +2,8 @@ import { useNotifications, Attribute } from "@wingconsole/design-system";
 import { memo, useCallback, useEffect, useState } from "react";
 
 import { useTable } from "../services/use-table.js";
-import { Row, RowData, TableInteraction } from "../ui/table-interaction.js";
+import type { Row, RowData } from "../ui/table-interaction.js";
+import { TableInteraction } from "../ui/table-interaction.js";
 
 export interface TableInteractionViewProps {
   resourcePath: string;

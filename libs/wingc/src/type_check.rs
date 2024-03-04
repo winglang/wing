@@ -6021,11 +6021,18 @@ where
 	T: Spanned + Display,
 {
 	match lookup_result {
-		LookupResult::NotFound(s) => TypeError {
-			message: format!("Unknown symbol \"{s}\""),
-			span: s.span(),
-			annotations: vec![],
-		},
+		LookupResult::NotFound(s, maybe_t) => {
+			let message = if let Some(env_type) = maybe_t {
+				format!("Member \"{s}\" doesn't exist in \"{env_type}\"")
+			} else {
+				format!("Unknown symbol \"{s}\"")
+			};
+			TypeError {
+				message,
+				span: s.span(),
+				annotations: vec![],
+			}
+		}
 		LookupResult::NotPublic(kind, lookup_info) => TypeError {
 			message: {
 				let access = lookup_info.access.to_string();

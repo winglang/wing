@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { PropsWithChildren, ReactNode, KeyboardEvent, memo } from "react";
+import type { PropsWithChildren, ReactNode, KeyboardEvent } from "react";
+import { memo } from "react";
 
 import { TreeItem as HeadlessTreeItem } from "./headless/tree-item.js";
 import { useTheme } from "./theme-provider.js";

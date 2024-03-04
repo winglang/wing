@@ -2,7 +2,7 @@ import { Attribute, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useCallback, useEffect, useId, useRef } from "react";
 
-import { TerminalHistoryItem } from "../shared/ternimal.js";
+import type { TerminalHistoryItem } from "../shared/ternimal.js";
 
 const REDIS_PROMPT = "redis>";
 
