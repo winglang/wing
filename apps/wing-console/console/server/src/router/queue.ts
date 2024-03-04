@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { IQueueClient } from "../wingsdk.js";
+import type { IQueueClient } from "../wingsdk.js";
 
 export const createQueueRouter = () => {
   return createRouter({

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { FunctionComponent, SVGProps } from "react";
+import type { FunctionComponent, SVGProps } from "react";
 
 import {
   getResourceIconColors,

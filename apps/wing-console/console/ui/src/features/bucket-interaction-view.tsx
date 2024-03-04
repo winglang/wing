@@ -1,5 +1,6 @@
-import { TreeEntry } from "@wingconsole/design-system";
-import { FormEventHandler, memo, useCallback, useMemo, useState } from "react";
+import type { TreeEntry } from "@wingconsole/design-system";
+import type { FormEventHandler } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 
 import { useBucket } from "../services/use-bucket.js";
 import { BucketInteraction } from "../ui/bucket-interaction.js";

@@ -3,7 +3,8 @@ import fetch from "node-fetch";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { ApiSchema, OpenApiSpec } from "../wingsdk.js";
+import type { ApiSchema } from "../wingsdk.js";
+import { OpenApiSpec } from "../wingsdk.js";
 
 export const createApiRouter = () => {
   return createRouter({

@@ -3,7 +3,7 @@ import {
   ResourceIcon,
   SpinnerLoader,
 } from "@wingconsole/design-system";
-import { MapNode } from "@wingconsole/server";
+import type { MapNode } from "@wingconsole/server";
 import classNames from "classnames";
 import { memo } from "react";
 

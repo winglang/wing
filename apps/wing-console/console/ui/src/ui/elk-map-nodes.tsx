@@ -1,7 +1,9 @@
-import { useTheme, IconComponent } from "@wingconsole/design-system";
-import { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
+import type { IconComponent } from "@wingconsole/design-system";
+import { useTheme } from "@wingconsole/design-system";
+import type { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
-import { PropsWithChildren, memo, useMemo } from "react";
+import type { PropsWithChildren } from "react";
+import { memo, useMemo } from "react";
 
 const getResourceBackgroudColor = (
   resourceType: BaseResourceSchema["type"] | undefined,

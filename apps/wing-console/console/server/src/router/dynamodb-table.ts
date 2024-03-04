@@ -1,7 +1,11 @@
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { DynamodbTableSchema, IDynamodbTableClient, Json } from "../wingsdk.js";
+import type {
+  DynamodbTableSchema,
+  IDynamodbTableClient,
+  Json,
+} from "../wingsdk.js";
 
 export const createDynamodbTableRouter = () => {
   return createRouter({

@@ -4,21 +4,18 @@ import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
 import type { Trace } from "../types.js";
-import { ConstructTreeNode } from "../utils/construct-tree.js";
-import {
+import type { ConstructTreeNode } from "../utils/construct-tree.js";
+import type {
   Node,
   NodeDisplay,
-  buildConstructTreeNodeMap,
   NodeConnection,
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
-import {
-  FileLink,
-  createProcedure,
-  createRouter,
-} from "../utils/createRouter.js";
+import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
+import type { FileLink } from "../utils/createRouter.js";
+import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { isTermsAccepted, getLicense } from "../utils/terms-and-conditions.js";
-import { Simulator } from "../wingsdk.js";
+import type { Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
