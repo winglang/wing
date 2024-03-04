@@ -2,7 +2,7 @@ import { useTheme, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { memo } from "react";
 
-import { MetadataNode } from "./resource-metadata.js";
+import type { MetadataNode } from "./resource-metadata.js";
 
 export interface CounterMetadataProps {
   node: MetadataNode;

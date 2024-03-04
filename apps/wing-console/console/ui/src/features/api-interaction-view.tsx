@@ -1,9 +1,9 @@
-import { OpenApiSpec } from "@wingconsole/server/src/wingsdk";
+import type { OpenApiSpec } from "@wingconsole/server/src/wingsdk";
 import { memo, useCallback, useContext, useState } from "react";
 
 import { AppContext } from "../AppContext.js";
 import { useApi } from "../services/use-api.js";
-import { ApiResponse } from "../shared/api.js";
+import type { ApiResponse } from "../shared/api.js";
 import { ApiInteraction } from "../ui/api-interaction.js";
 
 export interface ApiViewProps {

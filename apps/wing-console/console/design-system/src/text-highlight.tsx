@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from "react";
 
-import { Theme, useTheme } from "./theme-provider.js";
+import type { Theme } from "./theme-provider.js";
+import { useTheme } from "./theme-provider.js";
 
 export interface TextHighlightProps {
   id?: string;

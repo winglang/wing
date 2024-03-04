@@ -8,8 +8,7 @@
  *
  */
 
-import { exec } from "node:child_process";
-import { join } from "node:path";
+import { type ExecFileOptions, execFile } from "node:child_process";
 
 import spawn from "cross-spawn";
 import open from "open";
@@ -18,12 +17,12 @@ import colors from "picocolors";
 /**
  * Reads the BROWSER environment variable and decides what to do with it.
  */
-export function openBrowser(url, opt, logger) {
+export function openBrowser(url: string) {
   // The browser executable to open.
   // See https://github.com/sindresorhus/open#app for documentation.
-  const browser = typeof opt === "string" ? opt : process.env.BROWSER || "";
+  const browser = process.env.BROWSER || "";
   if (browser.toLowerCase().endsWith(".js")) {
-    executeNodeScript(browser, url, logger);
+    executeNodeScript(browser, url);
   } else if (browser.toLowerCase() !== "none") {
     const browserArguments = process.env.BROWSER_ARGS
       ? process.env.BROWSER_ARGS.split(" ")
@@ -32,7 +31,7 @@ export function openBrowser(url, opt, logger) {
   }
 }
 
-function executeNodeScript(scriptPath, url) {
+function executeNodeScript(scriptPath: string, url: string) {
   const extraArguments = process.argv.slice(2);
   const child = spawn(process.execPath, [scriptPath, ...extraArguments, url], {
     stdio: "inherit",
@@ -61,7 +60,11 @@ const supportedChromiumBrowsers = [
   "Chromium",
 ];
 
-async function startBrowserProcess(browser, browserArguments, url) {
+async function startBrowserProcess(
+  browser: string | undefined,
+  browserArguments: string[],
+  url: string,
+) {
   // If we're on OS X, the user hasn't specifically
   // requested a different browser, we can try opening
   // a Chromium browser with AppleScript. This lets us reuse an
@@ -75,7 +78,7 @@ async function startBrowserProcess(browser, browserArguments, url) {
 
   if (shouldTryOpenChromeWithAppleScript) {
     try {
-      const ps = await execAsync("ps cax");
+      const ps = await execAsync("ps cax", {});
       const openedBrowser =
         preferredOSXBrowser && ps.includes(preferredOSXBrowser)
           ? preferredOSXBrowser
@@ -87,7 +90,7 @@ async function startBrowserProcess(browser, browserArguments, url) {
             url,
           )}" "${openedBrowser}"`,
           {
-            cwd: join(VITE_PACKAGE_DIR, "bin"),
+            cwd: `${__dirname}/../assets`,
           },
         );
         return true;
@@ -118,9 +121,9 @@ async function startBrowserProcess(browser, browserArguments, url) {
   }
 }
 
-function execAsync(command, options) {
-  return new Promise((resolve, reject) => {
-    exec(command, options, (error, stdout) => {
+function execAsync(command: string, options: ExecFileOptions) {
+  return new Promise<string>((resolve, reject) => {
+    execFile(command, options, (error, stdout) => {
       if (error) {
         reject(error);
       } else {

@@ -6,10 +6,10 @@ import {
 } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { nanoid } from "nanoid";
+import type { PropsWithChildren } from "react";
 import {
   createContext,
   Fragment,
-  PropsWithChildren,
   useContext,
   useEffect,
   useMemo,
