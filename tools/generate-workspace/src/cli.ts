@@ -1,10 +1,31 @@
-import {findWorkspacePackages} from "@pnpm/workspace.find-packages";
-import {findWorkspaceDir} from "@pnpm/find-workspace-dir";
-import {writeFileSync} from "fs";
-import {join} from "path";
+import { findWorkspacePackages } from "@pnpm/workspace.find-packages";
+import { findWorkspaceDir } from "@pnpm/find-workspace-dir";
+import { writeFileSync } from "fs";
+import { join } from "path";
 
 // Define ignore list and name mapping
-const ignoreList = ["@wingconsole/design-system", "@wingconsole/error-message", "@wingconsole/eslint-plugin", "@wingconsole/tsconfig", "@wingconsole/use-loading", "@wingconsole/use-persistent-state", "@winglang/platform-awscdk", "@winglang/compatibility-spy", "@winglang/tree-sitter-wing", "@winglang/wingc", "@winglang/wingii", "@winglibs/testfixture", "bump-pack", "construct-library", "generate-workspace", "hangar", "jsii-fixture", "ts-fixture", "ts4w"];
+const ignoreList = [
+  "@wingcloud/framework",
+  "@wingconsole/design-system",
+  "@wingconsole/error-message",
+  "@wingconsole/eslint-plugin",
+  "@wingconsole/tsconfig",
+  "@wingconsole/use-loading",
+  "@wingconsole/use-persistent-state",
+  "@winglang/compatibility-spy",
+  "@winglang/platform-awscdk",
+  "@winglang/tree-sitter-wing",
+  "@winglang/wingc",
+  "@winglang/wingii",
+  "@winglibs/testfixture",
+  "bump-pack",
+  "compatibility-matrix-automation",
+  "construct-library",
+  "generate-workspace",
+  "hangar",
+  "jsii-fixture",
+  "ts-fixture",
+];
 
 const nameMapping: Record<string, string> = {
   "@wingconsole/app": "Console App",
@@ -50,7 +71,7 @@ function getFolders(workspacePackages: any[], workspaceDir: string) {
     const name = nameMapping[pkgName] || pkgName;
     const path = pkg.dir.replace(workspaceDir, "").substring(1); // Remove workspaceDir from the path
 
-    folders.push({name, path: `./${path}`});
+    folders.push({ name, path: `./${path}` });
   }
   return folders;
 }
@@ -58,7 +79,9 @@ function getFolders(workspacePackages: any[], workspaceDir: string) {
 function sortFolders(folders: any[]) {
   let sortedFolders = Object.keys(nameMapping)
     .map((key) => {
-      return folders.find((folder) => folder.name === key || folder.name === nameMapping[key]);
+      return folders.find(
+        (folder) => folder.name === key || folder.name === nameMapping[key]
+      );
     })
     .filter(Boolean);
   return sortedFolders;
@@ -67,8 +90,14 @@ function sortFolders(folders: any[]) {
 function warnAboutPackages(workspacePackages: any[]) {
   workspacePackages.forEach((pkg) => {
     const pkgName = pkg.manifest.name;
-    if (pkgName && !ignoreList.includes(pkgName) && !Object.keys(nameMapping).includes(pkgName)) {
-      console.warn(`Warning: Package ${pkgName} is not present in ignore list or name mappings. Please check ./tools/generate-workspace/src/cli.ts`);
+    if (
+      pkgName &&
+      !ignoreList.includes(pkgName) &&
+      !Object.keys(nameMapping).includes(pkgName)
+    ) {
+      console.warn(
+        `Warning: Package ${pkgName} is not present in ignore list or name mappings. Please check ./tools/generate-workspace/src/cli.ts`
+      );
     }
   });
 }
@@ -76,14 +105,18 @@ function warnAboutPackages(workspacePackages: any[]) {
 function checkIgnoreListAndNameMapping(workspacePackages: any[]) {
   ignoreList.forEach((ignoreItem) => {
     if (!workspacePackages.some((pkg) => pkg.manifest.name === ignoreItem)) {
-      console.error(`Error: ${ignoreItem} from ignore list is not present as a workspace package. Please check ./tools/generate-workspace/src/cli.ts`);
+      console.error(
+        `Error: ${ignoreItem} from ignore list is not present as a workspace package. Please check ./tools/generate-workspace/src/cli.ts`
+      );
       process.exit(1);
     }
   });
 
   Object.keys(nameMapping).forEach((mappingItem) => {
     if (!workspacePackages.some((pkg) => pkg.manifest.name === mappingItem)) {
-      console.error(`Error: ${mappingItem} from name mapping is not present as a workspace package. Please check ./tools/generate-workspace/src/cli.ts`);
+      console.error(
+        `Error: ${mappingItem} from name mapping is not present as a workspace package. Please check ./tools/generate-workspace/src/cli.ts`
+      );
       process.exit(1);
     }
   });
@@ -91,7 +124,10 @@ function checkIgnoreListAndNameMapping(workspacePackages: any[]) {
 
 function writeWorkspaceFile(workspaceDir: string, sortedFolders: any[]) {
   const workspaceFilePath = join(workspaceDir, "wing.code-workspace");
-  writeFileSync(workspaceFilePath, JSON.stringify({folders: sortedFolders, settings: {}}, null, 2));
+  writeFileSync(
+    workspaceFilePath,
+    JSON.stringify({ folders: sortedFolders, settings: {} }, null, 2)
+  );
   console.log(`Workspace file written to ${workspaceFilePath}`);
 }
 

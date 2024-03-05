@@ -144,7 +144,7 @@ fn partial_compile(
 	// Transform all inflight closures defined in preflight into single-method resources
 	for file in &topo_sorted_files {
 		let mut inflight_transformer = ClosureTransformer::new();
-		let scope = project_data.asts.remove(file).unwrap();
+		let scope = project_data.asts.swap_remove(file).unwrap();
 		let new_scope = inflight_transformer.fold_scope(scope);
 		project_data.asts.insert(file.clone(), new_scope);
 	}
@@ -159,7 +159,7 @@ fn partial_compile(
 	// Type check all files in topological order (start with files that don't require any other
 	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
-		let mut scope = project_data.asts.remove(file).expect("matching AST not found");
+		let mut scope = project_data.asts.swap_remove(file).expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,
@@ -196,7 +196,7 @@ fn partial_compile(
 	);
 	for file in &topo_sorted_files {
 		let mut lift = LiftVisitor::new(&jsifier);
-		let scope = project_data.asts.remove(file).expect("matching AST not found");
+		let scope = project_data.asts.swap_remove(file).expect("matching AST not found");
 		lift.visit_scope(&scope);
 		project_data.asts.insert(file.clone(), scope);
 	}

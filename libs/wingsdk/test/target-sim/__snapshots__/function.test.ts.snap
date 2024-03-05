@@ -6,14 +6,14 @@ exports[`__dirname and __filename cannot be used within inflight code 1`] = `
   "@winglang/sdk.cloud.Function created.",
   "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
   "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
-  "Invoke (payload=\\"\\").",
-  "Invoke (payload=\\"\\").",
+  "Invoke (payload=undefined).",
+  "Invoke (payload=undefined).",
 ]
 `;
 
 exports[`create a function 1`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -28,12 +28,12 @@ async handle(event) {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
@@ -154,7 +154,7 @@ async handle(event) {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -166,7 +166,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -179,14 +179,14 @@ async handle(event) {
 exports[`invoke function fails 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"alice\\\\\\"}\\").",
+  "Invoke (payload="{\\"name\\":\\"alice\\"}").",
   "@winglang/sdk.cloud.Function deleted.",
 ]
 `;
 
 exports[`invoke function fails 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -201,12 +201,12 @@ async handle(event) {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
@@ -325,7 +325,7 @@ async handle(event) {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -337,7 +337,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -350,14 +350,14 @@ async handle(event) {
 exports[`invoke function succeeds 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
+  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
   "@winglang/sdk.cloud.Function deleted.",
 ]
 `;
 
 exports[`invoke function succeeds 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -372,12 +372,12 @@ async handle(event) {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
@@ -496,7 +496,7 @@ async handle(event) {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -508,7 +508,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -521,14 +521,14 @@ async handle(event) {
 exports[`invoke function with environment variables 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
+  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
   "@winglang/sdk.cloud.Function deleted.",
 ]
 `;
 
 exports[`invoke function with environment variables 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -543,12 +543,12 @@ async handle(event) {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
@@ -669,7 +669,7 @@ async handle(event) {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -681,7 +681,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -694,14 +694,14 @@ async handle(event) {
 exports[`invoke function with process.exit(1) 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{}\\").",
+  "Invoke (payload="{}").",
   "@winglang/sdk.cloud.Function deleted.",
 ]
 `;
 
 exports[`invoke function with process.exit(1) 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -830,7 +830,7 @@ async handle() {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -842,7 +842,7 @@ async handle() {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -854,7 +854,7 @@ async handle() {
 
 exports[`runtime environment tests 1`] = `
 {
-  ".wing/function.0_c8d5fca2.js": "\\"use strict\\";
+  ".wing/function.0_c8d5fca2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -866,9 +866,9 @@ return class Handler {
   }
   async handle() {
           
-    const query = \\"q=URLUtils.searchParams&topic=api\\";
+    const query = "q=URLUtils.searchParams&topic=api";
     const p = new URLSearchParams(query);
-    return p.get(\\"topic\\");
+    return p.get("topic");
   
         }
 };
@@ -877,7 +877,7 @@ return class Handler {
 }));
   return await $handler.handle(event);
 };",
-  ".wing/function.1_c89ed254.js": "\\"use strict\\";
+  ".wing/function.1_c89ed254.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -898,7 +898,7 @@ return class Handler {
 }));
   return await $handler.handle(event);
 };",
-  ".wing/function.2_c8cd6c39.js": "\\"use strict\\";
+  ".wing/function.2_c8cd6c39.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -910,7 +910,7 @@ return class Handler {
   }
   async handle() {
           
-    const c = require(\\"crypto\\");
+    const c = require("crypto");
     return typeof c.createHash;
   
         }
@@ -920,7 +920,7 @@ return class Handler {
 }));
   return await $handler.handle(event);
 };",
-  ".wing/function.3_c8badafa.js": "\\"use strict\\";
+  ".wing/function.3_c8badafa.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -932,7 +932,7 @@ return class Handler {
   }
   async handle() {
           
-    const { nanoid } = await import(\\"nanoid\\");
+    const { nanoid } = await import("nanoid");
     return nanoid();
   
         }
@@ -1087,7 +1087,7 @@ return class Handler {
         "Function.0": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1099,7 +1099,7 @@ return class Handler {
         "Function.1": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1111,7 +1111,7 @@ return class Handler {
         "Function.2": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1123,7 +1123,7 @@ return class Handler {
         "Function.3": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1135,7 +1135,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

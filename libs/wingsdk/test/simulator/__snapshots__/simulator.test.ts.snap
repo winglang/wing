@@ -7,7 +7,7 @@ exports[`provides raw tree data 1`] = `
       "test": {
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.2.70",
+          "version": "10.3.0",
         },
         "display": {
           "description": "A cloud unit test.",
@@ -20,7 +20,7 @@ exports[`provides raw tree data 1`] = `
     },
     "constructInfo": {
       "fqn": "constructs.Construct",
-      "version": "10.2.70",
+      "version": "10.3.0",
     },
     "id": "root",
     "path": "root",
@@ -47,7 +47,7 @@ exports[`run all tests > single test 1`] = `
       },
       {
         "data": {
-          "message": "Invoke (payload=\\"\\").",
+          "message": "Invoke (payload=undefined).",
           "status": "success",
         },
         "sourcePath": "root/test/Handler",
@@ -77,7 +77,7 @@ exports[`run single test > happy path 1`] = `
     },
     {
       "data": {
-        "message": "Invoke (payload=\\"\\").",
+        "message": "Invoke (payload=undefined).",
         "status": "success",
       },
       "sourcePath": "root/test/Handler",
@@ -92,12 +92,12 @@ exports[`run single test > happy path 1`] = `
 exports[`run single test > test failure 1`] = `
 {
   "error": "Error: test failed
-<sanitized>
-<sanitized>
-<sanitized>
+    at Handler.handle ([abs])
+    at Object.exports.handler ([abs])
+    at process.<anonymous> ([abs])
     at process.emit (node:events:<sanitized>)
-<sanitized>
-<sanitized>",
+    at emit (node:internal/child_process:<sanitized>)
+    at process.processTicksAndRejections (node:internal/process/task_queues:<sanitized>)",
   "pass": false,
   "path": "root/test",
   "traces": [
@@ -113,7 +113,7 @@ exports[`run single test > test failure 1`] = `
     {
       "data": {
         "error": {},
-        "message": "Invoke (payload=\\"\\").",
+        "message": "Invoke (payload=undefined).",
         "status": "failure",
       },
       "sourcePath": "root/test/Handler",

@@ -1,10 +1,6 @@
 {
   "dependencies": [
     {
-      "name": "@types/jest",
-      "type": "build"
-    },
-    {
       "name": "@types/node",
       "version": "^16",
       "type": "build"
@@ -49,20 +45,6 @@
       "type": "build"
     },
     {
-      "name": "jest",
-      "type": "build"
-    },
-    {
-      "name": "jest-junit",
-      "version": "^15",
-      "type": "build"
-    },
-    {
-      "name": "npm-check-updates",
-      "version": "^16",
-      "type": "build"
-    },
-    {
       "name": "prettier",
       "type": "build"
     },
@@ -76,11 +58,7 @@
       "type": "build"
     },
     {
-      "name": "ts-jest",
-      "type": "build"
-    },
-    {
-      "name": "ts-node",
+      "name": "tsx",
       "type": "build"
     },
     {
@@ -89,7 +67,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^18.17.13",
+      "version": "^20.11.0",
       "type": "devenv"
     },
     {

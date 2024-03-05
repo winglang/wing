@@ -1,4 +1,5 @@
 const forms = require("@tailwindcss/forms");
+const typography = require("@tailwindcss/typography");
 const colors = require("tailwindcss/colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 const flattenColorPalette = require("tailwindcss/lib/util/flattenColorPalette.js");
@@ -159,7 +160,7 @@ const scrollbarPlugin =
     });
   });
 
-module.exports.plugins = [forms, scrollbarPlugin];
+module.exports.plugins = [typography, forms, scrollbarPlugin];
 module.exports.content = [
   `${__dirname}/src/**/*.{ts,tsx,js,jsx}`,
   `${__dirname}/dist/index.js`,

@@ -23,12 +23,12 @@ exports[`schedule behavior with cron 1`] = `
     },
     "aws_iam_role": {
       "Schedule_OnTick0_IamRole_478B0576": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Schedule_OnTick0_IamRolePolicy_708CFC38": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
     },
@@ -100,10 +100,18 @@ exports[`schedule behavior with cron 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "Schedule": {
                 "children": {
@@ -112,7 +120,7 @@ exports[`schedule behavior with cron 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/Schedule/OnTick0/Asset",
@@ -120,7 +128,7 @@ exports[`schedule behavior with cron 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "CloudwatchLogGroup",
                         "path": "root/Default/Schedule/OnTick0/CloudwatchLogGroup",
@@ -128,7 +136,7 @@ exports[`schedule behavior with cron 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Default",
                         "path": "root/Default/Schedule/OnTick0/Default",
@@ -136,7 +144,7 @@ exports[`schedule behavior with cron 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/Schedule/OnTick0/IamRole",
@@ -144,7 +152,7 @@ exports[`schedule behavior with cron 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/Schedule/OnTick0/IamRolePolicy",
@@ -152,7 +160,7 @@ exports[`schedule behavior with cron 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/Schedule/OnTick0/IamRolePolicyAttachment",
@@ -160,7 +168,7 @@ exports[`schedule behavior with cron 2`] = `
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                         "path": "root/Default/Schedule/OnTick0/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
@@ -168,7 +176,7 @@ exports[`schedule behavior with cron 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/Schedule/OnTick0/S3Object",
@@ -176,7 +184,7 @@ exports[`schedule behavior with cron 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -188,7 +196,7 @@ exports[`schedule behavior with cron 2`] = `
                   "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Schedule",
                     "path": "root/Default/Schedule/Schedule",
@@ -196,7 +204,7 @@ exports[`schedule behavior with cron 2`] = `
                   "ScheduleTarget0": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "ScheduleTarget0",
                     "path": "root/Default/Schedule/ScheduleTarget0",
@@ -204,7 +212,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -216,7 +224,7 @@ exports[`schedule behavior with cron 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -224,7 +232,7 @@ exports[`schedule behavior with cron 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -232,7 +240,7 @@ exports[`schedule behavior with cron 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -240,7 +248,7 @@ exports[`schedule behavior with cron 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -248,7 +256,7 @@ exports[`schedule behavior with cron 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -280,12 +288,12 @@ exports[`schedule behavior with rate 1`] = `
     },
     "aws_iam_role": {
       "Schedule_OnTick0_IamRole_478B0576": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Schedule_OnTick0_IamRolePolicy_708CFC38": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
     },
@@ -357,10 +365,18 @@ exports[`schedule behavior with rate 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "Schedule": {
                 "children": {
@@ -369,7 +385,7 @@ exports[`schedule behavior with rate 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/Schedule/OnTick0/Asset",
@@ -377,7 +393,7 @@ exports[`schedule behavior with rate 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "CloudwatchLogGroup",
                         "path": "root/Default/Schedule/OnTick0/CloudwatchLogGroup",
@@ -385,7 +401,7 @@ exports[`schedule behavior with rate 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Default",
                         "path": "root/Default/Schedule/OnTick0/Default",
@@ -393,7 +409,7 @@ exports[`schedule behavior with rate 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/Schedule/OnTick0/IamRole",
@@ -401,7 +417,7 @@ exports[`schedule behavior with rate 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/Schedule/OnTick0/IamRolePolicy",
@@ -409,7 +425,7 @@ exports[`schedule behavior with rate 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/Schedule/OnTick0/IamRolePolicyAttachment",
@@ -417,7 +433,7 @@ exports[`schedule behavior with rate 2`] = `
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                         "path": "root/Default/Schedule/OnTick0/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
@@ -425,7 +441,7 @@ exports[`schedule behavior with rate 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/Schedule/OnTick0/S3Object",
@@ -433,7 +449,7 @@ exports[`schedule behavior with rate 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -445,7 +461,7 @@ exports[`schedule behavior with rate 2`] = `
                   "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Schedule",
                     "path": "root/Default/Schedule/Schedule",
@@ -453,7 +469,7 @@ exports[`schedule behavior with rate 2`] = `
                   "ScheduleTarget0": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "ScheduleTarget0",
                     "path": "root/Default/Schedule/ScheduleTarget0",
@@ -461,7 +477,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -473,7 +489,7 @@ exports[`schedule behavior with rate 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -481,7 +497,7 @@ exports[`schedule behavior with rate 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -489,7 +505,7 @@ exports[`schedule behavior with rate 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -497,7 +513,7 @@ exports[`schedule behavior with rate 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -505,7 +521,7 @@ exports[`schedule behavior with rate 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -545,19 +561,19 @@ exports[`schedule with two functions 1`] = `
     },
     "aws_iam_role": {
       "Schedule_OnTick0_IamRole_478B0576": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
       "Schedule_OnTick1_IamRole_99D80025": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Schedule_OnTick0_IamRolePolicy_708CFC38": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
       "Schedule_OnTick1_IamRolePolicy_A5F98BAE": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Schedule_OnTick1_IamRole_99D80025.name}",
       },
     },
@@ -669,10 +685,18 @@ exports[`schedule with two functions 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "Schedule": {
                 "children": {
@@ -681,7 +705,7 @@ exports[`schedule with two functions 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/Schedule/OnTick0/Asset",
@@ -689,7 +713,7 @@ exports[`schedule with two functions 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "CloudwatchLogGroup",
                         "path": "root/Default/Schedule/OnTick0/CloudwatchLogGroup",
@@ -697,7 +721,7 @@ exports[`schedule with two functions 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Default",
                         "path": "root/Default/Schedule/OnTick0/Default",
@@ -705,7 +729,7 @@ exports[`schedule with two functions 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/Schedule/OnTick0/IamRole",
@@ -713,7 +737,7 @@ exports[`schedule with two functions 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/Schedule/OnTick0/IamRolePolicy",
@@ -721,7 +745,7 @@ exports[`schedule with two functions 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/Schedule/OnTick0/IamRolePolicyAttachment",
@@ -729,7 +753,7 @@ exports[`schedule with two functions 2`] = `
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                         "path": "root/Default/Schedule/OnTick0/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
@@ -737,7 +761,7 @@ exports[`schedule with two functions 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/Schedule/OnTick0/S3Object",
@@ -745,7 +769,7 @@ exports[`schedule with two functions 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -759,7 +783,7 @@ exports[`schedule with two functions 2`] = `
                       "Asset": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformAsset",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Asset",
                         "path": "root/Default/Schedule/OnTick1/Asset",
@@ -767,7 +791,7 @@ exports[`schedule with two functions 2`] = `
                       "CloudwatchLogGroup": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "CloudwatchLogGroup",
                         "path": "root/Default/Schedule/OnTick1/CloudwatchLogGroup",
@@ -775,7 +799,7 @@ exports[`schedule with two functions 2`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Default",
                         "path": "root/Default/Schedule/OnTick1/Default",
@@ -783,7 +807,7 @@ exports[`schedule with two functions 2`] = `
                       "IamRole": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRole",
                         "path": "root/Default/Schedule/OnTick1/IamRole",
@@ -791,7 +815,7 @@ exports[`schedule with two functions 2`] = `
                       "IamRolePolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRolePolicy",
                         "path": "root/Default/Schedule/OnTick1/IamRolePolicy",
@@ -799,7 +823,7 @@ exports[`schedule with two functions 2`] = `
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "IamRolePolicyAttachment",
                         "path": "root/Default/Schedule/OnTick1/IamRolePolicyAttachment",
@@ -807,7 +831,7 @@ exports[`schedule with two functions 2`] = `
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                         "path": "root/Default/Schedule/OnTick1/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
@@ -815,7 +839,7 @@ exports[`schedule with two functions 2`] = `
                       "S3Object": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "S3Object",
                         "path": "root/Default/Schedule/OnTick1/S3Object",
@@ -823,7 +847,7 @@ exports[`schedule with two functions 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
@@ -835,7 +859,7 @@ exports[`schedule with two functions 2`] = `
                   "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Schedule",
                     "path": "root/Default/Schedule/Schedule",
@@ -843,7 +867,7 @@ exports[`schedule with two functions 2`] = `
                   "ScheduleTarget0": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "ScheduleTarget0",
                     "path": "root/Default/Schedule/ScheduleTarget0",
@@ -851,7 +875,7 @@ exports[`schedule with two functions 2`] = `
                   "ScheduleTarget1": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "ScheduleTarget1",
                     "path": "root/Default/Schedule/ScheduleTarget1",
@@ -859,7 +883,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -871,7 +895,7 @@ exports[`schedule with two functions 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -879,7 +903,7 @@ exports[`schedule with two functions 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -887,7 +911,7 @@ exports[`schedule with two functions 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -895,7 +919,7 @@ exports[`schedule with two functions 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -903,7 +927,7 @@ exports[`schedule with two functions 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",

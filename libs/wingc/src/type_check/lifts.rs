@@ -57,13 +57,14 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, method: Option<Symbol>, property: Option<Symbol>, code: &str, is_field: bool) {
+	pub fn lift(&mut self, method: Option<Symbol>, property: Option<Symbol>, code: &str) {
 		let method = method.map(|m| m.name).unwrap_or(Default::default());
 
 		self.add_lift(method, code, property.as_ref().map(|s| s.name.clone()));
 
-		// add a lift to the inflight initializer or capture it if its not a field
-		if is_field {
+		// Add a lift to the inflight initializer to signify this class requires access to that preflight object.
+		// "this" is a special case since it's already in scope and doesn't need to be lifted.
+		if code != "this" {
 			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), code, None);
 		}
 	}

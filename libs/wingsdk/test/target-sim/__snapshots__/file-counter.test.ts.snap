@@ -2,10 +2,10 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/setconsumer0_c8e82e9f.js": "\\"use strict\\";
+  ".wing/setconsumer0_c8e82e9f.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -14,7 +14,7 @@ return class Handler {
   }
   async handle(event) {
           let next = await this.counter.inc();
-          let key = \\"file-\\" + next + \\".txt\\";
+          let key = "file-" + next + ".txt";
           await this.bucket.put(key, event);
         }
 };
@@ -22,24 +22,24 @@ return class Handler {
 counter: (function() {
   let handle = process.env.COUNTER_HANDLE_4ecd8d46;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: COUNTER_HANDLE_4ecd8d46\\");
+    throw new Error("Missing environment variable: COUNTER_HANDLE_4ecd8d46");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
-    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
   }
-  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle);
 })(),
 bucket: (function() {
   let handle = process.env.BUCKET_HANDLE_5f2a41c8;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_5f2a41c8\\");
+    throw new Error("Missing environment variable: BUCKET_HANDLE_5f2a41c8");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
-    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
   }
-  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle);
 })()
 }), args: {} }));
   return await $handler.handle(event);
@@ -57,17 +57,7 @@ bucket: (function() {
         "target": "root/HelloWorld/Counter",
       },
       {
-        "name": "$inflight_init()",
-        "source": "root/HelloWorld/Queue/SetConsumer0",
-        "target": "root/HelloWorld/Counter",
-      },
-      {
         "name": "put()",
-        "source": "root/HelloWorld/Queue/SetConsumer0",
-        "target": "root/HelloWorld/Bucket",
-      },
-      {
-        "name": "$inflight_init()",
         "source": "root/HelloWorld/Queue/SetConsumer0",
         "target": "root/HelloWorld/Bucket",
       },
@@ -227,7 +217,7 @@ bucket: (function() {
             "Bucket": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud object store",
@@ -239,7 +229,7 @@ bucket: (function() {
             "Counter": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A distributed atomic counter",
@@ -253,7 +243,7 @@ bucket: (function() {
                 "QueueEventMapping0": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
-                    "version": "10.2.70",
+                    "version": "10.3.0",
                   },
                   "display": {
                     "hidden": true,
@@ -264,7 +254,7 @@ bucket: (function() {
                 "SetConsumer0": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
-                    "version": "10.2.70",
+                    "version": "10.3.0",
                   },
                   "display": {
                     "description": "A cloud function (FaaS)",
@@ -277,7 +267,7 @@ bucket: (function() {
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A distributed message queue",
@@ -289,7 +279,7 @@ bucket: (function() {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "id": "HelloWorld",
           "path": "root/HelloWorld",
@@ -297,7 +287,7 @@ bucket: (function() {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

@@ -1,9 +1,9 @@
 import { existsSync } from "fs";
 import { resolve } from "path";
 import { createConsoleApp } from "@wingconsole/app";
+import { BuiltinPlatform } from "@winglang/compiler";
 import { debug } from "debug";
 import { glob } from "glob";
-import open from "open";
 import { parseNumericString } from "../util";
 
 /**
@@ -24,6 +24,11 @@ export interface RunOptions {
    * @default true
    */
   readonly open?: boolean;
+  /**
+   * Target platform
+   * @default wingCompiler.BuiltinPlatform.SIM
+   */
+  readonly platform?: string[];
 }
 
 /**
@@ -36,7 +41,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   const openBrowser = options?.open ?? true;
 
   if (!entrypoint) {
-    const wingFiles = (await glob("{main,*.main}.w")).sort();
+    const wingFiles = (await glob("{main,*.main}.{w,ts}")).sort();
     if (wingFiles.length === 0) {
       throw new Error(
         "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
@@ -56,6 +61,14 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     throw new Error(entrypoint + " doesn't exist");
   }
 
+  if (options?.platform && options?.platform[0] !== BuiltinPlatform.SIM) {
+    throw new Error(
+      `The first platform in the list must be the sim platform (try "-t sim -t ${options.platform.join(
+        " -t"
+      )}")`
+    );
+  }
+
   entrypoint = resolve(entrypoint);
   debug("opening the wing console with:" + entrypoint);
 
@@ -67,12 +80,11 @@ export async function run(entrypoint?: string, options?: RunOptions) {
         await open(url);
       },
     },
+    platform: options?.platform,
     requireAcceptTerms: !!process.stdin.isTTY,
+    open: openBrowser,
   });
   const url = `http://localhost:${port}/`;
-  if (openBrowser) {
-    await open(url);
-  }
   console.log(`The Wing Console is running at ${url}`);
 
   const onExit = async (exitCode: number) => {

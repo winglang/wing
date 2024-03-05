@@ -1,5 +1,5 @@
-import { writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { writeFileSync, readFileSync } from "node:fs";
+import { resolve, join } from "node:path";
 import { Construct } from "constructs";
 import { platform, core, std } from "@winglang/sdk";
 
@@ -7,7 +7,6 @@ const PARENT_PROPERTIES: Set<string> = new Set([
   "node",
   "onLiftMap",
   ...Object.getOwnPropertyNames(Construct),
-  ...Object.getOwnPropertyNames(Construct.prototype),
 ]);
 
 export class Platform implements platform.IPlatform {
@@ -17,14 +16,30 @@ export class Platform implements platform.IPlatform {
    * @internal
    */
   public _usageContext: Map<string, Set<string>> = new Map();
+  private readonly jsii;
+  constructor() {
+    this.jsii = JSON.parse(
+      readFileSync(
+        join(require.resolve("@winglang/sdk"), "..", "..", ".jsii"),
+        {
+          encoding: "utf8",
+        }
+      )
+    );
+  }
 
   newInstance(fqn: string, scope: Construct, id: string, ...args: any) {
-    //@ts-expect-error - accessing protected method
     const type = core.App.of(scope).typeForFqn(fqn);
 
     if (!type) {
       return undefined;
     }
+
+    const jsiiType = this.jsii.types[fqn];
+    const allowedMethods = [
+      ...(jsiiType?.methods ?? []),
+      ...(jsiiType?.properties ?? []),
+    ];
 
     return new Proxy(new type(scope, id, ...args), {
       get: (target, prop: string | Symbol) => {
@@ -39,7 +54,11 @@ export class Platform implements platform.IPlatform {
         if (
           typeof prop === "string" &&
           !prop.startsWith("_") &&
-          !PARENT_PROPERTIES.has(prop)
+          !PARENT_PROPERTIES.has(prop) &&
+          !!allowedMethods.find(
+            (o: { name: string; protected?: boolean }) =>
+              o.name === prop && !o.protected
+          )
         ) {
           this._addToUsageContext(target, prop);
         }

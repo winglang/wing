@@ -1,14 +1,13 @@
-import {
-  createConsoleServer,
+import type {
   CreateConsoleServerOptions,
   LogInterface,
   Updater,
   Config,
   HostUtils,
   Trace,
-  isTermsAccepted,
   LayoutConfig,
 } from "@wingconsole/server";
+import { createConsoleServer, isTermsAccepted } from "@wingconsole/server";
 import express from "express";
 
 import { createAnalytics } from "./analytics.js";
@@ -36,9 +35,11 @@ export interface CreateConsoleAppOptions {
   expressApp?: express.Express;
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
   requireAcceptTerms?: boolean;
+  requireSignIn?: boolean;
   layoutConfig?: LayoutConfig;
   platform?: string[];
   stateDir?: string;
+  open?: boolean;
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -60,6 +61,23 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
 
   const server = await createConsoleServer({
     ...options,
+    analyticsAnonymousId: analyticsStorage.getAnonymousId(),
+    analytics,
+    async requireSignIn() {
+      if (options.requireSignIn === false) {
+        return false;
+      }
+
+      // The VSCode extension for Wing will use this to determine whether to show the sign in prompt.
+      const noSignIn = process.env.NO_SIGN_IN === "true";
+      if (noSignIn) {
+        return false;
+      }
+      return analyticsStorage.getRequireSignIn();
+    },
+    async notifySignedIn() {
+      analyticsStorage.notifySignedIn();
+    },
     onExpressCreated(app) {
       app.use(express.static(staticDir));
       options.onExpressCreated?.(app);
@@ -126,5 +144,11 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
       set(key, value) {},
     },
   });
+
+  if (options.open) {
+    const { openBrowser } = await import("./open.js");
+    openBrowser(`http://localhost:${server.port}/`);
+  }
+
   return server;
 };

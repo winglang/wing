@@ -6,10 +6,12 @@
     "test": "wing test ./src/main.ts"
   },
   "dependencies": {
-    "ts4w": "workspace:^",
-    "@winglang/sdk": "workspace:^",
-    "winglang": "workspace:^",
+    "@wingcloud/framework": "workspace:^",
     "@winglibs/testfixture": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "winglang": "workspace:^"
   },
   "volta": {
     "extends": "../../package.json"

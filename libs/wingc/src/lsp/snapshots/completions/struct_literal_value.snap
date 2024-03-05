@@ -1,6 +1,13 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: this
+  kind: 6
+  detail: Construct
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight this: Construct\nclass Construct impl IConstruct\n```\n---\nRepresents the building block of the construct graph.\n\n### Remarks\nAll constructs besides the root construct must be created within the scope of\nanother construct.\n\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+  sortText: bb|this
 - label: nodeof
   kind: 3
   detail: "preflight (construct: IConstruct): Node"

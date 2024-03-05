@@ -1,14 +1,14 @@
 // This file and the main function are named "init" instead of "new"
 // to avoid a conflict with the "new" keyword in JavaScript
 import { exec } from "child_process";
-import { existsSync } from "fs";
-import { copyFile, mkdir, readdir } from "fs/promises";
+import { existsSync, constants } from "fs";
+import { copyFile, mkdir, readFile, readdir, writeFile } from "fs/promises";
 import { join, relative } from "path";
 import { promisify } from "util";
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { exists } from "./pack";
-import { projectTemplateNames, PROJECT_TEMPLATES_DIR } from "../util";
+import { projectTemplateNames, PROJECT_TEMPLATES_DIR, currentPackage } from "../util";
 
 const execPromise = promisify(exec);
 
@@ -17,8 +17,8 @@ const execPromise = promisify(exec);
  * This is passed from Commander to the `init` function.
  */
 export interface InitOptions {
-  readonly template?: string;
-  readonly language?: string;
+  template?: string;
+  language?: string;
   readonly listTemplates?: boolean;
 }
 
@@ -94,10 +94,12 @@ export async function init(template: string, options: InitOptions = {}): Promise
         `Unknown language: "${language}". Please select from "wing" or "typescript".`
       );
   }
-
+  // Since this object is used by our analytics collector
+  options.language = language;
+  options.template = template;
   // Check if the template exists for the selected language
   const templatePath = join(PROJECT_TEMPLATES_DIR, language, template);
-  const templateExists = await exists(templatePath);
+  const templateExists = await exists(templatePath, constants.R_OK);
   if (!templateExists) {
     throw new Error(
       `Template "${template}" is not available in ${language}. Please let us know you'd like to use this template in ${language} by opening an issue at https://github.com/winglang/wing/issues/!`
@@ -118,6 +120,33 @@ export async function init(template: string, options: InitOptions = {}): Promise
 
   // Copy the template
   await copyFiles(templatePath, process.cwd());
+
+  // Replace wing version
+  const packageJsonPath = join(process.cwd(), "package.json");
+  if (existsSync(packageJsonPath)) {
+    const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"));
+    const isDevVersion = currentPackage.version.startsWith("0.0.0");
+
+    const depKeys = ["dependencies", "devDependencies", "peerDependencies"];
+    for (const depKey of depKeys) {
+      const depMap = packageJson[depKey] ?? {};
+      for (const [key, val] of Object.entries(depMap)) {
+        if ((val as string).includes("#WING_VERSION#")) {
+          if (isDevVersion) {
+            if (key === "winglang") {
+              depMap[key] = `file:${join(__dirname, "..", "..")}`;
+            } else {
+              depMap[key] = `file:${join(__dirname, "..", "..", "..", "..", "libs", key)}`;
+            }
+          } else {
+            depMap[key] = depMap[key].replace("#WING_VERSION#", currentPackage.version);
+          }
+        }
+      }
+    }
+
+    await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
+  }
 
   // Run npm install
   console.log("Installing dependencies...");

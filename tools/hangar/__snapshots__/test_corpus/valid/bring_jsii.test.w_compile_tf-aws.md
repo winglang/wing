@@ -29,7 +29,7 @@ module.exports = function({ $greeting, $stuff_HelloWorld }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -52,6 +52,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const stuff = require("jsii-code-samples");
+const jsii_fixture = require("jsii-fixture");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -80,21 +81,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [greeting, []],
           ],
+          "$inflight_init": [
+            [greeting, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const hello = new stuff.HelloWorld();
     const greeting = (hello.sayHello("wingnuts"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:sayHello", new $Closure1(this, "$Closure1"));
+    const jsiiClass = new jsii_fixture.JsiiClass(10);
+    $helpers.assert($helpers.eq((jsiiClass.applyClosure(5, ((x) => {
+      return (x * 2);
+    }))), 10), "jsiiClass.applyClosure(5, (x) => { return x * 2; }) == 10");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

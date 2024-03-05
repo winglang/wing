@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { IFunctionClient } from "../wingsdk.js";
+import type { IFunctionClient } from "../wingsdk.js";
 
 export type ResponseEnvelope =
   | {
       success: true;
-      response: string;
+      response: string | undefined;
     }
   | {
       success: false;
@@ -32,6 +32,12 @@ export const isErrorLike = (value: unknown): value is ErrorLike => {
 export const createFunctionRouter = () => {
   return createRouter({
     "function.invoke": createProcedure
+      .meta({
+        analytics: {
+          action: "invoke",
+          resource: "Function",
+        },
+      })
       .input(
         z.object({
           resourcePath: z.string(),

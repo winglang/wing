@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import type { ComponentStory, ComponentMeta } from "@storybook/react";
 
 import { MapControls } from "./map-controls.js";
 import { ZoomPaneProvider } from "./zoom-pane.js";

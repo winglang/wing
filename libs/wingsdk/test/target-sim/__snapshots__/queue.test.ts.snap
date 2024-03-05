@@ -109,7 +109,7 @@ exports[`create a queue 1`] = `
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -121,7 +121,7 @@ exports[`create a queue 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -310,7 +310,7 @@ async handle(message) {
             "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -321,7 +321,7 @@ async handle(message) {
             "SetConsumer0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -334,7 +334,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -346,7 +346,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -536,7 +536,7 @@ async handle(message) {
             "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -547,7 +547,7 @@ async handle(message) {
             "SetConsumer0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -560,7 +560,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -572,7 +572,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -699,7 +699,7 @@ exports[`push rejects empty message 2`] = `
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -711,7 +711,7 @@ exports[`push rejects empty message 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -842,7 +842,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -854,7 +854,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -866,7 +866,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
 {
-  ".wing/function_c8ab799f.js": "\\"use strict\\";
+  ".wing/function_c8ab799f.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -877,33 +877,33 @@ return class Handler {
     }
   }
   async handle() {
-  await this.queue.push(\\"A\\");
-  await this.queue.push(\\"B\\");
-  await this.queue.push(\\"C\\");
-  await this.queue.push(\\"D\\");
-  await this.queue.push(\\"E\\");
-  await this.queue.push(\\"F\\");
+  await this.queue.push("A");
+  await this.queue.push("B");
+  await this.queue.push("C");
+  await this.queue.push("D");
+  await this.queue.push("E");
+  await this.queue.push("F");
 }
 };
 })())({
 queue: (function() {
   let handle = process.env.QUEUE_HANDLE_54fcf4cd;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: QUEUE_HANDLE_54fcf4cd\\");
+    throw new Error("Missing environment variable: QUEUE_HANDLE_54fcf4cd");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
-    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
   }
-  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle);
 })()
 }));
   return await $handler.handle(event);
 };",
-  ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
+  ".wing/setconsumer0_c8e33b9b.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -912,8 +912,8 @@ return class Handler {
   }
   
 async handle(message) {
-  if (message === \\"BAD MESSAGE\\") {
-    throw new Error(\\"ERROR\\");
+  if (message === "BAD MESSAGE") {
+    throw new Error("ERROR");
   }
 }
 };
@@ -931,11 +931,6 @@ async handle(message) {
       },
       {
         "name": "push()",
-        "source": "root/my_queue_messages/Function",
-        "target": "root/my_queue",
-      },
-      {
-        "name": "$inflight_init()",
         "source": "root/my_queue_messages/Function",
         "target": "root/my_queue",
       },
@@ -1095,7 +1090,7 @@ async handle(message) {
             "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -1106,7 +1101,7 @@ async handle(message) {
             "SetConsumer0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -1119,7 +1114,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -1133,7 +1128,7 @@ async handle(message) {
             "Function": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -1146,7 +1141,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "Run code during the app's deployment.",
@@ -1158,7 +1153,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1170,10 +1165,10 @@ async handle(message) {
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 {
-  ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
+  ".wing/setconsumer0_c8e33b9b.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1182,8 +1177,8 @@ return class Handler {
   }
   
 async handle(message) {
-  if (message === \\"BAD MESSAGE\\") {
-    throw new Error(\\"ERROR\\");
+  if (message === "BAD MESSAGE") {
+    throw new Error("ERROR");
   }
 }
 };
@@ -1332,7 +1327,7 @@ async handle(message) {
             "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -1343,7 +1338,7 @@ async handle(message) {
             "SetConsumer0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -1356,7 +1351,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed message queue",
@@ -1368,7 +1363,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

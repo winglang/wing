@@ -15,6 +15,8 @@ const project = new typescript.TypeScriptProject({
     "jsii-docgen": "bin/jsii-docgen",
   },
   devDeps: [
+    "vitest",
+    "tsx",
     "jsii@~5.3.11",
     "@types/fs-extra",
     "@types/semver",
@@ -37,10 +39,14 @@ const project = new typescript.TypeScriptProject({
   prettier: true,
   release: false,
   package: false,
-  jestOptions: {
-    coverageText: false,
-  },
+  jest: false,
+  depsUpgrade: false,
 });
+
+project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
+project.deps.removeDependency("ts-node");
+
+project.testTask.reset("vitest run --update");
 
 const libraryFixtures = ["construct-library"];
 
@@ -61,11 +67,6 @@ project.tasks.addEnvironment("NODE_OPTIONS", "--max-old-space-size=7168");
 // Avoid a non JSII compatible package (see https://github.com/projen/projen/issues/2264)
 // project.package.addPackageResolutions("@types/babel__traverse@7.18.2");
 
-// override default test timeout from 5s to 30s
-project.testTask.reset(
-  "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
-);
-
 project.addFields({
   volta: {
     extends: "../../package.json",
@@ -75,6 +76,6 @@ project.addFields({
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
 
-project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

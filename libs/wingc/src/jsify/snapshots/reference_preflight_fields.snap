@@ -36,12 +36,12 @@ source: libs/wingc/src/jsify/tests.rs
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyType {
-    constructor({ $this_b, $this_s_length }) {
+    constructor({ $this_b, $this_s }) {
       this.$this_b = $this_b;
-      this.$this_s_length = $this_s_length;
+      this.$this_s = $this_s;
     }
     async boom() {
-      $helpers.assert((this.$this_s_length > 0), "this.s.length > 0");
+      $helpers.assert((this.$this_s.length > 0), "this.s.length > 0");
       $helpers.assert(((await this.$this_b.list()).length > 0), "this.b.list().length > 0");
     }
     async bam() {
@@ -86,31 +86,27 @@ class $Root extends $stdlib.std.Resource {
             const MyTypeClient = ${MyType._toInflightType()};
             const client = new MyTypeClient({
               $this_b: ${$stdlib.core.liftObject(this.b)},
-              $this_s_length: ${$stdlib.core.liftObject(this.s.length)},
+              $this_s: ${$stdlib.core.liftObject(this.s)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "boom", "bam", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.b, []],
-            [this.s.length, []],
+      get _liftMap() {
+        return ({
+          "boom": [
+            [this.b, ["list"]],
+            [this.s, ["length"]],
           ],
           "bam": [
             [this.b, ["get", "put"]],
           ],
-          "boom": [
-            [this.b, ["list"]],
-            [this.s.length, []],
+          "$inflight_init": [
+            [this.b, []],
+            [this.s, []],
           ],
         });
-        super.onLift(host, ops);
       }
     }
   }

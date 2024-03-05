@@ -94,8 +94,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -122,16 +125,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [t.b, ["put"]],
           ],
+          "$inflight_init": [
+            [t.b, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const t = new MyType(this, "MyType");

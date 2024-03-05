@@ -158,6 +158,8 @@ Compiles your program for AWS CDK with CloudFormation to run on AWS.
 Usage:
 
 ```sh
+# npm init is only needed if you don't already have a package.json file
+$ npm init -y
 $ npm i @winglang/platform-awscdk
 $ export CDK_STACK_NAME="my-project"
 $ wing compile --platform @winglang/platform-awscdk [entrypoint]
@@ -181,19 +183,17 @@ Usage:
 $ wing test [entrypoint...] [--test-filter <regex>] [--retry [retries]]
 ```
 
-`[entrypoint...]` specifies the entrypoint list of files that will be compiled and tested. A file is considered a valid entrypoint if its name ends with `.w`.
+`[entrypoint...]` is the list of entrypoints that will be compiled and tested. 
+A file is considered an entrypoint if its name is `main` or ends with `.main` or `.test` and the extension is `.w` or `.ts`. 
+Exact paths or partial text can be used. If partial, all entrypoints in the current directory that contain the partial path will be used. For example `wing test bucket` will test `bucket.test.w` and `bucket/get.test.w`.
 
-`[--test-filter <regex>]` option to run only specific tests within the entrypoints based on a provided regex.
+By default, all entrypoints in the current directory will be used.
 
-`[--retry [retries]]` option specifies the number of retries for failed tests. If no number is specified, the default number of retries is `3`.
+`[--test-filter <regex>]` runs only specific tests within the entrypoints based on a provided regex.
+
+`[--retry [retries]]` will retry failed tests based on number provided. By default it will retry `3` times.
 
 For example ([test_bucket.test.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.test.w)):
-
-:::note Default Entrypoint(s)
-
-It's possible to execute `wing test` without specifying any entrypoint, in which case the CLI looks for all files ending with `.test.w` in the current directory. If no files are found, the CLI throws an error.
-
-:::
 
 ```js
 bring cloud;

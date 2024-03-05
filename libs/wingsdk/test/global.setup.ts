@@ -48,6 +48,8 @@ async function findFilesWithExtension(
       const files = await fs.readdir(dir);
 
       for (const file of files) {
+        if (file.startsWith(".")) continue;
+
         // Resolve the full path of the file
         const filePath = path.resolve(dir, file);
 

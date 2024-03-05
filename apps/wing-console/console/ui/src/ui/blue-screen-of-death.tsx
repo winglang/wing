@@ -19,7 +19,6 @@ export const BlueScreenOfDeath = memo(
     displayWingTitle?: boolean;
   }) => {
     const [formattedPathsError, setFormattedPathsError] = useState("");
-
     useEffect(() => {
       if (!displayLinks) {
         setFormattedPathsError(error);
@@ -28,7 +27,7 @@ export const BlueScreenOfDeath = memo(
       setFormattedPathsError(
         createHtmlLink(
           error,
-          "underline text-slate-300 hover:text-slate-400",
+          "underline text-slate-300 hover:text-slate-400 cursor-pointer",
           true,
         ),
       );
@@ -47,16 +46,17 @@ export const BlueScreenOfDeath = memo(
               <span className="bg-slate-400 px-4 text-[#004295]">Wing</span>
             </div>
           )}
+
           <div className="space-y-4">
-            <div>{title}</div>
-            <div className="py-4">
-              <OpenFileInEditorButton>
+            <OpenFileInEditorButton className="cursor-text select-text">
+              <div>{title}</div>
+              <div className="py-4">
                 <span
-                  className="outline-none select-text whitespace-pre-wrap"
+                  className="outline-none whitespace-pre-wrap"
                   dangerouslySetInnerHTML={{ __html: formattedPathsError }}
                 />
-              </OpenFileInEditorButton>
-            </div>
+              </div>
+            </OpenFileInEditorButton>
             {displayLinks && (
               <div className="w-full text-center py-4">
                 Click on any error reference to navigate to your IDE{" "}

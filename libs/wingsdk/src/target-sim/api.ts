@@ -1,3 +1,4 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
@@ -7,8 +8,9 @@ import { ApiSchema, ApiRoute } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../shared/convert";
 import { BaseResourceSchema } from "../simulator/simulator";
-import { IInflight, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
+import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
  * Simulator implementation of `cloud.Api`.
@@ -57,10 +59,17 @@ export class Api extends cloud.Api implements ISimulatorResource {
       return handler.func;
     }
 
+    // wrap our api handler with a function handler (from (str->str) to (json->json)).
+    const functionHandler = convertBetweenHandlers(
+      inflight,
+      join(__dirname, "api.onrequest.inflight.js"),
+      "ApiOnRequestHandlerClient"
+    );
+
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnRequestHandler"),
-      inflight as IInflight,
+      functionHandler,
       props
     ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;

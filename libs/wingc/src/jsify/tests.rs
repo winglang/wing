@@ -2031,3 +2031,12 @@ fn lift_self_reference() {
     "#
 	);
 }
+
+#[test]
+fn entrypoint_this() {
+	assert_compile_ok!(
+		r#"
+    this;
+    "#
+	);
+}

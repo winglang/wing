@@ -100,7 +100,7 @@ module.exports = function({ $bucket2 }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -173,16 +173,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [bucket2, ["put"]],
           ],
+          "$inflight_init": [
+            [bucket2, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class MyClosure extends $stdlib.std.Resource {
@@ -210,25 +209,23 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "putFile", "listFiles", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.bucket, []],
-          ],
+      get _liftMap() {
+        return ({
           "handle": [
+            [this, ["putFile"]],
+          ],
+          "putFile": [
+            [this.bucket, ["put"]],
           ],
           "listFiles": [
             [bucket2, ["put"]],
             [this.bucket, ["list"]],
           ],
-          "putFile": [
-            [this.bucket, ["put"]],
+          "$inflight_init": [
+            [bucket2, []],
+            [this.bucket, []],
           ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -255,16 +252,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [fn, ["handle"]],
           ],
+          "$inflight_init": [
+            [fn, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.AutoIdResource {
@@ -293,18 +289,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [bucket2, ["get"]],
             [fn2, ["handle", "listFiles"]],
             [fn2.bucket, ["get"]],
           ],
+          "$inflight_init": [
+            [bucket2, []],
+            [fn2, []],
+            [fn2.bucket, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");

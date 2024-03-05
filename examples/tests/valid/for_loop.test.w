@@ -1,5 +1,5 @@
 let words = ["wing", "lang", "dang"];
-let uniqueNumbers = { 1, 2, 3 };
+let uniqueNumbers = Set<num>[ 1, 2, 3 ];
 
 for word in words {
   for number in uniqueNumbers {
@@ -159,7 +159,7 @@ for x in (z*2)..0 {
 
 
 bring cloud;
-new cloud.Function(inflight (event:str) => {
+new cloud.Function(inflight () => {
   for x in 0..10 {
     assert(x <= 0);
     assert(x > 10);

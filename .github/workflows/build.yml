@@ -19,8 +19,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: "18.16.0"
-  PNPM_VERSION: "8.6.3"
+  NODE_VERSION: "20.11.0"
+  PNPM_VERSION: "8.15.1"
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -41,12 +41,12 @@ jobs:
       bench-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#bench'].changes }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v3
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -102,10 +102,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v3
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -153,7 +153,7 @@ jobs:
       - build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v3
@@ -162,7 +162,7 @@ jobs:
           path: dist
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v3
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -206,8 +206,7 @@ jobs:
       fail-fast: true
       matrix:
         runner: [windows, macos, ubuntu]
-        # Pinned 20 to 20.5.1 until https://github.com/nodejs/node/issues/49497 is released
-        node: ["18", "20.5.1"]
+        node: ["20", "18"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
@@ -218,14 +217,14 @@ jobs:
           - runner: windows
             full_run: false
           - runner: ubuntu
-            node: "20"
+            node: "18"
             full_run: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v3
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -250,11 +249,11 @@ jobs:
         working-directory: tools/hangar
         run: |
           pnpm test:generate
-          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
+          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '20' }}
 
       - name: Create mutation if needed
         # we only care about the diff in our standard dev env
-        if: matrix.runner == 'ubuntu' && matrix.node == '18'
+        if: matrix.runner == 'ubuntu' && matrix.node == '20'
         id: diff
         env:
           RAW_SHARD: ${{ matrix.shard }}
@@ -263,13 +262,13 @@ jobs:
           scripts/create_patch.sh "e2e-$SHARD.diff"
 
       - name: Upload mutation
-        if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
+        if: matrix.runner == 'ubuntu' && matrix.node == '20' && steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.diff.outputs.diff_name }}
           path: ${{ steps.diff.outputs.diff_name }}
 
-  aws-sdk-spec-test:
+  sdk-spec-test:
     needs:
       - build
     if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
@@ -288,7 +287,7 @@ jobs:
     if: ${{ needs.build.outputs.console-changed == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v3
@@ -297,7 +296,7 @@ jobs:
           path: dist
 
       - name: Install flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@1.4
+        uses: superfly/flyctl-actions/setup-flyctl@1.5
         with:
           version: ${{ env.FLY_VERSION }}
 
@@ -332,10 +331,10 @@ jobs:
       - e2e-test
       - benchmark
       - test
-      - aws-sdk-spec-test
+      - sdk-spec-test
     steps:
       - name: Check failure
-        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.aws-sdk-spec-test.result == 'failure'
+        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.sdk-spec-test.result == 'failure'
         run: exit 1
       - name: Download patches
         uses: actions/download-artifact@v3
@@ -375,7 +374,7 @@ jobs:
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
       - name: Publish NPM packages
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         env:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         with:
@@ -385,7 +384,7 @@ jobs:
             set -o pipefail
 
             cd dist
-            PACKAGES=("@winglang/sdk" "ts4w" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang" "@winglang/platform-awscdk" "@winglang/compatibility-spy")
+            PACKAGES=("@winglang/sdk" "@wingcloud/framework" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang" "@winglang/platform-awscdk" "@winglang/compatibility-spy")
             for PACKAGE in "${PACKAGES[@]}"; do
               # Check if already published
               VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version --verbose || true)
@@ -415,7 +414,7 @@ jobs:
           dependencies: false
 
       - name: Write Changelog
-        uses: DamianReeves/write-file-action@v1.2
+        uses: DamianReeves/write-file-action@v1.3
         with:
           path: "CHANGELOG.md"
           contents: ${{ needs.build.outputs.changelog }}

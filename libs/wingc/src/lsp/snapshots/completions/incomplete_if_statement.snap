@@ -29,12 +29,20 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: entries
+  kind: 2
+  detail: "(): Array<ArrayEntry>"
+  documentation:
+    kind: markdown
+    value: "```wing\nentries: (): Array<ArrayEntry>\n```\n---\nReturns the entries from the map.\n\n### Returns\nthe entries as Array<ArrayEntry>"
+  sortText: ff|entries
+  insertText: entries()
 - label: get
   kind: 2
   detail: "(key: str): T1"
   documentation:
     kind: markdown
-    value: "```wing\nget: (key: str): T1\n```\n---\nReturns a specified element from the map.\n### Parameters\n- `key` — `str` — The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found\n\n### Remarks\nIf the value that is associated to the provided key is an object, then you will get a reference\nto that object and any change made to that object will effectively modify it inside the map."
+    value: "```wing\nget: (key: str): T1\n```\n---\nReturns a specified element from the map.\n### Parameters\n- `key` — `str` — The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or throw an error if the key can't be found\n\n### Remarks\nIf the value that is associated to the provided key is an object, then you will get a reference\nto that object and any change made to that object will effectively modify it inside the map."
   sortText: ff|get
   insertText: get($1)
   insertTextFormat: 2

@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
-import { DefaultLayout, LayoutProps } from "./default-layout.js";
+import type { LayoutProps } from "./default-layout.js";
+import { DefaultLayout } from "./default-layout.js";
 
 export enum LayoutType {
   Default = 1,

@@ -3,6 +3,7 @@ import {
   ArrowTopRightOnSquareIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import type { TreeEntry } from "@wingconsole/design-system";
 import {
   Button,
   FilePreview,
@@ -10,19 +11,12 @@ import {
   ResponseInput,
   ToolbarButton,
   Tree,
-  TreeEntry,
   getPreviewType,
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import {
-  FormEvent,
-  useCallback,
-  useContext,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import type { FormEvent } from "react";
+import { useCallback, useContext, useMemo, useRef, useState } from "react";
 
 import { LayoutContext, LayoutType } from "../layout/layout-provider.js";
 

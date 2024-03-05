@@ -15,21 +15,21 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "@winglang/sdk.sim.EventMapping created.",
   "Publish (message=a).",
   "Sending message (message=a, subscriber=sim-5).",
-  "InvokeAsync (payload=\\"a\\").",
+  "InvokeAsync (payload="a").",
   "Put (key=a).",
   "Put (key=a).",
   "I am done",
   "Get (key=a).",
   "Publish (message=a).",
   "Sending message (message=a, subscriber=sim-7).",
-  "InvokeAsync (payload=\\"a\\").",
+  "InvokeAsync (payload="a").",
   "Put (key=a).",
   "Put (key=a).",
   "I am done",
   "Get (key=a).",
   "Publish (message=a).",
   "Sending message (message=a, subscriber=sim-9).",
-  "InvokeAsync (payload=\\"a\\").",
+  "InvokeAsync (payload="a").",
   "Delete (key=a).",
   "Put (key=a).",
   "I am done",
@@ -171,7 +171,7 @@ exports[`can add file in preflight 2`] = `
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud object store",
@@ -183,7 +183,7 @@ exports[`can add file in preflight 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -316,7 +316,7 @@ exports[`can add object in preflight 2`] = `
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud object store",
@@ -328,7 +328,7 @@ exports[`can add object in preflight 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -448,7 +448,7 @@ exports[`create a bucket 1`] = `
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud object store",
@@ -460,7 +460,7 @@ exports[`create a bucket 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -588,7 +588,7 @@ exports[`get invalid object throws an error 2`] = `
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud object store",
@@ -600,7 +600,7 @@ exports[`get invalid object throws an error 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -712,7 +712,7 @@ exports[`removing a key will call onDelete method 1`] = `
   "Put (key=unknown.txt).",
   "Publish (message=unknown.txt).",
   "Sending message (message=unknown.txt, subscriber=sim-2).",
-  "InvokeAsync (payload=\\"unknown.txt\\").",
+  "InvokeAsync (payload="unknown.txt").",
   "Delete (key=unknown.txt).",
   "Received unknown.txt",
   "@winglang/sdk.sim.EventMapping deleted.",
@@ -730,7 +730,7 @@ exports[`update an object in bucket 1`] = `
   "@winglang/sdk.sim.EventMapping created.",
   "Publish (message=greeting.txt).",
   "Sending message (message=greeting.txt, subscriber=sim-2).",
-  "InvokeAsync (payload=\\"greeting.txt\\").",
+  "InvokeAsync (payload="greeting.txt").",
   "Put (key=greeting.txt).",
   "Put (key=greeting.txt).",
   "@winglang/sdk.sim.EventMapping deleted.",

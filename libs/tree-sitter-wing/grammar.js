@@ -15,6 +15,7 @@ const PREC = {
   POWER: 140,
   MEMBER: 150,
   CALL: 160,
+  OPTIONAL_UNWRAP: 170,
 };
 
 module.exports = grammar({
@@ -29,7 +30,7 @@ module.exports = grammar({
   precedences: ($) => [
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
-    [$.json_map_literal, $.map_literal, $.set_literal],
+    [$.json_map_literal, $.map_literal, $.array_literal],
     [$.json_literal, $.structured_access_expression],
   ],
 
@@ -40,7 +41,7 @@ module.exports = grammar({
     // These modifier conflicts should be solved through GLR parsing
     [$.field_modifiers, $.method_modifiers],
     [$.class_modifiers, $.closure_modifiers],
-    [$.inflight_method_signature, $.field_modifiers]
+    [$.inflight_method_signature, $.field_modifiers],
   ],
 
   supertypes: ($) => [$.expression, $._literal],
@@ -122,7 +123,7 @@ module.exports = grammar({
         $.try_catch_statement,
         $.compiler_dbg_env,
         $.super_constructor_statement,
-        $.throw_statement,
+        $.throw_statement
       ),
 
     import_statement: ($) =>
@@ -168,7 +169,6 @@ module.exports = grammar({
         $._semicolon
       ),
 
-
     expression_statement: ($) => seq($.expression, $._semicolon),
 
     reassignable: ($) => "var",
@@ -190,7 +190,8 @@ module.exports = grammar({
 
     // Classes
 
-    class_modifiers: ($) => repeat1(choice($.access_modifier, $.inflight_specifier)),
+    class_modifiers: ($) =>
+      repeat1(choice($.access_modifier, $.inflight_specifier)),
 
     class_definition: ($) =>
       seq(
@@ -203,17 +204,17 @@ module.exports = grammar({
       ),
 
     class_implementation: ($) =>
-      braced(
-        repeat(
-          choice(
-            $.initializer,
-            $.method_definition,
-            $.class_field
-          )
+      braced(repeat(choice($.initializer, $.method_definition, $.class_field))),
+
+    field_modifiers: ($) =>
+      repeat1(
+        choice(
+          $.access_modifier,
+          $.static,
+          $.inflight_specifier,
+          $.reassignable
         )
       ),
-
-    field_modifiers: ($) => repeat1(choice($.access_modifier, $.static, $.inflight_specifier, $.reassignable)),
 
     class_field: ($) =>
       seq(
@@ -263,7 +264,8 @@ module.exports = grammar({
 
     break_statement: ($) => seq("break", $._semicolon),
     _super: ($) => "super",
-    super_constructor_statement: ($) => seq($._super, field("args", $.argument_list), $._semicolon),
+    super_constructor_statement: ($) =>
+      seq($._super, field("args", $.argument_list), $._semicolon),
 
     continue_statement: ($) => seq("continue", $._semicolon),
 
@@ -339,6 +341,7 @@ module.exports = grammar({
         $.struct_literal,
         $.optional_test,
         $.compiler_dbg_panic,
+        $.optional_unwrap
       ),
 
     // Primitives
@@ -351,7 +354,16 @@ module.exports = grammar({
 
     bool: ($) => choice("true", "false"),
 
-    duration: ($) => choice($.milliseconds, $.seconds, $.minutes, $.hours, $.days, $.months, $.years),
+    duration: ($) =>
+      choice(
+        $.milliseconds,
+        $.seconds,
+        $.minutes,
+        $.hours,
+        $.days,
+        $.months,
+        $.years
+      ),
     milliseconds: ($) => seq(field("value", $.number), "ms"),
     seconds: ($) => seq(field("value", $.number), "s"),
     minutes: ($) => seq(field("value", $.number), "m"),
@@ -398,7 +410,10 @@ module.exports = grammar({
     call: ($) =>
       prec.left(
         PREC.CALL,
-        seq(field("caller", choice($.expression, $.super_call)), field("args", $.argument_list))
+        seq(
+          field("caller", choice($.expression, $.super_call)),
+          field("args", $.argument_list)
+        )
       ),
 
     super_call: ($) => seq($._super, ".", field("method", $.identifier)),
@@ -438,19 +453,20 @@ module.exports = grammar({
           // While "args" is optional in this grammar, upstream parsing will fail if it is not present
           field("args", optional($.argument_list)),
           optional(seq("as", field("id", $.expression))),
-          optional(seq("in", field("scope", $.expression))),
+          optional(seq("in", field("scope", $.expression)))
         )
       ),
 
-    _type: ($) => choice(
-      $.custom_type,
-      $.builtin_type,
-      $._builtin_container_type,
-      $.json_container_type,
-      $.function_type,
-      $.optional,
-      $._parenthesized_type,
-    ),
+    _type: ($) =>
+      choice(
+        $.custom_type,
+        $.builtin_type,
+        $._builtin_container_type,
+        $.json_container_type,
+        $.function_type,
+        $.optional,
+        $._parenthesized_type
+      ),
 
     _parenthesized_type: ($) => seq("(", $._type, ")"),
 
@@ -490,7 +506,15 @@ module.exports = grammar({
         $._semicolon
       ),
 
-    method_modifiers: ($) => repeat1(choice($.extern_modifier, $.access_modifier, $.static, $.inflight_specifier)),
+    method_modifiers: ($) =>
+      repeat1(
+        choice(
+          $.extern_modifier,
+          $.access_modifier,
+          $.static,
+          $.inflight_specifier
+        )
+      ),
 
     method_definition: ($) =>
       seq(
@@ -519,7 +543,7 @@ module.exports = grammar({
         optional(field("reassignable", $.reassignable)),
         optional(field("variadic", $.variadic)),
         field("name", $.identifier),
-        optional($._type_annotation),
+        optional($._type_annotation)
       ),
 
     parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
@@ -543,6 +567,9 @@ module.exports = grammar({
 
     _container_value_type: ($) =>
       seq("<", field("type_parameter", $._type), ">"),
+
+    optional_unwrap: ($) =>
+      prec.right(PREC.OPTIONAL_UNWRAP, seq($.expression, "!")),
 
     unary_expression: ($) => {
       /** @type {Array<[RuleOrLiteral, number]>} */
@@ -619,19 +646,11 @@ module.exports = grammar({
     defer_expression: ($) => prec.right(seq("defer", $.expression)),
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
 
-    _collection_literal: ($) =>
-      choice($.array_literal, $.set_literal, $.map_literal),
+    _collection_literal: ($) => choice($.array_literal, $.map_literal),
     array_literal: ($) =>
       seq(
         optional(field("type", $._builtin_container_type)),
-        "[",
-        commaSep(field("element", $.expression)),
-        "]"
-      ),
-    set_literal: ($) =>
-      seq(
-        optional(field("type", $._builtin_container_type)),
-        braced(commaSep(field("element", $.expression)))
+        bracketed(commaSep(field("element", $.expression)))
       ),
     map_literal: ($) =>
       seq(
@@ -651,12 +670,17 @@ module.exports = grammar({
 
     json_literal: ($) =>
       choice(
-        seq(field("type", $.json_container_type), field("element", $.expression)),
+        seq(
+          field("type", $.json_container_type),
+          field("element", $.expression)
+        ),
         field("element", $.json_map_literal)
       ),
 
-    json_map_literal: ($) => braced(commaSep(field("member", $.json_literal_member))),
-    json_literal_member: ($) => seq(choice($.identifier, $.string), ":", $.expression),
+    json_map_literal: ($) =>
+      braced(commaSep(field("member", $.json_literal_member))),
+    json_literal_member: ($) =>
+      seq(choice($.identifier, $.string), ":", $.expression),
 
     json_container_type: ($) => $._json_types,
 
@@ -671,7 +695,14 @@ module.exports = grammar({
  * @param {Rule} rule
  */
 function braced(rule) {
-  return choice(seq("{", rule, "}"));
+  return seq("{", rule, "}");
+}
+
+/*
+ * @param {Rule} rule
+ */
+function bracketed(rule) {
+  return seq("[", rule, "]");
 }
 
 /**

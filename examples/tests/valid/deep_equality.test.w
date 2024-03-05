@@ -47,9 +47,9 @@ test "Json.values equality" {
 //-----------------------------------------------------------------------------
 // Set
 //-----------------------------------------------------------------------------
-let setA = { 1,2,3 };
-let setB = MutSet<num>{ 1,2,3 };
-let setC = { 4,5,6 };
+let setA = Set<num>[ 1,2,3 ];
+let setB = MutSet<num>[ 1,2,3 ];
+let setC = Set<num>[ 4,5,6 ];
 
 test "Set types with the same value" {
   assert(setA == setA);

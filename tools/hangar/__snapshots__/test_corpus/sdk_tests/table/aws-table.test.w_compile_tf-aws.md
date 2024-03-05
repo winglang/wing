@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -33,7 +33,10 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "name",
-        "name": "usersaws-wing-table-c82a4d4a"
+        "name": "usersaws-wing-table-c82a4d4a",
+        "point_in_time_recovery": {
+          "enabled": true
+        }
       }
     }
   }

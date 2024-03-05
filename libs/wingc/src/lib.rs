@@ -19,7 +19,7 @@ use indexmap::IndexMap;
 use jsify::JSifier;
 
 use lifting::LiftVisitor;
-use parser::parse_wing_project;
+use parser::{is_entrypoint_file, parse_wing_project};
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::SymbolEnvKind;
@@ -216,6 +216,7 @@ pub fn type_check(
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
 	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
+
 	types.set_scope_env(scope, env);
 
 	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
@@ -227,6 +228,11 @@ pub fn type_check(
 		None,
 	);
 	tc.add_builtins(scope);
+
+	// If the file is an entrypoint file, we add "this" to its symbol environment
+	if is_entrypoint_file(file_path) {
+		tc.add_this(&mut env);
+	}
 
 	tc.type_check_file_or_dir(file_path, scope);
 }
@@ -277,7 +283,7 @@ pub fn compile(
 	// Type check all files in topological order (start with files that don't bring any other
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
-		let mut scope = asts.remove(file).expect("matching AST not found");
+		let mut scope = asts.swap_remove(file).expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,

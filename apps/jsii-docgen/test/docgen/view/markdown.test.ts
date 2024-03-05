@@ -2,8 +2,6 @@ import * as path from "path";
 import { Documentation, Language } from "../../../src";
 import { JsiiEntity } from "../../../src/docgen/schema";
 
-jest.setTimeout(60 * 1000);
-
 let docs: Documentation;
 
 beforeAll(async () => {

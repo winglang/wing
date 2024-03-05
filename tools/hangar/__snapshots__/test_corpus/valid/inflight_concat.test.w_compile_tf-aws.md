@@ -6,11 +6,11 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class R {
-    constructor({ $_this_s1_concat___world___ }) {
-      this.$_this_s1_concat___world___ = $_this_s1_concat___world___;
+    constructor({ $this_s1 }) {
+      this.$this_s1 = $this_s1;
     }
     async foo() {
-      console.log(this.$_this_s1_concat___world___);
+      console.log((await this.$this_s1.concat(" world")));
     }
   }
   return R;
@@ -25,7 +25,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -66,26 +66,22 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const RClient = ${R._toInflightType()};
             const client = new RClient({
-              $_this_s1_concat___world___: ${$stdlib.core.liftObject((this.s1.concat(" world")))},
+              $this_s1: ${$stdlib.core.liftObject(this.s1)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "foo", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [(this.s1.concat(" world")), []],
-          ],
+      get _liftMap() {
+        return ({
           "foo": [
-            [(this.s1.concat(" world")), []],
+            [this.s1, ["concat"]],
+          ],
+          "$inflight_init": [
+            [this.s1, []],
           ],
         });
-        super.onLift(host, ops);
       }
     }
     const r = new R(this, "R");

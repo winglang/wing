@@ -2,4 +2,4 @@
 source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
-Unknown symbol "this" 3:8
+Member "print" doesn't exist in "Construct" 3:13

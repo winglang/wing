@@ -1,6 +1,6 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
-import { simulator } from "@winglang/sdk";
+import type { simulator } from "@winglang/sdk";
 import cors from "cors";
 import type Emittery from "emittery";
 import express from "express";
@@ -13,7 +13,9 @@ import type { HostUtils } from "./hostUtils.js";
 import { mergeAllRouters } from "./router/index.js";
 import type { State, Trace } from "./types.js";
 import type { Updater } from "./updater.js";
+import type { Analytics } from "./utils/analytics.js";
 import type {
+  FileLink,
   LayoutConfig,
   RouterContext,
   TestsStateManager,
@@ -29,6 +31,7 @@ export interface CreateExpressServerOptions {
   emitter: Emittery<{
     invalidateQuery: string | undefined;
     trace: Trace;
+    openFileInEditor: FileLink;
   }>;
   log: LogInterface;
   updater?: Updater;
@@ -44,6 +47,10 @@ export interface CreateExpressServerOptions {
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
   testsStateManager: () => TestsStateManager;
+  analyticsAnonymousId?: string;
+  analytics?: Analytics;
+  requireSignIn?: () => Promise<boolean>;
+  notifySignedIn?: () => Promise<void>;
 }
 
 export const createExpressServer = async ({
@@ -66,6 +73,10 @@ export const createExpressServer = async ({
   getSelectedNode,
   setSelectedNode,
   testsStateManager,
+  analyticsAnonymousId,
+  analytics,
+  requireSignIn,
+  notifySignedIn,
 }: CreateExpressServerOptions) => {
   const app = expressApp ?? express();
   app.use(cors());
@@ -99,6 +110,10 @@ export const createExpressServer = async ({
       getSelectedNode,
       setSelectedNode,
       testsStateManager,
+      analyticsAnonymousId,
+      analytics,
+      requireSignIn,
+      notifySignedIn,
     };
   };
   app.use(
@@ -131,10 +146,15 @@ export const createExpressServer = async ({
   log.info(`Server is listening on port ${port}`);
 
   const wss = new WebSocketServer({ server });
-  applyWSSHandler({
+  const handler = applyWSSHandler({
     wss,
     router,
     createContext,
+  });
+
+  process.on("SIGTERM", () => {
+    handler.broadcastReconnectNotification();
+    wss.close();
   });
 
   return { port, server };

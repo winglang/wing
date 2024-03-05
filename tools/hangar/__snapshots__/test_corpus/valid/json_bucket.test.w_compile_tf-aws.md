@@ -11,7 +11,7 @@ module.exports = function({ $b, $fileName }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(msg) {
+    async handle() {
       const x = (await $b.getJson($fileName));
       $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(x, "persons"), 0), "fears"), 1), "failure"), "x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"");
     }
@@ -49,7 +49,7 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -216,17 +216,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [b, ["getJson"]],
             [fileName, []],
           ],
+          "$inflight_init": [
+            [b, []],
+            [fileName, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -256,19 +256,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [b, ["putJson"]],
             [fileName, []],
             [getJson, ["invoke"]],
             [j, []],
           ],
+          "$inflight_init": [
+            [b, []],
+            [fileName, []],
+            [getJson, []],
+            [j, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");

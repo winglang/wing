@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ElkExtendedEdge } from "elkjs/lib/elk.bundled.js";
+import type { ElkExtendedEdge } from "elkjs/lib/elk.bundled.js";
 import { motion } from "framer-motion";
 import { memo, useMemo, useState } from "react";
 
@@ -46,10 +46,10 @@ export const EdgeItem = memo(
       <g
         className={classNames(
           "stroke-1 fill-none cursor-pointer hover:stroke-[1.5px]",
-          highlighted && "stroke-sky-500",
-          selected && "stroke-[1.5px] stroke-sky-500",
-          !highlighted && !selected && "stroke-slate-400 dark:stroke-slate-800",
-          fade && "opacity-40",
+          (highlighted || selected) &&
+            "stroke-[1.5px] stroke-sky-500 dark:stroke-sky-400",
+          !highlighted && !selected && "stroke-slate-400 dark:stroke-slate-750",
+          fade && "opacity-30",
           "transition-all",
         )}
       >

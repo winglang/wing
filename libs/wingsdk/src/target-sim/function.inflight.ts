@@ -54,9 +54,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   public async invoke(payload: string): Promise<string> {
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
-      activity: async () => {
-        return this.sandbox.call("handler", payload) ?? "";
-      },
+      activity: () => this.sandbox.call("handler", payload),
     });
   }
 

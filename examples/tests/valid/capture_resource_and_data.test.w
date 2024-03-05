@@ -1,6 +1,6 @@
 bring cloud;
 
-let data = {1,2,3};
+let data = Set<num>[1,2,3];
 let res = new cloud.Bucket();
 let queue = new cloud.Queue();
 

@@ -16,6 +16,8 @@ import { Topic } from "./topic";
 import { Website } from "./website";
 import { DataAwsCallerIdentity } from "../.gen/providers/aws/data-aws-caller-identity";
 import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
+import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
+import { DataAwsVpc } from "../.gen/providers/aws/data-aws-vpc";
 import { Eip } from "../.gen/providers/aws/eip";
 import { InternetGateway } from "../.gen/providers/aws/internet-gateway";
 import { NatGateway } from "../.gen/providers/aws/nat-gateway";
@@ -55,17 +57,20 @@ export class App extends CdktfApp {
 
   private awsRegionProvider?: DataAwsRegion;
   private awsAccountIdProvider?: DataAwsCallerIdentity;
-  private _vpc?: Vpc;
+  private _vpc?: Vpc | DataAwsVpc;
   private _codeBucket?: S3Bucket;
 
   /** Subnets shared across app */
-  public subnets: { [key: string]: Subnet };
+  public subnets: { [key: string]: (Subnet | DataAwsSubnet)[] };
 
   constructor(props: AppProps) {
     super(props);
     new AwsProvider(this, "aws", {});
 
-    this.subnets = {};
+    this.subnets = {
+      private: [],
+      public: [],
+    };
 
     TestRunner._createTree(this, props.rootConstruct);
   }
@@ -164,16 +169,60 @@ export class App extends CdktfApp {
   /**
    * Returns the VPC for this app. Will create a new VPC if one does not exist.
    */
-  public get vpc(): Vpc {
+  public get vpc(): Vpc | DataAwsVpc {
     if (this._vpc) {
       return this._vpc;
     }
 
+    return this.platformParameters.getParameterValue(`${this._target}/vpc`) ===
+      "existing"
+      ? this.importExistingVpc()
+      : this.createDefaultVpc();
+  }
+
+  private importExistingVpc(): DataAwsVpc {
+    const vpcId = this.platformParameters.getParameterValue(
+      `${this._target}/vpc_id`
+    );
+    const privateSubnetIds = this.platformParameters.getParameterValue(
+      `${this._target}/private_subnet_ids`
+    );
+    const publicSubnetIds = this.platformParameters.getParameterValue(
+      `${this._target}/public_subnet_ids`
+    );
+
+    this._vpc = new DataAwsVpc(this, "ExistingVpc", {
+      id: vpcId,
+    });
+
+    for (const subnetId of privateSubnetIds) {
+      this.subnets.private.push(
+        new DataAwsSubnet(this, `PrivateSubnet${subnetId.slice(-8)}`, {
+          vpcId: vpcId,
+          id: subnetId,
+        })
+      );
+    }
+
+    if (publicSubnetIds) {
+      for (const subnetId of publicSubnetIds) {
+        this.subnets.public.push(
+          new DataAwsSubnet(this, `PublicSubnet${subnetId.slice(-8)}`, {
+            vpcId: vpcId,
+            id: subnetId,
+          })
+        );
+      }
+    }
+
+    return this._vpc;
+  }
+
+  private createDefaultVpc(): Vpc {
     const VPC_NAME_OPTS: NameOptions = {
       maxLen: 32,
       disallowedRegex: /[^a-zA-Z0-9-]/,
     };
-
     const identifier = ResourceNames.generateName(this, VPC_NAME_OPTS);
 
     // create the app wide VPC
@@ -273,8 +322,8 @@ export class App extends CdktfApp {
       routeTableId: privateRouteTable.id,
     });
 
-    this.subnets.public = publicSubnet;
-    this.subnets.private = privateSubnet;
+    this.subnets.public.push(publicSubnet);
+    this.subnets.private.push(privateSubnet);
     return this._vpc;
   }
 }

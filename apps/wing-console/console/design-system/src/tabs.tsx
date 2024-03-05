@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import { ReactNode, memo, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { ScrollableArea } from "./scrollable-area.js";
 import { useTheme } from "./theme-provider.js";

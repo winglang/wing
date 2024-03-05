@@ -99,7 +99,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -186,8 +186,13 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
+          get _liftMap() {
+            return ({
+              "handle": [
+              ],
+              "$inflight_init": [
+              ],
+            });
           }
         }
         this.onUpdateCallback = new $Closure1(this, "$Closure1");
@@ -214,15 +219,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "get", "set", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.bucket, []],
-            [this.onUpdateCallback, []],
-          ],
+      get _liftMap() {
+        return ({
           "get": [
             [this.bucket, ["getJson"]],
             [this.onUpdateCallback, ["handle"]],
@@ -230,8 +228,11 @@ class $Root extends $stdlib.std.Resource {
           "set": [
             [this.bucket, ["putJson"]],
           ],
+          "$inflight_init": [
+            [this.bucket, []],
+            [this.onUpdateCallback, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -258,16 +259,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [counter, ["inc"]],
           ],
+          "$inflight_init": [
+            [counter, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.AutoIdResource {
@@ -296,17 +296,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [counter, ["peek"]],
             [kv, ["get", "set"]],
           ],
+          "$inflight_init": [
+            [counter, []],
+            [kv, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const kv = new KeyValueStore(this, "KeyValueStore");

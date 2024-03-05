@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -101,7 +101,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -149,7 +149,7 @@ exports.postSynth = function(config) {
 This workflow:
 
 - Checks out the code.
-- Installs Node.js v18.
+- Installs Node.js v20.
 - Installs the winglang CLI with the latest version.
 - Installs npm dependencies (this step can be skipped if not necessary).
 - Retrieves short-lived credentials for AWS via OIDC.
@@ -192,7 +192,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Node.js v18
         uses: actions/setup-node@v3
         with:

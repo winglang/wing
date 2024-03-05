@@ -2,7 +2,7 @@
 
 exports[`create a service with on start method 1`] = `
 {
-  ".wing/my_service_c815f66e.js": "\\"use strict\\";
+  ".wing/my_service_c815f66e.js": ""use strict";
 let $obj;
 async function $initOnce() {
   $obj = $obj || (await (new ((function(){
@@ -13,7 +13,7 @@ return class Handler {
     }
   }
   async handle() {
-  console.log(\\"start!\\");
+  console.log("start!");
 }
 };
 })())({
@@ -132,7 +132,7 @@ exports.handle = async function() {
         "my_service": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud service",
@@ -144,7 +144,7 @@ exports.handle = async function() {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

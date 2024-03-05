@@ -1,10 +1,8 @@
-import { readdirSync } from "fs";
-import { join } from "path";
 import { JsonFile, cdk, javascript, DependencyType } from "projen";
-import * as cloud from "./src";
 
-const JSII_DEPS = ["constructs@~10.2.69"];
-const CDKTF_VERSION = "0.17.0";
+const JSII_DEPS = ["constructs@^10.3"];
+const CDKTF_VERSION = "0.20.3";
+const AWS_SDK_VERSION = "3.490.0";
 
 const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
@@ -12,24 +10,6 @@ const CDKTF_PROVIDERS = [
   "azurerm@~>3.54.0",
   "google@~>5.10.0",
 ];
-
-// those will be skipped out of the docs
-const SKIPPED_MODULES = [
-  "cloud",
-  "ex",
-  "std",
-  "simulator",
-  "core",
-  "platform",
-  "helpers",
-];
-const publicModules = Object.keys(cloud).filter(
-  (item) => !SKIPPED_MODULES.includes(item)
-);
-
-const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/cloud/";
-const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/ex/";
-const STD_DOCS_PREFIX = "../../docs/docs/04-standard-library/std/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
@@ -53,6 +33,7 @@ const project = new cdk.JsiiProject({
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
   tsconfig: {
+    include: ["src/**/*.ts", "test/**/*.ts", "*.ts", "*.mts", "scripts/*.mts"],
     compilerOptions: {
       lib: ["es2020", "dom", "dom.iterable"],
     },
@@ -62,28 +43,29 @@ const project = new cdk.JsiiProject({
     ...sideLoad,
     // preflight dependencies
     "safe-stable-stringify",
-    // aws client dependencies
-    // (note: these should always be updated together, otherwise they will
-    // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.449.0",
-    "@aws-sdk/client-dynamodb@3.449.0",
-    "@aws-sdk/client-elasticache@3.449.0",
-    "@aws-sdk/util-dynamodb@3.449.0",
-    "@aws-sdk/client-lambda@3.449.0",
-    "@aws-sdk/client-secrets-manager@3.449.0",
-    "@aws-sdk/client-sqs@3.449.0",
-    "@aws-sdk/client-sns@3.449.0",
-    "@aws-sdk/client-s3@3.449.0",
-    "@aws-sdk/s3-request-presigner@3.449.0",
-    "@aws-sdk/types@3.449.0",
+    // aws sdk client dependencies
+    // change `AWS_SDK_VERSION` to update all deps at once
+    "@aws-sdk/client-cloudwatch-logs",
+    "@aws-sdk/client-dynamodb",
+    "@aws-sdk/client-elasticache",
+    "@aws-sdk/client-lambda",
+    "@aws-sdk/client-s3",
+    "@aws-sdk/client-secrets-manager",
+    "@aws-sdk/client-sns",
+    "@aws-sdk/client-sqs",
+    "@aws-sdk/s3-request-presigner",
+    "@aws-sdk/util-dynamodb",
+    // aws other client dependencies
     "@smithy/util-stream@2.0.17",
     "@smithy/util-utf8@2.0.0",
     "@types/aws-lambda",
+    "@aws-sdk/types",
     "mime-types",
     "mime@^3.0.0",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
-    "@azure/identity@3.1.3",
+    "@azure/data-tables@13.2.2",
+    "@azure/identity@4.0.1",
     "@azure/core-paging",
     // gcp client dependencies
     "@google-cloud/storage@6.9.5",
@@ -100,14 +82,16 @@ const project = new cdk.JsiiProject({
     // shared client dependencies
     "ioredis",
     "jsonschema",
+    "ajv",
     // fs module dependency
     "yaml",
+    "toml",
     // enhanced diagnostics
     "stacktracey",
     "ulid",
   ],
   devDeps: [
-    `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
+    `@cdktf/provider-aws@^19`, // only for testing Wing plugins
     "wing-api-checker",
     "bump-pack",
     "@types/aws-lambda",
@@ -122,15 +106,21 @@ const project = new cdk.JsiiProject({
     "fs-extra",
     "vitest",
     "@types/uuid",
-    "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
     "chalk",
+    "tsx",
     ...JSII_DEPS,
   ],
+  eslintOptions: {
+    dirs: ["src"],
+    devdirs: ["test", "scripts"],
+    ignorePatterns: ["src/.gen/", "**/*.d.ts"],
+  },
   jest: false,
+  depsUpgrade: false,
   prettier: true,
   npmignoreEnabled: false,
-  minNodeVersion: "18.13.0",
+  minNodeVersion: "20.0.0",
   projenCommand: "pnpm exec projen",
   packageManager: javascript.NodePackageManager.PNPM,
   codeCov: true,
@@ -139,9 +129,32 @@ const project = new cdk.JsiiProject({
   projenrcTs: true,
   jsiiVersion: "~5.3.11",
 });
+project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
+project.deps.removeDependency("ts-node");
 
-project.eslint?.addPlugins("sort-exports");
-project.eslint?.addOverride({
+/**
+ * Pin AWS SDK version and keep deps in sync
+ *
+ * `@aws-sdk/types` is excluded since it gets updated independently
+ * and its version may not match that of the AWS SDK clients
+ */
+project.deps.all
+  .filter(
+    (dep) => dep.name.startsWith("@aws-sdk/") && dep.name !== "@aws-sdk/types"
+  )
+  .map((dep) => project.addBundledDeps(`${dep.name}@${AWS_SDK_VERSION}`));
+
+project.deps.addDependency("eslint@^8.56.0", DependencyType.BUILD);
+project.deps.addDependency(
+  "@typescript-eslint/eslint-plugin@^7",
+  DependencyType.BUILD
+);
+project.deps.addDependency(
+  "@typescript-eslint/parser@^7",
+  DependencyType.BUILD
+);
+project.eslint!.addPlugins("sort-exports");
+project.eslint!.addOverride({
   files: ["src/**/index.ts"],
   rules: {
     "sort-exports/sort-exports": ["error", { sortDir: "asc" }],
@@ -264,124 +277,15 @@ project.tasks
 
 // --------------- docs -----------------
 
-const docsPrefix = (name: string) => {
-  return `../../docs/docs/04-standard-library/${name}`;
-};
-const docsFrontMatter = (name: string) => `---
-title: API reference
-id: api-reference
-description: Wing standard library API reference for the ${name} module
-keywords: [Wing sdk, sdk, Wing API Reference]
-hide_title: true
-sidebar_position: 100
----
-
-<!-- This file is automatically generated. Do not edit manually. -->
-`;
-
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
-
-// generate api reference for each submodule
-for (const mod of publicModules) {
-  const prefix = docsPrefix(mod);
-  const docsPath = prefix + "/api-reference.md";
-  docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
-  docgen.exec(`mkdir -p ${prefix}`);
-  docgen.exec(`echo '${docsFrontMatter(mod)}' > ${docsPath}`);
-  docgen.exec(`cat API.md >> ${docsPath}`);
-}
-
-const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
-const UNDOCUMENTED_EX_FILES = ["index", "dynamodb-table"];
-
-const toCamelCase = (str: string) =>
-  str.replace(/_(.)/g, (_, chr) => chr.toUpperCase());
-
-function generateResourceApiDocs(
-  module: string,
-  pathToFolder: string,
-  options: {
-    docsPath: string;
-    excludedFiles?: string[];
-    allowUndocumented?: boolean;
-  }
-) {
-  const { docsPath, excludedFiles = [], allowUndocumented = false } = options;
-
-  // copy readme docs
-  docgen.exec(`cp -r ${pathToFolder}/*.md ${docsPath}`);
-
-  const cloudFiles = readdirSync(pathToFolder);
-
-  const cloudResources: Set<string> = new Set(
-    cloudFiles.map((filename: string) => filename.split(".")[0])
-  );
-
-  excludedFiles.forEach((file) => cloudResources.delete(file));
-
-  const undocumentedResources = Array.from(cloudResources).filter(
-    (file) => !cloudFiles.includes(`${file}.md`)
-  );
-
-  if (undocumentedResources.length && !allowUndocumented) {
-    throw new Error(
-      `Detected undocumented resources: ${undocumentedResources.join(
-        ", "
-      )}. Please add the corresponding .md files in ${pathToFolder} folder.`
-    );
-  }
-
-  // generate api reference for each cloud/submodule and append it to the doc file
-  for (const mod of cloudResources) {
-    if (undocumentedResources.includes(mod)) {
-      // adding a title
-      docgen.exec(
-        `echo "---\ntitle: ${toCamelCase(mod)}\nid: ${toCamelCase(
-          mod
-        )}\n---\n\n" > ${docsPath}${mod}.md`
-      );
-    }
-    docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${module}/${mod}`);
-    docgen.exec(`cat API.md >> ${docsPath}${mod}.md`);
-  }
-}
-
-generateResourceApiDocs("cloud", "./src/cloud", {
-  docsPath: CLOUD_DOCS_PREFIX,
-  excludedFiles: UNDOCUMENTED_CLOUD_FILES,
-});
-generateResourceApiDocs("ex", "./src/ex", {
-  docsPath: EX_DOCS_PREFIX,
-  excludedFiles: UNDOCUMENTED_EX_FILES,
-});
-
-generateResourceApiDocs("ex/dynamodb-table", "./src/ex/dynamodb-table", {
-  docsPath: join(EX_DOCS_PREFIX, "/dynamodb-table/"),
-  excludedFiles: ["index"],
-});
-
-generateResourceApiDocs("std", "./src/std", {
-  docsPath: STD_DOCS_PREFIX,
-  excludedFiles: [
-    "README",
-    "index",
-    "test-runner",
-    "resource",
-    "test",
-    "range",
-    "generics",
-  ],
-  allowUndocumented: true,
-});
-
-docgen.exec("rm API.md");
+docgen.exec("tsx scripts/docgen.mts");
 
 // --------------- end of docs -----------------
 
 // set up vitest related config
 project.addGitIgnore("/coverage/");
-project.testTask.reset("vitest run --coverage --update --passWithNoTests");
+project.testTask.reset("vitest run --update");
 const testWatch = project.addTask("test:watch");
 testWatch.exec("vitest"); // Watch is default mode for vitest
 testWatch.description = "Run vitest in watch mode";
@@ -424,6 +328,6 @@ project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");
 
-project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

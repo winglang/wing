@@ -41,7 +41,7 @@ module.exports = function({ $s1, $s2 }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -90,17 +90,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [s1, []],
             [s2, []],
           ],
+          "$inflight_init": [
+            [s1, []],
+            [s2, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const s1 = "foo";

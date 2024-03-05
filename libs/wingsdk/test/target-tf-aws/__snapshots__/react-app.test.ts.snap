@@ -325,7 +325,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                       "AllowDistributionReadOnly": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformDataSource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "AllowDistributionReadOnly",
                         "path": "root/Default/Website/Website-host/AllowDistributionReadOnly",
@@ -333,7 +333,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                       "BucketWebsiteConfiguration": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "BucketWebsiteConfiguration",
                         "path": "root/Default/Website/Website-host/BucketWebsiteConfiguration",
@@ -341,7 +341,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                       "CloudfrontOac": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "CloudfrontOac",
                         "path": "root/Default/Website/Website-host/CloudfrontOac",
@@ -349,7 +349,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                       "Distribution": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Distribution",
                         "path": "root/Default/Website/Website-host/Distribution",
@@ -357,7 +357,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                       "DistributionS3BucketPolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "DistributionS3BucketPolicy",
                         "path": "root/Default/Website/Website-host/DistributionS3BucketPolicy",
@@ -367,7 +367,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                           "Url": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformOutput",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "Url",
                             "path": "root/Default/Website/Website-host/Endpoint/Url",
@@ -375,7 +375,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                         },
                         "constructInfo": {
                           "fqn": "constructs.Construct",
-                          "version": "10.2.70",
+                          "version": "10.3.0",
                         },
                         "display": {
                           "description": "Website root/Default/Website/Website-host",
@@ -388,7 +388,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                       "File--index.html": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "File--index.html",
                         "path": "root/Default/Website/Website-host/File--index.html",
@@ -396,7 +396,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                       "File-wing.js": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "File-wing.js",
                         "path": "root/Default/Website/Website-host/File-wing.js",
@@ -404,7 +404,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                       "WebsiteBucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "WebsiteBucket",
                         "path": "root/Default/Website/Website-host/WebsiteBucket",
@@ -412,7 +412,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A static website",
@@ -424,7 +424,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A deployable React App",
@@ -436,7 +436,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -444,7 +444,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -452,7 +452,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -460,7 +460,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -468,7 +468,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -621,7 +621,7 @@ exports[`Testing ReactApp > website with addEnvironment 1`] = `
         "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
         "content": "// This file is generated by wing
 window.wingEnv = {
-  \\"key\\": \\"value\\"
+  "key": "value"
 };",
         "content_type": "text/javascript",
         "depends_on": [
@@ -649,7 +649,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                       "AllowDistributionReadOnly": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformDataSource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "AllowDistributionReadOnly",
                         "path": "root/Default/Website/Website-host/AllowDistributionReadOnly",
@@ -657,7 +657,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                       "BucketWebsiteConfiguration": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "BucketWebsiteConfiguration",
                         "path": "root/Default/Website/Website-host/BucketWebsiteConfiguration",
@@ -665,7 +665,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                       "CloudfrontOac": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "CloudfrontOac",
                         "path": "root/Default/Website/Website-host/CloudfrontOac",
@@ -673,7 +673,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                       "Distribution": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Distribution",
                         "path": "root/Default/Website/Website-host/Distribution",
@@ -681,7 +681,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                       "DistributionS3BucketPolicy": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "DistributionS3BucketPolicy",
                         "path": "root/Default/Website/Website-host/DistributionS3BucketPolicy",
@@ -691,7 +691,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                           "Url": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformOutput",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "Url",
                             "path": "root/Default/Website/Website-host/Endpoint/Url",
@@ -699,7 +699,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                         },
                         "constructInfo": {
                           "fqn": "constructs.Construct",
-                          "version": "10.2.70",
+                          "version": "10.3.0",
                         },
                         "display": {
                           "description": "Website root/Default/Website/Website-host",
@@ -712,7 +712,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                       "File--index.html": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "File--index.html",
                         "path": "root/Default/Website/Website-host/File--index.html",
@@ -720,7 +720,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                       "File-wing.js": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "File-wing.js",
                         "path": "root/Default/Website/Website-host/File-wing.js",
@@ -728,7 +728,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                       "WebsiteBucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "WebsiteBucket",
                         "path": "root/Default/Website/Website-host/WebsiteBucket",
@@ -736,7 +736,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A static website",
@@ -748,7 +748,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A deployable React App",
@@ -760,7 +760,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -768,7 +768,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -776,7 +776,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -784,7 +784,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -792,7 +792,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",

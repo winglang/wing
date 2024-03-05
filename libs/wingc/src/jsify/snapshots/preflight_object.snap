@@ -92,8 +92,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "hello", "goodbye", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "hello": [
+          ],
+          "goodbye": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -120,16 +127,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [pf_obj, ["goodbye", "hello"]],
           ],
+          "$inflight_init": [
+            [pf_obj, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const pf_obj = new A(this, "A");

@@ -145,7 +145,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -192,8 +192,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -220,16 +225,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [x, ["handle"]],
           ],
+          "$inflight_init": [
+            [x, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class r extends $stdlib.std.Resource {
@@ -259,8 +263,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "method2", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "method2": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -287,16 +296,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [i3, ["method2"]],
           ],
+          "$inflight_init": [
+            [i3, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class Dog extends $stdlib.std.Resource {
@@ -320,8 +328,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "eat", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "eat": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Terrier extends Dog {
@@ -346,8 +359,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "eat", "$inflight_init"];
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "eat": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure3 extends $stdlib.std.AutoIdResource {
@@ -373,8 +391,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const x = new A(this, "A");

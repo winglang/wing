@@ -1,6 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
+import { ParameterRegistrar } from "../platform";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
 import { type IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
@@ -59,6 +60,12 @@ export interface AppProps {
    * @default - []
    */
   readonly newInstanceOverrides?: any[];
+
+  /**
+   * ParameterRegistrar of composed platforms
+   * @default - undefined
+   */
+  readonly platformParameterRegistrar?: ParameterRegistrar;
 }
 
 /**
@@ -144,6 +151,12 @@ export abstract class App extends Construct implements IApp {
    */
   protected _synthHooks?: SynthHooks;
 
+  /**
+   * Parameter registrar of composed platforms
+   * @internal
+   */
+  protected _platformParameters?: ParameterRegistrar;
+
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
@@ -168,6 +181,20 @@ export abstract class App extends Construct implements IApp {
    */
   public get workdir() {
     return `${this.outdir}/.wing`;
+  }
+
+  /**
+   * The parameter registrar for the app, can be used to find and register
+   * parameter values that were provided to the wing application.
+   */
+  public get platformParameters() {
+    if (!this._platformParameters) {
+      this._platformParameters = new ParameterRegistrar(
+        this,
+        "ParameterRegistrar"
+      );
+    }
+    return this._platformParameters!;
   }
 
   /**

@@ -32,7 +32,7 @@ let handler = inflight (message: str): str => {
 
 queue.setConsumer(handler);
 
-new cloud.Function(inflight (message: str): str => {
+new cloud.Function(inflight (message: str?): str? => {
   counter.inc();
   log("Counter is now {counter.inc(0)}");
   return message;
@@ -122,3 +122,36 @@ test "Add fixtures" {
   counter.set(0);
   counter.inc(100);
 }
+
+bring ui;
+
+class WidgetService {
+  data: cloud.Bucket;
+  counter: cloud.Counter;
+
+  new() {
+    this.data = new cloud.Bucket();
+    this.counter = new cloud.Counter();
+    
+    // a field displays a labeled value, with optional refreshing
+    new ui.Field(
+      "Total widgets",
+      inflight () => { return this.countWidgets(); },
+      refreshRate: 5s,
+    );
+
+    // a button lets you invoke any inflight function
+    new ui.Button("Add widget", inflight () => { this.addWidget(); });
+  }
+
+  inflight addWidget() {
+    let id = this.counter.inc();
+    this.data.put("widget-{id}", "my data");
+  }
+
+  inflight countWidgets(): str {
+    return "{this.data.list().length}";
+  }
+}
+
+new WidgetService();

@@ -1,12 +1,14 @@
-import {
+import type {
   Dispatch,
   PropsWithChildren,
   SetStateAction,
+  MutableRefObject,
+} from "react";
+import {
   createContext,
   useContext,
   useEffect,
   useRef,
-  MutableRefObject,
   useState,
   memo,
 } from "react";

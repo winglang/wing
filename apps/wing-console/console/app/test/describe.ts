@@ -32,6 +32,7 @@ export const describe = (wingfile: string, callback: () => void) => {
   test.beforeEach(async ({ page }) => {
     server = await createConsoleApp({
       wingfile: path.resolve(__dirname, wingfile),
+      requireSignIn: false,
     });
 
     await page.goto(`http://localhost:${server.port}/`);

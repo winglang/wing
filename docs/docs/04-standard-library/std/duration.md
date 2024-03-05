@@ -3,7 +3,6 @@ title: duration
 id: duration
 ---
 
-
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 

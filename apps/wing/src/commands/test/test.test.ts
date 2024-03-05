@@ -6,7 +6,7 @@ import { BuiltinPlatform } from "@winglang/compiler";
 import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
 import { describe, test, expect, beforeEach, afterEach, vi, SpyInstance } from "vitest";
-import { filterTests, renderTestReport, test as wingTest } from ".";
+import { filterTests, renderTestReport, collectTestFiles, test as wingTest } from ".";
 import * as resultsFn from "./results";
 
 const defaultChalkLevel = chalk.level;
@@ -90,33 +90,108 @@ describe("wing test (custom platform)", () => {
   });
 });
 
-describe("wing test (no options)", () => {
-  let logSpy: SpyInstance;
-
-  beforeEach(() => {
-    chalk.level = 0;
-    logSpy = vi.spyOn(console, "log");
-  });
-
-  afterEach(() => {
-    chalk.level = defaultChalkLevel;
-    process.chdir(cwd);
-    logSpy.mockRestore();
-  });
-
-  test("default entrypoint behaviour", async () => {
+describe("collectTestFiles", () => {
+  test("default entrypoints", async () => {
     const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
     process.chdir(outDir);
-    fs.writeFileSync("foo.test.w", "bring cloud;");
-    fs.writeFileSync("bar.test.w", "bring cloud;");
-    fs.writeFileSync("baz.test.w", "bring cloud;");
+    fs.writeFileSync("foo.test.w", "");
+    fs.writeFileSync("bar.test.w", "");
+    fs.writeFileSync("baz.test.w", "");
+    fs.writeFileSync("main.ts", "");
 
-    await wingTest([], { clean: true, platform: [BuiltinPlatform.SIM] });
+    const files = await collectTestFiles([]);
 
-    expect(logSpy).toHaveBeenCalledWith("pass ─ foo.test.wsim (no tests)");
-    expect(logSpy).toHaveBeenCalledWith("pass ─ bar.test.wsim (no tests)");
-    expect(logSpy).toHaveBeenCalledWith("pass ─ baz.test.wsim (no tests)");
+    expect(files).toMatchInlineSnapshot(`
+      [
+        "main.ts",
+        "foo.test.w",
+        "baz.test.w",
+        "bar.test.w",
+      ]
+    `);
+  });
+
+  test("specific entrypoint", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+
+    process.chdir(outDir);
+    fs.writeFileSync("foo.test.w", "");
+    fs.writeFileSync("bar.test.w", "");
+    fs.writeFileSync("baz.test.w", "");
+
+    const files = await collectTestFiles(["foo.test.w"]);
+
+    expect(files).toMatchInlineSnapshot(`
+      [
+        "foo.test.w",
+      ]
+    `);
+  });
+
+  test("fuzzy match dir", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+
+    process.chdir(outDir);
+    fs.mkdirSync("foo");
+    fs.writeFileSync("foo/a.test.w", "");
+    fs.writeFileSync("foo/b.test.w", "");
+    fs.writeFileSync("foo.test.w", "");
+    fs.writeFileSync("baz.test.w", "");
+
+    const files = await collectTestFiles(["foo"]);
+
+    expect(files).toMatchInlineSnapshot(`
+      [
+        "foo.test.w",
+        "foo/b.test.w",
+        "foo/a.test.w",
+      ]
+    `);
+  });
+
+  test("absolute path dedupe", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+
+    process.chdir(outDir);
+    fs.mkdirSync("foo");
+    fs.writeFileSync("foo/a.test.w", "");
+    fs.writeFileSync("foo/b.test.w", "");
+    fs.writeFileSync("foo.test.w", "");
+    fs.writeFileSync("baz.test.w", "");
+
+    const files = await collectTestFiles(["foo"]);
+
+    expect(files).toMatchInlineSnapshot(`
+    [
+      "foo.test.w",
+      "foo/b.test.w",
+      "foo/a.test.w",
+    ]
+  `);
+  });
+
+  test("testing file outside current dir", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+    const subDir = join(outDir, "subdir");
+
+    process.chdir(outDir);
+
+    fs.writeFileSync("foo.test.w", "");
+
+    fs.mkdirSync(subDir);
+
+    process.chdir(subDir);
+
+    fs.writeFileSync("main.w", "");
+
+    const files = await collectTestFiles(["../foo.test.w"]);
+
+    expect(files).toMatchInlineSnapshot(`
+      [
+        "../foo.test.w",
+      ]
+    `);
   });
 });
 
@@ -374,7 +449,7 @@ const BUCKET_TEST_RESULT = [
         sourceType: "@winglang/sdk.cloud.Bucket",
       },
       {
-        data: { message: 'Invoke (payload="").', status: "success" },
+        data: { message: "Invoke (payload=undefined).", status: "success" },
         type: "resource",
         sourcePath: "root/env0/test:put/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
@@ -411,7 +486,7 @@ const OUTPUT_FILE = {
           },
           {
             data: {
-              message: 'Invoke (payload="").',
+              message: "Invoke (payload=undefined).",
               status: "success",
             },
             type: "resource",

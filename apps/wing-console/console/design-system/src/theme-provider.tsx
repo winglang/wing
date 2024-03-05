@@ -1,6 +1,6 @@
+import type { PropsWithChildren } from "react";
 import {
   createContext,
-  PropsWithChildren,
   useCallback,
   useContext,
   useEffect,
@@ -50,8 +50,8 @@ export const DefaultTheme: Theme = {
   bg2Hover: "hover:bg-slate-200 dark:hover:bg-slate-750",
   bg3Hover: "hover:bg-slate-150 dark:hover:bg-slate-650",
   bg4Hover: "hover:bg-slate-50 dark:hover:bg-slate-500",
-  border3: "border-slate-300 dark:border-slate-900",
-  border4: "border-slate-200 dark:border-slate-800",
+  border3: "border-slate-300 dark:border-slate-800",
+  border4: "border-slate-200 dark:border-slate-600",
   text1: "text-slate-900 dark:text-slate-250",
   text2: "text-slate-500 dark:text-slate-400",
   text1Hover: "hover:text-slate-950 dark:hover:text-slate-200",
@@ -64,7 +64,7 @@ export const DefaultTheme: Theme = {
     "text-slate-900 placeholder:text-slate-500 dark:text-slate-300 dark:placeholder:text-slate-500",
   focusInput:
     "focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 outline-none",
-  borderInput: "border-slate-300 dark:border-slate-900",
+  borderInput: "border-slate-300 dark:border-slate-800",
   focusWithin:
     "focus-within:ring-2 focus-within:ring-sky-500/50 focus-within:border-sky-500 outline-none",
   scrollbar:

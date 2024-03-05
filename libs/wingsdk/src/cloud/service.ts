@@ -3,7 +3,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Lifting } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { IInflight, IInflightHost, Node, Resource } from "../std";
@@ -109,7 +109,7 @@ export class Service extends Resource implements IInflightHost {
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    this.handler.onLift(this, ["handle", "$inflight_init"]);
+    Lifting.lift(this.handler, this, ["handle"]);
   }
 
   /**

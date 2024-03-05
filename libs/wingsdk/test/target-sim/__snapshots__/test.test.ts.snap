@@ -2,7 +2,7 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c86fc180.js": "\\"use strict\\";
+  ".wing/handler_c86fc180.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -14,7 +14,7 @@ return class Handler {
   }
   
 async handle(event) {
-  console.log(\\"this test should pass!\\");
+  console.log("this test should pass!");
 }
 };
 })())({
@@ -142,7 +142,7 @@ async handle(event) {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -159,7 +159,7 @@ async handle(event) {
                 "Handler": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
-                    "version": "10.2.70",
+                    "version": "10.3.0",
                   },
                   "display": {
                     "description": "A cloud function (FaaS)",
@@ -171,7 +171,7 @@ async handle(event) {
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud unit test.",
@@ -183,7 +183,7 @@ async handle(event) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "id": "env0",
           "path": "root/env0",
@@ -191,7 +191,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

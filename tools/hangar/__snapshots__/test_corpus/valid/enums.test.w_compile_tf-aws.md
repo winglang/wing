@@ -28,7 +28,7 @@ module.exports = function({ $SomeEnum, $one, $two }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -52,6 +52,14 @@ const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    const SomeEnum =
+      (function (tmp) {
+        tmp[tmp["ONE"] = 0] = ",ONE";
+        tmp[tmp["TWO"] = 1] = ",TWO";
+        tmp[tmp["THREE"] = 2] = ",THREE";
+        return tmp;
+      })({})
+    ;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -78,27 +86,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [one, []],
             [two, []],
           ],
+          "$inflight_init": [
+            [one, []],
+            [two, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
-    const SomeEnum =
-      (function (tmp) {
-        tmp[tmp["ONE"] = 0] = ",ONE";
-        tmp[tmp["TWO"] = 1] = ",TWO";
-        tmp[tmp["THREE"] = 2] = ",THREE";
-        return tmp;
-      })({})
-    ;
+    const opt = undefined;
+    const three = SomeEnum.THREE;
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight", new $Closure1(this, "$Closure1"));

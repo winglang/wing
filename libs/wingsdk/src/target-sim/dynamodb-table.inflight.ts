@@ -1,17 +1,19 @@
-import { execSync } from "child_process";
 import {
   CreateTableCommand,
   DynamoDBClient,
   KeyType,
   KeySchemaElement,
 } from "@aws-sdk/client-dynamodb";
-import { v4 as uuidv4 } from "uuid";
 import {
   DynamodbTableAttributes,
   DynamodbTableSchema,
 } from "./schema-resources";
 import { DynamodbTableClientBase, GlobalSecondaryIndex } from "../ex";
-import { runDockerImage } from "../shared/misc";
+import {
+  generateDockerContainerName,
+  runDockerImage,
+  runCommand,
+} from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -36,10 +38,9 @@ export class DynamodbTable
     super(props.name);
 
     this.context = context;
-    this.containerName = `wing-sim-dynamodb-${this.context.resourcePath.replace(
-      /\//g,
-      "."
-    )}-${uuidv4()}`;
+    this.containerName = generateDockerContainerName(
+      `wing-sim-dynamodb-${this.context.resourcePath}`
+    );
   }
 
   public async init(): Promise<DynamodbTableAttributes> {
@@ -73,7 +74,7 @@ export class DynamodbTable
     // disconnect from the dynamodb server
     this.client?.destroy();
     // stop the dynamodb container
-    execSync(`docker rm -f ${this.containerName}`);
+    await runCommand("docker", ["rm", "-f", this.containerName]);
   }
 
   public async save(): Promise<void> {}
