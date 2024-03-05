@@ -133,15 +133,15 @@ class WidgetService {
     this.data = new cloud.Bucket();
     this.counter = new cloud.Counter();
     
-    // a button lets you invoke any inflight function
-    new ui.Button("Add widget", inflight () => { this.addWidget(); });
-    
     // a field displays a labeled value, with optional refreshing
     new ui.Field(
       "Total widgets",
       inflight () => { return this.countWidgets(); },
       refreshRate: 5s,
     );
+
+    // a button lets you invoke any inflight function
+    new ui.Button("Add widget", inflight () => { this.addWidget(); });
   }
 
   inflight addWidget() {
