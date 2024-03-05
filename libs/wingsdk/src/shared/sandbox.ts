@@ -51,7 +51,7 @@ export class Sandbox {
     const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
 
     // wrap contents with a shim that handles the communication with the parent process
-    // we insert this shim before bundling to ensure source maps will work correctly
+    // we insert this shim before bundling to ensure source maps are generated correctly
     let contents = (await readFile(this.entrypoint)).toString();
 
     // log a warning if contents includes __dirname or __filename
@@ -103,6 +103,7 @@ process.on("message", async (message) => {
     const logError = (message: string) =>
       this.options.log?.(false, "error", message);
 
+    // pipe stdout and stderr from the child process
     if (child.stdout) {
       processStream(child.stdout, log);
     }
