@@ -1,7 +1,7 @@
-<div align="center">
-  <img src="https://github.com/winglang/wing/assets/66887028/acfce775-13dc-4dd7-9a89-91409be0b26e)">
 
-</div>
+  [![Register](https://github.com/winglang/wing/assets/66887028/5647156b-3823-4ae3-939c-6e7d4405cc60)](https://wingla.ng/wing-cloud-early-access)
+
+
 
 <div align="center">
   <img src="./apps/wing/logo/banner.gif" alt="Wing Banner" >
