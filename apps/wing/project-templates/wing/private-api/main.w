@@ -101,14 +101,23 @@ new cloud.Function(inflight (event: str?) => {
     let name = parts.at(0);
     let note = parts.at(1);
 
-    let response = http.put("{noteService.api.url}/note/{name}", {
+    let response = http.post("{noteService.api.url}/note/{name}", {
       body: "{note}"
     });
     return response.body;
   }
 
   return "event is required `NAME:NOTE`";
-}) as "Consumer-PUT";
+}) as "Consumer-POST";
+
+new cloud.Function(inflight (event: str?) => {
+  if let event = event {
+    let response = http.delete("{noteService.api.url}/note/{event}");
+    return response.body;
+  }
+
+  return "event is required `NAME`";
+}) as "Consumer-DELETE";
 
 new cloud.Function(inflight (event: str?) => {
   if let event = event {
