@@ -54,7 +54,7 @@ let incAndCheck = new cloud.Function(inflight () => {
 
 test "Foo state is not shared between concurrent function invocations" {
   // start two invocations of fn, staggering them by 1 second
-  incAndCheck.invokeAsync("");
+  incAndCheck.invokeAsync();
   util.sleep(1s);
-  incAndCheck.invoke("");
+  incAndCheck.invoke();
 }
