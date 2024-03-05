@@ -419,6 +419,23 @@ const MapBackground = (props: {}) => {
   );
 };
 
+const nodeExists = (nodes: Node<any>[], id: string): boolean => {
+  let current = nodes;
+
+  let node: Node<any> | undefined;
+  do {
+    node = current.find(
+      (node) => node.id === id || id.startsWith(`${node.id}/`),
+    );
+    if (node?.id === id) {
+      return true;
+    }
+    current = node?.children ?? [];
+  } while (node);
+
+  return false;
+};
+
 export const ElkMap = <T extends unknown = undefined>({
   nodes,
   edges,
@@ -465,11 +482,16 @@ export const ElkMap = <T extends unknown = undefined>({
           "elk.padding": "[top=10,left=10,bottom=10,right=10]",
         },
         children: nodes.map((node) => toElkNode(node)),
-        edges: edges?.map((edge) => ({
-          id: edge.id,
-          sources: [edge.source],
-          targets: [edge.target],
-        })),
+        edges: edges
+          ?.filter(
+            (edge) =>
+              nodeExists(nodes, edge.source) && nodeExists(nodes, edge.target),
+          )
+          ?.map((edge) => ({
+            id: edge.id,
+            sources: [edge.source],
+            targets: [edge.target],
+          })),
       })
       .then((graph) => {
         if (abort) {
