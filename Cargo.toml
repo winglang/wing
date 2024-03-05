@@ -1,5 +1,6 @@
 [workspace]
-members = [ "apps/wingcli-v2",
+members = [
+  "apps/wingcli-v2",
   "libs/tree-sitter-wing",
   "libs/wingc",
   "libs/wingii",
