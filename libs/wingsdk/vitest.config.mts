@@ -8,6 +8,5 @@ export default defineConfig({
     // https://vitest.dev/guide/features.html#chai-and-jest-expect-compatibility
     // Allows to use the matchers added by "aws-sdk-client-mock-jest"
     globals: true,
-    maxConcurrency: 1,
   },
 });
