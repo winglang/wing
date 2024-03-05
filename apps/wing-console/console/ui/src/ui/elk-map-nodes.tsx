@@ -1,7 +1,9 @@
-import { useTheme, IconComponent } from "@wingconsole/design-system";
-import { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
+import type { IconComponent } from "@wingconsole/design-system";
+import { useTheme } from "@wingconsole/design-system";
+import type { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
-import { PropsWithChildren, memo, useMemo } from "react";
+import type { PropsWithChildren } from "react";
+import { memo, useMemo } from "react";
 
 const getResourceBackgroudColor = (
   resourceType: BaseResourceSchema["type"] | undefined,
@@ -54,6 +56,7 @@ export interface ContainerNodeProps {
   open?: boolean;
   hideBottomBar?: boolean;
   selected?: boolean;
+  fade?: boolean;
   resourceType: BaseResourceSchema["type"] | undefined;
   depth: number;
   onClick?: () => void;
@@ -66,6 +69,7 @@ export const ContainerNode = memo(
     icon: Icon,
     hideBottomBar,
     selected,
+    fade,
     onClick,
     onMouseEnter,
     resourceType,
@@ -134,6 +138,7 @@ export const ContainerNode = memo(
                   {
                     [theme.border3]: !selected,
                     "border-sky-300 dark:border-sky-500": selected,
+                    "opacity-30": fade,
                   },
                 )}
               >
@@ -170,6 +175,7 @@ export const ContainerNode = memo(
                     selected && "text-sky-600 dark:text-sky-400",
                     "font-semibold",
                   ],
+                  { "opacity-30": fade },
                 )}
               >
                 {compilerNamed ? display?.title : props.name}

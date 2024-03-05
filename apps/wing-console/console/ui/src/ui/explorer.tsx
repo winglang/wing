@@ -9,12 +9,12 @@ import {
   ResourceIcon,
   ScrollableArea,
 } from "@wingconsole/design-system";
-import { ExplorerItem } from "@wingconsole/server";
+import type { ExplorerItem } from "@wingconsole/server";
 import classNames from "classnames";
 import { memo, useMemo } from "react";
 
 import { NoResources } from "./no-resources.js";
-import { TreeMenuItem } from "./use-tree-menu-items.js";
+import type { TreeMenuItem } from "./use-tree-menu-items.js";
 
 const renderTreeItems = (items: TreeMenuItem[]) => {
   return items.map((item) => {

@@ -1,7 +1,7 @@
 import { errorMessage } from "@wingconsole/error-message";
 import { nanoid } from "nanoid";
 
-import { LogInterface } from "./utils/LogInterface.js";
+import type { LogInterface } from "./utils/LogInterface.js";
 
 export type LogLevel = "verbose" | "info" | "warn" | "error";
 

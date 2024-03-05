@@ -1,11 +1,17 @@
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { ITopicClient } from "../wingsdk.js";
+import type { ITopicClient } from "../wingsdk.js";
 
 export const createTopicRouter = () => {
   return createRouter({
     "topic.publish": createProcedure
+      .meta({
+        analytics: {
+          action: "publish",
+          resource: "Topic",
+        },
+      })
       .input(
         z.object({
           resourcePath: z.string(),
