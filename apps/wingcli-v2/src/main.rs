@@ -192,15 +192,26 @@ pub fn get_styles() -> clap::builder::Styles {
 #[cfg(test)]
 mod test {
 	use super::*;
+	use std::sync::Once;
+
+	static INIT: Once = Once::new();
+
+	fn initialize() {
+		INIT.call_once(|| {
+			install_sdk().expect("Failed to install SDK");
+		});
+	}
 
 	#[test]
 	fn test_compile_sim() {
+		initialize();
 		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::Sim));
 		assert!(res.is_ok());
 	}
 
 	#[test]
 	fn test_compile_tfaws() {
+		initialize();
 		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::TfAws));
 		assert!(res.is_ok());
 	}
