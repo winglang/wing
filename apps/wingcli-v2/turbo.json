@@ -2,12 +2,9 @@
     "$schema": "https://turborepo.org/schema.json",
     "extends": ["//"],
     "pipeline": {
-      "compile": {
-        "dependsOn": ["@winglang/wingii#compile", "@winglang/wingc#compile"],
-        "outputs": []
-      },
+      "compile": {},
       "test": {
-        "dependsOn": ["compile", "@winglang/sdk#compile"]
+        "dependsOn": ["@winglang/sdk#compile"]
       }
     }
   }
