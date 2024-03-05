@@ -4,6 +4,7 @@ import {
   Api,
   Bucket,
   Function,
+  IApiClient,
   IBucketClient,
   IFunctionClient,
   Service,
@@ -13,6 +14,7 @@ import { Simulator, Testing } from "../../src/simulator";
 import { ITestRunnerClient, Test, TestResult, TraceType } from "../../src/std";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
+import { State } from "../../src/target-sim";
 
 describe("run single test", () => {
   test("test not found", async () => {
@@ -184,6 +186,15 @@ test("provides raw tree data", async () => {
   await sim.stop();
   expect(treeData).toBeDefined();
   expect(treeData).toMatchSnapshot();
+});
+
+test("unable to resolve token during initialization", async () => {
+  const app = new SimApp();
+  const state = new State(app, "State");
+  const bucket = new Bucket(app, "Bucket");
+  bucket.addObject("url.txt", state.token("my_token"));
+
+  expect(app.startSimulator()).rejects.toThrowError(/Unable to resolve attribute 'my_token' for resource: root\/State/);
 });
 
 describe("in-place updates", () => {
@@ -424,6 +435,59 @@ describe("in-place updates", () => {
       "root/Bucket1 started",
     ]);
   });
+
+  
+  
+
+  test("token value is changed across an update", async () => {
+    const app = new SimApp();
+    const stateKey = "my_value";
+    
+   
+    const myState = new State(app, "State");
+
+    const myService = new Service(app, "Service", 
+      Testing.makeHandler(`async handle() { await this.myState.set("${stateKey}", "bang"); }`, 
+      { myState: { obj: myState, ops: ["set"] } }),
+      { env: { VER: "1" } });
+
+    new Function(app, "Function", Testing.makeHandler(`async handle() { return process.env.MY_VALUE; }`), {
+      env: { MY_VALUE: myState.token(stateKey) },
+    });
+
+    const sim = await app.startSimulator();
+
+    const fn = sim.getResource("root/Function") as IFunctionClient;
+    const result = await fn.invoke();
+    expect(result).toEqual("bang");
+
+    // okay, now we are ready to update
+    const app2 = new SimApp();
+    
+    const myState2 = new State(app2, "State");
+
+    const myService2 = new Service(app2, "Service", 
+      Testing.makeHandler(`async handle() { await this.myState.set("${stateKey}", "bing"); }`, 
+      { myState: { obj: myState2, ops: ["set"] } }), 
+      { env: { VER: "2" } });
+
+    new Function(app2, "Function", Testing.makeHandler(`async handle() { return process.env.MY_VALUE; }`), {
+      env: { MY_VALUE: myState.token(stateKey) },
+    });
+
+    await sim.update(app2.synth());
+
+    expect(simTraces(sim)).toEqual([
+      "root/State started",
+      "root/State.my_value = bang",
+      "root/Service started",
+      "root/Function started",
+      "Update: 0 added, 1 updated, 0 deleted",
+      "root/Service stopped",
+      "root/State.my_value = bing",
+      "root/Service started",
+    ]);
+  });
 });
 
 function makeTest(
@@ -437,28 +501,6 @@ function makeTest(
     bindings
   );
   return new Test(scope, id, handler, bindings);
-}
-
-function removePathsFromTraceLine(line?: string) {
-  if (!line) {
-    return undefined;
-  }
-
-  // convert wingsdk paths to src (e.g. "/a/b/wingsdk/src/z/t.js" -> "[src]/z/t.js") with relative paths
-  line = line.replace(/\/.+\/wingsdk\/src\//g, "[src]/");
-
-  // if any absolute paths remain, replace them with "[abs]"
-  line = line.replace(/([ (])\/[^)]+/g, "$1[abs]");
-
-  return line;
-}
-
-function removeLineNumbers(line?: string) {
-  if (!line) {
-    return undefined;
-  }
-
-  return line.replace(/:\d+:\d+/g, ":<sanitized>");
 }
 
 function sanitizeResult(result: TestResult): TestResult {

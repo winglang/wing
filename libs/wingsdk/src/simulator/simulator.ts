@@ -288,7 +288,7 @@ export class Simulator {
       newModel.schema.resources
     );
 
-    this._addTrace({
+    this.addTrace({
       type: TraceType.SIMULATOR,
       data: {
         message: `Update: ${plan.added.length} added, ${plan.updated.length} updated, ${plan.deleted.length} deleted`,
@@ -376,7 +376,7 @@ export class Simulator {
 
   private addSimulatorTrace(path: string, data: any) {
     const resourceConfig = this.getResourceConfig(path);
-    this._addTrace({
+    this.addTrace({
       type: TraceType.SIMULATOR,
       data: data,
       sourcePath: resourceConfig.path,
@@ -677,6 +677,12 @@ export class Simulator {
       recursive: true,
     });
 
+    // initialize the resource state object without attrs for now
+    this.state[path] = {
+      props: resolvedProps,
+      attrs: {},
+    };
+
     // create the resource based on its type
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const ResourceType = require(typeInfo.sourcePath)[typeInfo.className];
@@ -689,14 +695,11 @@ export class Simulator {
     // allocate a handle for the resource so others can find it
     const handle = this._handles.allocate(resourceObject);
 
-    // update the resource configuration with new attrs returned after initialization
-    // this indicates that the resource is started
-    this.state[path] = {
-      props: resolvedProps,
-      attrs: {
-        ...attrs,
-        [HANDLE_ATTRIBUTE]: handle,
-      },
+    // merge the attributes
+    this.state[path].attrs = {
+      ...this.state[path].attrs,
+      ...attrs,
+      [HANDLE_ATTRIBUTE]: handle,
     };
 
     // trace the resource creation
@@ -715,13 +718,13 @@ export class Simulator {
         return this._handles.find(handle);
       },
       addTrace: (trace: Trace) => {
-        this._addTrace(trace);
+        this.addTrace(trace);
       },
       withTrace: async (props: IWithTraceProps) => {
         // TODO: log start time and end time of activity?
         try {
           let result = await props.activity();
-          this._addTrace({
+          this.addTrace({
             data: {
               message: props.message,
               status: "success",
@@ -734,7 +737,7 @@ export class Simulator {
           });
           return result;
         } catch (err) {
-          this._addTrace({
+          this.addTrace({
             data: { message: props.message, status: "failure", error: err },
             type: TraceType.RESOURCE,
             sourcePath: resourceConfig.path,
@@ -748,6 +751,10 @@ export class Simulator {
         return [...this._traces];
       },
       setResourceAttributes: (path: string, attrs: Record<string, any>) => {
+        for (const [key, value] of Object.entries(attrs)) {
+          this.addSimulatorTrace(path, { message: `${path}.${key} = ${value}` });
+        }
+
         this.state[path].attrs = { ...this.state[path].attrs, ...attrs };
       },
       resourceAttributes: (path: string) => {
@@ -756,7 +763,7 @@ export class Simulator {
     };
   }
 
-  private _addTrace(event: Trace) {
+  private addTrace(event: Trace) {
     event = Object.freeze(event);
     for (const sub of this._traceSubscribers) {
       sub.callback(event);
@@ -786,11 +793,16 @@ export class Simulator {
           `Could not resolve token "${token}" because the resource at path "${token.path}" does not exist.`
         );
       }
-
+     
       const r = this.getResourceConfig(target.path);
 
       if (token.attr) {
-        return r.attrs[token.attr];
+        const value = r.attrs[token.attr];
+        if (value === undefined) {
+          throw new Error(`Unable to resolve attribute '${token.attr}' for resource: ${target.path}`);
+          // return undefined;
+        }
+        return value;
       }
 
       if (token.prop) {
