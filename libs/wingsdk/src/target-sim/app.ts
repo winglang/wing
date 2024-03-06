@@ -12,7 +12,7 @@ import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
 import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
-import { isSimulatorResource } from "./resource";
+import { ISimulatorResource, isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Service } from "./service";
@@ -261,10 +261,20 @@ export class App extends core.App {
   }
 
   private synthSimulatorFile(outdir: string) {
+    const toSimulatorWithDeps = (res: ISimulatorResource) => {
+      const cfg = res.toSimulator();
+      const deps = res.node.dependencies.map(d => d.node.path);
+      
+      return {
+        ...cfg,
+        deps,
+      }
+    };
+
     const resources = new core.DependencyGraph(this.node)
       .topology()
       .filter(isSimulatorResource)
-      .map((res) => res.toSimulator());
+      .map(toSimulatorWithDeps);
 
     const types: { [fqn: string]: TypeSchema } = {};
     for (const [fqn, className] of Object.entries(SIMULATOR_CLASS_DATA)) {

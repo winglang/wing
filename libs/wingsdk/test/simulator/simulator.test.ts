@@ -7,14 +7,16 @@ import {
   IApiClient,
   IBucketClient,
   IFunctionClient,
+  OnDeploy,
   Service,
 } from "../../src/cloud";
 import { InflightBindings } from "../../src/core";
 import { Simulator, Testing } from "../../src/simulator";
 import { ITestRunnerClient, Test, TestResult, TraceType } from "../../src/std";
+import { State } from "../../src/target-sim";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
-import { State } from "../../src/target-sim";
+import * as fs from "fs";
 
 describe("run single test", () => {
   test("test not found", async () => {
@@ -194,7 +196,9 @@ test("unable to resolve token during initialization", async () => {
   const bucket = new Bucket(app, "Bucket");
   bucket.addObject("url.txt", state.token("my_token"));
 
-  expect(void app.startSimulator()).rejects.toThrowError(/Unable to resolve attribute 'my_token' for resource: root\/State/);
+  expect(app.startSimulator()).rejects.toThrowError(
+    /Unable to resolve attribute 'my_token' for resource: root\/State/
+  );
 });
 
 describe("in-place updates", () => {
@@ -333,6 +337,8 @@ describe("in-place updates", () => {
     await sim.stop();
   });
 
+
+
   test("add resource that depends on an existing resource", async () => {
     const stateDir = mkdtemp();
 
@@ -391,6 +397,40 @@ describe("in-place updates", () => {
     expect(ret).toEqual(urlFromBucket);
   });
 
+  test("retained resource is not removed", async () => {
+    const app = new SimApp();
+    const api1 = new Api(app, "Api");
+    const bucket1 = new Bucket(app, "Bucket");
+    bucket1.addObject("url.txt", api1.url);
+
+    const stateDir = mkdtemp();
+    const sim = await app.startSimulator(stateDir);
+
+    const urlBeforeUpdate = await sim.getResource("root/Bucket").get("url.txt");
+
+    // remove the state directory otherwise Api reuses the port
+    fs.rmdirSync(stateDir, { recursive: true });
+
+    const app2 = new SimApp();
+    const api2 = new Api(app2, "Api");
+    const bucket2 = new Bucket(app2, "Bucket", { public: true }); // <-- causing the update to be updated because we are deleting the state dirtectory, so we want the file to be uploaded again.
+    bucket2.addObject("url.txt", api2.url);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(updateTrace(sim)).toStrictEqual({
+      added: [],
+      deleted: [],
+      updated: [
+        "root/Bucket"
+      ],
+    });
+
+    const urlAfterUpdate = await sim.getResource("root/Bucket").get("url.txt");
+    expect(urlBeforeUpdate).toStrictEqual(urlAfterUpdate);
+  });
+
   test("dependent resource is replaced when a dependency is replaced", async () => {
     const app = new SimApp();
     const myApi = new Api(app, "Api1");
@@ -399,7 +439,11 @@ describe("in-place updates", () => {
     // BUCKET depends on API
     myBucket.addObject("url.txt", myApi.url);
 
-    const sim = await app.startSimulator();
+    const stateDir = mkdtemp();
+    const sim = await app.startSimulator(stateDir);
+
+    const urlBeforeUpdate = await sim.getResource("root/Bucket1").get("url.txt");
+    expect(urlBeforeUpdate.startsWith("http://127.0.0")).toBeTruthy();
 
     expect(simTraces(sim)).toEqual([
       "root/Api1 started",
@@ -414,8 +458,12 @@ describe("in-place updates", () => {
     const myBucket2 = new Bucket(app2, "Bucket1");
     myBucket2.addObject("url.txt", myApi2.url);
 
+    // clear the state directory
+    fs.rmdirSync(stateDir, { recursive: true });
+
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
+
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
       deleted: [],
@@ -434,26 +482,35 @@ describe("in-place updates", () => {
       "root/Api1/Endpoint started",
       "root/Bucket1 started",
     ]);
-  });
 
-  
-  
+    const urlAfterUpdate = await (sim.getResource("root/Bucket1") as IBucketClient).get("url.txt");
+    expect(urlAfterUpdate).not.toEqual(urlBeforeUpdate);
+  });
 
   test("token value is changed across an update", async () => {
     const app = new SimApp();
     const stateKey = "my_value";
-    
-   
+
     const myState = new State(app, "State");
 
-    const myService = new Service(app, "Service", 
-      Testing.makeHandler(`async handle() { await this.myState.set("${stateKey}", "bang"); }`, 
-      { myState: { obj: myState, ops: ["set"] } }),
-      { env: { VER: "1" } });
+    const myService = new Service(
+      app,
+      "Service",
+      Testing.makeHandler(
+        `async handle() { await this.myState.set("${stateKey}", "bang"); }`,
+        { myState: { obj: myState, ops: ["set"] } }
+      ),
+      { env: { VER: "1" } }
+    );
 
-    new Function(app, "Function", Testing.makeHandler(`async handle() { return process.env.MY_VALUE; }`), {
-      env: { MY_VALUE: myState.token(stateKey) },
-    });
+    new Function(
+      app,
+      "Function",
+      Testing.makeHandler(`async handle() { return process.env.MY_VALUE; }`),
+      {
+        env: { MY_VALUE: myState.token(stateKey) },
+      }
+    );
 
     const sim = await app.startSimulator();
 
@@ -463,17 +520,27 @@ describe("in-place updates", () => {
 
     // okay, now we are ready to update
     const app2 = new SimApp();
-    
+
     const myState2 = new State(app2, "State");
 
-    const myService2 = new Service(app2, "Service", 
-      Testing.makeHandler(`async handle() { await this.myState.set("${stateKey}", "bing"); }`, 
-      { myState: { obj: myState2, ops: ["set"] } }), 
-      { env: { VER: "2" } });
+    const myService2 = new Service(
+      app2,
+      "Service",
+      Testing.makeHandler(
+        `async handle() { await this.myState.set("${stateKey}", "bing"); }`,
+        { myState: { obj: myState2, ops: ["set"] } }
+      ),
+      { env: { VER: "2" } }
+    );
 
-    new Function(app2, "Function", Testing.makeHandler(`async handle() { return process.env.MY_VALUE; }`), {
-      env: { MY_VALUE: myState.token(stateKey) },
-    });
+    new Function(
+      app2,
+      "Function",
+      Testing.makeHandler(`async handle() { return process.env.MY_VALUE; }`),
+      {
+        env: { MY_VALUE: myState.token(stateKey) },
+      }
+    );
 
     await sim.update(app2.synth());
 
@@ -488,6 +555,39 @@ describe("in-place updates", () => {
       "root/Service started",
     ]);
   });
+
+  test("Construct dependencies are taken into account", async () => {
+    const app = new SimApp();
+    const handler = Testing.makeHandler(`async handle() {}`);
+    const bucket = new Bucket(app, "Bucket1");
+
+    new OnDeploy(app, "OnDeploy", handler, {
+      executeAfter: [bucket],
+    });
+
+    const sim = await app.startSimulator();
+
+    const app2 = new SimApp();
+    const bucket2 = new Bucket(app2, "Bucket1", { public: true });
+    new OnDeploy(app2, "OnDeploy", handler, {
+      executeAfter: [bucket2],
+    });
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/OnDeploy/Function started",
+      "root/Bucket1 started",
+      "root/OnDeploy started",
+      "Update: 0 added, 1 updated, 0 deleted",
+      "root/OnDeploy stopped",
+      "root/Bucket1 stopped",
+      "root/Bucket1 started",
+      "root/OnDeploy started",
+    ]);
+  });
+
 });
 
 function makeTest(

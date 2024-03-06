@@ -752,7 +752,9 @@ export class Simulator {
       },
       setResourceAttributes: (path: string, attrs: Record<string, any>) => {
         for (const [key, value] of Object.entries(attrs)) {
-          this.addSimulatorTrace(path, { message: `${path}.${key} = ${value}` });
+          this.addSimulatorTrace(path, {
+            message: `${path}.${key} = ${value}`,
+          });
         }
 
         this.state[path].attrs = { ...this.state[path].attrs, ...attrs };
@@ -793,13 +795,15 @@ export class Simulator {
           `Could not resolve token "${token}" because the resource at path "${token.path}" does not exist.`
         );
       }
-     
+
       const r = this.getResourceConfig(target.path);
 
       if (token.attr) {
         const value = r.attrs[token.attr];
         if (value === undefined) {
-          throw new Error(`Unable to resolve attribute '${token.attr}' for resource: ${target.path}`);
+          throw new Error(
+            `Unable to resolve attribute '${token.attr}' for resource: ${target.path}`
+          );
           // return undefined;
         }
         return value;
@@ -1026,6 +1030,5 @@ function planUpdate(current: BaseResourceSchema[], next: BaseResourceSchema[]) {
       ret[resource.path] = resource;
     }
     return ret;
-  }  
+  }
 }
-
