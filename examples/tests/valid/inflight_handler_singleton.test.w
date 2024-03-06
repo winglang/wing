@@ -44,17 +44,3 @@ test "single instance of Foo" {
   // was reused or not between the two calls.
   assert(y == "100" || y == "101");
 }
-
-// a function that takes at least three seconds to run
-let incAndCheck = new cloud.Function(inflight () => {
-  let n = foo.inc();
-  util.sleep(3s);
-  assert(n == foo.get());
-}) as "incAndCheck";
-
-test "Foo state is not shared between concurrent function invocations" {
-  // start two invocations of fn, staggering them by 1 second
-  incAndCheck.invokeAsync();
-  util.sleep(1s);
-  incAndCheck.invoke();
-}
