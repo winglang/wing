@@ -13,11 +13,17 @@ export interface SandboxOptions {
   readonly log?: (internal: boolean, level: string, message: string) => void;
 }
 
+/**
+ * Shape of the messages sent to the child process.
+ */
 type ProcessRequest = {
   fn: string;
   args: any[];
 };
 
+/**
+ * Shape of the messages returned by the child process.
+ */
 type ProcessResponse =
   | {
       type: "resolve";
@@ -45,9 +51,7 @@ export class Sandbox {
     for (const timeout of this.timeouts) {
       clearTimeout(timeout);
     }
-    // It's possible that the sandbox's call() method was invoked without being awaited.
-    // If that's the case, we need to wait for the child process to exit before we can
-    // clean up the sandbox.
+    // Make sure all child processes have exited before cleaning up the sandbox.
     for (const child of this.exitingChildren) {
       await child;
     }
