@@ -164,6 +164,7 @@ type UnitTestId = string;
 
 /**
  * Used to aggregate logs from the simulator during unit tests.
+ * @internal
  */
 export class Logger {
   public static get instance(): Logger {
