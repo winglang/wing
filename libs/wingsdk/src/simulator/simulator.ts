@@ -609,6 +609,7 @@ export class Simulator {
             });
         });
       } catch (serverError) {
+        this.internalTrace(`Internal error: ${serverError}`);
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(
           serialize({
