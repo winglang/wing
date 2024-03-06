@@ -79,9 +79,6 @@ module.exports = function({  }) {
       this.n += 1;
       return this.n;
     }
-    async get() {
-      return this.n;
-    }
     async $inflight_init() {
       this.n = 99;
     }
@@ -336,8 +333,6 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "inc": [
-          ],
-          "get": [
           ],
           "$inflight_init": [
           ],
