@@ -88,15 +88,7 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     // produce an inflight code bundle using the latest information, including all
     // changes made to captured variables/resources after the constructor
-    const bundle = createBundle(this.entrypoint, [
-      '@aws-sdk/client-sso',
-      '@aws-sdk/client-sso-oidc',
-      '@aws-sdk/credential-provider-ini',
-      '@aws-sdk/credential-provider-process',
-      '@aws-sdk/credential-provider-sso',
-      '@aws-sdk/credential-provider-web-identity',
-      '@aws-sdk/token-providers'
-    ]);
+    const bundle = createBundle(this.entrypoint, externalLibraries);
 
     // copy files from bundle.directory to this.assetPath
     const assetDir = resolve(App.of(this).outdir, this.assetPath);
