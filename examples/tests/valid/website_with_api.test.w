@@ -7,7 +7,7 @@ bring expect;
 let api = new cloud.Api(
   cors: true,
   corsOptions: cloud.ApiCorsOptions {
-    allowOrigin: ["*"],
+    allowOrigin: "*",
     allowMethods: [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],
     allowHeaders: ["Content-Type"],
     allowCredentials: false,
