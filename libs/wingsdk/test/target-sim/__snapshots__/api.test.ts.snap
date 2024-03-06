@@ -97,6 +97,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -369,6 +373,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -637,6 +645,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -905,6 +917,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -1173,6 +1189,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -1441,6 +1461,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -1817,6 +1841,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -2126,6 +2154,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -2403,6 +2435,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -2665,6 +2701,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -2976,6 +3016,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -3006,6 +3050,10 @@ return class Handler {
       {
         "addr": "c874047faffbf7bc1cdc78bb5f3f942cf01cd31844",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler1",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping1",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -3340,6 +3388,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -3370,6 +3422,10 @@ return class Handler {
       {
         "addr": "c874047faffbf7bc1cdc78bb5f3f942cf01cd31844",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler1",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping1",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -3663,6 +3719,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -3940,6 +4000,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
@@ -4208,6 +4272,10 @@ return class Handler {
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
+        "deps": [
+          "root/my_api/OnRequestHandler0",
+          "root/my_api",
+        ],
         "path": "root/my_api/ApiEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",

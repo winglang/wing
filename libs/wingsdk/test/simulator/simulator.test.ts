@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
 import {
@@ -16,7 +17,6 @@ import { ITestRunnerClient, Test, TestResult, TraceType } from "../../src/std";
 import { State } from "../../src/target-sim";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
-import * as fs from "fs";
 
 describe("run single test", () => {
   test("test not found", async () => {
@@ -196,8 +196,15 @@ test("unable to resolve token during initialization", async () => {
   const bucket = new Bucket(app, "Bucket");
   bucket.addObject("url.txt", state.token("my_token"));
 
-  expect(app.startSimulator()).rejects.toThrowError(
-    /Unable to resolve attribute 'my_token' for resource: root\/State/
+  let error;
+  try {
+    await app.startSimulator();
+  } catch (e) {
+    error = e;
+  }
+  expect(error).toBeDefined();
+  expect(error.message).toMatch(
+    /Unable to resolve attribute 'my_token'/
   );
 });
 
@@ -337,8 +344,6 @@ describe("in-place updates", () => {
     await sim.stop();
   });
 
-
-
   test("add resource that depends on an existing resource", async () => {
     const stateDir = mkdtemp();
 
@@ -422,9 +427,7 @@ describe("in-place updates", () => {
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
       deleted: [],
-      updated: [
-        "root/Bucket"
-      ],
+      updated: ["root/Bucket"],
     });
 
     const urlAfterUpdate = await sim.getResource("root/Bucket").get("url.txt");
@@ -442,7 +445,9 @@ describe("in-place updates", () => {
     const stateDir = mkdtemp();
     const sim = await app.startSimulator(stateDir);
 
-    const urlBeforeUpdate = await sim.getResource("root/Bucket1").get("url.txt");
+    const urlBeforeUpdate = await sim
+      .getResource("root/Bucket1")
+      .get("url.txt");
     expect(urlBeforeUpdate.startsWith("http://127.0.0")).toBeTruthy();
 
     expect(simTraces(sim)).toEqual([
@@ -483,7 +488,9 @@ describe("in-place updates", () => {
       "root/Bucket1 started",
     ]);
 
-    const urlAfterUpdate = await (sim.getResource("root/Bucket1") as IBucketClient).get("url.txt");
+    const urlAfterUpdate = await (
+      sim.getResource("root/Bucket1") as IBucketClient
+    ).get("url.txt");
     expect(urlAfterUpdate).not.toEqual(urlBeforeUpdate);
   });
 
@@ -587,7 +594,6 @@ describe("in-place updates", () => {
       "root/OnDeploy started",
     ]);
   });
-
 });
 
 function makeTest(

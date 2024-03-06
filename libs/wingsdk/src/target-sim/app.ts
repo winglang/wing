@@ -263,12 +263,14 @@ export class App extends core.App {
   private synthSimulatorFile(outdir: string) {
     const toSimulatorWithDeps = (res: ISimulatorResource) => {
       const cfg = res.toSimulator();
-      const deps = res.node.dependencies.map(d => d.node.path);
-      
-      return {
-        ...cfg,
-        deps,
-      }
+      const deps = res.node.dependencies.map((d) => d.node.path);
+
+      return deps.length === 0
+        ? cfg
+        : {
+            ...cfg,
+            deps,
+          };
     };
 
     const resources = new core.DependencyGraph(this.node)
