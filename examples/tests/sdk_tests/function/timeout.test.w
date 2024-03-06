@@ -35,9 +35,7 @@ new std.Test(inflight () => {
     assert(e.contains("Task timed out after"));
   }
 
-  if (util.env("WING_TARGET") != "sim") {
-    assert(c.peek() == 0);
-  }
+  assert(c.peek() == 0);
 
   try {
     f2.invoke("");
@@ -49,8 +47,6 @@ new std.Test(inflight () => {
     assert(e.contains("Task timed out after"));
   }
 
-  if (util.env("WING_TARGET") != "sim") {
-    assert(c.peek() == 1);
-  }
+  assert(c.peek() == 1);
  
 }, std.TestProps {timeout: 2m}) as "timeout";

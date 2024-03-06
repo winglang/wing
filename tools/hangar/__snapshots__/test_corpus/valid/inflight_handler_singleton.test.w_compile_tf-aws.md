@@ -46,7 +46,7 @@ module.exports = function({ $foo }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
+module.exports = function({ $expect_Util, $fn, $fn2 }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -59,11 +59,7 @@ module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
       const z = (await $fn2.invoke(""));
       (await $expect_Util.equal(x, "100"));
       (await $expect_Util.equal(z, "100-fn2"));
-      if ($sim) {
-        (await $expect_Util.equal(y, "101"));
-        (await $expect_Util.equal(z, "100-fn2"));
-        console.log("client has been reused");
-      }
+      $helpers.assert(($helpers.eq(y, "100") || $helpers.eq(y, "101")), "y == \"100\" || y == \"101\"");
     }
   }
   return $Closure3;
@@ -427,7 +423,6 @@ class $Root extends $stdlib.std.Resource {
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $fn: ${$stdlib.core.liftObject(fn)},
             $fn2: ${$stdlib.core.liftObject(fn2)},
-            $sim: ${$stdlib.core.liftObject(sim)},
           })
         `;
       }
@@ -447,12 +442,10 @@ class $Root extends $stdlib.std.Resource {
           "handle": [
             [fn, ["invoke"]],
             [fn2, ["invoke"]],
-            [sim, []],
           ],
           "$inflight_init": [
             [fn, []],
             [fn2, []],
-            [sim, []],
           ],
         });
       }
