@@ -1,6 +1,12 @@
 import { Readable } from "stream";
 import { StringDecoder } from "string_decoder";
 
+/**
+ * Processes a stream, invoking a callback function for each line of data.
+ *
+ * @param stream - The readable stream to process.
+ * @param callback - The function to invoke for each line of data.
+ */
 export function processStream(
   stream: Readable,
   callback: (message: string) => void

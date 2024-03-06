@@ -143,6 +143,7 @@ process.on("message", async (message) => {
 
       let result: any;
       let status: "resolve" | "reject" | "pending" = "pending";
+
       child.on("message", (message: ProcessResponse) => {
         this.debugLog("Received a message, killing child process.");
         child.kill();
@@ -157,15 +158,17 @@ process.on("message", async (message) => {
           status = "reject";
         }
       });
+
+      // Something unexpected happened. "error" could be emitted for any number of reasons
+      // (the process couldn't be spawned or killed, or a message couldn't be sent),
+      // so we kill the process with SIGKILL to ensure it's dead, and reject the promise.
       child.on("error", (error) => {
         this.debugLog("Killing process after error.");
-        // Something unexpected happened. "error" could be emitted for any number of reasons
-        // (the process couldn't be spawned or killed, or a message couldn't be sent),
-        // so we kill the process with SIGKILL to ensure it's dead, and reject the promise.
         child.kill("SIGKILL");
         childExited();
         reject(`Unexpected error: ${error}`);
       });
+
       child.on("exit", (code, _signal) => {
         this.debugLog("Child processed stopped.");
         childExited();
