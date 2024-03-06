@@ -12,7 +12,7 @@ afterEach((test) => {
     if (logs) {
       console.error("Simulator logs:\n" + logs.join("\n"));
     } else {
-      console.error("(No simulator logs)");
+      console.error("(No simulator logs found)");
     }
   });
 });
