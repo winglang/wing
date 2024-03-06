@@ -520,93 +520,105 @@ export class Simulator {
    */
   private async startServer(): Promise<void> {
     const requestListener = (req: IncomingMessage, res: ServerResponse) => {
-      if (!req.url?.startsWith("/v1/call")) {
-        res.writeHead(404);
-        res.end();
-        return;
-      }
+      try {
+        if (!req.url?.startsWith("/v1/call")) {
+          res.writeHead(404);
+          res.end();
+          return;
+        }
 
-      let body = "";
-      req.on("data", (chunk) => {
-        body += chunk;
-      });
-      req.on("end", () => {
-        const request: SimulatorServerRequest = deserialize(body);
-        const { handle, method, args } = request;
-        const resource = this._handles.tryFind(handle);
+        let body = "";
+        req.on("data", (chunk) => {
+          body += chunk;
+        });
+        req.on("end", () => {
+          const request: SimulatorServerRequest = deserialize(body);
+          const { handle, method, args } = request;
+          const resource = this._handles.tryFind(handle);
 
-        // If we weren't able to find a resource with the given handle, it could actually
-        // be OK if the resource is still starting up or has already been cleaned up.
-        // In that case, we return a 500 error with a message that explains what happened.
-        if (!resource) {
-          res.writeHead(500, { "Content-Type": "application/json" });
-          if (this._running === "starting") {
+          // If we weren't able to find a resource with the given handle, it could actually
+          // be OK if the resource is still starting up or has already been cleaned up.
+          // In that case, we return a 500 error with a message that explains what happened.
+          if (!resource) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            if (this._running === "starting") {
+              res.end(
+                serialize({
+                  error: {
+                    message: `Resource ${handle} not found. It may not have been initialized yet.`,
+                  },
+                }),
+                "utf-8"
+              );
+              return;
+            } else if (this._running === "stopping") {
+              res.end(
+                serialize({
+                  error: {
+                    message: `Resource ${handle} not found. It may have been cleaned up already.`,
+                  },
+                }),
+                "utf-8"
+              );
+              return;
+            } else {
+              res.end(
+                serialize({
+                  error: {
+                    message: `Internal error - resource ${handle} not found.`,
+                  },
+                }),
+                "utf-8"
+              );
+              return;
+            }
+          }
+
+          const methodExists = (resource as any)[method] !== undefined;
+          if (!methodExists) {
+            res.writeHead(500, { "Content-Type": "application/json" });
             res.end(
               serialize({
                 error: {
-                  message: `Resource ${handle} not found. It may not have been initialized yet.`,
-                },
-              }),
-              "utf-8"
-            );
-            return;
-          } else if (this._running === "stopping") {
-            res.end(
-              serialize({
-                error: {
-                  message: `Resource ${handle} not found. It may have been cleaned up already.`,
-                },
-              }),
-              "utf-8"
-            );
-            return;
-          } else {
-            res.end(
-              serialize({
-                error: {
-                  message: `Internal error - resource ${handle} not found.`,
+                  message: `Method ${method} not found on resource ${handle}.`,
                 },
               }),
               "utf-8"
             );
             return;
           }
-        }
 
-        const methodExists = (resource as any)[method] !== undefined;
-        if (!methodExists) {
-          res.writeHead(500, { "Content-Type": "application/json" });
-          res.end(
-            serialize({
-              error: {
-                message: `Method ${method} not found on resource ${handle}.`,
-              },
-            }),
-            "utf-8"
-          );
-          return;
-        }
-
-        (resource as any)
-          [method](...args)
-          .then((result: any) => {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(serialize({ result }), "utf-8");
-          })
-          .catch((err: any) => {
-            res.writeHead(500, { "Content-Type": "application/json" });
-            res.end(
-              serialize({
-                error: {
-                  message: err?.message ?? `${err}`,
-                  stack: err.stack,
-                  name: err.name,
-                },
-              }),
-              "utf-8"
-            );
-          });
-      });
+          (resource as any)
+            [method](...args)
+            .then((result: any) => {
+              res.writeHead(200, { "Content-Type": "application/json" });
+              res.end(serialize({ result }), "utf-8");
+            })
+            .catch((err: any) => {
+              res.writeHead(500, { "Content-Type": "application/json" });
+              res.end(
+                serialize({
+                  error: {
+                    message: err?.message ?? `${err}`,
+                    stack: err.stack,
+                    name: err.name,
+                  },
+                }),
+                "utf-8"
+              );
+            });
+        });
+      } catch (serverError) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(
+          serialize({
+            error: {
+              message: `Internal error: ${serverError}`,
+            },
+          }),
+          "utf-8"
+        );
+      }
     };
 
     // only import "http" when this method is called to reduce the time it takes to load Wing SDK
