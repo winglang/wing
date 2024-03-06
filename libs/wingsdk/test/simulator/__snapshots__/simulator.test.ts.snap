@@ -93,7 +93,7 @@ exports[`run single test > test failure 1`] = `
 {
   "error": "Error: test failed
     at Handler.handle ([abs])
-    at Object.exports.handler ([abs])
+    at exports.handler ([abs])
     at process.<anonymous> ([abs])
     at process.emit (node:events:<sanitized>)
     at emit (node:internal/child_process:<sanitized>)
