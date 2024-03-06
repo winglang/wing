@@ -67,50 +67,6 @@ module.exports = function({ $expect_Util, $fn, $fn2 }) {
 //# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
-## inflight.$Closure4-1.js
-```js
-"use strict";
-const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $foo, $std_Duration, $util_Util }) {
-  class $Closure4 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      const n = (await $foo.inc());
-      (await $util_Util.sleep((await $std_Duration.fromSeconds(3))));
-      $helpers.assert($helpers.eq(n, (await $foo.get())), "n == foo.get()");
-    }
-  }
-  return $Closure4;
-}
-//# sourceMappingURL=inflight.$Closure4-1.js.map
-```
-
-## inflight.$Closure5-1.js
-```js
-"use strict";
-const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $incAndCheck, $std_Duration, $util_Util }) {
-  class $Closure5 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      (await $incAndCheck.invokeAsync());
-      (await $util_Util.sleep((await $std_Duration.fromSeconds(1))));
-      (await $incAndCheck.invoke());
-    }
-  }
-  return $Closure5;
-}
-//# sourceMappingURL=inflight.$Closure5-1.js.map
-```
-
 ## inflight.Foo-1.js
 ```js
 "use strict";
@@ -172,16 +128,6 @@ module.exports = function({  }) {
         },
         "name": "/aws/lambda/fn2-c892a4c6",
         "retention_in_days": 30
-      },
-      "incAndCheck_CloudwatchLogGroup_01665AEE": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/incAndCheck/CloudwatchLogGroup",
-            "uniqueId": "incAndCheck_CloudwatchLogGroup_01665AEE"
-          }
-        },
-        "name": "/aws/lambda/incAndCheck-c8164d4e",
-        "retention_in_days": 30
       }
     },
     "aws_iam_role": {
@@ -199,15 +145,6 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/fn2/IamRole",
             "uniqueId": "fn2_IamRole_DE8D96D2"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "incAndCheck_IamRole_67B3672C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/incAndCheck/IamRole",
-            "uniqueId": "incAndCheck_IamRole_67B3672C"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -233,16 +170,6 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.fn2_IamRole_DE8D96D2.name}"
-      },
-      "incAndCheck_IamRolePolicy_6D4DA8EC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/incAndCheck/IamRolePolicy",
-            "uniqueId": "incAndCheck_IamRolePolicy_6D4DA8EC"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.incAndCheck_IamRole_67B3672C.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -265,16 +192,6 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.fn2_IamRole_DE8D96D2.name}"
-      },
-      "incAndCheck_IamRolePolicyAttachment_D8077C87": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/incAndCheck/IamRolePolicyAttachment",
-            "uniqueId": "incAndCheck_IamRolePolicyAttachment_D8077C87"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.incAndCheck_IamRole_67B3672C.name}"
       }
     },
     "aws_lambda_function": {
@@ -339,37 +256,6 @@ module.exports = function({  }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
-      },
-      "incAndCheck": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/incAndCheck/Default",
-            "uniqueId": "incAndCheck"
-          }
-        },
-        "architectures": [
-          "arm64"
-        ],
-        "environment": {
-          "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "incAndCheck-c8164d4e",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "incAndCheck-c8164d4e",
-        "handler": "index.handler",
-        "memory_size": 1024,
-        "publish": true,
-        "role": "${aws_iam_role.incAndCheck_IamRole_67B3672C.arn}",
-        "runtime": "nodejs20.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.incAndCheck_S3Object_C6E37371.key}",
-        "timeout": 60,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
       }
     },
     "aws_s3_bucket": {
@@ -400,17 +286,6 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/fn2/S3Object",
             "uniqueId": "fn2_S3Object_FA91A9FB"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "incAndCheck_S3Object_C6E37371": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/incAndCheck/S3Object",
-            "uniqueId": "incAndCheck_S3Object_C6E37371"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -580,87 +455,11 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    class $Closure4 extends $stdlib.std.AutoIdResource {
-      _id = $stdlib.core.closureId();
-      constructor($scope, $id, ) {
-        super($scope, $id);
-        $helpers.nodeof(this).hidden = true;
-      }
-      static _toInflightType() {
-        return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.js")({
-            $foo: ${$stdlib.core.liftObject(foo)},
-            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
-            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType()};
-            const client = new $Closure4Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      get _liftMap() {
-        return ({
-          "handle": [
-            [foo, ["get", "inc"]],
-          ],
-          "$inflight_init": [
-            [foo, []],
-          ],
-        });
-      }
-    }
-    class $Closure5 extends $stdlib.std.AutoIdResource {
-      _id = $stdlib.core.closureId();
-      constructor($scope, $id, ) {
-        super($scope, $id);
-        $helpers.nodeof(this).hidden = true;
-      }
-      static _toInflightType() {
-        return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.js")({
-            $incAndCheck: ${$stdlib.core.liftObject(incAndCheck)},
-            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
-            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure5Client = ${$Closure5._toInflightType()};
-            const client = new $Closure5Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      get _liftMap() {
-        return ({
-          "handle": [
-            [incAndCheck, ["invoke", "invokeAsync"]],
-          ],
-          "$inflight_init": [
-            [incAndCheck, []],
-          ],
-        });
-      }
-    }
     const foo = new Foo(this, "Foo");
     const fn = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
     const fn2 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn2", new $Closure2(this, "$Closure2"));
     const sim = $helpers.eq((util.Util.env("WING_TARGET")), "sim");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:single instance of Foo", new $Closure3(this, "$Closure3"));
-    const incAndCheck = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "incAndCheck", new $Closure4(this, "$Closure4"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Foo state is not shared between concurrent function invocations", new $Closure5(this, "$Closure5"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
