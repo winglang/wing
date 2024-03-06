@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import { createRef, memo, ReactNode, useState } from "react";
+import type { ReactNode } from "react";
+import { createRef, memo, useState } from "react";
 
 export interface TopResizableWidgetProps {
   className?: string;

@@ -3,7 +3,8 @@ import { relative, resolve } from "node:path";
 
 import { CompileError, PreflightError } from "@winglang/compiler";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
-import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
+import type { File, Label } from "codespan-wasm";
+import { CHARS_ASCII, emitDiagnostic } from "codespan-wasm";
 
 function offsetFromLineAndColumn(source: string, line: number, column: number) {
   const lines = source.split("\n");

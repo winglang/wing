@@ -1,8 +1,8 @@
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import type { Column } from "@wingconsole/design-system";
 import {
   SpinnerLoader,
   useTheme,
-  Column,
   getInputType,
   TableRow,
 } from "@wingconsole/design-system";

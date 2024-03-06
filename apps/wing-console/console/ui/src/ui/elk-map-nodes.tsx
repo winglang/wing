@@ -1,7 +1,9 @@
-import { useTheme, IconComponent } from "@wingconsole/design-system";
-import { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
+import type { IconComponent } from "@wingconsole/design-system";
+import { useTheme } from "@wingconsole/design-system";
+import type { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
-import { PropsWithChildren, memo, useMemo } from "react";
+import type { PropsWithChildren } from "react";
+import { memo, useMemo } from "react";
 
 const getResourceBackgroudColor = (
   resourceType: BaseResourceSchema["type"] | undefined,
@@ -54,6 +56,7 @@ export interface ContainerNodeProps {
   open?: boolean;
   hideBottomBar?: boolean;
   selected?: boolean;
+  fade?: boolean;
   resourceType: BaseResourceSchema["type"] | undefined;
   depth: number;
   onClick?: () => void;
@@ -66,6 +69,7 @@ export const ContainerNode = memo(
     icon: Icon,
     hideBottomBar,
     selected,
+    fade,
     onClick,
     onMouseEnter,
     resourceType,
@@ -111,13 +115,9 @@ export const ContainerNode = memo(
             "px-3 py-2.5",
             "relative",
             "rounded-lg overflow-hidden",
-            "group-focus:border-sky-300 dark:group-focus:border-sky-500",
             "bg-white dark:bg-slate-700",
             {
               "rounded-b-none": open,
-              "border-b-0": open,
-              [theme.border3]: !selected,
-              "border-sky-300 dark:border-sky-500": selected,
             },
             "cursor-pointer",
           )}
@@ -132,8 +132,7 @@ export const ContainerNode = memo(
                   "transition-all",
                   "rounded-lg",
                   {
-                    [theme.border3]: !selected,
-                    "border-sky-300 dark:border-sky-500": selected,
+                    "opacity-30": fade,
                   },
                 )}
               >
@@ -170,6 +169,7 @@ export const ContainerNode = memo(
                     selected && "text-sky-600 dark:text-sky-400",
                     "font-semibold",
                   ],
+                  { "opacity-30": fade },
                 )}
               >
                 {compilerNamed ? display?.title : props.name}
@@ -182,6 +182,7 @@ export const ContainerNode = memo(
           <div
             className={classNames("flex-1 flex items-stretch", "border-t", {
               [theme.border3]: !selected,
+              "border-opacity-30": fade,
               "border-sky-200 dark:border-sky-400": selected,
             })}
           >
@@ -202,6 +203,7 @@ export const ContainerNode = memo(
             "border",
             selected && "border-sky-500 dark:border-sky-500",
             !selected && "border-slate-300 dark:border-slate-700",
+            fade && "border-opacity-30",
             "shadow-sm",
           )}
         ></div>

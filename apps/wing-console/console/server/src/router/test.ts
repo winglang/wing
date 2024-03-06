@@ -1,10 +1,10 @@
-import { TestResult } from "@winglang/sdk/lib/std";
+import type { TestResult } from "@winglang/sdk/lib/std";
 import { z } from "zod";
 
-import { ConsoleLogger } from "../consoleLogger.js";
+import type { ConsoleLogger } from "../consoleLogger.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { formatTraceError } from "../utils/format-wing-error.js";
-import { ITestRunnerClient, Simulator } from "../wingsdk.js";
+import type { ITestRunnerClient, Simulator } from "../wingsdk.js";
 
 const getTestName = (testPath: string) => {
   const test = testPath.split("/").pop() ?? testPath;
