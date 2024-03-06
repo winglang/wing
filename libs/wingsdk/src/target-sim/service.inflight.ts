@@ -5,7 +5,7 @@ import {
   IServiceStopHandlerClient,
   SERVICE_FQN,
 } from "../cloud";
-import { LegacySandbox } from "../shared/sandbox";
+import { LegacySandbox } from "../shared/legacy-sandbox";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
 
