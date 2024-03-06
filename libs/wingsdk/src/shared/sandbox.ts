@@ -48,12 +48,13 @@ export class Sandbox {
   }
 
   public async cleanup() {
+    await this.createBundlePromise;
     for (const timeout of this.timeouts) {
       clearTimeout(timeout);
     }
     // Make sure all child processes have exited before cleaning up the sandbox.
-    for (const child of this.exitingChildren) {
-      await child;
+    for (const exitingChild of this.exitingChildren) {
+      await exitingChild;
     }
   }
 
