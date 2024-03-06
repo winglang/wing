@@ -1,5 +1,6 @@
 bring cloud;
 bring http;
+bring util;
 
 /**
  * The example below is a simple note-taking app.
@@ -95,34 +96,36 @@ bring http;
 let noteService = new NoteService();
 
 // Consumer functions (not required for the app to work, but useful for testing)
-new cloud.Function(inflight (event: str?) => {
-  if let event = event {
-    let parts = event.split(":");
-    let name = parts.at(0);
-    let note = parts.at(1);
-
-    let response = http.post("{noteService.api.url}/note/{name}", {
-      body: "{note}"
-    });
-    return response.body;
-  }
-
-  return "event is required `NAME:NOTE`";
-}) as "Consumer-POST";
-
-new cloud.Function(inflight (event: str?) => {
-  if let event = event {
-    let response = http.delete("{noteService.api.url}/note/{event}");
-    return response.body;
-  }
-
-  return "event is required `NAME`";
-}) as "Consumer-DELETE";
-
-new cloud.Function(inflight (event: str?) => {
-  if let event = event {
-    return http.get("{noteService.api.url}/note?name={event}").body;
-  }
-
-  return "event is required `NAME`";
-}) as "Consumer-GET";
+if util.env("WING_TARGET") == "tf-aws" {
+  new cloud.Function(inflight (event: str?) => {
+    if let event = event {
+      let parts = event.split(":");
+      let name = parts.at(0);
+      let note = parts.at(1);
+  
+      let response = http.post("{noteService.api.url}/note/{name}", {
+        body: "{note}"
+      });
+      return response.body;
+    }
+  
+    return "event is required `NAME:NOTE`";
+  }) as "Consumer-PUT";
+  
+  new cloud.Function(inflight (event: str?) => {
+    if let event = event {
+      let response = http.delete("{noteService.api.url}/note/{event}");
+      return response.body;
+    }
+  
+    return "event is required `NAME`";
+  }) as "Consumer-DELETE";
+  
+  new cloud.Function(inflight (event: str?) => {
+    if let event = event {
+      return http.get("{noteService.api.url}/note?name={event}").body;
+    }
+  
+    return "event is required `NAME`";
+  }) as "Consumer-GET";
+}
