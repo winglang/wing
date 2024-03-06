@@ -163,31 +163,21 @@ type RunningState = "starting" | "running" | "stopping" | "stopped";
 type UnitTestId = string;
 
 /**
- * Used to aggregate logs from the simulator during unit tests.
  * @internal
  */
-export class Logger {
-  public static get instance(): Logger {
-    if (!Logger._instance) {
-      Logger._instance = new Logger();
+export class AllSimulators {
+  public static forTest(testId: UnitTestId): Simulator[] {
+    return this.simulators[testId] ?? [];
+  }
+
+  public static add(testId: UnitTestId, sim: Simulator) {
+    if (!this.simulators[testId]) {
+      this.simulators[testId] = [];
     }
-    return Logger._instance;
+    this.simulators[testId].push(sim);
   }
-  private static _instance: Logger;
-  private readonly logs: Record<UnitTestId, string[]> = {};
-  private constructor() {}
-  public log(msg: string) {
-    const workerId = process.env.VITEST_TEST_ID;
-    if (workerId) {
-      if (!this.logs[workerId]) {
-        this.logs[workerId] = [];
-      }
-      this.logs[workerId].push(msg);
-    }
-  }
-  public dumpLogs(workerId: UnitTestId): string[] | undefined {
-    return this.logs[workerId];
-  }
+
+  private static readonly simulators: Record<UnitTestId, Simulator[]> = {};
 }
 
 /**
@@ -222,13 +212,22 @@ export class Simulator {
     this._traces = new Array();
     this._traceSubscribers = new Array();
 
-    if (process.env.NODE_ENV === "test") {
-      this.onTrace({
-        callback: (event) => {
-          Logger.instance.log(JSON.stringify(event));
-        },
-      });
+    if (process.env.NODE_ENV === "test" && process.env.VITEST_TEST_ID) {
+      AllSimulators.add(process.env.VITEST_TEST_ID, this);
     }
+  }
+
+  /** @internal */
+  public dumpLogs() {
+    console.error(
+      "Simulator logs:\n",
+      this._traces.map((t) => JSON.stringify(t)).join("\n")
+    );
+  }
+
+  /** @internal */
+  public get running(): RunningState {
+    return this._running;
   }
 
   private _loadApp(simdir: string): {

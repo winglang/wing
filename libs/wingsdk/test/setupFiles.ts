@@ -1,5 +1,5 @@
 import { afterEach, beforeEach } from "vitest";
-import { Logger } from "../src/simulator";
+import { AllSimulators } from "../src/simulator";
 
 beforeEach((test) => {
   process.env.VITEST_TEST_ID = test.task.id;
@@ -7,12 +7,13 @@ beforeEach((test) => {
 
 afterEach((test) => {
   delete process.env.VITEST_TEST_ID;
-  test.onTestFailed((_result) => {
-    const logs = Logger.instance.dumpLogs(test.task.id);
-    if (logs) {
-      console.error("Simulator logs:\n" + logs.join("\n"));
-    } else {
-      console.error("(No simulator logs found)");
+  test.onTestFailed(async (_result) => {
+    const sims = AllSimulators.forTest(test.task.id);
+    for (const sim of sims) {
+      if (sim.running === "running") {
+        await sim.stop();
+      }
+      sim.dumpLogs();
     }
   });
 });
