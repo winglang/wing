@@ -233,6 +233,10 @@ export interface Trace {
  */
 export enum TraceType {
   /**
+   * A trace representing simulator activity.
+   */
+  SIMULATOR = "simulator",
+  /**
    * A trace representing a resource activity.
    */
   RESOURCE = "resource",

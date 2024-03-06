@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { listMessages, treeJsonOf } from "./util";
+import { containsTrace, listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
@@ -129,9 +129,13 @@ test("invoke function fails", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[1].data.error).toMatchObject({
-    message: "Name must start with uppercase letter",
-  });
+  expect(
+    containsTrace(
+      s,
+      (trace) =>
+        trace.data.error?.message === "Name must start with uppercase letter"
+    )
+  ).toBeTruthy();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -194,9 +198,14 @@ test("invoke function with process.exit(1)", async () => {
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[1].data.error).toMatchObject({
-    message: "process.exit() was called with exit code 1",
-  });
+  expect(
+    containsTrace(
+      s,
+      (trace) =>
+        trace.data.error?.message ===
+        "process.exit() was called with exit code 1"
+    )
+  ).toBeTruthy();
   expect(app.snapshot()).toMatchSnapshot();
 });
 

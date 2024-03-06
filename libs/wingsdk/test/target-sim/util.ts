@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { Simulator } from "../../src/simulator";
-import { Trace } from "../../src/std";
+import { Trace, TraceType } from "../../src/std";
 
 export function readJsonSync(file: string) {
   return JSON.parse(readFileSync(file, "utf-8"));
@@ -29,10 +29,25 @@ export interface IScopeCallback {
   (scope: Construct): void;
 }
 
-export function listMessages(s: Simulator) {
-  const message = s.listTraces().map((trace) => trace.data.message);
-  // Redact any messages containing port numbers
-  return message.map((m) => m.replace(/:\d+/, ":<port>"));
+export function listMessages(s: Simulator, includeInternal = false): string[] {
+  const messages: string[] = [];
+  for (const trace of s.listTraces()) {
+    if (trace.type === TraceType.SIMULATOR && !includeInternal) {
+      continue;
+    }
+
+    const message = trace.data.message as string;
+    // Redact any messages containing port numbers
+    messages.push(message.replace(/:\d+/, ":<port>"));
+  }
+  return messages;
+}
+
+export function containsTrace(
+  s: Simulator,
+  predicate: (trace: Trace) => boolean
+) {
+  return s.listTraces().some(predicate);
 }
 
 export async function sleep(ms: number) {

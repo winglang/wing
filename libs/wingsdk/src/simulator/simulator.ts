@@ -160,6 +160,35 @@ export interface ITraceSubscriber {
  */
 type RunningState = "starting" | "running" | "stopping" | "stopped";
 
+type UnitTestId = string;
+
+/**
+ * Used to aggregate logs from the simulator during unit tests.
+ */
+export class Logger {
+  public static get instance(): Logger {
+    if (!Logger._instance) {
+      Logger._instance = new Logger();
+    }
+    return Logger._instance;
+  }
+  private static _instance: Logger;
+  private readonly logs: Record<UnitTestId, string[]> = {};
+  private constructor() {}
+  public log(msg: string) {
+    const workerId = process.env.VITEST_TEST_ID;
+    if (workerId) {
+      if (!this.logs[workerId]) {
+        this.logs[workerId] = [];
+      }
+      this.logs[workerId].push(msg);
+    }
+  }
+  public dumpLogs(workerId: UnitTestId): string[] | undefined {
+    return this.logs[workerId];
+  }
+}
+
 /**
  * A simulator that can be used to test your application locally.
  */
@@ -191,6 +220,14 @@ export class Simulator {
     this._handles = new HandleManager();
     this._traces = new Array();
     this._traceSubscribers = new Array();
+
+    if (process.env.NODE_ENV === "test") {
+      this.onTrace({
+        callback: (event) => {
+          Logger.instance.log(JSON.stringify(event));
+        },
+      });
+    }
   }
 
   private _loadApp(simdir: string): {
@@ -250,6 +287,8 @@ export class Simulator {
     }
     this._running = "starting";
 
+    this.internalTrace("Starting simulator.");
+
     // create a copy of the resource list to be used as an init queue.
     const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [
       ...this._config.resources,
@@ -308,6 +347,8 @@ export class Simulator {
     }
     this._running = "stopping";
 
+    this.internalTrace("Stopping simulator.");
+
     for (const resourceConfig of this._config.resources.slice().reverse()) {
       const handle = resourceConfig.attrs?.handle;
       if (!handle) {
@@ -339,6 +380,8 @@ export class Simulator {
 
     this._handles.reset();
     this._running = "stopped";
+
+    this.internalTrace("Simulator stopped.");
   }
 
   /**
@@ -578,6 +621,7 @@ export class Simulator {
           this._serverUrl = `http://${addr.address}:${addr.port}`;
         }
         this._server = server;
+        this.internalTrace("Simulator server started");
         resolve();
       });
     });
@@ -587,6 +631,7 @@ export class Simulator {
    * Stop the simulator server.
    */
   private stopServer() {
+    this.internalTrace("Simulator server stopped");
     this._server!.close();
   }
 
@@ -843,6 +888,16 @@ export class Simulator {
     }
 
     return { resolved: true, value: obj };
+  }
+
+  private internalTrace(message: string) {
+    this._addTrace({
+      type: TraceType.SIMULATOR,
+      data: { message },
+      sourcePath: "root",
+      sourceType: "Simulator",
+      timestamp: new Date().toISOString(),
+    });
   }
 }
 

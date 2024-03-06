@@ -1,7 +1,12 @@
 import * as fs from "fs";
 import { resolve } from "path";
 import { vi, test, expect } from "vitest";
-import { listMessages, treeJsonOf, waitUntilTraceCount } from "./util";
+import {
+  containsTrace,
+  listMessages,
+  treeJsonOf,
+  waitUntilTraceCount,
+} from "./util";
 import * as cloud from "../../src/cloud";
 import { BucketEventType } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
@@ -330,7 +335,9 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[1].data.status).toEqual("failure");
+  expect(containsTrace(s, (trace) => trace.data.status === "failure")).toBe(
+    true
+  );
   expect(app.snapshot()).toMatchSnapshot();
 });
 

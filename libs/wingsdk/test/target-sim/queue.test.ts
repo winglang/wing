@@ -1,5 +1,6 @@
 import { test, expect } from "vitest";
 import {
+  containsTrace,
   listMessages,
   treeJsonOf,
   waitUntilTrace,
@@ -368,6 +369,8 @@ test("push rejects empty message", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[1].data.status).toEqual("failure");
+  expect(
+    containsTrace(s, (trace) => trace.data.status === "failure")
+  ).toBeTruthy();
   expect(app.snapshot()).toMatchSnapshot();
 });
