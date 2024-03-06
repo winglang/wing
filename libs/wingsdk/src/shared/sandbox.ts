@@ -104,6 +104,8 @@ process.on("message", async (message) => {
     this.debugLog("Forking process to run bundled code.");
 
     // start a Node.js process that runs the bundled code
+    // note: unlike the fork(2) POSIX system call, child_process.fork()
+    // does not clone the current process
     const child = cp.fork(this.entrypoint, [], {
       env: this.options.env,
       stdio: "pipe",
@@ -159,9 +161,9 @@ process.on("message", async (message) => {
         }
       });
 
-      // Something unexpected happened. "error" could be emitted for any number of reasons
-      // (the process couldn't be spawned or killed, or a message couldn't be sent),
-      // so we kill the process with SIGKILL to ensure it's dead, and reject the promise.
+      // "error" could be emitted for any number of reasons
+      // (e.g. the process couldn't be spawned or killed, or a message couldn't be sent).
+      // Since this is unexpected, we kill the process with SIGKILL to ensure it's dead, and reject the promise.
       child.on("error", (error) => {
         this.debugLog("Killing process after error.");
         child.kill("SIGKILL");

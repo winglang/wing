@@ -12,10 +12,6 @@ class Foo {
     this.n += 1;
     return this.n;
   }
-
-  pub inflight get(): num {
-    return this.n;
-  }
 }
 
 let foo = new Foo();
