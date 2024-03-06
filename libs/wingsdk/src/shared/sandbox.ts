@@ -110,7 +110,9 @@ process.on("message", async (message) => {
     const child = cp.fork(this.entrypoint, [], {
       env: this.options.env,
       stdio: "pipe",
-      execArgv: ["--enable-source-maps"],
+      cwd: process.cwd(),
+      // execArgv: ["--enable-source-maps"],
+      // this option allows complex objects like Error to be sent from the child process to the parent
       serialization: "advanced",
     });
 

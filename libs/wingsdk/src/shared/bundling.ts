@@ -72,13 +72,13 @@ export function createBundle(
     new TextDecoder().decode(esbuild.outputFiles[0].contents)
   );
   if (sourcemapData.sourceRoot) {
-    sourcemapData.sourceRoot = normalPath(resolve(sourcemapData.sourceRoot));
+    sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot);
   }
 
   for (const [idx, source] of Object.entries(
     sourcemapData.sources as string[]
   )) {
-    sourcemapData.sources[idx] = normalPath(resolve(source));
+    sourcemapData.sources[idx] = normalPath(source);
   }
 
   writeFileSync(outfile, bundleOutput.contents);
