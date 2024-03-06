@@ -10,10 +10,10 @@ afterEach((test) => {
   test.onTestFailed(async (_result) => {
     const sims = AllSimulators.forTest(test.task.id);
     for (const sim of sims) {
-      if (sim.running === "running") {
+      if (sim._runningState() === "running") {
         await sim.stop();
       }
-      sim.dumpLogs();
+      sim._dumpLogs();
     }
   });
 });

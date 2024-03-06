@@ -218,7 +218,7 @@ export class Simulator {
   }
 
   /** @internal */
-  public dumpLogs() {
+  public _dumpLogs() {
     console.error(
       "Simulator logs:\n",
       this._traces.map((t) => JSON.stringify(t)).join("\n")
@@ -226,7 +226,7 @@ export class Simulator {
   }
 
   /** @internal */
-  public get running(): RunningState {
+  public _runningState(): RunningState {
     return this._running;
   }
 
