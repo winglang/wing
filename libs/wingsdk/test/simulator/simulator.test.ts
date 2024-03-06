@@ -194,7 +194,7 @@ test("unable to resolve token during initialization", async () => {
   const bucket = new Bucket(app, "Bucket");
   bucket.addObject("url.txt", state.token("my_token"));
 
-  expect(app.startSimulator()).rejects.toThrowError(/Unable to resolve attribute 'my_token' for resource: root\/State/);
+  expect(void app.startSimulator()).rejects.toThrowError(/Unable to resolve attribute 'my_token' for resource: root\/State/);
 });
 
 describe("in-place updates", () => {
