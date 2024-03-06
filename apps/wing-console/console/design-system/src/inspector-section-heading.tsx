@@ -1,7 +1,7 @@
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
 
-import { IconComponent } from "./resource-icon.js";
+import type { IconComponent } from "./resource-icon.js";
 import { useTheme } from "./theme-provider.js";
 
 export interface InspectorSectionHeadingProps {

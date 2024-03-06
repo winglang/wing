@@ -38,7 +38,7 @@ jobs:
             | Library Ecosystem                                   | `@chriscbr`
             | Documentation                                       | `@hasanaburayyan`
             | SDK test suite                                      | `@tsuf239` 
-            | Examples                                            | `@skorfmann`
+            | Examples                                            | `@hasanaburayyan`
             | Wing Playground                                     | `@eladcon`
 
           comment_tag: New PR

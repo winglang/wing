@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 import { TreeView as HeadlessTreeView } from "./headless/tree-view.js";
 

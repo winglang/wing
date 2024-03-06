@@ -4,21 +4,18 @@ import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
 import type { Trace } from "../types.js";
-import { ConstructTreeNode } from "../utils/construct-tree.js";
-import {
+import type { ConstructTreeNode } from "../utils/construct-tree.js";
+import type {
   Node,
   NodeDisplay,
-  buildConstructTreeNodeMap,
   NodeConnection,
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
-import {
-  FileLink,
-  createProcedure,
-  createRouter,
-} from "../utils/createRouter.js";
+import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
+import type { FileLink } from "../utils/createRouter.js";
+import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { isTermsAccepted, getLicense } from "../utils/terms-and-conditions.js";
-import { Simulator } from "../wingsdk.js";
+import type { IFunctionClient, Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
@@ -450,6 +447,51 @@ export const createAppRouter = () => {
         }
         const { default: launch } = await import("launch-editor");
         launch(`${input.path}:${input.line}:${input.column}`);
+      }),
+
+    "app.getResourceUI": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const ui = simulator.getResourceUI(input.resourcePath);
+        return ui as Array<{
+          kind: string;
+          label: string;
+          handler: string;
+        }>;
+      }),
+    "app.getResourceUiField": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        return {
+          value: await client.invoke(""),
+        };
+      }),
+
+    "app.invokeResourceUiButton": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        await client.invoke("");
       }),
 
     "app.analytics": createProcedure.query(async ({ ctx }) => {

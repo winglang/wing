@@ -1,5 +1,5 @@
 import { KeyValueItem } from "@wingconsole/design-system";
-import { OpenApiSpec } from "@wingconsole/server/src/wingsdk";
+import type { OpenApiSpec } from "@wingconsole/server/src/wingsdk";
 
 export const HTTP_METHODS = [
   "GET",

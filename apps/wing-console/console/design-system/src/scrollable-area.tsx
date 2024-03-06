@@ -1,11 +1,6 @@
 import classNames from "classnames";
-import {
-  PropsWithChildren,
-  forwardRef,
-  memo,
-  useEffect,
-  useState,
-} from "react";
+import type { PropsWithChildren } from "react";
+import { forwardRef, memo, useEffect, useState } from "react";
 
 import { useTheme } from "./theme-provider.js";
 

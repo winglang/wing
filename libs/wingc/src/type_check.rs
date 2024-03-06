@@ -4922,7 +4922,7 @@ impl<'a> TypeChecker<'a> {
 			// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
 			let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
 				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
+				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../../libs/wingsdk".to_string());
 				let assembly_name = match self.jsii_types.load_module(&Utf8Path::new(&manifest_root)) {
 					Ok(name) => name,
 					Err(type_error) => {
@@ -6021,11 +6021,18 @@ where
 	T: Spanned + Display,
 {
 	match lookup_result {
-		LookupResult::NotFound(s) => TypeError {
-			message: format!("Unknown symbol \"{s}\""),
-			span: s.span(),
-			annotations: vec![],
-		},
+		LookupResult::NotFound(s, maybe_t) => {
+			let message = if let Some(env_type) = maybe_t {
+				format!("Member \"{s}\" doesn't exist in \"{env_type}\"")
+			} else {
+				format!("Unknown symbol \"{s}\"")
+			};
+			TypeError {
+				message,
+				span: s.span(),
+				annotations: vec![],
+			}
+		}
 		LookupResult::NotPublic(kind, lookup_info) => TypeError {
 			message: {
 				let access = lookup_info.access.to_string();
