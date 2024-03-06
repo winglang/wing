@@ -149,6 +149,9 @@ export function directorySnapshot(initialRoot: string) {
             break;
 
           case ".js":
+            if (f.endsWith(".sandbox.js")) {
+              continue;
+            }
             const code = readFileSync(abspath, "utf-8");
             snapshot[key] = sanitizeCode(code);
             break;

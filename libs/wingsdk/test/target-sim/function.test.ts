@@ -193,7 +193,7 @@ test("invoke function with process.exit(1)", async () => {
   // WHEN
   const PAYLOAD = {};
   await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-    "process.exit() was called with exit code 1"
+    "Process exited with code 1"
   );
   // THEN
   await s.stop();
@@ -201,9 +201,7 @@ test("invoke function with process.exit(1)", async () => {
   expect(
     containsTrace(
       s,
-      (trace) =>
-        trace.data.error?.message ===
-        "process.exit() was called with exit code 1"
+      (trace) => trace.data.error?.message === "Process exited with code 1"
     )
   ).toBeTruthy();
   expect(app.snapshot()).toMatchSnapshot();
@@ -252,11 +250,8 @@ test("__dirname and __filename cannot be used within inflight code", async () =>
 
   const s = await app.startSimulator();
 
-  await expect(dirnameInvoker(s)).rejects.toThrow(
-    "__dirname cannot be used within bundled cloud functions"
-  );
+  await dirnameInvoker(s);
+  await filenameInvoker(s);
 
-  await expect(filenameInvoker(s)).rejects.toThrow(
-    "__filename cannot be used within bundled cloud functions"
-  );
+  expect(listMessages(s)).toMatchSnapshot();
 });

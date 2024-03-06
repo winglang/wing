@@ -1,8 +1,39 @@
+import * as http from "http";
 import { deserialize } from "./serialization";
 import type {
   SimulatorServerRequest,
   SimulatorServerResponse,
 } from "./simulator";
+
+interface HttpRequestOptions extends http.RequestOptions {
+  body?: string;
+}
+
+function makeHttpRequest(options: HttpRequestOptions): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const req = http.request(options, (res) => {
+      let data = "";
+
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      res.on("end", () => {
+        resolve(data);
+      });
+    });
+
+    req.on("error", (e) => {
+      reject(e);
+    });
+
+    if (options.body !== undefined) {
+      req.write(options.body);
+    }
+
+    req.end();
+  });
+}
 
 export function makeSimulatorClient(url: string, handle: string) {
   let proxy: any;
@@ -15,24 +46,19 @@ export function makeSimulatorClient(url: string, handle: string) {
 
     return async function (...args: any[]) {
       const body: SimulatorServerRequest = { handle, method, args };
-
-      // import undici dynamically to reduce the time it takes to load Wing SDK
-      // undici is used instead of the built-in fetch so that we can customize the
-      // headers timeouts to be 10 minutes instead of the default 5 seconds
-      const { fetch, Agent } = await import("undici");
-      const resp = await fetch(url + "/v1/call", {
+      const parsedUrl = new URL(url);
+      const resp = await makeHttpRequest({
+        hostname: parsedUrl.hostname,
+        port: parsedUrl.port,
+        path: "/v1/call",
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(body),
-        dispatcher: new Agent({
-          keepAliveTimeout: 15 * 60 * 1000,
-          keepAliveMaxTimeout: 15 * 60 * 1000,
-          headersTimeout: 15 * 60 * 1000,
-          bodyTimeout: 15 * 60 * 1000,
-        }),
       });
 
-      let parsed: SimulatorServerResponse = deserialize(await resp.text());
+      let parsed: SimulatorServerResponse = deserialize(resp);
 
       if (parsed.error) {
         // objects with "then" methods are special-cased by the JS runtime
