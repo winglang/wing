@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { mkdirSync, realpathSync, writeFileSync } from "fs";
-import { join, resolve } from "path/posix";
+import { posix, resolve } from "path";
 import { normalPath } from "./misc";
 
 const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
@@ -34,8 +34,8 @@ export function createBundle(
   const outfileName = "index.js";
   const soucemapFilename = `${outfileName}.map`;
 
-  const outfile = join(outdir, outfileName);
-  const outfileMap = join(outdir, soucemapFilename);
+  const outfile = posix.join(outdir, outfileName);
+  const outfileMap = posix.join(outdir, soucemapFilename);
 
   // eslint-disable-next-line import/no-extraneous-dependencies,@typescript-eslint/no-require-imports
   const esbuilder: typeof import("esbuild") = require("esbuild");
