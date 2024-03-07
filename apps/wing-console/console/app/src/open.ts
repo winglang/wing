@@ -121,7 +121,7 @@ async function startBrowserProcess(
   }
 }
 
-function execAsync(command: string, options: ExecOptions): Promise<string> {
+function execAsync(command: string, options: ExecOptions) {
   return new Promise<string>((resolve, reject) => {
     exec(command, options, (error, stdout) => {
       if (error) {
