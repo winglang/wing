@@ -41,6 +41,10 @@ export class Sandbox {
     | undefined;
 
   private timeout: NodeJS.Timeout | undefined;
+
+  // Tracks whether the sandbox is available to process a new request
+  // When call() is called, it sets this to false, and when it's returning
+  // a response or error, it sets it back to true.
   private available = true;
 
   constructor(entrypoint: string, options: SandboxOptions = {}) {
@@ -104,6 +108,9 @@ export class Sandbox {
     // Prevent multiple calls to the same sandbox running concurrently.
     this.available = false;
 
+    // If this sandbox doesn't have a child process running (because it
+    // just got created, OR because the previous child process was killed due
+    // to timeout or an unexpected error), initialize one.
     if (!this.child) {
       await this.initialize();
     }
