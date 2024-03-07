@@ -8,7 +8,7 @@
  *
  */
 
-import { type ExecFileOptions, execFile } from "node:child_process";
+import { type ExecFileOptions, execFile, execSync } from "node:child_process";
 
 import spawn from "cross-spawn";
 import open from "open";
@@ -78,14 +78,14 @@ async function startBrowserProcess(
 
   if (shouldTryOpenChromeWithAppleScript) {
     try {
-      const ps = await execAsync("ps cax", {});
+      const ps = execSync("ps cax");
       const openedBrowser =
         preferredOSXBrowser && ps.includes(preferredOSXBrowser)
           ? preferredOSXBrowser
           : supportedChromiumBrowsers.find((b) => ps.includes(b));
       if (openedBrowser) {
         // Try our best to reuse existing tab with AppleScript
-        await execAsync(
+        execSync(
           `osascript openChrome.applescript "${encodeURI(
             url,
           )}" "${openedBrowser}"`,
