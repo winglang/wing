@@ -255,7 +255,6 @@ export abstract class App extends Construct implements IApp {
   public makeId(scope: IConstruct, prefix: string = "") {
     const key = `${scope.node.addr}|${prefix}`;
     this._idCounters[key] = this._idCounters[key] ?? 0;
-
     return `${prefix}${this._idCounters[key]++}`;
   }
 
