@@ -123,7 +123,7 @@ async function startBrowserProcess(
 
 function execAsync(command: string, options: ExecOptions): Promise<string> {
   return new Promise<string>((resolve, reject) => {
-    exec(command, options, (error, stdout, stderr) => {
+    exec(command, options, (error, stdout) => {
       if (error) {
         reject(error);
       } else {
