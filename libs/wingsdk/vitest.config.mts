@@ -2,7 +2,6 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    maxWorkers: process.env.CI ? 1 : undefined,
     setupFiles: "test/setupFiles.ts",
     globalSetup: "test/global.setup.ts",
     testTimeout: 200_000,

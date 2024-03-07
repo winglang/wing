@@ -7,9 +7,10 @@ import type {
 
 interface HttpRequestOptions extends http.RequestOptions {
   body?: string;
+  retries?: number;
 }
 
-function makeHttpRequest(options: HttpRequestOptions): Promise<string> {
+async function makeHttpRequest(options: HttpRequestOptions): Promise<string> {
   return new Promise((resolve, reject) => {
     const req = http.request(options, (res) => {
       let data = "";
@@ -35,6 +36,29 @@ function makeHttpRequest(options: HttpRequestOptions): Promise<string> {
   });
 }
 
+async function retryWithExponentialBackoff<T>(
+  fn: () => Promise<T>,
+  retries: number
+): Promise<T> {
+  let attempts = 0;
+  let delay = 100;
+
+  while (true) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (attempts >= retries) {
+        throw e;
+      }
+
+      const jitter = Math.random();
+      await new Promise((resolve) => setTimeout(resolve, jitter * delay));
+      delay *= 2;
+      attempts++;
+    }
+  }
+}
+
 export function makeSimulatorClient(url: string, handle: string) {
   let proxy: any;
   let hasThenMethod = true; // assume that the object has a "then" method until proven otherwise
@@ -47,16 +71,18 @@ export function makeSimulatorClient(url: string, handle: string) {
     return async function (...args: any[]) {
       const body: SimulatorServerRequest = { handle, method, args };
       const parsedUrl = new URL(url);
-      const resp = await makeHttpRequest({
-        hostname: parsedUrl.hostname,
-        port: parsedUrl.port,
-        path: "/v1/call",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+      const resp = await retryWithExponentialBackoff(() => {
+        return makeHttpRequest({
+          hostname: parsedUrl.hostname,
+          port: parsedUrl.port,
+          path: "/v1/call",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+      }, 3);
 
       let parsed: SimulatorServerResponse = deserialize(resp);
 
