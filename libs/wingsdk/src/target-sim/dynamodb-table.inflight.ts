@@ -86,7 +86,7 @@ export class DynamodbTable
   /**
    * Returns the local endpoint of the DynamoDB table.
    */
-  public async endpoint(): string {
+  public async endpoint(): Promise<string> {
     if (!this._endpoint) {
       throw new Error("DynamoDB hasn't been started");
     }
