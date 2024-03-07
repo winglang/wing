@@ -136,13 +136,23 @@ process.on("message", async (message) => {
     });
   }
 
+  // Used internally by cloud.Queue to apply backpressure
+  public async hasAvailableWorkers(): Promise<boolean> {
+    return (
+      this.workers.length < this.maxWorkers ||
+      this.workers.some((w) => w.isAvailable())
+    );
+  }
+
   private findAvailableWorker(): Sandbox | undefined {
     const worker = this.workers.find((w) => w.isAvailable());
     if (worker) {
+      this.addTrace("Reusing available worker");
       return worker;
     }
 
     if (this.workers.length < this.maxWorkers) {
+      this.addTrace("Adding worker");
       const newWorker = this.initWorker();
       this.workers.push(newWorker);
       return newWorker;

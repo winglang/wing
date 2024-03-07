@@ -23,4 +23,22 @@ if util.env("WING_TARGET") == "sim" {
     log("No error thrown");
     assert(false);
   }
+
+  let q = new cloud.Queue();
+
+  q.setConsumer(inflight (message: str) => {
+    util.sleep(1s);
+    c.inc();
+  }, concurrency: 1, batchSize: 1);
+
+  test "queue applies backpressure to functions with limited concurrency" {
+    q.push("m1");
+    q.push("m2");
+    q.push("m3");
+
+    util.sleep(5s);
+
+    log("c: {c.peek()}");
+    assert(c.peek() == 3);
+  }
 }

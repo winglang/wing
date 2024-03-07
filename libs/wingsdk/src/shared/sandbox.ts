@@ -161,7 +161,7 @@ export class Sandbox {
       if (this.options.timeout) {
         this.timeout = setTimeout(() => {
           this.debugLog("Killing process after timeout.");
-          this.child?.kill();
+          this.child?.kill("SIGTERM");
           this.child = undefined;
           this.available = true;
           reject(
