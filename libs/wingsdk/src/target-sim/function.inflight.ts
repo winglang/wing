@@ -30,7 +30,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     this.env = props.environmentVariables ?? {};
     this.context = context;
     this.timeout = props.timeout;
-    this.maxWorkers = 5; // TODO: configure concurrency
+    this.maxWorkers = props.concurrency;
 
     this.createBundlePromise = this.createBundle();
   }
@@ -96,7 +96,7 @@ process.on("message", async (message) => {
         const worker = this.findAvailableWorker();
         if (!worker) {
           throw new Error(
-            "Too many requests - maximum function concurrency reached."
+            "Too many requests, the function has reach its concurrency limit."
           );
         }
         return worker.call("handler", payload);
@@ -111,7 +111,9 @@ process.on("message", async (message) => {
         await this.createBundlePromise; // ensure inflight code is bundled before doing any work
         const worker = this.findAvailableWorker();
         if (!worker) {
-          throw new Error("Too many requests, maximum concurrency reached.");
+          throw new Error(
+            "Too many requests, the function has reach its concurrency limit."
+          );
         }
         process.nextTick(() => {
           // If the call fails, we log the error and continue since we've already
