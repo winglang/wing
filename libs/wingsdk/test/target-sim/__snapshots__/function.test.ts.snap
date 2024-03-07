@@ -3,8 +3,8 @@
 exports[`__dirname and __filename cannot be used within inflight code 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.cloud.Function created.",
   "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
+  "@winglang/sdk.cloud.Function created.",
   "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
   "Invoke (payload=undefined).",
   "Invoke (payload=undefined).",
