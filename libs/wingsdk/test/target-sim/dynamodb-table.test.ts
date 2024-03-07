@@ -13,6 +13,10 @@ test("create a table", async () => {
   });
 
   const s = await app.startSimulator();
+
+  const endpoint = await s.getResource("/create_table").endpoint();
+  expect(endpoint.startsWith("http://0.0.0.0:")).toBeTruthy();
+  
   expect(s.getResourceConfig("/create_table")).toEqual({
     attrs: {
       handle: expect.any(String),
