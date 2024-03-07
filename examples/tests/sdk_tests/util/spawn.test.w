@@ -24,6 +24,17 @@ test "spawn() with successful execution" {
   expect.equal(output.status, 0);
 }
 
+test "spawn() with empty args" {
+  let program = "echo";
+  let args = [""];
+  
+  let child = util.spawn(program, args, { stdout: util.Stdio.PIPED });
+  let output = child.wait();
+
+  expect.equal(output.stdout, "\n");
+  expect.equal(output.status, 0);
+}
+
 test "spawn() with non-existent program" {
   let program = "no-such-program";
   let args = ["--help" ];
