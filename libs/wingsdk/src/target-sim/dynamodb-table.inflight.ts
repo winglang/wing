@@ -90,10 +90,10 @@ export class DynamodbTable
     if (!this._endpoint) {
       throw new Error("DynamoDB hasn't been started");
     }
-    
+
     return this._endpoint;
   }
-  
+
   public async _rawClient(): Promise<DynamoDBClient> {
     if (this.client) {
       return this.client;
