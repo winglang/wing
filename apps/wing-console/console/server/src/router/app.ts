@@ -264,6 +264,9 @@ export const createAppRouter = () => {
                 path: sourceNode.path,
                 type: getResourceType(sourceNode, simulator),
               };
+            })
+            .filter(({ path }) => {
+              return path !== node.path;
             }),
           outbound: connections
             .filter(({ source }) => {
@@ -281,6 +284,9 @@ export const createAppRouter = () => {
                 path: targetNode.path,
                 type: getResourceType(targetNode, simulator),
               };
+            })
+            .filter(({ path }) => {
+              return path !== node.path;
             }),
         };
       }),
@@ -633,6 +639,15 @@ function createMapEdgesFromConnectionData(
       .filter((connection) => {
         return connectionsBasicFilter(connection, nodeMap, showTests);
       })
+      ?.map((connection: NodeConnection) => {
+        const source = getVisualNodePath(connection.source, nodeMap);
+        const target = getVisualNodePath(connection.target, nodeMap);
+        return {
+          id: `${source} -> ${target}`,
+          source,
+          target,
+        };
+      })
       ?.filter(({ source, target }) => {
         // Remove redundant connections to a parent resource if there's already a connection to a child resource.
         if (
@@ -649,15 +664,6 @@ function createMapEdgesFromConnectionData(
         }
 
         return true;
-      })
-      ?.map((connection: NodeConnection) => {
-        const source = getVisualNodePath(connection.source, nodeMap);
-        const target = getVisualNodePath(connection.target, nodeMap);
-        return {
-          id: `${source} -> ${target}`,
-          source,
-          target,
-        };
       }),
   ].flat();
 }
@@ -699,8 +705,8 @@ const connectionsBasicFilter = (
     });
   }
 
-  // Hide connections that go from a parent to its direct child (eg, API to an endpoint, queue to a consumer).
-  if (targetNode.parent === sourceNode.path) {
+  // Hide self loops.
+  if (sourceNode.path === targetNode.path) {
     return false;
   }
 
