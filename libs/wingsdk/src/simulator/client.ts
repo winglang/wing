@@ -51,6 +51,8 @@ async function retryWithExponentialBackoff<T>(
         throw e;
       }
 
+      console.error("Error making simulator request:", e);
+
       const jitter = Math.random();
       await new Promise((resolve) => setTimeout(resolve, jitter * delay));
       delay *= 2;
