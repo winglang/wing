@@ -91,6 +91,7 @@ bucket: (function() {
         "attrs": {},
         "path": "root/HelloWorld/Queue/SetConsumer0",
         "props": {
+          "concurrency": 10,
           "environmentVariables": {
             "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${wsim#root/HelloWorld/Counter#attrs.handle}",

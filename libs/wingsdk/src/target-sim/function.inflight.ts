@@ -147,12 +147,10 @@ process.on("message", async (message) => {
   private findAvailableWorker(): Sandbox | undefined {
     const worker = this.workers.find((w) => w.isAvailable());
     if (worker) {
-      this.addTrace("Reusing available worker");
       return worker;
     }
 
     if (this.workers.length < this.maxWorkers) {
-      this.addTrace("Adding worker");
       const newWorker = this.initWorker();
       this.workers.push(newWorker);
       return newWorker;
