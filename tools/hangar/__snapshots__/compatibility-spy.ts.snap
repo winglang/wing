@@ -22,6 +22,15 @@ exports[`aws-counter.test.w 1`] = `
         "traces": [
           {
             "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env0/test:validates the AWS counter name/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
               "message": "Invoke (payload=undefined).",
               "status": "success",
             },
@@ -61,6 +70,15 @@ exports[`dec.test.w 1`] = `
         "pass": true,
         "path": "root/env0/test:dec()",
         "traces": [
+          {
+            "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env0/test:dec()/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
           {
             "data": {
               "message": "Dec (amount=1).",
@@ -178,6 +196,15 @@ exports[`dec.test.w 1`] = `
         "traces": [
           {
             "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env1/test:dec() with custom key/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
               "message": "Dec (amount=5, key: custom-key).",
               "result": "-1",
               "status": "success",
@@ -283,6 +310,15 @@ exports[`inc.test.w 1`] = `
         "pass": true,
         "path": "root/env0/test:inc()",
         "traces": [
+          {
+            "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env0/test:inc()/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
           {
             "data": {
               "message": "Inc (amount=1).",
@@ -400,6 +436,15 @@ exports[`inc.test.w 1`] = `
         "traces": [
           {
             "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env1/test:inc() with custom key/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
               "message": "Inc (amount=5, key: custom-key).",
               "result": "-1",
               "status": "success",
@@ -506,6 +551,15 @@ exports[`initial.test.w 1`] = `
         "traces": [
           {
             "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env0/test:initial:default/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
               "message": "Peek (value=0).",
               "result": "0",
               "status": "success",
@@ -543,6 +597,15 @@ exports[`initial.test.w 1`] = `
         "traces": [
           {
             "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env2/test:initial:negative-value/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
               "message": "Peek (value=-198).",
               "result": "-198",
               "status": "success",
@@ -578,6 +641,15 @@ exports[`initial.test.w 1`] = `
         "pass": true,
         "path": "root/env1/test:initial:positive-value",
         "traces": [
+          {
+            "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env1/test:initial:positive-value/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
           {
             "data": {
               "message": "Peek (value=500).",
@@ -630,6 +702,15 @@ exports[`peek.test.w 1`] = `
         "pass": true,
         "path": "root/env1/test:key peek",
         "traces": [
+          {
+            "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env1/test:key peek/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
           {
             "data": {
               "message": "Peek (value=0, key: my-key).",
@@ -701,6 +782,15 @@ exports[`peek.test.w 1`] = `
         "pass": true,
         "path": "root/env0/test:peek",
         "traces": [
+          {
+            "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env0/test:peek/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
           {
             "data": {
               "message": "Peek (value=0).",
@@ -786,6 +876,15 @@ exports[`set.test.w 1`] = `
         "pass": true,
         "path": "root/env0/test:set()",
         "traces": [
+          {
+            "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env0/test:set()/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
           {
             "data": {
               "message": "Set (value=42).",
@@ -876,6 +975,15 @@ exports[`set.test.w 1`] = `
         "pass": true,
         "path": "root/env1/test:set() with custom key",
         "traces": [
+          {
+            "data": {
+              "message": "Adding worker",
+            },
+            "sourcePath": "root/env1/test:set() with custom key/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
           {
             "data": {
               "message": "Set (value=42, key: custom-key).",
