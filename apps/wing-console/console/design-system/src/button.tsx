@@ -1,7 +1,8 @@
 import classNames from "classnames";
-import { PropsWithChildren, forwardRef } from "react";
+import type { PropsWithChildren } from "react";
+import { forwardRef } from "react";
 
-import { IconComponent } from "./resource-icon.js";
+import type { IconComponent } from "./resource-icon.js";
 import { useTheme } from "./theme-provider.js";
 
 interface ButtonProps {

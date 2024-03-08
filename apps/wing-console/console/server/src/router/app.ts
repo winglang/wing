@@ -4,21 +4,18 @@ import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
 import type { Trace } from "../types.js";
-import { ConstructTreeNode } from "../utils/construct-tree.js";
-import {
+import type { ConstructTreeNode } from "../utils/construct-tree.js";
+import type {
   Node,
   NodeDisplay,
-  buildConstructTreeNodeMap,
   NodeConnection,
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
-import {
-  FileLink,
-  createProcedure,
-  createRouter,
-} from "../utils/createRouter.js";
+import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
+import type { FileLink } from "../utils/createRouter.js";
+import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { isTermsAccepted, getLicense } from "../utils/terms-and-conditions.js";
-import { Simulator } from "../wingsdk.js";
+import type { IFunctionClient, Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
@@ -267,6 +264,9 @@ export const createAppRouter = () => {
                 path: sourceNode.path,
                 type: getResourceType(sourceNode, simulator),
               };
+            })
+            .filter(({ path }) => {
+              return path !== node.path;
             }),
           outbound: connections
             .filter(({ source }) => {
@@ -284,6 +284,9 @@ export const createAppRouter = () => {
                 path: targetNode.path,
                 type: getResourceType(targetNode, simulator),
               };
+            })
+            .filter(({ path }) => {
+              return path !== node.path;
             }),
         };
       }),
@@ -452,6 +455,51 @@ export const createAppRouter = () => {
         launch(`${input.path}:${input.line}:${input.column}`);
       }),
 
+    "app.getResourceUI": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const ui = simulator.getResourceUI(input.resourcePath);
+        return ui as Array<{
+          kind: string;
+          label: string;
+          handler: string;
+        }>;
+      }),
+    "app.getResourceUiField": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        return {
+          value: await client.invoke(""),
+        };
+      }),
+
+    "app.invokeResourceUiButton": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        await client.invoke("");
+      }),
+
     "app.analytics": createProcedure.query(async ({ ctx }) => {
       const requireSignIn = (await ctx.requireSignIn?.()) ?? false;
       if (requireSignIn) {
@@ -591,6 +639,15 @@ function createMapEdgesFromConnectionData(
       .filter((connection) => {
         return connectionsBasicFilter(connection, nodeMap, showTests);
       })
+      ?.map((connection: NodeConnection) => {
+        const source = getVisualNodePath(connection.source, nodeMap);
+        const target = getVisualNodePath(connection.target, nodeMap);
+        return {
+          id: `${source} -> ${target}`,
+          source,
+          target,
+        };
+      })
       ?.filter(({ source, target }) => {
         // Remove redundant connections to a parent resource if there's already a connection to a child resource.
         if (
@@ -607,15 +664,6 @@ function createMapEdgesFromConnectionData(
         }
 
         return true;
-      })
-      ?.map((connection: NodeConnection) => {
-        const source = getVisualNodePath(connection.source, nodeMap);
-        const target = getVisualNodePath(connection.target, nodeMap);
-        return {
-          id: `${source} -> ${target}`,
-          source,
-          target,
-        };
       }),
   ].flat();
 }
@@ -657,8 +705,8 @@ const connectionsBasicFilter = (
     });
   }
 
-  // Hide connections that go from a parent to its direct child (eg, API to an endpoint, queue to a consumer).
-  if (targetNode.parent === sourceNode.path) {
+  // Hide self loops.
+  if (sourceNode.path === targetNode.path) {
     return false;
   }
 

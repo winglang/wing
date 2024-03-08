@@ -1,13 +1,7 @@
 import classNames from "classnames";
 import uniq from "lodash.uniq";
-import {
-  useState,
-  KeyboardEvent,
-  useEffect,
-  Ref,
-  useCallback,
-  forwardRef,
-} from "react";
+import type { KeyboardEvent, Ref } from "react";
+import { useState, useEffect, useCallback, forwardRef } from "react";
 
 import { useTheme } from "./theme-provider.js";
 

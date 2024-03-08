@@ -318,10 +318,6 @@
       "type": "bundled"
     },
     {
-      "name": "undici",
-      "type": "bundled"
-    },
-    {
       "name": "uuid",
       "type": "bundled"
     },

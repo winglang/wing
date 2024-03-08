@@ -27,7 +27,7 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $arrayA, $arrayB, $arrayC }) {
+module.exports = function({ $arrayA, $arrayB }) {
   class $Closure10 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -35,8 +35,8 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.neq($arrayA, $arrayC), "arrayA != arrayC");
-      $helpers.assert((!$helpers.neq($arrayA, $arrayB)), "!(arrayA != arrayB)");
+      $helpers.assert($helpers.eq($arrayA, $arrayA), "arrayA == arrayA");
+      $helpers.assert($helpers.eq($arrayA, $arrayB), "arrayA == arrayB");
     }
   }
   return $Closure10;
@@ -48,7 +48,7 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $cat1, $cat2 }) {
+module.exports = function({ $arrayA, $arrayB, $arrayC }) {
   class $Closure11 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -56,8 +56,8 @@ module.exports = function({ $cat1, $cat2 }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($cat1, $cat1), "cat1 == cat1");
-      $helpers.assert($helpers.eq($cat1, $cat2), "cat1 == cat2");
+      $helpers.assert($helpers.neq($arrayA, $arrayC), "arrayA != arrayC");
+      $helpers.assert((!$helpers.neq($arrayA, $arrayB)), "!(arrayA != arrayB)");
     }
   }
   return $Closure11;
@@ -69,8 +69,29 @@ module.exports = function({ $cat1, $cat2 }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $cat1, $cat2, $cat3 }) {
+module.exports = function({ $cat1, $cat2 }) {
   class $Closure12 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      $helpers.assert($helpers.eq($cat1, $cat1), "cat1 == cat1");
+      $helpers.assert($helpers.eq($cat1, $cat2), "cat1 == cat2");
+    }
+  }
+  return $Closure12;
+}
+//# sourceMappingURL=inflight.$Closure12-1.js.map
+```
+
+## inflight.$Closure13-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $cat1, $cat2, $cat3 }) {
+  class $Closure13 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -81,9 +102,9 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
       $helpers.assert((!$helpers.neq($cat1, $cat2)), "!(cat1 != cat2)");
     }
   }
-  return $Closure12;
+  return $Closure13;
 }
-//# sourceMappingURL=inflight.$Closure12-1.js.map
+//# sourceMappingURL=inflight.$Closure13-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -153,7 +174,7 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $setA, $setB }) {
+module.exports = function({ $std_Json }) {
   class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -161,8 +182,8 @@ module.exports = function({ $setA, $setB }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($setA, $setA), "setA == setA");
-      $helpers.assert($helpers.eq($setA, $setB), "setA == setB");
+      const j = ({"hello": 123, "world": [1, 2, 3]});
+      $helpers.assert($helpers.eq(Object.values(j), [123, [1, 2, 3]]), "Json.values(j) == [Json 123, Json [1, 2, 3]]");
     }
   }
   return $Closure5;
@@ -174,7 +195,7 @@ module.exports = function({ $setA, $setB }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $setA, $setB, $setC }) {
+module.exports = function({ $setA, $setB }) {
   class $Closure6 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -182,8 +203,8 @@ module.exports = function({ $setA, $setB, $setC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.neq($setA, $setC), "setA != setC");
-      $helpers.assert((!$helpers.neq($setA, $setB)), "!(setA != setB)");
+      $helpers.assert($helpers.eq($setA, $setA), "setA == setA");
+      $helpers.assert($helpers.eq($setA, $setB), "setA == setB");
     }
   }
   return $Closure6;
@@ -195,7 +216,7 @@ module.exports = function({ $setA, $setB, $setC }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $mapA, $mapB }) {
+module.exports = function({ $setA, $setB, $setC }) {
   class $Closure7 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -203,8 +224,8 @@ module.exports = function({ $mapA, $mapB }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($mapA, $mapA), "mapA == mapA");
-      $helpers.assert($helpers.eq($mapA, $mapB), "mapA == mapB");
+      $helpers.assert($helpers.neq($setA, $setC), "setA != setC");
+      $helpers.assert((!$helpers.neq($setA, $setB)), "!(setA != setB)");
     }
   }
   return $Closure7;
@@ -216,7 +237,7 @@ module.exports = function({ $mapA, $mapB }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $mapA, $mapB, $mapC }) {
+module.exports = function({ $mapA, $mapB }) {
   class $Closure8 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -224,8 +245,8 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.neq($mapA, $mapC), "mapA != mapC");
-      $helpers.assert((!$helpers.neq($mapA, $mapB)), "!(mapA != mapB)");
+      $helpers.assert($helpers.eq($mapA, $mapA), "mapA == mapA");
+      $helpers.assert($helpers.eq($mapA, $mapB), "mapA == mapB");
     }
   }
   return $Closure8;
@@ -237,7 +258,7 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $arrayA, $arrayB }) {
+module.exports = function({ $mapA, $mapB, $mapC }) {
   class $Closure9 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -245,8 +266,8 @@ module.exports = function({ $arrayA, $arrayB }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($arrayA, $arrayA), "arrayA == arrayA");
-      $helpers.assert($helpers.eq($arrayA, $arrayB), "arrayA == arrayB");
+      $helpers.assert($helpers.neq($mapA, $mapC), "mapA != mapC");
+      $helpers.assert((!$helpers.neq($mapA, $mapB)), "!(mapA != mapB)");
     }
   }
   return $Closure9;
@@ -461,8 +482,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.js")({
-            $setA: ${$stdlib.core.liftObject(setA)},
-            $setB: ${$stdlib.core.liftObject(setB)},
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -480,12 +500,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [setA, []],
-            [setB, []],
           ],
           "$inflight_init": [
-            [setA, []],
-            [setB, []],
           ],
         });
       }
@@ -501,7 +517,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure6-1.js")({
             $setA: ${$stdlib.core.liftObject(setA)},
             $setB: ${$stdlib.core.liftObject(setB)},
-            $setC: ${$stdlib.core.liftObject(setC)},
           })
         `;
       }
@@ -521,12 +536,10 @@ class $Root extends $stdlib.std.Resource {
           "handle": [
             [setA, []],
             [setB, []],
-            [setC, []],
           ],
           "$inflight_init": [
             [setA, []],
             [setB, []],
-            [setC, []],
           ],
         });
       }
@@ -540,8 +553,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure7-1.js")({
-            $mapA: ${$stdlib.core.liftObject(mapA)},
-            $mapB: ${$stdlib.core.liftObject(mapB)},
+            $setA: ${$stdlib.core.liftObject(setA)},
+            $setB: ${$stdlib.core.liftObject(setB)},
+            $setC: ${$stdlib.core.liftObject(setC)},
           })
         `;
       }
@@ -559,12 +573,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [mapA, []],
-            [mapB, []],
+            [setA, []],
+            [setB, []],
+            [setC, []],
           ],
           "$inflight_init": [
-            [mapA, []],
-            [mapB, []],
+            [setA, []],
+            [setB, []],
+            [setC, []],
           ],
         });
       }
@@ -580,7 +596,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure8-1.js")({
             $mapA: ${$stdlib.core.liftObject(mapA)},
             $mapB: ${$stdlib.core.liftObject(mapB)},
-            $mapC: ${$stdlib.core.liftObject(mapC)},
           })
         `;
       }
@@ -600,12 +615,10 @@ class $Root extends $stdlib.std.Resource {
           "handle": [
             [mapA, []],
             [mapB, []],
-            [mapC, []],
           ],
           "$inflight_init": [
             [mapA, []],
             [mapB, []],
-            [mapC, []],
           ],
         });
       }
@@ -619,8 +632,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure9-1.js")({
-            $arrayA: ${$stdlib.core.liftObject(arrayA)},
-            $arrayB: ${$stdlib.core.liftObject(arrayB)},
+            $mapA: ${$stdlib.core.liftObject(mapA)},
+            $mapB: ${$stdlib.core.liftObject(mapB)},
+            $mapC: ${$stdlib.core.liftObject(mapC)},
           })
         `;
       }
@@ -638,12 +652,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [arrayA, []],
-            [arrayB, []],
+            [mapA, []],
+            [mapB, []],
+            [mapC, []],
           ],
           "$inflight_init": [
-            [arrayA, []],
-            [arrayB, []],
+            [mapA, []],
+            [mapB, []],
+            [mapC, []],
           ],
         });
       }
@@ -659,7 +675,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure10-1.js")({
             $arrayA: ${$stdlib.core.liftObject(arrayA)},
             $arrayB: ${$stdlib.core.liftObject(arrayB)},
-            $arrayC: ${$stdlib.core.liftObject(arrayC)},
           })
         `;
       }
@@ -679,12 +694,10 @@ class $Root extends $stdlib.std.Resource {
           "handle": [
             [arrayA, []],
             [arrayB, []],
-            [arrayC, []],
           ],
           "$inflight_init": [
             [arrayA, []],
             [arrayB, []],
-            [arrayC, []],
           ],
         });
       }
@@ -698,8 +711,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure11-1.js")({
-            $cat1: ${$stdlib.core.liftObject(cat1)},
-            $cat2: ${$stdlib.core.liftObject(cat2)},
+            $arrayA: ${$stdlib.core.liftObject(arrayA)},
+            $arrayB: ${$stdlib.core.liftObject(arrayB)},
+            $arrayC: ${$stdlib.core.liftObject(arrayC)},
           })
         `;
       }
@@ -708,6 +722,46 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const $Closure11Client = ${$Closure11._toInflightType()};
             const client = new $Closure11Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [arrayA, []],
+            [arrayB, []],
+            [arrayC, []],
+          ],
+          "$inflight_init": [
+            [arrayA, []],
+            [arrayB, []],
+            [arrayC, []],
+          ],
+        });
+      }
+    }
+    class $Closure12 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure12-1.js")({
+            $cat1: ${$stdlib.core.liftObject(cat1)},
+            $cat2: ${$stdlib.core.liftObject(cat2)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure12Client = ${$Closure12._toInflightType()};
+            const client = new $Closure12Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -727,7 +781,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    class $Closure12 extends $stdlib.std.AutoIdResource {
+    class $Closure13 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -735,7 +789,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure12-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure13-1.js")({
             $cat1: ${$stdlib.core.liftObject(cat1)},
             $cat2: ${$stdlib.core.liftObject(cat2)},
             $cat3: ${$stdlib.core.liftObject(cat3)},
@@ -745,8 +799,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure12Client = ${$Closure12._toInflightType()};
-            const client = new $Closure12Client({
+            const $Closure13Client = ${$Closure13._toInflightType()};
+            const client = new $Closure13Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -781,26 +835,27 @@ class $Root extends $stdlib.std.Resource {
     const jsonC = [1, 2, 3];
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Json with the same value", new $Closure3(this, "$Closure3"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Json with different values", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Json.values equality", new $Closure5(this, "$Closure5"));
     const setA = new Set([1, 2, 3]);
     const setB = new Set([1, 2, 3]);
     const setC = new Set([4, 5, 6]);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with the same value", new $Closure5(this, "$Closure5"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with different values", new $Closure6(this, "$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with the same value", new $Closure6(this, "$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with different values", new $Closure7(this, "$Closure7"));
     const mapA = ({["a"]: 1, ["b"]: 2});
     const mapB = ({["a"]: 1, ["b"]: 2});
     const mapC = ({["c"]: 10, ["b"]: 2});
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with the same value", new $Closure7(this, "$Closure7"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with different values", new $Closure8(this, "$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with the same value", new $Closure8(this, "$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with different values", new $Closure9(this, "$Closure9"));
     const arrayA = [1, 2, 3];
     const arrayB = [1, 2, 3];
     const arrayC = [4, 5, 6];
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Array with the same value", new $Closure9(this, "$Closure9"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Array with different values", new $Closure10(this, "$Closure10"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Array with the same value", new $Closure10(this, "$Closure10"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Array with different values", new $Closure11(this, "$Closure11"));
     const cat1 = ({"name": "Mittens", "age": 3});
     const cat2 = ({"name": "Mittens", "age": 3});
     const cat3 = ({"name": "Simba", "age": 5});
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Struct with the same value", new $Closure11(this, "$Closure11"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Struct with different values", new $Closure12(this, "$Closure12"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Struct with the same value", new $Closure12(this, "$Closure12"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Struct with different values", new $Closure13(this, "$Closure13"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

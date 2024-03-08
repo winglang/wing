@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ElkExtendedEdge } from "elkjs/lib/elk.bundled.js";
+import type { ElkExtendedEdge } from "elkjs/lib/elk.bundled.js";
 import { motion } from "framer-motion";
 import { memo, useMemo, useState } from "react";
 
@@ -49,7 +49,7 @@ export const EdgeItem = memo(
           (highlighted || selected) &&
             "stroke-[1.5px] stroke-sky-500 dark:stroke-sky-400",
           !highlighted && !selected && "stroke-slate-400 dark:stroke-slate-750",
-          fade && "opacity-40",
+          fade && "opacity-30",
           "transition-all",
         )}
       >
@@ -58,7 +58,7 @@ export const EdgeItem = memo(
             opacity: 0,
           }}
           animate={{
-            opacity: fade ? 0.3 : 1,
+            opacity: 1,
           }}
           style={{ translateX: offset.x, translateY: offset.y }}
           transition={{ duration: transitionDuration }}
