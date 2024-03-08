@@ -231,7 +231,7 @@ export abstract class Resource extends Construct implements IResource {
             sourceOp: op,
             target: dep,
             targetOp: depOp,
-            name: depOp, // TODO: deprecate this?
+            name: depOp,
           });
         }
       }
