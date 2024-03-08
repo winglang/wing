@@ -19,85 +19,15 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: "20.11.0"
+  NODE_VERSION: "20.11.1"
   PNPM_VERSION: "8.15.1"
   CARGO_TERM_COLOR: always
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  # TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  # TURBO_TEAM: ${{ vars.TURBO_TEAM }}
   IS_SAME_REPO_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
 
 jobs:
-  build:
-    name: "Build"
-    timeout-minutes: 30
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
-      last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
-      changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
-      vscode-wing-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changes }}
-      console-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['@wingconsole/app#preview:fly'].changes }}
-      e2e-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
-      bench-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#bench'].changes }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          cache: "pnpm"
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install Rust
-        uses: moonrepo/setup-rust@v1
-        with:
-          inherit-toolchain: true
-          cache: false
-
-      - name: Setup Cargo Cache
-        uses: Swatinem/rust-cache@v2
-        with:
-          # Don't save cache here, to avoid thrashing with test job
-          save-if: false
-
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Derive appropriate SHAs for base and head
-        id: shas
-        uses: nrwl/nx-set-shas@v3
-
-      - name: Figure out what projects changed
-        id: turbo-diff
-        run: pnpm turbo-diff --startRef ${{ steps.shas.outputs.base }} --endRef ${{ steps.shas.outputs.head }}
-
-      - name: Changelog Generation
-        id: changelog
-        env:
-          GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
-        run: pnpm bump-pack
-
-      - name: Build and Package
-        run: pnpm package:ci
-        env:
-          SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: dist/*
-
-  test:
-    name: Test
+  test1:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
@@ -134,32 +64,12 @@ jobs:
       - name: Test
         run: pnpm test:ci
 
-      - name: Create git patch
-        id: diff
-        run: scripts/create_patch.sh build.diff
-
-      - name: Upload patch
-        if: steps.diff.outputs.diff == 'true'
-        uses: actions/upload-artifact@v3
-        with:
-          name: build.diff
-          path: build.diff
-
-  benchmark:
-    name: Benchmark
-    if: needs.build.outputs.bench-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
+  test2:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
-    needs:
-      - build
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Download Dist Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: dist
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -172,53 +82,29 @@ jobs:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install Dependencies
-        run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
-
-      - name: Run Baseline Benchmarks
-        working-directory: tools/hangar
-        if: github.event_name == 'pull_request'
-        env:
-          HANGAR_WINGLANG_PACKAGE: "winglang@latest"
-        run: pnpm bench
-
-      - name: Run Benchmarks
-        env:
-          BENCH_FAIL_THRESHOLD_PERCENT: "25"
-          GITHUB_TOKEN: ${{ env.IS_SAME_REPO_PR == 'true' && secrets.PROJEN_GITHUB_TOKEN || secrets.GITHUB_TOKEN  }}
-          BENCH_PR: "${{ env.IS_SAME_REPO_PR == 'true' && github.event.pull_request.number || '' }}"
-        working-directory: tools/hangar
-        run: pnpm bench
-
-      - name: Upload Report JSON
-        uses: actions/upload-artifact@v3
+      - name: Install Rust
+        uses: moonrepo/setup-rust@v1
         with:
-          name: benchmarks
-          path: tools/hangar/results/report.json
+          inherit-toolchain: true
+          cache: false
 
-  e2e-test:
-    name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
-    runs-on: "${{ matrix.runner }}-latest"
-    needs:
-      - build
-    if: needs.build.outputs.e2e-changed == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
-    strategy:
-      fail-fast: true
-      matrix:
-        runner: [windows, macos, ubuntu]
-        node: ["20", "18"]
-        shard: ["1/2", "2/2"]
-        full_run:
-          # Do a full run on push or when the PR is labeled "pr/e2e-full"
-          - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
-        exclude:
-          - runner: macos
-            full_run: false
-          - runner: windows
-            full_run: false
-          - runner: ubuntu
-            node: "18"
-            full_run: false
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright
+        working-directory: apps/wing-console/console/app
+        run: pnpm exec playwright install --with-deps
+
+      - name: Test
+        run: pnpm test:ci
+
+
+  test3:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -232,215 +118,137 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: "pnpm"
-          node-version: ${{ matrix.node }}
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Download Dist Artifacts
-        uses: actions/download-artifact@v3
+      - name: Install Rust
+        uses: moonrepo/setup-rust@v1
         with:
-          name: dist
-          path: dist
+          inherit-toolchain: true
+          cache: false
 
-      - name: Install dependencies
-        run: |
-          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
-          pnpm run compile --filter jsii-fixture
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
 
-      - name: Run Hangar Tests
-        working-directory: tools/hangar
-        run: |
-          pnpm test:generate
-          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '20' }}
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Create mutation if needed
-        # we only care about the diff in our standard dev env
-        if: matrix.runner == 'ubuntu' && matrix.node == '20'
-        id: diff
-        env:
-          RAW_SHARD: ${{ matrix.shard }}
-        run: |
-          SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
-          scripts/create_patch.sh "e2e-$SHARD.diff"
+      - name: Install Playwright
+        working-directory: apps/wing-console/console/app
+        run: pnpm exec playwright install --with-deps
 
-      - name: Upload mutation
-        if: matrix.runner == 'ubuntu' && matrix.node == '20' && steps.diff.outputs.diff == 'true'
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ steps.diff.outputs.diff_name }}
-          path: ${{ steps.diff.outputs.diff_name }}
+      - name: Test
+        run: pnpm test:ci
 
-  sdk-spec-test:
-    needs:
-      - build
-    if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
-    uses: ./.github/workflows/tf-aws-test.yml
-    secrets: inherit
 
-  console-preview:
-    name: "Console Preview"
+  test4:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
-    needs:
-      - build
-    env:
-      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      FLY_VERSION: "0.1.80"
-      APP_NAME: wing-console-pr-${{github.event.number}}
-    if: ${{ needs.build.outputs.console-changed == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Dist Artifacts
-        uses: actions/download-artifact@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
         with:
-          name: dist
-          path: dist
+          version: ${{ env.PNPM_VERSION }}
 
-      - name: Install flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@1.5
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          version: ${{ env.FLY_VERSION }}
+          cache: "pnpm"
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Deploy to Fly.io
-        id: deploy-fly
-        run: |
-          if ! flyctl status --app "$APP_NAME"; then
-            pushd ./apps/wing-console/console/app/preview
-            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest -o personal
-            popd
-          fi
-          flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
-          flyctl scale count 1 --yes --app "$APP_NAME"
-          echo "deploytime=$(TZ=UTC date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
-
-      - name: Post preview comment
-        uses: thollander/actions-comment-pull-request@v2
+      - name: Install Rust
+        uses: moonrepo/setup-rust@v1
         with:
-          message: |
-            Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
+          inherit-toolchain: true
+          cache: false
 
-            ###### Last Updated (UTC) ${{steps.deploy-fly.outputs.deploytime }}
-          comment_tag: Console preview environment
-          GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
 
-  quality-gate:
-    name: Quality Gate
-    runs-on: ubuntu-latest
-    if: ${{ !cancelled() }}
-    needs:
-      - build
-      - e2e-test
-      - benchmark
-      - test
-      - sdk-spec-test
-    steps:
-      - name: Check failure
-        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.sdk-spec-test.result == 'failure'
-        run: exit 1
-      - name: Download patches
-        uses: actions/download-artifact@v3
-      - name: Check patches
-        run: |
-          PATCH_COUNT=0
-          for f in $(find ./*.diff/*.diff); do
-            PATCH_COUNT=$((PATCH_COUNT + 1))
-            cat $f
-          done
-          if [ $PATCH_COUNT -gt 0 ]; then
-            echo "Found $PATCH_COUNT patches, build failed. A self-mutation should happen soon."
-            exit 1
-          fi
-      - name: All good
-        run: echo "Builds and tests passed! 🎉🎉🎉"
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
-  publish:
-    name: Publish
-    if: ${{ !cancelled() && needs.quality-gate.result == 'success' && github.event_name == 'push' && github.repository == 'winglang/wing' && github.ref == 'refs/heads/main' }}
-    needs:
-      - quality-gate
-      - build
+      - name: Install Playwright
+        working-directory: apps/wing-console/console/app
+        run: pnpm exec playwright install --with-deps
+
+      - name: Test
+        run: pnpm test:ci
+
+
+  test5:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Tag commit
-        uses: tvdias/github-tagger@v0.0.1
-        if: ${{ needs.build.outputs.last-version != needs.build.outputs.version }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
         with:
-          repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
-          tag: "v${{ needs.build.outputs.version }}"
+          version: ${{ env.PNPM_VERSION }}
 
-      - name: Login to NPM registry
-        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
-
-      - name: Publish NPM packages
-        uses: nick-fields/retry@v3
-        env:
-          PACKAGE_VERSION: ${{ needs.build.outputs.version }}
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          max_attempts: 7
-          timeout_minutes: 5
-          command: |
-            set -o pipefail
+          cache: "pnpm"
+          node-version: ${{ env.NODE_VERSION }}
 
-            cd dist
-            PACKAGES=("@winglang/sdk" "@wingcloud/framework" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang" "@winglang/platform-awscdk" "@winglang/compatibility-spy")
-            for PACKAGE in "${PACKAGES[@]}"; do
-              # Check if already published
-              VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version --verbose || true)
-              if [ "$VERSION_FOUND" = "$PACKAGE_VERSION" ]; then
-                echo "$PACKAGE@$PACKAGE_VERSION already published, skipping"
-                continue
-              fi
-
-              # remove "@" and replace "/" with "-"
-              TARBALL=$(echo "$PACKAGE-$PACKAGE_VERSION.tgz" | sed 's/@//g' | sed 's/\//-/g')
-
-              npm publish "$TARBALL" --access public --verbose
-
-              if [ $? -ne 0 ]; then
-                echo "Publishing $PACKAGE failed, exiting"
-                exit 1
-              fi
-            done
-
-      - name: Publish Extension to Visual Studio Marketplace
-        if: needs.build.outputs.vscode-wing-changed == 'true'
-        uses: "HaaLeo/publish-vscode-extension@v1"
+      - name: Install Rust
+        uses: moonrepo/setup-rust@v1
         with:
-          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-          registryUrl: "https://marketplace.visualstudio.com"
-          extensionFile: "dist/vscode-wing.vsix"
-          dependencies: false
+          inherit-toolchain: true
+          cache: false
 
-      - name: Write Changelog
-        uses: DamianReeves/write-file-action@v1.3
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright
+        working-directory: apps/wing-console/console/app
+        run: pnpm exec playwright install --with-deps
+
+      - name: Test
+        run: pnpm test:ci
+
+
+  test6:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
         with:
-          path: "CHANGELOG.md"
-          contents: ${{ needs.build.outputs.changelog }}
-          write-mode: overwrite
+          version: ${{ env.PNPM_VERSION }}
 
-      - name: Compute Checksums
-        run: |
-          # if there is a ./benchmarks/report.json, move it to ./dist
-          if [ -f ./benchmarks/report.json ]; then
-            mv ./benchmarks/report.json ./dist
-          fi
-
-          cd dist
-
-          echo '' >> ../CHANGELOG.md
-          echo '### SHA-1 Checksums' >> ../CHANGELOG.md
-          echo '```' >> ../CHANGELOG.md
-          sha1sum --binary * >> ../CHANGELOG.md
-          echo '```' >> ../CHANGELOG.md
-          cat ../CHANGELOG.md
-
-      - name: Cut Development Release
-        uses: softprops/action-gh-release@v1
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          name: "Wing ${{ needs.build.outputs.version }}"
-          tag_name: "v${{ needs.build.outputs.version }}"
-          body_path: CHANGELOG.md
-          files: dist/*
-          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          cache: "pnpm"
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Rust
+        uses: moonrepo/setup-rust@v1
+        with:
+          inherit-toolchain: true
+          cache: false
+
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright
+        working-directory: apps/wing-console/console/app
+        run: pnpm exec playwright install --with-deps
+
+      - name: Test
+        run: pnpm test:ci

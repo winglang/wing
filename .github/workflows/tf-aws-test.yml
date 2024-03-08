@@ -28,7 +28,7 @@ on:
           - sim
 env:
   AWS_REGION: "us-east-1"
-  NODE_VERSION: "20.11.0"
+  NODE_VERSION: "20.11.1"
   # this variable indicates wheater to use wing cli from a local version (using the current repo code)
   # or use the latest remote npm version
   LOCAL_BUILD: ${{ github.workflow == 'build' }}
