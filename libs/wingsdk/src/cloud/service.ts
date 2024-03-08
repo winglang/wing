@@ -48,7 +48,7 @@ export class Service extends Resource implements IInflightHost {
   protected readonly entrypoint!: string;
 
   private readonly _env: Record<string, string> = {};
-  private readonly handler!: IServiceHandler;
+  protected readonly handler!: IServiceHandler;
 
   constructor(
     scope: Construct,

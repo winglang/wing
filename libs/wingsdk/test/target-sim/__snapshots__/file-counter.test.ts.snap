@@ -49,17 +49,9 @@ bucket: (function() {
       {
         "name": "setConsumer()",
         "source": "root/HelloWorld/Queue",
+        "sourceOp": "push",
         "target": "root/HelloWorld/Queue/SetConsumer0",
-      },
-      {
-        "name": "inc()",
-        "source": "root/HelloWorld/Queue/SetConsumer0",
-        "target": "root/HelloWorld/Counter",
-      },
-      {
-        "name": "put()",
-        "source": "root/HelloWorld/Queue/SetConsumer0",
-        "target": "root/HelloWorld/Bucket",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",

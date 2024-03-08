@@ -4,7 +4,7 @@ import { ISimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { App } from "../core";
+import { App, LiftDepsMatrixRaw } from "../core";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost } from "../std";
 import { Duration } from "../std/duration";
@@ -51,11 +51,13 @@ export class Function extends cloud.Function implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.FunctionInflightMethods.INVOKE,
-      cloud.FunctionInflightMethods.INVOKE_ASYNC,
-    ];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
+        [this.handler, ["handle"]],
+      ],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

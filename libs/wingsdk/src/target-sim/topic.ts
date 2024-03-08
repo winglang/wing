@@ -7,6 +7,7 @@ import { ISimulatorResource } from "./resource";
 import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { LiftDepsMatrixRaw } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
@@ -48,7 +49,9 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "onMessage()",
     });
 
@@ -66,8 +69,8 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [cloud.TopicInflightMethods.PUBLISH];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return { [cloud.TopicInflightMethods.PUBLISH]: [] };
   }
 
   public toSimulator(): BaseResourceSchema {
