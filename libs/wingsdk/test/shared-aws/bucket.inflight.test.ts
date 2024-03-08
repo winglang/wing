@@ -12,7 +12,7 @@ import {
   NotFound,
   NoSuchKey,
 } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presig1ner";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@smithy/util-stream";
 import { mockClient } from "aws-sdk-client-mock";
