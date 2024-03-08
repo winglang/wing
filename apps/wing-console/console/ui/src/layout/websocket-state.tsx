@@ -28,16 +28,16 @@ export const WebSocketState = () => {
               />
             </div>
             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-              <h3 className="text-base font-semibold leading-6 text-gray-900">
+              <h3 className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
                 Connection Lost
               </h3>
               <div className="mt-2">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   The connection to the server was lost.
                 </p>
               </div>
               <div className="mt-2">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Please, try restarting the Wing Console.
                 </p>
               </div>

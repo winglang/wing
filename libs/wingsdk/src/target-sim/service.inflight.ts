@@ -5,7 +5,7 @@ import {
   IServiceStopHandlerClient,
   SERVICE_FQN,
 } from "../cloud";
-import { Sandbox } from "../shared/sandbox";
+import { LegacySandbox } from "../shared/legacy-sandbox";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
 
@@ -13,7 +13,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;
   private readonly entrypoint: string;
   private readonly autoStart: boolean;
-  private readonly sandbox: Sandbox;
+  private readonly sandbox: LegacySandbox;
   private running: boolean = false;
   private onStop?: IServiceStopHandlerClient;
 
@@ -21,7 +21,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     this.context = context;
     this.entrypoint = resolve(context.simdir, props.sourceCodeFile);
     this.autoStart = props.autoStart;
-    this.sandbox = new Sandbox(this.entrypoint, {
+    this.sandbox = new LegacySandbox(this.entrypoint, {
       env: {
         ...props.environmentVariables,
         WING_SIMULATOR_URL: this.context.serverUrl,
