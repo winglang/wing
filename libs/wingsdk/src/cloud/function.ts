@@ -52,6 +52,9 @@ export class Function extends Resource implements IInflightHost {
   /** @internal */
   public [INFLIGHT_SYMBOL]?: IFunctionClient;
   private readonly _env: Record<string, string> = {};
+  /**
+   * Reference to the function handler - an inflight closure.
+   */
   protected readonly handler!: IFunctionHandler;
 
   /**

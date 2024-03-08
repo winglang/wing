@@ -87,6 +87,7 @@ export interface AddConnectionProps {
 
   /**
    * An operation that the source object supports.
+   * @default - no operation
    */
   readonly sourceOp?: string;
 
@@ -97,6 +98,7 @@ export interface AddConnectionProps {
 
   /**
    * An operation that the target object supports.
+   * @default - no operation
    */
   readonly targetOp?: string;
 
@@ -117,6 +119,7 @@ export interface Connection {
 
   /**
    * An operation that the source object supports.
+   * @default - no operation
    */
   readonly sourceOp?: string;
 
@@ -127,6 +130,7 @@ export interface Connection {
 
   /**
    * An operation that the target object supports.
+   * @default - no operation
    */
   readonly targetOp?: string;
 
