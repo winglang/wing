@@ -293,7 +293,7 @@ Timezone is UTC.
 *Example*
 
 ```wing
-"0/1 * ? * *"
+"* * * * *"
 ```
 
 

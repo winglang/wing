@@ -49,7 +49,7 @@ test("schedule behavior with cron", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const fn = Testing.makeHandler(CODE_LOG_EVENT);
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "0/1 * ? * *",
+    cron: "0/1 * * * *",
   });
   schedule.onTick(fn);
   const output = app.synth();
@@ -72,7 +72,7 @@ test("schedule behavior with cron", () => {
       output,
       "aws_cloudwatch_event_rule",
       {
-        schedule_expression: "cron(0/1 * ? * * *)",
+        schedule_expression: "cron(0/1 * * * ? *)",
       }
     )
   ).toEqual(true);
@@ -86,7 +86,7 @@ test("schedule with two functions", () => {
   const fn1 = Testing.makeHandler(CODE_LOG_EVENT);
   const fn2 = Testing.makeHandler(CODE_LOG_EVENT);
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "0/1 * ? * *",
+    cron: "0/1 * * * *",
   });
   schedule.onTick(fn1);
   schedule.onTick(fn2);
@@ -118,7 +118,7 @@ test("schedule with rate and cron simultaneously", () => {
     () =>
       new cloud.Schedule(app, "Schedule", {
         rate: std.Duration.fromSeconds(30),
-        cron: "0/1 * ? * *",
+        cron: "0/1 * * * ?",
       })
   ).toThrow("rate and cron cannot be configured simultaneously.");
 });
@@ -131,7 +131,7 @@ test("cron with more than five values", () => {
   expect(
     () =>
       new cloud.Schedule(app, "Schedule", {
-        cron: "0/1 * ? * * *",
+        cron: "0/1 * * * * *",
       })
   ).toThrow(
     "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
@@ -159,4 +159,17 @@ test("schedule with rate less than 1 minute", () => {
         rate: std.Duration.fromSeconds(30),
       })
   ).toThrow("rate can not be set to less than 1 minute.");
+});
+
+test("cron with day of month and day of week configured at the same time", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+
+  // THEN
+  expect(
+    () =>
+      new cloud.Schedule(app, "Schedule", {
+        cron: "* * 1 * 1",
+      })
+  ).toThrow("Cannot supply both 'day' and 'weekDay', use at most one");
 });

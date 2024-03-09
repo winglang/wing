@@ -38,7 +38,7 @@ test("schedule behavior with cron", () => {
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "0/1 * ? * *",
+    cron: "0/1 * * * *",
   });
   schedule.onTick(fn);
   const output = app.synth();
@@ -47,7 +47,7 @@ test("schedule behavior with cron", () => {
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::Events::Rule", 1);
   template.hasResourceProperties("AWS::Events::Rule", {
-    ScheduleExpression: "cron(0/1 * ? * * *)",
+    ScheduleExpression: "cron(0/1 * * * ? *)",
   });
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -59,7 +59,7 @@ test("schedule with two functions", () => {
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "0/1 * ? * *",
+    cron: "0/1 * * * *",
   });
   schedule.onTick(fn);
   const output = app.synth();
@@ -128,7 +128,7 @@ test("schedule with rate less than 1 minute", () => {
   ).toThrow("rate can not be set to less than 1 minute.");
 });
 
-test("cron with Day-of-month and Day-of-week setting with *", () => {
+test("cron with day of month and day of week configured at the same time", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
@@ -136,9 +136,7 @@ test("cron with Day-of-month and Day-of-week setting with *", () => {
   expect(
     () =>
       new cloud.Schedule(app, "Schedule", {
-        cron: "0/1 * * * *",
+        cron: "* * 1 * 1",
       })
-  ).toThrow(
-    "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other"
-  );
+  ).toThrow("Cannot supply both 'day' and 'weekDay', use at most one");
 });

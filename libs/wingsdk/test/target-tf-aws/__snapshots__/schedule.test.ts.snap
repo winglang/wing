@@ -6,7 +6,7 @@ exports[`schedule behavior with cron 1`] = `
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
         "is_enabled": true,
-        "schedule_expression": "cron(0/1 * ? * * *)",
+        "schedule_expression": "cron(0/1 * * * ? *)",
       },
     },
     "aws_cloudwatch_event_target": {
@@ -536,7 +536,7 @@ exports[`schedule with two functions 1`] = `
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
         "is_enabled": true,
-        "schedule_expression": "cron(0/1 * ? * * *)",
+        "schedule_expression": "cron(0/1 * * * ? *)",
       },
     },
     "aws_cloudwatch_event_target": {

@@ -24,7 +24,7 @@ export interface ScheduleProps {
   /**
    * Trigger events according to a cron schedule using the UNIX cron format. Timezone is UTC.
    * [minute] [hour] [day of month] [month] [day of week]
-   * @example "0/1 * ? * *"
+   * @example "* * * * *"
    * @default undefined
    */
   readonly cron?: string;
@@ -65,11 +65,6 @@ export class Schedule extends Resource {
     if (cron && cron.split(" ").length > 5) {
       throw new Error(
         "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
-      );
-    }
-    if (cron && cron.split(" ")[2] == "*" && cron.split(" ")[4] == "*") {
-      throw new Error(
-        "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other"
       );
     }
   }
