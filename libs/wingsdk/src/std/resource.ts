@@ -139,8 +139,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   public static onLiftType(host: IInflightHost, ops: string[]): void {
     log(
-      `onLiftType called on a resource type (${
-        this.constructor.name
+      `onLiftType called on a resource type (${this.constructor.name
       }) with a host (${host.node.path}) and ops: ${JSON.stringify(ops)}`
     );
   }
@@ -199,8 +198,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   public onLift(host: IInflightHost, ops: string[]): void {
     log(
-      `onLift called on a resource (${this.node.path}) with a host (${
-        host.node.path
+      `onLift called on a resource (${this.node.path}) with a host (${host.node.path
       }) and ops: ${JSON.stringify(ops)}`
     );
 
@@ -224,6 +222,43 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _preSynthesize(): void {
     // do nothing by default
+  }
+
+
+  /**
+   * A singleton instance of this resource. Specifically used for inflight classes defined in preflight code.
+   * see `singleton` method for more details.
+   * @internal
+   */
+  //private static _singletonInstance: Resource;
+
+  /**
+   * Create a singleton of this resource. This uses `this` in a static context
+   * to create a singleton of any subclass of `Resource`.
+   * This helper function is used to create a single dummy instance of `inflight class`es
+   * defined in preflight code. This instances are needed to creaete a lift qualification
+   * map for such classes.
+   * 
+   * @internal
+   */
+  public static _singleton(scope: Construct, id: string): Resource {
+    console.log(`creating singleto for ${id} in ${Node.of(scope).root.node.path}`)
+    //const root: any = scope.node.root;
+    const root: any = Node.of(scope).root;
+    let t: any = this;
+    if (root.resourceSingletons === undefined) {
+      root.resourceSingletons = {};
+    }
+    const instance = root.resourceSingletons[t];
+    if (instance) {
+      return instance;
+    }
+    root.resourceSingletons[t] = new t(root, id);
+    return root.resourceSingletons[t];
+    // if (!this._singletonInstance) {
+    //   this._singletonInstance = new t(scope.node.root, id);
+    // }
+    // return this._singletonInstance;
   }
 }
 

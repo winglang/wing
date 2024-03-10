@@ -41,6 +41,7 @@ use std::cmp;
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use symbol_env::{StatementIdx, SymbolEnv};
 use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
@@ -336,7 +337,7 @@ pub struct Class {
 	pub std_construct_args: bool,
 
 	// Unique identifier for this class type, used to generate a unique type alias for this class se we can
-	// reference it regardless of type name shadowing.
+	// reference it regardless of type name shadowing or scoping.
 	pub uid: usize,
 }
 impl Class {
@@ -1797,11 +1798,11 @@ pub struct TypeChecker<'a> {
 
 	is_in_mut_json: bool,
 
-	/// Class counter, used to generate unique names class types
-	class_counter: usize,
-
 	ctx: VisitContext,
 }
+
+/// Class counter, used to generate unique names class types
+static CLASS_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 enum ExprVisitInfo {
 	/// The current expression has no special properties
@@ -1830,7 +1831,6 @@ impl<'a> TypeChecker<'a> {
 			jsii_imports,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
-			class_counter: 0,
 		}
 	}
 
@@ -4149,9 +4149,8 @@ impl<'a> TypeChecker<'a> {
 			docs: Docs::default(),
 			std_construct_args: ast_class.phase == Phase::Preflight,
 			lifts: None,
-			uid: self.class_counter,
+			uid: CLASS_COUNTER.fetch_add(1, Ordering::Relaxed),
 		};
-		self.class_counter += 1;
 		let mut class_type = self.types.add_type(Type::Class(class_spec));
 		match env.define(
 			&ast_class.name,
