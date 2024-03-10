@@ -3,7 +3,6 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
 import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
-import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
 import { ProjectService } from "../.gen/providers/google/project-service";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
 import * as cloud from "../cloud";
@@ -95,13 +94,7 @@ export class Schedule extends cloud.Schedule {
       }
     );
 
-    new CloudfunctionsFunctionIamMember(this, "CronFunctionInvoker", {
-      project: cronFunction.project,
-      region: cronFunction.region,
-      cloudFunction: cronFunction.name,
-      role: "roles/cloudfunctions.invoker",
-      member: `serviceAccount:${schedulerServiceAccount.email}`,
-    });
+    cronFunction.addPermissionToInvoke(schedulerServiceAccount);
 
     new CloudSchedulerJob(this, "Scheduler", {
       name: `scheduler-${uniqueId}`,
