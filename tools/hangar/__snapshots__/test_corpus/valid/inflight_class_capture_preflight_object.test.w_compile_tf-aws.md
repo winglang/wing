@@ -196,22 +196,25 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      static get _liftTypeMap() {
+      get _liftMap() {
         return ({
           "uploadToBucket": [
             [b, ["get", "put"]],
           ],
+          "$inflight_init": [
+            [b, []],
+          ],
+        });
+      }
+      static get _liftTypeMap() {
+        return ({
           "fooStatic": [
             [b, ["list"]],
-          ],
-          "init": [
-          ],
-          "$inflight_init": [
           ],
         });
       }
     }
-    const $UniqueClassAlias0 = Foo;
+    const $Foo_0 = new Foo(this, "$Foo_0");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -239,10 +242,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$UniqueClassAlias0, ["uploadToBucket"]],
+            [$Foo_0, ["uploadToBucket"]],
             [Foo, []],
           ],
           "$inflight_init": [
+            [$Foo_0, []],
+            [Foo, []],
           ],
         });
       }
@@ -277,6 +282,7 @@ class $Root extends $stdlib.std.Resource {
             [Foo, ["fooStatic"]],
           ],
           "$inflight_init": [
+            [Foo, []],
           ],
         });
       }
@@ -311,6 +317,7 @@ class $Root extends $stdlib.std.Resource {
             [Foo, []],
           ],
           "$inflight_init": [
+            [Foo, []],
           ],
         });
       }
@@ -342,10 +349,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$UniqueClassAlias0, ["uploadToBucket"]],
+            [$Foo_0, ["uploadToBucket"]],
             [getFoo, ["handle"]],
           ],
           "$inflight_init": [
+            [$Foo_0, []],
+            [getFoo, []],
           ],
         });
       }
@@ -380,6 +389,7 @@ class $Root extends $stdlib.std.Resource {
             [b, ["get", "put"]],
           ],
           "$inflight_init": [
+            [b, []],
           ],
         });
       }

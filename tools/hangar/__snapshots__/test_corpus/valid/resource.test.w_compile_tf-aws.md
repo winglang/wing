@@ -804,6 +804,7 @@ class $Root extends $stdlib.std.Resource {
           "$inflight_init": [
             [Bar, []],
             [Foo, []],
+            [MyEnum, []],
             [this.b, []],
             [this.e, []],
             [this.foo, []],

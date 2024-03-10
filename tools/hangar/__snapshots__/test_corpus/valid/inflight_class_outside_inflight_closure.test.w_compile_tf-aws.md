@@ -95,12 +95,10 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      static get _liftTypeMap() {
+      get _liftMap() {
         return ({
           "add": [
             [this, ["lhs", "rhs"]],
-          ],
-          "init": [
           ],
           "$inflight_init": [
             [this, ["lhs", "rhs"]],
@@ -112,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $UniqueClassAlias0 = BinaryOperation;
+    const $BinaryOperation_0 = new BinaryOperation(this, "$BinaryOperation_0");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -140,10 +138,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$UniqueClassAlias0, ["add"]],
+            [$BinaryOperation_0, ["add"]],
             [BinaryOperation, []],
           ],
           "$inflight_init": [
+            [$BinaryOperation_0, []],
+            [BinaryOperation, []],
           ],
         });
       }

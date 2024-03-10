@@ -135,6 +135,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $B_1 = new B(this, "$B_1");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

@@ -88,6 +88,7 @@ class $Root extends $stdlib.std.Resource {
             [greeting, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
             [greeting, []],
           ],
         });

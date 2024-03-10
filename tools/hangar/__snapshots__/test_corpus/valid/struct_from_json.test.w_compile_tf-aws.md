@@ -222,6 +222,7 @@ class $Root extends $stdlib.std.Resource {
             [j, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"), []],
             [j, []],
           ],
         });
@@ -257,6 +258,7 @@ class $Root extends $stdlib.std.Resource {
             [Student, ["fromJson"]],
           ],
           "$inflight_init": [
+            [Student, []],
           ],
         });
       }
@@ -293,6 +295,7 @@ class $Root extends $stdlib.std.Resource {
             [jStudent1, []],
           ],
           "$inflight_init": [
+            [Student, []],
             [jStudent1, []],
           ],
         });
@@ -336,7 +339,9 @@ class $Root extends $stdlib.std.Resource {
             [jMyStruct, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
             [(schema.asStr()), []],
+            [MyStruct, []],
             [expectedSchema, []],
             [jMyStruct, []],
           ],
@@ -379,6 +384,10 @@ class $Root extends $stdlib.std.Resource {
             [Student, ["fromJson"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"), []],
+            [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), []],
+            [$stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"), []],
+            [Student, []],
           ],
         });
       }

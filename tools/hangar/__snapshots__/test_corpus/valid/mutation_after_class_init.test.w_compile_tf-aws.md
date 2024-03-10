@@ -522,6 +522,7 @@ class $Root extends $stdlib.std.Resource {
             [q, ["push"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [c, []],
             [q, []],
           ],

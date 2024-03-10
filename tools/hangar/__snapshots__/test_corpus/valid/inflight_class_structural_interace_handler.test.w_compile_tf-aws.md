@@ -100,18 +100,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      static get _liftTypeMap() {
+      get _liftMap() {
         return ({
           "handle": [
-          ],
-          "init": [
           ],
           "$inflight_init": [
           ],
         });
       }
     }
-    const $UniqueClassAlias0 = NotGoo;
+    const $NotGoo_0 = new NotGoo(this, "$NotGoo_0");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -142,6 +140,7 @@ class $Root extends $stdlib.std.Resource {
             [NotGoo, []],
           ],
           "$inflight_init": [
+            [NotGoo, []],
           ],
         });
       }

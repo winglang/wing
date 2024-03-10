@@ -403,18 +403,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      static get _liftTypeMap() {
+      get _liftMap() {
         return ({
           "description": [
-          ],
-          "init": [
           ],
           "$inflight_init": [
           ],
         });
       }
     }
-    const $UniqueClassAlias5 = InflightA;
+    const $InflightA_5 = new InflightA(this, "$InflightA_5");
     class InflightB extends InflightA {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -437,18 +435,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      static get _liftTypeMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftTypeMap, {
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "description": [
-          ],
-          "init": [
           ],
           "$inflight_init": [
           ],
         });
       }
     }
-    const $UniqueClassAlias6 = InflightB;
+    const $InflightB_6 = new InflightB(this, "$InflightB_6");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -477,11 +473,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$UniqueClassAlias6, ["description"]],
+            [$InflightB_6, ["description"]],
             [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [InflightB, []],
           ],
           "$inflight_init": [
+            [$InflightB_6, []],
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [InflightB, []],
           ],
         });
       }
@@ -585,6 +584,7 @@ class $Root extends $stdlib.std.Resource {
             [extended, ["do"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
             [extended, []],
           ],
         });
