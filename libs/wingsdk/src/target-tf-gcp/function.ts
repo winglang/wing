@@ -61,8 +61,7 @@ export class Function extends cloud.Function {
 
   private static isGcpFunction(obj: any): obj is IGcpFunction {
     return (
-      typeof obj.name === "function" &&
-      typeof obj.httpsTriggerUrl === "function"
+      typeof obj.name === "string" && typeof obj.httpsTriggerUrl === "string"
     );
   }
 
