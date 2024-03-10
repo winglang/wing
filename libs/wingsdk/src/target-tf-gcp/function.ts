@@ -28,7 +28,7 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 };
 
 /**
- * Interface for GPC.
+ * Interface for GCP
  */
 export interface IGcpFunction {
   /**
