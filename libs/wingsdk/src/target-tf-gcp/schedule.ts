@@ -74,19 +74,19 @@ export class Schedule extends cloud.Schedule {
     );
     this.handlers[inflight._id] = cronFunction;
 
+    const schedulerServiceAccount = new ServiceAccount(
+      this,
+      "SchedulerServiceAccount",
+      {
+        accountId: `scheduler-${uniqueId}-sa`,
+        displayName: `Service Account for scheduler-${uniqueId}`,
+      }
+    );
+
+    cronFunction.addPermissionToInvoke(schedulerServiceAccount);
+
     let cronGpcFunction = Function.from(cronFunction);
     if (cronGpcFunction) {
-      const schedulerServiceAccount = new ServiceAccount(
-        this,
-        "SchedulerServiceAccount",
-        {
-          accountId: `scheduler-${uniqueId}-sa`,
-          displayName: `Service Account for scheduler-${uniqueId}`,
-        }
-      );
-
-      cronFunction.addPermissionToInvoke(schedulerServiceAccount);
-
       new CloudSchedulerJob(this, "Scheduler", {
         name: `scheduler-${uniqueId}`,
         description: `Trigger ${cronGpcFunction.name}`,
