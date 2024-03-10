@@ -74,42 +74,33 @@ export class Schedule extends cloud.Schedule {
     );
     this.handlers[inflight._id] = cronFunction;
 
-    // const cronFunction = new CloudfunctionsFunction(this, "CronFunction", {
-    //   name: `cron-function-${uniqueId}`,
-    //   region: gcpProvider.region!,
-    //   runtime: "nodejs20",
-    //   sourceArchiveBucket: cronFunctionSourceBucket.name,
-    //   sourceArchiveObject: cronFunctionSourceObject.name,
-    //   entryPoint: "handler",
-    //   triggerHttp: true,
-    //   httpsTriggerSecurityLevel: "SECURE_ALWAYS",
-    //   serviceAccountEmail: cronFunctionServiceAccount.email,
-    // });
+    let cronGpcFunction = Function.from(cronFunction);
+    if (cronGpcFunction) {
+      const schedulerServiceAccount = new ServiceAccount(
+        this,
+        "SchedulerServiceAccount",
+        {
+          accountId: `scheduler-${uniqueId}-sa`,
+          displayName: `Service Account for scheduler-${uniqueId}`,
+        }
+      );
 
-    const schedulerServiceAccount = new ServiceAccount(
-      this,
-      "SchedulerServiceAccount",
-      {
-        accountId: `scheduler-${uniqueId}-sa`,
-        displayName: `Service Account for scheduler-${uniqueId}`,
-      }
-    );
+      cronFunction.addPermissionToInvoke(schedulerServiceAccount);
 
-    cronFunction.addPermissionToInvoke(schedulerServiceAccount);
-
-    new CloudSchedulerJob(this, "Scheduler", {
-      name: `scheduler-${uniqueId}`,
-      description: `Trigger ${cronFunction.name}`,
-      schedule: this.scheduleExpression,
-      timeZone: "Etc/UTC",
-      attemptDeadline: "300s",
-      httpTarget: {
-        httpMethod: "GET",
-        uri: cronFunction.httpsTriggerUrl,
-        oidcToken: { serviceAccountEmail: schedulerServiceAccount.email },
-      },
-      dependsOn: [cloudSchedulerApi],
-    });
+      new CloudSchedulerJob(this, "Scheduler", {
+        name: `scheduler-${uniqueId}`,
+        description: `Trigger ${cronGpcFunction.name}`,
+        schedule: this.scheduleExpression,
+        timeZone: "Etc/UTC",
+        attemptDeadline: "300s",
+        httpTarget: {
+          httpMethod: "GET",
+          uri: cronGpcFunction.httpsTriggerUrl,
+          oidcToken: { serviceAccountEmail: schedulerServiceAccount.email },
+        },
+        dependsOn: [cloudSchedulerApi],
+      });
+    }
 
     Node.of(this).addConnection({
       source: this,

@@ -28,11 +28,24 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 };
 
 /**
+ * Interface for GPC.
+ */
+export interface IGcpFunction {
+  /**
+   * GCP Function name
+   */
+  readonly name: string;
+  /**
+   * GCP http trigger url
+   */
+  readonly httpsTriggerUrl: string;
+}
+
+/**
  * GCP implementation of `cloud.Function`.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
   private readonly functionServiceAccount: ServiceAccount;
@@ -42,6 +55,25 @@ export class Function extends cloud.Function {
   ]);
 
   private assetPath: string | undefined; // posix path
+
+  /**
+   * If the inflight host is an AWS Lambda, return a helper interface for
+   * working with it.
+   * @param host The inflight host.
+   */
+  public static from(host: IInflightHost): IGcpFunction | undefined {
+    if (this.isGcpFunction(host)) {
+      return host;
+    }
+    return undefined;
+  }
+
+  private static isGcpFunction(obj: any): obj is IGcpFunction {
+    return (
+      typeof obj.name === "function" &&
+      typeof obj.httpsTriggerUrl === "function"
+    );
+  }
 
   constructor(
     scope: Construct,
