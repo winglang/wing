@@ -116,6 +116,6 @@ export class Schedule extends cloud.Schedule {
   }
 
   private envName(): string {
-    return `SCHEDULER_JOB_${this.node.addr.slice(-8)}`;
+    return `SCHEDULE_EVENT_${this.node.addr.slice(-8)}`;
   }
 }

@@ -48,7 +48,7 @@ export interface IGcpFunction {
  */
 export class Function extends cloud.Function {
   /**
-   * If the inflight host is an AWS Lambda, return a helper interface for
+   * If the inflight host is a GCP Function, return a helper interface for
    * working with it.
    * @param host The inflight host.
    */
