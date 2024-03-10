@@ -2,10 +2,8 @@ import { useNotifications, Attribute } from "@wingconsole/design-system";
 import { memo, useCallback, useEffect, useState } from "react";
 
 import { useDynamodbTable } from "../services/use-dynamodb-table.js";
-import {
-  DynamodbTableInteraction,
-  RawRow,
-} from "../ui/dynamodb-table-interaction.js";
+import type { RawRow } from "../ui/dynamodb-table-interaction.js";
+import { DynamodbTableInteraction } from "../ui/dynamodb-table-interaction.js";
 
 export interface DynamodbTableInteractionViewProps {
   resourcePath: string;

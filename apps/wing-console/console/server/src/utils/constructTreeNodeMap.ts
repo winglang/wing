@@ -1,4 +1,4 @@
-import { ConstructInfo, ConstructTreeNode } from "./construct-tree.js";
+import type { ConstructInfo, ConstructTreeNode } from "./construct-tree.js";
 
 export interface NodeDisplay {
   title?: string;

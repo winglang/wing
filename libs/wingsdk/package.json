@@ -113,7 +113,6 @@
     "stacktracey": "^2.1.8",
     "toml": "^3.0.0",
     "ulid": "^2.3.0",
-    "undici": "^6.6.2",
     "uuid": "^8.3.2",
     "yaml": "^2.3.2"
   },
@@ -154,7 +153,6 @@
     "stacktracey",
     "toml",
     "ulid",
-    "undici",
     "uuid",
     "yaml"
   ],

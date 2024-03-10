@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`compile > fail > tsconfig_respected.ts 1`] = `
+Error: TS compilation failed:
+test/fixtures/fail/tsconfig_respected.ts:5:9 - error TS6133: 'x' is declared but its value is never read.
+
+5     let x = 2;
+          ~
+
+`;
+
+exports[`compile > fail > unlifted_reference.ts 1`] = `
+Error: TS compilation failed:
+test/fixtures/fail/unlifted_reference.ts:7:17 - error TS0: Unable to access "x" in inflight closure. Use 'lift( { x } )' before 'inflight' and reference through ctx.
+
+7     console.log(x);
+                  ~
+
+`;

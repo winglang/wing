@@ -1,4 +1,5 @@
-import { PropsWithChildren } from "react";
+import classNames from "classnames";
+import type { PropsWithChildren } from "react";
 
 import { trpc } from "../services/trpc.js";
 
@@ -11,7 +12,7 @@ export const createHtmlLink = (
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll(
-      /\B((?:[a-z]:)?\.{0,2}[/\\]\S+):(\d+):(\d+)/gi,
+      /--&gt;\s*([\w./-]+\.w):(\d+):(\d+)/g,
       (match, path, line, column) => {
         return `<a class="${className}" path="${path}" line="${line}" column="${column}" >${match}</a>`;
       },
@@ -19,12 +20,15 @@ export const createHtmlLink = (
     .replaceAll(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
 };
 
-export const OpenFileInEditorButton = ({ children }: PropsWithChildren) => {
+export const OpenFileInEditorButton = ({
+  className,
+  children,
+}: PropsWithChildren<{ className?: string }>) => {
   const openFileInEditor = trpc["app.openFileInEditor"].useMutation();
 
   return (
     <button
-      className="appearance-none text-left"
+      className={classNames("appearance-none text-left", className)}
       onClick={(event) => {
         event.preventDefault();
         const target = event.target as HTMLElement;

@@ -2,8 +2,7 @@
 
 ## stdout.log
 ```log
-pass ┌ inflight_handler_singleton.test.wsim » root/env0/test:single instance of Foo
-     └ client has been reused
+pass ─ inflight_handler_singleton.test.wsim » root/env0/test:single instance of Foo
  
  
 Tests 1 passed (1)

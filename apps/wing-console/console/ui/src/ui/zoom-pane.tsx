@@ -1,19 +1,20 @@
 import { Button, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import {
-  DetailedHTMLProps,
-  HTMLAttributes,
   MouseEventHandler,
+  createContext,
   forwardRef,
   useCallback,
+  useContext,
   useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { ReactNode } from "react";
-import { useEvent } from "react-use";
+import type { DetailedHTMLProps, HTMLAttributes } from "react";
+import type { ReactNode } from "react";
+import { useEvent, useKeyPressEvent } from "react-use";
 
 import { MapControls } from "./map-controls.js";
 
@@ -62,7 +63,7 @@ const boundingBoxOverlap = (a: BoundingBox, b: BoundingBox) => {
   );
 };
 const MIN_ZOOM_LEVEL = 0.125;
-const MAX_ZOOM_LEVEL = 1.5;
+const MAX_ZOOM_LEVEL = 1;
 const ZOOM_SENSITIVITY = 1.35;
 const MOVE_SENSITIVITY = 1.5;
 const WHEEL_SENSITIVITY = 0.01;
@@ -79,6 +80,14 @@ export interface ZoomPaneProps
 export interface ZoomPaneRef {
   zoomToFit(viewport?: Viewport): void;
 }
+
+const context = createContext({
+  viewTransform: IDENTITY_TRANSFORM,
+});
+
+export const useZoomPane = () => {
+  return useContext(context);
+};
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   const { boundingBox, children, className, onClick, ...divProps } = props;
@@ -146,14 +155,35 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   // and stop emitting `onClick` events if the user was dragging.
   const wasDragging = useRef(false);
 
+  // Keep track of whether the space key is pressed so we can show the user the grab cursor.
+  // The map is draggable using click only when space is pressed.
+  const [isSpacePressed, setSpacePressed] = useState(false);
+  useKeyPressEvent(
+    " ",
+    useCallback(() => {
+      setSpacePressed(true);
+    }, []),
+    useCallback(() => {
+      setSpacePressed(false);
+      setDragging(false);
+    }, []),
+  );
+
   const dragStart = useRef({ x: 0, y: 0 });
   useEvent(
     "mousedown",
-    useCallback((event: MouseEvent) => {
-      setDragging(true);
-      dragStart.current = { x: event.x, y: event.y };
-      wasDragging.current = false;
-    }, []) as (event: Event) => void,
+    useCallback(
+      (event: MouseEvent) => {
+        if (!isSpacePressed) {
+          return;
+        }
+
+        setDragging(true);
+        dragStart.current = { x: event.x, y: event.y };
+        wasDragging.current = false;
+      },
+      [isSpacePressed],
+    ) as (event: Event) => void,
     containerRef.current,
   );
 
@@ -161,6 +191,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     "mousemove",
     useCallback(
       (event: MouseEvent) => {
+        if (!isSpacePressed) {
+          return;
+        }
+
         wasDragging.current = true;
 
         if (!isDragging) {
@@ -181,30 +215,28 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
           };
         });
       },
-      [isDragging, dragStart],
+      [isSpacePressed, isDragging],
     ) as (event: Event) => void,
-    containerRef.current,
   );
 
   useEvent(
     "mouseup",
-    useCallback((event: MouseEvent) => {
+    useCallback(() => {
       setDragging(false);
-    }, []) as (event: Event) => void,
-    containerRef.current,
+    }, []),
   );
 
   useEvent(
     "click",
     useCallback(
       (event: any): void => {
-        if (wasDragging.current) {
+        if (isSpacePressed) {
           return;
         }
         onClick?.(event);
         wasDragging.current = false;
       },
-      [onClick],
+      [isSpacePressed, onClick],
     ),
     containerRef.current,
   );
@@ -344,13 +376,12 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     <div
       ref={containerRef}
       {...divProps}
-      className={classNames(className, "relative overflow-hidden", {
-        "cursor-grab": !isDragging,
-        "cursor-grabbing": isDragging,
-      })}
+      className={classNames(className, "relative overflow-hidden")}
     >
       <div ref={targetRef} className="absolute inset-0 origin-top-left">
-        {children}
+        <context.Provider value={{ viewTransform }}>
+          {children}
+        </context.Provider>
       </div>
 
       <div className="relative z-10 flex">
@@ -385,6 +416,15 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
             </div>
           </div>
         </div>
+      )}
+
+      {isSpacePressed && (
+        <div
+          className={classNames("absolute inset-0", {
+            "cursor-grab": !isDragging,
+            "cursor-grabbing": isDragging,
+          })}
+        ></div>
       )}
     </div>
   );

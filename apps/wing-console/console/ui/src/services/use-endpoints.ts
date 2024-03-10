@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 
-import { EndpointItem } from "../shared/endpoint-item.js";
+import type { EndpointItem } from "../shared/endpoint-item.js";
 
 import { trpc } from "./trpc.js";
 

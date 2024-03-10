@@ -13,7 +13,7 @@ import {
 } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import { EndpointItem } from "../shared/endpoint-item.js";
+import type { EndpointItem } from "../shared/endpoint-item.js";
 
 import { NoEndpoints } from "./no-endpoints.js";
 

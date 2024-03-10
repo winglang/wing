@@ -3,7 +3,7 @@ on:
   workflow_call: {}
 
 env:
-  NODE_VERSION: "20.11.0"
+  NODE_VERSION: "20.11.1"
   PNPM_VERSION: "8.15.1"
 
 jobs:
