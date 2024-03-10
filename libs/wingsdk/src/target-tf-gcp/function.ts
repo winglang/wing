@@ -28,15 +28,15 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 };
 
 /**
- * Interface for GCP
+ * Interface for GCP Cloud Function
  */
 export interface IGcpFunction {
   /**
-   * GCP Function name
+   * GCP Function Name
    */
   readonly name: string;
   /**
-   * GCP http trigger url
+   * GCP HTTPS Trigger URL
    */
   readonly httpsTriggerUrl: string;
 }
@@ -48,9 +48,9 @@ export interface IGcpFunction {
  */
 export class Function extends cloud.Function {
   /**
-   * If the inflight host is a GCP Function, return a helper interface for
-   * working with it.
-   * @param host The inflight host.
+   * Attempts to cast an IInflightHost to an IGcpFunction if it is one.
+   * @param host The IInflightHost instance to check and cast.
+   * @returns An IGcpFunction if the host is a GCP function, undefined otherwise.
    */
   public static from(host: IInflightHost): IGcpFunction | undefined {
     if (this.isGcpFunction(host)) {
@@ -59,6 +59,11 @@ export class Function extends cloud.Function {
     return undefined;
   }
 
+  /**
+   * Checks if the given object is an instance of IGcpFunction.
+   * @param obj The object to check.
+   * @returns true if the object is an IGcpFunction, false otherwise.
+   */
   private static isGcpFunction(obj: any): obj is IGcpFunction {
     return (
       typeof obj.name === "string" && typeof obj.httpsTriggerUrl === "string"
