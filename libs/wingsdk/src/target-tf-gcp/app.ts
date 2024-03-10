@@ -1,6 +1,7 @@
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
+import { Schedule } from "./schedule";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { GoogleProvider } from "../.gen/providers/google/provider";
