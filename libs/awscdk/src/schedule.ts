@@ -10,7 +10,7 @@ import { Function } from "./function";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
-import { convertUnixCrontoAWSCron } from "@winglang/sdk/lib/shared-aws/schedule";
+import { convertUnixCronToAWSCron } from "@winglang/sdk/lib/shared-aws/schedule";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -28,7 +28,7 @@ export class Schedule extends cloud.Schedule {
 
     if (cron) {
       let cronOpt: { [k: string]: string } = {};
-      const awsCron = convertUnixCrontoAWSCron(cron);
+      const awsCron = convertUnixCronToAWSCron(cron);
       const cronArr = awsCron.split(" ");
       if (cronArr[0] !== "*" && cronArr[0] !== "?") { cronOpt.minute = cronArr[0]; }
       if (cronArr[1] !== "*" && cronArr[1] !== "?") { cronOpt.hour = cronArr[1]; }

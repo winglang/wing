@@ -80,6 +80,114 @@ test("schedule behavior with cron", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("convert single dayOfWeek from Unix to AWS", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const fn = Testing.makeHandler(CODE_LOG_EVENT);
+  const schedule = new cloud.Schedule(app, "Schedule", {
+    cron: "* * * * 1",
+  });
+  schedule.onTick(fn);
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_event_rule", // main schedule event
+    "aws_cloudwatch_event_target", // schedule target
+    "aws_cloudwatch_log_group", // log group for function
+    "aws_iam_role", // role for function
+    "aws_iam_role_policy", // policy for role
+    "aws_iam_role_policy_attachment", // execution policy for role
+    "aws_lambda_function", // processor function
+    "aws_lambda_permission", // function permission
+    "aws_s3_bucket", // S3 bucket for code
+    "aws_s3_object", // S3 object for code
+  ]);
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(
+      output,
+      "aws_cloudwatch_event_rule",
+      {
+        schedule_expression: "cron(* * ? * 0 *)",
+      }
+    )
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("convert the range of dayOfWeek from Unix to AWS", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const fn = Testing.makeHandler(CODE_LOG_EVENT);
+  const schedule = new cloud.Schedule(app, "Schedule", {
+    cron: "* * * * 1-7",
+  });
+  schedule.onTick(fn);
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_event_rule", // main schedule event
+    "aws_cloudwatch_event_target", // schedule target
+    "aws_cloudwatch_log_group", // log group for function
+    "aws_iam_role", // role for function
+    "aws_iam_role_policy", // policy for role
+    "aws_iam_role_policy_attachment", // execution policy for role
+    "aws_lambda_function", // processor function
+    "aws_lambda_permission", // function permission
+    "aws_s3_bucket", // S3 bucket for code
+    "aws_s3_object", // S3 object for code
+  ]);
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(
+      output,
+      "aws_cloudwatch_event_rule",
+      {
+        schedule_expression: "cron(* * ? * 0-6 *)",
+      }
+    )
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("convert the list of dayOfWeek from Unix to AWS", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const fn = Testing.makeHandler(CODE_LOG_EVENT);
+  const schedule = new cloud.Schedule(app, "Schedule", {
+    cron: "* * * * 1,3,5,7",
+  });
+  schedule.onTick(fn);
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_event_rule", // main schedule event
+    "aws_cloudwatch_event_target", // schedule target
+    "aws_cloudwatch_log_group", // log group for function
+    "aws_iam_role", // role for function
+    "aws_iam_role_policy", // policy for role
+    "aws_iam_role_policy_attachment", // execution policy for role
+    "aws_lambda_function", // processor function
+    "aws_lambda_permission", // function permission
+    "aws_s3_bucket", // S3 bucket for code
+    "aws_s3_object", // S3 object for code
+  ]);
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(
+      output,
+      "aws_cloudwatch_event_rule",
+      {
+        schedule_expression: "cron(* * ? * 0,2,4,6 *)",
+      }
+    )
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("schedule with two functions", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });

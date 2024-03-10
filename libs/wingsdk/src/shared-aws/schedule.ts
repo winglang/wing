@@ -1,22 +1,31 @@
 /**
  * Convert Unix cron to AWS cron
  */
-export const convertUnixCrontoAWSCron = (cron: string) => {
-  let newCron = cron;
+export const convertUnixCronToAWSCron = (cron: string) => {
+  const minute = cron.split(" ")[0];
+  const hour = cron.split(" ")[1];
+  let dayOfMonth = cron.split(" ")[2];
+  const month = cron.split(" ")[3];
+  let dayOfWeek = cron.split(" ")[4];
 
   /*
    * The implementation of cron on AWS does not allow [day of month] and [day of week]
    * to have the character '*' at the same time.
    * Therefore, [day of week] will be replaced by '?'.
    */
-  if (cron && cron.split(" ")[2] == "*" && cron.split(" ")[4] == "*") {
-    const lastIndex = cron.lastIndexOf("*");
-    newCron = cron.substring(0, lastIndex) + "?";
+  if (cron && dayOfMonth == "*" && dayOfWeek == "*") {
+    dayOfWeek = "?";
   }
 
-  if (cron && cron.split(" ")[2] !== "*" && cron.split(" ")[4] !== "*") {
-    console.log(cron);
+  if (cron && dayOfMonth !== "*" && dayOfWeek !== "*") {
     throw new Error("Cannot supply both 'day' and 'weekDay', use at most one");
+  }
+
+  if (dayOfWeek !== "*" && dayOfWeek !== "?") {
+    dayOfMonth = "?";
+    if (/\d/.test(dayOfWeek)) {
+      dayOfWeek = convertDayOfWeekFromUnixToAWS(dayOfWeek);
+    }
   }
 
   /*
@@ -26,5 +35,28 @@ export const convertUnixCrontoAWSCron = (cron: string) => {
    *
    * We append * to the cron string for year field.
    */
-  return newCron + " *";
+  return (
+    minute +
+    " " +
+    hour +
+    " " +
+    dayOfMonth +
+    " " +
+    month +
+    " " +
+    dayOfWeek +
+    " *"
+  );
+};
+
+const convertDayOfWeekFromUnixToAWS = (dayOfWeek: string): string => {
+  const numbers = dayOfWeek.match(/\d+/g);
+
+  if (numbers) {
+    for (const number of numbers) {
+      dayOfWeek = dayOfWeek.replace(number, (parseInt(number) - 1).toString());
+    }
+  }
+
+  return dayOfWeek;
 };

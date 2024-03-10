@@ -7,7 +7,7 @@ import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-ta
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { convertUnixCrontoAWSCron } from "../shared-aws/schedule";
+import { convertUnixCronToAWSCron } from "../shared-aws/schedule";
 import { Node } from "../std";
 
 /**
@@ -29,7 +29,7 @@ export class Schedule extends cloud.Schedule {
       ? rate.minutes === 1
         ? `rate(${rate.minutes} minute)`
         : `rate(${rate.minutes} minutes)`
-      : `cron(${convertUnixCrontoAWSCron(cron!)})`;
+      : `cron(${convertUnixCronToAWSCron(cron!)})`;
 
     this.rule = new CloudwatchEventRule(this, "Schedule", {
       isEnabled: true,
