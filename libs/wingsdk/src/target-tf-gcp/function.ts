@@ -47,15 +47,6 @@ export interface IGcpFunction {
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.Function {
-  private readonly function: CloudfunctionsFunction;
-  private readonly functionServiceAccount: ServiceAccount;
-  private readonly functionCustomRole: ProjectIamCustomRole;
-  private readonly permissions: Set<string> = new Set([
-    "cloudfunctions.functions.get",
-  ]);
-
-  private assetPath: string | undefined; // posix path
-
   /**
    * If the inflight host is an AWS Lambda, return a helper interface for
    * working with it.
@@ -74,6 +65,15 @@ export class Function extends cloud.Function {
       typeof obj.httpsTriggerUrl === "function"
     );
   }
+
+  private readonly function: CloudfunctionsFunction;
+  private readonly functionServiceAccount: ServiceAccount;
+  private readonly functionCustomRole: ProjectIamCustomRole;
+  private readonly permissions: Set<string> = new Set([
+    "cloudfunctions.functions.get",
+  ]);
+
+  private assetPath: string | undefined; // posix path
 
   constructor(
     scope: Construct,
