@@ -9,12 +9,6 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Node } from "../std";
-// import {
-//   CaseConventions,
-//   NameOptions,
-//   ResourceNames,
-// } from "../shared/resource-names";
-// import { IInflightHost } from "../std";
 
 /**
  * GCP implementation of `cloud.Schedule`.
