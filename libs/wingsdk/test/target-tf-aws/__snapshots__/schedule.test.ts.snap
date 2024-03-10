@@ -5,7 +5,6 @@ exports[`convert single dayOfWeek from Unix to AWS 1`] = `
   "resource": {
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
-        "is_enabled": true,
         "schedule_expression": "cron(* * ? * 0 *)",
       },
     },
@@ -270,7 +269,6 @@ exports[`convert the list of dayOfWeek from Unix to AWS 1`] = `
   "resource": {
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
-        "is_enabled": true,
         "schedule_expression": "cron(* * ? * 0,2,4,6 *)",
       },
     },
@@ -535,7 +533,6 @@ exports[`convert the range of dayOfWeek from Unix to AWS 1`] = `
   "resource": {
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
-        "is_enabled": true,
         "schedule_expression": "cron(* * ? * 0-6 *)",
       },
     },
@@ -800,7 +797,6 @@ exports[`schedule behavior with cron 1`] = `
   "resource": {
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
-        "is_enabled": true,
         "schedule_expression": "cron(0/1 * * * ? *)",
       },
     },
@@ -1065,7 +1061,6 @@ exports[`schedule behavior with rate 1`] = `
   "resource": {
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
-        "is_enabled": true,
         "schedule_expression": "rate(2 minutes)",
       },
     },
@@ -1330,7 +1325,6 @@ exports[`schedule with two functions 1`] = `
   "resource": {
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
-        "is_enabled": true,
         "schedule_expression": "cron(0/1 * * * ? *)",
       },
     },

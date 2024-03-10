@@ -32,7 +32,6 @@ export class Schedule extends cloud.Schedule {
       : `cron(${convertUnixCronToAWSCron(cron!)})`;
 
     this.rule = new CloudwatchEventRule(this, "Schedule", {
-      isEnabled: true,
       scheduleExpression: this.scheduleExpression,
     });
   }
