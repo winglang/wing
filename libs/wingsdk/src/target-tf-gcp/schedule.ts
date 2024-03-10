@@ -8,6 +8,7 @@ import { ServiceAccount } from "../.gen/providers/google/service-account";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
+import { Node } from "../std";
 // import {
 //   CaseConventions,
 //   NameOptions,
@@ -109,6 +110,14 @@ export class Schedule extends cloud.Schedule {
       },
       dependsOn: [cloudSchedulerApi],
     });
+
+    Node.of(this).addConnection({
+      source: this,
+      target: cronFunction,
+      name: "onTick()",
+    });
+
+    return cronFunction;
   }
 
   /** @internal */
