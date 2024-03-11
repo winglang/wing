@@ -56,12 +56,12 @@ new cloud.Function(inflight () => {
 
 ## Function container reuse
 
-Most cloud providers will opportunistically reuse the function's container in additional invocations. It is possible
-to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
+Most cloud providers will opportunistically reuse the function's container in additional invocations.
+It is possible to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
 
 The following example reads the `bigdata.json` file once and reuses it every time `query()` is called.
 
-```js
+```ts playground
 bring cloud;
 
 let big = new cloud.Bucket();
@@ -94,6 +94,14 @@ new cloud.Function(inflight () => {
 ### Simulator (`sim`)
 
 The sim implementation of `cloud.Function` runs the inflight code as a JavaScript function.
+
+By default, a maximum of 10 workers can be processing requests sent to a `cloud.Function` concurrently, but this number can be adjusted with the `concurrency` property:
+
+```ts playground
+new cloud.Function(inflight () => {
+  // ... code that shouldn't run concurrently ...
+}, concurrency: 1);
+```
 
 ### AWS (`tf-aws` and `awscdk`)
 
