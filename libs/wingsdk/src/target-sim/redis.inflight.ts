@@ -58,6 +58,7 @@ export class Redis
   public async cleanup(): Promise<void> {
     this.isCleanedUp = true;
     // disconnect from the redis server
+    await this.connection?.quit();
     this.connection?.disconnect();
     // stop the redis container
     await runCommand("docker", ["rm", "-f", this.containerName]);

@@ -78,7 +78,10 @@ export async function prettyPrintError(
         !normalPath(item.file).includes("/@winglang/sdk/")
     )
     // special: remove the handler wrapper (See `cloud.Function` entrypoint for where this comes from)
-    .filter((item) => !normalPath(item.file).match(/\.wing\/handler_\w+\.js$/))
+    .filter(
+      (item) =>
+        !normalPath(item.file).match(/\.wing\/handler_\w+(\.sandbox)?\.js$/)
+    )
     .withSourcesAsync();
 
   let traceWithSources = st.items;

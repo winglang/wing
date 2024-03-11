@@ -58,17 +58,60 @@ module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
       const y = (await $fn.invoke(""));
       const z = (await $fn2.invoke(""));
       (await $expect_Util.equal(x, "100"));
-      (await $expect_Util.equal(z, "100-fn2"));
       if ($sim) {
         (await $expect_Util.equal(y, "101"));
-        (await $expect_Util.equal(z, "100-fn2"));
         console.log("client has been reused");
       }
+      (await $expect_Util.equal(z, "100-fn2"));
     }
   }
   return $Closure3;
 }
 //# sourceMappingURL=inflight.$Closure3-1.js.map
+```
+
+## inflight.$Closure4-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $foo, $std_Duration, $util_Util }) {
+  class $Closure4 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const n = (await $foo.inc());
+      (await $util_Util.sleep((await $std_Duration.fromSeconds(3))));
+      $helpers.assert($helpers.eq(n, (await $foo.get())), "n == foo.get()");
+    }
+  }
+  return $Closure4;
+}
+//# sourceMappingURL=inflight.$Closure4-1.js.map
+```
+
+## inflight.$Closure5-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $fn3, $std_Duration, $util_Util }) {
+  class $Closure5 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $fn3.invokeAsync(""));
+      (await $util_Util.sleep((await $std_Duration.fromSeconds(1))));
+      (await $fn3.invoke(""));
+    }
+  }
+  return $Closure5;
+}
+//# sourceMappingURL=inflight.$Closure5-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -81,6 +124,9 @@ module.exports = function({  }) {
     }
     async inc() {
       this.n += 1;
+      return this.n;
+    }
+    async get() {
       return this.n;
     }
     async $inflight_init() {
@@ -129,6 +175,16 @@ module.exports = function({  }) {
         },
         "name": "/aws/lambda/fn2-c892a4c6",
         "retention_in_days": 30
+      },
+      "fn3_CloudwatchLogGroup_C39A85FE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/fn3/CloudwatchLogGroup",
+            "uniqueId": "fn3_CloudwatchLogGroup_C39A85FE"
+          }
+        },
+        "name": "/aws/lambda/fn3-c856234e",
+        "retention_in_days": 30
       }
     },
     "aws_iam_role": {
@@ -146,6 +202,15 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/fn2/IamRole",
             "uniqueId": "fn2_IamRole_DE8D96D2"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "fn3_IamRole_B0C65815": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/fn3/IamRole",
+            "uniqueId": "fn3_IamRole_B0C65815"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -171,6 +236,16 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.fn2_IamRole_DE8D96D2.name}"
+      },
+      "fn3_IamRolePolicy_AE0DB40A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/fn3/IamRolePolicy",
+            "uniqueId": "fn3_IamRolePolicy_AE0DB40A"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.fn3_IamRole_B0C65815.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -193,6 +268,16 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.fn2_IamRole_DE8D96D2.name}"
+      },
+      "fn3_IamRolePolicyAttachment_9C4A07E9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/fn3/IamRolePolicyAttachment",
+            "uniqueId": "fn3_IamRolePolicyAttachment_9C4A07E9"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.fn3_IamRole_B0C65815.name}"
       }
     },
     "aws_lambda_function": {
@@ -257,6 +342,37 @@ module.exports = function({  }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
+      },
+      "fn3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/fn3/Default",
+            "uniqueId": "fn3"
+          }
+        },
+        "architectures": [
+          "arm64"
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "fn3-c856234e",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "fn3-c856234e",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "${aws_iam_role.fn3_IamRole_B0C65815.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.fn3_S3Object_4E99C117.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
       }
     },
     "aws_s3_bucket": {
@@ -287,6 +403,17 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/fn2/S3Object",
             "uniqueId": "fn2_S3Object_FA91A9FB"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "fn3_S3Object_4E99C117": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/fn3/S3Object",
+            "uniqueId": "fn3_S3Object_4E99C117"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -337,6 +464,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "inc": [
+          ],
+          "get": [
           ],
           "$inflight_init": [
           ],
@@ -457,11 +586,87 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class $Closure4 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.js")({
+            $foo: ${$stdlib.core.liftObject(foo)},
+            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure4Client = ${$Closure4._toInflightType()};
+            const client = new $Closure4Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [foo, ["get", "inc"]],
+          ],
+          "$inflight_init": [
+            [foo, []],
+          ],
+        });
+      }
+    }
+    class $Closure5 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.js")({
+            $fn3: ${$stdlib.core.liftObject(fn3)},
+            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure5Client = ${$Closure5._toInflightType()};
+            const client = new $Closure5Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [fn3, ["invoke", "invokeAsync"]],
+          ],
+          "$inflight_init": [
+            [fn3, []],
+          ],
+        });
+      }
+    }
     const foo = new Foo(this, "Foo");
     const fn = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
     const fn2 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn2", new $Closure2(this, "$Closure2"));
     const sim = $helpers.eq((util.Util.env("WING_TARGET")), "sim");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:single instance of Foo", new $Closure3(this, "$Closure3"));
+    const fn3 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn3", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Foo state is not shared between function invocations", new $Closure5(this, "$Closure5"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
