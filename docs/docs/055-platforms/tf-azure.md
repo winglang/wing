@@ -17,7 +17,7 @@ $ wing compile [entrypoint] --platform tf-azure
 
 ## Parameters
 
-The variable `AZURE_LOCATION` is required and indicates the [deployment
+The environment variable `AZURE_LOCATION` is required and indicates the [deployment
 location](https://github.com/claranet/terraform-azurerm-regions/blob/master/REGIONS.md) of your
 stack.
 

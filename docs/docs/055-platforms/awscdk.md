@@ -38,7 +38,7 @@ JavaScript bundles that include inflight code that executes on compute platforms
 To deploy your app, you will first need to install the [AWS CDK
 CLI](https://docs.aws.amazon.com/cdk/v2/guide/cli.html).
 
-You will need to bootstrap your environment (account/region):
+If not previously done, you will need to bootstrap your environment (account/region):
 
 ```sh
 $ cd bootstrap --app target/app.awscdk
