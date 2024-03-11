@@ -1,4 +1,5 @@
 import { EVENT_MAPPING_FQN } from "./event-mapping";
+import { SIM_RESOURCE_FQN } from "./resource";
 import { STATE_FQN } from "./state";
 import {
   API_FQN,
@@ -322,10 +323,21 @@ export interface DynamodbTableSchema extends BaseResourceSchema {
   };
 }
 
-/** Schema for simulator.State */
+/** Schema for sim.State */
 export interface StateSchema extends BaseResourceSchema {
   readonly type: typeof STATE_FQN;
   readonly props: {};
+}
+
+/** Schema for sim.Resource */
+export interface ResourceSchema extends BaseResourceSchema {
+  readonly type: typeof SIM_RESOURCE_FQN;
+  readonly props: {
+    /** The source code of the resource */
+    readonly sourceCodeFile: string;
+    /** A map of environment variables to run the function with. */
+    readonly environmentVariables: Record<string, string>;
+  };
 }
 
 /** Schema for cloud.Domain */

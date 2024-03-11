@@ -128,7 +128,7 @@ export interface IResource extends IConstruct, IHostedLiftable {
  * Shared behavior between all Wing SDK resources.
  * @skipDocs
  */
-export abstract class Resource extends Construct implements IResource {
+export class Resource extends Construct implements IResource {
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
    * use this type inflight. The list of requested inflight methods

@@ -92,6 +92,10 @@ exports[`create a schedule 1`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -165,6 +169,15 @@ console.log("Hello from schedule!");
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
+        "attrs": {},
+        "path": "root/my_schedule",
+        "props": {
+          "cronExpression": "* */3 * * ?",
+        },
+        "type": "@winglang/sdk.cloud.Schedule",
+      },
+      {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
@@ -175,15 +188,6 @@ console.log("Hello from schedule!");
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
-        "attrs": {},
-        "path": "root/my_schedule",
-        "props": {
-          "cronExpression": "* */3 * * ?",
-        },
-        "type": "@winglang/sdk.cloud.Schedule",
       },
       {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
@@ -270,6 +274,10 @@ console.log("Hello from schedule!");
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -370,6 +378,15 @@ console.log("Hello from schedule!");
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
+        "attrs": {},
+        "path": "root/my_schedule",
+        "props": {
+          "cronExpression": "*/10 * * * ?",
+        },
+        "type": "@winglang/sdk.cloud.Schedule",
+      },
+      {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
@@ -380,15 +397,6 @@ console.log("Hello from schedule!");
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
-        "attrs": {},
-        "path": "root/my_schedule",
-        "props": {
-          "cronExpression": "*/10 * * * ?",
-        },
-        "type": "@winglang/sdk.cloud.Schedule",
       },
       {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
@@ -475,6 +483,10 @@ console.log("Hello from schedule!");
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -575,6 +587,15 @@ console.log("Hello from schedule!");
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
+        "attrs": {},
+        "path": "root/my_schedule",
+        "props": {
+          "cronExpression": "* * * * ?",
+        },
+        "type": "@winglang/sdk.cloud.Schedule",
+      },
+      {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
@@ -585,15 +606,6 @@ console.log("Hello from schedule!");
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
-        "attrs": {},
-        "path": "root/my_schedule",
-        "props": {
-          "cronExpression": "* * * * ?",
-        },
-        "type": "@winglang/sdk.cloud.Schedule",
       },
       {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
@@ -680,6 +692,10 @@ console.log("Hello from schedule!");
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

@@ -2,9 +2,16 @@
 
 exports[`bucket on event creates 3 topics, and sends the right event and key in the event handlers 1`] = `
 [
+  "root/my_bucket is waiting on a dependency",
   "@winglang/sdk.cloud.Topic created.",
+  "root/my_bucket/oncreate/OnMessage0 is waiting on a dependency",
+  "root/my_bucket/oncreate/TopicEventMapping0 is waiting on a dependency",
   "@winglang/sdk.cloud.Topic created.",
+  "root/my_bucket/onupdate/OnMessage0 is waiting on a dependency",
+  "root/my_bucket/onupdate/TopicEventMapping0 is waiting on a dependency",
   "@winglang/sdk.cloud.Topic created.",
+  "root/my_bucket/ondelete/OnMessage0 is waiting on a dependency",
+  "root/my_bucket/ondelete/TopicEventMapping0 is waiting on a dependency",
   "@winglang/sdk.cloud.Bucket created.",
   "@winglang/sdk.cloud.Bucket created.",
   "@winglang/sdk.cloud.Function created.",
@@ -34,17 +41,17 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "Put (key=a).",
   "I am done",
   "Get (key=a).",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Bucket deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Topic deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Topic deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Topic deleted.",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
 ]
 `;
 
@@ -154,6 +161,10 @@ exports[`can add file in preflight 2`] = `
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -300,6 +311,10 @@ exports[`can add object in preflight 2`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -431,6 +446,10 @@ exports[`create a bucket 1`] = `
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -572,6 +591,10 @@ exports[`get invalid object throws an error 2`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -705,37 +728,39 @@ exports[`remove object from a bucket with mustExist as option 1`] = `
 
 exports[`removing a key will call onDelete method 1`] = `
 [
+  "root/my_bucket is waiting on a dependency",
   "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.cloud.Bucket created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Bucket created.",
   "Put (key=unknown.txt).",
   "Publish (message=unknown.txt).",
-  "Sending message (message=unknown.txt, subscriber=sim-2).",
+  "Sending message (message=unknown.txt, subscriber=sim-1).",
   "InvokeAsync (payload="unknown.txt").",
   "Delete (key=unknown.txt).",
   "Received unknown.txt",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Bucket deleted.",
   "@winglang/sdk.cloud.Topic deleted.",
+  "@winglang/sdk.cloud.Bucket deleted.",
 ]
 `;
 
 exports[`update an object in bucket 1`] = `
 [
+  "root/my_bucket is waiting on a dependency",
   "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.cloud.Bucket created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Bucket created.",
   "Publish (message=greeting.txt).",
-  "Sending message (message=greeting.txt, subscriber=sim-2).",
+  "Sending message (message=greeting.txt, subscriber=sim-1).",
   "InvokeAsync (payload="greeting.txt").",
   "Put (key=greeting.txt).",
   "Put (key=greeting.txt).",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Bucket deleted.",
   "@winglang/sdk.cloud.Topic deleted.",
+  "@winglang/sdk.cloud.Bucket deleted.",
 ]
 `;

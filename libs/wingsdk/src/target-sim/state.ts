@@ -1,4 +1,5 @@
 import { ISimulatorResource } from "./resource";
+import { StateSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
@@ -60,7 +61,7 @@ export class State extends Resource implements ISimulatorResource {
       addr: this.node.addr,
       props: {},
       attrs: {},
-    };
+    } as StateSchema;
   }
 }
 

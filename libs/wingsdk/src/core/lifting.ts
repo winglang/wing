@@ -118,18 +118,18 @@ export type LiftDepsMatrix = Record<string, Map<any, Set<string>>>;
  * See the unit tests in `lifting.test.ts` for examples.
  */
 export function mergeLiftDeps(
-  matrix1: LiftDepsMatrix,
-  matrix2: LiftDepsMatrix
+  matrix1: LiftDepsMatrix | undefined,
+  matrix2: LiftDepsMatrix | undefined
 ): LiftDepsMatrix {
   const result: LiftDepsMatrix = {};
-  for (const [op, deps] of Object.entries(matrix1)) {
+  for (const [op, deps] of Object.entries(matrix1 ?? {})) {
     result[op] = new Map();
     for (const [obj, objDeps] of deps) {
       result[op].set(obj, new Set(objDeps));
     }
   }
 
-  for (const [op, deps] of Object.entries(matrix2)) {
+  for (const [op, deps] of Object.entries(matrix2 ?? {})) {
     const resultDeps = result[op] ?? new Map();
     for (const [obj, objDeps] of deps) {
       const resultObjDeps = resultDeps.get(obj) ?? new Set();

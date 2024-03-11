@@ -447,7 +447,11 @@ export class Simulator {
   }
 
   private typeInfo(fqn: string): TypeSchema {
-    return this._config.types[fqn];
+    const schema = this._config.types[fqn];
+    if (!schema) {
+      throw new Error(`Unknown simulator resource type: ${fqn}`);
+    }
+    return schema;
   }
 
   /**

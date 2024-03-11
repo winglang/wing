@@ -93,6 +93,10 @@ exports[`create a queue 1`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -683,6 +687,10 @@ exports[`push rejects empty message 2`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -826,6 +834,10 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -940,6 +952,16 @@ async handle(message) {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
+        "attrs": {},
+        "path": "root/my_queue",
+        "props": {
+          "retentionPeriod": 3600,
+          "timeout": 30,
+        },
+        "type": "@winglang/sdk.cloud.Queue",
+      },
+      {
         "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
@@ -950,16 +972,6 @@ async handle(message) {
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
-        "attrs": {},
-        "path": "root/my_queue",
-        "props": {
-          "retentionPeriod": 3600,
-          "timeout": 30,
-        },
-        "type": "@winglang/sdk.cloud.Queue",
       },
       {
         "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
@@ -975,6 +987,15 @@ async handle(message) {
         "type": "@winglang/sdk.sim.EventMapping",
       },
       {
+        "addr": "c8e2354407fd3536187725c2b37c5327f47bb841e9",
+        "attrs": {},
+        "path": "root/my_queue_messages",
+        "props": {
+          "functionHandle": "\${wsim#root/my_queue_messages/Function#attrs.handle}",
+        },
+        "type": "@winglang/sdk.cloud.OnDeploy",
+      },
+      {
         "addr": "c8ab799f6c9c9a3cd279909012c4f322ab902f5e19",
         "attrs": {},
         "path": "root/my_queue_messages/Function",
@@ -987,15 +1008,6 @@ async handle(message) {
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8e2354407fd3536187725c2b37c5327f47bb841e9",
-        "attrs": {},
-        "path": "root/my_queue_messages",
-        "props": {
-          "functionHandle": "\${wsim#root/my_queue_messages/Function#attrs.handle}",
-        },
-        "type": "@winglang/sdk.cloud.OnDeploy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1071,6 +1083,10 @@ async handle(message) {
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1200,6 +1216,16 @@ async handle(message) {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
+        "attrs": {},
+        "path": "root/my_queue",
+        "props": {
+          "retentionPeriod": 3600,
+          "timeout": 30,
+        },
+        "type": "@winglang/sdk.cloud.Queue",
+      },
+      {
         "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
@@ -1210,16 +1236,6 @@ async handle(message) {
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
-        "attrs": {},
-        "path": "root/my_queue",
-        "props": {
-          "retentionPeriod": 3600,
-          "timeout": 30,
-        },
-        "type": "@winglang/sdk.cloud.Queue",
       },
       {
         "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
@@ -1308,6 +1324,10 @@ async handle(message) {
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

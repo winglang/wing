@@ -29,6 +29,17 @@ async handle(event) {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8647dd8d2adabe83cc081ebe0ccbefe4a068ef3bf",
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {
+            "root/env0/test:my_test": "\${wsim#root/env0/test:my_test/Handler#attrs.handle}",
+          },
+        },
+        "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
         "addr": "c86fc1804106bd848769cb0ddbcb872aa1e47943f4",
         "attrs": {},
         "path": "root/env0/test:my_test/Handler",
@@ -39,17 +50,6 @@ async handle(event) {
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8647dd8d2adabe83cc081ebe0ccbefe4a068ef3bf",
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {
-            "root/env0/test:my_test": "\${wsim#root/env0/test:my_test/Handler#attrs.handle}",
-          },
-        },
-        "type": "@winglang/sdk.std.TestRunner",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -125,6 +125,10 @@ async handle(event) {
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

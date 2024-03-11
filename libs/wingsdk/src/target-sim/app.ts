@@ -12,7 +12,11 @@ import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
 import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
-import { isSimulatorResource } from "./resource";
+import {
+  Resource as SimResource,
+  SIM_RESOURCE_FQN,
+  isSimulatorResource,
+} from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Service } from "./service";
@@ -22,6 +26,7 @@ import { TestRunner } from "./test-runner";
 import { SimTokens } from "./tokens";
 import { Topic } from "./topic";
 import { Website } from "./website";
+
 import {
   API_FQN,
   BUCKET_FQN,
@@ -71,6 +76,7 @@ const SIMULATOR_CLASS_DATA = {
   [TEST_RUNNER_FQN]: "TestRunner",
   [TOPIC_FQN]: "Topic",
   [WEBSITE_FQN]: "Website",
+  [SIM_RESOURCE_FQN]: "Resource",
 };
 
 /**
@@ -154,6 +160,9 @@ export class App extends core.App {
 
       case WEBSITE_FQN:
         return require.resolve("./website.inflight");
+
+      case SIM_RESOURCE_FQN:
+        return require.resolve("./resource.inflight");
     }
 
     return undefined;
@@ -219,6 +228,9 @@ export class App extends core.App {
 
       case WEBSITE_FQN:
         return Website;
+
+      case SIM_RESOURCE_FQN:
+        return SimResource;
     }
 
     return undefined;
@@ -261,8 +273,8 @@ export class App extends core.App {
   }
 
   private synthSimulatorFile(outdir: string) {
-    const resources = new core.DependencyGraph(this.node)
-      .topology()
+    const resources = this.node
+      .findAll()
       .filter(isSimulatorResource)
       .map((res) => res.toSimulator());
 

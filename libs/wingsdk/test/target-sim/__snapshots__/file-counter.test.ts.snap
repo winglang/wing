@@ -87,6 +87,16 @@ bucket: (function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8de0494647ac0bdaec85a77e2a164cfbcfecc5ca1",
+        "attrs": {},
+        "path": "root/HelloWorld/Queue",
+        "props": {
+          "retentionPeriod": 3600,
+          "timeout": 30,
+        },
+        "type": "@winglang/sdk.cloud.Queue",
+      },
+      {
         "addr": "c8e82e9fd83d9e59c5af169a3042b9ed0b40e91185",
         "attrs": {},
         "path": "root/HelloWorld/Queue/SetConsumer0",
@@ -100,16 +110,6 @@ bucket: (function() {
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8de0494647ac0bdaec85a77e2a164cfbcfecc5ca1",
-        "attrs": {},
-        "path": "root/HelloWorld/Queue",
-        "props": {
-          "retentionPeriod": 3600,
-          "timeout": 30,
-        },
-        "type": "@winglang/sdk.cloud.Queue",
       },
       {
         "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
@@ -198,6 +198,10 @@ bucket: (function() {
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
