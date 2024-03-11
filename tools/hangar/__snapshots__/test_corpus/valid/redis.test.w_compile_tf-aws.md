@@ -39,7 +39,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       (await $util_Util.waitUntil((async () => {
         return $helpers.neq((await $r.get("hello")), undefined);
       })));
-      $helpers.assert($helpers.eq("world!", String.raw({ raw: ["", ""] }, (await $r.get("hello")))), "\"world!\" == \"{r.get(\"hello\")}\"");
+      $helpers.assert($helpers.eq("world!", String.raw({ raw: ["", ""] }, ((await $r.get("hello")) ?? "nil"))), "\"world!\" == \"{r.get(\"hello\") ?? \"nil\"}\"");
     }
   }
   return $Closure2;

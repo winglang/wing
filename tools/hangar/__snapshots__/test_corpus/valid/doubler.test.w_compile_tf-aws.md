@@ -12,7 +12,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(m) {
-      return String.raw({ raw: ["Hello ", "!"] }, m);
+      return String.raw({ raw: ["Hello ", "!"] }, (m ?? "nil"));
     }
   }
   return $Closure1;
