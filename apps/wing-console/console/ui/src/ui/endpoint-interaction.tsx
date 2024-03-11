@@ -2,7 +2,7 @@ import { useTheme, Button, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useId } from "react";
 
-import { EndpointItem } from "../shared/endpoint-item.js";
+import type { EndpointItem } from "../shared/endpoint-item.js";
 
 export interface EndpointInteractionProps {
   endpoint: EndpointItem | undefined;
