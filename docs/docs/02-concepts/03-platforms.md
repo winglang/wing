@@ -38,6 +38,16 @@ The order in which platforms are evaluated is important.
 
 The first platform in the list is the primary platform, it is responsible for providing the Wing compiler with the base App that will be used to determine how resources are created, as well it will also lay the ground work for what target the rest of the platforms will need to be compatible with.
 
+#### Using Implicit Platforms
+
+Additionally, you can use naming conventions to implicitly define platforms that should be used. These platform files can be located in the root of your project or in a library that your project uses. The naming convention is as follows:
+```sh
+platform.js
+*.platform.js
+```
+
+For example, if you have a file named `my-platform.js` in the root of your project, it will automatically be added to the list of platforms to be used when compiling your application. Its also important to note that implicit platforms are always loaded after the platforms specified in the `--platform` option.
+
 ### Provisioning Engines
 
 Provisioning is the process of setting up and creating infrastructure, and the provisioning engine is the driver behind this deployment. Common engines used in the Wing compilation process include Terraform and AWS CDK, with support for more planned ([tracking issue](https://github.com/winglang/wing/issues/2066)).

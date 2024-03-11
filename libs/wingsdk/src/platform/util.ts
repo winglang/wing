@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, readdirSync } from "fs";
 import * as path from "path";
 import * as toml from "toml";
 import * as yaml from "yaml";
@@ -100,4 +100,27 @@ export function loadPlatformSpecificValues() {
     }
   })();
   return { ...fileValues, ...cliValues };
+}
+
+
+/**
+ * Scans a directory for a platform file.
+ * 
+ * @param dir the directory to scan
+ * @returns the path to the platform file, or undefined if none was found
+ */
+export function scanDirForPlatformFile(dir: string): string | undefined {
+  // Read each file in the directory
+  if(!existsSync(dir)) {
+    return undefined;
+  }
+
+  const files = readdirSync(dir);
+  for (const file of files) {
+    if (file === "platform.js" || file.endsWith(".platform.js")) {
+      return path.join(dir, file);
+    }
+  }
+  
+  return undefined;
 }

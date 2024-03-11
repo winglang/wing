@@ -1,8 +1,9 @@
-import { readFileSync, existsSync } from "fs";
+import { readFileSync } from "fs";
 import { basename, dirname, join } from "path";
 import { cwd } from "process";
 import * as vm from "vm";
 import { IPlatform } from "./platform";
+import { scanDirForPlatformFile } from "./util";
 import { App, AppProps, SynthHooks } from "../core";
 
 interface PlatformManagerOptions {
@@ -41,19 +42,18 @@ export class PlatformManager {
     const importedNamespaces = process.env.WING_IMPORTED_NAMESPACES?.split(";");
     const sourceDir = process.env.WING_SOURCE_DIR!;
 
-    const dirContainsPlatform = (dir: string) =>
-      existsSync(join(dir, "platform.js"));
-
     if (sourceDir) {
-      if (dirContainsPlatform(sourceDir)) {
-        this.platformPaths.push(join(sourceDir, "platform.js"));
+      const sourceDirPlatformFile = scanDirForPlatformFile(sourceDir);
+      if (sourceDirPlatformFile) {
+        this.platformPaths.push(sourceDirPlatformFile);
       }
     }
 
     if (importedNamespaces) {
       importedNamespaces.forEach((namespaceDir) => {
-        if (dirContainsPlatform(namespaceDir)) {
-          this.platformPaths.push(join(namespaceDir, "platform.js"));
+        const namespaceDirPlatformFile = scanDirForPlatformFile(namespaceDir);
+        if (namespaceDirPlatformFile) {
+          this.platformPaths.push(namespaceDirPlatformFile);
         }
       });
     }

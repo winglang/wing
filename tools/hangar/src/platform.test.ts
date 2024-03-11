@@ -403,7 +403,7 @@ describe("Platform examples", () => {
   });
 });
 
-describe("Implicit platform.js files", () => {
+describe("Implicit platform files", () => {
   const platformParameters = {
     type: "object",
     properties: {
@@ -448,6 +448,35 @@ describe("Implicit platform.js files", () => {
       expect(output.stderr).toContain("Parameter validation errors:");
       expect(output.stderr).toContain("- must have required property 'foo'");
     })
+
+    test("with a .platform.js extension", async () => {
+      // GIVEN
+      const wingCode = `
+        bring cloud;
+
+        let b = new cloud.Bucket();
+      `
+      const args = ["compile"];
+      const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
+      
+      fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
+      fs.writeFileSync(path.join(tempdir, "whatever.platform.js"), platformCode);
+
+      // WHEN
+      const output = await runWingCommand({
+        cwd: tempdir,
+        wingFile: path.join(tempdir, "main.w"),
+        args,
+        expectFailure: true
+      });
+
+      console.log("STDOUT: ", output.stdout);
+      console.log("STDERR: ", output.stderr);
+
+      // THEN
+      expect(output.stderr).toContain("Parameter validation errors:");
+      expect(output.stderr).toContain("- must have required property 'foo'");
+    });
 
     test("imported directory", async () => {
       // GIVEN
