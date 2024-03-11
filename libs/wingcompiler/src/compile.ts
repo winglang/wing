@@ -164,7 +164,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   if (!existsSync(synthDir)) {
     await fs.mkdir(workDir, { recursive: true });
   }
-  let compileForPreflightResult = await compileForPreflight({
+  const compileForPreflightResult = await compileForPreflight({
     entrypointFile,
     workDir,
     wingDir,
