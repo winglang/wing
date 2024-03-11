@@ -735,7 +735,6 @@ exports[`update an object in bucket 1`] = `
   "Put (key=greeting.txt).",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "InvokeAsync (payload="greeting.txt").",
   "@winglang/sdk.cloud.Bucket deleted.",
   "@winglang/sdk.cloud.Topic deleted.",
 ]
