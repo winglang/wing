@@ -3,12 +3,7 @@ import { test, expect } from "vitest";
 import { std, simulator, cloud } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-import { sanitizeCode, awscdkSanitize } from "./util";
-
-const CDK_APP_OPTS = {
-  stackName: "my-project",
-  entrypointDir: __dirname,
-};
+import { sanitizeCode, awscdkSanitize, CDK_APP_OPTS } from "./util";
 
 test("default queue behavior", () => {
   // GIVEN
