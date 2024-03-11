@@ -17,9 +17,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
 
     this._startCommand = this._useBuildCommand
       ? props.buildCommand ?? ex.DEFAULT_REACT_APP_BUILD_COMMAND
-      : `PORT=${this._localPort} ${
-          props.startCommand ?? DEFAULT_START_COMMAND
-        }`;
+      : props.startCommand ?? DEFAULT_START_COMMAND;
 
     if (this._useBuildCommand) {
       // In the future we can create an host (proxy like) for the development one if needed
@@ -55,6 +53,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
         ),
         useBuildCommand: this._useBuildCommand,
         url: this.url,
+        localPort: this._localPort,
       },
       attrs: {},
     };
