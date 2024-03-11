@@ -304,25 +304,29 @@ pub struct Stmt {
 	pub idx: usize,
 }
 
+// TODO: move out of AST, this it a TypeChecker thing
 #[derive(Debug)]
 pub enum UtilityFunctions {
 	Log,
 	Assert,
 	UnsafeCast,
 	Nodeof,
+	Lift,
 }
 
-impl UtilityFunctions {
-	/// Returns all utility functions.
-	pub fn all() -> Vec<UtilityFunctions> {
-		vec![
-			UtilityFunctions::Log,
-			UtilityFunctions::Assert,
-			UtilityFunctions::UnsafeCast,
-			UtilityFunctions::Nodeof,
-		]
-	}
-}
+// TODO: remove
+// impl UtilityFunctions {
+// 	/// Returns all utility functions.
+// 	pub fn all() -> Vec<UtilityFunctions> {
+// 		vec![
+// 			UtilityFunctions::Log,
+// 			UtilityFunctions::Assert,
+// 			UtilityFunctions::UnsafeCast,
+// 			UtilityFunctions::Nodeof,
+// 			UtilityFunctions::Lift,
+// 		]
+// 	}
+// }
 
 impl Display for UtilityFunctions {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -331,6 +335,7 @@ impl Display for UtilityFunctions {
 			UtilityFunctions::Assert => write!(f, "assert"),
 			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
 			UtilityFunctions::Nodeof => write!(f, "nodeof"),
+			UtilityFunctions::Lift => write!(f, "lift"),
 		}
 	}
 }

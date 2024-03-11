@@ -31,6 +31,8 @@ pub enum Liftable {
 pub struct LiftQualification {
 	/// The operations that qualify the lift (the property names)
 	pub ops: BTreeSet<String>,
+	/// Whether this lift was explicitly defined via a `lift` statement.
+	pub explicit: bool,
 }
 
 /// A record that describes a lift from a class.
@@ -57,29 +59,46 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, method: Option<Symbol>, property: Option<Symbol>, code: &str) {
-		let method = method.map(|m| m.name).unwrap_or(Default::default());
-
-		self.add_lift(method, code, property.as_ref().map(|s| s.name.clone()));
+	pub fn lift(&mut self, method: Symbol, property: Option<Symbol>, code: &str, explicit: bool) {
+		self.add_lift(
+			method.to_string(),
+			code,
+			property.as_ref().map(|s| s.name.clone()),
+			explicit,
+		);
 
 		// Add a lift to the inflight initializer to signify this class requires access to that preflight object.
 		// "this" is a special case since it's already in scope and doesn't need to be lifted.
 		if code != "this" {
-			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), code, None);
+			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), code, None, explicit);
 		}
 	}
 
-	fn add_lift(&mut self, method: String, code: &str, property: Option<String>) {
+	fn add_lift(&mut self, method: String, code: &str, property: Option<String>, explicit: bool) {
 		let lift = self
 			.lifts_qualifications
 			.entry(method)
 			.or_default()
 			.entry(code.to_string())
-			.or_insert(LiftQualification { ops: BTreeSet::new() });
+			.or_insert(LiftQualification {
+				ops: BTreeSet::new(),
+				explicit,
+			});
 
 		if let Some(op) = &property {
 			lift.ops.insert(op.clone());
 		}
+
+		// If there are explicit lifts in the method, then the lift is explicit.
+		lift.explicit |= explicit;
+	}
+
+	pub fn has_explicit_lifts(&self, method: &str) -> bool {
+		self
+			.lifts_qualifications
+			.get(method)
+			.map(|lifts| lifts.values().any(|lift| lift.explicit))
+			.unwrap_or(false)
 	}
 
 	/// Returns the token for a liftable. Called by the jsifier when emitting inflight code.

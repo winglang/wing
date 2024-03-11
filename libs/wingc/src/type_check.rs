@@ -2022,9 +2022,42 @@ impl<'a> TypeChecker<'a> {
 			}),
 			scope,
 		);
+
+		let str_array_type = self.types.add_type(Type::Array(self.types.string()));
+		self.add_builtin(
+			&UtilityFunctions::Lift.to_string(),
+			Type::Function(FunctionSignature {
+				this_type: None,
+				parameters: vec![
+					FunctionParameter {
+						name: "preflightObject".into(),
+						typeref: self.types.anything(), // TODO: maybe this has to be only preflight classes/interfaces??
+						docs: Docs::with_summary("The preflight object to qualify"),
+						variadic: false,
+					},
+					FunctionParameter {
+						name: "qualifications".into(),
+						typeref: str_array_type,
+						docs: Docs::with_summary("
+							The qualifications to apply to the preflight object.\n
+							This is and array of strings denoting members of the objects that are accessed in the current method/function.\n
+							For example, if the method accesses the `push` and `pop` and `age` members of a [cloud.Queue] object, the qualifications should be `[\"push\", \"pop\"]`."
+						),
+						variadic: false,
+					},
+				],
+				return_type: self.types.void(),
+				phase: Phase::Inflight,
+				js_override: None,
+				docs: Docs::with_summary(
+					"Explicitly apply qualifications to apply to the preflight object used in the current method/function",
+				),
+			}),
+			scope,
+		)
 	}
 
-	pub fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
+	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
 		let sym = Symbol::global(name);
 		let mut scope_env = self.types.get_scope_env(&scope);
 		scope_env

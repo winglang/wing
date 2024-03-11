@@ -1,6 +1,7 @@
 use crate::{
 	ast::{
-		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, Symbol, UserDefinedType,
+		CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, Symbol,
+		UserDefinedType, UtilityFunctions,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic},
@@ -197,10 +198,13 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				return;
 			}
 
+			// If the expression is a call to the `lift` builtin, use this opportunity to qualify the lift
+			v.check_explicit_lift(node);
+
 			// Inflight expressions that evaluate to a preflight type are currently unsupported because
 			// we can't determine exactly which preflight object is being accessed and therefore can't
 			// qualify the original lift expression.
-			if expr_phase == Phase::Inflight && expr_type.is_preflight_class() && v.ctx.current_property().is_some() {
+			if expr_phase == Phase::Inflight && expr_type.is_preflight_class() && v.ctx.current_property().is_some() && !v.ignore_unknown_preflight_object_error() {
 				report_diagnostic(Diagnostic {
 					message: format!(
 						"Expression of type \"{expr_type}\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)"
@@ -235,7 +239,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 				let mut lifts = v.lifts_stack.pop().unwrap();
 				let is_field = code.contains("this."); // TODO: starts_with?
-				lifts.lift(v.ctx.current_method().map(|(m,_)|m), property, &code);
+				lifts.lift(v.ctx.current_method().map(|(m,_)|m).expect("a method"), property, &code, false);
 				lifts.capture(&Liftable::Expr(node.id), &code, is_field);
 				v.lifts_stack.push(lifts);
 				return;
@@ -295,7 +299,12 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			}
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.lift(self.ctx.current_method().map(|(m, _)| m), property, &code);
+			lifts.lift(
+				self.ctx.current_method().map(|(m, _)| m).expect("a method"),
+				property,
+				&code,
+				false,
+			);
 			self.lifts_stack.push(lifts);
 		}
 
@@ -395,6 +404,59 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		self.ctx.push_stmt(node.idx);
 		visit::visit_stmt(self, node);
 		self.ctx.pop_stmt();
+	}
+}
+
+impl LiftVisitor<'_> {
+	/// Helper function to check if the current method has explicit lifts. If it does then ignore
+	/// inflight expressions that reference unknown preflight objects assuming that the explicit lifts
+	/// qualify the capabilities of the preflight objects correctly.
+	fn ignore_unknown_preflight_object_error(&mut self) -> bool {
+		let lifts = self.lifts_stack.pop().expect("lifts");
+		let current_method = self.ctx.current_method().map(|(m, _)| m).expect("a method");
+		let res = lifts.has_explicit_lifts(&current_method.name);
+		self.lifts_stack.push(lifts);
+		res
+	}
+
+	/// Helper function to check if the given expression is a call to the `lift` builtin.
+	/// If it is, we'll qualify the passed preflight object based on the passed capabilities.
+	fn check_explicit_lift(&mut self, node: &Expr) {
+		let ExprKind::Call {
+			callee: CalleeKind::Expr(callee_expr),
+			arg_list,
+		} = &node.kind
+		else {
+			return;
+		};
+
+		let ExprKind::Reference(Reference::Identifier(Symbol { name, .. })) = &callee_expr.kind else {
+			return;
+		};
+
+		if UtilityFunctions::Lift.to_string().ne(name) {
+			return;
+		}
+
+		// Get the preflight object's expression, which is the first argument to the `lift` call
+		let preflight_object_expr = &arg_list.pos_args[0];
+
+		// Make sure this really is a preflight expression
+		let obj_phase = self
+			.jsify
+			.types
+			.get_expr_phase(preflight_object_expr)
+			.expect("an expr phase");
+		if obj_phase != Phase::Preflight {
+			report_diagnostic(Diagnostic {
+				span: Some(preflight_object_expr.span.clone()),
+				message: format!(
+					"Expected a preflight object as first argument to `lift` builtin, found a {obj_phase} expression instead"
+				),
+				annotations: vec![],
+				hints: vec![],
+			});
+		}
 	}
 }
 
