@@ -21,6 +21,7 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
  */
 export class Function extends cloud.Function implements ISimulatorResource {
   private readonly timeout: Duration;
+  private readonly concurrency: number;
   constructor(
     scope: Construct,
     id: string,
@@ -31,6 +32,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
 
     // props.memory is unused since we are not simulating it
     this.timeout = props.timeout ?? Duration.fromMinutes(1);
+    this.concurrency = props.concurrency ?? 100;
   }
 
   public toSimulator(): BaseResourceSchema {
@@ -44,6 +46,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
         sourceCodeLanguage: "javascript",
         environmentVariables: this.env,
         timeout: this.timeout.seconds * 1000,
+        concurrency: this.concurrency,
       },
       attrs: {} as any,
     };
