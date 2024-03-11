@@ -62,6 +62,11 @@ export class Node {
    */
   public hidden?: boolean;
 
+  /**
+   * The color of the construct for display purposes.
+   */
+  public color?: string;
+
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
   private _app: IApp | undefined;

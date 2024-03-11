@@ -45,6 +45,7 @@ const Node = memo(
             <ResourceIcon
               resourceType={node.data?.type}
               resourcePath={node.data?.path}
+              color={node.data?.display?.color}
               solid
               {...props}
             />
