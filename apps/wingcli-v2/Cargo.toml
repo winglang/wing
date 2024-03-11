@@ -1,0 +1,30 @@
+[package]
+name = "wingcli"
+version = "0.59.24"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# Customizing CLI colored output
+anstyle = "1.0.6"
+# Check for tty
+atty = "0.2.14"
+# Drop in replacement for std::path but with only utf-8
+camino = "1.1.6"
+# Command line argument parsing
+clap = { version = "4.5.1", features = ["derive", "color"] }
+# Home directories
+home = "0.5.9"
+# Lazily evaluated static variables
+lazy_static = "1.4.0"
+# Enum parsing
+strum = { version = "0.26.1", features = ["derive"] }
+# Colors in terminal
+termcolor = "1.4.1"
+# Logging
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
+# Compilation
+wingc = { path = "../../libs/wingc" }
+wingii = { path = "../../libs/wingii" }

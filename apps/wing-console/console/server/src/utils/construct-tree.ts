@@ -1,4 +1,4 @@
-import { NodeDisplay } from "./constructTreeNodeMap.js";
+import type { NodeDisplay } from "./constructTreeNodeMap.js";
 
 /**
  * A node in the construct tree.

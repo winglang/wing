@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { WebsiteSchema } from "../wingsdk.js";
+import type { WebsiteSchema } from "../wingsdk.js";
 
 export const createWebsiteRouter = () => {
   return createRouter({

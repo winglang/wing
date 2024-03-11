@@ -4,7 +4,6 @@ import { createConsoleApp } from "@wingconsole/app";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { debug } from "debug";
 import { glob } from "glob";
-import open from "open";
 import { parseNumericString } from "../util";
 
 /**
@@ -83,11 +82,9 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     },
     platform: options?.platform,
     requireAcceptTerms: !!process.stdin.isTTY,
+    open: openBrowser,
   });
   const url = `http://localhost:${port}/`;
-  if (openBrowser) {
-    await open(url);
-  }
   console.log(`The Wing Console is running at ${url}`);
 
   const onExit = async (exitCode: number) => {

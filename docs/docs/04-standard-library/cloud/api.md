@@ -521,7 +521,7 @@ let ApiCorsOptions = cloud.ApiCorsOptions{ ... };
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowCredentials">allowCredentials</a></code> | <code>bool</code> | Whether to allow credentials. |
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowHeaders">allowHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed headers. |
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowMethods">allowMethods</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>&gt;</code> | The list of allowed methods. |
-| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin">allowOrigin</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed allowOrigin. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin">allowOrigin</a></code> | <code>str</code> | The allowed origin. |
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.exposeHeaders">exposeHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of exposed headers. |
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.maxAge">maxAge</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long the browser should cache preflight request results. |
 
@@ -583,20 +583,20 @@ The list of allowed methods.
 ##### `allowOrigin`<sup>Optional</sup> <a name="allowOrigin" id="@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin"></a>
 
 ```wing
-allowOrigin: MutArray<str>;
+allowOrigin: str;
 ```
 
-- *Type:* MutArray&lt;str&gt;
-- *Default:* ["*"]
+- *Type:* str
+- *Default:* "*"
 
-The list of allowed allowOrigin.
+The allowed origin.
 
 ---
 
 *Example*
 
 ```wing
-["https://example.com"]
+"https://example.com"
 ```
 
 
@@ -763,7 +763,7 @@ corsOptions: ApiCorsOptions;
 ```
 
 - *Type:* <a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a>
-- *Default:* Default CORS options are applied when `cors` is set to `true` allowOrigin: ["*"], allowMethods: [ HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS, ], allowHeaders: ["Content-Type", "Authorization"], exposeHeaders: [], allowCredentials: false,
+- *Default:* Default CORS options are applied when `cors` is set to `true` allowOrigin: "*", allowMethods: [ HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS, ], allowHeaders: ["Content-Type", "Authorization"], exposeHeaders: [], allowCredentials: false,
 
 Options for configuring the API's CORS behavior across all routes.
 
@@ -774,7 +774,7 @@ Options can also be overridden on a per-route basis. (not yet implemented)
 *Example*
 
 ```wing
-{ allowOrigin: ["https://example.com"] }
+{ allowOrigin: "https://example.com" }
 ```
 
 

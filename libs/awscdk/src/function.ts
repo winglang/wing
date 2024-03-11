@@ -4,15 +4,13 @@ import {
   Architecture,
   Function as CdkFunction,
   Code,
-  IEventSource,
   Runtime,
 } from "aws-cdk-lib/aws-lambda";
-import {
-  LogGroup, RetentionDays
-} from "aws-cdk-lib/aws-logs";
+import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Asset } from "aws-cdk-lib/aws-s3-assets";
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { cloud, std, core } from "@winglang/sdk";
+import { NotImplementedError } from "@winglang/sdk/lib/core/errors";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
 import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
 import { resolve } from "path";
@@ -20,11 +18,37 @@ import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
 
 /**
+ * Implementation of `awscdk.Function` are expected to implement this
+ */
+export interface IAwsCdkFunction extends IConstruct {
+  awscdkFunction: CdkFunction;
+}
+
+export function isAwsCdkFunction(x: any): x is IAwsCdkFunction {
+  return typeof x["awscdkFunction"] === "object";
+}
+
+/**
+ * Adds a bunch of policy statements to the function's role.
+ */
+export function addPolicyStatements(
+  fn: CdkFunction,
+  statements: PolicyStatement[]
+) {
+  for (const statement of statements) {
+    fn.addToRolePolicy(new CdkPolicyStatement(statement));
+  }
+}
+
+/**
  * AWS implementation of `cloud.Function`.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.Function implements IAwsFunction {
+export class Function
+  extends cloud.Function
+  implements IAwsCdkFunction, IAwsFunction
+{
   private readonly function: CdkFunction;
   private readonly assetPath: string;
 
@@ -36,6 +60,12 @@ export class Function extends cloud.Function implements IAwsFunction {
   ) {
     super(scope, id, inflight, props);
 
+    if (props.concurrency != null) {
+      throw new NotImplementedError(
+        "Function concurrency isn't implemented yet on the current target."
+      );
+    }
+
     // The code in `this.entrypoint` will be replaced during preSynthesize
     // but we produce an initial version and bundle it so that `lambda.Function`
     // has something to work with.
@@ -44,42 +74,19 @@ export class Function extends cloud.Function implements IAwsFunction {
     writeFileSync(this.entrypoint, inflightCodeApproximation);
     const bundle = createBundle(this.entrypoint);
 
-    const logRetentionDays =
-      props.logRetentionDays === undefined
-        ? 30
-        : props.logRetentionDays < 0
-          ? RetentionDays.INFINITE // Negative value means Infinite retention
-          : props.logRetentionDays;
-
     const code = Code.fromAsset(resolve(bundle.directory));
 
-    const logs = new LogGroup(this, "LogGroup", {
-      retention: logRetentionDays
-    });
-
-    this.function = new CdkFunction(this, "Default", {
-      handler: "index.handler",
-      code,
-      runtime: Runtime.NODEJS_20_X,
-      environment: {
-        NODE_OPTIONS: "--enable-source-maps",
-        ...this.env
-      },
-      timeout: props.timeout
-        ? Duration.seconds(props.timeout.seconds)
-        : Duration.minutes(1),
-      memorySize: props.memory ?? 1024,
-      architecture: Architecture.ARM_64,
-      logGroup: logs
-    });
+    this.function = this.createFunction(code, props);
 
     // hack: accessing private field from aws_lambda.AssetCode
     // https://github.com/aws/aws-cdk/blob/109b2abe4c713624e731afa1b82c3c1a3ba064c9/packages/aws-cdk-lib/aws-lambda/lib/code.ts#L266
     const asset: Asset = (code as any).asset;
     if (!asset.assetPath) {
-      throw new Error("AWS CDK 'Asset' class no longer has an 'assetPath' property");
+      throw new Error(
+        "AWS CDK 'Asset' class no longer has an 'assetPath' property"
+      );
     }
-    this.assetPath = asset.assetPath
+    this.assetPath = asset.assetPath;
   }
 
   /** @internal */
@@ -92,7 +99,7 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     // copy files from bundle.directory to this.assetPath
     const assetDir = resolve(App.of(this).outdir, this.assetPath);
-    rmSync(assetDir, { recursive: true, force: true })
+    rmSync(assetDir, { recursive: true, force: true });
     renameSync(bundle.directory, assetDir);
   }
 
@@ -105,15 +112,17 @@ export class Function extends cloud.Function implements IAwsFunction {
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("functions can only be bound by awscdk.Function for now");
+    if (!isAwsCdkFunction(host)) {
+      throw new Error("Expected host to implement IAwsCdkFunction");
     }
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
-      host.addPolicyStatements({
-        actions: ["lambda:InvokeFunction"],
-        resources: [`${this.function.functionArn}`],
-      });
+      host.awscdkFunction.addToRolePolicy(
+        new CdkPolicyStatement({
+          actions: ["lambda:InvokeFunction"],
+          resources: [`${this.function.functionArn}`],
+        })
+      );
     }
 
     // The function name needs to be passed through an environment variable since
@@ -125,12 +134,47 @@ export class Function extends cloud.Function implements IAwsFunction {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "FunctionClient",
-      [`process.env["${this.envName()}"], "${this.node.path}"`]
-    );
+    return core.InflightClient.for(__dirname, __filename, "FunctionClient", [
+      `process.env["${this.envName()}"], "${this.node.path}"`,
+    ]);
+  }
+
+  /**
+   * Can be overridden by subclasses to customize the AWS CDK function creation.
+   * @param code The AWS Lambda `Code` object that represents the inflight closure defined for this function.
+   * @param props Cloud function properties.
+   * @returns an object that implements `aws-lambda.IFunction`.
+   */
+  protected createFunction(
+    code: Code,
+    props: cloud.FunctionProps
+  ): CdkFunction {
+    const logRetentionDays =
+      props.logRetentionDays === undefined
+        ? 30
+        : props.logRetentionDays < 0
+        ? RetentionDays.INFINITE // Negative value means Infinite retention
+        : props.logRetentionDays;
+
+    const logs = new LogGroup(this, "LogGroup", {
+      retention: logRetentionDays,
+    });
+
+    return new CdkFunction(this, "Default", {
+      handler: "index.handler",
+      code,
+      runtime: Runtime.NODEJS_20_X,
+      environment: {
+        NODE_OPTIONS: "--enable-source-maps",
+        ...this.env,
+      },
+      timeout: props.timeout
+        ? Duration.seconds(props.timeout.seconds)
+        : Duration.minutes(1),
+      memorySize: props.memory ?? 1024,
+      architecture: Architecture.ARM_64,
+      logGroup: logs,
+    });
   }
 
   /**
@@ -154,17 +198,11 @@ export class Function extends cloud.Function implements IAwsFunction {
     }
   }
 
-  /** @internal */
-  public _addEventSource(eventSource: IEventSource) {
-    this.function.addEventSource(eventSource);
-  }
-
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  /** @internal */
-  get _function() {
+  public get awscdkFunction() {
     return this.function;
   }
 

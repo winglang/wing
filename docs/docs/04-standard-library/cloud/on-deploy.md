@@ -175,12 +175,26 @@ let OnDeployProps = cloud.OnDeployProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
 | <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.executeAfter">executeAfter</a></code> | <code>MutArray&lt;constructs.Construct&gt;</code> | Execute this trigger only after these resources have been provisioned. |
 | <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.executeBefore">executeBefore</a></code> | <code>MutArray&lt;constructs.Construct&gt;</code> | Adds this trigger as a dependency on other constructs. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.OnDeployProps.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
 
 ---
 

@@ -1,6 +1,6 @@
 import { KeyValueList, ResponseInput } from "@wingconsole/design-system";
 
-import { ApiResponseHeader } from "../shared/api.js";
+import type { ApiResponseHeader } from "../shared/api.js";
 
 export interface ApiHeadersPanelProps {
   headers: ApiResponseHeader[];

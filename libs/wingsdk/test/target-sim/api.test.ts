@@ -669,7 +669,7 @@ test("api with custom CORS settings", async () => {
   const api = new cloud.Api(app, "my_api", {
     cors: true,
     corsOptions: {
-      allowOrigin: ["https://example.com"],
+      allowOrigin: "https://example.com",
       allowCredentials: true,
       exposeHeaders: ["x-wingnuts"],
     },

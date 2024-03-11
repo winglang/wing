@@ -1,5 +1,6 @@
 bring cloud;
 bring http;
+bring util;
 
 /**
  * The example below is a simple note-taking app.
@@ -26,59 +27,105 @@ bring http;
  * If you have not made changes to this template you can find your function names in AWS using the following command:
  * `aws lambda list-functions --query "Functions[?starts_with(FunctionName, 'Consumer')].FunctionName"`
  */
-let noteBucket = new cloud.Bucket();
+ class NoteService {
+  pub api: cloud.Api;
+  notes: cloud.Bucket;
 
-let api = new cloud.Api();
+  new() {
+    this.notes = new cloud.Bucket() as "my-notes";
+    this.api = new cloud.Api() as "notes-api";
 
-api.get("/note", inflight (request) => {
-  let noteName = request.query.get("name"); 
-  let note = noteBucket.get(noteName);
 
-  return {
-    status: 200,
-    body: note
-  };
-});
+    let notes = this.notes;
 
-api.put("/note/:name", inflight (request) => {
-  let note = request.body;
-  let noteName = request.vars.get("name");
+    this.api.get("/note", inflight(request) => {
+      let noteName = request.query.get("name");
+      let note = notes.tryGet(noteName);
 
-  if (note == "") {
-    return {
-      status: 400,
-      body: "note is required"
-    };
+      if let note = note {
+        return {
+          status: 200,
+          body: "{note}"
+        };
+      } else {
+        return {
+          status: 400,
+          body: "Unable to find note named: {noteName}"
+        };
+      }
+    });
+
+    this.api.post("/note/:name", inflight (request) => {
+      let note = request.body;
+      let noteName = request.vars.get("name");
+
+      if (note == "") {
+        return {
+          status: 400,
+          body: "note is required!"
+        };
+      }
+
+      if let note = note {
+        notes.put(noteName, note);
+        return {
+          status: 200,
+          body: "note: {noteName} saved!"
+        };
+      }
+    });
+
+    this.api.delete("/note/:name", inflight(request) => {
+      let noteName = request.vars.get("name");
+
+      if notes.tryDelete(noteName) {
+        return {
+          status: 200,
+          body: "note: {noteName} was deleted!"
+        };
+      }
+
+      return {
+        status: 404,
+        body: "Unable to find note named: {noteName}"
+      };
+    });
   }
+}
 
-  noteBucket.put(noteName, note ?? "");
-
-  return {
-    status: 200,
-    body: "note: {noteName} saved!"
-  };
-});
+let noteService = new NoteService();
 
 // Consumer functions (not required for the app to work, but useful for testing)
-new cloud.Function(inflight (event: str?) => {
-  if let event = event {
-    let parts = event.split(":");
-    let name = parts.at(0);
-    let note = parts.at(1);
-
-    let response = http.put("{api.url}/note/{name}", {
-      body: "{note}"
-    });
-    return response.body;
-  }
-
-  return "event is required `NAME:NOTE`";
-}) as "Consumer-PUT";
-
-new cloud.Function(inflight (event: str?) => {
-  if let event = event {
-    return http.get("{api.url}/note?name={event}").body;
-  }
-
-  return "event is required `NAME`";
-}) as "Consumer-GET";
+if util.env("WING_TARGET") == "tf-aws" {
+  new cloud.Function(inflight (event: str?) => {
+    if let event = event {
+      let parts = event.split(":");
+      let name = parts.at(0);
+      let note = parts.at(1);
+  
+      let response = http.post("{noteService.api.url}/note/{name}", {
+        body: "{note}"
+      });
+      return response.body;
+    }
+  
+    return "event is required `NAME:NOTE`";
+  }) as "Consumer-PUT";
+  
+  new cloud.Function(inflight (event: str?) => {
+    if let event = event {
+      let response = http.delete("{noteService.api.url}/note/{event}");
+      return response.body;
+    }
+  
+    return "event is required `NAME`";
+  }) as "Consumer-DELETE";
+  
+  new cloud.Function(inflight (event: str?) => {
+    if let event = event {
+      return http.get("{noteService.api.url}/note?name={event}").body;
+    }
+  
+    return "event is required `NAME`";
+  }) as "Consumer-GET";
+}

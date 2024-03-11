@@ -1,4 +1,5 @@
 import { IEventPublisher } from "./event-mapping";
+import type { Function as FunctionClient } from "./function.inflight";
 import {
   QueueAttributes,
   QueueSchema,
@@ -149,6 +150,16 @@ export class Queue
         if (!fnClient) {
           throw new Error("No function client found");
         }
+
+        // If the function we picked is at capacity, keep the messages in the queue
+        const hasWorkers = await (
+          fnClient as FunctionClient
+        ).hasAvailableWorkers();
+        if (!hasWorkers) {
+          this.messages.push(...messages);
+          continue;
+        }
+
         this.context.addTrace({
           type: TraceType.RESOURCE,
           data: {
@@ -166,6 +177,14 @@ export class Queue
         void fnClient
           .invoke(JSON.stringify({ messages: messagesPayload }))
           .catch((err) => {
+            // If the function is at a concurrency limit, pretend we just didn't call it
+            if (
+              err.message ===
+              "Too many requests, the function has reached its concurrency limit."
+            ) {
+              this.messages.push(...messages);
+              return;
+            }
             // If the function returns an error, put the message back on the queue after timeout period
             this.context.addTrace({
               data: {
