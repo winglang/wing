@@ -5,6 +5,7 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket } from "./bucket";
 import { core } from "..";
+import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
 import { ProjectIamCustomRole } from "../.gen/providers/google/project-iam-custom-role";
@@ -20,7 +21,6 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
-import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
