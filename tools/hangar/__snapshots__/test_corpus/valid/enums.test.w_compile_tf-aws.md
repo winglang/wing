@@ -21,6 +21,28 @@ module.exports = function({ $SomeEnum, $one, $two }) {
 //# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
+## inflight.$Closure2-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $SomeEnum }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $SomeEnum.ONE), "ONE"), "\"{SomeEnum.ONE}\" == \"ONE\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $SomeEnum.TWO), "TWO"), "\"{SomeEnum.TWO}\" == \"TWO\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $SomeEnum.THREE), "THREE"), "\"{SomeEnum.THREE}\" == \"THREE\"");
+    }
+  }
+  return $Closure2;
+}
+//# sourceMappingURL=inflight.$Closure2-1.js.map
+```
+
 ## main.tf.json
 ```json
 {
@@ -54,9 +76,9 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     const SomeEnum =
       (function (tmp) {
-        tmp[tmp["ONE"] = 0] = ",ONE";
-        tmp[tmp["TWO"] = 1] = ",TWO";
-        tmp[tmp["THREE"] = 2] = ",THREE";
+        tmp["ONE"] = "ONE";
+        tmp["TWO"] = "TWO";
+        tmp["THREE"] = "THREE";
         return tmp;
       })({})
     ;
@@ -99,11 +121,48 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
+            $SomeEnum: ${$stdlib.core.liftObject(SomeEnum)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType()};
+            const client = new $Closure2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
     const opt = undefined;
     const three = SomeEnum.THREE;
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight", new $Closure1(this, "$Closure1"));
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, SomeEnum.ONE), "ONE"), "\"{SomeEnum.ONE}\" == \"ONE\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, SomeEnum.TWO), "TWO"), "\"{SomeEnum.TWO}\" == \"TWO\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, SomeEnum.THREE), "THREE"), "\"{SomeEnum.THREE}\" == \"THREE\"");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:toStr inflight", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

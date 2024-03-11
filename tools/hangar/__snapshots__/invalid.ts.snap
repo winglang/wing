@@ -4113,6 +4113,13 @@ exports[`void_in_expression_position.test.w 1`] = `
   |            ^^^ Property not found
 
 
+error: Expected type to be one of \\"str,num,Json,MutJson\\", but got \\"void\\" instead
+  --> ../../../examples/tests/invalid/void_in_expression_position.test.w:4:22
+  |
+4 | let x = \\"my name is {log(\\"mister cloud\\")}\\";
+  |                      ^^^^^^^^^^^^^^^^^^^ Expected type to be one of \\"str,num,Json,MutJson\\", but got \\"void\\" instead
+
+
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:7:9
   |
