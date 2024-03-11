@@ -1338,7 +1338,7 @@ pub struct Types {
 	/// A map from source paths to type information about that path
 	/// If it's a file, we save its symbol environment, and if it's a directory, we save a namespace that points to
 	/// all of the symbol environments of the files (or subdirectories) in that directory
-	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
+	pub source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
 	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,

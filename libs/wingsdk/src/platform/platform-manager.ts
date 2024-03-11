@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { basename, dirname, join } from "path";
 import { cwd } from "process";
 import * as vm from "vm";
@@ -21,6 +21,42 @@ export class PlatformManager {
 
   constructor(options: PlatformManagerOptions) {
     this.platformPaths = options.platformPaths ?? [];
+    this.retrieveImplicitPlatforms();
+  }
+
+  /**
+   * Retrieve all implicit platform declarations.
+   *
+   * These are platforms that are not explicitly declared in the cli options
+   * but are implicitly available to the app.
+   *
+   * We look for platforms in the following locations:
+   * - The source directory
+   * - Any imported namespaces (provided by the wingc compiler output)
+   *
+   * To determine if a directory contains a platform, we check if it contains a file named "platform.js"
+   * TODO: Support platforms defined in Wing (platform.w) https://github.com/winglang/wing/issues/4937
+   */
+  private retrieveImplicitPlatforms() {
+    const importedNamespaces = process.env.WING_IMPORTED_NAMESPACES?.split(";");
+    const sourceDir = process.env.WING_SOURCE_DIR!;
+
+    const dirContainsPlatform = (dir: string) =>
+      existsSync(join(dir, "platform.js"));
+
+    if (sourceDir) {
+      if (dirContainsPlatform(sourceDir)) {
+        this.platformPaths.push(join(sourceDir, "platform.js"));
+      }
+    }
+
+    if (importedNamespaces) {
+      importedNamespaces.forEach((namespaceDir) => {
+        if (dirContainsPlatform(namespaceDir)) {
+          this.platformPaths.push(join(namespaceDir, "platform.js"));
+        }
+      });
+    }
   }
 
   private loadPlatformPath(platformPath: string) {
