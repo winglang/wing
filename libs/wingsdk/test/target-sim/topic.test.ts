@@ -1,10 +1,5 @@
 import { test, expect } from "vitest";
-import {
-  listMessages,
-  treeJsonOf,
-  waitUntilTrace,
-  waitUntilTraceCount,
-} from "./util";
+import { treeJsonOf, waitUntilTrace } from "./util";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
