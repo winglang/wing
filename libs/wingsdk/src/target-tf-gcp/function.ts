@@ -8,6 +8,7 @@ import { core } from "..";
 import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
+// import { CloudfunctionsFunctionIamBinding } from "../.gen/providers/google/cloudfunctions-function-iam-binding";
 import { ProjectIamCustomRole } from "../.gen/providers/google/project-iam-custom-role";
 import { ProjectIamMember } from "../.gen/providers/google/project-iam-member";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
@@ -312,17 +313,15 @@ export class Function extends cloud.Function {
    * @param serviceAccount The service account to grant invoke permissions to.
    */
   public addPermissionToInvoke(serviceAccount: ServiceAccount): void {
-    new CloudfunctionsFunctionIamMember(
-      this,
-      `InvokerPermission-${this.node.addr.substring(-8)}`,
-      {
-        project: this.function.project,
-        region: this.function.region,
-        cloudFunction: this.function.name,
-        role: "roles/cloudfunctions.invoker",
-        member: `serviceAccount:${serviceAccount.email}`,
-      }
-    );
+    const random = Math.floor(Math.random() * (1 - 100 + 1)) + 1;
+
+    new CloudfunctionsFunctionIamMember(this, `invoker-permission-${random}`, {
+      project: this.function.project,
+      region: this.function.region,
+      cloudFunction: this.function.name,
+      role: "roles/cloudfunctions.invoker",
+      member: `serviceAccount:${serviceAccount.email}`,
+    });
   }
 
   public addScheduler(
