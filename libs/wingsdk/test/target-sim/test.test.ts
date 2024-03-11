@@ -35,7 +35,7 @@ test("create a test", async () => {
       sourceCodeFile: expect.any(String),
       sourceCodeLanguage: "javascript",
       timeout: 60000,
-      concurrency: 10,
+      concurrency: 100,
     },
     type: "@winglang/sdk.cloud.Function",
   });

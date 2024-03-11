@@ -47,7 +47,7 @@ return class Handler {
         "attrs": {},
         "path": "root/my_function",
         "props": {
-          "concurrency": 10,
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",

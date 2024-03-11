@@ -54,8 +54,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
-        await this.createBundlePromise; // ensure inflight code is bundled before doing any work
-        const worker = this.findAvailableWorker();
+        const worker = await this.findAvailableWorker();
         if (!worker) {
           throw new Error(
             "Too many requests, the function has reached its concurrency limit."
@@ -70,8 +69,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     await this.context.withTrace({
       message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
-        await this.createBundlePromise; // ensure inflight code is bundled before doing any work
-        const worker = this.findAvailableWorker();
+        const worker = await this.findAvailableWorker();
         if (!worker) {
           throw new Error(
             "Too many requests, the function has reached its concurrency limit."
@@ -112,14 +110,14 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     );
   }
 
-  private findAvailableWorker(): Sandbox | undefined {
+  private async findAvailableWorker(): Promise<Sandbox | undefined> {
     const worker = this.workers.find((w) => w.isAvailable());
     if (worker) {
       return worker;
     }
 
     if (this.workers.length < this.maxWorkers) {
-      const newWorker = this.initWorker();
+      const newWorker = await this.initWorker();
       this.workers.push(newWorker);
       return newWorker;
     }
@@ -127,7 +125,10 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return undefined;
   }
 
-  private initWorker(): Sandbox {
+  private async initWorker(): Promise<Sandbox> {
+    // ensure inflight code is bundled before we create any workers
+    await this.createBundlePromise;
+
     if (!this.bundle) {
       throw new Error("Bundle not created");
     }

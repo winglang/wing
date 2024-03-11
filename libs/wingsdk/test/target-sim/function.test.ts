@@ -49,7 +49,7 @@ test("create a function", async () => {
       environmentVariables: {
         ENV_VAR1: "true",
       },
-      concurrency: 10,
+      concurrency: 100,
       timeout: 60000,
     },
     type: cloud.FUNCTION_FQN,
