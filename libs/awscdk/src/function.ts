@@ -19,7 +19,7 @@ import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
 
 /**
- * Implementation of `awscdk.Function` are expected to implement thi
+ * Implementation of `awscdk.Function` are expected to implement this
  */
 export interface IAwsCdkFunction extends IConstruct {
   awscdkFunction: CdkFunction;
