@@ -30,6 +30,7 @@ export class DynamodbTable
     process.env.WING_DYNAMODB_IMAGE ?? "amazon/dynamodb-local:2.0.0";
   private readonly context: ISimulatorContext;
   private client?: DynamoDBClient;
+  private _endpoint?: string;
 
   public constructor(
     private props: DynamodbTableSchema["props"],
@@ -51,6 +52,8 @@ export class DynamodbTable
         containerPort: "8000",
       });
 
+      this._endpoint = `http://0.0.0.0:${hostPort}`;
+
       // dynamodb url based on host port
       this.client = new DynamoDBClient({
         region: "local",
@@ -58,7 +61,7 @@ export class DynamodbTable
           accessKeyId: "x",
           secretAccessKey: "y",
         },
-        endpoint: `http://0.0.0.0:${hostPort}`,
+        endpoint: this._endpoint,
       });
 
       await this.createTable();
@@ -75,9 +78,21 @@ export class DynamodbTable
     this.client?.destroy();
     // stop the dynamodb container
     await runCommand("docker", ["rm", "-f", this.containerName]);
+    this._endpoint = undefined;
   }
 
   public async save(): Promise<void> {}
+
+  /**
+   * Returns the local endpoint of the DynamoDB table.
+   */
+  public async endpoint(): Promise<string> {
+    if (!this._endpoint) {
+      throw new Error("DynamoDB hasn't been started");
+    }
+
+    return this._endpoint;
+  }
 
   public async _rawClient(): Promise<DynamoDBClient> {
     if (this.client) {
