@@ -1,7 +1,7 @@
 import { CfnOutput, Lazy } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { Function as AwsFunction } from "./function";
 import { core, std } from "@winglang/sdk";
+import { isAwsCdkFunction } from "./function";
 
 const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WingTestRunnerFunctionArns";
 
@@ -28,10 +28,6 @@ export class TestRunner extends std.TestRunner {
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!(host instanceof AwsFunction)) {
-      throw new Error("TestRunner can only be bound by tfaws.Function for now");
-    }
-
     // Collect all of the test functions and their ARNs, and pass them to the
     // test engine so they can be invoked inflight.
     // TODO: are we going to run into AWS's 4KB environment variable limit here?
@@ -66,12 +62,12 @@ export class TestRunner extends std.TestRunner {
     const arns = new Map<string, string>();
     for (const test of this.findTests()) {
       if (test._fn) {
-        if (!(test._fn instanceof AwsFunction)) {
+        if (!(isAwsCdkFunction(test._fn))) {
           throw new Error(
             `Unsupported test function type, ${test._fn.node.path} was not a tfaws.Function`
           );
         }
-        arns.set(test.node.path, (test._fn as AwsFunction).functionArn);
+        arns.set(test.node.path, test._fn.awscdkFunction.functionArn);
       }
     }
     return arns;
