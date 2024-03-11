@@ -54,7 +54,7 @@ async handle(event) {
         "attrs": {},
         "path": "root/my_function",
         "props": {
-          "concurrency": 10,
+          "concurrency": 100,
           "environmentVariables": {
             "ENV_VAR1": "true",
           },
@@ -228,7 +228,7 @@ async handle(event) {
         "attrs": {},
         "path": "root/my_function",
         "props": {
-          "concurrency": 10,
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
@@ -400,7 +400,7 @@ async handle(event) {
         "attrs": {},
         "path": "root/my_function",
         "props": {
-          "concurrency": 10,
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
@@ -572,7 +572,7 @@ async handle(event) {
         "attrs": {},
         "path": "root/my_function",
         "props": {
-          "concurrency": 10,
+          "concurrency": 100,
           "environmentVariables": {
             "PIG_LATIN": "true",
           },
@@ -736,7 +736,7 @@ async handle() {
         "attrs": {},
         "path": "root/my_function",
         "props": {
-          "concurrency": 10,
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
@@ -958,7 +958,7 @@ return class Handler {
         "attrs": {},
         "path": "root/Function.0",
         "props": {
-          "concurrency": 10,
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function.0_c8d5fca2.js",
           "sourceCodeLanguage": "javascript",
@@ -971,7 +971,7 @@ return class Handler {
         "attrs": {},
         "path": "root/Function.1",
         "props": {
-          "concurrency": 10,
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function.1_c89ed254.js",
           "sourceCodeLanguage": "javascript",
@@ -984,7 +984,7 @@ return class Handler {
         "attrs": {},
         "path": "root/Function.2",
         "props": {
-          "concurrency": 10,
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function.2_c8cd6c39.js",
           "sourceCodeLanguage": "javascript",
@@ -997,7 +997,7 @@ return class Handler {
         "attrs": {},
         "path": "root/Function.3",
         "props": {
-          "concurrency": 10,
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function.3_c8badafa.js",
           "sourceCodeLanguage": "javascript",
