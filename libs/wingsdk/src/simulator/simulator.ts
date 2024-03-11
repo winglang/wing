@@ -804,7 +804,6 @@ export class Simulator {
           throw new Error(
             `Unable to resolve attribute '${token.attr}' for resource: ${target.path}`
           );
-          // return undefined;
         }
         return value;
       }
