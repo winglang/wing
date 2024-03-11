@@ -412,7 +412,7 @@ export interface AddConnectionProps {
 
   /**
    * An operation that the target construct supports.
-   * @defualt - no operation
+   * @default - no operation
    */
   readonly targetOp?: string;
 
