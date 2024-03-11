@@ -3219,16 +3219,12 @@ impl<'a> TypeChecker<'a> {
 		first_expected_type
 	}
 
-	pub fn validate_type_is_stringable(&mut self, actual_type: TypeRef, span: &impl Spanned) -> TypeRef {
-		if actual_type.is_stringable() {
-			return actual_type;
+	pub fn validate_type_is_stringable(&mut self, actual_type: TypeRef, span: &impl Spanned) {
+		if !actual_type.is_stringable() {
+			let message = format!("Expected type to be stringable, but got \"{actual_type}\" instead");
+			let hint = "str, num, bool, json, and enums are stringable".to_string();
+			self.spanned_error_with_hints(span, message, vec![hint]);
 		}
-
-		let message = format!("Expected type to be stringable, but got \"{actual_type}\" instead");
-		let hint = "str, num, bool, json, and enums are stringable".to_string();
-		self.spanned_error_with_hints(span, message, vec![hint]);
-
-		self.types.string()
 	}
 
 	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {
