@@ -43,7 +43,7 @@ export interface FunctionProps {
 
   /**
    * The maximum concurrent invocations that can run at one time.
-   * @default - platform specific limits
+   * @default - platform specific limits (100 on the simulator)
    */
   readonly concurrency?: number;
 }

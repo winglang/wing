@@ -32,7 +32,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
 
     // props.memory is unused since we are not simulating it
     this.timeout = props.timeout ?? Duration.fromMinutes(1);
-    this.concurrency = props.concurrency ?? 10;
+    this.concurrency = props.concurrency ?? 100;
   }
 
   public toSimulator(): BaseResourceSchema {
