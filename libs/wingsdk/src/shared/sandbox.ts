@@ -1,4 +1,9 @@
 import * as cp from "child_process";
+import { writeFileSync } from "fs";
+import { mkdtemp, readFile, stat } from "fs/promises";
+import { tmpdir } from "os";
+import path from "path";
+import { Bundle, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
 
 export interface SandboxOptions {
@@ -30,6 +35,48 @@ type ProcessResponse =
     };
 
 export class Sandbox {
+  public static async createBundle(
+    entrypoint: string,
+    log?: (message: string) => void
+  ): Promise<Bundle> {
+    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
+
+    let contents = (await readFile(entrypoint)).toString();
+
+    // log a warning if contents includes __dirname or __filename
+    if (contents.includes("__dirname") || contents.includes("__filename")) {
+      log?.(
+        `Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.`
+      );
+    }
+
+    // wrap contents with a shim that handles the communication with the parent process
+    // we insert this shim before bundling to ensure source maps are generated correctly
+    contents = `
+"use strict";
+${contents}
+process.on("message", async (message) => {
+  const { fn, args } = message;
+  try {
+    const value = await exports[fn](...args);
+    process.send({ type: "resolve", value });
+  } catch (err) {
+    process.send({ type: "reject", reason: err });
+  }
+});
+`;
+    const wrappedPath = entrypoint.replace(/\.js$/, ".sandbox.js");
+    writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
+    const bundle = createBundle(wrappedPath, [], workdir);
+
+    if (process.env.DEBUG) {
+      const fileStats = await stat(entrypoint);
+      log?.(`Bundled code (${fileStats.size} bytes).`);
+    }
+
+    return bundle;
+  }
+
   private readonly entrypoint: string;
   private readonly options: SandboxOptions;
 

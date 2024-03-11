@@ -1,10 +1,7 @@
-import { writeFileSync } from "fs";
-import { mkdtemp, readFile, stat } from "fs/promises";
-import { tmpdir } from "os";
 import * as path from "path";
 import { FunctionAttributes, FunctionSchema } from "./schema-resources";
 import { FUNCTION_FQN, IFunctionClient } from "../cloud";
-import { createBundle } from "../shared/bundling";
+import { Bundle } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
 import {
   ISimulatorContext,
@@ -14,7 +11,7 @@ import { TraceType } from "../std";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly originalFile: string;
-  private bundledFile: string | undefined;
+  private bundle: Bundle | undefined;
   private readonly env: Record<string, string>;
   private readonly context: ISimulatorContext;
   private readonly timeout: number;
@@ -33,46 +30,6 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     this.maxWorkers = props.concurrency;
 
     this.createBundlePromise = this.createBundle();
-  }
-
-  // Create a bundle with the code that will be run by all workers.
-  private async createBundle() {
-    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-
-    let contents = (await readFile(this.originalFile)).toString();
-
-    // log a warning if contents includes __dirname or __filename
-    if (contents.includes("__dirname") || contents.includes("__filename")) {
-      this.addTrace(
-        `Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.`,
-        false
-      );
-    }
-
-    // wrap contents with a shim that handles the communication with the parent process
-    // we insert this shim before bundling to ensure source maps are generated correctly
-    contents = `
-"use strict";
-${contents}
-process.on("message", async (message) => {
-  const { fn, args } = message;
-  try {
-    const value = await exports[fn](...args);
-    process.send({ type: "resolve", value });
-  } catch (err) {
-    process.send({ type: "reject", reason: err });
-  }
-});
-`;
-    const wrappedPath = this.originalFile.replace(/\.js$/, ".sandbox.js");
-    writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
-    const bundle = createBundle(wrappedPath, [], workdir);
-    this.bundledFile = bundle.entrypointPath;
-
-    if (process.env.DEBUG) {
-      const fileStats = await stat(this.originalFile);
-      this.addTrace(`Bundled code (${fileStats.size} bytes).`);
-    }
   }
 
   public async init(): Promise<FunctionAttributes> {
@@ -136,6 +93,12 @@ process.on("message", async (message) => {
     });
   }
 
+  private async createBundle(): Promise<void> {
+    this.bundle = await Sandbox.createBundle(this.originalFile, (msg) => {
+      this.addTrace(msg);
+    });
+  }
+
   // Used internally by cloud.Queue to apply backpressure
   public async hasAvailableWorkers(): Promise<boolean> {
     return (
@@ -160,11 +123,11 @@ process.on("message", async (message) => {
   }
 
   private initWorker(): Sandbox {
-    if (!this.bundledFile) {
+    if (!this.bundle) {
       throw new Error("Bundle not created");
     }
 
-    return new Sandbox(this.bundledFile, {
+    return new Sandbox(this.bundle.entrypointPath, {
       env: {
         ...this.env,
         WING_SIMULATOR_URL: this.context.serverUrl,
