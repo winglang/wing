@@ -5,7 +5,7 @@ import { cloud, core, std } from "@winglang/sdk";
 import { COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/commons";
 import { calculateCounterPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsCounter } from "@winglang/sdk/lib/shared-aws/counter";
-import { isAwsCdkFunction } from "./function";
+import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
@@ -41,9 +41,7 @@ export class Counter extends cloud.Counter implements IAwsCounter {
       throw new Error("Expected 'host' to implement 'isAwsCdkFunction' method");
     }
 
-    host.awscdkFunction.addToRolePolicy(new PolicyStatement(
-      ...calculateCounterPermissions(this.table.tableArn, ops)
-    ));
+    addPolicyStatements(host.awscdkFunction, calculateCounterPermissions(this.table.tableArn, ops));
 
     host.addEnvironment(this.envName(), this.table.tableName);
 

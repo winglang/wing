@@ -30,6 +30,15 @@ export function isAwsCdkFunction(x: any): x is IAwsCdkFunction {
 }
 
 /**
+ * Adds a bunch of policy statements to the function's role.
+ */
+export function addPolicyStatements(fn: CdkFunction, statements: PolicyStatement[]) {
+  for (const statement of statements) {
+    fn.addToRolePolicy(new CdkPolicyStatement(statement));
+  }
+}
+
+/**
  * AWS implementation of `cloud.Function`.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`

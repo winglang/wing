@@ -7,7 +7,7 @@ import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsTopic } from "@winglang/sdk/lib/shared-aws/topic";
-import { isAwsCdkFunction } from "./function";
+import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
@@ -64,9 +64,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       throw new Error("Expected 'host' to implement 'IAwsCdkFunction' method");
     }
 
-    host.awscdkFunction.addToRolePolicy(new PolicyStatement(
-      ...calculateTopicPermissions(this.topic.topicArn, ops)
-    ));
+    addPolicyStatements(host.awscdkFunction, calculateTopicPermissions(this.topic.topicArn, ops));
 
     host.addEnvironment(this.envName(), this.topic.topicArn);
 

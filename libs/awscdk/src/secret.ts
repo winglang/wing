@@ -4,7 +4,7 @@ import {
   Secret as CdkSecret,
 } from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
-import { isAwsCdkFunction } from "./function";
+import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { calculateSecretPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -53,9 +53,7 @@ export class Secret extends cloud.Secret {
       throw new Error("Expected 'host' to implement 'isAwsCdkFunction' method");
     }
 
-    host.awscdkFunction.addToRolePolicy(new PolicyStatement(
-      ...calculateSecretPermissions(this.arnForPolicies, ops)
-    ));
+    addPolicyStatements(host.awscdkFunction, calculateSecretPermissions(this.arnForPolicies, ops));
 
     host.addEnvironment(this.envName(), this.secret.secretArn);
 

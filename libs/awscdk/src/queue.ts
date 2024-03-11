@@ -8,7 +8,7 @@ import { std, core, cloud } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
-import { isAwsCdkFunction } from "./function";
+import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
@@ -94,9 +94,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
     const env = this.envName();
 
-    host.awscdkFunction.addToRolePolicy(new PolicyStatement(
-      ...calculateQueuePermissions(this.queue.queueArn, ops)
-    ));
+    addPolicyStatements(host.awscdkFunction, calculateQueuePermissions(this.queue.queueArn, ops));
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
