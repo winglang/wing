@@ -37,7 +37,12 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {
+    // We wait for the bundle to be created since there's no way to otherwise cancel the work.
+    // If the simulator runs for a short time (and cloud.Function is created and then deleted)
+    // and the bundling code is allowed to run after the simulator has stopped, it might fail
+    // and throw an error to the user because the files the simulator was using may no longer be there there.
     await this.createBundlePromise;
+
     for (const worker of this.workers) {
       await worker.cleanup();
     }
