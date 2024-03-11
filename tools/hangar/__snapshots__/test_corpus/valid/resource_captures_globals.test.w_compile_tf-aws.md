@@ -252,6 +252,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
+        "reserved_concurrent_executions": 10,
         "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage0_IamRole_961468EB.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",

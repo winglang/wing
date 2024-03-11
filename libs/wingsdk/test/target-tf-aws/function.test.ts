@@ -236,3 +236,33 @@ test("vpc permissions are added even if there is no policy", () => {
     },
   ]);
 });
+
+test("basic function with concurrency specified", () => {
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
+  new Function(app, "Function", inflight, { concurrency: 1 });
+  const output = app.synth();
+
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
+      reservedConcurrentExecutions: 1,
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("basic function with concurrency defaulted", () => {
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
+  new Function(app, "Function", inflight);
+  const output = app.synth();
+
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
+      reservedConcurrentExecutions: 10,
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});

@@ -40,6 +40,12 @@ export interface FunctionProps {
    * @default 30
    */
   readonly logRetentionDays?: number;
+
+  /**
+   * The maximum concurrent invocations that can run at one time.
+   * @default 10
+   */
+  readonly concurrency?: number;
 }
 
 /**

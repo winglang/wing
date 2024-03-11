@@ -329,7 +329,7 @@ let FunctionProps = cloud.FunctionProps{ ... };
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
-
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum number of concurrent invocations. |
 ---
 
 ##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.FunctionProps.property.env"></a>
@@ -383,6 +383,19 @@ timeout: duration;
 - *Default:* 1m
 
 The maximum amount of time the function can run.
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.FunctionProps.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* 10
+
+The maximum number of concurrent invocations. Invocations beyond this number will be queued and can timeout based on platform default.
 
 ---
 

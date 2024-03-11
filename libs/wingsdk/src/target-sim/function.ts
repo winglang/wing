@@ -29,7 +29,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
   ) {
     super(scope, id, inflight, props);
 
-    // props.memory is unused since we are not simulating it
+    // props.memory and props.concurrency are unused since we are not simulating it
     this.timeout = props.timeout ?? Duration.fromMinutes(1);
   }
 

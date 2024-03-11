@@ -269,6 +269,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
+        "reserved_concurrent_executions": 10,
         "role": "${aws_iam_role.cloudApi_get_users0_IamRole_5BFD476C.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",

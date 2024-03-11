@@ -12,7 +12,7 @@ import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
-import { DEFAULT_MEMORY_SIZE } from "../shared/function";
+import { DEFAULT_CONCURRENCY, DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Effect, IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost, Resource } from "../std";
@@ -227,6 +227,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         : Duration.fromMinutes(1).seconds,
       memorySize: props.memory ?? DEFAULT_MEMORY_SIZE,
       architectures: ["arm64"],
+      reservedConcurrentExecutions: props.concurrency ?? DEFAULT_CONCURRENCY,
     });
 
     if (
