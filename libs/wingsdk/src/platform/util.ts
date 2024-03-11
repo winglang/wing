@@ -102,16 +102,15 @@ export function loadPlatformSpecificValues() {
   return { ...fileValues, ...cliValues };
 }
 
-
 /**
  * Scans a directory for a platform file.
- * 
+ *
  * @param dir the directory to scan
  * @returns the path to the platform file, or undefined if none was found
  */
 export function scanDirForPlatformFile(dir: string): string | undefined {
   // Read each file in the directory
-  if(!existsSync(dir)) {
+  if (!existsSync(dir)) {
     return undefined;
   }
 
@@ -121,6 +120,6 @@ export function scanDirForPlatformFile(dir: string): string | undefined {
       return path.join(dir, file);
     }
   }
-  
+
   return undefined;
 }
