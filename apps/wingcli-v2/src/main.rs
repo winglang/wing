@@ -145,6 +145,8 @@ fn run_javascript_node(source_file: &Utf8Path, target_dir: &Utf8Path, target: Ta
 	command.env("WING_PLATFORMS", target.to_string());
 	command.env("WING_SOURCE_DIR", source_dir);
 	command.env("WING_SYNTH_DIR", target_dir);
+
+	tracing::info!("Running command: {:?}", command);
 	let status = command.status()?;
 	if !status.success() {
 		return Err("Node.js failed".into());

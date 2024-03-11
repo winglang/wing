@@ -944,6 +944,7 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
@@ -979,6 +980,7 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue_messages/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {
             "QUEUE_HANDLE_54fcf4cd": "\${wsim#root/my_queue#attrs.handle}",
           },
@@ -1204,6 +1206,7 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
