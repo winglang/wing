@@ -7,8 +7,6 @@ keywords: [platforms, targets, target, platform, aws, gcp, azure, sim, terraform
 
 When working with the Wing programming language, an integral part of the compilation process is the use of platform. In essence, platform specify how and where your application is deployed. They determine both the cloud environment and the provisioning engine that the code will be deployed with.
 
-## Platforms
-
 You can view the list of available builtin platform with the `wing compile --help` command. Here is an example of the output:
 
 ```sh
@@ -83,11 +81,17 @@ Though this may be a bit verbose. As an alternative you can use a values file. V
 Here is an example of using a `wing.toml` file to provide the same parameters as above:
 
 ```toml
-[tf-aws]
-vpc = "existing"
-vpcId = "vpc-1234567890"
-privateSubnetId = "subnet-1234567890"
-publicSubnetId = "subnet-1234567890"
+[ tf-aws ]
+# vpc can be set to "new" or "existing"
+vpc = "new"
+# vpc_lambda will ensure that lambda functions are created within the vpc on the private subnet
+vpc_lambda = true
+# vpc_api_gateway will ensure that the api gateway is created within the vpc on the private subnet
+vpc_api_gateway = true
+# The following parameters will be required if using "existing" vpc
+# vpc_id = "vpc-123xyz"
+# private_subnet_ids = ["subnet-123xyz"]
+# public_subnet_ids = ["subnet-123xyz"]
 ```
 
 #### Target-specific code
