@@ -180,7 +180,7 @@ export class Queue
             // If the function is at a concurrency limit, pretend we just didn't call it
             if (
               err.message ===
-              "Too many requests, the function has reach its concurrency limit."
+              "Too many requests, the function has reached its concurrency limit."
             ) {
               this.messages.push(...messages);
               return;

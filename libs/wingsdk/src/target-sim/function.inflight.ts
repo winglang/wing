@@ -58,7 +58,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         const worker = this.findAvailableWorker();
         if (!worker) {
           throw new Error(
-            "Too many requests, the function has reach its concurrency limit."
+            "Too many requests, the function has reached its concurrency limit."
           );
         }
         return worker.call("handler", payload);
@@ -74,7 +74,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         const worker = this.findAvailableWorker();
         if (!worker) {
           throw new Error(
-            "Too many requests, the function has reach its concurrency limit."
+            "Too many requests, the function has reached its concurrency limit."
           );
         }
         process.nextTick(() => {

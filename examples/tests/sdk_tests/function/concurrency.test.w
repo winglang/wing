@@ -16,7 +16,7 @@ if util.env("WING_TARGET") == "sim" {
     try {
       f1.invoke();
     } catch e {
-      assert(e.contains("Too many requests, the function has reach its concurrency limit"));
+      assert(e.contains("Too many requests, the function has reached its concurrency limit"));
       return;
     }
   
