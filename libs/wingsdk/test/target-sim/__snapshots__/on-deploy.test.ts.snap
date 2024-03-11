@@ -30,6 +30,7 @@ return class Handler {
         "attrs": {},
         "path": "root/my_on_deploy/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c83fbf14.js",
           "sourceCodeLanguage": "javascript",
