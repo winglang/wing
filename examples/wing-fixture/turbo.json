@@ -4,7 +4,8 @@
     "pipeline": {
       "compile": {
         "dependsOn": ["^compile"],
-        "inputs": ["**/*.w", "**/*.js", "**/*.ts"]
+        "inputs": ["**/*.w", "**/*.js", "**/*.ts"],
+        "outputs": ["target/wing-fixture.wsim/**"]
       },
       "topo": {}
     }
