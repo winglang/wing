@@ -1,4 +1,5 @@
 import { IEventPublisher } from "./event-mapping";
+import type { Function as FunctionClient } from "./function.inflight";
 import {
   QueueAttributes,
   QueueSchema,
@@ -151,7 +152,9 @@ export class Queue
         }
 
         // If the function we picked is at capacity, keep the messages in the queue
-        const hasWorkers = await (fnClient as any).hasAvailableWorkers();
+        const hasWorkers = await (
+          fnClient as FunctionClient
+        ).hasAvailableWorkers();
         if (!hasWorkers) {
           this.messages.push(...messages);
           continue;
