@@ -15,7 +15,6 @@ import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateBucketPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsBucket } from "@winglang/sdk/lib/shared-aws/bucket";
 import { IAwsCdkFunction, addPolicyStatements, isAwsCdkFunction } from "./function";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,

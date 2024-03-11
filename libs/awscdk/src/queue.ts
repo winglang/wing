@@ -9,7 +9,6 @@ import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS implementation of `cloud.Queue`.

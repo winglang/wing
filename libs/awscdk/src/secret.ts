@@ -7,7 +7,6 @@ import { Construct } from "constructs";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { calculateSecretPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS Implemntation of `cloud.Secret`

@@ -6,7 +6,6 @@ import { COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/commons";
 import { calculateCounterPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsCounter } from "@winglang/sdk/lib/shared-aws/counter";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS implementation of `cloud.Counter`.

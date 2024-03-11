@@ -8,7 +8,6 @@ import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsTopic } from "@winglang/sdk/lib/shared-aws/topic";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS Implementation of `cloud.Topic`.

@@ -6,7 +6,6 @@ import { core, ex, std } from "@winglang/sdk";
 import { ResourceNames } from "@winglang/sdk/lib/shared/resource-names";
 import { IAwsDynamodbTable, NAME_OPTS } from "@winglang/sdk/lib/shared-aws/dynamodb-table";
 import { calculateDynamodbTablePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS implementation of `ex.DynamodbTable`.
