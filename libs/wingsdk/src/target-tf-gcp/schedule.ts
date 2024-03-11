@@ -2,8 +2,8 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
-import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
-import { ProjectService } from "../.gen/providers/google/project-service";
+// import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
+// import { ProjectService } from "../.gen/providers/google/project-service";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -41,10 +41,10 @@ export class Schedule extends cloud.Schedule {
   ): cloud.Function {
     const uniqueId = this.node.addr.substring(0, 8);
 
-    const cloudSchedulerApi = new ProjectService(this, "CloudSchedulerAPI", {
-      service: "cloudscheduler.googleapis.com",
-      disableOnDestroy: false,
-    });
+    // const cloudSchedulerApi = new ProjectService(this, "CloudSchedulerAPI", {
+    //   service: "cloudscheduler.googleapis.com",
+    //   disableOnDestroy: false,
+    // });
 
     const functionHandler = convertBetweenHandlers(
       inflight,
@@ -79,22 +79,7 @@ export class Schedule extends cloud.Schedule {
 
     cronFunction.addPermissionToInvoke(schedulerServiceAccount);
 
-    let cronGpcFunction = Function.from(cronFunction);
-    if (cronGpcFunction) {
-      new CloudSchedulerJob(this, "Scheduler", {
-        name: `scheduler-${uniqueId}`,
-        description: `Trigger ${cronGpcFunction.name}`,
-        schedule: this.scheduleExpression,
-        timeZone: "Etc/UTC",
-        attemptDeadline: "300s",
-        httpTarget: {
-          httpMethod: "GET",
-          uri: cronGpcFunction.httpsTriggerUrl,
-          oidcToken: { serviceAccountEmail: schedulerServiceAccount.email },
-        },
-        dependsOn: [cloudSchedulerApi],
-      });
-    }
+    cronFunction.addScheduler(schedulerServiceAccount, this.scheduleExpression);
 
     Node.of(this).addConnection({
       source: this,

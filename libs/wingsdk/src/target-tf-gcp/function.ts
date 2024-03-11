@@ -20,6 +20,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
+import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
@@ -322,6 +323,26 @@ export class Function extends cloud.Function {
         member: `serviceAccount:${serviceAccount.email}`,
       }
     );
+  }
+
+  public addScheduler(
+    serviceAccount: ServiceAccount,
+    scheduleExpression: string
+  ): void {
+    const random = Math.floor(Math.random() * (1 - 100 + 1)) + 1;
+
+    new CloudSchedulerJob(this, "Scheduler", {
+      name: `scheduler-${random}`,
+      description: `Trigger`,
+      schedule: scheduleExpression,
+      timeZone: "Etc/UTC",
+      attemptDeadline: "300s",
+      httpTarget: {
+        httpMethod: "GET",
+        uri: this.function.httpsTriggerUrl,
+        oidcToken: { serviceAccountEmail: serviceAccount.email },
+      },
+    });
   }
 
   private envName(): string {
