@@ -1,7 +1,7 @@
 import { Fn, Token } from "aws-cdk-lib";
-import { Function } from "@winglang/sdk/lib/cloud";
 import { tokenEnvName, ITokenResolver } from "@winglang/sdk/lib/core/tokens";
 import { IInflightHost } from "@winglang/sdk/lib/std";
+import { isAwsCdkFunction } from "./function";
 
 /**
  * Represents values that can only be resolved after the app is synthesized.
@@ -41,8 +41,8 @@ export class CdkTokens implements ITokenResolver {
    * Binds the given token to the host.
    */
   public onLiftValue(host: IInflightHost, value: any) {
-    if (!(host instanceof Function)) {
-      throw new Error(`Tokens can only be bound by a Function for now`);
+    if (!isAwsCdkFunction(host)) {
+      throw new Error("Expected 'host' to implement 'isAwsCdkFunction' method");
     }
 
     let envValue;
@@ -65,9 +65,8 @@ export class CdkTokens implements ITokenResolver {
     }
 
     const envName = tokenEnvName(value.toString());
+
     // the same token might be bound multiple times by different variables/inflight contexts
-    if (host.env[envName] === undefined) {
-      host.addEnvironment(envName, envValue);
-    }
+    host.addEnvironment(envName, envValue);
   }
 }

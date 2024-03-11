@@ -3,12 +3,7 @@ import { test, expect } from "vitest";
 import { simulator, cloud, std } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-import { awscdkSanitize } from "./util";
-
-const CDK_APP_OPTS = {
-  stackName: "my-project",
-  entrypointDir: __dirname,
-};
+import { awscdkSanitize, CDK_APP_OPTS } from "./util";
 
 test("schedule behavior with rate", () => {
   // GIVEN

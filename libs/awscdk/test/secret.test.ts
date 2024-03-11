@@ -4,11 +4,7 @@ import { test, expect } from "vitest";
 import { cloud } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-
-const CDK_APP_OPTS = {
-  stackName: "my-project",
-  entrypointDir: __dirname,
-};
+import { CDK_APP_OPTS} from "./util"; 
 
 test("default secret behavior", () => {
   // GIVEN
