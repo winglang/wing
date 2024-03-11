@@ -3,12 +3,13 @@ import { Duration } from "aws-cdk-lib";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
-import { Function } from "./function";
 import { App } from "./app";
 import { std, core, cloud } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
+import { isAwsCdkFunction } from "./function";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -46,7 +47,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       "QueueSetConsumerHandlerClient"
     );
 
-    const fn = new Function(
+    const fn = new cloud.Function(
       // ok since we're not a tree root
       this.node.scope!,
       App.of(this).makeId(this, `${this.node.id}-SetConsumer`),
@@ -57,15 +58,15 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       }
     );
 
-    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
-    if (!(fn instanceof Function)) {
-      throw new Error("Queue only supports creating awscdk.Function right now");
+    if (!isAwsCdkFunction(fn)) {
+      throw new Error("Queue only supports creating IAwsCdkFunction right now");
     }
 
     const eventSource = new SqsEventSource(this.queue, {
       batchSize: props.batchSize ?? 1,
     });
-    fn._addEventSource(eventSource);
+
+    fn.awscdkFunction.addEventSource(eventSource);
 
     std.Node.of(this).addConnection({
       source: this,
@@ -87,15 +88,15 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("queues can only be bound by tfaws.Function for now");
+    if (!isAwsCdkFunction(host)) {
+      throw new Error("Expected 'host' to implement IAwsCdkFunction");
     }
 
     const env = this.envName();
 
-    host.addPolicyStatements(
+    host.awscdkFunction.addToRolePolicy(new PolicyStatement(
       ...calculateQueuePermissions(this.queue.queueArn, ops)
-    );
+    ));
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.

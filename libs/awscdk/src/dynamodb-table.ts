@@ -1,11 +1,12 @@
 import { RemovalPolicy } from "aws-cdk-lib";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { isAwsCdkFunction } from "./function";
 import { core, ex, std } from "@winglang/sdk";
 import { ResourceNames } from "@winglang/sdk/lib/shared/resource-names";
 import { IAwsDynamodbTable, NAME_OPTS } from "@winglang/sdk/lib/shared-aws/dynamodb-table";
 import { calculateDynamodbTablePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS implementation of `ex.DynamodbTable`.
@@ -41,15 +42,13 @@ export class DynamodbTable extends ex.DynamodbTable implements IAwsDynamodbTable
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error(
-        "Dynamodb tables can only be bound by tfaws.Function for now"
-      );
+    if (!isAwsCdkFunction(host)) {
+      throw new Error("Expected 'host' to implement 'isAwsCdkFunction' method");
     }
 
-    host.addPolicyStatements(
+    host.awscdkFunction.addToRolePolicy(new PolicyStatement(
       ...calculateDynamodbTablePermissions(this.table.tableArn, ops)
-    );
+    ));
 
     host.addEnvironment(this.envName(), this.table.tableName);
 

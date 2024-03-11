@@ -1,11 +1,12 @@
 import { RemovalPolicy } from "aws-cdk-lib";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
-import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/commons";
 import { calculateCounterPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsCounter } from "@winglang/sdk/lib/shared-aws/counter";
+import { isAwsCdkFunction } from "./function";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS implementation of `cloud.Counter`.
@@ -36,13 +37,13 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("counters can only be bound by awscdk.Function for now");
+    if (!isAwsCdkFunction(host)) {
+      throw new Error("Expected 'host' to implement 'isAwsCdkFunction' method");
     }
 
-    host.addPolicyStatements(
+    host.awscdkFunction.addToRolePolicy(new PolicyStatement(
       ...calculateCounterPermissions(this.table.tableArn, ops)
-    );
+    ));
 
     host.addEnvironment(this.envName(), this.table.tableName);
 

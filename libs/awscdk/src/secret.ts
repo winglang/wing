@@ -4,9 +4,10 @@ import {
   Secret as CdkSecret,
 } from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { isAwsCdkFunction } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { calculateSecretPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS Implemntation of `cloud.Secret`
@@ -48,13 +49,13 @@ export class Secret extends cloud.Secret {
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("secrets can only be bound by awscdk.Function for now");
+    if (!isAwsCdkFunction(host)) {
+      throw new Error("Expected 'host' to implement 'isAwsCdkFunction' method");
     }
 
-    host.addPolicyStatements(
+    host.awscdkFunction.addToRolePolicy(new PolicyStatement(
       ...calculateSecretPermissions(this.arnForPolicies, ops)
-    );
+    ));
 
     host.addEnvironment(this.envName(), this.secret.secretArn);
 

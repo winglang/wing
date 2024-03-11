@@ -10,11 +10,12 @@ import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { LambdaDestination } from "aws-cdk-lib/aws-s3-notifications";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateBucketPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsBucket } from "@winglang/sdk/lib/shared-aws/bucket";
+import { IAwsCdkFunction, isAwsCdkFunction } from "./function";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -59,24 +60,22 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     event: string,
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions
-  ): Function {
+  ): IAwsCdkFunction {
     const functionHandler = convertBetweenHandlers(
       inflight,
       this.eventHandlerLocation(),
       `BucketEventHandlerClient`
     );
 
-    const fn = new Function(
+    const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
       App.of(this).makeId(this, `${this.node.id}-${event}`),
       functionHandler,
       opts
     );
 
-    if (!(fn instanceof Function)) {
-      throw new Error(
-        "Bucket only supports creating awscdk.Function right now"
-      );
+    if (!isAwsCdkFunction(fn)) {
+      throw new Error("Expected function to implement IAwsCdkFunction");
     }
 
     return fn;
@@ -117,7 +116,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.awscdkFunction)
     );
   }
 
@@ -135,7 +134,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.awscdkFunction)
     );
   }
 
@@ -153,7 +152,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.awscdkFunction)
     );
   }
 
@@ -170,7 +169,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.awscdkFunction)
     );
 
     std.Node.of(this).addConnection({
@@ -180,7 +179,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.awscdkFunction)
     );
 
     std.Node.of(this).addConnection({
@@ -190,18 +189,18 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.awscdkFunction)
     );
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("buckets can only be bound by tfaws.Function for now");
+    if (!isAwsCdkFunction(host)) {
+      throw new Error("Expected 'host' to implement IAwsCdkFunction");
     }
 
-    host.addPolicyStatements(
+    host.awscdkFunction.addToRolePolicy(new PolicyStatement(
       ...calculateBucketPermissions(this.bucket.bucketArn, ops)
-    );
+    ));
 
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.

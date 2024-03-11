@@ -44,9 +44,18 @@ import { registerTokenResolver } from "@winglang/sdk/lib/core/tokens";
 export interface CdkAppProps extends core.AppProps {
   /**
    * CDK Stack Name
-   * @default - undefined
+   * 
+   * @default - read from the CDK_STACK_NAME environment variable
    */
   readonly stackName?: string;
+
+  /**
+   * A hook for customizating the way the root CDK stack is created. You can override this if you wish to use a custom stack
+   * instead of the default `cdk.Stack`.
+   * 
+   * @default - creates a standard `cdk.Stack`
+   */
+  readonly stackFactory?: (app: cdk.App, stackName: string) => cdk.Stack;
 }
 
 /**
@@ -85,7 +94,9 @@ export class App extends core.App {
     mkdirSync(cdkOutdir, { recursive: true });
 
     const cdkApp = new cdk.App({ outdir: cdkOutdir });
-    const cdkStack = new cdk.Stack(cdkApp, stackName);
+
+    const createStack = props.stackFactory ?? ((app, stackName) => new cdk.Stack(app, stackName));
+    const cdkStack = createStack(cdkApp, stackName);
 
     super(cdkStack, props.rootId ?? "Default", props);
 
