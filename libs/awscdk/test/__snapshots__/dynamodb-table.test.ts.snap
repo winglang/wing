@@ -166,16 +166,6 @@ exports[`function with a table binding 1`] = `
                 ],
               },
             },
-            {
-              "Action": "dynamodb:Scan",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "TableCD117FA1",
-                  "Arn",
-                ],
-              },
-            },
           ],
           "Version": "2012-10-17",
         },
