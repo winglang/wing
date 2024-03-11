@@ -81,7 +81,7 @@ export class Function extends cloud.Function {
 
     if (props.concurrency != null) {
       throw new NotImplementedError(
-        "Function concurrency prop isn't implemented yet on the current target."
+        "Function concurrency isn't implemented yet on the current target."
       );
     }
 
