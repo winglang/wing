@@ -1211,11 +1211,9 @@ impl<'a> JSifier<'a> {
 		for value in values {
 			code.line(new_code!(
 				&value.span,
-				"tmp[tmp[\"",
+				"tmp[\"",
 				jsify_symbol(value),
-				"\"] = ",
-				value_index.to_string(),
-				"] = \",",
+				"\"] = \"",
 				jsify_symbol(value),
 				"\";"
 			));
