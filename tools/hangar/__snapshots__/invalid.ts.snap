@@ -4057,7 +4057,7 @@ Duration <DURATION>"
 `;
 
 exports[`unresolved_state.test.w 1`] = `
-"Could not start resource root/env0/cloud.Function after 10 attempts. This could be due to a dependency cycle or an invalid attribute reference.
+"Could not start resource after 10 attempts: Unable to resolve attribute 'my_unresolved_token' for resource: root/env0/sim.State
  
  
 Tests 1 failed (1)
