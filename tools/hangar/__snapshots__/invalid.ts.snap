@@ -3596,6 +3596,32 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`stringify.test.w 1`] = `
+"error: Expected type to be stringable, but got \\"B\\" instead
+  --> ../../../examples/tests/invalid/stringify.test.w:3:13
+  |
+3 | log(\\"hello {b}\\");
+  |             ^ Expected type to be stringable, but got \\"B\\" instead
+  |
+  = hint: str, num, bool, json, and enums are stringable
+
+
+error: Expected type to be stringable, but got \\"str?\\" instead
+  --> ../../../examples/tests/invalid/stringify.test.w:7:7
+  |
+7 | log(\\"{x}\\");
+  |       ^ Expected type to be stringable, but got \\"str?\\" instead
+  |
+  = hint: str? is an optional, try unwrapping it with 'x ?? \\"nil\\"' or 'x!'
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`struct_expansion.test.w 1`] = `
 "error: Unexpected 'keyword_argument'
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:15
@@ -4111,6 +4137,15 @@ exports[`void_in_expression_position.test.w 1`] = `
   |
 1 | log(\\"hey\\").get(\\"x\\");
   |            ^^^ Property not found
+
+
+error: Expected type to be stringable, but got \\"void\\" instead
+  --> ../../../examples/tests/invalid/void_in_expression_position.test.w:4:22
+  |
+4 | let x = \\"my name is {log(\\"mister cloud\\")}\\";
+  |                      ^^^^^^^^^^^^^^^^^^^ Expected type to be stringable, but got \\"void\\" instead
+  |
+  = hint: str, num, bool, json, and enums are stringable
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
