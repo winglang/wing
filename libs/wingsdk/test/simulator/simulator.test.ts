@@ -8,6 +8,7 @@ import {
   IApiClient,
   IBucketClient,
   IFunctionClient,
+  IServiceClient,
   OnDeploy,
   Service,
 } from "../../src/cloud";
@@ -412,7 +413,7 @@ describe("in-place updates", () => {
     const urlBeforeUpdate = await sim.getResource("root/Bucket").get("url.txt");
 
     // remove the state directory otherwise Api reuses the port
-    fs.rmdirSync(stateDir, { recursive: true });
+    fs.rmdirSync(sim.getResourceStateDir("/Api"), { recursive: true });
 
     const app2 = new SimApp();
     const api2 = new Api(app2, "Api");
