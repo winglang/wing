@@ -6,28 +6,22 @@ keywords: [Websockets, React, Vite, Local, Wing]
 
 # React, Vite & WebSockets 
 
-In this guide, we will build a simple web application with [Vite](https://vitejs.dev/) for the
-frontend and Wing for our backend. We will develop and test our application using the Wing Simulator
-and deploy it to AWS using [Terraform](https://www.terraform.io/).
+In this guide, we will build a simple web application with React for our frontend and Wing for our backend.
+We will develop and test our application using the Wing Simulator and deploy it to AWS using [Terraform](https://www.terraform.io/).
 
 Our application will have a counter that can be incremented by clicking on it. This counter will be
 synchronized in real-time across all users via a distributed cloud counter and WebSockets.
 
-## Join the community
+> 🚧 Wing is still under active development, so don't be (too) surprised if you run into issues or bugs
+> along the way. You are invited to [join the Wing Slack](https://t.winglang.io/slack) to say hi, ask questions
+> and help your fellow Wingnuts.
 
-Wing is still under active development, so don't be (too) surprised if you run into issues or bugs
-along the way. But don't fear, there's an awesome community of Wingnuts that are always happy to
-help and support.
+## How to use this guide?
 
-You are more than invited to:
+This guide is written as a tutorial and intended to be followed step-by-step. At the end of each step, you should be able to find the 
+full source code in a collapsable section.
 
-* [Join the Wing Slack](https://t.winglang.io/slack) to say hi, ask questions and help your fellow Wingnuts.
-* [Raise a GitHub issue](https://github.com/winglang/wing/issues/new/choose) if you encounter a problem.
-* [Edit this
-  guide](https://github.com/winglang/wing/tree/main/docs/docs/08-guides/03-react-vite-websockets.md)
-  to propose improvements.
-
-Without further ado, let's go!
+You can also find the entire project in [GitHub](https://github.com/winglang/guide-react-vite-websockets).
 
 ## Prerequisites
 
