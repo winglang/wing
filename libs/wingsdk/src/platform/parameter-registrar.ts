@@ -48,8 +48,8 @@ export class ParameterRegistrar extends Construct {
    */
   public addSchema(schema: any) {
     // If a JsonSchema object is passed in, extract the jsonSchema from it
-    if (schema["jsonSchema"]) {
-      this.parameterSchemas.push(schema["jsonSchema"]);
+    if (schema.jsonSchema) {
+      this.parameterSchemas.push(schema.jsonSchema);
       return;
     }
 
@@ -64,14 +64,8 @@ export class ParameterRegistrar extends Construct {
    * @param path the path to nest the schema under
    * @param recursiveRequire whether or not to require all the nested properties
    */
-  public addSchemaAtPath(
-    schema: any,
-    path: string,
-    recursiveRequire = false
-  ) {
-    this.addSchema(
-      this._nestSchemaUnderPath(schema, path, recursiveRequire)
-    );
+  public addSchemaAtPath(schema: any, path: string, recursiveRequire = false) {
+    this.addSchema(this._nestSchemaUnderPath(schema, path, recursiveRequire));
   }
 
   /**

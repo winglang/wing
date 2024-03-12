@@ -236,9 +236,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       architectures: ["arm64"],
     });
 
-    if (
-      app.parameters.getValue("tf-aws/vpc_lambda") === true
-    ) {
+    if (app.parameters.getValue("tf-aws/vpc_lambda") === true) {
       const sg = new SecurityGroup(this, `${id}SecurityGroup`, {
         vpcId: app.vpc.id,
         egress: [

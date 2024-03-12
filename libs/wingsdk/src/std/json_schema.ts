@@ -25,6 +25,7 @@ export class JsonSchema {
     return new JsonSchema(schema);
   }
 
+  /** The raw Json Schema definition */
   public jsonSchema: any;
   private validator: Validator;
 
@@ -47,7 +48,7 @@ export class JsonSchema {
     const result = this.validator.validate(obj, this.jsonSchema);
     if (result.errors.length > 0) {
       throw new Error(
-        `unable to parse ${this.jsonSchema["$id"].replace(
+        `unable to parse ${this.jsonSchema.$id.replace(
           "/",
           ""
         )}:\n- ${result.errors.join("\n- ")}`

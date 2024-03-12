@@ -189,10 +189,7 @@ export abstract class App extends Construct implements IApp {
    */
   public get parameters() {
     if (!this._parameters) {
-      this._parameters = new ParameterRegistrar(
-        this,
-        "ParameterRegistrar"
-      );
+      this._parameters = new ParameterRegistrar(this, "ParameterRegistrar");
     }
     return this._parameters!;
   }

@@ -70,6 +70,25 @@ the Json object to validate.
 ---
 
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonSchema.property.jsonSchema">jsonSchema</a></code> | <code>any</code> | The raw Json Schema definition. |
+
+---
+
+##### `jsonSchema`<sup>Required</sup> <a name="jsonSchema" id="@winglang/sdk.std.JsonSchema.property.jsonSchema"></a>
+
+```wing
+jsonSchema: any;
+```
+
+- *Type:* any
+
+The raw Json Schema definition.
+
+---
 
 
 

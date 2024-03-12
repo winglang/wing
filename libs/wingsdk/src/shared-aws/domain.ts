@@ -52,9 +52,7 @@ export class Domain extends cloud.Domain {
     const acmCertificateArn = parameters.getValue(
       `${this.node.path}/acmCertificateArn`
     );
-    const hostedZoneId = parameters.getValue(
-      `${this.node.path}/hostedZoneId`
-    );
+    const hostedZoneId = parameters.getValue(`${this.node.path}/hostedZoneId`);
 
     this._iamCertificate = iamCertificate;
     this._hostedZoneId = hostedZoneId;
