@@ -402,3 +402,157 @@ describe("Platform examples", () => {
     });
   });
 });
+
+describe("Implicit platform files", () => {
+  const platformParameters = {
+    type: "object",
+    properties: {
+      foo: {
+        type: "string",
+      }
+    },
+    required: ["foo"]
+  }
+
+  // Simple platform with a required parameter
+  const platformCode = `
+  exports.Platform = class Platform {
+    target = "*";
+    parameters = ${JSON.stringify(platformParameters)};
+  }
+  `
+
+  describe("can be defined", () => {
+    test("in the source directory", async () => {
+      // GIVEN
+      const wingCode = `
+        bring cloud;
+
+        let b = new cloud.Bucket();
+      `
+      const args = ["compile"];
+      const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
+      
+      fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
+      fs.writeFileSync(path.join(tempdir, "wplatform.js"), platformCode);
+
+      // WHEN
+      const output = await runWingCommand({
+        cwd: tempdir,
+        wingFile: path.join(tempdir, "main.w"),
+        args,
+        expectFailure: true
+      });
+
+      // THEN
+      expect(output.stderr).toContain("Parameter validation errors:");
+      expect(output.stderr).toContain("- must have required property 'foo'");
+    })
+
+    test("with a .wplatform.js extension", async () => {
+      // GIVEN
+      const wingCode = `
+        bring cloud;
+
+        let b = new cloud.Bucket();
+      `
+      const args = ["compile"];
+      const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
+      
+      fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
+      fs.writeFileSync(path.join(tempdir, "whatever.wplatform.js"), platformCode);
+
+      // WHEN
+      const output = await runWingCommand({
+        cwd: tempdir,
+        wingFile: path.join(tempdir, "main.w"),
+        args,
+        expectFailure: true
+      });
+
+      console.log("STDOUT: ", output.stdout);
+      console.log("STDERR: ", output.stderr);
+
+      // THEN
+      expect(output.stderr).toContain("Parameter validation errors:");
+      expect(output.stderr).toContain("- must have required property 'foo'");
+    });
+
+    test("imported directory", async () => {
+      // GIVEN
+      const wingCode = `
+        bring cloud;
+        bring "./lib" as myLib;
+
+        let b = new cloud.Bucket();
+      `
+      
+      const args = ["compile"];
+      const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
+      fs.mkdirSync(path.join(tempdir, "lib"));
+      fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
+      fs.writeFileSync(path.join(tempdir, "lib", "dummy.w"), "");
+      fs.writeFileSync(path.join(tempdir, "lib", "wplatform.js"), platformCode);
+
+      // WHEN
+      const output = await runWingCommand({
+        cwd: tempdir,
+        wingFile: path.join(tempdir, "main.w"),
+        args,
+        expectFailure: true
+      });
+
+      // THEN
+      expect(output.stderr).toContain("Parameter validation errors:");
+      expect(output.stderr).toContain("- must have required property 'foo'");
+    });
+
+    test("in multiple imported directories", async () => {
+      // GIVEN
+      const wingCode = `
+        bring cloud;
+        bring "./lib" as myLib;
+        bring "./lib2" as myLib2;
+
+        let b = new cloud.Bucket();
+      `
+      const otherPlatformCode = `
+        exports.Platform = class Platform {
+          target = "*";
+          parameters = {
+            type: "object",
+            properties: {
+              bar: {
+                type: "string",
+              }
+            },
+            required: ["bar"]
+          }
+        }
+      `
+      const args = ["compile"];
+      const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
+      fs.mkdirSync(path.join(tempdir, "lib"));
+      fs.mkdirSync(path.join(tempdir, "lib2"));
+      fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
+      fs.writeFileSync(path.join(tempdir, "lib", "dummy.w"), "");
+      fs.writeFileSync(path.join(tempdir, "lib", "wplatform.js"), platformCode);
+      fs.writeFileSync(path.join(tempdir, "lib2", "dummy.w"), "");
+      fs.writeFileSync(path.join(tempdir, "lib2", "wplatform.js"), otherPlatformCode);
+
+
+      // WHEN
+      const output = await runWingCommand({
+        cwd: tempdir,
+        wingFile: path.join(tempdir, "main.w"),
+        args,
+        expectFailure: true
+      });
+
+      // THEN
+      expect(output.stderr).toContain("Parameter validation errors:");
+      expect(output.stderr).toContain("- must have required property 'foo'");
+      expect(output.stderr).toContain("- must have required property 'bar'");
+    });
+  })
+})
