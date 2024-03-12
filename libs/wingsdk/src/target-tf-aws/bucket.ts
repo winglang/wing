@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as AWSFunction } from "./function";
 import { Topic as AWSTopic } from "./topic";
+import { DataAwsS3Bucket } from "../.gen/providers/aws/data-aws-s3-bucket";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import {
   S3BucketNotification,
@@ -47,19 +48,53 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
 };
 
 /**
+ * Properties for a new tfaws.Bucket.
+ */
+export interface BucketProps extends cloud.BucketProps {
+  /**
+   * This internal property is used to override the default bucket creation
+   * and instead use an existing bucket.
+   *
+   * @internal
+   */
+  _existingBucket?: DataAwsS3Bucket;
+}
+
+/**
  * AWS implementation of `cloud.Bucket`.
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.Bucket implements IAwsBucket {
-  private readonly bucket: S3Bucket;
-  private readonly public: boolean;
+  /**
+   * Create a new cloud.Bucket from an existing s3 bucket.
+   *
+   * @param scope scope to use for the bucket data lookup
+   * @param bucketName the name of the existing bucket to reference
+   * @returns A cloud.Bucket
+   */
+  public static fromBucketName(scope: Construct, bucketName: string): Bucket {
+    const bucketLookup = new DataAwsS3Bucket(
+      scope,
+      `${bucketName}_${scope.node.addr.slice(-8)}`,
+      { bucket: bucketName }
+    );
+    return new Bucket(scope, `existing_${bucketLookup.id}`, {
+      _existingBucket: bucketLookup,
+    });
+  }
+
+  private readonly bucket: S3Bucket | DataAwsS3Bucket;
+  private readonly public: boolean = false;
   private readonly notificationTopics: S3BucketNotificationTopic[] = [];
   private readonly notificationDependencies: ITerraformDependable[] = [];
 
-  constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
+  constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id, props);
-
+    if (props._existingBucket) {
+      this.bucket = props._existingBucket;
+      return;
+    }
     this.public = props.public ?? false;
 
     this.bucket = createEncryptedBucket(this, this.public);
@@ -119,6 +154,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     return handler;
   }
 
+  /** @internal */
   public _preSynthesize() {
     super._preSynthesize();
     if (this.notificationTopics.length) {

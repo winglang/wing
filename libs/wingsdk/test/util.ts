@@ -8,6 +8,10 @@ export function treeJsonOf(outdir: string): any {
   return JSON.parse(readFileSync(join(outdir, "tree.json"), "utf8"));
 }
 
+export function tfDataOf(templateStr: string): any {
+  return Object.keys(JSON.parse(templateStr).data).sort();
+}
+
 export function tfResourcesOf(templateStr: string): string[] {
   return Object.keys(JSON.parse(templateStr).resource).sort();
 }

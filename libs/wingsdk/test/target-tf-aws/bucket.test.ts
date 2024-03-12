@@ -10,6 +10,7 @@ import {
   tfSanitize,
   treeJsonOf,
   getTfResource,
+  tfDataOf,
 } from "../util";
 
 test("create a bucket", () => {
@@ -22,6 +23,19 @@ test("create a bucket", () => {
   expect(tfResourcesOf(output)).toEqual([
     "aws_s3_bucket", // main bucket
   ]);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("create a bucket from an existing bucket", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  tfaws.Bucket.fromBucketName(app, "some-existing-bucket");
+  const output = app.synth();
+  const parsedOutput = JSON.parse(output);
+  // THEN
+  expect(parsedOutput.resources).toEqual(undefined); // No resources should be created
+  expect(tfDataOf(output)).toEqual(["aws_s3_bucket"]); // One bucket data lookup exists
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
