@@ -56,12 +56,12 @@ new cloud.Function(inflight () => {
 
 ## Function container reuse
 
-Most cloud providers will opportunistically reuse the function's container in additional invocations. It is possible
-to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
+Most cloud providers will opportunistically reuse the function's container in additional invocations.
+It is possible to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
 
 The following example reads the `bigdata.json` file once and reuses it every time `query()` is called.
 
-```js
+```ts playground
 bring cloud;
 
 let big = new cloud.Bucket();
@@ -94,6 +94,14 @@ new cloud.Function(inflight () => {
 ### Simulator (`sim`)
 
 The sim implementation of `cloud.Function` runs the inflight code as a JavaScript function.
+
+By default, a maximum of 10 workers can be processing requests sent to a `cloud.Function` concurrently, but this number can be adjusted with the `concurrency` property:
+
+```ts playground
+new cloud.Function(inflight () => {
+  // ... code that shouldn't run concurrently ...
+}, concurrency: 1);
+```
 
 ### AWS (`tf-aws` and `awscdk`)
 
@@ -325,10 +333,24 @@ let FunctionProps = cloud.FunctionProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.FunctionProps.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
 
 ---
 

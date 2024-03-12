@@ -169,6 +169,7 @@ console.log("Hello from schedule!");
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
           "sourceCodeLanguage": "javascript",
@@ -378,6 +379,7 @@ console.log("Hello from schedule!");
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
           "sourceCodeLanguage": "javascript",
@@ -587,6 +589,7 @@ console.log("Hello from schedule!");
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
           "sourceCodeLanguage": "javascript",

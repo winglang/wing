@@ -263,6 +263,7 @@ export const createAppRouter = () => {
                 id: sourceNode.id,
                 path: sourceNode.path,
                 type: getResourceType(sourceNode, simulator),
+                display: sourceNode.display,
               };
             })
             .filter(({ path }) => {
@@ -283,6 +284,7 @@ export const createAppRouter = () => {
                 id: targetNode.id,
                 path: targetNode.path,
                 type: getResourceType(targetNode, simulator),
+                display: targetNode.display,
               };
             })
             .filter(({ path }) => {

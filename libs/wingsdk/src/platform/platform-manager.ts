@@ -3,6 +3,7 @@ import { basename, dirname, join } from "path";
 import { cwd } from "process";
 import * as vm from "vm";
 import { IPlatform } from "./platform";
+import { scanDirForPlatformFile } from "./util";
 import { App, AppProps, SynthHooks } from "../core";
 
 interface PlatformManagerOptions {
@@ -21,6 +22,41 @@ export class PlatformManager {
 
   constructor(options: PlatformManagerOptions) {
     this.platformPaths = options.platformPaths ?? [];
+    this.retrieveImplicitPlatforms();
+  }
+
+  /**
+   * Retrieve all implicit platform declarations.
+   *
+   * These are platforms that are not explicitly declared in the cli options
+   * but are implicitly available to the app.
+   *
+   * We look for platforms in the following locations:
+   * - The source directory
+   * - Any imported namespaces (provided by the wingc compiler output)
+   *
+   * To determine if a directory contains a platform, we check if it contains a file ending in "wplatform.js"
+   * TODO: Support platforms defined in Wing (platform.w) https://github.com/winglang/wing/issues/4937
+   */
+  private retrieveImplicitPlatforms() {
+    const importedNamespaces = process.env.WING_IMPORTED_NAMESPACES?.split(";");
+    const sourceDir = process.env.WING_SOURCE_DIR!;
+
+    if (sourceDir) {
+      const sourceDirPlatformFile = scanDirForPlatformFile(sourceDir);
+      if (sourceDirPlatformFile) {
+        this.platformPaths.push(...sourceDirPlatformFile);
+      }
+    }
+
+    if (importedNamespaces) {
+      importedNamespaces.forEach((namespaceDir) => {
+        const namespaceDirPlatformFile = scanDirForPlatformFile(namespaceDir);
+        if (namespaceDirPlatformFile) {
+          this.platformPaths.push(...namespaceDirPlatformFile);
+        }
+      });
+    }
   }
 
   private loadPlatformPath(platformPath: string) {

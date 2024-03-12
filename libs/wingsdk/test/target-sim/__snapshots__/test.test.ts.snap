@@ -33,6 +33,7 @@ async handle(event) {
         "attrs": {},
         "path": "root/env0/test:my_test/Handler",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/handler_c86fc180.js",
           "sourceCodeLanguage": "javascript",

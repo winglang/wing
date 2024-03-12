@@ -13,6 +13,7 @@ export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
   private readonly path: string;
   private readonly environmentVariables: Record<string, string>;
   private readonly useBuildCommand: boolean;
+  private readonly localPort: string | number;
   private childProcess?: ChildProcess;
   private url: string;
 
@@ -22,6 +23,7 @@ export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
     this.startCommand = props.startCommand;
     this.environmentVariables = props.environmentVariables;
     this.useBuildCommand = props.useBuildCommand;
+    this.localPort = props.localPort;
     this.url = props.url;
   }
 
@@ -56,6 +58,8 @@ window.wingEnv = ${JSON.stringify(this.environmentVariables, null, 2)};`
     } else {
       // react usually offer hot reloading-
       // we're waiting for execution ending since it's ending only when manually terminating the process
+      options.env = { ...process.env, PORT: `${this.localPort}` };
+
       this.childProcess = exec(
         this.startCommand,
         options,
