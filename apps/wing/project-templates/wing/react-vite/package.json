@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@winglibs/websockets": "^0.3.1"
+  }
+}
