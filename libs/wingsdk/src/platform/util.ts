@@ -103,23 +103,24 @@ export function loadPlatformSpecificValues() {
 }
 
 /**
- * Scans a directory for a platform file.
- *
+ * Scans a directory for any platform files.
+ * 
  * @param dir the directory to scan
- * @returns the path to the platform file, or undefined if none was found
+ * @returns the path to any platform files
  */
-export function scanDirForPlatformFile(dir: string): string | undefined {
-  // Read each file in the directory
-  if (!existsSync(dir)) {
-    return undefined;
+export function scanDirForPlatformFile(dir: string): string[] {
+  const result: string[] = [];
+
+  if(!existsSync(dir)) {
+    return result;
   }
 
   const files = readdirSync(dir);
   for (const file of files) {
-    if (file === "platform.js" || file.endsWith(".platform.js")) {
-      return path.join(dir, file);
+    if (file === "wplatform.js" || file.endsWith(".wplatform.js")) {
+      result.push(path.join(dir, file));
     }
   }
-
-  return undefined;
+  
+  return result;
 }

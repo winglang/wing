@@ -42,11 +42,11 @@ The first platform in the list is the primary platform, it is responsible for pr
 
 Additionally, you can use naming conventions to implicitly define platforms that should be used. These platform files can be located in the root of your project or in a library that your project uses. The naming convention is as follows:
 ```sh
-platform.js
-*.platform.js
+wplatform.js
+*.wplatform.js
 ```
 
-For example, if you have a file named `my-platform.js` in the root of your project, it will automatically be added to the list of platforms to be used when compiling your application. Its also important to note that implicit platforms are always loaded after the platforms specified in the `--platform` option.
+For example, if you have a file named `custom.wplatform.js` in the root of your project, it will automatically be added to the list of platforms to be used when compiling your application. Its also important to note that implicit platforms are always loaded after the platforms specified in the `--platform` option.
 
 ### Provisioning Engines
 

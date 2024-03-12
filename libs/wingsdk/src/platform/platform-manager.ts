@@ -35,7 +35,7 @@ export class PlatformManager {
    * - The source directory
    * - Any imported namespaces (provided by the wingc compiler output)
    *
-   * To determine if a directory contains a platform, we check if it contains a file named "platform.js"
+   * To determine if a directory contains a platform, we check if it contains a file ending in "wplatform.js"
    * TODO: Support platforms defined in Wing (platform.w) https://github.com/winglang/wing/issues/4937
    */
   private retrieveImplicitPlatforms() {
@@ -45,7 +45,7 @@ export class PlatformManager {
     if (sourceDir) {
       const sourceDirPlatformFile = scanDirForPlatformFile(sourceDir);
       if (sourceDirPlatformFile) {
-        this.platformPaths.push(sourceDirPlatformFile);
+        this.platformPaths.push(...sourceDirPlatformFile);
       }
     }
 
@@ -53,7 +53,7 @@ export class PlatformManager {
       importedNamespaces.forEach((namespaceDir) => {
         const namespaceDirPlatformFile = scanDirForPlatformFile(namespaceDir);
         if (namespaceDirPlatformFile) {
-          this.platformPaths.push(namespaceDirPlatformFile);
+          this.platformPaths.push(...namespaceDirPlatformFile);
         }
       });
     }

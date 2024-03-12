@@ -434,7 +434,7 @@ describe("Implicit platform files", () => {
       const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
       
       fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
-      fs.writeFileSync(path.join(tempdir, "platform.js"), platformCode);
+      fs.writeFileSync(path.join(tempdir, "wplatform.js"), platformCode);
 
       // WHEN
       const output = await runWingCommand({
@@ -449,7 +449,7 @@ describe("Implicit platform files", () => {
       expect(output.stderr).toContain("- must have required property 'foo'");
     })
 
-    test("with a .platform.js extension", async () => {
+    test("with a .wplatform.js extension", async () => {
       // GIVEN
       const wingCode = `
         bring cloud;
@@ -460,7 +460,7 @@ describe("Implicit platform files", () => {
       const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
       
       fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
-      fs.writeFileSync(path.join(tempdir, "whatever.platform.js"), platformCode);
+      fs.writeFileSync(path.join(tempdir, "whatever.wplatform.js"), platformCode);
 
       // WHEN
       const output = await runWingCommand({
@@ -492,7 +492,7 @@ describe("Implicit platform files", () => {
       fs.mkdirSync(path.join(tempdir, "lib"));
       fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
       fs.writeFileSync(path.join(tempdir, "lib", "dummy.w"), "");
-      fs.writeFileSync(path.join(tempdir, "lib", "platform.js"), platformCode);
+      fs.writeFileSync(path.join(tempdir, "lib", "wplatform.js"), platformCode);
 
       // WHEN
       const output = await runWingCommand({
@@ -536,9 +536,9 @@ describe("Implicit platform files", () => {
       fs.mkdirSync(path.join(tempdir, "lib2"));
       fs.writeFileSync(path.join(tempdir, "main.w"), wingCode);
       fs.writeFileSync(path.join(tempdir, "lib", "dummy.w"), "");
-      fs.writeFileSync(path.join(tempdir, "lib", "platform.js"), platformCode);
+      fs.writeFileSync(path.join(tempdir, "lib", "wplatform.js"), platformCode);
       fs.writeFileSync(path.join(tempdir, "lib2", "dummy.w"), "");
-      fs.writeFileSync(path.join(tempdir, "lib2", "platform.js"), otherPlatformCode);
+      fs.writeFileSync(path.join(tempdir, "lib2", "wplatform.js"), otherPlatformCode);
 
 
       // WHEN
