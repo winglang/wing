@@ -1,20 +1,14 @@
 let app = nodeof(this).app;
 
-let registrar = app.parameterRegistrar;
+struct MyParams {
+  foo: str?;
+}
 
-registrar.addParameterSchema({
-  type: "object",
-  properties: {
-    foo: {
-      type: "string"
-    },
-    meaning_of_life: {
-      type: "number"
-    }
-  }
-});
+let registrar = app.parameters;
 
-let foo = registrar.getParameterValue("foo");
+registrar.addSchema(MyParams.schema());
+
+let foo = registrar.getValue("foo");
 
 if let foo = foo {
   assert(false); // shouldnt happen

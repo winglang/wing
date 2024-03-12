@@ -1,16 +1,12 @@
 let app = nodeof(this).app;
 
-let registrar = app.parameterRegistrar;
+struct MyParams {
+  foo: str;
+}
 
-registrar.addParameterSchema({
-  type: "object",
-  properties: {
-    foo: {
-      type: "string"
-    }
-  },
-  required: ["foo"]
-});
+let registrar = app.parameters;
+
+registrar.addSchema(MyParams.schema());
 
 // Error: Parameter validation errors:
 // - must have required property 'foo'

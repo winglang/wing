@@ -456,7 +456,7 @@ export interface IApp extends IConstruct {
   /**
    * The application's parameter registrar
    */
-  readonly parameterRegistrar: ParameterRegistrar;
+  readonly parameters: ParameterRegistrar;
 
   /**
    * Generate a unique ID for the given scope and prefix. The newly generated ID is

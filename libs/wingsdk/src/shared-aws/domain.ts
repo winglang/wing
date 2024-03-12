@@ -17,7 +17,7 @@ export class Domain extends cloud.Domain {
   constructor(scope: Construct, id: string, props: cloud.DomainProps) {
     super(scope, id, props);
 
-    const parameters = App.of(scope).parameterRegistrar;
+    const parameters = App.of(scope).parameters;
 
     // Domain requires parameters from the user, so we need to add the parameter schemas to the registrar
     let schema = {
@@ -44,15 +44,15 @@ export class Domain extends cloud.Domain {
       },
     };
 
-    parameters.addParameterSchemaAtPath(schema, this.node.path, true);
+    parameters.addSchemaAtPath(schema, this.node.path, true);
 
-    const iamCertificate = parameters.getParameterValue(
+    const iamCertificate = parameters.getValue(
       `${this.node.path}/iamCertificate`
     );
-    const acmCertificateArn = parameters.getParameterValue(
+    const acmCertificateArn = parameters.getValue(
       `${this.node.path}/acmCertificateArn`
     );
-    const hostedZoneId = parameters.getParameterValue(
+    const hostedZoneId = parameters.getValue(
       `${this.node.path}/hostedZoneId`
     );
 

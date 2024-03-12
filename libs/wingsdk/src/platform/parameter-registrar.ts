@@ -29,7 +29,7 @@ export class ParameterRegistrar extends Construct {
    * @param path the path of the parameter
    * @returns the value of the parameter
    */
-  public getParameterValue(path: string): any {
+  public getValue(path: string): any {
     if (this.parameterValueByPath[path] === undefined) {
       // attempt to read the value from the raw parameters, then cache it
       this.parameterValueByPath[path] = resolveValueFromPath(
@@ -46,7 +46,13 @@ export class ParameterRegistrar extends Construct {
    *
    * @param schema schema to add to the registrar
    */
-  public addParameterSchema(schema: any) {
+  public addSchema(schema: any) {
+    // If a JsonSchema object is passed in, extract the jsonSchema from it
+    if (schema["jsonSchema"]) {
+      this.parameterSchemas.push(schema["jsonSchema"]);
+      return;
+    }
+
     this.parameterSchemas.push(schema);
   }
 
@@ -58,12 +64,12 @@ export class ParameterRegistrar extends Construct {
    * @param path the path to nest the schema under
    * @param recursiveRequire whether or not to require all the nested properties
    */
-  public addParameterSchemaAtPath(
+  public addSchemaAtPath(
     schema: any,
     path: string,
     recursiveRequire = false
   ) {
-    this.addParameterSchema(
+    this.addSchema(
       this._nestSchemaUnderPath(schema, path, recursiveRequire)
     );
   }
