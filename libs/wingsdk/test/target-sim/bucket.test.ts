@@ -43,13 +43,13 @@ test("update an object in bucket", async () => {
 
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
-
-  const KEY = "greeting.txt";
-  const VALUE = JSON.stringify({ msg: "Hello world!" });
+  const KEY = "1.txt";
 
   // WHEN
-  await client.put(KEY, VALUE);
-  await client.put(KEY, JSON.stringify({ msg: "another msg" }));
+  await client.put(KEY, JSON.stringify({ msg: "Hello world 1!" }));
+  await waitUntilTraceCount(s, 4, (trace) => trace.data.message.includes(KEY));
+  await client.put(KEY, JSON.stringify({ msg: "Hello world 2!" }));
+  await waitUntilTraceCount(s, 5, (trace) => trace.data.message.includes(KEY));
 
   // THEN
   await s.stop();
