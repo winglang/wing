@@ -211,7 +211,7 @@ import { useState, useEffect } from 'react';
 
 3. Now, let's trigger the `incrementCount` function when the user clicks to increment the counter:
 ```ts
-   <button onClick={incrementCount}>
+   <button key={count} onClick={incrementCount}>
 ```
 
 For convenience, here is the entire `App.tsx` file:
@@ -250,7 +250,7 @@ function App() {
       </div>
       <h1>{window.wing.env.title}</h1>
       <div className="card">
-        <button onClick={incrementCount}>
+        <button key={count} onClick={incrementCount}>
           count is {count}
         </button>
         <p>
@@ -449,7 +449,7 @@ function App() {
       </div>
       <h1>{window.wing.env.title}</h1>
       <div className="card">
-        <button onClick={incrementCount}>
+        <button key={count} onClick={incrementCount}>
           count is {count}
         </button>
         <p>
