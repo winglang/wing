@@ -104,14 +104,14 @@ export function loadPlatformSpecificValues() {
 
 /**
  * Scans a directory for any platform files.
- * 
+ *
  * @param dir the directory to scan
  * @returns the path to any platform files
  */
 export function scanDirForPlatformFile(dir: string): string[] {
   const result: string[] = [];
 
-  if(!existsSync(dir)) {
+  if (!existsSync(dir)) {
     return result;
   }
 
@@ -121,6 +121,6 @@ export function scanDirForPlatformFile(dir: string): string[] {
       result.push(path.join(dir, file));
     }
   }
-  
+
   return result;
 }
