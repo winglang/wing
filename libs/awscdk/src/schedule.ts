@@ -6,10 +6,10 @@ import {
   addLambdaPermission,
 } from "aws-cdk-lib/aws-events-targets";
 import { Construct } from "constructs";
-import { Function } from "./function";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
+import { isAwsCdkFunction } from "./function";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -73,7 +73,7 @@ export class Schedule extends cloud.Schedule {
       "ScheduleOnTickHandlerClient"
     );
 
-    const fn = new Function(
+    const fn = new cloud.Function(
       // ok since we're not a tree root
       this.node.scope!,
       App.of(this).makeId(this, `${this.node.id}-OnTick`),
@@ -81,15 +81,12 @@ export class Schedule extends cloud.Schedule {
       props
     );
 
-    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
-    if (!(fn instanceof Function)) {
-      throw new Error(
-        "Schedule only supports creating awscdk.Function right now"
-      );
+    if (!isAwsCdkFunction(fn)) {
+      throw new Error("Expected function to implement 'isAwsCdkFunction' method");
     }
 
-    this.rule.addTarget(new LambdaFunction(fn._function));
-    addLambdaPermission(this.rule, fn._function);
+    this.rule.addTarget(new LambdaFunction(fn.awscdkFunction));
+    addLambdaPermission(this.rule, fn.awscdkFunction);
 
     std.Node.of(this).addConnection({
       source: this,

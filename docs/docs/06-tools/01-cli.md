@@ -70,108 +70,16 @@ By default, `wing compile` will look for exactly one file named `main.w` or endi
 
 :::
 
-The --platform option specifies the target platform to compile for. The default platform is `sim`.
-The following platforms are built-in:
+The --platform option (or `-t`) specifies the target platform to compile for. The default platform
+is `sim`.
 
-* `sim` - [Wing Simulator](#sim-target)
-* `tf-aws` - Terraform/AWS
-* `tf-azure` - Terraform/Azure
-* `tf-gcp` - Terraform/Google Cloud Platform
+You can use one of the built-in platform providers:
 
-### `sim` Platform
-
-The Wing program is going to be compiled for the Wing simulator (`.wsim`).
-
-Usage:
-
-```sh
-$ wing compile [entrypoint] --platform sim
-```
-
-The output will be found under `target/<entrypoint>.wsim` and can be opened in two ways:
-
-* Interactively through the [Wing Console](/docs/start-here/local)
-* Using the `wing run|it target/<entrypoint>.wsim` command through the Wing CLI.
-
-
-### `tf-aws` Platform
-
-Compiles your program for Terraform and run on AWS.
-
-Usage:
-
-```sh
-$ wing compile [entrypoint] --platform tf-aws
-```
-
-The output includes both a Terraform configuration file (under `target/cdktf.out/stacks/root`) and
-JavaScript bundles that include inflight code that executes on compute platform such as AWS Lambda.
-
-You can deploy your stack to AWS using Terraform ([instructions](/docs/start-here/aws)).
-
-
-
-### `tf-azure` Platform
-
-Compiles your program for Terraform and run on Azure.
-
-Usage:
-
-```sh
-$ export AZURE_LOCATION="East US"
-$ wing compile [entrypoint] --platform tf-azure
-```
-
-The variable `AZURE_LOCATION` is required and indicates the [deployment
-location](https://github.com/claranet/terraform-azurerm-regions/blob/master/REGIONS.md) of your
-stack.
-
-The output includes both a Terraform configuration file (under `target/cdktf.out/stacks/root`) and
-JavaScript bundles that include inflight code that executes on compute platform such as Azure
-Functions.
-
-### `tf-gcp` Platform
-
-Compiles your program for Terraform and run on Google Cloud Platform.
-
-Usage:
-
-```sh
-$ export GOOGLE_PROJECT_ID="my-project"
-$ export GOOGLE_STORAGE_LOCATION="US"
-$ wing compile [entrypoint] --platform tf-gcp
-```
-
-The variable `GOOGLE_STORAGE_LOCATION` is required and indicates the [deployment
-location](https://cloud.google.com/storage/docs/locations) of all storage
-resources (such as buckets and queues). The variable `GOOGLE_PROJECT_ID` is required and indicates
-the project ID of your stack.
-
-The output includes both a Terraform configuration file (under `target/cdktf.out/stacks/root`) and
-JavaScript bundles that include inflight code that executes on compute platform such as Google Cloud Functions.
-
-
-### `awscdk` Platform
-
-Compiles your program for AWS CDK with CloudFormation to run on AWS.
-
-Usage:
-
-```sh
-# npm init is only needed if you don't already have a package.json file
-$ npm init -y
-$ npm i @winglang/platform-awscdk
-$ export CDK_STACK_NAME="my-project"
-$ wing compile --platform @winglang/platform-awscdk [entrypoint]
-```
-
-The output includes both a AWS-CDK configuration file (under `target/<entrypoint>.awscdk`) and
-JavaScript bundles that include inflight code that executes on compute platforms such as AWS Lambda.
-
-You can deploy your stack to AWS by installing the [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html) and running:
-```sh
-$ cdk deploy --app target/app.awscdk
-```
+* [Wing Cloud Simulator](../055-platforms/sim.md) - `sim`
+* [Terraform/AWS](../055-platforms/tf-aws.md) - `tf-aws`
+* [Terraform/Azure](../055-platforms/tf-azure.md) - `tf-azure`
+* [Terraform/GCP](../055-platforms/tf-gcp.md) - `tf-gcp`
+* [AWS CDK](../055-platforms/awscdk.md) - `@winglang/platform-awscdk`
 
 ## Test: `wing test`
 
