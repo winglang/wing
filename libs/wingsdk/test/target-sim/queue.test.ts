@@ -24,7 +24,6 @@ test("create a queue", async () => {
   const s = await app.startSimulator();
 
   // THEN
-  await s.stop();
   expect(s.getResourceConfig("/my_queue")).toEqual({
     attrs: {
       handle: expect.any(String),
@@ -37,6 +36,8 @@ test("create a queue", async () => {
     },
     type: cloud.QUEUE_FQN,
   });
+
+  await s.stop();
 
   expect(app.snapshot()).toMatchSnapshot();
 });
