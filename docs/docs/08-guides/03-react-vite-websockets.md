@@ -26,7 +26,6 @@ You can also find the entire project in [GitHub](https://github.com/winglang/gui
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en) v20 or later.
-
 - IDE support (syntax highlighting, code completions and more):
   - [VSCode](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing) - Official extension
   - [IntelliJ](https://plugins.jetbrains.com/plugin/22353-wing) - Community-supported
@@ -179,11 +178,23 @@ the frontend.
 
     > ![image](https://github.com/winglang/wing/assets/598796/cda270e1-5b7b-402f-b533-68be131b5075)
 
-3. Edit `frontend/src/App.tsx` and use replace `<h1>Vite + React</h1>` with
-   `<h1>{window.wing.env.TITLE}</h1>`
+3. Add this line at the top of `frontend/src/App.tsx`:
 
-    > Known issue [#5899](https://github.com/winglang/wing/issues/5899): it is safe to ignore
-    > `Property 'wing' does not exist on type 'Window & typeof globalThis'`.
+    ```ts
+    import "../.winglibs/wing-env"
+    ```
+
+4. Edit `frontend/src/App.tsx` and use replace:
+
+    ```tsx
+    <h1>Vite + React</h1>
+    ```
+
+    with:
+
+    ```ts
+    <h1>{window.wing.env.TITLE}</h1>
+    ```
 
 5. Upon saving both `main.w` and `App.tsx`, you should see the new title pop up!
 
