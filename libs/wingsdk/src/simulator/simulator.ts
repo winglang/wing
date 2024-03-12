@@ -271,7 +271,7 @@ export class Simulator {
 
   private async startResources() {
     const retries: Record<string, number> = {};
-    const queue = this._model.graph.nodes.map(n => n.path);
+    const queue = this._model.graph.nodes.map((n) => n.path);
     while (queue.length > 0) {
       const top = queue.shift()!;
       try {
@@ -367,7 +367,7 @@ export class Simulator {
     }
 
     // first, stop all dependent resources
-    for (const consumer of this._model.graph.find(path)?.dependents ?? []) {
+    for (const consumer of this._model.graph.tryFind(path)?.dependents ?? []) {
       await this.stopResource(consumer);
     }
 
@@ -471,7 +471,11 @@ export class Simulator {
       path = `root${path}`;
     }
 
-    const def = this._model.graph.find(path).def;
+    const def = this._model.graph.tryFind(path)?.def;
+    if (!def) {
+      return undefined;
+    }
+
     const state = this.state[path];
 
     return {
@@ -677,7 +681,7 @@ export class Simulator {
     }
 
     // first lets make sure all my dependencies have been started (depth-first)
-    for (const d of this._model.graph.find(path).dependencies) {
+    for (const d of this._model.graph.tryFind(path)?.dependencies ?? []) {
       await this.startResource(d);
     }
 
@@ -806,7 +810,7 @@ export class Simulator {
    */
   private resolveTokens(obj: any): any {
     return resolveTokens(obj, (token) => {
-      const target = this._model.graph.find(token.path);
+      const target = this._model.graph.tryFind(token.path);
       if (!target) {
         throw new Error(
           `Could not resolve token "${token}" because the resource at path "${token.path}" does not exist.`
