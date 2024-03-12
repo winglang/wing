@@ -3220,9 +3220,23 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn validate_type_is_stringable(&mut self, actual_type: TypeRef, span: &impl Spanned) {
+		// If it's a type we can't resolve then we silently ignore it, assuming an error was already reported
+		if actual_type.is_unresolved() || actual_type.is_inferred() {
+			return;
+		}
+
 		if !actual_type.is_stringable() {
 			let message = format!("Expected type to be stringable, but got \"{actual_type}\" instead");
-			let hint = "str, num, bool, json, and enums are stringable".to_string();
+
+			let hint = if actual_type.maybe_unwrap_option().is_stringable() {
+				format!(
+					"{} is an optional, try unwrapping it with 'x ?? \"nil\"' or 'x!'",
+					actual_type
+				)
+			} else {
+				"str, num, bool, json, and enums are stringable".to_string()
+			};
+
 			self.spanned_error_with_hints(span, message, vec![hint]);
 		}
 	}
