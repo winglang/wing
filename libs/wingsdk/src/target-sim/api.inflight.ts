@@ -131,10 +131,13 @@ export class Api
   public async cleanup(): Promise<void> {
     this.addTrace(`Closing server on ${this.url}`);
     return new Promise((resolve, reject) => {
-      this.server?.closeAllConnections();
       this.server?.close((err) => {
-        if (err) return reject(err);
-        else return resolve();
+        if (err) {
+          return reject(err);
+        }
+
+        this.server?.closeAllConnections();
+        return resolve();
       });
     });
   }
