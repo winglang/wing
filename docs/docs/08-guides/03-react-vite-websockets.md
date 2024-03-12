@@ -43,7 +43,7 @@ In this step, we will create our project.
     cd ~/shared-counter
     ```
 
-2. Create a new React app using [Vite]() under the frontend folder:
+2. Create a new React app using Vite under the `frontend` directory:
  
     ```sh
     npm create -y vite frontend -- --template react-ts
@@ -181,7 +181,7 @@ the frontend.
 3. Add this line at the top of `frontend/src/App.tsx`:
 
     ```ts
-    import "../.winglibs/wing-env"
+    import "../.winglibs/wing-env.d.ts"
     ```
 
 4. Edit `frontend/src/App.tsx` and use replace:
