@@ -532,11 +532,10 @@ api.get("/counter", inflight () => {
 });
 
 api.post("/counter", inflight () => {
-  let oldValue = counter.inc();
+  let prev = counter.inc();
   broadcaster.broadcast("refresh");
-
   return {
-    body: "{oldValue + 1}"
+    body: "{prev + 1}"
   };
 });
 
