@@ -10,7 +10,7 @@ const runApiTest = async (
   route: string,
   response: string,
 ) => {
-  await getResourceNode(page, "root/Default/cloud.Api").click();
+  await getResourceNode(page, "root/Default/Api").click();
 
   await page.getByTestId("cloud.api:method-toggle").click();
   await page.getByTestId(`cloud.api:method-entry-${method}`).click();
@@ -29,27 +29,27 @@ const runApiTest = async (
 };
 
 describe(`${__dirname}/main.w`, () => {
-  test.skip("get method", async ({ page }) => {
+  test("get method", async ({ page }) => {
     await runApiTest(page, "GET", "/test-get", "Hello GET!");
   });
 
-  test.skip("post method", async ({ page }) => {
+  test("post method", async ({ page }) => {
     await runApiTest(page, "POST", "/test-post", "Hello POST!");
   });
 
-  test.skip("put method", async ({ page }) => {
+  test("put method", async ({ page }) => {
     await runApiTest(page, "PUT", "/test-put", "Hello PUT!");
   });
 
-  test.skip("delete method", async ({ page }) => {
+  test("delete method", async ({ page }) => {
     await runApiTest(page, "DELETE", "/test-delete", "Hello DELETE!");
   });
 
-  test.skip("patch method", async ({ page }) => {
+  test("patch method", async ({ page }) => {
     await runApiTest(page, "PATCH", "/test-patch", "Hello PATCH!");
   });
 
-  test.skip("options method", async ({ page }) => {
+  test("options method", async ({ page }) => {
     await runApiTest(page, "OPTIONS", "/test-options", "Hello OPTIONS!");
   });
 });
