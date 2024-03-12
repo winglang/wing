@@ -64,6 +64,18 @@ export class Node {
 
   /**
    * The color of the construct for display purposes.
+   * Supported colors are:
+   * - orange
+   * - sky
+   * - emerald
+   * - lime
+   * - pink
+   * - amber
+   * - cyan
+   * - purple
+   * - red
+   * - violet
+   * - slate
    */
   public color?: string;
 
