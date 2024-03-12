@@ -52,8 +52,8 @@ test("update an object in bucket", async () => {
   await waitUntilTraceCount(s, 5, (trace) => trace.data.message.includes(KEY));
 
   // THEN
-  await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
+  await s.stop();
 });
 
 test("bucket on event creates 3 topics, and sends the right event and key in the event handlers", async () => {
