@@ -32,14 +32,14 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "CustomScope_cloudBucket_17614466": {
+      "CustomScope_Bucket_8BBB89A4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/CustomScope/cloud.Bucket/Default",
-            "uniqueId": "CustomScope_cloudBucket_17614466"
+            "path": "root/Default/Default/CustomScope/Bucket/Default",
+            "uniqueId": "CustomScope_Bucket_8BBB89A4"
           }
         },
-        "bucket_prefix": "cloud-bucket-c89807a1-",
+        "bucket_prefix": "bucket-c830af09-",
         "force_destroy": false
       }
     }
@@ -90,7 +90,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     let count = 0;
-    ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "cloud.Bucket"))(new CustomScope(this, "CustomScope"));
+    ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "Bucket"))(new CustomScope(this, "CustomScope"));
     $helpers.assert($helpers.eq(count, 1), "count == 1");
   }
 }

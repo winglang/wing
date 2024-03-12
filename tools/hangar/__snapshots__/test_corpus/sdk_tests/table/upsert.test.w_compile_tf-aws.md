@@ -18,11 +18,11 @@
   },
   "resource": {
     "aws_dynamodb_table": {
-      "exTable": {
+      "Table": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.Table/Default",
-            "uniqueId": "exTable"
+            "path": "root/Default/Default/Table/Default",
+            "uniqueId": "Table"
           }
         },
         "attribute": [
@@ -33,34 +33,34 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "name",
-        "name": "usersex.Table-c840a49c",
+        "name": "usersTable-c89b2d37",
         "point_in_time_recovery": {
           "enabled": true
         }
       }
     },
     "aws_dynamodb_table_item": {
-      "exTable_DynamodbTableItem-luigi_6628CD6F": {
+      "Table_DynamodbTableItem-luigi_46B8F6CB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.Table/DynamodbTableItem-luigi",
-            "uniqueId": "exTable_DynamodbTableItem-luigi_6628CD6F"
+            "path": "root/Default/Default/Table/DynamodbTableItem-luigi",
+            "uniqueId": "Table_DynamodbTableItem-luigi_46B8F6CB"
           }
         },
-        "hash_key": "${aws_dynamodb_table.exTable.hash_key}",
+        "hash_key": "${aws_dynamodb_table.Table.hash_key}",
         "item": "{\"name\":{\"S\":\"luigi\"},\"gender\":{\"S\":\"male\"},\"role\":{\"S\":\"plumber\"}}",
-        "table_name": "${aws_dynamodb_table.exTable.name}"
+        "table_name": "${aws_dynamodb_table.Table.name}"
       },
-      "exTable_DynamodbTableItem-mario_1CD163AB": {
+      "Table_DynamodbTableItem-mario_6E16BC1F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.Table/DynamodbTableItem-mario",
-            "uniqueId": "exTable_DynamodbTableItem-mario_1CD163AB"
+            "path": "root/Default/Default/Table/DynamodbTableItem-mario",
+            "uniqueId": "Table_DynamodbTableItem-mario_6E16BC1F"
           }
         },
-        "hash_key": "${aws_dynamodb_table.exTable.hash_key}",
+        "hash_key": "${aws_dynamodb_table.Table.hash_key}",
         "item": "{\"name\":{\"S\":\"mario\"},\"gender\":{\"S\":\"male\"},\"role\":{\"S\":\"plumber\"}}",
-        "table_name": "${aws_dynamodb_table.exTable.name}"
+        "table_name": "${aws_dynamodb_table.Table.name}"
       }
     }
   }

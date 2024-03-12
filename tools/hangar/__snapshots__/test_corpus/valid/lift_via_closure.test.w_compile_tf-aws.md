@@ -111,24 +111,24 @@ module.exports = function({ $bucket2 }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "MyClosure_cloudBucket_4DAD12C0": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyClosure/cloud.Bucket/Default",
-            "uniqueId": "MyClosure_cloudBucket_4DAD12C0"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8b87a6b-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       },
-      "cloudBucket": {
+      "MyClosure_Bucket_874B5056": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/MyClosure/Bucket/Default",
+            "uniqueId": "MyClosure_Bucket_874B5056"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c8fe564c-",
         "force_destroy": false
       }
     }
@@ -188,7 +188,7 @@ class $Root extends $stdlib.std.Resource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
       }
       static _toInflightType() {
         return `
@@ -304,7 +304,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const fn = new $Closure1(this, "$Closure1");
     const fn2 = new MyClosure(this, "MyClosure");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:call synthetic closure class as a function", new $Closure2(this, "$Closure2"));

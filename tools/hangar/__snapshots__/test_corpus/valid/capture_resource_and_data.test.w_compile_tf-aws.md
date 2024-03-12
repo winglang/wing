@@ -41,27 +41,27 @@ module.exports = function({ $data_size, $queue, $res }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "cloudBucket": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       }
     },
     "aws_sqs_queue": {
-      "cloudQueue": {
+      "Queue": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue/Default",
-            "uniqueId": "cloudQueue"
+            "path": "root/Default/Default/Queue/Default",
+            "uniqueId": "Queue"
           }
         },
         "message_retention_seconds": 3600,
-        "name": "cloud-Queue-c86e03d8",
+        "name": "Queue-c822c726",
         "visibility_timeout_seconds": 30
       }
     }
@@ -124,8 +124,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const data = new Set([1, 2, 3]);
-    const res = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
-    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+    const res = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:resource and data", new $Closure1(this, "$Closure1"));
   }
 }

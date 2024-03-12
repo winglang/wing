@@ -59,11 +59,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "A_cloudCounter_1CAB7DAD": {
+      "A_Counter_2B28E8C1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/A/cloud.Counter/Default",
-            "uniqueId": "A_cloudCounter_1CAB7DAD"
+            "path": "root/Default/Default/A/Counter/Default",
+            "uniqueId": "A_Counter_2B28E8C1"
           }
         },
         "attribute": [
@@ -74,7 +74,7 @@ module.exports = function({  }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c88d0b81"
+        "name": "wing-counter-Counter-c87bf366"
       }
     }
   }
@@ -98,7 +98,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         this.field = "hey";
-        this.counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+        this.counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
       }
       static _toInflightType() {
         return `

@@ -136,58 +136,58 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "Doubler2_cloudFunction_CloudwatchLogGroup_517BCD05": {
+      "Doubler2_Function_CloudwatchLogGroup_53963378": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/cloud.Function/CloudwatchLogGroup",
-            "uniqueId": "Doubler2_cloudFunction_CloudwatchLogGroup_517BCD05"
+            "path": "root/Default/Default/Doubler2/Function/CloudwatchLogGroup",
+            "uniqueId": "Doubler2_Function_CloudwatchLogGroup_53963378"
           }
         },
-        "name": "/aws/lambda/cloud-Function-c8d4b6f0",
+        "name": "/aws/lambda/Function-c892ab6d",
         "retention_in_days": 30
       }
     },
     "aws_iam_role": {
-      "Doubler2_cloudFunction_IamRole_3E4BED38": {
+      "Doubler2_Function_IamRole_66AECEFB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/cloud.Function/IamRole",
-            "uniqueId": "Doubler2_cloudFunction_IamRole_3E4BED38"
+            "path": "root/Default/Default/Doubler2/Function/IamRole",
+            "uniqueId": "Doubler2_Function_IamRole_66AECEFB"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "Doubler2_cloudFunction_IamRolePolicy_0E850719": {
+      "Doubler2_Function_IamRolePolicy_B68B51AD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/cloud.Function/IamRolePolicy",
-            "uniqueId": "Doubler2_cloudFunction_IamRolePolicy_0E850719"
+            "path": "root/Default/Default/Doubler2/Function/IamRolePolicy",
+            "uniqueId": "Doubler2_Function_IamRolePolicy_B68B51AD"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.Doubler2_cloudFunction_IamRole_3E4BED38.name}"
+        "role": "${aws_iam_role.Doubler2_Function_IamRole_66AECEFB.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "Doubler2_cloudFunction_IamRolePolicyAttachment_A02FB4B1": {
+      "Doubler2_Function_IamRolePolicyAttachment_4191B8F8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/cloud.Function/IamRolePolicyAttachment",
-            "uniqueId": "Doubler2_cloudFunction_IamRolePolicyAttachment_A02FB4B1"
+            "path": "root/Default/Default/Doubler2/Function/IamRolePolicyAttachment",
+            "uniqueId": "Doubler2_Function_IamRolePolicyAttachment_4191B8F8"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.Doubler2_cloudFunction_IamRole_3E4BED38.name}"
+        "role": "${aws_iam_role.Doubler2_Function_IamRole_66AECEFB.name}"
       }
     },
     "aws_lambda_function": {
-      "Doubler2_cloudFunction_402CDAA3": {
+      "Doubler2_Function_235483AB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/cloud.Function/Default",
-            "uniqueId": "Doubler2_cloudFunction_402CDAA3"
+            "path": "root/Default/Default/Doubler2/Function/Default",
+            "uniqueId": "Doubler2_Function_235483AB"
           }
         },
         "architectures": [
@@ -196,18 +196,18 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "cloud-Function-c8d4b6f0",
+            "WING_FUNCTION_NAME": "Function-c892ab6d",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Function-c8d4b6f0",
+        "function_name": "Function-c892ab6d",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.Doubler2_cloudFunction_IamRole_3E4BED38.arn}",
+        "role": "${aws_iam_role.Doubler2_Function_IamRole_66AECEFB.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.Doubler2_cloudFunction_S3Object_8029A145.key}",
+        "s3_key": "${aws_s3_object.Doubler2_Function_S3Object_4A795FD9.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -227,11 +227,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "Doubler2_cloudFunction_S3Object_8029A145": {
+      "Doubler2_Function_S3Object_4A795FD9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Doubler2/cloud.Function/S3Object",
-            "uniqueId": "Doubler2_cloudFunction_S3Object_8029A145"
+            "path": "root/Default/Default/Doubler2/Function/S3Object",
+            "uniqueId": "Doubler2_Function_S3Object_4A795FD9"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -365,7 +365,7 @@ class $Root extends $stdlib.std.Resource {
             });
           }
         }
-        return this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure2(this, "$Closure2"));
+        return this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", new $Closure2(this, "$Closure2"));
       }
       static _toInflightType() {
         return `

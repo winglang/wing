@@ -18,6 +18,40 @@
   },
   "resource": {
     "aws_dynamodb_table": {
+      "DynamodbTable": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/DynamodbTable/Default",
+            "uniqueId": "DynamodbTable"
+          }
+        },
+        "attribute": [
+          {
+            "name": "type",
+            "type": "S"
+          },
+          {
+            "name": "id",
+            "type": "S"
+          },
+          {
+            "name": "createdAt",
+            "type": "N"
+          }
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "global_secondary_index": [
+          {
+            "hash_key": "type",
+            "name": "CreatedAtIndex",
+            "projection_type": "ALL",
+            "range_key": "createdAt"
+          }
+        ],
+        "hash_key": "type",
+        "name": "blogDynamodbTable-c84d1506",
+        "range_key": "id"
+      },
       "blog2": {
         "//": {
           "metadata": {
@@ -45,40 +79,6 @@
         ],
         "hash_key": "type",
         "name": "blog2blog2-c861757e",
-        "range_key": "id"
-      },
-      "exDynamodbTable": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/ex.DynamodbTable/Default",
-            "uniqueId": "exDynamodbTable"
-          }
-        },
-        "attribute": [
-          {
-            "name": "type",
-            "type": "S"
-          },
-          {
-            "name": "id",
-            "type": "S"
-          },
-          {
-            "name": "createdAt",
-            "type": "N"
-          }
-        ],
-        "billing_mode": "PAY_PER_REQUEST",
-        "global_secondary_index": [
-          {
-            "hash_key": "type",
-            "name": "CreatedAtIndex",
-            "projection_type": "ALL",
-            "range_key": "createdAt"
-          }
-        ],
-        "hash_key": "type",
-        "name": "blogex.DynamodbTable-c8d9b5e7",
         "range_key": "id"
       }
     }

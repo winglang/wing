@@ -110,7 +110,7 @@ class Util extends $stdlib.std.Resource {
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-    this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const __parent_this_1 = this;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
@@ -147,7 +147,7 @@ class Store extends $stdlib.std.Resource {
         });
       }
     }
-    const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
+    const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "OnDeploy", new $Closure1(this, "$Closure1"));
   }
   static _toInflightType() {
     return `

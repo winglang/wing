@@ -508,7 +508,11 @@ impl<'a> JSifier<'a> {
 					Some(if let Some(id_exp) = obj_id {
 						self.jsify_expression(id_exp, ctx).to_string()
 					} else {
-						format!("\"{}\"", ctor.to_string())
+						// take only the last part of the fully qualified name (the class name) because any
+						// leading parts like the namespace are volatile and can be changed easily by the user
+						let s = ctor.to_string();
+						let class_name = s.split(".").last().unwrap().to_string();
+						format!("\"{}\"", class_name)
 					})
 				} else {
 					None

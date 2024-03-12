@@ -86,7 +86,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+    const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
