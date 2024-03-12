@@ -281,7 +281,7 @@ export class Simulator {
           retries[top] = (retries[top] ?? 0) + 1;
           if (retries[top] > 10) {
             throw new Error(
-              `Failed to resolve tokens for resource ${top} after 10 retries: ${e.message}`
+              `Could not start resource after 10 attempts: ${e.message}`
             );
           }
           queue.push(top);
