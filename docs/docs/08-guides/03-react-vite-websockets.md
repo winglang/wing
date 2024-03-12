@@ -346,7 +346,7 @@ Let's modify our frontend code to fetch and update the counter value using the r
 3. Let's trigger the `incrementCount()` function when the user clicks the button:
 
     ```ts
-      <button onClick={incrementCount}>
+      <button key={count} onClick={incrementCount}>
     ```
 
 4. Once you save the code, you can examine both the webpage and the Simulator to see how the counter
@@ -395,7 +395,7 @@ function App() {
       </div>
       <h1>{window.wing.env.TITLE}</h1>
       <div className="card">
-        <button onClick={incrementCount}>
+        <button key={count} onClick={incrementCount}>
           count is {count}
         </button>
         <p>
@@ -635,7 +635,7 @@ function App() {
       </div>
       <h1>{window.wing.env.TITLE}</h1>
       <div className="card">
-        <button onClick={incrementCount}>
+        <button key={count} onClick={incrementCount}>
           count is {count}
         </button>
         <p>
