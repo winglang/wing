@@ -270,8 +270,25 @@ export class Simulator {
   }
 
   private async startResources() {
-    for (const n of this._model.graph.nodes) {
-      await this.startResource(n.path);
+    const retries: Record<string, number> = {};
+    const queue = this._model.graph.nodes.map(n => n.path);
+    while (queue.length > 0) {
+      const top = queue.shift()!;
+      try {
+        await this.startResource(top);
+      } catch (e) {
+        if (e instanceof UnresolvedTokenError) {
+          retries[top] = (retries[top] ?? 0) + 1;
+          if (retries[top] > 10) {
+            throw new Error(
+              `Failed to resolve tokens for resource ${top} after 10 retries: ${e.message}`
+            );
+          }
+          queue.push(top);
+        } else {
+          throw e;
+        }
+      }
     }
   }
 
@@ -801,7 +818,7 @@ export class Simulator {
       if (token.attr) {
         const value = r.attrs[token.attr];
         if (value === undefined) {
-          throw new Error(
+          throw new UnresolvedTokenError(
             `Unable to resolve attribute '${token.attr}' for resource: ${target.path}`
           );
         }
@@ -816,6 +833,8 @@ export class Simulator {
     });
   }
 }
+
+class UnresolvedTokenError extends Error {}
 
 /**
  * A factory that can turn resource descriptions into (inflight) resource simulations.
