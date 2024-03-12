@@ -333,7 +333,7 @@ class WingRestApi extends Construct {
     this.accountId = app.accountId;
 
     // Check for PRIVATE API Gateway configuration
-    let privateApiGateway = app.platformParameters.getParameterValue(
+    let privateApiGateway = app.parameterRegistrar.getParameterValue(
       "tf-aws/vpc_api_gateway"
     );
     if (privateApiGateway === true) {

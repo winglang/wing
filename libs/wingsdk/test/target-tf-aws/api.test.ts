@@ -36,7 +36,7 @@ test("api with GET route at root", () => {
 test("api will be private when vpc_api_gateway is true", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const parameters = app.platformParameters;
+  const parameters = app.parameterRegistrar;
   parameters._rawParameters["tf-aws"] = {
     vpc: "new",
     vpc_api_gateway: true,

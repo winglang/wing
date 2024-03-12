@@ -17,7 +17,7 @@ export class Domain extends cloud.Domain {
   constructor(scope: Construct, id: string, props: cloud.DomainProps) {
     super(scope, id, props);
 
-    const parameters = App.of(scope).platformParameters;
+    const parameters = App.of(scope).parameterRegistrar;
 
     // Domain requires parameters from the user, so we need to add the parameter schemas to the registrar
     let schema = {

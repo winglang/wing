@@ -7,6 +7,7 @@ import {
   IValidation,
 } from "constructs";
 import { Connections } from "../core/connections";
+import { ParameterRegistrar } from "../platform";
 
 const NODE_SYMBOL = Symbol.for("@winglang/sdk.std.Node");
 export const APP_SYMBOL = Symbol.for("@winglang/sdk.std.Node/app");
@@ -451,6 +452,11 @@ export interface IApp extends IConstruct {
    * The directory of the entrypoint of the current program.
    */
   readonly entrypointDir: string;
+
+  /**
+   * The application's parameter registrar
+   */
+  readonly parameterRegistrar: ParameterRegistrar;
 
   /**
    * Generate a unique ID for the given scope and prefix. The newly generated ID is

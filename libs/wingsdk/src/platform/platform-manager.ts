@@ -148,7 +148,7 @@ export class PlatformManager {
       newInstanceOverrides,
     }) as App;
 
-    let registrar = app.platformParameters;
+    let registrar = app.parameterRegistrar;
 
     parameterSchemas.forEach((schema) => {
       registrar.addParameterSchema(schema);

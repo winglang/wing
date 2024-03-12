@@ -640,6 +640,7 @@ prepended to the unique identifier.
 | <code><a href="#@winglang/sdk.std.IApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.std.IApp.property.entrypointDir">entrypointDir</a></code> | <code>str</code> | The directory of the entrypoint of the current program. |
 | <code><a href="#@winglang/sdk.std.IApp.property.isTestEnvironment">isTestEnvironment</a></code> | <code>bool</code> | `true` if this is a testing environment. |
+| <code><a href="#@winglang/sdk.std.IApp.property.parameterRegistrar">parameterRegistrar</a></code> | <code><a href="#@winglang/sdk.platform.ParameterRegistrar">ParameterRegistrar</a></code> | The parameter registrar. |
 | <code><a href="#@winglang/sdk.std.IApp.property.workdir">workdir</a></code> | <code>str</code> | The `.wing` directory into which you can emit artifacts during preflight. |
 
 ---
@@ -677,6 +678,18 @@ isTestEnvironment: bool;
 - *Type:* bool
 
 `true` if this is a testing environment.
+
+---
+
+##### `parameterRegistrar`<sup>Required</sup> <a name="parameterRegistrar" id="@winglang/sdk.std.IApp.property.parameterRegistrar"></a>
+
+```wing
+parameterRegistrar: ParameterRegistrar;
+```
+
+- *Type:* <a href="#@winglang/sdk.platform.ParameterRegistrar">ParameterRegistrar</a>
+
+The parameter registrar.
 
 ---
 
