@@ -595,6 +595,13 @@ describe("in-place updates", () => {
   });
 });
 
+test("tryGetResource returns undefined if the resource not found", async () => {
+  const app = new SimApp();
+  const sim = await app.startSimulator();
+  expect(sim.tryGetResource("bang")).toBeUndefined();
+  expect(sim.tryGetResourceConfig("bing")).toBeUndefined();
+});
+
 function makeTest(
   scope: Construct,
   id: string,
