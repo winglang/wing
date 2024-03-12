@@ -4057,7 +4057,7 @@ Duration <DURATION>"
 `;
 
 exports[`unresolved_state.test.w 1`] = `
-"Unable to resolve attribute 'my_unresolved_token' for resource: root/env0/sim.State
+"Failed to resolve tokens for resource root/env0/cloud.Function after 10 retries: Unable to resolve attribute 'my_unresolved_token' for resource: root/env0/sim.State
  
  
 Tests 1 failed (1)
