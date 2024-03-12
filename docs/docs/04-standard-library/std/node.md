@@ -449,6 +449,19 @@ color: str;
 
 The color of the construct for display purposes.
 
+Supported colors are:
+- orange
+- sky
+- emerald
+- lime
+- pink
+- amber
+- cyan
+- purple
+- red
+- violet
+- slate
+
 ---
 
 ##### `defaultChild`<sup>Optional</sup> <a name="defaultChild" id="@winglang/sdk.std.Node.property.defaultChild"></a>
