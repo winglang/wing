@@ -48,6 +48,19 @@ wplatform.js
 
 For example, if you have a file named `custom.wplatform.js` in the root of your project, it will automatically be added to the list of platforms to be used when compiling your application. Its also important to note that implicit platforms are always loaded after the platforms specified in the `--platform` option.
 
+The use of implicit platforms can be beneficial when writing a Wing library that requires a specific platform to be used. For example, if you are writing a library that requires a specific parameter to be passed to the platform, you can use an implicit platform to ensure that the parameter is always provided.
+
+For example, if your library structure looks like this:
+
+```sh
+my-library/
+  lib.w
+  custom.wplatform.js
+```
+
+Then the custom platform can define any required parameters that the library needs to function properly. (see [Defining Custom Platform Parameters](#defining-custom-platform-parameters) for more information on how to define custom platform parameters)
+
+
 ### Provisioning Engines
 
 Provisioning is the process of setting up and creating infrastructure, and the provisioning engine is the driver behind this deployment. Common engines used in the Wing compilation process include Terraform and AWS CDK, with support for more planned ([tracking issue](https://github.com/winglang/wing/issues/2066)).
