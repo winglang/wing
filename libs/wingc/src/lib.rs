@@ -20,6 +20,7 @@ use jsify::JSifier;
 
 use lifting::LiftVisitor;
 use parser::{is_entrypoint_file, parse_wing_project};
+use serde::Serialize;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::SymbolEnvKind;
@@ -37,7 +38,7 @@ use std::mem;
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
-use crate::type_check::{TypeChecker, Types};
+use crate::type_check::{SymbolEnvOrNamespace, TypeChecker, Types};
 
 #[macro_use]
 #[cfg(test)]
@@ -124,7 +125,10 @@ const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
 pub const TRUSTED_LIBRARY_NPM_NAMESPACE: &'static str = "@winglibs";
 
-pub struct CompilerOutput {}
+#[derive(Serialize)]
+pub struct CompilerOutput {
+	imported_namespaces: Vec<String>,
+}
 
 /// Exposes an allocation function to the WASM host
 ///
@@ -200,10 +204,11 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 
 	let results = compile(project_dir, source_path, None, output_dir);
+
 	if results.is_err() {
 		WASM_RETURN_ERROR
 	} else {
-		string_to_combined_ptr("".to_string())
+		string_to_combined_ptr(serde_json::to_string(&results.unwrap()).unwrap())
 	}
 }
 
@@ -378,7 +383,16 @@ pub fn compile(
 		return Err(());
 	}
 
-	return Ok(CompilerOutput {});
+	let imported_namespaces = types
+		.source_file_envs
+		.iter()
+		.filter_map(|(k, v)| match v {
+			SymbolEnvOrNamespace::Namespace(_) => Some(k.to_string()),
+			_ => None,
+		})
+		.collect::<Vec<String>>();
+
+	return Ok(CompilerOutput { imported_namespaces });
 }
 
 pub fn is_absolute_path(path: &Utf8Path) -> bool {

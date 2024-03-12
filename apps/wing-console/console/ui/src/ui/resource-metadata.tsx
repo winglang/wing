@@ -125,6 +125,7 @@ interface Relationship {
   id: string;
   path: string;
   type: string;
+  display?: NodeDisplay;
 }
 
 export interface MetadataNode {
@@ -252,6 +253,7 @@ export const ResourceMetadata = memo(
                 resourceType={relationship.type}
                 resourcePath={relationship.path}
                 className="w-4 h-4"
+                color={relationship.display?.color}
               />
             ),
           })),
@@ -269,6 +271,7 @@ export const ResourceMetadata = memo(
                 resourceType={relationship.type}
                 resourcePath={relationship.path}
                 className="w-4 h-4"
+                color={relationship.display?.color}
               />
             ),
           })),
@@ -309,6 +312,7 @@ export const ResourceMetadata = memo(
               className="w-6 h-6"
               resourceType={node.type}
               resourcePath={node.path}
+              color={node.display?.color}
             />
           </div>
 
@@ -322,7 +326,7 @@ export const ResourceMetadata = memo(
         {resourceUI.data && resourceUI.data.length > 0 && (
           <InspectorSection
             icon={CubeIcon}
-            text="Properties"
+            text={(node.display?.title || node.id) ?? "Properties"}
             open={openInspectorSections.includes("resourceUI")}
             onClick={() => toggleInspectorSection("resourceUI")}
             headingClassName="pl-2"

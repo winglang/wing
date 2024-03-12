@@ -282,7 +282,7 @@ export function invoke(
     argMemoryBuffer.set(bytes);
 
     const result = exports[func](argPointer, bytes.byteLength);
-
+    
     if (result === 0 || result === undefined || result === 0n) {
       return 0;
     } else {
