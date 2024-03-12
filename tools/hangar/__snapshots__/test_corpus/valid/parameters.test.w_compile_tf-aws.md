@@ -31,10 +31,11 @@ const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{foo:{type:"string"},},required:[]});
     const app = $helpers.nodeof(this).app;
-    const registrar = app.parameterRegistrar;
-    (registrar.addParameterSchema(({"type": "object", "properties": ({"foo": ({"type": "string"}), "meaning_of_life": ({"type": "number"})})})));
-    const foo = (registrar.getParameterValue("foo"));
+    const registrar = app.parameters;
+    (registrar.addSchema(MyParams));
+    const foo = (registrar.getValue("foo"));
     {
       const $if_let_value = foo;
       if ($if_let_value != undefined) {
