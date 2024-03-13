@@ -1,12 +1,12 @@
 import { mkdirSync, writeFileSync } from "fs";
-import { basename, dirname, join, relative } from "path";
+import { join, relative } from "path";
 import { ResourceSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { Construct, INFLIGHT_SYMBOL } from "../core/types";
-import { normalPath } from "../helpers";
+// import { normalPath } from "../helpers";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { BaseResourceSchema } from "../simulator/simulator";
 import * as std from "../std";
@@ -47,12 +47,7 @@ export class Resource
    * @internal
    */
   public static _toInflightType(): string {
-    const dir = dirname(__filename);
-    const base = basename(__filename).split(".")[0];
-
-    return `require("${normalPath(
-      join(dir, `${base}.inflight.js`)
-    )}").EmptyResource`;
+    return `class Resource {}`;
   }
 
   /** @internal */

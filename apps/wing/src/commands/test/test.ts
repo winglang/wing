@@ -199,7 +199,7 @@ export async function renderTestReport(
     // add any log messages that were emitted during the test
     for (const trace of result.traces) {
       // only show detailed traces if we are in debug mode
-      if (trace.type === "resource" && process.env.DEBUG) {
+      if ((trace.type === "resource" || trace.type === "simulator") && process.env.DEBUG) {
         details.push(chalk.gray("[trace] " + trace.data.message));
       }
       if (trace.type === "log") {
