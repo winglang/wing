@@ -1,4 +1,6 @@
-use std::collections::{BTreeMap, BTreeSet, HashMap};
+use std::collections::{BTreeMap, HashMap};
+
+use indexmap::IndexSet;
 
 use crate::ast::{Symbol, UserDefinedType};
 
@@ -30,7 +32,7 @@ pub enum Liftable {
 #[derive(Debug)]
 pub struct LiftQualification {
 	/// The operations that qualify the lift (the property names)
-	pub ops: BTreeSet<String>,
+	pub ops: IndexSet<String>,
 	/// Whether this lift was explicitly defined via a `lift` statement.
 	pub explicit: bool,
 }
@@ -59,11 +61,11 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, method: Symbol, property: Option<Symbol>, code: &str, explicit: bool) {
+	pub fn lift(&mut self, method: Symbol, qualification: Option<String>, code: &str, explicit: bool) {
 		self.add_lift(
 			method.to_string(),
 			code,
-			property.as_ref().map(|s| s.name.clone()),
+			qualification.as_ref().map(|s| s.clone()),
 			explicit,
 		);
 
@@ -74,19 +76,19 @@ impl Lifts {
 		}
 	}
 
-	fn add_lift(&mut self, method: String, code: &str, property: Option<String>, explicit: bool) {
+	fn add_lift(&mut self, method: String, code: &str, qualification: Option<String>, explicit: bool) {
 		let lift = self
 			.lifts_qualifications
 			.entry(method)
 			.or_default()
 			.entry(code.to_string())
 			.or_insert(LiftQualification {
-				ops: BTreeSet::new(),
+				ops: IndexSet::new(),
 				explicit,
 			});
 
-		if let Some(op) = &property {
-			lift.ops.insert(op.clone());
+		if let Some(op) = qualification {
+			lift.ops.insert(op);
 		}
 
 		// If there are explicit lifts in the method, then the lift is explicit.

@@ -152,6 +152,12 @@ impl<'a> LiftVisitor<'a> {
 			udt_js
 		}
 	}
+
+	// Used for generating a js array represtining a lift qualificaiton (an operation done on a lifted preflight object)
+	// lift qualifcations are in array format so multile ops can be bunched together in some cases.
+	fn jsify_symbol_to_op_array(&self, symb: &Symbol) -> String {
+		format!("[\"{symb}\"]")
+	}
 }
 
 impl<'a> Visit<'a> for LiftVisitor<'a> {
@@ -218,9 +224,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			//---------------
 			// LIFT
 			if expr_phase == Phase::Preflight {
-				// jsify the expression so we can get the preflight code
-				let code = v.jsify_expr(&node);
-
+				// Get the property being accessed on the preflight expression, this is used to qualify the lift
 				let property = if let Some(property) = v.ctx.current_property() {
 					Some(property)
 				} else if expr_type.is_closure() {
@@ -237,9 +241,17 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 					return;
 				}
 
+				// jsify the expression so we can get the preflight code
+				let code = v.jsify_expr(&node);
+
 				let mut lifts = v.lifts_stack.pop().unwrap();
 				let is_field = code.contains("this."); // TODO: starts_with?
-				lifts.lift(v.ctx.current_method().map(|(m,_)|m).expect("a method"), property, &code, false);
+				lifts.lift(
+					v.ctx.current_method().map(|(m,_)|m).expect("a method"),
+					property.map(|p| v.jsify_symbol_to_op_array(&p)),
+					&code,
+					false
+				);
 				lifts.capture(&Liftable::Expr(node.id), &code, is_field);
 				v.lifts_stack.push(lifts);
 				return;
@@ -301,7 +313,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.lift(
 				self.ctx.current_method().map(|(m, _)| m).expect("a method"),
-				property,
+				property.map(|p| self.jsify_symbol_to_op_array(&p)),
 				&code,
 				false,
 			);
@@ -451,12 +463,50 @@ impl LiftVisitor<'_> {
 			report_diagnostic(Diagnostic {
 				span: Some(preflight_object_expr.span.clone()),
 				message: format!(
-					"Expected a preflight object as first argument to `lift` builtin, found a {obj_phase} expression instead"
+					"Expected a preflight object as first argument to `lift` builtin, found {obj_phase} expression instead"
 				),
 				annotations: vec![],
 				hints: vec![],
 			});
+			return;
 		}
+
+		// Make sure the second argument, the qualifications, is a preflight expression since we'll need to evalute it preflihgt
+		let qualifications_expr = &arg_list.pos_args[1];
+		let qualifications_phase = self
+			.jsify
+			.types
+			.get_expr_phase(qualifications_expr)
+			.expect("an expr phase");
+		if qualifications_phase != Phase::Preflight {
+			report_diagnostic(Diagnostic {
+				span: Some(qualifications_expr.span.clone()),
+				message: format!(
+					"Qualification list must be a preflight array of strings, found {qualifications_phase} expression instead"
+				),
+				annotations: vec![],
+				hints: vec![],
+			});
+			return;
+		}
+
+		// This seems like a valid explicit lift qualification, add it
+
+		// jsify the expression so we can get the preflight code
+		let code = self.jsify_expr(&preflight_object_expr);
+
+		// jsify the explicit lift qualifications
+		let qualification_code = self.jsify_expr(qualifications_expr);
+
+		let mut lifts = self.lifts_stack.pop().unwrap();
+
+		lifts.lift(
+			self.ctx.current_method().map(|(m, _)| m).expect("a method"),
+			Some(qualification_code),
+			&code,
+			false,
+		);
+		self.lifts_stack.push(lifts);
 	}
 }
 

@@ -1854,8 +1854,8 @@ impl<'a> JSifier<'a> {
 			for (method_name, method_qual) in lift_qualifications {
 				bind_method.open(format!("\"{method_name}\": [",));
 				for (code, method_lift_qual) in method_qual {
-					let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
-					bind_method.line(format!("[{code}, [{ops_strings}]],",));
+					let ops = method_lift_qual.ops.iter().join(", ");
+					bind_method.line(format!("[{code}, [].concat(...[{ops}])],",));
 				}
 				bind_method.close("],");
 			}

@@ -2048,7 +2048,9 @@ impl<'a> TypeChecker<'a> {
 				],
 				return_type: self.types.void(),
 				phase: Phase::Inflight,
-				js_override: None,
+				// This builtin actually compiles to nothing in JS, it's a marker that behaves like a function in the type checker
+				// and is used during the lifting phase to explicitly define lifts for an inflight method
+				js_override: Some("".to_string()),
 				docs: Docs::with_summary(
 					"Explicitly apply qualifications to apply to the preflight object used in the current method/function",
 				),
