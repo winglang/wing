@@ -154,7 +154,7 @@ impl<'a> LiftVisitor<'a> {
 	}
 
 	// Used for generating a js array represtining a lift qualificaiton (an operation done on a lifted preflight object)
-	// lift qualifcations are in array format so multile ops can be bunched together in some cases.
+	// lift qualifcations are in array format so multiple ops can be bunched together in some cases.
 	fn jsify_symbol_to_op_array(&self, symb: &Symbol) -> String {
 		format!("[\"{symb}\"]")
 	}
