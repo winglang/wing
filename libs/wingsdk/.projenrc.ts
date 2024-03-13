@@ -88,6 +88,8 @@ const project = new cdk.JsiiProject({
     // enhanced diagnostics
     "stacktracey",
     "ulid",
+    // tunnels
+    "@winglang/wingtunnels@workspace:^",
   ],
   devDeps: [
     `@cdktf/provider-aws@^19`, // only for testing Wing plugins

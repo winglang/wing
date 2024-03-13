@@ -254,6 +254,11 @@
       "type": "bundled"
     },
     {
+      "name": "@winglang/wingtunnels",
+      "version": "workspace:^",
+      "type": "bundled"
+    },
+    {
       "name": "ajv",
       "type": "bundled"
     },
