@@ -40,6 +40,7 @@ const getEndpointDetails = async (
     // The slice is for removing `"root/Default/"` from `endpoint.path`.
     label: endpoint.attrs.label ?? endpoint.path.slice(13),
     url: endpoint.attrs.url,
+    localUrl: endpoint.attrs.inputUrl,
     browserSupport: endpoint.props.browserSupport ?? false,
     exposeStatus,
   };

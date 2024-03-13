@@ -10,7 +10,7 @@ export const useEndpoints = () => {
   const endpointListQuery = trpc["endpoint.list"].useQuery();
 
   useEffect(() => {
-    return setEndpointList(endpointListQuery.data || []);
+    return setEndpointList(endpointListQuery.data ?? []);
   }, [endpointListQuery.data]);
 
   const exposeEndpointMutation = trpc["endpoint.expose"].useMutation();

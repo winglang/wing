@@ -1,6 +1,6 @@
 import { useTheme, Button, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useId } from "react";
+import { useId, useMemo } from "react";
 
 import type { EndpointItem } from "../shared/endpoint-item.js";
 
