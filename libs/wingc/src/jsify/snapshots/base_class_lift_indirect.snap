@@ -109,7 +109,7 @@ class $Root extends $stdlib.std.Resource {
             [this.b, [].concat(...[["put"], ["list"]])],
           ],
           "$inflight_init": [
-            [this.b, [].concat(...[])],
+            [this.b, []],
           ],
         });
       }
@@ -139,7 +139,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "foo": [
-            [this, [].concat(...[["put"]])],
+            [this, ["put"]],
           ],
           "$inflight_init": [
           ],
