@@ -5,7 +5,7 @@ import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/main.w`, () => {
   test.skip("executes function and shows response", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Function").click();
+    await getResourceNode(page, "root/Default/Function").click();
 
     await page.getByTestId("cloud.function:invoke").click();
 

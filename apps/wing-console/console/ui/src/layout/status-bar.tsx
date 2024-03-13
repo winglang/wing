@@ -52,6 +52,7 @@ export const StatusBar = ({
           <span>Status:</span>
           <span className={classNames(theme.text2)}>
             <span
+              data-testid="app-state"
               className={classNames([
                 isError ? "text-red-500" : theme.text2,
                 "flex",

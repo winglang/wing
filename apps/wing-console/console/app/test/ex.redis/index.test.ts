@@ -22,7 +22,7 @@ describe(`${__dirname}/main.w`, () => {
   });
 
   test.skip("opens redis help", async ({ page }) => {
-    await getResourceNode(page, "root/Default/ex.Redis").click();
+    await getResourceNode(page, "root/Default/Redis").click();
 
     const input = page.getByTestId("ex.redis:input");
 
@@ -40,7 +40,7 @@ describe(`${__dirname}/main.w`, () => {
   });
 
   test.skip("navigates history", async ({ page }) => {
-    await getResourceNode(page, "root/Default/ex.Redis").click();
+    await getResourceNode(page, "root/Default/Redis").click();
 
     const input = page.getByTestId("ex.redis:input");
 
