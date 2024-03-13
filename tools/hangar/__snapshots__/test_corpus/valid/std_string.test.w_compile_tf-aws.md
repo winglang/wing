@@ -82,11 +82,11 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [s1, [].concat(...[["indexOf"], ["split"], ["concat"]])],
-            [s2, [].concat(...[])],
+            [s2, []],
           ],
           "$inflight_init": [
-            [s1, [].concat(...[])],
-            [s2, [].concat(...[])],
+            [s1, []],
+            [s2, []],
           ],
         });
       }

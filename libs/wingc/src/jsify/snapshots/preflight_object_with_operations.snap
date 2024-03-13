@@ -80,7 +80,7 @@ class $Root extends $stdlib.std.Resource {
             [b, [].concat(...[["list"], ["put"]])],
           ],
           "$inflight_init": [
-            [b, [].concat(...[])],
+            [b, []],
           ],
         });
       }

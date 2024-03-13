@@ -149,12 +149,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "access_b": [
-            [b, [].concat(...[["list"]])],
+            [b, ["list"]],
           ],
           "m": [
           ],
           "$inflight_init": [
-            [b, [].concat(...[])],
+            [b, []],
           ],
         });
       }
@@ -186,10 +186,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [f, [].concat(...[["m"]])],
+            [f, ["m"]],
           ],
           "$inflight_init": [
-            [f, [].concat(...[])],
+            [f, []],
           ],
         });
       }
@@ -221,14 +221,14 @@ class $Root extends $stdlib.std.Resource {
           "m": [
           ],
           "$inflight_init": [
-            [b, [].concat(...[])],
+            [b, []],
           ],
         });
       }
       static get _liftTypeMap() {
         return ({
           "access_b": [
-            [b, [].concat(...[["list"]])],
+            [b, ["list"]],
           ],
         });
       }
@@ -260,10 +260,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [bar, [].concat(...[["m"]])],
+            [bar, ["m"]],
           ],
           "$inflight_init": [
-            [bar, [].concat(...[])],
+            [bar, []],
           ],
         });
       }

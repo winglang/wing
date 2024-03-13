@@ -222,15 +222,15 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "get": [
-            [this.bucket, [].concat(...[["getJson"]])],
-            [this.onUpdateCallback, [].concat(...[["handle"]])],
+            [this.bucket, ["getJson"]],
+            [this.onUpdateCallback, ["handle"]],
           ],
           "set": [
-            [this.bucket, [].concat(...[["putJson"]])],
+            [this.bucket, ["putJson"]],
           ],
           "$inflight_init": [
-            [this.bucket, [].concat(...[])],
-            [this.onUpdateCallback, [].concat(...[])],
+            [this.bucket, []],
+            [this.onUpdateCallback, []],
           ],
         });
       }
@@ -262,10 +262,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [counter, [].concat(...[["inc"]])],
+            [counter, ["inc"]],
           ],
           "$inflight_init": [
-            [counter, [].concat(...[])],
+            [counter, []],
           ],
         });
       }
@@ -299,12 +299,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [counter, [].concat(...[["peek"]])],
+            [counter, ["peek"]],
             [kv, [].concat(...[["set"], ["get"]])],
           ],
           "$inflight_init": [
-            [counter, [].concat(...[])],
-            [kv, [].concat(...[])],
+            [counter, []],
+            [kv, []],
           ],
         });
       }

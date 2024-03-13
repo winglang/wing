@@ -138,7 +138,7 @@ class $Root extends $stdlib.std.Resource {
             [fn, [].concat(...[["handle"], ["another"]])],
           ],
           "$inflight_init": [
-            [fn, [].concat(...[])],
+            [fn, []],
           ],
         });
       }

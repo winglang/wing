@@ -172,19 +172,19 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "makeFn": [
-            [this, [].concat(...[["inflight2"]])],
-            [this.inflight1, [].concat(...[["handle"]])],
+            [this, ["inflight2"]],
+            [this.inflight1, ["handle"]],
           ],
           "callFn": [
-            [this, [].concat(...[["makeFn"]])],
+            [this, ["makeFn"]],
           ],
           "callFn2": [
-            [this, [].concat(...[["inflight2"]])],
-            [this.inflight1, [].concat(...[["handle"]])],
+            [this, ["inflight2"]],
+            [this.inflight1, ["handle"]],
           ],
           "$inflight_init": [
-            [this, [].concat(...[["inflight2"]])],
-            [this.inflight1, [].concat(...[])],
+            [this, ["inflight2"]],
+            [this.inflight1, []],
           ],
           "inflight2": [
           ],
@@ -221,7 +221,7 @@ class $Root extends $stdlib.std.Resource {
             [foo, [].concat(...[["callFn"], ["callFn2"]])],
           ],
           "$inflight_init": [
-            [foo, [].concat(...[])],
+            [foo, []],
           ],
         });
       }

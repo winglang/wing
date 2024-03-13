@@ -549,7 +549,7 @@ class $Root extends $stdlib.std.Resource {
             [c5, [].concat(...[["x"], ["y"], ["set"]])],
           ],
           "$inflight_init": [
-            [c5, [].concat(...[])],
+            [c5, []],
           ],
         });
       }
@@ -672,14 +672,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [student.hrlyWage, [].concat(...[])],
-            [student.major, [].concat(...[])],
-            [student.name, [].concat(...[])],
+            [student.hrlyWage, []],
+            [student.major, []],
+            [student.name, []],
           ],
           "$inflight_init": [
-            [student.hrlyWage, [].concat(...[])],
-            [student.major, [].concat(...[])],
-            [student.name, [].concat(...[])],
+            [student.hrlyWage, []],
+            [student.major, []],
+            [student.name, []],
           ],
         });
       }
@@ -741,10 +741,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [ta.hrlyWage, [].concat(...[])],
+            [ta.hrlyWage, []],
           ],
           "$inflight_init": [
-            [ta.hrlyWage, [].concat(...[])],
+            [ta.hrlyWage, []],
           ],
         });
       }
@@ -773,7 +773,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "$inflight_init": [
-            [this, [].concat(...[["sound"]])],
+            [this, ["sound"]],
           ],
           "sound": [
           ],

@@ -119,7 +119,7 @@ class $Root extends $stdlib.std.Resource {
             [b, [].concat(...[["list"], ["put"]])],
           ],
           "$inflight_init": [
-            [b, [].concat(...[])],
+            [b, []],
           ],
         });
       }
@@ -154,7 +154,7 @@ class $Root extends $stdlib.std.Resource {
             [b, [].concat(...[["put"], ["get"]])],
           ],
           "$inflight_init": [
-            [b, [].concat(...[])],
+            [b, []],
           ],
         });
       }

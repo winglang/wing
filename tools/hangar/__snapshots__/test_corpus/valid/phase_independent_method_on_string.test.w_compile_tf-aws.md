@@ -172,13 +172,13 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [api.url, [].concat(...[["startsWith"], ["length"]])],
-            [token_len, [].concat(...[])],
-            [url_regex, [].concat(...[])],
+            [token_len, []],
+            [url_regex, []],
           ],
           "$inflight_init": [
-            [api.url, [].concat(...[])],
-            [token_len, [].concat(...[])],
-            [url_regex, [].concat(...[])],
+            [api.url, []],
+            [token_len, []],
+            [url_regex, []],
           ],
         });
       }

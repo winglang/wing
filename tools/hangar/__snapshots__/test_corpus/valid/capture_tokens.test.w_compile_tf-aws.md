@@ -259,14 +259,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "foo": [
-            [MyResource, [].concat(...[["isValidUrl"]])],
-            [this.api.url, [].concat(...[])],
-            [this.url, [].concat(...[])],
+            [MyResource, ["isValidUrl"]],
+            [this.api.url, []],
+            [this.url, []],
           ],
           "$inflight_init": [
-            [MyResource, [].concat(...[])],
-            [this.api.url, [].concat(...[])],
-            [this.url, [].concat(...[])],
+            [MyResource, []],
+            [this.api.url, []],
+            [this.url, []],
           ],
         });
       }
@@ -304,10 +304,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [r, [].concat(...[["foo"]])],
+            [r, ["foo"]],
           ],
           "$inflight_init": [
-            [r, [].concat(...[])],
+            [r, []],
           ],
         });
       }
@@ -341,14 +341,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [MyResource, [].concat(...[["isValidUrl"]])],
-            [api.url, [].concat(...[])],
-            [url, [].concat(...[])],
+            [MyResource, ["isValidUrl"]],
+            [api.url, []],
+            [url, []],
           ],
           "$inflight_init": [
-            [MyResource, [].concat(...[])],
-            [api.url, [].concat(...[])],
-            [url, [].concat(...[])],
+            [MyResource, []],
+            [api.url, []],
+            [url, []],
           ],
         });
       }

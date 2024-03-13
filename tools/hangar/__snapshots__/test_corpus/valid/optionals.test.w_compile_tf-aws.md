@@ -277,14 +277,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((payloadWithBucket.c) != null), [].concat(...[])],
-            [((payloadWithoutOptions.b) != null), [].concat(...[])],
-            [payloadWithBucket.c, [].concat(...[["put"]])],
+            [((payloadWithBucket.c) != null), []],
+            [((payloadWithoutOptions.b) != null), []],
+            [payloadWithBucket.c, ["put"]],
           ],
           "$inflight_init": [
-            [((payloadWithBucket.c) != null), [].concat(...[])],
-            [((payloadWithoutOptions.b) != null), [].concat(...[])],
-            [payloadWithBucket.c, [].concat(...[])],
+            [((payloadWithBucket.c) != null), []],
+            [((payloadWithoutOptions.b) != null), []],
+            [payloadWithBucket.c, []],
           ],
         });
       }

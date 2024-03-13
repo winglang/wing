@@ -133,7 +133,7 @@ class $Root extends $stdlib.std.Resource {
             [pf_obj, [].concat(...[["hello"], ["goodbye"]])],
           ],
           "$inflight_init": [
-            [pf_obj, [].concat(...[])],
+            [pf_obj, []],
           ],
         });
       }

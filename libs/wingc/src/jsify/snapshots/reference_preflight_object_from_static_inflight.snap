@@ -74,14 +74,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "$inflight_init": [
-            [q, [].concat(...[])],
+            [q, []],
           ],
         });
       }
       static get _liftTypeMap() {
         return ({
           "addToQueue": [
-            [q, [].concat(...[["push"]])],
+            [q, ["push"]],
           ],
         });
       }

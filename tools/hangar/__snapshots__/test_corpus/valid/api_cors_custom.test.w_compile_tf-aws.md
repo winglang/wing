@@ -400,10 +400,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [api.url, [].concat(...[])],
+            [api.url, []],
           ],
           "$inflight_init": [
-            [api.url, [].concat(...[])],
+            [api.url, []],
           ],
         });
       }
@@ -438,10 +438,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [api.url, [].concat(...[])],
+            [api.url, []],
           ],
           "$inflight_init": [
-            [api.url, [].concat(...[])],
+            [api.url, []],
           ],
         });
       }
@@ -476,10 +476,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [api.url, [].concat(...[])],
+            [api.url, []],
           ],
           "$inflight_init": [
-            [api.url, [].concat(...[])],
+            [api.url, []],
           ],
         });
       }
