@@ -471,7 +471,7 @@ impl LiftVisitor<'_> {
 			return;
 		}
 
-		// Make sure the second argument, the qualifications, isn't an inflight expression since we'll need to evalute it preflihgt
+		// Make sure the second argument, the qualifications, isn't an inflight expression since we'll need to evaluate it preflihgt
 		let qualifications_expr = &arg_list.pos_args[1];
 		let qualifications_phase = self
 			.jsify
