@@ -191,7 +191,7 @@ class $Root extends $stdlib.std.Resource {
             [foo, [].concat(...[["bang"], ["bug"], ["over_inflight"]])],
           ],
           "$inflight_init": [
-            [foo, [].concat(...[])],
+            [foo, []],
           ],
         });
       }

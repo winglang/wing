@@ -411,10 +411,10 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
-                [__parent_this_2.consumer, [].concat(...[["handle"]])],
+                [__parent_this_2.consumer, ["handle"]],
               ],
               "$inflight_init": [
-                [__parent_this_2.consumer, [].concat(...[])],
+                [__parent_this_2.consumer, []],
               ],
             });
           }
@@ -445,10 +445,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "push": [
-            [this.data, [].concat(...[["put"]])],
+            [this.data, ["put"]],
           ],
           "$inflight_init": [
-            [this.data, [].concat(...[])],
+            [this.data, []],
           ],
         });
       }
@@ -480,10 +480,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [c, [].concat(...[["inc"]])],
+            [c, ["inc"]],
           ],
           "$inflight_init": [
-            [c, [].concat(...[])],
+            [c, []],
           ],
         });
       }
@@ -517,12 +517,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [c, [].concat(...[["peek"]])],
-            [q, [].concat(...[["push"]])],
+            [c, ["peek"]],
+            [q, ["push"]],
           ],
           "$inflight_init": [
-            [c, [].concat(...[])],
-            [q, [].concat(...[])],
+            [c, []],
+            [q, []],
           ],
         });
       }
