@@ -179,7 +179,7 @@ export async function init(template: string, options: InitOptions = {}): Promise
 
   console.log(`Created a new ${chalk.cyan(template)} project in the current directory! 🎉`);
   console.log();
-  console.log("Not sure where to get started? Try running:");
+  console.log("Not sure where to get started? In your Wing application folder, try running:");
   console.log();
   console.log("  wing compile - build your project");
   console.log("  wing it - simulate your app in the Wing Console");
