@@ -2,9 +2,9 @@ bring cloud;
 bring expect;
 bring vite;
 bring http;
-bring "./broadcaster.w" as broadcaster;
+bring "./broadcaster.w" as b;
 
-let my_broadcaster = new broadcaster.Broadcaster() as "Broadcaster";
+let my_broadcaster = new b.Broadcaster() as "Broadcaster";
 let api = new cloud.Api(cors: true);
 let counter = new cloud.Counter();
 
