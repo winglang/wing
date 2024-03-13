@@ -95,12 +95,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "incCounter": [
-            [this.c, ["inc"]],
+            [this.c, [].concat(...[["inc"]])],
           ],
           "dontTouchCounter": [
           ],
           "$inflight_init": [
-            [this.c, []],
+            [this.c, [].concat(...[])],
           ],
           "myField2": [
           ],

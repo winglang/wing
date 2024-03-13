@@ -74,10 +74,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(s, "hello"), ["length"]],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(s, "hello"), [].concat(...[["length"]])],
           ],
           "$inflight_init": [
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(s, "hello"), []],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(s, "hello"), [].concat(...[])],
           ],
         });
       }

@@ -71,14 +71,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "$inflight_init": [
-            [s, []],
+            [s, [].concat(...[])],
           ],
         });
       }
       static get _liftTypeMap() {
         return ({
           "staticMethod": [
-            [s, []],
+            [s, [].concat(...[])],
           ],
         });
       }

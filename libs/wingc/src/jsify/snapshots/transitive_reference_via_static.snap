@@ -124,14 +124,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "$inflight_init": [
-            [b, []],
+            [b, [].concat(...[])],
           ],
         });
       }
       static get _liftTypeMap() {
         return ({
           "putInBucket": [
-            [b, ["put"]],
+            [b, [].concat(...[["put"]])],
           ],
         });
       }
@@ -161,10 +161,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "putIndirect": [
-            [MyType, ["putInBucket"]],
+            [MyType, [].concat(...[["putInBucket"]])],
           ],
           "$inflight_init": [
-            [MyType, []],
+            [MyType, [].concat(...[])],
           ],
         });
       }
@@ -196,10 +196,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [t, ["putIndirect"]],
+            [t, [].concat(...[["putIndirect"]])],
           ],
           "$inflight_init": [
-            [t, []],
+            [t, [].concat(...[])],
           ],
         });
       }

@@ -123,14 +123,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "$inflight_init": [
-            [A, []],
+            [A, [].concat(...[])],
           ],
         });
       }
       static get _liftTypeMap() {
         return ({
           "bar": [
-            [A, ["foo"]],
+            [A, [].concat(...[["foo"]])],
           ],
         });
       }

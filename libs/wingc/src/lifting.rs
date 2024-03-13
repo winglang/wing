@@ -481,7 +481,7 @@ impl LiftVisitor<'_> {
 		if qualifications_phase == Phase::Inflight {
 			report_diagnostic(Diagnostic {
 				span: Some(qualifications_expr.span.clone()),
-				message: format!("Qualification list must not contain any inflight elements"),
+				message: "Qualification list must not contain any inflight elements".to_string(),
 				annotations: vec![],
 				hints: vec![],
 			});

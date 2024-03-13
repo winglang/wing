@@ -20,6 +20,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: lift
+  kind: 3
+  detail: "inflight (preflightObject: any, qualifications: Array<str>): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nlift: inflight (preflightObject: any, qualifications: Array<str>): void\n```\n---\nExplicitly apply qualifications to apply to the preflight object used in the current method/function\n### Parameters\n- `preflightObject` — `any` — The preflight object to qualify\n- `qualifications` — `Array<str>` — \n\t\t\t\t\t\t\tThe qualifications to apply to the preflight object.\n\n\t\t\t\t\t\t\tThis is and array of strings denoting members of the objects that are accessed in the current method/function.\n\n\t\t\t\t\t\t\tFor example, if the method accesses the `push` and `pop` and `age` members of a [cloud.Queue] object, the qualifications should be `[\"push\", \"pop\"]`."
+  sortText: cc|lift
+  insertText: lift($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: log
   kind: 3
   detail: "(message: str): void"

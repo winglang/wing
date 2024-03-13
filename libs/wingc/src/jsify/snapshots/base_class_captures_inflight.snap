@@ -96,10 +96,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "bar": [
-            [x, []],
+            [x, [].concat(...[])],
           ],
           "$inflight_init": [
-            [x, []],
+            [x, [].concat(...[])],
           ],
         });
       }
@@ -129,7 +129,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "foo": [
-            [this, ["bar"]],
+            [this, [].concat(...[["bar"]])],
           ],
           "$inflight_init": [
           ],
