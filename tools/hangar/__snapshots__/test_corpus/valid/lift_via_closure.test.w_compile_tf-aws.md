@@ -176,10 +176,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [bucket2, [].concat(...[["put"]])],
+            [bucket2, ["put"]],
           ],
           "$inflight_init": [
-            [bucket2, [].concat(...[])],
+            [bucket2, []],
           ],
         });
       }
@@ -212,18 +212,18 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [this, [].concat(...[["putFile"]])],
+            [this, ["putFile"]],
           ],
           "putFile": [
-            [this.bucket, [].concat(...[["put"]])],
+            [this.bucket, ["put"]],
           ],
           "listFiles": [
-            [bucket2, [].concat(...[["put"]])],
-            [this.bucket, [].concat(...[["list"]])],
+            [bucket2, ["put"]],
+            [this.bucket, ["list"]],
           ],
           "$inflight_init": [
-            [bucket2, [].concat(...[])],
-            [this.bucket, [].concat(...[])],
+            [bucket2, []],
+            [this.bucket, []],
           ],
         });
       }
@@ -255,10 +255,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [fn, [].concat(...[["handle"]])],
+            [fn, ["handle"]],
           ],
           "$inflight_init": [
-            [fn, [].concat(...[])],
+            [fn, []],
           ],
         });
       }
@@ -292,14 +292,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [bucket2, [].concat(...[["get"]])],
+            [bucket2, ["get"]],
             [fn2, [].concat(...[["handle"], ["listFiles"]])],
-            [fn2.bucket, [].concat(...[["get"]])],
+            [fn2.bucket, ["get"]],
           ],
           "$inflight_init": [
-            [bucket2, [].concat(...[])],
-            [fn2, [].concat(...[])],
-            [fn2.bucket, [].concat(...[])],
+            [bucket2, []],
+            [fn2, []],
+            [fn2.bucket, []],
           ],
         });
       }

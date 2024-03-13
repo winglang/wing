@@ -219,12 +219,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [b, [].concat(...[["getJson"]])],
-            [fileName, [].concat(...[])],
+            [b, ["getJson"]],
+            [fileName, []],
           ],
           "$inflight_init": [
-            [b, [].concat(...[])],
-            [fileName, [].concat(...[])],
+            [b, []],
+            [fileName, []],
           ],
         });
       }
@@ -259,16 +259,16 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [b, [].concat(...[["putJson"]])],
-            [fileName, [].concat(...[])],
-            [getJson, [].concat(...[["invoke"]])],
-            [j, [].concat(...[])],
+            [b, ["putJson"]],
+            [fileName, []],
+            [getJson, ["invoke"]],
+            [j, []],
           ],
           "$inflight_init": [
-            [b, [].concat(...[])],
-            [fileName, [].concat(...[])],
-            [getJson, [].concat(...[])],
-            [j, [].concat(...[])],
+            [b, []],
+            [fileName, []],
+            [getJson, []],
+            [j, []],
           ],
         });
       }

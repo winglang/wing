@@ -668,10 +668,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [b1, [].concat(...[["get"]])],
+            [b1, ["get"]],
           ],
           "$inflight_init": [
-            [b1, [].concat(...[])],
+            [b1, []],
           ],
         });
       }
@@ -703,10 +703,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [b2, [].concat(...[["get"]])],
+            [b2, ["get"]],
           ],
           "$inflight_init": [
-            [b2, [].concat(...[])],
+            [b2, []],
           ],
         });
       }
@@ -738,10 +738,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [ar, [].concat(...[])],
+            [ar, []],
           ],
           "$inflight_init": [
-            [ar, [].concat(...[])],
+            [ar, []],
           ],
         });
       }
@@ -773,10 +773,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [f1, [].concat(...[["invoke"]])],
+            [f1, ["invoke"]],
           ],
           "$inflight_init": [
-            [f1, [].concat(...[])],
+            [f1, []],
           ],
         });
       }
@@ -808,10 +808,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [Object.values(map), [].concat(...[])],
+            [Object.values(map), []],
           ],
           "$inflight_init": [
-            [Object.values(map), [].concat(...[])],
+            [Object.values(map), []],
           ],
         });
       }
@@ -843,10 +843,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [f2, [].concat(...[["invoke"]])],
+            [f2, ["invoke"]],
           ],
           "$inflight_init": [
-            [f2, [].concat(...[])],
+            [f2, []],
           ],
         });
       }
@@ -878,10 +878,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [set, [].concat(...[])],
+            [set, []],
           ],
           "$inflight_init": [
-            [set, [].concat(...[])],
+            [set, []],
           ],
         });
       }
@@ -913,10 +913,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [f3, [].concat(...[["invoke"]])],
+            [f3, ["invoke"]],
           ],
           "$inflight_init": [
-            [f3, [].concat(...[])],
+            [f3, []],
           ],
         });
       }
@@ -948,10 +948,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [complex, [].concat(...[["at"]])],
+            [complex, ["at"]],
           ],
           "$inflight_init": [
-            [complex, [].concat(...[])],
+            [complex, []],
           ],
         });
       }
@@ -983,10 +983,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [f4, [].concat(...[["invoke"]])],
+            [f4, ["invoke"]],
           ],
           "$inflight_init": [
-            [f4, [].concat(...[])],
+            [f4, []],
           ],
         });
       }

@@ -97,11 +97,11 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [b, [].concat(...[["put"], ["get"]])],
-            [x, [].concat(...[])],
+            [x, []],
           ],
           "$inflight_init": [
-            [b, [].concat(...[])],
-            [x, [].concat(...[])],
+            [b, []],
+            [x, []],
           ],
         });
       }

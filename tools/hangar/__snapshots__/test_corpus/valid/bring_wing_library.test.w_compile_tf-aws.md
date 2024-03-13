@@ -157,10 +157,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), [].concat(...[["makeKeyInflight"]])],
+            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), ["makeKeyInflight"]],
           ],
           "$inflight_init": [
-            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), [].concat(...[])],
+            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), []],
           ],
         });
       }
@@ -222,14 +222,14 @@ class Store extends $stdlib.std.Resource {
   get _liftMap() {
     return ({
       "set": [
-        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), [].concat(...[["double"]])],
-        [this.data, [].concat(...[["put"]])],
-        [this.handlers, [].concat(...[])],
+        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), ["double"]],
+        [this.data, ["put"]],
+        [this.handlers, []],
       ],
       "$inflight_init": [
-        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), [].concat(...[])],
-        [this.data, [].concat(...[])],
-        [this.handlers, [].concat(...[])],
+        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), []],
+        [this.data, []],
+        [this.handlers, []],
       ],
     });
   }
