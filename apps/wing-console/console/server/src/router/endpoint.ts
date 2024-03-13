@@ -1,7 +1,7 @@
 import { ENDPOINT_FQN } from "@winglang/sdk/lib/cloud/endpoint.js";
 import { type Endpoint } from "@winglang/sdk/lib/target-sim/endpoint.inflight.js";
 import type { EndpointSchema } from "@winglang/sdk/lib/target-sim/schema-resources.js";
-import { z } from "zod";
+import * as z from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
 import type { Simulator } from "../wingsdk.js";
