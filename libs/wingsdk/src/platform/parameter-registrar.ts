@@ -49,7 +49,7 @@ export class ParameterRegistrar extends Construct {
   public addSchema(schema: any) {
     // If a JsonSchema object is passed in, extract the jsonSchema from it
     if (schema.rawSchema) {
-      this.parameterSchemas.push(schema.jsonSchema);
+      this.parameterSchemas.push(schema.rawSchema);
       return;
     }
 
