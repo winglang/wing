@@ -5,7 +5,7 @@ import { InflightClient } from "../core";
 /**
  * Struct Schema
  */
-export class JsonSchema {
+export class Schema {
   /**
    * @internal
    */
@@ -21,8 +21,8 @@ export class JsonSchema {
    *
    * @internal
    */
-  public static _createJsonSchema(schema: Json): JsonSchema {
-    return new JsonSchema(schema);
+  public static _createJsonSchema(schema: Json): Schema {
+    return new Schema(schema);
   }
 
   /** The raw Json Schema definition */
@@ -91,6 +91,6 @@ export class JsonSchema {
 
   /** @internal */
   public _toInflightType() {
-    return JsonSchema._toInflightType(this.jsonSchema);
+    return Schema._toInflightType(this.jsonSchema);
   }
 }
