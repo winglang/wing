@@ -2529,9 +2529,11 @@ impl<'a> TypeChecker<'a> {
 						(self.types.add_type(Type::Array(inner_type)), inner_type)
 					};
 
-					// Verify all types are the same as the inferred type
+					// Verify all types are the same as the inferred type and find the aggregate phase of all the items
+					let mut phase = Phase::Independent;
 					for item in items {
-						let (t, _) = self.type_check_exp(item, env);
+						let (t, item_phase) = self.type_check_exp(item, env);
+						phase = combine_phases(phase, item_phase);
 
 						if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
 							// This is an array of JSON, change the element type to reflect that
@@ -2569,7 +2571,7 @@ impl<'a> TypeChecker<'a> {
 						*inner = element_type;
 					}
 
-					(container_type, env.phase)
+					(container_type, phase)
 				}
 				ExprKind::MapLiteral { fields, type_ } => {
 					// Infer type based on either the explicit type or the value in one of the fields

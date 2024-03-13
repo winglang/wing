@@ -471,19 +471,17 @@ impl LiftVisitor<'_> {
 			return;
 		}
 
-		// Make sure the second argument, the qualifications, is a preflight expression since we'll need to evalute it preflihgt
+		// Make sure the second argument, the qualifications, isn't an inflight expression since we'll need to evalute it preflihgt
 		let qualifications_expr = &arg_list.pos_args[1];
 		let qualifications_phase = self
 			.jsify
 			.types
 			.get_expr_phase(qualifications_expr)
 			.expect("an expr phase");
-		if qualifications_phase != Phase::Preflight {
+		if qualifications_phase == Phase::Inflight {
 			report_diagnostic(Diagnostic {
 				span: Some(qualifications_expr.span.clone()),
-				message: format!(
-					"Qualification list must be a preflight array of strings, found {qualifications_phase} expression instead"
-				),
+				message: format!("Qualification list must not contain any inflight elements"),
 				annotations: vec![],
 				hints: vec![],
 			});
