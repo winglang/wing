@@ -11,7 +11,7 @@ let app = nodeof(this).app;
 // technically we never enforced the parameters must have been
 // provided
 
-MyParams.fromParameters(app.parameters);
+MyParams.fromJson(app.parameters.json());
 //Error: unable to parse MyParams:
 // - instance requires property "bar"
 // - instance requires property "baz"

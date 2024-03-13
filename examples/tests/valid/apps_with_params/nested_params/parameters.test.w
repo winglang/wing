@@ -12,12 +12,11 @@ struct MyParams {
   houses: Array<House>;
 }
 
-
 let app = nodeof(this).app;
 
 app.parameters.addSchema(MyParams.schema());
 
-let myParams = MyParams.fromParameters(app.parameters);
+let myParams = MyParams.fromJson(app.parameters.json());
 
 assert(myParams.houses.length == 2);
 assert(myParams.houses.at(0).address == "123 Main St");

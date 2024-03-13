@@ -34,7 +34,7 @@ class $Root extends $stdlib.std.Resource {
     const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{foo:{type:"string"},meaningOfLife:{type:"number"},},required:["meaningOfLife",]});
     const app = $helpers.nodeof(this).app;
     (app.parameters.addSchema(MyParams));
-    const myParams = MyParams._fromParameters(app.parameters);
+    const myParams = MyParams._fromJson((app.parameters.json()));
     {
       const $if_let_value = myParams.foo;
       if ($if_let_value != undefined) {

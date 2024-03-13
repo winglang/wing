@@ -4,9 +4,7 @@ struct MyParams {
   foo: str;
 }
 
-let registrar = app.parameters;
-
-registrar.addSchema(MyParams.schema());
+app.parameters.addSchema(MyParams.schema());
 
 // Error: Parameter validation errors:
 // - must have required property 'foo'

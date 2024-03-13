@@ -2,7 +2,6 @@ import { T1 } from "./generics";
 import { Json, JsonValidationOptions } from "./json";
 import { JsonSchema } from "./json_schema";
 import { InflightClient } from "../core";
-import { ParameterRegistrar } from "../platform";
 
 /**
  * Shared behavior for all structs
@@ -25,16 +24,6 @@ export class Struct {
   public static fromJson(json: Json, options?: JsonValidationOptions): T1 {
     json;
     options;
-    throw new Error("Macro");
-  }
-
-  /**
-   * Creates a Struct from a set of parameters
-   *
-   * @macro $self$._fromParameters($args$)
-   */
-  public static fromParameters(parameters: ParameterRegistrar): T1 {
-    parameters;
     throw new Error("Macro");
   }
 

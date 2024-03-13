@@ -1,7 +1,6 @@
 import { Validator } from "jsonschema";
 import { Json, JsonValidationOptions } from "./json";
 import { InflightClient } from "../core";
-import { ParameterRegistrar } from "../platform";
 
 /**
  * Struct Schema
@@ -69,45 +68,9 @@ export class JsonSchema {
   /** @internal */
   public _fromJson(obj: Json, validateOptions?: JsonValidationOptions) {
     this.validate(obj, validateOptions);
-    return obj;
-  }
-
-  /**
-   * Validates the parameters against the json schema, since the validation is not done
-   * using strict mode, its fine to validate against the whole of rawParameters but once
-   * the validation is done, we should only return the parameters that are present in the schema.
-   *
-   * I.E. if the rawParameters looks like this:
-   * {
-   *  "foo": "hello",
-   *  "bar": 123,
-   *   "baz": { "some_more": "data" }
-   * }
-   *
-   * And the JsonSchema looks like this:
-   * {
-   * "type": "object",
-   * "properties": {
-   *  "foo": { "type": "string" },
-   *  }
-   * }
-   *
-   * Then the returned values should just be the subset of the rawParameters that are present in the schema:
-   * {
-   * "foo": "hello"
-   * }
-   *
-   * @internal
-   */
-  public _fromParameters(parameters: ParameterRegistrar) {
-    this.validate(parameters._rawParameters as any);
-    // Extract fields from schema
     const fields = this.extractFieldsFromSchema(this.rawSchema);
     // Filter rawParameters based on the schema
-    const filteredParameters = this.filterParametersBySchema(
-      fields,
-      parameters._rawParameters
-    );
+    const filteredParameters = this.filterParametersBySchema(fields, obj);
     return filteredParameters;
   }
 

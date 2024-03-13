@@ -3777,7 +3777,7 @@ exports[`struct_from_parameter.test.w 1`] = `
    | // technically we never enforced the parameters must have been
    | // provided
    | 
-14 | MyParams.fromParameters(app.parameters);
+14 | MyParams.fromJson(app.parameters.json());
    | ^
 at <ABSOLUTE>/struct_from_parameter.test.w:14:1
  

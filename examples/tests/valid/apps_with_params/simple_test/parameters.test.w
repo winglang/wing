@@ -7,7 +7,7 @@ struct MyParams {
 
 app.parameters.addSchema(MyParams.schema());
 
-let myParams = MyParams.fromParameters(app.parameters);
+let myParams = MyParams.fromJson(app.parameters.json());
 
 if let foo = myParams.foo {
   assert(false); // shouldnt happen

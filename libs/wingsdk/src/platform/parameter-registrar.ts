@@ -1,7 +1,7 @@
 import Ajv from "ajv";
 import { Construct } from "constructs";
 import { loadPlatformSpecificValues } from "./util";
-import { Node } from "../std";
+import { Json, Node } from "../std";
 
 /**
  * Parameter Registrar
@@ -39,6 +39,15 @@ export class ParameterRegistrar extends Construct {
     }
 
     return this.parameterValueByPath[path];
+  }
+
+  /**
+   * Return all parameters as Json
+   *
+   * @returns the schema as a string
+   */
+  public json(): Json {
+    return this._rawParameters as Json;
   }
 
   /**
