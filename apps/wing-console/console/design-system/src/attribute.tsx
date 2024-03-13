@@ -13,6 +13,7 @@ interface AttributeProps {
   noLeftPadding?: boolean;
   centerLabel?: boolean;
   dataTestId?: string;
+  className?: string;
 }
 
 export const Attribute = ({
@@ -24,6 +25,7 @@ export const Attribute = ({
   noLeftPadding = false,
   centerLabel = true,
   dataTestId,
+  className,
 }: PropsWithChildren<AttributeProps>) => {
   const { theme } = useTheme();
   const id = useId();
@@ -33,6 +35,7 @@ export const Attribute = ({
         "flex flex-row",
         !noLeftPadding && "pl-4",
         centerLabel && "items-center",
+        className,
       )}
     >
       <label htmlFor={id} className={classNames(theme.text2, "min-w-[100px]")}>

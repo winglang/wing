@@ -229,7 +229,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -502,7 +501,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -775,7 +773,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1048,7 +1045,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1321,7 +1317,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1594,7 +1589,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1999,7 +1993,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2289,7 +2282,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2571,7 +2563,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2842,7 +2833,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3200,7 +3190,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3574,7 +3563,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3861,7 +3849,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4143,7 +4130,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4416,7 +4402,6 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4589,7 +4574,6 @@ exports[`create an api 1`] = `
               },
               "display": {
                 "description": "Api root/my_api",
-                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
