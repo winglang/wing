@@ -13,6 +13,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: fromParameters
+  kind: 2
+  detail: "(parameters: ParameterRegistrar): T1"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic fromParameters: (parameters: ParameterRegistrar): T1\n```\n---\nCreates a Struct from a set of parameters.\n### Parameters\n- `parameters` — `ParameterRegistrar`"
+  sortText: ff|fromParameters
+  insertText: fromParameters($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: parseJson
   kind: 2
   detail: "(json: str): T1"

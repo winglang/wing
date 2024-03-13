@@ -18,6 +18,7 @@ Shared behavior for all structs.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Struct.fromJson">fromJson</a></code> | Converts a Json to a Struct. |
+| <code><a href="#@winglang/sdk.std.Struct.fromParameters">fromParameters</a></code> | Creates a Struct from a set of parameters. |
 | <code><a href="#@winglang/sdk.std.Struct.parseJson">parseJson</a></code> | Parse a Json string into a Struct. |
 | <code><a href="#@winglang/sdk.std.Struct.schema">schema</a></code> | Retrieve the schema for this struct. |
 | <code><a href="#@winglang/sdk.std.Struct.tryFromJson">tryFromJson</a></code> | Converts a Json to a Struct, returning nil if the Json is not valid. |
@@ -42,6 +43,20 @@ Converts a Json to a Struct.
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Struct.fromJson.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.JsonValidationOptions">JsonValidationOptions</a>
+
+---
+
+##### `fromParameters` <a name="fromParameters" id="@winglang/sdk.std.Struct.fromParameters"></a>
+
+```wing
+Struct.fromParameters(parameters: ParameterRegistrar);
+```
+
+Creates a Struct from a set of parameters.
+
+###### `parameters`<sup>Required</sup> <a name="parameters" id="@winglang/sdk.std.Struct.fromParameters.parameter.parameters"></a>
+
+- *Type:* <a href="#@winglang/sdk.platform.ParameterRegistrar">ParameterRegistrar</a>
 
 ---
 

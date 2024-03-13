@@ -7,14 +7,14 @@ struct MyParams {
 
 app.parameters.addSchema(MyParams.schema());
 
-let foo = app.parameters.getValue("foo");
+let myParams = MyParams.fromParameters(app.parameters);
 
-if let foo = foo {
+if let foo = myParams.foo {
   assert(false); // shouldnt happen
 } else {
   assert(true);
 }
 
-let meaningOfLife = app.parameters.getValue("meaningOfLife");
+let meaningOfLife = myParams.meaningOfLife;
 
 assert(meaningOfLife == 42);
