@@ -106,8 +106,8 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const FavoriteNumbers =
   (function (tmp) {
-    tmp[tmp["SEVEN"] = 0] = ",SEVEN";
-    tmp[tmp["FORTY_TWO"] = 1] = ",FORTY_TWO";
+    tmp["SEVEN"] = "SEVEN";
+    tmp["FORTY_TWO"] = "FORTY_TWO";
     return tmp;
   })({})
 ;

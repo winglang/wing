@@ -55,18 +55,18 @@ export class Graph<T extends Definition> {
     return Object.values(this.byPath);
   }
 
-  public find(path: string): Node<T> {
+  public tryFind(path: string): Node<T> | undefined {
     const node = this.byPath[path];
     if (!node) {
-      throw new Error(`node not found: ${path}`);
+      return undefined;
     }
 
     return node;
   }
 
   private recordDependency(consumer: string, producer: string) {
-    this.find(consumer).dependencies.add(producer);
-    this.find(producer).dependents.add(consumer);
+    this.tryFind(consumer)?.dependencies.add(producer);
+    this.tryFind(producer)?.dependents.add(consumer);
 
     // check for cyclic dependencies
     this.detectCycles(consumer);
@@ -91,7 +91,7 @@ export class Graph<T extends Definition> {
       visited.add(path);
       stack.add(path);
 
-      for (const dep of this.find(path).dependencies) {
+      for (const dep of this.tryFind(path)?.dependencies ?? []) {
         visit(dep);
       }
 
