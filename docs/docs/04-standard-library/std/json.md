@@ -408,14 +408,14 @@ the Json object to validate.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.JsonSchema.property.jsonSchema">jsonSchema</a></code> | <code>any</code> | The raw Json Schema definition. |
+| <code><a href="#@winglang/sdk.std.JsonSchema.property.rawSchema">rawSchema</a></code> | <code>any</code> | The raw Json Schema definition. |
 
 ---
 
-##### `jsonSchema`<sup>Required</sup> <a name="jsonSchema" id="@winglang/sdk.std.JsonSchema.property.jsonSchema"></a>
+##### `rawSchema`<sup>Required</sup> <a name="rawSchema" id="@winglang/sdk.std.JsonSchema.property.rawSchema"></a>
 
 ```wing
-jsonSchema: any;
+rawSchema: any;
 ```
 
 - *Type:* any

@@ -5,7 +5,7 @@ import { InflightClient } from "../core";
 /**
  * Struct Schema
  */
-export class Schema {
+export class JsonSchema {
   /**
    * @internal
    */
@@ -21,16 +21,16 @@ export class Schema {
    *
    * @internal
    */
-  public static _createJsonSchema(schema: Json): Schema {
-    return new Schema(schema);
+  public static _createJsonSchema(schema: Json): JsonSchema {
+    return new JsonSchema(schema);
   }
 
   /** The raw Json Schema definition */
-  public jsonSchema: any;
+  public rawSchema: any;
   private validator: Validator;
 
   constructor(schema: Json) {
-    this.jsonSchema = schema;
+    this.rawSchema = schema;
     this.validator = new Validator();
   }
 
@@ -45,10 +45,10 @@ export class Schema {
       return; // skip validation
     }
 
-    const result = this.validator.validate(obj, this.jsonSchema);
+    const result = this.validator.validate(obj, this.rawSchema);
     if (result.errors.length > 0) {
       throw new Error(
-        `unable to parse ${this.jsonSchema.$id.replace(
+        `unable to parse ${this.rawSchema.$id.replace(
           "/",
           ""
         )}:\n- ${result.errors.join("\n- ")}`
@@ -62,7 +62,7 @@ export class Schema {
    * @returns the schema as a string
    */
   public asStr(): String {
-    return JSON.stringify(this.jsonSchema);
+    return JSON.stringify(this.rawSchema);
   }
 
   /** @internal */
@@ -91,6 +91,6 @@ export class Schema {
 
   /** @internal */
   public _toInflightType() {
-    return Schema._toInflightType(this.jsonSchema);
+    return JsonSchema._toInflightType(this.rawSchema);
   }
 }

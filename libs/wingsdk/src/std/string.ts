@@ -3,7 +3,7 @@
 // TODO: This should be an interface, currently Wing does not support interface JSII imports
 
 import { Json, JsonValidationOptions } from "./json";
-import { Schema } from "./json_schema";
+import { JsonSchema } from "./json_schema";
 import { InflightClient } from "../core";
 
 /**
@@ -25,7 +25,7 @@ export class String {
    * @returns a string.
    */
   public static fromJson(json: Json, options?: JsonValidationOptions): string {
-    const schema = Schema._createJsonSchema({
+    const schema = JsonSchema._createJsonSchema({
       $id: "string",
       type: "string",
     } as any);

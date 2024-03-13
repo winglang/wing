@@ -1,5 +1,5 @@
 import { Json, JsonValidationOptions } from "./json";
-import { Schema } from "./json_schema";
+import { JsonSchema } from "./json_schema";
 import { InflightClient } from "../core";
 
 /**
@@ -14,7 +14,7 @@ export class Boolean {
    * @returns a boolean.
    */
   public static fromJson(json: Json, options?: JsonValidationOptions): boolean {
-    const schema = Schema._createJsonSchema({
+    const schema = JsonSchema._createJsonSchema({
       $id: "bool",
       type: "boolean",
     } as any);

@@ -1,5 +1,5 @@
 import { Json, JsonValidationOptions } from "./json";
-import { Schema } from "./json_schema";
+import { JsonSchema } from "./json_schema";
 import { InflightClient } from "../core";
 
 /**
@@ -14,7 +14,7 @@ export class Number {
    * @returns a number.
    */
   public static fromJson(json: Json, options?: JsonValidationOptions): number {
-    const schema = Schema._createJsonSchema({
+    const schema = JsonSchema._createJsonSchema({
       $id: "num",
       type: "number",
     } as any);
