@@ -504,7 +504,7 @@ impl LiftVisitor<'_> {
 			self.ctx.current_method().map(|(m, _)| m).expect("a method"),
 			Some(qualification_code),
 			&code,
-			false,
+			true,
 		);
 		self.lifts_stack.push(lifts);
 	}
