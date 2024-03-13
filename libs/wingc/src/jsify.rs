@@ -1857,7 +1857,14 @@ impl<'a> JSifier<'a> {
 				bind_method.open(format!("\"{method_name}\": [",));
 				for (code, method_lift_qual) in method_qual {
 					let ops = method_lift_qual.ops.iter().join(", ");
-					bind_method.line(format!("[{code}, [].concat(...[{ops}])],",));
+					// To keep the code concise treat no ops, single op and multiple ops differenly here, although the multiple ops is the generic case
+					if method_lift_qual.ops.len() == 0 {
+						bind_method.line(format!("[{code}, []],"));
+					} else if method_lift_qual.ops.len() == 1 {
+						bind_method.line(format!("[{code}, {ops}],"));
+					} else {
+						bind_method.line(format!("[{code}, [].concat(...[{ops}])],"));
+					}
 				}
 				bind_method.close("],");
 			}
