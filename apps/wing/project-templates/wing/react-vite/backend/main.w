@@ -1,6 +1,7 @@
 bring cloud;
 bring expect;
 bring vite;
+bring http;
 bring "./broadcaster.w" as broadcaster;
 
 let my_broadcaster = new broadcaster.Broadcaster() as "Broadcaster";
@@ -30,7 +31,11 @@ api.post("/counter", inflight () => {
   };
 });
 
-test "broadcast counter increment" {
-  counter.inc();
-  my_broadcaster.broadcast("refresh");
+test "api counter increment and get" {
+  log("counter initial value: {counter.peek()}");
+  assert(counter.peek() == 0);
+  http.post(api.url + "/counter");
+  let res = http.get(api.url + "/counter");
+  log("counter value after increment: {res.body}");
+  assert(res.body == "1");
 }
