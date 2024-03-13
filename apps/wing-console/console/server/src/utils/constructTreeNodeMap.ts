@@ -5,6 +5,7 @@ export interface NodeDisplay {
   description?: string;
   sourceModule?: string;
   hidden?: boolean;
+  color?: string;
 }
 
 export interface NodeConnection {

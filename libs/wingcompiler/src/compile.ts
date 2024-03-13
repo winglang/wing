@@ -164,8 +164,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   if (!existsSync(synthDir)) {
     await fs.mkdir(workDir, { recursive: true });
   }
-
-  let preflightEntrypoint = await compileForPreflight({
+  const compileForPreflightResult = await compileForPreflight({
     entrypointFile,
     workDir,
     wingDir,
@@ -185,6 +184,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       WING_VALUES: options.value?.length == 0 ? undefined : options.value,
       WING_VALUES_FILE: options.values ?? defaultValuesFile(),
       WING_NODE_MODULES: wingNodeModules,
+      WING_IMPORTED_NAMESPACES: compileForPreflightResult.compilerOutput?.imported_namespaces.join(";"),
     };
 
     if (options.rootId) {
@@ -201,10 +201,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         delete preflightEnv.Path;
       }
     }
-
-    await runPreflightCodeInWorkerThread(preflightEntrypoint, preflightEnv);
+    await runPreflightCodeInWorkerThread(compileForPreflightResult.preflightEntrypoint, preflightEnv);
   }
-
   return synthDir;
 }
 
@@ -219,6 +217,13 @@ function isEntrypointFile(path: string) {
   );
 }
 
+interface CompileForPreflightResult {
+  readonly preflightEntrypoint: string;
+  readonly compilerOutput?: {
+    imported_namespaces: string[];
+  }
+}
+
 async function compileForPreflight(props: {
   entrypointFile: string;
   workDir: string;
@@ -226,7 +231,7 @@ async function compileForPreflight(props: {
   synthDir: string;
   color?: boolean;
   log?: (...args: any[]) => void;
-}) {
+}): Promise<CompileForPreflightResult> {
   if (props.entrypointFile.endsWith(".ts")) {
     const typescriptFramework = await import("@wingcloud/framework")
       .then((m) => m.internal)
@@ -239,10 +244,12 @@ npm i @wingcloud/framework
 `);
       });
 
-    return await typescriptFramework.compile({
-      workDir: props.workDir,
-      entrypoint: props.entrypointFile,
-    });
+    return {
+      preflightEntrypoint: await typescriptFramework.compile({
+        workDir: props.workDir,
+        entrypoint: props.entrypointFile,
+      })
+    }
   } else {
     let env: Record<string, string> = {
       RUST_BACKTRACE: "full",
@@ -278,8 +285,10 @@ npm i @wingcloud/framework
     )}`;
     props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
     let compileSuccess: boolean;
+    let compilerOutput: string | number = "";
     try {
-      compileSuccess = wingCompiler.invoke(wingc, WINGC_COMPILE, arg) !== 0;
+      compilerOutput = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+      compileSuccess = compilerOutput !== 0;
     } catch (error) {
       // This is a bug in the compiler, indicate a compilation failure.
       // The bug details should be part of the diagnostics handling below.
@@ -290,7 +299,12 @@ npm i @wingcloud/framework
       throw new CompileError(errors);
     }
 
-    return join(props.workDir, WINGC_PREFLIGHT);
+    return {
+      preflightEntrypoint: join(props.workDir, WINGC_PREFLIGHT),
+      compilerOutput: JSON.parse(
+        compilerOutput as string
+      ),
+    }
   }
 }
 

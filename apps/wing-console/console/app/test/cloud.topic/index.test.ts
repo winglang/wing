@@ -5,7 +5,7 @@ import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/main.w`, () => {
   test.skip("publishes message", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Topic").click();
+    await getResourceNode(page, "root/Default/Topic").click();
 
     await page.getByTestId("cloud.topic:message").fill("Hello world!");
 

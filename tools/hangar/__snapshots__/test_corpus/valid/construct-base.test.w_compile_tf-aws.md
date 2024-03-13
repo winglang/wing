@@ -32,11 +32,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_sqs_queue": {
-      "awssqsQueueSqsQueue": {
+      "SqsQueue": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/aws.sqsQueue.SqsQueue",
-            "uniqueId": "awssqsQueueSqsQueue"
+            "path": "root/Default/Default/SqsQueue",
+            "uniqueId": "SqsQueue"
           }
         }
       }
@@ -95,7 +95,7 @@ class $Root extends $stdlib.std.Resource {
     const getDisplayName = ((r) => {
       return $helpers.nodeof(r).title;
     });
-    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "aws.sqsQueue.SqsQueue");
+    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "SqsQueue");
     const wr = new WingResource(this, "WingResource");
     const another_resource = wr;
     console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))));

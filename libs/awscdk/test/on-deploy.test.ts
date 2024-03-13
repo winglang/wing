@@ -3,11 +3,7 @@ import { expect, test } from "vitest";
 import { cloud, simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-import { awscdkSanitize } from "./util";
-
-const CDK_APP_OPTS = {
-  stackName: "my-project",
-};
+import { awscdkSanitize, CDK_APP_OPTS } from "./util";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 
@@ -15,7 +11,6 @@ test("create an OnDeploy", () => {
   // GIVEN
   const app = new awscdk.App({
     outdir: mkdtemp(),
-    entrypointDir: __dirname,
     ...CDK_APP_OPTS,
   });
   const handler = simulator.Testing.makeHandler(INFLIGHT_CODE);
@@ -32,7 +27,6 @@ test("execute OnDeploy after other resources", () => {
   // GIVEN
   const app = new awscdk.App({
     outdir: mkdtemp(),
-    entrypointDir: __dirname,
     ...CDK_APP_OPTS,
   });
   const bucket = new cloud.Bucket(app, "my_bucket");
@@ -55,7 +49,6 @@ test("execute OnDeploy before other resources", () => {
   // GIVEN
   const app = new awscdk.App({
     outdir: mkdtemp(),
-    entrypointDir: __dirname,
     ...CDK_APP_OPTS,
   });
   const bucket = new cloud.Bucket(app, "my_bucket");

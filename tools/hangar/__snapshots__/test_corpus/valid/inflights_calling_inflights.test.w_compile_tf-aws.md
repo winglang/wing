@@ -175,7 +175,7 @@ module.exports = function({  }) {
             "uniqueId": "func1_IamRolePolicy_B533BD74"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.Bucket.arn}\",\"${aws_s3_bucket.Bucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.func1_IamRole_31EC29DC.name}"
       }
     },
@@ -204,7 +204,7 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
+            "BUCKET_NAME_1357ca3a": "${aws_s3_bucket.Bucket.bucket}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "func1-c899062d",
             "WING_TARGET": "tf-aws"
@@ -226,6 +226,16 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
+      "Bucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
+          }
+        },
+        "bucket_prefix": "bucket-c88fdc5f-",
+        "force_destroy": false
+      },
       "Code": {
         "//": {
           "metadata": {
@@ -234,16 +244,6 @@ module.exports = function({  }) {
           }
         },
         "bucket_prefix": "code-c84a50b1-"
-      },
-      "cloudBucket": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
-          }
-        },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
-        "force_destroy": false
       }
     },
     "aws_s3_object": {
@@ -489,7 +489,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const storeInBucket = new $Closure1(this, "$Closure1");
     const handler1 = new $Closure2(this, "$Closure2");
     const func1 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "func1", handler1);
