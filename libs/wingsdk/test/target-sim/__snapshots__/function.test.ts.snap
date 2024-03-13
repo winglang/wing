@@ -2,8 +2,8 @@
 
 exports[`__dirname and __filename cannot be used within inflight code 1`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.cloud.Function created.",
+  "root/Function.0 started",
+  "root/Function.1 started",
   "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
   "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
   "Invoke (payload=undefined).",
@@ -179,9 +179,9 @@ async handle(event) {
 
 exports[`invoke function fails 1`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
+  "root/my_function started",
   "Invoke (payload="{\\"name\\":\\"alice\\"}").",
-  "@winglang/sdk.cloud.Function deleted.",
+  "root/my_function stopped",
 ]
 `;
 
@@ -351,9 +351,9 @@ async handle(event) {
 
 exports[`invoke function succeeds 1`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
+  "root/my_function started",
   "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
-  "@winglang/sdk.cloud.Function deleted.",
+  "root/my_function stopped",
 ]
 `;
 
@@ -523,9 +523,9 @@ async handle(event) {
 
 exports[`invoke function with environment variables 1`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
+  "root/my_function started",
   "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
-  "@winglang/sdk.cloud.Function deleted.",
+  "root/my_function stopped",
 ]
 `;
 
@@ -697,9 +697,9 @@ async handle(event) {
 
 exports[`invoke function with process.exit(1) 1`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
+  "root/my_function started",
   "Invoke (payload="{}").",
-  "@winglang/sdk.cloud.Function deleted.",
+  "root/my_function stopped",
 ]
 `;
 

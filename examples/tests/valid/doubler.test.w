@@ -15,7 +15,7 @@ class Doubler {
 }
 
 let fn = new Doubler(inflight (m: str?): str => {
-  return "Hello {m}!";
+  return "Hello {m ?? "nil"}!";
 });
 
 // ----------

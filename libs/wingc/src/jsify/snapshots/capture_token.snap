@@ -82,7 +82,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }

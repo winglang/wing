@@ -73,9 +73,9 @@ const math = $stdlib.math;
 const cloud = $stdlib.cloud;
 const Color =
   (function (tmp) {
-    tmp[tmp["RED"] = 0] = ",RED";
-    tmp[tmp["GREEN"] = 1] = ",GREEN";
-    tmp[tmp["BLUE"] = 2] = ",BLUE";
+    tmp["RED"] = "RED";
+    tmp["GREEN"] = "GREEN";
+    tmp["BLUE"] = "BLUE";
     return tmp;
   })({})
 ;
@@ -110,7 +110,7 @@ class Util extends $stdlib.std.Resource {
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-    this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const __parent_this_1 = this;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
@@ -147,7 +147,7 @@ class Store extends $stdlib.std.Resource {
         });
       }
     }
-    const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
+    const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "OnDeploy", new $Closure1(this, "$Closure1"));
   }
   static _toInflightType() {
     return `

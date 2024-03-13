@@ -496,7 +496,7 @@ class $Root extends $stdlib.std.Resource {
     (std.Number.fromJson("cool", { unsafe: true }));
     Student._fromJson(({"obviously": "not a student"}), { unsafe: true });
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:unsafe flight", new $Closure5(this, "$Closure5"));
-    new otherExternalStructs.UsesStructInImportedFile(this, "otherExternalStructs.UsesStructInImportedFile");
+    new otherExternalStructs.UsesStructInImportedFile(this, "UsesStructInImportedFile");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

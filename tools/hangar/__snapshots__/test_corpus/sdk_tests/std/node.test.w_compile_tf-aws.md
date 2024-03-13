@@ -18,6 +18,16 @@
   },
   "resource": {
     "aws_s3_bucket": {
+      "Bucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
+          }
+        },
+        "bucket_prefix": "bucket-c88fdc5f-",
+        "force_destroy": false
+      },
       "SingletonBucket": {
         "//": {
           "metadata": {
@@ -26,16 +36,6 @@
           }
         },
         "bucket_prefix": "singletonbucket-c8ac9620-",
-        "force_destroy": false
-      },
-      "cloudBucket": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
-          }
-        },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false
       }
     },
