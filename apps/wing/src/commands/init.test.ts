@@ -21,17 +21,23 @@ describe.each(templates)("new %s --language=wing", (template) => {
     console.log = log;
   });
 
-  test(`wing new ${template} && wing test main.w`, async () => {
-    const workdir = await generateTmpDir();
-    process.chdir(workdir);
+  test(
+    `wing new ${template} && wing test main.w`,
+    async () => {
+      const workdir = await generateTmpDir();
+      process.chdir(workdir);
 
-    await init(template, { language: "wing" });
+      await init(template, { language: "wing" });
 
-    await cliTest(["main.w"], {
-      platform: ["sim"],
-      clean: false,
-    });
-  });
+      await cliTest(["main.w"], {
+        platform: ["sim"],
+        clean: false,
+      });
+    },
+    {
+      timeout: 500_000, // npm install can take a long time
+    }
+  );
 });
 
 describe("new --list-templates", () => {
