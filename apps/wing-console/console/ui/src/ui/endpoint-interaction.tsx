@@ -18,7 +18,6 @@ export const EndpointInteraction = ({
   const { theme } = useTheme();
 
   const toggleId = useId();
-  console.log({ endpoint });
   const publicUrl = useMemo(() => {
     if (!endpoint) {
       return "";
