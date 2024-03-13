@@ -739,13 +739,13 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "fooInc": [
-            [this.c, ["inc"]],
+            [this.c, [].concat(...[["inc"]])],
           ],
           "fooGet": [
-            [this.c, ["peek"]],
+            [this.c, [].concat(...[["peek"]])],
           ],
           "$inflight_init": [
-            [this.c, ["dec", "inc"]],
+            [this.c, [].concat(...[["inc"], ["dec"]])],
           ],
           "inflightField": [
           ],
@@ -791,21 +791,21 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "myMethod": [
-            [Foo, ["fooStatic"]],
-            [this.b, ["get", "put"]],
-            [this.foo, ["fooGet", "fooInc"]],
+            [Foo, [].concat(...[["fooStatic"]])],
+            [this.b, [].concat(...[["put"], ["get"]])],
+            [this.foo, [].concat(...[["fooInc"], ["fooGet"]])],
           ],
           "testTypeAccess": [
-            [Bar, ["barStatic"]],
-            [Foo, ["fooStatic"]],
-            [this.e, []],
+            [Bar, [].concat(...[["barStatic"]])],
+            [Foo, [].concat(...[["fooStatic"]])],
+            [this.e, [].concat(...[])],
           ],
           "$inflight_init": [
-            [Bar, []],
-            [Foo, []],
-            [this.b, []],
-            [this.e, []],
-            [this.foo, []],
+            [Bar, [].concat(...[])],
+            [Foo, [].concat(...[])],
+            [this.b, [].concat(...[])],
+            [this.e, [].concat(...[])],
+            [this.foo, [].concat(...[])],
           ],
         });
       }
@@ -845,14 +845,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [bucket, ["list"]],
-            [res, ["myMethod", "testTypeAccess"]],
-            [res.foo, ["inflightField"]],
+            [bucket, [].concat(...[["list"]])],
+            [res, [].concat(...[["myMethod"], ["testTypeAccess"]])],
+            [res.foo, [].concat(...[["inflightField"]])],
           ],
           "$inflight_init": [
-            [bucket, []],
-            [res, []],
-            [res.foo, []],
+            [bucket, [].concat(...[])],
+            [res, [].concat(...[])],
+            [res.foo, [].concat(...[])],
           ],
         });
       }
@@ -892,10 +892,10 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
-                [__parent_this_2.b, ["put"]],
+                [__parent_this_2.b, [].concat(...[["put"]])],
               ],
               "$inflight_init": [
-                [__parent_this_2.b, []],
+                [__parent_this_2.b, [].concat(...[])],
               ],
             });
           }
@@ -929,10 +929,10 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
-                [__parent_this_3.b, ["put"]],
+                [__parent_this_3.b, [].concat(...[["put"]])],
               ],
               "$inflight_init": [
-                [__parent_this_3.b, []],
+                [__parent_this_3.b, [].concat(...[])],
               ],
             });
           }
@@ -966,10 +966,10 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
-                [__parent_this_4.q, ["push"]],
+                [__parent_this_4.q, [].concat(...[["push"]])],
               ],
               "$inflight_init": [
-                [__parent_this_4.q, []],
+                [__parent_this_4.q, [].concat(...[])],
               ],
             });
           }
@@ -1000,18 +1000,18 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "publish": [
-            [this.b2, ["put"]],
-            [this.q, ["push"]],
-            [this.t, ["publish"]],
+            [this.b2, [].concat(...[["put"]])],
+            [this.q, [].concat(...[["push"]])],
+            [this.t, [].concat(...[["publish"]])],
           ],
           "getObjectCount": [
-            [this.b, ["list"]],
+            [this.b, [].concat(...[["list"]])],
           ],
           "$inflight_init": [
-            [this.b, []],
-            [this.b2, []],
-            [this.q, []],
-            [this.t, []],
+            [this.b, [].concat(...[])],
+            [this.b2, [].concat(...[])],
+            [this.q, [].concat(...[])],
+            [this.t, [].concat(...[])],
           ],
         });
       }
@@ -1043,10 +1043,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [bigOlPublisher, ["getObjectCount", "publish"]],
+            [bigOlPublisher, [].concat(...[["publish"], ["getObjectCount"]])],
           ],
           "$inflight_init": [
-            [bigOlPublisher, []],
+            [bigOlPublisher, [].concat(...[])],
           ],
         });
       }

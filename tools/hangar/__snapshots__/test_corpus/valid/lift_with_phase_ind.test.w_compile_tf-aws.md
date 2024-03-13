@@ -87,14 +87,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(ar, 0), []],
-            [ar, ["at"]],
-            [ar.length, []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(ar, 0), [].concat(...[])],
+            [ar, [].concat(...[["at"]])],
+            [ar.length, [].concat(...[])],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(ar, 0), []],
-            [ar, []],
-            [ar.length, []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(ar, 0), [].concat(...[])],
+            [ar, [].concat(...[])],
+            [ar.length, [].concat(...[])],
           ],
         });
       }

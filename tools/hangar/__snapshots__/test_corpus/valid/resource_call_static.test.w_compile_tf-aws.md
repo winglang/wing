@@ -115,14 +115,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "$inflight_init": [
-            [globalCounter, []],
+            [globalCounter, [].concat(...[])],
           ],
         });
       }
       static get _liftTypeMap() {
         return ({
           "myStaticMethod": [
-            [globalCounter, ["peek"]],
+            [globalCounter, [].concat(...[["peek"]])],
           ],
         });
       }
@@ -154,10 +154,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [Another, ["myStaticMethod"]],
+            [Another, [].concat(...[["myStaticMethod"]])],
           ],
           "$inflight_init": [
-            [Another, []],
+            [Another, [].concat(...[])],
           ],
         });
       }

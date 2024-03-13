@@ -147,14 +147,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [(!("bar" in (map))), []],
-            [("foo" in (map)), []],
-            [Object.keys(map).length, []],
+            [(!("bar" in (map))), [].concat(...[])],
+            [("foo" in (map)), [].concat(...[])],
+            [Object.keys(map).length, [].concat(...[])],
           ],
           "$inflight_init": [
-            [(!("bar" in (map))), []],
-            [("foo" in (map)), []],
-            [Object.keys(map).length, []],
+            [(!("bar" in (map))), [].concat(...[])],
+            [("foo" in (map)), [].concat(...[])],
+            [Object.keys(map).length, [].concat(...[])],
           ],
         });
       }
@@ -186,10 +186,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(map, "foo"), []],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(map, "foo"), [].concat(...[])],
           ],
           "$inflight_init": [
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(map, "foo"), []],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(map, "foo"), [].concat(...[])],
           ],
         });
       }
@@ -221,10 +221,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [Object.entries(map).map(([key, value]) => ({ key, value })), []],
+            [Object.entries(map).map(([key, value]) => ({ key, value })), [].concat(...[])],
           ],
           "$inflight_init": [
-            [Object.entries(map).map(([key, value]) => ({ key, value })), []],
+            [Object.entries(map).map(([key, value]) => ({ key, value })), [].concat(...[])],
           ],
         });
       }

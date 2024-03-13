@@ -236,10 +236,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [fn, ["invoke"]],
+            [fn, [].concat(...[["invoke"]])],
           ],
           "$inflight_init": [
-            [fn, []],
+            [fn, [].concat(...[])],
           ],
         });
       }

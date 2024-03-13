@@ -344,10 +344,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [api.url, []],
+            [api.url, [].concat(...[])],
           ],
           "$inflight_init": [
-            [api.url, []],
+            [api.url, [].concat(...[])],
           ],
         });
       }

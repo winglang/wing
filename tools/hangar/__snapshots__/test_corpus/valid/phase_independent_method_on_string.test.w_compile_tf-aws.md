@@ -171,14 +171,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [api.url, ["length", "startsWith"]],
-            [token_len, []],
-            [url_regex, []],
+            [api.url, [].concat(...[["startsWith"], ["length"]])],
+            [token_len, [].concat(...[])],
+            [url_regex, [].concat(...[])],
           ],
           "$inflight_init": [
-            [api.url, []],
-            [token_len, []],
-            [url_regex, []],
+            [api.url, [].concat(...[])],
+            [token_len, [].concat(...[])],
+            [url_regex, [].concat(...[])],
           ],
         });
       }

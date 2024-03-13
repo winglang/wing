@@ -222,7 +222,7 @@ class $Root extends $stdlib.std.Resource {
           "get_six": [
           ],
           "$inflight_init": [
-            [this, ["field1", "field2", "get_six"]],
+            [this, [].concat(...[["field1"], ["get_six"], ["field2"]])],
           ],
           "field1": [
           ],
@@ -256,7 +256,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "$inflight_init": [
-            [this, ["field3"]],
+            [this, [].concat(...[["field3"]])],
           ],
           "field3": [
           ],

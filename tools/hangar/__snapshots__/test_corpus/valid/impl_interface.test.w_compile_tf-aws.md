@@ -228,10 +228,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [x, ["handle"]],
+            [x, [].concat(...[["handle"]])],
           ],
           "$inflight_init": [
-            [x, []],
+            [x, [].concat(...[])],
           ],
         });
       }
@@ -299,10 +299,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [i3, ["method2"]],
+            [i3, [].concat(...[["method2"]])],
           ],
           "$inflight_init": [
-            [i3, []],
+            [i3, [].concat(...[])],
           ],
         });
       }

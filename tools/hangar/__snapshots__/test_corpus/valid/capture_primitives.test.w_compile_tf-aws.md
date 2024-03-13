@@ -205,22 +205,22 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [myBool, []],
-            [myDur.hours, []],
-            [myDur.minutes, []],
-            [myDur.seconds, []],
-            [myNum, []],
-            [mySecondBool, []],
-            [myStr, []],
+            [myBool, [].concat(...[])],
+            [myDur.hours, [].concat(...[])],
+            [myDur.minutes, [].concat(...[])],
+            [myDur.seconds, [].concat(...[])],
+            [myNum, [].concat(...[])],
+            [mySecondBool, [].concat(...[])],
+            [myStr, [].concat(...[])],
           ],
           "$inflight_init": [
-            [myBool, []],
-            [myDur.hours, []],
-            [myDur.minutes, []],
-            [myDur.seconds, []],
-            [myNum, []],
-            [mySecondBool, []],
-            [myStr, []],
+            [myBool, [].concat(...[])],
+            [myDur.hours, [].concat(...[])],
+            [myDur.minutes, [].concat(...[])],
+            [myDur.seconds, [].concat(...[])],
+            [myNum, [].concat(...[])],
+            [mySecondBool, [].concat(...[])],
+            [myStr, [].concat(...[])],
           ],
         });
       }

@@ -139,10 +139,10 @@ class Store extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [__parent_this_1.b, ["put"]],
+            [__parent_this_1.b, [].concat(...[["put"]])],
           ],
           "$inflight_init": [
-            [__parent_this_1.b, []],
+            [__parent_this_1.b, [].concat(...[])],
           ],
         });
       }
@@ -170,10 +170,10 @@ class Store extends $stdlib.std.Resource {
   get _liftMap() {
     return ({
       "store": [
-        [this.b, ["put"]],
+        [this.b, [].concat(...[["put"]])],
       ],
       "$inflight_init": [
-        [this.b, []],
+        [this.b, [].concat(...[])],
       ],
     });
   }

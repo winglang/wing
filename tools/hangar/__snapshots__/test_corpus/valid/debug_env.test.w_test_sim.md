@@ -4,7 +4,7 @@
 ```log
 [symbol environment at debug_env.test.w:7:5]
 level 0: { this => A }
-level 1: { A => A [type], assert => (condition: bool): void, cloud => cloud [namespace], log => (message: str): void, nodeof => preflight (construct: IConstruct): Node, std => std [namespace], this => Construct, unsafeCast => (value: any): any }
+level 1: { A => A [type], assert => (condition: bool): void, cloud => cloud [namespace], lift => inflight (preflightObject: any, qualifications: Array<str>): void, log => (message: str): void, nodeof => preflight (construct: IConstruct): Node, std => std [namespace], this => Construct, unsafeCast => (value: any): any }
 ```
 
 ## stdout.log
