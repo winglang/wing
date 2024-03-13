@@ -17,54 +17,66 @@ export const EndpointInteraction = ({
 }: EndpointInteractionProps) => {
   const { theme } = useTheme();
 
-  const actualValueElementId = useId();
-  if (!endpoint) {
-    return;
-  }
+  const toggleId = useId();
+  console.log({ endpoint });
+  const publicUrl = useMemo(() => {
+    if (!endpoint) {
+      return "";
+    }
+
+    if (endpoint.exposeStatus === "connected") {
+      return endpoint.url;
+    }
+
+    return "<not exposed>";
+  }, [endpoint]);
 
   return (
     <div
       className={classNames(
-        "h-full flex flex-1 flex-col py-1",
+        "h-full flex flex-1 flex-col",
         theme.bg3,
         theme.text2,
       )}
     >
-      <div className="flex flex-col items-start">
-        <Attribute name="URL" value={endpoint.url} noLeftPadding />
+      <div className="flex flex-col gap-1">
+        <Attribute name="Local URL" value={endpoint?.localUrl} noLeftPadding />
 
-        <Attribute
-          name="Status"
-          value={
-            endpoint.exposeStatus === "connected" ? "Exposed" : "Not Exposed"
-          }
-          noLeftPadding
-          className="my-1"
-        />
+        <Attribute name="Public URL" value={publicUrl} noLeftPadding />
 
-        <div
-          className={classNames("w-full my-2 flex gap-2 min-w-0 justify-end")}
-        >
-          {(endpoint.exposeStatus === "disconnected" ||
-            endpoint.exposeStatus === "connecting") && (
+        <div className="flex flex-row items-center">
+          <label
+            htmlFor={toggleId}
+            className="min-w-[100px] invisible text-slate-500 dark:text-slate-400"
+          >
+            Toggle exposed
+          </label>
+
+          {(endpoint?.exposeStatus === "disconnected" ||
+            endpoint?.exposeStatus === "connecting") && (
             <Button
+              id={toggleId}
               small
               title="Open a tunnel for this enpoint"
               disabled={endpoint.exposeStatus === "connecting"}
               className="px-0.5 h-7 content-end"
               onClick={exposeEndpoint}
             >
-              Expose
+              {endpoint.exposeStatus === "connecting"
+                ? "Exposing..."
+                : "Expose"}
             </Button>
           )}
-          {endpoint.exposeStatus === "connected" && (
+
+          {endpoint?.exposeStatus === "connected" && (
             <Button
+              id={toggleId}
               small
               title="Close the tunnel for this endpoint"
               className="px-0.5 h-7 content-end"
               onClick={hideEndpoint}
             >
-              Hide Endpoint
+              Hide
             </Button>
           )}
         </div>
