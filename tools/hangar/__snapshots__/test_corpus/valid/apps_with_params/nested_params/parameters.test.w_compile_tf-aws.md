@@ -1,4 +1,4 @@
-# [parameters.test.w](../../../../../../../examples/tests/valid/apps_with_params/simple_test/parameters.test.w) | compile | tf-aws
+# [parameters.test.w](../../../../../../../examples/tests/valid/apps_with_params/nested_params/parameters.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
@@ -31,22 +31,13 @@ const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{foo:{type:"string"},meaningOfLife:{type:"number"},},required:["meaningOfLife",]});
+    const MyParams = $stdlib.std.Struct._createJsonSchema({$id:"/MyParams",type:"object",properties:{houses:{type:"array",items:{type:"object",properties:{address:{type:"string"},residents:{type:"array",items:{type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]}},},required:["address","residents",]}},},required:["houses",]});
     const app = $helpers.nodeof(this).app;
     (app.parameters.addSchema(MyParams));
     const myParams = MyParams._fromParameters(app.parameters);
-    {
-      const $if_let_value = myParams.foo;
-      if ($if_let_value != undefined) {
-        const foo = $if_let_value;
-        $helpers.assert(false, "false");
-      }
-      else {
-        $helpers.assert(true, "true");
-      }
-    }
-    const meaningOfLife = myParams.meaningOfLife;
-    $helpers.assert($helpers.eq(meaningOfLife, 42), "meaningOfLife == 42");
+    $helpers.assert($helpers.eq(myParams.houses.length, 2), "myParams.houses.length == 2");
+    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(myParams.houses, 0).address, "123 Main St"), "myParams.houses.at(0).address == \"123 Main St\"");
+    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(myParams.houses, 0).residents.length, 2), "myParams.houses.at(0).residents.length == 2");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
