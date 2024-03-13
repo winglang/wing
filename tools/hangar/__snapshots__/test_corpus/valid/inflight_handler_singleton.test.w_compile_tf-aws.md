@@ -501,10 +501,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [foo, ["inc"]],
+            [foo, [].concat(...[["inc"]])],
           ],
           "$inflight_init": [
-            [foo, []],
+            [foo, [].concat(...[])],
           ],
         });
       }
@@ -536,10 +536,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [foo, ["inc"]],
+            [foo, [].concat(...[["inc"]])],
           ],
           "$inflight_init": [
-            [foo, []],
+            [foo, [].concat(...[])],
           ],
         });
       }
@@ -574,14 +574,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [fn, ["invoke"]],
-            [fn2, ["invoke"]],
-            [sim, []],
+            [fn, [].concat(...[["invoke"]])],
+            [fn2, [].concat(...[["invoke"]])],
+            [sim, [].concat(...[])],
           ],
           "$inflight_init": [
-            [fn, []],
-            [fn2, []],
-            [sim, []],
+            [fn, [].concat(...[])],
+            [fn2, [].concat(...[])],
+            [sim, [].concat(...[])],
           ],
         });
       }
@@ -615,10 +615,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [foo, ["get", "inc"]],
+            [foo, [].concat(...[["inc"], ["get"]])],
           ],
           "$inflight_init": [
-            [foo, []],
+            [foo, [].concat(...[])],
           ],
         });
       }
@@ -652,10 +652,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [fn3, ["invoke", "invokeAsync"]],
+            [fn3, [].concat(...[["invokeAsync"], ["invoke"]])],
           ],
           "$inflight_init": [
-            [fn3, []],
+            [fn3, [].concat(...[])],
           ],
         });
       }

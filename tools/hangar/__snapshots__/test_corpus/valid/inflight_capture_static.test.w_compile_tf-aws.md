@@ -253,10 +253,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [Preflight, ["staticMethod"]],
+            [Preflight, [].concat(...[["staticMethod"]])],
           ],
           "$inflight_init": [
-            [Preflight, []],
+            [Preflight, [].concat(...[])],
           ],
         });
       }

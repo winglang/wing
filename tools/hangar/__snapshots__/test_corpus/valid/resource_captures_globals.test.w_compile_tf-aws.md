@@ -418,17 +418,17 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "myMethod": [
-            [globalCounter, ["inc", "peek"]],
+            [globalCounter, [].concat(...[["inc"], ["peek"]])],
           ],
           "$inflight_init": [
-            [globalCounter, ["peek"]],
+            [globalCounter, [].concat(...[["peek"]])],
           ],
         });
       }
       static get _liftTypeMap() {
         return ({
           "myStaticMethod": [
-            [globalCounter, ["peek"]],
+            [globalCounter, [].concat(...[["peek"]])],
           ],
         });
       }
@@ -466,12 +466,12 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
-                [$parentThis.localCounter, ["inc"]],
-                [globalCounter, ["inc"]],
+                [$parentThis.localCounter, [].concat(...[["inc"]])],
+                [globalCounter, [].concat(...[["inc"]])],
               ],
               "$inflight_init": [
-                [$parentThis.localCounter, []],
-                [globalCounter, []],
+                [$parentThis.localCounter, [].concat(...[])],
+                [globalCounter, [].concat(...[])],
               ],
             });
           }
@@ -510,32 +510,32 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "myPut": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0), []],
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), []],
-            [(globalSetOfStr.has("a")), []],
-            [Another, ["myStaticMethod"]],
-            [globalAnother, ["myMethod"]],
-            [globalAnother.first.myResource, ["put"]],
-            [globalAnother.myField, []],
-            [globalBool, []],
-            [globalBucket, ["put"]],
-            [globalNum, []],
-            [globalStr, []],
-            [this.localTopic, ["publish"]],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0), [].concat(...[])],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), [].concat(...[])],
+            [(globalSetOfStr.has("a")), [].concat(...[])],
+            [Another, [].concat(...[["myStaticMethod"]])],
+            [globalAnother, [].concat(...[["myMethod"]])],
+            [globalAnother.first.myResource, [].concat(...[["put"]])],
+            [globalAnother.myField, [].concat(...[])],
+            [globalBool, [].concat(...[])],
+            [globalBucket, [].concat(...[["put"]])],
+            [globalNum, [].concat(...[])],
+            [globalStr, [].concat(...[])],
+            [this.localTopic, [].concat(...[["publish"]])],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0), []],
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), []],
-            [(globalSetOfStr.has("a")), []],
-            [Another, []],
-            [globalAnother, []],
-            [globalAnother.first.myResource, []],
-            [globalAnother.myField, []],
-            [globalBool, []],
-            [globalBucket, []],
-            [globalNum, []],
-            [globalStr, []],
-            [this.localTopic, []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0), [].concat(...[])],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), [].concat(...[])],
+            [(globalSetOfStr.has("a")), [].concat(...[])],
+            [Another, [].concat(...[])],
+            [globalAnother, [].concat(...[])],
+            [globalAnother.first.myResource, [].concat(...[])],
+            [globalAnother.myField, [].concat(...[])],
+            [globalBool, [].concat(...[])],
+            [globalBucket, [].concat(...[])],
+            [globalNum, [].concat(...[])],
+            [globalStr, [].concat(...[])],
+            [this.localTopic, [].concat(...[])],
           ],
         });
       }
@@ -567,10 +567,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [res, ["myPut"]],
+            [res, [].concat(...[["myPut"]])],
           ],
           "$inflight_init": [
-            [res, []],
+            [res, [].concat(...[])],
           ],
         });
       }
@@ -602,10 +602,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [Another, ["myStaticMethod"]],
+            [Another, [].concat(...[["myStaticMethod"]])],
           ],
           "$inflight_init": [
-            [Another, []],
+            [Another, [].concat(...[])],
           ],
         });
       }

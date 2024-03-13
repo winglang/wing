@@ -402,10 +402,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "callInner": [
-            [this.inner, ["handle"]],
+            [this.inner, [].concat(...[["handle"]])],
           ],
           "$inflight_init": [
-            [this.inner, []],
+            [this.inner, [].concat(...[])],
           ],
         });
       }
@@ -441,16 +441,16 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [a, ["goo"]],
-            [d, ["callInner"]],
-            [fn, ["handle"]],
-            [innerD, ["handle"]],
+            [a, [].concat(...[["goo"]])],
+            [d, [].concat(...[["callInner"]])],
+            [fn, [].concat(...[["handle"]])],
+            [innerD, [].concat(...[["handle"]])],
           ],
           "$inflight_init": [
-            [a, []],
-            [d, []],
-            [fn, []],
-            [innerD, []],
+            [a, [].concat(...[])],
+            [d, [].concat(...[])],
+            [fn, [].concat(...[])],
+            [innerD, [].concat(...[])],
           ],
         });
       }

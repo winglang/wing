@@ -336,16 +336,16 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [numA, []],
-            [numB, []],
-            [strA, []],
-            [strB, []],
+            [numA, [].concat(...[])],
+            [numB, [].concat(...[])],
+            [strA, [].concat(...[])],
+            [strB, [].concat(...[])],
           ],
           "$inflight_init": [
-            [numA, []],
-            [numB, []],
-            [strA, []],
-            [strB, []],
+            [numA, [].concat(...[])],
+            [numB, [].concat(...[])],
+            [strA, [].concat(...[])],
+            [strB, [].concat(...[])],
           ],
         });
       }
@@ -380,16 +380,16 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [numA, []],
-            [numC, []],
-            [strA, []],
-            [strC, []],
+            [numA, [].concat(...[])],
+            [numC, [].concat(...[])],
+            [strA, [].concat(...[])],
+            [strC, [].concat(...[])],
           ],
           "$inflight_init": [
-            [numA, []],
-            [numC, []],
-            [strA, []],
-            [strC, []],
+            [numA, [].concat(...[])],
+            [numC, [].concat(...[])],
+            [strA, [].concat(...[])],
+            [strC, [].concat(...[])],
           ],
         });
       }
@@ -422,12 +422,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [jsonA, []],
-            [jsonB, []],
+            [jsonA, [].concat(...[])],
+            [jsonB, [].concat(...[])],
           ],
           "$inflight_init": [
-            [jsonA, []],
-            [jsonB, []],
+            [jsonA, [].concat(...[])],
+            [jsonB, [].concat(...[])],
           ],
         });
       }
@@ -461,14 +461,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [jsonA, []],
-            [jsonB, []],
-            [jsonC, []],
+            [jsonA, [].concat(...[])],
+            [jsonB, [].concat(...[])],
+            [jsonC, [].concat(...[])],
           ],
           "$inflight_init": [
-            [jsonA, []],
-            [jsonB, []],
-            [jsonC, []],
+            [jsonA, [].concat(...[])],
+            [jsonB, [].concat(...[])],
+            [jsonC, [].concat(...[])],
           ],
         });
       }
@@ -534,12 +534,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [setA, []],
-            [setB, []],
+            [setA, [].concat(...[])],
+            [setB, [].concat(...[])],
           ],
           "$inflight_init": [
-            [setA, []],
-            [setB, []],
+            [setA, [].concat(...[])],
+            [setB, [].concat(...[])],
           ],
         });
       }
@@ -573,14 +573,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [setA, []],
-            [setB, []],
-            [setC, []],
+            [setA, [].concat(...[])],
+            [setB, [].concat(...[])],
+            [setC, [].concat(...[])],
           ],
           "$inflight_init": [
-            [setA, []],
-            [setB, []],
-            [setC, []],
+            [setA, [].concat(...[])],
+            [setB, [].concat(...[])],
+            [setC, [].concat(...[])],
           ],
         });
       }
@@ -613,12 +613,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [mapA, []],
-            [mapB, []],
+            [mapA, [].concat(...[])],
+            [mapB, [].concat(...[])],
           ],
           "$inflight_init": [
-            [mapA, []],
-            [mapB, []],
+            [mapA, [].concat(...[])],
+            [mapB, [].concat(...[])],
           ],
         });
       }
@@ -652,14 +652,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [mapA, []],
-            [mapB, []],
-            [mapC, []],
+            [mapA, [].concat(...[])],
+            [mapB, [].concat(...[])],
+            [mapC, [].concat(...[])],
           ],
           "$inflight_init": [
-            [mapA, []],
-            [mapB, []],
-            [mapC, []],
+            [mapA, [].concat(...[])],
+            [mapB, [].concat(...[])],
+            [mapC, [].concat(...[])],
           ],
         });
       }
@@ -692,12 +692,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [arrayA, []],
-            [arrayB, []],
+            [arrayA, [].concat(...[])],
+            [arrayB, [].concat(...[])],
           ],
           "$inflight_init": [
-            [arrayA, []],
-            [arrayB, []],
+            [arrayA, [].concat(...[])],
+            [arrayB, [].concat(...[])],
           ],
         });
       }
@@ -731,14 +731,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [arrayA, []],
-            [arrayB, []],
-            [arrayC, []],
+            [arrayA, [].concat(...[])],
+            [arrayB, [].concat(...[])],
+            [arrayC, [].concat(...[])],
           ],
           "$inflight_init": [
-            [arrayA, []],
-            [arrayB, []],
-            [arrayC, []],
+            [arrayA, [].concat(...[])],
+            [arrayB, [].concat(...[])],
+            [arrayC, [].concat(...[])],
           ],
         });
       }
@@ -771,12 +771,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [cat1, []],
-            [cat2, []],
+            [cat1, [].concat(...[])],
+            [cat2, [].concat(...[])],
           ],
           "$inflight_init": [
-            [cat1, []],
-            [cat2, []],
+            [cat1, [].concat(...[])],
+            [cat2, [].concat(...[])],
           ],
         });
       }
@@ -810,14 +810,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [cat1, []],
-            [cat2, []],
-            [cat3, []],
+            [cat1, [].concat(...[])],
+            [cat2, [].concat(...[])],
+            [cat3, [].concat(...[])],
           ],
           "$inflight_init": [
-            [cat1, []],
-            [cat2, []],
-            [cat3, []],
+            [cat1, [].concat(...[])],
+            [cat2, [].concat(...[])],
+            [cat3, [].concat(...[])],
           ],
         });
       }

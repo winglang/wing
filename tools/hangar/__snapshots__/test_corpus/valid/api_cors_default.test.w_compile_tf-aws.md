@@ -375,10 +375,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [apiDefaultCors.url, []],
+            [apiDefaultCors.url, [].concat(...[])],
           ],
           "$inflight_init": [
-            [apiDefaultCors.url, []],
+            [apiDefaultCors.url, [].concat(...[])],
           ],
         });
       }
@@ -413,10 +413,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [apiDefaultCors.url, []],
+            [apiDefaultCors.url, [].concat(...[])],
           ],
           "$inflight_init": [
-            [apiDefaultCors.url, []],
+            [apiDefaultCors.url, [].concat(...[])],
           ],
         });
       }
