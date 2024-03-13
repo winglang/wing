@@ -136,12 +136,12 @@ exports[`create a counter 1`] = `
 
 exports[`dec 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Dec (amount=1).",
   "Dec (amount=1).",
   "Dec (amount=10).",
   "Dec (amount=10).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -281,12 +281,12 @@ exports[`dec 2`] = `
 
 exports[`inc 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Inc (amount=1).",
   "Inc (amount=1).",
   "Inc (amount=10).",
   "Inc (amount=10).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -426,12 +426,12 @@ exports[`inc 2`] = `
 
 exports[`key dec 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Dec (amount=1, key: my-key).",
   "Dec (amount=1, key: my-key).",
   "Dec (amount=10, key: my-key).",
   "Dec (amount=10, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -571,12 +571,12 @@ exports[`key dec 2`] = `
 
 exports[`key inc 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Inc (amount=1, key: my-key).",
   "Inc (amount=1, key: my-key).",
   "Inc (amount=10, key: my-key).",
   "Inc (amount=10, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -716,10 +716,10 @@ exports[`key inc 2`] = `
 
 exports[`key set to new value 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Set (value=5, key: my-key).",
   "Peek (value=5, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -859,10 +859,10 @@ exports[`key set to new value 2`] = `
 
 exports[`set to new value 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Set (value=5).",
   "Peek (value=5).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 

@@ -140,8 +140,8 @@ exports[`create a table 1`] = `
 
 exports[`get item 1`] = `
 [
-  "@winglang/sdk.ex.DynamodbTable created.",
-  "@winglang/sdk.ex.DynamodbTable deleted.",
+  "root/get_table started",
+  "root/get_table stopped",
 ]
 `;
 
@@ -285,8 +285,8 @@ exports[`get item 2`] = `
 
 exports[`put item 1`] = `
 [
-  "@winglang/sdk.ex.DynamodbTable created.",
-  "@winglang/sdk.ex.DynamodbTable deleted.",
+  "root/put_table started",
+  "root/put_table stopped",
 ]
 `;
 
@@ -430,8 +430,8 @@ exports[`put item 2`] = `
 
 exports[`update item 1`] = `
 [
-  "@winglang/sdk.ex.DynamodbTable created.",
-  "@winglang/sdk.ex.DynamodbTable deleted.",
+  "root/update_table started",
+  "root/update_table stopped",
 ]
 `;
 

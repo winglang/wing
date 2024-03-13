@@ -52,7 +52,6 @@ test("create a service with a on stop method", async () => {
 
   // WHEN
   const s = await app.startSimulator();
-  await s.stop();
 
   // THEN
   expect(s.getResourceConfig("/my_service")).toEqual({
@@ -69,6 +68,8 @@ test("create a service with a on stop method", async () => {
     type: cloud.SERVICE_FQN,
   });
 
+  await s.stop();
+
   expect(
     s
       .listTraces()
@@ -76,9 +77,9 @@ test("create a service with a on stop method", async () => {
       .map((trace) => trace.data.message)
   ).toEqual([
     "start!",
-    "@winglang/sdk.cloud.Service created.",
+    "root/my_service started",
     "stop!",
-    "@winglang/sdk.cloud.Service deleted.",
+    "root/my_service stopped",
   ]);
 });
 
@@ -94,7 +95,6 @@ test("create a service without autostart", async () => {
 
   // WHEN
   const s = await app.startSimulator();
-  await s.stop();
 
   // THEN
   expect(s.getResourceConfig("/my_service")).toEqual({
@@ -111,15 +111,14 @@ test("create a service without autostart", async () => {
     type: cloud.SERVICE_FQN,
   });
 
+  await s.stop();
+
   expect(
     s
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual([
-    "@winglang/sdk.cloud.Service created.", // Service created never started
-    "@winglang/sdk.cloud.Service deleted.",
-  ]);
+  ).toEqual(["root/my_service started", "root/my_service stopped"]);
 });
 
 test("start and stop service", async () => {
@@ -149,13 +148,7 @@ test("start and stop service", async () => {
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual([
-    "@winglang/sdk.cloud.Service created.",
-    "start!",
-    "stop!",
-    "start!",
-    "stop!",
-  ]);
+  ).toEqual(["root/my_service started", "start!", "stop!", "start!", "stop!"]);
 });
 
 test("consecutive start and stop service", async () => {
@@ -186,7 +179,7 @@ test("consecutive start and stop service", async () => {
       .listTraces()
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual(["@winglang/sdk.cloud.Service created.", "start!", "stop!"]);
+  ).toEqual(["root/my_service started", "start!", "stop!"]);
 });
 
 test("throws during service start", async () => {

@@ -77,6 +77,8 @@ export interface FunctionSchema extends BaseResourceSchema {
     readonly environmentVariables: Record<string, string>;
     /** The maximum amount of time the function can run, in milliseconds. */
     readonly timeout: number;
+    /** The maximum number of concurrent invocations that can run at one time. */
+    readonly concurrency: number;
   };
 }
 
@@ -264,6 +266,7 @@ export interface ReactAppSchema extends BaseResourceSchema {
     environmentVariables: Record<string, string>;
     useBuildCommand: boolean;
     url: string;
+    localPort: string | number;
   };
 }
 export interface ReactAppAttributes {

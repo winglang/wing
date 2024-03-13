@@ -3,9 +3,9 @@
 exports[`can add row in preflight 1`] = `
 [
   "Adding initial row (key=joe-id).",
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "get row joe-id from table my_addrow_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -297,11 +297,11 @@ exports[`create a table 1`] = `
 
 exports[`get row 1`] = `
 [
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
   "get row NON_EXISTENT_KEY from table my_get_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -447,9 +447,9 @@ exports[`get row 2`] = `
 
 exports[`insert row 1`] = `
 [
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "insert row joe-id into the table my_insert_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -595,11 +595,11 @@ exports[`insert row 2`] = `
 
 exports[`list table 1`] = `
 [
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "insert row joe-id into the table my_list_table.",
   "insert row jane-id into the table my_list_table.",
   "list all rows from table my_list_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -745,10 +745,10 @@ exports[`list table 2`] = `
 
 exports[`tryGet row 1`] = `
 [
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -894,13 +894,13 @@ exports[`tryGet row 2`] = `
 
 exports[`update row 1`] = `
 [
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "insert row joe-id into the table my_update_table.",
   "get row joe-id from table my_update_table.",
   "get row joe-id from table my_update_table.",
   "update row joe-id in table my_update_table.",
   "get row joe-id from table my_update_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 

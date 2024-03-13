@@ -13,9 +13,10 @@ import { Queue } from "./queue";
 import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import {
-  Resource as SimResource,
   SIM_RESOURCE_FQN,
   isSimulatorResource,
+  Resource as SimResource,
+  ISimulatorResource,
 } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
@@ -273,10 +274,22 @@ export class App extends core.App {
   }
 
   private synthSimulatorFile(outdir: string) {
+    const toSimulatorWithDeps = (res: ISimulatorResource) => {
+      const cfg = res.toSimulator();
+      const deps = res.node.dependencies.map((d) => d.node.path);
+
+      return deps.length === 0
+        ? cfg
+        : {
+            ...cfg,
+            deps,
+          };
+    };
+
     const resources = this.node
       .findAll()
       .filter(isSimulatorResource)
-      .map((res) => res.toSimulator());
+      .map(toSimulatorWithDeps);
 
     const types: { [fqn: string]: TypeSchema } = {};
     for (const [fqn, className] of Object.entries(SIMULATOR_CLASS_DATA)) {

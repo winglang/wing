@@ -3,19 +3,17 @@ import { mkdir, rm } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join } from "path";
 import { makeSimulatorClient } from "./client";
+import { Graph } from "./graph";
 import { deserialize, serialize } from "./serialization";
+import { resolveTokens } from "./tokens";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
-import { ConstructTree, TREE_FILE_PATH } from "../core";
+import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
-import {
-  SIMULATOR_TOKEN_REGEX,
-  SIMULATOR_TOKEN_REGEX_FULL,
-} from "../target-sim/tokens";
 
-const START_ATTEMPT_COUNT = 10;
 const LOCALHOST_ADDRESS = "127.0.0.1";
+const HANDLE_ATTRIBUTE = "handle";
 
 /**
  * Props for `Simulator`.
@@ -160,13 +158,24 @@ export interface ITraceSubscriber {
  */
 type RunningState = "starting" | "running" | "stopping" | "stopped";
 
+interface Model {
+  simdir: string;
+  tree: Tree;
+  connections: ConnectionData[];
+  schema: WingSimulatorSchema;
+  graph: Graph<BaseResourceSchema>;
+}
+
+interface ResourceState {
+  props: Record<string, any>;
+  attrs: Record<string, any>;
+}
+
 /**
  * A simulator that can be used to test your application locally.
  */
 export class Simulator {
   // fields that are same between simulation runs / reloads
-  private _config: WingSimulatorSchema;
-  private readonly simdir: string;
   private readonly statedir: string;
 
   // fields that change between simulation runs / reloads
@@ -174,18 +183,18 @@ export class Simulator {
   private readonly _handles: HandleManager;
   private _traces: Array<Trace>;
   private readonly _traceSubscribers: Array<ITraceSubscriber>;
-  private _tree: Tree;
-  private _connections: ConnectionData[];
   private _serverUrl: string | undefined;
   private _server: Server | undefined;
+  private _model: Model;
+
+  // keeps the actual resolved state (props and attrs) of all started resources. this state is
+  // merged in when calling `getResourceConfig()`.
+  private state: Record<string, ResourceState> = {};
 
   constructor(props: SimulatorProps) {
-    this.simdir = props.simfile;
-    this.statedir = props.stateDir ?? join(this.simdir, ".state");
-    const { config, treeData, connectionData } = this._loadApp(props.simfile);
-    this._config = config;
-    this._tree = new Tree(treeData);
-    this._connections = connectionData;
+    const simdir = props.simfile;
+    this.statedir = props.stateDir ?? join(simdir, ".state");
+    this._model = this._loadApp(simdir);
 
     this._running = "stopped";
     this._handles = new HandleManager();
@@ -193,50 +202,48 @@ export class Simulator {
     this._traceSubscribers = new Array();
   }
 
-  private _loadApp(simdir: string): {
-    config: any;
-    treeData: ConstructTree;
-    connectionData: ConnectionData[];
-  } {
-    const simJson = join(this.simdir, "simulator.json");
+  private _loadApp(simdir: string): Model {
+    const simJson = join(simdir, "simulator.json");
     if (!existsSync(simJson)) {
       throw new Error(
         `Invalid Wing app (${simdir}) - simulator.json not found.`
       );
     }
 
-    const config: WingSimulatorSchema = readJsonSync(simJson);
+    const schema = readJsonSync(simJson) as WingSimulatorSchema;
 
-    const foundVersion = config.sdkVersion ?? "unknown";
+    const foundVersion = schema.sdkVersion ?? "unknown";
     const expectedVersion = SDK_VERSION;
     if (foundVersion !== expectedVersion) {
       console.error(
         `WARNING: The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
       );
     }
-    if (config.resources === undefined) {
+    if (schema.resources === undefined) {
       throw new Error(
         `Incompatible .wsim file. The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
       );
     }
 
-    const treeJson = join(this.simdir, TREE_FILE_PATH);
+    const treeJson = join(simdir, TREE_FILE_PATH);
     if (!existsSync(treeJson)) {
       throw new Error(
         `Invalid Wing app (${simdir}) - ${TREE_FILE_PATH} not found.`
       );
     }
-    const treeData = readJsonSync(treeJson);
 
-    const connectionJson = join(this.simdir, CONNECTIONS_FILE_PATH);
+    const tree = new Tree(readJsonSync(treeJson));
+
+    const connectionJson = join(simdir, CONNECTIONS_FILE_PATH);
     if (!existsSync(connectionJson)) {
       throw new Error(
         `Invalid Wing app (${simdir}) - ${CONNECTIONS_FILE_PATH} not found.`
       );
     }
-    const connectionData = readJsonSync(connectionJson).connections;
+    const connections = readJsonSync(connectionJson).connections;
+    const graph = new Graph(schema.resources);
 
-    return { config, treeData, connectionData };
+    return { schema, tree, connections, simdir, graph };
   }
 
   /**
@@ -250,45 +257,76 @@ export class Simulator {
     }
     this._running = "starting";
 
-    // create a copy of the resource list to be used as an init queue.
-    const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [
-      ...this._config.resources,
-    ];
-
     await this.startServer();
 
     try {
-      while (true) {
-        const next = initQueue.shift();
-        if (!next) {
-          break;
-        }
-
-        // we couldn't start this resource yet, so decrement the retry counter and put it back in
-        // the init queue.
-        if (!(await this.tryStartResource(next))) {
-          // we couldn't start this resource yet, so decrement the attempt counter
-          next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
-          next._attempts--;
-
-          // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
-          if (next._attempts === 0) {
-            throw new Error(
-              `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
-            );
-          }
-
-          // put back in the queue for another round
-          initQueue.push(next);
-        }
-      }
-
+      await this.startResources();
       this._running = "running";
     } catch (err) {
       this.stopServer();
       this._running = "stopped";
       throw err;
     }
+  }
+
+  private async startResources() {
+    const retries: Record<string, number> = {};
+    const queue = this._model.graph.nodes.map((n) => n.path);
+    while (queue.length > 0) {
+      const top = queue.shift()!;
+      try {
+        await this.startResource(top);
+      } catch (e) {
+        if (e instanceof UnresolvedTokenError) {
+          retries[top] = (retries[top] ?? 0) + 1;
+          if (retries[top] > 10) {
+            throw new Error(
+              `Could not start resource after 10 attempts: ${e.message}`
+            );
+          }
+          queue.push(top);
+        } else {
+          throw e;
+        }
+      }
+    }
+  }
+
+  /**
+   * Updates the running simulation with a new version of the app. This will create/update/delete
+   * resources as necessary to get to the desired state.
+   * @param simDir The path to the new version of the app
+   */
+  public async update(simDir: string) {
+    const newModel = this._loadApp(simDir);
+
+    const plan = planUpdate(
+      this._model.schema.resources,
+      newModel.schema.resources
+    );
+
+    this.addTrace({
+      type: TraceType.SIMULATOR,
+      data: {
+        message: `Update: ${plan.added.length} added, ${plan.updated.length} updated, ${plan.deleted.length} deleted`,
+        update: plan,
+      },
+      sourcePath: "root",
+      sourceType: "Simulator",
+      timestamp: new Date().toISOString(),
+    });
+
+    // stop all *deleted* and *updated* resources
+    for (const c of [...plan.deleted, ...plan.updated]) {
+      await this.stopResource(c); // <-- this also stops all dependent resources if needed
+    }
+
+    // now update the internal model to the new version
+    this._model = newModel;
+
+    // start all *added* and *updated* resources (the updated model basically includes only these)
+    // this will also start all dependencies as needed and not touch any resource that is already started
+    await this.startResources();
   }
 
   /**
@@ -308,37 +346,60 @@ export class Simulator {
     }
     this._running = "stopping";
 
-    for (const resourceConfig of this._config.resources.slice().reverse()) {
-      const handle = resourceConfig.attrs?.handle;
-      if (!handle) {
-        throw new Error(
-          `Resource ${resourceConfig.path} could not be cleaned up, no handle for it was found.`
-        );
-      }
-
-      try {
-        const resource = this._handles.find(handle);
-        await resource.save(this.getResourceStateDir(resourceConfig.path));
-        this._handles.deallocate(handle);
-        await resource.cleanup();
-      } catch (err) {
-        console.warn(err);
-      }
-
-      let event: Trace = {
-        type: TraceType.RESOURCE,
-        data: { message: `${resourceConfig.type} deleted.` },
-        sourcePath: resourceConfig.path,
-        sourceType: resourceConfig.type,
-        timestamp: new Date().toISOString(),
-      };
-      this._addTrace(event);
+    // just call "stopResource" for all resources. it will stop all dependents as well.
+    for (const node of this._model.graph.nodes) {
+      await this.stopResource(node.path);
     }
 
     this.stopServer();
 
     this._handles.reset();
     this._running = "stopped";
+  }
+
+  private isStarted(path: string): boolean {
+    return path in this.state;
+  }
+
+  private async stopResource(path: string) {
+    if (!this.isStarted(path)) {
+      return; // resource is already stopped
+    }
+
+    // first, stop all dependent resources
+    for (const consumer of this._model.graph.tryFind(path)?.dependents ?? []) {
+      await this.stopResource(consumer);
+    }
+
+    const handle = this.tryGetResourceHandle(path);
+    if (!handle) {
+      throw new Error(
+        `Resource ${path} could not be cleaned up, no handle for it was found.`
+      );
+    }
+
+    try {
+      const resource = this._handles.find(handle);
+      await resource.save(this.getResourceStateDir(path));
+      this._handles.deallocate(handle);
+      await resource.cleanup();
+    } catch (err) {
+      console.warn(err);
+    }
+
+    this.addSimulatorTrace(path, { message: `${path} stopped` });
+    delete this.state[path]; // delete the state of the resource
+  }
+
+  private addSimulatorTrace(path: string, data: any) {
+    const resourceConfig = this.getResourceConfig(path);
+    this.addTrace({
+      type: TraceType.SIMULATOR,
+      data: data,
+      sourcePath: resourceConfig.path,
+      sourceType: resourceConfig.type,
+      timestamp: new Date().toISOString(),
+    });
   }
 
   /**
@@ -352,10 +413,7 @@ export class Simulator {
       await rm(this.statedir, { recursive: true });
     }
 
-    const { config, treeData, connectionData } = this._loadApp(this.simdir);
-    this._config = config;
-    this._tree = new Tree(treeData);
-    this._connections = connectionData;
+    this._model = this._loadApp(this._model.simdir);
 
     await this.start();
   }
@@ -364,7 +422,7 @@ export class Simulator {
    * Get a list of all resource paths.
    */
   public listResources(): string[] {
-    return this._config.resources.map((config) => config.path).sort();
+    return this._model.graph.nodes.map((x) => x.path).sort();
   }
 
   /**
@@ -391,12 +449,16 @@ export class Simulator {
    * @returns The resource or undefined if not found
    */
   public tryGetResource(path: string): any | undefined {
-    const handle: string = this.tryGetResourceConfig(path)?.attrs.handle;
+    const handle = this.tryGetResourceHandle(path);
     if (!handle) {
       return undefined;
     }
 
     return makeSimulatorClient(this.url, handle);
+  }
+
+  private tryGetResourceHandle(path: string): string | undefined {
+    return this.tryGetResourceConfig(path)?.attrs[HANDLE_ATTRIBUTE];
   }
 
   /**
@@ -408,7 +470,20 @@ export class Simulator {
     if (path.startsWith("/")) {
       path = `root${path}`;
     }
-    return this._config.resources.find((r) => r.path === path);
+
+    const def = this._model.graph.tryFind(path)?.def;
+    if (!def) {
+      return undefined;
+    }
+
+    const state = this.state[path];
+
+    return {
+      ...def,
+
+      // merge the actual state (props and attrs) over the desired state in `def`
+      ...state,
+    };
   }
 
   /**
@@ -447,7 +522,7 @@ export class Simulator {
   }
 
   private typeInfo(fqn: string): TypeSchema {
-    const schema = this._config.types[fqn];
+    const schema = this._model.schema.types[fqn];
     if (!schema) {
       throw new Error(`Unknown simulator resource type: ${fqn}`);
     }
@@ -466,14 +541,14 @@ export class Simulator {
    * Obtain information about the application's construct tree.
    */
   public tree(): Tree {
-    return this._tree;
+    return this._model.tree;
   }
 
   /**
    * Obtain information about the application's connections.
    */
   public connections(): ConnectionData[] {
-    return structuredClone(this._connections);
+    return structuredClone(this._model.connections);
   }
 
   /**
@@ -604,31 +679,20 @@ export class Simulator {
     return this._serverUrl;
   }
 
-  private async tryStartResource(
-    resourceConfig: BaseResourceSchema
-  ): Promise<boolean> {
-    const context = this.createContext(resourceConfig);
-
-    const { resolved, value: resolvedProps } = this.tryResolveTokens(
-      resourceConfig.props
-    );
-    if (!resolved) {
-      this._addTrace({
-        type: TraceType.RESOURCE,
-        data: { message: `${resourceConfig.path} is waiting on a dependency` },
-        sourcePath: resourceConfig.path,
-        sourceType: resourceConfig.type,
-        timestamp: new Date().toISOString(),
-      });
-
-      // this means the resource has a dependency that hasn't been started yet (hopefully). return
-      // it to the init queue.
-      return false;
+  private async startResource(path: string): Promise<void> {
+    if (this.isStarted(path)) {
+      return; // already started
     }
 
-    // update the resource's config with the resolved props
-    const config = this.getResourceConfig(resourceConfig.path);
-    (config.props as any) = resolvedProps;
+    // first lets make sure all my dependencies have been started (depth-first)
+    for (const d of this._model.graph.tryFind(path)?.dependencies ?? []) {
+      await this.startResource(d);
+    }
+
+    const resourceConfig = this.getResourceConfig(path);
+    const context = this.createContext(resourceConfig);
+
+    const resolvedProps = this.resolveTokens(resourceConfig.props);
 
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
@@ -637,6 +701,12 @@ export class Simulator {
     await mkdir(this.getResourceStateDir(resourceConfig.path), {
       recursive: true,
     });
+
+    // initialize the resource state object without attrs for now
+    this.state[path] = {
+      props: resolvedProps,
+      attrs: {},
+    };
 
     // create the resource based on its type
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -650,24 +720,22 @@ export class Simulator {
     // allocate a handle for the resource so others can find it
     const handle = this._handles.allocate(resourceObject);
 
-    // update the resource configuration with new attrs returned after initialization
-    context.setResourceAttributes(resourceConfig.path, { ...attrs, handle });
+    // merge the attributes
+    this.state[path].attrs = {
+      ...this.state[path].attrs,
+      ...attrs,
+      [HANDLE_ATTRIBUTE]: handle,
+    };
 
     // trace the resource creation
-    this._addTrace({
-      type: TraceType.RESOURCE,
-      data: { message: `${resourceConfig.type} created.` },
-      sourcePath: resourceConfig.path,
-      sourceType: resourceConfig.type,
-      timestamp: new Date().toISOString(),
+    this.addSimulatorTrace(path, {
+      message: `${resourceConfig.path} started`,
     });
-
-    return true;
   }
 
   private createContext(resourceConfig: BaseResourceSchema): ISimulatorContext {
     return {
-      simdir: this.simdir,
+      simdir: this._model.simdir,
       statedir: join(this.statedir, resourceConfig.addr),
       resourcePath: resourceConfig.path,
       serverUrl: this.url,
@@ -675,13 +743,13 @@ export class Simulator {
         return this._handles.find(handle);
       },
       addTrace: (trace: Trace) => {
-        this._addTrace(trace);
+        this.addTrace(trace);
       },
       withTrace: async (props: IWithTraceProps) => {
         // TODO: log start time and end time of activity?
         try {
           let result = await props.activity();
-          this._addTrace({
+          this.addTrace({
             data: {
               message: props.message,
               status: "success",
@@ -694,7 +762,7 @@ export class Simulator {
           });
           return result;
         } catch (err) {
-          this._addTrace({
+          this.addTrace({
             data: { message: props.message, status: "failure", error: err },
             type: TraceType.RESOURCE,
             sourcePath: resourceConfig.path,
@@ -708,56 +776,26 @@ export class Simulator {
         return [...this._traces];
       },
       setResourceAttributes: (path: string, attrs: Record<string, any>) => {
-        const config = this.getResourceConfig(path);
-        const prev = config.attrs;
-        (config as any).attrs = { ...prev, ...attrs };
+        for (const [key, value] of Object.entries(attrs)) {
+          this.addSimulatorTrace(path, {
+            message: `${path}.${key} = ${value}`,
+          });
+        }
+
+        this.state[path].attrs = { ...this.state[path].attrs, ...attrs };
       },
       resourceAttributes: (path: string) => {
-        return this.getResourceConfig(path).attrs;
+        return this.state[path].attrs;
       },
     };
   }
 
-  private _addTrace(event: Trace) {
+  private addTrace(event: Trace) {
     event = Object.freeze(event);
     for (const sub of this._traceSubscribers) {
       sub.callback(event);
     }
     this._traces.push(event);
-  }
-
-  private tryResolveToken(s: string): { resolved: boolean; value: any } {
-    const ref = s.slice(2, -1);
-    const [_, path, rest] = ref.split("#");
-    const config = this.getResourceConfig(path);
-    if (rest.startsWith("attrs.")) {
-      const attrName = rest.slice(6);
-      const attr = config?.attrs[attrName];
-
-      // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
-      // that this resource haven't been started yet. so return `undefined`, which will cause
-      // this resource to go back to the init queue.
-      if (!attr) {
-        return { resolved: false, value: undefined };
-      }
-      return { resolved: true, value: attr };
-    } else if (rest.startsWith("props.")) {
-      if (!config.props) {
-        throw new Error(
-          `Tried to resolve token "${s}" but resource ${path} has no props defined.`
-        );
-      }
-      const propPath = rest.slice(6);
-      const value = config.props[propPath];
-      if (value === undefined) {
-        throw new Error(
-          `Tried to resolve token "${s}" but resource ${path} has no prop "${propPath}".`
-        );
-      }
-      return { resolved: true, value };
-    } else {
-      throw new Error(`Invalid token reference: "${ref}"`);
-    }
   }
 
   /**
@@ -774,81 +812,37 @@ export class Simulator {
    * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
    * the resolved value.
    */
-  private tryResolveTokens(obj: any): { resolved: boolean; value: any } {
-    if (typeof obj === "string") {
-      // there are two cases - a token can be the entire string, or it can be part of the string.
-      // first, check if the entire string is a token
-      if (SIMULATOR_TOKEN_REGEX_FULL.test(obj)) {
-        const { resolved, value } = this.tryResolveToken(obj);
-        if (!resolved) {
-          return { resolved: false, value: undefined };
-        }
-        return { resolved: true, value };
+  private resolveTokens(obj: any): any {
+    return resolveTokens(obj, (token) => {
+      const target = this._model.graph.tryFind(token.path);
+      if (!target) {
+        throw new Error(
+          `Could not resolve token "${token}" because the resource at path "${token.path}" does not exist.`
+        );
       }
 
-      // otherwise, check if the string contains tokens inside it. if so, we need to resolve them
-      // and then check if the result is a string
-      const globalRegex = new RegExp(SIMULATOR_TOKEN_REGEX.source, "g");
-      const matches = obj.matchAll(globalRegex);
-      const replacements = [];
-      for (const match of matches) {
-        const { resolved, value } = this.tryResolveToken(match[0]);
-        if (!resolved) {
-          return { resolved: false, value: undefined };
-        }
-        if (typeof value !== "string") {
-          throw new Error(
-            `Expected token "${
-              match[0]
-            }" to resolve to a string, but it resolved to ${typeof value}.`
+      const r = this.getResourceConfig(target.path);
+
+      if (token.attr) {
+        const value = r.attrs[token.attr];
+        if (value === undefined) {
+          throw new UnresolvedTokenError(
+            `Unable to resolve attribute '${token.attr}' for resource: ${target.path}`
           );
         }
-        replacements.push({ match, value });
+        return value;
       }
 
-      // replace all the tokens in reverse order, and return the result
-      // if a token returns another token (god forbid), do not resolve it again
-      let result = obj;
-      for (const { match, value } of replacements.reverse()) {
-        if (match.index === undefined) {
-          throw new Error(`unexpected error: match.index is undefined`);
-        }
-        result =
-          result.slice(0, match.index) +
-          value +
-          result.slice(match.index + match[0].length);
-      }
-      return { resolved: true, value: result };
-    }
-
-    if (Array.isArray(obj)) {
-      const result = [];
-      for (const x of obj) {
-        const { resolved, value } = this.tryResolveTokens(x);
-        if (!resolved) {
-          return { resolved: false, value: undefined };
-        }
-        result.push(value);
+      if (token.prop) {
+        return r.props[token.prop];
       }
 
-      return { resolved: true, value: result };
-    }
-
-    if (typeof obj === "object") {
-      const ret: any = {};
-      for (const [key, v] of Object.entries(obj)) {
-        const { resolved, value } = this.tryResolveTokens(v);
-        if (!resolved) {
-          return { resolved: false, value: undefined };
-        }
-        ret[key] = value;
-      }
-      return { resolved: true, value: ret };
-    }
-
-    return { resolved: true, value: obj };
+      throw new Error(`Invalid token: ${token}`);
+    });
   }
 }
+
+class UnresolvedTokenError extends Error {}
 
 /**
  * A factory that can turn resource descriptions into (inflight) resource simulations.
@@ -958,13 +952,14 @@ export interface BaseResourceSchema {
   readonly props: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
   readonly attrs: Record<string, any>;
-  // TODO: model dependencies
+  /** Resources that should be deployed before this resource. */
+  readonly deps?: string[];
 }
 
 /** Schema for resource attributes */
 export interface BaseResourceAttributes {
   /** The resource's simulator-unique id. */
-  readonly handle: string;
+  readonly [HANDLE_ATTRIBUTE]: string;
 }
 
 /** Schema for `.connections` in connections.json */
@@ -999,4 +994,67 @@ export interface SimulatorServerResponse {
   readonly result?: any;
   /** The error that occurred during the method call. */
   readonly error?: any;
+}
+
+/**
+ * Given the "current" set of resources and a "next" set of resources, calculate the diff and
+ * determine which resources need to be added, updated or deleted.
+ *
+ * Note that dependencies are not considered here but they are implicitly handled by the
+ * `startResource` and `stopResource` methods. So, for example, when a resource is updated,
+ * all of it's dependents will be stopped and started again.
+ */
+function planUpdate(current: BaseResourceSchema[], next: BaseResourceSchema[]) {
+  const currentByPath = toMap(current);
+  const nextByPath = toMap(next);
+
+  const added: string[] = [];
+  const updated: string[] = [];
+  const deleted: string[] = [];
+
+  for (const [path, nextConfig] of Object.entries(nextByPath)) {
+    const currConfig = currentByPath[path];
+
+    // if the resource is not in "current", it means it was added
+    if (!currConfig) {
+      added.push(nextConfig.path);
+      continue;
+    }
+
+    // the resource is already in "current", if it's different from "next", it means it was updated
+    const state = (r: BaseResourceSchema) =>
+      JSON.stringify({
+        props: r.props,
+        type: r.type,
+      });
+
+    if (state(currConfig) !== state(nextConfig)) {
+      updated.push(nextConfig.path);
+    }
+
+    // remove it from "current" so we know what's left to be deleted
+    delete currentByPath[path];
+  }
+
+  // everything left in "current" is to be deleted
+  for (const config of Object.values(currentByPath)) {
+    deleted.push(config.path);
+  }
+
+  return { added, updated, deleted };
+
+  function toMap(list: BaseResourceSchema[]): {
+    [path: string]: BaseResourceSchema;
+  } {
+    const ret: { [path: string]: BaseResourceSchema } = {};
+    for (const resource of list) {
+      if (ret[resource.path]) {
+        throw new Error(
+          `unexpected - duplicate resources with the same path: ${resource.path}`
+        );
+      }
+      ret[resource.path] = resource;
+    }
+    return ret;
+  }
 }

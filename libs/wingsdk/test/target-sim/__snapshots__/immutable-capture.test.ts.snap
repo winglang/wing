@@ -35,6 +35,7 @@ my_capture: ["hello","dude"]
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -194,6 +195,7 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -352,6 +354,7 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -509,6 +512,7 @@ my_capture: false
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -668,6 +672,7 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -829,6 +834,7 @@ my_capture: new Map([["foo",123],["bar",456]])
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -992,6 +998,7 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -1152,6 +1159,7 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -1309,6 +1317,7 @@ my_capture: 123
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -1469,6 +1478,7 @@ my_capture: new Set(["boom","bam","bang"])
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -1628,6 +1638,7 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -1786,6 +1797,7 @@ my_capture: "bam bam bam"
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -1946,6 +1958,7 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -2106,6 +2119,7 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
         "attrs": {},
         "path": "root/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",

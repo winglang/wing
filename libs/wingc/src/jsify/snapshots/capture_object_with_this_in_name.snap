@@ -83,7 +83,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const bucket_this = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const bucket_this = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const fn = new $Closure1(this, "$Closure1");
   }
 }
