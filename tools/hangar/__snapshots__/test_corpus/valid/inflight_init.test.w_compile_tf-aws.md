@@ -222,7 +222,7 @@ class $Root extends $stdlib.std.Resource {
           "get_six": [
           ],
           "$inflight_init": [
-            [this, [].concat(...[["field1"], ["get_six"], ["field2"]])],
+            [this, [].concat(["field1"], ["get_six"], ["field2"])],
           ],
           "field1": [
           ],
