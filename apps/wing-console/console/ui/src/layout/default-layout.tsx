@@ -306,54 +306,55 @@ export const DefaultLayout = ({
                           onSelectedEdgeIdChange={setSelectedEdgeId}
                         />
                       </div>
-
-                      <LeftResizableWidget
-                        className={classNames(
-                          theme.border4,
-                          "flex-shrink w-80 min-w-[10rem] z-10",
-                          USE_EXTERNAL_THEME_COLOR,
-                        )}
-                      >
-                        <div
+                      {!layout.rightPanel?.hide && (
+                        <LeftResizableWidget
                           className={classNames(
-                            "w-full h-full relative",
-                            theme.bg3,
-                            layout.panels?.rounded &&
-                              "rounded-lg overflow-hidden",
+                            theme.border4,
+                            "flex-shrink w-80 min-w-[10rem] z-10",
+                            USE_EXTERNAL_THEME_COLOR,
                           )}
                         >
                           <div
                             className={classNames(
-                              "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
-                              "transition-all",
-                              deferredLoading && "opacity-100 z-50",
-                              !deferredLoading && "opacity-100 -z-10",
+                              "w-full h-full relative",
+                              theme.bg3,
+                              layout.panels?.rounded &&
+                                "rounded-lg overflow-hidden",
                             )}
                           >
-                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                              <SpinnerLoader data-testid="main-view-loader" />
+                            <div
+                              className={classNames(
+                                "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
+                                "transition-all",
+                                deferredLoading && "opacity-100 z-50",
+                                !deferredLoading && "opacity-100 -z-10",
+                              )}
+                            >
+                              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <SpinnerLoader data-testid="main-view-loader" />
+                              </div>
                             </div>
+
+                            {metadata.data && (
+                              <ResourceMetadata
+                                node={metadata.data?.node}
+                                inbound={metadata.data?.inbound}
+                                outbound={metadata.data?.outbound}
+                                onConnectionNodeClick={onConnectionNodeClick}
+                              />
+                            )}
+
+                            {selectedEdgeId && edgeMetadata.data && (
+                              <EdgeMetadata
+                                source={edgeMetadata.data.source}
+                                target={edgeMetadata.data.target}
+                                inflights={edgeMetadata.data.inflights}
+                                onConnectionNodeClick={onConnectionNodeClick}
+                              />
+                            )}
                           </div>
-
-                          {metadata.data && (
-                            <ResourceMetadata
-                              node={metadata.data?.node}
-                              inbound={metadata.data?.inbound}
-                              outbound={metadata.data?.outbound}
-                              onConnectionNodeClick={onConnectionNodeClick}
-                            />
-                          )}
-
-                          {selectedEdgeId && edgeMetadata.data && (
-                            <EdgeMetadata
-                              source={edgeMetadata.data.source}
-                              target={edgeMetadata.data.target}
-                              inflights={edgeMetadata.data.inflights}
-                              onConnectionNodeClick={onConnectionNodeClick}
-                            />
-                          )}
-                        </div>
-                      </LeftResizableWidget>
+                        </LeftResizableWidget>
+                      )}
                     </div>
                   </div>
                 </div>
