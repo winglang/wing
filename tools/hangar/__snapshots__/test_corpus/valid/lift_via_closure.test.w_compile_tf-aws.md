@@ -293,7 +293,7 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [bucket2, ["get"]],
-            [fn2, [].concat(...[["handle"], ["listFiles"]])],
+            [fn2, [].concat(["handle"], ["listFiles"])],
             [fn2.bucket, ["get"]],
           ],
           "$inflight_init": [

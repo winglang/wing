@@ -300,7 +300,7 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [counter, ["peek"]],
-            [kv, [].concat(...[["set"], ["get"]])],
+            [kv, [].concat(["set"], ["get"])],
           ],
           "$inflight_init": [
             [counter, []],
