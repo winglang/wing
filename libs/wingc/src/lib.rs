@@ -205,10 +205,10 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 
 	let results = compile(project_dir, source_path, None, output_dir);
 
-	if results.is_err() {
-		WASM_RETURN_ERROR
+	if let Ok(results) = results {
+		string_to_combined_ptr(serde_json::to_string(&results).unwrap())
 	} else {
-		string_to_combined_ptr(serde_json::to_string(&results.unwrap()).unwrap())
+		WASM_RETURN_ERROR
 	}
 }
 

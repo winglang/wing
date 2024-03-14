@@ -1,7 +1,7 @@
 use crate::{
 	ast::{
 		CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, Symbol,
-		UserDefinedType, UtilityFunctions,
+		UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic},
@@ -10,7 +10,7 @@ use crate::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
 		symbol_env::LookupResult,
-		ClassLike, ResolveSource, SymbolKind, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+		ClassLike, ResolveSource, SymbolKind, TypeRef, UtilityFunctions, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
 	visit_context::{VisitContext, VisitorWithContext},
