@@ -1863,7 +1863,7 @@ impl<'a> JSifier<'a> {
 					} else if method_lift_qual.ops.len() == 1 {
 						bind_method.line(format!("[{code}, {ops}],"));
 					} else {
-						bind_method.line(format!("[{code}, [].concat(...[{ops}])],"));
+						bind_method.line(format!("[{code}, [].concat({ops})],"));
 					}
 				}
 				bind_method.close("],");
