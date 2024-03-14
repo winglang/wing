@@ -30,13 +30,13 @@ const addRow = async (
 
 describe(`${__dirname}/main.w`, () => {
   test.skip("adds new row", async ({ page }) => {
-    await getResourceNode(page, "root/Default/ex.Table").click();
+    await getResourceNode(page, "root/Default/Table").click();
 
     await addRow(page, "Hello World!");
   });
 
   test.skip("edits row", async ({ page }) => {
-    await getResourceNode(page, "root/Default/ex.Table").click();
+    await getResourceNode(page, "root/Default/Table").click();
 
     const rowId = "Hello World!";
 
@@ -55,7 +55,7 @@ describe(`${__dirname}/main.w`, () => {
   });
 
   test.skip("removes row", async ({ page }) => {
-    await getResourceNode(page, "root/Default/ex.Table").click();
+    await getResourceNode(page, "root/Default/Table").click();
 
     const rowId = "Hello World!";
 

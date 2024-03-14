@@ -139,6 +139,7 @@ export class Function extends cloud.Function {
       sourceArchiveObject: FunctionObjectBucket.name,
       entryPoint: "handler",
       triggerHttp: true,
+      httpsTriggerSecurityLevel: "SECURE_ALWAYS",
       // It takes around 1 minutes to the function invocation permissions to be established -
       // therefore, the timeout is higher than in other targets
       timeout: props.timeout?.seconds ?? 120,

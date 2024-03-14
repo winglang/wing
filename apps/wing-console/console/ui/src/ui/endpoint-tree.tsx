@@ -1,4 +1,9 @@
-import { GlobeAltIcon, LinkIcon } from "@heroicons/react/24/outline";
+import {
+  GlobeAltIcon,
+  LinkIcon,
+  ShareIcon,
+  EyeSlashIcon,
+} from "@heroicons/react/24/outline";
 import {
   ScrollableArea,
   Toolbar,
@@ -14,9 +19,15 @@ import { NoEndpoints } from "./no-endpoints.js";
 
 export interface EndpointTreeProps {
   endpointList: EndpointItem[];
+  exposeEndpoint: (resourcePath: string) => void;
+  hideEndpoint: (resourcePath: string) => void;
 }
 
-export const EndpointTree = ({ endpointList }: EndpointTreeProps) => {
+export const EndpointTree = ({
+  endpointList,
+  exposeEndpoint,
+  hideEndpoint,
+}: EndpointTreeProps) => {
   const { theme } = useTheme();
 
   return (
@@ -65,6 +76,37 @@ export const EndpointTree = ({ endpointList }: EndpointTreeProps) => {
                         {!endpoint.browserSupport && (
                           <LinkIcon
                             className={classNames("w-4 h-4", theme.text1)}
+                          />
+                        )}
+                      </>
+                    }
+                    secondaryLabel={
+                      <>
+                        {endpoint.exposeStatus !== "connected" && (
+                          <ShareIcon
+                            className={classNames(
+                              "w-4 h-4",
+                              theme.text1,
+                              endpoint.exposeStatus === "connecting"
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer",
+                            )}
+                            title="Open a tunnel for this enpoint"
+                            onClick={() => {
+                              exposeEndpoint(endpoint.id);
+                            }}
+                          />
+                        )}
+                        {endpoint.exposeStatus === "connected" && (
+                          <EyeSlashIcon
+                            className={classNames(
+                              "w-4 h-4 cursor-pointer",
+                              theme.text1,
+                            )}
+                            title="Close the tunnel for this endpoint"
+                            onClick={() => {
+                              hideEndpoint(endpoint.id);
+                            }}
                           />
                         )}
                       </>
