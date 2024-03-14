@@ -2061,8 +2061,8 @@ impl<'a> TypeChecker<'a> {
 						typeref: str_array_type,
 						docs: Docs::with_summary("
 							The qualifications to apply to the preflight object.\n
-							This is and array of strings denoting members of the objects that are accessed in the current method/function.\n
-							For example, if the method accesses the `push` and `pop` and `age` members of a [cloud.Queue] object, the qualifications should be `[\"push\", \"pop\"]`."
+							This is an array of strings denoting members of the object that are accessed in the current method/function.\n
+							For example, if the method accesses the `push` and `pop` members of a `cloud.Queue` object, the qualifications should be `[\"push\", \"pop\"]`."
 						),
 						variadic: false,
 					},
@@ -2073,7 +2073,7 @@ impl<'a> TypeChecker<'a> {
 				// and is used during the lifting phase to explicitly define lifts for an inflight method
 				js_override: Some("".to_string()),
 				docs: Docs::with_summary(
-					"Explicitly apply qualifications to apply to the preflight object used in the current method/function",
+					"Explicitly apply qualifications to a preflight object used in the current method/function",
 				),
 			}),
 			scope,
