@@ -174,17 +174,17 @@ export class App extends CdktfApp {
       return this._vpc;
     }
 
-    return this.parameters.getValue(`${this._target}/vpc`) === "existing"
+    return this.parameters.value(`${this._target}/vpc`) === "existing"
       ? this.importExistingVpc()
       : this.createDefaultVpc();
   }
 
   private importExistingVpc(): DataAwsVpc {
-    const vpcId = this.parameters.getValue(`${this._target}/vpc_id`);
-    const privateSubnetIds = this.parameters.getValue(
+    const vpcId = this.parameters.value(`${this._target}/vpc_id`);
+    const privateSubnetIds = this.parameters.value(
       `${this._target}/private_subnet_ids`
     );
-    const publicSubnetIds = this.parameters.getValue(
+    const publicSubnetIds = this.parameters.value(
       `${this._target}/public_subnet_ids`
     );
 

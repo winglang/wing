@@ -404,25 +404,6 @@ the Json object to validate.
 ---
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.JsonSchema.property.rawSchema">rawSchema</a></code> | <code>any</code> | The raw Json Schema definition. |
-
----
-
-##### `rawSchema`<sup>Required</sup> <a name="rawSchema" id="@winglang/sdk.std.JsonSchema.property.rawSchema"></a>
-
-```wing
-rawSchema: any;
-```
-
-- *Type:* any
-
-The raw Json Schema definition.
-
----
 
 
 ### MutJson <a name="MutJson" id="@winglang/sdk.std.MutJson"></a>

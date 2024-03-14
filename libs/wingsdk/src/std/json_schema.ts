@@ -25,12 +25,12 @@ export class JsonSchema {
     return new JsonSchema(schema);
   }
 
-  /** The raw Json Schema definition */
-  public rawSchema: any;
+  /** @internal */
+  public _rawSchema: any;
   private validator: Validator;
 
   constructor(schema: Json) {
-    this.rawSchema = schema;
+    this._rawSchema = schema;
     this.validator = new Validator();
   }
 
@@ -45,10 +45,10 @@ export class JsonSchema {
       return; // skip validation
     }
 
-    const result = this.validator.validate(obj, this.rawSchema);
+    const result = this.validator.validate(obj, this._rawSchema);
     if (result.errors.length > 0) {
       throw new Error(
-        `unable to parse ${this.rawSchema.$id.replace(
+        `unable to parse ${this._rawSchema.$id.replace(
           "/",
           ""
         )}:\n- ${result.errors.join("\n- ")}`
@@ -62,13 +62,13 @@ export class JsonSchema {
    * @returns the schema as a string
    */
   public asStr(): String {
-    return JSON.stringify(this.rawSchema);
+    return JSON.stringify(this._rawSchema);
   }
 
   /** @internal */
   public _fromJson(obj: Json, validateOptions?: JsonValidationOptions) {
     this.validate(obj, validateOptions);
-    const fields = this.extractFieldsFromSchema(this.rawSchema);
+    const fields = this.extractFieldsFromSchema(this._rawSchema);
     // Filter rawParameters based on the schema
     const filteredParameters = this.filterParametersBySchema(fields, obj);
     return filteredParameters;
@@ -126,6 +126,6 @@ export class JsonSchema {
 
   /** @internal */
   public _toInflightType() {
-    return JsonSchema._toInflightType(this.rawSchema);
+    return JsonSchema._toInflightType(this._rawSchema);
   }
 }

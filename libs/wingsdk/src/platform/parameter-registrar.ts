@@ -29,7 +29,7 @@ export class ParameterRegistrar extends Construct {
    * @param path the path of the parameter
    * @returns the value of the parameter
    */
-  public getValue(path: string): any {
+  public value(path: string): any {
     if (this.parameterValueByPath[path] === undefined) {
       // attempt to read the value from the raw parameters, then cache it
       this.parameterValueByPath[path] = resolveValueFromPath(
@@ -57,8 +57,8 @@ export class ParameterRegistrar extends Construct {
    */
   public addSchema(schema: any) {
     // If a JsonSchema object is passed in, extract the jsonSchema from it
-    if (schema.rawSchema) {
-      this.parameterSchemas.push(schema.rawSchema);
+    if (schema._rawSchema) {
+      this.parameterSchemas.push(schema._rawSchema);
       return;
     }
 
