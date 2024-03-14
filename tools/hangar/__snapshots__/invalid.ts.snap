@@ -1393,6 +1393,42 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`explicit_lift_qualification.test.w 1`] = `
+"error: Expected type to be \\"Resource\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:12:10
+   |
+12 |     lift(prelight_string, [\\"contains\\"]); // Explicit qualification on preflight non-class
+   |          ^^^^^^^^^^^^^^^ Expected type to be \\"Resource\\", but got \\"str\\" instead
+
+
+error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:10:10
+   |
+10 |     lift(b, [\\"put\\"]); // Explicit qualification with inflight object
+   |          ^ Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
+
+
+error: Qualification list must not contain any inflight elements
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:16:18
+   |
+16 |     lift(bucket, [inflight_qualifier]); // Explicit qualification with inflight qualifiers
+   |                  ^^^^^^^^^^^^^^^^^^^^ Qualification list must not contain any inflight elements
+
+
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:22:5
+   |
+22 |     b.put(\\"k\\", \\"v\\"); // With no explicit qualification this should be an error
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`extern.test.w 1`] = `
 "error: File not found: \\"./sad.js\\"
   --> ../../../examples/tests/invalid/extern.test.w:2:3
