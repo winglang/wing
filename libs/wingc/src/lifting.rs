@@ -213,7 +213,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			if expr_phase == Phase::Inflight && expr_type.is_preflight_class() && v.ctx.current_property().is_some() && !v.ignore_unknown_preflight_object_error() {
 				report_diagnostic(Diagnostic {
 					message: format!(
-						"Expression of type \"{expr_type}\" references an unknown preflight object, can't qualify its capabilities. Use the `lift` builtin to explicitly qualify the relevant preflight object"
+						"Expression of type \"{expr_type}\" references an unknown preflight object, can't qualify its capabilities. Use `lift()` to explicitly qualify the preflight object to disable this error."
 					),
 					span: Some(node.span.clone()),
 					annotations: vec![],
