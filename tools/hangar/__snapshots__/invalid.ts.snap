@@ -2246,25 +2246,25 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.test.w 1`] = `
-"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:36:5
    |
 36 |     x.put(\\"hello\\", \\"world\\");
-   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
 
 
-error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:43:5
    |
 43 |     q.push(\\"push!\\");
-   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:48:12
    |
 48 |     assert(b.list().length == 0);
-   |            ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |            ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
 
 
  
@@ -2275,18 +2275,18 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.test.w 1`] = `
-"error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+"error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
    --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:32:5
    |
 32 |     q.push(\\"push!\\");
-   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
 
 
-error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
    --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:35:5
    |
 35 |     q2.push(\\"push!\\");
-   |     ^^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
 
 
  
@@ -2297,18 +2297,18 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.test.w 1`] = `
-"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
    --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:15:5
    |
 15 |     x.put(\\"hello\\", \\"world\\");
-   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
    --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:19:5
    |
 19 |     y.put(\\"boom\\", \\"shakalaka\\");
-   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
 
 
  
@@ -3329,11 +3329,11 @@ Duration <DURATION>"
 `;
 
 exports[`resource_captures.test.w 1`] = `
-"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
    --> ../../../examples/tests/invalid/resource_captures.test.w:15:5
    |
 15 |     b.put(\\"hello\\", \\"world\\");
-   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use the \`lift\` builtin to explicitly qualify the relevant preflight object
 
 
  
