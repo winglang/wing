@@ -2052,7 +2052,7 @@ impl<'a> TypeChecker<'a> {
 				parameters: vec![
 					FunctionParameter {
 						name: "preflightObject".into(),
-						typeref: self.types.anything(), // TODO: maybe this has to be only preflight classes/interfaces??
+						typeref: self.types.resource_base_type(),
 						docs: Docs::with_summary("The preflight object to qualify"),
 						variadic: false,
 					},
