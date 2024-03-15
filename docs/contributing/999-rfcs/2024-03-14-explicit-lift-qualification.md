@@ -38,7 +38,7 @@ Lift qualification is currently done automatically by the compiler for all prefl
 
 When the compiler encounters an inflight expression that references a preflight type, then, without static analysis, it cannot qualify the lift because it does not know what preflight objects might be referenced by this inflight expression. The result is a compilation error.
 
-In the future we'd like to employ data flow analysis (probably through [reaching defintions analysis](https://en.wikipedia.org/wiki/Reaching_definition) resolve these errors.
+In the future we'd like to employ data flow analysis (probably through [reaching defintions analysis](https://en.wikipedia.org/wiki/Reaching_definition)) resolve these errors.
 
 ## Problems with current solution
 
