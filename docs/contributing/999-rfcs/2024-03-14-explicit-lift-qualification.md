@@ -129,7 +129,7 @@ inflight () => {
 }
 ```
 
-Internally the argument to the `lift_qualification` keyword creates a `std.Qualifications` object wich is added to the closures lift qualifications. 
+Internally the argument to the `lift_qualification` keyword creates a `std.Qualifications` object which is added to the closures lift qualifications. 
 
 Note that multiple `lift_qualification` blocks in the code just create more `std.Qualifications`s for this closure. 
 The actuall qualification values (`b1` and `"put"`) are just appended to the closure/method and they don't strictly belong to the block.
