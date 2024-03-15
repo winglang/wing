@@ -44,7 +44,7 @@ In the future we'd like to employ data flow analysis (probably through [reaching
 
 We need a mechanism for explicitly qualifying lifted objects. Consider the following cases:
 
-1. Cases where we use inflight expressions to reference a preflight object we'd like to disable the compilation error and explicitly qualify the lift.
+1. When using inflight expressions to reference a preflight object we'd like to disable the compilation error and explicitly qualify the lift.
 ```js
 let b1 = new cloud.Bucket() as "b1";
 let b2 = new cloud.Bucket() as "b2";
@@ -57,13 +57,13 @@ inflight () => {
 }
 ```
 
-2. Cases where we there's a collection of preflight objects that are being used inflight:
+2. When there's a collection of preflight objects that are being used inflight:
 ```js
 for b in buckets {
   b.put("key", "value"); // We need to qualify all `buckets` with "put"
 }
 ```
-3. Cases where our knowledge of the application logic can produce better qualifications:
+3. When our knowledge of the application logic can produce better qualifications:
 ```js
 for i in buckets.len {
   if i % 2 == 0 {
@@ -78,7 +78,7 @@ for i in 0..5 {
 }
 ```
 Here we can benefit from an explicit qualification of `bucket` with `"put"` operation and a specific key pattern: `"k*"`. We currently don't
-have a way to disable the automatic qualification and to define the narrower qualification.
+have a way to disable the automatic qualification and define the narrower qualification.
 
 Note that in all the above exmaples except the last one we currently get a compilation error due to us trying to use a `Bucket.put` operation on an inflight expression.
 
