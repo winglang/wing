@@ -1302,6 +1302,9 @@ importers:
       '@azure/storage-blob':
         specifier: 12.14.0
         version: 12.14.0
+      '@cdktf/hcl-tools':
+        specifier: '*'
+        version: 0.20.3
       '@google-cloud/datastore':
         specifier: 8.4.0
         version: 8.4.0
@@ -5497,7 +5500,6 @@ packages:
 
   /@cdktf/hcl-tools@0.20.3:
     resolution: {integrity: sha512-S0i3XKSFVVRW16xvodbIC81/2WiEAySJQK3JttmMMgADWGs76j9aIiDOZzs0NF9EbLY4QkxgcPApO33l9EATLw==}
-    dev: true
 
   /@cdktf/hcl2cdk@0.20.3(constructs@10.1.167):
     resolution: {integrity: sha512-XXNDp52vIXh2revaaosE/e6TXY6SDoss48cCJ1FQjd5GJw9HdwAXEhQvCH59v7wAVokZk3NGEUybSXHq3zwCYA==}
@@ -14612,7 +14614,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240311
+      typescript: 5.5.0-dev.20240315
     dev: true
 
   /dset@3.1.2:
@@ -23273,8 +23275,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240311:
-    resolution: {integrity: sha512-Cdp0eYgn/19lkcrq7WCqQxmnvCqvuJrd/jGhm1HyPMSYVTGzjxVP0NfXr2A4YVS12IAipt1uO4zgAJeLlYG2JA==}
+  /typescript@5.5.0-dev.20240315:
+    resolution: {integrity: sha512-unbI1s+RxosUsAsJZMLheuH4p87PMzm77BS2Rh4KNKuPFKEA9qhWbsUMNZ4zu8vCzJOv1KSgISMMBEx8A+ofWg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

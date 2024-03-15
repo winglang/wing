@@ -88,6 +88,8 @@ const project = new cdk.JsiiProject({
     // enhanced diagnostics
     "stacktracey",
     "ulid",
+    // terraform formatting
+    "@cdktf/hcl-tools",
     // tunnels
     "@winglang/wingtunnels@workspace:^",
   ],

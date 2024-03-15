@@ -5,8 +5,10 @@ import {
   rmSync,
   existsSync,
   writeFileSync,
+  readFileSync,
 } from "fs";
 import { join, resolve } from "path";
+import { format } from "@cdktf/hcl-tools";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
@@ -45,7 +47,7 @@ export abstract class CdktfApp extends App {
 
     mkdirSync(cdktfOutdir, { recursive: true });
 
-    const cdktfApp = new cdktf.App({ outdir: cdktfOutdir });
+    const cdktfApp = new cdktf.App({ outdir: cdktfOutdir, hclOutput: true });
     const cdktfStack = new cdktf.TerraformStack(cdktfApp, TERRAFORM_STACK_NAME);
 
     super(cdktfStack, props.rootId ?? "Default", props);
@@ -110,11 +112,14 @@ export abstract class CdktfApp extends App {
     // move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
     this.moveCdktfArtifactsToOutdir();
 
-    // rename `outdir/cdk.tf.json` to `outdir/main.tf.json`
-    renameSync(
-      join(this.outdir, "cdk.tf.json"),
-      join(this.outdir, `main.tf.json`)
-    );
+    // rename `outdir/cdk.tf` to `outdir/main.tf`
+    renameSync(join(this.outdir, "cdk.tf"), join(this.outdir, `main.tf`));
+
+    // TODO: this should be awaited or somehow made synchronous
+    const tfContents = readFileSync(join(this.outdir, "main.tf"), "utf-8");
+    void format(tfContents).then((formatted) => {
+      writeFileSync(join(this.outdir, "main.tf"), formatted);
+    });
 
     // delete `outdir/.tmp.cdktf.out`
     rmSync(this.cdktfApp.outdir, { recursive: true, force: true });

@@ -230,6 +230,10 @@
       "type": "bundled"
     },
     {
+      "name": "@cdktf/hcl-tools",
+      "type": "bundled"
+    },
+    {
       "name": "@google-cloud/datastore",
       "version": "8.4.0",
       "type": "bundled"

@@ -184,7 +184,9 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       WING_VALUES: options.value?.length == 0 ? undefined : options.value,
       WING_VALUES_FILE: options.values ?? defaultValuesFile(),
       WING_NODE_MODULES: wingNodeModules,
-      WING_IMPORTED_NAMESPACES: compileForPreflightResult.compilerOutput?.imported_namespaces.join(";"),
+      WING_IMPORTED_NAMESPACES:
+        compileForPreflightResult.compilerOutput?.imported_namespaces.join(";"),
+      SYNTH_HCL_OUTPUT: "true",
     };
 
     if (options.rootId) {
@@ -201,7 +203,10 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         delete preflightEnv.Path;
       }
     }
-    await runPreflightCodeInWorkerThread(compileForPreflightResult.preflightEntrypoint, preflightEnv);
+    await runPreflightCodeInWorkerThread(
+      compileForPreflightResult.preflightEntrypoint,
+      preflightEnv
+    );
   }
   return synthDir;
 }
@@ -221,7 +226,7 @@ interface CompileForPreflightResult {
   readonly preflightEntrypoint: string;
   readonly compilerOutput?: {
     imported_namespaces: string[];
-  }
+  };
 }
 
 async function compileForPreflight(props: {
@@ -248,8 +253,8 @@ npm i @wingcloud/framework
       preflightEntrypoint: await typescriptFramework.compile({
         workDir: props.workDir,
         entrypoint: props.entrypointFile,
-      })
-    }
+      }),
+    };
   } else {
     let env: Record<string, string> = {
       RUST_BACKTRACE: "full",
@@ -301,22 +306,20 @@ npm i @wingcloud/framework
 
     return {
       preflightEntrypoint: join(props.workDir, WINGC_PREFLIGHT),
-      compilerOutput: JSON.parse(
-        compilerOutput as string
-      ),
-    }
+      compilerOutput: JSON.parse(compilerOutput as string),
+    };
   }
 }
 
 /**
  * Check if in the current working directory there is a default values file
- * only the first match is returned from the list of default values files 
- * 
+ * only the first match is returned from the list of default values files
+ *
  * @returns default values file from the current working directory
  */
 function defaultValuesFile() {
-  const defaultConfigs = [ "wing.toml", "wing.yaml", "wing.yml", "wing.json"]
-  
+  const defaultConfigs = ["wing.toml", "wing.yaml", "wing.yml", "wing.json"];
+
   for (const configFile of defaultConfigs) {
     if (existsSync(join(process.cwd(), configFile))) {
       return configFile;
