@@ -107,7 +107,8 @@ In this proposal I'll use "qualifications", but I'd be happy to hear what you th
 
 Issues with this PR:
 * Confusing sytax that looks like an inflight function call might lead to [misuse](https://github.com/winglang/wing/pull/5935#issuecomment-1995051115).
-* No scoping of where we're disabling compiler errors auto qualification.
+* No scoping of where we're disabling compiler errors.
+* Doesn't provide a mechanism to disable auto qualification.
 * No mechanism or clear path to mechanism for programatically defining and reusing lift qualifications.
 
 ## Proposal
