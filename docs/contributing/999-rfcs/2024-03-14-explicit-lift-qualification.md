@@ -85,9 +85,9 @@ Note that in all the above exmaples except the last one we currently get a compi
 ## Requirements
 
 So the aim of this proposal is to present:
-1. A way to explicitly qualifying the preflight objects that are being used by inflight methods/closures.
-2. Disabling compilation errors where the explicit qualification apply.
-3. Disabling automatic qualification where the explicit qualification apply. 
+1. A way to explicitly qualify the preflight objects that are being used by inflight methods/closures.
+2. Disabling compilation errors where the explicit qualification applies.
+3. Disabling automatic qualification where the explicit qualification applies. 
 4. Provide a framework that can be extended to programatically defining and reusing lift qualifications.
 
 ## Naming
