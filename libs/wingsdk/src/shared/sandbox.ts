@@ -117,12 +117,28 @@ process.on("message", async (message) => {
 
   public async initialize() {
     this.debugLog("Initializing sandbox.");
+    const childEnv = this.options.env ?? {};
+    if (
+      process.env.NODE_OPTIONS?.includes("--inspect") ||
+      process.execArgv.some((a) => a.startsWith("--inspect"))
+    ) {
+      // We're exposing a debugger, let's attempt to ensure the child process automatically attaches
+      childEnv.NODE_OPTIONS =
+        (childEnv.NODE_OPTIONS ?? "") + (process.env.NODE_OPTIONS ?? "");
+
+      // VSCode's debugger adds some environment variables that we want to pass to the child process
+      for (const key in process.env) {
+        if (key.startsWith("VSCODE_")) {
+          childEnv[key] = process.env[key]!;
+        }
+      }
+    }
 
     // start a Node.js process that runs the inflight code
     // note: unlike the fork(2) POSIX system call, child_process.fork()
     // does not clone the current process
-    this.child = cp.fork(this.entrypoint, [], {
-      env: this.options.env,
+    this.child = cp.fork(this.entrypoint, {
+      env: childEnv,
       stdio: "pipe",
       // this option allows complex objects like Error to be sent from the child process to the parent
       serialization: "advanced",
