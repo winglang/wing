@@ -7,7 +7,6 @@ import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-ta
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { convertUnixCronToAWSCron } from "../shared-aws/schedule";
 import { Node } from "../std";
 
 /**
@@ -25,13 +24,21 @@ export class Schedule extends cloud.Schedule {
 
     const { rate, cron } = props;
 
+    /*
+     * The schedule cron string is Unix cron format: [minute] [hour] [day of month] [month] [day of week]
+     * AWS EventBridge Schedule uses a 6 field format which includes year: [minute] [hour] [day of month] [month] [day of week] [year]
+     * https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html#cron-based
+     *
+     * We append * to the cron string for year field.
+     */
     this.scheduleExpression = rate
       ? rate.minutes === 1
         ? `rate(${rate.minutes} minute)`
         : `rate(${rate.minutes} minutes)`
-      : `cron(${convertUnixCronToAWSCron(cron!)})`;
+      : `cron(${cron} *)`;
 
     this.rule = new CloudwatchEventRule(this, "Schedule", {
+      isEnabled: true,
       scheduleExpression: this.scheduleExpression,
     });
   }
