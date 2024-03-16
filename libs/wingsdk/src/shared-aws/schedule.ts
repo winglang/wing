@@ -18,7 +18,9 @@ export const convertUnixCronToAWSCron = (cron: string) => {
   }
 
   if (cron && dayOfMonth !== "*" && dayOfWeek !== "*") {
-    throw new Error("Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'");
+    throw new Error(
+      "Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'"
+    );
   }
 
   if (dayOfWeek !== "*" && dayOfWeek !== "?") {

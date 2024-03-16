@@ -196,5 +196,5 @@ test("cron with day of month and day of week configured at the same time", () =>
       new cloud.Schedule(app, "Schedule", {
         cron: "* * 1 * 1",
       })
-  ).toThrow("Cannot supply both 'day' and 'weekDay', use at most one");
+  ).toThrow("Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'");
 });
