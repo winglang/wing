@@ -18,15 +18,15 @@
   },
   "resource": {
     "aws_sqs_queue": {
-      "cloudQueue": {
+      "Queue": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue/Default",
-            "uniqueId": "cloudQueue"
+            "path": "root/Default/Default/Queue/Default",
+            "uniqueId": "Queue"
           }
         },
         "message_retention_seconds": 3600,
-        "name": "cloud-Queue-c86e03d8",
+        "name": "Queue-c822c726",
         "visibility_timeout_seconds": 3
       }
     }

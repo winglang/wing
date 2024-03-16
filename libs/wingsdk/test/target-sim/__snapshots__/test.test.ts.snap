@@ -33,6 +33,7 @@ async handle(event) {
         "attrs": {},
         "path": "root/env0/test:my_test/Handler",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/handler_c86fc180.js",
           "sourceCodeLanguage": "javascript",
@@ -43,6 +44,9 @@ async handle(event) {
       {
         "addr": "c8647dd8d2adabe83cc081ebe0ccbefe4a068ef3bf",
         "attrs": {},
+        "deps": [
+          "root/env0/test:my_test/Handler",
+        ],
         "path": "root/cloud.TestRunner",
         "props": {
           "tests": {

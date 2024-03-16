@@ -55,7 +55,6 @@ export class Endpoint extends Resource {
 
     super(scope, id);
 
-    Node.of(this).hidden = true;
     Node.of(this).title = "Endpoint";
     Node.of(this).description = props?.label ?? "A cloud endpoint";
 

@@ -199,14 +199,14 @@ module.exports = function({ $InflightA }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "cloudBucket": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       }
     }
@@ -583,7 +583,7 @@ class $Root extends $stdlib.std.Resource {
     const e = new E(this, "E");
     (expect.Util.equal((e.description()), "E extends C extends B"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:super call inflight", new $Closure1(this, "$Closure1"));
-    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const extended = new ExtendedClass(this, "ExtendedClass");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:super call sets binding permissions", new $Closure2(this, "$Closure2"));
   }

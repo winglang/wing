@@ -41,6 +41,7 @@ export interface LayoutPanel {
 export interface LayoutConfig {
   leftPanel?: LayoutPanel;
   bottomPanel?: LayoutPanel;
+  rightPanel?: LayoutPanel;
   statusBar?: {
     hide?: boolean;
     showThemeToggle?: boolean;

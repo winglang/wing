@@ -169,6 +169,7 @@ console.log("Hello from schedule!");
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
           "sourceCodeLanguage": "javascript",
@@ -188,6 +189,10 @@ console.log("Hello from schedule!");
       {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
         "attrs": {},
+        "deps": [
+          "root/my_schedule/OnTick0",
+          "root/my_schedule",
+        ],
         "path": "root/my_schedule/OnTickMapping0",
         "props": {
           "publisher": "\${wsim#root/my_schedule#attrs.handle}",
@@ -374,6 +379,7 @@ console.log("Hello from schedule!");
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
           "sourceCodeLanguage": "javascript",
@@ -393,6 +399,10 @@ console.log("Hello from schedule!");
       {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
         "attrs": {},
+        "deps": [
+          "root/my_schedule/OnTick0",
+          "root/my_schedule",
+        ],
         "path": "root/my_schedule/OnTickMapping0",
         "props": {
           "publisher": "\${wsim#root/my_schedule#attrs.handle}",
@@ -579,6 +589,7 @@ console.log("Hello from schedule!");
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
           "sourceCodeLanguage": "javascript",
@@ -598,6 +609,10 @@ console.log("Hello from schedule!");
       {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
         "attrs": {},
+        "deps": [
+          "root/my_schedule/OnTick0",
+          "root/my_schedule",
+        ],
         "path": "root/my_schedule/OnTickMapping0",
         "props": {
           "publisher": "\${wsim#root/my_schedule#attrs.handle}",

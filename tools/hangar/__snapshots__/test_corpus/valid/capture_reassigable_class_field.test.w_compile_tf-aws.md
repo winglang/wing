@@ -129,14 +129,14 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "KeyValueStore_cloudBucket_D9D365FD": {
+      "KeyValueStore_Bucket_EBBCDEA3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/KeyValueStore/cloud.Bucket/Default",
-            "uniqueId": "KeyValueStore_cloudBucket_D9D365FD"
+            "path": "root/Default/Default/KeyValueStore/Bucket/Default",
+            "uniqueId": "KeyValueStore_Bucket_EBBCDEA3"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8a9ef69-",
+        "bucket_prefix": "bucket-c8da6031-",
         "force_destroy": false
       }
     }
@@ -161,7 +161,7 @@ class $Root extends $stdlib.std.Resource {
     class KeyValueStore extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();

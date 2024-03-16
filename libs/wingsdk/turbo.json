@@ -7,7 +7,7 @@
       "outputs": ["src/.gen/**"]
     },
     "compile": {
-      "dependsOn": ["pre-compile"],
+      "dependsOn": ["^compile", "pre-compile"],
       "outputs": ["lib/**", ".jsii"]
     },
     "post-compile": {

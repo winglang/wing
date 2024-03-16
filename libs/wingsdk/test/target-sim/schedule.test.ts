@@ -64,7 +64,6 @@ test("schedule with one task using rate of 10m", async () => {
   const s = await app.startSimulator();
 
   // THEN
-  await s.stop();
   expect(app.snapshot()).toMatchSnapshot();
   expect(s.getResourceConfig("/my_schedule")).toEqual({
     attrs: {
@@ -77,6 +76,8 @@ test("schedule with one task using rate of 10m", async () => {
     },
     type: cloud.SCHEDULE_FQN,
   });
+
+  await s.stop();
 });
 
 test("schedule with one task using rate of 3h", async () => {
@@ -91,7 +92,6 @@ test("schedule with one task using rate of 3h", async () => {
   const s = await app.startSimulator();
 
   // THEN
-  await s.stop();
   expect(app.snapshot()).toMatchSnapshot();
   expect(s.getResourceConfig("/my_schedule")).toEqual({
     attrs: {
@@ -104,4 +104,6 @@ test("schedule with one task using rate of 3h", async () => {
     },
     type: cloud.SCHEDULE_FQN,
   });
+
+  await s.stop();
 });
