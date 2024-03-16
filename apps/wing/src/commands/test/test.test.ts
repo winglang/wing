@@ -406,7 +406,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: "Get (key=file.txt).", status: "failure", error: {} },
         type: TraceType.RESOURCE,
-        sourcePath: "root/env0/MyProcessor/cloud.Bucket",
+        sourcePath: "root/env0/MyProcessor/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
         timestamp: "2023-05-15T16:20:47.388Z",
       },
@@ -439,13 +439,13 @@ const BUCKET_TEST_RESULT = [
       {
         data: { message: "Put (key=test1.txt).", status: "success" },
         type: "resource",
-        sourcePath: "root/env0/cloud.Bucket",
+        sourcePath: "root/env0/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
       },
       {
         data: { message: "Get (key=test1.txt).", status: "success", result: '"Foo"' },
         type: "resource",
-        sourcePath: "root/env0/cloud.Bucket",
+        sourcePath: "root/env0/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
       },
       {
@@ -471,7 +471,7 @@ const OUTPUT_FILE = {
               status: "success",
             },
             type: "resource",
-            sourcePath: "root/env0/cloud.Bucket",
+            sourcePath: "root/env0/Bucket",
             sourceType: "@winglang/sdk.cloud.Bucket",
           },
           {
@@ -481,7 +481,7 @@ const OUTPUT_FILE = {
               result: '"Foo"',
             },
             type: "resource",
-            sourcePath: "root/env0/cloud.Bucket",
+            sourcePath: "root/env0/Bucket",
             sourceType: "@winglang/sdk.cloud.Bucket",
           },
           {

@@ -74,7 +74,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    new MyClass(this.node.root.new("constructs.Construct", c.Construct, this, "c.Construct"), "MyClass");
+    new MyClass(this.node.root.new("constructs.Construct", c.Construct, this, "Construct"), "MyClass");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

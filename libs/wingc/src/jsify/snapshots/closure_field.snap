@@ -214,7 +214,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const x = new MyResource(this, "MyResource");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:variable can be an inflight closure", new $Closure2(this, "$Closure2"));
   }

@@ -584,9 +584,9 @@ async handle(message) {
 
 exports[`push rejects empty message 1`] = `
 [
-  "@winglang/sdk.cloud.Queue created.",
+  "root/my_queue started",
   "Push (messages=).",
-  "@winglang/sdk.cloud.Queue deleted.",
+  "root/my_queue stopped",
 ]
 `;
 
@@ -723,13 +723,13 @@ exports[`push rejects empty message 2`] = `
 
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
-  "@winglang/sdk.cloud.Queue created.",
+  "root/my_queue started",
   "Push (messages=A).",
   "Push (messages=B).",
   "ApproxSize ().",
   "Purge ().",
   "ApproxSize ().",
-  "@winglang/sdk.cloud.Queue deleted.",
+  "root/my_queue stopped",
 ]
 `;
 
@@ -944,6 +944,7 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
@@ -964,6 +965,10 @@ async handle(message) {
       {
         "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "attrs": {},
+        "deps": [
+          "root/my_queue/SetConsumer0",
+          "root/my_queue",
+        ],
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_queue#attrs.handle}",
@@ -977,8 +982,12 @@ async handle(message) {
       {
         "addr": "c8ab799f6c9c9a3cd279909012c4f322ab902f5e19",
         "attrs": {},
+        "deps": [
+          "root/my_queue",
+        ],
         "path": "root/my_queue_messages/Function",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {
             "QUEUE_HANDLE_54fcf4cd": "\${wsim#root/my_queue#attrs.handle}",
           },
@@ -991,6 +1000,9 @@ async handle(message) {
       {
         "addr": "c8e2354407fd3536187725c2b37c5327f47bb841e9",
         "attrs": {},
+        "deps": [
+          "root/my_queue_messages/Function",
+        ],
         "path": "root/my_queue_messages",
         "props": {
           "functionHandle": "\${wsim#root/my_queue_messages/Function#attrs.handle}",
@@ -1204,6 +1216,7 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
@@ -1224,6 +1237,10 @@ async handle(message) {
       {
         "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "attrs": {},
+        "deps": [
+          "root/my_queue/SetConsumer0",
+          "root/my_queue",
+        ],
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_queue#attrs.handle}",

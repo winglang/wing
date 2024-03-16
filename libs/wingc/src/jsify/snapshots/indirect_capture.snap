@@ -87,7 +87,7 @@ class $Root extends $stdlib.std.Resource {
     class Capture extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+        this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
       }
       static _toInflightType() {
         return `
@@ -156,7 +156,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const f = new Capture(this, "Capture");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }

@@ -52,6 +52,16 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
+      "Construct_Bucket_2C7B19D9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Construct/Bucket/Default",
+            "uniqueId": "Construct_Bucket_2C7B19D9"
+          }
+        },
+        "bucket_prefix": "bucket-c8186214-",
+        "force_destroy": false
+      },
       "b1": {
         "//": {
           "metadata": {
@@ -70,16 +80,6 @@ module.exports = function({  }) {
           }
         },
         "bucket_prefix": "b2-c844cd88-",
-        "force_destroy": false
-      },
-      "cConstruct_cloudBucket_63D47E7B": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/c.Construct/cloud.Bucket/Default",
-            "uniqueId": "cConstruct_cloudBucket_63D47E7B"
-          }
-        },
-        "bucket_prefix": "cloud-bucket-c8e0ff1c-",
         "force_destroy": false
       }
     }
@@ -106,7 +106,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
       }
       static createBucket(scope) {
-        return ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "cloud.Bucket"))(scope);
+        return ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "Bucket"))(scope);
       }
       static createMyClass(scope) {
         return new MyClass(scope, "MyClass");
@@ -176,7 +176,7 @@ class $Root extends $stdlib.std.Resource {
     if (true) {
       this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
     }
-    const scope = this.node.root.new("constructs.Construct", c.Construct, this, "c.Construct");
+    const scope = this.node.root.new("constructs.Construct", c.Construct, this, "Construct");
     const bucket = (MyClass.createBucket(scope));
     const bucket2 = (createBucket());
     const my = (MyClass.createMyClass(scope));

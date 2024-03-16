@@ -16,13 +16,13 @@ const addRow = async (page: Page, data?: Record<string, any>) => {
 
 describe(`${__dirname}/main.w`, () => {
   test.skip("adds new item", async ({ page }) => {
-    await getResourceNode(page, "root/Default/ex.DynamodbTable").click();
+    await getResourceNode(page, "root/Default/DynamodbTable").click();
 
     await addRow(page, { id: "1", key1: "value1", key2: "value2" });
   });
 
   test.skip("removes row", async ({ page }) => {
-    await getResourceNode(page, "root/Default/ex.DynamodbTable").click();
+    await getResourceNode(page, "root/Default/DynamodbTable").click();
 
     await addRow(page, { id: "1", key1: "value1", key2: "value2" });
 

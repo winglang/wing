@@ -1127,6 +1127,17 @@ impl TypeRef {
 		matches!(**self, Type::Function(_))
 	}
 
+	pub fn is_enum(&self) -> bool {
+		matches!(**self, Type::Enum(_))
+	}
+
+	pub fn is_stringable(&self) -> bool {
+		matches!(
+			**self,
+			Type::String | Type::Number | Type::Boolean | Type::Json(_) | Type::MutJson | Type::Enum(_) | Type::Anything
+		)
+	}
+
 	/// If this is a function and its last argument is a struct, return that struct.
 	pub fn get_function_struct_arg(&self) -> Option<&Struct> {
 		if let Some(func) = self.maybe_unwrap_option().as_function_sig() {
@@ -1338,7 +1349,7 @@ pub struct Types {
 	/// A map from source paths to type information about that path
 	/// If it's a file, we save its symbol environment, and if it's a directory, we save a namespace that points to
 	/// all of the symbol environments of the files (or subdirectories) in that directory
-	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
+	pub source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
 	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
@@ -1555,18 +1566,6 @@ impl Types {
 
 	pub fn mut_json(&self) -> TypeRef {
 		self.get_typeref(self.mut_json_idx)
-	}
-
-	pub fn stringables(&self) -> Vec<TypeRef> {
-		// TODO: This should be more complex and return all types that have some stringification facility
-		// see: https://github.com/winglang/wing/issues/741
-		vec![
-			self.string(),
-			self.number(),
-			self.json(),
-			self.mut_json(),
-			self.anything(),
-		]
 	}
 
 	pub fn add_namespace(&mut self, n: Namespace) -> NamespaceRef {
@@ -2063,7 +2062,7 @@ impl<'a> TypeChecker<'a> {
 							if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 								let (exp_type, p) = self.type_check_exp(interpolated_expr, env);
 								phase = combine_phases(phase, p);
-								self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
+								self.validate_type_is_stringable(exp_type, interpolated_expr);
 							}
 						});
 						(self.types.string(), phase)
@@ -3218,6 +3217,28 @@ impl<'a> TypeChecker<'a> {
 
 		// Evaluate to one of the expected types
 		first_expected_type
+	}
+
+	pub fn validate_type_is_stringable(&mut self, actual_type: TypeRef, span: &impl Spanned) {
+		// If it's a type we can't resolve then we silently ignore it, assuming an error was already reported
+		if actual_type.is_unresolved() || actual_type.is_inferred() {
+			return;
+		}
+
+		if !actual_type.is_stringable() {
+			let message = format!("Expected type to be stringable, but got \"{actual_type}\" instead");
+
+			let hint = if actual_type.maybe_unwrap_option().is_stringable() {
+				format!(
+					"{} is an optional, try unwrapping it with 'x ?? \"nil\"' or 'x!'",
+					actual_type
+				)
+			} else {
+				"str, num, bool, json, and enums are stringable".to_string()
+			};
+
+			self.spanned_error_with_hints(span, message, vec![hint]);
+		}
 	}
 
 	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {

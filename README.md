@@ -1,6 +1,4 @@
 
-  [![Register](https://github.com/winglang/wing/assets/66887028/5647156b-3823-4ae3-939c-6e7d4405cc60)](https://wingla.ng/wing-cloud-early-access)
-
 
 
 <div align="center">

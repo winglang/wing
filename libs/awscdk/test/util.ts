@@ -32,3 +32,8 @@ export function awscdkSanitize(template: Template): any {
 
   return JSON.parse(jsonString);
 }
+
+export const CDK_APP_OPTS = {
+  stackName: "my-project",
+  entrypointDir: __dirname,
+};
