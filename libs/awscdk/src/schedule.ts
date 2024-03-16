@@ -9,9 +9,7 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
-import { convertUnixCronToAWSCron } from "@winglang/sdk/lib/shared-aws/schedule";
 import { isAwsCdkFunction } from "./function";
-
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -27,15 +25,27 @@ export class Schedule extends cloud.Schedule {
 
     const { rate, cron } = props;
 
+    /*
+     * The schedule cron string is Unix cron format: [minute] [hour] [day of month] [month] [day of week]
+     * AWS EventBridge Schedule uses a 6 field format which includes year: [minute] [hour] [day of month] [month] [day of week] [year]
+     * https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html#cron-based
+     *
+     * We append * to the cron string for year field.
+     */
     if (cron) {
-      let cronOpt: { [k: string]: string } = {};
-      const awsCron = convertUnixCronToAWSCron(cron);
-      const cronArr = awsCron.split(" ");
-      if (cronArr[0] !== "*" && cronArr[0] !== "?") { cronOpt.minute = cronArr[0]; }
-      if (cronArr[1] !== "*" && cronArr[1] !== "?") { cronOpt.hour = cronArr[1]; }
-      if (cronArr[2] !== "*" && cronArr[2] !== "?") { cronOpt.day = cronArr[2]; }
-      if (cronArr[3] !== "*" && cronArr[3] !== "?") { cronOpt.month = cronArr[3]; }
-      if (cronArr[4] !== "*" && cronArr[4] !== "?") { cronOpt.weekDay = cronArr[4]; }
+      const cronArr = cron.split(" ");
+      let cronOpt: { [k: string]: string } = {
+        minute: cronArr[0],
+        hour: cronArr[1],
+        month: cronArr[3],
+        year: "*",
+      };
+      if (cronArr[2] !== "?") {
+        cronOpt.day = cronArr[2];
+      }
+      if (cronArr[4] !== "?") {
+        cronOpt.weekDay = cronArr[4];
+      }
 
       this.scheduleExpression = EventSchedule.cron(cronOpt);
     } else {
