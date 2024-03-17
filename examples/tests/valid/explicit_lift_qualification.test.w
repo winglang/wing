@@ -10,7 +10,7 @@ class Foo {
     lift(bucket, put_and_list); // Qualify `bucket` with a preflight expression
     lift(bucket, ["delete"]); // Qualify `bucket` with `delete` via literal
     let b = bucket; // Assign `bucket` to an inflight variable
-
+    
     // `put` should work on `b` since we explicitly qualified `bucket` with `put`
     // no error generated here because of use of `lift()` in this method
     b.put("k2", "value2"); 

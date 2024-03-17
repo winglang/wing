@@ -1,7 +1,7 @@
 use crate::{
 	ast::{
-		CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, Symbol,
-		UserDefinedType,
+		ArgList, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt,
+		StmtKind, Symbol, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic},
@@ -20,6 +20,7 @@ pub struct LiftVisitor<'a> {
 	ctx: VisitContext,
 	jsify: &'a JSifier<'a>,
 	lifts_stack: Vec<Lifts>,
+	in_inner_inflight_class: usize,
 }
 
 impl<'a> LiftVisitor<'a> {
@@ -28,6 +29,7 @@ impl<'a> LiftVisitor<'a> {
 			jsify: jsifier,
 			ctx: VisitContext::new(),
 			lifts_stack: vec![],
+			in_inner_inflight_class: 0,
 		}
 	}
 
@@ -341,66 +343,108 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 	fn visit_function_definition(&mut self, node: &'a FunctionDefinition) {
 		match &node.body {
 			FunctionBody::Statements(scope) => {
-				self.ctx.push_function_definition(
-					node.name.as_ref(),
-					&node.signature,
-					node.is_static,
-					self.jsify.types.get_scope_env(&scope),
-				);
+				// If this is a method (of a non-inner inflight class), make sure there are no `lift()` calls that aren't at the top of the method
+				if node.name.is_some() && self.in_inner_inflight_class == 0 {
+					// Skip all statments that are a lift call and then search to see if there are further lift calls
+					let stmts = scope.statements.iter();
+					let lift_stmts = stmts
+						.skip_while(|s| {
+							if let StmtKind::Expression(expr) = &s.kind {
+								return Self::is_lift_builtin_call(expr).is_some();
+							}
+							false
+						})
+						.filter(
+							// If we find a lift call after the first non-lift call statement, report an error
+							|s| {
+								if let StmtKind::Expression(expr) = &s.kind {
+									return Self::is_lift_builtin_call(expr).is_some();
+								}
+								false
+							},
+						);
+
+					for lift_stmt in lift_stmts {
+						report_diagnostic(Diagnostic {
+							span: Some(lift_stmt.span.clone()),
+							message: "lift() calls must be at the top of the method".to_string(),
+							annotations: vec![],
+							hints: vec![],
+						});
+					}
+				} else {
+					// This isn't a method, don't allow any lift statments
+					let lift_stmts = scope.statements.iter().filter(|s| {
+						if let StmtKind::Expression(expr) = &s.kind {
+							return Self::is_lift_builtin_call(expr).is_some();
+						}
+						false
+					});
+					for lift_stmt in lift_stmts {
+						report_diagnostic(Diagnostic {
+							span: Some(lift_stmt.span.clone()),
+							message: "lift() calls are only allowed in inflight methods and closures defined in preflight"
+								.to_string(),
+							annotations: vec![],
+							hints: vec![],
+						});
+					}
+				}
+
+				// If we're in an inner inflight class then we don't need to track this inner method since lifts are
+				// collected for methods of classes defined preflight.
+				if self.in_inner_inflight_class == 0 {
+					self.ctx.push_function_definition(
+						node.name.as_ref(),
+						&node.signature,
+						node.is_static,
+						self.jsify.types.get_scope_env(&scope),
+					);
+				}
 
 				visit::visit_function_definition(self, node);
-				self.ctx.pop_function_definition();
+
+				if self.in_inner_inflight_class == 0 {
+					self.ctx.pop_function_definition();
+				}
 			}
 			FunctionBody::External(_) => visit::visit_function_definition(self, node),
 		}
 	}
 
 	fn visit_class(&mut self, node: &'a Class) {
-		// nothing to do if we are emitting an inflight class from within an inflight scope
-		if self.ctx.current_phase() == Phase::Inflight && node.phase == Phase::Inflight {
-			self.visit_symbol(&node.name);
+		let in_inner_inflight_class = self.ctx.current_phase() == Phase::Inflight && node.phase == Phase::Inflight;
+		if in_inner_inflight_class {
+			// nothing to do if we are emitting an inflight class from within an inflight scope:
+			// inner inflight classes collect lifts in their outer class, just mark we're in such a class and do nothing
+			self.in_inner_inflight_class += 1;
+		} else {
+			self.ctx.push_class(node);
 
-			visit::visit_function_definition(self, &node.initializer);
-			visit::visit_function_definition(self, &node.inflight_initializer);
+			self.lifts_stack.push(Lifts::new());
 
-			for field in node.fields.iter() {
-				self.visit_symbol(&field.name);
-				self.visit_type_annotation(&field.member_type);
-			}
-			for (name, def) in node.methods.iter() {
-				self.visit_symbol(&name);
-				visit::visit_function_definition(self, &def);
-			}
 			if let Some(parent) = &node.parent {
-				self.visit_user_defined_type(&parent);
+				let mut lifts = self.lifts_stack.pop().unwrap();
+				lifts.capture(&Liftable::Type(parent.clone()), &self.jsify_udt(&parent), false);
+				self.lifts_stack.push(lifts);
 			}
-			for interface in node.implements.iter() {
-				self.visit_user_defined_type(&interface);
-			}
-			return;
-		}
-
-		self.ctx.push_class(node);
-
-		self.lifts_stack.push(Lifts::new());
-
-		if let Some(parent) = &node.parent {
-			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.capture(&Liftable::Type(parent.clone()), &self.jsify_udt(&parent), false);
-			self.lifts_stack.push(lifts);
 		}
 
 		visit::visit_class(self, node);
 
-		self.ctx.pop_class();
+		if in_inner_inflight_class {
+			self.in_inner_inflight_class -= 1;
+		} else {
+			let lifts = self.lifts_stack.pop().expect("Unable to pop class tokens");
 
-		let lifts = self.lifts_stack.pop().expect("Unable to pop class tokens");
-
-		if let Some(env) = self.ctx.current_env() {
-			if let Some(mut t) = resolve_user_defined_type(&UserDefinedType::for_class(node), env, 0).ok() {
-				let mut_class = t.as_class_mut().unwrap();
-				mut_class.set_lifts(lifts);
+			if let Some(env) = self.ctx.current_env() {
+				if let Some(mut t) = resolve_user_defined_type(&UserDefinedType::for_class(node), env, 0).ok() {
+					let mut_class = t.as_class_mut().unwrap();
+					mut_class.set_lifts(lifts);
+				}
 			}
+
+			self.ctx.pop_class();
 		}
 	}
 
@@ -431,24 +475,28 @@ impl LiftVisitor<'_> {
 		res
 	}
 
-	/// Helper function to check if the given expression is a call to the `lift` builtin.
-	/// If it is, we'll qualify the passed preflight object based on the passed capabilities.
-	fn check_explicit_lift(&mut self, node: &Expr) {
-		let ExprKind::Call {
+	fn is_lift_builtin_call(node: &Expr) -> Option<&ArgList> {
+		if let ExprKind::Call {
 			callee: CalleeKind::Expr(callee_expr),
 			arg_list,
 		} = &node.kind
-		else {
-			return;
-		};
-
-		let ExprKind::Reference(Reference::Identifier(Symbol { name, .. })) = &callee_expr.kind else {
-			return;
-		};
-
-		if UtilityFunctions::Lift.to_string().ne(name) {
-			return;
+		{
+			if let ExprKind::Reference(Reference::Identifier(Symbol { name, .. })) = &callee_expr.kind {
+				if UtilityFunctions::Lift.to_string().eq(name) {
+					return Some(arg_list);
+				}
+			}
 		}
+
+		None
+	}
+
+	/// Helper function to check if the given expression is a call to the `lift` builtin.
+	/// If it is, we'll qualify the passed preflight object based on the passed capabilities.
+	fn check_explicit_lift(&mut self, node: &Expr) {
+		let Some(arg_list) = Self::is_lift_builtin_call(node) else {
+			return;
+		};
 
 		// Get the preflight object's expression, which is the first argument to the `lift` call
 		let preflight_object_expr = &arg_list.pos_args[0];
