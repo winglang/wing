@@ -54,6 +54,7 @@ class DynamoTable {
     }
   }
 
+  extern "./dynamo.ts" static inflight _getItem(tableName: str, key: Json): Json;
   extern "./dynamo.ts" static inflight _putItem(tableName: str, item: Json): void;
 
   pub inflight putItem(item: Map<Attribute>) {
