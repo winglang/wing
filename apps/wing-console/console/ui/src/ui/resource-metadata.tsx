@@ -317,7 +317,9 @@ export const ResourceMetadata = memo(
           </div>
 
           <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate">{node.id}</div>
+            <div className="text-sm font-medium truncate">
+              {node?.display?.title ?? node.id}
+            </div>
             <div className="flex">
               <Pill>{node.type}</Pill>
             </div>
