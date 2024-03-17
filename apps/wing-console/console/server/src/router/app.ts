@@ -551,10 +551,7 @@ function createExplorerItemFromConstructTreeNode(
   showTests = false,
   includeHiddens = false,
 ): ExplorerItem {
-  const label =
-    node.display?.sourceModule === "@winglang/sdk" && node.display?.title
-      ? node.display?.title
-      : node.id;
+  const label = node.display?.title ?? node.id;
 
   return {
     id: node.path,
