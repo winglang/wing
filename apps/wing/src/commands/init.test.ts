@@ -10,7 +10,7 @@ vitest.mock("inquirer");
 
 const templates = projectTemplateNames();
 
-describe("new empty --language=wing", () => {
+describe.each(templates)("new %s --language=wing", (template) => {
   let log: any;
   beforeEach(() => {
     log = console.log;
@@ -21,83 +21,16 @@ describe("new empty --language=wing", () => {
     console.log = log;
   });
 
-  test(`wing new empty && wing test main.w`, async () => {
+  test(`wing new ${template} && wing test main.w`, async () => {
     const workdir = await generateTmpDir();
     process.chdir(workdir);
 
-    await init("empty", { language: "wing" });
+    await init(template, { language: "wing" });
 
     await cliTest(["main.w"], {
       platform: ["sim"],
       clean: false,
     });
-  });
-});
-
-describe("new http-api --language=wing", () => {
-  let log: any;
-  beforeEach(() => {
-    log = console.log;
-    console.log = vi.fn();
-  });
-
-  afterEach(() => {
-    console.log = log;
-  });
-
-  test(`wing new http-api && wing test main.w`, async () => {
-    const workdir = await generateTmpDir();
-    process.chdir(workdir);
-
-    await init("http-api", { language: "wing" });
-
-    await cliTest(["main.w"], {
-      platform: ["sim"],
-      clean: false,
-    });
-  });
-});
-
-describe("new private-api --language=wing", () => {
-  let log: any;
-  beforeEach(() => {
-    log = console.log;
-    console.log = vi.fn();
-  });
-
-  afterEach(() => {
-    console.log = log;
-  });
-
-  test(`wing new private-api && wing test main.w`, async () => {
-    const workdir = await generateTmpDir();
-    process.chdir(workdir);
-
-    await init("private-api", { language: "wing" });
-
-    await cliTest(["main.w"], {
-      platform: ["sim"],
-      clean: false,
-    });
-  });
-});
-
-describe("new react-vite --language=wing", () => {
-  let log: any;
-  beforeEach(() => {
-    log = console.log;
-    console.log = vi.fn();
-  });
-
-  afterEach(() => {
-    console.log = log;
-  });
-
-  test(`wing new react-vite`, async () => {
-    const workdir = await generateTmpDir();
-    process.chdir(workdir);
-
-    await init("react-vite", { language: "wing" });
   });
 });
 
