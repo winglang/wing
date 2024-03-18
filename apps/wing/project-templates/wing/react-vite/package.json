@@ -5,7 +5,9 @@
   "author": "Your Name",
   "license": "MIT",
   "scripts": {
-    "postinstall": "(cd backend && npm install) && (cd frontend && npm install)"
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "postinstall": "npm run install:backend && npm run install:frontend"
   },
   "dependencies": {
     "@winglibs/websockets": "^0.3.2"
