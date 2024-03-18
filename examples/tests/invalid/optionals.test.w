@@ -116,3 +116,27 @@ let nonOptionalFn = (): num => {
 let unwrapValueFn = nonOptionalFn()!;
 //                  ^^^^^^^^^^^^^^^ '!' expects an optional type, found "num"
 
+class Pet {
+  giveTreat() {
+    log("yum");
+  }
+}
+
+class Dog extends Pet {
+  bark(): str {
+    return "woof";
+  }
+}
+
+class Cat extends Pet {
+  meow(): str {
+    return "meow";
+  }
+}
+
+let bailey: Dog? = new Dog();
+let whiskers: Cat? = new Cat();
+
+let s = bailey ?? whiskers;
+// ^ Type mismatch: cannot use '??' with types "Cat?" and "Dog?", neither is a subtype of the other
+// TODO: we could return a Pet? here, but we don't yet support that
