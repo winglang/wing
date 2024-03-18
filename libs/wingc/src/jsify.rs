@@ -1318,7 +1318,6 @@ impl<'a> JSifier<'a> {
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope_body(scope, ctx),
 			FunctionBody::External(extern_path) => {
-				let extern_path = Utf8Path::new(extern_path);
 				let entrypoint_is_file = self.compilation_init_path.is_file();
 				let entrypoint_dir = if entrypoint_is_file {
 					self.compilation_init_path.parent().unwrap()

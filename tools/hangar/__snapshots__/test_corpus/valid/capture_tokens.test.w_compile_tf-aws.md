@@ -52,7 +52,7 @@ module.exports = function({  }) {
       this.$this_url = $this_url;
     }
     static async isValidUrl(url) {
-      return (require("../../../url_utils.js")["isValidUrl"])(url)
+      return (require("../../../url_utils.ts")["isValidUrl"])(url)
     }
     async foo() {
       $helpers.assert((await MyResource.isValidUrl(this.$this_url)), "MyResource.isValidUrl(this.url)");

@@ -279,7 +279,7 @@ pub enum FunctionBody {
 	/// The function body implemented within a Wing scope.
 	Statements(Scope),
 	/// The `extern` modifier value, pointing to an external implementation file
-	External(String),
+	External(Utf8PathBuf),
 }
 
 #[derive(Debug)]
