@@ -38,6 +38,16 @@ export function toLiftableModuleType(
   moduleSpec: string,
   path: string
 ) {
+  // hack to stop inheritance when extending sim.Resource
+  if (moduleSpec === "@winglang/sdk/sim" && path === "Resource") {
+    // class EmptyResource {}
+    // return EmptyResource;
+    // return null;
+    return {
+      _toInflightType: () => `class EmptyResource {}`,
+    };
+  }
+
   if (
     typeof type?._toInflightType === "function" ||
     type?.constructor?.name === "Object"
@@ -329,7 +339,11 @@ export function collectLifts(
       if (!objDeps) {
         if (Construct.isConstruct(obj)) {
           throw new NotImplementedError(
-            `Resource ${obj.node.path} does not support inflight operation ${op}.\nIt might not be implemented yet.`,
+            `Resource ${
+              obj.node.path
+            } does not support inflight operation ${op} (known operations: [${Object.keys(
+              matrix
+            ).join(", ")}]).\nIt might not be implemented yet.`,
             { resource: obj.constructor.name, operation: op }
           );
         } else {
@@ -411,6 +425,11 @@ export class Lifting {
 
     // call all of the onLift methods
     for (const [liftedObj, liftedOps] of lifts) {
+      if (liftedObj === host && (host as any)._isSimResource === true) {
+        // don't lift the host itself
+        continue;
+      }
+
       const tokens = getTokenResolver(liftedObj);
       if (tokens) {
         tokens.onLiftValue(host, liftedObj);

@@ -1508,10 +1508,19 @@ impl<'a> JSifier<'a> {
 				code.line(self.jsify_function(Some(class), m, false, ctx));
 			}
 
+			let sim_resource_type = self.types.sim_resource_type();
+			let is_sim_resource = class_type
+				.as_class()
+				.expect("type is not a class")
+				.extends(sim_resource_type);
+			if is_sim_resource {
+				code.add_code(self.jsify_simulator_client_method(class, ctx));
+			}
+
 			// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
 			// `_liftType`).
 			code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
-			code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
+			code.add_code(self.jsify_to_inflight_method(&class.name, class_type, ctx));
 
 			// emit `onLift` and `onLiftType` to bind permissions and environment variables to inflight hosts
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
@@ -1559,6 +1568,50 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
+	fn jsify_simulator_client_method(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
+		let mut code = CodeMaker::with_source(&class.name.span);
+
+		code.open("_simulatorClient() {");
+		// code.open(format!("return `(new (${{{}._toInflightType()}})({{", class.name));
+
+		// if let Some(lifts) = &ctx.lifts {
+		// 	for (token, obj) in lifts.lifted_fields() {
+		// 		code.line(format!("{token}: ${{{STDLIB_CORE}.liftObject({obj})}},"));
+		// 	}
+		// }
+
+		// code.close("}))`;");
+
+		code.open("return `");
+		code.open("(await (async () => {");
+
+		code.line(format!(
+			"const {}Client = ${{{}._toInflightType()}};",
+			class.name.name, class.name.name,
+		));
+
+		code.open(format!("const client = new {}Client({{", class.name.name));
+
+		if let Some(lifts) = &ctx.lifts {
+			for (token, obj) in lifts.lifted_fields() {
+				code.line(format!("{token}: ${{{STDLIB_CORE}.liftObject({obj})}},"));
+			}
+		}
+
+		code.close("});");
+
+		code.line(format!(
+			"if (client.{CLASS_INFLIGHT_INIT_NAME}) {{ await client.{CLASS_INFLIGHT_INIT_NAME}(); }}"
+		));
+		code.line("return client;");
+
+		code.close("})())");
+		code.close("`;");
+		code.close("}");
+
+		code
+	}
+
 	fn jsify_to_inflight_type_method(&self, class: &AstClass, ctx: &JSifyContext) -> CodeMaker {
 		let client_path = self.inflight_filename(class);
 
@@ -1587,38 +1640,49 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_to_inflight_method(&self, resource_name: &Symbol, ctx: &JSifyContext) -> CodeMaker {
+	fn jsify_to_inflight_method(&self, resource_name: &Symbol, class_type: TypeRef, ctx: &JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::with_source(&resource_name.span);
 
 		code.open("_toInflight() {");
 
-		code.open("return `");
+		let sim_resource_type = self.types.sim_resource_type();
+		if class_type
+			.as_class()
+			.expect("type is not a class")
+			.extends(sim_resource_type)
+		{
+			// Special case for classes that extend `sim.Resource`:
+			// The inflight client will always be a proxy object that calls to the simulator via HTTP.
+			code.line("return super._toInflight();");
+		} else {
+			code.open("return `");
 
-		code.open("(await (async () => {");
+			code.open("(await (async () => {");
 
-		code.line(format!(
-			"const {}Client = ${{{}._toInflightType()}};",
-			resource_name.name, resource_name.name,
-		));
+			code.line(format!(
+				"const {}Client = ${{{}._toInflightType()}};",
+				resource_name.name, resource_name.name,
+			));
 
-		code.open(format!("const client = new {}Client({{", resource_name.name));
+			code.open(format!("const client = new {}Client({{", resource_name.name));
 
-		if let Some(lifts) = &ctx.lifts {
-			for (token, obj) in lifts.lifted_fields() {
-				code.line(format!("{token}: ${{{STDLIB_CORE}.liftObject({obj})}},"));
+			if let Some(lifts) = &ctx.lifts {
+				for (token, obj) in lifts.lifted_fields() {
+					code.line(format!("{token}: ${{{STDLIB_CORE}.liftObject({obj})}},"));
+				}
 			}
+
+			code.close("});");
+
+			code.line(format!(
+				"if (client.{CLASS_INFLIGHT_INIT_NAME}) {{ await client.{CLASS_INFLIGHT_INIT_NAME}(); }}"
+			));
+			code.line("return client;");
+
+			code.close("})())");
+
+			code.close("`;");
 		}
-
-		code.close("});");
-
-		code.line(format!(
-			"if (client.{CLASS_INFLIGHT_INIT_NAME}) {{ await client.{CLASS_INFLIGHT_INIT_NAME}(); }}"
-		));
-		code.line("return client;");
-
-		code.close("})())");
-
-		code.close("`;");
 
 		code.close("}");
 		code
@@ -1781,7 +1845,19 @@ impl<'a> JSifier<'a> {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
 			BindMethod::Type => ("static ", "_liftTypeMap"),
-			BindMethod::Instance => ("", "_liftMap"),
+			BindMethod::Instance => {
+				// let sim_resource_type = self.types.sim_resource_type();
+				// let is_sim_resource = class_type
+				// 	.as_class()
+				// 	.expect("type is not a class")
+				// 	.extends(sim_resource_type);
+				// if is_sim_resource {
+				// 	("", "_simulatorLiftMap")
+				// } else {
+				// 	("", "_liftMap")
+				// }
+				("", "_liftMap")
+			}
 		};
 
 		let class_name = class.name.to_string();

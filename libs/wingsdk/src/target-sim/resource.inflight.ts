@@ -1,6 +1,5 @@
 import { resolve } from "path";
 import {
-  IResourceClient,
   IResourceContext,
   ResourceInflightMethods,
   SIM_RESOURCE_FQN,
@@ -14,7 +13,7 @@ import { TraceType } from "../std";
 
 export class EmptyResource {}
 
-export class Resource implements IResourceClient, ISimulatorResourceInstance {
+export class Resource implements ISimulatorResourceInstance {
   private readonly originalFile: string;
   private sandbox: Sandbox | undefined;
   private bundle: Bundle | undefined;
@@ -33,9 +32,6 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
       this.addTrace(msg);
     });
   }
-
-  public async start(_context: IResourceContext): Promise<void> {}
-  public async stop(): Promise<void> {}
 
   public async init(): Promise<Record<string, any>> {
     // ensure resource code is bundled before we start the resource
@@ -79,6 +75,14 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
     }
 
     return attrs;
+  }
+
+  public async $callMethod(method: string, args: any[]): Promise<any> {
+    if (!this.sandbox) {
+      throw new Error("Resource not initialized yet");
+    }
+
+    return this.sandbox.call(method, ...args);
   }
 
   public async cleanup(): Promise<void> {

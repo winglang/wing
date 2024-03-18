@@ -28,7 +28,7 @@ use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
 	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_JSON, WINGSDK_MAP,
 	WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_SIM_RESOURCE, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -334,6 +334,7 @@ pub struct Class {
 	// and instead the user will need to pass the relevant args to the class's init method.
 	pub std_construct_args: bool,
 }
+
 impl Class {
 	pub(crate) fn set_lifts(&mut self, lifts: Lifts) {
 		self.lifts = Some(lifts);
@@ -346,6 +347,23 @@ impl Class {
 			.methods(true)
 			.find(|(name, type_)| name == CLOSURE_CLASS_HANDLE_METHOD && type_.is_inflight_function())
 			.map(|(_, t)| t)
+	}
+
+	/// Returns the type of the "init" method of a class or `None` if this is not a class
+	pub fn extends(&self, other: TypeRef) -> bool {
+		if !matches!(*other, Type::Class(_)) {
+			return false;
+		}
+
+		if let Some(parent) = self.parent {
+			if parent.is_same_type_as(&other) {
+				return true;
+			}
+			if let Some(parent_class) = parent.as_class() {
+				return parent_class.extends(other);
+			}
+		}
+		false
 	}
 }
 
@@ -1609,7 +1627,7 @@ impl Types {
 			.expect("Construct base class to be a type")
 	}
 
-	pub fn construct_interface(&self) -> TypeRef {
+	pub fn construct_interface_type(&self) -> TypeRef {
 		self
 			.libraries
 			.lookup_nested_str(&CONSTRUCT_BASE_INTERFACE, None)
@@ -1617,6 +1635,17 @@ impl Types {
 			.0
 			.as_type()
 			.expect("Construct interface to be a type")
+	}
+
+	pub fn sim_resource_type(&self) -> TypeRef {
+		let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_SIM_RESOURCE);
+		self
+			.libraries
+			.lookup_nested_str(&resource_fqn, None)
+			.expect("sim.Resource class to be loaded")
+			.0
+			.as_type()
+			.expect("sim.Resource class to be a type")
 	}
 
 	/// Stores the type and phase of a given expression node.
@@ -2010,7 +2039,7 @@ impl<'a> TypeChecker<'a> {
 				this_type: None,
 				parameters: vec![FunctionParameter {
 					name: "construct".into(),
-					typeref: self.types.construct_interface(),
+					typeref: self.types.construct_interface_type(),
 					docs: Docs::with_summary("The construct to obtain the tree node of"),
 					variadic: false,
 				}],
@@ -2318,7 +2347,7 @@ impl<'a> TypeChecker<'a> {
 
 						// Verify the object scope is a construct
 						if let Some(obj_scope_type) = obj_scope_type {
-							if !obj_scope_type.is_subtype_of(&self.types.construct_interface()) {
+							if !obj_scope_type.is_subtype_of(&self.types.construct_interface_type()) {
 								self.spanned_error(
 									exp,
 									format!(

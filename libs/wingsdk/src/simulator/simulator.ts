@@ -618,7 +618,52 @@ export class Simulator {
         }
 
         const methodExists = (resource as any)[method] !== undefined;
-        if (!methodExists) {
+        if (methodExists) {
+          // eventually all simulator resources will be implemented with sim.Resource
+          // and can go through $callMethod, so this path can be removed...
+          (resource as any)
+            [method](...args)
+            .then((result: any) => {
+              res.writeHead(200, { "Content-Type": "application/json" });
+              res.end(serialize({ result }), "utf-8");
+            })
+            .catch((err: any) => {
+              res.writeHead(500, { "Content-Type": "application/json" });
+              res.end(
+                serialize({
+                  error: {
+                    message: err?.message ?? `${err}`,
+                    stack: err.stack,
+                    name: err.name,
+                  },
+                }),
+                "utf-8"
+              );
+            });
+          return;
+        }
+
+        if ((resource as any).$callMethod) {
+          (resource as any)
+            .$callMethod(method, args)
+            .then((result: any) => {
+              res.writeHead(200, { "Content-Type": "application/json" });
+              res.end(serialize({ result }), "utf-8");
+            })
+            .catch((err: any) => {
+              res.writeHead(500, { "Content-Type": "application/json" });
+              res.end(
+                serialize({
+                  error: {
+                    message: err?.message ?? `${err}`,
+                    stack: err.stack,
+                    name: err.name,
+                  },
+                }),
+                "utf-8"
+              );
+            });
+        } else {
           res.writeHead(500, { "Content-Type": "application/json" });
           res.end(
             serialize({
@@ -630,26 +675,6 @@ export class Simulator {
           );
           return;
         }
-
-        (resource as any)
-          [method](...args)
-          .then((result: any) => {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(serialize({ result }), "utf-8");
-          })
-          .catch((err: any) => {
-            res.writeHead(500, { "Content-Type": "application/json" });
-            res.end(
-              serialize({
-                error: {
-                  message: err?.message ?? `${err}`,
-                  stack: err.stack,
-                  name: err.name,
-                },
-              }),
-              "utf-8"
-            );
-          });
       });
     };
 

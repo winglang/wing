@@ -115,6 +115,7 @@ const WINGSDK_AUTOID_RESOURCE: &'static str = "std.AutoIdResource";
 const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 const WINGSDK_NODE: &'static str = "std.Node";
+const WINGSDK_SIM_RESOURCE: &'static str = "sim.Resource";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
@@ -205,10 +206,10 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 
 	let results = compile(project_dir, source_path, None, output_dir);
 
-	if results.is_err() {
-		WASM_RETURN_ERROR
+	if let Ok(results) = results {
+		string_to_combined_ptr(serde_json::to_string(&results).unwrap())
 	} else {
-		string_to_combined_ptr(serde_json::to_string(&results.unwrap()).unwrap())
+		WASM_RETURN_ERROR
 	}
 }
 

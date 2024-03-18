@@ -1,40 +1,16 @@
+bring cloud;
 bring sim;
-bring fs;
 bring util;
+bring math;
 
-class MyResource extends sim.Resource {
-  pub inflight start(ctx: sim.IResourceContext) {
-    log("start called");
-    // ctx.resolveAttribute("foo", "bar");
-    fs.writeFile("/tmp/boom.txt", "bam");
-  }
-
-  pub inflight do(): num {
-    let text = fs.readFile("/tmp/boom.txt");
-    log(text);
-    return 5;
-  }
-
-  pub inflight stop() {
-    log("stopping!");
-  }
-}
-
-let r = new MyResource();
-
-test "call method on MyResource" {
-  let x = r.do();
-  log("{x}");
-  assert(x == 5);
-}
-
+// sim.Resource is a base class for custom simulated resources
 class MyCounter extends sim.Resource {
   inflight var count: num;
-  inflight new() {
-    this.count = 0;
-  }
+  inflight new() { this.count = 0; }
 
   pub inflight start(ctx: sim.IResourceContext) {}
+  pub inflight stop() {}
+
   pub inflight inc(): num {
     this.count += 1;
     return this.count;
@@ -42,20 +18,23 @@ class MyCounter extends sim.Resource {
   pub inflight peek(): num {
     return this.count;
   }
-  pub inflight stop() {}
 }
 
-let c = new MyCounter();
+let c1 = new MyCounter() as "c1";
 
-test "counter peek" {
-  assert(c.peek() == 0);
+let worker = new cloud.Function(inflight () => {
+  c1.inc();
+}) as "IncCounter";
+
+// send many concurrent requests to the singleton counter resource
+let addTraffic = new cloud.Function(inflight () => {
+  for _ in 0..100 {
+    worker.invokeAsync();
+  }
+}) as "AddTraffic";
+
+test "counter resource" {
+  addTraffic.invoke();
+  util.sleep(1s);
+  assert(c1.peek() == 100);
 }
-
-test "counter inc" {
-  assert(c.peek() == 0);
-  assert(c.inc() == 1);
-  assert(c.peek() == 1);
-}
-
-// TODO: try methods that throw errors
-// TODO: resolve attributes

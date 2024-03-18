@@ -4,9 +4,8 @@ import { ResourceSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, LiftDepsMatrixRaw, Lifting } from "../core";
 import { Construct, INFLIGHT_SYMBOL } from "../core/types";
-// import { normalPath } from "../helpers";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { BaseResourceSchema } from "../simulator/simulator";
 import * as std from "../std";
@@ -47,8 +46,11 @@ export class Resource
    * @internal
    */
   public static _toInflightType(): string {
-    return `class Resource {}`;
+    throw new Error("Not implemented");
   }
+
+  /** @internal */
+  public readonly _isSimResource = true;
 
   /** @internal */
   public [INFLIGHT_SYMBOL]?: IResourceClient;
@@ -62,6 +64,12 @@ export class Resource
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
+
+    if (App.of(this)._target !== "sim") {
+      throw new Error(
+        'Class "sim.Resource" can only be used on the simulator ("sim") target.'
+      );
+    }
 
     const assetName = ResourceNames.generateName(this, {
       disallowedRegex: /[><:"/\\|?*\s]/g, // avoid characters that may cause path issues
@@ -103,6 +111,26 @@ export class Resource
     return makeSimulatorJsClient(__filename, this);
   }
 
+  /** @internal */
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {
+      [ResourceInflightMethods.START]: [],
+      [ResourceInflightMethods.STOP]: [],
+    };
+  }
+
+  /** @internal */
+  public _simulatorClient(): string {
+    throw new Error("Expected _simulatorClient to be implemented by subclass.");
+  }
+
+  /** @internal */
+  public _simulatorLiftMap(): LiftDepsMatrixRaw {
+    throw new Error(
+      "Expected _simulatorLiftMap to be implemented by subclass."
+    );
+  }
+
   public onLift(host: std.IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super.onLift(host, ops);
@@ -125,7 +153,7 @@ export class Resource
   public _preSynthesize(): void {
     super._preSynthesize();
 
-    const inflightClient = this._toInflight();
+    const inflightClient = this._simulatorClient();
     const lines = new Array<string>();
 
     lines.push('"use strict";');
@@ -136,7 +164,7 @@ export class Resource
     lines.push("  return $obj;");
     lines.push("};");
 
-    const methods = this._supportedOps();
+    const methods = Object.keys(this._liftMap ?? {});
 
     for (const method of methods) {
       lines.push(`exports.${method} = async function(...args) {`);
@@ -146,11 +174,11 @@ export class Resource
 
     writeFileSync(this.entrypoint, lines.join("\n"));
 
-    // // lift the resource onto itself
-    // Lifting.lift(this, this, [
-    //   ResourceInflightMethods.START,
-    //   ResourceInflightMethods.STOP,
-    // ]);
+    // lift the resource onto itself
+    Lifting.lift(this, this, [
+      ResourceInflightMethods.START,
+      ResourceInflightMethods.STOP,
+    ]);
   }
 }
 
