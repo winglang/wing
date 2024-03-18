@@ -100,10 +100,7 @@ export const ContainerNode = memo(
     );
 
     const compilerNamed = useMemo(() => {
-      if (!display) {
-        return false;
-      }
-      return display.sourceModule === "@winglang/sdk" && display.title;
+      return !!display?.title;
     }, [display]);
 
     return (
