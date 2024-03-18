@@ -15,7 +15,7 @@ describe("Multiple platforms", () => {
   const appFile = path.join(platformsDir, app);
 
   test("only first platform app is used", async () => {
-    const args = ["compile"];
+    const args = ["whoopsie"];
     const platforms = ["tf-aws", "tf-azure"];
     const targetDir = path.join(platformsDir, "target", "main.tfaws");
 
