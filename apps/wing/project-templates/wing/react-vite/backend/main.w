@@ -2,7 +2,7 @@ bring cloud;
 bring expect;
 bring vite;
 bring http;
-bring "./broadcaster.w" as b;
+bring "./broadcaster.w" as broadcaster;
 
 // Winglang doesn't have a built-in support for __dirname yet, so we use a workaround to get the current directory.
 // @see tracking issue: https://github.com/winglang/wing/issues/3736
@@ -10,18 +10,18 @@ class Utils {
   extern "utils.js" pub static __dirname(): str;
 }
 
-let my_broadcaster = new b.Broadcaster() as "Broadcaster";
+let myBroadcaster = new broadcaster.Broadcaster() as "Broadcaster";
 let api = new cloud.Api(cors: true);
 let counter = new cloud.Counter();
 
-let my_vite = new vite.Vite(
+let website = new vite.Vite(
   root: "{Utils.__dirname()}/../frontend",
   publicEnv: {
     TITLE: "Wing + Vite + React",
     API_URL: api.url,
-    WS_URL: my_broadcaster.url
+    WS_URL: myBroadcaster.url
   }
-) as "Vite"; 
+) as "Vite Website"; 
 
 api.get("/counter", inflight () => {
   return {
@@ -31,7 +31,7 @@ api.get("/counter", inflight () => {
 
 api.post("/counter", inflight () => {
   let prev = counter.inc();
-  my_broadcaster.broadcast("refresh");
+  myBroadcaster.broadcast("refresh");
   return {
     body: "{prev + 1}"
   };
