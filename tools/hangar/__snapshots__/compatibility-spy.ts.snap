@@ -494,6 +494,7 @@ exports[`initial.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "initial",
               "peek",
             ],
             "TestRunner": [
@@ -531,6 +532,7 @@ exports[`initial.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "initial",
               "peek",
             ],
             "TestRunner": [
@@ -568,6 +570,7 @@ exports[`initial.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "initial",
               "peek",
             ],
             "TestRunner": [
