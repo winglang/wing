@@ -12,6 +12,7 @@ use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
+use dtsify::extern_dtsify::{is_extern_file, ExternDTSifier};
 use file_graph::FileGraph;
 use files::Files;
 use fold::Fold;
@@ -205,10 +206,10 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 
 	let results = compile(project_dir, source_path, None, output_dir);
 
-	if results.is_err() {
-		WASM_RETURN_ERROR
+	if let Ok(results) = results {
+		string_to_combined_ptr(serde_json::to_string(&results).unwrap())
 	} else {
-		string_to_combined_ptr(serde_json::to_string(&results.unwrap()).unwrap())
+		WASM_RETURN_ERROR
 	}
 }
 
@@ -359,9 +360,11 @@ pub fn compile(
 		let scope = asts.get_mut(file).expect("matching AST not found");
 		jsifier.jsify(file, &scope);
 	}
-	match jsifier.output_files.borrow().emit_files(out_dir) {
-		Ok(()) => {}
-		Err(err) => report_diagnostic(err.into()),
+	if !found_errors() {
+		match jsifier.output_files.borrow().emit_files(out_dir) {
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
 	}
 
 	// -- DTSIFICATION PHASE --
@@ -372,10 +375,25 @@ pub fn compile(
 			let scope = asts.get_mut(file).expect("matching AST not found");
 			dtsifier.dtsify(file, &scope);
 		}
-		let output_files = dtsifier.output_files.borrow();
-		match output_files.emit_files(out_dir) {
-			Ok(()) => {}
-			Err(err) => report_diagnostic(err.into()),
+		if !found_errors() {
+			let output_files = dtsifier.output_files.borrow();
+			match output_files.emit_files(out_dir) {
+				Ok(()) => {}
+				Err(err) => report_diagnostic(err.into()),
+			}
+		}
+	}
+
+	// -- EXTERN DTSIFICATION PHASE --
+	for source_files_env in &types.source_file_envs {
+		if is_extern_file(source_files_env.0) {
+			let mut extern_dtsifier = ExternDTSifier::new(source_files_env.0, source_files_env.1, &types.libraries);
+			if !found_errors() {
+				match extern_dtsifier.dtsify() {
+					Ok(()) => {}
+					Err(err) => report_diagnostic(err.into()),
+				};
+			}
 		}
 	}
 
@@ -392,7 +410,7 @@ pub fn compile(
 		})
 		.collect::<Vec<String>>();
 
-	return Ok(CompilerOutput { imported_namespaces });
+	Ok(CompilerOutput { imported_namespaces })
 }
 
 pub fn is_absolute_path(path: &Utf8Path) -> bool {

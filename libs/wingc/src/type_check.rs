@@ -4839,12 +4839,62 @@ impl<'a> TypeChecker<'a> {
 					tc.inner_scopes.push((scope, tc.ctx.clone()));
 				}
 
-				if let FunctionBody::External(_) = &method_def.body {
+				if let FunctionBody::External(extern_path) = &method_def.body {
 					if !method_def.is_static {
 						tc.spanned_error(
 							method_name,
 							"Extern methods must be declared \"static\" (they cannot access instance members)",
 						);
+					}
+					if !tc.types.source_file_envs.contains_key(extern_path) {
+						let new_env = tc.types.add_symbol_env(SymbolEnv::new(
+							None,
+							SymbolEnvKind::Type(tc.types.void()),
+							method_sig.phase,
+							0,
+						));
+						tc.types
+							.source_file_envs
+							.insert(extern_path.clone(), SymbolEnvOrNamespace::SymbolEnv(new_env));
+					}
+
+					if let Some(SymbolEnvOrNamespace::SymbolEnv(extern_env)) = tc.types.source_file_envs.get_mut(extern_path) {
+						let lookup = extern_env.lookup(method_name, None);
+						if let Some(lookup) = lookup {
+							// check if it's the same type
+							if let Some(lookup) = lookup.as_variable() {
+								if !lookup.type_.is_same_type_as(method_type) {
+									report_diagnostic(Diagnostic {
+										message: "extern type must be the same in all usages".to_string(),
+										span: Some(method_name.span.clone()),
+										annotations: vec![DiagnosticAnnotation {
+											message: "First declared here".to_string(),
+											span: lookup.name.span.clone(),
+										}],
+										hints: vec![format!("Change type to match first declaration: {}", lookup.type_)],
+									});
+								}
+							} else {
+								panic!("Expected extern to be a variable");
+							}
+						} else {
+							extern_env
+								.define(
+									method_name,
+									SymbolKind::Variable(VariableInfo {
+										name: method_name.clone(),
+										type_: *method_type,
+										access: method_def.access,
+										phase: method_def.signature.phase,
+										docs: None,
+										kind: VariableKind::StaticMember,
+										reassignable: false,
+									}),
+									method_def.access,
+									StatementIdx::Top,
+								)
+								.expect("Expected extern to be defined");
+						}
 					}
 				}
 			},
