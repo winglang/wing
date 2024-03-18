@@ -8,8 +8,9 @@ use crate::{
 	ast::*, diagnostic::report_diagnostic, file_graph::FileGraph, files::Files, jsify::codemaker::CodeMaker,
 	type_check::Types, WINGSDK_ASSEMBLY_NAME,
 };
+pub mod extern_dtsify;
 
-const TYPE_INFLIGHT_POSTFIX: &str = "$Inflight";
+pub const TYPE_INFLIGHT_POSTFIX: &str = "$Inflight";
 const TYPE_INTERNAL_NAMESPACE: &str = "$internal";
 const TYPE_STD: &str = "std";
 
@@ -389,11 +390,11 @@ impl<'a> DTSifier<'a> {
 	}
 }
 
-fn ignore_member_phase(phase: Phase, is_inflight_client: bool) -> bool {
+pub fn ignore_member_phase(phase: Phase, is_inflight: bool) -> bool {
 	// If we're an inflight client, we want to ignore preflight members
 	// Or
 	// If we're a preflight client, we want to ignore inflight members
-	(is_inflight_client && matches!(phase, Phase::Preflight)) || (!is_inflight_client && matches!(phase, Phase::Inflight))
+	(is_inflight && matches!(phase, Phase::Preflight)) || (!is_inflight && matches!(phase, Phase::Inflight))
 }
 
 #[test]

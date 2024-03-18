@@ -84,10 +84,29 @@ impl Files {
 				fs::create_dir_all(parent).map_err(FilesError::IoError)?;
 			}
 
-			let mut file = File::create(full_path).map_err(FilesError::IoError)?;
-			file.write_all(content.as_bytes()).map_err(FilesError::IoError)?;
-			file.flush().map_err(FilesError::IoError)?;
+			write_file(&full_path, content)?;
 		}
+		Ok(())
+	}
+}
+
+/// Write file to disk
+pub fn write_file(path: &Utf8Path, content: &str) -> Result<(), FilesError> {
+	let mut file = File::create(path).map_err(FilesError::IoError)?;
+	file.write_all(content.as_bytes()).map_err(FilesError::IoError)?;
+	file.flush().map_err(FilesError::IoError)?;
+	Ok(())
+}
+
+// Check if the content of a file is the same as existing content. If so, skip writing the file.
+pub fn update_file(path: &Utf8Path, content: &str) -> Result<(), FilesError> {
+	let Ok(existing_content) = fs::read(path) else {
+		return write_file(path, content);
+	};
+
+	if existing_content != content.as_bytes() {
+		write_file(path, content)
+	} else {
 		Ok(())
 	}
 }
@@ -164,5 +183,40 @@ mod tests {
 
 		let file1_content = fs::read_to_string(file1_path).expect("Failed to read file");
 		assert_eq!(file1_content, "content1");
+	}
+	#[test]
+	fn test_update_file() {
+		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
+		let out_dir = Utf8Path::from_path(temp_dir.path()).expect("invalid unicode path");
+
+		let file_path = out_dir.join("file");
+
+		// Write the file for the first time
+		assert!(update_file(&file_path, "content").is_ok());
+
+		// Update the file
+		let new_content = "new content";
+		assert!(update_file(&file_path, new_content).is_ok());
+
+		// Verify that the file was updated
+		let file_content = fs::read_to_string(file_path.clone()).expect("Failed to read file");
+		assert_eq!(file_content, new_content);
+		let last_updated = file_path
+			.metadata()
+			.expect("Failed to get file metadata")
+			.modified()
+			.expect("Failed to get file modified time");
+
+		// Try to update the file with the same content
+		assert!(update_file(&file_path, new_content).is_ok());
+
+		// Verify that the file was not updated (check the timestamps via stat)
+		let updated = file_path
+			.metadata()
+			.expect("Failed to get file metadata")
+			.modified()
+			.expect("Failed to get file modified time");
+
+		assert_eq!(updated, last_updated);
 	}
 }

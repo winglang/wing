@@ -1,56 +1,58 @@
 ---
-title: Using JavaScript
+title: Using JavaScript/TypeScript
 id: using-javascript
-keywords: [Wing example]
+keywords: [example, javascript, extern, typescript, js, ts]
 ---
 
-Calling a Javascript function from Wing requires two steps. 
+Calling a Javascript function from Wing requires two steps.
 
-First, export the function from Javascript.
-
-This examples exports `isValidUrl` from a file named`url_utils.js`:
+1. Create a .js file that exports some functions
 
 ```js
-exports.isValidUrl = function(url) {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
+// util.js
+
+exports.isValidUrl = function (url) {
+  return URL.canParse(url);
 };
 ```
 
-### Preflight function
+In preflight, this file must be a CommonJS module written in Javascript. Inflight, it may be CJS/ESM and either JavaScript or TypeScript.
 
-To call this in preflight code, define the function as an `extern` in a class.
+2. Use the `extern` keyword in a class to expose the function to Wing. Note that this must be `static`. It may also be `inflight`
 
-**Note:** Extern functions must be `static.` 
-
-If you want to use the function outside of the class, be sure to declare it as `pub`.
-
-```ts 
-class JsExample {  
-  // preflight static 
-  pub extern "./url_utils.js" static isValidUrl(url: str): bool;
+```ts
+class JsExample {
+  pub extern "./util.js" static isValidUrl(url: str): bool;
 }
 
 assert(JsExample.isValidUrl("http://www.google.com"));
 assert(!JsExample.isValidUrl("X?Y"));
 ```
 
-### Inflight
+### Type-safe `extern`
 
-To call the function inflight, add the `inflight` modifier. 
+Running `wing compile` will generate a corresponding `.d.ts` file for each `extern`. This file can be imported into the extern file itself to ensure the extern is type-safe. Either your IDE or a separate usage of the TypeScript compiler can provide type-checking.
 
 ```ts
-class JsExample {  
-  // inflight static method
-  extern "./url_utils.js" static inflight  isValidUrl(url: str): bool;
-}
+// util.ts
+import type extern from "./util.extern";
 
-test "main" {
-  assert(JsExample.isValidUrl("http://www.google.com"));
-  assert(!JsExample.isValidUrl("X?Y"));
-}
+export const isValidUrl: extern["isValidUrl"] = (url) => {
+  // url is known to be a string and that we must return a boolean
+  return URL.canParse(url);
+};
 ```
+
+The .d.ts file can also be used in JavaScript via JSDoc comments and can even be applied at a module export level.
+
+```js
+// util.js
+/** @type {import("./util.extern").default} */
+module.exports = {
+  isValidUrl: (url) => {
+    return URL.canParse(url);
+  },
+};
+```
+
+Coming Soon: The ability to use resources inside an `inflight extern`. See [this issue](https://github.com/winglang/wing/issues/76) for more information.

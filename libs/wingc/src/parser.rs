@@ -1615,7 +1615,7 @@ impl<'s> Parser<'s> {
 					.report();
 			}
 
-			FunctionBody::External(file_path.to_string())
+			FunctionBody::External(file_path)
 		} else {
 			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?, phase))
 		};

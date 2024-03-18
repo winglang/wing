@@ -1,8 +1,13 @@
-const { DynamoDBClient, PutItemCommand, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+import type extern from "./dynamo.extern";
+import {
+  DynamoDBClient,
+  PutItemCommand,
+  GetItemCommand,
+} from "@aws-sdk/client-dynamodb";
 
 const client = new DynamoDBClient({});
 
-export async function _putItem(tableName, item) {
+export const _putItem: extern["_putItem"] = async (tableName, item) => {
   const command = new PutItemCommand({
     TableName: tableName,
     Item: item,
@@ -11,15 +16,15 @@ export async function _putItem(tableName, item) {
   const response = await client.send(command);
   console.log(response);
   return;
-}
+};
 
-export async function _getItem(tableName, key) {
+export const _getItem: extern["_getItem"] = async (tableName, key) => {
   const command = new GetItemCommand({
     TableName: tableName,
-    Key: key
+    Key: key,
   });
 
   const response = await client.send(command);
   console.log(response);
   return response;
-}
+};
