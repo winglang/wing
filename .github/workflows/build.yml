@@ -334,7 +334,7 @@ jobs:
       - sdk-spec-test
     steps:
       - name: Check failure
-        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.sdk-spec-test.result == 'failure'
+        if: needs.build.result != 'success' || needs.e2e-test.result != 'success' || needs.benchmark.result != 'success' || needs.test.result != 'success' || needs.sdk-spec-test.result != 'success'
         run: exit 1
       - name: Download patches
         uses: actions/download-artifact@v3
