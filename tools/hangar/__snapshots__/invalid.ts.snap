@@ -2836,9 +2836,9 @@ Duration <DURATION>"
 
 exports[`optionals.test.w 1`] = `
 "error: Unexpected 'parameter_type_list'
-   --> ../../../examples/tests/invalid/optionals.test.w:98:36
+   --> ../../../examples/tests/invalid/optionals.test.w:84:36
    |
-98 | let optionalFunctionWithNoRetType: ()? = () => {};
+84 | let optionalFunctionWithNoRetType: ()? = () => {};
    |                                    ^^ Unexpected 'parameter_type_list'
 
 
@@ -2877,90 +2877,83 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
    |              ^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:28:6
+error: Cannot use '??' with types \\"num?\\" and \\"str\\", neither is a subtype of the other
+   --> ../../../examples/tests/invalid/optionals.test.w:28:1
    |
 28 | x ?? \\"hello\\";
-   |      ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
-error: Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:39:17
-   |
-39 | optionalSub1 ?? new Sub2();
-   |                 ^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
-
-
-error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:41:17
-   |
-41 | optionalSub1 ?? new Super();
-   |                 ^^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Super\\" instead
+   | ^^^^^^^^^^^^ Cannot use '??' with types \\"num?\\" and \\"str\\", neither is a subtype of the other
 
 
 error: Expected type to be optional, but got \\"bool\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:45:12
+   --> ../../../examples/tests/invalid/optionals.test.w:31:12
    |
-45 | if let x = true {
+31 | if let x = true {
    |            ^^^^ Expected type to be optional, but got \\"bool\\" instead
 
 
 error: Property access on optional type \\"A?\\" requires optional accessor: \\"?.\\"
-   --> ../../../examples/tests/invalid/optionals.test.w:68:9
+   --> ../../../examples/tests/invalid/optionals.test.w:54:9
    |
-68 | let c = b.a.val;
+54 | let c = b.a.val;
    |         ^^^ Property access on optional type \\"A?\\" requires optional accessor: \\"?.\\"
 
 
 error: Expected type to be \\"str\\", but got \\"str?\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:91:16
+   --> ../../../examples/tests/invalid/optionals.test.w:77:16
    |
-91 | let val: str = baz?.bar?.foo?.val;
+77 | let val: str = baz?.bar?.foo?.val;
    |                ^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"str?\\" instead
 
 
 error: Cannot call an optional function
-   --> ../../../examples/tests/invalid/optionals.test.w:95:1
+   --> ../../../examples/tests/invalid/optionals.test.w:81:1
    |
-95 | optionalFunction();
+81 | optionalFunction();
    | ^^^^^^^^^^^^^^^^ Cannot call an optional function
 
 
 error: Expected type to be \\"(preflight (num): void)?\\", but got \\"preflight (x: str): void\\" instead
-    --> ../../../examples/tests/invalid/optionals.test.w:102:53
-    |
-102 | let functionWithOptionalFuncParam1: ((num):void)? = (x: str):void => {};
-    |                                                     ^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (num): void)?\\", but got \\"preflight (x: str): void\\" instead
+   --> ../../../examples/tests/invalid/optionals.test.w:88:53
+   |
+88 | let functionWithOptionalFuncParam1: ((num):void)? = (x: str):void => {};
+   |                                                     ^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (num): void)?\\", but got \\"preflight (x: str): void\\" instead
 
 
 error: Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
-    --> ../../../examples/tests/invalid/optionals.test.w:104:49
-    |
-104 | let functionWithOptionalFuncParam2: (():num)? = ():str => { return \\"s\\"; };
-    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
+   --> ../../../examples/tests/invalid/optionals.test.w:90:49
+   |
+90 | let functionWithOptionalFuncParam2: (():num)? = ():str => { return \\"s\\"; };
+   |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
 
 
 error: '!' expects an optional type, found \\"num\\"
-    --> ../../../examples/tests/invalid/optionals.test.w:110:19
-    |
-110 | let unwrapValue = nonOptional!;
-    |                   ^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
+   --> ../../../examples/tests/invalid/optionals.test.w:96:19
+   |
+96 | let unwrapValue = nonOptional!;
+   |                   ^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
 
 
 error: '!' expects an optional type, found \\"num\\"
-    --> ../../../examples/tests/invalid/optionals.test.w:116:21
+    --> ../../../examples/tests/invalid/optionals.test.w:102:21
     |
-116 | let unwrapValueFn = nonOptionalFn()!;
+102 | let unwrapValueFn = nonOptionalFn()!;
     |                     ^^^^^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
 
 
+error: Cannot use '??' with types \\"Dog?\\" and \\"Cat?\\", neither is a subtype of the other
+    --> ../../../examples/tests/invalid/optionals.test.w:126:9
+    |
+126 | let s = bailey ?? whiskers;
+    |         ^^^^^^^^^^^^^^^^^^ Cannot use '??' with types \\"Dog?\\" and \\"Cat?\\", neither is a subtype of the other
+
+
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/optionals.test.w:53:3
+   --> ../../../examples/tests/invalid/optionals.test.w:39:3
    |
-50 | if let hi = hi {
+36 | if let hi = hi {
    |        -- defined here (try adding \\"var\\" in front)
    .
-53 |   hi = \\"bye\\";
+39 |   hi = \\"bye\\";
    |   ^^ Variable is not reassignable
 
 

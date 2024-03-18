@@ -774,6 +774,7 @@ impl Subtype for Type {
 			(Self::String, Self::String) => true,
 			(Self::Boolean, Self::Boolean) => true,
 			(Self::Duration, Self::Duration) => true,
+			(Self::Json(_), Self::Json(_)) => true,
 			(Self::Void, Self::Void) => true,
 			_ => false,
 		}
