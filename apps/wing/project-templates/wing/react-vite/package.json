@@ -5,8 +5,8 @@
   "author": "Your Name",
   "license": "MIT",
   "scripts": {
-    "install:backend": "npm install --prefix backend",
-    "install:frontend": "npm install --prefix frontend",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
     "postinstall": "npm run install:backend && npm run install:frontend"
   },
   "dependencies": {
