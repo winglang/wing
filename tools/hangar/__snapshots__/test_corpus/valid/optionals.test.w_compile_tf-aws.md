@@ -23,6 +23,36 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
 //# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
+## inflight.Cat-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $Pet }) {
+  class Cat extends $Pet {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return Cat;
+}
+//# sourceMappingURL=inflight.Cat-1.js.map
+```
+
+## inflight.Dog-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $Pet }) {
+  class Dog extends $Pet {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return Dog;
+}
+//# sourceMappingURL=inflight.Dog-1.js.map
+```
+
 ## inflight.Node-1.js
 ```js
 "use strict";
@@ -35,6 +65,20 @@ module.exports = function({  }) {
   return Node;
 }
 //# sourceMappingURL=inflight.Node-1.js.map
+```
+
+## inflight.Pet-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class Pet {
+    constructor({  }) {
+    }
+  }
+  return Pet;
+}
+//# sourceMappingURL=inflight.Pet-1.js.map
 ```
 
 ## inflight.Sub-1.js
@@ -289,6 +333,101 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class Pet extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      giveTreat() {
+        console.log("yum");
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.Pet-1.js")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const PetClient = ${Pet._toInflightType()};
+            const client = new PetClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class Dog extends Pet {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      bark() {
+        return "woof";
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.Dog-1.js")({
+            $Pet: ${$stdlib.core.liftObject(Pet)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const DogClient = ${Dog._toInflightType()};
+            const client = new DogClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class Cat extends Pet {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      meow() {
+        return "meow";
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.Cat-1.js")({
+            $Pet: ${$stdlib.core.liftObject(Pet)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const CatClient = ${Cat._toInflightType()};
+            const client = new CatClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
     const x = 4;
     $helpers.assert($helpers.eq(((x) != null), true), "x? == true");
     $helpers.assert($helpers.eq((!((x) != null)), false), "!x? == false");
@@ -532,6 +671,28 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq($helpers.unwrap(maybeX), 0), "maybeX! == 0");
     const maybeY = "";
     $helpers.assert($helpers.eq($helpers.unwrap(maybeY), ""), "maybeY! == \"\"");
+    const bailey = new Dog(this, "Dog");
+    const whiskers = new Cat(this, "Cat");
+    const maybeDog = bailey;
+    const dog = bailey;
+    const maybePet = bailey;
+    const pet = bailey;
+    const takesDog = ((d) => {
+    });
+    const takesPet = ((p) => {
+    });
+    const takesMaybeDog = ((d) => {
+    });
+    const takesMaybePet = ((p) => {
+    });
+    const x1 = (maybeDog ?? dog);
+    const x2 = (maybeDog ?? maybeDog);
+    const x3 = (maybeDog ?? pet);
+    const x4 = (maybeDog ?? maybePet);
+    const x5 = (maybePet ?? dog);
+    const x6 = (maybePet ?? maybeDog);
+    const x7 = (((maybeDog ?? maybeDog) ?? maybeDog) ?? maybeDog);
+    const x8 = (((maybeDog ?? maybeDog) ?? maybeDog) ?? dog);
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
