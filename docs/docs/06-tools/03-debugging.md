@@ -16,9 +16,9 @@ Open the command palette and type "Debug: Open JavaScript Debug Terminal". This 
 
 ### Limitations
 
-- When using the Wing Console (`wing it`) and attempting to debug inflight code in a `test` or Function, the first execution of the test will not hit a breakpoint and will need to be run again
+- ([Issue](https://github.com/winglang/wing/issues/5988)) When using the Wing Console (`wing it`) and attempting to debug inflight code in a `test` or Function, the first execution of the test will not hit a breakpoint and will need to be run again
+- ([Issue](https://github.com/winglang/wing/issues/5986)) inflight code by default has a timeout that continues during debugging, so if execution is paused for too long the program is terminate
 - Caught/Unhandled will often not stop at expected places
-- inflight code by default has a timeout that continues during debugging, so if execution is paused for too long the program is terminate
 
 #### Non-VSCode Support
 
