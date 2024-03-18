@@ -114,13 +114,18 @@ process.on("message", async (message) => {
   public async initialize() {
     this.debugLog("Initializing sandbox.");
     const childEnv = this.options.env ?? {};
-    if (
-      process.env.NODE_OPTIONS?.includes("--inspect") ||
-      process.execArgv.some((a) => a.startsWith("--inspect"))
-    ) {
+    if (await import("inspector").then((i) => !!i.url()).catch(() => false)) {
       // We're exposing a debugger, let's attempt to ensure the child process automatically attaches
       childEnv.NODE_OPTIONS =
         (childEnv.NODE_OPTIONS ?? "") + (process.env.NODE_OPTIONS ?? "");
+
+      // If the child process is not already configured to attach a debugger, add a flag to do so
+      if (
+        !childEnv.NODE_OPTIONS.includes("--inspect") &&
+        !process.execArgv.includes("--inspect")
+      ) {
+        childEnv.NODE_OPTIONS += " --inspect=0";
+      }
 
       // VSCode's debugger adds some environment variables that we want to pass to the child process
       for (const key in process.env) {
