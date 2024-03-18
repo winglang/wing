@@ -7,7 +7,7 @@ const AWS_SDK_VERSION = "3.490.0";
 const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
   "random@~>3.5.1",
-  "azurerm@~>3.54.0",
+  "azurerm@~>3.96.0",
   "google@~>5.10.0",
 ];
 
