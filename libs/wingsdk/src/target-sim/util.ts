@@ -75,9 +75,7 @@ export function convertDurationToCronExpression(dur: Duration): string {
   // for now we just use * for day, month, and year
   const dayInMonth = "*";
   const month = "*";
-  // if day of month is "*", day of week should be "?"
-  // https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
-  const dayOfWeek = "?";
+  const dayOfWeek = "*";
 
   // Generate cron string based on the duration
   const cronString = `${minute} ${hour} ${dayInMonth} ${month} ${dayOfWeek}`;
