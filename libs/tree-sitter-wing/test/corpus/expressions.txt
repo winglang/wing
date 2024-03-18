@@ -298,6 +298,7 @@ Template string
 maybeVal ?? 2;
 maybeVal ?? 2 + 2;
 maybeVal ?? 2 == 2;
+maybeVal ?? foo.bar ?? 2;
 
 --------------------------------------------------------------------------------
 
@@ -320,6 +321,18 @@ maybeVal ?? 2 == 2;
         (reference
           (reference_identifier))
         (number))
+      (number)))
+  (expression_statement
+    (binary_expression
+      (binary_expression
+        (reference
+          (reference_identifier))
+        (reference
+          (nested_identifier
+            (reference
+              (reference_identifier))
+            (accessor)
+            (member_identifier))))
       (number))))
 
 ================================================================================
