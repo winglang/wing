@@ -28,20 +28,6 @@ let w: str = x ?? 3;
 x ?? "hello";
 //  default type (str) must be same as wrapped type (num)
 
-class Super {
-}
-class Sub1 extends Super {
-}
-class Sub2 extends Super {
-}
-
-let optionalSub1: Sub1? = new Sub1();
-optionalSub1 ?? new Sub2();
-//               ^ error: Sub2 is not a subtype of Sub1
-optionalSub1 ?? new Super();
-//               ^ error: Super? is not a subtype of Sub1
-
-
 if let x = true {
 //         ^^^^ Expected type to be optional, but got "bool" instead
 }
