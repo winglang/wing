@@ -1,8 +1,6 @@
 import * as cp from "child_process";
 import { writeFileSync } from "fs";
-import { mkdtemp, readFile, stat } from "fs/promises";
-import { tmpdir } from "os";
-import path from "path";
+import { readFile, stat } from "fs/promises";
 import { Bundle, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
 
@@ -39,8 +37,6 @@ export class Sandbox {
     entrypoint: string,
     log?: (message: string) => void
   ): Promise<Bundle> {
-    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-
     let contents = (await readFile(entrypoint)).toString();
 
     // log a warning if contents includes __dirname or __filename
@@ -67,7 +63,7 @@ process.on("message", async (message) => {
 `;
     const wrappedPath = entrypoint.replace(/\.js$/, ".sandbox.js");
     writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
-    const bundle = createBundle(wrappedPath, [], workdir);
+    const bundle = createBundle(wrappedPath);
 
     if (process.env.DEBUG) {
       const fileStats = await stat(entrypoint);
