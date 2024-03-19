@@ -61,6 +61,9 @@ export class Queue {
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class QueueRef extends Resource {
+  /**
+   * The ARN of this queue.
+   */
   public readonly queueArn: string;
 
   constructor(scope: Construct, id: string, queueArn: string) {
@@ -155,5 +158,19 @@ export class QueueRef extends Resource {
     new ui.Field(this, "AwsConsoleField", "AWS Console", awsConsoleHandler, {
       link: true,
     });
+
+    const queueArnHandler = Testing.makeHandler(
+      `async handle() { 
+        return this.queueArn;
+      }`,
+      {
+        queueArn: {
+          obj: this.queueArn,
+          ops: [],
+        },
+      }
+    );
+
+    new ui.Field(this, "QueueArnField", "SQS Queue ARN", queueArnHandler);
   }
 }

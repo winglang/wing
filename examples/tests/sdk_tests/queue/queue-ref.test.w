@@ -34,7 +34,8 @@ if let arn = aws.Queue.from(q)?.queueArn {
 if util.env("WING_TARGET") == "sim" {
   bring expect;
 
-  let dummyArn = "arn:aws:sqs:us-east-1:111111111111:Queue-11111111";
+  // let dummyArn = "arn:aws:sqs:us-east-1:111111111111:Queue-11111111";
+  let dummyArn = "arn:aws:sqs:us-east-1:248020555503:foo-cloudQueueAC7844E1-xgGanPBn1Bdp";
   let qr = new aws.QueueRef(dummyArn);
 
   test "queueArn returns the arn" {
