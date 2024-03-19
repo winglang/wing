@@ -3,7 +3,9 @@ import { Function } from "./function";
 import { calculateQueuePermissions } from "./permissions";
 import { isValidArn } from "./util";
 import { cloud } from "..";
+import { IQueueClient } from "../cloud";
 import { InflightClient } from "../core";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Testing } from "../simulator";
 import { IInflightHost, Node, Resource } from "../std";
 import * as ui from "../ui";
@@ -61,6 +63,9 @@ export class Queue {
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class QueueRef extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IQueueClient;
+
   /**
    * The ARN of this queue.
    */
