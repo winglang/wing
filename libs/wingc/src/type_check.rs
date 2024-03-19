@@ -8,7 +8,7 @@ pub(crate) mod type_reference_transform;
 
 use crate::ast::{
 	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,
-	TypeAnnotationKind, UtilityFunctions,
+	TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -1740,6 +1740,28 @@ impl Types {
 	}
 }
 
+/// Enum of builtin functions, this are defined as hard coded AST nodes in `add_builtins`
+#[derive(Debug)]
+pub enum UtilityFunctions {
+	Log,
+	Assert,
+	UnsafeCast,
+	Nodeof,
+	Lift,
+}
+
+impl Display for UtilityFunctions {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			UtilityFunctions::Log => write!(f, "log"),
+			UtilityFunctions::Assert => write!(f, "assert"),
+			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
+			UtilityFunctions::Nodeof => write!(f, "nodeof"),
+			UtilityFunctions::Lift => write!(f, "lift"),
+		}
+	}
+}
+
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
 
@@ -2021,9 +2043,44 @@ impl<'a> TypeChecker<'a> {
 			}),
 			scope,
 		);
+
+		let str_array_type = self.types.add_type(Type::Array(self.types.string()));
+		self.add_builtin(
+			&UtilityFunctions::Lift.to_string(),
+			Type::Function(FunctionSignature {
+				this_type: None,
+				parameters: vec![
+					FunctionParameter {
+						name: "preflightObject".into(),
+						typeref: self.types.resource_base_type(),
+						docs: Docs::with_summary("The preflight object to qualify"),
+						variadic: false,
+					},
+					FunctionParameter {
+						name: "qualifications".into(),
+						typeref: str_array_type,
+						docs: Docs::with_summary("
+							The qualifications to apply to the preflight object.\n
+							This is an array of strings denoting members of the object that are accessed in the current method/function.\n
+							For example, if the method accesses the `push` and `pop` members of a `cloud.Queue` object, the qualifications should be `[\"push\", \"pop\"]`."
+						),
+						variadic: false,
+					},
+				],
+				return_type: self.types.void(),
+				phase: Phase::Inflight,
+				// This builtin actually compiles to nothing in JS, it's a marker that behaves like a function in the type checker
+				// and is used during the lifting phase to explicitly define lifts for an inflight method
+				js_override: Some("".to_string()),
+				docs: Docs::with_summary(
+					"Explicitly apply qualifications to a preflight object used in the current method/function",
+				),
+			}),
+			scope,
+		)
 	}
 
-	pub fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
+	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
 		let sym = Symbol::global(name);
 		let mut scope_env = self.types.get_scope_env(&scope);
 		scope_env
@@ -2493,9 +2550,11 @@ impl<'a> TypeChecker<'a> {
 						(self.types.add_type(Type::Array(inner_type)), inner_type)
 					};
 
-					// Verify all types are the same as the inferred type
+					// Verify all types are the same as the inferred type and find the aggregate phase of all the items
+					let mut phase = Phase::Independent;
 					for item in items {
-						let (t, _) = self.type_check_exp(item, env);
+						let (t, item_phase) = self.type_check_exp(item, env);
+						phase = combine_phases(phase, item_phase);
 
 						if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
 							// This is an array of JSON, change the element type to reflect that
@@ -2533,7 +2592,7 @@ impl<'a> TypeChecker<'a> {
 						*inner = element_type;
 					}
 
-					(container_type, env.phase)
+					(container_type, phase)
 				}
 				ExprKind::MapLiteral { fields, type_ } => {
 					// Infer type based on either the explicit type or the value in one of the fields
@@ -4839,12 +4898,62 @@ impl<'a> TypeChecker<'a> {
 					tc.inner_scopes.push((scope, tc.ctx.clone()));
 				}
 
-				if let FunctionBody::External(_) = &method_def.body {
+				if let FunctionBody::External(extern_path) = &method_def.body {
 					if !method_def.is_static {
 						tc.spanned_error(
 							method_name,
 							"Extern methods must be declared \"static\" (they cannot access instance members)",
 						);
+					}
+					if !tc.types.source_file_envs.contains_key(extern_path) {
+						let new_env = tc.types.add_symbol_env(SymbolEnv::new(
+							None,
+							SymbolEnvKind::Type(tc.types.void()),
+							method_sig.phase,
+							0,
+						));
+						tc.types
+							.source_file_envs
+							.insert(extern_path.clone(), SymbolEnvOrNamespace::SymbolEnv(new_env));
+					}
+
+					if let Some(SymbolEnvOrNamespace::SymbolEnv(extern_env)) = tc.types.source_file_envs.get_mut(extern_path) {
+						let lookup = extern_env.lookup(method_name, None);
+						if let Some(lookup) = lookup {
+							// check if it's the same type
+							if let Some(lookup) = lookup.as_variable() {
+								if !lookup.type_.is_same_type_as(method_type) {
+									report_diagnostic(Diagnostic {
+										message: "extern type must be the same in all usages".to_string(),
+										span: Some(method_name.span.clone()),
+										annotations: vec![DiagnosticAnnotation {
+											message: "First declared here".to_string(),
+											span: lookup.name.span.clone(),
+										}],
+										hints: vec![format!("Change type to match first declaration: {}", lookup.type_)],
+									});
+								}
+							} else {
+								panic!("Expected extern to be a variable");
+							}
+						} else {
+							extern_env
+								.define(
+									method_name,
+									SymbolKind::Variable(VariableInfo {
+										name: method_name.clone(),
+										type_: *method_type,
+										access: method_def.access,
+										phase: method_def.signature.phase,
+										docs: None,
+										kind: VariableKind::StaticMember,
+										reassignable: false,
+									}),
+									method_def.access,
+									StatementIdx::Top,
+								)
+								.expect("Expected extern to be defined");
+						}
 					}
 				}
 			},

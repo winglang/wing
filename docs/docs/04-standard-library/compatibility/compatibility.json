@@ -820,6 +820,9 @@
     "initial": {
       "tf-aws": {
         "implemented": true
+      },
+      "sim": {
+        "implemented": true
       }
     }
   },

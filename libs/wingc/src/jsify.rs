@@ -1318,7 +1318,6 @@ impl<'a> JSifier<'a> {
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope_body(scope, ctx),
 			FunctionBody::External(extern_path) => {
-				let extern_path = Utf8Path::new(extern_path);
 				let entrypoint_is_file = self.compilation_init_path.is_file();
 				let entrypoint_dir = if entrypoint_is_file {
 					self.compilation_init_path.parent().unwrap()
@@ -1856,8 +1855,15 @@ impl<'a> JSifier<'a> {
 			for (method_name, method_qual) in lift_qualifications {
 				bind_method.open(format!("\"{method_name}\": [",));
 				for (code, method_lift_qual) in method_qual {
-					let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
-					bind_method.line(format!("[{code}, [{ops_strings}]],",));
+					let ops = method_lift_qual.ops.iter().join(", ");
+					// To keep the code concise treat no ops, single op and multiple ops differenly here, although the multiple ops is the generic case
+					if method_lift_qual.ops.len() == 0 {
+						bind_method.line(format!("[{code}, []],"));
+					} else if method_lift_qual.ops.len() == 1 {
+						bind_method.line(format!("[{code}, {ops}],"));
+					} else {
+						bind_method.line(format!("[{code}, [].concat({ops})],"));
+					}
 				}
 				bind_method.close("],");
 			}

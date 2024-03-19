@@ -49,7 +49,7 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     static async greet(name) {
-      return (require("../../../subdir/util.js")["greet"])(name)
+      return (require("../../../subdir/util.ts")["greet"])(name)
     }
   }
   return Q;
