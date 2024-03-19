@@ -678,8 +678,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [bucket1, ["list", "publicUrl", "put"]],
-            [bucket2, ["get", "publicUrl"]],
+            [bucket1, [].concat(["put"], ["list"], ["publicUrl"])],
+            [bucket2, [].concat(["get"], ["publicUrl"])],
             [bucket3, ["get"]],
           ],
           "$inflight_init": [

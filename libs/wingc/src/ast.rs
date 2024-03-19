@@ -305,37 +305,6 @@ pub struct Stmt {
 }
 
 #[derive(Debug)]
-pub enum UtilityFunctions {
-	Log,
-	Assert,
-	UnsafeCast,
-	Nodeof,
-}
-
-impl UtilityFunctions {
-	/// Returns all utility functions.
-	pub fn all() -> Vec<UtilityFunctions> {
-		vec![
-			UtilityFunctions::Log,
-			UtilityFunctions::Assert,
-			UtilityFunctions::UnsafeCast,
-			UtilityFunctions::Nodeof,
-		]
-	}
-}
-
-impl Display for UtilityFunctions {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		match self {
-			UtilityFunctions::Log => write!(f, "log"),
-			UtilityFunctions::Assert => write!(f, "assert"),
-			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
-			UtilityFunctions::Nodeof => write!(f, "nodeof"),
-		}
-	}
-}
-
-#[derive(Debug)]
 pub struct ElifBlock {
 	pub condition: Expr,
 	pub statements: Scope,

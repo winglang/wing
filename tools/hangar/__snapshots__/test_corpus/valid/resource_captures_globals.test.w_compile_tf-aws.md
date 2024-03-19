@@ -418,7 +418,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "myMethod": [
-            [globalCounter, ["inc", "peek"]],
+            [globalCounter, [].concat(["inc"], ["peek"])],
           ],
           "$inflight_init": [
             [globalCounter, ["peek"]],
