@@ -774,6 +774,7 @@ impl Subtype for Type {
 			(Self::String, Self::String) => true,
 			(Self::Boolean, Self::Boolean) => true,
 			(Self::Duration, Self::Duration) => true,
+			(Self::Json(_), Self::Json(_)) => true,
 			(Self::Void, Self::Void) => true,
 			_ => false,
 		}
@@ -2190,12 +2191,51 @@ impl<'a> TypeChecker<'a> {
 							// Left argument must be an optional type
 							if !ltype.is_option() {
 								self.spanned_error(left, format!("Expected optional type, found \"{}\"", ltype));
-								(ltype, phase)
-							} else {
-								// Right argument must be a subtype of the inner type of the left argument
-								let inner_type = *ltype.maybe_unwrap_option();
-								self.validate_type(rtype, inner_type, right);
-								(inner_type, phase)
+								return (ltype, phase);
+							}
+
+							let left_inner = *ltype.maybe_unwrap_option();
+							let right_inner = *rtype.maybe_unwrap_option();
+
+							// Three possible cases here:
+							// 1. Right argument is a subtype of the left argument
+							//    e.g. Optional<Pet> ?? Dog           -> Pet
+							//    e.g. Optional<Pet> ?? Optional<Dog> -> Optional<Pet>
+							// 2. Left argument is a subtype of the right argument
+							//    e.g. Optional<Dog> ?? Pet           -> Pet
+							//    e.g. Optional<Dog> ?? Optional<Pet> -> Optional<Pet>
+							// 3. Neither is a subtype of the other
+							//    e.g. Optional<Dog> ?? Optional<Cat> -> Optional<Pet> (not implemented)
+							//    e.g. Optional<num> ?? Optional<str> -> type error
+
+							// If the right type is a subtype of the left type, return the left type
+							if right_inner.is_subtype_of(&left_inner) {
+								if rtype.is_option() {
+									(ltype, phase)
+								} else {
+									(left_inner, phase)
+								}
+							}
+							// If the left type is a subtype of the right type, return the right type
+							else if left_inner.is_subtype_of(&right_inner) {
+								if ltype.is_option() {
+									(rtype, phase)
+								} else {
+									(right_inner, phase)
+								}
+							}
+							// If neither is a subtype of the other, return the error type
+							else {
+								// TODO: we could return a shared supertype of the two types if there exists one
+								// e.g. Optional<Dog> ?? Optional<Cat> -> Optional<Animal>
+								self.spanned_error(
+									exp,
+									format!(
+										"Cannot use '??' with types \"{}\" and \"{}\", neither is a subtype of the other",
+										ltype, rtype
+									),
+								);
+								(self.types.error(), phase)
 							}
 						}
 					}

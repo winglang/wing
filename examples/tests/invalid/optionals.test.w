@@ -28,20 +28,6 @@ let w: str = x ?? 3;
 x ?? "hello";
 //  default type (str) must be same as wrapped type (num)
 
-class Super {
-}
-class Sub1 extends Super {
-}
-class Sub2 extends Super {
-}
-
-let optionalSub1: Sub1? = new Sub1();
-optionalSub1 ?? new Sub2();
-//               ^ error: Sub2 is not a subtype of Sub1
-optionalSub1 ?? new Super();
-//               ^ error: Super? is not a subtype of Sub1
-
-
 if let x = true {
 //         ^^^^ Expected type to be optional, but got "bool" instead
 }
@@ -116,3 +102,27 @@ let nonOptionalFn = (): num => {
 let unwrapValueFn = nonOptionalFn()!;
 //                  ^^^^^^^^^^^^^^^ '!' expects an optional type, found "num"
 
+class Pet {
+  giveTreat() {
+    log("yum");
+  }
+}
+
+class Dog extends Pet {
+  bark(): str {
+    return "woof";
+  }
+}
+
+class Cat extends Pet {
+  meow(): str {
+    return "meow";
+  }
+}
+
+let bailey: Dog? = new Dog();
+let whiskers: Cat? = new Cat();
+
+let s = bailey ?? whiskers;
+// ^ Type mismatch: cannot use '??' with types "Cat?" and "Dog?", neither is a subtype of the other
+// TODO: we could return a Pet? here, but we don't yet support that
