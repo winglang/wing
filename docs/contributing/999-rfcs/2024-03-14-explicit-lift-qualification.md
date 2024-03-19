@@ -100,8 +100,10 @@ Other words that we sometime used in the past and might be clearer are "capabili
 In this proposal I'll use "qualifications", but I'd be happy to hear what you think.
 
 ## Prior work
+
 ### Issue with discussion on the subject: 
 [Mechanism for explicitly qualifying lifting](https://github.com/winglang/wing/issues/76)
+
 ### Existing PR
 [feat(compiler): allow explicit lift qualifications of preflight objects](https://github.com/winglang/wing/pull/5935)
 
@@ -135,8 +137,41 @@ Internally the argument to the `lift` block creates a `std.Qualifications` objec
 Note that multiple `lift` blocks in the code just create more `std.Qualifications`s for this closure. 
 The actuall qualification values (`b1` and `"put"`) are just appended to the closure/method and they don't strictly belong to the block.
 
-What does apply to the block are the disabling of qualification errors within the block, so in our example we can use the inflight expression `b`, and inside the block we also don't automatically add qualifications even if the compile can technically do this. 
+What does apply to the block are the disabling of qualification errors within the block, so in our example we can use the inflight expression `b`, and inside the block we also don't automatically add qualifications even if the compiler can technically do this. 
 This behavior ensures that we can create custom qualifications without worrying that the compiler with override this with something more general.
+
+A few points worth highlighting about the design of the block-like syntax:
+
+1. It's granular, meaning it's possible to scope usage to the exact code it's needed for, avoiding [spooky action at a distance](https://en.wikipedia.org/wiki/Action_at_a_distance_(computer_programming)). The syntax opts out of Winglang's automatic permission generation for just the lines of code inside it, which means if you have a function with dozens of lines of code, you don't necessarily have to opt the entire function out of the compiler's automatic qualification system.
+
+2. The syntax makes it clear to people reading the code that something special is happening that can't be achieved in plain runtime / library code. For example it's not a function call, so it doesn't necessarily follow the rules of function calls.
+
+3. It's compositional. When a user refactors their code (for example, to extract a few lines of code into a separate function), they can take a qualification/capabilities block along with it, and it's made easy because the qualifications are located adjacent to the relevant code.
+
+4. Note that nesting `lift` blocks has no special effect. It'll just add the explicit qualifications to the method and disable the compiler's error generation and auto qualification at the top most `lift` block:
+
+```js
+// These two inflight closures are effectively the same:
+let nesting = inflight () => {
+  let b = bucket;
+  let q = queue;
+  lift {bucket: ["get"]} {
+    b.get("key");
+    lift {queue: ["push"]} {
+      q.push("data");
+    }
+  }
+}
+
+let no_nesting inflight () => {
+  let b = bucket;
+  let q = queue;
+  lift {bucket: ["get"], queue: ["push"]} {
+    b.get("key");
+    q.push("data");
+  }
+}
+```
 
 ## Next steps
 
