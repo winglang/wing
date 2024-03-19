@@ -1,6 +1,4 @@
-import { mkdtemp, readFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import path from "node:path";
+import { readFile } from "node:fs/promises";
 import * as util from "node:util";
 import * as vm from "node:vm";
 import { createBundle } from "./bundling";
@@ -90,8 +88,7 @@ export class LegacySandbox {
 
   private async createBundle() {
     // load bundle into context on first run
-    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-    const bundle = createBundle(this.entrypoint, [], workdir);
+    const bundle = createBundle(this.entrypoint);
     this.entrypoint = bundle.entrypointPath;
 
     this.code = await readFile(this.entrypoint, "utf-8");
