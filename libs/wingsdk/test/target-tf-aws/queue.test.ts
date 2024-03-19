@@ -192,6 +192,11 @@ test("QueueRef in an TFAWS app can be used to reference an existing queue", () =
 
   expect(statements).toStrictEqual([
     {
+      Action: ["sqs:GetQueueUrl"],
+      Effect: "Allow",
+      Resource: ["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],
+    },
+    {
       Action: ["sqs:SendMessage"],
       Effect: "Allow",
       Resource: ["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],

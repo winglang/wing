@@ -56,7 +56,7 @@ export class Field extends VisualComponent {
   private readonly fn: Function;
   private readonly label: string;
   private readonly refreshRate: number | undefined;
-  private readonly link: boolean;
+  private readonly link: boolean | undefined;
 
   constructor(
     scope: Construct,
@@ -70,7 +70,7 @@ export class Field extends VisualComponent {
     this.label = label;
     this.refreshRate = props.refreshRate?.seconds;
     this.fn = new Function(this, "Handler", handler);
-    this.link = props.link ?? false;
+    this.link = props.link;
   }
 
   /** @internal */
