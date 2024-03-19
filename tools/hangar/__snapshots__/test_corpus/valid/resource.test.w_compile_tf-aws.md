@@ -745,7 +745,7 @@ class $Root extends $stdlib.std.Resource {
             [this.c, ["peek"]],
           ],
           "$inflight_init": [
-            [this.c, ["dec", "inc"]],
+            [this.c, [].concat(["inc"], ["dec"])],
           ],
           "inflightField": [
           ],
@@ -792,8 +792,8 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "myMethod": [
             [Foo, ["fooStatic"]],
-            [this.b, ["get", "put"]],
-            [this.foo, ["fooGet", "fooInc"]],
+            [this.b, [].concat(["put"], ["get"])],
+            [this.foo, [].concat(["fooInc"], ["fooGet"])],
           ],
           "testTypeAccess": [
             [Bar, ["barStatic"]],
@@ -846,7 +846,7 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [bucket, ["list"]],
-            [res, ["myMethod", "testTypeAccess"]],
+            [res, [].concat(["myMethod"], ["testTypeAccess"])],
             [res.foo, ["inflightField"]],
           ],
           "$inflight_init": [
@@ -1043,7 +1043,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [bigOlPublisher, ["getObjectCount", "publish"]],
+            [bigOlPublisher, [].concat(["publish"], ["getObjectCount"])],
           ],
           "$inflight_init": [
             [bigOlPublisher, []],

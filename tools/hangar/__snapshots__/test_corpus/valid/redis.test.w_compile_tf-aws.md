@@ -612,7 +612,7 @@ class $Root extends $stdlib.std.Resource {
           "handle": [
             [queue, ["push"]],
             [r, ["get"]],
-            [r2, ["get", "set"]],
+            [r2, [].concat(["set"], ["get"])],
           ],
           "$inflight_init": [
             [queue, []],

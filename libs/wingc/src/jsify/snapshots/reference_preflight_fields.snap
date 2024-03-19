@@ -100,7 +100,7 @@ class $Root extends $stdlib.std.Resource {
             [this.s, ["length"]],
           ],
           "bam": [
-            [this.b, ["get", "put"]],
+            [this.b, [].concat(["put"], ["get"])],
           ],
           "$inflight_init": [
             [this.b, []],
