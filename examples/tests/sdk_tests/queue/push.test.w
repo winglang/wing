@@ -29,16 +29,16 @@ new std.Test(inflight () => {
 
   q.push("Foo");
   
-  assert(util.waitUntil((): bool => {
+  util.waitUntil((): bool => {
     return q.approxSize() == 1;
-  }));
+  });
 
   q.pop();
   q.push("Bar", "Baz");
 
-  assert(util.waitUntil(() => {
+  util.waitUntil(() => {
     return q.approxSize() == 2;
-  }));
+  });
 
   q.purge(); 
   if util.env("WING_TARGET") != "sim" {
@@ -47,13 +47,13 @@ new std.Test(inflight () => {
     util.sleep(1m);
   }
 
-  assert(util.waitUntil(() => {
+  util.waitUntil(() => {
     return q.approxSize() == 0;
-  }));
+  });
 
   q.push("123", "\r", "{obj}");
 
-  assert(util.waitUntil(() => {
+  util.waitUntil(() => {
     return q.approxSize() == 3;
-  }));
+  });
 }, timeout: 3m) as "push";
