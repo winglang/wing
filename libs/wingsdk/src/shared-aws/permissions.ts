@@ -24,6 +24,12 @@ export function calculateQueuePermissions(
 ): PolicyStatement[] {
   const policies: PolicyStatement[] = [];
 
+  // this is always needed in order to resolve URL from ARN/name
+  policies.push({
+    actions: ["sqs:GetQueueUrl"],
+    resources: [arn],
+  });
+
   if (ops.includes(cloud.QueueInflightMethods.PUSH)) {
     policies.push({
       actions: ["sqs:SendMessage"],

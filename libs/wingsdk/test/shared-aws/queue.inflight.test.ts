@@ -7,12 +7,14 @@ import {
   InvalidMessageContents,
   DeleteMessageCommand,
   ReceiveMessageCommandOutput,
+  GetQueueUrlCommand,
 } from "@aws-sdk/client-sqs";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
 import { QueueClient } from "../../src/shared-aws/queue.inflight";
 import "aws-sdk-client-mock-jest";
 
+const QUEUE_URL = "https://my-queue-url";
 const sqsMock = mockClient(SQSClient);
 
 beforeEach(() => {
@@ -21,7 +23,6 @@ beforeEach(() => {
 
 test("push - happy path", async () => {
   // GIVEN
-  const QUEUE_URL = "QUEUE_URL";
   const MESSAGE = "MESSAGE";
   const RESPONSE = {
     MessageId: "MESSAGE_ID",
@@ -37,11 +38,11 @@ test("push - happy path", async () => {
 
   // THEN
   expect(response).toEqual(undefined);
+  expect(sqsMock).toHaveReceivedCommandTimes(SendMessageCommand, 1);
 });
 
 test("push batch - happy path", async () => {
   // GIVEN
-  const QUEUE_URL = "QUEUE_URL";
   const MESSAGES = ["MESSAGE1", "MESSAGE2", "MESSAGE3"];
   const RESPONSE = {
     MessageId: "MESSAGE_ID",
@@ -72,7 +73,6 @@ test("push batch - happy path", async () => {
 
 test("push - sad path invalid message", async () => {
   // GIVEN
-  const QUEUE_URL = "QUEUE_URL";
   const MESSAGE = "INVALID_MESSAGE";
 
   sqsMock
@@ -95,7 +95,6 @@ test("push - sad path invalid message", async () => {
 
 test("push - sad path empty message", async () => {
   // GIVEN
-  const QUEUE_URL = "QUEUE_URL";
   const MESSAGE = "";
 
   // WHEN
@@ -113,7 +112,6 @@ test("push - sad path empty message", async () => {
 
 test("push - sad path unknown error", async () => {
   // GIVEN
-  const QUEUE_URL = "QUEUE_URL";
   const MESSAGE = "MESSAGE";
 
   sqsMock
@@ -131,7 +129,6 @@ test("push - sad path unknown error", async () => {
 
 test("purge - happy path", async () => {
   // GIVEN
-  const QUEUE_URL = "QUEUE_URL";
   const RESPONSE = {};
 
   sqsMock.on(PurgeQueueCommand, { QueueUrl: QUEUE_URL }).resolves(RESPONSE);
@@ -147,7 +144,6 @@ test("purge - happy path", async () => {
 test("approxSize - happy path", async () => {
   // GIVEN
   const QUEUE_SIZE = 3;
-  const QUEUE_URL = "QUEUE_URL";
   const GET_QUEUE_ATTRIBUTES_RESPONSE = {
     Attributes: { ApproximateNumberOfMessages: QUEUE_SIZE.toString() },
   };
@@ -166,7 +162,6 @@ test("approxSize - happy path", async () => {
 
 test("pop - happy path", async () => {
   // GIVEN
-  const QUEUE_URL = "QUEUE_URL";
   const MESSAGE = "MESSAGE";
   const ONE_MSG_RESPONSE: ReceiveMessageCommandOutput = {
     Messages: [
@@ -198,7 +193,6 @@ test("pop - happy path", async () => {
 
 test("pop - happy path w/o message receipt", async () => {
   // GIVEN
-  const QUEUE_URL = "QUEUE_URL";
   const MESSAGE = "MESSAGE";
   const ONE_MSG_RESPONSE: ReceiveMessageCommandOutput = {
     Messages: [
@@ -230,7 +224,6 @@ test("pop - happy path w/o message receipt", async () => {
 
 test("pop - happy path w/ no message in the queue", async () => {
   // GIVEN
-  const QUEUE_URL = "QUEUE_URL";
   const NO_MSG_RESPONSE = {};
 
   sqsMock
@@ -247,4 +240,26 @@ test("pop - happy path w/ no message in the queue", async () => {
   expect(secondPopResponse).toBeUndefined();
   expect(sqsMock).toHaveReceivedCommandTimes(ReceiveMessageCommand, 2);
   expect(sqsMock).toHaveReceivedCommandTimes(DeleteMessageCommand, 0);
+});
+
+test("if a queue name is provided, the url is resolved", async () => {
+  const queueName = "MyQueueName";
+
+  // GIVEN
+  sqsMock.on(GetQueueUrlCommand, { QueueName: queueName }).resolves({
+    QueueUrl: "https://my-queue-url",
+  });
+
+  sqsMock
+    .on(SendMessageCommand, {
+      QueueUrl: "https://my-queue-url",
+      MessageBody: "test",
+    })
+    .resolves({});
+
+  const client = new QueueClient(queueName);
+  await client.push("test");
+
+  expect(sqsMock).toHaveReceivedCommandTimes(GetQueueUrlCommand, 1);
+  expect(sqsMock).toHaveReceivedCommandTimes(SendMessageCommand, 1);
 });

@@ -19,6 +19,13 @@ export interface FieldProps {
    * @default - no automatic refresh
    */
   readonly refreshRate?: Duration;
+
+  /**
+   * Indicates that this field is a link.
+   *
+   * @default false
+   */
+  readonly link?: boolean;
 }
 
 /**
@@ -49,6 +56,7 @@ export class Field extends VisualComponent {
   private readonly fn: Function;
   private readonly label: string;
   private readonly refreshRate: number | undefined;
+  private readonly link: boolean | undefined;
 
   constructor(
     scope: Construct,
@@ -62,6 +70,7 @@ export class Field extends VisualComponent {
     this.label = label;
     this.refreshRate = props.refreshRate?.seconds;
     this.fn = new Function(this, "Handler", handler);
+    this.link = props.link;
   }
 
   /** @internal */
@@ -71,6 +80,7 @@ export class Field extends VisualComponent {
       label: this.label,
       handler: this.fn.node.path,
       refreshRate: this.refreshRate,
+      link: this.link,
     };
   }
 
