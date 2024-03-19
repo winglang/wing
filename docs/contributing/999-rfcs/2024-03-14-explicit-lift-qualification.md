@@ -195,7 +195,6 @@ class cloud.BucketPutQual extends std.Qualification {
 // Create a qualifications container
 let quals = new std.Qualifications();
 
-
 let b1 = new cloud.Bucket() as "b1";
 let b2 = new cloud.Bucket() as "b1";
 
@@ -211,6 +210,12 @@ quals.add(b2Quals);
 
 let arr = [b1,b2];
 
+// Define get access on all buckets
+let getBucketQuals = new std.Qualifications();
+for b in arr {
+  getQuals.add(new std.Qualification(b, ["get"]));
+}
+
 class A {
   inflight foo() {
     lift qual { // Use the qualification object programatically defined in preflight code
@@ -220,6 +225,13 @@ class A {
       // 
       b2.put("hello", "world"); // b2 accepts any key pattern
       b1.put("k100", "v"); // no automatic qualifications happen in this scope, the key pattern qualification on b1 isn't overriden
+    }
+
+    // use getBucketQuals for get access on all buckets in the bucket array
+    lift getBucketQuals {
+      for b in arr {
+        b.get("k");
+      }
     }
   }
 
