@@ -148,7 +148,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "call": [
-            [Foo, ["getData", "getUuid", "regexInflight"]],
+            [Foo, [].concat(["regexInflight"], ["getUuid"], ["getData"])],
           ],
           "$inflight_init": [
             [Foo, []],
