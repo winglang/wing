@@ -218,9 +218,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"), ["fromJson"]],
             [j, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"), []],
             [j, []],
           ],
         });
@@ -253,8 +255,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [Student, ["fromJson"]],
           ],
           "$inflight_init": [
+            [Student, []],
           ],
         });
       }
@@ -287,9 +291,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [Student, ["fromJson"]],
             [jStudent1, []],
           ],
           "$inflight_init": [
+            [Student, []],
             [jStudent1, []],
           ],
         });
@@ -326,12 +332,16 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
             [(schema.asStr()), []],
+            [MyStruct, ["schema"]],
             [expectedSchema, []],
             [jMyStruct, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
             [(schema.asStr()), []],
+            [MyStruct, []],
             [expectedSchema, []],
             [jMyStruct, []],
           ],
@@ -368,8 +378,16 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"), ["fromJson"]],
+            [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), ["fromJson"]],
+            [$stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"), ["fromJson"]],
+            [Student, ["fromJson"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"), []],
+            [$stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"), []],
+            [$stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"), []],
+            [Student, []],
           ],
         });
       }

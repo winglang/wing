@@ -8,7 +8,7 @@ use super::{ExprId, CLASS_INFLIGHT_INIT_NAME};
 #[derive(Debug)]
 pub struct Lifts {
 	// TODO: make all these private and add accessors+helper logic
-	/// All the lifts. Map from method to a map from inflight code to lift qualifications.
+	/// All the lifts. Map from method to a map from preflight code to lift qualifications.
 	pub lifts_qualifications: BTreeMap<String, BTreeMap<String, LiftQualification>>,
 
 	/// All the captures. The key is token the value is the preflight code.
@@ -57,10 +57,8 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, method: Option<Symbol>, property: Option<Symbol>, code: &str) {
-		let method = method.map(|m| m.name).unwrap_or(Default::default());
-
-		self.add_lift(method, code, property.as_ref().map(|s| s.name.clone()));
+	pub fn lift(&mut self, method: Symbol, property: Option<Symbol>, code: &str) {
+		self.add_lift(method.name.clone(), code, property.as_ref().map(|s| s.name.clone()));
 
 		// Add a lift to the inflight initializer to signify this class requires access to that preflight object.
 		// "this" is a special case since it's already in scope and doesn't need to be lifted.

@@ -41,6 +41,7 @@ use std::cmp;
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use symbol_env::{StatementIdx, SymbolEnv};
 use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
@@ -327,12 +328,17 @@ pub struct Class {
 	pub phase: Phase,
 	pub docs: Docs,
 	pub lifts: Option<Lifts>,
+	pub defined_in_phase: Phase, // TODO: naming: maybe this should just be `phase` while `phase` should be `default_member_phase`?
 
 	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
 	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
 	// to have a construct which does not have these arguments, in which case we can't use the `as` `in` keywords
 	// and instead the user will need to pass the relevant args to the class's init method.
 	pub std_construct_args: bool,
+
+	// Unique identifier for this class type, used to generate a unique type alias for this class se we can
+	// reference it regardless of type name shadowing or scoping.
+	pub uid: usize,
 }
 impl Class {
 	pub(crate) fn set_lifts(&mut self, lifts: Lifts) {
@@ -344,8 +350,8 @@ impl Class {
 	pub fn get_closure_method(&self) -> Option<TypeRef> {
 		self
 			.methods(true)
-			.find(|(name, type_)| name == CLOSURE_CLASS_HANDLE_METHOD && type_.is_inflight_function())
-			.map(|(_, t)| t)
+			.find(|(name, v)| name == CLOSURE_CLASS_HANDLE_METHOD && v.type_.is_inflight_function())
+			.map(|(_, v)| v.type_)
 	}
 }
 
@@ -391,25 +397,23 @@ impl Display for Interface {
 }
 
 type ClassLikeIterator<'a> =
-	FilterMap<SymbolEnvIter<'a>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>>;
+	FilterMap<SymbolEnvIter<'a>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, VariableInfo)>>;
 
 pub trait ClassLike: Display {
 	fn get_env(&self) -> &SymbolEnv;
 
 	fn methods(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
-		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
-			t.as_variable()
-				.unwrap()
-				.type_
-				.as_function_sig()
-				.map(|_| (s.clone(), t.as_variable().unwrap().type_))
+		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
+			let v = sym_kind.as_variable().unwrap();
+			v.type_.as_function_sig().map(|_| (s.clone(), v.clone()))
 		})
 	}
 
 	fn fields(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
-		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
-			if t.as_variable().unwrap().type_.as_function_sig().is_none() {
-				Some((s, t.as_variable().unwrap().type_))
+		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
+			let v = sym_kind.as_variable().unwrap();
+			if v.type_.as_function_sig().is_none() {
+				Some((s, v.clone()))
 			} else {
 				None
 			}
@@ -445,6 +449,32 @@ pub trait ClassLike: Display {
 			None
 		}
 	}
+
+	// fn phase(&self) -> Phase {
+	// 	// A class is considered a "preflight class" if it has any preflight fields.
+	// 	// Having a preflight state means that different instances of the class
+	// 	// might access different preflight data. Such instances need to be lifted
+	// 	// into inflight individually. Non preflight class instances don't need to be
+	// 	// lifted and can therefore be instantiated inflight.
+	// 	if self
+	// 		.fields(true)
+	// 		.any(|(_, vi)| vi.kind == VariableKind::InstanceMember && vi.phase == Phase::Preflight)
+	// 	{
+	// 		return Phase::Preflight;
+	// 	}
+
+	// 	// If all memebers are phase independent, then this class is phase independent
+	// 	if self
+	// 		.get_env()
+	// 		.iter(true)
+	// 		.all(|(_, v, _)| v.as_variable().unwrap().phase == Phase::Independent)
+	// 	{
+	// 		return Phase::Independent;
+	// 	}
+
+	// 	// Otherwise, this is an inflight class
+	// 	Phase::Inflight
+	// }
 }
 
 impl ClassLike for Interface {
@@ -660,16 +690,14 @@ impl Subtype for Type {
 				// method type (aka "closure classes").
 
 				// First, check if there is exactly one inflight method in the interface
-				let mut inflight_methods = iface
-					.methods(true)
-					.filter(|(_name, type_)| type_.is_inflight_function());
+				let mut inflight_methods = iface.methods(true).filter(|(_name, v)| v.type_.is_inflight_function());
 				let handler_method = inflight_methods.next();
 				if handler_method.is_none() || inflight_methods.next().is_some() {
 					return false;
 				}
 
 				// Next, check that the method's name is "handle"
-				let (handler_method_name, handler_method_type) = handler_method.unwrap();
+				let (handler_method_name, handler_method_var) = handler_method.unwrap();
 				if handler_method_name != CLOSURE_CLASS_HANDLE_METHOD {
 					return false;
 				}
@@ -682,7 +710,7 @@ impl Subtype for Type {
 				};
 
 				// Finally check if they're subtypes
-				res_handle_type.is_subtype_of(&handler_method_type)
+				res_handle_type.is_subtype_of(&handler_method_var.type_)
 			}
 			(Self::Class(res), Self::Function(_)) => {
 				// To support flexible inflight closures, we say that any
@@ -1080,12 +1108,13 @@ impl TypeRef {
 
 	/// Returns whether type represents a closure (either a function or a closure class).
 	pub fn is_closure(&self) -> bool {
-		if self.as_function_sig().is_some() {
-			return true;
-		}
+		self.as_function_sig().is_some() || self.is_closure_class()
+	}
 
-		if let Some(ref class) = self.as_preflight_class() {
-			return class.get_closure_method().is_some();
+	/// Returns whether type represents a class representing an inflight closure.
+	pub fn is_closure_class(&self) -> bool {
+		if let Some(ref class) = self.as_class() {
+			return class.get_closure_method().is_some() && class.defined_in_phase == Phase::Preflight;
 		}
 		false
 	}
@@ -1243,7 +1272,7 @@ impl TypeRef {
 			Type::Map(v) => v.is_json_legal_value(),
 			Type::Optional(v) => v.is_json_legal_value(),
 			Type::Struct(ref s) => {
-				for (_, t) in s.fields(true) {
+				for t in s.fields(true).map(|(_, v)| v.type_) {
 					if !t.is_json_legal_value() {
 						return false;
 					}
@@ -1280,8 +1309,8 @@ impl TypeRef {
 		match &**self {
 			Type::Struct(s) => {
 				// check all its fields are json compatible
-				for (_, field) in s.fields(true) {
-					if !field.has_json_representation() {
+				for t in s.fields(true).map(|(_, v)| v.type_) {
+					if !t.has_json_representation() {
 						return false;
 					}
 				}
@@ -1768,12 +1797,11 @@ pub struct TypeChecker<'a> {
 
 	is_in_mut_json: bool,
 
-	// Stack of extra information we need to keep track of while visiting nested
-	// expressions during type checking.
-	curr_expr_info: Vec<ExprVisitInfo>,
-
 	ctx: VisitContext,
 }
+
+/// Class counter, used to generate unique names class types
+static CLASS_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 enum ExprVisitInfo {
 	/// The current expression has no special properties
@@ -1802,7 +1830,6 @@ impl<'a> TypeChecker<'a> {
 			jsii_imports,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
-			curr_expr_info: vec![],
 		}
 	}
 
@@ -2049,8 +2076,6 @@ impl<'a> TypeChecker<'a> {
 	) -> (TypeRef, Phase) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &exp.span);
 
-		self.curr_expr_info.push(expr_visit_info);
-
 		let (mut t, phase) = |exp: &Expr, env: &mut SymbolEnv| -> (TypeRef, Phase) {
 			match &exp.kind {
 				ExprKind::Literal(lit) => match lit {
@@ -2179,7 +2204,11 @@ impl<'a> TypeChecker<'a> {
 					(self.types.add_type(Type::Array(stype)), stype_phase)
 				}
 				ExprKind::Reference(_ref) => {
-					let (vi, phase) = self.resolve_reference(_ref, env, self.curr_expr_is_callee_with_inflight_args());
+					let (vi, phase) = self.resolve_reference(
+						_ref,
+						env,
+						matches!(expr_visit_info, ExprVisitInfo::Callee { inflight_args: true }),
+					);
 					(vi.type_, phase)
 				}
 				ExprKind::New(new_expr) => {
@@ -2389,21 +2418,9 @@ impl<'a> TypeChecker<'a> {
 					// Make sure this is a function signature type
 					let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 						func_sig.clone()
-					} else if let Some(class) = func_type.as_preflight_class() {
-						// return the signature of the "handle" method
-						let lookup_res = class.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into());
-						let handle_type = if let Some(method) = lookup_res {
-							method.type_
-						} else {
-							self.spanned_error(callee, "Expected a function or method");
-							return self.resolved_error();
-						};
-						if let Some(sig_type) = handle_type.as_function_sig() {
-							sig_type.clone()
-						} else {
-							self.spanned_error(callee, "Expected a function or method");
-							return self.resolved_error();
-						}
+					} else if func_type.is_closure_class() {
+						let handle_type = func_type.as_class().unwrap().get_closure_method().unwrap();
+						handle_type.as_function_sig().unwrap().clone()
 					} else {
 						self.spanned_error(
 							callee,
@@ -2658,7 +2675,8 @@ impl<'a> TypeChecker<'a> {
 						.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 					// Verify that all expected fields are present and are the right type
-					for (name, field_type) in st.fields(true) {
+					for (name, v) in st.fields(true) {
+						let field_type = v.type_;
 						match fields.get(name.as_str()) {
 							Some(field_exp) => {
 								let t = field_types.get(name.as_str()).unwrap();
@@ -2782,8 +2800,6 @@ impl<'a> TypeChecker<'a> {
 		}(exp, env);
 
 		self.types.assign_type_to_expr(exp, t, phase);
-
-		self.curr_expr_info.pop();
 
 		// In case any type inferences were updated during this check, ensure all related inferences are updated
 		self.update_known_inferences(&mut t, &exp.span);
@@ -4150,9 +4166,11 @@ impl<'a> TypeChecker<'a> {
 			implements: impl_interfaces.clone(),
 			is_abstract: false,
 			phase: ast_class.phase,
+			defined_in_phase: env.phase,
 			docs: Docs::default(),
 			std_construct_args: ast_class.phase == Phase::Preflight,
 			lifts: None,
+			uid: CLASS_COUNTER.fetch_add(1, Ordering::Relaxed),
 		};
 		let mut class_type = self.types.add_type(Type::Class(class_spec));
 		match env.define(
@@ -4300,7 +4318,8 @@ impl<'a> TypeChecker<'a> {
 			};
 
 			// Check all methods are implemented
-			for (method_name, method_type) in interface_type.methods(true) {
+			for (method_name, v) in interface_type.methods(true) {
+				let method_type = v.type_;
 				if let Some(symbol) = &mut class_type
 					.as_class_mut()
 					.unwrap()
@@ -4713,7 +4732,7 @@ impl<'a> TypeChecker<'a> {
 			return;
 		};
 
-		// If the parent class is phase independent than its init name is just "init" regadless of
+		// If the parent class is phase independent then its init name is just "init" regadless of
 		// whether we're inflight or not.
 		let parent_init_name = if parent_class.as_class().unwrap().phase == Phase::Independent {
 			CLASS_INIT_NAME
@@ -4725,13 +4744,13 @@ impl<'a> TypeChecker<'a> {
 			.as_class()
 			.unwrap()
 			.methods(false)
-			.filter(|(name, _type)| name == parent_init_name)
-			.collect_vec()[0]
+			.find(|(name, ..)| name == parent_init_name)
+			.unwrap()
 			.1;
 
 		self.type_check_arg_list_against_function_sig(
 			&arg_list,
-			parent_initializer.as_function_sig().unwrap(),
+			parent_initializer.type_.as_function_sig().unwrap(),
 			super_constructor_call,
 			arg_list_types,
 		);
@@ -5147,6 +5166,8 @@ impl<'a> TypeChecker<'a> {
 				docs: c.docs.clone(),
 				std_construct_args: c.std_construct_args,
 				lifts: None,
+				defined_in_phase: env.phase,
+				uid: c.uid,
 			}),
 			Type::Interface(iface) => Type::Interface(Interface {
 				name: iface.name.clone(),
@@ -5627,7 +5648,7 @@ impl<'a> TypeChecker<'a> {
 						if property.name == FROM_JSON || property.name == TRY_FROM_JSON {
 							// we need to validate that only structs with all valid json fields can have a fromJson method
 							for (name, field) in s.fields(true) {
-								if !field.has_json_representation() {
+								if !field.type_.has_json_representation() {
 									self.spanned_error_with_var(
 										property,
 										format!(
@@ -5652,7 +5673,7 @@ impl<'a> TypeChecker<'a> {
 								format!("Class \"{c}\" contains a member \"{property}\" but it is not static"),
 							);
 						}
-						// If the property is phase independent then but it's a method call with inflight
+						// If the property is phase independent but it's a method call with inflight
 						// args then treat it as an inflight property
 						let phase = if v.phase == Phase::Independent && callee_with_inflight_args {
 							Phase::Inflight
@@ -5909,22 +5930,6 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(parent, format!("Expected \"{}\" to be a class", parent));
 			(None, None)
 		}
-	}
-
-	fn curr_expr_is_callee_with_inflight_args(&self) -> bool {
-		self
-			.curr_expr_info
-			.last()
-			.map(|e| {
-				matches!(
-					e,
-					ExprVisitInfo::Callee {
-						inflight_args: true,
-						..
-					}
-				)
-			})
-			.unwrap_or(false)
 	}
 }
 
@@ -6186,6 +6191,19 @@ pub fn resolve_user_defined_type_ref<'a>(
 		}
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
+	}
+}
+
+pub fn get_udt_definition_phase(user_defined_type: &UserDefinedType, env: &SymbolEnv) -> Option<Phase> {
+	let mut nested_name = vec![&user_defined_type.root];
+	nested_name.extend(user_defined_type.fields.iter().collect_vec());
+
+	let lookup_result = env.lookup_nested(&nested_name, None);
+
+	if let LookupResult::Found(_, lookup_info) = lookup_result {
+		Some(lookup_info.env.phase)
+	} else {
+		None
 	}
 }
 

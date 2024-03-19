@@ -188,9 +188,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [foo, ["bang", "bug", "over_inflight"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
             [foo, []],
           ],
         });

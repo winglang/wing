@@ -56,6 +56,10 @@ const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
+//const PREFLIGHT_TYPES_MAP: &str = "globalThis.$preflightTypesMap";
+//const PREFLIGHT_TYPES_MAP: &str = "this.node.root.$preflightTypesMap";
+const PREFLIGHT_TYPES_MAP: &str = "$helpers.nodeof(this).root.$preflightTypesMap";
+
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
 	pub visit_ctx: &'a mut VisitContext,
@@ -95,7 +99,7 @@ impl VisitorWithContext for JSifyContext<'_> {
 /// Preflight classes have two types of host binding methods:
 /// `Type` for binding static fields and methods to the host and
 /// `instance` for binding instance fields and methods to the host.
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq)]
 enum BindMethod {
 	Type,
 	Instance,
@@ -185,6 +189,7 @@ impl<'a> JSifier<'a> {
 		// "std" is implicitly imported
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.line(format!("const {HELPERS_VAR} = {STDLIB}.helpers;"));
+
 		output.add_code(imports);
 
 		if is_entrypoint {
@@ -193,6 +198,10 @@ impl<'a> JSifier<'a> {
 			root_class.open(format!("{JS_CONSTRUCTOR}($scope, $id) {{"));
 			root_class.line("super($scope, $id);");
 			root_class.add_code(self.jsify_struct_schemas());
+
+			// Create global map of preflight class types
+			root_class.line(format!("{PREFLIGHT_TYPES_MAP} = {{}};"));
+
 			root_class.add_code(js);
 			root_class.close("}");
 			root_class.close("}");
@@ -1517,8 +1526,48 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
 			code.close("}");
+
+			// Inflight classes might need their type to be lift-qualified (onLift), but their type name might not be necessarily avaialble
+			// at the scope when they are qualified (it might even be shadowed by another type name). Here we generate a unique
+			// type name to be used in such cases.
+			// if class.phase == Phase::Inflight {
+			// 	let inflight_class_unique_instance = self.unique_class_alias(class_type);
+			// 	code.line(format!(
+			// 		"const {inflight_class_unique_instance} = new {}(this, \"{inflight_class_unique_instance}\");",
+			// 		class.name,
+			// 	));
+			// }
+
+			// Inflight classes might need to be lift-qualified (onLift), but their type name might not be necessarily avaialble
+			// at the scope when they are qualified (it might even be shadowed by another type name). We atore a reference to these
+			// class types in a global preflight types map indexed by the class's unique id.
+			if class.phase == Phase::Inflight {
+				code.line(format!(
+					"if ({PREFLIGHT_TYPES_MAP}[{}]) {{ throw new Error(\"{} is already in type map\"); }}",
+					class_type.as_class().unwrap().uid,
+					class.name
+				));
+				code.line(format!(
+					"{PREFLIGHT_TYPES_MAP}[{}] = {};",
+					class_type.as_class().unwrap().uid,
+					class.name
+				));
+				code.line(format!(
+					"console.log(`Adding {} to ${{$helpers.nodeof(this).root.node.id}}`);",
+					class.name
+				));
+			}
+
 			code
 		})
+	}
+
+	pub fn class_singleton(&self, type_: TypeRef) -> String {
+		let c = type_.as_class().unwrap();
+		format!(
+			"{PREFLIGHT_TYPES_MAP}[{}]._singleton(this,\"{}_singleton_{}\")",
+			c.uid, c.name, c.uid
+		)
 	}
 
 	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
@@ -1820,9 +1869,9 @@ impl<'a> JSifier<'a> {
 			}
 		}
 
-		for m in class.inflight_fields() {
-			let name = &m.name;
-			let is_static = m.is_static;
+		for f in class.inflight_fields() {
+			let name = &f.name;
+			let is_static = f.is_static;
 			let filter = match bind_method_kind {
 				BindMethod::Instance => !is_static,
 				BindMethod::Type => is_static,
@@ -1847,7 +1896,9 @@ impl<'a> JSifier<'a> {
 			if bind_method_kind == BindMethod::Instance && class.parent.is_some() {
 				// mergeLiftDeps is a helper method that combines the lift deps of the parent class with the
 				// lift deps of this class
-				bind_method.open(format!("return {STDLIB_CORE}.mergeLiftDeps(super._liftMap, {{"));
+				bind_method.open(format!(
+					"return {STDLIB_CORE}.mergeLiftDeps(super.{bind_method_name}, {{"
+				));
 			} else {
 				bind_method.open("return ({".to_string());
 			}

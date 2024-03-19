@@ -231,6 +231,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $Foo_0 = new Foo(this, "$Foo_0");
     class FooChild extends Foo {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -263,6 +264,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $FooChild_1 = new FooChild(this, "$FooChild_1");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -290,8 +292,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$Foo_0, ["field1", "field2"]],
+            [Foo, []],
           ],
           "$inflight_init": [
+            [$Foo_0, []],
+            [Foo, []],
           ],
         });
       }
@@ -323,8 +329,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$FooChild_1, ["field1", "field2", "field3"]],
+            [FooChild, []],
           ],
           "$inflight_init": [
+            [$FooChild_1, []],
+            [FooChild, []],
           ],
         });
       }
@@ -388,8 +398,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"), []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"), []],
           ],
         });
       }

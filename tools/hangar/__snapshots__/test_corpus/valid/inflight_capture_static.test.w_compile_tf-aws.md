@@ -226,6 +226,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $OuterInflight_1 = new OuterInflight(this, "$OuterInflight_1");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -288,8 +289,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [OuterInflight, ["staticMethod"]],
           ],
           "$inflight_init": [
+            [OuterInflight, []],
           ],
         });
       }
@@ -353,8 +356,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["tryEnv"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
           ],
         });
       }

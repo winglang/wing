@@ -75,8 +75,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["values"]],
+            [$stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"), ["fromJson"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
+            [$stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"), []],
           ],
         });
       }

@@ -780,6 +780,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $A_12 = new A(this, "$A_12");
     class B extends A {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -809,6 +810,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $B_13 = new B(this, "$B_13");
     class $Closure4 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -836,8 +838,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$B_13, ["sound"]],
+            [B, []],
           ],
           "$inflight_init": [
+            [$B_13, []],
+            [B, []],
           ],
         });
       }

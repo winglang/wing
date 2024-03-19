@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::{
-	ast::{Class, ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
+	ast::{Class, Expr, ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
 	type_check::symbol_env::SymbolEnvRef,
 };
 
@@ -72,8 +72,8 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_expr(&mut self, expr: ExprId) {
-		self.expression.push(expr);
+	pub fn push_expr(&mut self, expr: &Expr) {
+		self.expression.push(expr.id);
 	}
 
 	pub fn pop_expr(&mut self) {
@@ -218,7 +218,7 @@ impl VisitContext {
 pub trait VisitorWithContext {
 	fn ctx(&mut self) -> &mut VisitContext;
 
-	fn with_expr(&mut self, expr: ExprId, f: impl FnOnce(&mut Self)) {
+	fn with_expr(&mut self, expr: &Expr, f: impl FnOnce(&mut Self)) {
 		self.ctx().push_expr(expr);
 		f(self);
 		self.ctx().pop_expr();

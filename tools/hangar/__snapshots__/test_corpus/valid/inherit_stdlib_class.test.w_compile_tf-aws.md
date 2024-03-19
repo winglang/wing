@@ -383,9 +383,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), ["get"]],
             [api.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [api.url, []],
           ],
         });

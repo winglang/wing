@@ -84,9 +84,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
             [greeting, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"), []],
             [greeting, []],
           ],
         });

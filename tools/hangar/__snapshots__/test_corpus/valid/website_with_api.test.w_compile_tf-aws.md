@@ -663,9 +663,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
             [usersTable, ["list"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
             [usersTable, []],
           ],
         });
@@ -699,9 +701,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["parse", "stringify"]],
             [usersTable, ["insert"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
             [usersTable, []],
           ],
         });
@@ -737,9 +741,15 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal", "nil"]],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), ["GET"]],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), ["fetch"]],
             [api.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), []],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [api.url, []],
           ],
         });
@@ -775,9 +785,15 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), ["OPTIONS"]],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), ["fetch"]],
             [api.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), []],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [api.url, []],
           ],
         });

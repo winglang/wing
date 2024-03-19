@@ -294,7 +294,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			return;
 		}
 
-		self.ctx.push_expr(node.id);
+		self.ctx.push_expr(&node);
 
 		match &node.kind {
 			ExprKind::New(new_expr) => {

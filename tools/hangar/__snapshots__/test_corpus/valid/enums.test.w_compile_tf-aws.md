@@ -111,10 +111,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [SomeEnum, ["ONE", "TWO"]],
             [one, []],
             [two, []],
           ],
           "$inflight_init": [
+            [SomeEnum, []],
             [one, []],
             [two, []],
           ],

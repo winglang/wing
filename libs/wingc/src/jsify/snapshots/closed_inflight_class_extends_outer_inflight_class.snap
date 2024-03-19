@@ -91,6 +91,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $Base_0 = new Base(this, "$Base_0");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -118,8 +119,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [Base, []],
           ],
           "$inflight_init": [
+            [Base, []],
           ],
         });
       }

@@ -244,6 +244,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $B_1 = new B(this, "$B_1");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -342,6 +343,7 @@ class $Root extends $stdlib.std.Resource {
             });
           }
         }
+        const $F_7 = new F(this, "$F_7");
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
@@ -370,8 +372,12 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
+                [$F_7, ["foo"]],
+                [F, ["foo"]],
               ],
               "$inflight_init": [
+                [$F_7, []],
+                [F, []],
               ],
             });
           }
@@ -441,12 +447,16 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$B_1, ["foo"]],
+            [B, []],
             [a, ["goo"]],
             [d, ["callInner"]],
             [fn, ["handle"]],
             [innerD, ["handle"]],
           ],
           "$inflight_init": [
+            [$B_1, []],
+            [B, []],
             [a, []],
             [d, []],
             [fn, []],

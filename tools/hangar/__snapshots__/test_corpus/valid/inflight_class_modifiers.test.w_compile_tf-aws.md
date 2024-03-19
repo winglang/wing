@@ -83,6 +83,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $C_0 = new C(this, "$C_0");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

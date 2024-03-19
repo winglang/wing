@@ -610,11 +610,13 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["waitUntil"]],
             [queue, ["push"]],
             [r, ["get"]],
             [r2, ["get", "set"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), []],
             [queue, []],
             [r, []],
             [r2, []],

@@ -79,6 +79,7 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class NotGoo extends $stdlib.std.Resource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
       }
@@ -108,6 +109,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $NotGoo_0 = new NotGoo(this, "$NotGoo_0");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -135,8 +137,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [NotGoo, []],
           ],
           "$inflight_init": [
+            [NotGoo, []],
           ],
         });
       }

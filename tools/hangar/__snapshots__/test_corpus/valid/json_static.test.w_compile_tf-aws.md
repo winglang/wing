@@ -103,9 +103,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
             [jj, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
             [jj, []],
           ],
         });
@@ -138,8 +140,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["has"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
           ],
         });
       }
