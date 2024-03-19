@@ -1,14 +1,13 @@
 import * as fs from "fs";
+import * as inspector from "inspector";
 import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
 import {
   Api,
   Bucket,
   Function,
-  IApiClient,
   IBucketClient,
   IFunctionClient,
-  IServiceClient,
   OnDeploy,
   Service,
 } from "../../src/cloud";
@@ -592,6 +591,24 @@ describe("in-place updates", () => {
       "root/Bucket1 started",
       "root/OnDeploy started",
     ]);
+  });
+
+  test("debugging inspector inherited by sandbox", async () => {
+    const app = new SimApp();
+    const handler = Testing.makeHandler(
+      `async handle() { if(require('inspector').url() === undefined) { throw new Error('inspector not available'); } }`
+    );
+    new OnDeploy(app, "OnDeploy", handler);
+
+    inspector.open(0);
+    const sim = await app.startSimulator();
+    await sim.stop();
+
+    expect(
+      sim
+        .listTraces()
+        .some((t) => t.data.message.startsWith("Debugger listening on "))
+    );
   });
 });
 
