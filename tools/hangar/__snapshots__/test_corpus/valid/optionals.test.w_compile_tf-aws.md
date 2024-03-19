@@ -692,8 +692,8 @@ class $Root extends $stdlib.std.Resource {
     const x4 = (maybeDog ?? maybePet);
     const x5 = (maybePet ?? dog);
     const x6 = (maybePet ?? maybeDog);
-    const x7 = (((maybeDog ?? maybeDog) ?? maybeDog) ?? maybeDog);
-    const x8 = (((maybeDog ?? maybeDog) ?? maybeDog) ?? dog);
+    const x7 = (maybeDog ?? (maybeDog ?? (maybeDog ?? maybeDog)));
+    const x8 = (maybeDog ?? (maybeDog ?? (maybeDog ?? dog)));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
