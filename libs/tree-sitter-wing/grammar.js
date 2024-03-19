@@ -326,6 +326,7 @@ module.exports = grammar({
 
     expression: ($) =>
       choice(
+        $.unwrap_or,
         $.binary_expression,
         $.unary_expression,
         $.new_expression,
@@ -568,6 +569,14 @@ module.exports = grammar({
     _container_value_type: ($) =>
       seq("<", field("type_parameter", $._type), ">"),
 
+    unwrap_or: ($) => prec.right(PREC.UNWRAP_OR,
+      seq(
+        field("left", $.expression),
+        field("op", "??"),
+        field("right", $.expression)
+      )
+    ),
+
     optional_unwrap: ($) =>
       prec.right(PREC.OPTIONAL_UNWRAP, seq($.expression, "!")),
 
@@ -614,7 +623,6 @@ module.exports = grammar({
         //['<<', PREC.SHIFT],
         //['>>', PREC.SHIFT],
         //['>>>', PREC.SHIFT],
-        ["??", PREC.UNWRAP_OR],
       ];
 
       return choice(
