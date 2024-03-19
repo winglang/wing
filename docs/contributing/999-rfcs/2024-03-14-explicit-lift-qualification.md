@@ -38,13 +38,13 @@ Lift qualification is currently done automatically by the compiler for all prefl
 
 When the compiler encounters an inflight expression that references a preflight type, then, without static analysis, it cannot qualify the lift because it does not know what preflight objects might be referenced by this inflight expression. The result is a compilation error.
 
-In the future we'd like to employ data flow analysis (probably through [reaching defintions analysis](https://en.wikipedia.org/wiki/Reaching_definition) resolve these errors.
+In the future we'd like to employ data flow analysis (probably through [reaching defintions analysis](https://en.wikipedia.org/wiki/Reaching_definition)) resolve these errors.
 
 ## Problems with the current solution
 
 We need a mechanism for explicitly qualifying lifted objects. Consider the following cases:
 
-1. Cases where we use inflight expressions to reference a preflight object we'd like to disable the compilation error and explicitly qualify the lift.
+1. When using inflight expressions to reference a preflight object we'd like to disable the compilation error and explicitly qualify the lift.
 ```js
 let b1 = new cloud.Bucket() as "b1";
 let b2 = new cloud.Bucket() as "b2";
@@ -57,13 +57,13 @@ inflight () => {
 }
 ```
 
-2. Cases where we there's a collection of preflight objects that are being used inflight:
+2. When there's a collection of preflight objects that are being used inflight:
 ```js
 for b in buckets {
   b.put("key", "value"); // We need to qualify all `buckets` with "put"
 }
 ```
-3. Cases where our knowledge of the application logic can produce better qualifications:
+3. When our knowledge of the application logic can produce better qualifications:
 ```js
 for i in buckets.len {
   if i % 2 == 0 {
@@ -78,16 +78,16 @@ for i in 0..5 {
 }
 ```
 Here we can benefit from an explicit qualification of `bucket` with `"put"` operation and a specific key pattern: `"k*"`. We currently don't
-have a way to disable the automatic qualification and to define the narrower qualification.
+have a way to disable the automatic qualification and define the narrower qualification.
 
 Note that in all the above exmaples except the last one we currently get a compilation error due to us trying to use a `Bucket.put` operation on an inflight expression.
 
 ## Requirements
 
 So the aim of this proposal is to present:
-1. A way to explicitly qualifying the preflight objects that are being used by inflight methods/closures.
-2. Disabling compilation errors where the explicit qualification apply.
-3. Disabling automatic qualification where the explicit qualification apply. 
+1. A way to explicitly qualify the preflight objects that are being used by inflight methods/closures.
+2. Disabling compilation errors where the explicit qualification applies.
+3. Disabling automatic qualification where the explicit qualification applies. 
 4. Provide a framework that can be extended to programatically defining and reusing lift qualifications.
 
 ## Naming
@@ -107,7 +107,8 @@ In this proposal I'll use "qualifications", but I'd be happy to hear what you th
 
 Issues with this PR:
 * Confusing sytax that looks like an inflight function call might lead to [misuse](https://github.com/winglang/wing/pull/5935#issuecomment-1995051115).
-* No scoping of where we're disabling compiler errors auto qualification.
+* No scoping of where we're disabling compiler errors.
+* Doesn't provide a mechanism to disable auto qualification.
 * No mechanism or clear path to mechanism for programatically defining and reusing lift qualifications.
 
 ## Proposal
@@ -129,7 +130,7 @@ inflight () => {
 }
 ```
 
-Internally the argument to the `lift` block creates a `std.Qualifications` object wich is added to the closures lift qualifications. 
+Internally the argument to the `lift` block creates a `std.Qualifications` object which is added to the closures lift qualifications. 
 
 Note that multiple `lift` blocks in the code just create more `std.Qualifications`s for this closure. 
 The actuall qualification values (`b1` and `"put"`) are just appended to the closure/method and they don't strictly belong to the block.
