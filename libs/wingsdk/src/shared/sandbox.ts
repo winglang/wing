@@ -37,7 +37,7 @@ export class Sandbox {
     entrypoint: string,
     log?: (message: string) => void
   ): Promise<Bundle> {
-    let contents = await readFile(entrypoint, "utf-8");
+    let contents = (await readFile(entrypoint)).toString();
 
     // log a warning if contents includes __dirname or __filename
     if (contents.includes("__dirname") || contents.includes("__filename")) {
@@ -48,7 +48,9 @@ export class Sandbox {
 
     // wrap contents with a shim that handles the communication with the parent process
     // we insert this shim before bundling to ensure source maps are generated correctly
-    contents += `
+    contents = `
+"use strict";
+${contents}
 process.on("message", async (message) => {
   const { fn, args } = message;
   try {
