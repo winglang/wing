@@ -298,17 +298,18 @@ Template string
 maybeVal ?? 2;
 maybeVal ?? 2 + 2;
 maybeVal ?? 2 == 2;
+maybeVal ?? "hi" ?? 2;
 
 --------------------------------------------------------------------------------
 
 (source
   (expression_statement
-    (binary_expression
+    (unwrap_or
       (reference
         (reference_identifier))
       (number)))
   (expression_statement
-    (binary_expression
+    (unwrap_or
       (reference
         (reference_identifier))
       (binary_expression
@@ -316,11 +317,18 @@ maybeVal ?? 2 == 2;
         (number))))
   (expression_statement
     (binary_expression
-      (binary_expression
+      (unwrap_or
         (reference
           (reference_identifier))
         (number))
-      (number))))
+      (number)))
+  (expression_statement
+    (unwrap_or
+      (reference
+        (reference_identifier))
+      (unwrap_or
+        (string)
+        (number)))))
 
 ================================================================================
 Unwrap expression

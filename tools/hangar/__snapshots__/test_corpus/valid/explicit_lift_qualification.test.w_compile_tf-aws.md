@@ -1,4 +1,4 @@
-# [nil.test.w](../../../../../examples/tests/valid/nil.test.w) | compile | tf-aws
+# [explicit_lift_qualification.test.w](../../../../../examples/tests/valid/explicit_lift_qualification.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
@@ -12,8 +12,7 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((((await $foo.returnNil(true))) != null), true), "foo.returnNil(true)? == true");
-      $helpers.assert($helpers.eq((((await $foo.returnNil(false))) != null), false), "foo.returnNil(false)? == false");
+      (await $foo.mehtod());
     }
   }
   return $Closure1;
@@ -25,7 +24,7 @@ module.exports = function({ $foo }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $foo }) {
+module.exports = function({ $bucket }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -33,13 +32,10 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), false), "foo.getOptionalValue()? == false");
-      (await $foo.setOptionalValue("hello"));
-      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), true), "foo.getOptionalValue()? == true");
-      $helpers.assert($helpers.neq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() != nil");
-      (await $foo.setOptionalValue(undefined));
-      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), false), "foo.getOptionalValue()? == false");
-      $helpers.assert($helpers.eq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() == nil");
+      ;
+      const b = $bucket;
+      (await b.put("k3", "value3"));
+      $helpers.assert($helpers.eq((await $bucket.get("k3")), "value3"), "bucket.get(\"k3\") == \"value3\"");
     }
   }
   return $Closure2;
@@ -47,28 +43,42 @@ module.exports = function({ $foo }) {
 //# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
+## inflight.$Closure3-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $inflight_closure }) {
+  class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $inflight_closure());
+    }
+  }
+  return $Closure3;
+}
+//# sourceMappingURL=inflight.$Closure3-1.js.map
+```
+
 ## inflight.Foo-1.js
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({  }) {
+module.exports = function({ $bucket, $put_and_list }) {
   class Foo {
     constructor({  }) {
     }
-    async returnNil(t) {
-      if (t) {
-        return "hello";
-      }
-      return undefined;
-    }
-    async setOptionalValue(msg) {
-      this.optionalVar = msg;
-    }
-    async getOptionalValue() {
-      return this.optionalVar;
-    }
-    async $inflight_init() {
-      this.optionalVar = undefined;
+    async mehtod() {
+      ;
+      ;
+      const b = $bucket;
+      (await b.put("k2", "value2"));
+      $helpers.assert($helpers.eq((await b.list()), ["k", "k2"]), "b.list() == [\"k\", \"k2\"]");
+      (await b.delete("k2"));
+      $helpers.assert($helpers.eq((await $bucket.tryGet("k2")), undefined), "bucket.tryGet(\"k2\") == nil");
     }
   }
   return Foo;
@@ -91,6 +101,33 @@ module.exports = function({  }) {
     "aws": [
       {}
     ]
+  },
+  "resource": {
+    "aws_s3_bucket": {
+      "Bucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
+          }
+        },
+        "bucket_prefix": "bucket-c88fdc5f-",
+        "force_destroy": false
+      }
+    },
+    "aws_s3_object": {
+      "Bucket_S3Object-k_D126CC53": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/S3Object-k",
+            "uniqueId": "Bucket_S3Object-k_D126CC53"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Bucket.bucket}",
+        "content": "value",
+        "key": "k"
+      }
+    }
   }
 }
 ```
@@ -115,6 +152,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
+            $bucket: ${$stdlib.core.liftObject(bucket)},
+            $put_and_list: ${$stdlib.core.liftObject(put_and_list)},
           })
         `;
       }
@@ -131,15 +170,13 @@ class $Root extends $stdlib.std.Resource {
       }
       get _liftMap() {
         return ({
-          "returnNil": [
-          ],
-          "setOptionalValue": [
-          ],
-          "getOptionalValue": [
+          "mehtod": [
+            [bucket, [].concat(put_and_list, ["delete"], ["tryGet"])],
+            [put_and_list, []],
           ],
           "$inflight_init": [
-          ],
-          "optionalVar": [
+            [bucket, []],
+            [put_and_list, []],
           ],
         });
       }
@@ -171,7 +208,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [foo, ["returnNil"]],
+            [foo, ["mehtod"]],
           ],
           "$inflight_init": [
             [foo, []],
@@ -188,7 +225,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
-            $foo: ${$stdlib.core.liftObject(foo)},
+            $bucket: ${$stdlib.core.liftObject(bucket)},
           })
         `;
       }
@@ -206,21 +243,60 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [foo, [].concat(["getOptionalValue"], ["setOptionalValue"])],
+            [bucket, [].concat(["put"], ["get"])],
           ],
           "$inflight_init": [
-            [foo, []],
+            [bucket, []],
           ],
         });
       }
     }
+    class $Closure3 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
+            $inflight_closure: ${$stdlib.core.liftObject(inflight_closure)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure3Client = ${$Closure3._toInflightType()};
+            const client = new $Closure3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [inflight_closure, ["handle"]],
+          ],
+          "$inflight_init": [
+            [inflight_closure, []],
+          ],
+        });
+      }
+    }
+    const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    (bucket.addObject("k", "value"));
+    const put_and_list = ["put", "list"];
     const foo = new Foo(this, "Foo");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:nil return", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:optional instance variable", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit method lift qualification", new $Closure1(this, "$Closure1"));
+    const inflight_closure = new $Closure2(this, "$Closure2");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit closure lift qualification", new $Closure3(this, "$Closure3"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "nil.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "explicit_lift_qualification.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
 ```
