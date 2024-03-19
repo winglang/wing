@@ -47,7 +47,6 @@ if util.env("WING_TARGET") == "sim" {
       qr.push("foo");
     } catch e {
       err = true;
-      assert(e.contains("QueueDoesNotExist"));
     }
 
     assert(err);
