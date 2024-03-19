@@ -16,13 +16,14 @@ class Super {
 class Sub extends Super {
   new() { this.name = "Sub"; }
 }
-class Sub1 extends Super {
-  new() { this.name = "Sub"; }
+class SubSub extends Sub {
+  new() { this.name = "SubSub"; }
 }
 
 let optionalSup: Super? = new Super();
 let s = optionalSup ?? new Sub();
 assert(s.name == "Super");
+let s2 = optionalSup ?? optionalSup ?? new SubSub();
 
 struct Name {
   first: str;

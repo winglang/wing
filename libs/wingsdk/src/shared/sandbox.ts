@@ -1,8 +1,7 @@
 import * as cp from "child_process";
 import { writeFileSync } from "fs";
-import { mkdtemp, readFile, stat } from "fs/promises";
-import { tmpdir } from "os";
-import path from "path";
+import { readFile, stat } from "fs/promises";
+import { url as inspectorUrl } from "inspector";
 import { Bundle, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
 
@@ -39,9 +38,7 @@ export class Sandbox {
     entrypoint: string,
     log?: (message: string) => void
   ): Promise<Bundle> {
-    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-
-    let contents = (await readFile(entrypoint)).toString();
+    let contents = await readFile(entrypoint, "utf-8");
 
     // log a warning if contents includes __dirname or __filename
     if (contents.includes("__dirname") || contents.includes("__filename")) {
@@ -52,9 +49,7 @@ export class Sandbox {
 
     // wrap contents with a shim that handles the communication with the parent process
     // we insert this shim before bundling to ensure source maps are generated correctly
-    contents = `
-"use strict";
-${contents}
+    contents += `
 process.on("message", async (message) => {
   const { fn, args } = message;
   try {
@@ -67,7 +62,7 @@ process.on("message", async (message) => {
 `;
     const wrappedPath = entrypoint.replace(/\.js$/, ".sandbox.js");
     writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
-    const bundle = createBundle(wrappedPath, [], workdir);
+    const bundle = createBundle(wrappedPath);
 
     if (process.env.DEBUG) {
       const fileStats = await stat(entrypoint);
@@ -118,13 +113,18 @@ process.on("message", async (message) => {
   public async initialize() {
     this.debugLog("Initializing sandbox.");
     const childEnv = this.options.env ?? {};
-    if (
-      process.env.NODE_OPTIONS?.includes("--inspect") ||
-      process.execArgv.some((a) => a.startsWith("--inspect"))
-    ) {
+    if (inspectorUrl?.()) {
       // We're exposing a debugger, let's attempt to ensure the child process automatically attaches
       childEnv.NODE_OPTIONS =
         (childEnv.NODE_OPTIONS ?? "") + (process.env.NODE_OPTIONS ?? "");
+
+      // If the child process is not already configured to attach a debugger, add a flag to do so
+      if (
+        !childEnv.NODE_OPTIONS.includes("--inspect") &&
+        !process.execArgv.includes("--inspect")
+      ) {
+        childEnv.NODE_OPTIONS += " --inspect=0";
+      }
 
       // VSCode's debugger adds some environment variables that we want to pass to the child process
       for (const key in process.env) {

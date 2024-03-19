@@ -622,8 +622,8 @@ exports[`peek.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
-              "inc",
               "peek",
+              "inc",
             ],
             "TestRunner": [
               "findTests",
@@ -693,8 +693,8 @@ exports[`peek.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
-              "inc",
               "peek",
+              "inc",
             ],
             "TestRunner": [
               "findTests",
@@ -778,8 +778,8 @@ exports[`set.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
-              "peek",
               "set",
+              "peek",
             ],
             "TestRunner": [
               "findTests",
@@ -868,8 +868,8 @@ exports[`set.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
-              "peek",
               "set",
+              "peek",
             ],
             "TestRunner": [
               "findTests",

@@ -6,6 +6,6 @@
   "license": "MIT",
   "wing": true,
   "dependencies": {
-    "@winglibs/vite": "^0.1.2"
+    "@winglibs/vite": "^0.1.3"
   }
 }
