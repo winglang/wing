@@ -1685,15 +1685,6 @@ impl Types {
 		self.json_literal_casts.get(&expr_id)
 	}
 
-	pub fn reset_per_compile_data(&mut self) {
-		self.type_for_expr.clear();
-		self.scope_envs.clear();
-		self.inferences.clear();
-		self.json_literal_casts.clear();
-		self.type_expressions.clear();
-		self.source_file_envs.clear();
-	}
-
 	/// Given a builtin type, return the full class info from the standard library.
 	///
 	/// This is needed because our builtin types have no API.
