@@ -1664,12 +1664,6 @@ impl Types {
 		self.scope_envs[scope_id].expect("Scope should have an env")
 	}
 
-	pub fn reset_scope_envs(&mut self) {
-		for elem in self.scope_envs.iter_mut() {
-			*elem = None;
-		}
-	}
-
 	/// Obtain the type of a given expression id. Returns None if the expression has not been type checked yet. If
 	/// this is called after type checking, it should always return Some.
 	pub fn try_get_expr_type(&self, expr_id: ExprId) -> Option<TypeRef> {
@@ -1691,10 +1685,13 @@ impl Types {
 		self.json_literal_casts.get(&expr_id)
 	}
 
-	pub fn reset_expr_types(&mut self) {
-		for elem in self.type_for_expr.iter_mut() {
-			*elem = None;
-		}
+	pub fn reset_per_compile_data(&mut self) {
+		self.type_for_expr.clear();
+		self.scope_envs.clear();
+		self.inferences.clear();
+		self.json_literal_casts.clear();
+		self.type_expressions.clear();
+		self.source_file_envs.clear();
 	}
 
 	/// Given a builtin type, return the full class info from the standard library.

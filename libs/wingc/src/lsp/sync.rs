@@ -150,8 +150,7 @@ fn partial_compile(
 	}
 
 	// Reset all type information
-	types.reset_expr_types();
-	types.reset_scope_envs();
+	types.reset_per_compile_data();
 
 	// -- TYPECHECKING PHASE --
 	let mut jsii_imports = vec![];
