@@ -1,6 +1,7 @@
-import { Token } from "cdktf";
-
 export function isValidArn(arn: string, service: string) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { Token } = require("cdktf");
+
   // if the ARN is an unresolved token, we can't validate it so assume it's valid
   if (Token.isUnresolved(arn)) {
     return true;
