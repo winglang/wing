@@ -40,7 +40,7 @@ When the compiler encounters an inflight expression that references a preflight 
 
 In the future we'd like to employ data flow analysis (probably through [reaching defintions analysis](https://en.wikipedia.org/wiki/Reaching_definition) resolve these errors.
 
-## Problems with current solution
+## Problems with the current solution
 
 We need a mechanism for explicitly qualifying lifted objects. Consider the following cases:
 
@@ -123,15 +123,15 @@ inflight () => {
   // In the following scope we disable qualification compilation errors due to unknown preflight object
   // and we also disable automatic qualification.
   // We explicitly qualify b1 and b2 with "put" since the compiler doesn't figure this out for us.
-  with lift_qualification {b1: ["put"], b2: ["put"]} {
+  lift {b1: ["put"], b2: ["put"]} {
     b.put("key", "value"); 
   }
 }
 ```
 
-Internally the argument to the `lift_qualification` keyword creates a `std.Qualifications` object wich is added to the closures lift qualifications. 
+Internally the argument to the `lift` block creates a `std.Qualifications` object wich is added to the closures lift qualifications. 
 
-Note that multiple `lift_qualification` blocks in the code just create more `std.Qualifications`s for this closure. 
+Note that multiple `lift` blocks in the code just create more `std.Qualifications`s for this closure. 
 The actuall qualification values (`b1` and `"put"`) are just appended to the closure/method and they don't strictly belong to the block.
 
 What does apply to the block are the disabling of qualification errors within the block, so in our example we can use the inflight expression `b`, and inside the block we also don't automatically add qualifications even if the compile can technically do this. 
@@ -177,7 +177,7 @@ let arr = [b1,b2];
 
 class A {
   inflight foo() {
-    with lift_qualifications qual { // Use the qualification object programatically defined in preflight code
+    lift qual { // Use the qualification object programatically defined in preflight code
       for b in arr {
         b.put("k99", "v"); // This key pattern should work for both buckets
       }
@@ -188,7 +188,7 @@ class A {
   }
 
   inflight bar() {
-    with lift_qualifications qual { // reuse `qual` for another method of `A`
+    lift qual { // reuse `qual` for another method of `A`
       let b = arr.at(randome(arr.len));
       b.put("k0", "bar");
     }
