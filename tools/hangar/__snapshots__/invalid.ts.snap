@@ -3018,6 +3018,13 @@ error: Cannot use '??' with types \\"Dog?\\" and \\"Cat?\\", neither is a subtyp
     |         ^^^^^^^^^^^^^^^^^^ Cannot use '??' with types \\"Dog?\\" and \\"Cat?\\", neither is a subtype of the other
 
 
+error: Expected type to be \\"str\\", but got \\"str?\\" instead
+    --> ../../../examples/tests/invalid/optionals.test.w:132:15
+    |
+132 | let y1: str = a1 ?? b1;
+    |               ^^^^^^^^ Expected type to be \\"str\\", but got \\"str?\\" instead
+
+
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/optionals.test.w:39:3
    |

@@ -126,3 +126,8 @@ let whiskers: Cat? = new Cat();
 let s = bailey ?? whiskers;
 // ^ Type mismatch: cannot use '??' with types "Cat?" and "Dog?", neither is a subtype of the other
 // TODO: we could return a Pet? here, but we don't yet support that
+
+let a1: str? = nil;
+let b1: str? = "string";
+let y1: str = a1 ?? b1;
+                //^ Error expected a `str` but got `str?` instead

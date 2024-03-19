@@ -20,6 +20,4 @@ test "onMessage" {
   util.waitUntil(inflight () => {
     return c.peek() == 10;
   }, timeout: 10s);
-
-  assert(c.peek() == 10);
 }

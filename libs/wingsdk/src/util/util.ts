@@ -79,6 +79,11 @@ export interface WaitUntilProps {
    * @default 0.1s
    */
   readonly interval?: Duration;
+  /**
+   * Whether to throw an error if the timeout elapses.
+   * @default true
+   */
+  readonly throws?: boolean;
 }
 
 /**
@@ -267,6 +272,11 @@ export class Util {
 
   /**
    * Run a predicate repeatedly, waiting until it returns true or until the timeout elapses.
+   * If the timeout elapses, the function throws an error.
+   *
+   * Alternatively, you can pass `throws: false` to suppress the error, and instead return a boolean
+   * indicating whether the predicate returned true within the timeout.
+   *
    * @param predicate The function that will be evaluated.
    * @param props Timeout and interval values, default to one 1m timeout and 0.1sec interval.
    * @throws Will throw if the given predicate throws.
@@ -289,6 +299,9 @@ export class Util {
       // it might be that predicate takes a long time and it is not considered inside timeout
       elapsed += interval.seconds;
       await this.sleep(interval);
+    }
+    if (props.throws !== false) {
+      throw new Error("Timeout elapsed");
     }
     return false;
   }

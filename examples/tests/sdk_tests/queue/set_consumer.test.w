@@ -11,7 +11,7 @@ q.setConsumer(inflight (msg: str) => {
 test "setConsumer" {
   q.push("hello", "world");
 
-  assert(util.waitUntil(
+  util.waitUntil(
     inflight () => { return c.peek() == 2; }, timeout: 10m, interval: 1s
-  ));
+  );
 }
