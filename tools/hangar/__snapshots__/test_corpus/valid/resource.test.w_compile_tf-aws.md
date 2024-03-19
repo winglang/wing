@@ -347,7 +347,7 @@ module.exports = function({  }) {
             "uniqueId": "BigPublisher_b2_oncreate-OnMessage0_IamRolePolicy_983EC08F"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_Queue_2C024F97.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:GetQueueUrl\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_Queue_2C024F97.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_Queue_2C024F97.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.BigPublisher_b2_oncreate-OnMessage0_IamRole_FF154497.name}"
       }
     },
