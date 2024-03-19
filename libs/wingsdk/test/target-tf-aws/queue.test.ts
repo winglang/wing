@@ -1,9 +1,11 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
-import { Queue } from "../../src/cloud";
+import { Function, IFunctionClient, Queue } from "../../src/cloud";
+import { QueueRef } from "../../src/shared-aws";
 import { Testing } from "../../src/simulator";
 import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
+import { SimApp } from "../sim-app";
 import {
   mkdtemp,
   sanitizeCode,
@@ -94,7 +96,7 @@ test("queue name valid", () => {
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_sqs_queue", {
       name: `The-Incredible_Queue-01-${queue.node.addr.substring(0, 8)}`,
     })
-  );
+  ).toBeTruthy();
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -110,7 +112,97 @@ test("replace invalid character from queue name", () => {
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_sqs_queue", {
       name: `The-Incredible-Queue-${queue.node.addr.substring(0, 8)}`,
     })
+  ).toBeTruthy();
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("QueueRef fails with an invalid ARN", async () => {
+  const app = new SimApp();
+  expect(() => {
+    new QueueRef(app, "QueueRef", "not-an_arn");
+  }).toThrow(/"not-an_arn" is not a valid Amazon SQS ARN/);
+});
+
+test("QueueRef in a SimApp can be used to reference an existing queue within a simulated app", async () => {
+  const app = new SimApp();
+
+  const queueRef = new QueueRef(
+    app,
+    "QueueRef",
+    "arn:aws:sqs:us-west-2:123456789012:MyQueue1234"
   );
+
+  // we can't really make a remote call here, so we'll just check that
+  // we have the right inflight client with the right queue name.
+  new Function(
+    app,
+    "Function",
+    Testing.makeHandler(
+      `async handle() {
+        if (!this.queue.client) {
+          throw new Error("Queue AWS SDK client not found");
+        }
+        if (this.queue.client.constructor.name !== "SQSClient") {
+          throw new Error("Queue AWS SDK client is not an SQSClient");
+        }
+        return this.queue._queueUrlOrArn; // yes, internal stuff
+      }`,
+      {
+        queue: { obj: queueRef, ops: ["push"] },
+      }
+    )
+  );
+
+  expect(queueRef.queueArn).toStrictEqual(
+    "arn:aws:sqs:us-west-2:123456789012:MyQueue1234"
+  );
+
+  const sim = await app.startSimulator();
+
+  const fn = sim.getResource("root/Function") as IFunctionClient;
+
+  const reply = await fn.invoke();
+  expect(reply).toStrictEqual("arn:aws:sqs:us-west-2:123456789012:MyQueue1234");
+});
+
+test("QueueRef in an TFAWS app can be used to reference an existing queue", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const queue = new QueueRef(
+    app,
+    "QueueRef",
+    "arn:aws:sqs:us-west-2:123456789012:MyQueue1234"
+  );
+
+  const handler = Testing.makeHandler(``, {
+    queue: { obj: queue, ops: ["push", "approxSize"] },
+  });
+
+  new Function(app, "Function", handler);
+
+  const output = app.synth();
+
+  // THEN
+
+  const statements = JSON.parse(
+    JSON.parse(output).resource.aws_iam_role_policy
+      .Function_IamRolePolicy_E3B26607.policy
+  ).Statement;
+
+  expect(statements).toStrictEqual([
+    {
+      Action: ["sqs:SendMessage"],
+      Effect: "Allow",
+      Resource: ["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],
+    },
+    {
+      Action: ["sqs:GetQueueAttributes"],
+      Effect: "Allow",
+      Resource: ["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],
+    },
+  ]);
+
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
