@@ -10,11 +10,11 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
+	AccessModifier, ArgList, AssignmentKind, Ast, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
 	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
 	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
-	Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
-	UserDefinedType,
+	Scope, ScopeId, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
+	UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
@@ -159,7 +159,7 @@ pub fn parse_wing_project(
 	files: &mut Files,
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
-	asts: &mut IndexMap<Utf8PathBuf, Scope>,
+	asts: &mut IndexMap<Utf8PathBuf, Ast>,
 ) -> Vec<Utf8PathBuf> {
 	// Parse the initial path (even if we have already seen it before)
 	let dependent_wing_paths = match init_path.is_dir() {
@@ -225,7 +225,7 @@ fn parse_wing_file(
 	files: &mut Files,
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
-	asts: &mut IndexMap<Utf8PathBuf, Scope>,
+	asts: &mut IndexMap<Utf8PathBuf, Ast>,
 ) -> Vec<Utf8PathBuf> {
 	let source_text = match source_text {
 		Some(text) => text,
@@ -303,7 +303,7 @@ fn parse_wing_directory(
 	files: &mut Files,
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
-	asts: &mut IndexMap<Utf8PathBuf, Scope>,
+	asts: &mut IndexMap<Utf8PathBuf, Ast>,
 ) -> Vec<Utf8PathBuf> {
 	// Collect a list of all files and subdirectories in the directory
 	let mut files_and_dirs = Vec::new();
@@ -348,13 +348,13 @@ fn parse_wing_directory(
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
 	tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
 	let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
-	let scope = Scope::empty();
+	let ast = Ast::new();
 	let dependent_wing_paths = files_and_dirs;
 
 	// Update our collections of trees and ASTs and our file graph
 	files.update_file(&source_path, "".to_string());
 	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
-	asts.insert(source_path.to_owned(), scope);
+	asts.insert(source_path.to_owned(), ast);
 	file_graph.update_file(source_path, &dependent_wing_paths);
 
 	dependent_wing_paths
@@ -373,6 +373,9 @@ pub struct Parser<'a> {
 	/// Track all file paths that have been found while parsing the current file
 	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
 	referenced_wing_paths: RefCell<Vec<Utf8PathBuf>>,
+
+	/// The generated AST
+	ast: Ast,
 }
 
 struct ParseErrorBuilder<'s> {
@@ -415,30 +418,33 @@ impl<'s> Parser<'s> {
 			in_json: RefCell::new(0),
 			is_in_mut_json: RefCell::new(false),
 			referenced_wing_paths: RefCell::new(Vec::new()),
+			ast: Ast::new(),
 		}
 	}
 
-	pub fn parse(self, root: &Node) -> (Scope, Vec<Utf8PathBuf>) {
-		let scope = match root.kind() {
-			"source" => self.build_scope(&root, Phase::Preflight),
-			_ => Scope::empty(),
-		};
+	pub fn parse(mut self, root: &Node) -> (Ast, Vec<Utf8PathBuf>) {
+		if matches!(root.kind(), "source") {
+			self.ast.root_scope = Some(self.build_scope(&root, Phase::Preflight))
+		}
 
 		// Module files can only have certain kinds of statements
-		if !is_entrypoint_file(&self.source_name) {
-			for stmt in &scope.statements {
-				if !is_valid_module_statement(&stmt) {
-					Diagnostic::new(
+		if let Some(scope) = self.ast.root_scope {
+			if !is_entrypoint_file(&self.source_name) {
+				let scope = self.ast.get_scope(scope);
+				for stmt in &scope.statements {
+					if !is_valid_module_statement(&stmt) {
+						Diagnostic::new(
 						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` or `.test.w` to make this an entrypoint file.",
 						stmt,
 					).report();
+					}
 				}
 			}
 		}
 
 		self.report_unhandled_errors(&root);
 
-		(scope, self.referenced_wing_paths.into_inner())
+		(self.ast, self.referenced_wing_paths.into_inner())
 	}
 
 	fn add_error(&self, message: impl ToString, node: &Node) {
@@ -568,7 +574,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_scope(&self, scope_node: &Node, phase: Phase) -> Scope {
+	fn build_scope(&self, scope_node: &Node, phase: Phase) -> ScopeId {
 		let span = self.node_span(scope_node);
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let mut cursor = scope_node.walk();
@@ -579,7 +585,7 @@ impl<'s> Parser<'s> {
 			.enumerate()
 			.filter_map(|(i, st_node)| self.build_statement(&st_node, i, phase).ok())
 			.collect();
-		Scope::new(statements, span)
+		self.ast.new_scope(statements, span)
 	}
 
 	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase) -> DiagnosticResult<Stmt> {
@@ -684,7 +690,7 @@ impl<'s> Parser<'s> {
 	/// Builds scope statements for a loop (while/for), and maintains the is_in_loop flag
 	/// for the duration of the loop. So that later break statements inside can be validated
 	/// without traversing the AST.
-	fn build_in_loop_scope(&self, scope_node: &Node, phase: Phase) -> Scope {
+	fn build_in_loop_scope(&self, scope_node: &Node, phase: Phase) -> ScopeId {
 		let prev_is_in_loop = *self.is_in_loop.borrow();
 		*self.is_in_loop.borrow_mut() = true;
 		let scope = self.build_scope(scope_node, phase);
@@ -1324,7 +1330,7 @@ impl<'s> Parser<'s> {
 					}),
 					phase: Phase::Preflight,
 				},
-				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
+				body: FunctionBody::Statements(self.ast.new_scope(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
 				access: AccessModifier::Public,
@@ -1349,7 +1355,7 @@ impl<'s> Parser<'s> {
 					}),
 					phase: Phase::Inflight,
 				},
-				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
+				body: FunctionBody::Statements(self.ast.new_scope(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
 				access: AccessModifier::Public,
@@ -2535,7 +2541,7 @@ impl<'s> Parser<'s> {
 			self.node_span(&name_node),
 		));
 		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), Phase::Inflight);
-		let statements_span = statements.span.clone();
+		let statements_span = self.ast.get_scope(statements).span.clone();
 		let span = self.node_span(statement_node);
 
 		let inflight_closure = Expr::new(

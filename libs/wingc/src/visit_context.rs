@@ -41,9 +41,7 @@ impl VisitContext {
 			expression: vec![],
 		}
 	}
-}
 
-impl VisitContext {
 	pub fn push_type_annotation(&mut self) {
 		self.in_type_annotation.push(true);
 	}

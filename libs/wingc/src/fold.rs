@@ -1,9 +1,9 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum, Expr,
+		ArgList, Ast, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum, Expr,
 		ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface,
-		InterpolatedString, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind, Struct, StructField,
-		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		InterpolatedString, InterpolatedStringPart, Literal, New, Reference, Scope, ScopeId, Stmt, StmtKind, Struct,
+		StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -12,7 +12,9 @@ use crate::{
 /// AST node instead of a reference to it, and returns a new AST node instance.
 /// This trait can be useful for AST transformations.
 pub trait Fold {
-	fn fold_scope(&mut self, node: Scope) -> Scope {
+	fn ast(&mut self) -> &mut Ast;
+
+	fn fold_scope(&mut self, node: ScopeId) -> ScopeId {
 		fold_scope(self, node)
 	}
 	fn fold_stmt(&mut self, node: Stmt) -> Stmt {
@@ -71,15 +73,17 @@ pub trait Fold {
 	}
 }
 
-pub fn fold_scope<F>(f: &mut F, node: Scope) -> Scope
+pub fn fold_scope<F>(f: &mut F, node: ScopeId) -> ScopeId
 where
 	F: Fold + ?Sized,
 {
-	Scope {
-		id: node.id,
-		statements: node.statements.into_iter().map(|stmt| f.fold_stmt(stmt)).collect(),
-		span: node.span,
-	}
+	let scope = f.ast().scopes[node];
+	f.ast().scopes[node] = Scope {
+		id: scope.id,
+		statements: scope.statements.into_iter().map(|stmt| f.fold_stmt(stmt)).collect(),
+		span: scope.span,
+	};
+	node
 }
 
 pub fn fold_stmt<F>(f: &mut F, node: Stmt) -> Stmt

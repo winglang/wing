@@ -7,7 +7,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Symbol};
+use ast::{Ast, Scope, Symbol};
 use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
@@ -214,18 +214,22 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 }
 
 pub fn type_check(
-	scope: &mut Scope,
+	ast: &mut Ast,
 	types: &mut Types,
 	file_path: &Utf8Path,
 	file_graph: &FileGraph,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
+	let Some(root_scope) = ast.root_scope else {
+		return;
+	};
+
 	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 
-	types.set_scope_env(scope, env);
+	types.set_scope_env(ast, root_scope, env);
 
-	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
+	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports, ast);
 	tc.add_jsii_module_to_env(
 		&mut env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
@@ -233,14 +237,14 @@ pub fn type_check(
 		&Symbol::global(WINGSDK_STD_MODULE),
 		None,
 	);
-	tc.add_builtins(scope);
+	tc.add_builtins(root_scope);
 
 	// If the file is an entrypoint file, we add "this" to its symbol environment
 	if is_entrypoint_file(file_path) {
 		tc.add_this(&mut env);
 	}
 
-	tc.type_check_file_or_dir(file_path, scope);
+	tc.type_check_file_or_dir(file_path, root_scope);
 }
 
 pub fn compile(
@@ -270,12 +274,14 @@ pub fn compile(
 	// Transform all inflight closures defined in preflight into single-method resources
 	let mut asts = asts
 		.into_iter()
-		.map(|(path, scope)| {
-			let mut inflight_transformer = ClosureTransformer::new();
-			let scope = inflight_transformer.fold_scope(scope);
-			(path, scope)
+		.map(|(path, ast)| {
+			if let Some(root) = ast.root_scope {
+				let mut inflight_transformer = ClosureTransformer::new(ast);
+				let scope = inflight_transformer.fold_scope(root);
+			}
+			(path, ast)
 		})
-		.collect::<IndexMap<Utf8PathBuf, Scope>>();
+		.collect::<IndexMap<Utf8PathBuf, Ast>>();
 
 	// -- TYPECHECKING PHASE --
 
@@ -289,9 +295,9 @@ pub fn compile(
 	// Type check all files in topological order (start with files that don't bring any other
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
-		let mut scope = asts.swap_remove(file).expect("matching AST not found");
+		let mut ast = asts.swap_remove(file).expect("matching AST not found");
 		type_check(
-			&mut scope,
+			&mut ast,
 			&mut types,
 			&file,
 			&file_graph,
@@ -299,19 +305,25 @@ pub fn compile(
 			&mut jsii_imports,
 		);
 
-		// Make sure all type reference are no longer considered references
-		let mut tr_transformer = TypeReferenceTransformer { types: &mut types };
-		let scope = tr_transformer.fold_scope(scope);
+		if let Some(root_scope) = ast.root_scope {
+			// Make sure all type reference are no longer considered references
+			let mut tr_transformer = TypeReferenceTransformer {
+				types: &mut types,
+				ast: &mut ast,
+			};
+			tr_transformer.fold_scope(root_scope);
+			let scope = ast.get_scope(root_scope);
 
-		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
-		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
-		tc_assert.check(&scope);
+			// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
+			let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
+			tc_assert.check(scope);
 
-		// Validate all Json literals to make sure their values are legal
-		let mut json_checker = ValidJsonVisitor::new(&types);
-		json_checker.check(&scope);
+			// Validate all Json literals to make sure their values are legal
+			let mut json_checker = ValidJsonVisitor::new(&types);
+			json_checker.check(scope);
+		}
 
-		asts.insert(file.clone(), scope);
+		asts.insert(file.clone(), ast);
 	}
 
 	// Verify that the project dir is absolute
@@ -331,12 +343,14 @@ pub fn compile(
 
 	let mut asts = asts
 		.into_iter()
-		.map(|(path, scope)| {
+		.map(|(path, ast)| {
 			let mut lift = LiftVisitor::new(&jsifier);
-			lift.visit_scope(&scope);
-			(path, scope)
+			if let Some(root) = ast.root_scope {
+				lift.visit_scope(&ast.get_scope(root));
+			}
+			(path, ast)
 		})
-		.collect::<IndexMap<Utf8PathBuf, Scope>>();
+		.collect::<IndexMap<Utf8PathBuf, Ast>>();
 
 	// bail out now (before jsification) if there are errors (no point in jsifying)
 	if found_errors() {
@@ -349,16 +363,20 @@ pub fn compile(
 		.into_iter()
 		.map(|(path, scope)| {
 			let mut reference_visitor = StructSchemaVisitor::new(&jsifier);
-			reference_visitor.visit_scope(&scope);
+			if let Some(root) = scope.root_scope {
+				reference_visitor.visit_scope(&scope.get_scope(root));
+			}
 			(path, scope)
 		})
-		.collect::<IndexMap<Utf8PathBuf, Scope>>();
+		.collect::<IndexMap<Utf8PathBuf, Ast>>();
 
 	// -- JSIFICATION PHASE --
 
 	for file in &topo_sorted_files {
-		let scope = asts.get_mut(file).expect("matching AST not found");
-		jsifier.jsify(file, &scope);
+		let ast = asts.get_mut(file).expect("matching AST not found");
+		if let Some(root) = ast.root_scope {
+			jsifier.jsify(file, &ast, root);
+		}
 	}
 	if !found_errors() {
 		match jsifier.output_files.borrow().emit_files(out_dir) {
@@ -372,8 +390,10 @@ pub fn compile(
 		let preflight_file_map = jsifier.preflight_file_map.borrow();
 		let dtsifier = dtsify::DTSifier::new(&mut types, &preflight_file_map, &mut file_graph);
 		for file in &topo_sorted_files {
-			let scope = asts.get_mut(file).expect("matching AST not found");
-			dtsifier.dtsify(file, &scope);
+			let ast = asts.get_mut(file).expect("matching AST not found");
+			if let Some(root) = ast.root_scope {
+				dtsifier.dtsify(file, ast.get_scope(root));
+			}
 		}
 		if !found_errors() {
 			let output_files = dtsifier.output_files.borrow();

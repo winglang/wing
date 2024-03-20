@@ -7,8 +7,8 @@ pub mod symbol_env;
 pub(crate) mod type_reference_transform;
 
 use crate::ast::{
-	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,
-	TypeAnnotationKind,
+	self, AccessModifier, AssignmentKind, Ast, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet,
+	New, ScopeId, TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -20,6 +20,7 @@ use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::FileGraph;
+use crate::jsify::ROOT_CONSTRUCT;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
@@ -1367,8 +1368,8 @@ pub struct Types {
 	type_for_expr: Vec<Option<ResolvedExpression>>,
 	/// Lookup table from an Expr's `id` to the type it's being cast to. The Expr is always a Json literal or Json map literal.
 	json_literal_casts: IndexMap<ExprId, TypeRef>,
-	/// Lookup table from a Scope's `id` to its symbol environment
-	scope_envs: Vec<Option<SymbolEnvRef>>,
+	/// Lookup table from an AST's `id`` to a Scope's `id` to its symbol environment
+	ast_scope_envs: HashMap<usize, HashMap<ScopeId, SymbolEnvRef>>,
 	/// Expressions used in references that actually refer to a type.
 	/// Key is the ExprId of the object of a InstanceMember, and the value is a TypeMember representing the whole reference.
 	type_expressions: IndexMap<ExprId, Reference>,
@@ -1418,7 +1419,7 @@ impl Types {
 			err_idx,
 			type_for_expr: Vec::new(),
 			json_literal_casts: IndexMap::new(),
-			scope_envs: Vec::new(),
+			ast_scope_envs: HashMap::new(),
 			inferences: Vec::new(),
 			type_expressions: IndexMap::new(),
 		}
@@ -1649,19 +1650,18 @@ impl Types {
 
 	/// Sets the type environment for a given scope. Usually should be called soon
 	/// after the scope is created.
-	pub fn set_scope_env(&mut self, scope: &Scope, env: SymbolEnvRef) {
-		let scope_id = scope.id;
-		if self.scope_envs.len() <= scope_id {
-			self.scope_envs.resize_with(scope_id + 1, || None);
-		}
-		assert!(self.scope_envs[scope_id].is_none());
-		self.scope_envs[scope_id] = Some(env);
+	pub fn set_scope_env(&mut self, ast: &Ast, scope: ScopeId, env: SymbolEnvRef) {
+		self
+			.ast_scope_envs
+			.entry(ast.id)
+			.or_insert(HashMap::new())
+			.entry(scope)
+			.or_insert(env);
 	}
 
 	/// Obtain the type environment for a given scope.
-	pub fn get_scope_env(&self, scope: &Scope) -> SymbolEnvRef {
-		let scope_id = scope.id;
-		self.scope_envs[scope_id].expect("Scope should have an env")
+	pub fn get_scope_env(&self, ast: &Ast, scope: ScopeId) -> SymbolEnvRef {
+		self.ast_scope_envs[&ast.id][&scope]
 	}
 
 	/// Obtain the type of a given expression id. Returns None if the expression has not been type checked yet. If
@@ -1736,6 +1736,7 @@ pub enum UtilityFunctions {
 	UnsafeCast,
 	Nodeof,
 	Lift,
+	Root,
 }
 
 impl Display for UtilityFunctions {
@@ -1746,6 +1747,7 @@ impl Display for UtilityFunctions {
 			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
 			UtilityFunctions::Nodeof => write!(f, "nodeof"),
 			UtilityFunctions::Lift => write!(f, "lift"),
+			UtilityFunctions::Root => write!(f, "root"),
 		}
 	}
 }
@@ -1755,13 +1757,10 @@ pub struct TypeChecker<'a> {
 
 	/// Scratchpad for storing inner scopes so we can do breadth first traversal of the AST tree during type checking
 	///
-	/// TODO: this is a list of unsafe pointers to the statement's inner scopes. We use
-	/// unsafe because we can't return a mutable reference to the inner scopes since this method
-	/// already uses references to the statement that contains the scopes. Using unsafe here just
-	/// makes it a lot simpler. Ideally we should avoid returning anything here and have some way
+	/// TODO: Ideally we should avoid returning anything here and have some way
 	/// to iterate over the inner scopes given the outer scope. For this we need to model our AST
 	/// so all nodes implement some basic "tree" interface. For now this is good enough.
-	inner_scopes: Vec<(*const Scope, VisitContext)>,
+	inner_scopes: Vec<(ScopeId, VisitContext)>,
 
 	/// The path to the source file being type checked.
 	source_path: &'a Utf8Path,
@@ -1783,6 +1782,9 @@ pub struct TypeChecker<'a> {
 	curr_expr_info: Vec<ExprVisitInfo>,
 
 	ctx: VisitContext,
+
+	/// The AST we're type checking
+	ast: &'a Ast,
 }
 
 enum ExprVisitInfo {
@@ -1802,6 +1804,7 @@ impl<'a> TypeChecker<'a> {
 		file_graph: &'a FileGraph,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
+		ast: &'a Ast,
 	) -> Self {
 		Self {
 			types,
@@ -1813,6 +1816,7 @@ impl<'a> TypeChecker<'a> {
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
 			curr_expr_info: vec![],
+			ast,
 		}
 	}
 
@@ -1952,7 +1956,7 @@ impl<'a> TypeChecker<'a> {
 			.expect("Failed to add this");
 	}
 
-	pub fn add_builtins(&mut self, scope: &mut Scope) {
+	pub fn add_builtins(&mut self, scope: ScopeId) {
 		self.add_builtin(
 			UtilityFunctions::Log.to_string().as_str(),
 			Type::Function(FunctionSignature {
@@ -2065,12 +2069,25 @@ impl<'a> TypeChecker<'a> {
 				),
 			}),
 			scope,
-		)
+		);
+
+		self.add_builtin(
+			UtilityFunctions::Root.to_string().as_str(),
+			Type::Function(FunctionSignature {
+				this_type: None,
+				parameters: vec![],
+				return_type: self.types.construct_base_type(),
+				phase: Phase::Preflight,
+				js_override: Some(ROOT_CONSTRUCT.to_string()), // TODO: make sure this is passed into imported .w files
+				docs: Docs::with_summary("Returns the root contruct"),
+			}),
+			scope,
+		);
 	}
 
-	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
+	fn add_builtin(&mut self, name: &str, typ: Type, scope: ScopeId) {
 		let sym = Symbol::global(name);
-		let mut scope_env = self.types.get_scope_env(&scope);
+		let mut scope_env = self.types.get_scope_env(self.ast, scope);
 		scope_env
 			.define(
 				&sym,
@@ -2971,9 +2988,9 @@ impl<'a> TypeChecker<'a> {
 		self.with_function_def(None, &func_def.signature, func_def.is_static, function_env, |tc| {
 			// Type check the function body
 			if let FunctionBody::Statements(scope) = &func_def.body {
-				tc.types.set_scope_env(scope, function_env);
+				tc.types.set_scope_env(tc.ast, *scope, function_env);
 
-				tc.inner_scopes.push((scope, tc.ctx.clone()));
+				tc.inner_scopes.push((*scope, tc.ctx.clone()));
 
 				(function_type, sig.phase)
 			} else {
@@ -3288,8 +3305,8 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {
-		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
+	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: ScopeId) {
+		CompilationContext::set(CompilationPhase::TypeChecking, &self.ast.get_scope(scope).span);
 		self.type_check_scope(scope);
 
 		if source_path.is_dir() {
@@ -3299,7 +3316,7 @@ impl<'a> TypeChecker<'a> {
 
 		// Save the file's symbol environment to `self.types.source_file_envs`
 		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
-		let scope_env = self.types.get_scope_env(scope);
+		let scope_env = self.types.get_scope_env(self.ast, scope);
 		self
 			.types
 			.source_file_envs
@@ -3389,21 +3406,21 @@ impl<'a> TypeChecker<'a> {
 			.insert(source_path.to_owned(), SymbolEnvOrNamespace::Namespace(ns));
 	}
 
-	fn type_check_scope(&mut self, scope: &Scope) {
+	fn type_check_scope(&mut self, scope_id: ScopeId) {
 		assert!(self.inner_scopes.is_empty());
-		let mut env = self.types.get_scope_env(scope);
+		let mut env = self.types.get_scope_env(self.ast, scope_id);
 
-		self.hoist_type_definitions(scope, &mut env);
+		self.hoist_type_definitions(scope_id, &mut env);
 
+		let scope = self.ast.get_scope(scope_id);
 		for statement in scope.statements.iter() {
 			self.type_check_statement(statement, &mut env);
 		}
 
 		let inner_scopes = self.inner_scopes.drain(..).collect::<Vec<_>>();
 		for (inner_scope, ctx) in inner_scopes {
-			let scope = unsafe { &*inner_scope };
 			self.ctx = ctx;
-			self.type_check_scope(scope);
+			self.type_check_scope(inner_scope);
 		}
 
 		if let SymbolEnvKind::Function { sig, is_init, .. } = env.kind {
@@ -3457,8 +3474,8 @@ impl<'a> TypeChecker<'a> {
 	/// Check if there are any type declaration statements in the given scope.
 	/// If so, define the the respective types in the environment so that the type can be referenced by other
 	/// type declarations, even if they come before the type declaration.
-	fn hoist_type_definitions(&mut self, scope: &Scope, env: &mut SymbolEnv) {
-		for statement in scope.statements.iter() {
+	fn hoist_type_definitions(&mut self, scope: ScopeId, env: &mut SymbolEnv) {
+		for statement in self.ast.get_scope(scope).statements.iter() {
 			match &statement.kind {
 				StmtKind::Bring { source, identifier } => self.hoist_bring_statement(source, identifier, statement, env),
 				StmtKind::Struct(st) => self.hoist_struct_definition(st, env),
@@ -3891,10 +3908,10 @@ impl<'a> TypeChecker<'a> {
 				iterable,
 				statements,
 			} => {
-				tc.type_check_for_loop(iterable, iterator, statements, env);
+				tc.type_check_for_loop(iterable, iterator, *statements, env);
 			}
 			StmtKind::While { condition, statements } => {
-				tc.type_check_while(condition, statements, env);
+				tc.type_check_while(condition, *statements, env);
 			}
 			StmtKind::Break | StmtKind::Continue => {}
 			StmtKind::IfLet(iflet) => {
@@ -3906,7 +3923,7 @@ impl<'a> TypeChecker<'a> {
 				elif_statements,
 				else_statements,
 			} => {
-				tc.type_check_if(condition, statements, elif_statements, else_statements, env);
+				tc.type_check_if(condition, *statements, elif_statements, else_statements, env);
 			}
 			StmtKind::Expression(e) => {
 				tc.type_check_exp(e, env);
@@ -3924,8 +3941,8 @@ impl<'a> TypeChecker<'a> {
 					env.phase,
 					stmt.idx,
 				));
-				tc.types.set_scope_env(scope, scope_env);
-				tc.inner_scopes.push((scope, tc.ctx.clone()));
+				tc.types.set_scope_env(self.ast, *scope, scope_env);
+				tc.inner_scopes.push((*scope, tc.ctx.clone()));
 			}
 			StmtKind::Throw(exp) => {
 				tc.type_check_throw(exp, env);
@@ -3950,7 +3967,7 @@ impl<'a> TypeChecker<'a> {
 				catch_block,
 				finally_statements,
 			} => {
-				tc.type_check_try_catch(try_statements, catch_block, finally_statements, env);
+				tc.type_check_try_catch(*try_statements, catch_block, finally_statements, env);
 			}
 			StmtKind::CompilerDebugEnv => {
 				eprintln!("[symbol environment at {}]", stmt.span);
@@ -3964,9 +3981,9 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_try_catch(
 		&mut self,
-		try_statements: &Scope,
+		try_statements: ScopeId,
 		catch_block: &Option<ast::CatchBlock>,
-		finally_statements: &Option<Scope>,
+		finally_statements: &Option<ScopeId>,
 		env: &mut SymbolEnv,
 	) {
 		// Create a new environment for the try block
@@ -3976,7 +3993,7 @@ impl<'a> TypeChecker<'a> {
 			env.phase,
 			self.ctx.current_stmt_idx(),
 		));
-		self.types.set_scope_env(try_statements, try_env);
+		self.types.set_scope_env(self.ast, try_statements, try_env);
 		self.inner_scopes.push((try_statements, self.ctx.clone()));
 
 		// Create a new environment for the catch block
@@ -4002,8 +4019,8 @@ impl<'a> TypeChecker<'a> {
 					_ => {}
 				}
 			}
-			self.types.set_scope_env(&catch_block.statements, catch_env);
-			self.inner_scopes.push((&catch_block.statements, self.ctx.clone()));
+			self.types.set_scope_env(self.ast, catch_block.statements, catch_env);
+			self.inner_scopes.push((catch_block.statements, self.ctx.clone()));
 		}
 
 		// Create a new environment for the finally block
@@ -4014,8 +4031,8 @@ impl<'a> TypeChecker<'a> {
 				env.phase,
 				self.ctx.current_stmt_idx(),
 			));
-			self.types.set_scope_env(finally_statements, finally_env);
-			self.inner_scopes.push((finally_statements, self.ctx.clone()));
+			self.types.set_scope_env(self.ast, *finally_statements, finally_env);
+			self.inner_scopes.push((*finally_statements, self.ctx.clone()));
 		}
 	}
 
@@ -4296,7 +4313,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if let FunctionBody::Statements(scope) = &ast_class.inflight_initializer.body {
-			self.check_class_field_initialization(&scope, &ast_class.fields, Phase::Inflight);
+			self.check_class_field_initialization(*scope, &ast_class.fields, Phase::Inflight);
 		};
 
 		// Type check constructor
@@ -4315,7 +4332,7 @@ impl<'a> TypeChecker<'a> {
 			FunctionBody::External(_) => panic!("init cannot be extern"),
 		};
 
-		self.check_class_field_initialization(&init_statements, &ast_class.fields, Phase::Preflight);
+		self.check_class_field_initialization(*init_statements, &ast_class.fields, Phase::Preflight);
 
 		// Type check the inflight initializer
 		self.type_check_method(
@@ -4465,15 +4482,15 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_if(
 		&mut self,
 		condition: &Expr,
-		statements: &Scope,
+		statements: ScopeId,
 		elif_statements: &Vec<ast::ElifBlock>,
-		else_statements: &Option<Scope>,
+		else_statements: &Option<ScopeId>,
 		env: &mut SymbolEnv,
 	) {
 		self.type_check_if_statement(condition, statements, env);
 
 		for elif_scope in elif_statements {
-			self.type_check_if_statement(&elif_scope.condition, &elif_scope.statements, env);
+			self.type_check_if_statement(&elif_scope.condition, elif_scope.statements, env);
 		}
 
 		if let Some(else_scope) = else_statements {
@@ -4483,15 +4500,15 @@ impl<'a> TypeChecker<'a> {
 				env.phase,
 				self.ctx.current_stmt_idx(),
 			));
-			self.types.set_scope_env(else_scope, else_scope_env);
-			self.inner_scopes.push((else_scope, self.ctx.clone()));
+			self.types.set_scope_env(self.ast, *else_scope, else_scope_env);
+			self.inner_scopes.push((*else_scope, self.ctx.clone()));
 		}
 	}
 
 	fn type_check_iflet(&mut self, iflet: &IfLet, env: &mut SymbolEnv) {
 		self.type_check_if_let_statement(
 			&iflet.value,
-			&iflet.statements,
+			iflet.statements,
 			&iflet.reassignable,
 			&iflet.var_name,
 			env,
@@ -4500,12 +4517,12 @@ impl<'a> TypeChecker<'a> {
 		for elif_scope in &iflet.elif_statements {
 			match elif_scope {
 				Elifs::ElifBlock(elif_block) => {
-					self.type_check_if_statement(&elif_block.condition, &elif_block.statements, env);
+					self.type_check_if_statement(&elif_block.condition, elif_block.statements, env);
 				}
 				Elifs::ElifLetBlock(elif_let_block) => {
 					self.type_check_if_let_statement(
 						&elif_let_block.value,
-						&elif_let_block.statements,
+						elif_let_block.statements,
 						&elif_let_block.reassignable,
 						&elif_let_block.var_name,
 						env,
@@ -4514,19 +4531,19 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 
-		if let Some(else_scope) = &iflet.else_statements {
+		if let Some(else_scope) = iflet.else_statements {
 			let else_scope_env = self.types.add_symbol_env(SymbolEnv::new(
 				Some(env.get_ref()),
 				SymbolEnvKind::Scope,
 				env.phase,
 				self.ctx.current_stmt_idx(),
 			));
-			self.types.set_scope_env(else_scope, else_scope_env);
+			self.types.set_scope_env(self.ast, else_scope, else_scope_env);
 			self.inner_scopes.push((else_scope, self.ctx.clone()));
 		}
 	}
 
-	fn type_check_while(&mut self, condition: &Expr, statements: &Scope, env: &mut SymbolEnv) {
+	fn type_check_while(&mut self, condition: &Expr, statements: ScopeId, env: &mut SymbolEnv) {
 		let (cond_type, _) = self.type_check_exp(condition, env);
 		self.validate_type(cond_type, self.types.bool(), condition);
 
@@ -4536,12 +4553,12 @@ impl<'a> TypeChecker<'a> {
 			env.phase,
 			self.ctx.current_stmt_idx(),
 		));
-		self.types.set_scope_env(statements, scope_env);
+		self.types.set_scope_env(self.ast, statements, scope_env);
 
 		self.inner_scopes.push((statements, self.ctx.clone()));
 	}
 
-	fn type_check_for_loop(&mut self, iterable: &Expr, iterator: &Symbol, statements: &Scope, env: &mut SymbolEnv) {
+	fn type_check_for_loop(&mut self, iterable: &Expr, iterator: &Symbol, statements: ScopeId, env: &mut SymbolEnv) {
 		// TODO: Expression must be iterable
 		let (exp_type, _) = self.type_check_exp(iterable, env);
 
@@ -4576,7 +4593,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			_ => {}
 		};
-		self.types.set_scope_env(statements, scope_env);
+		self.types.set_scope_env(self.ast, statements, scope_env);
 
 		self.inner_scopes.push((statements, self.ctx.clone()));
 	}
@@ -4646,7 +4663,7 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_if_let_statement(
 		&mut self,
 		value: &Expr,
-		statements: &Scope,
+		statements: ScopeId,
 		reassignable: &bool,
 		var_name: &Symbol,
 		env: &mut SymbolEnv,
@@ -4696,11 +4713,11 @@ impl<'a> TypeChecker<'a> {
 			_ => {}
 		}
 
-		self.types.set_scope_env(statements, stmt_env);
+		self.types.set_scope_env(self.ast, statements, stmt_env);
 		self.inner_scopes.push((statements, self.ctx.clone()));
 	}
 
-	fn type_check_if_statement(&mut self, condition: &Expr, statements: &Scope, env: &mut SymbolEnv) {
+	fn type_check_if_statement(&mut self, condition: &Expr, statements: ScopeId, env: &mut SymbolEnv) {
 		let (cond_type, _) = self.type_check_exp(condition, env);
 		self.validate_type(cond_type, self.types.bool(), condition);
 
@@ -4710,7 +4727,7 @@ impl<'a> TypeChecker<'a> {
 			env.phase,
 			self.ctx.current_stmt_idx(),
 		));
-		self.types.set_scope_env(statements, if_scope_env);
+		self.types.set_scope_env(self.ast, statements, if_scope_env);
 		self.inner_scopes.push((statements, self.ctx.clone()));
 	}
 
@@ -4794,9 +4811,9 @@ impl<'a> TypeChecker<'a> {
 	/// * `fields` - All fields of a class
 	/// * `phase` - initializer phase
 	///
-	fn check_class_field_initialization(&mut self, scope: &Scope, fields: &[ClassField], phase: Phase) {
+	fn check_class_field_initialization(&mut self, scope: ScopeId, fields: &[ClassField], phase: Phase) {
 		let mut visit_init = VisitClassInit::default();
-		visit_init.analyze_statements(&scope.statements);
+		visit_init.analyze_statements(&self.ast.get_scope(scope).statements);
 		let initialized_fields = visit_init.fields;
 
 		let (current_phase, forbidden_phase) = if phase == Phase::Inflight {
@@ -4881,8 +4898,8 @@ impl<'a> TypeChecker<'a> {
 			method_def.is_static,
 			method_env,
 			|tc| {
-				if let FunctionBody::Statements(scope) = &method_def.body {
-					tc.types.set_scope_env(scope, method_env);
+				if let FunctionBody::Statements(scope) = method_def.body {
+					tc.types.set_scope_env(self.ast, scope, method_env);
 					tc.inner_scopes.push((scope, tc.ctx.clone()));
 				}
 

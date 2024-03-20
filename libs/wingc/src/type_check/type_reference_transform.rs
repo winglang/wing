@@ -1,15 +1,20 @@
 use crate::{
-	ast::{Reference, Scope},
+	ast::{Ast, Reference, Scope, ScopeId},
 	fold::{self, Fold},
 };
 
 /// Replaces InstanceMembers pointing to a type a proper TypeMember.
 pub struct TypeReferenceTransformer<'a> {
 	pub types: &'a mut crate::type_check::Types,
+	pub ast: &'a mut Ast,
 }
 
 impl<'a> Fold for TypeReferenceTransformer<'a> {
-	fn fold_scope(&mut self, node: Scope) -> Scope {
+	fn ast(&mut self) -> &mut Ast {
+		self.ast
+	}
+
+	fn fold_scope(&mut self, node: ScopeId) -> ScopeId {
 		if self.types.type_expressions.is_empty() {
 			return node;
 		} else {

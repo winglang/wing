@@ -2,9 +2,9 @@ use indexmap::IndexMap;
 
 use crate::{
 	ast::{
-		AccessModifier, ArgList, AssignmentKind, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, FunctionParameter, FunctionSignature, Literal, New, Phase, Reference, Scope, Stmt, StmtKind,
-		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, Ast, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody,
+		FunctionDefinition, FunctionParameter, FunctionSignature, Literal, New, Phase, Reference, Scope, ScopeId, Stmt,
+		StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
@@ -54,25 +54,34 @@ pub struct ClosureTransformer {
 	// Track the statement index of the nearest statement we're inside so that
 	// newly-inserted classes will have access to the correct state
 	nearest_stmt_idx: usize,
+	/// The AST being transformed
+	ast: Ast,
 }
 
 impl ClosureTransformer {
-	pub fn new() -> Self {
+	pub fn new(ast: Ast) -> Self {
 		Self {
 			phase: Phase::Preflight,
 			inside_scope_with_this: false,
 			closure_counter: 0,
 			class_statements: vec![],
 			nearest_stmt_idx: 0,
+			ast,
 		}
 	}
 }
 
 impl Fold for ClosureTransformer {
-	fn fold_scope(&mut self, node: Scope) -> Scope {
+	fn ast(&mut self) -> &mut Ast {
+		&mut self.ast
+	}
+
+	fn fold_scope(&mut self, node: ScopeId) -> ScopeId {
 		let mut statements = vec![];
 
-		for stmt in node.statements {
+		let scope = self.ast().scopes[node];
+
+		for stmt in scope.statements {
 			// TODO: can we remove "idx" from Stmt to avoid having to reason about this?
 			// or add a compiler step that updates statement indices after folding?
 			let old_nearest_stmt_idx = self.nearest_stmt_idx;
@@ -91,11 +100,12 @@ impl Fold for ClosureTransformer {
 			self.class_statements.clear();
 		}
 
-		Scope {
-			id: node.id,
+		self.ast().scopes[node] = Scope {
+			id: scope.id,
 			statements,
-			span: node.span,
-		}
+			span: scope.span,
+		};
+		node
 	}
 
 	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
@@ -165,6 +175,7 @@ impl Fold for ClosureTransformer {
 						from: "this",
 						to: parent_this.as_str(),
 						inside_class: false,
+						ast: self.ast(),
 					};
 					this_transform.fold_function_definition(func_def)
 				} else {
@@ -268,7 +279,7 @@ impl Fold for ClosureTransformer {
 								phase: Phase::Preflight,
 							},
 							is_static: true,
-							body: FunctionBody::Statements(Scope::new(class_init_body, WingSpan::for_file(file_id))),
+							body: FunctionBody::Statements(self.ast().new_scope(class_init_body, WingSpan::for_file(file_id))),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
 						},
@@ -287,7 +298,7 @@ impl Fold for ClosureTransformer {
 								phase: Phase::Inflight,
 							},
 							is_static: false,
-							body: FunctionBody::Statements(Scope::new(vec![], WingSpan::for_file(file_id))),
+							body: FunctionBody::Statements(self.ast().new_scope(vec![], WingSpan::for_file(file_id))),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
 						},
@@ -332,14 +343,17 @@ struct RenameThisTransformer<'a> {
 	// The transform shouldn't change references to `this` inside inflight classes since
 	// they refer to different objects.
 	inside_class: bool,
+	/// The AST being transformed
+	ast: &'a Ast,
 }
 
-impl Default for RenameThisTransformer<'_> {
-	fn default() -> Self {
+impl RenameThisTransformer<'_> {
+	fn new(ast: &Ast) -> Self {
 		Self {
 			from: "this",
 			to: PARENT_THIS_NAME,
 			inside_class: false,
+			ast,
 		}
 	}
 }
@@ -367,5 +381,9 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 			}
 			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
 		}
+	}
+
+	fn ast(&mut self) -> &mut Ast {
+		&mut self.ast
 	}
 }

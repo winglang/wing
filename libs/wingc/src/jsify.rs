@@ -12,9 +12,9 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Enum,
-		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference,
-		Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, Ast, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs,
+		Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase,
+		Reference, Scope, ScopeId, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -50,6 +50,7 @@ const PLATFORMS_VAR: &str = "$platforms";
 const HELPERS_VAR: &str = "$helpers";
 
 const ROOT_CLASS: &str = "$Root";
+pub const ROOT_CONSTRUCT: &str = "$root";
 const JS_CONSTRUCTOR: &str = "constructor";
 const NODE_MODULES_DIR: &str = "node_modules";
 const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
@@ -60,6 +61,7 @@ pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
 	pub visit_ctx: &'a mut VisitContext,
 	pub source_path: Option<&'a Utf8Path>,
+	ast: &'a Ast,
 }
 
 pub struct JSifier<'a> {
@@ -125,7 +127,9 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	pub fn jsify(&mut self, source_path: &Utf8Path, scope: &Scope) {
+	pub fn jsify(&mut self, source_path: &Utf8Path, ast: &'a Ast, scope_id: ScopeId) {
+		// TODO: do we always pass the root scope?
+		let scope = ast.get_scope(scope_id);
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
@@ -135,8 +139,11 @@ impl<'a> JSifier<'a> {
 			visit_ctx: &mut visit_ctx,
 			lifts: None,
 			source_path: Some(source_path),
+			ast,
 		};
-		jsify_context.visit_ctx.push_env(self.types.get_scope_env(&scope));
+		jsify_context
+			.visit_ctx
+			.push_env(self.types.get_scope_env(ast, scope_id));
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
 			// Put type definitions first so JS won't complain of unknown types
 			(StmtKind::Enum(_), StmtKind::Enum(_)) => Ordering::Equal,
@@ -147,7 +154,7 @@ impl<'a> JSifier<'a> {
 			(_, StmtKind::Class(_)) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
-			let scope_env = self.types.get_scope_env(&scope);
+			let scope_env = self.types.get_scope_env(ast, scope_id);
 			let s = self.jsify_statement(&scope_env, statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
 				identifier: _,
@@ -192,6 +199,7 @@ impl<'a> JSifier<'a> {
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}($scope, $id) {{"));
 			root_class.line("super($scope, $id);");
+			root_class.line(format!("const {ROOT_CONSTRUCT} = this;"));
 			root_class.add_code(self.jsify_struct_schemas());
 			root_class.add_code(js);
 			root_class.close("}");
@@ -238,7 +246,7 @@ impl<'a> JSifier<'a> {
 		} else {
 			output.add_code(self.jsify_struct_schemas());
 			output.add_code(js);
-			let exports = get_public_symbols(&scope);
+			let exports = get_public_symbols(ast, scope_id);
 			output.line(format!(
 				"module.exports = {{ {} }};",
 				exports.iter().map(ToString::to_string).join(", ")
@@ -316,11 +324,12 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_scope_body(&self, scope: &Scope, ctx: &mut JSifyContext) -> CodeMaker {
+	fn jsify_scope_body(&self, scope_id: ScopeId, ctx: &mut JSifyContext) -> CodeMaker {
+		let scope = ctx.ast.get_scope(scope_id);
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut code = CodeMaker::with_source(&scope.span);
 
-		let scope_env = self.types.get_scope_env(&scope);
+		let scope_env = self.types.get_scope_env(ctx.ast, scope_id);
 		ctx.visit_ctx.push_env(scope_env);
 		for statement in scope.statements.iter() {
 			let statement_code = self.jsify_statement(&scope_env, statement, ctx);
@@ -841,7 +850,7 @@ impl<'a> JSifier<'a> {
 		code: &mut CodeMaker,
 		elif_statements: &Vec<Elifs>,
 		index: usize,
-		else_statements: &Option<Scope>,
+		else_statements: &Option<ScopeId>,
 		ctx: &mut JSifyContext,
 	) {
 		match elif_statements.get(index).unwrap() {
@@ -869,7 +878,7 @@ impl<'a> JSifier<'a> {
 					code.line(format!("const {} = {};", elif_let_to_jsify.var_name, value));
 				}
 
-				code.add_code(self.jsify_scope_body(&elif_let_to_jsify.statements, ctx));
+				code.add_code(self.jsify_scope_body(elif_let_to_jsify.statements, ctx));
 				code.close("}");
 			}
 			Elifs::ElifBlock(elif_to_jsify) => {
@@ -877,7 +886,7 @@ impl<'a> JSifier<'a> {
 				// TODO: this puts the "else if" in a separate line from the closing block but
 				// technically that shouldn't be a problem, its just ugly
 				code.open(new_code!(&elif_to_jsify.condition.span, "else if (", condition, ") {"));
-				code.add_code(self.jsify_scope_body(&elif_to_jsify.statements, ctx));
+				code.add_code(self.jsify_scope_body(elif_to_jsify.statements, ctx));
 				code.close("}");
 			}
 		}
@@ -885,7 +894,7 @@ impl<'a> JSifier<'a> {
 			self.jsify_elif_statements(code, elif_statements, index + 1, else_statements, ctx);
 		} else if let Some(else_scope) = else_statements {
 			code.open("else {");
-			code.add_code(self.jsify_scope_body(else_scope, ctx));
+			code.add_code(self.jsify_scope_body(*else_scope, ctx));
 			code.close("}");
 		}
 		return;
@@ -997,7 +1006,7 @@ impl<'a> JSifier<'a> {
 					self.jsify_expression(iterable, ctx),
 					") {"
 				));
-				code.add_code(self.jsify_scope_body(statements, ctx));
+				code.add_code(self.jsify_scope_body(*statements, ctx));
 				code.close("}");
 			}
 			StmtKind::While { condition, statements } => {
@@ -1007,7 +1016,7 @@ impl<'a> JSifier<'a> {
 					self.jsify_expression(condition, ctx),
 					") {"
 				));
-				code.add_code(self.jsify_scope_body(statements, ctx));
+				code.add_code(self.jsify_scope_body(*statements, ctx));
 				code.close("}");
 			}
 			StmtKind::Break => code.line("break;"),
@@ -1064,7 +1073,7 @@ impl<'a> JSifier<'a> {
 				} else {
 					code.line(format!("const {} = {};", var_name, if_let_value));
 				}
-				code.add_code(self.jsify_scope_body(statements, ctx));
+				code.add_code(self.jsify_scope_body(*statements, ctx));
 				code.close("}");
 
 				if elif_statements.len() > 0 {
@@ -1079,7 +1088,7 @@ impl<'a> JSifier<'a> {
 					}
 				} else if let Some(else_scope) = else_statements {
 					code.open("else {");
-					code.add_code(self.jsify_scope_body(else_scope, ctx));
+					code.add_code(self.jsify_scope_body(*else_scope, ctx));
 					code.close("}");
 				}
 
@@ -1097,7 +1106,7 @@ impl<'a> JSifier<'a> {
 					self.jsify_expression(condition, ctx),
 					") {"
 				));
-				code.add_code(self.jsify_scope_body(statements, ctx));
+				code.add_code(self.jsify_scope_body(*statements, ctx));
 				code.close("}");
 
 				for elif_block in elif_statements {
@@ -1105,13 +1114,13 @@ impl<'a> JSifier<'a> {
 					// TODO: this puts the "else if" in a separate line from the closing block but
 					// technically that shouldn't be a problem, its just ugly
 					code.open(new_code!(&elif_block.condition.span, "else if (", condition, ") {"));
-					code.add_code(self.jsify_scope_body(&elif_block.statements, ctx));
+					code.add_code(self.jsify_scope_body(elif_block.statements, ctx));
 					code.close("}");
 				}
 
 				if let Some(else_scope) = else_statements {
 					code.open("else {");
-					code.add_code(self.jsify_scope_body(else_scope, ctx));
+					code.add_code(self.jsify_scope_body(*else_scope, ctx));
 					code.close("}");
 				}
 			}
@@ -1134,10 +1143,10 @@ impl<'a> JSifier<'a> {
 					";"
 				));
 			}
-			StmtKind::Scope(scope) => {
-				if !scope.statements.is_empty() {
+			StmtKind::Scope(scope_id) => {
+				if !ctx.ast.get_scope(*scope_id).statements.is_empty() {
 					code.open("{");
-					code.add_code(self.jsify_scope_body(scope, ctx));
+					code.add_code(self.jsify_scope_body(*scope_id, ctx));
 					code.close("}");
 				}
 			}
@@ -1177,7 +1186,7 @@ impl<'a> JSifier<'a> {
 				finally_statements,
 			} => {
 				code.open("try {");
-				code.add_code(self.jsify_scope_body(try_statements, ctx));
+				code.add_code(self.jsify_scope_body(*try_statements, ctx));
 				code.close("}");
 
 				if let Some(catch_block) = catch_block {
@@ -1190,13 +1199,13 @@ impl<'a> JSifier<'a> {
 						code.open("catch {");
 					}
 
-					code.add_code(self.jsify_scope_body(&catch_block.statements, ctx));
+					code.add_code(self.jsify_scope_body(catch_block.statements, ctx));
 					code.close("}");
 				}
 
 				if let Some(finally_statements) = finally_statements {
 					code.open("finally {");
-					code.add_code(self.jsify_scope_body(finally_statements, ctx));
+					code.add_code(self.jsify_scope_body(*finally_statements, ctx));
 					code.close("}");
 				}
 			}
@@ -1253,7 +1262,7 @@ impl<'a> JSifier<'a> {
 			// Preflight class's inflight inits have no args
 			format!("async {CLASS_INFLIGHT_INIT_NAME}() {{")
 		});
-		async_init_body_code.add_code(self.jsify_scope_body(body_scope, ctx));
+		async_init_body_code.add_code(self.jsify_scope_body(*body_scope, ctx));
 		async_init_body_code.close("}");
 
 		// If this is an inflight init of an inflight class then we also need to generate a normal ctor, if it's a preflight class
@@ -1274,7 +1283,7 @@ impl<'a> JSifier<'a> {
 			if let Some(Stmt {
 				kind: StmtKind::SuperConstructor { arg_list },
 				..
-			}) = body_scope.statements.iter().next()
+			}) = ctx.ast.get_scope(*body_scope).statements.iter().next()
 			{
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
 				code.line("super(");
@@ -1316,7 +1325,7 @@ impl<'a> JSifier<'a> {
 		};
 
 		let body = match &func_def.body {
-			FunctionBody::Statements(scope) => self.jsify_scope_body(scope, ctx),
+			FunctionBody::Statements(scope) => self.jsify_scope_body(*scope, ctx),
 			FunctionBody::External(extern_path) => {
 				let entrypoint_is_file = self.compilation_init_path.is_file();
 				let entrypoint_dir = if entrypoint_is_file {
@@ -1436,6 +1445,7 @@ impl<'a> JSifier<'a> {
 				lifts,
 				visit_ctx: &mut ctx.visit_ctx,
 				source_path: ctx.source_path,
+				ast: ctx.ast,
 			};
 
 			// emit the inflight side of the class into a separate file
@@ -1537,7 +1547,7 @@ impl<'a> JSifier<'a> {
 		};
 
 		// Check if the first statement is a super constructor call, if not we need to add one
-		let super_called = if let Some(s) = init_statements.statements.first() {
+		let super_called = if let Some(s) = ctx.ast.get_scope(*init_statements).statements.first() {
 			matches!(s.kind, StmtKind::SuperConstructor { .. })
 		} else {
 			false
@@ -1550,7 +1560,7 @@ impl<'a> JSifier<'a> {
 		if !super_called {
 			body_code.line("super($scope, $id);");
 		}
-		body_code.add_code(self.jsify_scope_body(&init_statements, ctx));
+		body_code.add_code(self.jsify_scope_body(*init_statements, ctx));
 
 		code.add_code(body_code);
 
@@ -1648,7 +1658,7 @@ impl<'a> JSifier<'a> {
 
 		// emit the $inflight_init function (if it has a body).
 		if let FunctionBody::Statements(s) = &class.inflight_initializer.body {
-			if !s.statements.is_empty() {
+			if !ctx.ast.get_scope(*s).statements.is_empty() {
 				class_code.line(self.jsify_inflight_init(&class.inflight_initializer, class.phase, &mut ctx));
 			}
 		}
@@ -1889,46 +1899,10 @@ impl<'a> JSifier<'a> {
 	}
 }
 
-fn jsify_function_parameters(func_def: &FunctionDefinition) -> CodeMaker {
-	let mut parameter_list = vec![];
-
-	for p in &func_def.signature.parameters {
-		if p.variadic {
-			parameter_list.push(new_code!(&func_def.span, "...", jsify_symbol(&p.name)));
-		} else {
-			parameter_list.push(jsify_symbol(&p.name));
-		}
-	}
-
-	new_code!(&func_def.span, parameter_list)
-}
-
-fn jsify_symbol(symbol: &Symbol) -> CodeMaker {
-	new_code!(&symbol.span, &symbol.name)
-}
-
-fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
-	let current_class_type = resolve_user_defined_type(
-		ctx.visit_ctx.current_class().expect("a class"),
-		ctx.visit_ctx.current_env().expect("an env"),
-		ctx.visit_ctx.current_stmt_idx(),
-	)
-	.expect("a class type");
-	let parent_class_phase = current_class_type
-		.as_class()
-		.expect("a class")
-		.parent
-		.expect("a parent class")
-		.as_class()
-		.expect("a class")
-		.phase;
-	parent_class_phase
-}
-
-fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
+fn get_public_symbols(ast: &Ast, scope: ScopeId) -> Vec<Symbol> {
 	let mut symbols = Vec::new();
 
-	for stmt in &scope.statements {
+	for stmt in &ast.get_scope(scope).statements {
 		match &stmt.kind {
 			StmtKind::Bring { .. } => {}
 			StmtKind::SuperConstructor { .. } => {}
@@ -1965,6 +1939,42 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
+}
+
+fn jsify_function_parameters(func_def: &FunctionDefinition) -> CodeMaker {
+	let mut parameter_list = vec![];
+
+	for p in &func_def.signature.parameters {
+		if p.variadic {
+			parameter_list.push(new_code!(&func_def.span, "...", jsify_symbol(&p.name)));
+		} else {
+			parameter_list.push(jsify_symbol(&p.name));
+		}
+	}
+
+	new_code!(&func_def.span, parameter_list)
+}
+
+fn jsify_symbol(symbol: &Symbol) -> CodeMaker {
+	new_code!(&symbol.span, &symbol.name)
+}
+
+fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
+	let current_class_type = resolve_user_defined_type(
+		ctx.visit_ctx.current_class().expect("a class"),
+		ctx.visit_ctx.current_env().expect("an env"),
+		ctx.visit_ctx.current_stmt_idx(),
+	)
+	.expect("a class type");
+	let parent_class_phase = current_class_type
+		.as_class()
+		.expect("a class")
+		.parent
+		.expect("a parent class")
+		.as_class()
+		.expect("a class")
+		.phase;
+	parent_class_phase
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {

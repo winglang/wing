@@ -11,7 +11,35 @@ use crate::diagnostic::WingSpan;
 use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
-static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
+//static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
+static AST_COUNTER: AtomicUsize = AtomicUsize::new(0);
+
+pub struct Ast {
+	pub scopes: Vec<Scope>,
+	pub root_scope: Option<ScopeId>,
+	pub id: usize,
+}
+
+impl Ast {
+	pub fn new() -> Self {
+		Self {
+			scopes: vec![],
+			root_scope: None,
+			id: AST_COUNTER.fetch_add(1, Ordering::Relaxed),
+		}
+	}
+
+	pub fn new_scope(&mut self, statements: Vec<Stmt>, span: WingSpan) -> ScopeId {
+		let id = self.scopes.len();
+		let scope = Scope { id, statements, span };
+		self.scopes.push(scope);
+		id
+	}
+
+	pub fn get_scope(&self, id: ScopeId) -> &Scope {
+		&self.scopes[id]
+	}
+}
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -277,7 +305,7 @@ pub struct FunctionParameter {
 #[derive(Debug)]
 pub enum FunctionBody {
 	/// The function body implemented within a Wing scope.
-	Statements(Scope),
+	Statements(ScopeId),
 	/// The `extern` modifier value, pointing to an external implementation file
 	External(Utf8PathBuf),
 }
@@ -307,7 +335,7 @@ pub struct Stmt {
 #[derive(Debug)]
 pub struct ElifBlock {
 	pub condition: Expr,
-	pub statements: Scope,
+	pub statements: ScopeId,
 }
 
 #[derive(Debug)]
@@ -315,7 +343,7 @@ pub struct ElifLetBlock {
 	pub reassignable: bool,
 	pub var_name: Symbol,
 	pub value: Expr,
-	pub statements: Scope,
+	pub statements: ScopeId,
 }
 
 #[derive(Debug)]
@@ -436,9 +464,9 @@ pub struct IfLet {
 	pub reassignable: bool,
 	pub var_name: Symbol,
 	pub value: Expr,
-	pub statements: Scope,
+	pub statements: ScopeId,
 	pub elif_statements: Vec<Elifs>,
-	pub else_statements: Option<Scope>,
+	pub else_statements: Option<ScopeId>,
 }
 
 #[derive(Debug)]
@@ -465,18 +493,18 @@ pub enum StmtKind {
 	ForLoop {
 		iterator: Symbol,
 		iterable: Expr,
-		statements: Scope,
+		statements: ScopeId,
 	},
 	While {
 		condition: Expr,
-		statements: Scope,
+		statements: ScopeId,
 	},
 	IfLet(IfLet),
 	If {
 		condition: Expr,
-		statements: Scope,
+		statements: ScopeId,
 		elif_statements: Vec<ElifBlock>,
-		else_statements: Option<Scope>,
+		else_statements: Option<ScopeId>,
 	},
 	Break,
 	Continue,
@@ -488,22 +516,22 @@ pub enum StmtKind {
 		variable: Reference,
 		value: Expr,
 	},
-	Scope(Scope),
+	Scope(ScopeId),
 	Class(Class),
 	Interface(Interface),
 	Struct(Struct),
 	Enum(Enum),
 	TryCatch {
-		try_statements: Scope,
+		try_statements: ScopeId,
 		catch_block: Option<CatchBlock>,
-		finally_statements: Option<Scope>,
+		finally_statements: Option<ScopeId>,
 	},
 	CompilerDebugEnv,
 }
 
 #[derive(Debug)]
 pub struct CatchBlock {
-	pub statements: Scope,
+	pub statements: ScopeId,
 	pub exception_var: Option<Symbol>,
 }
 
@@ -688,20 +716,20 @@ pub struct Scope {
 	pub span: WingSpan,
 }
 
-impl Scope {
-	pub fn empty() -> Self {
-		Self {
-			id: SCOPE_COUNTER.fetch_add(1, Ordering::SeqCst),
-			statements: vec![],
-			span: WingSpan::default(),
-		}
-	}
+// impl Scope {
+// 	pub fn empty() -> Self {
+// 		Self {
+// 			id: SCOPE_COUNTER.fetch_add(1, Ordering::SeqCst),
+// 			statements: vec![],
+// 			span: WingSpan::default(),
+// 		}
+// 	}
 
-	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
-		let id = SCOPE_COUNTER.fetch_add(1, Ordering::SeqCst);
-		Self { id, statements, span }
-	}
-}
+// 	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
+// 		let id = SCOPE_COUNTER.fetch_add(1, Ordering::SeqCst);
+// 		Self { id, statements, span }
+// 	}
+// }
 
 #[derive(Debug)]
 pub enum UnaryOperator {
