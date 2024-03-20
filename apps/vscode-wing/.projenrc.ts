@@ -135,34 +135,6 @@ const contributes: VSCodeExtensionContributions = {
         dark: "resources/icon-dark.svg",
       },
     },
-    {
-      command: "wing.openFile",
-      title: "Open source file",
-      icon: {
-        light: "resources/icon-light.svg",
-        dark: "resources/icon-dark.svg",
-      },
-    },
-    {
-      command: "wingConsole.openResource",
-      title: "Open resource",
-    },
-    {
-      command: "wingConsole.runTest",
-      title: "Run test",
-      icon: {
-        light: "resources/play-light.svg",
-        dark: "resources/play-dark.svg",
-      },
-    },
-    {
-      command: "wingConsole.runAllTests",
-      title: "Run all tests",
-      icon: {
-        light: "resources/play-all-light.svg",
-        dark: "resources/play-all-dark.svg",
-      },
-    },
   ],
   menus: {
     "editor/title": [
@@ -170,25 +142,6 @@ const contributes: VSCodeExtensionContributions = {
         when: "resourceLangId == wing && activeWebviewPanelId != 'wing.console'",
         command: "wing.openConsole",
         group: "navigation",
-      },
-      {
-        when: "resourceLangId != wing && activeWebviewPanelId == 'wing.console'",
-        command: "wing.openFile",
-        group: "navigation",
-      },
-    ],
-    "view/item/context": [
-      {
-        command: "wingConsole.runTest",
-        when: "view == consoleTestsExplorer",
-        group: "inline",
-      },
-    ],
-    "explorer/context": [
-      {
-        command: "wingConsole.runAllTests",
-        when: "view == consoleTestsExplorer",
-        group: "inline",
       },
     ],
   },
@@ -204,22 +157,6 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   ],
-  views: {
-    explorer: [
-      {
-        id: "consoleExplorer",
-        name: "Wing Resources",
-      },
-      {
-        id: "consoleTestsExplorer",
-        name: "Wing Tests",
-      },
-      {
-        id: "consoleEndpointsExplorer",
-        name: "Wing Endpoints",
-      },
-    ],
-  },
 };
 
 project.addFields({
