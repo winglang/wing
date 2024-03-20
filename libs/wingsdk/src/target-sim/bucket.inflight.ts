@@ -58,11 +58,6 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       );
       const metadata = deserialize(metadataContents);
       this._metadata = new Map(metadata);
-    } else {
-      await fs.promises.writeFile(
-        join(this.context.statedir, METADATA_FILENAME),
-        serialize({})
-      );
     }
 
     for (const [key, value] of Object.entries(this.initialObjects)) {
@@ -82,7 +77,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   public async save(): Promise<void> {
     // no need to save individual files, since they are already persisted in the state dir
     // during the bucket's lifecycle
-    await fs.promises.writeFile(
+    fs.writeFileSync(
       join(this.context.statedir, METADATA_FILENAME),
       serialize(Array.from(this._metadata.entries())) // metadata contains Datetime values, so we need to serialize it
     );
