@@ -15,15 +15,16 @@ import {
   BucketDeleteOptions,
   BucketGetOptions,
   BucketTryGetOptions,
+  BUCKET_FQN,
 } from "../cloud";
 import { deserialize, serialize } from "../simulator/serialization";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
-import { Datetime, Json } from "../std";
+import { Datetime, Json, TraceType } from "../std";
 
-const METADATA_FILENAME = "metadata.json";
+export const METADATA_FILENAME = "metadata.json";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly _fileDir: string;
@@ -56,8 +57,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         join(this.context.statedir, METADATA_FILENAME),
         "utf-8"
       );
-      const metadata = deserialize(metadataContents);
-      this._metadata = new Map(metadata);
+      try {
+        const metadata = deserialize(metadataContents);
+        this._metadata = new Map(metadata);
+      } catch (e) {
+        this.addTrace(`Failed to deserialize metadata: ${(e as Error).stack}`);
+      }
     }
 
     for (const [key, value] of Object.entries(this.initialObjects)) {
@@ -352,5 +357,15 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   private hashKey(key: string): string {
     return crypto.createHash("sha512").update(key).digest("hex").slice(-32);
+  }
+
+  private addTrace(message: string): void {
+    this.context.addTrace({
+      data: { message },
+      type: TraceType.RESOURCE,
+      sourcePath: this.context.resourcePath,
+      sourceType: BUCKET_FQN,
+      timestamp: new Date().toISOString(),
+    });
   }
 }
