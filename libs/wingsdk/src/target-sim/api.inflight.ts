@@ -162,7 +162,7 @@ export class Api
   }
 
   private async saveState(state: StateFileContents): Promise<void> {
-    await fs.promises.writeFile(
+    fs.writeFileSync(
       join(this.context.statedir, STATE_FILENAME),
       JSON.stringify(state)
     );
