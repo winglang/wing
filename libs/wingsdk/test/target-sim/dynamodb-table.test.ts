@@ -155,6 +155,7 @@ test("update item", async () => {
   });
   await s.stop();
 
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 

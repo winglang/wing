@@ -166,12 +166,12 @@ exports[`get item 1`] = `
 [
   "image amazon/dynamodb-local:<port>.0.0 already exists",
   "starting container from image amazon/dynamodb-local:<port>.0.0",
-  "docker run --detach --rm --name w-01HSGTNB9WYG57WAR3W229D41Z -p 8000 amazon/dynamodb-local:<port>.0.0",
-  "containerName=w-01HSGTNB9WYG57WAR3W229D41Z",
+  "docker run --detach --rm --name wing-container-<container> -p 8000 amazon/dynamodb-local:<port>.0.0",
+  "containerName=wing-container-<container>",
   "root/get_table/Container started",
   "root/get_table started",
   "root/get_table stopped",
-  "Stopping container w-01HSGTNB9WYG57WAR3W229D41Z",
+  "Stopping container wing-container-<container>",
   "root/get_table/Container stopped",
 ]
 `;
@@ -342,12 +342,12 @@ exports[`put item 1`] = `
 [
   "image amazon/dynamodb-local:<port>.0.0 already exists",
   "starting container from image amazon/dynamodb-local:<port>.0.0",
-  "docker run --detach --rm --name w-01HSGTN6TC8K9BZQY869KX4HCV -p 8000 amazon/dynamodb-local:<port>.0.0",
-  "containerName=w-01HSGTN6TC8K9BZQY869KX4HCV",
+  "docker run --detach --rm --name wing-container-<container> -p 8000 amazon/dynamodb-local:<port>.0.0",
+  "containerName=wing-container-<container>",
   "root/put_table/Container started",
   "root/put_table started",
   "root/put_table stopped",
-  "Stopping container w-01HSGTN6TC8K9BZQY869KX4HCV",
+  "Stopping container wing-container-<container>",
   "root/put_table/Container stopped",
 ]
 `;
@@ -515,6 +515,20 @@ exports[`put item 2`] = `
 `;
 
 exports[`update item 1`] = `
+[
+  "image amazon/dynamodb-local:<port>.0.0 already exists",
+  "starting container from image amazon/dynamodb-local:<port>.0.0",
+  "docker run --detach --rm --name wing-container-<container> -p 8000 amazon/dynamodb-local:<port>.0.0",
+  "containerName=wing-container-<container>",
+  "root/update_table/Container started",
+  "root/update_table started",
+  "root/update_table stopped",
+  "Stopping container wing-container-<container>",
+  "root/update_table/Container stopped",
+]
+`;
+
+exports[`update item 2`] = `
 {
   "connections.json": {
     "connections": [],
