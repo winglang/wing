@@ -241,7 +241,7 @@ export interface GlobOptions {
    * @default false
    */
   readonly realpath?: boolean;
-  
+
   /**
    * Set to `true` to always receive absolute paths for matched files. Set to `false` to always
    * receive relative paths for matched files.
@@ -627,12 +627,12 @@ export class Util {
    * Calculate an MD5 content hash of all the files that match a glob pattern.
    *
    * @param dir The root directory.
-   * @param glob The glob pattern to match (defaults to all files and subdirectories).
+   * @param globPattern The glob pattern to match (defaults to all files and subdirectories).
    * @returns An md5 hash of the file contents.
    */
-  public static md5(dir: string, glob: string = "**/*") {
+  public static md5(dir: string, globPattern: string = "**/*") {
     const hash = crypto.createHash("md5");
-    const files = this.glob(glob, { nodir: true, cwd: dir });
+    const files = this.glob(globPattern, { nodir: true, cwd: dir });
     for (const f of files) {
       const data = fs.readFileSync(this.join(dir, f));
       hash.update(data);
