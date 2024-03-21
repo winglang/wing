@@ -101,7 +101,7 @@ export interface ISimulatorContext {
   /**
    * Obtain a client given a resource's handle.
    */
-  getClient(handle: string): any;
+  getClient(handle: string): unknown;
 
   /**
    * Add a trace. Traces are breadcrumbs of information about resource
