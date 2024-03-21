@@ -1,6 +1,8 @@
+import * as crypto from "crypto";
 import * as fs from "fs";
 import * as os from "os";
 import * as nodePath from "path";
+import * as glob from "glob";
 import * as yaml from "yaml";
 import { InflightClient } from "../core";
 import { normalPath } from "../shared/misc";
@@ -122,6 +124,153 @@ export interface Metadata {
   readonly modified: Datetime;
   /** The date and time the file was created. */
   readonly created: Datetime;
+}
+
+/**
+ * Options for `glob`, based on https://www.npmjs.com/package/glob
+ */
+export interface GlobOptions {
+  /**
+   * The current working directory in which to search.
+   *
+   * @default process.cwd()
+   */
+  readonly cwd?: string;
+
+  /**
+   * A string path resolved against the cwd option, which is used as the starting point for absolute
+   * patterns that start with `/`, (but not drive letters or UNC paths on Windows).
+   *
+   * @default ""
+   */
+  readonly root?: string;
+
+  /**
+   * Use `\\` as a path separator only, and never as an escape character. If set, all `\\`
+   * characters are replaced with `/` in the pattern.
+   *
+   * @default false
+   */
+  readonly windowsPathsNoEscape?: boolean;
+
+  /**
+   * Include `.dot` files in normal matches and globstar matches. Note that an explicit dot in a
+   * portion of the pattern will always match dot files.
+   *
+   * @default false
+   */
+  readonly dot?: boolean;
+
+  /**
+   * Treat brace expansion like `{a,b}` as a "magic" pattern.
+   * @default false
+   */
+  readonly magicalBraces?: boolean;
+
+  /**
+   * Prepend all relative path strings with ./ (or .\ on Windows). Without this option, returned
+   * relative paths are "bare", so instead of returning './foo/bar', they are returned as 'foo/bar'.
+   */
+  readonly dotRelative?: boolean;
+
+  /**
+   * Add a `/` character to directory matches. Note that this requires additional stat calls
+   */
+  readonly mark?: boolean;
+
+  /**
+   * Call `lstat()` on all entries, whether required or not to determine whether it's a valid match.
+   * When used with `withFileTypes`, this means that matches will include data such as modified
+   * time, permissions, and so on. Note that this will incur a performance cost due to the added
+   * system calls.
+   * @default false
+   */
+  readonly stat?: boolean;
+
+  /**
+   * Do not expand `{a,b}` and `{1..3}` brace sets
+   * @default false
+   */
+  readonly nobrace?: boolean;
+
+  /**
+   * Do not match ** against multiple filenames. (Ie, treat it as a normal * instead.
+   * @default false
+   */
+  readonly noglobstar?: boolean;
+
+  /**
+   * Do not match "extglob" patterns such as `+(a|b)`.
+   * @default false
+   */
+  readonly noext?: boolean;
+
+  /**
+   * Perform a case-insensitive match. This defaults to true on macOS and Windows systems, and false
+   * on all others.
+   * @default false
+   */
+  readonly nocase?: boolean;
+
+  /**
+   * Do not match directories, only files. (Note: to match only directories, put a `/` at the end of
+   * the pattern.)
+   *
+   * @default false
+   */
+  readonly nodir?: boolean;
+
+  /**
+   * An array of glob patterns to exclude from matches. To ignore all children within a directory,
+   * as well as the entry itself, append '/**' to the ignore pattern.
+   * @default []
+   */
+  readonly ignore?: string[];
+
+  /**
+   * Follow symlinked directories when expanding `**` patterns. This can result in a lot of
+   * duplicate references in the presence of cyclic links, and make performance quite bad.
+   * @default false
+   */
+  readonly follow?: boolean;
+
+  /**
+   * Set to true to call `fs.realpath()` on all of the results. In the case of an entry that cannot
+   * be resolved, the entry is omitted. This incurs a slight performance penalty, of course, because
+   * of the added system calls.
+   * @default false
+   */
+  readonly realpath?: boolean;
+
+  /**
+   * Set to `true` to always receive absolute paths for matched files. Set to `false` to always
+   * receive relative paths for matched files.
+   * @default false
+   */
+  readonly absolute?: boolean;
+
+  /**
+   * Specify a number to limit the depth of the directory traversal to this many levels below the
+   * cwd.
+   *
+   * @default - no limit
+   */
+  readonly maxDepth?: number;
+
+  /**
+   * Perform a basename-only match if the pattern does not contain any slash characters. That is, *.js matches all js files in all directories.
+   * @default false
+   */
+  readonly matchBase?: boolean;
+
+  /**
+   * Set to true to use `/` as the path separator in returned results. On posix systems, this has no
+   * effect. On Windows systems, this will return `/` delimited path results, and absolute paths
+   * will be returned in their full resolved UNC path form, eg insted of 'C:\\foo\\bar', it will
+   * return `//?/C:/foo/bar`.
+   * @default false
+   */
+  readonly posix?: boolean;
 }
 
 /**
@@ -459,6 +608,37 @@ export class Util {
     type: SymlinkType = SymlinkType.FILE
   ): void {
     fs.symlinkSync(target, path, type);
+  }
+
+  /**
+   * Match files using the patterns the shell uses.
+   *
+   * Built with the great `glob` package, based on https://www.npmjs.com/package/glob
+
+   * @param pattern The pattern to match.
+   * @param options Glob options.
+   * @returns List of matching files.
+   */
+  public static glob(pattern: string, options: GlobOptions = {}): string[] {
+    return glob.sync(pattern, options);
+  }
+
+  /**
+   * Calculate an MD5 content hash of all the files that match a glob pattern.
+   *
+   * @param dir The root directory.
+   * @param globPattern The glob pattern to match (defaults to all files and subdirectories).
+   * @returns An md5 hash of the file contents.
+   */
+  public static md5(dir: string, globPattern: string = "**/*") {
+    const hash = crypto.createHash("md5");
+    const files = this.glob(globPattern, { nodir: true, cwd: dir });
+    for (const f of files) {
+      const data = fs.readFileSync(this.join(dir, f));
+      hash.update(data);
+    }
+
+    return hash.digest("hex");
   }
 
   /**

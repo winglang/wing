@@ -12,8 +12,22 @@ exports[`create a Redis resource 1`] = `
         "addr": "c84bd402f6d507613026d171fe74fc8ce07ced29ae",
         "attrs": {},
         "path": "root/my_redis",
-        "props": {},
+        "props": {
+          "port": "\${wsim#root/my_redis/Container#attrs.host_port}",
+        },
         "type": "@winglang/sdk.ex.Redis",
+      },
+      {
+        "addr": "c80acc96b1d952059eb0beee72912b94d23302fa03",
+        "attrs": {},
+        "path": "root/my_redis/Container",
+        "props": {
+          "containerPort": 6379,
+          "cwd": "/home/runner/work/wing/wing/libs/wingsdk/test",
+          "image": "redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0",
+          "imageTag": "redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0",
+        },
+        "type": "@winglang/sdk.sim.Container",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -86,6 +100,10 @@ exports[`create a Redis resource 1`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
@@ -104,6 +122,17 @@ exports[`create a Redis resource 1`] = `
     "tree": {
       "children": {
         "my_redis": {
+          "children": {
+            "Container": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {},
+              "id": "Container",
+              "path": "root/my_redis/Container",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",

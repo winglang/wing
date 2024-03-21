@@ -10,11 +10,6 @@ import {
 } from "./schema-resources";
 import { DynamodbTableClientBase, GlobalSecondaryIndex } from "../ex";
 import {
-  generateDockerContainerName,
-  runDockerImage,
-  runCommand,
-} from "../shared/misc";
-import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
@@ -25,34 +20,19 @@ export class DynamodbTable
   extends DynamodbTableClientBase
   implements ISimulatorResourceInstance
 {
-  private containerName: string;
-  private readonly WING_DYNAMODB_IMAGE =
-    process.env.WING_DYNAMODB_IMAGE ?? "amazon/dynamodb-local:2.0.0";
-  private readonly context: ISimulatorContext;
   private client?: DynamoDBClient;
   private _endpoint?: string;
 
   public constructor(
-    private props: DynamodbTableSchema["props"],
-    context: ISimulatorContext
+    private readonly props: DynamodbTableSchema["props"],
+    _context: ISimulatorContext
   ) {
     super(props.name);
-
-    this.context = context;
-    this.containerName = generateDockerContainerName(
-      `wing-sim-dynamodb-${this.context.resourcePath}`
-    );
   }
 
   public async init(): Promise<DynamodbTableAttributes> {
     try {
-      const { hostPort } = await runDockerImage({
-        imageName: this.WING_DYNAMODB_IMAGE,
-        containerName: this.containerName,
-        containerPort: "8000",
-      });
-
-      this._endpoint = `http://0.0.0.0:${hostPort}`;
+      this._endpoint = `http://0.0.0.0:${this.props.hostPort}`;
 
       // dynamodb url based on host port
       this.client = new DynamoDBClient({
@@ -76,8 +56,6 @@ export class DynamodbTable
   public async cleanup(): Promise<void> {
     // disconnect from the dynamodb server
     this.client?.destroy();
-    // stop the dynamodb container
-    await runCommand("docker", ["rm", "-f", this.containerName]);
     this._endpoint = undefined;
   }
 

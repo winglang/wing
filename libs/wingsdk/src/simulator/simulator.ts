@@ -522,7 +522,11 @@ export class Simulator {
   }
 
   private typeInfo(fqn: string): TypeSchema {
-    return this._model.schema.types[fqn];
+    const schema = this._model.schema.types[fqn];
+    if (!schema) {
+      throw new Error(`Unknown simulator type ${fqn}`);
+    }
+    return schema;
   }
 
   /**
