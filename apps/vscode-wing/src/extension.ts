@@ -7,13 +7,11 @@ import {
   window,
 } from "vscode";
 import { getWingBin, updateStatusBar } from "./bin-helper";
-import { WingConsoleManager } from "./console";
-import { CFG_WING, CFG_WING_BIN } from "./constants";
+import { CFG_WING, CFG_WING_BIN, COMMAND_OPEN_CONSOLE } from "./constants";
 import { Loggers } from "./logging";
 import { LanguageServerManager } from "./lsp";
 
 let wingBinWatcher: FSWatcher | undefined;
-let wingConsoleContext: WingConsoleManager | undefined;
 let languageServerManager: LanguageServerManager | undefined;
 
 export async function deactivate() {
@@ -29,7 +27,6 @@ export async function activate(context: ExtensionContext) {
     wordPattern: /([a-zA-Z_$][A-Za-z_$0-9]*)/,
   });
 
-  wingConsoleContext = new WingConsoleManager(context);
   languageServerManager = new LanguageServerManager();
 
   const wingBinChanged = async () => {
@@ -56,30 +53,32 @@ export async function activate(context: ExtensionContext) {
         Loggers.default.appendLine(`Using wing from "${currentWingBin}"`);
 
         languageServerManager?.setWingBin(currentWingBin);
-        wingConsoleContext?.setWingBin(currentWingBin);
 
         await languageServerManager?.start();
-
-        // restart the language server and reset any open console windows
-        if (wingConsoleContext?.consoleManager?.activeInstances()) {
-          const chooseReload = await window.showInformationMessage(
-            `Wing has been updated and there are open consoles. Would you like to close them? (This will reset their state)`,
-            "Yes",
-            "No (Close and reopen console to use new version)"
-          );
-
-          if (chooseReload === "Yes") {
-            await wingConsoleContext?.stop();
-          }
-        } else {
-          await wingConsoleContext?.stop();
-        }
       } else {
         void window.showErrorMessage(`wing not found at "${currentWingBin}"`);
       }
     } else {
       Loggers.default.appendLine(`wing not found`);
     }
+  };
+
+  const wingIt = async () => {
+    const filePath = window.activeTextEditor?.document.fileName;
+    if (!filePath) {
+      return;
+    }
+    const terminalName = `Wing it: ${filePath.split("/").pop()}`;
+
+    const existingTerminal = window.terminals.find(
+      (t) => t.name === terminalName
+    );
+    if (existingTerminal) {
+      existingTerminal.dispose();
+    }
+    const terminal = window.createTerminal(terminalName);
+    terminal.show();
+    terminal.sendText(`wing it "${filePath}"`);
   };
 
   //watch for config changes
@@ -92,12 +91,7 @@ export async function activate(context: ExtensionContext) {
 
   // add command to preview wing files
   context.subscriptions.push(
-    commands.registerCommand("wing.openFile", () =>
-      wingConsoleContext?.openFile()
-    ),
-    commands.registerCommand("wing.openConsole", () =>
-      wingConsoleContext?.openConsole()
-    )
+    commands.registerCommand(COMMAND_OPEN_CONSOLE, wingIt)
   );
 
   await wingBinChanged();

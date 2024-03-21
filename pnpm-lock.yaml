@@ -188,12 +188,6 @@ importers:
       '@vscode/vsce':
         specifier: ^2.21.0
         version: 2.21.1
-      '@wingconsole/app':
-        specifier: workspace:^
-        version: link:../wing-console/console/app
-      '@wingconsole/server':
-        specifier: workspace:^
-        version: link:../wing-console/console/server
       eslint:
         specifier: ^8
         version: 8.51.0
