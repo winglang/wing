@@ -45,15 +45,11 @@ During this tutorial, we'll be focusing on editing the following files:
 backend/
 ├── main.w
 ├── broadcaster.w
-├── package-lock.json
-├── package.json
 ```
 
 ```bash
 frontend/
 ├── src/App.tsx
-├── package-lock.json
-├── package.json
 ```
 ```
 
