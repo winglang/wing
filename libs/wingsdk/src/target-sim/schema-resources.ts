@@ -52,8 +52,8 @@ export interface ApiAttributes {
 
 /** Schema for cloud.Api.props.routes */
 export interface ApiRoute {
-  /** The path to handle. */
-  readonly path: string;
+  /** The HTTP path pattern to handle. */
+  readonly pathPattern: string;
   /** The HTTP method to handle. */
   readonly method: HttpMethod;
 }
