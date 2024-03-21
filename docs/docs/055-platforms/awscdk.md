@@ -41,7 +41,7 @@ CLI](https://docs.aws.amazon.com/cdk/v2/guide/cli.html).
 If not previously done, you will need to bootstrap your environment (account/region):
 
 ```sh
-$ cd bootstrap --app target/app.awscdk
+$ cdk bootstrap --app target/app.awscdk
 ```
 
 And then you can deploy:
