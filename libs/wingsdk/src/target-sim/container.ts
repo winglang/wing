@@ -30,6 +30,7 @@ export interface ContainerProps {
 
   /**
    * Internal container port to expose.
+   * @default - no port exposed
    */
   readonly containerPort?: number;
 
@@ -56,6 +57,7 @@ export interface ContainerProps {
   /**
    * An explicit source hash that represents the container source. if not set, and `sourcePattern`
    * is set, the hash will be calculated based on the content of the source files.
+   * @default - calculated based on the source files
    */
   readonly sourceHash?: string;
 }
