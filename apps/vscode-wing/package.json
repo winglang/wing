@@ -36,8 +36,6 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@vscode/vsce": "^2.21.0",
-    "@wingconsole/app": "workspace:^",
-    "@wingconsole/server": "workspace:^",
     "eslint": "^8",
     "eslint-config-prettier": "^8.10.0",
     "eslint-import-resolver-node": "^0.3.9",
@@ -142,7 +140,7 @@
     "menus": {
       "editor/title": [
         {
-          "when": "resourceLangId == wing && activeWebviewPanelId != 'wing.console'",
+          "when": "resourceLangId == wing",
           "command": "wing.openConsole",
           "group": "navigation"
         }

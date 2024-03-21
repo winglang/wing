@@ -67,8 +67,6 @@ const project = new TypeScriptAppProject({
     "@vscode/vsce",
     "@types/node-fetch",
     "@types/ws",
-    "@wingconsole/app@workspace:^",
-    "@wingconsole/server@workspace:^",
     "winglang@workspace:^",
   ],
 });
@@ -139,7 +137,7 @@ const contributes: VSCodeExtensionContributions = {
   menus: {
     "editor/title": [
       {
-        when: "resourceLangId == wing && activeWebviewPanelId != 'wing.console'",
+        when: "resourceLangId == wing",
         command: "wing.openConsole",
         group: "navigation",
       },

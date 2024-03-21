@@ -188,12 +188,6 @@ importers:
       '@vscode/vsce':
         specifier: ^2.21.0
         version: 2.21.1
-      '@wingconsole/app':
-        specifier: workspace:^
-        version: link:../wing-console/console/app
-      '@wingconsole/server':
-        specifier: workspace:^
-        version: link:../wing-console/console/server
       eslint:
         specifier: ^8
         version: 8.51.0
@@ -14612,7 +14606,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240311
+      typescript: 5.5.0-dev.20240321
     dev: true
 
   /dset@3.1.2:
@@ -23273,8 +23267,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240311:
-    resolution: {integrity: sha512-Cdp0eYgn/19lkcrq7WCqQxmnvCqvuJrd/jGhm1HyPMSYVTGzjxVP0NfXr2A4YVS12IAipt1uO4zgAJeLlYG2JA==}
+  /typescript@5.5.0-dev.20240321:
+    resolution: {integrity: sha512-QEUqMB18VAUQBHtHlq8BfjxGZzFkavH5fhZn+I97N67mDZTa86n1S8kiRKmrbxVwPAdvn3DYtJzcGq5OvdWkmQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
