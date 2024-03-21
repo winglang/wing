@@ -34,7 +34,7 @@ test "send request" {
 }
 ```
 
-There is also support for building containers from a local `Dockerfile`:
+There is also support for building containers from a local directory with a `Dockerfile`:
 
 ```js
 new sim.Container(
