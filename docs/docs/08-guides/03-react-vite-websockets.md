@@ -51,7 +51,6 @@ backend/
 frontend/
 ├── src/App.tsx
 ```
-```
 
 You can also find the entire project in [GitHub](https://github.com/winglang/guide-react-vite-websockets).
 
