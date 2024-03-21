@@ -220,6 +220,10 @@ jobs:
             node: "18"
             full_run: false
     steps:
+      - name: Switch to Linux Containers on Windows
+        if: matrix.runner == 'windows'
+        run: Start-Process -NoNewWindow -Wait "$Env:ProgramFiles\Docker\Docker\DockerCli.exe" -ArgumentList ['-SwitchLinuxEngine']
+
       - name: Checkout
         uses: actions/checkout@v4
 
