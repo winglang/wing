@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   mime: ^3.0.0
 
@@ -222,7 +226,7 @@ importers:
         version: 0.71.163
       tsup:
         specifier: ^8.0.2
-        version: 8.0.2(postcss@8.4.31)(typescript@5.2.2)
+        version: 8.0.2(typescript@5.3.3)
       tsx:
         specifier: ^4.7.0
         version: 4.7.0
@@ -722,7 +726,7 @@ importers:
         version: 4.6.10
       tsup:
         specifier: ^8.0.2
-        version: 8.0.2(postcss@8.4.31)(typescript@5.2.2)
+        version: 8.0.2(postcss@8.4.35)(typescript@5.2.2)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -1132,7 +1136,7 @@ importers:
         version: link:../../../tools/bump-pack
       tsup:
         specifier: ^8.0.2
-        version: 8.0.2(postcss@8.4.31)(typescript@5.2.2)
+        version: 8.0.2(typescript@5.3.3)
       vitest:
         specifier: ^1.3.1
         version: 1.3.1(@types/node@20.11.0)
@@ -1157,7 +1161,7 @@ importers:
         version: link:../../tools/bump-pack
       tsup:
         specifier: ^8.0.2
-        version: 8.0.2(postcss@8.4.31)(typescript@5.2.2)
+        version: 8.0.2(typescript@5.3.3)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -1179,7 +1183,7 @@ importers:
         version: link:../../tools/bump-pack
       tsup:
         specifier: ^8.0.2
-        version: 8.0.2(postcss@8.4.31)(typescript@5.2.2)
+        version: 8.0.2(typescript@5.3.3)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -1235,7 +1239,7 @@ importers:
         version: link:../../tools/bump-pack
       tsup:
         specifier: ^8.0.2
-        version: 8.0.2(postcss@8.4.31)(typescript@5.2.2)
+        version: 8.0.2(typescript@5.3.3)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -1326,7 +1330,7 @@ importers:
         specifier: ^4.18.2
         version: 4.18.2
       glob:
-        specifier: '*'
+        specifier: ^8.1.0
         version: 8.1.0
       google-auth-library:
         specifier: ^8.9.0
@@ -1382,7 +1386,7 @@ importers:
         specifier: ^11.0.1
         version: 11.0.2
       '@types/glob':
-        specifier: '*'
+        specifier: ^7.2.0
         version: 7.2.0
       '@types/mime-types':
         specifier: ^2.1.2
@@ -14177,7 +14181,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240320
+      typescript: 5.5.0-dev.20240321
     dev: true
 
   /dset@3.1.2:
@@ -22517,6 +22521,45 @@ packages:
       - ts-node
     dev: true
 
+  /tsup@8.0.2(typescript@5.3.3):
+    resolution: {integrity: sha512-NY8xtQXdH7hDUAZwcQdY/Vzlw9johQsaqf7iwZ6g1DOUlFYQ5/AtVAjTvihhEyeRlGo4dLRVHtrRaL35M1daqQ==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      '@microsoft/api-extractor': ^7.36.0
+      '@swc/core': ^1
+      postcss: ^8.4.12
+      typescript: '>=4.5.0'
+    peerDependenciesMeta:
+      '@microsoft/api-extractor':
+        optional: true
+      '@swc/core':
+        optional: true
+      postcss:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 4.0.2(esbuild@0.19.12)
+      cac: 6.7.14
+      chokidar: 3.5.3
+      debug: 4.3.4
+      esbuild: 0.19.12
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      postcss-load-config: 4.0.1(postcss@8.4.35)
+      resolve-from: 5.0.0
+      rollup: 4.9.1
+      source-map: 0.8.0-beta.0
+      sucrase: 3.34.0
+      tree-kill: 1.2.2
+      typescript: 5.3.3
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+    dev: true
+
   /tsutils@3.21.0(typescript@5.2.2):
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
     engines: {node: '>= 6'}
@@ -22746,8 +22789,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240320:
-    resolution: {integrity: sha512-f6O4RIs1q/POZywDLiRJ6+2rmyW+S3Aua7QYVwdSf06SiQv//zptr78enmBWkNI70FPCMNM20X/cVgKiHR8ryQ==}
+  /typescript@5.5.0-dev.20240321:
+    resolution: {integrity: sha512-QEUqMB18VAUQBHtHlq8BfjxGZzFkavH5fhZn+I97N67mDZTa86n1S8kiRKmrbxVwPAdvn3DYtJzcGq5OvdWkmQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -23937,7 +23980,3 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
