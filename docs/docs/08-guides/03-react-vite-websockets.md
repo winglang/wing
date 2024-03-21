@@ -21,6 +21,37 @@ synchronized in real-time across all users via a distributed cloud counter and W
 This guide is written as a tutorial and intended to be followed step-by-step. At the end of each step, you should be able to find the 
 full source code in a collapsable section.
 
+To expedite the project creation process, consider leveraging the react-vite quickstart template. This quickstart option automates the generation of all the files demonstrated in this tutorial, providing a fast way to set up your project environment:
+
+```bash
+$ mkdir my-react-vite
+$ cd my-react-vite
+$ wing new react-vite
+```
+
+Let's check out what we now have in our project directory:
+
+```bash
+my-react-vite/
+├── backend
+├── frontned
+├── package-lock.json
+├── package.json
+```
+
+During this tutorial, we'll be focusing on editing the following files:
+
+```bash
+backend/
+├── main.w
+├── broadcaster.w
+```
+
+```bash
+frontend/
+├── src/App.tsx
+```
+
 You can also find the entire project in [GitHub](https://github.com/winglang/guide-react-vite-websockets).
 
 ## Prerequisites
