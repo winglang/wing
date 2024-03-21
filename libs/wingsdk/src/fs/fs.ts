@@ -138,79 +138,12 @@ export interface GlobOptions {
   readonly cwd?: string;
 
   /**
-   * A string path resolved against the cwd option, which is used as the starting point for absolute
-   * patterns that start with `/`, (but not drive letters or UNC paths on Windows).
-   *
-   * @default ""
-   */
-  readonly root?: string;
-
-  /**
-   * Use `\\` as a path separator only, and never as an escape character. If set, all `\\`
-   * characters are replaced with `/` in the pattern.
-   *
-   * @default false
-   */
-  readonly windowsPathsNoEscape?: boolean;
-
-  /**
    * Include `.dot` files in normal matches and globstar matches. Note that an explicit dot in a
    * portion of the pattern will always match dot files.
    *
    * @default false
    */
   readonly dot?: boolean;
-
-  /**
-   * Treat brace expansion like `{a,b}` as a "magic" pattern.
-   * @default false
-   */
-  readonly magicalBraces?: boolean;
-
-  /**
-   * Prepend all relative path strings with ./ (or .\ on Windows). Without this option, returned
-   * relative paths are "bare", so instead of returning './foo/bar', they are returned as 'foo/bar'.
-   */
-  readonly dotRelative?: boolean;
-
-  /**
-   * Add a `/` character to directory matches. Note that this requires additional stat calls
-   */
-  readonly mark?: boolean;
-
-  /**
-   * Call `lstat()` on all entries, whether required or not to determine whether it's a valid match.
-   * When used with `withFileTypes`, this means that matches will include data such as modified
-   * time, permissions, and so on. Note that this will incur a performance cost due to the added
-   * system calls.
-   * @default false
-   */
-  readonly stat?: boolean;
-
-  /**
-   * Do not expand `{a,b}` and `{1..3}` brace sets
-   * @default false
-   */
-  readonly nobrace?: boolean;
-
-  /**
-   * Do not match ** against multiple filenames. (Ie, treat it as a normal * instead.
-   * @default false
-   */
-  readonly noglobstar?: boolean;
-
-  /**
-   * Do not match "extglob" patterns such as `+(a|b)`.
-   * @default false
-   */
-  readonly noext?: boolean;
-
-  /**
-   * Perform a case-insensitive match. This defaults to true on macOS and Windows systems, and false
-   * on all others.
-   * @default false
-   */
-  readonly nocase?: boolean;
 
   /**
    * Do not match directories, only files. (Note: to match only directories, put a `/` at the end of
@@ -235,14 +168,6 @@ export interface GlobOptions {
   readonly follow?: boolean;
 
   /**
-   * Set to true to call `fs.realpath()` on all of the results. In the case of an entry that cannot
-   * be resolved, the entry is omitted. This incurs a slight performance penalty, of course, because
-   * of the added system calls.
-   * @default false
-   */
-  readonly realpath?: boolean;
-
-  /**
    * Set to `true` to always receive absolute paths for matched files. Set to `false` to always
    * receive relative paths for matched files.
    * @default false
@@ -256,21 +181,6 @@ export interface GlobOptions {
    * @default - no limit
    */
   readonly maxDepth?: number;
-
-  /**
-   * Perform a basename-only match if the pattern does not contain any slash characters. That is, *.js matches all js files in all directories.
-   * @default false
-   */
-  readonly matchBase?: boolean;
-
-  /**
-   * Set to true to use `/` as the path separator in returned results. On posix systems, this has no
-   * effect. On Windows systems, this will return `/` delimited path results, and absolute paths
-   * will be returned in their full resolved UNC path form, eg insted of 'C:\\foo\\bar', it will
-   * return `//?/C:/foo/bar`.
-   * @default false
-   */
-  readonly posix?: boolean;
 }
 
 /**
