@@ -3,6 +3,7 @@ import { ISimulatorResource } from "./resource";
 import { SecretSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { LiftDepsMatrixRaw } from "../core";
 import { ResourceNames } from "../shared/resource-names";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost } from "../std";
@@ -33,11 +34,11 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.SecretInflightMethods.VALUE,
-      cloud.SecretInflightMethods.VALUE_JSON,
-    ];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {
+      [cloud.SecretInflightMethods.VALUE]: [],
+      [cloud.SecretInflightMethods.VALUE_JSON]: [],
+    };
   }
 
   public toSimulator(): BaseResourceSchema {

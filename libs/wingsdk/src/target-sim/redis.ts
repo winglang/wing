@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { RedisSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { LiftDepsMatrixRaw } from "../core";
 import * as ex from "../ex";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost } from "../std";
@@ -33,17 +34,17 @@ export class Redis extends ex.Redis implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      ex.RedisInflightMethods.URL,
-      ex.RedisInflightMethods.SET,
-      ex.RedisInflightMethods.GET,
-      ex.RedisInflightMethods.HSET,
-      ex.RedisInflightMethods.HGET,
-      ex.RedisInflightMethods.SADD,
-      ex.RedisInflightMethods.SMEMBERS,
-      ex.RedisInflightMethods.DEL,
-    ];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {
+      [ex.RedisInflightMethods.URL]: [],
+      [ex.RedisInflightMethods.SET]: [],
+      [ex.RedisInflightMethods.GET]: [],
+      [ex.RedisInflightMethods.HSET]: [],
+      [ex.RedisInflightMethods.HGET]: [],
+      [ex.RedisInflightMethods.SADD]: [],
+      [ex.RedisInflightMethods.SMEMBERS]: [],
+      [ex.RedisInflightMethods.DEL]: [],
+    };
   }
 
   /** @internal */

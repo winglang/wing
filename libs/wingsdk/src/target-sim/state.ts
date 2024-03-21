@@ -2,6 +2,7 @@ import { ISimulatorResource } from "./resource";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
+import { LiftDepsMatrixRaw } from "../core";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost, Json, Resource } from "../std";
 
@@ -35,12 +36,12 @@ export class State extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      StateInflightMethods.GET,
-      StateInflightMethods.SET,
-      StateInflightMethods.TRY_GET,
-    ];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {
+      [StateInflightMethods.GET]: [],
+      [StateInflightMethods.SET]: [],
+      [StateInflightMethods.TRY_GET]: [],
+    };
   }
 
   /** @internal */
