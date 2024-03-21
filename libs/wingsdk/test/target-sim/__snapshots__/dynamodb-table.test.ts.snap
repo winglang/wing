@@ -28,7 +28,7 @@ exports[`create a table 1`] = `
         "path": "root/create_table/Container",
         "props": {
           "containerPort": 8000,
-          "cwd": "/home/runner/work/wing/wing/libs/wingsdk/test",
+          "cwd": "<ABSOLUTE PATH>/test",
           "image": "amazon/dynamodb-local:2.0.0",
           "imageTag": "amazon/dynamodb-local:2.0.0",
         },
@@ -204,7 +204,7 @@ exports[`get item 2`] = `
         "path": "root/get_table/Container",
         "props": {
           "containerPort": 8000,
-          "cwd": "/home/runner/work/wing/wing/libs/wingsdk/test",
+          "cwd": "<ABSOLUTE PATH>/test",
           "image": "amazon/dynamodb-local:2.0.0",
           "imageTag": "amazon/dynamodb-local:2.0.0",
         },
@@ -380,7 +380,7 @@ exports[`put item 2`] = `
         "path": "root/put_table/Container",
         "props": {
           "containerPort": 8000,
-          "cwd": "/home/runner/work/wing/wing/libs/wingsdk/test",
+          "cwd": "<ABSOLUTE PATH>/test",
           "image": "amazon/dynamodb-local:2.0.0",
           "imageTag": "amazon/dynamodb-local:2.0.0",
         },
@@ -556,7 +556,7 @@ exports[`update item 2`] = `
         "path": "root/update_table/Container",
         "props": {
           "containerPort": 8000,
-          "cwd": "/home/runner/work/wing/wing/libs/wingsdk/test",
+          "cwd": "<ABSOLUTE PATH>/test",
           "image": "amazon/dynamodb-local:2.0.0",
           "imageTag": "amazon/dynamodb-local:2.0.0",
         },

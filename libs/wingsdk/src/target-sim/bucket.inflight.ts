@@ -96,9 +96,9 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       return;
     }
 
-    const topicClient = this.context.findInstance(
+    const topicClient = this.context.getClient(
       this.topicHandlers[actionType]!
-    ) as ITopicClient & ISimulatorResourceInstance;
+    ) as ITopicClient;
 
     return topicClient.publish(key);
   }
