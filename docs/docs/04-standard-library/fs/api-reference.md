@@ -768,23 +768,10 @@ let GlobOptions = fs.GlobOptions{ ... };
 | <code><a href="#@winglang/sdk.fs.GlobOptions.property.absolute">absolute</a></code> | <code>bool</code> | Set to `true` to always receive absolute paths for matched files. |
 | <code><a href="#@winglang/sdk.fs.GlobOptions.property.cwd">cwd</a></code> | <code>str</code> | The current working directory in which to search. |
 | <code><a href="#@winglang/sdk.fs.GlobOptions.property.dot">dot</a></code> | <code>bool</code> | Include `.dot` files in normal matches and globstar matches. Note that an explicit dot in a portion of the pattern will always match dot files. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.dotRelative">dotRelative</a></code> | <code>bool</code> | Prepend all relative path strings with ./ (or .\ on Windows). Without this option, returned relative paths are "bare", so instead of returning './foo/bar', they are returned as 'foo/bar'. |
 | <code><a href="#@winglang/sdk.fs.GlobOptions.property.follow">follow</a></code> | <code>bool</code> | Follow symlinked directories when expanding `**` patterns. |
 | <code><a href="#@winglang/sdk.fs.GlobOptions.property.ignore">ignore</a></code> | <code>MutArray&lt;str&gt;</code> | An array of glob patterns to exclude from matches. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.magicalBraces">magicalBraces</a></code> | <code>bool</code> | Treat brace expansion like `{a,b}` as a "magic" pattern. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.mark">mark</a></code> | <code>bool</code> | Add a `/` character to directory matches. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.matchBase">matchBase</a></code> | <code>bool</code> | Perform a basename-only match if the pattern does not contain any slash characters. |
 | <code><a href="#@winglang/sdk.fs.GlobOptions.property.maxDepth">maxDepth</a></code> | <code>num</code> | Specify a number to limit the depth of the directory traversal to this many levels below the cwd. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.nobrace">nobrace</a></code> | <code>bool</code> | Do not expand `{a,b}` and `{1..3}` brace sets. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.nocase">nocase</a></code> | <code>bool</code> | Perform a case-insensitive match. |
 | <code><a href="#@winglang/sdk.fs.GlobOptions.property.nodir">nodir</a></code> | <code>bool</code> | Do not match directories, only files. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.noext">noext</a></code> | <code>bool</code> | Do not match "extglob" patterns such as `+(a\|b)`. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.noglobstar">noglobstar</a></code> | <code>bool</code> | Do not match ** against multiple filenames. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.posix">posix</a></code> | <code>bool</code> | Set to true to use `/` as the path separator in returned results. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.realpath">realpath</a></code> | <code>bool</code> | Set to true to call `fs.realpath()` on all of the results. In the case of an entry that cannot be resolved, the entry is omitted. This incurs a slight performance penalty, of course, because of the added system calls. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.root">root</a></code> | <code>str</code> | A string path resolved against the cwd option, which is used as the starting point for absolute patterns that start with `/`, (but not drive letters or UNC paths on Windows). |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.stat">stat</a></code> | <code>bool</code> | Call `lstat()` on all entries, whether required or not to determine whether it's a valid match. |
-| <code><a href="#@winglang/sdk.fs.GlobOptions.property.windowsPathsNoEscape">windowsPathsNoEscape</a></code> | <code>bool</code> | Use `\\` as a path separator only, and never as an escape character. |
 
 ---
 
@@ -830,18 +817,6 @@ Include `.dot` files in normal matches and globstar matches. Note that an explic
 
 ---
 
-##### `dotRelative`<sup>Optional</sup> <a name="dotRelative" id="@winglang/sdk.fs.GlobOptions.property.dotRelative"></a>
-
-```wing
-dotRelative: bool;
-```
-
-- *Type:* bool
-
-Prepend all relative path strings with ./ (or .\ on Windows). Without this option, returned relative paths are "bare", so instead of returning './foo/bar', they are returned as 'foo/bar'.
-
----
-
 ##### `follow`<sup>Optional</sup> <a name="follow" id="@winglang/sdk.fs.GlobOptions.property.follow"></a>
 
 ```wing
@@ -874,48 +849,6 @@ as well as the entry itself, append '/**' to the ignore pattern.
 
 ---
 
-##### `magicalBraces`<sup>Optional</sup> <a name="magicalBraces" id="@winglang/sdk.fs.GlobOptions.property.magicalBraces"></a>
-
-```wing
-magicalBraces: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Treat brace expansion like `{a,b}` as a "magic" pattern.
-
----
-
-##### `mark`<sup>Optional</sup> <a name="mark" id="@winglang/sdk.fs.GlobOptions.property.mark"></a>
-
-```wing
-mark: bool;
-```
-
-- *Type:* bool
-
-Add a `/` character to directory matches.
-
-Note that this requires additional stat calls
-
----
-
-##### `matchBase`<sup>Optional</sup> <a name="matchBase" id="@winglang/sdk.fs.GlobOptions.property.matchBase"></a>
-
-```wing
-matchBase: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Perform a basename-only match if the pattern does not contain any slash characters.
-
-That is, *.js matches all js files in all directories.
-
----
-
 ##### `maxDepth`<sup>Optional</sup> <a name="maxDepth" id="@winglang/sdk.fs.GlobOptions.property.maxDepth"></a>
 
 ```wing
@@ -926,35 +859,6 @@ maxDepth: num;
 - *Default:* no limit
 
 Specify a number to limit the depth of the directory traversal to this many levels below the cwd.
-
----
-
-##### `nobrace`<sup>Optional</sup> <a name="nobrace" id="@winglang/sdk.fs.GlobOptions.property.nobrace"></a>
-
-```wing
-nobrace: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Do not expand `{a,b}` and `{1..3}` brace sets.
-
----
-
-##### `nocase`<sup>Optional</sup> <a name="nocase" id="@winglang/sdk.fs.GlobOptions.property.nocase"></a>
-
-```wing
-nocase: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Perform a case-insensitive match.
-
-This defaults to true on macOS and Windows systems, and false
-on all others.
 
 ---
 
@@ -971,111 +875,6 @@ Do not match directories, only files.
 
 (Note: to match only directories, put a `/` at the end of
 the pattern.)
-
----
-
-##### `noext`<sup>Optional</sup> <a name="noext" id="@winglang/sdk.fs.GlobOptions.property.noext"></a>
-
-```wing
-noext: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Do not match "extglob" patterns such as `+(a|b)`.
-
----
-
-##### `noglobstar`<sup>Optional</sup> <a name="noglobstar" id="@winglang/sdk.fs.GlobOptions.property.noglobstar"></a>
-
-```wing
-noglobstar: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Do not match ** against multiple filenames.
-
-(Ie, treat it as a normal * instead.
-
----
-
-##### `posix`<sup>Optional</sup> <a name="posix" id="@winglang/sdk.fs.GlobOptions.property.posix"></a>
-
-```wing
-posix: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Set to true to use `/` as the path separator in returned results.
-
-On posix systems, this has no
-effect. On Windows systems, this will return `/` delimited path results, and absolute paths
-will be returned in their full resolved UNC path form, eg insted of 'C:\\foo\\bar', it will
-return `//?/C:/foo/bar`.
-
----
-
-##### `realpath`<sup>Optional</sup> <a name="realpath" id="@winglang/sdk.fs.GlobOptions.property.realpath"></a>
-
-```wing
-realpath: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Set to true to call `fs.realpath()` on all of the results. In the case of an entry that cannot be resolved, the entry is omitted. This incurs a slight performance penalty, of course, because of the added system calls.
-
----
-
-##### `root`<sup>Optional</sup> <a name="root" id="@winglang/sdk.fs.GlobOptions.property.root"></a>
-
-```wing
-root: str;
-```
-
-- *Type:* str
-- *Default:* ""
-
-A string path resolved against the cwd option, which is used as the starting point for absolute patterns that start with `/`, (but not drive letters or UNC paths on Windows).
-
----
-
-##### `stat`<sup>Optional</sup> <a name="stat" id="@winglang/sdk.fs.GlobOptions.property.stat"></a>
-
-```wing
-stat: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Call `lstat()` on all entries, whether required or not to determine whether it's a valid match.
-
-When used with `withFileTypes`, this means that matches will include data such as modified
-time, permissions, and so on. Note that this will incur a performance cost due to the added
-system calls.
-
----
-
-##### `windowsPathsNoEscape`<sup>Optional</sup> <a name="windowsPathsNoEscape" id="@winglang/sdk.fs.GlobOptions.property.windowsPathsNoEscape"></a>
-
-```wing
-windowsPathsNoEscape: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Use `\\` as a path separator only, and never as an escape character.
-
-If set, all `\\`
-characters are replaced with `/` in the pattern.
 
 ---
 
