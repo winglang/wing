@@ -119,10 +119,6 @@ async handle(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -295,10 +291,6 @@ async handle(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -470,10 +462,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
       },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
@@ -649,10 +637,6 @@ async handle(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -814,10 +798,6 @@ async handle() {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
       },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
@@ -1079,10 +1059,6 @@ return class Handler {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
       },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",

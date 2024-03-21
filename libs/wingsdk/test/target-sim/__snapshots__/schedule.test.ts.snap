@@ -72,10 +72,6 @@ exports[`create a schedule 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -259,10 +255,6 @@ console.log("Hello from schedule!");
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
       },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
@@ -474,10 +466,6 @@ console.log("Hello from schedule!");
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -687,10 +675,6 @@ console.log("Hello from schedule!");
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
       },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",

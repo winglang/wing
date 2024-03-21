@@ -19,14 +19,7 @@ import {
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
-import {
-  ColumnType,
-  DYNAMODB_TABLE_FQN,
-  REACT_APP_FQN,
-  REDIS_FQN,
-  TABLE_FQN,
-} from "../ex";
-import { GlobalSecondaryIndex as DynamodbTableGlobalSecondaryIndex } from "../ex/dynamodb-table";
+import { ColumnType, REACT_APP_FQN, REDIS_FQN, TABLE_FQN } from "../ex";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
@@ -301,41 +294,6 @@ export interface OnDeploySchema extends BaseResourceSchema {
 
 /** Runtime attributes for cloud.OnDeploy */
 export interface OnDeployAttributes {}
-
-/** Runtime attributes for ex.DynamodbTable */
-export interface DynamodbTableAttributes {}
-
-/** Schema for ex.DynamodbTable */
-export interface DynamodbTableSchema extends BaseResourceSchema {
-  readonly type: typeof DYNAMODB_TABLE_FQN;
-  readonly props: {
-    /**
-     * The port of the DynamoDB container.
-     */
-    readonly hostPort: string;
-
-    /**
-     * The table name.
-     */
-    readonly name: string;
-    /**
-     * Table attribute definitions. e.g. { "myKey": "S", "myOtherKey": "S" }.
-     */
-    readonly attributeDefinitions: Json;
-    /**
-     * Hash key for this table.
-     */
-    readonly hashKey: string;
-    /**
-     * Range key for this table.
-     */
-    readonly rangeKey?: string;
-    /**
-     * The GSI for the table.
-     */
-    readonly globalSecondaryIndex?: DynamodbTableGlobalSecondaryIndex[];
-  };
-}
 
 /** Schema for simulator.State */
 export interface StateSchema extends BaseResourceSchema {
