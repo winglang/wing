@@ -7,7 +7,7 @@ import {
   window,
 } from "vscode";
 import { getWingBin, updateStatusBar } from "./bin-helper";
-import { CFG_WING, CFG_WING_BIN } from "./constants";
+import { CFG_WING, CFG_WING_BIN, COMMAND_OPEN_CONSOLE } from "./constants";
 import { Loggers } from "./logging";
 import { LanguageServerManager } from "./lsp";
 
@@ -91,7 +91,7 @@ export async function activate(context: ExtensionContext) {
 
   // add command to preview wing files
   context.subscriptions.push(
-    commands.registerCommand("wing.openConsole", wingIt)
+    commands.registerCommand(COMMAND_OPEN_CONSOLE, wingIt)
   );
 
   await wingBinChanged();
