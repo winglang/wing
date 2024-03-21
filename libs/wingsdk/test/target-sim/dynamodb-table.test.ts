@@ -29,6 +29,7 @@ test("create a table", async () => {
         id: "S",
       },
       hashKey: "id",
+      hostPort: expect.any(String),
     },
     type: ex.DYNAMODB_TABLE_FQN,
   });
@@ -65,6 +66,7 @@ test("put item", async () => {
         id: "S",
       },
       hashKey: "id",
+      hostPort: expect.any(String),
     },
     type: ex.DYNAMODB_TABLE_FQN,
   });
@@ -102,6 +104,7 @@ test("get item", async () => {
         id: "S",
       },
       hashKey: "id",
+      hostPort: expect.any(String),
     },
     type: ex.DYNAMODB_TABLE_FQN,
   });
@@ -146,6 +149,7 @@ test("update item", async () => {
         id: "S",
       },
       hashKey: "id",
+      hostPort: expect.any(String),
     },
     type: ex.DYNAMODB_TABLE_FQN,
   });

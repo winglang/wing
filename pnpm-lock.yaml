@@ -1323,6 +1323,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.18.2
+      glob:
+        specifier: ^8.1.0
+        version: 8.1.0
       google-auth-library:
         specifier: ^8.9.0
         version: 8.9.0
@@ -1376,6 +1379,9 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.1
         version: 11.0.2
+      '@types/glob':
+        specifier: ^7.2.0
+        version: 7.2.0
       '@types/mime-types':
         specifier: ^2.1.2
         version: 2.1.2
