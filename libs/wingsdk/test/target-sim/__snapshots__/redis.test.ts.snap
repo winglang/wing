@@ -23,7 +23,7 @@ exports[`create a Redis resource 1`] = `
         "path": "root/my_redis/Container",
         "props": {
           "containerPort": 6379,
-          "cwd": "/home/runner/work/wing/wing/libs/wingsdk/test",
+          "cwd": "<ABSOLUTE PATH>/test",
           "image": "redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0",
           "imageTag": "redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0",
         },

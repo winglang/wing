@@ -110,11 +110,11 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
               {
                 "method": "POST",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
@@ -390,7 +390,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
@@ -666,7 +666,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
@@ -942,7 +942,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
@@ -1218,7 +1218,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
@@ -1494,7 +1494,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
@@ -1878,31 +1878,31 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
               {
                 "method": "POST",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
               {
                 "method": "PUT",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
               {
                 "method": "DELETE",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
               {
                 "method": "HEAD",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
               {
                 "method": "OPTIONS",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
               {
                 "method": "PATCH",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
@@ -2195,7 +2195,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/:name/:age",
+                "pathPattern": "/:name/:age",
               },
             ],
           },
@@ -2480,7 +2480,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/:name",
+                "pathPattern": "/:name",
               },
             ],
           },
@@ -2750,11 +2750,11 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello/foo",
+                "pathPattern": "/hello/foo",
               },
               {
                 "method": "GET",
-                "path": "/hello/bat",
+                "pathPattern": "/hello/bat",
               },
             ],
           },
@@ -3069,7 +3069,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
@@ -3104,7 +3104,7 @@ return class Handler {
             "routes": [
               {
                 "method": "POST",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
@@ -3446,7 +3446,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello/world",
+                "pathPattern": "/hello/world",
               },
             ],
           },
@@ -3481,7 +3481,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello/wingnuts",
+                "pathPattern": "/hello/wingnuts",
               },
             ],
           },
@@ -3782,7 +3782,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
@@ -4067,7 +4067,7 @@ return class Handler {
             "routes": [
               {
                 "method": "GET",
-                "path": "/users/:name",
+                "pathPattern": "/users/:name",
               },
             ],
           },
@@ -4343,7 +4343,7 @@ return class Handler {
             "routes": [
               {
                 "method": "POST",
-                "path": "/hello",
+                "pathPattern": "/hello",
               },
             ],
           },
