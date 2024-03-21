@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { Container } from "./container";
 import { ISimulatorResource } from "./resource";
 import { DynamodbTableSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
@@ -15,10 +16,26 @@ export class DynamodbTable
   extends ex.DynamodbTable
   implements ISimulatorResource
 {
+  private readonly WING_DYNAMODB_IMAGE =
+    process.env.WING_DYNAMODB_IMAGE ?? "amazon/dynamodb-local:2.0.0";
+
   private readonly props: ex.DynamodbTableProps;
+  private readonly hostPort: string;
 
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
     super(scope, id, props);
+
+    const c = new Container(this, "Container", {
+      name: "dynamodb",
+      image: this.WING_DYNAMODB_IMAGE,
+      containerPort: 8000,
+    });
+
+    if (!c.hostPort) {
+      throw new Error("Failed to get host port for the dynamodb container");
+    }
+
+    this.hostPort = c.hostPort;
 
     this.props = props;
   }
@@ -29,6 +46,7 @@ export class DynamodbTable
       path: this.node.path,
       addr: this.node.addr,
       props: {
+        hostPort: this.hostPort,
         name: this.name,
         attributeDefinitions: this.props.attributeDefinitions,
         hashKey: this.props.hashKey,

@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { Api } from "./api";
 import { Bucket } from "./bucket";
+import { SIM_CONTAINER_FQN } from "./container";
 import { Counter } from "./counter";
 import { Domain } from "./domain";
 import { DynamodbTable } from "./dynamodb-table";
@@ -67,6 +68,7 @@ const SIMULATOR_CLASS_DATA = {
   [SECRET_FQN]: "Secret",
   [SERVICE_FQN]: "Service",
   [STATE_FQN]: "State",
+  [SIM_CONTAINER_FQN]: "Container",
   [TABLE_FQN]: "Table",
   [TEST_RUNNER_FQN]: "TestRunner",
   [TOPIC_FQN]: "Topic",
@@ -154,6 +156,9 @@ export class App extends core.App {
 
       case WEBSITE_FQN:
         return require.resolve("./website.inflight");
+
+      case SIM_CONTAINER_FQN:
+        return require.resolve("./container.inflight");
     }
 
     return undefined;

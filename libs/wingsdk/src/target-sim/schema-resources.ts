@@ -1,3 +1,4 @@
+import { SIM_CONTAINER_FQN } from "./container";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { STATE_FQN } from "./state";
 import {
@@ -229,8 +230,11 @@ export interface TestRunnerAttributes {}
 /** Schema for redis.Redis */
 export interface RedisSchema extends BaseResourceSchema {
   readonly type: typeof REDIS_FQN;
-  readonly props: {};
+  readonly props: {
+    readonly port: string;
+  };
 }
+
 /**
  * Custom routes created in preflight.
  * Each contains the data to send to the user and a contentType header.
@@ -305,6 +309,14 @@ export interface DynamodbTableAttributes {}
 export interface DynamodbTableSchema extends BaseResourceSchema {
   readonly type: typeof DYNAMODB_TABLE_FQN;
   readonly props: {
+    /**
+     * The port of the DynamoDB container.
+     */
+    readonly hostPort: string;
+
+    /**
+     * The table name.
+     */
     readonly name: string;
     /**
      * Table attribute definitions. e.g. { "myKey": "S", "myOtherKey": "S" }.
@@ -364,3 +376,20 @@ export interface EndpointSchema extends BaseResourceSchema {
   };
   readonly attrs: EndpointAttributes & BaseResourceAttributes;
 }
+
+/** Schema for sim.Container */
+export interface ContainerSchema extends BaseResourceSchema {
+  readonly type: typeof SIM_CONTAINER_FQN;
+  readonly props: {
+    imageTag: string;
+    image: string;
+    containerPort?: number;
+    env?: Record<string, string>;
+    args?: string[];
+    cwd: string;
+  };
+  readonly attrs: ContainerAttributes & BaseResourceAttributes;
+}
+
+/** Runtime attributes for sim.Container */
+export interface ContainerAttributes {}
