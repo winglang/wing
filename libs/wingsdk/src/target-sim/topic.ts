@@ -3,6 +3,7 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
+import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
@@ -17,8 +18,10 @@ import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.Topic implements ISimulatorResource {
+  private readonly policy: Policy;
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
+    this.policy = new Policy(this, "Policy", { target: this });
   }
 
   public onMessage(
@@ -52,11 +55,13 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       name: "onMessage()",
     });
 
+    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE_ASYNC);
+
     return fn;
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

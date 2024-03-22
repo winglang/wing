@@ -3,15 +3,14 @@ import {
   EventMappingAttributes,
   EventMappingSchema,
   EventSubscription,
-  FunctionHandle,
-  PublisherHandle,
+  ResourceHandle,
 } from "./schema-resources";
 import { ISimulatorContext } from "../simulator";
 import { ISimulatorResourceInstance } from "../simulator/simulator";
 
 export class EventMapping implements ISimulatorResourceInstance {
-  private readonly publisher: PublisherHandle;
-  private readonly subscriber: FunctionHandle;
+  private readonly publisher: ResourceHandle;
+  private readonly subscriber: ResourceHandle;
   private readonly eventSubscription: EventSubscription;
   private readonly context: ISimulatorContext;
 

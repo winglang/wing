@@ -5,7 +5,7 @@ import {
   QueueSchema,
   QueueSubscriber,
   EventSubscription,
-  FunctionHandle,
+  ResourceHandle,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient, QUEUE_FQN } from "../cloud";
 import {
@@ -42,7 +42,7 @@ export class Queue
   public async save(): Promise<void> {}
 
   public async addEventSubscription(
-    subscriber: FunctionHandle,
+    subscriber: ResourceHandle,
     subscriptionProps: EventSubscription
   ): Promise<void> {
     const s = {
@@ -53,7 +53,7 @@ export class Queue
   }
 
   public async removeEventSubscription(
-    subscriber: FunctionHandle
+    subscriber: ResourceHandle
   ): Promise<void> {
     const index = this.subscribers.findIndex(
       (s) => s.functionHandle === subscriber

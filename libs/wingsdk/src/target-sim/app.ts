@@ -9,6 +9,7 @@ import { Endpoint } from "./endpoint";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
+import { POLICY_FQN, Policy } from "./policy";
 import { Queue } from "./queue";
 import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
@@ -60,6 +61,7 @@ const SIMULATOR_CLASS_DATA = {
   [EVENT_MAPPING_FQN]: "EventMapping",
   [FUNCTION_FQN]: "Function",
   [ON_DEPLOY_FQN]: "OnDeploy",
+  [POLICY_FQN]: "Policy",
   [QUEUE_FQN]: "Queue",
   [REACT_APP_FQN]: "ReactApp",
   [REDIS_FQN]: "Redis",
@@ -121,6 +123,9 @@ export class App extends core.App {
 
       case ON_DEPLOY_FQN:
         return require.resolve("./on-deploy.inflight");
+
+      case POLICY_FQN:
+        return require.resolve("./policy.inflight");
 
       case QUEUE_FQN:
         return require.resolve("./queue.inflight");
@@ -186,6 +191,9 @@ export class App extends core.App {
 
       case ON_DEPLOY_FQN:
         return OnDeploy;
+
+      case POLICY_FQN:
+        return Policy;
 
       case QUEUE_FQN:
         return Queue;

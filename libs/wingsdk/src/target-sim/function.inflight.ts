@@ -136,6 +136,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return new Sandbox(this.bundle.entrypointPath, {
       env: {
         ...this.env,
+        WING_SIMULATOR_CALLER: this.context.resourcePath,
         WING_SIMULATOR_URL: this.context.serverUrl,
       },
       timeout: this.timeout,

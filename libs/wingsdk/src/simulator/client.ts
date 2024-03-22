@@ -35,7 +35,11 @@ function makeHttpRequest(options: HttpRequestOptions): Promise<string> {
   });
 }
 
-export function makeSimulatorClient(url: string, handle: string) {
+export function makeSimulatorClient(
+  url: string,
+  handle: string,
+  caller: string
+) {
   let proxy: any;
   let hasThenMethod = true; // assume that the object has a "then" method until proven otherwise
 
@@ -45,7 +49,7 @@ export function makeSimulatorClient(url: string, handle: string) {
     }
 
     return async function (...args: any[]) {
-      const body: SimulatorServerRequest = { handle, method, args };
+      const body: SimulatorServerRequest = { caller, handle, method, args };
       const parsedUrl = new URL(url);
       const resp = await makeHttpRequest({
         hostname: parsedUrl.hostname,

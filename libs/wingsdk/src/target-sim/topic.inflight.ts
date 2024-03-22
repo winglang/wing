@@ -4,7 +4,7 @@ import {
   TopicSchema,
   TopicSubscriber,
   EventSubscription,
-  FunctionHandle,
+  ResourceHandle,
 } from "./schema-resources";
 import { IFunctionClient, ITopicClient, TOPIC_FQN } from "../cloud";
 import {
@@ -57,7 +57,7 @@ export class Topic
   }
 
   public async addEventSubscription(
-    subscriber: FunctionHandle,
+    subscriber: ResourceHandle,
     subscriptionProps: EventSubscription
   ): Promise<void> {
     let s = {

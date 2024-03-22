@@ -24,6 +24,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     this.sandbox = new LegacySandbox(this.entrypoint, {
       env: {
         ...props.environmentVariables,
+        WING_SIMULATOR_CALLER: this.context.resourcePath,
         WING_SIMULATOR_URL: this.context.serverUrl,
       },
       log: (internal, _level, message) => {

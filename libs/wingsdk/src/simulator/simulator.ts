@@ -11,9 +11,16 @@ import { SDK_VERSION } from "../constants";
 import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
+import { POLICY_FQN } from "../target-sim";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 const HANDLE_ATTRIBUTE = "handle";
+
+/**
+ * If an API call is made to a resource with name as the caller, any permissions
+ * checking will be skipped. Used by unit tests and the Wing Console.
+ */
+const ADMIN_PERMISSION = "simulator:admin";
 
 /**
  * Props for `Simulator`.
@@ -454,7 +461,7 @@ export class Simulator {
       return undefined;
     }
 
-    return makeSimulatorClient(this.url, handle);
+    return makeSimulatorClient(this.url, handle, ADMIN_PERMISSION);
   }
 
   private tryGetResourceHandle(path: string): string | undefined {
@@ -522,7 +529,11 @@ export class Simulator {
   }
 
   private typeInfo(fqn: string): TypeSchema {
-    return this._model.schema.types[fqn];
+    const info = this._model.schema.types[fqn];
+    if (!info) {
+      throw new Error(`Type "${fqn}" not found.`);
+    }
+    return info;
   }
 
   /**
@@ -547,6 +558,57 @@ export class Simulator {
     return structuredClone(this._model.connections);
   }
 
+  private checkPermission(
+    callerPath: string,
+    resourceHandle: string,
+    method: string
+  ): { granted: boolean; reason?: string } {
+    if (callerPath === ADMIN_PERMISSION) {
+      return { granted: true };
+    }
+
+    const callerHandle = this.tryGetResourceHandle(callerPath);
+    if (!callerHandle) {
+      return {
+        granted: false,
+        reason: `Caller resource "${callerPath}" not initialized.`,
+      };
+    }
+
+    const resourcePath = this._handles.tryFindPath(resourceHandle);
+    if (!resourcePath) {
+      return {
+        granted: false,
+        reason: `Resource with handle "${resourceHandle}" not found.`,
+      };
+    }
+
+    // Look for a policy whose "target" matches the caller
+    const resources = this._model.graph.nodes.map((n) => n.path);
+    for (const resource of resources) {
+      const config = this.getResourceConfig(resource);
+      if (config.type !== POLICY_FQN) {
+        continue;
+      }
+
+      if (config.props.target !== callerHandle) {
+        continue;
+      }
+
+      const statements = config.props.statements;
+      for (const statement of statements) {
+        if (statement.resource === resourceHandle && statement.op === method) {
+          return { granted: true };
+        }
+      }
+    }
+
+    return {
+      granted: false,
+      reason: `Resource "${callerPath}" does not have permission to use operation "${method}" on resource "${resourcePath}".`,
+    };
+  }
+
   /**
    * Start a server that allows any resource to be accessed via HTTP.
    */
@@ -564,8 +626,23 @@ export class Simulator {
       });
       req.on("end", () => {
         const request: SimulatorServerRequest = deserialize(body);
-        const { handle, method, args } = request;
+        const { caller, handle, method, args } = request;
         const resource = this._handles.tryFind(handle);
+
+        // Check if the caller has permission to call the method on the resource
+        const grant = this.checkPermission(caller, handle, method);
+        if (!grant.granted) {
+          res.writeHead(403, { "Content-Type": "application/json" });
+          res.end(
+            serialize({
+              error: {
+                message: grant.reason,
+              },
+            }),
+            "utf-8"
+          );
+          return;
+        }
 
         // If we weren't able to find a resource with the given handle, it could actually
         // be OK if the resource is still starting up or has already been cleaned up.
@@ -856,10 +933,12 @@ export interface ISimulatorFactory {
 
 class HandleManager {
   private readonly handles: Map<string, ISimulatorResourceInstance>;
+  private readonly paths: Map<string, string>; // handle -> path
   private nextHandle: number;
 
   public constructor() {
     this.handles = new Map();
+    this.paths = new Map();
     this.nextHandle = 0;
   }
 
@@ -879,6 +958,10 @@ class HandleManager {
 
   public tryFind(handle: string): ISimulatorResourceInstance | undefined {
     return this.handles.get(handle);
+  }
+
+  public tryFindPath(handle: string): string | undefined {
+    return this.paths.get(handle);
   }
 
   public deallocate(handle: string): ISimulatorResourceInstance {
@@ -973,7 +1056,9 @@ export interface ConnectionData {
  * Subject to breaking changes.
  */
 export interface SimulatorServerRequest {
-  /** The resource handle (an ID unique among resources in the simulation). */
+  /** The path of the resource making the request. */
+  readonly caller: string;
+  /** The target resource handle (an ID unique among resources in the simulation). */
   readonly handle: string;
   /** The method to call on the resource. */
   readonly method: string;
