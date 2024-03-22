@@ -1,6 +1,8 @@
+import * as crypto from "crypto";
 import * as fs from "fs";
 import * as os from "os";
 import * as nodePath from "path";
+import * as glob from "glob";
 import * as yaml from "yaml";
 import { InflightClient } from "../core";
 import { normalPath } from "../shared/misc";
@@ -122,6 +124,63 @@ export interface Metadata {
   readonly modified: Datetime;
   /** The date and time the file was created. */
   readonly created: Datetime;
+}
+
+/**
+ * Options for `glob`, based on https://www.npmjs.com/package/glob
+ */
+export interface GlobOptions {
+  /**
+   * The current working directory in which to search.
+   *
+   * @default process.cwd()
+   */
+  readonly cwd?: string;
+
+  /**
+   * Include `.dot` files in normal matches and globstar matches. Note that an explicit dot in a
+   * portion of the pattern will always match dot files.
+   *
+   * @default false
+   */
+  readonly dot?: boolean;
+
+  /**
+   * Do not match directories, only files. (Note: to match only directories, put a `/` at the end of
+   * the pattern.)
+   *
+   * @default false
+   */
+  readonly nodir?: boolean;
+
+  /**
+   * An array of glob patterns to exclude from matches. To ignore all children within a directory,
+   * as well as the entry itself, append '/**' to the ignore pattern.
+   * @default []
+   */
+  readonly ignore?: string[];
+
+  /**
+   * Follow symlinked directories when expanding `**` patterns. This can result in a lot of
+   * duplicate references in the presence of cyclic links, and make performance quite bad.
+   * @default false
+   */
+  readonly follow?: boolean;
+
+  /**
+   * Set to `true` to always receive absolute paths for matched files. Set to `false` to always
+   * receive relative paths for matched files.
+   * @default false
+   */
+  readonly absolute?: boolean;
+
+  /**
+   * Specify a number to limit the depth of the directory traversal to this many levels below the
+   * cwd.
+   *
+   * @default - no limit
+   */
+  readonly maxDepth?: number;
 }
 
 /**
@@ -459,6 +518,37 @@ export class Util {
     type: SymlinkType = SymlinkType.FILE
   ): void {
     fs.symlinkSync(target, path, type);
+  }
+
+  /**
+   * Match files using the patterns the shell uses.
+   *
+   * Built with the great `glob` package, based on https://www.npmjs.com/package/glob
+
+   * @param pattern The pattern to match.
+   * @param options Glob options.
+   * @returns List of matching files.
+   */
+  public static glob(pattern: string, options: GlobOptions = {}): string[] {
+    return glob.sync(pattern, options);
+  }
+
+  /**
+   * Calculate an MD5 content hash of all the files that match a glob pattern.
+   *
+   * @param dir The root directory.
+   * @param globPattern The glob pattern to match (defaults to all files and subdirectories).
+   * @returns An md5 hash of the file contents.
+   */
+  public static md5(dir: string, globPattern: string = "**/*") {
+    const hash = crypto.createHash("md5");
+    const files = this.glob(globPattern, { nodir: true, cwd: dir });
+    for (const f of files) {
+      const data = fs.readFileSync(this.join(dir, f));
+      hash.update(data);
+    }
+
+    return hash.digest("hex");
   }
 
   /**

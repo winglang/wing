@@ -34,14 +34,9 @@ export class Topic
 
   private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {
-      const fnClient = this.context.findInstance(
-        subscriber.functionHandle!
-      ) as IFunctionClient & ISimulatorResourceInstance;
-
-      if (!fnClient) {
-        throw new Error("No function client found!");
-      }
-
+      const fnClient = this.context.getClient(
+        subscriber.functionHandle
+      ) as IFunctionClient;
       this.context.addTrace({
         type: TraceType.RESOURCE,
         data: {

@@ -144,9 +144,9 @@ export class Queue
           continue;
         }
 
-        const fnClient = this.context.findInstance(
-          subscriber.functionHandle!
-        ) as IFunctionClient & ISimulatorResourceInstance;
+        const fnClient = this.context.getClient(
+          subscriber.functionHandle
+        ) as IFunctionClient;
         if (!fnClient) {
           throw new Error("No function client found");
         }

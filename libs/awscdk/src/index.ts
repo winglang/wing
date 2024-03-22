@@ -1,4 +1,4 @@
-export * from "./platform"
+export * from "./platform";
 export * from "./app";
 export * from "./bucket";
 export * from "./bucket.onevent.inflight";
@@ -14,8 +14,6 @@ export * from "./secret";
 export * from "./topic";
 export * from "./topic.onmessage.inflight";
 export * from "./website";
-export * from "./dynamodb-table";
-export * from "./dynamodb-table.inflight";
 export * from "./on-deploy";
 export * from "./test-runner";
 export * from "./tokens";

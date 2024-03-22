@@ -35,6 +35,14 @@ function makeHttpRequest(options: HttpRequestOptions): Promise<string> {
   });
 }
 
+/**
+ * Creates a proxy object that forwards method calls to the simulator server.
+ *
+ * @param url The URL of the simulator server
+ * @param handle The handle for the resource we're calling a method on or getting a property from
+ * @param caller The construct path of the resource that is making the call
+ * @returns A proxy object that forwards method calls to the simulator server
+ */
 export function makeSimulatorClient(
   url: string,
   handle: string,

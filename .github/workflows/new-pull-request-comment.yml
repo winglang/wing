@@ -29,7 +29,7 @@ jobs:
             | JSON, structs, primitives and collections           | `@hasanaburayyan`
             | Platforms and plugins                               | `@hasanaburayyan`
             | Frontend resources (website, react, etc)            | `@tsuf239`
-            | Language design                                     | `@eladb`
+            | Language design                                     | `@chriscbr`
             | VSCode extension and language server                | `@markmcculloh`
             | Compiler architecture, inflights, lifting           | `@yoav-steinberg`
             | Wing Testing Framework                              | `@tsuf239`

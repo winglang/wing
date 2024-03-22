@@ -23,13 +23,13 @@ export class EventMapping implements ISimulatorResourceInstance {
   }
 
   public async init(): Promise<EventMappingAttributes> {
-    const client = this.context.findInstance(this.publisher) as IEventPublisher;
+    const client = this.context.getClient(this.publisher) as IEventPublisher;
     await client.addEventSubscription(this.subscriber, this.eventSubscription);
     return {};
   }
 
   public async cleanup(): Promise<void> {
-    const client = this.context.findInstance(this.publisher) as IEventPublisher;
+    const client = this.context.getClient(this.publisher) as IEventPublisher;
     await client.removeEventSubscription(this.subscriber);
   }
 

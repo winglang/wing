@@ -2,9 +2,9 @@ import * as fs from "fs";
 import * as path from "path";
 import { Api } from "./api";
 import { Bucket } from "./bucket";
+import { SIM_CONTAINER_FQN } from "./container";
 import { Counter } from "./counter";
 import { Domain } from "./domain";
-import { DynamodbTable } from "./dynamodb-table";
 import { Endpoint } from "./endpoint";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { Function } from "./function";
@@ -42,7 +42,7 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { registerTokenResolver } from "../core/tokens";
-import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN, REACT_APP_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN } from "../ex";
 import { TypeSchema, WingSimulatorSchema } from "../simulator/simulator";
 import { TEST_RUNNER_FQN } from "../std";
 
@@ -56,7 +56,6 @@ const SIMULATOR_CLASS_DATA = {
   [BUCKET_FQN]: "Bucket",
   [COUNTER_FQN]: "Counter",
   [DOMAIN_FQN]: "Domain",
-  [DYNAMODB_TABLE_FQN]: "DynamodbTable",
   [ENDPOINT_FQN]: "Endpoint",
   [EVENT_MAPPING_FQN]: "EventMapping",
   [FUNCTION_FQN]: "Function",
@@ -69,6 +68,7 @@ const SIMULATOR_CLASS_DATA = {
   [SECRET_FQN]: "Secret",
   [SERVICE_FQN]: "Service",
   [STATE_FQN]: "State",
+  [SIM_CONTAINER_FQN]: "Container",
   [TABLE_FQN]: "Table",
   [TEST_RUNNER_FQN]: "TestRunner",
   [TOPIC_FQN]: "Topic",
@@ -108,9 +108,6 @@ export class App extends core.App {
 
       case DOMAIN_FQN:
         return require.resolve("./domain.inflight");
-
-      case DYNAMODB_TABLE_FQN:
-        return require.resolve("./dynamodb-table.inflight");
 
       case ENDPOINT_FQN:
         return require.resolve("./endpoint.inflight");
@@ -159,6 +156,9 @@ export class App extends core.App {
 
       case WEBSITE_FQN:
         return require.resolve("./website.inflight");
+
+      case SIM_CONTAINER_FQN:
+        return require.resolve("./container.inflight");
     }
 
     return undefined;
@@ -177,9 +177,6 @@ export class App extends core.App {
 
       case DOMAIN_FQN:
         return Domain;
-
-      case DYNAMODB_TABLE_FQN:
-        return DynamodbTable;
 
       case ENDPOINT_FQN:
         return Endpoint;
