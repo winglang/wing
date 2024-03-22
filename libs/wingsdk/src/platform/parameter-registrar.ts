@@ -1,7 +1,15 @@
 import Ajv from "ajv";
 import { Construct } from "constructs";
-import { loadPlatformSpecificValues } from "./util";
+import { loadPlatformSpecificValues, extractFieldsFromSchema, filterParametersBySchema } from "./util";
 import { Json, Node } from "../std";
+
+/**
+ * Options for reading parameters
+ */
+export interface ReadParameterOptions {
+  /** schema to limit the read to */
+  readonly schema?: any;
+}
 
 /**
  * Parameter Registrar
@@ -41,12 +49,23 @@ export class ParameterRegistrar extends Construct {
     return this.parameterValueByPath[path];
   }
 
+  
   /**
-   * Return all parameters as Json
-   *
-   * @returns the schema as a string
+   * Read parameters
+   * 
+   * @param options options for reading parameters
+   * @returns the schema as a string 
    */
-  public json(): Json {
+  public read(options?: ReadParameterOptions): Json {
+    if (options?.schema) {
+      this.addSchema(options.schema);
+      const fields = extractFieldsFromSchema(
+        options.schema._rawSchema ? // If a JsonSchema object is passed in, extract raw schema from it 
+        options.schema._rawSchema : 
+        options.schema
+      );
+      return filterParametersBySchema(fields, this._rawParameters);
+    }
     return this._rawParameters as Json;
   }
 
@@ -56,13 +75,11 @@ export class ParameterRegistrar extends Construct {
    * @param schema schema to add to the registrar
    */
   public addSchema(schema: any) {
-    // If a JsonSchema object is passed in, extract the jsonSchema from it
-    if (schema._rawSchema) {
-      this.parameterSchemas.push(schema._rawSchema);
-      return;
+    // If a JsonSchema object is passed in, extract the raw schema from it
+    const schemaToAdd = schema._rawSchema ? schema._rawSchema : schema;
+    if (!this.parameterSchemas.includes(schemaToAdd)) {
+      this.parameterSchemas.push(schemaToAdd);
     }
-
-    this.parameterSchemas.push(schema);
   }
 
   /**

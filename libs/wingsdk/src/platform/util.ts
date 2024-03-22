@@ -43,6 +43,36 @@ export function parseValuesObjectFromString(values: string) {
 }
 
 /**
+ * Extracts all fields from a JSON schema.
+ *
+ * @param schema the schema to extract fields from
+ * @returns a set of all fields in the schema
+ */
+export function extractFieldsFromSchema(schema: any): Set<string> {
+  const fields = new Set<string>();
+
+  if (schema.properties) {
+    for (const key of Object.keys(schema.properties)) {
+      fields.add(key);
+    }
+  }
+
+  return fields;
+}
+
+export function filterParametersBySchema(fields: Set<string>, parameters: any): any {
+  const filtered: any = {};
+
+  for (const field of fields) {
+    if (parameters.hasOwnProperty(field)) {
+      filtered[field] = parameters[field];
+    }
+  }
+
+  return filtered;
+}
+
+/**
  * Loads platform-specific values that were passed in via CLI arguments and
  * from a values file. CLI arguments take precedence over values file.
  *

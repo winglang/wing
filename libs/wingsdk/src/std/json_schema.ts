@@ -1,6 +1,7 @@
 import { Validator } from "jsonschema";
 import { Json, JsonValidationOptions } from "./json";
 import { InflightClient } from "../core";
+import { extractFieldsFromSchema, filterParametersBySchema } from "../platform/util";
 
 /**
  * Struct Schema
@@ -68,42 +69,10 @@ export class JsonSchema {
   /** @internal */
   public _fromJson(obj: Json, validateOptions?: JsonValidationOptions) {
     this.validate(obj, validateOptions);
-    const fields = this.extractFieldsFromSchema(this._rawSchema);
+    const fields = extractFieldsFromSchema(this._rawSchema);
     // Filter rawParameters based on the schema
-    const filteredParameters = this.filterParametersBySchema(fields, obj);
+    const filteredParameters = filterParametersBySchema(fields, obj);
     return filteredParameters;
-  }
-
-  /**
-   * Extracts the field names from the JSON Schema.
-   */
-  private extractFieldsFromSchema(schema: any): Set<string> {
-    const fields = new Set<string>();
-
-    if (schema.properties) {
-      for (const key of Object.keys(schema.properties)) {
-        fields.add(key);
-      }
-    }
-
-    // Add handling for other schema constructs as necessary, such as nested objects or arrays
-
-    return fields;
-  }
-
-  /**
-   * Filters the parameters object to only include fields that are present in the schema.
-   */
-  private filterParametersBySchema(fields: Set<string>, parameters: any): any {
-    const filtered: any = {};
-
-    for (const field of fields) {
-      if (parameters.hasOwnProperty(field)) {
-        filtered[field] = parameters[field];
-      }
-    }
-
-    return filtered;
   }
 
   /** @internal */

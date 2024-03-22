@@ -14,9 +14,7 @@ struct MyParams {
 
 let app = nodeof(this).app;
 
-app.parameters.addSchema(MyParams.schema());
-
-let myParams = MyParams.fromJson(app.parameters.json());
+let myParams = MyParams.fromJson(app.parameters.read(schema: MyParams.schema()));
 
 assert(myParams.houses.length == 2);
 assert(myParams.houses.at(0).address == "123 Main St");

@@ -5,9 +5,7 @@ struct MyParams {
   meaningOfLife: num;
 }
 
-app.parameters.addSchema(MyParams.schema());
-
-let myParams = MyParams.fromJson(app.parameters.json());
+let myParams = MyParams.fromJson(app.parameters.read(schema: MyParams.schema()));
 
 if let foo = myParams.foo {
   assert(false); // shouldnt happen
