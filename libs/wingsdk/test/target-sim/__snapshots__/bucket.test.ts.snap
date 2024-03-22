@@ -135,10 +135,6 @@ exports[`can add file in preflight 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -284,10 +280,6 @@ exports[`can add object in preflight 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -419,10 +411,6 @@ exports[`create a bucket 1`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
       },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
@@ -563,10 +551,6 @@ exports[`get invalid object throws an error 2`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
       },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",

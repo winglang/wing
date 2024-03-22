@@ -1896,40 +1896,6 @@
       }
     }
   },
-  "DynamodbTable": {
-    "putItem": {
-      "sim": {
-        "implemented": true
-      },
-      "tf-aws": {
-        "implemented": true
-      }
-    },
-    "query": {
-      "sim": {
-        "implemented": true
-      },
-      "tf-aws": {
-        "implemented": true
-      }
-    },
-    "getItem": {
-      "sim": {
-        "implemented": true
-      },
-      "tf-aws": {
-        "implemented": true
-      }
-    },
-    "transactWriteItems": {
-      "sim": {
-        "implemented": true
-      },
-      "tf-aws": {
-        "implemented": true
-      }
-    }
-  },
   "ReactApp": {
     "addEnvironment": {
       "sim": {

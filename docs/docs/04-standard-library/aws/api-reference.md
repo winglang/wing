@@ -435,52 +435,6 @@ The cloud.Counter.
 
 
 
-### DynamodbTable <a name="DynamodbTable" id="@winglang/sdk.aws.DynamodbTable"></a>
-
-A helper class for working with AWS DynamodbTables.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.DynamodbTable.Initializer"></a>
-
-```wing
-bring aws;
-
-new aws.DynamodbTable();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.DynamodbTable.from">from</a></code> | If the table is an AWS Dynamodb, return a helper interface for working with it. |
-
----
-
-##### `from` <a name="from" id="@winglang/sdk.aws.DynamodbTable.from"></a>
-
-```wing
-bring aws;
-
-aws.DynamodbTable.from(dynamodb: DynamodbTable);
-```
-
-If the table is an AWS Dynamodb, return a helper interface for working with it.
-
-###### `dynamodb`<sup>Required</sup> <a name="dynamodb" id="@winglang/sdk.aws.DynamodbTable.from.parameter.dynamodb"></a>
-
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTable">DynamodbTable</a>
-
-The ex.DynamodbTable.
-
----
-
-
-
 ### Function <a name="Function" id="@winglang/sdk.aws.Function"></a>
 
 A helper class for working with AWS functions.
@@ -1170,46 +1124,6 @@ AWS Dynamodb arn.
 ---
 
 ##### `dynamoTableName`<sup>Required</sup> <a name="dynamoTableName" id="@winglang/sdk.aws.IAwsCounter.property.dynamoTableName"></a>
-
-```wing
-dynamoTableName: str;
-```
-
-- *Type:* str
-
-AWS Dynamodb name.
-
----
-
-### IAwsDynamodbTable <a name="IAwsDynamodbTable" id="@winglang/sdk.aws.IAwsDynamodbTable"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsDynamodbTable">IAwsDynamodbTable</a>
-
-A shared interface for AWS Dynamodb.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableArn">dynamoTableArn</a></code> | <code>str</code> | AWS Dynamodb arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableName">dynamoTableName</a></code> | <code>str</code> | AWS Dynamodb name. |
-
----
-
-##### `dynamoTableArn`<sup>Required</sup> <a name="dynamoTableArn" id="@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableArn"></a>
-
-```wing
-dynamoTableArn: str;
-```
-
-- *Type:* str
-
-AWS Dynamodb arn.
-
----
-
-##### `dynamoTableName`<sup>Required</sup> <a name="dynamoTableName" id="@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableName"></a>
 
 ```wing
 dynamoTableName: str;
