@@ -1,13 +1,17 @@
 import Ajv from "ajv";
 import { Construct } from "constructs";
-import { loadPlatformSpecificValues, extractFieldsFromSchema, filterParametersBySchema } from "./util";
+import {
+  loadPlatformSpecificValues,
+  extractFieldsFromSchema,
+  filterParametersBySchema,
+} from "./util";
 import { Json, Node } from "../std";
 
 /**
  * Options for reading parameters
  */
 export interface ReadParameterOptions {
-  /** schema to limit the read to */
+  /** Schema to limit the read to */
   readonly schema?: any;
 }
 
@@ -49,20 +53,19 @@ export class ParameterRegistrar extends Construct {
     return this.parameterValueByPath[path];
   }
 
-  
   /**
    * Read parameters
-   * 
+   *
    * @param options options for reading parameters
-   * @returns the schema as a string 
+   * @returns the schema as a string
    */
   public read(options?: ReadParameterOptions): Json {
     if (options?.schema) {
       this.addSchema(options.schema);
       const fields = extractFieldsFromSchema(
-        options.schema._rawSchema ? // If a JsonSchema object is passed in, extract raw schema from it 
-        options.schema._rawSchema : 
-        options.schema
+        options.schema._rawSchema // If a JsonSchema object is passed in, extract raw schema from it
+          ? options.schema._rawSchema
+          : options.schema
       );
       return filterParametersBySchema(fields, this._rawParameters);
     }

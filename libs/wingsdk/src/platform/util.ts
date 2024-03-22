@@ -60,7 +60,10 @@ export function extractFieldsFromSchema(schema: any): Set<string> {
   return fields;
 }
 
-export function filterParametersBySchema(fields: Set<string>, parameters: any): any {
+export function filterParametersBySchema(
+  fields: Set<string>,
+  parameters: any
+): any {
   const filtered: any = {};
 
   for (const field of fields) {

@@ -1,7 +1,10 @@
 import { Validator } from "jsonschema";
 import { Json, JsonValidationOptions } from "./json";
 import { InflightClient } from "../core";
-import { extractFieldsFromSchema, filterParametersBySchema } from "../platform/util";
+import {
+  extractFieldsFromSchema,
+  filterParametersBySchema,
+} from "../platform/util";
 
 /**
  * Struct Schema
