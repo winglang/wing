@@ -12,6 +12,7 @@ import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
 import { POLICY_FQN } from "../target-sim";
+import { PolicyStatement } from "../target-sim/schema-resources";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 const HANDLE_ATTRIBUTE = "handle";
@@ -20,7 +21,7 @@ const HANDLE_ATTRIBUTE = "handle";
  * If an API call is made to a resource with name as the caller, any permissions
  * checking will be skipped. Used by unit tests and the Wing Console.
  */
-const ADMIN_PERMISSION = "simulator:admin";
+const ADMIN_PERMISSION = "admin";
 
 /**
  * Props for `Simulator`.
@@ -101,6 +102,11 @@ export interface ISimulatorContext {
   readonly resourcePath: string;
 
   /**
+   * The handle of the resource that is being simulated.
+   */
+  readonly resourceHandle: string;
+
+  /**
    * The url that the simulator server is listening on.
    */
   readonly serverUrl: string;
@@ -108,7 +114,7 @@ export interface ISimulatorContext {
   /**
    * Obtain a client given a resource's handle.
    */
-  getClient(handle: string): unknown;
+  getClient(handle: string, asAdmin?: boolean): unknown;
 
   /**
    * Add a trace. Traces are breadcrumbs of information about resource
@@ -202,6 +208,8 @@ export class Simulator {
     const simdir = props.simfile;
     this.statedir = props.stateDir ?? join(simdir, ".state");
     this._model = this._loadApp(simdir);
+
+    // console.error("model:", JSON.stringify(this._model, null, 2));
 
     this._running = "stopped";
     this._handles = new HandleManager();
@@ -461,6 +469,17 @@ export class Simulator {
       return undefined;
     }
 
+    // console.error(
+    //   "Connecting to simulator at",
+    //   this.url,
+    //   "with handle",
+    //   handle,
+    //   "and caller",
+    //   ADMIN_PERMISSION
+    // );
+    if (ADMIN_PERMISSION === undefined) {
+      throw new Error("undefined??");
+    }
     return makeSimulatorClient(this.url, handle, ADMIN_PERMISSION);
   }
 
@@ -559,31 +578,54 @@ export class Simulator {
   }
 
   private checkPermission(
-    callerPath: string,
-    resourceHandle: string,
+    callerHandle: string,
+    calleeHandle: string,
     method: string
   ): { granted: boolean; reason?: string } {
-    if (callerPath === ADMIN_PERMISSION) {
+    if (callerHandle === ADMIN_PERMISSION) {
       return { granted: true };
     }
 
-    const callerHandle = this.tryGetResourceHandle(callerPath);
-    if (!callerHandle) {
+    // console.error(
+    //   "Checking permission for",
+    //   "method:",
+    //   method,
+    //   "callerHandle:",
+    //   callerHandle,
+    //   "calleeHandle:",
+    //   calleeHandle
+    // );
+
+    const callerPath = this._handles.tryFindPath(callerHandle);
+    if (!callerPath) {
       return {
         granted: false,
-        reason: `Caller resource "${callerPath}" not initialized.`,
+        reason: `Resource with handle "${callerHandle}" not found.`,
       };
     }
 
-    const resourcePath = this._handles.tryFindPath(resourceHandle);
-    if (!resourcePath) {
+    const calleePath = this._handles.tryFindPath(calleeHandle);
+    if (!calleePath) {
       return {
         granted: false,
-        reason: `Resource with handle "${resourceHandle}" not found.`,
+        reason: `Resource with handle "${calleeHandle}" not found.`,
       };
     }
 
-    // Look for a policy whose "target" matches the caller
+    // console.error(
+    //   "Checking permission for callerPath:",
+    //   callerPath,
+    //   "calleePath:",
+    //   calleePath,
+    //   "method:",
+    //   method,
+    //   "callerHandle:",
+    //   callerHandle,
+    //   "calleeHandle:",
+    //   calleeHandle
+    // );
+
+    // Look for a policy whose "principal" matches the caller
     const resources = this._model.graph.nodes.map((n) => n.path);
     for (const resource of resources) {
       const config = this.getResourceConfig(resource);
@@ -591,21 +633,33 @@ export class Simulator {
         continue;
       }
 
-      if (config.props.target !== callerHandle) {
+      // console.error("found a policy resource...");
+
+      // console.error(JSON.stringify(config, null, 2));
+
+      if (config.props.principal !== callerHandle) {
         continue;
       }
 
-      const statements = config.props.statements;
+      // console.error("the principal matches...");
+
+      const statements: PolicyStatement[] = config.props.statements;
       for (const statement of statements) {
-        if (statement.resource === resourceHandle && statement.op === method) {
+        if (
+          statement.resourceHandle === calleeHandle &&
+          statement.operation === method
+        ) {
+          // console.error("operation is valid!");
           return { granted: true };
         }
       }
+
+      // console.error("no matching statement found...");
     }
 
     return {
       granted: false,
-      reason: `Resource "${callerPath}" does not have permission to use operation "${method}" on resource "${resourcePath}".`,
+      reason: `Resource "${callerPath}" does not have permission to perform operation "${method}" on resource "${calleePath}".`,
     };
   }
 
@@ -626,6 +680,7 @@ export class Simulator {
       });
       req.on("end", () => {
         const request: SimulatorServerRequest = deserialize(body);
+        // console.error("Received request:", request);
         const { caller, handle, method, args } = request;
         const resource = this._handles.tryFind(handle);
 
@@ -763,7 +818,6 @@ export class Simulator {
     }
 
     const resourceConfig = this.getResourceConfig(path);
-    const context = this.createContext(resourceConfig);
 
     const resolvedProps = this.resolveTokens(resourceConfig.props);
 
@@ -784,14 +838,17 @@ export class Simulator {
     // create the resource based on its type
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const ResourceType = require(typeInfo.sourcePath)[typeInfo.className];
-    const resourceObject = new ResourceType(resolvedProps, context);
-    const attrs = await resourceObject.init();
+    const resourceObject = new ResourceType(resolvedProps);
+
+    // allocate a handle for the resource so others can find it
+    const handle = this._handles.allocate(path, resourceObject);
+
+    // initialize the resource with the simulator context
+    const context = this.createContext(resourceConfig, handle);
+    const attrs = await resourceObject.init(context);
 
     // save the current state
     await resourceObject.save();
-
-    // allocate a handle for the resource so others can find it
-    const handle = this._handles.allocate(resourceObject);
 
     // merge the attributes
     this.state[path].attrs = {
@@ -806,14 +863,30 @@ export class Simulator {
     });
   }
 
-  private createContext(resourceConfig: BaseResourceSchema): ISimulatorContext {
+  private createContext(
+    resourceConfig: BaseResourceSchema,
+    resourceHandle: string
+  ): ISimulatorContext {
     return {
       simdir: this._model.simdir,
       statedir: join(this.statedir, resourceConfig.addr),
       resourcePath: resourceConfig.path,
+      resourceHandle: resourceHandle,
       serverUrl: this.url,
-      getClient: (handle: string) => {
-        return makeSimulatorClient(this.url, handle, ADMIN_PERMISSION);
+      getClient: (calleeHandle: string, asAdmin: boolean) => {
+        const callerHandle = asAdmin ? ADMIN_PERMISSION : resourceHandle;
+        // console.error(
+        //   "Connecting to simulator at",
+        //   this.url,
+        //   "with handle",
+        //   calleeHandle,
+        //   "and caller",
+        //   callerHandle
+        // );
+        if (callerHandle === undefined) {
+          throw new Error("undefined?");
+        }
+        return makeSimulatorClient(this.url, calleeHandle, callerHandle);
       },
       addTrace: (trace: Trace) => {
         this.addTrace(trace);
@@ -942,9 +1015,10 @@ class HandleManager {
     this.nextHandle = 0;
   }
 
-  public allocate(resource: ISimulatorResourceInstance): string {
+  public allocate(path: string, resource: ISimulatorResourceInstance): string {
     const handle = `sim-${this.nextHandle++}`;
     this.handles.set(handle, resource);
+    this.paths.set(handle, path);
     return handle;
   }
 
@@ -970,11 +1044,13 @@ class HandleManager {
       throw new Error(`No resource found with handle "${handle}".`);
     }
     this.handles.delete(handle);
+    this.paths.delete(handle);
     return instance;
   }
 
   public reset(): void {
     this.handles.clear();
+    this.paths.clear();
     this.nextHandle = 0;
   }
 }
@@ -987,7 +1063,7 @@ export interface ISimulatorResourceInstance {
    * Perform any async initialization required by the resource. Return a map of
    * the resource's runtime attributes.
    */
-  init(): Promise<Record<string, any>>;
+  init(ctx: ISimulatorContext): Promise<Record<string, any>>;
 
   /**
    * Stop the resource and clean up any physical resources it may have created

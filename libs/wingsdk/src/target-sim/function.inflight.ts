@@ -10,29 +10,37 @@ import {
 import { TraceType } from "../std";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
-  private readonly originalFile: string;
+  private readonly sourceCodeFile: string;
+  private originalFile!: string;
   private bundle: Bundle | undefined;
   private readonly env: Record<string, string>;
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
   private readonly timeout: number;
   private readonly maxWorkers: number;
   private readonly workers = new Array<Sandbox>();
-  private createBundlePromise: Promise<void>;
+  private createBundlePromise!: Promise<void>;
 
-  constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
+  constructor(props: FunctionSchema["props"]) {
+    this.sourceCodeFile = props.sourceCodeFile;
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
-    this.originalFile = path.resolve(context.simdir, props.sourceCodeFile);
     this.env = props.environmentVariables ?? {};
-    this.context = context;
     this.timeout = props.timeout;
     this.maxWorkers = props.concurrency;
-
-    this.createBundlePromise = this.createBundle();
   }
 
-  public async init(): Promise<FunctionAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<FunctionAttributes> {
+    this._context = context;
+    this.originalFile = path.resolve(context.simdir, this.sourceCodeFile);
+    this.createBundlePromise = this.createBundle();
     return {};
   }
 
@@ -79,6 +87,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
           // If the call fails, we log the error and continue since we've already
           // handed control back to the caller.
           void worker.call("handler", payload).catch((e) => {
+            console.error(e);
             this.context.addTrace({
               data: {
                 message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
@@ -136,7 +145,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return new Sandbox(this.bundle.entrypointPath, {
       env: {
         ...this.env,
-        WING_SIMULATOR_CALLER: this.context.resourcePath,
+        WING_SIMULATOR_CALLER: this.context.resourceHandle,
         WING_SIMULATOR_URL: this.context.serverUrl,
       },
       timeout: this.timeout,

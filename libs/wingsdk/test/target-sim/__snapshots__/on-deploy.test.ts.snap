@@ -50,6 +50,16 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.OnDeploy",
       },
+      {
+        "addr": "c84ce37dba3dd1bd3d5c4ab27cb72c54e2b1a75821",
+        "attrs": {},
+        "path": "root/my_on_deploy/Function/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_on_deploy/Function#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -125,6 +135,10 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -141,6 +155,21 @@ return class Handler {
         "my_on_deploy": {
           "children": {
             "Function": {
+              "children": {
+                "Policy": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A simulated resource policy",
+                    "hidden": true,
+                    "title": "Policy",
+                  },
+                  "id": "Policy",
+                  "path": "root/my_on_deploy/Function/Policy",
+                },
+              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -185,7 +214,9 @@ exports[`create an OnDeploy 2`] = `
   "Invoke (payload=undefined).",
   "OnDeploy invoked.",
   "root/my_on_deploy started",
+  "root/my_on_deploy/Function/Policy started",
   "root/my_on_deploy stopped",
+  "root/my_on_deploy/Function/Policy stopped",
   "root/my_on_deploy/Function stopped",
 ]
 `;

@@ -17,14 +17,19 @@ export class Topic
   implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
 {
   private readonly subscribers = new Array<TopicSubscriber>();
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
 
-  constructor(props: TopicSchema["props"], context: ISimulatorContext) {
-    this.context = context;
-    props;
+  constructor(_props: TopicSchema["props"]) {}
+
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
   }
 
-  public async init(): Promise<TopicAttributes> {
+  public async init(context: ISimulatorContext): Promise<TopicAttributes> {
+    this._context = context;
     return {};
   }
 

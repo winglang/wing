@@ -4,11 +4,18 @@ import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { Json } from "../std";
 
 export class State implements IStateClient, ISimulatorResourceInstance {
-  constructor(
-    _props: StateSchema["props"],
-    private readonly context: ISimulatorContext
-  ) {}
-  public async init(): Promise<Record<string, any>> {
+  private _context: ISimulatorContext | undefined;
+  constructor(_props: StateSchema["props"]) {}
+
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<Record<string, any>> {
+    this._context = context;
     return {};
   }
 

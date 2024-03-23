@@ -92,6 +92,10 @@ exports[`create a schedule 1`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -164,6 +168,16 @@ console.log("Hello from schedule!");
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c8d61fcab25f1c27fcb0f0ba29e4888a7041c8029f",
+        "attrs": {},
+        "path": "root/my_schedule/OnTick0/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
       {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
@@ -276,6 +290,10 @@ console.log("Hello from schedule!");
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -292,6 +310,21 @@ console.log("Hello from schedule!");
         "my_schedule": {
           "children": {
             "OnTick0": {
+              "children": {
+                "Policy": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A simulated resource policy",
+                    "hidden": true,
+                    "title": "Policy",
+                  },
+                  "id": "Policy",
+                  "path": "root/my_schedule/OnTick0/Policy",
+                },
+              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -374,6 +407,16 @@ console.log("Hello from schedule!");
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c8d61fcab25f1c27fcb0f0ba29e4888a7041c8029f",
+        "attrs": {},
+        "path": "root/my_schedule/OnTick0/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
       {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
@@ -486,6 +529,10 @@ console.log("Hello from schedule!");
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -502,6 +549,21 @@ console.log("Hello from schedule!");
         "my_schedule": {
           "children": {
             "OnTick0": {
+              "children": {
+                "Policy": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A simulated resource policy",
+                    "hidden": true,
+                    "title": "Policy",
+                  },
+                  "id": "Policy",
+                  "path": "root/my_schedule/OnTick0/Policy",
+                },
+              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -584,6 +646,16 @@ console.log("Hello from schedule!");
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c8d61fcab25f1c27fcb0f0ba29e4888a7041c8029f",
+        "attrs": {},
+        "path": "root/my_schedule/OnTick0/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
       {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
@@ -696,6 +768,10 @@ console.log("Hello from schedule!");
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -712,6 +788,21 @@ console.log("Hello from schedule!");
         "my_schedule": {
           "children": {
             "OnTick0": {
+              "children": {
+                "Policy": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A simulated resource policy",
+                    "hidden": true,
+                    "title": "Policy",
+                  },
+                  "id": "Policy",
+                  "path": "root/my_schedule/OnTick0/Policy",
+                },
+              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",

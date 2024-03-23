@@ -26,7 +26,7 @@ export class Function
 {
   private readonly timeout: Duration;
   private readonly concurrency: number;
-  private readonly policy: Policy;
+  public readonly policy: Policy;
   public _liftMap = undefined;
 
   constructor(
@@ -40,7 +40,7 @@ export class Function
     // props.memory is unused since we are not simulating it
     this.timeout = props.timeout ?? Duration.fromMinutes(1);
     this.concurrency = props.concurrency ?? 100;
-    this.policy = new Policy(this, "Policy", { target: this });
+    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
   public addPermission(resource: IResource, op: string): void {
@@ -82,4 +82,11 @@ export class Function
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
+}
+
+/**
+ * Simulator-specific inflight methods for `cloud.Function`.
+ */
+export enum FunctionInflightMethods {
+  HAS_AVAILABLE_WORKERS = "hasAvailableWorkers",
 }

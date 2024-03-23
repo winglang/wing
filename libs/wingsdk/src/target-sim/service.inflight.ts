@@ -10,21 +10,35 @@ import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {
-  private readonly context: ISimulatorContext;
-  private readonly entrypoint: string;
+  private _context: ISimulatorContext | undefined;
+  private entrypoint!: string;
   private readonly autoStart: boolean;
-  private readonly sandbox: LegacySandbox;
+  private sandbox!: LegacySandbox;
   private running: boolean = false;
   private onStop?: IServiceStopHandlerClient;
+  private readonly environmentVariables: Record<string, string>;
 
-  constructor(props: ServiceSchema["props"], context: ISimulatorContext) {
-    this.context = context;
-    this.entrypoint = resolve(context.simdir, props.sourceCodeFile);
+  constructor(props: ServiceSchema["props"]) {
     this.autoStart = props.autoStart;
+    this.environmentVariables = props.environmentVariables;
+
+    props;
+  }
+
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<ServiceAttributes> {
+    this._context = context;
+    this.entrypoint = resolve(context.simdir, this.entrypoint);
     this.sandbox = new LegacySandbox(this.entrypoint, {
       env: {
-        ...props.environmentVariables,
-        WING_SIMULATOR_CALLER: this.context.resourcePath,
+        ...this.environmentVariables,
+        WING_SIMULATOR_CALLER: this.context.resourceHandle,
         WING_SIMULATOR_URL: this.context.serverUrl,
       },
       log: (internal, _level, message) => {
@@ -37,11 +51,6 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
         });
       },
     });
-
-    props;
-  }
-
-  public async init(): Promise<ServiceAttributes> {
     if (this.autoStart) {
       await this.start();
     }

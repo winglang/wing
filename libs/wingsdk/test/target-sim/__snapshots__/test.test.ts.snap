@@ -55,6 +55,16 @@ async handle(event) {
         },
         "type": "@winglang/sdk.std.TestRunner",
       },
+      {
+        "addr": "c8e9f1ae266f81e04ffcbb951317b09fa72e8ad7cb",
+        "attrs": {},
+        "path": "root/env0/test:my_test/Handler/Policy",
+        "props": {
+          "principal": "\${wsim#root/env0/test:my_test/Handler#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -130,6 +140,10 @@ async handle(event) {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -161,6 +175,21 @@ async handle(event) {
             "test:my_test": {
               "children": {
                 "Handler": {
+                  "children": {
+                    "Policy": {
+                      "constructInfo": {
+                        "fqn": "constructs.Construct",
+                        "version": "10.3.0",
+                      },
+                      "display": {
+                        "description": "A simulated resource policy",
+                        "hidden": true,
+                        "title": "Policy",
+                      },
+                      "id": "Policy",
+                      "path": "root/env0/test:my_test/Handler/Policy",
+                    },
+                  },
                   "constructInfo": {
                     "fqn": "constructs.Construct",
                     "version": "10.3.0",

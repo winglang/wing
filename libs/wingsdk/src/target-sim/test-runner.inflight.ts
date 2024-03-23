@@ -8,14 +8,21 @@ export class TestRunner
 {
   // A map from test paths to their corresponding function handles.
   private readonly tests: Map<string, string>;
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
 
-  constructor(props: TestRunnerSchema["props"], context: ISimulatorContext) {
+  constructor(props: TestRunnerSchema["props"]) {
     this.tests = new Map(Object.entries(props.tests));
-    this.context = context;
   }
 
-  public async init(): Promise<TestRunnerAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<TestRunnerAttributes> {
+    this._context = context;
     return {};
   }
 

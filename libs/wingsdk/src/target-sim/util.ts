@@ -67,6 +67,7 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
   if (!caller) {
     throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
   }
+  console.error("Connecting to simulator at", simulatorUrl, "with handle", handle, "and caller", caller);
   return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
 })()`;
 }

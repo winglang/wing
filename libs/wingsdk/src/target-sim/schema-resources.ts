@@ -360,7 +360,7 @@ export interface PolicySchema extends BaseResourceSchema {
   readonly type: typeof POLICY_FQN;
   readonly props: {
     /** The resource which the policy is attached to. */
-    readonly target: ResourceHandle;
+    readonly principal: ResourceHandle;
     /** The statements in the policy. */
     readonly statements: PolicyStatement[];
   };

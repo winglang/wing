@@ -95,3 +95,8 @@ export class EventMapping extends Resource implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 }
+
+export enum EventMappingInflightMethods {
+  ADD_SUBSCRIPTION = "addEventSubscription",
+  REMOVE_SUBSCRIPTION = "removeEventSubscription",
+}

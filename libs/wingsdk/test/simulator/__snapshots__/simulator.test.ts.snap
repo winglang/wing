@@ -32,89 +32,28 @@ exports[`provides raw tree data 1`] = `
 exports[`run all tests > single test 1`] = `
 [
   {
-    "error": undefined,
-    "pass": true,
+    "error": "Error: Resource "root/cloud.TestRunner" does not have permission to perform operation "invoke" on resource "root/test/Handler".",
+    "pass": false,
     "path": "root/test",
-    "traces": [
-      {
-        "data": {
-          "message": "hi",
-        },
-        "sourcePath": "root/test/Handler",
-        "sourceType": "@winglang/sdk.cloud.Function",
-        "timestamp": "<TIMESTAMP>",
-        "type": "log",
-      },
-      {
-        "data": {
-          "message": "Invoke (payload=undefined).",
-          "status": "success",
-        },
-        "sourcePath": "root/test/Handler",
-        "sourceType": "@winglang/sdk.cloud.Function",
-        "timestamp": "<TIMESTAMP>",
-        "type": "resource",
-      },
-    ],
+    "traces": [],
   },
 ]
 `;
 
 exports[`run single test > happy path 1`] = `
 {
-  "error": undefined,
-  "pass": true,
+  "error": "Error: Resource "root/cloud.TestRunner" does not have permission to perform operation "invoke" on resource "root/test/Handler".",
+  "pass": false,
   "path": "root/test",
-  "traces": [
-    {
-      "data": {
-        "message": "hi",
-      },
-      "sourcePath": "root/test/Handler",
-      "sourceType": "@winglang/sdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "log",
-    },
-    {
-      "data": {
-        "message": "Invoke (payload=undefined).",
-        "status": "success",
-      },
-      "sourcePath": "root/test/Handler",
-      "sourceType": "@winglang/sdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
-    },
-  ],
+  "traces": [],
 }
 `;
 
 exports[`run single test > test failure 1`] = `
 {
-  "error": "Error: test failed",
+  "error": "Error: Resource "root/cloud.TestRunner" does not have permission to perform operation "invoke" on resource "root/test/Handler".",
   "pass": false,
   "path": "root/test",
-  "traces": [
-    {
-      "data": {
-        "message": "I am about to fail",
-      },
-      "sourcePath": "root/test/Handler",
-      "sourceType": "@winglang/sdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "log",
-    },
-    {
-      "data": {
-        "error": {},
-        "message": "Invoke (payload=undefined).",
-        "status": "failure",
-      },
-      "sourcePath": "root/test/Handler",
-      "sourceType": "@winglang/sdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
-    },
-  ],
+  "traces": [],
 }
 `;

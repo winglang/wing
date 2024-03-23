@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { PolicySchema } from "./schema-resources";
+import { PolicySchema, PolicyStatement } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { fqnForType } from "../constants";
 import { BaseResourceSchema } from "../simulator";
@@ -15,7 +15,7 @@ export interface PolicyProps {
   /**
    * The resource to which the policy is attached.
    */
-  readonly target: IResource;
+  readonly principal: IResource;
 }
 
 /**
@@ -23,10 +23,10 @@ export interface PolicyProps {
  */
 export class Policy extends Resource implements ISimulatorResource {
   private readonly statements: Map<IResource, Set<string>> = new Map();
-  private readonly target: IResource;
+  private readonly principal: IResource;
   constructor(scope: Construct, id: string, props: PolicyProps) {
     super(scope, id);
-    this.target = props.target;
+    this.principal = props.principal;
     Node.of(this).hidden = true;
     Node.of(this).title = "Policy";
     Node.of(this).description = "A simulated resource policy";
@@ -43,12 +43,12 @@ export class Policy extends Resource implements ISimulatorResource {
   }
 
   public toSimulator(): BaseResourceSchema {
-    const statements = [];
+    const statements: Array<PolicyStatement> = [];
     for (const [resource, ops] of this.statements.entries()) {
       for (const op of ops) {
         statements.push({
-          resource: simulatorHandleToken(resource),
-          op,
+          resourceHandle: simulatorHandleToken(resource),
+          operation: op,
         });
       }
     }
@@ -57,8 +57,8 @@ export class Policy extends Resource implements ISimulatorResource {
       path: this.node.path,
       addr: this.node.addr,
       props: {
-        target: simulatorHandleToken(this.target),
-        statements: [],
+        principal: simulatorHandleToken(this.principal),
+        statements,
       },
       attrs: {} as any,
     };
