@@ -27,7 +27,7 @@ use crate::{
 		lifts::{LiftQualification, Liftable, Lifts},
 		resolve_super_method, resolve_user_defined_type,
 		symbol_env::{SymbolEnv, SymbolEnvKind},
-		ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+		ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::{VisitContext, VisitorWithContext},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_AUTOID_RESOURCE,
@@ -499,8 +499,8 @@ impl<'a> JSifier<'a> {
 				let scope = if is_preflight_class && class_type.std_construct_args {
 					if let Some(scope) = obj_scope {
 						Some(self.jsify_expression(scope, ctx).to_string())
-						} else {
-							Some("this".to_string())
+					} else {
+						Some("this".to_string())
 					}
 				} else {
 					None
