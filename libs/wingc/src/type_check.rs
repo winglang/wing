@@ -4976,9 +4976,26 @@ impl<'a> TypeChecker<'a> {
 		// use the class type as the function's "this" type (or None if static)
 		method_sig.this_type = instance_type;
 
-		// For now all static preflight methods require an implicit scope argument. In the future we may be smart and if
-		// the method doesn't instantiate any preflight classes then it can do away with it.
-		method_sig.implicit_scope_param = instance_type.is_none() && method_sig.phase == Phase::Preflight;
+		// For now all* static preflight methods require an implicit scope argument. In the future we may be smart and if
+		// the method doesn't instantiate any preflight classes then we can do away with it.
+		//
+		// *Special case: if we're overriding a method from a parent class, we assume its `implicit_scope_param`. Note that
+		// this isn't stricly correct and we don't have clearly defined rules for static method inheritance, but this
+		// resolves the issue of calling the base `Resource` class's onTypeLift method which doesn't expect a scope param.
+		let inherit_implicit_scope_param = class_env.parent.and_then(|e| {
+			e.lookup(method_name, None).and_then(|s| {
+				s.as_variable()
+					.unwrap()
+					.type_
+					.as_function_sig()
+					.map(|s| s.implicit_scope_param)
+			})
+		});
+		method_sig.implicit_scope_param = if let Some(inherit_implicit_scope_param) = inherit_implicit_scope_param {
+			inherit_implicit_scope_param
+		} else {
+			instance_type.is_none() && method_sig.phase == Phase::Preflight
+		};
 
 		// If this method is overriding a parent method, check access modifiers allow it, note this is only relevant for instance methods
 		if instance_type.is_some() {
