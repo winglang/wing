@@ -32,7 +32,11 @@ export interface IScopeCallback {
 export function listMessages(s: Simulator) {
   const message = s.listTraces().map((trace) => trace.data.message);
   // Redact any messages containing port numbers
-  return message.map((m) => m.replace(/:\d+/, ":<port>"));
+  return message.map((m) =>
+    m
+      .replace(/wing-container-\w+/g, "wing-container-<container>")
+      .replace(/:\d+/, ":<port>")
+  );
 }
 
 export async function sleep(ms: number) {

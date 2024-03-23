@@ -26,7 +26,6 @@ import {
   KeyIcon as SolidKeyIcon,
 } from "@heroicons/react/24/solid";
 
-import { DynamoDBIcon } from "../icons/dynamodb-icon.js";
 import { ReactIcon } from "../icons/react-icon.js";
 import { RedisIcon } from "../icons/redis-icon.js";
 
@@ -85,9 +84,6 @@ export const getResourceIconComponent = (
     }
     case "@winglang/sdk.cloud.Secret": {
       return solid ? SolidKeyIcon : KeyIcon;
-    }
-    case "@winglang/sdk.ex.DynamodbTable": {
-      return DynamoDBIcon;
     }
     default: {
       return CubeIcon;

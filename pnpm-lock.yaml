@@ -188,12 +188,6 @@ importers:
       '@vscode/vsce':
         specifier: ^2.21.0
         version: 2.21.1
-      '@wingconsole/app':
-        specifier: workspace:^
-        version: link:../wing-console/console/app
-      '@wingconsole/server':
-        specifier: workspace:^
-        version: link:../wing-console/console/server
       eslint:
         specifier: ^8
         version: 8.51.0
@@ -1329,6 +1323,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.18.2
+      glob:
+        specifier: ^8.1.0
+        version: 8.1.0
       google-auth-library:
         specifier: ^8.9.0
         version: 8.9.0
@@ -1382,6 +1379,9 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.1
         version: 11.0.2
+      '@types/glob':
+        specifier: ^7.2.0
+        version: 7.2.0
       '@types/mime-types':
         specifier: ^2.1.2
         version: 2.1.2
@@ -14175,7 +14175,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240320
+      typescript: 5.5.0-dev.20240321
     dev: true
 
   /dset@3.1.2:
@@ -22783,8 +22783,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240320:
-    resolution: {integrity: sha512-f6O4RIs1q/POZywDLiRJ6+2rmyW+S3Aua7QYVwdSf06SiQv//zptr78enmBWkNI70FPCMNM20X/cVgKiHR8ryQ==}
+  /typescript@5.5.0-dev.20240321:
+    resolution: {integrity: sha512-QEUqMB18VAUQBHtHlq8BfjxGZzFkavH5fhZn+I97N67mDZTa86n1S8kiRKmrbxVwPAdvn3DYtJzcGq5OvdWkmQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

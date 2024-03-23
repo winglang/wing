@@ -4,7 +4,7 @@ import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource } from "../std";
 
 /**
- * Global identifier for `Bucket`.
+ * Global identifier for `Redis`.
  */
 export const REDIS_FQN = fqnForType("ex.Redis");
 
