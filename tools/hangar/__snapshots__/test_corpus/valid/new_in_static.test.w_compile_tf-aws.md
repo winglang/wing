@@ -105,10 +105,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static createBucket(scope) {
+      static createBucket($scope, scope) {
         return ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "Bucket"))(scope);
       }
-      static createMyClass(scope) {
+      static createMyClass($scope, scope) {
         return new MyClass(scope, "MyClass");
       }
       static _toInflightType() {
@@ -177,9 +177,9 @@ class $Root extends $stdlib.std.Resource {
       this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
     }
     const scope = this.node.root.new("constructs.Construct", c.Construct, this, "Construct");
-    const bucket = (MyClass.createBucket(scope));
+    const bucket = (MyClass.createBucket(this, scope));
     const bucket2 = (createBucket());
-    const my = (MyClass.createMyClass(scope));
+    const my = (MyClass.createMyClass(this, scope));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:play with bucket", new $Closure1(this, "$Closure1"));
   }
 }

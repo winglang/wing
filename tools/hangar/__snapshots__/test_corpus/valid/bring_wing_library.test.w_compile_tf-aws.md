@@ -169,7 +169,7 @@ class $Root extends $stdlib.std.Resource {
     const fave_num = fixture.FavoriteNumbers.SEVEN;
     const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
-    $helpers.assert($helpers.eq((fixture.Store.makeKey("hello")), "data/hello.json"), "fixture.Store.makeKey(\"hello\") == \"data/hello.json\"");
+    $helpers.assert($helpers.eq((fixture.Store.makeKey(this, "hello")), "data/hello.json"), "fixture.Store.makeKey(\"hello\") == \"data/hello.json\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
   }
 }
@@ -193,7 +193,7 @@ class Store extends $stdlib.std.Resource {
     this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     this.handlers = [];
   }
-  static makeKey(name) {
+  static makeKey($scope, name) {
     return (require("@winglibs/testfixture/util.js")["makeKey"])(name)
   }
   onSet(handler) {
