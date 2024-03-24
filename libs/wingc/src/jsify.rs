@@ -500,7 +500,17 @@ impl<'a> JSifier<'a> {
 					if let Some(scope) = obj_scope {
 						Some(self.jsify_expression(scope, ctx).to_string())
 					} else {
-						Some("this".to_string())
+						// If the current method has an implicit scope arg then use it, if not we can assume `this` is available
+						if ctx.visit_ctx.current_method_env().map_or(false, |e| {
+							let SymbolEnvKind::Function { sig, .. } = e.kind else {
+								panic!("Method env not a function env");
+							};
+							sig.as_function_sig().unwrap().implicit_scope_param
+						}) {
+							Some(SCOPE_PARAM.to_string())
+						} else {
+							Some("this".to_string())
+						}
 					}
 				} else {
 					None
@@ -525,6 +535,7 @@ impl<'a> JSifier<'a> {
 				let scope_arg = if fqn.is_none() {
 					scope.clone()
 				} else {
+					// TODO: i don't get this?? why is scope_arg different from scope?
 					match scope.clone() {
 						None => None,
 						Some(scope) => Some(if scope == "this" {
