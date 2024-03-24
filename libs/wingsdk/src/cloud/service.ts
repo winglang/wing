@@ -95,16 +95,23 @@ export class Service extends Resource implements IInflightHost {
     const lines = new Array<string>();
 
     lines.push('"use strict";');
-    lines.push("let $obj;");
+    lines.push("let $stop;");
 
-    lines.push("async function $initOnce() {");
-    lines.push(`  $obj = $obj || (await (${inflightClient}));`);
-    lines.push("  return $obj;");
+    lines.push("exports.start = async function() {");
+    lines.push("  if ($stop) {");
+    lines.push("    throw Error('service already started');");
+    lines.push("  }");
+    lines.push(`  $stop = await ((await (${inflightClient})).handle());`);
     lines.push("};");
 
-    lines.push("exports.handle = async function() {");
-    lines.push("  return (await $initOnce()).handle();");
+    lines.push("exports.stop = async function() {");
+    lines.push("  if (!$stop) {");
+    lines.push("    throw Error('service not started');");
+    lines.push("  }");
+    lines.push("  await $stop();");
+    lines.push("  $stop = undefined;");
     lines.push("};");
+
     writeFileSync(this.entrypoint, lines.join("\n"));
 
     // indicates that we are calling the inflight constructor and the
