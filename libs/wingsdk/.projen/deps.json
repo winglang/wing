@@ -18,6 +18,10 @@
       "type": "build"
     },
     {
+      "name": "@types/glob",
+      "type": "build"
+    },
+    {
       "name": "@types/mime-types",
       "type": "build"
     },
@@ -273,6 +277,10 @@
     },
     {
       "name": "express",
+      "type": "bundled"
+    },
+    {
+      "name": "glob",
       "type": "bundled"
     },
     {

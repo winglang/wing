@@ -92,7 +92,7 @@ class Foo extends $stdlib.std.Resource {
     return "foo";
   }
   checkWidget(widget) {
-    return ((widget.compute()) + (blah.Widget.staticCompute()));
+    return ((widget.compute()) + (blah.Widget.staticCompute(this, )));
   }
   static _toInflightType() {
     return `
@@ -263,7 +263,7 @@ class Widget extends $stdlib.std.Resource {
   compute() {
     return 42;
   }
-  static staticCompute() {
+  static staticCompute($scope, ) {
     return 1337;
   }
   static _toInflightType() {

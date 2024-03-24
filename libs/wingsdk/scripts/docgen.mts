@@ -33,7 +33,7 @@ sidebar_position: 100
 `;
 
 const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
-const UNDOCUMENTED_EX_FILES = ["index", "dynamodb-table"];
+const UNDOCUMENTED_EX_FILES = ["index"];
 const UNDOCUMENTED_STD_FILES = [
   "README",
   "index",
@@ -151,11 +151,6 @@ await generateResourceApiDocs("cloud", {
 await generateResourceApiDocs("ex", {
   docsPath: getStdlibDocsDir("ex"),
   excludedFiles: UNDOCUMENTED_EX_FILES,
-});
-
-await generateResourceApiDocs("ex/dynamodb-table", {
-  docsPath: join(getStdlibDocsDir("ex"), "dynamodb-table"),
-  excludedFiles: ["index"],
 });
 
 await generateResourceApiDocs("std", {

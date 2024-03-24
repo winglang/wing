@@ -99,9 +99,9 @@ export interface ISimulatorContext {
   readonly serverUrl: string;
 
   /**
-   * Find a resource simulation by its handle. Throws if the handle isn't valid.
+   * Obtain a client given a resource's handle.
    */
-  findInstance(handle: string): ISimulatorResourceInstance;
+  getClient(handle: string): unknown;
 
   /**
    * Add a trace. Traces are breadcrumbs of information about resource
@@ -522,7 +522,11 @@ export class Simulator {
   }
 
   private typeInfo(fqn: string): TypeSchema {
-    return this._model.schema.types[fqn];
+    const schema = this._model.schema.types[fqn];
+    if (!schema) {
+      throw new Error(`Unknown simulator type ${fqn}`);
+    }
+    return schema;
   }
 
   /**
@@ -735,8 +739,8 @@ export class Simulator {
       statedir: join(this.statedir, resourceConfig.addr),
       resourcePath: resourceConfig.path,
       serverUrl: this.url,
-      findInstance: (handle: string) => {
-        return this._handles.find(handle);
+      getClient: (handle: string) => {
+        return makeSimulatorClient(this.url, handle);
       },
       addTrace: (trace: Trace) => {
         this.addTrace(trace);

@@ -17,9 +17,22 @@ exports[`create a table 1`] = `
             "id": "S",
           },
           "hashKey": "id",
+          "hostPort": "\${wsim#root/create_table/Container#attrs.host_port}",
           "name": "new_table",
         },
         "type": "@winglang/sdk.ex.DynamodbTable",
+      },
+      {
+        "addr": "c82d9c21ab6a376c9bcdf5239702cd3d3a582b5e50",
+        "attrs": {},
+        "path": "root/create_table/Container",
+        "props": {
+          "containerPort": 8000,
+          "cwd": "<ABSOLUTE PATH>/test",
+          "image": "amazon/dynamodb-local:2.0.0",
+          "imageTag": "amazon/dynamodb-local:2.0.0",
+        },
+        "type": "@winglang/sdk.sim.Container",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -92,6 +105,10 @@ exports[`create a table 1`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
@@ -110,6 +127,17 @@ exports[`create a table 1`] = `
     "tree": {
       "children": {
         "create_table": {
+          "children": {
+            "Container": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {},
+              "id": "Container",
+              "path": "root/create_table/Container",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -136,8 +164,15 @@ exports[`create a table 1`] = `
 
 exports[`get item 1`] = `
 [
+  "image amazon/dynamodb-local:<port>.0.0 already exists",
+  "starting container from image amazon/dynamodb-local:<port>.0.0",
+  "docker run --detach --rm --name wing-container-<container> -p 8000 amazon/dynamodb-local:<port>.0.0",
+  "containerName=wing-container-<container>",
+  "root/get_table/Container started",
   "root/get_table started",
   "root/get_table stopped",
+  "Stopping container wing-container-<container>",
+  "root/get_table/Container stopped",
 ]
 `;
 
@@ -158,9 +193,22 @@ exports[`get item 2`] = `
             "id": "S",
           },
           "hashKey": "id",
+          "hostPort": "\${wsim#root/get_table/Container#attrs.host_port}",
           "name": "my_get_table",
         },
         "type": "@winglang/sdk.ex.DynamodbTable",
+      },
+      {
+        "addr": "c8b10674f74fa0a89c85159f18ee72997a19272e1a",
+        "attrs": {},
+        "path": "root/get_table/Container",
+        "props": {
+          "containerPort": 8000,
+          "cwd": "<ABSOLUTE PATH>/test",
+          "image": "amazon/dynamodb-local:2.0.0",
+          "imageTag": "amazon/dynamodb-local:2.0.0",
+        },
+        "type": "@winglang/sdk.sim.Container",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -233,6 +281,10 @@ exports[`get item 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
@@ -251,6 +303,17 @@ exports[`get item 2`] = `
     "tree": {
       "children": {
         "get_table": {
+          "children": {
+            "Container": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {},
+              "id": "Container",
+              "path": "root/get_table/Container",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -277,8 +340,15 @@ exports[`get item 2`] = `
 
 exports[`put item 1`] = `
 [
+  "image amazon/dynamodb-local:<port>.0.0 already exists",
+  "starting container from image amazon/dynamodb-local:<port>.0.0",
+  "docker run --detach --rm --name wing-container-<container> -p 8000 amazon/dynamodb-local:<port>.0.0",
+  "containerName=wing-container-<container>",
+  "root/put_table/Container started",
   "root/put_table started",
   "root/put_table stopped",
+  "Stopping container wing-container-<container>",
+  "root/put_table/Container stopped",
 ]
 `;
 
@@ -299,9 +369,22 @@ exports[`put item 2`] = `
             "id": "S",
           },
           "hashKey": "id",
+          "hostPort": "\${wsim#root/put_table/Container#attrs.host_port}",
           "name": "my_insert_table",
         },
         "type": "@winglang/sdk.ex.DynamodbTable",
+      },
+      {
+        "addr": "c8934f0d9367e400f390b6380b526e9c5ceaa3833e",
+        "attrs": {},
+        "path": "root/put_table/Container",
+        "props": {
+          "containerPort": 8000,
+          "cwd": "<ABSOLUTE PATH>/test",
+          "image": "amazon/dynamodb-local:2.0.0",
+          "imageTag": "amazon/dynamodb-local:2.0.0",
+        },
+        "type": "@winglang/sdk.sim.Container",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -374,6 +457,10 @@ exports[`put item 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
@@ -392,6 +479,17 @@ exports[`put item 2`] = `
     "tree": {
       "children": {
         "put_table": {
+          "children": {
+            "Container": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {},
+              "id": "Container",
+              "path": "root/put_table/Container",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -418,8 +516,15 @@ exports[`put item 2`] = `
 
 exports[`update item 1`] = `
 [
+  "image amazon/dynamodb-local:<port>.0.0 already exists",
+  "starting container from image amazon/dynamodb-local:<port>.0.0",
+  "docker run --detach --rm --name wing-container-<container> -p 8000 amazon/dynamodb-local:<port>.0.0",
+  "containerName=wing-container-<container>",
+  "root/update_table/Container started",
   "root/update_table started",
   "root/update_table stopped",
+  "Stopping container wing-container-<container>",
+  "root/update_table/Container stopped",
 ]
 `;
 
@@ -440,9 +545,22 @@ exports[`update item 2`] = `
             "id": "S",
           },
           "hashKey": "id",
+          "hostPort": "\${wsim#root/update_table/Container#attrs.host_port}",
           "name": "my_update_table",
         },
         "type": "@winglang/sdk.ex.DynamodbTable",
+      },
+      {
+        "addr": "c87d51114bd971aa78d45b09d1581b2d2490f8d31a",
+        "attrs": {},
+        "path": "root/update_table/Container",
+        "props": {
+          "containerPort": 8000,
+          "cwd": "<ABSOLUTE PATH>/test",
+          "image": "amazon/dynamodb-local:2.0.0",
+          "imageTag": "amazon/dynamodb-local:2.0.0",
+        },
+        "type": "@winglang/sdk.sim.Container",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -515,6 +633,10 @@ exports[`update item 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
@@ -533,6 +655,17 @@ exports[`update item 2`] = `
     "tree": {
       "children": {
         "update_table": {
+          "children": {
+            "Container": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {},
+              "id": "Container",
+              "path": "root/update_table/Container",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
