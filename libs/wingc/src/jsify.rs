@@ -1361,7 +1361,10 @@ impl<'a> JSifier<'a> {
 				.implicit_scope_param
 		}) {
 			let mut res = CodeMaker::one_line(SCOPE_PARAM);
-			res.append(parameters);
+			if !parameters.is_empty() {
+				res.append(", ");
+				res.append(parameters);
+			}
 			res
 		} else {
 			parameters
