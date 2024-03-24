@@ -1339,7 +1339,7 @@ impl<'a> JSifier<'a> {
 		let parameters = jsify_function_parameters(func_def);
 
 		// If this function requires an implicit scope parameter then add it to the parameters
-		let implicit_parameters = if class_type.map_or(false, |t| {
+		let parameters = if class_type.map_or(false, |t| {
 			t.as_class()
 				.unwrap()
 				.get_method(func_def.name.as_ref().unwrap())
@@ -1349,9 +1349,11 @@ impl<'a> JSifier<'a> {
 				.unwrap()
 				.implicit_scope_param
 		}) {
-			format!("{SCOPE_PARAM}, ")
+			let mut res = CodeMaker::one_line(SCOPE_PARAM);
+			res.append(parameters);
+			res
 		} else {
-			"".to_string()
+			parameters
 		};
 
 		let (name, arrow) = match &func_def.name {
@@ -1458,16 +1460,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		let func_prefix = prefix.join(" ");
-		let mut code = new_code!(
-			&func_def.span,
-			func_prefix,
-			"(",
-			implicit_parameters,
-			parameters.clone(),
-			")",
-			arrow,
-			"{"
-		);
+		let mut code = new_code!(&func_def.span, func_prefix, "(", parameters.clone(), ")", arrow, "{");
 		code.indent();
 
 		code.add_code(body);
