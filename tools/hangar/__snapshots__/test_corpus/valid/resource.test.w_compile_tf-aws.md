@@ -393,7 +393,10 @@ module.exports = function({  }) {
         },
         "batch_size": 1,
         "event_source_arn": "${aws_sqs_queue.BigPublisher_Queue_2C024F97.arn}",
-        "function_name": "${aws_lambda_function.BigPublisher_Queue-SetConsumer0_55896C65.function_name}"
+        "function_name": "${aws_lambda_function.BigPublisher_Queue-SetConsumer0_55896C65.function_name}",
+        "function_response_types": [
+          "ReportBatchItemFailures"
+        ]
       }
     },
     "aws_lambda_function": {

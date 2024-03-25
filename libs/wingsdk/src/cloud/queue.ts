@@ -19,7 +19,7 @@ export interface DeadLetterQueueProps {
    */
   readonly queue: Queue;
   /**
-   * The number of times a message can be unsuccesfully dequeued 
+   * The number of times a message can be unsuccesfully dequeued
    * before being moved to the dead-letter queue.
    */
   readonly maxReveiceCount: number;
@@ -146,7 +146,7 @@ export interface IQueueSetConsumerHandlerClient {
    * Function that will be called when a message is received from the queue.
    * @inflight
    */
-  handle(message: string): Promise<void>;
+  handle(message: string): Promise<any>;
 }
 
 /**

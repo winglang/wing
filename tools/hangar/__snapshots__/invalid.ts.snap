@@ -1064,7 +1064,7 @@ exports[`cloud_function_expects_inflight.test.w 1`] = `
   = hint: expected phase to be inflight, but got preflight instead
 
 
-error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
+error: Expected type to be \\"inflight (message: str): any\\", but got \\"inflight (x: num): unknown\\" instead
    --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:9:15
    |  
  9 |   q.setConsumer(inflight (x: num) => {
@@ -1072,7 +1072,7 @@ error: Expected type to be \\"inflight (message: str): void\\", but got \\"infli
 10 | |                      // ^ \\"num\\" doesn't match the expected type \\"str\\"
 11 | |   return;
 12 | | });
-   | \\\\-^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
+   | \\\\-^ Expected type to be \\"inflight (message: str): any\\", but got \\"inflight (x: num): unknown\\" instead
 
 
  
@@ -1965,11 +1965,11 @@ exports[`impl_interface.test.w 1`] = `
   |       ^ Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
 
 
-error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
+error: Expected type to be \\"inflight (message: str): any\\", but got \\"inflight (x: num): void\\" instead
   --> ../../../examples/tests/invalid/impl_interface.test.w:7:7
   |
 7 | class B impl cloud.IQueueSetConsumerHandler {
-  |       ^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
+  |       ^ Expected type to be \\"inflight (message: str): any\\", but got \\"inflight (x: num): void\\" instead
 
 
 error: Expected an interface, instead found type \\"Bucket\\"

@@ -4,7 +4,8 @@ import type {
 } from "../cloud";
 
 export class QueueSetConsumerHandlerClient
-  implements IQueueSetConsumerHandlerClient {
+  implements IQueueSetConsumerHandlerClient
+{
   private readonly handler: IFunctionHandlerClient;
   constructor({ handler }: { handler: IFunctionHandlerClient }) {
     this.handler = handler;
@@ -16,10 +17,12 @@ export class QueueSetConsumerHandlerClient
         await this.handler.handle(record.body);
       } catch (error) {
         batchItemFailures.push({
-          itemIdentifier: record.messageId
+          itemIdentifier: record.messageId,
         });
       }
     }
-    return batchItemFailures;
+    return {
+      batchItemFailures: batchItemFailures,
+    };
   }
 }
