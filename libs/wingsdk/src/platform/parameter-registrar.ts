@@ -1,7 +1,19 @@
 import Ajv from "ajv";
 import { Construct } from "constructs";
-import { loadPlatformSpecificValues } from "./util";
-import { Node } from "../std";
+import {
+  loadPlatformSpecificValues,
+  extractFieldsFromSchema,
+  filterParametersBySchema,
+} from "./util";
+import { Json, Node } from "../std";
+
+/**
+ * Options for reading parameters
+ */
+export interface ReadParameterOptions {
+  /** Schema to limit the read to */
+  readonly schema?: any;
+}
 
 /**
  * Parameter Registrar
@@ -29,7 +41,7 @@ export class ParameterRegistrar extends Construct {
    * @param path the path of the parameter
    * @returns the value of the parameter
    */
-  public getParameterValue(path: string): any {
+  public value(path: string): any {
     if (this.parameterValueByPath[path] === undefined) {
       // attempt to read the value from the raw parameters, then cache it
       this.parameterValueByPath[path] = resolveValueFromPath(
@@ -42,12 +54,35 @@ export class ParameterRegistrar extends Construct {
   }
 
   /**
+   * Read parameters
+   *
+   * @param options options for reading parameters
+   * @returns the schema as a string
+   */
+  public read(options?: ReadParameterOptions): Json {
+    if (options?.schema) {
+      this.addSchema(options.schema);
+      const fields = extractFieldsFromSchema(
+        options.schema._rawSchema // If a JsonSchema object is passed in, extract raw schema from it
+          ? options.schema._rawSchema
+          : options.schema
+      );
+      return filterParametersBySchema(fields, this._rawParameters);
+    }
+    return this._rawParameters as Json;
+  }
+
+  /**
    * Add parameter schema to registrar
    *
    * @param schema schema to add to the registrar
    */
-  public addParameterSchema(schema: any) {
-    this.parameterSchemas.push(schema);
+  public addSchema(schema: any) {
+    // If a JsonSchema object is passed in, extract the raw schema from it
+    const schemaToAdd = schema._rawSchema ? schema._rawSchema : schema;
+    if (!this.parameterSchemas.includes(schemaToAdd)) {
+      this.parameterSchemas.push(schemaToAdd);
+    }
   }
 
   /**
@@ -58,14 +93,8 @@ export class ParameterRegistrar extends Construct {
    * @param path the path to nest the schema under
    * @param recursiveRequire whether or not to require all the nested properties
    */
-  public addParameterSchemaAtPath(
-    schema: any,
-    path: string,
-    recursiveRequire = false
-  ) {
-    this.addParameterSchema(
-      this._nestSchemaUnderPath(schema, path, recursiveRequire)
-    );
+  public addSchemaAtPath(schema: any, path: string, recursiveRequire = false) {
+    this.addSchema(this._nestSchemaUnderPath(schema, path, recursiveRequire));
   }
 
   /**

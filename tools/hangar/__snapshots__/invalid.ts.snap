@@ -3061,6 +3061,19 @@ Duration <DURATION>"
 
 exports[`panic.test.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
+exports[`parameters.test.w 1`] = `
+"Error: Parameter validation errors:
+- must have required property 'foo'
+
+(hint: make sure to use --values to provide the required parameters file)
+        
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`phase_mismatch.test.w 1`] = `
 "error: Expected type to be \\"inflight (num): num\\", but got \\"preflight (n: num): num\\" instead
   --> ../../../examples/tests/invalid/phase_mismatch.test.w:2:10
@@ -3748,6 +3761,25 @@ error: Expected between 2 and 3 positional arguments or named arguments for the 
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
 
 
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`struct_from_parameter.test.w 1`] = `
+"Error: unable to parse MyParams:
+- instance requires property \\"bar\\"
+- instance requires property \\"baz\\"
+- instance requires property \\"foo\\"
+   --> ../../../examples/tests/invalid/struct_from_parameter.test.w:14:1
+   | // technically we never enforced the parameters must have been
+   | // provided
+   | 
+14 | MyParams.fromJson(app.parameters.read());
+   | ^
+at <ABSOLUTE>/struct_from_parameter.test.w:14:1
  
  
 Tests 1 failed (1)
