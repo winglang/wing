@@ -39,7 +39,6 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {
-    await this.createBundlePromise;
     await this.stop();
   }
 
@@ -84,6 +83,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
 
     try {
       this.running = false;
+      await this.createBundlePromise;
       await this.sandbox.call("stop");
       await this.sandbox.cleanup();
     } catch (e: any) {
