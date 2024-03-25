@@ -105,13 +105,13 @@ let myBucket = new MyBucket();
 [-pin] /root/CoolBucket
 [+pin] /root/MyBucket/cloud.Bucket
 
-Error: The following pin has been moved or deleted:
+Error: The following pinned resource has been moved or deleted:
   - /root/CoolBucket
 
 If moved, update "path" property in the pinfile to the new path.
 If deleted, remove the entry from the pinfile.
 ```
-
+> In the future we will add support for `wing pin mv` and `wing pin rm`
 For now, Sally wants to avoid the destructive move of the bucket so she updates the `path` in the pinfile.
 
 ```json
@@ -218,7 +218,7 @@ Sometimes your statefulness is intentionally volatile so you don't care about wa
 Sometimes it isn't actually stateful but is treated as so by requiring additional mitigation to avoid downtime/corruption during replacement.
 Designing distributed systems requires balancing the trade-offs of statefulness and statelessness against factors like cost and reliability so it's not always obvious what the right choice is.
 
-With all this said, it's important to give consumers tools to express their intent for pinning even if a resource is typically considered stateful/stateless.
+With all this said, it's important to give users the tools to express their intent for pinning even if a resource is typically considered stateful/stateless.
 
 ## Out-of-scope Thoughts
 
