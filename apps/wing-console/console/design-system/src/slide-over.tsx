@@ -1,6 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Fragment, PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
+import { Fragment } from "react";
 
 export interface SlideOverProps {
   title: string;

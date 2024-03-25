@@ -146,6 +146,155 @@ The IAM certificate identifier value.
 ---
 
 
+### QueueRef <a name="QueueRef" id="@winglang/sdk.aws.QueueRef"></a>
+
+A reference to an external SQS queue.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.QueueRef.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.QueueRef(queueArn: str);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.QueueRef.Initializer.parameter.queueArn">queueArn</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `queueArn`<sup>Required</sup> <a name="queueArn" id="@winglang/sdk.aws.QueueRef.Initializer.parameter.queueArn"></a>
+
+- *Type:* str
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push one or more messages to the queue. |
+
+---
+
+##### `approxSize` <a name="approxSize" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
+
+```wing
+inflight approxSize(): num
+```
+
+Retrieve the approximate number of messages in the queue.
+
+##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
+
+```wing
+inflight pop(): str
+```
+
+Pop a message from the queue.
+
+##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
+
+```wing
+inflight purge(): void
+```
+
+Purge all of the messages in the queue.
+
+##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
+
+```wing
+inflight push(...messages: Array<str>): void
+```
+
+Push one or more messages to the queue.
+
+###### `messages`<sup>Required</sup> <a name="messages" id="@winglang/sdk.cloud.IQueueClient.push.parameter.messages"></a>
+
+- *Type:* str
+
+Payload to send to the queue.
+
+Each message must be non-empty.
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.QueueRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.QueueRef.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.QueueRef.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.QueueRef.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.QueueRef.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.QueueRef.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.QueueRef.property.queueArn">queueArn</a></code> | <code>str</code> | The ARN of this queue. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.QueueRef.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `queueArn`<sup>Required</sup> <a name="queueArn" id="@winglang/sdk.aws.QueueRef.property.queueArn"></a>
+
+```wing
+queueArn: str;
+```
+
+- *Type:* str
+
+The ARN of this queue.
+
+---
+
+
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### Api <a name="Api" id="@winglang/sdk.aws.Api"></a>
@@ -281,52 +430,6 @@ If the table is an AWS Counter, return a helper interface for working with it.
 - *Type:* <a href="#@winglang/sdk.cloud.Counter">Counter</a>
 
 The cloud.Counter.
-
----
-
-
-
-### DynamodbTable <a name="DynamodbTable" id="@winglang/sdk.aws.DynamodbTable"></a>
-
-A helper class for working with AWS DynamodbTables.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.DynamodbTable.Initializer"></a>
-
-```wing
-bring aws;
-
-new aws.DynamodbTable();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.DynamodbTable.from">from</a></code> | If the table is an AWS Dynamodb, return a helper interface for working with it. |
-
----
-
-##### `from` <a name="from" id="@winglang/sdk.aws.DynamodbTable.from"></a>
-
-```wing
-bring aws;
-
-aws.DynamodbTable.from(dynamodb: DynamodbTable);
-```
-
-If the table is an AWS Dynamodb, return a helper interface for working with it.
-
-###### `dynamodb`<sup>Required</sup> <a name="dynamodb" id="@winglang/sdk.aws.DynamodbTable.from.parameter.dynamodb"></a>
-
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTable">DynamodbTable</a>
-
-The ex.DynamodbTable.
 
 ---
 
@@ -1021,46 +1124,6 @@ AWS Dynamodb arn.
 ---
 
 ##### `dynamoTableName`<sup>Required</sup> <a name="dynamoTableName" id="@winglang/sdk.aws.IAwsCounter.property.dynamoTableName"></a>
-
-```wing
-dynamoTableName: str;
-```
-
-- *Type:* str
-
-AWS Dynamodb name.
-
----
-
-### IAwsDynamodbTable <a name="IAwsDynamodbTable" id="@winglang/sdk.aws.IAwsDynamodbTable"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsDynamodbTable">IAwsDynamodbTable</a>
-
-A shared interface for AWS Dynamodb.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableArn">dynamoTableArn</a></code> | <code>str</code> | AWS Dynamodb arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableName">dynamoTableName</a></code> | <code>str</code> | AWS Dynamodb name. |
-
----
-
-##### `dynamoTableArn`<sup>Required</sup> <a name="dynamoTableArn" id="@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableArn"></a>
-
-```wing
-dynamoTableArn: str;
-```
-
-- *Type:* str
-
-AWS Dynamodb arn.
-
----
-
-##### `dynamoTableName`<sup>Required</sup> <a name="dynamoTableName" id="@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableName"></a>
 
 ```wing
 dynamoTableName: str;

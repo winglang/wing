@@ -5,7 +5,7 @@ import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/main.w`, () => {
   test.skip("increase counter", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Counter").click();
+    await getResourceNode(page, "root/Default/Counter").click();
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
 
@@ -17,7 +17,7 @@ describe(`${__dirname}/main.w`, () => {
   });
 
   test.skip("decreases counter", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Counter").click();
+    await getResourceNode(page, "root/Default/Counter").click();
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
 
@@ -29,7 +29,7 @@ describe(`${__dirname}/main.w`, () => {
   });
 
   test.skip("resets counter", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Counter").click();
+    await getResourceNode(page, "root/Default/Counter").click();
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
 

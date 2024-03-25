@@ -52,7 +52,7 @@ module.exports = function({  }) {
       this.$this_url = $this_url;
     }
     static async isValidUrl(url) {
-      return (require("../../../url_utils.js")["isValidUrl"])(url)
+      return (require("../../../url_utils.ts")["isValidUrl"])(url)
     }
     async foo() {
       $helpers.assert((await MyResource.isValidUrl(this.$this_url)), "MyResource.isValidUrl(this.url)");
@@ -77,16 +77,16 @@ module.exports = function({  }) {
       "root": {
         "Default": {
           "Default": {
-            "MyResource": {
-              "cloud.Api": {
-                "Endpoint": {
-                  "Url": "MyResource_cloudApi_Endpoint_Url_02924D7C"
-                }
+            "Api": {
+              "Endpoint": {
+                "Url": "Api_Endpoint_Url_473FEE9F"
               }
             },
-            "cloud.Api": {
-              "Endpoint": {
-                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
+            "MyResource": {
+              "Api": {
+                "Endpoint": {
+                  "Url": "MyResource_Api_Endpoint_Url_62C4AC1C"
+                }
               }
             }
           }
@@ -117,11 +117,11 @@ module.exports = function({  }) {
     }
   },
   "output": {
-    "MyResource_cloudApi_Endpoint_Url_02924D7C": {
-      "value": "https://${aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.MyResource_cloudApi_api_stage_A26656F9.stage_name}"
+    "Api_Endpoint_Url_473FEE9F": {
+      "value": "https://${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}"
     },
-    "cloudApi_Endpoint_Url_CD8AC9A6": {
-      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
+    "MyResource_Api_Endpoint_Url_62C4AC1C": {
+      "value": "https://${aws_api_gateway_rest_api.MyResource_Api_api_35C6C5EE.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.MyResource_Api_api_stage_4DA77656.stage_name}"
     }
   },
   "provider": {
@@ -131,86 +131,86 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_api_gateway_deployment": {
-      "MyResource_cloudApi_api_deployment_6DBAED7F": {
+      "Api_api_deployment_7FB64CC4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Api/api/deployment",
-            "uniqueId": "MyResource_cloudApi_api_deployment_6DBAED7F"
+            "path": "root/Default/Default/Api/api/deployment",
+            "uniqueId": "Api_api_deployment_7FB64CC4"
           }
         },
         "lifecycle": {
           "create_before_destroy": true
         },
-        "rest_api_id": "${aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.Api_api_91C07D84.id}",
         "triggers": {
-          "redeployment": "${sha256(aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.body)}"
+          "redeployment": "${sha256(aws_api_gateway_rest_api.Api_api_91C07D84.body)}"
         }
       },
-      "cloudApi_api_deployment_545514BF": {
+      "MyResource_Api_api_deployment_9749D61B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/api/deployment",
-            "uniqueId": "cloudApi_api_deployment_545514BF"
+            "path": "root/Default/Default/MyResource/Api/api/deployment",
+            "uniqueId": "MyResource_Api_api_deployment_9749D61B"
           }
         },
         "lifecycle": {
           "create_before_destroy": true
         },
-        "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.MyResource_Api_api_35C6C5EE.id}",
         "triggers": {
-          "redeployment": "${sha256(aws_api_gateway_rest_api.cloudApi_api_2B334D75.body)}"
+          "redeployment": "${sha256(aws_api_gateway_rest_api.MyResource_Api_api_35C6C5EE.body)}"
         }
       }
     },
     "aws_api_gateway_rest_api": {
-      "MyResource_cloudApi_api_4CB9B8E3": {
+      "Api_api_91C07D84": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Api/api/api",
-            "uniqueId": "MyResource_cloudApi_api_4CB9B8E3"
+            "path": "root/Default/Default/Api/api/api",
+            "uniqueId": "Api_api_91C07D84"
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
-        "name": "api-c8ef4b64"
+        "name": "api-c8f613f0"
       },
-      "cloudApi_api_2B334D75": {
+      "MyResource_Api_api_35C6C5EE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/api/api",
-            "uniqueId": "cloudApi_api_2B334D75"
+            "path": "root/Default/Default/MyResource/Api/api/api",
+            "uniqueId": "MyResource_Api_api_35C6C5EE"
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
-        "name": "api-c895068c"
+        "name": "api-c801136d"
       }
     },
     "aws_api_gateway_stage": {
-      "MyResource_cloudApi_api_stage_A26656F9": {
+      "Api_api_stage_E0FA39D6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Api/api/stage",
-            "uniqueId": "MyResource_cloudApi_api_stage_A26656F9"
+            "path": "root/Default/Default/Api/api/stage",
+            "uniqueId": "Api_api_stage_E0FA39D6"
           }
         },
-        "deployment_id": "${aws_api_gateway_deployment.MyResource_cloudApi_api_deployment_6DBAED7F.id}",
-        "rest_api_id": "${aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.id}",
+        "deployment_id": "${aws_api_gateway_deployment.Api_api_deployment_7FB64CC4.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.Api_api_91C07D84.id}",
         "stage_name": "prod"
       },
-      "cloudApi_api_stage_BBB283E4": {
+      "MyResource_Api_api_stage_4DA77656": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/api/stage",
-            "uniqueId": "cloudApi_api_stage_BBB283E4"
+            "path": "root/Default/Default/MyResource/Api/api/stage",
+            "uniqueId": "MyResource_Api_api_stage_4DA77656"
           }
         },
-        "deployment_id": "${aws_api_gateway_deployment.cloudApi_api_deployment_545514BF.id}",
-        "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
+        "deployment_id": "${aws_api_gateway_deployment.MyResource_Api_api_deployment_9749D61B.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.MyResource_Api_api_35C6C5EE.id}",
         "stage_name": "prod"
       }
     }
@@ -234,7 +234,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
+        this.api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
         this.url = this.api.url;
       }
       static _toInflightType() {
@@ -355,7 +355,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const r = new MyResource(this, "MyResource");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class", new $Closure1(this, "$Closure1"));
-    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
     const url = api.url;
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight globals", new $Closure2(this, "$Closure2"));
   }

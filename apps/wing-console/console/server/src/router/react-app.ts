@@ -1,4 +1,4 @@
-import { ReactAppSchema } from "@winglang/sdk/lib/target-sim/schema-resources";
+import type { ReactAppSchema } from "@winglang/sdk/lib/target-sim/schema-resources";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";

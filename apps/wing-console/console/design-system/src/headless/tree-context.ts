@@ -1,4 +1,5 @@
-import { createContext, useContext, KeyboardEvent } from "react";
+import type { KeyboardEvent } from "react";
+import { createContext, useContext } from "react";
 
 export interface TreeContext {
   expandedItems: string[];

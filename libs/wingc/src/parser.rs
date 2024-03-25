@@ -1615,7 +1615,7 @@ impl<'s> Parser<'s> {
 					.report();
 			}
 
-			FunctionBody::External(file_path.to_string())
+			FunctionBody::External(file_path)
 		} else {
 			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?, phase))
 		};
@@ -2021,7 +2021,7 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
-			"binary_expression" => Ok(Expr::new(
+			"binary_expression" | "unwrap_or" => Ok(Expr::new(
 				ExprKind::Binary {
 					left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap(), phase)?),
 					right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap(), phase)?),

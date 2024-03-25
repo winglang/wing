@@ -1,11 +1,16 @@
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 import fs from "fs/promises";
 import path from "path";
 
 export async function setup() {
-  // compile src/**/*.on*.inflight.ts to .js because these are going to be
+  // compile src/**/*.ts to .js because these are going to be
   // injected into our javascript vm and cannot be resolved via vitest
-  execSync("pnpm tsc -p tsconfig.test.json", { stdio: "inherit" });
+  const tscPath = path.join(__dirname, "..", "node_modules", ".bin", "tsc");
+  const tsconfigPath = path.join(__dirname, "..", "tsconfig.test.json");
+  execFileSync(tscPath, ["-p", tsconfigPath], {
+    stdio: "inherit",
+  });
+
   return () => {};
 }
 
@@ -16,7 +21,7 @@ export async function teardown() {
   if (process.env.WING_SDK_VITEST_SKIP_TEARDOWN) {
     return;
   }
-  const files = await findFilesWithExtension(["src"], [".d.ts", ".js"]);
+  const files = await findFilesWithExtension(["src"], [".js"]);
   for (const file of files) {
     try {
       await fs.unlink(file);

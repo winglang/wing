@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: "20.11.0"
+  NODE_VERSION: "20.11.1"
   PNPM_VERSION: "8.15.1"
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -334,8 +334,12 @@ jobs:
       - sdk-spec-test
     steps:
       - name: Check failure
-        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.sdk-spec-test.result == 'failure'
-        run: exit 1
+        # All jobs must either be sucessful or skipped
+        if: contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'failure') || contains(needs.*.result, 'action_required')|| contains(needs.*.result, 'stale')|| contains(needs.*.result, 'null')
+        run: |
+          echo "One or more jobs failed or were cancelled. Please check the logs."
+          echo '${{ toJson(needs) }}'
+          exit 1
       - name: Download patches
         uses: actions/download-artifact@v3
       - name: Check patches

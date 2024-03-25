@@ -4,7 +4,7 @@
   "updateContentCommand": "pnpm install",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "20.11.0"
+      "version": "20.11.1"
     },
     "ghcr.io/devcontainers/features/aws-cli:1": {},
     "ghcr.io/devcontainers/features/terraform:1": {},

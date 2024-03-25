@@ -169,11 +169,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "MyResource_cloudCounter_0782991D": {
+      "MyResource_Counter_D9D84476": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Counter/Default",
-            "uniqueId": "MyResource_cloudCounter_0782991D"
+            "path": "root/Default/Default/MyResource/Counter/Default",
+            "uniqueId": "MyResource_Counter_D9D84476"
           }
         },
         "attribute": [
@@ -184,51 +184,51 @@ module.exports = function({  }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c87187fa"
+        "name": "wing-counter-Counter-c8736322"
       }
     },
     "aws_s3_bucket": {
-      "MyResource_Another_First_cloudBucket_5C44A510": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/Another/First/cloud.Bucket/Default",
-            "uniqueId": "MyResource_Another_First_cloudBucket_5C44A510"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8e81a49-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       },
-      "MyResource_cloudBucket_B5E6C951": {
+      "MyResource_Another_First_Bucket_1DA21BC0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Bucket/Default",
-            "uniqueId": "MyResource_cloudBucket_B5E6C951"
+            "path": "root/Default/Default/MyResource/Another/First/Bucket/Default",
+            "uniqueId": "MyResource_Another_First_Bucket_1DA21BC0"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8f3d54f-",
+        "bucket_prefix": "bucket-c859322f-",
         "force_destroy": false
       },
-      "cloudBucket": {
+      "MyResource_Bucket_0DE6FCB5": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/MyResource/Bucket/Default",
+            "uniqueId": "MyResource_Bucket_0DE6FCB5"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c87b43ba-",
         "force_destroy": false
       }
     },
     "aws_sqs_queue": {
-      "MyResource_cloudQueue_E7A2C0F4": {
+      "MyResource_Queue_C2F2FBE5": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Queue/Default",
-            "uniqueId": "MyResource_cloudQueue_E7A2C0F4"
+            "path": "root/Default/Default/MyResource/Queue/Default",
+            "uniqueId": "MyResource_Queue_C2F2FBE5"
           }
         },
         "message_retention_seconds": 3600,
-        "name": "cloud-Queue-c8185458",
+        "name": "Queue-c84748c7",
         "visibility_timeout_seconds": 30
       }
     }
@@ -252,7 +252,7 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
       }
       static _toInflightType() {
         return `
@@ -315,7 +315,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, externalBucket, externalNum) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
         this.myStr = "myString";
         this.myNum = 42;
         this.myBool = true;
@@ -324,10 +324,10 @@ class $Root extends $stdlib.std.Resource {
         this.mapOfNum = ({["k1"]: 11, ["k2"]: 22});
         this.setOfStr = new Set(["s1", "s2", "s1"]);
         this.another = new Another(this, "Another");
-        this.myQueue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+        this.myQueue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
         this.extBucket = externalBucket;
         this.extNum = externalNum;
-        this.unusedResource = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+        this.unusedResource = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
       }
       helloPreflight() {
         return this.another;
@@ -391,13 +391,13 @@ class $Root extends $stdlib.std.Resource {
             [this.myOptStr, []],
           ],
           "testCaptureResource": [
-            [this.myResource, ["get", "list", "put"]],
+            [this.myResource, [].concat(["put"], ["get"], ["list"])],
           ],
           "testNestedInflightField": [
             [this.another.myField, []],
           ],
           "testNestedResource": [
-            [this.another.first.myResource, ["get", "list", "put"]],
+            [this.another.first.myResource, [].concat(["list"], ["put"], ["get"])],
             [this.myStr, []],
           ],
           "testExpressionRecursive": [
@@ -409,7 +409,7 @@ class $Root extends $stdlib.std.Resource {
             [this.extNum, []],
           ],
           "testUserDefinedResource": [
-            [this.another, ["anotherFunc", "meaningOfLife"]],
+            [this.another, [].concat(["meaningOfLife"], ["anotherFunc"])],
           ],
           "testInflightField": [
           ],
@@ -466,7 +466,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [r, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]],
+            [r, [].concat(["testNoCapture"], ["testCaptureCollectionsOfData"], ["testCapturePrimitives"], ["testCaptureOptional"], ["testCaptureResource"], ["testNestedInflightField"], ["testNestedResource"], ["testExpressionRecursive"], ["testExternal"], ["testUserDefinedResource"], ["testInflightField"])],
           ],
           "$inflight_init": [
             [r, []],
@@ -474,7 +474,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const r = new MyResource(this, "MyResource", b, 12);
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }

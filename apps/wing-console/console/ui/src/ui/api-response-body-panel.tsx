@@ -1,7 +1,7 @@
 import { useTheme, JsonResponseInput } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import { ApiResponse } from "../shared/api.js";
+import type { ApiResponse } from "../shared/api.js";
 
 const getResponseColor: (status: number) => string = (status) => {
   if (status >= 200 && status < 300) {

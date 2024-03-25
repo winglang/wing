@@ -83,14 +83,14 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "fixtureStore_cloudBucket_0EE75A93": {
+      "Store_Bucket_42A4CEFB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/fixture.Store/cloud.Bucket/Default",
-            "uniqueId": "fixtureStore_cloudBucket_0EE75A93"
+            "path": "root/Default/Default/Store/Bucket/Default",
+            "uniqueId": "Store_Bucket_42A4CEFB"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8afb3a9-",
+        "bucket_prefix": "bucket-c843dbb0-",
         "force_destroy": false
       }
     }
@@ -106,8 +106,8 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const FavoriteNumbers =
   (function (tmp) {
-    tmp[tmp["SEVEN"] = 0] = ",SEVEN";
-    tmp[tmp["FORTY_TWO"] = 1] = ",FORTY_TWO";
+    tmp["SEVEN"] = "SEVEN";
+    tmp["FORTY_TWO"] = "FORTY_TWO";
     return tmp;
   })({})
 ;
@@ -165,7 +165,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    new fixture.Store(this, "fixture.Store");
+    new fixture.Store(this, "Store");
     const fave_num = fixture.FavoriteNumbers.SEVEN;
     const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
@@ -190,7 +190,7 @@ const myutil = require("./preflight.util-2.js");
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, options) {
     super($scope, $id);
-    this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     this.handlers = [];
   }
   static makeKey(name) {

@@ -1,47 +1,65 @@
-import { useTheme, IconComponent } from "@wingconsole/design-system";
-import { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
+import type { IconComponent } from "@wingconsole/design-system";
+import { useTheme } from "@wingconsole/design-system";
+import type { Colors } from "@wingconsole/design-system/src/utils/colors";
+import type { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
-import { PropsWithChildren, memo, useMemo } from "react";
+import type { PropsWithChildren } from "react";
+import { memo, useMemo } from "react";
+
+const colorSet: Record<Colors, string> = {
+  orange: "bg-orange-500 dark:bg-orange-600",
+  sky: "bg-sky-500 dark:bg-sky-600",
+  emerald: "bg-emerald-500 dark:bg-emerald-600",
+  lime: "bg-lime-500 dark:bg-lime-600",
+  pink: "bg-pink-500 dark:bg-pink-600",
+  amber: "bg-amber-500 dark:bg-amber-600",
+  cyan: "bg-cyan-500 dark:bg-cyan-600",
+  purple: "bg-purple-500 dark:bg-purple-600",
+  red: "bg-red-700 dark:bg-red-600",
+  violet: "bg-violet-500 dark:bg-violet-600",
+  slate: "bg-slate-400 dark:bg-slate-600",
+};
 
 const getResourceBackgroudColor = (
   resourceType: BaseResourceSchema["type"] | undefined,
+  color: Colors = "slate",
 ) => {
   switch (resourceType) {
     case "@winglang/sdk.cloud.Bucket": {
-      return "bg-orange-500 dark:bg-orange-600";
+      return colorSet.orange;
     }
     case "@winglang/sdk.cloud.Function": {
-      return "bg-sky-500 dark:bg-sky-600";
+      return colorSet.sky;
     }
     case "@winglang/sdk.cloud.Queue": {
-      return "bg-emerald-500 dark:bg-emerald-600";
+      return colorSet.emerald;
     }
     case "@winglang/sdk.cloud.Counter": {
-      return "bg-lime-500 dark:bg-lime-600";
+      return colorSet.lime;
     }
     case "@winglang/sdk.cloud.Topic": {
-      return "bg-pink-500 dark:bg-pink-600";
+      return colorSet.pink;
     }
     case "@winglang/sdk.cloud.Api": {
-      return "bg-amber-500 dark:bg-amber-600";
+      return colorSet.amber;
     }
     case "@winglang/sdk.ex.Table": {
-      return "bg-cyan-500 dark:bg-cyan-600";
+      return colorSet.cyan;
     }
     case "@winglang/sdk.cloud.Schedule": {
-      return "bg-purple-500 dark:bg-purple-600";
+      return colorSet.purple;
     }
     case "@winglang/sdk.ex.Redis": {
-      return "bg-red-700 dark:bg-red-600";
+      return colorSet.red;
     }
     case "@winglang/sdk.cloud.Website": {
-      return "bg-violet-500 dark:bg-violet-600";
+      return colorSet.violet;
     }
     case "@winglang/sdk.ex.ReactApp": {
-      return "bg-sky-500 dark:bg-sky-600";
+      return colorSet.sky;
     }
     default: {
-      return "bg-slate-400 dark:bg-slate-600";
+      return colorSet[color] ?? colorSet.slate;
     }
   }
 };
@@ -77,15 +95,12 @@ export const ContainerNode = memo(
   }: PropsWithChildren<ContainerNodeProps>) => {
     const { theme } = useTheme();
     const bgColor = useMemo(
-      () => getResourceBackgroudColor(resourceType),
-      [resourceType],
+      () => getResourceBackgroudColor(resourceType, display?.color as Colors),
+      [resourceType, display?.color],
     );
 
     const compilerNamed = useMemo(() => {
-      if (!display) {
-        return false;
-      }
-      return display.sourceModule === "@winglang/sdk" && display.title;
+      return !!display?.title;
     }, [display]);
 
     return (
@@ -113,13 +128,9 @@ export const ContainerNode = memo(
             "px-3 py-2.5",
             "relative",
             "rounded-lg overflow-hidden",
-            "group-focus:border-sky-300 dark:group-focus:border-sky-500",
             "bg-white dark:bg-slate-700",
             {
               "rounded-b-none": open,
-              "border-b-0": open,
-              [theme.border3]: !selected,
-              "border-sky-300 dark:border-sky-500": selected,
             },
             "cursor-pointer",
           )}
@@ -134,8 +145,6 @@ export const ContainerNode = memo(
                   "transition-all",
                   "rounded-lg",
                   {
-                    [theme.border3]: !selected,
-                    "border-sky-300 dark:border-sky-500": selected,
                     "opacity-30": fade,
                   },
                 )}
@@ -186,6 +195,7 @@ export const ContainerNode = memo(
           <div
             className={classNames("flex-1 flex items-stretch", "border-t", {
               [theme.border3]: !selected,
+              "border-opacity-30": fade,
               "border-sky-200 dark:border-sky-400": selected,
             })}
           >
@@ -206,6 +216,7 @@ export const ContainerNode = memo(
             "border",
             selected && "border-sky-500 dark:border-sky-500",
             !selected && "border-slate-300 dark:border-slate-700",
+            fade && "border-opacity-30",
             "shadow-sm",
           )}
         ></div>

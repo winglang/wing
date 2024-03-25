@@ -7,7 +7,7 @@ const AWS_SDK_VERSION = "3.490.0";
 const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
   "random@~>3.5.1",
-  "azurerm@~>3.54.0",
+  "azurerm@~>3.96.0",
   "google@~>5.10.0",
 ];
 
@@ -75,7 +75,6 @@ const project = new cdk.JsiiProject({
     // simulator dependencies
     "express",
     "uuid",
-    "undici",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
     "nanoid@^3.3.6",
     "cron-parser",
@@ -89,6 +88,9 @@ const project = new cdk.JsiiProject({
     // enhanced diagnostics
     "stacktracey",
     "ulid",
+    // tunnels
+    "@winglang/wingtunnels@workspace:^",
+    "glob",
   ],
   devDeps: [
     `@cdktf/provider-aws@^19`, // only for testing Wing plugins
@@ -99,6 +101,7 @@ const project = new cdk.JsiiProject({
     "@types/mime-types",
     "mock-gcs@^1.2.0",
     "@types/express",
+    "@types/glob",
     "aws-sdk-client-mock@3.0.0",
     "aws-sdk-client-mock-jest@3.0.0",
     `cdktf-cli@${CDKTF_VERSION}`,

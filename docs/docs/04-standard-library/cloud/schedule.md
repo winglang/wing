@@ -192,10 +192,24 @@ let ScheduleOnTickOptions = cloud.ScheduleOnTickOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ScheduleOnTickOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
 
 ---
 
@@ -287,13 +301,21 @@ Trigger events according to a cron schedule using the UNIX cron format.
 
 Timezone is UTC.
 [minute] [hour] [day of month] [month] [day of week]
+'*' means all possible values.
+'-' means a range of values.
+',' means a list of values.
+[minute] allows 0-59.
+[hour] allows 0-23.
+[day of month] allows 1-31.
+[month] allows 1-12 or JAN-DEC.
+[day of week] allows 0-6 or SUN-SAT.
 
 ---
 
 *Example*
 
 ```wing
-"0/1 * ? * *"
+"* * * * *"
 ```
 
 

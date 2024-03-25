@@ -56,12 +56,12 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       (await $kv.get("k"));
       (await $kv.get("k"));
       (await $kv.get("k2"));
-      $helpers.assert((await $util_Util.waitUntil((async () => {
+      (await $util_Util.waitUntil((async () => {
         return $helpers.eq((await $counter.peek("k")), 2);
-      }))), "util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })");
-      $helpers.assert((await $util_Util.waitUntil((async () => {
+      })));
+      (await $util_Util.waitUntil((async () => {
         return $helpers.eq((await $counter.peek("k2")), 1);
-      }))), "util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })");
+      })));
     }
   }
   return $Closure3;
@@ -129,14 +129,14 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "KeyValueStore_cloudBucket_D9D365FD": {
+      "KeyValueStore_Bucket_EBBCDEA3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/KeyValueStore/cloud.Bucket/Default",
-            "uniqueId": "KeyValueStore_cloudBucket_D9D365FD"
+            "path": "root/Default/Default/KeyValueStore/Bucket/Default",
+            "uniqueId": "KeyValueStore_Bucket_EBBCDEA3"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8a9ef69-",
+        "bucket_prefix": "bucket-c8da6031-",
         "force_destroy": false
       }
     }
@@ -161,7 +161,7 @@ class $Root extends $stdlib.std.Resource {
     class KeyValueStore extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
@@ -300,7 +300,7 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [counter, ["peek"]],
-            [kv, ["get", "set"]],
+            [kv, [].concat(["set"], ["get"])],
           ],
           "$inflight_init": [
             [counter, []],

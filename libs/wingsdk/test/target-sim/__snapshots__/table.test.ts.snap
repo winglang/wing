@@ -3,9 +3,9 @@
 exports[`can add row in preflight 1`] = `
 [
   "Adding initial row (key=joe-id).",
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "get row joe-id from table my_addrow_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -93,10 +93,6 @@ exports[`can add row in preflight 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -108,6 +104,10 @@ exports[`can add row in preflight 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -229,10 +229,6 @@ exports[`create a table 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -244,6 +240,10 @@ exports[`create a table 1`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -289,11 +289,11 @@ exports[`create a table 1`] = `
 
 exports[`get row 1`] = `
 [
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
   "get row NON_EXISTENT_KEY from table my_get_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -375,10 +375,6 @@ exports[`get row 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -390,6 +386,10 @@ exports[`get row 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -435,9 +435,9 @@ exports[`get row 2`] = `
 
 exports[`insert row 1`] = `
 [
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "insert row joe-id into the table my_insert_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -519,10 +519,6 @@ exports[`insert row 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -534,6 +530,10 @@ exports[`insert row 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -579,11 +579,11 @@ exports[`insert row 2`] = `
 
 exports[`list table 1`] = `
 [
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "insert row joe-id into the table my_list_table.",
   "insert row jane-id into the table my_list_table.",
   "list all rows from table my_list_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -665,10 +665,6 @@ exports[`list table 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -680,6 +676,10 @@ exports[`list table 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -725,10 +725,10 @@ exports[`list table 2`] = `
 
 exports[`tryGet row 1`] = `
 [
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -810,10 +810,6 @@ exports[`tryGet row 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -825,6 +821,10 @@ exports[`tryGet row 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -870,13 +870,13 @@ exports[`tryGet row 2`] = `
 
 exports[`update row 1`] = `
 [
-  "@winglang/sdk.ex.Table created.",
+  "root/my_table started",
   "insert row joe-id into the table my_update_table.",
   "get row joe-id from table my_update_table.",
   "get row joe-id from table my_update_table.",
   "update row joe-id in table my_update_table.",
   "get row joe-id from table my_update_table.",
-  "@winglang/sdk.ex.Table deleted.",
+  "root/my_table stopped",
 ]
 `;
 
@@ -958,10 +958,6 @@ exports[`update row 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -973,6 +969,10 @@ exports[`update row 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",

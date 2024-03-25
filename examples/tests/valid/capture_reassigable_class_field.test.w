@@ -39,11 +39,11 @@ test "main" {
   kv.get("k");
   kv.get("k2");
 
-  assert(util.waitUntil((): bool => {
+  util.waitUntil((): bool => {
     return counter.peek("k") == 2;
-  }));
+  });
 
-  assert(util.waitUntil((): bool => {
+  util.waitUntil((): bool => {
     return counter.peek("k2") == 1;
-  }));
+  });
 }

@@ -43,7 +43,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   private createOrGetFunction(
     inflight: cloud.IApiEndpointHandler,
     props: cloud.FunctionProps,
-    path: string,
+    pathPattern: string,
     method: cloud.HttpMethod
   ): Function {
     let handler = this.handlers[inflight._id];
@@ -52,7 +52,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       const routes = (handler.mapping.eventProps.subscriptionProps as any)
         .routes as ApiRoute[];
       routes.push({
-        path,
+        pathPattern,
         method,
       });
 
@@ -73,7 +73,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       props
     ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = `${method.toUpperCase()} ${path}`;
+    Node.of(fn).title = `${method.toUpperCase()} ${pathPattern}`;
     Node.of(fn).hidden = true;
 
     const eventMapping = new EventMapping(
@@ -85,7 +85,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
         subscriptionProps: {
           routes: [
             {
-              path,
+              pathPattern,
               method,
             },
           ],

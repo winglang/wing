@@ -1,8 +1,9 @@
 import { ResourceIcon } from "@wingconsole/design-system";
-import { ExplorerItem } from "@wingconsole/server";
+import type { ExplorerItem } from "@wingconsole/server";
 import { useCallback, useEffect } from "react";
 
-import { TreeMenuItem, useTreeMenuItems } from "../ui/use-tree-menu-items.js";
+import type { TreeMenuItem } from "../ui/use-tree-menu-items.js";
+import { useTreeMenuItems } from "../ui/use-tree-menu-items.js";
 
 import { trpc } from "./trpc.js";
 
@@ -17,6 +18,7 @@ const createTreeMenuItemFromExplorerTreeItem = (
         resourceType={item.type}
         resourcePath={item.id}
         className="w-4 h-4"
+        color={item.display?.color}
       />
     ) : undefined,
     children: item.childItems?.map((item) =>

@@ -3,7 +3,7 @@ import {
   ResourceIcon,
   SpinnerLoader,
 } from "@wingconsole/design-system";
-import { MapNode } from "@wingconsole/server";
+import type { MapNode } from "@wingconsole/server";
 import classNames from "classnames";
 import { memo } from "react";
 
@@ -45,6 +45,7 @@ const Node = memo(
             <ResourceIcon
               resourceType={node.data?.type}
               resourcePath={node.data?.path}
+              color={node.data?.display?.color}
               solid
               {...props}
             />

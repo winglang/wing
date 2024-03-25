@@ -1,4 +1,5 @@
-import { Page, expect, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
@@ -9,7 +10,7 @@ const runApiTest = async (
   route: string,
   response: string,
 ) => {
-  await getResourceNode(page, "root/Default/cloud.Api").click();
+  await getResourceNode(page, "root/Default/Api").click();
 
   await page.getByTestId("cloud.api:method-toggle").click();
   await page.getByTestId(`cloud.api:method-entry-${method}`).click();

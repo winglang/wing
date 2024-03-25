@@ -244,15 +244,15 @@ module.exports = function({ $strToStr }) {
       }
     },
     "aws_sqs_queue": {
-      "cloudQueue": {
+      "Queue": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue/Default",
-            "uniqueId": "cloudQueue"
+            "path": "root/Default/Default/Queue/Default",
+            "uniqueId": "Queue"
           }
         },
         "message_retention_seconds": 3600,
-        "name": "cloud-Queue-c86e03d8",
+        "name": "Queue-c822c726",
         "visibility_timeout_seconds": 30
       }
     }
@@ -340,7 +340,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+    const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
     const strToStr = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "strToStr", new $Closure1(this, "$Closure1"));
     const func = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "func", new $Closure2(this, "$Closure2"));
   }

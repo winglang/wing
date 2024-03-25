@@ -6,7 +6,7 @@ bring expect;
 let api = new cloud.Api(
   cors: true,
   corsOptions: {
-    allowOrigin: ["winglang.io"],
+    allowOrigin: "winglang.io",
     allowMethods: [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],
     allowHeaders: ["Content-Type", "Authorization", "X-Custom-Header"],
     allowCredentials: true,

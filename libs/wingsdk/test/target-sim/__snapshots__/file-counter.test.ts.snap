@@ -89,8 +89,13 @@ bucket: (function() {
       {
         "addr": "c8e82e9fd83d9e59c5af169a3042b9ed0b40e91185",
         "attrs": {},
+        "deps": [
+          "root/HelloWorld/Counter",
+          "root/HelloWorld/Bucket",
+        ],
         "path": "root/HelloWorld/Queue/SetConsumer0",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {
             "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${wsim#root/HelloWorld/Counter#attrs.handle}",
@@ -114,6 +119,10 @@ bucket: (function() {
       {
         "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
         "attrs": {},
+        "deps": [
+          "root/HelloWorld/Queue/SetConsumer0",
+          "root/HelloWorld/Queue",
+        ],
         "path": "root/HelloWorld/Queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
@@ -179,10 +188,6 @@ bucket: (function() {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -194,6 +199,10 @@ bucket: (function() {
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",

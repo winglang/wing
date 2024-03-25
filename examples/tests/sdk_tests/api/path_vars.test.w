@@ -25,40 +25,24 @@ api.get("/path/:name", handler);
 api.get("/users/permission/:name", handler);
 api.get("/path/:name/:age", handler_two);
 
-test "test" {
-  let username = "tsuf";
-  let res: http.Response = http.get("{api.url}/users/{username}");
-
-
-  assert(res.status == 200);
-  assert(Json.parse(res.body).get("user") == username);
-}
-
-test "test2" {
-  let username = "akhil";
-  let res: http.Response = http.get("{api.url}/path/{username}");
-
-
-  assert(res.status == 200);
-  assert(Json.parse(res.body).get("user") == username);
-}
-
-test "test3" {
-  let username = "akhil";
-  let res: http.Response = http.get("{api.url}/users/permission/{username}");
-
-
-  assert(res.status == 200);
-  assert(Json.parse(res.body).get("user") == username);
-}
-
-test "test4" {
+test "path vars are valid" {
   let username = "akhil";
   let age = "23";
-  let res: http.Response = http.get("{api.url}/path/{username}/{age}");
 
+  let res1: http.Response = http.get("{api.url}/users/{username}");
+  assert(res1.status == 200);
+  assert(Json.parse(res1.body).get("user") == username);
 
-  assert(res.status == 200);
-  assert(Json.parse(res.body).get("user") == username);
-  assert(Json.parse(res.body).get("age") == age);
+  let res2: http.Response = http.get("{api.url}/path/{username}");
+  assert(res2.status == 200);
+  assert(Json.parse(res2.body).get("user") == username);
+
+  let res3: http.Response = http.get("{api.url}/users/permission/{username}");
+  assert(res3.status == 200);
+  assert(Json.parse(res3.body).get("user") == username);
+
+  let res4: http.Response = http.get("{api.url}/path/{username}/{age}");
+  assert(res4.status == 200);
+  assert(Json.parse(res4.body).get("user") == username);
+  assert(Json.parse(res4.body).get("age") == age);
 }

@@ -91,17 +91,7 @@ exports[`run single test > happy path 1`] = `
 
 exports[`run single test > test failure 1`] = `
 {
-  "error": "Error: test failed
-    at Handler.handle ([abs])
-    at Object.exports.handler ([abs])
-    at [abs]
-    at Script.runInContext (node:vm:<sanitized>)
-    at Object.runInContext (node:vm:<sanitized>)
-    at [src]/shared/sandbox.ts:<sanitized>
-    at new Promise (<anonymous>)
-    at Sandbox.call ([src]/shared/sandbox.ts:<sanitized>)
-    at Object.withTrace ([src]/simulator/simulator.ts:<sanitized>)
-    at TestRunner.runTest ([src]/target-sim/test-runner.inflight.ts:<sanitized>)",
+  "error": "Error: test failed",
   "pass": false,
   "path": "root/test",
   "traces": [

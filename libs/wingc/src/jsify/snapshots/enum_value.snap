@@ -52,8 +52,8 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     const MyEnum =
       (function (tmp) {
-        tmp[tmp["B"] = 0] = ",B";
-        tmp[tmp["C"] = 1] = ",C";
+        tmp["B"] = "B";
+        tmp["C"] = "C";
         return tmp;
       })({})
     ;

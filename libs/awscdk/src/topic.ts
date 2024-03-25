@@ -2,12 +2,12 @@ import { join } from "path";
 import { Topic as SNSTopic } from "aws-cdk-lib/aws-sns";
 import { LambdaSubscription } from "aws-cdk-lib/aws-sns-subscriptions";
 import { Construct } from "constructs";
-import { Function } from "./function";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsTopic } from "@winglang/sdk/lib/shared-aws/topic";
+import { addPolicyStatements, isAwsCdkFunction } from "./function";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -35,19 +35,18 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       "TopicOnMessageHandlerClient"
     );
 
-    const fn = new Function(
+    const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
       App.of(this).makeId(this, `${this.node.id}-OnMessage`),
       functionHandler,
       props
     );
 
-    // TODO: remove this constraint by adding geric permission APIs to cloud.Function
-    if (!(fn instanceof Function)) {
-      throw new Error("Topic only supports creating awscdk.Function right now");
+    if (!isAwsCdkFunction(fn)) {
+      throw new Error("Expected function to implement 'IAwsCdkFunction' method");
     }
 
-    const subscription = new LambdaSubscription(fn._function);
+    const subscription = new LambdaSubscription(fn.awscdkFunction);
     this.topic.addSubscription(subscription);
 
     std.Node.of(this).addConnection({
@@ -60,13 +59,11 @@ export class Topic extends cloud.Topic implements IAwsTopic {
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("topics can only be bound by awscdk.Function for now");
+    if (!isAwsCdkFunction(host)) {
+      throw new Error("Expected 'host' to implement 'IAwsCdkFunction' method");
     }
 
-    host.addPolicyStatements(
-      ...calculateTopicPermissions(this.topic.topicArn, ops)
-    );
+    addPolicyStatements(host.awscdkFunction, calculateTopicPermissions(this.topic.topicArn, ops));
 
     host.addEnvironment(this.envName(), this.topic.topicArn);
 

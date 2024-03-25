@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
-import { mkdirSync, writeFileSync } from "fs";
-import { join, resolve } from "path";
+import { mkdirSync, realpathSync, writeFileSync } from "fs";
+import { posix, resolve } from "path";
 import { normalPath } from "./misc";
 
 const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
@@ -25,21 +25,24 @@ export function createBundle(
   external: string[] = [],
   outputDir?: string
 ): Bundle {
-  const outdir = resolve(outputDir ?? entrypoint + ".bundle");
+  const normalEntrypoint = normalPath(realpathSync(entrypoint));
+  const outdir = outputDir
+    ? normalPath(realpathSync(outputDir))
+    : `${normalEntrypoint}.bundle`;
   mkdirSync(outdir, { recursive: true });
 
   const outfileName = "index.js";
   const soucemapFilename = `${outfileName}.map`;
 
-  const outfile = join(outdir, outfileName);
-  const outfileMap = join(outdir, soucemapFilename);
+  const outfile = posix.join(outdir, outfileName);
+  const outfileMap = posix.join(outdir, soucemapFilename);
 
   // eslint-disable-next-line import/no-extraneous-dependencies,@typescript-eslint/no-require-imports
   const esbuilder: typeof import("esbuild") = require("esbuild");
 
   let esbuild = esbuilder.buildSync({
     bundle: true,
-    entryPoints: [normalPath(resolve(entrypoint))],
+    entryPoints: [normalEntrypoint],
     outfile,
     // otherwise there are problems with running azure cloud functions:
     // https://stackoverflow.com/questions/70332883/webpack-azure-storage-blob-node-fetch-abortsignal-issue

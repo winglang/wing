@@ -1,7 +1,7 @@
 import { useTheme, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-import { MetadataNode } from "./resource-metadata.js";
+import type { MetadataNode } from "./resource-metadata.js";
 
 export interface BucketMetadataProps {
   node: MetadataNode;

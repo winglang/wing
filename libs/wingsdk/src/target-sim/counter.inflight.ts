@@ -38,7 +38,7 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {}
 
   public async save(): Promise<void> {
-    await fs.promises.writeFile(
+    fs.writeFileSync(
       join(this.context.statedir, VALUES_FILENAME),
       JSON.stringify(Array.from(this.values.entries()))
     );

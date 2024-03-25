@@ -20,3 +20,14 @@ test "inflight" {
   assert(one == SomeEnum.ONE);
   assert(two == SomeEnum.TWO);
 }
+
+// values stringify into their own names
+assert("{SomeEnum.ONE}" == "ONE");
+assert("{SomeEnum.TWO}" == "TWO");
+assert("{SomeEnum.THREE}" == "THREE");
+
+test "toStr inflight" {
+  assert("{SomeEnum.ONE}" == "ONE");
+  assert("{SomeEnum.TWO}" == "TWO");
+  assert("{SomeEnum.THREE}" == "THREE");
+}

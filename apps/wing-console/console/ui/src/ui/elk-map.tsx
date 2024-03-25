@@ -1,12 +1,13 @@
 import classNames from "classnames";
-import ELK, {
+import type {
   ElkExtendedEdge,
   ElkNode,
   LayoutOptions,
 } from "elkjs/lib/elk.bundled.js";
+import ELK from "elkjs/lib/elk.bundled.js";
 import { AnimatePresence } from "framer-motion";
+import type { FC } from "react";
 import {
-  FC,
   Fragment,
   memo,
   useCallback,
@@ -19,12 +20,13 @@ import {
 import { createPortal } from "react-dom";
 import { useKeyPressEvent } from "react-use";
 
-import { Edge } from "../shared/Edge.js";
-import { Node } from "../shared/Node.js";
+import type { Edge } from "../shared/Edge.js";
+import type { Node } from "../shared/Node.js";
 
 import { EdgeItem } from "./edge-item.js";
 import { useNodeStaticData } from "./use-node-static-data.js";
-import { ZoomPane, ZoomPaneRef, useZoomPane } from "./zoom-pane.js";
+import type { ZoomPaneRef } from "./zoom-pane.js";
+import { ZoomPane, useZoomPane } from "./zoom-pane.js";
 
 const durationClass = "duration-500";
 
@@ -417,6 +419,23 @@ const MapBackground = (props: {}) => {
   );
 };
 
+const nodeExists = (nodes: Node<any>[], id: string): boolean => {
+  let current = nodes;
+
+  let node: Node<any> | undefined;
+  do {
+    node = current.find(
+      (node) => node.id === id || id.startsWith(`${node.id}/`),
+    );
+    if (node?.id === id) {
+      return true;
+    }
+    current = node?.children ?? [];
+  } while (node);
+
+  return false;
+};
+
 export const ElkMap = <T extends unknown = undefined>({
   nodes,
   edges,
@@ -463,11 +482,16 @@ export const ElkMap = <T extends unknown = undefined>({
           "elk.padding": "[top=10,left=10,bottom=10,right=10]",
         },
         children: nodes.map((node) => toElkNode(node)),
-        edges: edges?.map((edge) => ({
-          id: edge.id,
-          sources: [edge.source],
-          targets: [edge.target],
-        })),
+        edges: edges
+          ?.filter(
+            (edge) =>
+              nodeExists(nodes, edge.source) && nodeExists(nodes, edge.target),
+          )
+          ?.map((edge) => ({
+            id: edge.id,
+            sources: [edge.source],
+            targets: [edge.target],
+          })),
       })
       .then((graph) => {
         if (abort) {
