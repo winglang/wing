@@ -83,9 +83,9 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     }
 
     try {
+      this.running = false;
       await this.sandbox.call("stop");
       await this.sandbox.cleanup();
-      this.running = false;
     } catch (e: any) {
       this.addTrace(`Failed to stop service: ${e.message}`);
     }
