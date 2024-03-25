@@ -8,7 +8,7 @@ exports.start = async function() {
   if ($stop) {
     throw Error('service already started');
   }
-  $stop = await ((await (new ((function(){
+  $stop = (await ((await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -21,7 +21,7 @@ return class Handler {
 };
 })())({
 
-}))).handle());
+}))).handle())) ?? (() => {});
 };
 exports.stop = async function() {
   if (!$stop) {
