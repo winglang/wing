@@ -163,7 +163,7 @@ let nesting = inflight () => {
   }
 }
 
-let no_nesting inflight () => {
+let no_nesting = inflight () => {
   let b = bucket;
   let q = queue;
   lift {bucket: ["get"], queue: ["push"]} {
