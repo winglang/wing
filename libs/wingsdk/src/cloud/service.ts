@@ -93,21 +93,25 @@ export class Service extends Resource implements IInflightHost {
 
     const inflightClient = this.handler._toInflight();
     const code = `\
-"use strict";
-let $stop;
-exports.start = async function() {
-  if ($stop) {
-    throw Error('service already started');
-  }
-  $stop = (await ((await ${inflightClient})).handle())) ?? (() => {});
-};
-exports.stop = async function() {
-  if (!$stop) {
-    throw Error('service not started');
-  }
-  await $stop();
-  $stop = undefined;
-};`; 
+      "use strict";
+      let $stop;
+      exports.start = async function() {
+        if ($stop) {
+          throw Error('service already started');
+        }
+        const client = await ${inflightClient};
+        const noop = () => {};
+        $stop = (await client.handle()) ?? noop;
+      };
+
+      exports.stop = async function() {
+        if (!$stop) {
+          throw Error('service not started');
+        }
+        await $stop();
+        $stop = undefined;
+      };
+      `;
 
     writeFileSync(this.entrypoint, code);
 
