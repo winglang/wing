@@ -11,7 +11,7 @@ import { Duration, IInflight, Node, Resource } from "../std";
 export const QUEUE_FQN = fqnForType("cloud.Queue");
 
 /**
- * Options for DLQ
+ * Dead letter queue options.
  */
 export interface DeadLetterQueueProps {
   /**
