@@ -287,6 +287,9 @@ importers:
       inquirer:
         specifier: ^8
         version: 8.2.6
+      lodash.once:
+        specifier: ^4.1.1
+        version: 4.1.1
       nanoid:
         specifier: ^3.3.6
         version: 3.3.6
@@ -318,6 +321,9 @@ importers:
       '@types/inquirer':
         specifier: ^9.0.7
         version: 9.0.7
+      '@types/lodash.once':
+        specifier: ^4.1.9
+        version: 4.1.9
       '@types/node':
         specifier: ^20.11.0
         version: 20.11.0
@@ -10518,6 +10524,12 @@ packages:
       '@types/lodash': 4.14.199
     dev: true
 
+  /@types/lodash.once@4.1.9:
+    resolution: {integrity: sha512-nvZ7GYfyZB6CUmXL+7HSXg53rFpc49FsKuRmMiCIGhgJB/yyTip8uHk4mxGyVJOl87dXPlf3qy42WsjOcIrnmg==}
+    dependencies:
+      '@types/lodash': 4.14.199
+    dev: true
+
   /@types/lodash.throttle@4.1.7:
     resolution: {integrity: sha512-znwGDpjCHQ4FpLLx19w4OXDqq8+OvREa05H89obtSyXyOFKL3dDjCslsmfBz0T2FU8dmf5Wx1QvogbINiGIu9g==}
     dependencies:
@@ -14175,7 +14187,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240321
+      typescript: 5.5.0-dev.20240325
     dev: true
 
   /dset@3.1.2:
@@ -22783,8 +22795,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240321:
-    resolution: {integrity: sha512-QEUqMB18VAUQBHtHlq8BfjxGZzFkavH5fhZn+I97N67mDZTa86n1S8kiRKmrbxVwPAdvn3DYtJzcGq5OvdWkmQ==}
+  /typescript@5.5.0-dev.20240325:
+    resolution: {integrity: sha512-3kSBj+PWimbJvH3s/sQiIU7zBIOWAEpHdD3lykIykePugc1qXNIK8d5/WJJNpzH4q2n6gY8pz8lLoe/HanVGnA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
