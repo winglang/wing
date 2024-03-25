@@ -32,7 +32,18 @@ it or otherwise it creates a new bucket with this id (`as uid`) under the root n
 Now, in order to access our bucket from anywhere within the app, I can just use:
 
 ```js
-let bucket = SingletonBucket.of(this);
+class MyFoo {
+  new() {
+    let bucket = SingletonBucket.of(this);
+  }
+}
 ```
 
 And we will always get the same bucket.
+
+> NOTE: if you use `this` in an entrypoint (outside of a class declaration), its type is going to be `Construct`
+> (known issue: [#6049](https://github.com/winglang/wing/issues/6049)), so you can use `unsafeCast` as a workaround:
+
+```js
+let bucket = SingletonBucket.of(unsafeCast(this));
+```
