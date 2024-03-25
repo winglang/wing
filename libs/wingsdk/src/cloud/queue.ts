@@ -19,10 +19,10 @@ export interface DeadLetterQueueProps {
    */
   readonly queue: Queue;
   /**
-   * The number of times a message can be unsuccesfully dequeued
-   * before being moved to the dead-letter queue.
+   * The number of times a message can fail delivery before being pushed to 
+   * the dead-letter queue.
    */
-  readonly maxReveiceCount: number;
+  readonly retries: number;
 }
 
 /**
