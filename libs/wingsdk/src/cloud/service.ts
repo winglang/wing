@@ -101,7 +101,9 @@ export class Service extends Resource implements IInflightHost {
     lines.push("  if ($stop) {");
     lines.push("    throw Error('service already started');");
     lines.push("  }");
-    lines.push(`  $stop = await ((await (${inflightClient})).handle());`);
+    lines.push(
+      `  $stop = (await ((await (${inflightClient})).handle())) ?? (() => {});`
+    );
     lines.push("};");
 
     lines.push("exports.stop = async function() {");
