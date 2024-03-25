@@ -2,13 +2,13 @@
 
 exports[`create a service with on start method 1`] = `
 {
-  ".wing/my_service_c815f66e.js": ""use strict";
-let $stop;
-exports.start = async function() {
-  if ($stop) {
-    throw Error('service already started');
-  }
-  $stop = (await ((await (new ((function(){
+  ".wing/my_service_c815f66e.js": "      "use strict";
+      let $stop;
+      exports.start = async function() {
+        if ($stop) {
+          throw Error('service already started');
+        }
+        const client = await new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -21,15 +21,19 @@ return class Handler {
 };
 })())({
 
-}))).handle())) ?? (() => {});
-};
-exports.stop = async function() {
-  if (!$stop) {
-    throw Error('service not started');
-  }
-  await $stop();
-  $stop = undefined;
-};",
+});
+        const noop = () => {};
+        $stop = (await client.handle()) ?? noop;
+      };
+
+      exports.stop = async function() {
+        if (!$stop) {
+          throw Error('service not started');
+        }
+        await $stop();
+        $stop = undefined;
+      };
+      ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
