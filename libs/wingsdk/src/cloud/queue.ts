@@ -11,6 +11,21 @@ import { Duration, IInflight, Node, Resource } from "../std";
 export const QUEUE_FQN = fqnForType("cloud.Queue");
 
 /**
+ * Options for DLQ
+ */
+export interface DeadLetterQueueProps {
+  /**
+   * Queue to receive the unsuccesfully messages.
+   */
+  readonly queue: Queue;
+  /**
+   * The number of times a message can be unsuccesfully dequeued 
+   * before being moved to the dead-letter queue.
+   */
+  readonly maxReveiceCount: number;
+}
+
+/**
  * Options for `Queue`.
  */
 export interface QueueProps {
@@ -25,6 +40,12 @@ export interface QueueProps {
    * @default 1h
    */
   readonly retentionPeriod?: Duration;
+
+  /**
+   * A dead-letter queue.
+   * @default undefined
+   */
+  readonly dlq?: DeadLetterQueueProps;
 }
 
 /**

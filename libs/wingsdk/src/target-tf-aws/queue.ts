@@ -4,12 +4,14 @@ import { App } from "./app";
 import { Function } from "./function";
 import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-source-mapping";
 import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
+import { SqsQueueRedriveAllowPolicy } from "../.gen/providers/aws/sqs-queue-redrive-allow-policy";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { IAwsQueue } from "../shared-aws";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
+import { Queue as AwsQueue } from "../shared-aws/queue";
 import { Duration, IInflightHost, Node } from "../std";
 
 /**
@@ -32,15 +34,39 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.queue = new SqsQueue(this, "Default", {
-      visibilityTimeoutSeconds: props.timeout
-        ? props.timeout.seconds
-        : Duration.fromSeconds(30).seconds,
-      messageRetentionSeconds: props.retentionPeriod
-        ? props.retentionPeriod.seconds
-        : Duration.fromHours(1).seconds,
-      name: ResourceNames.generateName(this, NAME_OPTS),
-    });
+    if (props.dlq) {
+      this.queue = new SqsQueue(this, "Default", {
+        visibilityTimeoutSeconds: props.timeout
+          ? props.timeout.seconds
+          : Duration.fromSeconds(30).seconds,
+        messageRetentionSeconds: props.retentionPeriod
+          ? props.retentionPeriod.seconds
+          : Duration.fromHours(1).seconds,
+        name: ResourceNames.generateName(this, NAME_OPTS),
+        redrivePolicy: JSON.stringify({
+          deadLetterTargetArn: AwsQueue.from(props.dlq.queue)?.queueArn,
+          maxReceiveCount: 2
+        })
+      });
+
+      new SqsQueueRedriveAllowPolicy(this, "RedriveAllowPolicy", {
+        queueUrl: AwsQueue.from(props.dlq.queue)?.queueUrl!,
+        redriveAllowPolicy: JSON.stringify({
+          redrivePermission: "byQueue",
+          sourceQueueArns: [this.queue.arn]
+        })
+      });
+    } else {
+      this.queue = new SqsQueue(this, "Default", {
+        visibilityTimeoutSeconds: props.timeout
+          ? props.timeout.seconds
+          : Duration.fromSeconds(30).seconds,
+        messageRetentionSeconds: props.retentionPeriod
+          ? props.retentionPeriod.seconds
+          : Duration.fromHours(1).seconds,
+        name: ResourceNames.generateName(this, NAME_OPTS),
+      });
+    }
   }
 
   /** @internal */
