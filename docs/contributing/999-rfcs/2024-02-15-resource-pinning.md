@@ -143,7 +143,7 @@ class MyBucket {
 
   new() {
     this.bucket = new cloud.Bucket();
-    this.bucket.pinned = false;
+    nodeof(this.bucket).pinned = false;
   }
 }
 
@@ -161,7 +161,7 @@ Running `wing compile -t tf-aws` automatically updates the pinfile (because the 
 
 ### pinning
 
-The `pinned` property is used to mark a created resource as "pinned" in the resource tree. This is an inherent public property of all resources. This means that the user does not intend for the resource to be deleted or moved. Pinning is deep, meaning that pinning a parent inherently pins all of its children.
+The `pinned` property is used to mark a created resource as "pinned" in the resource tree. This api is available on the a resource's Node (`nodeof(this).pinned`). This is an inherent public property of all resource nods. Setting this means that the user does not intend for the resource to be deleted or moved. Pinning is deep, meaning that pinning a parent inherently pins all of its children.
 
 This information will be available to the target platform/app which can choose what to do with this information. For example, the sim target can simply ignore this while the terraform target can manage a pinfile to inform the user when this changes between compilation and allow them to resolve any renames.
 
