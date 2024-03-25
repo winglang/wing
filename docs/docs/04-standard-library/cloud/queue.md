@@ -272,7 +272,7 @@ The tree node.
 
 ### DeadLetterQueueProps <a name="DeadLetterQueueProps" id="@winglang/sdk.cloud.DeadLetterQueueProps"></a>
 
-Options for DLQ.
+Dead letter queue options.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.DeadLetterQueueProps.Initializer"></a>
 

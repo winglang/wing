@@ -233,7 +233,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct DeadLetterQueueProps\n```\n---\nOptions for DLQ.\n### Fields\n- `maxReveiceCount` — `num` — The number of times a message can be unsuccesfully dequeued before being moved to the dead-letter queue.\n- `queue` — `Queue` — Queue to receive the unsuccesfully messages."
+    value: "```wing\nstruct DeadLetterQueueProps\n```\n---\nDead letter queue options.\n### Fields\n- `maxReveiceCount` — `num` — The number of times a message can be unsuccesfully dequeued before being moved to the dead-letter queue.\n- `queue` — `Queue` — Queue to receive the unsuccesfully messages."
   sortText: hh|DeadLetterQueueProps
 - label: DomainProps
   kind: 22
