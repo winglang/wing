@@ -43,7 +43,7 @@ export interface QueueProps {
 
   /**
    * A dead-letter queue.
-   * @default undefined
+   * @default - no dead letter queue
    */
   readonly dlq?: DeadLetterQueueProps;
 }
