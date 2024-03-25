@@ -34,8 +34,8 @@ bring cloud;
 bring util;
 
 // defining a cloud.Function resource
-let countWords = new cloud.Function(inflight (s: str): str => {
-  return "${s.split(" ").length}";
+let countWords = new cloud.Function(inflight (s: str?): str => {
+  return "{s?.split(" ")?.length ?? 0}";
 }) as "countWords";
 
 let longTask = new cloud.Function(inflight () => {
@@ -47,7 +47,7 @@ new cloud.Function(inflight () => {
   let sentence = "I am a sentence with 7 words";
   // invoking cloud.Function from inflight context
   let wordsCount = countWords.invoke(sentence);
-  log("'${sentence}' has ${wordsCount} words");
+  log("'{sentence}' has {wordsCount ?? "0"} words");
 
   longTask.invokeAsync("");
   log("task started");
