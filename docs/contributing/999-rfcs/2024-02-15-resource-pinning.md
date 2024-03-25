@@ -207,6 +207,7 @@ Minimal API:
 - `addPin(construct: Construct): void` - Adds a construct to the known pins for the current compilation
 - `getOrphanedPins(): string[]` - Gets a list of paths that are present in the saved pinfile but not in the current one
 - `write(): void` - Writes the current state of the pinfile to disk for the current platform. This list automatically will not include pins that are "fromPath" of a different pin.
+- `app.move(from, to)` - Convenience method for creating a new pin that maps a previous path to a new path
 
 ### Note on "statefulness"
 
