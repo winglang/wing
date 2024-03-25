@@ -1,6 +1,10 @@
 import { Validator } from "jsonschema";
 import { Json, JsonValidationOptions } from "./json";
 import { InflightClient } from "../core";
+import {
+  extractFieldsFromSchema,
+  filterParametersBySchema,
+} from "../platform/util";
 
 /**
  * Struct Schema
@@ -25,11 +29,12 @@ export class JsonSchema {
     return new JsonSchema(schema);
   }
 
-  private jsonSchema: any;
+  /** @internal */
+  public _rawSchema: any;
   private validator: Validator;
 
   constructor(schema: Json) {
-    this.jsonSchema = schema;
+    this._rawSchema = schema;
     this.validator = new Validator();
   }
 
@@ -44,10 +49,10 @@ export class JsonSchema {
       return; // skip validation
     }
 
-    const result = this.validator.validate(obj, this.jsonSchema);
+    const result = this.validator.validate(obj, this._rawSchema);
     if (result.errors.length > 0) {
       throw new Error(
-        `unable to parse ${this.jsonSchema.id.replace(
+        `unable to parse ${this._rawSchema.$id.replace(
           "/",
           ""
         )}:\n- ${result.errors.join("\n- ")}`
@@ -61,13 +66,16 @@ export class JsonSchema {
    * @returns the schema as a string
    */
   public asStr(): String {
-    return JSON.stringify(this.jsonSchema);
+    return JSON.stringify(this._rawSchema);
   }
 
   /** @internal */
   public _fromJson(obj: Json, validateOptions?: JsonValidationOptions) {
     this.validate(obj, validateOptions);
-    return obj;
+    const fields = extractFieldsFromSchema(this._rawSchema);
+    // Filter rawParameters based on the schema
+    const filteredParameters = filterParametersBySchema(fields, obj);
+    return filteredParameters;
   }
 
   /** @internal */
@@ -90,6 +98,6 @@ export class JsonSchema {
 
   /** @internal */
   public _toInflightType() {
-    return JsonSchema._toInflightType(this.jsonSchema);
+    return JsonSchema._toInflightType(this._rawSchema);
   }
 }

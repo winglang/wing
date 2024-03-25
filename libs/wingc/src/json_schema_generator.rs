@@ -88,7 +88,7 @@ impl JsonSchemaGenerator {
 		let mut code = CodeMaker::default();
 
 		code.open("{");
-		code.line(format!("id: \"/{}\",", struct_.name));
+		code.line(format!("$id: \"/{}\",", struct_.name));
 		code.line("type: \"object\",".to_string());
 
 		code.open("properties: {");
