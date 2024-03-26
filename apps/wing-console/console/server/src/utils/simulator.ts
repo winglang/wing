@@ -48,11 +48,12 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
   const start = async (simfile: string) => {
     try {
       if (instance) {
-        await events.emit("stopping");
-        await stopSilently(instance);
+        // await events.emit("stopping");
+        // await stopSilently(instance);
 
-        console.log("update", simfile);
+        await events.emit("starting", { instance });
         await instance.update(simfile);
+        await events.emit("started");
       } else {
         instance = new simulator.Simulator({
           simfile,
