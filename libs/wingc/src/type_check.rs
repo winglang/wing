@@ -250,7 +250,7 @@ pub enum Type {
 	Enum(Enum),
 }
 
-pub const CLASS_INIT_NAME: &'static str = "init"; // TODO: change to "new"??
+pub const CLASS_INIT_NAME: &'static str = "init";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
 pub const CLOSURE_CLASS_HANDLE_METHOD: &'static str = "handle";

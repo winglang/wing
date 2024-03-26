@@ -535,7 +535,6 @@ impl<'a> JSifier<'a> {
 				let scope_arg = if fqn.is_none() {
 					scope.clone()
 				} else {
-					// TODO: i don't get this?? why is scope_arg different from scope?
 					match scope.clone() {
 						None => None,
 						Some(scope) => Some(if scope == "this" {
