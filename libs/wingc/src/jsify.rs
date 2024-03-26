@@ -716,13 +716,18 @@ impl<'a> JSifier<'a> {
 								false
 							}
 						});
+
 						let prepend_scope_arg = if implicit_scope_arg_available {
 							SCOPE_PARAM.to_string()
 						} else {
 							// Otherwise, we can just use `this`. We can assume `this` is available since othesize we should have had an implicit scope arg available.
 							"this".to_string()
 						};
-						args_string = format!("{}, {}", prepend_scope_arg, args_string);
+						if args_string.len() > 0 {
+							args_string = format!("{}, {}", prepend_scope_arg, args_string);
+						} else {
+							args_string = prepend_scope_arg;
+						}
 					}
 				}
 
