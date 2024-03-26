@@ -61,8 +61,8 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
             events.emit("trace", trace);
           },
         });
-        await events.emit("starting", { instance });
 
+        await events.emit("starting", { instance });
         await instance.start();
         await events.emit("started");
       }
