@@ -2,7 +2,7 @@ import { relative } from "path";
 import { Construct } from "constructs";
 import { Policy } from "./policy";
 import { ISimulatorInflightHost, ISimulatorResource } from "./resource";
-import { ServiceAutoStarterSchema, ServiceSchema } from "./schema-resources";
+import { ServiceHelperSchema, ServiceSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
@@ -27,13 +27,12 @@ export class Service
     super(scope, id, handler, props);
     this.policy = new Policy(this, "Policy", { principal: this });
 
-    if (props.autoStart ?? true) {
-      const autoStarter = new ServiceAutoStarter(this, "AutoStarter", {
-        service: this,
-      });
-      autoStarter.node.addDependency(this);
-      autoStarter.node.addDependency(this.policy);
-    }
+    const autoStarter = new ServiceHelper(this, "AutoStarter", {
+      service: this,
+      autoStart: props.autoStart ?? true,
+    });
+    autoStarter.node.addDependency(this);
+    autoStarter.node.addDependency(this.policy);
   }
 
   public addPermission(resource: IResource, op: string): void {
@@ -74,38 +73,45 @@ export class Service
 }
 
 /** @internal */
-export const SERVICE_AUTO_STARTER_FQN = fqnForType("sim.ServiceAutoStarter");
+export const SERVICE_HELPER_FQN = fqnForType("sim.ServiceHelper");
 
 /** @internal */
-export interface ServiceAutoStarterProps {
+export interface ServiceHelperProps {
   readonly service: Service;
+  readonly autoStart: boolean;
 }
 
 /**
  * This is a helper resource that automatically starts the service after the
- * service is created in the simulator.
+ * service is created in the simulator and shuts it down when the simulator
+ * stops.
  *
  * Suppose a service puts an object in a bucket when it starts. The policy
  * (sim.Policy) that grants the service bucket permissions only takes effect
  * after the service is created. Because of this, the service needs to be
- * started after both the service and the policy are created.
+ * started after both the service and the policy are created. Vice versa, the
+ * service needs to be stopped before the policy is deleted.
  *
  * @internal
  */
-export class ServiceAutoStarter extends Resource implements ISimulatorResource {
+export class ServiceHelper extends Resource implements ISimulatorResource {
   private readonly service: Service;
-  constructor(scope: Construct, id: string, props: ServiceAutoStarterProps) {
+  private readonly autoStart: boolean;
+
+  constructor(scope: Construct, id: string, props: ServiceHelperProps) {
     super(scope, id);
     this.service = props.service;
+    this.autoStart = props.autoStart;
   }
 
   public toSimulator(): BaseResourceSchema {
-    const schema: ServiceAutoStarterSchema = {
-      type: SERVICE_AUTO_STARTER_FQN,
+    const schema: ServiceHelperSchema = {
+      type: SERVICE_HELPER_FQN,
       path: this.node.path,
       addr: this.node.addr,
       props: {
         service: simulatorHandleToken(this.service),
+        autoStart: this.autoStart,
       },
       attrs: {} as any,
     };

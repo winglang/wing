@@ -1,7 +1,7 @@
 import { resolve } from "path";
 import {
   ServiceAttributes,
-  ServiceAutoStarterSchema,
+  ServiceHelperSchema,
   ServiceSchema,
 } from "./schema-resources";
 import { IServiceClient, SERVICE_FQN } from "../cloud";
@@ -99,7 +99,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       await this.sandbox.call("stop");
       await this.sandbox.cleanup();
     } catch (e: any) {
-      this.addTrace(`Failed to stop service: ${e.message}`);
+      this.addTrace(`Failed to stop service: ${e.message} ${e.stack}`);
     }
   }
 
@@ -118,19 +118,36 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   }
 }
 
-export class ServiceAutoStarter implements ISimulatorResourceInstance {
+export class ServiceHelper implements ISimulatorResourceInstance {
   private readonly serviceHandle: string;
+  private readonly autoStart: boolean;
+  private _context: ISimulatorContext | undefined;
 
-  public constructor(props: ServiceAutoStarterSchema["props"]) {
+  public constructor(props: ServiceHelperSchema["props"]) {
     this.serviceHandle = props.service;
+    this.autoStart = props.autoStart;
+  }
+
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
   }
 
   public async init(context: ISimulatorContext): Promise<ServiceAttributes> {
-    const service = context.getClient(this.serviceHandle, true) as Service;
-    await service.start();
+    this._context = context;
+    if (this.autoStart) {
+      const service = context.getClient(this.serviceHandle, true) as Service;
+      await service.start();
+    }
     return {};
   }
 
-  public async cleanup(): Promise<void> {}
+  public async cleanup(): Promise<void> {
+    const service = this.context.getClient(this.serviceHandle, true) as Service;
+    await service.stop();
+  }
+
   public async save(): Promise<void> {}
 }

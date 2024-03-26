@@ -396,8 +396,8 @@ export class Simulator {
       const resource = this._handles.find(handle);
       await this.ensureStateDirExists(path);
       await resource.save(this.getResourceStateDir(path));
-      this._handles.deallocate(handle);
       await resource.cleanup();
+      this._handles.deallocate(handle);
     } catch (err) {
       console.warn(err);
     }
@@ -608,7 +608,7 @@ export class Simulator {
     if (!callerPath) {
       return {
         granted: false,
-        reason: `Resource with handle "${callerHandle}" not found.`,
+        reason: `(Permission checking) Calling resource with handle "${callerHandle}" not found.`,
       };
     }
 
@@ -616,7 +616,7 @@ export class Simulator {
     if (!calleePath) {
       return {
         granted: false,
-        reason: `Resource with handle "${calleeHandle}" not found.`,
+        reason: `(Permission checking) Callee resource with handle "${calleeHandle}" not found.`,
       };
     }
 
@@ -1127,7 +1127,7 @@ export interface ConnectionData {
  * Subject to breaking changes.
  */
 export interface SimulatorServerRequest {
-  /** The path of the resource making the request. */
+  /** The handle of the resource making the request. */
   readonly caller: string;
   /** The target resource handle (an ID unique among resources in the simulation). */
   readonly handle: string;

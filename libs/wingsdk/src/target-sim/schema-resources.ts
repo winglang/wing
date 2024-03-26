@@ -1,7 +1,7 @@
 import { SIM_CONTAINER_FQN } from "./container";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { POLICY_FQN } from "./policy";
-import { SERVICE_AUTO_STARTER_FQN } from "./service";
+import { SERVICE_HELPER_FQN } from "./service";
 import { STATE_FQN } from "./state";
 import {
   API_FQN,
@@ -104,17 +104,19 @@ export interface ServiceSchema extends BaseResourceSchema {
 /** Runtime attributes for cloud.Service */
 export interface ServiceAttributes {}
 
-/** Schema for sim.ServiceAutoStarter */
-export interface ServiceAutoStarterSchema extends BaseResourceSchema {
-  readonly type: typeof SERVICE_AUTO_STARTER_FQN;
+/** Schema for sim.ServiceHelper */
+export interface ServiceHelperSchema extends BaseResourceSchema {
+  readonly type: typeof SERVICE_HELPER_FQN;
   readonly props: {
-    /** The service to start. */
+    /** The service. */
     readonly service: ResourceHandle;
+    /** Whether to auto-start the service */
+    readonly autoStart: boolean;
   };
 }
 
-/** Runtime attributes for sim.ServiceAutoStarter */
-export interface ServiceAutoStarterAttributes {}
+/** Runtime attributes for sim.ServiceHelper */
+export interface ServiceHelperAttributes {}
 
 /** Runtime attributes for cloud.Schedule */
 export interface ScheduleAttributes {}
