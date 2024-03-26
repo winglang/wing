@@ -84,10 +84,9 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
           );
         }
         process.nextTick(() => {
-          // If the call fails, we log the error and continue since we've already
-          // handed control back to the caller.
           void worker.call("handler", payload).catch((e) => {
-            console.error(e);
+            // If the call fails, we log the error and continue since we've already
+            // handed control back to the caller.
             this.context.addTrace({
               data: {
                 message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,

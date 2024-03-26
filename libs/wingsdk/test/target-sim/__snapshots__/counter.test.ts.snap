@@ -96,6 +96,10 @@ exports[`create a counter 1`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -240,6 +244,10 @@ exports[`dec 2`] = `
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -386,6 +394,10 @@ exports[`inc 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -530,6 +542,10 @@ exports[`key dec 2`] = `
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -676,6 +692,10 @@ exports[`key inc 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -819,6 +839,10 @@ exports[`key set to new value 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -961,6 +985,10 @@ exports[`set to new value 2`] = `
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

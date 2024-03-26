@@ -43,16 +43,6 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
-        "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
-        "attrs": {},
-        "path": "root/my_bucket/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_bucket#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
         "attrs": {},
         "path": "root/my_function",
@@ -154,6 +144,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -168,21 +162,6 @@ return class Handler {
     "tree": {
       "children": {
         "my_bucket": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_bucket/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",

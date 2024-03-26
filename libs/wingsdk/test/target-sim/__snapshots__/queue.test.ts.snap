@@ -107,6 +107,10 @@ exports[`create a queue 1`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -728,6 +732,10 @@ exports[`push rejects empty message 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -902,6 +910,10 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -990,7 +1002,6 @@ queue: (function() {
   if (!caller) {
     throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
   }
-  console.error("Connecting to simulator at", simulatorUrl, "with handle", handle, "and caller", caller);
   return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
 })()
 }));
@@ -1228,6 +1239,10 @@ async handle(message) {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1546,6 +1561,10 @@ async handle(message) {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

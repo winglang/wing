@@ -9,7 +9,6 @@ exports[`publishing messages to topic 1`] = `
   "root/TopicTester/MyTopic/TopicEventMapping0 started",
   "root/TopicTester/Function started",
   "root/TopicTester/Function/Policy started",
-  "Connecting to simulator at http://127.0.0.1:<port> with handle sim-0 and caller sim-5",
   "Publish (message=ABC).",
   "Sending message (message=ABC, subscriber=sim-1).",
   "InvokeAsync (payload="ABC").",

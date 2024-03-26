@@ -4,8 +4,8 @@ exports[`__dirname and __filename cannot be used within inflight code 1`] = `
 [
   "root/Function.0 started",
   "root/Function.0/Policy started",
-  "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
   "root/Function.1 started",
+  "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
   "root/Function.1/Policy started",
   "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
   "Invoke (payload=undefined).",
@@ -154,6 +154,10 @@ async handle(event) {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -358,6 +362,10 @@ async handle(event) {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -560,6 +568,10 @@ async handle(event) {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -766,6 +778,10 @@ async handle(event) {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -958,6 +974,10 @@ async handle() {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1278,6 +1298,10 @@ return class Handler {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

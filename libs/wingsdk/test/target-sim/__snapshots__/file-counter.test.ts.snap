@@ -32,7 +32,6 @@ counter: (function() {
   if (!caller) {
     throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
   }
-  console.error("Connecting to simulator at", simulatorUrl, "with handle", handle, "and caller", caller);
   return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
 })(),
 bucket: (function() {
@@ -48,7 +47,6 @@ bucket: (function() {
   if (!caller) {
     throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
   }
-  console.error("Connecting to simulator at", simulatorUrl, "with handle", handle, "and caller", caller);
   return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
 })()
 }), args: {} }));
@@ -76,16 +74,6 @@ bucket: (function() {
   },
   "simulator.json": {
     "resources": [
-      {
-        "addr": "c86eb36bbe6e764a632afaaea5db2d4bd693c92624",
-        "attrs": {},
-        "path": "root/HelloWorld/Bucket/Policy",
-        "props": {
-          "principal": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
       {
         "addr": "c86b009930462795eeb90e647a56dbfc5356d9ea80",
         "attrs": {},
@@ -270,6 +258,10 @@ bucket: (function() {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.ServiceAutoStarter": {
+        "className": "ServiceAutoStarter",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -286,21 +278,6 @@ bucket: (function() {
         "HelloWorld": {
           "children": {
             "Bucket": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/HelloWorld/Bucket/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",

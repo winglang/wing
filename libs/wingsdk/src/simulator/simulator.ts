@@ -610,19 +610,6 @@ export class Simulator {
       };
     }
 
-    // console.error(
-    //   "Checking permission for callerPath:",
-    //   callerPath,
-    //   "calleePath:",
-    //   calleePath,
-    //   "method:",
-    //   method,
-    //   "callerHandle:",
-    //   callerHandle,
-    //   "calleeHandle:",
-    //   calleeHandle
-    // );
-
     // Look for a policy whose "principal" matches the caller
     const resources = this._model.graph.nodes.map((n) => n.path);
     for (const resource of resources) {
