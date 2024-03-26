@@ -2,7 +2,10 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function, FunctionInflightMethods } from "./function";
+import {
+  Function,
+  FunctionInflightMethods as SimFunctionInflightMethods,
+} from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
@@ -114,7 +117,10 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     });
 
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
-    this.policy.addStatement(fn, FunctionInflightMethods.HAS_AVAILABLE_WORKERS);
+    this.policy.addStatement(
+      fn,
+      SimFunctionInflightMethods.HAS_AVAILABLE_WORKERS
+    );
 
     return fn;
   }

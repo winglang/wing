@@ -18,7 +18,7 @@ import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.Topic implements ISimulatorResource {
-  private readonly policy: Policy;
+  public readonly policy: Policy;
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
     this.policy = new Policy(this, "Policy", { principal: this });

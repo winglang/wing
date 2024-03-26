@@ -1,9 +1,9 @@
 import { join } from "path";
 import { Construct } from "constructs";
-import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { BucketSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
+import { Topic as SimTopic } from "./topic";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { BaseResourceSchema } from "../simulator/simulator";
@@ -17,13 +17,11 @@ import { IInflightHost } from "../std";
 export class Bucket extends cloud.Bucket implements ISimulatorResource {
   private readonly public: boolean;
   private readonly initialObjects: Record<string, string> = {};
-  private readonly policy: Policy;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
-    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
   /** @internal */
@@ -64,13 +62,17 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     this.initialObjects[key] = body;
   }
 
+  protected getTopic(actionType: cloud.BucketEventType): SimTopic {
+    return super.getTopic(actionType) as SimTopic;
+  }
+
   public onCreate(
     fn: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions | undefined
   ): void {
     super.onCreate(fn, opts);
     const topic = this.getTopic(cloud.BucketEventType.CREATE);
-    this.policy.addStatement(topic, cloud.TopicInflightMethods.PUBLISH);
+    topic.policy.addStatement(topic, cloud.TopicInflightMethods.PUBLISH);
   }
 
   public onDelete(
@@ -79,7 +81,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   ): void {
     super.onDelete(fn, opts);
     const topic = this.getTopic(cloud.BucketEventType.DELETE);
-    this.policy.addStatement(topic, cloud.TopicInflightMethods.PUBLISH);
+    topic.policy.addStatement(topic, cloud.TopicInflightMethods.PUBLISH);
   }
 
   public onUpdate(
@@ -88,7 +90,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   ): void {
     super.onUpdate(fn, opts);
     const topic = this.getTopic(cloud.BucketEventType.UPDATE);
-    this.policy.addStatement(topic, cloud.TopicInflightMethods.PUBLISH);
+    topic.policy.addStatement(topic, cloud.TopicInflightMethods.PUBLISH);
   }
 
   public onEvent(
@@ -97,11 +99,20 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   ): void {
     super.onEvent(fn, opts);
     const createTopic = this.getTopic(cloud.BucketEventType.CREATE);
-    this.policy.addStatement(createTopic, cloud.TopicInflightMethods.PUBLISH);
+    createTopic.policy.addStatement(
+      createTopic,
+      cloud.TopicInflightMethods.PUBLISH
+    );
     const deleteTopic = this.getTopic(cloud.BucketEventType.DELETE);
-    this.policy.addStatement(deleteTopic, cloud.TopicInflightMethods.PUBLISH);
+    deleteTopic.policy.addStatement(
+      deleteTopic,
+      cloud.TopicInflightMethods.PUBLISH
+    );
     const updateTopic = this.getTopic(cloud.BucketEventType.UPDATE);
-    this.policy.addStatement(updateTopic, cloud.TopicInflightMethods.PUBLISH);
+    updateTopic.policy.addStatement(
+      updateTopic,
+      cloud.TopicInflightMethods.PUBLISH
+    );
   }
 
   protected eventHandlerLocation(): string {

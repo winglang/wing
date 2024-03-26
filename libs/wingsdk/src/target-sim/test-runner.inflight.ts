@@ -41,7 +41,10 @@ export class TestRunner
     if (!functionHandle) {
       throw new Error(`No test found at path "${path}"`);
     }
-    const fnClient = this.context.getClient(functionHandle) as IFunctionClient;
+    const fnClient = this.context.getClient(
+      functionHandle,
+      true
+    ) as IFunctionClient;
     let pass = false;
     let error: string | undefined;
     const previousTraces = this.context.listTraces().length;

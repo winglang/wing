@@ -209,8 +209,6 @@ export class Simulator {
     this.statedir = props.stateDir ?? join(simdir, ".state");
     this._model = this._loadApp(simdir);
 
-    // console.error("model:", JSON.stringify(this._model, null, 2));
-
     this._running = "stopped";
     this._handles = new HandleManager();
     this._traces = new Array();
