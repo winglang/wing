@@ -1,8 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`create a bucket 1`] = `
+exports[`create an OnDeploy 1`] = `
 {
-  ".wing/my_function_c85c4e0e.js": ""use strict";
+  ".wing/function_c83fbf14.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -12,7 +12,7 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle() { return 'hello'; }
+  async handle() { console.log("super duper success"); }
 };
 })())({
 
@@ -20,60 +20,46 @@ return class Handler {
   return await $handler.handle(event);
 };",
   "connections.json": {
-    "connections": [
-      {
-        "name": "relationship",
-        "source": "root/my_bucket",
-        "target": "root/my_function",
-      },
-    ],
+    "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
     "resources": [
       {
-        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
+        "addr": "c83fbf14da06343c694e42a8758f43bcb1f1c2c389",
         "attrs": {},
-        "path": "root/my_bucket",
-        "props": {
-          "initialObjects": {},
-          "public": false,
-          "topics": {},
-        },
-        "type": "@winglang/sdk.cloud.Bucket",
-      },
-      {
-        "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
-        "attrs": {},
-        "path": "root/my_bucket/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_bucket#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
-        "attrs": {},
-        "path": "root/my_function",
+        "path": "root/my_on_deploy/Function",
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
+          "sourceCodeFile": ".wing/function_c83fbf14.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
       {
-        "addr": "c8d421ed6ca2ddf857d835791bcde9240c8682a8d9",
+        "addr": "c84ce37dba3dd1bd3d5c4ab27cb72c54e2b1a75821",
         "attrs": {},
-        "path": "root/my_function/Policy",
+        "path": "root/my_on_deploy/Function/Policy",
         "props": {
-          "principal": "\${wsim#root/my_function#attrs.handle}",
+          "principal": "\${wsim#root/my_on_deploy/Function#attrs.handle}",
           "statements": [],
         },
         "type": "@winglang/sdk.sim.Policy",
+      },
+      {
+        "addr": "c8e2618b976544550a8396a3817f0bad07099f7050",
+        "attrs": {},
+        "deps": [
+          "root/my_on_deploy/Function",
+          "root/my_on_deploy/Function/Policy",
+        ],
+        "path": "root/my_on_deploy",
+        "props": {
+          "functionHandle": "\${wsim#root/my_on_deploy/Function#attrs.handle}",
+        },
+        "type": "@winglang/sdk.cloud.OnDeploy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -171,20 +157,35 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "my_bucket": {
+        "my_on_deploy": {
           "children": {
-            "Policy": {
+            "Function": {
+              "children": {
+                "Policy": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A simulated resource policy",
+                    "hidden": true,
+                    "title": "Policy",
+                  },
+                  "id": "Policy",
+                  "path": "root/my_on_deploy/Function/Policy",
+                },
+              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
               },
               "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "Function",
               },
-              "id": "Policy",
-              "path": "root/my_bucket/Policy",
+              "id": "Function",
+              "path": "root/my_on_deploy/Function",
             },
           },
           "constructInfo": {
@@ -192,38 +193,11 @@ return class Handler {
             "version": "10.3.0",
           },
           "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
+            "description": "Run code during the app's deployment.",
+            "title": "OnDeploy",
           },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-        "my_function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_function/Policy",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.3.0",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_function",
-          "path": "root/my_function",
+          "id": "my_on_deploy",
+          "path": "root/my_on_deploy",
         },
       },
       "constructInfo": {
@@ -236,4 +210,18 @@ return class Handler {
     "version": "tree-0.1",
   },
 }
+`;
+
+exports[`create an OnDeploy 2`] = `
+[
+  "root/my_on_deploy/Function started",
+  "root/my_on_deploy/Function/Policy started",
+  "super duper success",
+  "Invoke (payload=undefined).",
+  "OnDeploy invoked.",
+  "root/my_on_deploy started",
+  "root/my_on_deploy stopped",
+  "root/my_on_deploy/Function/Policy stopped",
+  "root/my_on_deploy/Function stopped",
+]
 `;

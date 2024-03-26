@@ -1,18 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`__dirname and __filename cannot be used within inflight code 1`] = `
-[
-  "root/Function.0 started",
-  "root/Function.0/Policy started",
-  "root/Function.1 started",
-  "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
-  "root/Function.1/Policy started",
-  "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
-  "Invoke (payload=undefined).",
-  "Invoke (payload=undefined).",
-]
-`;
-
 exports[`create a function 1`] = `
 {
   ".wing/my_function_c85c4e0e.js": ""use strict";

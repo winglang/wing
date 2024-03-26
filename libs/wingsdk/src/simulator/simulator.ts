@@ -7,6 +7,7 @@ import { Graph } from "./graph";
 import { deserialize, serialize } from "./serialization";
 import { resolveTokens } from "./tokens";
 import { Tree } from "./tree";
+import { exists } from "./util";
 import { SDK_VERSION } from "../constants";
 import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
@@ -393,6 +394,7 @@ export class Simulator {
 
     try {
       const resource = this._handles.find(handle);
+      await this.ensureStateDirExists(path);
       await resource.save(this.getResourceStateDir(path));
       this._handles.deallocate(handle);
       await resource.cleanup();
@@ -531,6 +533,14 @@ export class Simulator {
   public getResourceStateDir(path: string): string {
     const config = this.getResourceConfig(path);
     return join(this.statedir, config.addr);
+  }
+
+  private async ensureStateDirExists(path: string) {
+    const statedir = this.getResourceStateDir(path);
+    const statedirExists = await exists(statedir);
+    if (!statedirExists) {
+      await mkdir(statedir, { recursive: true });
+    }
   }
 
   /**

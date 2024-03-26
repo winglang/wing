@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { Function as SimFunction } from "./function";
 import { OnDeploySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
@@ -21,7 +21,7 @@ export class OnDeploy extends cloud.OnDeploy {
     Node.of(this.fn).sourceModule = SDK_SOURCE_MODULE;
 
     this.node.addDependency(this.fn);
-    this.node.addDependency((this.fn as Function).policy);
+    this.node.addDependency((this.fn as SimFunction).policy);
 
     for (const c of props.executeBefore ?? []) {
       c.node.addDependency(this);

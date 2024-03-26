@@ -89,7 +89,9 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
             // handed control back to the caller.
             this.context.addTrace({
               data: {
-                message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
+                message: `InvokeAsync (payload=${JSON.stringify(
+                  payload
+                )}) failure.`,
                 status: "failure",
                 error: e,
               },

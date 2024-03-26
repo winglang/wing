@@ -75,6 +75,16 @@ bucket: (function() {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c86eb36bbe6e764a632afaaea5db2d4bd693c92624",
+        "attrs": {},
+        "path": "root/HelloWorld/Bucket/Policy",
+        "props": {
+          "principal": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+      {
         "addr": "c86b009930462795eeb90e647a56dbfc5356d9ea80",
         "attrs": {},
         "path": "root/HelloWorld/Queue/Policy",
@@ -278,6 +288,21 @@ bucket: (function() {
         "HelloWorld": {
           "children": {
             "Bucket": {
+              "children": {
+                "Policy": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A simulated resource policy",
+                    "hidden": true,
+                    "title": "Policy",
+                  },
+                  "id": "Policy",
+                  "path": "root/HelloWorld/Bucket/Policy",
+                },
+              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
