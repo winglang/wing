@@ -7,22 +7,26 @@ import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { TraceType } from "../std";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {
-  private readonly context: ISimulatorContext;
-  private readonly originalFile: string;
+  private _context: ISimulatorContext | undefined;
+  private readonly sourceCodeFile: string;
+  private originalFile!: string;
   private readonly autoStart: boolean;
   private sandbox: Sandbox | undefined;
   private bundle: Bundle | undefined;
-  private createBundlePromise: Promise<void>;
   private running: boolean = false;
   private environmentVariables: Record<string, string>;
 
-  constructor(props: ServiceSchema["props"], context: ISimulatorContext) {
-    this.context = context;
-    this.originalFile = resolve(context.simdir, props.sourceCodeFile);
+  constructor(props: ServiceSchema["props"]) {
     this.autoStart = props.autoStart;
+    this.sourceCodeFile = props.sourceCodeFile;
     this.environmentVariables = props.environmentVariables ?? {};
+  }
 
-    this.createBundlePromise = this.createBundle();
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
   }
 
   private async createBundle(): Promise<void> {
@@ -31,7 +35,10 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     });
   }
 
-  public async init(): Promise<ServiceAttributes> {
+  public async init(context: ISimulatorContext): Promise<ServiceAttributes> {
+    this._context = context;
+    this.originalFile = resolve(context.simdir, this.sourceCodeFile);
+    await this.createBundle();
     if (this.autoStart) {
       await this.start();
     }
@@ -49,8 +56,6 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     if (this.running) {
       return;
     }
-
-    await this.createBundlePromise;
 
     if (!this.bundle) {
       this.addTrace("Failed to start service: bundle is not created");
@@ -83,7 +88,6 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
 
     try {
       this.running = false;
-      await this.createBundlePromise;
       await this.sandbox.call("stop");
       await this.sandbox.cleanup();
     } catch (e: any) {
