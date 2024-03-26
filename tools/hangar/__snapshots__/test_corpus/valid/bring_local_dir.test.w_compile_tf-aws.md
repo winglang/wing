@@ -92,7 +92,7 @@ class Foo extends $stdlib.std.Resource {
     return "foo";
   }
   checkWidget(widget) {
-    return ((widget.compute()) + (blah.Widget.staticCompute(this, )));
+    return ((widget.compute()) + (blah.Widget.staticCompute(this)));
   }
   static _toInflightType() {
     return `

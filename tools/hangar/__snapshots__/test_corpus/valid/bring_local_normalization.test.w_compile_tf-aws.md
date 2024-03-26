@@ -159,10 +159,10 @@ class Foo extends $stdlib.std.Resource {
     return "foo";
   }
   static bar($scope) {
-    return (bar.Bar.bar($scope, ));
+    return (bar.Bar.bar($scope));
   }
   static baz($scope) {
-    return (baz.Baz.baz($scope, ));
+    return (baz.Baz.baz($scope));
   }
   static _toInflightType() {
     return `
@@ -207,11 +207,11 @@ const baz = require("./preflight.baz-2.js");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.assert($helpers.eq((foo.Foo.foo(this, )), "foo"), "foo.Foo.foo() == \"foo\"");
-    $helpers.assert($helpers.eq((foo.Foo.bar(this, )), "bar"), "foo.Foo.bar() == \"bar\"");
-    $helpers.assert($helpers.eq((foo.Foo.baz(this, )), "baz"), "foo.Foo.baz() == \"baz\"");
-    $helpers.assert($helpers.eq((bar.Bar.bar(this, )), "bar"), "bar.Bar.bar() == \"bar\"");
-    $helpers.assert($helpers.eq((baz.Baz.baz(this, )), "baz"), "baz.Baz.baz() == \"baz\"");
+    $helpers.assert($helpers.eq((foo.Foo.foo(this)), "foo"), "foo.Foo.foo() == \"foo\"");
+    $helpers.assert($helpers.eq((foo.Foo.bar(this)), "bar"), "foo.Foo.bar() == \"bar\"");
+    $helpers.assert($helpers.eq((foo.Foo.baz(this)), "baz"), "foo.Foo.baz() == \"baz\"");
+    $helpers.assert($helpers.eq((bar.Bar.bar(this)), "bar"), "bar.Bar.bar() == \"bar\"");
+    $helpers.assert($helpers.eq((baz.Baz.baz(this)), "baz"), "baz.Baz.baz() == \"baz\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

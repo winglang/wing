@@ -170,7 +170,7 @@ class $Root extends $stdlib.std.Resource {
       }
       instanceMethod() {
         const my = (MyClass.createMyClassWithImplicitScope(this, "from-instance-method"));
-        const bucket = (MyClass.createBucketWithImplicitScope(this, ));
+        const bucket = (MyClass.createBucketWithImplicitScope(this));
       }
       static staticMehtodThatCallsAnotherStaticMethod($scope) {
         return (MyClass.createMyClassWithImplicitScope($scope, "from-outer-static-method"));
@@ -307,8 +307,8 @@ class $Root extends $stdlib.std.Resource {
     const bucket2 = (createBucket());
     const my = (MyClass.createMyClass(this, scope));
     const my2 = (MyClass.createMyClassWithImplicitScope(this, "from-root"));
-    const bucket3 = (MyClass.createBucketWithImplicitScope(this, ));
-    const my3 = (MyClass.staticMehtodThatCallsAnotherStaticMethod(this, ));
+    const bucket3 = (MyClass.createBucketWithImplicitScope(this));
+    const my3 = (MyClass.staticMehtodThatCallsAnotherStaticMethod(this));
     (my.instanceMethod());
     $helpers.assert($helpers.eq((jsii_fixture.JsiiClass.staticMethod("foo")), "Got foo"), "jsii_fixture.JsiiClass.staticMethod(\"foo\") == \"Got foo\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:play with buckets", new $Closure1(this, "$Closure1"));
