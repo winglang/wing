@@ -16,7 +16,11 @@ import { Redis } from "./redis";
 import { ISimulatorResource, isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
-import { Service } from "./service";
+import {
+  SERVICE_AUTO_STARTER_FQN,
+  Service,
+  ServiceAutoStarter,
+} from "./service";
 import { STATE_FQN, State } from "./state";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
@@ -67,6 +71,7 @@ const SIMULATOR_CLASS_DATA = {
   [SCHEDULE_FQN]: "Schedule",
   [SECRET_FQN]: "Secret",
   [SERVICE_FQN]: "Service",
+  [SERVICE_AUTO_STARTER_FQN]: "ServiceAutoStarter",
   [STATE_FQN]: "State",
   [SIM_CONTAINER_FQN]: "Container",
   [TABLE_FQN]: "Table",
@@ -142,6 +147,9 @@ export class App extends core.App {
       case SERVICE_FQN:
         return require.resolve("./service.inflight");
 
+      case SERVICE_AUTO_STARTER_FQN:
+        return require.resolve("./service.inflight");
+
       case STATE_FQN:
         return require.resolve("./state.inflight");
 
@@ -209,6 +217,9 @@ export class App extends core.App {
 
       case SERVICE_FQN:
         return Service;
+
+      case SERVICE_AUTO_STARTER_FQN:
+        return ServiceAutoStarter;
 
       case STATE_FQN:
         return State;

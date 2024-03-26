@@ -1,5 +1,9 @@
 import { resolve } from "path";
-import { ServiceAttributes, ServiceSchema } from "./schema-resources";
+import {
+  ServiceAttributes,
+  ServiceAutoStarterSchema,
+  ServiceSchema,
+} from "./schema-resources";
 import { IServiceClient, SERVICE_FQN } from "../cloud";
 import { Bundle } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
@@ -10,14 +14,12 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   private _context: ISimulatorContext | undefined;
   private readonly sourceCodeFile: string;
   private originalFile!: string;
-  private readonly autoStart: boolean;
   private sandbox: Sandbox | undefined;
   private bundle: Bundle | undefined;
   private running: boolean = false;
   private environmentVariables: Record<string, string>;
 
   constructor(props: ServiceSchema["props"]) {
-    this.autoStart = props.autoStart;
     this.sourceCodeFile = props.sourceCodeFile;
     this.environmentVariables = props.environmentVariables ?? {};
   }
@@ -39,9 +41,6 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     this._context = context;
     this.originalFile = resolve(context.simdir, this.sourceCodeFile);
     await this.createBundle();
-    if (this.autoStart) {
-      await this.start();
-    }
     return {};
   }
 
@@ -66,6 +65,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       env: {
         ...this.environmentVariables,
         WING_SIMULATOR_URL: this.context.serverUrl,
+        WING_SIMULATOR_CALLER: this.context.resourceHandle,
       },
       log: (internal, _level, message) => {
         this.addTrace(message, internal);
@@ -108,4 +108,21 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
   }
+}
+
+export class ServiceAutoStarter implements ISimulatorResourceInstance {
+  private readonly serviceHandle: string;
+
+  public constructor(props: ServiceAutoStarterSchema["props"]) {
+    this.serviceHandle = props.service;
+  }
+
+  public async init(context: ISimulatorContext): Promise<ServiceAttributes> {
+    const service = context.getClient(this.serviceHandle, true) as Service;
+    await service.start();
+    return {};
+  }
+
+  public async cleanup(): Promise<void> {}
+  public async save(): Promise<void> {}
 }
