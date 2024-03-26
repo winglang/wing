@@ -48,9 +48,6 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
   const start = async (simfile: string) => {
     try {
       if (instance) {
-        // await events.emit("stopping");
-        // await stopSilently(instance);
-
         await events.emit("starting", { instance });
         await instance.update(simfile);
         await events.emit("started");
@@ -64,7 +61,6 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
             events.emit("trace", trace);
           },
         });
-
         await events.emit("starting", { instance });
 
         await instance.start();
