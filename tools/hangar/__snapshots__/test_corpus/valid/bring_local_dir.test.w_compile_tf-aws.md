@@ -263,7 +263,7 @@ class Widget extends $stdlib.std.Resource {
   compute() {
     return 42;
   }
-  static staticCompute($scope, ) {
+  static staticCompute($scope) {
     return 1337;
   }
   static _toInflightType() {

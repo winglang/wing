@@ -458,7 +458,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static m($scope, ) {
+      static m($scope) {
         return 1;
       }
       static _toInflightType() {

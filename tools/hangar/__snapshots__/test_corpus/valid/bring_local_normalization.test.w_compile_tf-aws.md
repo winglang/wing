@@ -71,7 +71,7 @@ class Bar extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
   }
-  static bar($scope, ) {
+  static bar($scope) {
     return "bar";
   }
   static _toInflightType() {
@@ -112,7 +112,7 @@ class Baz extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
   }
-  static baz($scope, ) {
+  static baz($scope) {
     return "baz";
   }
   static _toInflightType() {
@@ -155,13 +155,13 @@ class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
   }
-  static foo($scope, ) {
+  static foo($scope) {
     return "foo";
   }
-  static bar($scope, ) {
+  static bar($scope) {
     return (bar.Bar.bar($scope, ));
   }
-  static baz($scope, ) {
+  static baz($scope) {
     return (baz.Baz.baz($scope, ));
   }
   static _toInflightType() {
