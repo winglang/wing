@@ -72,7 +72,7 @@ class FooParent {
 class Foo extends FooParent {
   new() {
     super(
-      // TODO: unsupported yet, see https://github.com/winglang/wing/issues/4925
+      // TODO: unsupported yet, see https://github.com/winglang/wing/issues/6016
       // MyClass.createMyClassWithImplicitScope("from-ctor-before-super")
       nil
     );
