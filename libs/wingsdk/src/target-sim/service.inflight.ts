@@ -13,11 +13,12 @@ import { TraceType } from "../std";
 export class Service implements IServiceClient, ISimulatorResourceInstance {
   private _context: ISimulatorContext | undefined;
   private readonly sourceCodeFile: string;
-  private originalFile!: string;
+  private resolvedSourceCodeFile!: string;
   private sandbox: Sandbox | undefined;
   private bundle: Bundle | undefined;
   private running: boolean = false;
   private environmentVariables: Record<string, string>;
+  private createBundlePromise!: Promise<void>;
 
   constructor(props: ServiceSchema["props"]) {
     this.sourceCodeFile = props.sourceCodeFile;
@@ -32,19 +33,23 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   }
 
   private async createBundle(): Promise<void> {
-    this.bundle = await Sandbox.createBundle(this.originalFile, (msg) => {
-      this.addTrace(msg);
-    });
+    this.bundle = await Sandbox.createBundle(
+      this.resolvedSourceCodeFile,
+      (msg) => {
+        this.addTrace(msg);
+      }
+    );
   }
 
   public async init(context: ISimulatorContext): Promise<ServiceAttributes> {
     this._context = context;
-    this.originalFile = resolve(context.simdir, this.sourceCodeFile);
-    await this.createBundle();
+    this.resolvedSourceCodeFile = resolve(context.simdir, this.sourceCodeFile);
+    this.createBundlePromise = this.createBundle();
     return {};
   }
 
   public async cleanup(): Promise<void> {
+    await this.createBundlePromise;
     await this.stop();
   }
 
@@ -55,6 +60,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     if (this.running) {
       return;
     }
+
+    await this.createBundlePromise;
 
     if (!this.bundle) {
       this.addTrace("Failed to start service: bundle is not created");
@@ -88,6 +95,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
 
     try {
       this.running = false;
+      await this.createBundlePromise;
       await this.sandbox.call("stop");
       await this.sandbox.cleanup();
     } catch (e: any) {
