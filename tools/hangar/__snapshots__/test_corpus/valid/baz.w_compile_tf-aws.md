@@ -24,7 +24,7 @@ class Baz extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
   }
-  static baz($scope, ) {
+  static baz($scope) {
     return "baz";
   }
   static _toInflightType() {
