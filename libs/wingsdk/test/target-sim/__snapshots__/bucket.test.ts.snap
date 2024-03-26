@@ -187,8 +187,8 @@ exports[`can add file in preflight 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
@@ -367,8 +367,8 @@ exports[`can add object in preflight 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
@@ -532,8 +532,8 @@ exports[`create a bucket 1`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
@@ -707,8 +707,8 @@ exports[`get invalid object throws an error 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {

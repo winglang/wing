@@ -140,8 +140,8 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {

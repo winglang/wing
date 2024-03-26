@@ -107,8 +107,8 @@ exports[`create a queue 1`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
@@ -732,8 +732,8 @@ exports[`push rejects empty message 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
@@ -910,8 +910,8 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
@@ -1240,8 +1240,8 @@ async handle(message) {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
@@ -1562,8 +1562,8 @@ async handle(message) {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {

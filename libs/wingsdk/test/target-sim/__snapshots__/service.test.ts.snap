@@ -69,9 +69,10 @@ return class Handler {
         ],
         "path": "root/my_service/AutoStarter",
         "props": {
+          "autoStart": true,
           "service": "\${wsim#root/my_service#attrs.handle}",
         },
-        "type": "@winglang/sdk.sim.ServiceAutoStarter",
+        "type": "@winglang/sdk.sim.ServiceHelper",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -152,8 +153,8 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceAutoStarter": {
-        "className": "ServiceAutoStarter",
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
         "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
