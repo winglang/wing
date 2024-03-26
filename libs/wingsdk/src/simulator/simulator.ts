@@ -13,7 +13,7 @@ import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
 import { POLICY_FQN } from "../target-sim";
-import { PolicyStatement } from "../target-sim/schema-resources";
+import { PolicySchemaProps } from "../target-sim/schema-resources";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 const HANDLE_ATTRIBUTE = "handle";
@@ -200,6 +200,7 @@ export class Simulator {
   private _serverUrl: string | undefined;
   private _server: Server | undefined;
   private _model: Model;
+  private _policyRegistry: PolicyRegistry;
 
   // keeps the actual resolved state (props and attrs) of all started resources. this state is
   // merged in when calling `getResourceConfig()`.
@@ -212,6 +213,7 @@ export class Simulator {
 
     this._running = "stopped";
     this._handles = new HandleManager();
+    this._policyRegistry = new PolicyRegistry();
     this._traces = new Array();
     this._traceSubscribers = new Array();
   }
@@ -400,6 +402,11 @@ export class Simulator {
       this._handles.deallocate(handle);
     } catch (err) {
       console.warn(err);
+    }
+
+    // if the resource is a policy, remove it from the policy registry
+    if (this.getResourceConfig(path).type === POLICY_FQN) {
+      this._policyRegistry.deregister(path);
     }
 
     this.addSimulatorTrace(path, { message: `${path} stopped` });
@@ -594,16 +601,6 @@ export class Simulator {
       return { granted: true };
     }
 
-    // console.error(
-    //   "Checking permission for",
-    //   "method:",
-    //   method,
-    //   "callerHandle:",
-    //   callerHandle,
-    //   "calleeHandle:",
-    //   calleeHandle
-    // );
-
     const callerPath = this._handles.tryFindPath(callerHandle);
     if (!callerPath) {
       return {
@@ -620,36 +617,10 @@ export class Simulator {
       };
     }
 
-    // Look for a policy whose "principal" matches the caller
-    const resources = this._model.graph.nodes.map((n) => n.path);
-    for (const resource of resources) {
-      const config = this.getResourceConfig(resource);
-      if (config.type !== POLICY_FQN) {
-        continue;
-      }
-
-      // console.error("found a policy resource...");
-
-      // console.error(JSON.stringify(config, null, 2));
-
-      if (config.props.principal !== callerHandle) {
-        continue;
-      }
-
-      // console.error("the principal matches...");
-
-      const statements: PolicyStatement[] = config.props.statements;
-      for (const statement of statements) {
-        if (
-          statement.resourceHandle === calleeHandle &&
-          statement.operation === method
-        ) {
-          // console.error("operation is valid!");
-          return { granted: true };
-        }
-      }
-
-      // console.error("no matching statement found...");
+    if (
+      this._policyRegistry.checkPermission(callerHandle, calleeHandle, method)
+    ) {
+      return { granted: true };
     }
 
     return {
@@ -675,7 +646,6 @@ export class Simulator {
       });
       req.on("end", () => {
         const request: SimulatorServerRequest = deserialize(body);
-        // console.error("Received request:", request);
         const { caller, handle, method, args } = request;
         const resource = this._handles.tryFind(handle);
 
@@ -856,6 +826,12 @@ export class Simulator {
     this.addSimulatorTrace(path, {
       message: `${resourceConfig.path} started`,
     });
+
+    // if the resource is a policy, add it to the policy registry
+    if (resourceConfig.type === POLICY_FQN) {
+      const policyProps = resolvedProps as PolicySchemaProps;
+      this._policyRegistry.register(resourceConfig.path, policyProps);
+    }
   }
 
   private createContext(
@@ -870,17 +846,6 @@ export class Simulator {
       serverUrl: this.url,
       getClient: (calleeHandle: string, asAdmin: boolean) => {
         const callerHandle = asAdmin ? ADMIN_PERMISSION : resourceHandle;
-        // console.error(
-        //   "Connecting to simulator at",
-        //   this.url,
-        //   "with handle",
-        //   calleeHandle,
-        //   "and caller",
-        //   callerHandle
-        // );
-        if (callerHandle === undefined) {
-          throw new Error("undefined?");
-        }
         return makeSimulatorClient(this.url, calleeHandle, callerHandle);
       },
       addTrace: (trace: Trace) => {
@@ -1208,5 +1173,44 @@ function planUpdate(current: BaseResourceSchema[], next: BaseResourceSchema[]) {
       ret[resource.path] = resource;
     }
     return ret;
+  }
+}
+
+class PolicyRegistry {
+  private readonly policies: Record<string, PolicySchemaProps>;
+
+  constructor() {
+    this.policies = {};
+  }
+
+  public register(id: string, policy: PolicySchemaProps) {
+    if (this.policies[id]) {
+      throw new Error(`Policy with id ${id} already registered.`);
+    }
+    this.policies[id] = policy;
+  }
+
+  public deregister(id: string) {
+    delete this.policies[id];
+  }
+
+  public checkPermission(
+    caller: string,
+    callee: string,
+    method: string
+  ): boolean {
+    for (const policy of Object.values(this.policies)) {
+      if (policy.principal === caller) {
+        for (const statement of policy.statements) {
+          if (
+            statement.resourceHandle === callee &&
+            statement.operation === method
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 }

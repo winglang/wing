@@ -371,13 +371,15 @@ export interface ContainerAttributes {}
 /** Schema for sim.Policy */
 export interface PolicySchema extends BaseResourceSchema {
   readonly type: typeof POLICY_FQN;
-  readonly props: {
-    /** The resource which the policy is attached to. */
-    readonly principal: ResourceHandle;
-    /** The statements in the policy. */
-    readonly statements: PolicyStatement[];
-  };
+  readonly props: PolicySchemaProps;
   readonly attrs: PolicyAttributes & BaseResourceAttributes;
+}
+
+export interface PolicySchemaProps {
+  /** The resource which the policy is attached to. */
+  readonly principal: ResourceHandle;
+  /** The statements in the policy. */
+  readonly statements: PolicyStatement[];
 }
 
 export interface PolicyStatement {

@@ -17,6 +17,16 @@ exports[`create a schedule 1`] = `
         },
         "type": "@winglang/sdk.cloud.Schedule",
       },
+      {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "attrs": {},
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -114,6 +124,21 @@ exports[`create a schedule 1`] = `
     "tree": {
       "children": {
         "my_schedule": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_schedule/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -172,6 +197,21 @@ console.log("Hello from schedule!");
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "attrs": {},
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
       {
         "addr": "c8d61fcab25f1c27fcb0f0ba29e4888a7041c8029f",
         "attrs": {},
@@ -356,6 +396,19 @@ console.log("Hello from schedule!");
               "id": "OnTickMapping0",
               "path": "root/my_schedule/OnTickMapping0",
             },
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_schedule/Policy",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -415,6 +468,21 @@ console.log("Hello from schedule!");
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "attrs": {},
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
       {
         "addr": "c8d61fcab25f1c27fcb0f0ba29e4888a7041c8029f",
         "attrs": {},
@@ -599,6 +667,19 @@ console.log("Hello from schedule!");
               "id": "OnTickMapping0",
               "path": "root/my_schedule/OnTickMapping0",
             },
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_schedule/Policy",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -658,6 +739,21 @@ console.log("Hello from schedule!");
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "attrs": {},
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
       {
         "addr": "c8d61fcab25f1c27fcb0f0ba29e4888a7041c8029f",
         "attrs": {},
@@ -841,6 +937,19 @@ console.log("Hello from schedule!");
               },
               "id": "OnTickMapping0",
               "path": "root/my_schedule/OnTickMapping0",
+            },
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_schedule/Policy",
             },
           },
           "constructInfo": {
