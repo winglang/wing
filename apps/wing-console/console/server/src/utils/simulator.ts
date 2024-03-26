@@ -50,22 +50,25 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
       if (instance) {
         await events.emit("stopping");
         await stopSilently(instance);
+
+        console.log("update", simfile);
+        await instance.update(simfile);
+      } else {
+        instance = new simulator.Simulator({
+          simfile,
+          stateDir: props?.stateDir,
+        });
+        instance.onTrace({
+          callback(trace) {
+            events.emit("trace", trace);
+          },
+        });
+
+        await events.emit("starting", { instance });
+
+        await instance.start();
+        await events.emit("started");
       }
-
-      instance = new simulator.Simulator({
-        simfile,
-        stateDir: props?.stateDir,
-      });
-      instance.onTrace({
-        callback(trace) {
-          events.emit("trace", trace);
-        },
-      });
-
-      await events.emit("starting", { instance });
-
-      await instance.start();
-      await events.emit("started");
     } catch (error) {
       await events.emit(
         "error",
