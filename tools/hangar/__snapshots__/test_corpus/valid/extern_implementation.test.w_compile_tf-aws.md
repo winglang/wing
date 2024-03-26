@@ -122,10 +122,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static getGreeting($scope, name) {
+      static getGreeting(name) {
         return (require("../../../external_js.js")["getGreeting"])(name)
       }
-      static preflightBucket($scope, bucket, id) {
+      static preflightBucket(bucket, id) {
         return (require("../../../external_js.js")["preflightBucket"])(bucket, id)
       }
       static _toInflightType() {
@@ -238,10 +238,10 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    $helpers.assert($helpers.eq((Foo.getGreeting(this, "Wingding")), "Hello, Wingding!"), "Foo.getGreeting(\"Wingding\") == \"Hello, Wingding!\"");
+    $helpers.assert($helpers.eq((Foo.getGreeting("Wingding")), "Hello, Wingding!"), "Foo.getGreeting(\"Wingding\") == \"Hello, Wingding!\"");
     const f = new Foo(this, "Foo");
     const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "my-bucket");
-    const result = (Foo.preflightBucket(this, bucket, "my-bucket"));
+    const result = (Foo.preflightBucket(bucket, "my-bucket"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:call", new $Closure1(this, "$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:console", new $Closure2(this, "$Closure2"));
   }

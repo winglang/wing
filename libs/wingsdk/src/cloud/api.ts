@@ -607,6 +607,7 @@ export class Api extends Resource {
 
     // https://spec.openapis.org/oas/v3.0.3
     return {
+      ...this.apiSpec,
       openapi: "3.0.3",
       paths: paths,
     };

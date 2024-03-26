@@ -127,7 +127,7 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const Person = $stdlib.std.Struct._createJsonSchema({id:"/Person",type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]});
+    const Person = $stdlib.std.Struct._createJsonSchema({$id:"/Person",type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]});
     class Super extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);

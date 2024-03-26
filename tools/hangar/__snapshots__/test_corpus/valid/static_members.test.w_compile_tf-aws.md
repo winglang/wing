@@ -84,7 +84,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.instanceField = 100;
       }
-      static m($scope, ) {
+      static m($scope) {
         return 99;
       }
       static _toInflightType() {
