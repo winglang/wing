@@ -4259,6 +4259,7 @@ impl<'a> TypeChecker<'a> {
 			let mut method_type = self.resolve_type_annotation(&method_def.signature.to_type_annotation(), env);
 			self.add_method_to_class_env(
 				&mut method_type,
+				method_def,
 				if method_def.is_static { None } else { Some(class_type) },
 				method_def.access,
 				&mut class_env,
@@ -4276,6 +4277,7 @@ impl<'a> TypeChecker<'a> {
 		let mut init_func_type = self.resolve_type_annotation(&ast_class.initializer.signature.to_type_annotation(), env);
 		self.add_method_to_class_env(
 			&mut init_func_type,
+			&ast_class.initializer,
 			None,
 			ast_class.initializer.access,
 			&mut class_env,
@@ -4293,6 +4295,7 @@ impl<'a> TypeChecker<'a> {
 			self.resolve_type_annotation(&ast_class.inflight_initializer.signature.to_type_annotation(), env);
 		self.add_method_to_class_env(
 			&mut inflight_init_func_type,
+			&ast_class.inflight_initializer,
 			Some(class_type),
 			ast_class.inflight_initializer.access,
 			&mut class_env,
@@ -4963,6 +4966,7 @@ impl<'a> TypeChecker<'a> {
 	fn add_method_to_class_env(
 		&mut self,
 		method_type: &mut TypeRef,
+		method_def: &FunctionDefinition,
 		instance_type: Option<TypeRef>,
 		access: AccessModifier,
 		class_env: &mut SymbolEnv,
@@ -4976,12 +4980,14 @@ impl<'a> TypeChecker<'a> {
 		// use the class type as the function's "this" type (or None if static)
 		method_sig.this_type = instance_type;
 
-		// For now all* static preflight methods require an implicit scope argument. In the future we may be smart and if
+		// For now all static preflight methods require an implicit scope argument. In the future we may be smart and if
 		// the method doesn't instantiate any preflight classes then we can do away with it.
 		//
-		// *Special case: if we're overriding a method from a parent class, we assume its `implicit_scope_param`. Note that
-		// this isn't stricly correct and we don't have clearly defined rules for static method inheritance, but this
-		// resolves the issue of calling the base `Resource` class's onTypeLift method which doesn't expect a scope param.
+		// Special cases:
+		// 1) If we're overriding a method from a parent class, we assume its `implicit_scope_param`. Note that
+		//    this isn't stricly correct and we don't have clearly defined rules for static method inheritance, but this
+		//    resolves the issue of calling the base `Resource` class's onTypeLift method which doesn't expect a scope param.
+		// 2) If the method is extern we can't add any implicit params.
 		let inherit_implicit_scope_param = class_env.parent.and_then(|e| {
 			e.lookup(method_name, None).and_then(|s| {
 				s.as_variable()
@@ -4994,7 +5000,9 @@ impl<'a> TypeChecker<'a> {
 		method_sig.implicit_scope_param = if let Some(inherit_implicit_scope_param) = inherit_implicit_scope_param {
 			inherit_implicit_scope_param
 		} else {
-			instance_type.is_none() && method_sig.phase == Phase::Preflight
+			instance_type.is_none()
+				&& method_sig.phase == Phase::Preflight
+				&& !matches!(method_def.body, FunctionBody::External(_))
 		};
 
 		// If this method is overriding a parent method, check access modifiers allow it, note this is only relevant for instance methods
