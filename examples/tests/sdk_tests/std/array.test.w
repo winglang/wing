@@ -399,3 +399,129 @@ test "removeFirst()" {
   assert(r2 == false);
   assert(mutArr.length == 3);
 }
+
+//-----------------------------------------------------------------------------
+// sort() for a mutable array
+
+test "sort() mutuable array" {
+    let mutArr = MutArray<num>[3, 1, 2];
+    mutArr.sort();
+    assert(mutArr == MutArray<num>[1, 2, 3]);
+}
+
+//-----------------------------------------------------------------------------
+// sorted() for a mutable array
+
+test "sorted() mutable array" {
+    let mutArr = MutArray<num>[3, 1, 2];
+    let sortedArr = mutArr.sorted();
+    assert(sortedArr == MutArray<num>[1, 2, 3]);
+}
+
+//-----------------------------------------------------------------------------
+// sorted() for a mutable array with a custom comparator in desc order
+
+test "sorted() mutable array with custom comparator" {
+  let mutArr = MutArray<num>[3, 1, 2];
+
+  let sortedArr = mutArr.sorted((a, b) => {
+    if a > b {
+        return 1;
+    }
+
+    if a < b {
+        return -1;
+    }
+
+    return 0;
+  });
+
+  assert(sortedArr == MutArray<num>[1, 2, 3]);
+}
+
+//-----------------------------------------------------------------------------
+// sorted() for a non-mutable array with a comparator
+
+test "sortedWithComparator()" {
+  let arr = Array<num>[3, 5, 1];
+
+  // implement a reverse sort (instead of the default ascending sort)
+  let sortedArr = arr.sorted((a, b) => {
+    if a > b {
+      return -1;
+    }
+
+    if a < b {
+      return 1;
+    }
+
+    return 0;
+  });
+
+  log("{sortedArr}");
+
+  assert(sortedArr == Array<num>[5, 3, 1]);
+  assert(arr == Array<num>[3, 5, 1]);
+}
+
+//-----------------------------------------------------------------------------
+// sorted() for a mutuable array with a comparator
+
+test "sortedMutWithComparator()" {
+  let mutArr = MutArray<num>[3, 2, 1];
+
+  // implement a reverse sort (instead of the default ascending sort)
+  let sortedArr = mutArr.sorted((a, b) => {
+    if a < b {
+      return -1;
+    }
+
+    if a > b {
+      return 1;
+    }
+
+    return 0;
+  });
+
+  assert(sortedArr == Array<num>[1, 2, 3]);
+  assert(mutArr == MutArray<num>[3, 2, 1]);
+}
+
+//-----------------------------------------------------------------------------
+// sorted() for a non-mutable array with a comparator and a array of strings
+
+test "sortedWithComparatorAndStrings()" {
+  let arr = Array<str>["c", "b", "a"];
+
+  // implement a reverse sort (instead of the default ascending sort)
+  let sortedArr = arr.sorted();
+
+  assert(sortedArr == Array<str>["a", "b", "c"]);
+  assert(arr == Array<str>["c", "b", "a"]);
+}
+
+//-----------------------------------------------------------------------------
+// sorted() for a mutuable array with a comparator and a array of structs
+struct Person {
+  age: num;
+}
+
+test "sortedMutWithComparatorAndStructs()" {
+  let mutArr = MutArray<Person>[Person{age: 30}, Person{age: 40}, Person{age: 20}];
+
+  // implement a reverse sort (instead of the default ascending sort)
+  let sortedArr = mutArr.sorted((a, b) => {
+    if a.age > b.age {
+      return -1;
+    }
+
+    if a.age < b.age {
+      return 1;
+    }
+
+    return 0;
+  });
+
+  assert(sortedArr == MutArray<Person>[Person{age: 40}, Person{age: 30}, Person{age: 20}]);
+  assert(mutArr == MutArray<Person>[Person{age: 30}, Person{age: 40}, Person{age: 20}]);
+}

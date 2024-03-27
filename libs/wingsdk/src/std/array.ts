@@ -6,6 +6,26 @@ import { T1 } from "./generics";
 import { InflightClient } from "../core";
 
 /**
+ * Comparator function for sorting arrays
+ *
+ * @typeparam T1
+ * @callable
+ */
+export interface IComparator {
+  /** @internal */
+  (a: T1, b: T1): number;
+
+  /**
+   * Comparator function for sorting arrays
+   *
+   * @param a
+   * @param b
+   * @returns a negative number if a < b, a positive number if a > b, or 0 if a == b
+   */
+  fn(a: T1, b: T1): number;
+}
+
+/**
  * Immutable Array
  *
  * @typeparam T1
@@ -123,6 +143,19 @@ export class Array {
    */
   public lastIndexOf(searchElement: T1): number {
     searchElement;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns a sorted copy of the array.
+   *
+   * @macro ((arr, args) => { return args ? $helpers.mergeSort([...arr], args) : [...arr].sort() })($self$, $args$)
+   *
+   * @param comparator Function used to determine the order of the elements.
+   * @returns same array, sorted
+   */
+  public sorted(comparator?: IComparator): Array {
+    comparator;
     throw new Error("Macro");
   }
 }
@@ -309,6 +342,32 @@ export class MutArray {
    */
   public removeFirst(value: T1): boolean {
     value;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Sorts the array, modifying it in-place.
+   *
+   * @macro ((arr, args) => { return args ? $helpers.mergeSort(arr, args) : arr.sort() })($self$, $args$)
+   *
+   * @param comparator Function used to determine the order of the elements.
+   * @returns same array, sorted
+   */
+  public sort(comparator?: IComparator): Array {
+    comparator;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Sorts the array, creating a new array.
+   *
+   * @macro ((arr, args) => { return args ? $helpers.mergeSort([...arr], args) : [...arr].sort() })($self$, $args$)
+   *
+   * @param comparator Function used to determine the order of the elements.
+   * @returns a new array with the elements sorted
+   */
+  public sorted(comparator?: IComparator): Array {
+    comparator;
     throw new Error("Macro");
   }
 }

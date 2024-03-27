@@ -23,6 +23,7 @@ Immutable Array.
 | <code><a href="#@winglang/sdk.std.Array.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.Array.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.Array.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.Array.sorted">sorted</a></code> | Returns a sorted copy of the array. |
 | <code><a href="#@winglang/sdk.std.Array.tryAt">tryAt</a></code> | Get the value at the given index, returning nil if the index is out of bounds. |
 
 ---
@@ -132,6 +133,22 @@ to search for.
 
 ---
 
+##### `sorted` <a name="sorted" id="@winglang/sdk.std.Array.sorted"></a>
+
+```wing
+sorted(comparator?: IComparator): Array
+```
+
+Returns a sorted copy of the array.
+
+###### `comparator`<sup>Optional</sup> <a name="comparator" id="@winglang/sdk.std.Array.sorted.parameter.comparator"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IComparator">IComparator</a>
+
+Function used to determine the order of the elements.
+
+---
+
 ##### `tryAt` <a name="tryAt" id="@winglang/sdk.std.Array.tryAt"></a>
 
 ```wing
@@ -191,6 +208,8 @@ Mutable Array.
 | <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add values to end of array. |
 | <code><a href="#@winglang/sdk.std.MutArray.removeFirst">removeFirst</a></code> | Removes first occurrence of a given value in an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.set">set</a></code> | Sets a new value at the given index of an array. |
+| <code><a href="#@winglang/sdk.std.MutArray.sort">sort</a></code> | Sorts the array, modifying it in-place. |
+| <code><a href="#@winglang/sdk.std.MutArray.sorted">sorted</a></code> | Sorts the array, creating a new array. |
 
 ---
 
@@ -403,6 +422,38 @@ the value to set at the given index.
 
 ---
 
+##### `sort` <a name="sort" id="@winglang/sdk.std.MutArray.sort"></a>
+
+```wing
+sort(comparator?: IComparator): Array
+```
+
+Sorts the array, modifying it in-place.
+
+###### `comparator`<sup>Optional</sup> <a name="comparator" id="@winglang/sdk.std.MutArray.sort.parameter.comparator"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IComparator">IComparator</a>
+
+Function used to determine the order of the elements.
+
+---
+
+##### `sorted` <a name="sorted" id="@winglang/sdk.std.MutArray.sorted"></a>
+
+```wing
+sorted(comparator?: IComparator): Array
+```
+
+Sorts the array, creating a new array.
+
+###### `comparator`<sup>Optional</sup> <a name="comparator" id="@winglang/sdk.std.MutArray.sorted.parameter.comparator"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IComparator">IComparator</a>
+
+Function used to determine the order of the elements.
+
+---
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -425,5 +476,41 @@ The length of the array.
 ---
 
 
+
+## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IComparator <a name="IComparator" id="@winglang/sdk.std.IComparator"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.std.IComparator">IComparator</a>
+
+Comparator function for sorting arrays.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.IComparator.fn">fn</a></code> | Comparator function for sorting arrays. |
+
+---
+
+##### `fn` <a name="fn" id="@winglang/sdk.std.IComparator.fn"></a>
+
+```wing
+fn(a: <T>, b: <T>): num
+```
+
+Comparator function for sorting arrays.
+
+###### `a`<sup>Required</sup> <a name="a" id="@winglang/sdk.std.IComparator.fn.parameter.a"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
+
+---
+
+###### `b`<sup>Required</sup> <a name="b" id="@winglang/sdk.std.IComparator.fn.parameter.b"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
+
+---
 
 
