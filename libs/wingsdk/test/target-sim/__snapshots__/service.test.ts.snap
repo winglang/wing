@@ -177,7 +177,9 @@ return class Handler {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
               },
-              "display": {},
+              "display": {
+                "hidden": true,
+              },
               "id": "AutoStarter",
               "path": "root/my_service/AutoStarter",
             },

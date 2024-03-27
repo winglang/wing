@@ -9,7 +9,7 @@ import * as cloud from "../cloud";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { BaseResourceSchema } from "../simulator";
-import { IInflightHost, IResource, Resource } from "../std";
+import { IInflightHost, IResource, Resource, Node } from "../std";
 
 export class Service
   extends cloud.Service
@@ -102,6 +102,7 @@ export class ServiceHelper extends Resource implements ISimulatorResource {
     super(scope, id);
     this.service = props.service;
     this.autoStart = props.autoStart;
+    Node.of(this).hidden = true;
   }
 
   public toSimulator(): BaseResourceSchema {
