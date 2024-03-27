@@ -6,7 +6,7 @@ let buckets = [
 ];
 
 test "incorrect resource permission" {
-  // This should fail because permission is granted to b2, not b1
+  // This test fails because permission is granted to b2, not b1
   lift(buckets.at(1), ["put"]);
   let var i = 10;
   while i > 0 {
@@ -16,7 +16,7 @@ test "incorrect resource permission" {
 }
 
 test "incorrect permission operation" {
-  // This should fail because permission is granted for "list", not "put"
+  // This test fails because permission is granted for "list", not "put"
   lift(buckets.at(0), ["list"]);
   let var i = 10;
   while i > 0 {
