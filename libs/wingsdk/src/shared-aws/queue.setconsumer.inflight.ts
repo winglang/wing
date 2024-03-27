@@ -21,8 +21,6 @@ export class QueueSetConsumerHandlerClient
         });
       }
     }
-    return {
-      batchItemFailures: batchItemFailures,
-    };
+    return { batchItemFailures };
   }
 }

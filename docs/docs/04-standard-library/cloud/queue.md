@@ -286,20 +286,8 @@ let DeadLetterQueueProps = cloud.DeadLetterQueueProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.maxReveiceCount">maxReveiceCount</a></code> | <code>num</code> | The number of times a message can be unsuccesfully dequeued before being moved to the dead-letter queue. |
 | <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.queue">queue</a></code> | <code><a href="#@winglang/sdk.cloud.Queue">Queue</a></code> | Queue to receive the unsuccesfully messages. |
-
----
-
-##### `maxReveiceCount`<sup>Required</sup> <a name="maxReveiceCount" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.maxReveiceCount"></a>
-
-```wing
-maxReveiceCount: num;
-```
-
-- *Type:* num
-
-The number of times a message can be unsuccesfully dequeued before being moved to the dead-letter queue.
+| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.retries">retries</a></code> | <code>num</code> | The number of times a message can fail delivery before being pushed to the dead-letter queue. |
 
 ---
 
@@ -312,6 +300,19 @@ queue: Queue;
 - *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
 
 Queue to receive the unsuccesfully messages.
+
+---
+
+##### `retries`<sup>Required</sup> <a name="retries" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.retries"></a>
+
+```wing
+retries: num;
+```
+
+- *Type:* num
+- *Default:* 1
+
+The number of times a message can fail delivery before being pushed to the dead-letter queue.
 
 ---
 
@@ -344,7 +345,7 @@ dlq: DeadLetterQueueProps;
 ```
 
 - *Type:* <a href="#@winglang/sdk.cloud.DeadLetterQueueProps">DeadLetterQueueProps</a>
-- *Default:* undefined
+- *Default:* no dead letter queue
 
 A dead-letter queue.
 

@@ -44,7 +44,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
           name: ResourceNames.generateName(this, NAME_OPTS),
           redrivePolicy: JSON.stringify({
             deadLetterTargetArn: AwsQueue.from(props.dlq.queue)?.queueArn,
-            maxReceiveCount: props.dlq.maxReveiceCount,
+            maxReceiveCount: props.dlq.retries ?? 1,
           }),
         }
       : {

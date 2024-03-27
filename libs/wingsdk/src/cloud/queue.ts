@@ -19,8 +19,9 @@ export interface DeadLetterQueueProps {
    */
   readonly queue: Queue;
   /**
-   * The number of times a message can fail delivery before being pushed to 
+   * The number of times a message can fail delivery before being pushed to
    * the dead-letter queue.
+   * @default 1
    */
   readonly retries: number;
 }
