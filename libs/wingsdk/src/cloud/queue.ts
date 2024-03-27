@@ -15,7 +15,7 @@ export const QUEUE_FQN = fqnForType("cloud.Queue");
  */
 export interface DeadLetterQueueProps {
   /**
-   * Queue to receive the unsuccesfully messages.
+   * Queue to receive messages that failed processing.
    */
   readonly queue: Queue;
   /**
