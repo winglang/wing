@@ -286,7 +286,7 @@ let DeadLetterQueueProps = cloud.DeadLetterQueueProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.queue">queue</a></code> | <code><a href="#@winglang/sdk.cloud.Queue">Queue</a></code> | Queue to receive the unsuccesfully messages. |
+| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.queue">queue</a></code> | <code><a href="#@winglang/sdk.cloud.Queue">Queue</a></code> | Queue to receive messages that failed processing. |
 | <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.retries">retries</a></code> | <code>num</code> | The number of times a message can fail delivery before being pushed to the dead-letter queue. |
 
 ---
@@ -299,7 +299,7 @@ queue: Queue;
 
 - *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
 
-Queue to receive the unsuccesfully messages.
+Queue to receive messages that failed processing.
 
 ---
 
