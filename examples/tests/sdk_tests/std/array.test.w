@@ -420,19 +420,19 @@ test "slice()" {
   let slice5 = arr.slice(0, 0);
   assert(slice5 == []);
 
-  let mutarr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  let mutarr = MutArray<num>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   let mutSlice1 = mutarr.slice(2, 5);
-  assert(mutSlice1 == [3, 4, 5]);
+  assert(mutSlice1 == MutArray<num>[3, 4, 5]);
 
   let mutSlice2 = mutarr.slice(5);
-  assert(mutSlice2 == [6, 7, 8, 9, 10]);
+  assert(mutSlice2 == MutArray<num>[6, 7, 8, 9, 10]);
 
   let mutSlice3 = mutarr.slice(0, 3);
-  assert(mutSlice3 == [1, 2, 3]);
+  assert(mutSlice3 == MutArray<num>[1, 2, 3]);
 
   let mutSlice4 = mutarr.slice(0);
-  assert(mutSlice4 == arr);
+  assert(mutSlice4 == mutarr);
 
   let mutSlice5 = mutarr.slice(0, 0);
-  assert(mutSlice5 == []);
+  assert(mutSlice5 == MutArray<num>[]);
 }
