@@ -1007,7 +1007,7 @@ importers:
         version: 5.2.2
 
   apps/wingcli-v2:
-    dependencies:
+    devDependencies:
       '@winglang/wingc':
         specifier: workspace:^
         version: link:../../libs/wingc
@@ -14187,7 +14187,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240325
+      typescript: 5.5.0-dev.20240327
     dev: true
 
   /dset@3.1.2:
@@ -22795,8 +22795,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240325:
-    resolution: {integrity: sha512-3kSBj+PWimbJvH3s/sQiIU7zBIOWAEpHdD3lykIykePugc1qXNIK8d5/WJJNpzH4q2n6gY8pz8lLoe/HanVGnA==}
+  /typescript@5.5.0-dev.20240327:
+    resolution: {integrity: sha512-8nAu1p3cwPDGwuJ2XyLonUMdWYtHIyFRi/3qA0FYNmArajdxYW15fh9szcDlLF1nPz/3kM7sbT1q8K7GLTPvxA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

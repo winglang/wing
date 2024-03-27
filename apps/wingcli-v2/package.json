@@ -1,10 +1,11 @@
 {
   "name": "wingcli-v2",
   "scripts": {
+    "dev": "cargo install --path . --force --locked",
     "compile": "cargo build --release",
     "test": "cargo test"
   },
-  "dependencies": {
+  "devDependencies": {
     "@winglang/wingii": "workspace:^",
     "@winglang/wingc": "workspace:^"
   },
