@@ -125,6 +125,21 @@ export class Array {
     searchElement;
     throw new Error("Macro");
   }
+
+  /**
+   * Returns a shallow copy of a portion of the array.
+   *
+   * @macro $self$.slice($args$)
+   *
+   * @param start the beginning index of the slice, inclusive.
+   * @param end the ending index of the slice, exclusive.
+   * @returns a new array containing the sliced elements.
+   */
+  public slice(start?: number, end?: number): Array {
+    start;
+    end;
+    throw new Error("Macro");
+  }
 }
 
 /**
@@ -309,6 +324,21 @@ export class MutArray {
    */
   public removeFirst(value: T1): boolean {
     value;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns a shallow copy of a portion of the array.
+   *
+   * @macro $self$.slice($args$)
+   *
+   * @param start the beginning index of the slice, inclusive.
+   * @param end the ending index of the slice, exclusive.
+   * @returns a new array containing the sliced elements.
+   */
+  public slice(start?: number, end?: number): MutArray {
+    start;
+    end;
     throw new Error("Macro");
   }
 }
