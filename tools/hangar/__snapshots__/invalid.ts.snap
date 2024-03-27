@@ -2840,24 +2840,6 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`new_in_static_without_scope.test.w 1`] = `
-"Error: Cannot read properties of undefined (reading 'addChild')
-  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:5:7
-  | // explicit \`scope\`.
-  | bring cloud;
-  | 
-5 | class MyClass {
-  |       ^
-at new MyClass <ABSOLUTE>/new_in_static_without_scope.test.w:5:7
-at createMyClass <ABSOLUTE>/new_in_static_without_scope.test.w:10:16
-at <ABSOLUTE>/new_in_static_without_scope.test.w:14:1
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
 exports[`nil.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"nil\\" instead
   --> ../../../examples/tests/invalid/nil.test.w:3:14

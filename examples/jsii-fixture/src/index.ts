@@ -21,6 +21,10 @@ export class JsiiClass {
   protected protectedMethod(arg: string) {
     return `Got ${arg}`;
   }
+
+  public static staticMethod(arg: string) {
+    return `Got ${arg}`;
+  }
 }
 
 /**
