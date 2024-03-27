@@ -475,18 +475,6 @@ export class Simulator {
     if (!handle) {
       return undefined;
     }
-
-    // console.error(
-    //   "Connecting to simulator at",
-    //   this.url,
-    //   "with handle",
-    //   handle,
-    //   "and caller",
-    //   ADMIN_PERMISSION
-    // );
-    if (ADMIN_PERMISSION === undefined) {
-      throw new Error("undefined??");
-    }
     return makeSimulatorClient(this.url, handle, ADMIN_PERMISSION);
   }
 
@@ -605,7 +593,7 @@ export class Simulator {
     if (!callerPath) {
       return {
         granted: false,
-        reason: `(Permission checking) Calling resource with handle "${callerHandle}" not found.`,
+        reason: `(Permission checking) No caller resource with handle "${callerHandle}" found.`,
       };
     }
 
@@ -613,7 +601,7 @@ export class Simulator {
     if (!calleePath) {
       return {
         granted: false,
-        reason: `(Permission checking) Callee resource with handle "${calleeHandle}" not found.`,
+        reason: `(Permission checking) No callee resource with handle "${calleeHandle}" found.`,
       };
     }
 
