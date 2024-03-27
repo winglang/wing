@@ -62,7 +62,6 @@ export function printResults(
   }
 
   // prints a summary of how many tests passed and failed
-  res.push(" ");
   const testCount = [
     failingTestsNumber && chalk.red(` ${failingTestsNumber} failed`),
     passingTestsNumber && chalk.green(` ${passingTestsNumber} passed`),
