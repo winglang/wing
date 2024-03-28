@@ -99,6 +99,8 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq((jsiiClass.applyClosure(5, ((x) => {
       return (x * 2);
     }))), 10), "jsiiClass.applyClosure(5, (x) => { return x * 2; }) == 10");
+    const jsiiStruct = ({"field": "struct field"});
+    $helpers.assert($helpers.eq((jsiiClass.methodWithStructParam(jsiiStruct)), "struct field"), "jsiiClass.methodWithStructParam(jsiiStruct) == \"struct field\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
