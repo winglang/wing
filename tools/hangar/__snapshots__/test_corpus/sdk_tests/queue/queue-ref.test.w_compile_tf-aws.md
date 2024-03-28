@@ -273,6 +273,9 @@
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -305,6 +308,9 @@
         },
         "function_name": "Queue-SetConsumer0-c83c303c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
@@ -337,6 +343,9 @@
         },
         "function_name": "Handler-c85cfbef",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.QueueRef_AwsConsoleField_Handler_IamRole_0DD0004C.arn}",
@@ -369,6 +378,9 @@
         },
         "function_name": "Handler-c8c3c90a",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.QueueRef_QueueArnField_Handler_IamRole_C121BD5E.arn}",
@@ -401,6 +413,9 @@
         },
         "function_name": "Handler-c8ec121e",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.QueueRef_QueueUrlField_Handler_IamRole_709A15CB.arn}",

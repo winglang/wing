@@ -246,6 +246,9 @@
         },
         "function_name": "connect_path0-c88ada6c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_connect_path0_IamRole_879E3AD0.arn}",
@@ -277,6 +280,9 @@
         },
         "function_name": "head_path0-c8127a73",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_head_path0_IamRole_8A76125C.arn}",
@@ -308,6 +314,9 @@
         },
         "function_name": "options_path0-c858e550",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_options_path0_IamRole_993D1A6D.arn}",

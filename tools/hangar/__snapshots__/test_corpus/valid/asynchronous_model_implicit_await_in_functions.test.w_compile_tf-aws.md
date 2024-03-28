@@ -164,6 +164,9 @@ module.exports = function({ $strToStr }) {
         },
         "function_name": "func-c8cf78f6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.func_IamRole_EED2D17C.arn}",
@@ -195,6 +198,9 @@ module.exports = function({ $strToStr }) {
         },
         "function_name": "strToStr-c8d5081f",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.strToStr_IamRole_3B9A4F9A.arn}",

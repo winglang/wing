@@ -417,6 +417,9 @@ module.exports = function({  }) {
         },
         "function_name": "Queue-SetConsumer0-c8931d51",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_Queue-SetConsumer0_IamRole_D38B87EE.arn}",
@@ -449,6 +452,9 @@ module.exports = function({  }) {
         },
         "function_name": "Topic-OnMessage0-c8bea057",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_Topic-OnMessage0_IamRole_FEF4CFBB.arn}",
@@ -481,6 +487,9 @@ module.exports = function({  }) {
         },
         "function_name": "oncreate-OnMessage0-c8946df1",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_b2_oncreate-OnMessage0_IamRole_FF154497.arn}",

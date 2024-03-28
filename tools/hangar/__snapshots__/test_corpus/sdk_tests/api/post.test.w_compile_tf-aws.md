@@ -168,6 +168,9 @@
         },
         "function_name": "post_path0-c8a546a0",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_post_path0_IamRole_8E1F7602.arn}",

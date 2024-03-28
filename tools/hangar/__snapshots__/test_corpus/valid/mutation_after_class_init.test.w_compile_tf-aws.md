@@ -206,6 +206,9 @@ module.exports = function({  }) {
         },
         "function_name": "oncreate-OnMessage0-c8eb573e",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Queue_Bucket_oncreate-OnMessage0_IamRole_9A71BD20.arn}",

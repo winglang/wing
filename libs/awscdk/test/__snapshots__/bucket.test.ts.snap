@@ -368,6 +368,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "mybucketOnCreate0LogGroup8E3C4A72",
           },
@@ -725,6 +726,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "mybucketOnDelete0LogGroup44992347",
           },
@@ -1104,6 +1106,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "mybucketOnEvent0LogGroupBE45837D",
           },
@@ -1461,6 +1464,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "mybucketOnUpdate0LogGroupFDC75EA3",
           },

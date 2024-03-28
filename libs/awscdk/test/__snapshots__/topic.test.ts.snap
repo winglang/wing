@@ -124,6 +124,7 @@ exports[`topic with multiple subscribers 3`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "TopicOnMessage0LogGroup83A2C34E",
           },
@@ -231,6 +232,7 @@ exports[`topic with multiple subscribers 3`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "TopicOnMessage1LogGroup54716DB9",
           },
@@ -397,6 +399,7 @@ exports[`topic with subscriber function 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "TopicOnMessage0LogGroup83A2C34E",
           },

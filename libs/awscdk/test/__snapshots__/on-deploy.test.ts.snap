@@ -109,6 +109,7 @@ exports[`create an OnDeploy 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "myondeployFunctionLogGroup6E16B2CD",
           },
@@ -353,6 +354,7 @@ exports[`execute OnDeploy after other resources 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "myondeployFunctionLogGroup6E16B2CD",
           },
@@ -603,6 +605,7 @@ exports[`execute OnDeploy before other resources 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "myondeployFunctionLogGroup6E16B2CD",
           },

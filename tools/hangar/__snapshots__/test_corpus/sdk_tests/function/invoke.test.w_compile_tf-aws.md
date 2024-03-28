@@ -162,6 +162,9 @@
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -193,6 +196,9 @@
         },
         "function_name": "f2-c812cd39",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f2_IamRole_B66911B2.arn}",
@@ -224,6 +230,9 @@
         },
         "function_name": "f3-c8555a7c",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f3_IamRole_72675FA1.arn}",

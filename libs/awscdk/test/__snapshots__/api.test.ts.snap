@@ -321,6 +321,7 @@ exports[`api configured for cors 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apiget0LogGroupB0A43FFB",
           },
@@ -621,6 +622,7 @@ exports[`api url can be used as environment variable 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FnLogGroup27CC2AC8",
           },
@@ -990,6 +992,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apigetnameage0LogGroup06FA8F29",
           },
@@ -1351,6 +1354,7 @@ exports[`api with 'name' parameter 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apigetname0LogGroup8430423E",
           },
@@ -1703,6 +1707,7 @@ exports[`api with CONNECT route 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apiconnect0LogGroup1650F1E1",
           },
@@ -2055,6 +2060,7 @@ exports[`api with DELETE route 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apidelete0LogGroupD287E557",
           },
@@ -2407,6 +2413,7 @@ exports[`api with GET route at root 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apiget0LogGroupB0A43FFB",
           },
@@ -2835,6 +2842,7 @@ exports[`api with GET routes with common prefix 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apigethellobat0LogGroup462CC819",
           },
@@ -2911,6 +2919,7 @@ exports[`api with GET routes with common prefix 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apigethellofoo0LogGroup02F88FE3",
           },
@@ -3339,6 +3348,7 @@ exports[`api with GET routes with different prefix 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apigetfoobar0LogGroup83F006C8",
           },
@@ -3415,6 +3425,7 @@ exports[`api with GET routes with different prefix 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apigethellofoo0LogGroup02F88FE3",
           },
@@ -3767,6 +3778,7 @@ exports[`api with HEAD route 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apihead0LogGroup1D4A092E",
           },
@@ -4119,6 +4131,7 @@ exports[`api with OPTIONS route 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apioptions0LogGroup9252C37D",
           },
@@ -4471,6 +4484,7 @@ exports[`api with PATCH route 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apipatch0LogGroupB991FA81",
           },
@@ -4823,6 +4837,7 @@ exports[`api with POST route 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apipost0LogGroup0EB50BDA",
           },
@@ -5175,6 +5190,7 @@ exports[`api with PUT route 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apiput0LogGroupD231D4EA",
           },
@@ -5603,6 +5619,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apigethellofoo0LogGroup02F88FE3",
           },
@@ -6031,6 +6048,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apigethellofoo0LogGroup02F88FE3",
           },
@@ -6107,6 +6125,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apiposthellobat0LogGroup4E1A6722",
           },
@@ -6535,6 +6554,7 @@ exports[`api with multiple methods and one lambda 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apigethellofoo0LogGroup02F88FE3",
           },
@@ -6961,6 +6981,7 @@ exports[`api with multiple methods on same route 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apiget0LogGroupB0A43FFB",
           },
@@ -7322,6 +7343,7 @@ exports[`api with path parameter 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "Apigethelloworld0LogGroupDD091C4B",
           },

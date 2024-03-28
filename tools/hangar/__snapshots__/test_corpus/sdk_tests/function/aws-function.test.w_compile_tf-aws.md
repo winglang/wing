@@ -84,6 +84,9 @@
         },
         "function_name": "aws-wing-function-c8f4cdef",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.aws-wing-function_IamRole_705FDD7E.arn}",

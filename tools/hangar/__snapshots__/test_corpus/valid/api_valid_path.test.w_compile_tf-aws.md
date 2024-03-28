@@ -188,6 +188,9 @@ module.exports = function({  }) {
         },
         "function_name": "get_test_path0-c8bdb226",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON"
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Api_get_test_path0_IamRole_C41D1174.arn}",

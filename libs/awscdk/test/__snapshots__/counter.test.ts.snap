@@ -134,6 +134,7 @@ exports[`dec() policy statement 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -380,6 +381,7 @@ exports[`function with a counter binding 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -565,6 +567,7 @@ exports[`inc() policy statement 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -750,6 +753,7 @@ exports[`peek() policy statement 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -935,6 +939,7 @@ exports[`set() policy statement 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },

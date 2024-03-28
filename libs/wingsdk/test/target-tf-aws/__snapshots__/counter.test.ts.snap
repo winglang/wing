@@ -241,6 +241,9 @@ exports[`dec() policy statement 1`] = `
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -521,6 +524,9 @@ exports[`function with a counter binding 2`] = `
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -763,6 +769,9 @@ exports[`inc() policy statement 1`] = `
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -1005,6 +1014,9 @@ exports[`peek() policy statement 1`] = `
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
@@ -1341,6 +1353,9 @@ exports[`set() policy statement 1`] = `
         },
         "function_name": "Function-c852aba6",
         "handler": "index.handler",
+        "logging_config": {
+          "log_format": "JSON",
+        },
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",

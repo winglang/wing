@@ -93,6 +93,7 @@ exports[`queue with a consumer function 2`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "QueueSetConsumer0LogGroupC0386522",
           },

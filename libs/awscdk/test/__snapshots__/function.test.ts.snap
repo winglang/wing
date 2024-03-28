@@ -31,6 +31,7 @@ exports[`basic function 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -148,6 +149,7 @@ exports[`basic function with custom log retention 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -267,6 +269,7 @@ exports[`basic function with environment variables 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -384,6 +387,7 @@ exports[`basic function with infinite log retention 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -498,6 +502,7 @@ exports[`basic function with memory size specified 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -615,6 +620,7 @@ exports[`basic function with standard log retention 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -732,6 +738,7 @@ exports[`basic function with timeout explicitly set 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
@@ -849,6 +856,7 @@ exports[`source map setting 1`] = `
         },
         "Handler": "index.handler",
         "LoggingConfig": {
+          "LogFormat": "JSON",
           "LogGroup": {
             "Ref": "FunctionLogGroup55B80E27",
           },
