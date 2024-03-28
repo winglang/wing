@@ -192,6 +192,9 @@ exports[`queue with a consumer function 2`] = `
         "FunctionName": {
           "Ref": "QueueSetConsumer06749388A",
         },
+        "FunctionResponseTypes": [
+          "ReportBatchItemFailures",
+        ],
       },
       "Type": "AWS::Lambda::EventSourceMapping",
     },

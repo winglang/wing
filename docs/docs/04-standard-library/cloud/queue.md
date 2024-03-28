@@ -270,6 +270,52 @@ The tree node.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
+### DeadLetterQueueProps <a name="DeadLetterQueueProps" id="@winglang/sdk.cloud.DeadLetterQueueProps"></a>
+
+Dead letter queue options.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.DeadLetterQueueProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let DeadLetterQueueProps = cloud.DeadLetterQueueProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.queue">queue</a></code> | <code><a href="#@winglang/sdk.cloud.Queue">Queue</a></code> | Queue to receive messages that failed processing. |
+| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.retries">retries</a></code> | <code>num</code> | The number of times a message can fail delivery before being pushed to the dead-letter queue. |
+
+---
+
+##### `queue`<sup>Required</sup> <a name="queue" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.queue"></a>
+
+```wing
+queue: Queue;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
+
+Queue to receive messages that failed processing.
+
+---
+
+##### `retries`<sup>Required</sup> <a name="retries" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.retries"></a>
+
+```wing
+retries: num;
+```
+
+- *Type:* num
+- *Default:* 1
+
+The number of times a message can fail delivery before being pushed to the dead-letter queue.
+
+---
+
 ### QueueProps <a name="QueueProps" id="@winglang/sdk.cloud.QueueProps"></a>
 
 Options for `Queue`.
@@ -286,8 +332,22 @@ let QueueProps = cloud.QueueProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.dlq">dlq</a></code> | <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps">DeadLetterQueueProps</a></code> | A dead-letter queue. |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue retains a message. |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue's consumers have to process a message. |
+
+---
+
+##### `dlq`<sup>Optional</sup> <a name="dlq" id="@winglang/sdk.cloud.QueueProps.property.dlq"></a>
+
+```wing
+dlq: DeadLetterQueueProps;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.DeadLetterQueueProps">DeadLetterQueueProps</a>
+- *Default:* no dead letter queue
+
+A dead-letter queue.
 
 ---
 
@@ -453,7 +513,7 @@ Inflight client for `IQueueSetConsumerHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle"></a>
 
 ```wing
-inflight handle(message: str): void
+inflight handle(message: str): any
 ```
 
 Function that will be called when a message is received from the queue.
