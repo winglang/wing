@@ -1864,7 +1864,7 @@ let bucket = new awscdk.aws_s3.Bucket(
 
 ### 5.1.2 Type System
 
-Mapping to JSII types to Wing types:
+Mapping JSII types to Wing types:
 
 | **JSII Type** |  **Wing Type** |
 |---------------|--------------------|
