@@ -32,7 +32,7 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource("test-runner", this, host);
+    bindSimulatorResource("test-runner", this, host, ops);
     super.onLift(host, ops);
   }
 

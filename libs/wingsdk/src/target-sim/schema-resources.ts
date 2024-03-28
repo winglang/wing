@@ -1,5 +1,7 @@
 import { SIM_CONTAINER_FQN } from "./container";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
+import { POLICY_FQN } from "./policy";
+import { SERVICE_HELPER_FQN } from "./service";
 import { STATE_FQN } from "./state";
 import {
   API_FQN,
@@ -26,8 +28,7 @@ import {
 } from "../simulator/simulator";
 import { Json, TEST_RUNNER_FQN } from "../std";
 
-export type FunctionHandle = string;
-export type PublisherHandle = string;
+export type ResourceHandle = string;
 
 /** Schema for cloud.Api */
 export interface ApiSchema extends BaseResourceSchema {
@@ -95,8 +96,6 @@ export interface ServiceSchema extends BaseResourceSchema {
   readonly props: {
     /** The source code of the service */
     readonly sourceCodeFile: string;
-    /** Whether the service should start when sim starts */
-    readonly autoStart: boolean;
     /** A map of environment variables to run the function with. */
     readonly environmentVariables: Record<string, string>;
   };
@@ -104,6 +103,20 @@ export interface ServiceSchema extends BaseResourceSchema {
 
 /** Runtime attributes for cloud.Service */
 export interface ServiceAttributes {}
+
+/** Schema for sim.ServiceHelper */
+export interface ServiceHelperSchema extends BaseResourceSchema {
+  readonly type: typeof SERVICE_HELPER_FQN;
+  readonly props: {
+    /** The service. */
+    readonly service: ResourceHandle;
+    /** Whether to auto-start the service */
+    readonly autoStart: boolean;
+  };
+}
+
+/** Runtime attributes for sim.ServiceHelper */
+export interface ServiceHelperAttributes {}
 
 /** Runtime attributes for cloud.Schedule */
 export interface ScheduleAttributes {}
@@ -120,7 +133,7 @@ export interface ScheduleSchema extends BaseResourceSchema {
 /** Schema for cloud.Queue.props.subscribers */
 export interface ScheduleTask extends EventSubscription {
   /** Function that should be called. */
-  readonly functionHandle: FunctionHandle;
+  readonly functionHandle: ResourceHandle;
 }
 
 export interface EventSubscription {}
@@ -130,9 +143,9 @@ export interface EventMappingSchema extends BaseResourceSchema {
   readonly type: typeof EVENT_MAPPING_FQN;
   readonly props: {
     /** Function handle to call for subscriber */
-    subscriber: FunctionHandle;
+    subscriber: ResourceHandle;
     /** Publisher handle of the event */
-    publisher: PublisherHandle;
+    publisher: ResourceHandle;
     /** Additional properties of event subscription */
     subscriptionProps: EventSubscription;
   };
@@ -147,7 +160,7 @@ export interface QueueAttributes {}
 /** Schema for cloud.Queue.props.subscribers */
 export interface QueueSubscriber extends EventSubscription {
   /** Function that should be called. */
-  readonly functionHandle: FunctionHandle;
+  readonly functionHandle: ResourceHandle;
   /** Maximum number of messages that will be batched together to the subscriber. */
   readonly batchSize: number;
 }
@@ -163,7 +176,7 @@ export interface TopicAttributes {}
 
 export interface TopicSubscriber extends EventSubscription {
   /** Function that should be called */
-  readonly functionHandle: FunctionHandle;
+  readonly functionHandle: ResourceHandle;
 }
 
 /** Runtime attributes for cloud.Table */
@@ -213,7 +226,7 @@ export interface TestRunnerSchema extends BaseResourceSchema {
   readonly type: typeof TEST_RUNNER_FQN;
   readonly props: {
     /** A map from test functions to their handles. */
-    readonly tests: Record<string, FunctionHandle>;
+    readonly tests: Record<string, ResourceHandle>;
   };
 }
 
@@ -288,7 +301,7 @@ export interface OnDeploySchema extends BaseResourceSchema {
   readonly type: typeof ON_DEPLOY_FQN;
   readonly props: {
     /** The function to run on deploy. */
-    readonly functionHandle: FunctionHandle;
+    readonly functionHandle: ResourceHandle;
   };
 }
 
@@ -335,6 +348,9 @@ export interface EndpointSchema extends BaseResourceSchema {
   readonly attrs: EndpointAttributes & BaseResourceAttributes;
 }
 
+/** Runtime attributes for sim.Policy */
+export interface PolicyAttributes {}
+
 /** Schema for sim.Container */
 export interface ContainerSchema extends BaseResourceSchema {
   readonly type: typeof SIM_CONTAINER_FQN;
@@ -351,3 +367,22 @@ export interface ContainerSchema extends BaseResourceSchema {
 
 /** Runtime attributes for sim.Container */
 export interface ContainerAttributes {}
+
+/** Schema for sim.Policy */
+export interface PolicySchema extends BaseResourceSchema {
+  readonly type: typeof POLICY_FQN;
+  readonly props: PolicySchemaProps;
+  readonly attrs: PolicyAttributes & BaseResourceAttributes;
+}
+
+export interface PolicySchemaProps {
+  /** The resource which the policy is attached to. */
+  readonly principal: ResourceHandle;
+  /** The statements in the policy. */
+  readonly statements: PolicyStatement[];
+}
+
+export interface PolicyStatement {
+  readonly operation: string;
+  readonly resourceHandle: ResourceHandle;
+}

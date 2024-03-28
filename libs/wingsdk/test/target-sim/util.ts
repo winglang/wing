@@ -29,7 +29,7 @@ export interface IScopeCallback {
   (scope: Construct): void;
 }
 
-export function listMessages(s: Simulator) {
+export function listMessages(s: Simulator): string[] {
   const message = s.listTraces().map((trace) => trace.data.message);
   // Redact any messages containing port numbers
   return message.map((m) =>

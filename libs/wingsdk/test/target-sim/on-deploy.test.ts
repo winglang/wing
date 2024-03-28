@@ -18,7 +18,7 @@ test("create an OnDeploy", async () => {
     attrs: {
       handle: expect.any(String),
     },
-    deps: ["root/my_on_deploy/Function"],
+    deps: ["root/my_on_deploy/Function", "root/my_on_deploy/Function/Policy"],
     path: "root/my_on_deploy",
     addr: expect.any(String),
     props: {

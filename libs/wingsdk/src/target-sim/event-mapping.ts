@@ -3,7 +3,7 @@ import { ISimulatorResource } from "./resource";
 import {
   EventMappingSchema,
   EventSubscription,
-  FunctionHandle,
+  ResourceHandle,
 } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
@@ -24,7 +24,7 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
    * @param subscriptionProps additional subscription properties
    */
   addEventSubscription: (
-    subscriber: FunctionHandle,
+    subscriber: ResourceHandle,
     subscriptionProps: EventSubscription
   ) => Promise<void>;
 
@@ -33,7 +33,7 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
    * @param subscriber the subscriber function
    * @param subscriptionProps additional subscription properties
    */
-  removeEventSubscription: (subscriber: FunctionHandle) => Promise<void>;
+  removeEventSubscription: (subscriber: ResourceHandle) => Promise<void>;
 }
 
 export const EVENT_MAPPING_FQN = fqnForType("sim.EventMapping");
@@ -87,7 +87,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

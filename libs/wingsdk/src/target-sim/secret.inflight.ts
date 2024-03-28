@@ -10,13 +10,11 @@ import {
 import { Json, TraceType } from "../std";
 
 export class Secret implements ISecretClient, ISimulatorResourceInstance {
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
   private readonly secretsFile: string;
   private readonly name: string;
 
-  constructor(props: SecretSchema["props"], context: ISimulatorContext) {
-    this.context = context;
-
+  constructor(props: SecretSchema["props"]) {
     this.secretsFile = path.join(os.homedir(), ".wing", "secrets.json");
     if (!fs.existsSync(this.secretsFile)) {
       throw new Error(
@@ -27,7 +25,15 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
     this.name = props.name;
   }
 
-  public async init(): Promise<SecretAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<SecretAttributes> {
+    this._context = context;
     return {};
   }
 
