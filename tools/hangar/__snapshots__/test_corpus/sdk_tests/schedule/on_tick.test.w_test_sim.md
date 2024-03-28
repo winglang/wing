@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ on_tick.test.wsim » root/env0/on tick is called both for rate and cron schedules
+pass ─ on_tick.test.wsim » root/env0/onTick()
  
  
 Tests 1 passed (1)
