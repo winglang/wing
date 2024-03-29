@@ -399,3 +399,40 @@ test "removeFirst()" {
   assert(r2 == false);
   assert(mutArr.length == 3);
 }
+
+//-----------------------------------------------------------------------------
+// slice()
+
+test "slice()" {
+  let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  let slice1 = arr.slice(2, 5);
+  assert(slice1 == [3, 4, 5]);
+
+  let slice2 = arr.slice(5);
+  assert(slice2 == [6, 7, 8, 9, 10]);
+
+  let slice3 = arr.slice(0, 3);
+  assert(slice3 == [1, 2, 3]);
+
+  let slice4 = arr.slice(0);
+  assert(slice4 == arr);
+
+  let slice5 = arr.slice(0, 0);
+  assert(slice5 == []);
+
+  let mutarr = MutArray<num>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  let mutSlice1 = mutarr.slice(2, 5);
+  assert(mutSlice1 == MutArray<num>[3, 4, 5]);
+
+  let mutSlice2 = mutarr.slice(5);
+  assert(mutSlice2 == MutArray<num>[6, 7, 8, 9, 10]);
+
+  let mutSlice3 = mutarr.slice(0, 3);
+  assert(mutSlice3 == MutArray<num>[1, 2, 3]);
+
+  let mutSlice4 = mutarr.slice(0);
+  assert(mutSlice4 == mutarr);
+
+  let mutSlice5 = mutarr.slice(0, 0);
+  assert(mutSlice5 == MutArray<num>[]);
+}
