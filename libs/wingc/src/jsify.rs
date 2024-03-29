@@ -53,7 +53,6 @@ const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 const NODE_MODULES_DIR: &str = "node_modules";
 const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
-const CORE_PLATFORM: &str = "$CorePlatform";
 const CORE_PLATFORM_FILE: &str = "core.platform.js";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
@@ -179,19 +178,6 @@ impl<'a> JSifier<'a> {
 			"const {{ initializePlatform }} = require('./{}');",
 			CORE_PLATFORM_FILE
 		));
-
-		// TODO: delete
-		// if is_entrypoint {
-		// 	output.line(format!(
-		// 		"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);",
-		// 		PLATFORMS_VAR
-		// 	));
-		// 	output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
-		// 	output.line(format!(
-		// 		"const {} = process.env.WING_IS_TEST === \"true\";",
-		// 		ENV_WING_IS_TEST
-		// 	));
-		// }
 
 		// "std" is implicitly imported
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
