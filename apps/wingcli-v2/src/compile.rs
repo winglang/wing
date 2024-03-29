@@ -5,7 +5,7 @@ use wingc::compile;
 
 use crate::{
 	as_dir_prefix,
-	cli::{print_compiled, print_compiling},
+	cli::{print_compiled, print_compiling, print_installing, print_updating},
 	constants::{VERSION, WING_CACHE_DIR, WING_SDK_DIR},
 	sdk::{check_sdk_version, install_sdk},
 	Target,
@@ -27,6 +27,7 @@ pub fn command_compile(source_file: Utf8PathBuf, target: Option<Target>) -> Resu
 	print_compiling(source_file.as_str());
 
 	if !WING_SDK_DIR.exists() {
+		print_installing("Wing SDK");
 		install_sdk()?;
 	} else {
 		// Check if the SDK version is correct
@@ -37,6 +38,7 @@ pub fn command_compile(source_file: Utf8PathBuf, target: Option<Target>) -> Resu
 				sdk_version,
 				VERSION
 			);
+			print_updating("Wing SDK");
 			install_sdk()?;
 		}
 	}

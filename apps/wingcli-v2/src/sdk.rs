@@ -1,7 +1,7 @@
 use std::error::Error;
 
+use crate::constants::WING_CACHE_DIR;
 use crate::constants::{VERSION, WING_SDK_DIR};
-use crate::{cli::print_installing, constants::WING_CACHE_DIR};
 
 pub fn check_sdk_version() -> Result<String, Box<dyn Error>> {
 	let pkg_json = WING_SDK_DIR.join("package.json");
@@ -16,8 +16,6 @@ pub fn check_sdk_version() -> Result<String, Box<dyn Error>> {
 }
 
 pub fn install_sdk() -> Result<(), Box<dyn Error>> {
-	print_installing("Wing SDK");
-
 	std::fs::create_dir_all(WING_CACHE_DIR.as_str())?;
 	let mut install_command = std::process::Command::new("npm");
 	install_command

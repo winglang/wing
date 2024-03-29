@@ -11,6 +11,10 @@ pub(crate) fn print_installing(text: &str) {
 	print_colourful_prefix("Installing", text)
 }
 
+pub(crate) fn print_updating(text: &str) {
+	print_colourful_prefix("Updating", text)
+}
+
 pub(crate) fn print_compiled(duration: Duration) {
 	print_colourful_prefix("Compiled", &format!("in {}", seconds(duration)))
 }
