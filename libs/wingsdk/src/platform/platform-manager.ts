@@ -4,7 +4,7 @@ import { cwd } from "process";
 import * as vm from "vm";
 import { IPlatform } from "./platform";
 import { scanDirForPlatformFile } from "./util";
-import { App, AppProps, SynthHooks } from "../core";
+import { App, AppProps, PolyconFactory, SynthHooks } from "../core";
 
 interface PlatformManagerOptions {
   /**
@@ -97,11 +97,22 @@ export class PlatformManager {
     });
   }
 
+  public createPolyconFactory(): PolyconFactory {
+    this.createPlatformInstances();
+    const newInstanceOverrides: any[] = [];
+
+    this.platformInstances.forEach((instance) => {
+      if (instance.newInstance) {
+        newInstanceOverrides.push(instance.newInstance.bind(instance));
+      }
+    });
+
+    return new PolyconFactory(newInstanceOverrides);
+  }
+
   // This method is called from preflight.js in order to return an App instance
   // that can be synthesized
   public createApp(appProps: AppProps): App {
-    this.createPlatformInstances();
-
     let appCall = this.platformInstances[0].newApp;
 
     if (!appCall) {
@@ -145,7 +156,6 @@ export class PlatformManager {
     const app = appCall!({
       ...appProps,
       synthHooks,
-      newInstanceOverrides,
     }) as App;
 
     let registrar = app.parameters;

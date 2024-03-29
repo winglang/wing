@@ -2,8 +2,8 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, UIComponent } from "../core";
-import { Duration, IInflight } from "../std";
+import { UIComponent } from "../core";
+import { Duration, IInflight, Resource } from "../std";
 
 /**
  * Global identifier for `Field`.
@@ -43,7 +43,7 @@ export class Field extends VisualComponent {
     handler: IFieldHandler,
     props: FieldProps = {}
   ): Field {
-    return App.of(scope).newAbstract(
+    return Resource._newFromFactory(
       FIELD_FQN,
       scope,
       id,

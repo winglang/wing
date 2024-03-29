@@ -1,5 +1,5 @@
 import { Construct, IConstruct } from "constructs";
-import { App, LiftDepsMatrixRaw } from "../core";
+import { App, LiftDepsMatrixRaw, PolyconFactory } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { log } from "../shared/log";
 import { Node } from "../std";
@@ -166,9 +166,9 @@ export abstract class Resource extends Construct implements IResource {
     fqn: string,
     scope: Construct,
     id: string,
-    ...props: any[]
+    ...args: any[]
   ): TResource {
-    return App.of(scope).newAbstract(fqn, scope, id, ...props);
+    return PolyconFactory.of(scope).new(fqn, undefined, scope, id, ...args);
   }
 
   /**

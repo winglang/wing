@@ -188,6 +188,12 @@ impl<'a> JSifier<'a> {
 		output.add_code(imports);
 
 		if is_entrypoint {
+			output.line(format!(
+				"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
+				PLATFORMS_VAR
+			));
+			output.line("const $PolyconFactory = $PlatformManager.createPolyconFactory();".to_string());
+
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}($scope, $id) {{"));
@@ -198,15 +204,12 @@ impl<'a> JSifier<'a> {
 			root_class.close("}");
 
 			output.add_code(root_class);
-			output.line(format!(
-				"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
-				PLATFORMS_VAR
-			));
 			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
-				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
+				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: $PolyconFactory }});",
 				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
 			));
+			// output.line("$PolyconFactory.register($APP);".to_string());
 			output.line("$APP.synth();".to_string());
 		} else if is_directory {
 			let directory_children = self.source_file_graph.dependencies_of(source_path);
@@ -558,7 +561,7 @@ impl<'a> JSifier<'a> {
 							")"
 						)
 					} else {
-						new_code!(expr_span, "this.node.root.new(\"", fqn, "\", ", ctor, ", ", args, ")")
+						new_code!(expr_span, "$PolyconFactory.new(\"", fqn, "\", ", ctor, ", ", args, ")")
 					}
 				} else {
 					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
@@ -1465,6 +1468,7 @@ impl<'a> JSifier<'a> {
 				if let Some(fqn) = &parent_type.as_class().unwrap().fqn {
 					code.append(new_code!(
 						&class.name.span,
+						// TODO: extends ($PolyconFactory.typeForFqn(
 						" extends (this.node.root.typeForFqn(\"",
 						fqn,
 						"\") ?? ",

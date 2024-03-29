@@ -29,7 +29,8 @@ export class Platform implements platform.IPlatform {
   }
 
   newInstance(fqn: string, scope: Construct, id: string, ...args: any) {
-    const type = core.App.of(scope).typeForFqn(fqn);
+    // const type = core.App.of(scope).typeForFqn(fqn); // TODO
+    const type: any = undefined;
 
     if (!type) {
       return undefined;

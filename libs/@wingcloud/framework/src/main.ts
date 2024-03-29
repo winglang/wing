@@ -89,6 +89,7 @@ This is a Wing app and must be run through the Wing CLI (npm install -f winglang
   const rootId = process.env.WING_ROOT_ID;
 
   const $PlatformManager = new platform.PlatformManager({ platformPaths });
+  const $PolyconFactory = $PlatformManager.createPolyconFactory();
   const app = $PlatformManager.createApp({
     outdir,
     name,
@@ -96,6 +97,7 @@ This is a Wing app and must be run through the Wing CLI (npm install -f winglang
     isTestEnvironment,
     entrypointDir,
     rootId,
+    polyconFactory: $PolyconFactory,
   });
 
   app.synth();

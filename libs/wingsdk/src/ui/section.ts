@@ -3,7 +3,8 @@ import { VisualComponent } from "./base";
 import { Button, IButtonHandler } from "./button";
 import { Field, FieldProps, IFieldHandler } from "./field";
 import { fqnForType } from "../constants";
-import { App, UIComponent } from "../core";
+import { UIComponent } from "../core";
+import { Resource } from "../std";
 
 /**
  * Global identifier for `Section`.
@@ -34,7 +35,7 @@ export class Section extends VisualComponent {
     id: string,
     props: SectionProps = {}
   ): Section {
-    return App.of(scope).newAbstract(SECTION_FQN, scope, id, props);
+    return Resource._newFromFactory(SECTION_FQN, scope, id, props);
   }
 
   private readonly label: string | undefined;
