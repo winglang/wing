@@ -38,5 +38,12 @@ if (util.env("WING_TARGET") != "sim") {
   } catch e {
       error = e;
   }
-  assert(error ==  "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]");
+  assert(error == "Invalid UNIX cron format");
+
+  try {
+      new cloud.Schedule( cron: "* * * * ?" ) as "s5";
+  } catch e {
+      error = e;
+  }
+  assert(error == "Invalid UNIX cron format");
 }

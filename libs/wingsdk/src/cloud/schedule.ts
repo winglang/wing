@@ -4,6 +4,7 @@ import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Duration, IInflight, Node, Resource } from "../std";
+import { isValidCron } from "cron-validator";
 
 /**
  * Global identifier for `Schedule`.
@@ -70,10 +71,9 @@ export class Schedule extends Resource {
     if (rate && rate.seconds < 60) {
       throw new Error("rate can not be set to less than 1 minute.");
     }
-    if (cron && cron.split(" ").length > 5) {
-      throw new Error(
-        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
-      );
+    // https://www.ibm.com/docs/en/db2/11.5?topic=task-unix-cron-format
+    if (cron && !isValidCron(cron, { alias: true, seconds: false })) {
+      throw new Error("Invalid UNIX cron format");
     }
   }
 
