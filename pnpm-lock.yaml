@@ -1326,6 +1326,9 @@ importers:
       cron-parser:
         specifier: ^4.9.0
         version: 4.9.0
+      cron-validator:
+        specifier: ^1.3.1
+        version: 1.3.1
       express:
         specifier: ^4.18.2
         version: 4.18.2
@@ -13694,6 +13697,10 @@ packages:
       luxon: 3.4.3
     dev: false
 
+  /cron-validator@1.3.1:
+    resolution: {integrity: sha512-C1HsxuPCY/5opR55G5/WNzyEGDWFVG+6GLrA+fW/sCTcP6A6NTjUP2AK7B8n2PyFs90kDG2qzwm8LMheADku6A==}
+    dev: false
+
   /cross-fetch@3.1.8:
     resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
     dependencies:
@@ -14187,7 +14194,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240327
+      typescript: 5.5.0-dev.20240329
     dev: true
 
   /dset@3.1.2:
@@ -22795,8 +22802,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240327:
-    resolution: {integrity: sha512-8nAu1p3cwPDGwuJ2XyLonUMdWYtHIyFRi/3qA0FYNmArajdxYW15fh9szcDlLF1nPz/3kM7sbT1q8K7GLTPvxA==}
+  /typescript@5.5.0-dev.20240329:
+    resolution: {integrity: sha512-T1vHxyzRt1MeCLzQdY8JYOM1K9XRs4YgTOzMjlw8m5K19P9264rc22CyvUB9lA0vBIcMSDjObfh+/GVHMOXhkg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
