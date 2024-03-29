@@ -82,7 +82,7 @@ export class Schedule extends Resource {
         seconds: false,
       })
     ) {
-      throw new Error("Invalid UNIX cron format");
+      throw new Error("cron string must be in UNIX cron format");
     }
   }
 

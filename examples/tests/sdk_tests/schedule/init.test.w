@@ -39,12 +39,12 @@ if (util.env("WING_TARGET") != "sim") {
   } catch e {
       error = e;
   }
-  expect.equal(error, "Invalid UNIX cron format");
+  expect.equal(error, "cron string must be in UNIX cron format");
 
   try {
       new cloud.Schedule( cron: "* * * * ?" ) as "s5";
   } catch e {
       error = e;
   }
-  expect.equal(error, "Invalid UNIX cron format");
+  expect.equal(error, "cron string must be in UNIX cron format");
 }
