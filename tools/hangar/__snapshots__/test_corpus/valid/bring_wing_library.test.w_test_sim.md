@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ bring_wing_library.test.wsim » root/env0/test:makeKeyInflight
+pass ─ bring_wing_library.test.wsim (no tests)
  
  
 Tests 1 passed (1)

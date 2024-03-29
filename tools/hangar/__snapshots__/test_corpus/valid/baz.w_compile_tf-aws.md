@@ -18,8 +18,10 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const { initializePlatform } = require('./core.platform.js');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const { $APP } = initializePlatform();
 class Baz extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);

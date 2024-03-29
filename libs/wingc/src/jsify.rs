@@ -53,6 +53,8 @@ const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 const NODE_MODULES_DIR: &str = "node_modules";
 const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
+const CORE_PLATFORM: &str = "$CorePlatform";
+const CORE_PLATFORM_FILE: &str = "core.platform.js";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
@@ -166,21 +168,30 @@ impl<'a> JSifier<'a> {
 		let is_entrypoint = is_entrypoint_file(source_path);
 		let is_directory = source_path.is_dir();
 
+		if !self.output_files.borrow().contains_file("core.platform.js") {
+			self.emit_core_platform(&source_path);
+		}
+
 		output.line("\"use strict\";");
 
 		output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+		output.line(format!(
+			"const {{ initializePlatform }} = require('./{}');",
+			CORE_PLATFORM_FILE
+		));
 
-		if is_entrypoint {
-			output.line(format!(
-				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);",
-				PLATFORMS_VAR
-			));
-			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
-			output.line(format!(
-				"const {} = process.env.WING_IS_TEST === \"true\";",
-				ENV_WING_IS_TEST
-			));
-		}
+		// TODO: delete
+		// if is_entrypoint {
+		// 	output.line(format!(
+		// 		"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);",
+		// 		PLATFORMS_VAR
+		// 	));
+		// 	output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
+		// 	output.line(format!(
+		// 		"const {} = process.env.WING_IS_TEST === \"true\";",
+		// 		ENV_WING_IS_TEST
+		// 	));
+		// }
 
 		// "std" is implicitly imported
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
@@ -189,7 +200,10 @@ impl<'a> JSifier<'a> {
 
 		if is_entrypoint {
 			let mut root_class = CodeMaker::default();
-			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
+			root_class.open(format!(
+				"class {} extends {} {{",
+				ROOT_CLASS, STDLIB_CORE_RESOURCE
+			));
 			root_class.open(format!("{JS_CONSTRUCTOR}($scope, $id) {{"));
 			root_class.line("super($scope, $id);");
 			root_class.add_code(self.jsify_struct_schemas());
@@ -198,15 +212,16 @@ impl<'a> JSifier<'a> {
 			root_class.close("}");
 
 			output.add_code(root_class);
-			output.line(format!(
-				"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
-				PLATFORMS_VAR
-			));
-			let app_name = source_path.file_stem().unwrap();
-			output.line(format!(
-				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
-				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
-			));
+			// output.line(format!(
+			// 	"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
+			// 	PLATFORMS_VAR
+			// ));
+			// let app_name = source_path.file_stem().unwrap();
+			// output.line(format!(
+			// 	"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
+			// 	OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
+			// ));
+      output.line(format!("const {{ $APP }} = initializePlatform({});", ROOT_CLASS));
 			output.line("$APP.synth();".to_string());
 		} else if is_directory {
 			let directory_children = self.source_file_graph.dependencies_of(source_path);
@@ -236,6 +251,7 @@ impl<'a> JSifier<'a> {
 			}
 			output.close("};");
 		} else {
+      output.line(format!("const {{ $APP }} = initializePlatform();"));
 			output.add_code(self.jsify_struct_schemas());
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
@@ -558,7 +574,13 @@ impl<'a> JSifier<'a> {
 							")"
 						)
 					} else {
-						new_code!(expr_span, "this.node.root.new(\"", fqn, "\", ", ctor, ", ", args, ")")
+            // If were in the entrypoint file, we can use `this` to refer to the root object
+            // otherwise we need to use `$APP` to refer to the root object
+            let resource = match is_entrypoint_file(ctx.source_path.unwrap()) {
+              true => "this",
+              false => "$APP",
+            };
+            new_code!(expr_span, format!("{}.node.root.new(\"", resource), fqn, "\", ", ctor, ", ", args, ")")
 					}
 				} else {
 					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
@@ -1463,9 +1485,13 @@ impl<'a> JSifier<'a> {
 					.as_type()
 					.unwrap();
 				if let Some(fqn) = &parent_type.as_class().unwrap().fqn {
+          let resource = match is_entrypoint_file(ctx.source_path.unwrap()) {
+            true => "this",
+            false => "$APP",
+          };
 					code.append(new_code!(
 						&class.name.span,
-						" extends (this.node.root.typeForFqn(\"",
+						format!(" extends ({}.node.root.typeForFqn(\"", resource),
 						fqn,
 						"\") ?? ",
 						self.jsify_user_defined_type(parent, ctx),
@@ -1661,6 +1687,59 @@ impl<'a> JSifier<'a> {
 	pub fn add_referenced_struct_schema(&self, struct_name: String, schema: CodeMaker) {
 		let mut struct_schemas = self.referenced_struct_schemas.borrow_mut();
 		struct_schemas.insert(struct_name, schema);
+	}
+
+	fn emit_core_platform(&self, source_path: &Utf8Path) {
+		const INITIALIZED: &str = "initialized";
+    const APP: &str = "$APP";
+    const PLATFORM_MANAGER: &str = "$PlatformManager";
+
+    let mut code = CodeMaker::default();
+
+		code.line("\"use strict\";");
+		
+    code.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+    code.line(format!("let {} = false;", INITIALIZED));
+    code.line(format!("let {}, {};", APP, PLATFORM_MANAGER));
+    
+    code.open(format!("function initializePlatform({}) {{", ROOT_CLASS));
+    code.line(format!("if ({}) return {{ {}, {} }};", INITIALIZED, APP, PLATFORM_MANAGER));
+		code.line(format!(
+      "const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);",
+			PLATFORMS_VAR
+		));
+		code.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
+		code.line(format!(
+      "const {} = process.env.WING_IS_TEST === \"true\";",
+			ENV_WING_IS_TEST
+		));
+
+		code.line(format!(
+			"{} = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
+      PLATFORM_MANAGER,
+			PLATFORMS_VAR
+		));
+		let app_name = source_path.file_stem().unwrap();
+		
+    code.line(format!(
+      "{} = {}.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
+      APP, PLATFORM_MANAGER, OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
+    ));
+
+    code.line(format!("{} = true;", INITIALIZED));
+    code.line(format!("return {{ {}, {} }};", APP, PLATFORM_MANAGER));
+
+    code.close("}");
+		code.line("module.exports = { initializePlatform };");
+
+		match self
+			.output_files
+			.borrow_mut()
+			.add_file("core.platform.js", code.to_string())
+		{
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
 	}
 
 	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {

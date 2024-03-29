@@ -80,20 +80,6 @@ module.exports = function({  }) {
     "aws": [
       {}
     ]
-  },
-  "resource": {
-    "aws_s3_bucket": {
-      "Store_Bucket_42A4CEFB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/Store/Bucket/Default",
-            "uniqueId": "Store_Bucket_42A4CEFB"
-          }
-        },
-        "bucket_prefix": "bucket-c843dbb0-",
-        "force_destroy": false
-      }
-    }
   }
 }
 ```
@@ -102,8 +88,10 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const { initializePlatform } = require('./core.platform.js');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const { $APP } = initializePlatform();
 const FavoriteNumbers =
   (function (tmp) {
     tmp["SEVEN"] = "SEVEN";
@@ -119,9 +107,7 @@ module.exports = { FavoriteNumbers };
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
+const { initializePlatform } = require('./core.platform.js');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const fixture = require("./preflight.testfixture-5.js");
@@ -173,8 +159,7 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_wing_library.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const { $APP } = initializePlatform($Root);
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
 ```
@@ -183,14 +168,16 @@ $APP.synth();
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const { initializePlatform } = require('./core.platform.js');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const myutil = require("./preflight.util-2.js");
+const { $APP } = initializePlatform();
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, options) {
     super($scope, $id);
-    this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    this.data = $APP.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     this.handlers = [];
   }
   static makeKey(name) {
@@ -248,6 +235,7 @@ module.exports = { Store };
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const { initializePlatform } = require('./core.platform.js');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 module.exports = {
@@ -260,6 +248,7 @@ module.exports = {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const { initializePlatform } = require('./core.platform.js');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 module.exports = {
@@ -274,8 +263,10 @@ module.exports = {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const { initializePlatform } = require('./core.platform.js');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const { $APP } = initializePlatform();
 class Util extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);

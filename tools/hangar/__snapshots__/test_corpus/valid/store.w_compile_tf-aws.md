@@ -56,8 +56,10 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const { initializePlatform } = require('./core.platform.js');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const { $APP } = initializePlatform();
 module.exports = {  };
 //# sourceMappingURL=preflight.empty-1.js.map
 ```
@@ -66,11 +68,13 @@ module.exports = {  };
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
+const { initializePlatform } = require('./core.platform.js');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const file3 = require("./preflight.empty-1.js");
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
+const { $APP } = initializePlatform();
 const Color =
   (function (tmp) {
     tmp["RED"] = "RED";
@@ -110,7 +114,7 @@ class Util extends $stdlib.std.Resource {
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-    this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    this.b = $APP.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const __parent_this_1 = this;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
@@ -147,7 +151,7 @@ class Store extends $stdlib.std.Resource {
         });
       }
     }
-    const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "OnDeploy", new $Closure1(this, "$Closure1"));
+    const prefill = $APP.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "OnDeploy", new $Closure1(this, "$Closure1"));
   }
   static _toInflightType() {
     return `
