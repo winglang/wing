@@ -71,8 +71,17 @@ export class Schedule extends Resource {
     if (rate && rate.seconds < 60) {
       throw new Error("rate can not be set to less than 1 minute.");
     }
+    // Check for valid UNIX cron format
     // https://www.ibm.com/docs/en/db2/11.5?topic=task-unix-cron-format
-    if (cron && !isValidCron(cron, { alias: true, seconds: false })) {
+    if (
+      cron &&
+      !isValidCron(cron, {
+        alias: true,
+        allowSevenAsSunday: true,
+        allowBlankDay: false,
+        seconds: false,
+      })
+    ) {
       throw new Error("Invalid UNIX cron format");
     }
   }
