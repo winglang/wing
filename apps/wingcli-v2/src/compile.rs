@@ -23,9 +23,6 @@ pub fn command_compile(source_file: Utf8PathBuf, target: Option<Target>) -> Resu
 	));
 	let work_dir = target_dir.join(".wing");
 
-	// Print that work is being done
-	print_compiling(source_file.as_str());
-
 	if !WING_SDK_DIR.exists() {
 		print_installing("Wing SDK");
 		install_sdk()?;
@@ -42,6 +39,9 @@ pub fn command_compile(source_file: Utf8PathBuf, target: Option<Target>) -> Resu
 			install_sdk()?;
 		}
 	}
+
+	// Print that work is being done
+	print_compiling(source_file.as_str());
 
 	tracing::info!("Using SDK at {}", WING_SDK_DIR.as_str());
 

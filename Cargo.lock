@@ -2245,7 +2245,7 @@ dependencies = [
 
 [[package]]
 name = "wingcli"
-version = "0.64.4"
+version = "0.66.3"
 dependencies = [
  "anstyle",
  "atty",
