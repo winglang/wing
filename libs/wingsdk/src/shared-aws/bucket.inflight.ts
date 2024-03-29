@@ -6,6 +6,7 @@ import {
   DeleteObjectCommand,
   GetBucketLocationCommand,
   GetObjectCommand,
+  GetObjectCommandInput,
   GetObjectOutput,
   GetPublicAccessBlockCommand,
   GetPublicAccessBlockCommandOutput,
@@ -99,15 +100,17 @@ export class BucketClient implements IBucketClient {
     key: string,
     options?: BucketGetOptions
   ): Promise<string | undefined> {
-    const getObjectParams: { Bucket: string; Key: string; Range?: string } = {
+    const getObjectParams: GetObjectCommandInput = {
       Bucket: this.bucketName,
       Key: key,
     };
 
-    getObjectParams.Range =
-      options?.startByte !== undefined
-        ? `bytes=${options.startByte}-${options?.endByte ?? ""}`
-        : undefined;
+    // Conditionally add the `Range` parameter
+    if (options?.startByte !== undefined || options?.endByte !== undefined) {
+      const startByte = options?.startByte ?? 0;
+      const endByte = options?.endByte ?? "";
+      getObjectParams.Range = `bytes=${startByte}-${endByte}`;
+    }
 
     const command = new GetObjectCommand(getObjectParams);
 
