@@ -1953,6 +1953,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn add_builtins(&mut self, scope: &mut Scope) {
+		let optional_string = self.types.make_option(self.types.string());
 		self.add_builtin(
 			UtilityFunctions::Log.to_string().as_str(),
 			Type::Function(FunctionSignature {
@@ -1974,12 +1975,20 @@ impl<'a> TypeChecker<'a> {
 			UtilityFunctions::Assert.to_string().as_str(),
 			Type::Function(FunctionSignature {
 				this_type: None,
-				parameters: vec![FunctionParameter {
-					name: "condition".into(),
-					typeref: self.types.bool(),
-					docs: Docs::with_summary("The condition to assert"),
-					variadic: false,
-				}],
+				parameters: vec![
+					FunctionParameter {
+						name: "condition".into(),
+						typeref: self.types.bool(),
+						docs: Docs::with_summary("The condition to assert"),
+						variadic: false,
+					},
+					FunctionParameter {
+						name: "message".into(),
+						typeref: optional_string,
+						docs: Docs::with_summary("The message to log if the condition is false"),
+						variadic: false,
+					},
+				],
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
