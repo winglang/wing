@@ -99,13 +99,17 @@ export class BucketClient implements IBucketClient {
     key: string,
     options?: BucketGetOptions
   ): Promise<string | undefined> {
-    const command = new GetObjectCommand({
+    const getObjectParams: { Bucket: string; Key: string; Range?: string } = {
       Bucket: this.bucketName,
       Key: key,
-      Range: `bytes=${
-        options?.startByte !== undefined ? options.startByte : 0
-      }-${options?.endByte !== undefined ? options.endByte : ""}`,
-    });
+    };
+
+    getObjectParams.Range =
+      options?.startByte !== undefined
+        ? `bytes=${options.startByte}-${options?.endByte ?? ""}`
+        : undefined;
+
+    const command = new GetObjectCommand(getObjectParams);
 
     try {
       const resp: GetObjectOutput = await this.s3Client.send(command);
