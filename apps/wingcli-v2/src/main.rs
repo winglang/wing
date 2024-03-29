@@ -22,6 +22,8 @@ enum Command {
 		#[clap(short, long)]
 		target: Option<Target>,
 	},
+	/// Open the Wing documentation
+	Docs,
 }
 
 #[derive(Parser, Debug, EnumString, Display, Clone, Copy)]
@@ -46,6 +48,10 @@ fn main() {
 	let stderr = cli::stderr_buffer_writer();
 	let result = match Command::parse() {
 		Command::Compile { file, target } => command_compile(file, target),
+		Command::Docs => {
+			tracing::info!("Opening https://www.winglang.io/docs/");
+			opener::open("https://www.winglang.io/docs/").map_err(|error| error.into())
+		}
 	};
 
 	match result {

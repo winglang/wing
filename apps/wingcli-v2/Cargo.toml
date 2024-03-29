@@ -19,6 +19,8 @@ clap = { version = "4.5.1", features = ["derive", "color"] }
 home = "0.5.9"
 # Lazily evaluated static variables
 lazy_static = "1.4.0"
+# Open files in the browser or default editor
+opener = "0.7.0"
 # JSON parsing
 serde = "1.0.197"
 serde_json = "1.0.115"
