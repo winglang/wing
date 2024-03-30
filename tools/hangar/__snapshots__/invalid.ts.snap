@@ -1816,11 +1816,11 @@ error: Variable is not reassignable
    | ^^^^^^ Variable is not reassignable
 
 
-error: Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+error: Expected type to be \\"(condition: bool, message: str?): void\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/global_symbols.test.w:12:10
    |
 12 | assert = \\"there\\";
-   |          ^^^^^^^ Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+   |          ^^^^^^^ Expected type to be \\"(condition: bool, message: str?): void\\", but got \\"str\\" instead
 
 
 error: Variable is not reassignable

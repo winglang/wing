@@ -558,6 +558,7 @@ log("UTC: {t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 > ```TS
 > log("Hello {name}");
 > assert(x > 0);
+> assert(x > 0, "x should be positive");
 > ```
 
 [`▲ top`][top]
