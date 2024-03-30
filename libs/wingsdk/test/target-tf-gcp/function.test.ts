@@ -1,23 +1,16 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { GcpApp } from "./gcp-util";
 import { Function } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Duration } from "../../src/std";
-import * as tfgcp from "../../src/target-tf-gcp";
-import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
-
-const GCP_APP_OPTS = {
-  projectId: "my-project",
-  region: "us-central1",
-  entrypointDir: __dirname,
-  zone: "us-central1",
-};
+import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 
 test("basic function", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
@@ -41,7 +34,7 @@ test("basic function", () => {
 
 test("basic function with environment variables", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
@@ -72,7 +65,7 @@ test("basic function with environment variables", () => {
 
 test("basic function with timeout explicitly set", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
@@ -97,7 +90,7 @@ test("basic function with timeout explicitly set", () => {
 
 test("basic function with timeout beyond the allowed range", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
@@ -110,7 +103,7 @@ test("basic function with timeout beyond the allowed range", () => {
 
 test("basic function with memory size specified", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
@@ -135,7 +128,7 @@ test("basic function with memory size specified", () => {
 
 test("basic function with memory beyond the allowed range", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN

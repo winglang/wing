@@ -3,9 +3,11 @@ import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { simulatorJsonOf } from "./util";
 import { Bucket } from "../../src/cloud";
+import { PolyconFactory } from "../../src/core";
 import { Testing } from "../../src/simulator";
 import { Test } from "../../src/std";
 import { App } from "../../src/target-sim/app";
+import { Platform } from "../../src/target-sim/platform";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
 
@@ -20,7 +22,16 @@ test("app name can be customized", () => {
 
   // WHEN
   const outdir = join(mkdtemp(), `${APP_NAME}.wsim`);
-  const app = new App({ outdir, name: APP_NAME, entrypointDir: __dirname });
+  const platform = new Platform();
+  const polyconFactory = new PolyconFactory([
+    platform.newInstance.bind(platform),
+  ]);
+  const app = new App({
+    outdir,
+    name: APP_NAME,
+    entrypointDir: __dirname,
+    polyconFactory,
+  });
   new Bucket(app, "my_bucket");
   const simfile = app.synth();
 

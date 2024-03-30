@@ -1,16 +1,30 @@
-// // import { PolyconFactory } from "../../src/core";
-// import { AppProps } from "../../src/target-tf-gcp";
-// // import { Platform } from "../../src/target-tf-gcp/platform";
+import { PolyconFactory } from "../../src/core";
+import { App, AppProps } from "../../src/target-tf-gcp";
+import { Platform } from "../../src/target-tf-gcp/platform";
+import { mkdtemp } from "../util";
 
-// // const GCP_PLATFORM = new Platform();
-// // const GCP_POLYCON_FACTORY = new PolyconFactory([
-// //   GCP_PLATFORM.newInstance.bind(GCP_PLATFORM),
-// // ]);
+export interface GcpAppProps extends Partial<AppProps> {}
 
-// export const GCP_APP_OPTS: AppProps = {
-//   projectId: "my-project",
-//   region: "us-central1",
-//   zone: "us-central1-a",
-//   entrypointDir: __dirname,
-//   polyconFactory: undefined as any,
-// };
+export class GcpApp extends App {
+  private _synthesized: boolean = false;
+  private functionIndex: number = 0;
+
+  constructor(props: GcpAppProps = {}) {
+    const platform = new Platform();
+    const polyconFactory = new PolyconFactory([
+      platform.newInstance.bind(platform),
+    ]);
+
+    super({
+      outdir: mkdtemp(),
+      entrypointDir: __dirname,
+      isTestEnvironment: false,
+      rootConstruct: undefined,
+      projectId: "my-project",
+      region: "us-central1",
+      zone: "us-central1-a",
+      polyconFactory,
+      ...props,
+    });
+  }
+}
