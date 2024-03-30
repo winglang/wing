@@ -31,8 +31,8 @@ export class Queue extends cloud.Queue implements IAwsQueue {
         ? Duration.seconds(props.retentionPeriod?.seconds)
         : Duration.hours(1),
       deadLetterQueue: {
-        queue: SQSQueue.fromQueueArn(this, "DLQ", AwsQueue.from(props.dlq.queue)?.queueArn!),
-        maxReceiveCount: props.dlq.retries ?? 1,
+        queue: SQSQueue.fromQueueArn(this, "DeadLetterQueue", AwsQueue.from(props.dlq.queue)?.queueArn!),
+        maxReceiveCount: props.dlq.retries ?? cloud.DEFAULT_RETRIES,
       }
     } : {
       visibilityTimeout: props.timeout

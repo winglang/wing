@@ -78,6 +78,11 @@ export interface FunctionSchema extends BaseResourceSchema {
 /** Runtime attributes for cloud.Function */
 export interface FunctionAttributes {}
 
+export interface DeadLetterQueueSchema {
+  dlqHandler: string;
+  retries: number;
+}
+
 /** Schema for cloud.Queue */
 export interface QueueSchema extends BaseResourceSchema {
   readonly type: typeof QUEUE_FQN;
@@ -86,6 +91,8 @@ export interface QueueSchema extends BaseResourceSchema {
     readonly timeout: number;
     /** How long a queue retains a message, in seconds */
     readonly retentionPeriod: number;
+    /** Dead-letter queue options */
+    readonly dlq?: DeadLetterQueueSchema;
   };
 }
 

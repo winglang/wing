@@ -303,7 +303,7 @@ Queue to receive messages that failed processing.
 
 ---
 
-##### `retries`<sup>Required</sup> <a name="retries" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.retries"></a>
+##### `retries`<sup>Optional</sup> <a name="retries" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.retries"></a>
 
 ```wing
 retries: num;

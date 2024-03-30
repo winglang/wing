@@ -6,6 +6,7 @@ import {
   QueueSubscriber,
   EventSubscription,
   FunctionHandle,
+  DeadLetterQueueSchema,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient, QUEUE_FQN } from "../cloud";
 import {
@@ -23,10 +24,12 @@ export class Queue
   private readonly context: ISimulatorContext;
   private readonly timeoutSeconds: number;
   private readonly retentionPeriod: number;
+  private readonly dlq?: DeadLetterQueueSchema;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
     this.timeoutSeconds = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
+    this.dlq = props.dlq;
     this.processLoop = runEvery(100, async () => this.processMessages()); // every 0.1 seconds
     this.context = context;
   }
@@ -72,7 +75,9 @@ export class Queue
           throw new Error("Empty messages are not allowed");
         }
         for (const message of messages) {
-          this.messages.push(new QueueMessage(this.retentionPeriod, message));
+          this.messages.push(
+            new QueueMessage(this.retentionPeriod, 1, message)
+          );
         }
       },
     });
@@ -174,8 +179,29 @@ export class Queue
 
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
-        void fnClient
+        await fnClient
           .invoke(JSON.stringify({ messages: messagesPayload }))
+          .then((result) => {
+            if (this.dlq && result) {
+              const payloadErrorList = JSON.parse(result);
+              const errorMessages = messages.filter((message) =>
+                payloadErrorList.includes(message.payload)
+              );
+              let retriesMessages = [];
+              for (const msg of errorMessages) {
+                if (msg.retries < this.dlq.retries) {
+                  msg.retries++;
+                  retriesMessages.push(msg);
+                } else {
+                  let dlq = this.context.getClient(
+                    this.dlq.dlqHandler
+                  ) as IQueueClient;
+                  void dlq.push(msg.payload);
+                }
+              }
+              this.messages.push(...retriesMessages);
+            }
+          })
           .catch((err) => {
             // If the function is at a concurrency limit, pretend we just didn't call it
             if (
@@ -225,12 +251,14 @@ export class Queue
 class QueueMessage {
   public readonly retentionTimeout: Date;
   public readonly payload: string;
+  public retries: number;
 
-  constructor(retentionPeriod: number, message: string) {
+  constructor(retentionPeriod: number, retries: number, message: string) {
     const currentTime = new Date();
     currentTime.setSeconds(retentionPeriod + currentTime.getSeconds());
     this.retentionTimeout = currentTime;
     this.payload = message;
+    this.retries = retries;
   }
 }
 

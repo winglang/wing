@@ -5,6 +5,7 @@ import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { NotImplementedError } from "../core/errors";
@@ -20,6 +21,7 @@ import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: Duration;
   private readonly retentionPeriod: Duration;
+  private readonly dlq?: cloud.DeadLetterQueueProps;
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
@@ -36,6 +38,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
     this.timeout = props.timeout ?? Duration.fromSeconds(30);
     this.retentionPeriod = props.retentionPeriod ?? Duration.fromHours(1);
+    this.dlq = props.dlq;
 
     if (this.retentionPeriod.seconds < this.timeout.seconds) {
       throw new Error(
@@ -113,6 +116,12 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   public toSimulator(): BaseResourceSchema {
+    const dlqSchema = this.dlq
+      ? {
+          dlqHandler: simulatorHandleToken(this.dlq.queue),
+          retries: this.dlq.retries ?? cloud.DEFAULT_RETRIES,
+        }
+      : undefined;
     const schema: QueueSchema = {
       type: cloud.QUEUE_FQN,
       path: this.node.path,
@@ -120,6 +129,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       props: {
         timeout: this.timeout.seconds,
         retentionPeriod: this.retentionPeriod.seconds,
+        dlq: dlqSchema,
       },
       attrs: {} as any,
     };

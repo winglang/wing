@@ -11,6 +11,11 @@ import { Duration, IInflight, Node, Resource } from "../std";
 export const QUEUE_FQN = fqnForType("cloud.Queue");
 
 /**
+ * Dead-letter queue default retries
+ */
+export const DEFAULT_RETRIES = 1;
+
+/**
  * Dead letter queue options.
  */
 export interface DeadLetterQueueProps {
@@ -23,7 +28,7 @@ export interface DeadLetterQueueProps {
    * the dead-letter queue.
    * @default 1
    */
-  readonly retries: number;
+  readonly retries?: number;
 }
 
 /**
