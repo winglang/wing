@@ -67,6 +67,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -144,6 +145,9 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(y.field3.field0, "foo"), "y.field3.field0 == \"foo\"");
     const s = ({"a": "Boom baby"});
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:struct definitions are phase independant", new $Closure1(this, "$Closure1"));
+    const aNode = ({"val": "someval"});
+    const bNode = ({"val": "otherval", "next": aNode});
+    (expect.Util.equal(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(bNode), "{\"val\":\"otherval\",\"next\":{\"val\":\"someval\"\}\}"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
