@@ -14,7 +14,7 @@ export class QueueSetConsumerHandlerClient implements IFunctionHandlerClient {
     if (!parsed.messages) throw new Error('No "messages" field in event.');
     for (const $message of parsed.messages) {
       try {
-        await this.handler.handle($message);
+        await this.handler.handle($message.payload);
       } catch (error) {
         batchItemFailures.push($message);
       }

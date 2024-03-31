@@ -233,7 +233,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct DeadLetterQueueProps\n```\n---\nDead letter queue options.\n### Fields\n- `queue` — `Queue` — Queue to receive messages that failed processing.\n- `retries?` — `num?` — The number of times a message can fail delivery before being pushed to the dead-letter queue."
+    value: "```wing\nstruct DeadLetterQueueProps\n```\n---\nDead letter queue options.\n### Fields\n- `queue` — `Queue` — Queue to receive messages that failed processing.\n- `retries?` — `num?` — Number of times a message will be reprocessed before being sent to the dead-letter queue."
   sortText: hh|DeadLetterQueueProps
 - label: DomainProps
   kind: 22

@@ -11,6 +11,11 @@ import { IInflightHost, Node, Resource } from "../std";
 import * as ui from "../ui";
 
 /**
+ * Queue standard execution
+ */
+export const QUEUE_STANDARD_EXECUTION = 1;
+
+/**
  * A shared interface for AWS queues.
  */
 export interface IAwsQueue {

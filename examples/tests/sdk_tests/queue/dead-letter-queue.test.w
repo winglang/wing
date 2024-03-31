@@ -21,7 +21,7 @@ new std.Test(inflight () => {
   queue_without_retries.push("fail");
   queue_without_retries.push("World!");
 
-  // wait until it executes once and retry two more times.
+  // wait until it executes once.
   util.waitUntil(
     inflight () => { return c.peek(key_without_retries) == 1; }, 
     timeout: 3m, interval: 1s, throws: false
@@ -57,9 +57,9 @@ new std.Test(inflight () => {
   queue_with_retries.push("fail");
   queue_with_retries.push("World!");
 
-  // wait until it executes once and retry two more times.
+  // wait until it executes once and retry three more times.
   util.waitUntil(
-    inflight () => { return c.peek(key_with_retries) == 3; }, 
+    inflight () => { return c.peek(key_with_retries) == 4; }, 
     timeout: 3m, interval: 1s, throws: false
   );
 

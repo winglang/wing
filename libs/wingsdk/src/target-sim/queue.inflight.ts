@@ -76,7 +76,7 @@ export class Queue
         }
         for (const message of messages) {
           this.messages.push(
-            new QueueMessage(this.retentionPeriod, 1, message)
+            new QueueMessage(this.retentionPeriod, 0, message)
           );
         }
       },
@@ -180,15 +180,12 @@ export class Queue
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
         await fnClient
-          .invoke(JSON.stringify({ messages: messagesPayload }))
+          .invoke(JSON.stringify({ messages: messages }))
           .then((result) => {
             if (this.dlq && result) {
-              const payloadErrorList = JSON.parse(result);
-              const errorMessages = messages.filter((message) =>
-                payloadErrorList.includes(message.payload)
-              );
+              const errorList = JSON.parse(result);
               let retriesMessages = [];
-              for (const msg of errorMessages) {
+              for (const msg of errorList) {
                 if (msg.retries < this.dlq.retries) {
                   msg.retries++;
                   retriesMessages.push(msg);
