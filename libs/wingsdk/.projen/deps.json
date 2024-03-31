@@ -276,6 +276,10 @@
       "type": "bundled"
     },
     {
+      "name": "cron-validator",
+      "type": "bundled"
+    },
+    {
       "name": "express",
       "type": "bundled"
     },

@@ -25,6 +25,10 @@ export class JsiiClass {
   public static staticMethod(arg: string) {
     return `Got ${arg}`;
   }
+  
+  public methodWithStructParam(s: SomeStruct): string {
+    return s.field;
+  }
 }
 
 /**
@@ -35,4 +39,8 @@ export interface IFakeClosure {
   (x: number): number
 
   fn(x: number): number;
+}
+
+export interface SomeStruct {
+  readonly field: string;
 }

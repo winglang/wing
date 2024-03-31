@@ -82,6 +82,7 @@ const project = new cdk.JsiiProject({
     "ioredis",
     "jsonschema",
     "ajv",
+    "cron-validator",
     // fs module dependency
     "yaml",
     "toml",

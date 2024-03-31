@@ -241,9 +241,7 @@ test("cron with more than five values", () => {
       new cloud.Schedule(app, "Schedule", {
         cron: "0/1 * * * * *",
       })
-  ).toThrow(
-    "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
-  );
+  ).toThrow("cron string must be in UNIX cron format");
 });
 
 test("schedule without rate or cron", () => {
