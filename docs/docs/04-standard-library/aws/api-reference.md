@@ -146,6 +146,147 @@ The IAM certificate identifier value.
 ---
 
 
+### FunctionRef <a name="FunctionRef" id="@winglang/sdk.aws.FunctionRef"></a>
+
+A reference to an external Lambda function.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.FunctionRef.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.FunctionRef(functionArn: str);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.FunctionRef.Initializer.parameter.functionArn">functionArn</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `functionArn`<sup>Required</sup> <a name="functionArn" id="@winglang/sdk.aws.FunctionRef.Initializer.parameter.functionArn"></a>
+
+- *Type:* str
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invokes the function with a payload and waits for the result. |
+| <code><a href="#@winglang/sdk.cloud.IFunctionClient.invokeAsync">invokeAsync</a></code> | Kicks off the execution of the function with a payload and returns immediately while the function is running. |
+
+---
+
+##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
+
+```wing
+inflight invoke(payload?: str): str
+```
+
+Invokes the function with a payload and waits for the result.
+
+###### `payload`<sup>Optional</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
+
+- *Type:* str
+
+payload to pass to the function.
+
+If not defined, an empty string will be passed.
+
+---
+
+##### `invokeAsync` <a name="invokeAsync" id="@winglang/sdk.cloud.IFunctionClient.invokeAsync"></a>
+
+```wing
+inflight invokeAsync(payload?: str): void
+```
+
+Kicks off the execution of the function with a payload and returns immediately while the function is running.
+
+###### `payload`<sup>Optional</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invokeAsync.parameter.payload"></a>
+
+- *Type:* str
+
+payload to pass to the function.
+
+If not defined, an empty string will be passed.
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.FunctionRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.FunctionRef.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.FunctionRef.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.FunctionRef.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.FunctionRef.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.FunctionRef.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.FunctionRef.property.functionArn">functionArn</a></code> | <code>str</code> | The ARN of this function. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.FunctionRef.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `functionArn`<sup>Required</sup> <a name="functionArn" id="@winglang/sdk.aws.FunctionRef.property.functionArn"></a>
+
+```wing
+functionArn: str;
+```
+
+- *Type:* str
+
+The ARN of this function.
+
+---
+
+
 ### QueueRef <a name="QueueRef" id="@winglang/sdk.aws.QueueRef"></a>
 
 A reference to an external SQS queue.
