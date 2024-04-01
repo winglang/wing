@@ -8,7 +8,7 @@ export function isValidArn(arn: string, service: string) {
   }
 
   const parts = arn.split(":");
-  if (parts.length !== 6) {
+  if (parts.length < 6 || parts.length > 7) {
     return false;
   }
 
