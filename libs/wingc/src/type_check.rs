@@ -5473,11 +5473,19 @@ impl<'a> TypeChecker<'a> {
 		let start = root.span.start;
 		let end = path.last().map(|s| s.span.end).unwrap_or(root.span.end);
 		let file_id = root.span.file_id.clone();
+		let start_offset = root.span.start_offset;
+		let end_offset = path.last().map(|s| s.span.end_offset).unwrap_or(root.span.end_offset);
 
 		Some(UserDefinedType {
 			root,
 			fields: path,
-			span: WingSpan { start, end, file_id },
+			span: WingSpan {
+				start,
+				end,
+				file_id,
+				start_offset,
+				end_offset,
+			},
 		})
 	}
 
