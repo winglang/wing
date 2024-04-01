@@ -380,6 +380,8 @@ mod tests {
 			file_id: "test.w".to_string(),
 			start: WingLocation { line: 2, col: 4 },
 			end: WingLocation { line: 2, col: 8 },
+			start_offset: 0,
+			end_offset: 0,
 		};
 		let mut code = CodeMaker::with_source(&base_span);
 		code.line("1");
@@ -415,6 +417,8 @@ mod tests {
 			file_id: "test.w".to_string(),
 			start: WingLocation { line: 2, col: 4 },
 			end: WingLocation { line: 2, col: 8 },
+			start_offset: 0,
+			end_offset: 0,
 		};
 		let mut code = CodeMaker::with_source(&base_span);
 		code.line("1");
