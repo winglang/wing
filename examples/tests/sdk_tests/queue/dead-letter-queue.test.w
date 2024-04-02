@@ -42,7 +42,7 @@ let dlq_with_retries = new cloud.Queue() as "dlq with retries";
 let queue_with_retries = new cloud.Queue(
   dlq: {
     queue: dlq_with_retries,
-    retries: 3
+    maxDeliveryAttemps: 3
   }
 ) as "queue with retries";
 queue_with_retries.setConsumer(inflight (msg: str) => {
@@ -59,7 +59,7 @@ new std.Test(inflight () => {
 
   // wait until it executes once and retry three more times.
   util.waitUntil(
-    inflight () => { return c.peek(key_with_retries) == 4; }, 
+    inflight () => { return c.peek(key_with_retries) == 3; }, 
     timeout: 3m, interval: 1s, throws: false
   );
 

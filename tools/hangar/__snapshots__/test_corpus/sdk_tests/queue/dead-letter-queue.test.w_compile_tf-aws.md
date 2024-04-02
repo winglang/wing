@@ -297,7 +297,7 @@
         },
         "message_retention_seconds": 3600,
         "name": "queue-with-retries-c8a06dc7",
-        "redrive_policy": "{\"deadLetterTargetArn\":\"${aws_sqs_queue.dlqwithretries.arn}\",\"maxReceiveCount\":4}",
+        "redrive_policy": "{\"deadLetterTargetArn\":\"${aws_sqs_queue.dlqwithretries.arn}\",\"maxReceiveCount\":3}",
         "visibility_timeout_seconds": 30
       }
     }
