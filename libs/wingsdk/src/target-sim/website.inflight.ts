@@ -7,6 +7,7 @@ import { IWebsiteClient, WEBSITE_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -77,6 +78,10 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   private addTrace(message: string): void {
     this.context.addTrace({

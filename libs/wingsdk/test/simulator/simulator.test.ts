@@ -498,7 +498,7 @@ describe("in-place updates", () => {
 
     const myState = new State(app, "State");
 
-    const myService = new Service(
+    new Service(
       app,
       "Service",
       Testing.makeHandler(
@@ -554,10 +554,12 @@ describe("in-place updates", () => {
       "root/State.my_value = bang",
       "root/Service started",
       "root/Function started",
-      "Update: 0 added, 1 updated, 0 deleted",
+      "Update: 0 added, 2 updated, 0 deleted",
       "root/Service stopped",
+      "root/Function stopped",
       "root/State.my_value = bing",
       "root/Service started",
+      "root/Function started",
     ]);
   });
 
@@ -585,31 +587,75 @@ describe("in-place updates", () => {
       "root/OnDeploy/Function started",
       "root/Bucket1 started",
       "root/OnDeploy started",
-      "Update: 0 added, 1 updated, 0 deleted",
+      "Update: 0 added, 2 updated, 0 deleted",
       "root/OnDeploy stopped",
+      "root/OnDeploy/Function stopped",
       "root/Bucket1 stopped",
+      "root/OnDeploy/Function started",
       "root/Bucket1 started",
       "root/OnDeploy started",
     ]);
   });
 
-  test("debugging inspector inherited by sandbox", async () => {
+  test("cloud.Function is always replaced", async () => {
     const app = new SimApp();
-    const handler = Testing.makeHandler(
-      `async handle() { if(require('inspector').url() === undefined) { throw new Error('inspector not available'); } }`
-    );
-    new OnDeploy(app, "OnDeploy", handler);
+    const handler = Testing.makeHandler(`async handle() {}`);
+    new Function(app, "Function", handler);
 
-    inspector.open(0);
     const sim = await app.startSimulator();
-    await sim.stop();
 
-    expect(
-      sim
-        .listTraces()
-        .some((t) => t.data.message.startsWith("Debugger listening on "))
-    );
+    const app2 = new SimApp();
+    new Function(app2, "Function", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Function started",
+      "Update: 0 added, 1 updated, 0 deleted",
+      "root/Function stopped",
+      "root/Function started",
+    ]);
   });
+
+  test("cloud.Service is always replaced", async () => {
+    const app = new SimApp();
+    const handler = Testing.makeHandler(`async handle() {}`);
+    new Service(app, "Service", handler);
+
+    const sim = await app.startSimulator();
+
+    const app2 = new SimApp();
+    new Service(app2, "Service", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Service started",
+      "Update: 0 added, 1 updated, 0 deleted",
+      "root/Service stopped",
+      "root/Service started",
+    ]);
+  });
+});
+
+test("debugging inspector inherited by sandbox", async () => {
+  const app = new SimApp();
+  const handler = Testing.makeHandler(
+    `async handle() { if(require('inspector').url() === undefined) { throw new Error('inspector not available'); } }`
+  );
+  new OnDeploy(app, "OnDeploy", handler);
+
+  inspector.open(0);
+  const sim = await app.startSimulator();
+  await sim.stop();
+
+  expect(
+    sim
+      .listTraces()
+      .some((t) => t.data.message.startsWith("Debugger listening on "))
+  );
 });
 
 test("tryGetResource returns undefined if the resource not found", async () => {
