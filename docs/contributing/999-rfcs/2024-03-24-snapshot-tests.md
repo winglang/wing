@@ -57,6 +57,14 @@ We will also need `wing test --update-snapshot|-U -t tf-aws foo.test.w` to allow
 snapshots, because sometimes it doesn't make practical sense to have to deploy just in order to
 update the snapshot.
 
+The `--snapshots` or `-s` switch can be used to control behavior:
+
+ * `--snapshots=auto` - auto-detect based on CI flag (described above)
+ * `--snapshots=never` - disables snapshots altogether
+ * `--snapshots=dry` - will skip deployment and only update the snapshots.
+ * `--snapshots=wet` - forces a deployment even if `CI=1`.
+ * `--snapshots=assert` - only asserts that the snapshots have not changed
+
 ## Implementation Notes
 
 * We need to decide if we want the inflight JavaScript code to also be included or just trust the
