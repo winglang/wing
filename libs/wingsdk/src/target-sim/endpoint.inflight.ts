@@ -5,7 +5,11 @@ import { connect, ConnectResponse } from "@winglang/wingtunnels";
 import { EndpointAttributes, EndpointSchema } from "./schema-resources";
 import { exists } from "./util";
 import { IEndpointClient } from "../cloud";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
 
 const STATE_FILENAME = "state.json";
 
@@ -59,6 +63,10 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
     return this.saveState({
       ...(this.lastSubdomain && { subdomain: this.lastSubdomain }),
     });
+  }
+
+  public async plan() {
+    return UpdatePlan.AUTO;
   }
 
   public async expose(): Promise<void> {

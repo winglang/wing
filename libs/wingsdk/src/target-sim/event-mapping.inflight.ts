@@ -6,7 +6,7 @@ import {
   ResourceHandle,
 } from "./schema-resources";
 import { ISimulatorContext } from "../simulator";
-import { ISimulatorResourceInstance } from "../simulator/simulator";
+import { ISimulatorResourceInstance, UpdatePlan } from "../simulator/simulator";
 
 export class EventMapping implements ISimulatorResourceInstance {
   private readonly publisher: ResourceHandle;
@@ -48,4 +48,8 @@ export class EventMapping implements ISimulatorResourceInstance {
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 }

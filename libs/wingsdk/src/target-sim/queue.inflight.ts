@@ -11,6 +11,7 @@ import { IFunctionClient, IQueueClient, QUEUE_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -47,6 +48,10 @@ export class Queue
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async addEventSubscription(
     subscriber: ResourceHandle,

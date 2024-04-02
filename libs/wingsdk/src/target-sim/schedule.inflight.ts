@@ -7,7 +7,11 @@ import {
   ScheduleTask,
 } from "./schema-resources";
 import { IFunctionClient, IScheduleClient, SCHEDULE_FQN } from "../cloud";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
 import { TraceType } from "../std";
 
 export class Schedule
@@ -53,6 +57,10 @@ export class Schedule
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async addEventSubscription(
     subscriber: string,

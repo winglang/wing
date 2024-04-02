@@ -1,6 +1,10 @@
 import { IPolicyClient } from "./policy";
 import { PolicySchema } from "./schema-resources";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
 
 export class Policy implements IPolicyClient, ISimulatorResourceInstance {
   constructor(_props: PolicySchema["props"]) {}
@@ -11,4 +15,8 @@ export class Policy implements IPolicyClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {}
 
   public async save(): Promise<void> {}
+
+  public async plan(): Promise<UpdatePlan> {
+    return UpdatePlan.AUTO;
+  }
 }

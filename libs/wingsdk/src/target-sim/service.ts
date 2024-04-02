@@ -27,12 +27,12 @@ export class Service
     super(scope, id, handler, props);
     this.policy = new Policy(this, "Policy", { principal: this });
 
-    const autoStarter = new ServiceHelper(this, "AutoStarter", {
+    const helper = new ServiceHelper(this, "Helper", {
       service: this,
       autoStart: props.autoStart ?? true,
     });
-    autoStarter.node.addDependency(this);
-    autoStarter.node.addDependency(this.policy);
+    helper.node.addDependency(this);
+    helper.node.addDependency(this.policy);
   }
 
   public addPermission(resource: IResource, op: string): void {

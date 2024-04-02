@@ -565,6 +565,8 @@ impl<'s> Parser<'s> {
 			start: node_range.start_point.into(),
 			end: node_range.end_point.into(),
 			file_id: self.source_name.to_string(),
+			start_offset: node_range.start_byte,
+			end_offset: node_range.end_byte,
 		}
 	}
 

@@ -316,7 +316,7 @@ export class Simulator {
   public async update(simDir: string) {
     const newModel = this._loadApp(simDir);
 
-    const plan = planUpdate(
+    const plan = await this.planUpdate(
       this._model.schema.resources,
       newModel.schema.resources
     );
@@ -934,6 +934,90 @@ export class Simulator {
       throw new Error(`Invalid token: ${token}`);
     });
   }
+
+  /**
+   * Given the "current" set of resources and a "next" set of resources, calculate the diff and
+   * determine which resources need to be added, updated or deleted.
+   *
+   * Note that dependencies are not considered here but they are implicitly handled by the
+   * `startResource` and `stopResource` methods. So, for example, when a resource is updated,
+   * all of it's dependents will be stopped and started again.
+   */
+  private async planUpdate(
+    current: BaseResourceSchema[],
+    next: BaseResourceSchema[]
+  ) {
+    const currentByPath = toMap(current);
+    const nextByPath = toMap(next);
+
+    const added: string[] = [];
+    const updated: string[] = [];
+    const deleted: string[] = [];
+
+    for (const [path, nextConfig] of Object.entries(nextByPath)) {
+      const currConfig = currentByPath[path];
+
+      // if the resource is not in "current", it means it was added
+      if (!currConfig) {
+        added.push(nextConfig.path);
+        continue;
+      }
+
+      // the resource is already in "current", if it's different from "next", it means it was updated
+      if (await this.shouldReplace(path, currConfig, nextConfig)) {
+        updated.push(nextConfig.path);
+      }
+
+      // remove it from "current" so we know what's left to be deleted
+      delete currentByPath[path];
+    }
+
+    // everything left in "current" is to be deleted
+    for (const config of Object.values(currentByPath)) {
+      deleted.push(config.path);
+    }
+
+    return { added, updated, deleted };
+
+    function toMap(list: BaseResourceSchema[]): {
+      [path: string]: BaseResourceSchema;
+    } {
+      const ret: { [path: string]: BaseResourceSchema } = {};
+      for (const resource of list) {
+        if (ret[resource.path]) {
+          throw new Error(
+            `unexpected - duplicate resources with the same path: ${resource.path}`
+          );
+        }
+        ret[resource.path] = resource;
+      }
+      return ret;
+    }
+  }
+
+  private async shouldReplace(
+    path: string,
+    oldConfig: BaseResourceSchema,
+    newConfig: BaseResourceSchema
+  ) {
+    // consult the resource's "plan()" method if it has one
+    const instance = this.tryGetResource(path) as ISimulatorResourceInstance;
+    const plan = instance ? await instance.plan(newConfig) : UpdatePlan.AUTO;
+
+    switch (plan) {
+      case UpdatePlan.SKIP:
+        return false;
+
+      case UpdatePlan.REPLACE:
+        return true;
+
+      case UpdatePlan.AUTO:
+        const state = (r: BaseResourceSchema) =>
+          JSON.stringify({ props: r.props, type: r.type });
+
+        return state(oldConfig) !== state(newConfig);
+    }
+  }
 }
 
 class UnresolvedTokenError extends Error {}
@@ -1023,6 +1107,36 @@ export interface ISimulatorResourceInstance {
    * Save the resource's state into the state directory.
    */
   save(statedir: string): Promise<void>;
+
+  /**
+   * Determines the update plan for applying a new configuration for this resource.
+   *
+   * If this is not implemented, the default behavior is to automatically replace the resource if
+   * the new configuration is different from the current configuration.
+   *
+   * @param newConfig The new configuration to apply (this could include unresolved tokens)
+   */
+  plan(newConfig: BaseResourceSchema): Promise<UpdatePlan>;
+}
+
+/**
+ * Determines how updates are performed on this resource.
+ */
+export enum UpdatePlan {
+  /**
+   * Does nothing. This resource is already in the desired state.
+   */
+  SKIP = "SKIP",
+
+  /**
+   * Deletes the resource and creates a new instance with the new configuration.
+   */
+  REPLACE = "REPLACE",
+
+  /**
+   * Auto detect changes in new configuration and replace the resource.
+   */
+  AUTO = "AUTO",
 }
 
 /** Schema for simulator.json */
@@ -1099,69 +1213,6 @@ export interface SimulatorServerResponse {
   readonly result?: any;
   /** The error that occurred during the method call. */
   readonly error?: any;
-}
-
-/**
- * Given the "current" set of resources and a "next" set of resources, calculate the diff and
- * determine which resources need to be added, updated or deleted.
- *
- * Note that dependencies are not considered here but they are implicitly handled by the
- * `startResource` and `stopResource` methods. So, for example, when a resource is updated,
- * all of it's dependents will be stopped and started again.
- */
-function planUpdate(current: BaseResourceSchema[], next: BaseResourceSchema[]) {
-  const currentByPath = toMap(current);
-  const nextByPath = toMap(next);
-
-  const added: string[] = [];
-  const updated: string[] = [];
-  const deleted: string[] = [];
-
-  for (const [path, nextConfig] of Object.entries(nextByPath)) {
-    const currConfig = currentByPath[path];
-
-    // if the resource is not in "current", it means it was added
-    if (!currConfig) {
-      added.push(nextConfig.path);
-      continue;
-    }
-
-    // the resource is already in "current", if it's different from "next", it means it was updated
-    const state = (r: BaseResourceSchema) =>
-      JSON.stringify({
-        props: r.props,
-        type: r.type,
-      });
-
-    if (state(currConfig) !== state(nextConfig)) {
-      updated.push(nextConfig.path);
-    }
-
-    // remove it from "current" so we know what's left to be deleted
-    delete currentByPath[path];
-  }
-
-  // everything left in "current" is to be deleted
-  for (const config of Object.values(currentByPath)) {
-    deleted.push(config.path);
-  }
-
-  return { added, updated, deleted };
-
-  function toMap(list: BaseResourceSchema[]): {
-    [path: string]: BaseResourceSchema;
-  } {
-    const ret: { [path: string]: BaseResourceSchema } = {};
-    for (const resource of list) {
-      if (ret[resource.path]) {
-        throw new Error(
-          `unexpected - duplicate resources with the same path: ${resource.path}`
-        );
-      }
-      ret[resource.path] = resource;
-    }
-    return ret;
-  }
 }
 
 class PolicyRegistry {

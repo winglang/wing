@@ -1816,11 +1816,11 @@ error: Variable is not reassignable
    | ^^^^^^ Variable is not reassignable
 
 
-error: Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+error: Expected type to be \\"(condition: bool, message: str?): void\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/global_symbols.test.w:12:10
    |
 12 | assert = \\"there\\";
-   |          ^^^^^^^ Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+   |          ^^^^^^^ Expected type to be \\"(condition: bool, message: str?): void\\", but got \\"str\\" instead
 
 
 error: Variable is not reassignable
@@ -2833,24 +2833,6 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
    |                       ^^ Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 
 
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`new_in_static_without_scope.test.w 1`] = `
-"Error: Cannot read properties of undefined (reading 'addChild')
-  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:5:7
-  | // explicit \`scope\`.
-  | bring cloud;
-  | 
-5 | class MyClass {
-  |       ^
-at new MyClass <ABSOLUTE>/new_in_static_without_scope.test.w:5:7
-at createMyClass <ABSOLUTE>/new_in_static_without_scope.test.w:10:16
-at <ABSOLUTE>/new_in_static_without_scope.test.w:14:1
  
  
 Tests 1 failed (1)

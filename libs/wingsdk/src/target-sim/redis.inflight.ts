@@ -4,6 +4,7 @@ import { RedisClientBase } from "../ex";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 
 export class Redis
@@ -42,6 +43,10 @@ export class Redis
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async rawClient(): Promise<any> {
     if (this.connection) {

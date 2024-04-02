@@ -10,6 +10,7 @@ import { IFunctionClient, ITopicClient, TOPIC_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -36,6 +37,10 @@ export class Topic
   public async cleanup(): Promise<void> {}
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {

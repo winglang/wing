@@ -4,7 +4,11 @@ import { join } from "path";
 import { promisify } from "util";
 import { ReactAppAttributes, ReactAppSchema } from "./schema-resources";
 import { IReactAppClient, REACT_APP_FQN, WING_JS } from "../ex";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
 import { TraceType } from "../std";
 
 export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
@@ -91,6 +95,10 @@ window.wingEnv = ${JSON.stringify(this.environmentVariables, null, 2)};`
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   private addTrace(message: string): void {
     this.context.addTrace({

@@ -563,7 +563,7 @@ describe("in-place updates", () => {
 
     const myState = new State(app, "State");
 
-    const myService = new Service(
+    new Service(
       app,
       "Service",
       Testing.makeHandler(
@@ -619,17 +619,21 @@ describe("in-place updates", () => {
       "root/Service started",
       "root/Service/Policy started",
       "root/State.my_value = bang",
-      "root/Service/AutoStarter started",
+      "root/Service/Helper started",
       "root/Function started",
       "root/Function/Policy started",
-      "Update: 0 added, 1 updated, 0 deleted",
-      "root/Service/AutoStarter stopped",
+      "Update: 0 added, 2 updated, 0 deleted",
+      "root/Service/Helper stopped",
       "root/Service/Policy stopped",
       "root/Service stopped",
+      "root/Function/Policy stopped",
+      "root/Function stopped",
       "root/Service started",
       "root/Service/Policy started",
       "root/State.my_value = bing",
-      "root/Service/AutoStarter started",
+      "root/Service/Helper started",
+      "root/Function started",
+      "root/Function/Policy started",
     ]);
   });
 
@@ -659,33 +663,115 @@ describe("in-place updates", () => {
       "root/OnDeploy/Function started",
       "root/OnDeploy/Function/Policy started",
       "root/OnDeploy started",
-      "Update: 0 added, 1 updated, 0 deleted",
-      "root/Bucket1/Policy stopped",
+      "Update: 0 added, 3 updated, 0 deleted",
       "root/OnDeploy stopped",
+      "root/OnDeploy/Function/Policy stopped",
+      "root/OnDeploy/Function stopped",
+      "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
       "root/Bucket1 started",
       "root/Bucket1/Policy started",
+      "root/OnDeploy/Function started",
+      "root/OnDeploy/Function/Policy started",
       "root/OnDeploy started",
     ]);
   });
 
-  test("debugging inspector inherited by sandbox", async () => {
+  test("cloud.Function is always replaced", async () => {
     const app = new SimApp();
-    const handler = Testing.makeHandler(
-      `async handle() { if(require('inspector').url() === undefined) { throw new Error('inspector not available'); } }`
-    );
+    const handler = Testing.makeHandler(`async handle() {}`);
+    new Function(app, "Function", handler);
+
+    const sim = await app.startSimulator();
+
+    const app2 = new SimApp();
+    new Function(app2, "Function", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Function started",
+      "root/Function/Policy started",
+      "Update: 0 added, 1 updated, 0 deleted",
+      "root/Function/Policy stopped",
+      "root/Function stopped",
+      "root/Function started",
+      "root/Function/Policy started",
+    ]);
+  });
+
+  test("cloud.Service is always replaced", async () => {
+    const app = new SimApp();
+    const handler = Testing.makeHandler(`async handle() {}`);
+    new Service(app, "Service", handler);
+
+    const sim = await app.startSimulator();
+
+    const app2 = new SimApp();
+    new Service(app2, "Service", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Service started",
+      "root/Service/Policy started",
+      "root/Service/Helper started",
+      "Update: 0 added, 1 updated, 0 deleted",
+      "root/Service/Helper stopped",
+      "root/Service/Policy stopped",
+      "root/Service stopped",
+      "root/Service started",
+      "root/Service/Policy started",
+      "root/Service/Helper started",
+    ]);
+  });
+
+  test("cloud.OnDeploy is always replaced", async () => {
+    const app = new SimApp();
+    const handler = Testing.makeHandler(`async handle() {}`);
     new OnDeploy(app, "OnDeploy", handler);
 
-    inspector.open(0);
     const sim = await app.startSimulator();
-    await sim.stop();
 
-    expect(
-      sim
-        .listTraces()
-        .some((t) => t.data.message.startsWith("Debugger listening on "))
-    );
+    const app2 = new SimApp();
+    new OnDeploy(app2, "OnDeploy", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/OnDeploy/Function started",
+      "root/OnDeploy/Function/Policy started",
+      "root/OnDeploy started",
+      "Update: 0 added, 2 updated, 0 deleted",
+      "root/OnDeploy stopped",
+      "root/OnDeploy/Function/Policy stopped",
+      "root/OnDeploy/Function stopped",
+      "root/OnDeploy/Function started",
+      "root/OnDeploy/Function/Policy started",
+      "root/OnDeploy started",
+    ]);
   });
+});
+
+test("debugging inspector inherited by sandbox", async () => {
+  const app = new SimApp();
+  const handler = Testing.makeHandler(
+    `async handle() { if(require('inspector').url() === undefined) { throw new Error('inspector not available'); } }`
+  );
+  new OnDeploy(app, "OnDeploy", handler);
+
+  inspector.open(0);
+  const sim = await app.startSimulator();
+  await sim.stop();
+
+  expect(
+    sim
+      .listTraces()
+      .some((t) => t.data.message.startsWith("Debugger listening on "))
+  );
 });
 
 test("tryGetResource returns undefined if the resource not found", async () => {

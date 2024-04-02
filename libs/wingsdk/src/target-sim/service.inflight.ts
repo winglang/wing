@@ -7,7 +7,11 @@ import {
 import { IServiceClient, SERVICE_FQN } from "../cloud";
 import { Bundle } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
 import { TraceType } from "../std";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {
@@ -54,6 +58,12 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   }
 
   public async save(): Promise<void> {}
+
+  public async plan(): Promise<UpdatePlan> {
+    // for now, always replace because we can't determine if the function code
+    // has changed since the last update. see https://github.com/winglang/wing/issues/6116
+    return UpdatePlan.REPLACE;
+  }
 
   public async start(): Promise<void> {
     // Do nothing if service is already running.
@@ -150,4 +160,8 @@ export class ServiceHelper implements ISimulatorResourceInstance {
   }
 
   public async save(): Promise<void> {}
+
+  public async plan(): Promise<UpdatePlan> {
+    return UpdatePlan.AUTO;
+  }
 }

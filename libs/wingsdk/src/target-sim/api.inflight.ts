@@ -24,6 +24,7 @@ import {
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -151,6 +152,10 @@ export class Api
 
   public async save(): Promise<void> {
     await this.saveState({ lastPort: this.port });
+  }
+
+  public async plan() {
+    return UpdatePlan.AUTO;
   }
 
   private async loadState(): Promise<StateFileContents> {

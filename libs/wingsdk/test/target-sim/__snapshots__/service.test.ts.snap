@@ -61,13 +61,13 @@ return class Handler {
         "type": "@winglang/sdk.sim.Policy",
       },
       {
-        "addr": "c8c6d3abee052c2e929e77c82e7699b9f0fc920e79",
+        "addr": "c810e24e6e3ab8b88ceddbbe1ac7323d46de30a969",
         "attrs": {},
         "deps": [
           "root/my_service",
           "root/my_service/Policy",
         ],
-        "path": "root/my_service/AutoStarter",
+        "path": "root/my_service/Helper",
         "props": {
           "autoStart": true,
           "service": "\${wsim#root/my_service#attrs.handle}",
@@ -172,7 +172,7 @@ return class Handler {
       "children": {
         "my_service": {
           "children": {
-            "AutoStarter": {
+            "Helper": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -180,8 +180,8 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "AutoStarter",
-              "path": "root/my_service/AutoStarter",
+              "id": "Helper",
+              "path": "root/my_service/Helper",
             },
             "Policy": {
               "constructInfo": {
