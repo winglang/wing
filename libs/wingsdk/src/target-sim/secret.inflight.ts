@@ -6,6 +6,7 @@ import { ISecretClient, SECRET_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { Json, TraceType } from "../std";
 
@@ -34,6 +35,10 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {}
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async value(): Promise<string> {
     this.context.addTrace({
