@@ -41,9 +41,9 @@ export class ChildProcess {
         ? { ...process.env, ...opts.env }
         : { ...opts?.env },
       stdio: [
-        opts?.stdin ?? Stdio.INHERIT,
-        opts?.stdout ?? Stdio.INHERIT,
-        opts?.stderr ?? Stdio.INHERIT,
+        opts?.stdin ?? Stdio.PIPED,
+        opts?.stdout ?? Stdio.PIPED,
+        opts?.stderr ?? Stdio.PIPED,
       ],
     };
 

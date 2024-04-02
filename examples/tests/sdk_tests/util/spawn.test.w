@@ -17,7 +17,7 @@ test "spawn() with successful execution" {
   let program = "echo";
   let args = ["Hello, Wing!"];
   
-  let child = util.spawn(program, args, { stdout: util.Stdio.PIPED });
+  let child = util.spawn(program, args);
   let output = child.wait();
 
   expect.equal(output.stdout, "Hello, Wing!\n");
