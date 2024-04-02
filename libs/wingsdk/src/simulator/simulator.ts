@@ -916,16 +916,13 @@ export class Simulator {
 
       case UpdatePlan.REPLACE:
         return true;
+
+      case UpdatePlan.AUTO:
+        const state = (r: BaseResourceSchema) =>
+          JSON.stringify({ props: r.props, type: r.type });
+
+        return state(oldConfig) !== state(newConfig);
     }
-
-    // the resource is already in "current", if it's different from "next", it means it was updated
-    const state = (r: BaseResourceSchema) =>
-      JSON.stringify({
-        props: r.props,
-        type: r.type,
-      });
-
-    return state(oldConfig) !== state(newConfig);
   }
 }
 
@@ -1014,7 +1011,7 @@ export interface ISimulatorResourceInstance {
    * If this is not implemented, the default behavior is to automatically replace the resource if
    * the new configuration is different from the current configuration.
    *
-   * @param newConfig The new configuration to apply
+   * @param newConfig The new configuration to apply (this could include unresolved tokens)
    */
   plan(newConfig: BaseResourceSchema): Promise<UpdatePlan>;
 }
