@@ -1019,6 +1019,9 @@ export interface ISimulatorResourceInstance {
   plan(newConfig: BaseResourceSchema): Promise<UpdatePlan>;
 }
 
+/**
+ * Determines how updates are performed on this resource.
+ */
 export enum UpdatePlan {
   /**
    * Does nothing. This resource is already in the desired state.
