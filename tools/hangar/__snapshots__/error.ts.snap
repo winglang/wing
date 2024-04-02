@@ -18,7 +18,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_stacktraces.test.w 1`] = `
-"fail ┌ inflight_stacktraces.test.wsim » root/env0/test:assert            
+"fail ┌ inflight_stacktraces.test.wsim » root/env0/test:assert             
      │ Error: assertion failed: false
      │   --> ../../../examples/tests/error/inflight_stacktraces.test.w:7:3
      │   | let bucket = new cloud.Bucket();
@@ -27,7 +27,7 @@ exports[`inflight_stacktraces.test.w 1`] = `
      │ 7 |   assert(false);
      │   |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:7:3
-fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal      
+fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal       
      │ Error: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
      │ 
      │ 1 !== 2
@@ -39,7 +39,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal
      │ 11 |   expect.equal(1,2 );
      │    |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:11:3
-fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get 
+fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get  
      │ Error: Object does not exist (key=doesn't exist): Error: ENOENT: no such file or directory, open '../../../examples/tests/error/target/test/inflight_stacktraces.test.wsim/.state/<STATE_FILE>'
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:15:3
      │    | }
@@ -48,7 +48,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get
      │ 15 |   bucket.get(\\"doesn't exist\\");
      │    |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:15:3
-fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure
+fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure 
      │ Error: ouch
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:20:5
      │    | 
@@ -58,9 +58,18 @@ fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure
      │    |     ^
      │ at closure <ABSOLUTE>/inflight_stacktraces.test.w:20:5
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:22:3
+fail ┌ inflight_stacktraces.test.wsim » root/env4/test:assert with message
+     │ Error: assertion failed: x is false
+     │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:27:3
+     │    | 
+     │    | test \\"assert with message\\" {
+     │    |   let x = false;
+     │ 27 |   assert(x, \\"x is false\\");
+     │    |   ^
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:27:3
  
  
-Tests 4 failed (4)
+Tests 5 failed (5)
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -98,7 +107,7 @@ Duration <DURATION>"
 `;
 
 exports[`repeat_construct_id.test.w 1`] = `
-"Error: There is already a Construct with name 'cloud.Bucket' in $Root [env0]
+"Error: There is already a Construct with name 'Bucket' in $Root [env0]
 
 hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:
 

@@ -4,6 +4,7 @@ import { IConstruct } from "constructs";
 import { App } from "./app";
 import { IResource, Node, Resource } from "../std";
 import { VisualComponent } from "../ui/base";
+import { Colors, isOfTypeColors } from "../ui/colors";
 
 export const TREE_FILE_PATH = "tree.json";
 
@@ -75,6 +76,11 @@ export interface DisplayInfo {
    * @default - no UI components
    */
   readonly ui?: any[]; // UIComponent
+
+  /**
+   * The color of the resource in the UI.
+   */
+  readonly color?: Colors;
 }
 
 /** @internal */
@@ -87,6 +93,7 @@ export interface UIField {
   /** The construct path to a cloud.Function */
   readonly handler: string;
   readonly refreshRate: number | undefined;
+  readonly link?: boolean;
 }
 
 /** @internal */
@@ -206,13 +213,20 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
     }
   }
 
-  if (display.description || display.title || display.hidden || ui) {
+  if (
+    display.description ||
+    display.title ||
+    display.hidden ||
+    ui ||
+    display.color
+  ) {
     return {
       title: display.title,
       description: display.description,
       hidden: display.hidden,
       sourceModule: display.sourceModule,
       ui: ui.length > 0 ? ui : undefined,
+      color: isOfTypeColors(display.color) ? display.color : undefined,
     };
   }
   return;

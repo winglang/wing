@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { Server } from "http";
-import { AddressInfo, createServer } from "net";
+import { AddressInfo, Socket } from "net";
 import { join } from "path";
 import express from "express";
 import { IEventPublisher } from "./event-mapping";
@@ -56,7 +56,6 @@ export class Api
   private port: number | undefined;
 
   constructor(props: ApiSchema["props"], context: ISimulatorContext) {
-    props;
     this.routes = [];
     this.context = context;
     const { corsHeaders } = props;
@@ -131,8 +130,16 @@ export class Api
 
   public async cleanup(): Promise<void> {
     this.addTrace(`Closing server on ${this.url}`);
-    this.server?.close();
-    this.server?.closeAllConnections();
+    return new Promise((resolve, reject) => {
+      this.server?.close((err) => {
+        if (err) {
+          return reject(err);
+        }
+
+        this.server?.closeAllConnections();
+        return resolve();
+      });
+    });
   }
 
   public async save(): Promise<void> {
@@ -155,7 +162,7 @@ export class Api
   }
 
   private async saveState(state: StateFileContents): Promise<void> {
-    await fs.promises.writeFile(
+    fs.writeFileSync(
       join(this.context.statedir, STATE_FILENAME),
       JSON.stringify(state)
     );
@@ -170,7 +177,7 @@ export class Api
       const s = {
         functionHandle: subscriber,
         method: r.method,
-        path: r.path,
+        pathPattern: r.pathPattern,
       };
       this.routes.push(s);
       this.populateRoute(s, subscriber);
@@ -195,15 +202,9 @@ export class Api
       | "patch"
       | "connect";
 
-    const fnClient = this.context.findInstance(
-      functionHandle
-    ) as IFunctionClient & ISimulatorResourceInstance;
-    if (!fnClient) {
-      throw new Error("No function client found!");
-    }
-
+    const fnClient = this.context.getClient(functionHandle) as IFunctionClient;
     this.app[method](
-      transformRoutePath(route.path),
+      transformRoutePath(route.pathPattern),
       asyncMiddleware(
         async (
           req: express.Request,
@@ -211,9 +212,9 @@ export class Api
           next: express.NextFunction
         ) => {
           this.addTrace(
-            `Processing "${route.method} ${route.path}" params=${JSON.stringify(
-              req.params
-            )}).`
+            `Processing "${route.method} ${
+              route.pathPattern
+            }" params=${JSON.stringify(req.params)}).`
           );
 
           const apiRequest = transformRequest(req);
@@ -236,7 +237,7 @@ export class Api
             } else {
               res.end();
             }
-            this.addTrace(`${route.method} ${route.path} - ${status}.`);
+            this.addTrace(`${route.method} ${route.pathPattern} - ${status}.`);
           } catch (err) {
             return next(err);
           }
@@ -294,19 +295,23 @@ function asyncMiddleware(
 
 async function isPortAvailable(port: number): Promise<boolean> {
   return new Promise((resolve, _reject) => {
-    let s = createServer();
+    const s = new Socket();
     s.once("error", (err) => {
-      s.close();
-      if ((err as any).code == "EADDRINUSE") {
+      s.destroy();
+      if ((err as any).code !== "ECONNREFUSED") {
         resolve(false);
       } else {
-        resolve(false);
+        // connection refused means the port is not used
+        resolve(true);
       }
     });
-    s.once("listening", () => {
-      s.close();
-      resolve(true);
+
+    s.once("connect", () => {
+      s.destroy();
+      // connection successful means the port is used
+      resolve(false);
     });
-    s.listen(port);
+
+    s.connect(port, LOCALHOST_ADDRESS);
   });
 }

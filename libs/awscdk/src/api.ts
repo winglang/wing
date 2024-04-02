@@ -10,18 +10,18 @@ import {
 import { CfnPermission } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { IAwsApi, STAGE_NAME } from "@winglang/sdk/lib/shared-aws/api";
 import { API_DEFAULT_RESPONSE } from "@winglang/sdk/lib/shared-aws/api.default";
+import { isAwsCdkFunction } from "./function";
 
 /**
  * AWS Implementation of `cloud.Api`.
  */
 export class Api extends cloud.Api implements IAwsApi {
   private readonly api: WingRestApi;
-  private readonly handlers: Record<string, Function> = {};
+  private readonly handlers: Record<string, cloud.Function> = {};
   private readonly endpoint: cloud.Endpoint;
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
@@ -187,12 +187,8 @@ export class Api extends cloud.Api implements IAwsApi {
     inflight: cloud.IApiEndpointHandler,
     method: string,
     path: string
-  ): Function {
-    let fn = this.addInflightHandler(inflight, method, path);
-    if (!(fn instanceof Function)) {
-      throw new Error("Api only supports creating tfaws.Function right now");
-    }
-    return fn;
+  ): cloud.Function {
+    return this.addInflightHandler(inflight, method, path);
   }
 
   /**
@@ -205,7 +201,7 @@ export class Api extends cloud.Api implements IAwsApi {
     inflight: cloud.IApiEndpointHandler,
     method: string,
     path: string
-  ): Function {
+  ): cloud.Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
       const newInflight = convertBetweenHandlers(
@@ -218,7 +214,7 @@ export class Api extends cloud.Api implements IAwsApi {
         }
       );
       const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
-      handler = new Function(
+      handler = new cloud.Function(
         this,
         App.of(this).makeId(this, prefix),
         newInflight
@@ -231,12 +227,7 @@ export class Api extends cloud.Api implements IAwsApi {
 
   /** @internal */
   public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("apis can only be bound by awscdk.Function for now");
-    }
-
     host.addEnvironment(this.urlEnvName(), this.url);
-
     super.onLift(host, ops);
   }
 
@@ -338,7 +329,7 @@ class WingRestApi extends Construct {
    * @param handler Lambda function to handle the endpoint
    * @returns OpenApi spec extension for the endpoint
    */
-  public addEndpoint(path: string, method: string, handler: Function) {
+  public addEndpoint(path: string, method: string, handler: cloud.Function) {
     const endpointExtension = this.createApiSpecExtension(handler);
     this.addHandlerPermissions(path, method, handler);
     return endpointExtension;
@@ -349,10 +340,14 @@ class WingRestApi extends Construct {
    * @param handler Lambda function to handle the endpoint
    * @returns OpenApi extension object for the endpoint and handler
    */
-  private createApiSpecExtension(handler: Function) {
+  private createApiSpecExtension(handler: cloud.Function) {
+    if (!isAwsCdkFunction(handler)) {
+      throw new Error("Expected 'handler' to implement IAwsCdkFunction");
+    }
+
     const extension = {
       "x-amazon-apigateway-integration": {
-        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.functionArn}/invocations`,
+        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.awscdkFunction.functionArn}/invocations`,
         type: "aws_proxy",
         httpMethod: "POST",
         responses: {
@@ -377,13 +372,18 @@ class WingRestApi extends Construct {
   private addHandlerPermissions = (
     path: string,
     method: string,
-    handler: Function
+    handler: cloud.Function
   ) => {
+    if (!isAwsCdkFunction(handler)) {
+      throw new Error("Expected 'handler' to implement IAwsCdkFunction");
+    }
+
     const pathHash = createHash("sha1").update(path).digest("hex").slice(-8);
     const permissionId = `${method}-${pathHash}`;
+
     new CfnPermission(this, `permission-${permissionId}`, {
       action: "lambda:InvokeFunction",
-      functionName: handler.functionName,
+      functionName: handler.awscdkFunction.functionName,
       principal: "apigateway.amazonaws.com",
       sourceArn: this.api.arnForExecuteApi(method, Api._toOpenApiPath(path)),
     });

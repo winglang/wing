@@ -268,6 +268,65 @@ inflight () => {
 };
 ```
 
+### Lift qualification
+
+Preflight objects referenced inflight are called "lifted" objects:
+
+```js playground
+let preflight_str = "hello from preflight"; 
+inflight () => {
+  log(preflight_str); // `preflight_str` is "lifted" into inflight.
+};
+```
+
+During the lifting process the compiler tries to figure out in what way the lifted objects are being used. 
+This is how Winglang generats least privilage permissions. Consider the case of lifting a [`cloud.Bucket`](../04-standard-library/cloud/bucket.md) object:
+
+```js playground
+bring cloud;
+let bucket = new cloud.Bucket();
+new cloud.Function(inflight () => {
+  bucket.put("key", "value"); // `bucket` is lifted and `put` is being used on it
+});
+```
+
+In this example the compiler generates the correct _write_ access permissions for the [`cloud.Function`](../04-standard-library/cloud/function.md) on `bucket` based on the fact we're `put`ing into it. We say `bucket`'s lift is qualified with `put`. 
+
+#### Explicit lift qualification
+In some cases the compiler can't figure out (yet) the lift qualifications, and therefore will report an error:
+
+```js playground
+bring cloud;
+let main_bucket = new cloud.Bucket() as "main";
+let secondary_bucket = new cloud.Bucket() as "backup";
+let use_main = true;
+new cloud.Function(inflight () => {
+  let var b = main_bucket;
+  if !use_main {
+    b = secondary_bucket;
+  }
+  b.put("key", "value"); // Error: the compiler doesn't know the possible values for `b` and therefore can't qualify the lift.
+});
+```
+
+To explicitly qualify lifts in an inflight closure or inflight method and supress the above compiler error use the `lift()` utility function:
+
+```js playground
+bring cloud;
+let main_bucket = new cloud.Bucket() as "main";
+let secondary_bucket = new cloud.Bucket() as "backup";
+let use_main = true;
+new cloud.Function(inflight () => {
+  lift(main_bucket, ["put"]); // Explicitly sate the "put" may be used on `main_bucket`
+  lift(secondary_bucket, ["put"]); // Explicitly sate the "put" may be used on `secondary_bucket`
+  let var b = main_bucket;
+  if !use_main {
+    b = secondary_bucket;
+  }
+  b.put("key", "value"); // Error is supressed and all possible values of `b` were explicitly qualified with "put"
+});
+```
+
 ## Phase-independent code
 
 The global functions `log`, `assert`, and `throw` can all be used in both preflight and inflight code.

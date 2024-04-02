@@ -389,18 +389,18 @@ error: Cannot access static property \\"m\\" from instance
    |     ^ Cannot access static property \\"m\\" from instance
 
 
-error: Unknown symbol \\"instanceField\\"
+error: Member \\"instanceField\\" doesn't exist in \\"Construct\\"
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:10
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |          ^^^^^^^^^^^^^ Unknown symbol \\"instanceField\\"
+  |          ^^^^^^^^^^^^^ Member \\"instanceField\\" doesn't exist in \\"Construct\\"
 
 
-error: Unknown symbol \\"f\\"
+error: Member \\"f\\" doesn't exist in \\"Construct\\"
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:10
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
-  |          ^ Unknown symbol \\"f\\"
+  |          ^ Member \\"f\\" doesn't exist in \\"Construct\\"
 
 
  
@@ -1125,11 +1125,11 @@ error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
   |                        ^^^^ Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
 
 
-error: Unknown symbol \\"someRandomMethod\\"
+error: Member \\"someRandomMethod\\" doesn't exist in \\"Array\\"
   --> ../../../examples/tests/invalid/container_types.test.w:6:6
   |
 6 | arr1.someRandomMethod();
-  |      ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
+  |      ^^^^^^^^^^^^^^^^ Member \\"someRandomMethod\\" doesn't exist in \\"Array\\"
 
 
 error: Expected type to be \\"num\\", but got \\"num?\\" instead
@@ -1160,11 +1160,11 @@ error: Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
    |                    ^^ Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
 
 
-error: Unknown symbol \\"someRandomMethod\\"
+error: Member \\"someRandomMethod\\" doesn't exist in \\"Map\\"
    --> ../../../examples/tests/invalid/container_types.test.w:17:4
    |
 17 | m1.someRandomMethod();
-   |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
+   |    ^^^^^^^^^^^^^^^^ Member \\"someRandomMethod\\" doesn't exist in \\"Map\\"
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
@@ -1216,11 +1216,11 @@ error: Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
    |                    ^^ Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
 
 
-error: Unknown symbol \\"someRandomMethod\\"
+error: Member \\"someRandomMethod\\" doesn't exist in \\"Set\\"
    --> ../../../examples/tests/invalid/container_types.test.w:29:4
    |
 29 | s1.someRandomMethod();
-   |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
+   |    ^^^^^^^^^^^^^^^^ Member \\"someRandomMethod\\" doesn't exist in \\"Set\\"
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
@@ -1237,11 +1237,11 @@ error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
 
 
-error: Unknown symbol \\"copyMut\\"
+error: Member \\"copyMut\\" doesn't exist in \\"MutMap\\"
    --> ../../../examples/tests/invalid/container_types.test.w:37:15
    |
 37 | let mm3 = mm2.copyMut();
-   |               ^^^^^^^ Unknown symbol \\"copyMut\\"
+   |               ^^^^^^^ Member \\"copyMut\\" doesn't exist in \\"MutMap\\"
 
 
 error: Expected type to be \\"MutSet<str>\\", but got \\"Array<str>\\" instead
@@ -1258,11 +1258,11 @@ error: Expected type to be \\"num\\", but got \\"bool\\" instead
    |                                    ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
 
 
-error: Unknown symbol \\"copyMut\\"
+error: Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
    --> ../../../examples/tests/invalid/container_types.test.w:46:15
    |
 46 | let ss4 = ss3.copyMut();
-   |               ^^^^^^^ Unknown symbol \\"copyMut\\"
+   |               ^^^^^^^ Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
 
 
  
@@ -1384,6 +1384,77 @@ error: Property not found
   |
 8 | let two = SomeEnum.TWO.TWO;
   |                        ^^^ Property not found
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`explicit_lift_qualification.test.w 1`] = `
+"error: Expected type to be \\"Resource\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:14:10
+   |
+14 |     lift(prelight_string, [\\"contains\\"]); // Explicit qualification on preflight non-class
+   |          ^^^^^^^^^^^^^^^ Expected type to be \\"Resource\\", but got \\"str\\" instead
+
+
+error: lift() calls must be at the top of the method
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:10:5
+   |
+10 |     lift(b, [\\"put\\"]); // Explicit qualification with inflight object, lift call as non first statement
+   |     ^^^^^^^^^^^^^^^^^ lift() calls must be at the top of the method
+
+
+error: lift() calls must be at the top of the method
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:14:5
+   |
+14 |     lift(prelight_string, [\\"contains\\"]); // Explicit qualification on preflight non-class
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ lift() calls must be at the top of the method
+
+
+error: lift() calls must be at the top of the method
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:19:5
+   |
+19 |     lift(bucket, [inflight_qualifier]); // Explicit qualification with inflight qualifiers, lift call as non first statement
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ lift() calls must be at the top of the method
+
+
+error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:10:10
+   |
+10 |     lift(b, [\\"put\\"]); // Explicit qualification with inflight object, lift call as non first statement
+   |          ^ Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
+
+
+error: Qualification list must not contain any inflight elements
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:19:18
+   |
+19 |     lift(bucket, [inflight_qualifier]); // Explicit qualification with inflight qualifiers, lift call as non first statement
+   |                  ^^^^^^^^^^^^^^^^^^^^ Qualification list must not contain any inflight elements
+
+
+error: lift() calls are only allowed in inflight methods and closures defined in preflight
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:24:7
+   |
+24 |       lift(bucket, [\\"get\\"]); // lift() call in inner closure
+   |       ^^^^^^^^^^^^^^^^^^^^^^ lift() calls are only allowed in inflight methods and closures defined in preflight
+
+
+error: lift() calls are only allowed in inflight methods and closures defined in preflight
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:29:9
+   |
+29 |         lift(bucket, [\\"get\\"]); // lift() call in inner class
+   |         ^^^^^^^^^^^^^^^^^^^^^^ lift() calls are only allowed in inflight methods and closures defined in preflight
+
+
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:37:5
+   |
+37 |     b.put(\\"k\\", \\"v\\"); // With no explicit qualification this should be an error
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
  
@@ -1745,11 +1816,11 @@ error: Variable is not reassignable
    | ^^^^^^ Variable is not reassignable
 
 
-error: Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+error: Expected type to be \\"(condition: bool, message: str?): void\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/global_symbols.test.w:12:10
    |
 12 | assert = \\"there\\";
-   |          ^^^^^^^ Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+   |          ^^^^^^^ Expected type to be \\"(condition: bool, message: str?): void\\", but got \\"str\\" instead
 
 
 error: Variable is not reassignable
@@ -1788,11 +1859,11 @@ Duration <DURATION>"
 `;
 
 exports[`immutable_container_types.test.w 1`] = `
-"error: Unknown symbol \\"set\\"
+"error: Member \\"set\\" doesn't exist in \\"Map\\"
   --> ../../../examples/tests/invalid/immutable_container_types.test.w:3:4
   |
 3 | m1.set(\\"a\\", \\"bye\\");
-  |    ^^^ Unknown symbol \\"set\\"
+  |    ^^^ Member \\"set\\" doesn't exist in \\"Map\\"
 
 
 error: Expected type to be \\"Map<str>\\", but got \\"MutMap<str>\\" instead
@@ -1809,32 +1880,32 @@ error: Expected type to be \\"bool\\", but got \\"str\\" instead
   |                             ^^^ Expected type to be \\"bool\\", but got \\"str\\" instead
 
 
-error: Unknown symbol \\"set\\"
+error: Member \\"set\\" doesn't exist in \\"Map\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
    |
 11 | m4.set(\\"2\\", 3);
-   |    ^^^ Unknown symbol \\"set\\"
+   |    ^^^ Member \\"set\\" doesn't exist in \\"Map\\"
 
 
-error: Unknown symbol \\"copy\\"
+error: Member \\"copy\\" doesn't exist in \\"Map\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:13:13
    |
 13 | let m5 = m4.copy();
-   |             ^^^^ Unknown symbol \\"copy\\"
+   |             ^^^^ Member \\"copy\\" doesn't exist in \\"Map\\"
 
 
-error: Unknown symbol \\"delete\\"
+error: Member \\"delete\\" doesn't exist in \\"Map\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:15:4
    |
 15 | m4.delete(\\"1\\");
-   |    ^^^^^^ Unknown symbol \\"delete\\"
+   |    ^^^^^^ Member \\"delete\\" doesn't exist in \\"Map\\"
 
 
-error: Unknown symbol \\"clear\\"
+error: Member \\"clear\\" doesn't exist in \\"Map\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:17:4
    |
 17 | m4.clear();
-   |    ^^^^^ Unknown symbol \\"clear\\"
+   |    ^^^^^ Member \\"clear\\" doesn't exist in \\"Map\\"
 
 
 error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
@@ -1844,32 +1915,32 @@ error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\
    |                           ^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
 
 
-error: Unknown symbol \\"delete\\"
+error: Member \\"delete\\" doesn't exist in \\"Set\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:24:4
    |
 24 | s2.delete(\\"a\\");
-   |    ^^^^^^ Unknown symbol \\"delete\\"
+   |    ^^^^^^ Member \\"delete\\" doesn't exist in \\"Set\\"
 
 
-error: Unknown symbol \\"add\\"
+error: Member \\"add\\" doesn't exist in \\"Set\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:26:4
    |
 26 | s2.add(\\"d\\");
-   |    ^^^ Unknown symbol \\"add\\"
+   |    ^^^ Member \\"add\\" doesn't exist in \\"Set\\"
 
 
-error: Unknown symbol \\"copy\\"
+error: Member \\"copy\\" doesn't exist in \\"Set\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:28:13
    |
 28 | let s3 = s2.copy();
-   |             ^^^^ Unknown symbol \\"copy\\"
+   |             ^^^^ Member \\"copy\\" doesn't exist in \\"Set\\"
 
 
-error: Unknown symbol \\"clear\\"
+error: Member \\"clear\\" doesn't exist in \\"Set\\"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:30:4
    |
 30 | s2.clear();
-   |    ^^^^^ Unknown symbol \\"clear\\"
+   |    ^^^^^ Member \\"clear\\" doesn't exist in \\"Set\\"
 
 
 error: Expected type to be \\"bool\\", but got \\"Array<num>\\" instead
@@ -2246,25 +2317,25 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.test.w 1`] = `
-"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:36:5
    |
 36 |     x.put(\\"hello\\", \\"world\\");
-   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
-error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:43:5
    |
 43 |     q.push(\\"push!\\");
-   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:48:12
    |
 48 |     assert(b.list().length == 0);
-   |            ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |            ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
  
@@ -2275,18 +2346,18 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.test.w 1`] = `
-"error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+"error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
    --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:32:5
    |
 32 |     q.push(\\"push!\\");
-   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
-error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
    --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:35:5
    |
 35 |     q2.push(\\"push!\\");
-   |     ^^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
  
@@ -2297,18 +2368,18 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.test.w 1`] = `
-"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
    --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:15:5
    |
 15 |     x.put(\\"hello\\", \\"world\\");
-   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
    --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:19:5
    |
 19 |     y.put(\\"boom\\", \\"shakalaka\\");
-   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
  
@@ -2486,11 +2557,11 @@ error: Expected type to be \\"Array<str>\\", but got \\"str\\" instead
    |                     ^ Expected type to be \\"Array<str>\\", but got \\"str\\" instead
 
 
-error: Unknown symbol \\"set\\"
+error: Member \\"set\\" doesn't exist in \\"Json\\"
    --> ../../../examples/tests/invalid/json.test.w:19:13
    |
 19 | foreverJson.set(\\"a\\", \\"world!\\");
-   |             ^^^ Unknown symbol \\"set\\"
+   |             ^^^ Member \\"set\\" doesn't exist in \\"Json\\"
 
 
 error: Expected type to be \\"num?\\", but got \\"str?\\" instead
@@ -2601,11 +2672,11 @@ Duration <DURATION>"
 `;
 
 exports[`json_static.test.w 1`] = `
-"error: Unknown symbol \\"set\\"
+"error: Member \\"set\\" doesn't exist in \\"Json\\"
   --> ../../../examples/tests/invalid/json_static.test.w:4:10
   |
 4 | immutObj.set(\\"a\\", \\"foo\\");
-  |          ^^^ Unknown symbol \\"set\\"
+  |          ^^^ Member \\"set\\" doesn't exist in \\"Json\\"
 
 
  
@@ -2699,11 +2770,11 @@ error: Expected type to be \\"MutArray<num>\\", but got \\"MutArray<str>\\" inst
   |                           ^^^^ Expected type to be \\"MutArray<num>\\", but got \\"MutArray<str>\\" instead
 
 
-error: Unknown symbol \\"someMethod\\"
+error: Member \\"someMethod\\" doesn't exist in \\"MutArray\\"
   --> ../../../examples/tests/invalid/mut_container_types.test.w:6:6
   |
 6 | arr1.someMethod();
-  |      ^^^^^^^^^^ Unknown symbol \\"someMethod\\"
+  |      ^^^^^^^^^^ Member \\"someMethod\\" doesn't exist in \\"MutArray\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -2727,11 +2798,11 @@ error: Expected type to be \\"MutSet<num>\\", but got \\"MutSet<str>\\" instead
    |                       ^^ Expected type to be \\"MutSet<num>\\", but got \\"MutSet<str>\\" instead
 
 
-error: Unknown symbol \\"someMethod\\"
+error: Member \\"someMethod\\" doesn't exist in \\"MutSet\\"
    --> ../../../examples/tests/invalid/mut_container_types.test.w:14:4
    |
 14 | s3.someMethod();
-   |    ^^^^^^^^^^ Unknown symbol \\"someMethod\\"
+   |    ^^^^^^^^^^ Member \\"someMethod\\" doesn't exist in \\"MutSet\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -2990,6 +3061,19 @@ Duration <DURATION>"
 
 exports[`panic.test.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
+exports[`parameters.test.w 1`] = `
+"Error: Parameter validation errors:
+- must have required property 'foo'
+
+(hint: make sure to use --values to provide the required parameters file)
+        
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`phase_mismatch.test.w 1`] = `
 "error: Expected type to be \\"inflight (num): num\\", but got \\"preflight (n: num): num\\" instead
   --> ../../../examples/tests/invalid/phase_mismatch.test.w:2:10
@@ -3064,18 +3148,18 @@ exports[`primitives.test.w 1`] = `
   |     ^^^^ Unexpected reference \\"structured_access_expression\\"
 
 
-error: Unknown symbol \\"blabla\\"
+error: Member \\"blabla\\" doesn't exist in \\"Array\\"
   --> ../../../examples/tests/invalid/primitives.test.w:9:16
   |
 9 | let join = arr.blabla(\\",\\");
-  |                ^^^^^^ Unknown symbol \\"blabla\\"
+  |                ^^^^^^ Member \\"blabla\\" doesn't exist in \\"Array\\"
 
 
-error: Unknown symbol \\"push\\"
+error: Member \\"push\\" doesn't exist in \\"Array\\"
    --> ../../../examples/tests/invalid/primitives.test.w:11:5
    |
 11 | arr.push(4);
-   |     ^^^^ Unknown symbol \\"push\\"
+   |     ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
@@ -3329,11 +3413,11 @@ Duration <DURATION>"
 `;
 
 exports[`resource_captures.test.w 1`] = `
-"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
    --> ../../../examples/tests/invalid/resource_captures.test.w:15:5
    |
 15 |     b.put(\\"hello\\", \\"world\\");
-   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
  
@@ -3596,6 +3680,32 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`stringify.test.w 1`] = `
+"error: Expected type to be stringable, but got \\"B\\" instead
+  --> ../../../examples/tests/invalid/stringify.test.w:3:13
+  |
+3 | log(\\"hello {b}\\");
+  |             ^ Expected type to be stringable, but got \\"B\\" instead
+  |
+  = hint: str, num, bool, json, and enums are stringable
+
+
+error: Expected type to be stringable, but got \\"str?\\" instead
+  --> ../../../examples/tests/invalid/stringify.test.w:7:7
+  |
+7 | log(\\"{x}\\");
+  |       ^ Expected type to be stringable, but got \\"str?\\" instead
+  |
+  = hint: str? is an optional, try unwrapping it with 'x ?? \\"nil\\"' or 'x!'
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`struct_expansion.test.w 1`] = `
 "error: Unexpected 'keyword_argument'
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:15
@@ -3651,6 +3761,25 @@ error: Expected between 2 and 3 positional arguments or named arguments for the 
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
 
 
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`struct_from_parameter.test.w 1`] = `
+"Error: unable to parse MyParams:
+- instance requires property \\"bar\\"
+- instance requires property \\"baz\\"
+- instance requires property \\"foo\\"
+   --> ../../../examples/tests/invalid/struct_from_parameter.test.w:14:1
+   | // technically we never enforced the parameters must have been
+   | // provided
+   | 
+14 | MyParams.fromJson(app.parameters.read());
+   | ^
+at <ABSOLUTE>/struct_from_parameter.test.w:14:1
  
  
 Tests 1 failed (1)
@@ -3716,11 +3845,11 @@ error: Struct fields must have immutable types
    |   ^ Struct fields must have immutable types
 
 
-error: Unknown symbol \\"badField\\"
+error: Member \\"badField\\" doesn't exist in \\"A\\"
    --> ../../../examples/tests/invalid/structs.test.w:32:7
    |
 32 | log(a.badField);
-   |       ^^^^^^^^ Unknown symbol \\"badField\\"
+   |       ^^^^^^^^ Member \\"badField\\" doesn't exist in \\"A\\"
 
 
 error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != str)
@@ -3949,11 +4078,11 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_field.test.w 1`] = `
-"error: Unknown symbol \\"a\\"
+"error: Member \\"a\\" doesn't exist in \\"String\\"
   --> ../../../examples/tests/invalid/unknown_field.test.w:1:12
   |
 1 | std.String.a.b.c.fromJson();
-  |            ^ Unknown symbol \\"a\\"
+  |            ^ Member \\"a\\" doesn't exist in \\"String\\"
 
 
  
@@ -3980,9 +4109,9 @@ Duration <DURATION>"
 
 exports[`unknown_symbol.test.w 1`] = `
 "error: Reserved word
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:35:5
+   --> ../../../examples/tests/invalid/unknown_symbol.test.w:43:5
    |
-35 | let let = 2;
+43 | let let = 2;
    |     ^^^ Reserved word
 
 
@@ -4014,10 +4143,17 @@ error: Unknown symbol \\"B\\"
    |                 ^ Unknown symbol \\"B\\"
 
 
-error: Unknown symbol \\"unknown\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:32:1
+error: Member \\"dodo\\" doesn't exist in \\"SomeResourceChild\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.test.w:37:5
    |
-32 | unknown = 1;
+37 | src.dodo();
+   |     ^^^^ Member \\"dodo\\" doesn't exist in \\"SomeResourceChild\\"
+
+
+error: Unknown symbol \\"unknown\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.test.w:40:1
+   |
+40 | unknown = 1;
    | ^^^^^^^ Unknown symbol \\"unknown\\"
 
 
@@ -4028,18 +4164,18 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
    |                        ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
 
 
-error: Unknown symbol \\"assert\\"
+error: Member \\"assert\\" doesn't exist in \\"Bucket\\"
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
    |
 20 |     this.bucket.assert(2 + \\"2\\");
-   |                 ^^^^^^ Unknown symbol \\"assert\\"
+   |                 ^^^^^^ Member \\"assert\\" doesn't exist in \\"Bucket\\"
 
 
-error: Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
+error: Member \\"methodWhichIsNotPartOfBucketApi\\" doesn't exist in \\"Bucket\\"
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:23:24
    |
 23 |     return this.bucket.methodWhichIsNotPartOfBucketApi(id);
-   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Member \\"methodWhichIsNotPartOfBucketApi\\" doesn't exist in \\"Bucket\\"
 
 
  
@@ -4050,7 +4186,7 @@ Duration <DURATION>"
 `;
 
 exports[`unresolved_state.test.w 1`] = `
-"Could not start resource root/env0/cloud.Function after 10 attempts. This could be due to a dependency cycle or an invalid attribute reference.
+"Could not start resource after 10 attempts: Unable to resolve attribute 'my_unresolved_token' for resource: root/env0/State
  
  
 Tests 1 failed (1)
@@ -4104,6 +4240,15 @@ exports[`void_in_expression_position.test.w 1`] = `
   |
 1 | log(\\"hey\\").get(\\"x\\");
   |            ^^^ Property not found
+
+
+error: Expected type to be stringable, but got \\"void\\" instead
+  --> ../../../examples/tests/invalid/void_in_expression_position.test.w:4:22
+  |
+4 | let x = \\"my name is {log(\\"mister cloud\\")}\\";
+  |                      ^^^^^^^^^^^^^^^^^^^ Expected type to be stringable, but got \\"void\\" instead
+  |
+  = hint: str, num, bool, json, and enums are stringable
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported

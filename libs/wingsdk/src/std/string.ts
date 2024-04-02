@@ -26,7 +26,7 @@ export class String {
    */
   public static fromJson(json: Json, options?: JsonValidationOptions): string {
     const schema = JsonSchema._createJsonSchema({
-      id: "string",
+      $id: "string",
       type: "string",
     } as any);
     schema.validate(json, options);

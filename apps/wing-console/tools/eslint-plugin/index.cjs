@@ -13,7 +13,6 @@ const base = {
     "plugin:unicorn/recommended",
     "plugin:@cloudy-ts/recommended",
   ],
-
   settings: {
     react: {
       version: "detect",
@@ -50,6 +49,7 @@ const base = {
       },
     ],
     "react/display-name": ["off"],
+    "@typescript-eslint/consistent-type-imports": "error",
   },
 };
 

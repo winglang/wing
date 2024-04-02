@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { isValidCron } from "cron-validator";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
@@ -24,7 +25,15 @@ export interface ScheduleProps {
   /**
    * Trigger events according to a cron schedule using the UNIX cron format. Timezone is UTC.
    * [minute] [hour] [day of month] [month] [day of week]
-   * @example "0/1 * ? * *"
+   * '*' means all possible values.
+   * '-' means a range of values.
+   * ',' means a list of values.
+   * [minute] allows 0-59.
+   * [hour] allows 0-23.
+   * [day of month] allows 1-31.
+   * [month] allows 1-12 or JAN-DEC.
+   * [day of week] allows 0-6 or SUN-SAT.
+   * @example "* * * * *"
    * @default undefined
    */
   readonly cron?: string;
@@ -62,15 +71,18 @@ export class Schedule extends Resource {
     if (rate && rate.seconds < 60) {
       throw new Error("rate can not be set to less than 1 minute.");
     }
-    if (cron && cron.split(" ").length > 5) {
-      throw new Error(
-        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
-      );
-    }
-    if (cron && cron.split(" ")[2] == "*" && cron.split(" ")[4] == "*") {
-      throw new Error(
-        "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other"
-      );
+    // Check for valid UNIX cron format
+    // https://www.ibm.com/docs/en/db2/11.5?topic=task-unix-cron-format
+    if (
+      cron &&
+      !isValidCron(cron, {
+        alias: true,
+        allowSevenAsSunday: true,
+        allowBlankDay: false,
+        seconds: false,
+      })
+    ) {
+      throw new Error("cron string must be in UNIX cron format");
     }
   }
 

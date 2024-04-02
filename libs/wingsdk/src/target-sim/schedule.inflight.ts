@@ -67,9 +67,9 @@ export class Schedule
 
   private runTasks() {
     for (const task of this.tasks) {
-      const fnClient = this.context.findInstance(
-        task.functionHandle!
-      ) as IFunctionClient & ISimulatorResourceInstance;
+      const fnClient = this.context.getClient(
+        task.functionHandle
+      ) as IFunctionClient;
       if (!fnClient) {
         throw new Error("No function client found for task.");
       }

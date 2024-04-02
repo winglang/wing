@@ -33,6 +33,7 @@ async handle(event) {
         "attrs": {},
         "path": "root/env0/test:my_test/Handler",
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/handler_c86fc180.js",
           "sourceCodeLanguage": "javascript",
@@ -43,6 +44,9 @@ async handle(event) {
       {
         "addr": "c8647dd8d2adabe83cc081ebe0ccbefe4a068ef3bf",
         "attrs": {},
+        "deps": [
+          "root/env0/test:my_test/Handler",
+        ],
         "path": "root/cloud.TestRunner",
         "props": {
           "tests": {
@@ -106,10 +110,6 @@ async handle(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -121,6 +121,10 @@ async handle(event) {
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",

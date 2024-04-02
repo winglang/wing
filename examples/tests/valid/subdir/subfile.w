@@ -1,5 +1,5 @@
 bring math;
 
 pub class Q {
-  extern "./util.js" static inflight greet(name: str): str;
+  extern "./util.ts" static inflight greet(name: str): str;
 }

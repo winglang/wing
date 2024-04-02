@@ -1,14 +1,12 @@
+import type { PropsWithChildren, ReactNode, KeyboardEvent } from "react";
 import {
   createContext,
-  PropsWithChildren,
-  ReactNode,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
-  KeyboardEvent,
 } from "react";
 
 import { useTreeContext } from "./tree-context.js";

@@ -519,7 +519,21 @@ let FieldProps = ui.FieldProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.FieldProps.property.link">link</a></code> | <code>bool</code> | Indicates that this field is a link. |
 | <code><a href="#@winglang/sdk.ui.FieldProps.property.refreshRate">refreshRate</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How often the field should be refreshed. |
+
+---
+
+##### `link`<sup>Optional</sup> <a name="link" id="@winglang/sdk.ui.FieldProps.property.link"></a>
+
+```wing
+link: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Indicates that this field is a link.
 
 ---
 

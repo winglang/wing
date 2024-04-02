@@ -1,9 +1,9 @@
-import { mkdtemp, readFile } from "fs/promises";
-import { tmpdir } from "os";
-import * as path from "path";
-import * as util from "util";
-import * as vm from "vm";
-import { createBundle } from "./bundling";
+import * as cp from "child_process";
+import { writeFileSync } from "fs";
+import { readFile, stat } from "fs/promises";
+import { url as inspectorUrl } from "inspector";
+import { Bundle, createBundle } from "./bundling";
+import { processStream } from "./stream-processor";
 
 export interface SandboxOptions {
   readonly env?: { [key: string]: string };
@@ -12,152 +12,241 @@ export interface SandboxOptions {
   readonly log?: (internal: boolean, level: string, message: string) => void;
 }
 
+/**
+ * Shape of the messages sent to the child process.
+ */
+type ProcessRequest = {
+  fn: string;
+  args: any[];
+};
+
+/**
+ * Shape of the messages returned by the child process.
+ */
+type ProcessResponse =
+  | {
+      type: "resolve";
+      value: any;
+    }
+  | {
+      type: "reject";
+      reason: Error;
+    };
+
 export class Sandbox {
-  private loaded = false; // "true" after first run (module is loaded into context)
-  private createBundlePromise: Promise<void>;
-  private entrypoint: string;
-  private code: string | undefined;
+  public static async createBundle(
+    entrypoint: string,
+    log?: (message: string) => void
+  ): Promise<Bundle> {
+    let contents = await readFile(entrypoint, "utf-8");
+
+    // log a warning if contents includes __dirname or __filename
+    if (contents.includes("__dirname") || contents.includes("__filename")) {
+      log?.(
+        `Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.`
+      );
+    }
+
+    // wrap contents with a shim that handles the communication with the parent process
+    // we insert this shim before bundling to ensure source maps are generated correctly
+    contents += `
+process.on("message", async (message) => {
+  const { fn, args } = message;
+  try {
+    const value = await exports[fn](...args);
+    process.send({ type: "resolve", value });
+  } catch (err) {
+    process.send({ type: "reject", reason: err });
+  }
+});
+`;
+    const wrappedPath = entrypoint.replace(/\.js$/, ".sandbox.js");
+    writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
+    const bundle = createBundle(wrappedPath);
+
+    if (process.env.DEBUG) {
+      const fileStats = await stat(entrypoint);
+      log?.(`Bundled code (${fileStats.size} bytes).`);
+    }
+
+    return bundle;
+  }
+
+  private readonly entrypoint: string;
   private readonly options: SandboxOptions;
-  private readonly context: any = {};
+
+  private child: cp.ChildProcess | undefined;
+  private onChildMessage: ((message: ProcessResponse) => void) | undefined;
+  private onChildError: ((error: Error) => void) | undefined;
+  private onChildExit:
+    | ((code: number | null, signal: NodeJS.Signals | null) => void)
+    | undefined;
+
+  private timeout: NodeJS.Timeout | undefined;
+
+  // Tracks whether the sandbox is available to process a new request
+  // When call() is called, it sets this to false, and when it's returning
+  // a response or error, it sets it back to true.
+  private available = true;
 
   constructor(entrypoint: string, options: SandboxOptions = {}) {
     this.entrypoint = entrypoint;
     this.options = options;
-    this.context = this.createContext();
-    this.createBundlePromise = this.createBundle();
   }
 
-  private createContext() {
-    const sandboxProcess = {
-      ...process,
-
-      // override process.exit to throw an exception instead of exiting the process
-      exit: (exitCode: number) => {
-        throw new Error("process.exit() was called with exit code " + exitCode);
-      },
-
-      env: this.options.env,
-    };
-
-    const sandboxConsole: any = {};
-    const levels = ["debug", "info", "log", "warn", "error"];
-    for (const level of levels) {
-      sandboxConsole[level] = (...args: any[]) => {
-        const message = util.format(...args);
-        this.options.log?.(false, level, message);
-        // also log to stderr if DEBUG is set
-        if (process.env.DEBUG) {
-          console.error(message);
-        }
-      };
+  public async cleanup() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
     }
 
-    const ctx: any = {};
+    if (this.child) {
+      this.child.kill("SIGTERM");
+      this.child = undefined;
+      this.available = true;
+    }
+  }
 
-    // create a copy of all the globals from our current context.
-    for (const k of Object.getOwnPropertyNames(global)) {
-      try {
-        ctx[k] = (global as any)[k];
-      } catch {
-        // ignore unresolvable globals (see https://github.com/winglang/wing/pull/1923)
+  public isAvailable(): boolean {
+    return this.available;
+  }
+
+  public async initialize() {
+    this.debugLog("Initializing sandbox.");
+    const childEnv = this.options.env ?? {};
+    if (inspectorUrl?.()) {
+      // We're exposing a debugger, let's attempt to ensure the child process automatically attaches
+      childEnv.NODE_OPTIONS =
+        (childEnv.NODE_OPTIONS ?? "") + (process.env.NODE_OPTIONS ?? "");
+
+      // If the child process is not already configured to attach a debugger, add a flag to do so
+      if (
+        !childEnv.NODE_OPTIONS.includes("--inspect") &&
+        !process.execArgv.includes("--inspect")
+      ) {
+        childEnv.NODE_OPTIONS += " --inspect=0";
+      }
+
+      // VSCode's debugger adds some environment variables that we want to pass to the child process
+      for (const key in process.env) {
+        if (key.startsWith("VSCODE_")) {
+          childEnv[key] = process.env[key]!;
+        }
       }
     }
 
-    // append the user's context
-    for (const [k, v] of Object.entries(this.options.context ?? {})) {
-      ctx[k] = v;
-    }
-
-    const context = vm.createContext({
-      ...ctx,
-      process: sandboxProcess,
-      console: sandboxConsole,
-      exports: {},
-      require, // to support requiring node.js sdk modules (others will be bundled)
+    // start a Node.js process that runs the inflight code
+    // note: unlike the fork(2) POSIX system call, child_process.fork()
+    // does not clone the current process
+    this.child = cp.fork(this.entrypoint, {
+      env: childEnv,
+      stdio: "pipe",
+      // this option allows complex objects like Error to be sent from the child process to the parent
+      serialization: "advanced",
     });
 
-    // emit an explicit error when trying to access `__dirname` and `__filename` because we cannot
-    // resolve these when bundling (this is true both for simulator and the cloud since we are
-    // bundling there as well).
-    const forbidGlobal = (name: string) => {
-      Object.defineProperty(context, name, {
-        get: () => {
-          throw new Error(
-            `${name} cannot be used within bundled cloud functions`
-          );
-        },
-      });
-    };
+    const log = (message: string) => this.options.log?.(false, "log", message);
+    const logError = (message: string) =>
+      this.options.log?.(false, "error", message);
 
-    forbidGlobal("__dirname");
-    forbidGlobal("__filename");
-
-    return context;
-  }
-
-  private async createBundle() {
-    // load bundle into context on first run
-    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-    const bundle = createBundle(this.entrypoint, [], workdir);
-    this.entrypoint = bundle.entrypointPath;
-
-    this.code = await readFile(this.entrypoint, "utf-8");
-
-    if (process.env.DEBUG) {
-      const bundleSize = Buffer.byteLength(this.code, "utf-8");
-      this.options.log?.(true, "log", `Bundled code (${bundleSize} bytes).`);
+    // pipe stdout and stderr from the child process
+    if (this.child.stdout) {
+      processStream(this.child.stdout, log);
     }
-  }
-
-  private loadBundleOnce() {
-    if (this.loaded) {
-      return;
+    if (this.child.stderr) {
+      processStream(this.child.stderr, logError);
     }
 
-    if (!this.code) {
-      throw new Error("Bundle not created yet - please report this as a bug");
-    }
-
-    // this will add stuff to the "exports" object within our context
-    vm.runInContext(this.code!, this.context, {
-      filename: this.entrypoint,
+    this.child.on("message", (message: ProcessResponse) => {
+      this.onChildMessage?.(message);
     });
-
-    this.loaded = true;
+    this.child!.on("error", (error) => {
+      this.onChildError?.(error);
+    });
+    this.child!.on("exit", (code, signal) => {
+      this.onChildExit?.(code, signal);
+    });
   }
 
   public async call(fn: string, ...args: any[]): Promise<any> {
-    // wait for the bundle to finish creation
-    await this.createBundlePromise;
+    // Prevent multiple calls to the same sandbox running concurrently.
+    this.available = false;
 
-    // load the bundle into context on the first run
-    // we don't do this earlier because bundled code may have side effects
-    // and we want to simulate that a function is "cold" on the first run
-    this.loadBundleOnce();
+    // If this sandbox doesn't have a child process running (because it
+    // just got created, OR because the previous child process was killed due
+    // to timeout or an unexpected error), initialize one.
+    if (!this.child) {
+      await this.initialize();
+    }
 
-    return new Promise(($resolve, $reject) => {
-      const cleanup = () => {
-        delete this.context.$resolve;
-        delete this.context.$reject;
+    // Send the function name and arguments to the child process.
+    // When a message is received, resolve or reject the promise.
+    return new Promise((resolve, reject) => {
+      this.child!.send({ fn, args } as ProcessRequest);
+
+      this.onChildMessage = (message: ProcessResponse) => {
+        this.debugLog("Received a message from the sandbox.");
+        this.available = true;
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        if (message.type === "resolve") {
+          resolve(message.value);
+        } else if (message.type === "reject") {
+          reject(message.reason);
+        } else {
+          reject(
+            new Error(
+              `Unexpected message from sandbox child process: ${message}`
+            )
+          );
+        }
       };
 
-      this.context.$resolve = (value: any) => {
-        cleanup();
-        $resolve(value);
+      // "error" could be emitted for any number of reasons
+      // (e.g. the process couldn't be spawned or killed, or a message couldn't be sent).
+      // Since this is unexpected, we kill the process with SIGKILL to ensure it's dead, and reject the promise.
+      this.onChildError = (error: Error) => {
+        this.debugLog("Unexpected error from the sandbox.");
+        this.child?.kill("SIGKILL");
+        this.child = undefined;
+        this.available = true;
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        reject(error);
       };
 
-      this.context.$reject = (reason?: any) => {
-        cleanup();
-        $reject(reason);
+      // "exit" could be emitted if the user code called process.exit(), or if we killed the process
+      // due to a timeout or unexpected error. In any case, we reject the promise.
+      this.onChildExit = (code: number | null) => {
+        this.debugLog("Child processed stopped.");
+        this.child = undefined;
+        this.available = true;
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        reject(new Error(`Process exited with code ${code}`));
       };
 
-      const code = `exports.${fn}(${args
-        .map((a) => JSON.stringify(a))
-        .join(",")}).then($resolve).catch($reject);`;
-      vm.runInContext(code, this.context, {
-        filename: this.entrypoint,
-        timeout: this.options.timeout,
-      });
+      if (this.options.timeout) {
+        this.timeout = setTimeout(() => {
+          this.debugLog("Killing process after timeout.");
+          this.child?.kill("SIGTERM");
+          this.child = undefined;
+          this.available = true;
+          reject(
+            new Error(
+              `Function timed out (it was configured to only run for ${this.options.timeout}ms)`
+            )
+          );
+        }, this.options.timeout);
+      }
     });
+  }
+
+  private debugLog(message: string) {
+    if (process.env.DEBUG) {
+      this.options.log?.(true, "log", message);
+    }
   }
 }

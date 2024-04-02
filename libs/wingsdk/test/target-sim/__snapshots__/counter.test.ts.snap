@@ -72,10 +72,6 @@ exports[`create a counter 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -87,6 +83,10 @@ exports[`create a counter 1`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -132,12 +132,12 @@ exports[`create a counter 1`] = `
 
 exports[`dec 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Dec (amount=1).",
   "Dec (amount=1).",
   "Dec (amount=10).",
   "Dec (amount=10).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -213,10 +213,6 @@ exports[`dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -228,6 +224,10 @@ exports[`dec 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -273,12 +273,12 @@ exports[`dec 2`] = `
 
 exports[`inc 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Inc (amount=1).",
   "Inc (amount=1).",
   "Inc (amount=10).",
   "Inc (amount=10).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -354,10 +354,6 @@ exports[`inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -369,6 +365,10 @@ exports[`inc 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -414,12 +414,12 @@ exports[`inc 2`] = `
 
 exports[`key dec 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Dec (amount=1, key: my-key).",
   "Dec (amount=1, key: my-key).",
   "Dec (amount=10, key: my-key).",
   "Dec (amount=10, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -495,10 +495,6 @@ exports[`key dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -510,6 +506,10 @@ exports[`key dec 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -555,12 +555,12 @@ exports[`key dec 2`] = `
 
 exports[`key inc 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Inc (amount=1, key: my-key).",
   "Inc (amount=1, key: my-key).",
   "Inc (amount=10, key: my-key).",
   "Inc (amount=10, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -636,10 +636,6 @@ exports[`key inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -651,6 +647,10 @@ exports[`key inc 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -696,10 +696,10 @@ exports[`key inc 2`] = `
 
 exports[`key set to new value 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Set (value=5, key: my-key).",
   "Peek (value=5, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -775,10 +775,6 @@ exports[`key set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -790,6 +786,10 @@ exports[`key set to new value 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
@@ -835,10 +835,10 @@ exports[`key set to new value 2`] = `
 
 exports[`set to new value 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Set (value=5).",
   "Peek (value=5).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -914,10 +914,6 @@ exports[`set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
       "@winglang/sdk.ex.ReactApp": {
         "className": "ReactApp",
         "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
@@ -929,6 +925,10 @@ exports[`set to new value 2`] = `
       "@winglang/sdk.ex.Table": {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
       },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",

@@ -8,7 +8,7 @@ pub(crate) mod type_reference_transform;
 
 use crate::ast::{
 	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,
-	TypeAnnotationKind, UtilityFunctions,
+	TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -1127,6 +1127,17 @@ impl TypeRef {
 		matches!(**self, Type::Function(_))
 	}
 
+	pub fn is_enum(&self) -> bool {
+		matches!(**self, Type::Enum(_))
+	}
+
+	pub fn is_stringable(&self) -> bool {
+		matches!(
+			**self,
+			Type::String | Type::Number | Type::Boolean | Type::Json(_) | Type::MutJson | Type::Enum(_) | Type::Anything
+		)
+	}
+
 	/// If this is a function and its last argument is a struct, return that struct.
 	pub fn get_function_struct_arg(&self) -> Option<&Struct> {
 		if let Some(func) = self.maybe_unwrap_option().as_function_sig() {
@@ -1338,7 +1349,7 @@ pub struct Types {
 	/// A map from source paths to type information about that path
 	/// If it's a file, we save its symbol environment, and if it's a directory, we save a namespace that points to
 	/// all of the symbol environments of the files (or subdirectories) in that directory
-	source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
+	pub source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
 	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
@@ -1557,18 +1568,6 @@ impl Types {
 		self.get_typeref(self.mut_json_idx)
 	}
 
-	pub fn stringables(&self) -> Vec<TypeRef> {
-		// TODO: This should be more complex and return all types that have some stringification facility
-		// see: https://github.com/winglang/wing/issues/741
-		vec![
-			self.string(),
-			self.number(),
-			self.json(),
-			self.mut_json(),
-			self.anything(),
-		]
-	}
-
 	pub fn add_namespace(&mut self, n: Namespace) -> NamespaceRef {
 		self.namespaces.push(Box::new(n));
 		self.get_namespaceref(self.namespaces.len() - 1)
@@ -1665,12 +1664,6 @@ impl Types {
 		self.scope_envs[scope_id].expect("Scope should have an env")
 	}
 
-	pub fn reset_scope_envs(&mut self) {
-		for elem in self.scope_envs.iter_mut() {
-			*elem = None;
-		}
-	}
-
 	/// Obtain the type of a given expression id. Returns None if the expression has not been type checked yet. If
 	/// this is called after type checking, it should always return Some.
 	pub fn try_get_expr_type(&self, expr_id: ExprId) -> Option<TypeRef> {
@@ -1690,12 +1683,6 @@ impl Types {
 	/// Get the type that a JSON literal expression was cast to.
 	pub fn get_type_from_json_cast(&self, expr_id: ExprId) -> Option<&TypeRef> {
 		self.json_literal_casts.get(&expr_id)
-	}
-
-	pub fn reset_expr_types(&mut self) {
-		for elem in self.type_for_expr.iter_mut() {
-			*elem = None;
-		}
 	}
 
 	/// Given a builtin type, return the full class info from the standard library.
@@ -1738,6 +1725,28 @@ impl Types {
 		let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{WINGSDK_STD_MODULE}.{type_name}");
 
 		self.libraries.lookup_nested_str(fqn.as_str(), None).ok()
+	}
+}
+
+/// Enum of builtin functions, this are defined as hard coded AST nodes in `add_builtins`
+#[derive(Debug)]
+pub enum UtilityFunctions {
+	Log,
+	Assert,
+	UnsafeCast,
+	Nodeof,
+	Lift,
+}
+
+impl Display for UtilityFunctions {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			UtilityFunctions::Log => write!(f, "log"),
+			UtilityFunctions::Assert => write!(f, "assert"),
+			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
+			UtilityFunctions::Nodeof => write!(f, "nodeof"),
+			UtilityFunctions::Lift => write!(f, "lift"),
+		}
 	}
 }
 
@@ -1944,6 +1953,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn add_builtins(&mut self, scope: &mut Scope) {
+		let optional_string = self.types.make_option(self.types.string());
 		self.add_builtin(
 			UtilityFunctions::Log.to_string().as_str(),
 			Type::Function(FunctionSignature {
@@ -1965,12 +1975,20 @@ impl<'a> TypeChecker<'a> {
 			UtilityFunctions::Assert.to_string().as_str(),
 			Type::Function(FunctionSignature {
 				this_type: None,
-				parameters: vec![FunctionParameter {
-					name: "condition".into(),
-					typeref: self.types.bool(),
-					docs: Docs::with_summary("The condition to assert"),
-					variadic: false,
-				}],
+				parameters: vec![
+					FunctionParameter {
+						name: "condition".into(),
+						typeref: self.types.bool(),
+						docs: Docs::with_summary("The condition to assert"),
+						variadic: false,
+					},
+					FunctionParameter {
+						name: "message".into(),
+						typeref: optional_string,
+						docs: Docs::with_summary("The message to log if the condition is false"),
+						variadic: false,
+					},
+				],
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
@@ -2022,9 +2040,44 @@ impl<'a> TypeChecker<'a> {
 			}),
 			scope,
 		);
+
+		let str_array_type = self.types.add_type(Type::Array(self.types.string()));
+		self.add_builtin(
+			&UtilityFunctions::Lift.to_string(),
+			Type::Function(FunctionSignature {
+				this_type: None,
+				parameters: vec![
+					FunctionParameter {
+						name: "preflightObject".into(),
+						typeref: self.types.resource_base_type(),
+						docs: Docs::with_summary("The preflight object to qualify"),
+						variadic: false,
+					},
+					FunctionParameter {
+						name: "qualifications".into(),
+						typeref: str_array_type,
+						docs: Docs::with_summary("
+							The qualifications to apply to the preflight object.\n
+							This is an array of strings denoting members of the object that are accessed in the current method/function.\n
+							For example, if the method accesses the `push` and `pop` members of a `cloud.Queue` object, the qualifications should be `[\"push\", \"pop\"]`."
+						),
+						variadic: false,
+					},
+				],
+				return_type: self.types.void(),
+				phase: Phase::Inflight,
+				// This builtin actually compiles to nothing in JS, it's a marker that behaves like a function in the type checker
+				// and is used during the lifting phase to explicitly define lifts for an inflight method
+				js_override: Some("".to_string()),
+				docs: Docs::with_summary(
+					"Explicitly apply qualifications to a preflight object used in the current method/function",
+				),
+			}),
+			scope,
+		)
 	}
 
-	pub fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
+	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
 		let sym = Symbol::global(name);
 		let mut scope_env = self.types.get_scope_env(&scope);
 		scope_env
@@ -2063,7 +2116,7 @@ impl<'a> TypeChecker<'a> {
 							if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 								let (exp_type, p) = self.type_check_exp(interpolated_expr, env);
 								phase = combine_phases(phase, p);
-								self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
+								self.validate_type_is_stringable(exp_type, interpolated_expr);
 							}
 						});
 						(self.types.string(), phase)
@@ -2494,9 +2547,11 @@ impl<'a> TypeChecker<'a> {
 						(self.types.add_type(Type::Array(inner_type)), inner_type)
 					};
 
-					// Verify all types are the same as the inferred type
+					// Verify all types are the same as the inferred type and find the aggregate phase of all the items
+					let mut phase = Phase::Independent;
 					for item in items {
-						let (t, _) = self.type_check_exp(item, env);
+						let (t, item_phase) = self.type_check_exp(item, env);
+						phase = combine_phases(phase, item_phase);
 
 						if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
 							// This is an array of JSON, change the element type to reflect that
@@ -2534,7 +2589,7 @@ impl<'a> TypeChecker<'a> {
 						*inner = element_type;
 					}
 
-					(container_type, env.phase)
+					(container_type, phase)
 				}
 				ExprKind::MapLiteral { fields, type_ } => {
 					// Infer type based on either the explicit type or the value in one of the fields
@@ -3218,6 +3273,28 @@ impl<'a> TypeChecker<'a> {
 
 		// Evaluate to one of the expected types
 		first_expected_type
+	}
+
+	pub fn validate_type_is_stringable(&mut self, actual_type: TypeRef, span: &impl Spanned) {
+		// If it's a type we can't resolve then we silently ignore it, assuming an error was already reported
+		if actual_type.is_unresolved() || actual_type.is_inferred() {
+			return;
+		}
+
+		if !actual_type.is_stringable() {
+			let message = format!("Expected type to be stringable, but got \"{actual_type}\" instead");
+
+			let hint = if actual_type.maybe_unwrap_option().is_stringable() {
+				format!(
+					"{} is an optional, try unwrapping it with 'x ?? \"nil\"' or 'x!'",
+					actual_type
+				)
+			} else {
+				"str, num, bool, json, and enums are stringable".to_string()
+			};
+
+			self.spanned_error_with_hints(span, message, vec![hint]);
+		}
 	}
 
 	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {
@@ -4818,12 +4895,62 @@ impl<'a> TypeChecker<'a> {
 					tc.inner_scopes.push((scope, tc.ctx.clone()));
 				}
 
-				if let FunctionBody::External(_) = &method_def.body {
+				if let FunctionBody::External(extern_path) = &method_def.body {
 					if !method_def.is_static {
 						tc.spanned_error(
 							method_name,
 							"Extern methods must be declared \"static\" (they cannot access instance members)",
 						);
+					}
+					if !tc.types.source_file_envs.contains_key(extern_path) {
+						let new_env = tc.types.add_symbol_env(SymbolEnv::new(
+							None,
+							SymbolEnvKind::Type(tc.types.void()),
+							method_sig.phase,
+							0,
+						));
+						tc.types
+							.source_file_envs
+							.insert(extern_path.clone(), SymbolEnvOrNamespace::SymbolEnv(new_env));
+					}
+
+					if let Some(SymbolEnvOrNamespace::SymbolEnv(extern_env)) = tc.types.source_file_envs.get_mut(extern_path) {
+						let lookup = extern_env.lookup(method_name, None);
+						if let Some(lookup) = lookup {
+							// check if it's the same type
+							if let Some(lookup) = lookup.as_variable() {
+								if !lookup.type_.is_same_type_as(method_type) {
+									report_diagnostic(Diagnostic {
+										message: "extern type must be the same in all usages".to_string(),
+										span: Some(method_name.span.clone()),
+										annotations: vec![DiagnosticAnnotation {
+											message: "First declared here".to_string(),
+											span: lookup.name.span.clone(),
+										}],
+										hints: vec![format!("Change type to match first declaration: {}", lookup.type_)],
+									});
+								}
+							} else {
+								panic!("Expected extern to be a variable");
+							}
+						} else {
+							extern_env
+								.define(
+									method_name,
+									SymbolKind::Variable(VariableInfo {
+										name: method_name.clone(),
+										type_: *method_type,
+										access: method_def.access,
+										phase: method_def.signature.phase,
+										docs: None,
+										kind: VariableKind::StaticMember,
+										reassignable: false,
+									}),
+									method_def.access,
+									StatementIdx::Top,
+								)
+								.expect("Expected extern to be defined");
+						}
 					}
 				}
 			},
@@ -4922,7 +5049,7 @@ impl<'a> TypeChecker<'a> {
 			// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
 			let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
 				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
+				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../../libs/wingsdk".to_string());
 				let assembly_name = match self.jsii_types.load_module(&Utf8Path::new(&manifest_root)) {
 					Ok(name) => name,
 					Err(type_error) => {
@@ -5346,11 +5473,19 @@ impl<'a> TypeChecker<'a> {
 		let start = root.span.start;
 		let end = path.last().map(|s| s.span.end).unwrap_or(root.span.end);
 		let file_id = root.span.file_id.clone();
+		let start_offset = root.span.start_offset;
+		let end_offset = path.last().map(|s| s.span.end_offset).unwrap_or(root.span.end_offset);
 
 		Some(UserDefinedType {
 			root,
 			fields: path,
-			span: WingSpan { start, end, file_id },
+			span: WingSpan {
+				start,
+				end,
+				file_id,
+				start_offset,
+				end_offset,
+			},
 		})
 	}
 
@@ -6021,11 +6156,18 @@ where
 	T: Spanned + Display,
 {
 	match lookup_result {
-		LookupResult::NotFound(s) => TypeError {
-			message: format!("Unknown symbol \"{s}\""),
-			span: s.span(),
-			annotations: vec![],
-		},
+		LookupResult::NotFound(s, maybe_t) => {
+			let message = if let Some(env_type) = maybe_t {
+				format!("Member \"{s}\" doesn't exist in \"{env_type}\"")
+			} else {
+				format!("Unknown symbol \"{s}\"")
+			};
+			TypeError {
+				message,
+				span: s.span(),
+				annotations: vec![],
+			}
+		}
 		LookupResult::NotPublic(kind, lookup_info) => TypeError {
 			message: {
 				let access = lookup_info.access.to_string();

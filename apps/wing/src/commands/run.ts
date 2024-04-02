@@ -4,8 +4,9 @@ import { createConsoleApp } from "@wingconsole/app";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { debug } from "debug";
 import { glob } from "glob";
-import open from "open";
+import once from "lodash.once";
 import { parseNumericString } from "../util";
+import { beforeShutdown } from "../util.before-shutdown.js";
 
 /**
  * Options for the `run` command.
@@ -78,23 +79,19 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     requestedPort,
     hostUtils: {
       async openExternal(url: string) {
-        await open(url);
+        open(url);
       },
     },
     platform: options?.platform,
     requireAcceptTerms: !!process.stdin.isTTY,
+    open: openBrowser,
   });
   const url = `http://localhost:${port}/`;
-  if (openBrowser) {
-    await open(url);
-  }
   console.log(`The Wing Console is running at ${url}`);
 
-  const onExit = async (exitCode: number) => {
+  const onExit = once(async (exitCode: number) => {
     await close(() => process.exit(exitCode));
-  };
+  });
 
-  process.once("exit", (c) => void onExit(c));
-  process.once("SIGTERM", () => void onExit(0));
-  process.once("SIGINT", () => void onExit(0));
+  beforeShutdown(() => onExit(0));
 }

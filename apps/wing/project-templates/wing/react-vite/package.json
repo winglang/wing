@@ -1,0 +1,15 @@
+{
+  "name": "my-app",
+  "version": "0.0.0",
+  "description": "A description of my application",
+  "author": "Your Name",
+  "license": "MIT",
+  "scripts": {
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "postinstall": "npm run install:backend && npm run install:frontend"
+  },
+  "dependencies": {
+    "@winglibs/websockets": "^0.3.2"
+  }
+}

@@ -437,6 +437,11 @@ util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps);
 
 Run a predicate repeatedly, waiting until it returns true or until the timeout elapses.
 
+If the timeout elapses, the function throws an error.
+
+Alternatively, you can pass `throws: false` to suppress the error, and instead return a boolean
+indicating whether the predicate returned true within the timeout.
+
 ###### `predicate`<sup>Required</sup> <a name="predicate" id="@winglang/sdk.util.Util.waitUntil.parameter.predicate"></a>
 
 - *Type:* <a href="#@winglang/sdk.util.IPredicateHandler">IPredicateHandler</a>
@@ -913,6 +918,7 @@ let WaitUntilProps = util.WaitUntilProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.util.WaitUntilProps.property.interval">interval</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | Interval between predicate retries. |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.throws">throws</a></code> | <code>bool</code> | Whether to throw an error if the timeout elapses. |
 | <code><a href="#@winglang/sdk.util.WaitUntilProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The timeout for keep trying predicate. |
 
 ---
@@ -927,6 +933,19 @@ interval: duration;
 - *Default:* 0.1s
 
 Interval between predicate retries.
+
+---
+
+##### `throws`<sup>Optional</sup> <a name="throws" id="@winglang/sdk.util.WaitUntilProps.property.throws"></a>
+
+```wing
+throws: bool;
+```
+
+- *Type:* bool
+- *Default:* true
+
+Whether to throw an error if the timeout elapses.
 
 ---
 

@@ -35,13 +35,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function.\n\n### Initializer\n- `handler` — `inflight (event: str?): str?`\n- `...props` — `FunctionProps?`\n  \n  - `env?` — `Map<str>?` — Environment variables to pass to the function.\n  - `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n  - `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n  - `timeout?` — `duration?` — The maximum amount of time the function can run.\n### Fields\n- `env` — `Map<str>` — Returns the set of environment variables for this function.\n- `node` — `Node` — The tree node.\n### Methods\n- `addEnvironment` — `preflight (name: str, value: str): void` — Add an environment variable to the function.\n- `invoke` — `inflight (payload: str?): str?` — Invokes the function with a payload and waits for the result.\n- `invokeAsync` — `inflight (payload: str?): void` — Kicks off the execution of the function with a payload and returns immediately while the function is running.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function.\n\n### Initializer\n- `handler` — `inflight (event: str?): str?`\n- `...props` — `FunctionProps?`\n  \n  - `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n  - `env?` — `Map<str>?` — Environment variables to pass to the function.\n  - `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n  - `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n  - `timeout?` — `duration?` — The maximum amount of time the function can run.\n### Fields\n- `env` — `Map<str>` — Returns the set of environment variables for this function.\n- `node` — `Node` — The tree node.\n### Methods\n- `addEnvironment` — `preflight (name: str, value: str): void` — Add an environment variable to the function.\n- `invoke` — `inflight (payload: str?): str?` — Invokes the function with a payload and waits for the result.\n- `invokeAsync` — `inflight (payload: str?): void` — Kicks off the execution of the function with a payload and returns immediately while the function is running.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
   sortText: gg|Function
 - label: OnDeploy
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass OnDeploy\n```\n---\nRun code every time the app is deployed.\n\n### Initializer\n- `handler` — `inflight (): void`\n- `...props` — `OnDeployProps?`\n  \n  - `env?` — `Map<str>?`\n  - `executeAfter?` — `Array<Construct>?` — Execute this trigger only after these resources have been provisioned.\n  - `executeBefore?` — `Array<Construct>?` — Adds this trigger as a dependency on other constructs.\n  - `logRetentionDays?` — `num?`\n  - `memory?` — `num?`\n  - `timeout?` — `duration?`\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+    value: "```wing\nclass OnDeploy\n```\n---\nRun code every time the app is deployed.\n\n### Initializer\n- `handler` — `inflight (): void`\n- `...props` — `OnDeployProps?`\n  \n  - `concurrency?` — `num?`\n  - `env?` — `Map<str>?`\n  - `executeAfter?` — `Array<Construct>?` — Execute this trigger only after these resources have been provisioned.\n  - `executeBefore?` — `Array<Construct>?` — Adds this trigger as a dependency on other constructs.\n  - `logRetentionDays?` — `num?`\n  - `memory?` — `num?`\n  - `timeout?` — `duration?`\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
   sortText: gg|OnDeploy
 - label: Queue
   kind: 7
@@ -95,7 +95,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiCorsOptions\n```\n---\nCors Options for `Api`.\n### Fields\n- `allowCredentials?` — `bool?` — Whether to allow credentials.\n- `allowHeaders?` — `Array<str>?` — The list of allowed headers.\n- `allowMethods?` — `Array<HttpMethod>?` — The list of allowed methods.\n- `allowOrigin?` — `Array<str>?` — The list of allowed allowOrigin.\n- `exposeHeaders?` — `Array<str>?` — The list of exposed headers.\n- `maxAge?` — `duration?` — How long the browser should cache preflight request results."
+    value: "```wing\nstruct ApiCorsOptions\n```\n---\nCors Options for `Api`.\n### Fields\n- `allowCredentials?` — `bool?` — Whether to allow credentials.\n- `allowHeaders?` — `Array<str>?` — The list of allowed headers.\n- `allowMethods?` — `Array<HttpMethod>?` — The list of allowed methods.\n- `allowOrigin?` — `str?` — The allowed origin.\n- `exposeHeaders?` — `Array<str>?` — The list of exposed headers.\n- `maxAge?` — `duration?` — How long the browser should cache preflight request results."
   sortText: hh|ApiCorsOptions
 - label: ApiDeleteOptions
   kind: 22
@@ -245,7 +245,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct FunctionProps\n```\n---\nOptions for `Function`.\n### Fields\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
+    value: "```wing\nstruct FunctionProps\n```\n---\nOptions for `Function`.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|FunctionProps
 - label: GetSecretValueOptions
   kind: 22
@@ -263,7 +263,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `env?` — `Map<str>?`\n- `executeAfter?` — `Array<Construct>?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — `Array<Construct>?` — Adds this trigger as a dependency on other constructs.\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `concurrency?` — `num?`\n- `env?` — `Map<str>?`\n- `executeAfter?` — `Array<Construct>?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — `Array<Construct>?` — Adds this trigger as a dependency on other constructs.\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
   sortText: hh|OnDeployProps
 - label: QueueProps
   kind: 22
@@ -275,13 +275,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct QueueSetConsumerOptions extends FunctionProps\n```\n---\nOptions for Queue.setConsumer.\n### Fields\n- `batchSize?` — `num?` — The maximum number of messages to send to subscribers at once.\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct QueueSetConsumerOptions extends FunctionProps\n```\n---\nOptions for Queue.setConsumer.\n### Fields\n- `batchSize?` — `num?` — The maximum number of messages to send to subscribers at once.\n- `concurrency?` — `num?`\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
   sortText: hh|QueueSetConsumerOptions
 - label: ScheduleOnTickOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ScheduleOnTickOptions extends FunctionProps\n```\n---\nOptions for Schedule.onTick.\n### Fields\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct ScheduleOnTickOptions extends FunctionProps\n```\n---\nOptions for Schedule.onTick.\n### Fields\n- `concurrency?` — `num?`\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
   sortText: hh|ScheduleOnTickOptions
 - label: ScheduleProps
   kind: 22
@@ -299,7 +299,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ServiceOnStartOptions extends FunctionProps\n```\n---\nOptions for Service.onStart.\n### Fields\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct ServiceOnStartOptions extends FunctionProps\n```\n---\nOptions for Service.onStart.\n### Fields\n- `concurrency?` — `num?`\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
   sortText: hh|ServiceOnStartOptions
 - label: ServiceProps
   kind: 22
@@ -311,7 +311,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct TopicOnMessageOptions extends FunctionProps\n```\n---\nOptions for `Topic.onMessage`.\n### Fields\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct TopicOnMessageOptions extends FunctionProps\n```\n---\nOptions for `Topic.onMessage`.\n### Fields\n- `concurrency?` — `num?`\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
   sortText: hh|TopicOnMessageOptions
 - label: TopicProps
   kind: 22

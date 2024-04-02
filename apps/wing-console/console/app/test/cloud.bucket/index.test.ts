@@ -5,7 +5,7 @@ import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/main.w`, () => {
   test.skip("opens file preview", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Bucket").click();
+    await getResourceNode(page, "root/Default/Bucket").click();
 
     await page.getByTestId("cloud.bucket:files-entry-test.txt").click();
 
@@ -15,7 +15,7 @@ describe(`${__dirname}/main.w`, () => {
   });
 
   test.skip("deletes a file", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Bucket").click();
+    await getResourceNode(page, "root/Default/Bucket").click();
 
     const file = page.getByTestId("cloud.bucket:files-entry-test.txt");
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 
-import { ApiRequest } from "../shared/api.js";
+import type { ApiRequest } from "../shared/api.js";
 
 import { trpc } from "./trpc.js";
 

@@ -11,7 +11,7 @@ new std.Test(inflight () => {
 
   util.sleep(retentionPeriod);
 
-  assert(util.waitUntil(() => {
+  util.waitUntil(() => {
     return q.approxSize() == 0;
-  }));
+  });
 }, timeout: 2m) as "retentionPeriod";

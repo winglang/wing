@@ -14,7 +14,7 @@ import {
 import classNames from "classnames";
 import { useCallback, useMemo, useState } from "react";
 
-import { MetadataNode } from "./resource-metadata.js";
+import type { MetadataNode } from "./resource-metadata.js";
 
 export interface EdgeMetadataProps {
   source: MetadataNode;
@@ -109,6 +109,7 @@ export const EdgeMetadata = ({
                     className="w-4 h-4"
                     resourceType={source.type}
                     resourcePath={source.path}
+                    color={source.display?.color}
                   />
                 </div>
                 <div className="truncate">{source.id}</div>
@@ -132,6 +133,7 @@ export const EdgeMetadata = ({
                     className="w-4 h-4"
                     resourceType={target.type}
                     resourcePath={target.path}
+                    color={target.display?.color}
                   />
                 </div>
                 <div className="truncate">{target.id}</div>

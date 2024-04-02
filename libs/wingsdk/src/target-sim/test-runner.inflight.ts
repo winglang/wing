@@ -34,12 +34,7 @@ export class TestRunner
     if (!functionHandle) {
       throw new Error(`No test found at path "${path}"`);
     }
-    const fnClient = this.context.findInstance(
-      functionHandle
-    ) as IFunctionClient & ISimulatorResourceInstance;
-    if (!fnClient) {
-      throw new Error(`No function client found for test path "${path}"`);
-    }
+    const fnClient = this.context.getClient(functionHandle) as IFunctionClient;
     let pass = false;
     let error: string | undefined;
     const previousTraces = this.context.listTraces().length;

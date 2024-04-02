@@ -16,11 +16,11 @@ export const API_FQN = fqnForType("cloud.Api");
  */
 export interface ApiCorsOptions {
   /**
-   * The list of allowed allowOrigin.
-   * @example ["https://example.com"]
-   * @default - ["*"]
+   * The allowed origin.
+   * @example "https://example.com"
+   * @default - "*"
    */
-  readonly allowOrigin?: Array<string>;
+  readonly allowOrigin?: string;
 
   /**
    * The list of allowed methods.
@@ -75,9 +75,9 @@ export interface ApiProps {
    * Options for configuring the API's CORS behavior across all routes.
    * Options can also be overridden on a per-route basis. (not yet implemented)
    *
-   * @example { allowOrigin: ["https://example.com"] }
+   * @example { allowOrigin: "https://example.com" }
    * @default - Default CORS options are applied when `cors` is set to `true`
-   *  allowOrigin: ["*"],
+   *  allowOrigin: "*",
    *  allowMethods: [
    *   HttpMethod.GET,
    *   HttpMethod.POST,
@@ -209,7 +209,7 @@ export class Api extends Resource {
   };
 
   private corsDefaultValues: ApiCorsOptions = {
-    allowOrigin: ["*"],
+    allowOrigin: "*",
     allowMethods: [
       HttpMethod.GET,
       HttpMethod.POST,
@@ -502,7 +502,7 @@ export class Api extends Resource {
     }
 
     const {
-      allowOrigin = [],
+      allowOrigin = "*",
       allowHeaders = [],
       allowMethods = [],
       exposeHeaders = [],
@@ -511,13 +511,13 @@ export class Api extends Resource {
     } = corsOptions;
 
     const defaultHeaders: CorsDefaultResponseHeaders = {
-      "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
+      "Access-Control-Allow-Origin": allowOrigin || "*",
       "Access-Control-Expose-Headers": exposeHeaders.join(",") || "",
       "Access-Control-Allow-Credentials": allowCredentials ? "true" : "false",
     };
 
     const optionsHeaders: CorsOptionsResponseHeaders = {
-      "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
+      "Access-Control-Allow-Origin": allowOrigin || "*",
       "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
       "Access-Control-Allow-Methods": allowMethods.join(",") || "",
       "Access-Control-Max-Age": maxAge.seconds.toString(),
@@ -607,6 +607,7 @@ export class Api extends Resource {
 
     // https://spec.openapis.org/oas/v3.0.3
     return {
+      ...this.apiSpec,
       openapi: "3.0.3",
       paths: paths,
     };

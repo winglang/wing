@@ -269,6 +269,7 @@ Invokes the `validate()` method on all validations added through
 | <code><a href="#@winglang/sdk.std.Node.property.root">root</a></code> | <code>constructs.IConstruct</code> | Returns the root of the construct tree (the `cloud.App` object). |
 | <code><a href="#@winglang/sdk.std.Node.property.scopes">scopes</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | All parent scopes of this construct. |
 | <code><a href="#@winglang/sdk.std.Node.property.scope">scope</a></code> | <code>constructs.IConstruct</code> | Returns the scope in which this construct is defined. |
+| <code><a href="#@winglang/sdk.std.Node.property.color">color</a></code> | <code>str</code> | The color of the construct for display purposes. |
 | <code><a href="#@winglang/sdk.std.Node.property.defaultChild">defaultChild</a></code> | <code>constructs.IConstruct</code> | Returns the child construct that has the id `Default` or `Resource"`. |
 | <code><a href="#@winglang/sdk.std.Node.property.description">description</a></code> | <code>str</code> | Description of the construct for display purposes. |
 | <code><a href="#@winglang/sdk.std.Node.property.hidden">hidden</a></code> | <code>bool</code> | Whether the construct should be hidden by default in tree visualizations. |
@@ -435,6 +436,31 @@ scope: IConstruct;
 Returns the scope in which this construct is defined.
 
 The value is `undefined` at the root of the construct scope tree.
+
+---
+
+##### `color`<sup>Optional</sup> <a name="color" id="@winglang/sdk.std.Node.property.color"></a>
+
+```wing
+color: str;
+```
+
+- *Type:* str
+
+The color of the construct for display purposes.
+
+Supported colors are:
+- orange
+- sky
+- emerald
+- lime
+- pink
+- amber
+- cyan
+- purple
+- red
+- violet
+- slate
 
 ---
 
@@ -614,6 +640,7 @@ prepended to the unique identifier.
 | <code><a href="#@winglang/sdk.std.IApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.std.IApp.property.entrypointDir">entrypointDir</a></code> | <code>str</code> | The directory of the entrypoint of the current program. |
 | <code><a href="#@winglang/sdk.std.IApp.property.isTestEnvironment">isTestEnvironment</a></code> | <code>bool</code> | `true` if this is a testing environment. |
+| <code><a href="#@winglang/sdk.std.IApp.property.parameters">parameters</a></code> | <code><a href="#@winglang/sdk.platform.ParameterRegistrar">ParameterRegistrar</a></code> | The application's parameter registrar. |
 | <code><a href="#@winglang/sdk.std.IApp.property.workdir">workdir</a></code> | <code>str</code> | The `.wing` directory into which you can emit artifacts during preflight. |
 
 ---
@@ -651,6 +678,18 @@ isTestEnvironment: bool;
 - *Type:* bool
 
 `true` if this is a testing environment.
+
+---
+
+##### `parameters`<sup>Required</sup> <a name="parameters" id="@winglang/sdk.std.IApp.property.parameters"></a>
+
+```wing
+parameters: ParameterRegistrar;
+```
+
+- *Type:* <a href="#@winglang/sdk.platform.ParameterRegistrar">ParameterRegistrar</a>
+
+The application's parameter registrar.
 
 ---
 

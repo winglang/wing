@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { forwardRef } from "react";
 
-import { IconComponent } from "./resource-icon.js";
+import type { IconComponent } from "./resource-icon.js";
 import { useTheme } from "./theme-provider.js";
 
 export interface InputProps {

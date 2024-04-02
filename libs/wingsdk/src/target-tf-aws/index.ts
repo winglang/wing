@@ -2,7 +2,6 @@ export * from "./api";
 export * from "./app";
 export * from "./bucket";
 export * from "./counter";
-export * from "./dynamodb-table";
 export * from "./function";
 export * from "./queue";
 export * from "./schedule";

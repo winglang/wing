@@ -20,6 +20,4 @@ test "topic subscribers are invoked without blocking" {
 
   // after a while, the counter should be 1
   util.waitUntil(inflight () => { return counter.peek() == 1; }, interval: 1s, timeout: 30s);
-
-  assert(counter.peek() == 1);
 }

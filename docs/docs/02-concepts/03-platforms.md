@@ -7,8 +7,6 @@ keywords: [platforms, targets, target, platform, aws, gcp, azure, sim, terraform
 
 When working with the Wing programming language, an integral part of the compilation process is the use of platform. In essence, platform specify how and where your application is deployed. They determine both the cloud environment and the provisioning engine that the code will be deployed with.
 
-## Platforms
-
 You can view the list of available builtin platform with the `wing compile --help` command. Here is an example of the output:
 
 ```sh
@@ -40,6 +38,29 @@ The order in which platforms are evaluated is important.
 
 The first platform in the list is the primary platform, it is responsible for providing the Wing compiler with the base App that will be used to determine how resources are created, as well it will also lay the ground work for what target the rest of the platforms will need to be compatible with.
 
+#### Implicit Platforms
+
+Additionally, you can use naming conventions to implicitly define platforms that should be used. These platform files can be located in the root of your project or in a library that your project uses. The naming convention is as follows:
+```sh
+wplatform.js
+*.wplatform.js
+```
+
+For example, if you have a file named `custom.wplatform.js` in the root of your project, it will automatically be added to the list of platforms to be used when compiling your application. Its also important to note that implicit platforms are always loaded after the platforms specified in the `--platform` option.
+
+The use of implicit platforms can be beneficial when writing a Wing library that requires a specific platform to be used. For example, if you are writing a library that requires a specific parameter to be passed to the platform, you can use an implicit platform to ensure that the parameter is always provided.
+
+For example, if your library structure looks like this:
+
+```sh
+my-library/
+  lib.w
+  custom.wplatform.js
+```
+
+Then the custom platform can define any required parameters that the library needs to function properly. (see [Defining Custom Platform Parameters](#defining-custom-platform-parameters) for more information on how to define custom platform parameters)
+
+
 ### Provisioning Engines
 
 Provisioning is the process of setting up and creating infrastructure, and the provisioning engine is the driver behind this deployment. Common engines used in the Wing compilation process include Terraform and AWS CDK, with support for more planned ([tracking issue](https://github.com/winglang/wing/issues/2066)).
@@ -68,8 +89,8 @@ which will tell the `tf-aws` platform to use an existing VPC. However this will 
 ```sh
 Error: Parameter validation errors:
 - must have required property 'vpc_id'
-- must have required property 'private_subnet_id'
-- must have required property 'public_subnet_id'
+- must have required property 'private_subnet_ids'
+- must have required property 'public_subnet_ids'
 ```
 
 it is possible to provide these additional parameters using the `--value` option as well. For example:
@@ -83,11 +104,17 @@ Though this may be a bit verbose. As an alternative you can use a values file. V
 Here is an example of using a `wing.toml` file to provide the same parameters as above:
 
 ```toml
-[tf-aws]
-vpc = "existing"
-vpcId = "vpc-1234567890"
-privateSubnetId = "subnet-1234567890"
-publicSubnetId = "subnet-1234567890"
+[ tf-aws ]
+# vpc can be set to "new" or "existing"
+vpc = "new"
+# vpc_lambda will ensure that lambda functions are created within the vpc on the private subnet
+vpc_lambda = true
+# vpc_api_gateway will ensure that the api gateway is created within the vpc on the private subnet
+vpc_api_gateway = true
+# The following parameters will be required if using "existing" vpc
+# vpc_id = "vpc-123xyz"
+# private_subnet_ids = ["subnet-123xyz"]
+# public_subnet_ids = ["subnet-123xyz"]
 ```
 
 #### Target-specific code

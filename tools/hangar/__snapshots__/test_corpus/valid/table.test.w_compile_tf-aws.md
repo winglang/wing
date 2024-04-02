@@ -18,11 +18,11 @@
   },
   "resource": {
     "aws_dynamodb_table": {
-      "exTable": {
+      "Table": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.Table/Default",
-            "uniqueId": "exTable"
+            "path": "root/Default/Default/Table/Default",
+            "uniqueId": "Table"
           }
         },
         "attribute": [
@@ -33,7 +33,7 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "simple-tableex.Table-c840a49c",
+        "name": "simple-tableTable-c89b2d37",
         "point_in_time_recovery": {
           "enabled": true
         }
@@ -56,7 +56,7 @@ const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const t = this.node.root.new("@winglang/sdk.ex.Table", ex.Table, this, "ex.Table", { name: "simple-table", primaryKey: "id", columns: ({["id"]: ex.ColumnType.STRING, ["name"]: ex.ColumnType.STRING, ["age"]: ex.ColumnType.NUMBER}) });
+    const t = this.node.root.new("@winglang/sdk.ex.Table", ex.Table, this, "Table", { name: "simple-table", primaryKey: "id", columns: ({["id"]: ex.ColumnType.STRING, ["name"]: ex.ColumnType.STRING, ["age"]: ex.ColumnType.NUMBER}) });
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

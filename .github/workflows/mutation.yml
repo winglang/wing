@@ -27,7 +27,7 @@ jobs:
         id: download-artifacts
         uses: dawidd6/action-download-artifact@v3
         with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           run_id: ${{ github.event.workflow_run.id }}
           name: .+\.diff$
           name_is_regexp: true
@@ -37,7 +37,7 @@ jobs:
       - uses: marocchino/action-workflow_run-status@54b6e87d6cb552fc5f36dbe9a722a6048725917a
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Token check
         if: steps.download-artifacts.outputs.found_artifact == 'true'
@@ -50,11 +50,33 @@ jobs:
             It requires private repo read/write permissions." >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
+      
+      - name: Find associated pull request
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const mainRepo = context.payload.workflow_run.repository.full_name;
+            const headBranch = context.payload.workflow_run.head_branch;
+            console.log(`Searching for pull request in ${mainRepo} with head branch ${headBranch}`);
+
+            const response = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${mainRepo} is:pr is:open head:${headBranch}`,
+              per_page: 1,
+            });
+            const prs = response.data.items;
+            if (prs.length < 1) {
+              throw new Error('No pull request found for the commit');
+            }
+            const prNumber = prs[0].number;
+            console.log(`Pull request number is ${prNumber}`);
+            return prNumber;
 
       - name: Unstable mutation comment
         if: steps.download-artifacts.outputs.found_artifact == 'true' && startsWith(github.event.workflow_run.head_commit.message, format('chore{0} self mutation', ':'))
         uses: thollander/actions-comment-pull-request@v2
         with:
+          pr_number: ${{ steps.pr.outputs.result }}
           mode: recreate
           message: |
             ### :x: Unstable Self-Mutation :x:
@@ -67,33 +89,29 @@ jobs:
             - Flakey tests (relying on one of the above)
           comment_tag: UnstableMutation
           GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-      
+
       - name: Unstable mutation fail
         if: steps.download-artifacts.outputs.found_artifact == 'true' && startsWith(github.event.workflow_run.head_commit.message, format('chore{0} self mutation', ':'))
         run: exit 1
 
       - name: Disable Git Hooks
         if: steps.download-artifacts.outputs.found_artifact == 'true'
-        run: |
-          git config --global core.hooksPath /dev/null
+        run: git config --global core.hooksPath /dev/null
 
       - name: Update PR Branch
         uses: actions/github-script@v7
+        id: branch-update
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |
-            // use API to get the PR data since we can't rely on the context across forks
-            const pulls = await github.rest.pulls.list({
-              per_page: 1,
+            const prContextData = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
+              pull_number: ${{ steps.pr.outputs.result }}
             });
-
-            const prContextData = pulls.data[0];
-            const prNumber = prContextData.number;
-            const originalSha = prContextData.head.sha;
+            const prNumber = prContextData.data.number;
+            const originalSha = prContextData.data.head.sha;
 
             try {
               console.log("Updating PR branch");
@@ -166,19 +184,9 @@ jobs:
         with:
           github-token: ${{ secrets.MUTATION_TOKEN }}
           script: |
-            // use API to get the PR number since we can't rely on the context across forks
-            const pulls = await github.rest.pulls.list({
-              per_page: 1,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: `${context.payload.workflow_run.head_repository.full_name}:${context.payload.workflow_run.head_branch}`
-            });
-            const prNumber = pulls.data[0].number;
-            const labels = ["⚠️ pr/review-mutation"];
-
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: prNumber,
-              labels: labels
+              issue_number: ${{ steps.pr.outputs.result }},
+              labels: ["⚠️ pr/review-mutation"]
             });

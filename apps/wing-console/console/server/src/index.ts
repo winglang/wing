@@ -16,7 +16,7 @@ import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
 import type { Analytics } from "./utils/analytics.js";
 import { createCompiler } from "./utils/compiler.js";
-import {
+import type {
   FileLink,
   LayoutConfig,
   TestItem,
@@ -42,6 +42,7 @@ export type { Config } from "./config.js";
 export type { Router } from "./router/index.js";
 export type { HostUtils } from "./hostUtils.js";
 export type { RouterContext } from "./utils/createRouter.js";
+export type { RouterMeta } from "./utils/createRouter.js";
 export type { MapNode, MapEdge } from "./router/app.js";
 export type { InternalTestResult } from "./router/test.js";
 export type { Column } from "./router/table.js";

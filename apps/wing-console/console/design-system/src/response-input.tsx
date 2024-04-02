@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 import { SpinnerLoader } from "./spinner-loader.js";
 import { useTheme } from "./theme-provider.js";

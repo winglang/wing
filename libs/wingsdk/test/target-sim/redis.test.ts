@@ -19,7 +19,9 @@ test("create a Redis resource", async () => {
     },
     path: "root/my_redis",
     addr: expect.any(String),
-    props: {},
+    props: {
+      port: expect.any(String),
+    },
     type: REDIS_FQN,
   });
   expect(app.snapshot()).toMatchSnapshot();

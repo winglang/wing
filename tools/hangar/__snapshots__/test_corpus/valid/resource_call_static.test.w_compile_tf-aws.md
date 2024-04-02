@@ -55,11 +55,11 @@ module.exports = function({ $globalCounter }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "cloudCounter": {
+      "Counter": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "cloudCounter"
+            "path": "root/Default/Default/Counter/Default",
+            "uniqueId": "Counter"
           }
         },
         "attribute": [
@@ -70,7 +70,7 @@ module.exports = function({ $globalCounter }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c866f225"
+        "name": "wing-counter-Counter-c824ef62"
       }
     }
   }
@@ -162,7 +162,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access cloud resource through static methods only", new $Closure1(this, "$Closure1"));
   }
 }
