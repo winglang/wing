@@ -793,9 +793,15 @@ pub struct FunctionSignature {
 	/// The type of "this" inside the function, if any. This should be None for
 	/// static or anonymous functions.
 	pub this_type: Option<TypeRef>,
+	/// The parameters of the function.
 	pub parameters: Vec<FunctionParameter>,
+	/// The return type of the function.
 	pub return_type: TypeRef,
+	/// The phase in which this function exists
 	pub phase: Phase,
+	/// Expects an implicit caller scope argument to be passed to the function (for static preflight functions
+	/// so they can instantiate preflight classes)
+	pub implicit_scope_param: bool,
 	/// During jsify, calls to this function will be replaced with this string
 	/// In JSII imports, this is denoted by the `@macro` attribute
 	/// This string may contain special tokens:
@@ -1968,6 +1974,7 @@ impl<'a> TypeChecker<'a> {
 				phase: Phase::Independent,
 				js_override: Some("console.log($args$)".to_string()),
 				docs: Docs::with_summary("Logs a message"),
+				implicit_scope_param: false,
 			}),
 			scope,
 		);
@@ -1993,6 +2000,7 @@ impl<'a> TypeChecker<'a> {
 				phase: Phase::Independent,
 				js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
 				docs: Docs::with_summary("Asserts that a condition is true"),
+				implicit_scope_param: false,
 			}),
 			scope,
 		);
@@ -2010,6 +2018,7 @@ impl<'a> TypeChecker<'a> {
 				phase: Phase::Independent,
 				js_override: Some("$args$".to_string()),
 				docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
+				implicit_scope_param: false,
 			}),
 			scope,
 		);
@@ -2037,6 +2046,7 @@ impl<'a> TypeChecker<'a> {
 				phase: Phase::Preflight,
 				js_override: Some("$helpers.nodeof($args$)".to_string()),
 				docs: Docs::with_summary("Obtain the tree node of a preflight resource."),
+				implicit_scope_param: false,
 			}),
 			scope,
 		);
@@ -2072,6 +2082,7 @@ impl<'a> TypeChecker<'a> {
 				docs: Docs::with_summary(
 					"Explicitly apply qualifications to a preflight object used in the current method/function",
 				),
+				implicit_scope_param: false,
 			}),
 			scope,
 		)
@@ -2939,7 +2950,7 @@ impl<'a> TypeChecker<'a> {
 				arg_list.pos_args.iter().skip(variadic_index),
 				arg_list_types.pos_args.iter().skip(variadic_index),
 			) {
-				// If your calling a method on some container type, and it takes a generic variadic argument,
+				// If you're calling a method on some container type, and it takes a generic variadic argument,
 				// then substitute that argument type (T1) with the container's element type when typechecking the function arguments
 				if let Some(element_type) = func_sig.this_type.and_then(|x| x.collection_item_type()) {
 					if let Some(object) = variadic_args_inner_type.as_class() {
@@ -3803,6 +3814,7 @@ impl<'a> TypeChecker<'a> {
 					phase: ast_sig.phase,
 					js_override: None,
 					docs: Docs::default(),
+					implicit_scope_param: false,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
@@ -4256,6 +4268,7 @@ impl<'a> TypeChecker<'a> {
 			let mut method_type = self.resolve_type_annotation(&method_def.signature.to_type_annotation(), env);
 			self.add_method_to_class_env(
 				&mut method_type,
+				method_def,
 				if method_def.is_static { None } else { Some(class_type) },
 				method_def.access,
 				&mut class_env,
@@ -4273,6 +4286,7 @@ impl<'a> TypeChecker<'a> {
 		let mut init_func_type = self.resolve_type_annotation(&ast_class.initializer.signature.to_type_annotation(), env);
 		self.add_method_to_class_env(
 			&mut init_func_type,
+			&ast_class.initializer,
 			None,
 			ast_class.initializer.access,
 			&mut class_env,
@@ -4290,6 +4304,7 @@ impl<'a> TypeChecker<'a> {
 			self.resolve_type_annotation(&ast_class.inflight_initializer.signature.to_type_annotation(), env);
 		self.add_method_to_class_env(
 			&mut inflight_init_func_type,
+			&ast_class.inflight_initializer,
 			Some(class_type),
 			ast_class.inflight_initializer.access,
 			&mut class_env,
@@ -4960,16 +4975,44 @@ impl<'a> TypeChecker<'a> {
 	fn add_method_to_class_env(
 		&mut self,
 		method_type: &mut TypeRef,
+		method_def: &FunctionDefinition,
 		instance_type: Option<TypeRef>,
 		access: AccessModifier,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
 	) {
-		// use the class type as the function's "this" type (or None if static)
-		method_type
+		// Modify the method's type based on the fact we know it's a method and not just a function
+		let method_sig = method_type
 			.as_mut_function_sig()
-			.expect("Expected method type to be a function")
-			.this_type = instance_type;
+			.expect("Expected method type to be a function");
+
+		// use the class type as the function's "this" type (or None if static)
+		method_sig.this_type = instance_type;
+
+		// For now all static preflight methods require an implicit scope argument. In the future we may be smart and if
+		// the method doesn't instantiate any preflight classes then we can do away with it.
+		//
+		// Special cases:
+		// 1) If we're overriding a method from a parent class, we assume its `implicit_scope_param`. Note that
+		//    this isn't stricly correct and we don't have clearly defined rules for static method inheritance, but this
+		//    resolves the issue of calling the base `Resource` class's onTypeLift method which doesn't expect a scope param.
+		// 2) If the method is extern we can't add any implicit params.
+		let inherit_implicit_scope_param = class_env.parent.and_then(|e| {
+			e.lookup(method_name, None).and_then(|s| {
+				s.as_variable()
+					.unwrap()
+					.type_
+					.as_function_sig()
+					.map(|s| s.implicit_scope_param)
+			})
+		});
+		method_sig.implicit_scope_param = if let Some(inherit_implicit_scope_param) = inherit_implicit_scope_param {
+			inherit_implicit_scope_param
+		} else {
+			instance_type.is_none()
+				&& method_sig.phase == Phase::Preflight
+				&& !matches!(method_def.body, FunctionBody::External(_))
+		};
 
 		// If this method is overriding a parent method, check access modifiers allow it, note this is only relevant for instance methods
 		if instance_type.is_some() {
@@ -5325,6 +5368,7 @@ impl<'a> TypeChecker<'a> {
 					phase: if new_this_type.is_none() { env.phase } else { sig.phase },
 					js_override: sig.js_override.clone(),
 					docs: sig.docs.clone(),
+					implicit_scope_param: sig.implicit_scope_param,
 				};
 
 				return self.types.add_type(Type::Function(new_sig));
@@ -6422,6 +6466,7 @@ mod tests {
 			phase,
 			js_override: None,
 			docs: Docs::default(),
+			implicit_scope_param: false,
 		})
 	}
 

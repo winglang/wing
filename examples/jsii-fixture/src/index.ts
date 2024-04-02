@@ -22,6 +22,10 @@ export class JsiiClass {
     return `Got ${arg}`;
   }
 
+  public static staticMethod(arg: string) {
+    return `Got ${arg}`;
+  }
+  
   public methodWithStructParam(s: SomeStruct): string {
     return s.field;
   }
