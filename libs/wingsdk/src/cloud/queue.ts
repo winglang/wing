@@ -13,7 +13,7 @@ export const QUEUE_FQN = fqnForType("cloud.Queue");
 /**
  * Dead-letter queue default retries
  */
-export const DEFAULT_RETRIES = 0;
+export const DEFAULT_DELIVERY_ATTEMPS = 1;
 
 /**
  * Dead letter queue options.
@@ -24,11 +24,11 @@ export interface DeadLetterQueueProps {
    */
   readonly queue: Queue;
   /**
-   * Number of times a message will be reprocessed before being
+   * Number of times a message will be processed before being
    * sent to the dead-letter queue.
-   * @default 0
+   * @default 1
    */
-  readonly retries?: number;
+  readonly maxDeliveryAttemps?: number;
 }
 
 /**
@@ -152,7 +152,7 @@ export interface IQueueSetConsumerHandlerClient {
    * Function that will be called when a message is received from the queue.
    * @inflight
    */
-  handle(message: string): Promise<any>;
+  handle(message: string): Promise<void>;
 }
 
 /**

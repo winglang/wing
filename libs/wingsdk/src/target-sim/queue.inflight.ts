@@ -8,7 +8,12 @@ import {
   FunctionHandle,
   DeadLetterQueueSchema,
 } from "./schema-resources";
-import { IFunctionClient, IQueueClient, QUEUE_FQN } from "../cloud";
+import {
+  DEFAULT_DELIVERY_ATTEMPS,
+  IFunctionClient,
+  IQueueClient,
+  QUEUE_FQN,
+} from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -76,7 +81,11 @@ export class Queue
         }
         for (const message of messages) {
           this.messages.push(
-            new QueueMessage(this.retentionPeriod, 0, message)
+            new QueueMessage(
+              this.retentionPeriod,
+              DEFAULT_DELIVERY_ATTEMPS,
+              message
+            )
           );
         }
       },
@@ -186,7 +195,7 @@ export class Queue
               const errorList = JSON.parse(result);
               let retriesMessages = [];
               for (const msg of errorList) {
-                if (msg.retries < this.dlq.retries) {
+                if (msg.maxDeliveryAttemps < this.dlq.maxDeliveryAttemps) {
                   msg.retries++;
                   retriesMessages.push(msg);
                 } else {

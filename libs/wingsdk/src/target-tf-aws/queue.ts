@@ -10,10 +10,7 @@ import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { IAwsQueue } from "../shared-aws";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import {
-  Queue as AwsQueue,
-  QUEUE_STANDARD_EXECUTION,
-} from "../shared-aws/queue";
+import { Queue as AwsQueue } from "../shared-aws/queue";
 import { Duration, IInflightHost, Node } from "../std";
 
 /**
@@ -48,8 +45,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
           redrivePolicy: JSON.stringify({
             deadLetterTargetArn: AwsQueue.from(props.dlq.queue)?.queueArn,
             maxReceiveCount:
-              QUEUE_STANDARD_EXECUTION +
-              (props.dlq.retries ?? cloud.DEFAULT_RETRIES),
+              props.dlq.maxDeliveryAttemps ?? cloud.DEFAULT_DELIVERY_ATTEMPS,
           }),
         }
       : {

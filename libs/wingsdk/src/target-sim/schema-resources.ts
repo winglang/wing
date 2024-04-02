@@ -79,8 +79,10 @@ export interface FunctionSchema extends BaseResourceSchema {
 export interface FunctionAttributes {}
 
 export interface DeadLetterQueueSchema {
+  /** Dead-letter queue handler token */
   dlqHandler: string;
-  retries: number;
+  /** Number of time a message will be processed */
+  maxDeliveryAttemps: number;
 }
 
 /** Schema for cloud.Queue */

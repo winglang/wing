@@ -287,7 +287,7 @@ let DeadLetterQueueProps = cloud.DeadLetterQueueProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.queue">queue</a></code> | <code><a href="#@winglang/sdk.cloud.Queue">Queue</a></code> | Queue to receive messages that failed processing. |
-| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.retries">retries</a></code> | <code>num</code> | Number of times a message will be reprocessed before being sent to the dead-letter queue. |
+| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.maxDeliveryAttemps">maxDeliveryAttemps</a></code> | <code>num</code> | Number of times a message will be processed before being sent to the dead-letter queue. |
 
 ---
 
@@ -303,16 +303,16 @@ Queue to receive messages that failed processing.
 
 ---
 
-##### `retries`<sup>Optional</sup> <a name="retries" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.retries"></a>
+##### `maxDeliveryAttemps`<sup>Optional</sup> <a name="maxDeliveryAttemps" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.maxDeliveryAttemps"></a>
 
 ```wing
-retries: num;
+maxDeliveryAttemps: num;
 ```
 
 - *Type:* num
-- *Default:* 0
+- *Default:* 1
 
-Number of times a message will be reprocessed before being sent to the dead-letter queue.
+Number of times a message will be processed before being sent to the dead-letter queue.
 
 ---
 
@@ -513,7 +513,7 @@ Inflight client for `IQueueSetConsumerHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle"></a>
 
 ```wing
-inflight handle(message: str): any
+inflight handle(message: str): void
 ```
 
 Function that will be called when a message is received from the queue.

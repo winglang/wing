@@ -7,7 +7,7 @@ import { App } from "./app";
 import { std, core, cloud } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsQueue, Queue as AwsQueue, QUEUE_STANDARD_EXECUTION } from "@winglang/sdk/lib/shared-aws/queue";
+import { IAwsQueue, Queue as AwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 
 /**
@@ -32,7 +32,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
         : Duration.hours(1),
       deadLetterQueue: {
         queue: SQSQueue.fromQueueArn(this, "DeadLetterQueue", AwsQueue.from(props.dlq.queue)?.queueArn!),
-        maxReceiveCount: QUEUE_STANDARD_EXECUTION + (props.dlq.retries ?? cloud.DEFAULT_RETRIES),
+        maxReceiveCount: props.dlq.maxDeliveryAttemps ?? cloud.DEFAULT_DELIVERY_ATTEMPS,
       }
     } : {
       visibilityTimeout: props.timeout
