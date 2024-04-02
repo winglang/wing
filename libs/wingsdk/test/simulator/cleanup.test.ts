@@ -19,7 +19,7 @@ async function main() {
   console.log("Simulator started");
 
   process.on("SIGTERM", async () => {
-    console.log("SIGTERM received, stopping simulator...");
+    console.log("SIGTERM received, stopping simulator..");
     await sim.stop();
     process.exit(1);
   });
