@@ -53,10 +53,6 @@ go and deploy to the cloud. Instead, it will just synthesize the output and comp
 committed `.snap` file. If the output is not the same, the test will fail with a nice diff
 indicating that there was an unexpected regression.
 
-We will also need `wing test --update-snapshot|-U -t tf-aws foo.test.w` to allow only updating the
-snapshots, because sometimes it doesn't make practical sense to have to deploy just in order to
-update the snapshot.
-
 The `--snapshots` or `-s` switch can be used to control behavior:
 
  * `--snapshots=auto` - auto-detect based on CI flag (described above)
