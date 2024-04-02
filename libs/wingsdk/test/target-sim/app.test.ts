@@ -48,7 +48,10 @@ test("tests do not synthesize functions when test mode is off", async () => {
   await s.stop();
 
   // THEN
-  expect(resources.sort()).toEqual(["root/Default/my_bucket"]);
+  expect(resources.sort()).toEqual([
+    "root/Default/my_bucket",
+    "root/Default/my_bucket/Policy",
+  ]);
 });
 
 test("tests are synthesized into individual environments when test mode is on", async () => {
@@ -73,8 +76,12 @@ test("tests are synthesized into individual environments when test mode is on", 
   expect(resources.sort()).toEqual([
     "root/cloud.TestRunner",
     "root/env0/my_bucket",
+    "root/env0/my_bucket/Policy",
     "root/env0/test:my_test1/Handler",
+    "root/env0/test:my_test1/Handler/Policy",
     "root/env1/my_bucket",
+    "root/env1/my_bucket/Policy",
     "root/env1/test:my_test2/Handler",
+    "root/env1/test:my_test2/Handler/Policy",
   ]);
 });

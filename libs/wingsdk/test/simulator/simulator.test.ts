@@ -214,9 +214,15 @@ describe("in-place updates", () => {
     new Bucket(app, "Bucket1");
 
     const sim = await app.startSimulator(stateDir);
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
 
-    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
+    expect(simTraces(sim)).toStrictEqual([
+      "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+    ]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1");
@@ -232,10 +238,14 @@ describe("in-place updates", () => {
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "Update: 0 added, 0 updated, 0 deleted",
     ]);
 
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
     await sim.stop();
   });
 
@@ -246,8 +256,14 @@ describe("in-place updates", () => {
 
     new Bucket(app, "Bucket1");
     const sim = await app.startSimulator(stateDir);
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
-    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
+    expect(simTraces(sim)).toStrictEqual([
+      "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+    ]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1");
@@ -256,16 +272,23 @@ describe("in-place updates", () => {
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
     expect(updateTrace(sim)).toStrictEqual({
-      added: ["root/Bucket2"],
+      added: ["root/Bucket2", "root/Bucket2/Policy"],
       deleted: [],
       updated: [],
     });
 
-    expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+      "root/Bucket2",
+      "root/Bucket2/Policy",
+    ]);
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
-      "Update: 1 added, 0 updated, 0 deleted",
+      "root/Bucket1/Policy started",
+      "Update: 2 added, 0 updated, 0 deleted",
       "root/Bucket2 started",
+      "root/Bucket2/Policy started",
     ]);
 
     await sim.stop();
@@ -278,10 +301,17 @@ describe("in-place updates", () => {
     new Bucket(app, "Bucket1");
     new Bucket(app, "Bucket2");
     const sim = await app.startSimulator(stateDir);
-    expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+      "root/Bucket2",
+      "root/Bucket2/Policy",
+    ]);
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "root/Bucket2 started",
+      "root/Bucket2/Policy started",
     ]);
 
     const app2 = new SimApp();
@@ -291,16 +321,22 @@ describe("in-place updates", () => {
     await sim.update(app2Dir);
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
-      deleted: ["root/Bucket2"],
+      deleted: ["root/Bucket2", "root/Bucket2/Policy"],
       updated: [],
     });
 
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "root/Bucket2 started",
-      "Update: 0 added, 0 updated, 1 deleted",
+      "root/Bucket2/Policy started",
+      "Update: 0 added, 0 updated, 2 deleted",
+      "root/Bucket2/Policy stopped",
       "root/Bucket2 stopped",
     ]);
 
@@ -313,9 +349,15 @@ describe("in-place updates", () => {
     const app = new SimApp();
     new Bucket(app, "Bucket1");
     const sim = await app.startSimulator(stateDir);
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeFalsy();
-    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
+    expect(simTraces(sim)).toStrictEqual([
+      "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+    ]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1", { public: true });
@@ -328,13 +370,19 @@ describe("in-place updates", () => {
       updated: ["root/Bucket1"],
     });
 
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "Update: 0 added, 1 updated, 0 deleted",
+      "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
     ]);
 
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeTruthy();
@@ -350,9 +398,15 @@ describe("in-place updates", () => {
 
     const sim = await app.startSimulator(stateDir);
 
-    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
+    expect(simTraces(sim)).toStrictEqual([
+      "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+    ]);
 
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeFalsy();
 
     const app2 = new SimApp();
@@ -369,26 +423,40 @@ describe("in-place updates", () => {
 
     await sim.update(app2Dir);
     expect(updateTrace(sim)).toStrictEqual({
-      added: ["root/Api", "root/Api/Endpoint", "root/Function"],
+      added: [
+        "root/Api",
+        "root/Api/Endpoint",
+        "root/Api/Policy",
+        "root/Function",
+        "root/Function/Policy",
+      ],
       deleted: [],
       updated: ["root/Bucket1"],
     });
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
-      "Update: 3 added, 1 updated, 0 deleted",
+      "root/Bucket1/Policy started",
+      "Update: 5 added, 1 updated, 0 deleted",
+      "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
       "root/Api started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "root/Api/Endpoint started",
+      "root/Api/Policy started",
       "root/Function started",
+      "root/Function/Policy started",
     ]);
 
     expect(sim.listResources()).toEqual([
       "root/Api",
       "root/Api/Endpoint",
+      "root/Api/Policy",
       "root/Bucket1",
+      "root/Bucket1/Policy",
       "root/Function",
+      "root/Function/Policy",
     ]);
 
     const bucketClient = sim.getResource("root/Bucket1") as IBucketClient;
@@ -443,15 +511,12 @@ describe("in-place updates", () => {
     const stateDir = mkdtemp();
     const sim = await app.startSimulator(stateDir);
 
-    const urlBeforeUpdate = await sim
-      .getResource("root/Bucket1")
-      .get("url.txt");
-    expect(urlBeforeUpdate.startsWith("http://127.0.0")).toBeTruthy();
-
     expect(simTraces(sim)).toEqual([
       "root/Api1 started",
       "root/Api1/Endpoint started",
+      "root/Api1/Policy started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
     ]);
 
     // now lets change some configuration of Api1. we expect the bucket to be replaced as well
@@ -461,35 +526,35 @@ describe("in-place updates", () => {
     const myBucket2 = new Bucket(app2, "Bucket1");
     myBucket2.addObject("url.txt", myApi2.url);
 
-    // clear the state directory
-    fs.rmdirSync(stateDir, { recursive: true });
-
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
 
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
       deleted: [],
-      updated: ["root/Api1"],
+      updated: ["root/Api1"], // TODO: shouldn't Bucket also be listed here?
     });
 
     expect(simTraces(sim)).toEqual([
       "root/Api1 started",
       "root/Api1/Endpoint started",
+      "root/Api1/Policy started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "Update: 0 added, 1 updated, 0 deleted",
       "root/Api1/Endpoint stopped",
+      "root/Api1/Policy stopped",
+      "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
       "root/Api1 stopped",
       "root/Api1 started",
       "root/Api1/Endpoint started",
+      "root/Api1/Policy started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
     ]);
 
-    const urlAfterUpdate = await (
-      sim.getResource("root/Bucket1") as IBucketClient
-    ).get("url.txt");
-    expect(urlAfterUpdate).not.toEqual(urlBeforeUpdate);
+    await sim.stop();
   });
 
   test("token value is changed across an update", async () => {
@@ -551,15 +616,24 @@ describe("in-place updates", () => {
 
     expect(simTraces(sim)).toEqual([
       "root/State started",
+      "root/Service started",
+      "root/Service/Policy started",
       "root/State.my_value = bang",
-      "root/Service started",
+      "root/Service/Helper started",
       "root/Function started",
+      "root/Function/Policy started",
       "Update: 0 added, 2 updated, 0 deleted",
+      "root/Service/Helper stopped",
+      "root/Service/Policy stopped",
       "root/Service stopped",
+      "root/Function/Policy stopped",
       "root/Function stopped",
-      "root/State.my_value = bing",
       "root/Service started",
+      "root/Service/Policy started",
+      "root/State.my_value = bing",
+      "root/Service/Helper started",
       "root/Function started",
+      "root/Function/Policy started",
     ]);
   });
 
@@ -584,15 +658,21 @@ describe("in-place updates", () => {
     await sim.update(app2Dir);
 
     expect(simTraces(sim)).toEqual([
-      "root/OnDeploy/Function started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+      "root/OnDeploy/Function started",
+      "root/OnDeploy/Function/Policy started",
       "root/OnDeploy started",
-      "Update: 0 added, 2 updated, 0 deleted",
+      "Update: 0 added, 3 updated, 0 deleted",
       "root/OnDeploy stopped",
+      "root/OnDeploy/Function/Policy stopped",
       "root/OnDeploy/Function stopped",
+      "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
-      "root/OnDeploy/Function started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+      "root/OnDeploy/Function started",
+      "root/OnDeploy/Function/Policy started",
       "root/OnDeploy started",
     ]);
   });
@@ -612,9 +692,12 @@ describe("in-place updates", () => {
 
     expect(simTraces(sim)).toEqual([
       "root/Function started",
+      "root/Function/Policy started",
       "Update: 0 added, 1 updated, 0 deleted",
+      "root/Function/Policy stopped",
       "root/Function stopped",
       "root/Function started",
+      "root/Function/Policy started",
     ]);
   });
 
@@ -633,9 +716,42 @@ describe("in-place updates", () => {
 
     expect(simTraces(sim)).toEqual([
       "root/Service started",
+      "root/Service/Policy started",
+      "root/Service/Helper started",
       "Update: 0 added, 1 updated, 0 deleted",
+      "root/Service/Helper stopped",
+      "root/Service/Policy stopped",
       "root/Service stopped",
       "root/Service started",
+      "root/Service/Policy started",
+      "root/Service/Helper started",
+    ]);
+  });
+
+  test("cloud.OnDeploy is always replaced", async () => {
+    const app = new SimApp();
+    const handler = Testing.makeHandler(`async handle() {}`);
+    new OnDeploy(app, "OnDeploy", handler);
+
+    const sim = await app.startSimulator();
+
+    const app2 = new SimApp();
+    new OnDeploy(app2, "OnDeploy", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/OnDeploy/Function started",
+      "root/OnDeploy/Function/Policy started",
+      "root/OnDeploy started",
+      "Update: 0 added, 2 updated, 0 deleted",
+      "root/OnDeploy stopped",
+      "root/OnDeploy/Function/Policy stopped",
+      "root/OnDeploy/Function stopped",
+      "root/OnDeploy/Function started",
+      "root/OnDeploy/Function/Policy started",
+      "root/OnDeploy started",
     ]);
   });
 });

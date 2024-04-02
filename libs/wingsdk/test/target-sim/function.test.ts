@@ -130,7 +130,7 @@ test("invoke function fails", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[1].data.error).toMatchObject({
+  expect(s.listTraces()[2].data.error).toMatchObject({
     message: "Name must start with uppercase letter",
   });
   expect(app.snapshot()).toMatchSnapshot();
@@ -190,13 +190,13 @@ test("invoke function with process.exit(1)", async () => {
   // WHEN
   const PAYLOAD = {};
   await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-    "Process exited with code 1"
+    "Process exited with code 1, signal null"
   );
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[1].data.error).toMatchObject({
-    message: "Process exited with code 1",
+  expect(s.listTraces()[2].data.error).toMatchObject({
+    message: "Process exited with code 1, signal null",
   });
   expect(app.snapshot()).toMatchSnapshot();
 });
@@ -247,5 +247,13 @@ test("__dirname and __filename cannot be used within inflight code", async () =>
   await dirnameInvoker(s);
   await filenameInvoker(s);
 
-  expect(listMessages(s)).toMatchSnapshot();
+  await s.stop();
+
+  expect(
+    listMessages(s).filter((m) =>
+      m.includes(
+        "Warning: __dirname and __filename cannot be used within bundled cloud functions."
+      )
+    )
+  ).toHaveLength(2);
 });

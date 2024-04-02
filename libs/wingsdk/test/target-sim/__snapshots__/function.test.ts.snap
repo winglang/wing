@@ -1,16 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`__dirname and __filename cannot be used within inflight code 1`] = `
-[
-  "root/Function.0 started",
-  "root/Function.1 started",
-  "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
-  "Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.",
-  "Invoke (payload=undefined).",
-  "Invoke (payload=undefined).",
-]
-`;
-
 exports[`create a function 1`] = `
 {
   ".wing/my_function_c85c4e0e.js": ""use strict";
@@ -63,6 +52,16 @@ async handle(event) {
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
+      },
+      {
+        "addr": "c8d421ed6ca2ddf857d835791bcde9240c8682a8d9",
+        "attrs": {},
+        "path": "root/my_function/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_function#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -139,6 +138,14 @@ async handle(event) {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -153,6 +160,21 @@ async handle(event) {
     "tree": {
       "children": {
         "my_function": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_function/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -180,7 +202,9 @@ async handle(event) {
 exports[`invoke function fails 1`] = `
 [
   "root/my_function started",
+  "root/my_function/Policy started",
   "Invoke (payload="{\\"name\\":\\"alice\\"}").",
+  "root/my_function/Policy stopped",
   "root/my_function stopped",
 ]
 `;
@@ -236,6 +260,16 @@ async handle(event) {
         },
         "type": "@winglang/sdk.cloud.Function",
       },
+      {
+        "addr": "c8d421ed6ca2ddf857d835791bcde9240c8682a8d9",
+        "attrs": {},
+        "path": "root/my_function/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_function#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -311,6 +345,14 @@ async handle(event) {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -325,6 +367,21 @@ async handle(event) {
     "tree": {
       "children": {
         "my_function": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_function/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -352,7 +409,9 @@ async handle(event) {
 exports[`invoke function succeeds 1`] = `
 [
   "root/my_function started",
+  "root/my_function/Policy started",
   "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
+  "root/my_function/Policy stopped",
   "root/my_function stopped",
 ]
 `;
@@ -408,6 +467,16 @@ async handle(event) {
         },
         "type": "@winglang/sdk.cloud.Function",
       },
+      {
+        "addr": "c8d421ed6ca2ddf857d835791bcde9240c8682a8d9",
+        "attrs": {},
+        "path": "root/my_function/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_function#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -483,6 +552,14 @@ async handle(event) {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -497,6 +574,21 @@ async handle(event) {
     "tree": {
       "children": {
         "my_function": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_function/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -524,7 +616,9 @@ async handle(event) {
 exports[`invoke function with environment variables 1`] = `
 [
   "root/my_function started",
+  "root/my_function/Policy started",
   "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
+  "root/my_function/Policy stopped",
   "root/my_function stopped",
 ]
 `;
@@ -582,6 +676,16 @@ async handle(event) {
         },
         "type": "@winglang/sdk.cloud.Function",
       },
+      {
+        "addr": "c8d421ed6ca2ddf857d835791bcde9240c8682a8d9",
+        "attrs": {},
+        "path": "root/my_function/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_function#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -657,6 +761,14 @@ async handle(event) {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -671,6 +783,21 @@ async handle(event) {
     "tree": {
       "children": {
         "my_function": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_function/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -698,7 +825,9 @@ async handle(event) {
 exports[`invoke function with process.exit(1) 1`] = `
 [
   "root/my_function started",
+  "root/my_function/Policy started",
   "Invoke (payload="{}").",
+  "root/my_function/Policy stopped",
   "root/my_function stopped",
 ]
 `;
@@ -744,6 +873,16 @@ async handle() {
         },
         "type": "@winglang/sdk.cloud.Function",
       },
+      {
+        "addr": "c8d421ed6ca2ddf857d835791bcde9240c8682a8d9",
+        "attrs": {},
+        "path": "root/my_function/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_function#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -819,6 +958,14 @@ async handle() {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -833,6 +980,21 @@ async handle() {
     "tree": {
       "children": {
         "my_function": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_function/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -967,6 +1129,16 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c80ba70b2cdb9a19bee761f329d38a2f8fe60dfd96",
+        "attrs": {},
+        "path": "root/Function.0/Policy",
+        "props": {
+          "principal": "\${wsim#root/Function.0#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+      {
         "addr": "c89ed254f66166d83153cc0a4952a15be63d47b0d2",
         "attrs": {},
         "path": "root/Function.1",
@@ -978,6 +1150,16 @@ return class Handler {
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
+      },
+      {
+        "addr": "c82b947659316c604ceae225ba418b0d37542a5ba9",
+        "attrs": {},
+        "path": "root/Function.1/Policy",
+        "props": {
+          "principal": "\${wsim#root/Function.1#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c8cd6c39da22910102d0cfeb2cb96f2160fa79e517",
@@ -993,6 +1175,16 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c84e1c1344ab5edfebbe25048f337b36bf0c9aed39",
+        "attrs": {},
+        "path": "root/Function.2/Policy",
+        "props": {
+          "principal": "\${wsim#root/Function.2#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+      {
         "addr": "c8badafa75a67ff66740e0c5fbbb392ab574b52b3c",
         "attrs": {},
         "path": "root/Function.3",
@@ -1004,6 +1196,16 @@ return class Handler {
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
+      },
+      {
+        "addr": "c808a620b5341fa15dc763e8b6ba15ff0ebfcc6240",
+        "attrs": {},
+        "path": "root/Function.3/Policy",
+        "props": {
+          "principal": "\${wsim#root/Function.3#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1080,6 +1282,14 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1094,6 +1304,21 @@ return class Handler {
     "tree": {
       "children": {
         "Function.0": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/Function.0/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -1106,6 +1331,21 @@ return class Handler {
           "path": "root/Function.0",
         },
         "Function.1": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/Function.1/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -1118,6 +1358,21 @@ return class Handler {
           "path": "root/Function.1",
         },
         "Function.2": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/Function.2/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -1130,6 +1385,21 @@ return class Handler {
           "path": "root/Function.2",
         },
         "Function.3": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/Function.3/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
