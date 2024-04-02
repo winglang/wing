@@ -28,7 +28,7 @@ test "spawn() with empty args" {
   let program = "echo";
   let args = [""];
   
-  let child = util.spawn(program, args, { stdout: util.Stdio.PIPED });
+  let child = util.spawn(program, args);
   let output = child.wait();
 
   expect.equal(output.stdout, "\n");
