@@ -1,7 +1,6 @@
 import { SIM_CONTAINER_FQN } from "./container";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { POLICY_FQN } from "./policy";
-import { SERVICE_HELPER_FQN } from "./service";
 import { STATE_FQN } from "./state";
 import {
   API_FQN,
@@ -25,6 +24,7 @@ import { ColumnType, REACT_APP_FQN, REDIS_FQN, TABLE_FQN } from "../ex";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
+  PolicyStatement,
 } from "../simulator/simulator";
 import { Json, TEST_RUNNER_FQN } from "../std";
 
@@ -98,25 +98,13 @@ export interface ServiceSchema extends BaseResourceSchema {
     readonly sourceCodeFile: string;
     /** A map of environment variables to run the function with. */
     readonly environmentVariables: Record<string, string>;
+    /** Whether to auto-start the service. */
+    readonly autoStart: boolean;
   };
 }
 
 /** Runtime attributes for cloud.Service */
 export interface ServiceAttributes {}
-
-/** Schema for sim.ServiceHelper */
-export interface ServiceHelperSchema extends BaseResourceSchema {
-  readonly type: typeof SERVICE_HELPER_FQN;
-  readonly props: {
-    /** The service. */
-    readonly service: ResourceHandle;
-    /** Whether to auto-start the service */
-    readonly autoStart: boolean;
-  };
-}
-
-/** Runtime attributes for sim.ServiceHelper */
-export interface ServiceHelperAttributes {}
 
 /** Runtime attributes for cloud.Schedule */
 export interface ScheduleAttributes {}
@@ -380,9 +368,4 @@ export interface PolicySchemaProps {
   readonly principal: ResourceHandle;
   /** The statements in the policy. */
   readonly statements: PolicyStatement[];
-}
-
-export interface PolicyStatement {
-  readonly operation: string;
-  readonly resourceHandle: ResourceHandle;
 }
