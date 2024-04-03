@@ -15,11 +15,14 @@ export class Redis
   private connection?: IoRedis;
   private isCleanedUp = false;
 
-  public constructor(private readonly props: RedisSchema["props"]) {
+  public constructor(
+    private readonly props: RedisSchema["props"],
+    _context: ISimulatorContext
+  ) {
     super();
   }
 
-  public async init(_context: ISimulatorContext): Promise<RedisAttributes> {
+  public async init(): Promise<RedisAttributes> {
     try {
       if (this.isCleanedUp) {
         return {};

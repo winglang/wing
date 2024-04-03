@@ -35,19 +35,7 @@ function makeHttpRequest(options: HttpRequestOptions): Promise<string> {
   });
 }
 
-/**
- * Creates a proxy object that forwards method calls to the simulator server.
- *
- * @param url The URL of the simulator server
- * @param handle The handle for the resource we're calling methods on or getting properties from
- * @param caller The handle of the resource that is making the calls
- * @returns A proxy object that forwards calls to the simulator server
- */
-export function makeSimulatorClient(
-  url: string,
-  handle: string,
-  caller: string
-) {
+export function makeSimulatorClient(url: string, handle: string) {
   let proxy: any;
   let hasThenMethod = true; // assume that the object has a "then" method until proven otherwise
 
@@ -57,7 +45,7 @@ export function makeSimulatorClient(
     }
 
     return async function (...args: any[]) {
-      const body: SimulatorServerRequest = { caller, handle, method, args };
+      const body: SimulatorServerRequest = { handle, method, args };
       const parsedUrl = new URL(url);
       const resp = await makeHttpRequest({
         hostname: parsedUrl.hostname,

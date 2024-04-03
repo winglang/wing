@@ -14,22 +14,18 @@ const VALUES_FILENAME = "values.json";
 export class Counter implements ICounterClient, ISimulatorResourceInstance {
   private values: Map<string, number>;
   private initial: number;
-  private _context: ISimulatorContext | undefined;
+  private readonly context: ISimulatorContext;
 
-  public constructor(props: CounterSchema["props"]) {
+  public constructor(
+    props: CounterSchema["props"],
+    context: ISimulatorContext
+  ) {
     this.initial = props.initial ?? 0;
     this.values = new Map().set("default", this.initial);
+    this.context = context;
   }
 
-  private get context(): ISimulatorContext {
-    if (!this._context) {
-      throw new Error("Cannot access context during class construction");
-    }
-    return this._context;
-  }
-
-  public async init(context: ISimulatorContext): Promise<CounterAttributes> {
-    this._context = context;
+  public async init(): Promise<CounterAttributes> {
     const valuesFile = join(this.context.statedir, VALUES_FILENAME);
     const valueFilesExists = await exists(valuesFile);
     if (valueFilesExists) {

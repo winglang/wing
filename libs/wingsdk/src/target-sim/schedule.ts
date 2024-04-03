@@ -3,7 +3,6 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
-import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { ScheduleSchema } from "./schema-resources";
 import {
@@ -23,14 +22,12 @@ import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
  */
 export class Schedule extends cloud.Schedule implements ISimulatorResource {
   private readonly cronExpression: string;
-  private readonly policy: Policy;
 
   constructor(scope: Construct, id: string, props: cloud.ScheduleProps = {}) {
     super(scope, id, props);
     const { rate, cron } = props;
 
     this.cronExpression = cron ?? convertDurationToCronExpression(rate!);
-    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
   public onTick(
@@ -63,7 +60,6 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       target: fn,
       name: "onTick()",
     });
-    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
 
     return fn;
   }
@@ -87,7 +83,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(__filename, this, host);
     super.onLift(host, ops);
   }
 }

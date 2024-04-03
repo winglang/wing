@@ -1,29 +1,9 @@
 import { BaseResourceSchema } from "../simulator/simulator";
-import { IInflightHost, IResource } from "../std";
+import { IResource } from "../std";
 
 /**
- * Interfaces shared by all preflight classes that host inflight code.
- */
-export interface ISimulatorInflightHost extends IInflightHost {
-  /**
-   * Add a simulated permission to this inflight host.
-   * @param resource The resource to add
-   * @param op The action to add
-   */
-  addPermission(resource: IResource, op: string): void;
-}
-
-export function isSimulatorInflightHost(
-  obj: any
-): obj is ISimulatorInflightHost {
-  return (
-    typeof obj == "object" &&
-    typeof (obj as ISimulatorInflightHost).addPermission === "function"
-  );
-}
-
-/**
- * Interfaces shared by all preflight classes targeting the simulator.
+ * Interfaces shared by all polycon implementations (preflight classes)
+ * targeting the simulator.
  */
 export interface ISimulatorResource extends IResource {
   /**

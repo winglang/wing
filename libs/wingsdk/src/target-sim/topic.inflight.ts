@@ -4,7 +4,7 @@ import {
   TopicSchema,
   TopicSubscriber,
   EventSubscription,
-  ResourceHandle,
+  FunctionHandle,
 } from "./schema-resources";
 import { IFunctionClient, ITopicClient, TOPIC_FQN } from "../cloud";
 import {
@@ -18,19 +18,14 @@ export class Topic
   implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
 {
   private readonly subscribers = new Array<TopicSubscriber>();
-  private _context: ISimulatorContext | undefined;
+  private readonly context: ISimulatorContext;
 
-  constructor(_props: TopicSchema["props"]) {}
-
-  private get context(): ISimulatorContext {
-    if (!this._context) {
-      throw new Error("Cannot access context during class construction");
-    }
-    return this._context;
+  constructor(props: TopicSchema["props"], context: ISimulatorContext) {
+    this.context = context;
+    props;
   }
 
-  public async init(context: ISimulatorContext): Promise<TopicAttributes> {
-    this._context = context;
+  public async init(): Promise<TopicAttributes> {
     return {};
   }
 
@@ -62,7 +57,7 @@ export class Topic
   }
 
   public async addEventSubscription(
-    subscriber: ResourceHandle,
+    subscriber: FunctionHandle,
     subscriptionProps: EventSubscription
   ): Promise<void> {
     let s = {

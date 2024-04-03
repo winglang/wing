@@ -13,26 +13,19 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
   private columns: { [key: string]: ColumnType };
   private primaryKey: string;
   private table: Map<string, any>;
-  private _context: ISimulatorContext | undefined;
+  private readonly context: ISimulatorContext;
   private readonly initialRows: Record<string, Json>;
 
-  public constructor(props: TableSchema["props"]) {
+  public constructor(props: TableSchema["props"], context: ISimulatorContext) {
     this.name = props.name;
     this.columns = props.columns;
     this.primaryKey = props.primaryKey;
     this.table = new Map<string, any>();
+    this.context = context;
     this.initialRows = props.initialRows ?? {};
   }
 
-  private get context(): ISimulatorContext {
-    if (!this._context) {
-      throw new Error("Cannot access context during class construction");
-    }
-    return this._context;
-  }
-
-  public async init(context: ISimulatorContext): Promise<TableAttributes> {
-    this._context = context;
+  public async init(): Promise<TableAttributes> {
     for (const [key, row] of Object.entries(this.initialRows)) {
       await this.context.withTrace({
         message: `Adding initial row (key=${key}).`,

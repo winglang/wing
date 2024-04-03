@@ -3546,32 +3546,6 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`simulator_permissions.test.w 1`] = `
-"fail ┌ simulator_permissions.test.wsim » root/env0/test:incorrect resource permission 
-     │ Error: Resource \\"root/env0/test:incorrect resource permission/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env0/b1\\".
-     │    --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
-     │    | while i > 0 {
-     │    |   i -= 1;
-     │    | }
-     │ 15 | buckets.at(i).put(\\"key\\", \\"value\\");
-     │    | ^
-     └ at <ABSOLUTE>/simulator_permissions.test.w:15:3
-fail ┌ simulator_permissions.test.wsim » root/env1/test:incorrect permission operation
-     │ Error: Resource \\"root/env1/test:incorrect permission operation/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env1/b1\\".
-     │    --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
-     │    | while i > 0 {
-     │    |   i -= 1;
-     │    | }
-     │ 25 | buckets.at(i).put(\\"key\\", \\"value\\");
-     │    | ^
-     └ at <ABSOLUTE>/simulator_permissions.test.w:25:3
- 
- 
-Tests 2 failed (2)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
 exports[`sorted_errors_no_span.test.w 1`] = `
 "error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:1:14

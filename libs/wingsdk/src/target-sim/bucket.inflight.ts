@@ -28,31 +28,23 @@ import { Datetime, Json, TraceType } from "../std";
 export const METADATA_FILENAME = "metadata.json";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
-  private _fileDir!: string;
-  private _context: ISimulatorContext | undefined;
+  private readonly _fileDir: string;
+  private readonly context: ISimulatorContext;
   private readonly initialObjects: Record<string, string>;
   private readonly _public: boolean;
   private readonly topicHandlers: Partial<Record<BucketEventType, string>>;
   private _metadata: Map<string, ObjectMetadata>;
 
-  public constructor(props: BucketSchema["props"]) {
+  public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
+    this._fileDir = join(context.statedir, "files");
+    this.context = context;
     this.initialObjects = props.initialObjects ?? {};
     this._public = props.public ?? false;
     this.topicHandlers = props.topics;
     this._metadata = new Map();
   }
 
-  private get context(): ISimulatorContext {
-    if (!this._context) {
-      throw new Error("Cannot access context during class construction");
-    }
-    return this._context;
-  }
-
-  public async init(context: ISimulatorContext): Promise<BucketAttributes> {
-    this._context = context;
-    this._fileDir = join(context.statedir, "files");
-
+  public async init(): Promise<BucketAttributes> {
     const fileDirExists = await exists(this._fileDir);
     if (!fileDirExists) {
       await fs.promises.mkdir(this._fileDir, { recursive: true });

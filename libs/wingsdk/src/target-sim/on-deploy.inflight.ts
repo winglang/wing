@@ -8,17 +8,21 @@ import {
 
 export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
   private functionHandle: string;
+  private readonly context: ISimulatorContext;
 
-  public constructor(props: OnDeploySchema["props"]) {
+  public constructor(
+    props: OnDeploySchema["props"],
+    context: ISimulatorContext
+  ) {
     this.functionHandle = props.functionHandle;
+    this.context = context;
   }
 
-  public async init(context: ISimulatorContext): Promise<OnDeployAttributes> {
-    const functionClient = context.getClient(
-      this.functionHandle,
-      true
+  public async init(): Promise<OnDeployAttributes> {
+    const functionClient = this.context.getClient(
+      this.functionHandle
     ) as IFunctionClient;
-    await context.withTrace({
+    await this.context.withTrace({
       message: "OnDeploy invoked.",
       activity: async () => {
         return functionClient.invoke();
@@ -32,7 +36,6 @@ export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
   public async save(): Promise<void> {}
 
   public async plan() {
-    // OnDeploy runs on every deployment, so always replace
-    return UpdatePlan.REPLACE;
+    return UpdatePlan.AUTO;
   }
 }

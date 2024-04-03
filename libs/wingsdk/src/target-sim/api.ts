@@ -3,7 +3,6 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
-import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { ApiSchema, ApiRoute } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
@@ -25,7 +24,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
   > = {};
 
   private readonly endpoint: cloud.Endpoint;
-  private readonly policy: Policy;
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
@@ -36,7 +34,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
       simulatorAttrToken(this, "url"),
       { label: `Api ${this.node.path}` }
     );
-    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
   protected get _endpoint(): cloud.Endpoint {
@@ -119,7 +116,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
       target: fn,
       name: `${method.toLowerCase()}()`,
     });
-    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
   }
 
   /**
@@ -249,7 +245,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(__filename, this, host);
     super.onLift(host, ops);
   }
 

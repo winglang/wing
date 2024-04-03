@@ -9,14 +9,13 @@ import { Endpoint } from "./endpoint";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
-import { POLICY_FQN, Policy } from "./policy";
 import { Queue } from "./queue";
 import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { ISimulatorResource, isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
-import { SERVICE_HELPER_FQN, Service, ServiceHelper } from "./service";
+import { Service } from "./service";
 import { STATE_FQN, State } from "./state";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
@@ -60,14 +59,12 @@ const SIMULATOR_CLASS_DATA = {
   [EVENT_MAPPING_FQN]: "EventMapping",
   [FUNCTION_FQN]: "Function",
   [ON_DEPLOY_FQN]: "OnDeploy",
-  [POLICY_FQN]: "Policy",
   [QUEUE_FQN]: "Queue",
   [REACT_APP_FQN]: "ReactApp",
   [REDIS_FQN]: "Redis",
   [SCHEDULE_FQN]: "Schedule",
   [SECRET_FQN]: "Secret",
   [SERVICE_FQN]: "Service",
-  [SERVICE_HELPER_FQN]: "ServiceHelper",
   [STATE_FQN]: "State",
   [SIM_CONTAINER_FQN]: "Container",
   [TABLE_FQN]: "Table",
@@ -122,9 +119,6 @@ export class App extends core.App {
       case ON_DEPLOY_FQN:
         return require.resolve("./on-deploy.inflight");
 
-      case POLICY_FQN:
-        return require.resolve("./policy.inflight");
-
       case QUEUE_FQN:
         return require.resolve("./queue.inflight");
 
@@ -141,9 +135,6 @@ export class App extends core.App {
         return require.resolve("./secret.inflight");
 
       case SERVICE_FQN:
-        return require.resolve("./service.inflight");
-
-      case SERVICE_HELPER_FQN:
         return require.resolve("./service.inflight");
 
       case STATE_FQN:
@@ -193,9 +184,6 @@ export class App extends core.App {
       case ON_DEPLOY_FQN:
         return OnDeploy;
 
-      case POLICY_FQN:
-        return Policy;
-
       case QUEUE_FQN:
         return Queue;
 
@@ -213,9 +201,6 @@ export class App extends core.App {
 
       case SERVICE_FQN:
         return Service;
-
-      case SERVICE_HELPER_FQN:
-        return ServiceHelper;
 
       case STATE_FQN:
         return State;

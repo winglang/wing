@@ -61,7 +61,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(__filename, this, host);
     super.onLift(host, ops);
   }
 
