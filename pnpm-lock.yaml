@@ -1354,7 +1354,7 @@ importers:
         specifier: ^3.3.6
         version: 3.3.6
       path-to-regexp:
-        specifier: '*'
+        specifier: ^1.8.0
         version: 1.8.0
       protobufjs:
         specifier: 7.2.5
