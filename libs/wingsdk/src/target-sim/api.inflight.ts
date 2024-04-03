@@ -272,8 +272,8 @@ export class Api
   ): Promise<void> {
     const routes = (subscriptionProps as any).routes as ApiRoute[];
     for (const routeConfig of routes) {
-      // Routes with variables are stored in the form of /{param} based on the OpenAPI 3.0 spec [1]
-      // To use them with express, convert them to express's format of /:param
+      // Routes with variables are generated in preflight in the form of /{param} based on the OpenAPI 3.0 spec [1]
+      // Here we convert them to express's format of /:param so that we can use path-to-regexp to match the routes
       //
       // [1] https://swagger.io/docs/specification/describing-parameters/
       const expressPath = transformRoutePath(routeConfig.pathPattern);
