@@ -314,6 +314,10 @@
       "type": "bundled"
     },
     {
+      "name": "path-to-regexp",
+      "type": "bundled"
+    },
+    {
       "name": "protobufjs",
       "version": "7.2.5",
       "type": "bundled"

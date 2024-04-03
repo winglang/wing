@@ -3,6 +3,7 @@ import { Server } from "http";
 import { AddressInfo, Socket } from "net";
 import { join } from "path";
 import express from "express";
+import pathToRegexp from "path-to-regexp";
 import { IEventPublisher } from "./event-mapping";
 import {
   ApiAttributes,
@@ -42,14 +43,35 @@ interface StateFileContents {
   readonly lastPort?: number;
 }
 
-interface ApiRouteWithFunctionHandle extends ApiRoute {
+interface Route {
+  /**
+   * The method's route as an uppercase string, e.g. "GET"
+   */
+  method: string;
+  /**
+   * The path pattern as a regex.
+   */
+  pathRegex: RegExp;
+  /**
+   * Information about keys from the path pattern.
+   * See https://www.npmjs.com/package/path-to-regexp#path-to-regexp-1
+   */
+  pathRegexKeys: pathToRegexp.Key[];
+  /**
+   * The path pattern as the user originally wrote it.
+   * For debugging and error messages.
+   */
+  originalPathPattern: string;
+  /**
+   * The function handle that should be invoked when this route is hit.
+   */
   functionHandle: string;
 }
 
 export class Api
   implements IApiClient, ISimulatorResourceInstance, IEventPublisher
 {
-  private readonly routes: ApiRouteWithFunctionHandle[];
+  private readonly routes: Route[];
   private readonly context: ISimulatorContext;
   private readonly app: express.Application;
   private server: Server | undefined;
@@ -92,6 +114,77 @@ export class Api
         }
       });
     }
+
+    // The routes are populated by the addEventSubscription method and removed
+    // by the removeEventSubscription method. Since the routes can change,
+    // we just maintain a list of routes internally and do the routing ourselves.
+    this.app.use(
+      asyncMiddleware(
+        async (
+          req: express.Request,
+          res: express.Response,
+          next: express.NextFunction
+        ) => {
+          const method = req.method.toUpperCase();
+
+          // Greedily match the first route that matches the method and path of the request.
+          const route = this.routes.find(
+            (r) => r.method === method && r.pathRegex.test(req.path)
+          );
+
+          if (!route) {
+            return next();
+          }
+
+          const keys = route.pathRegexKeys ?? [];
+          const match = route.pathRegex.exec(req.path);
+          if (match) {
+            for (let i = 1; i < match.length; i++) {
+              const key = keys[i - 1];
+              if (key) {
+                req.params[key.name] = match[i];
+              }
+            }
+          }
+
+          const apiRequest = transformRequest(req);
+
+          this.addTrace(
+            `Processing "${route.method} ${
+              route.originalPathPattern
+            }" params=${JSON.stringify(req.params)}).`
+          );
+
+          try {
+            const fnClient = this.context.getClient(
+              route.functionHandle
+            ) as IFunctionClient;
+            const responseString = await fnClient.invoke(
+              JSON.stringify(apiRequest)
+            );
+            const response: ApiResponse = JSON.parse(responseString ?? "{}");
+
+            const status = response.status ?? DEFAULT_RESPONSE_STATUS;
+            res.status(status);
+            for (const [key, value] of Object.entries(
+              response?.headers ?? {}
+            )) {
+              res.set(key, value);
+            }
+            if (response?.body !== undefined) {
+              res.send(response.body);
+            } else {
+              res.end();
+            }
+            this.addTrace(
+              `${route.method} ${route.originalPathPattern} - ${status}.`
+            );
+          } catch (err) {
+            return next(err);
+          }
+        }
+      )
+    );
   }
 
   public async init(): Promise<ApiAttributes> {
@@ -178,15 +271,27 @@ export class Api
     subscriptionProps: EventSubscription
   ): Promise<void> {
     const routes = (subscriptionProps as any).routes as ApiRoute[];
-    routes.forEach((r) => {
-      const s = {
+    for (const routeConfig of routes) {
+      // Routes with variables are stored in the form of /{param} based on the OpenAPI 3.0 spec [1]
+      // To use them with express, convert them to express's format of /:param
+      //
+      // [1] https://swagger.io/docs/specification/describing-parameters/
+      const expressPath = transformRoutePath(routeConfig.pathPattern);
+
+      const pathRegexKeys: pathToRegexp.Key[] = [];
+      const pathRegex = pathToRegexp(expressPath, pathRegexKeys, {
+        strict: true,
+        sensitive: true,
+      });
+      const route: Route = {
+        method: routeConfig.method.toString().toUpperCase(),
+        pathRegex,
+        pathRegexKeys,
+        originalPathPattern: routeConfig.pathPattern,
         functionHandle: subscriber,
-        method: r.method,
-        pathPattern: r.pathPattern,
       };
-      this.routes.push(s);
-      this.populateRoute(s, subscriber);
-    });
+      this.routes.push(route);
+    }
   }
 
   public async removeEventSubscription(subscriber: string): Promise<void> {
@@ -194,61 +299,6 @@ export class Api
     if (index >= 0) {
       this.routes.splice(index, 1);
     }
-  }
-
-  private populateRoute(route: ApiRoute, functionHandle: string): void {
-    const method = route.method.toLowerCase() as
-      | "get"
-      | "post"
-      | "put"
-      | "delete"
-      | "head"
-      | "options"
-      | "patch"
-      | "connect";
-
-    const fnClient = this.context.getClient(functionHandle) as IFunctionClient;
-    this.app[method](
-      transformRoutePath(route.pathPattern),
-      asyncMiddleware(
-        async (
-          req: express.Request,
-          res: express.Response,
-          next: express.NextFunction
-        ) => {
-          this.addTrace(
-            `Processing "${route.method} ${
-              route.pathPattern
-            }" params=${JSON.stringify(req.params)}).`
-          );
-
-          const apiRequest = transformRequest(req);
-
-          try {
-            const responseString = await fnClient.invoke(
-              JSON.stringify(apiRequest)
-            );
-            const response: ApiResponse = JSON.parse(responseString ?? "{}");
-
-            const status = response.status ?? DEFAULT_RESPONSE_STATUS;
-            res.status(status);
-            for (const [key, value] of Object.entries(
-              response?.headers ?? {}
-            )) {
-              res.set(key, value);
-            }
-            if (response?.body !== undefined) {
-              res.send(response.body);
-            } else {
-              res.end();
-            }
-            this.addTrace(`${route.method} ${route.pathPattern} - ${status}.`);
-          } catch (err) {
-            return next(err);
-          }
-        }
-      )
-    );
   }
 
   private addTrace(message: string): void {

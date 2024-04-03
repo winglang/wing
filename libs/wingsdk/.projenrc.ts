@@ -75,6 +75,7 @@ const project = new cdk.JsiiProject({
     // simulator dependencies
     "express",
     "uuid",
+    "path-to-regexp",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
     "nanoid@^3.3.6",
     "cron-parser",
