@@ -97,7 +97,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     return fn;
   }
 
-  public queueSubscription(
+  public subscribeQueue(
     queue: cloud.Queue,
     props: cloud.TopicOnMessageOptions = {}
   ): void {

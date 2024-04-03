@@ -58,29 +58,32 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     return fn;
   }
 
-  public queueSubscription(
+  public subscribeQueue(
     queue: cloud.Queue,
     props: cloud.TopicOnMessageOptions = {}
   ): void {
     const functionHandler = convertBetweenHandlers(
-      Testing.makeHandler("async handle(event) { return await this.queue.push(event); }", {
-        queue: {
-          obj: queue,
-          ops: [QUEUE_PUSH_METHOD]
+      Testing.makeHandler(
+        "async handle(event) { return await this.queue.push(event); }",
+        {
+          queue: {
+            obj: queue,
+            ops: [QUEUE_PUSH_METHOD],
+          },
         }
-      }),
+      ),
       join(__dirname, "topic.onmessage.inflight.js"),
       "TopicOnMessageHandlerClient"
     );
 
     const fn = new Function(
       this,
-      App.of(this).makeId(this, "queueSubscription"),
+      App.of(this).makeId(this, "subscribeQueue"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = "queueSubscription()";
+    Node.of(fn).title = "subscribeQueue()";
 
     new EventMapping(this, App.of(this).makeId(this, "TopicEventMapping"), {
       subscriber: fn,
@@ -91,7 +94,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     Node.of(this).addConnection({
       source: this,
       target: fn,
-      name: "queueSubscription()",
+      name: "subscribeQueue()",
     });
   }
 
