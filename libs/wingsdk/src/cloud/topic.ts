@@ -53,7 +53,7 @@ export class Topic extends Resource {
    * Subscribing queue to the topic
    * @abstract
    */
-  public subscribeQueue(queue: Queue, props?: TopicOnMessageOptions): void {
+  public subscribeQueue(queue: Queue, props?: TopicSubscribeQueueOptions): void {
     queue;
     props;
     throw new AbstractMemberError();

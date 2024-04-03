@@ -110,7 +110,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [QUEUE_PUSH_METHOD, cloud.TopicInflightMethods.PUBLISH];
+    return [cloud.QueueInflightMethods.PUSH, cloud.TopicInflightMethods.PUBLISH];
   }
 
   public toSimulator(): BaseResourceSchema {
