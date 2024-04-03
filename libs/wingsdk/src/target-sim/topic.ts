@@ -8,8 +8,11 @@ import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
+import { Testing } from "../simulator";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
+
+const QUEUE_PUSH_METHOD = "push";
 
 /**
  * Simulator implementation of `cloud.Topic`
@@ -55,6 +58,43 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     return fn;
   }
 
+  public queueSubscription(
+    queue: cloud.Queue,
+    props: cloud.TopicOnMessageOptions = {}
+  ): void {
+    const functionHandler = convertBetweenHandlers(
+      Testing.makeHandler("async handle(event) { return await this.queue.push(event); }", {
+        queue: {
+          obj: queue,
+          ops: [QUEUE_PUSH_METHOD]
+        }
+      }),
+      join(__dirname, "topic.onmessage.inflight.js"),
+      "TopicOnMessageHandlerClient"
+    );
+
+    const fn = new Function(
+      this,
+      App.of(this).makeId(this, "queueSubscription"),
+      functionHandler,
+      props
+    );
+    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
+    Node.of(fn).title = "queueSubscription()";
+
+    new EventMapping(this, App.of(this).makeId(this, "TopicEventMapping"), {
+      subscriber: fn,
+      publisher: this,
+      subscriptionProps: {},
+    });
+
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "queueSubscription()",
+    });
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super.onLift(host, ops);
@@ -67,7 +107,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [cloud.TopicInflightMethods.PUBLISH];
+    return [QUEUE_PUSH_METHOD, cloud.TopicInflightMethods.PUBLISH];
   }
 
   public toSimulator(): BaseResourceSchema {

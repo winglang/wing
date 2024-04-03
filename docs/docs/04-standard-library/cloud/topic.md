@@ -135,6 +135,7 @@ new cloud.Topic(props?: TopicProps);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.onMessage">onMessage</a></code> | Run an inflight whenever an message is published to the topic. |
+| <code><a href="#@winglang/sdk.cloud.Topic.queueSubscription">queueSubscription</a></code> | Subscribing queue to the topic. |
 
 ##### Inflight Methods
 
@@ -159,6 +160,26 @@ Run an inflight whenever an message is published to the topic.
 ---
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.onMessage.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.TopicOnMessageOptions">TopicOnMessageOptions</a>
+
+---
+
+##### `queueSubscription` <a name="queueSubscription" id="@winglang/sdk.cloud.Topic.queueSubscription"></a>
+
+```wing
+queueSubscription(queue: Queue, props?: TopicOnMessageOptions): void
+```
+
+Subscribing queue to the topic.
+
+###### `queue`<sup>Required</sup> <a name="queue" id="@winglang/sdk.cloud.Topic.queueSubscription.parameter.queue"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.queueSubscription.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.TopicOnMessageOptions">TopicOnMessageOptions</a>
 

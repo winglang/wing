@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
+import { Queue } from "./queue";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
@@ -44,6 +45,16 @@ export class Topic extends Resource {
     props?: TopicOnMessageOptions
   ): Function {
     inflight;
+    props;
+    throw new AbstractMemberError();
+  }
+
+  /**
+   * Subscribing queue to the topic
+   * @abstract
+   */
+  public queueSubscription(queue: Queue, props?: TopicOnMessageOptions): void {
+    queue;
     props;
     throw new AbstractMemberError();
   }

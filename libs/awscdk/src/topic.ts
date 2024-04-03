@@ -58,6 +58,14 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     return fn;
   }
 
+  public queueSubscription(
+    queue: cloud.Queue,
+    props: cloud.TopicOnMessageOptions = {}
+  ): void {
+    queue;
+    props;
+  }
+
   public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!isAwsCdkFunction(host)) {
       throw new Error("Expected 'host' to implement 'IAwsCdkFunction' method");

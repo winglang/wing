@@ -97,6 +97,14 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     return fn;
   }
 
+  public queueSubscription(
+    queue: cloud.Queue,
+    props: cloud.TopicOnMessageOptions = {}
+  ): void {
+    queue;
+    props;
+  }
+
   /**
    * Grants the given identity permissions to publish this topic.
    * @param source the resource that will publish to the topic
