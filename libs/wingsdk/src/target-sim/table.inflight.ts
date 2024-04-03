@@ -4,6 +4,7 @@ import { validateRow } from "../shared/table-utils";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { Json } from "../std";
 
@@ -39,6 +40,10 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {}
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async insert(key: string, row: Json): Promise<void> {
     validateRow(row, this.columns);

@@ -354,6 +354,7 @@ impl<'a> JsiiImporter<'a> {
 			return_type,
 			phase,
 			js_override: extract_docstring_tag(&first_method.docs, "macro").map(|s| s.to_string()),
+			implicit_scope_param: false,
 		}));
 
 		self.register_jsii_type(&jsii_interface_fqn, &new_type_symbol, wing_type);
@@ -577,6 +578,7 @@ impl<'a> JsiiImporter<'a> {
 					return_type,
 					phase: member_phase,
 					js_override: extract_docstring_tag(&m.docs, "macro").map(|s| s.to_string()),
+					implicit_scope_param: false,
 				}));
 				let sym = Self::jsii_name_to_symbol(&m.name, &m.location_in_module);
 				let access_modifier = if matches!(m.protected, Some(true)) {
@@ -834,6 +836,7 @@ impl<'a> JsiiImporter<'a> {
 				phase: member_phase,
 				js_override: None,
 				docs: Docs::from(&initializer.docs),
+				implicit_scope_param: false,
 			}));
 			let sym = Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module);
 			let access_modifier = if matches!(initializer.protected, Some(true)) {

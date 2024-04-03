@@ -3,6 +3,7 @@ import { IFunctionClient, IOnDeployClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 
 export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
@@ -33,4 +34,8 @@ export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {}
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 }

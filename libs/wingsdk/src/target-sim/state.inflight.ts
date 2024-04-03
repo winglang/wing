@@ -1,6 +1,10 @@
 import { StateSchema } from "./schema-resources";
 import { IStateClient } from "./state";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
 import { Json } from "../std";
 
 export class State implements IStateClient, ISimulatorResourceInstance {
@@ -15,6 +19,10 @@ export class State implements IStateClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {}
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async set(key: string, value: any): Promise<void> {
     this.context.setResourceAttributes(this.context.resourcePath, {

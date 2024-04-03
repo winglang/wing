@@ -1,6 +1,10 @@
 import { TestRunnerAttributes, TestRunnerSchema } from "./schema-resources";
 import { IFunctionClient } from "../cloud";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
 import { ITestRunnerClient, TestResult } from "../std";
 
 export class TestRunner
@@ -24,6 +28,10 @@ export class TestRunner
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async listTests(): Promise<string[]> {
     return Array.from(this.tests.keys());
