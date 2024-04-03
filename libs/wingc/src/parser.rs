@@ -348,7 +348,9 @@ fn parse_wing_directory(
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
 	tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
 	let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
-	let ast = Ast::new();
+	let mut ast = Ast::new();
+	let root = ast.new_scope(vec![], WingSpan::default());
+	ast.set_root(root);
 	let dependent_wing_paths = files_and_dirs;
 
 	// Update our collections of trees and ASTs and our file graph
