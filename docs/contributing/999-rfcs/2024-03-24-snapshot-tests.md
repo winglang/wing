@@ -48,6 +48,8 @@ When I run `wing test -t tf-aws foo.test.w` in my dev environment, if the test s
 deploys and all test cases pass), the test framework will create `foo.test.w.tfaws.snap` which will
 include a nicely formatted (markdown?) snapshot of all the synthesis output from this test.
 
+> In a future version we can add support for placing all snapshots in an adjacent subdirectory.
+
 Now, when `wing test -t tf-aws foo.test.w` is executed in CI (`CI=1`), by default it won't actually
 go and deploy to the cloud. Instead, it will just synthesize the output and compare it to the
 committed `.snap` file. If the output is not the same, the test will fail with a nice diff
@@ -57,8 +59,8 @@ The `--snapshots` or `-s` switch can be used to control behavior:
 
  * `--snapshots=auto` - auto-detect based on CI flag (described above)
  * `--snapshots=never` - disables snapshots altogether
- * `--snapshots=dry` - will skip deployment and only update the snapshots.
- * `--snapshots=wet` - forces a deployment even if `CI=1`.
+ * `--snapshots=update` - skips deployment and only update the snapshots.
+ * `--snapshots=deploy` - forces a deployment even if `CI=1`.
  * `--snapshots=assert` - only asserts that the snapshots have not changed
 
 ## Implementation Notes
