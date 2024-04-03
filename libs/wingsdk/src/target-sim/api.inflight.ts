@@ -44,6 +44,7 @@ interface StateFileContents {
 
 interface ApiRouteWithFunctionHandle extends ApiRoute {
   functionHandle: string;
+  expressRouteHandle: any;
 }
 
 export class Api
@@ -178,22 +179,51 @@ export class Api
     subscriptionProps: EventSubscription
   ): Promise<void> {
     const routes = (subscriptionProps as any).routes as ApiRoute[];
-    routes.forEach((r) => {
+    for (const route of routes) {
       const s = {
         functionHandle: subscriber,
-        method: r.method,
-        pathPattern: r.pathPattern,
+        method: route.method,
+        pathPattern: route.pathPattern,
       };
-      this.routes.push(s);
       this.populateRoute(s, subscriber);
-    });
+
+      // Keep track of the internal express function so we can remove it later
+      // Each layer object in express looks something like this:
+      //
+      // Layer {
+      //   handle: [Function: bound dispatch],
+      //   name: 'bound dispatch',
+      //   params: undefined,
+      //   path: undefined,
+      //   keys: [ [Object] ],
+      //   regexp: /^\/foo\/(?:([^\/]+?))\/?$/i { fast_star: false, fast_slash: false },
+      //   route: Route { path: '/foo/:bar', stack: [Array], methods: [Object] }
+      // }
+      const expressRouteHandle =
+        this.app._router.stack[this.app._router.stack.length - 1];
+      this.routes.push({
+        ...s,
+        expressRouteHandle,
+      });
+    }
   }
 
   public async removeEventSubscription(subscriber: string): Promise<void> {
     const index = this.routes.findIndex((s) => s.functionHandle === subscriber);
-    if (index >= 0) {
-      this.routes.splice(index, 1);
+    if (index === -1) {
+      this.addTrace(
+        `Internal error: No route found for subscriber ${subscriber}.`
+      );
+      return;
     }
+    const route = this.routes[index];
+    for (const layer of this.app._router.stack) {
+      if (layer === route.expressRouteHandle) {
+        this.app._router.stack.splice(this.app._router.stack.indexOf(layer), 1);
+        break;
+      }
+    }
+    this.routes.splice(index, 1);
   }
 
   private populateRoute(route: ApiRoute, functionHandle: string): void {
