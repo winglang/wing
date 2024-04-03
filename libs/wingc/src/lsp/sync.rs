@@ -7,6 +7,7 @@ use std::cell::RefCell;
 use std::path::{Path, PathBuf};
 use tree_sitter::Tree;
 
+use crate::ast::Ast;
 use crate::closure_transform::ClosureTransformer;
 use crate::diagnostic::{found_errors, reset_diagnostics};
 use crate::file_graph::FileGraph;
@@ -18,11 +19,11 @@ use crate::parser::{normalize_path, parse_wing_project};
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::type_check::type_reference_transform::TypeReferenceTransformer;
+use crate::type_check::Types;
 use crate::type_check_assert::TypeCheckAssert;
 use crate::valid_json_visitor::ValidJsonVisitor;
 use crate::visit::Visit;
 use crate::wasm_util::extern_json_fn;
-use crate::{ast::Scope, type_check::Types};
 
 /// The output of compiling a Wing project with one or more files
 pub struct ProjectData {
@@ -33,7 +34,7 @@ pub struct ProjectData {
 	/// tree-sitter trees
 	pub trees: IndexMap<Utf8PathBuf, Tree>,
 	/// AST for each file
-	pub asts: IndexMap<Utf8PathBuf, Scope>,
+	pub asts: IndexMap<Utf8PathBuf, Ast>,
 	/// The JSII imports for the file. This is saved so we can load JSII types (for autocompletion for example)
 	/// which don't exist explicitly in the source.
 	pub jsii_imports: Vec<JsiiImportSpec>,
@@ -143,10 +144,11 @@ fn partial_compile(
 
 	// Transform all inflight closures defined in preflight into single-method resources
 	for file in &topo_sorted_files {
-		let mut inflight_transformer = ClosureTransformer::new();
-		let scope = project_data.asts.swap_remove(file).unwrap();
-		let new_scope = inflight_transformer.fold_scope(scope);
-		project_data.asts.insert(file.clone(), new_scope);
+		let mut ast = project_data.asts.swap_remove(file).unwrap();
+		let mut inflight_transformer = ClosureTransformer::new(&mut ast);
+		let root_scope = inflight_transformer.ast().root();
+		inflight_transformer.fold_scope(root_scope.id);
+		project_data.asts.insert(file.clone(), ast);
 	}
 
 	// Reset all type information
@@ -158,9 +160,9 @@ fn partial_compile(
 	// Type check all files in topological order (start with files that don't require any other
 	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
-		let mut scope = project_data.asts.swap_remove(file).expect("matching AST not found");
+		let mut ast = project_data.asts.swap_remove(file).expect("matching AST not found");
 		type_check(
-			&mut scope,
+			&ast,
 			&mut types,
 			&file,
 			&project_data.file_graph,
@@ -169,18 +171,23 @@ fn partial_compile(
 		);
 
 		// Make sure all type reference are no longer considered references
-		let mut tr_transformer = TypeReferenceTransformer { types: &mut types };
-		let scope = tr_transformer.fold_scope(scope);
+		let root_id = ast.root().id;
+		let mut tr_transformer = TypeReferenceTransformer {
+			types: &mut types,
+			ast: &mut ast,
+		};
+		let root_id = tr_transformer.fold_scope(root_id);
+		let root_scope = ast.get_scope(root_id);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
-		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
-		tc_assert.check(&scope);
+		let mut tc_assert = TypeCheckAssert::new(&ast, &types, found_errors());
+		tc_assert.check(root_scope);
 
 		// Validate all Json literals to make sure their values are legal
-		let mut json_checker = ValidJsonVisitor::new(&types);
-		json_checker.check(&scope);
+		let mut json_checker = ValidJsonVisitor::new(&ast, &types);
+		json_checker.check(&root_scope);
 
-		project_data.asts.insert(file.clone(), scope);
+		project_data.asts.insert(file.clone(), ast);
 	}
 
 	// -- LIFTING PHASE --
@@ -194,10 +201,11 @@ fn partial_compile(
 		&source_path,
 	);
 	for file in &topo_sorted_files {
-		let mut lift = LiftVisitor::new(&jsifier);
-		let scope = project_data.asts.swap_remove(file).expect("matching AST not found");
-		lift.visit_scope(&scope);
-		project_data.asts.insert(file.clone(), scope);
+		let ast = project_data.asts.swap_remove(file).expect("matching AST not found");
+		let root_scope = ast.root();
+		let mut lift = LiftVisitor::new(&jsifier, &ast);
+		lift.visit_scope(root_scope);
+		project_data.asts.insert(file.clone(), ast);
 	}
 
 	// no need to JSify in the LSP

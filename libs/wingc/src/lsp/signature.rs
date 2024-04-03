@@ -4,7 +4,7 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{CalleeKind, Expr, ExprKind, New, Symbol};
+use crate::ast::{Ast, CalleeKind, Expr, ExprKind, New, Symbol};
 use crate::docs::Documented;
 use crate::lsp::sync::PROJECT_DATA;
 use crate::lsp::sync::WING_TYPES;
@@ -28,9 +28,10 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			let project_data = project_data.borrow();
 			let uri = params.text_document_position_params.text_document.uri;
 			let file = check_utf8(uri.to_file_path().ok().expect("LSP only works on real filesystems"));
-			let root_scope = &project_data.asts.get(&file).unwrap();
+			let ast = project_data.asts.get(&file).unwrap();
+			let root_scope = ast.root();
 
-			let mut scope_visitor = ScopeVisitor::new(&types, params.text_document_position_params.position);
+			let mut scope_visitor = ScopeVisitor::new(ast, &types, params.text_document_position_params.position);
 			scope_visitor.visit_scope(root_scope);
 			let expr = scope_visitor.call_expr?;
 			let env = scope_visitor.call_env?;
@@ -42,7 +43,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				ExprKind::New(new_expr) => {
 					let New { class, arg_list, .. } = new_expr;
 
-					let Some(t) = resolve_user_defined_type(class, &types.get_scope_env(&root_scope), 0).ok() else {
+					let Some(t) = resolve_user_defined_type(class, &types.get_scope_env(ast, root_scope.id), 0).ok() else {
 						return None;
 					};
 
@@ -172,6 +173,9 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 /// This visitor is used to find the scope
 /// and relevant expression that contains a given location.
 pub struct ScopeVisitor<'a> {
+	/// The AST we're visiting
+	pub ast: &'a Ast,
+	/// The type system
 	types: &'a Types,
 	/// The target location we're looking for
 	pub location: Position,
@@ -184,8 +188,9 @@ pub struct ScopeVisitor<'a> {
 }
 
 impl<'a> ScopeVisitor<'a> {
-	pub fn new(types: &'a Types, location: Position) -> Self {
+	pub fn new(ast: &'a Ast, types: &'a Types, location: Position) -> Self {
 		Self {
+			ast,
 			types,
 			location,
 			call_expr: None,
@@ -196,6 +201,10 @@ impl<'a> ScopeVisitor<'a> {
 }
 
 impl<'a> Visit<'a> for ScopeVisitor<'a> {
+	fn ast(&self) -> &'a Ast {
+		self.ast
+	}
+
 	fn visit_expr(&mut self, node: &'a Expr) {
 		visit_expr(self, node);
 
@@ -215,7 +224,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	}
 
 	fn visit_scope(&mut self, node: &'a crate::ast::Scope) {
-		let env = self.types.get_scope_env(node);
+		let env = self.types.get_scope_env(self.ast, node.id);
 		self.curr_env.push(env);
 		visit_scope(self, node);
 		self.curr_env.pop();

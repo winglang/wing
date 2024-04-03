@@ -7,7 +7,7 @@ use std::cmp::max;
 use tree_sitter::{Node, Point};
 
 use crate::ast::{
-	AccessModifier, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, UserDefinedType,
+	AccessModifier, Ast, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, UserDefinedType,
 };
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
@@ -109,7 +109,9 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			let uri = params.text_document_position.text_document.uri;
 			let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
 			let root_ts_node = project_data.trees.get(&file).expect("tree not found").root_node();
-			let root_scope = project_data.asts.get(&file).expect("ast not found");
+			let ast = project_data.asts.get(&file).expect("ast not found");
+
+			let root_scope = ast.root();
 
 			let true_point = Point::new(
 				params.text_document_position.position.line as usize,
@@ -175,6 +177,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 
 			let mut scope_visitor = ScopeVisitor::new(
+				ast,
 				node_to_complete.parent().map(|parent| WingSpan {
 					start: parent.start_position().into(),
 					end: parent.end_position().into(),
@@ -186,11 +189,11 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					file_id: file.to_string(),
 				},
 				params.text_document_position.position.into(),
-				&root_scope,
+				root_scope,
 			);
 			scope_visitor.visit();
 
-			let found_env = types.get_scope_env(&scope_visitor.found_scope);
+			let found_env = types.get_scope_env(ast, scope_visitor.found_scope.id);
 			if matches!(
 				node_to_complete_kind,
 				"." | "?." | "member_identifier" | "type_identifier"
@@ -629,7 +632,7 @@ fn get_current_scope_completions(
 		}
 	}
 
-	let found_env = types.get_scope_env(&scope_visitor.found_scope);
+	let found_env = types.get_scope_env(scope_visitor.ast, scope_visitor.found_scope.id);
 
 	for symbol_data in found_env.symbol_map.iter().filter(|s| {
 		if let StatementIdx::Index(stmt_idx) = s.1.statement_idx {
@@ -1129,6 +1132,8 @@ fn str_to_access_context(s: &str) -> ObjectAccessContext {
 /// This visitor is used to find the scope
 /// and relevant expression that contains a given location.
 pub struct ScopeVisitor<'a> {
+	/// The AST to search
+	pub ast: &'a Ast,
 	/// The area surrounding the location we're looking for
 	pub parent_span: Option<WingSpan>,
 	/// The target location we're looking for
@@ -1148,12 +1153,14 @@ pub struct ScopeVisitor<'a> {
 
 impl<'a> ScopeVisitor<'a> {
 	pub fn new(
+		ast: &'a Ast,
 		parent_span: Option<WingSpan>,
 		target_span: WingSpan,
 		exact_position: WingLocation,
 		starting_scope: &'a Scope,
 	) -> Self {
 		Self {
+			ast,
 			exact_position,
 			parent_span,
 			target_span,
@@ -1171,6 +1178,10 @@ impl<'a> ScopeVisitor<'a> {
 }
 
 impl<'a> Visit<'a> for ScopeVisitor<'a> {
+	fn ast(&self) -> &'a Ast {
+		self.ast
+	}
+
 	fn visit_scope(&mut self, node: &'a Scope) {
 		if node.span.file_id != "" && node.span.contains_location(&self.exact_position) {
 			self.found_scope = node;

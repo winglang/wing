@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Ast, Reference, Scope, ScopeId},
+	ast::{Ast, Reference, ScopeId},
 	fold::{self, Fold},
 };
 
@@ -10,7 +10,11 @@ pub struct TypeReferenceTransformer<'a> {
 }
 
 impl<'a> Fold for TypeReferenceTransformer<'a> {
-	fn ast(&mut self) -> &mut Ast {
+	fn ast(&self) -> &Ast {
+		self.ast
+	}
+
+	fn ast_mut(&mut self) -> &mut Ast {
 		self.ast
 	}
 

@@ -13,8 +13,8 @@ use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, Ast, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
 	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
 	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
-	Scope, ScopeId, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
-	UnaryOperator, UserDefinedType,
+	ScopeId, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
+	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
@@ -375,7 +375,7 @@ pub struct Parser<'a> {
 	referenced_wing_paths: RefCell<Vec<Utf8PathBuf>>,
 
 	/// The generated AST
-	ast: Ast,
+	ast: RefCell<Ast>,
 }
 
 struct ParseErrorBuilder<'s> {
@@ -418,33 +418,33 @@ impl<'s> Parser<'s> {
 			in_json: RefCell::new(0),
 			is_in_mut_json: RefCell::new(false),
 			referenced_wing_paths: RefCell::new(Vec::new()),
-			ast: Ast::new(),
+			ast: RefCell::new(Ast::new()),
 		}
 	}
 
-	pub fn parse(mut self, root: &Node) -> (Ast, Vec<Utf8PathBuf>) {
+	pub fn parse(self, root: &Node) -> (Ast, Vec<Utf8PathBuf>) {
 		if matches!(root.kind(), "source") {
-			self.ast.root_scope = Some(self.build_scope(&root, Phase::Preflight))
+			let root = self.build_scope(&root, Phase::Preflight);
+			self.ast.borrow_mut().set_root(root);
 		}
 
 		// Module files can only have certain kinds of statements
-		if let Some(scope) = self.ast.root_scope {
-			if !is_entrypoint_file(&self.source_name) {
-				let scope = self.ast.get_scope(scope);
-				for stmt in &scope.statements {
-					if !is_valid_module_statement(&stmt) {
-						Diagnostic::new(
+		if !is_entrypoint_file(&self.source_name) {
+			let ast = self.ast.borrow();
+			let scope = ast.root();
+			for stmt in &scope.statements {
+				if !is_valid_module_statement(&stmt) {
+					Diagnostic::new(
 						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` or `.test.w` to make this an entrypoint file.",
 						stmt,
 					).report();
-					}
 				}
 			}
 		}
 
 		self.report_unhandled_errors(&root);
 
-		(self.ast, self.referenced_wing_paths.into_inner())
+		(self.ast.into_inner(), self.referenced_wing_paths.into_inner())
 	}
 
 	fn add_error(&self, message: impl ToString, node: &Node) {
@@ -585,7 +585,7 @@ impl<'s> Parser<'s> {
 			.enumerate()
 			.filter_map(|(i, st_node)| self.build_statement(&st_node, i, phase).ok())
 			.collect();
-		self.ast.new_scope(statements, span)
+		self.ast.borrow_mut().new_scope(statements, span)
 	}
 
 	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase) -> DiagnosticResult<Stmt> {
@@ -1330,7 +1330,7 @@ impl<'s> Parser<'s> {
 					}),
 					phase: Phase::Preflight,
 				},
-				body: FunctionBody::Statements(self.ast.new_scope(vec![], WingSpan::default())),
+				body: FunctionBody::Statements(self.ast.borrow_mut().new_scope(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
 				access: AccessModifier::Public,
@@ -1355,7 +1355,7 @@ impl<'s> Parser<'s> {
 					}),
 					phase: Phase::Inflight,
 				},
-				body: FunctionBody::Statements(self.ast.new_scope(vec![], WingSpan::default())),
+				body: FunctionBody::Statements(self.ast.borrow_mut().new_scope(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
 				access: AccessModifier::Public,
@@ -2541,7 +2541,7 @@ impl<'s> Parser<'s> {
 			self.node_span(&name_node),
 		));
 		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), Phase::Inflight);
-		let statements_span = self.ast.get_scope(statements).span.clone();
+		let statements_span = self.ast.borrow().get_scope(statements).span.clone();
 		let span = self.node_span(statement_node);
 
 		let inflight_closure = Expr::new(

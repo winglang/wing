@@ -46,6 +46,7 @@ pub enum SymbolLocatorResult {
 }
 
 pub struct SymbolLocator<'a> {
+	ast: &'a Ast,
 	ctx: VisitContext,
 	types: &'a Types,
 	location: WingLocation,
@@ -60,8 +61,9 @@ impl<'a> VisitorWithContext for SymbolLocator<'a> {
 }
 
 impl<'a> SymbolLocator<'a> {
-	pub fn new(types: &'a Types, location: WingLocation) -> Self {
+	pub fn new(ast: &'a Ast, types: &'a Types, location: WingLocation) -> Self {
 		Self {
+			ast,
 			types,
 			ctx: VisitContext::new(),
 			result: SymbolLocatorResult::NotFound,
@@ -75,8 +77,8 @@ impl<'a> SymbolLocator<'a> {
 		self.result_ctx = self.ctx.clone();
 	}
 
-	fn push_scope_env(&mut self, scope: &'a Scope) {
-		self.ctx.push_env(self.types.get_scope_env(scope));
+	fn push_scope_env(&mut self, scope: ScopeId) {
+		self.ctx.push_env(self.types.get_scope_env(self.ast, scope));
 	}
 
 	fn is_found(&self) -> bool {
@@ -202,12 +204,16 @@ impl<'a> SymbolLocator<'a> {
 }
 
 impl<'a> Visit<'a> for SymbolLocator<'a> {
+	fn ast(&self) -> &'a Ast {
+		self.ast
+	}
+
 	fn visit_scope(&mut self, node: &'a Scope) {
 		if self.is_found() {
 			return;
 		}
 
-		self.ctx.push_env(self.types.get_scope_env(node));
+		self.ctx.push_env(self.types.get_scope_env(self.ast, node.id));
 		visit_scope(self, node);
 		self.ctx.pop_env();
 	}
@@ -250,14 +256,14 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			StmtKind::ForLoop {
 				iterator, statements, ..
 			} => {
-				self.push_scope_env(&statements);
+				self.push_scope_env(*statements);
 				self.visit_symbol(iterator);
 				self.ctx.pop_env();
 			}
 			StmtKind::TryCatch { catch_block, .. } => {
 				if let Some(catch_block) = catch_block {
 					if let Some(exception_var) = &catch_block.exception_var {
-						self.push_scope_env(&catch_block.statements);
+						self.push_scope_env(catch_block.statements);
 						self.visit_symbol(exception_var);
 						self.ctx.pop_env();
 					}
@@ -269,13 +275,13 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 				elif_statements,
 				..
 			}) => {
-				self.push_scope_env(&statements);
+				self.push_scope_env(*statements);
 				self.visit_symbol(var_name);
 				self.ctx.pop_env();
 
 				for elif in elif_statements {
 					if let Elifs::ElifLetBlock(elif_let_block) = elif {
-						self.push_scope_env(&elif_let_block.statements);
+						self.push_scope_env(elif_let_block.statements);
 						self.visit_symbol(&elif_let_block.var_name);
 						self.ctx.pop_env();
 					}
@@ -402,7 +408,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 		}
 
 		if let FunctionBody::Statements(scope) = &node.body {
-			self.push_scope_env(scope);
+			self.push_scope_env(*scope);
 			for param in &node.signature.parameters {
 				self.visit_function_parameter(&param);
 			}

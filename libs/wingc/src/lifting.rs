@@ -1,6 +1,6 @@
 use crate::{
 	ast::{
-		ArgList, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt,
+		ArgList, Ast, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt,
 		StmtKind, Symbol, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
@@ -21,15 +21,17 @@ pub struct LiftVisitor<'a> {
 	jsify: &'a JSifier<'a>,
 	lifts_stack: Vec<Lifts>,
 	in_inner_inflight_class: usize,
+	ast: &'a Ast,
 }
 
 impl<'a> LiftVisitor<'a> {
-	pub fn new(jsifier: &'a JSifier<'a>) -> Self {
+	pub fn new(jsifier: &'a JSifier<'a>, ast: &'a Ast) -> Self {
 		Self {
 			jsify: jsifier,
 			ctx: VisitContext::new(),
 			lifts_stack: vec![],
 			in_inner_inflight_class: 0,
+			ast,
 		}
 	}
 
@@ -116,14 +118,13 @@ impl<'a> LiftVisitor<'a> {
 
 	fn jsify_expr(&mut self, node: &Expr) -> String {
 		self.ctx.push_phase(Phase::Preflight);
-		let res = self.jsify.jsify_expression(
-			&node,
-			&mut JSifyContext {
-				lifts: None,
-				visit_ctx: &mut self.ctx,
-				source_path: None,
-			},
-		);
+		let mut jsify_ctx = JSifyContext {
+			lifts: None,
+			visit_ctx: &mut self.ctx,
+			source_path: None,
+			ast: self.ast,
+		};
+		let res = self.jsify.jsify_expression(&node, &mut jsify_ctx);
 		self.ctx.pop_phase();
 		res.to_string()
 	}
@@ -137,6 +138,7 @@ impl<'a> LiftVisitor<'a> {
 					lifts: None,
 					visit_ctx: &mut self.ctx,
 					source_path: None,
+					ast: self.ast,
 				},
 			)
 			.to_string();
@@ -163,6 +165,10 @@ impl<'a> LiftVisitor<'a> {
 }
 
 impl<'a> Visit<'a> for LiftVisitor<'a> {
+	fn ast(&self) -> &'a Ast {
+		self.ast
+	}
+
 	fn visit_reference(&mut self, node: &'a Reference) {
 		match node {
 			Reference::InstanceMember { property, .. } => {
@@ -342,7 +348,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 	fn visit_function_definition(&mut self, node: &'a FunctionDefinition) {
 		match &node.body {
-			FunctionBody::Statements(scope) => {
+			FunctionBody::Statements(scope_id) => {
+				let scope = self.ast.get_scope(*scope_id);
 				// If this is a method (of a non-inner inflight class), make sure there are no `lift()` calls that aren't at the top of the method
 				if node.name.is_some() && self.in_inner_inflight_class == 0 {
 					// Skip all statments that are a lift call and then search to see if there are further lift calls
@@ -398,7 +405,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 						node.name.as_ref(),
 						&node.signature,
 						node.is_static,
-						self.jsify.types.get_scope_env(&scope),
+						self.jsify.types.get_scope_env(self.ast, *scope_id),
 					);
 				}
 
@@ -449,7 +456,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 	}
 
 	fn visit_scope(&mut self, node: &'a Scope) {
-		self.ctx.push_env(self.jsify.types.get_scope_env(&node));
+		self.ctx.push_env(self.jsify.types.get_scope_env(self.ast, node.id));
 		visit::visit_scope(self, node);
 		self.ctx.pop_env();
 	}

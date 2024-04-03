@@ -21,9 +21,10 @@ pub fn on_goto_definition(params: GotoDefinitionParams) -> Vec<LocationLink> {
 			let uri = params.text_document_position_params.text_document.uri;
 			let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
 			let wing_source = project_data.files.get_file(&file).unwrap().as_bytes();
-			let scope = project_data.asts.get(&file).unwrap();
+			let ast = project_data.asts.get(&file).unwrap();
+			let scope = ast.root();
 
-			let mut symbol_finder = SymbolLocator::new(&types, params.text_document_position_params.position.into());
+			let mut symbol_finder = SymbolLocator::new(ast, &types, params.text_document_position_params.position.into());
 			symbol_finder.visit_scope(scope);
 
 			if let Some(lookup) = symbol_finder.lookup_located_symbol() {

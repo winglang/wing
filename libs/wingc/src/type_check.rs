@@ -13,14 +13,12 @@ use crate::ast::{
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
 	FunctionParameter as AstFunctionParameter, Interface as AstInterface, InterpolatedStringPart, Literal, Phase,
-	Reference, Scope, Spanned, Stmt, StmtKind, Struct as AstStruct, Symbol, TypeAnnotation, UnaryOperator,
-	UserDefinedType,
+	Reference, Spanned, Stmt, StmtKind, Struct as AstStruct, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::FileGraph;
-use crate::jsify::ROOT_CONSTRUCT;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
@@ -1368,7 +1366,7 @@ pub struct Types {
 	type_for_expr: Vec<Option<ResolvedExpression>>,
 	/// Lookup table from an Expr's `id` to the type it's being cast to. The Expr is always a Json literal or Json map literal.
 	json_literal_casts: IndexMap<ExprId, TypeRef>,
-	/// Lookup table from an AST's `id`` to a Scope's `id` to its symbol environment
+	/// Lookup table from an AST's `id` to a Scope's `id` to its symbol environment
 	ast_scope_envs: HashMap<usize, HashMap<ScopeId, SymbolEnvRef>>,
 	/// Expressions used in references that actually refer to a type.
 	/// Key is the ExprId of the object of a InstanceMember, and the value is a TypeMember representing the whole reference.
@@ -1736,7 +1734,6 @@ pub enum UtilityFunctions {
 	UnsafeCast,
 	Nodeof,
 	Lift,
-	Root,
 }
 
 impl Display for UtilityFunctions {
@@ -1747,7 +1744,6 @@ impl Display for UtilityFunctions {
 			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
 			UtilityFunctions::Nodeof => write!(f, "nodeof"),
 			UtilityFunctions::Lift => write!(f, "lift"),
-			UtilityFunctions::Root => write!(f, "root"),
 		}
 	}
 }
@@ -2067,19 +2063,6 @@ impl<'a> TypeChecker<'a> {
 				docs: Docs::with_summary(
 					"Explicitly apply qualifications to a preflight object used in the current method/function",
 				),
-			}),
-			scope,
-		);
-
-		self.add_builtin(
-			UtilityFunctions::Root.to_string().as_str(),
-			Type::Function(FunctionSignature {
-				this_type: None,
-				parameters: vec![],
-				return_type: self.types.construct_base_type(),
-				phase: Phase::Preflight,
-				js_override: Some(ROOT_CONSTRUCT.to_string()), // TODO: make sure this is passed into imported .w files
-				docs: Docs::with_summary("Returns the root contruct"),
 			}),
 			scope,
 		);
@@ -3435,7 +3418,7 @@ impl<'a> TypeChecker<'a> {
 
 			// iterate over the statements in the scope and check if there are any statements
 			// we care about
-			let mut has_stmt_visitor = HasStatementVisitor::default();
+			let mut has_stmt_visitor = HasStatementVisitor::new(self.ast);
 			has_stmt_visitor.visit(&scope.statements);
 
 			// If the scope doesn't contain any return statements and the return type isn't void or T? or
@@ -4812,9 +4795,8 @@ impl<'a> TypeChecker<'a> {
 	/// * `phase` - initializer phase
 	///
 	fn check_class_field_initialization(&mut self, scope: ScopeId, fields: &[ClassField], phase: Phase) {
-		let mut visit_init = VisitClassInit::default();
-		visit_init.analyze_statements(&self.ast.get_scope(scope).statements);
-		let initialized_fields = visit_init.fields;
+		let visit_init = VisitClassInit::new(self.ast);
+		let initialized_fields = visit_init.analyze_statements(&self.ast.get_scope(scope).statements);
 
 		let (current_phase, forbidden_phase) = if phase == Phase::Inflight {
 			("Inflight", Phase::Preflight)

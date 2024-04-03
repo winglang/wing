@@ -19,9 +19,10 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 			let project_data = project_data.borrow();
 			let uri = params.text_document_position_params.text_document.uri.clone();
 			let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
-			let root_scope = &project_data.asts.get(&file).unwrap();
+			let ast = project_data.asts.get(&file).unwrap();
+			let root_scope = ast.root();
 
-			let mut symbol_finder = SymbolLocator::new(&types, params.text_document_position_params.position.into());
+			let mut symbol_finder = SymbolLocator::new(ast, &types, params.text_document_position_params.position.into());
 			symbol_finder.visit_scope(root_scope);
 
 			if let Some(lookup) = symbol_finder.lookup_located_symbol() {

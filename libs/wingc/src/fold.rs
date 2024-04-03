@@ -12,7 +12,9 @@ use crate::{
 /// AST node instead of a reference to it, and returns a new AST node instance.
 /// This trait can be useful for AST transformations.
 pub trait Fold {
-	fn ast(&mut self) -> &mut Ast;
+	fn ast_mut(&mut self) -> &mut Ast;
+
+	fn ast(&self) -> &Ast;
 
 	fn fold_scope(&mut self, node: ScopeId) -> ScopeId {
 		fold_scope(self, node)
@@ -77,12 +79,13 @@ pub fn fold_scope<F>(f: &mut F, node: ScopeId) -> ScopeId
 where
 	F: Fold + ?Sized,
 {
-	let scope = f.ast().scopes[node];
-	f.ast().scopes[node] = Scope {
+	let scope = f.ast_mut().remove_scope(node);
+	let scope = Scope {
 		id: scope.id,
 		statements: scope.statements.into_iter().map(|stmt| f.fold_stmt(stmt)).collect(),
 		span: scope.span,
 	};
+	f.ast_mut().set_scope(scope);
 	node
 }
 

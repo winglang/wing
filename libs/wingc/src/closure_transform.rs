@@ -41,7 +41,7 @@ pub const PARENT_THIS_NAME: &str = "__parent_this";
 /// }
 /// let f = new $Closure1();
 /// ```
-pub struct ClosureTransformer {
+pub struct ClosureTransformer<'a> {
 	// Whether the transformer is inside a preflight or inflight scope.
 	// Only inflight closures defined in preflight scopes need to be transformed.
 	phase: Phase,
@@ -55,11 +55,11 @@ pub struct ClosureTransformer {
 	// newly-inserted classes will have access to the correct state
 	nearest_stmt_idx: usize,
 	/// The AST being transformed
-	ast: Ast,
+	ast: &'a mut Ast,
 }
 
-impl ClosureTransformer {
-	pub fn new(ast: Ast) -> Self {
+impl<'a> ClosureTransformer<'a> {
+	pub fn new(ast: &'a mut Ast) -> Self {
 		Self {
 			phase: Phase::Preflight,
 			inside_scope_with_this: false,
@@ -71,17 +71,20 @@ impl ClosureTransformer {
 	}
 }
 
-impl Fold for ClosureTransformer {
-	fn ast(&mut self) -> &mut Ast {
+impl<'a> Fold for ClosureTransformer<'a> {
+	fn ast(&self) -> &Ast {
+		&self.ast
+	}
+
+	fn ast_mut(&mut self) -> &mut Ast {
 		&mut self.ast
 	}
 
 	fn fold_scope(&mut self, node: ScopeId) -> ScopeId {
 		let mut statements = vec![];
 
-		let scope = self.ast().scopes[node];
-
-		for stmt in scope.statements {
+		let scope = self.ast_mut().remove_scope(node);
+		for stmt in scope.statements.into_iter() {
 			// TODO: can we remove "idx" from Stmt to avoid having to reason about this?
 			// or add a compiler step that updates statement indices after folding?
 			let old_nearest_stmt_idx = self.nearest_stmt_idx;
@@ -100,11 +103,11 @@ impl Fold for ClosureTransformer {
 			self.class_statements.clear();
 		}
 
-		self.ast().scopes[node] = Scope {
+		self.ast_mut().set_scope(Scope {
 			id: scope.id,
 			statements,
 			span: scope.span,
-		};
+		});
 		node
 	}
 
@@ -175,7 +178,7 @@ impl Fold for ClosureTransformer {
 						from: "this",
 						to: parent_this.as_str(),
 						inside_class: false,
-						ast: self.ast(),
+						ast: self.ast_mut(),
 					};
 					this_transform.fold_function_definition(func_def)
 				} else {
@@ -279,7 +282,7 @@ impl Fold for ClosureTransformer {
 								phase: Phase::Preflight,
 							},
 							is_static: true,
-							body: FunctionBody::Statements(self.ast().new_scope(class_init_body, WingSpan::for_file(file_id))),
+							body: FunctionBody::Statements(self.ast_mut().new_scope(class_init_body, WingSpan::for_file(file_id))),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
 						},
@@ -298,7 +301,7 @@ impl Fold for ClosureTransformer {
 								phase: Phase::Inflight,
 							},
 							is_static: false,
-							body: FunctionBody::Statements(self.ast().new_scope(vec![], WingSpan::for_file(file_id))),
+							body: FunctionBody::Statements(self.ast_mut().new_scope(vec![], WingSpan::for_file(file_id))),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
 						},
@@ -344,21 +347,14 @@ struct RenameThisTransformer<'a> {
 	// they refer to different objects.
 	inside_class: bool,
 	/// The AST being transformed
-	ast: &'a Ast,
-}
-
-impl RenameThisTransformer<'_> {
-	fn new(ast: &Ast) -> Self {
-		Self {
-			from: "this",
-			to: PARENT_THIS_NAME,
-			inside_class: false,
-			ast,
-		}
-	}
+	ast: &'a mut Ast,
 }
 
 impl<'a> Fold for RenameThisTransformer<'a> {
+	fn ast_mut(&mut self) -> &mut Ast {
+		&mut self.ast
+	}
+
 	fn fold_class(&mut self, node: Class) -> Class {
 		let old_inside_class = self.inside_class;
 		self.inside_class = true;
@@ -383,7 +379,7 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 		}
 	}
 
-	fn ast(&mut self) -> &mut Ast {
-		&mut self.ast
+	fn ast(&self) -> &Ast {
+		&self.ast
 	}
 }

@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Reference, Scope},
+	ast::{Ast, Reference, Scope},
 	jsify::JSifier,
 	json_schema_generator::JsonSchemaGenerator,
 	type_check::{is_udt_struct_type, resolve_user_defined_type},
@@ -8,13 +8,15 @@ use crate::{
 };
 
 pub struct StructSchemaVisitor<'a> {
+	ast: &'a Ast,
 	jsify: &'a JSifier<'a>,
 	ctx: VisitContext,
 }
 
 impl<'a> StructSchemaVisitor<'a> {
-	pub fn new(jsifier: &'a JSifier<'a>) -> Self {
+	pub fn new(ast: &'a Ast, jsifier: &'a JSifier<'a>) -> Self {
 		Self {
+			ast,
 			jsify: jsifier,
 			ctx: VisitContext::new(),
 		}
@@ -23,6 +25,10 @@ impl<'a> StructSchemaVisitor<'a> {
 
 // Looks for any references to a struct type, and emits a struct schema file for it.
 impl<'a> Visit<'a> for StructSchemaVisitor<'a> {
+	fn ast(&self) -> &'a crate::ast::Ast {
+		self.ast
+	}
+
 	fn visit_reference(&mut self, node: &'a crate::ast::Reference) {
 		match node {
 			Reference::InstanceMember { .. } => {
@@ -48,7 +54,7 @@ impl<'a> Visit<'a> for StructSchemaVisitor<'a> {
 	}
 
 	fn visit_scope(&mut self, node: &'a Scope) {
-		self.ctx.push_env(self.jsify.types.get_scope_env(&node));
+		self.ctx.push_env(self.jsify.types.get_scope_env(self.ast, node.id));
 		visit::visit_scope(self, node);
 		self.ctx.pop_env();
 	}

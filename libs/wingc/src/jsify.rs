@@ -14,7 +14,7 @@ use crate::{
 	ast::{
 		AccessModifier, ArgList, AssignmentKind, Ast, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs,
 		Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase,
-		Reference, Scope, ScopeId, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		Reference, ScopeId, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -50,7 +50,6 @@ const PLATFORMS_VAR: &str = "$platforms";
 const HELPERS_VAR: &str = "$helpers";
 
 const ROOT_CLASS: &str = "$Root";
-pub const ROOT_CONSTRUCT: &str = "$root";
 const JS_CONSTRUCTOR: &str = "constructor";
 const NODE_MODULES_DIR: &str = "node_modules";
 const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
@@ -61,7 +60,7 @@ pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
 	pub visit_ctx: &'a mut VisitContext,
 	pub source_path: Option<&'a Utf8Path>,
-	ast: &'a Ast,
+	pub ast: &'a Ast,
 }
 
 pub struct JSifier<'a> {
@@ -199,7 +198,6 @@ impl<'a> JSifier<'a> {
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}($scope, $id) {{"));
 			root_class.line("super($scope, $id);");
-			root_class.line(format!("const {ROOT_CONSTRUCT} = this;"));
 			root_class.add_code(self.jsify_struct_schemas());
 			root_class.add_code(js);
 			root_class.close("}");

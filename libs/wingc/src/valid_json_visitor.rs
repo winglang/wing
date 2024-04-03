@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Expr, ExprKind, Scope},
+	ast::{Ast, Expr, ExprKind, Scope},
 	diagnostic::{report_diagnostic, Diagnostic},
 	type_check::{JsonData, JsonDataKind, Type, Types},
 	visit::{self, Visit},
@@ -11,21 +11,26 @@ use crate::{
 /// - All inferences need to be resolved first.
 /// - When type checking an expression, it's not known if the literal is only being used for casting so we don't know whether to skip the validation or not
 pub struct ValidJsonVisitor<'a> {
+	ast: &'a Ast,
 	types: &'a Types,
 }
 
 impl<'a> ValidJsonVisitor<'a> {
-	pub fn new(types: &'a Types) -> Self {
-		Self { types }
+	pub fn new(ast: &'a Ast, types: &'a Types) -> Self {
+		Self { ast, types }
 	}
 
-	pub fn check(&mut self, scope: &Scope) {
+	pub fn check(&mut self, scope: &'a Scope) {
 		self.visit_scope(scope);
 	}
 }
 
-impl<'a> Visit<'_> for ValidJsonVisitor<'a> {
-	fn visit_expr(&mut self, expr: &Expr) {
+impl<'a> Visit<'a> for ValidJsonVisitor<'a> {
+	fn ast(&self) -> &'a Ast {
+		self.ast
+	}
+
+	fn visit_expr(&mut self, expr: &'a Expr) {
 		if let Some(t) = self.types.try_get_expr_type(expr.id) {
 			// if the type is json with known values, then we may need to validate that the values are legal json values
 			if let Type::Json(Some(JsonData { kind, expression_id })) = &*t {

@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -14,30 +15,89 @@ static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 //static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
 static AST_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
+struct AstElementArena<T> {
+	// TODO: make T a trait with an id() method
+	elements: HashMap<usize, T>,
+	id_counter: usize,
+}
+
+impl<T> AstElementArena<T> {
+	fn new() -> Self {
+		Self {
+			elements: HashMap::new(),
+			id_counter: 0,
+		}
+	}
+
+	fn gen_id(&mut self) -> usize {
+		let res = self.id_counter;
+		self.id_counter += 1;
+		res
+	}
+
+	fn add(&mut self, id: usize, element: T) {
+		assert!(!self.elements.contains_key(&id), "Cannot add element with existing id");
+		self.elements.insert(id, element);
+	}
+
+	fn get(&self, id: usize) -> &T {
+		self.elements.get(&id).expect("Element to exist")
+	}
+
+	fn remove(&mut self, id: usize) -> T {
+		self.elements.remove(&id).expect("Element to exist")
+	}
+
+	fn set(&mut self, id: usize, element: T) {
+		assert!(!self.elements.contains_key(&id), "Element already set");
+		self.elements.insert(id, element);
+	}
+}
+
 pub struct Ast {
-	pub scopes: Vec<Scope>,
-	pub root_scope: Option<ScopeId>,
+	scopes: AstElementArena<Scope>,
+	root_scope: Option<ScopeId>,
+	/// Unique identifier for this AST
 	pub id: usize,
 }
 
 impl Ast {
 	pub fn new() -> Self {
 		Self {
-			scopes: vec![],
+			scopes: AstElementArena::new(),
 			root_scope: None,
 			id: AST_COUNTER.fetch_add(1, Ordering::Relaxed),
 		}
 	}
 
 	pub fn new_scope(&mut self, statements: Vec<Stmt>, span: WingSpan) -> ScopeId {
-		let id = self.scopes.len();
+		let id = self.scopes.gen_id();
 		let scope = Scope { id, statements, span };
-		self.scopes.push(scope);
+		self.scopes.add(id, scope);
 		id
 	}
 
 	pub fn get_scope(&self, id: ScopeId) -> &Scope {
-		&self.scopes[id]
+		self.scopes.get(id)
+	}
+
+	pub fn remove_scope(&mut self, id: ScopeId) -> Scope {
+		self.scopes.remove(id)
+	}
+
+	pub fn set_scope(&mut self, scope: Scope) {
+		self.scopes.set(scope.id, scope);
+	}
+
+	/// Gets the root scope of the AST.
+	/// This assumes the AST was initialized by the parser, otherwise it will panic.
+	pub fn root(&self) -> &Scope {
+		self.get_scope(self.root_scope.expect("an AST to have a root"))
+	}
+
+	pub fn set_root(&mut self, root: ScopeId) {
+		assert!(self.root_scope.is_none(), "Root scope already set");
+		self.root_scope = Some(root);
 	}
 }
 
@@ -705,7 +765,7 @@ pub enum InterpolatedStringPart {
 	Expr(Expr),
 }
 
-pub type ScopeId = usize;
+pub type ScopeId = usize; // TODO: Consider `pub struct ScopeId(pub usize);` instead of alias for better type safety
 
 // do not derive Default, as we want to explicitly generate IDs
 #[derive(Debug)]

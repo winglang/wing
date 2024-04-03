@@ -1,6 +1,6 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, Class, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		ArgList, Ast, BringSource, CalleeKind, Class, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition,
 		FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope,
 		Stmt, StmtKind, Struct, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
@@ -33,6 +33,8 @@ use crate::{
 /// TODO: Provide a VisitMut trait that allows for mutation of the AST nodes
 /// (each method would accept a `&mut node` instead of `&node`)
 pub trait Visit<'ast> {
+	fn ast(&self) -> &'ast Ast;
+
 	fn visit_scope(&mut self, node: &'ast Scope) {
 		visit_scope(self, node);
 	}
@@ -132,11 +134,11 @@ where
 		} => {
 			v.visit_symbol(iterator);
 			v.visit_expr(iterable);
-			v.visit_scope(statements);
+			v.visit_scope(v.ast().get_scope(*statements));
 		}
 		StmtKind::While { condition, statements } => {
 			v.visit_expr(condition);
-			v.visit_scope(statements);
+			v.visit_scope(v.ast().get_scope(*statements));
 		}
 		StmtKind::Break | StmtKind::Continue => {}
 		StmtKind::IfLet(IfLet {
@@ -149,22 +151,22 @@ where
 		}) => {
 			v.visit_symbol(var_name);
 			v.visit_expr(value);
-			v.visit_scope(statements);
+			v.visit_scope(v.ast().get_scope(*statements));
 			for elif in elif_statements {
 				match elif {
 					Elifs::ElifBlock(elif_block) => {
 						v.visit_expr(&elif_block.condition);
-						v.visit_scope(&elif_block.statements);
+						v.visit_scope(v.ast().get_scope(elif_block.statements));
 					}
 					Elifs::ElifLetBlock(elif_let_block) => {
 						v.visit_symbol(&elif_let_block.var_name);
 						v.visit_expr(&elif_let_block.value);
-						v.visit_scope(&elif_let_block.statements);
+						v.visit_scope(v.ast().get_scope(elif_let_block.statements));
 					}
 				}
 			}
 			if let Some(statements) = else_statements {
-				v.visit_scope(statements);
+				v.visit_scope(v.ast().get_scope(*statements));
 			}
 		}
 		StmtKind::If {
@@ -174,13 +176,13 @@ where
 			else_statements,
 		} => {
 			v.visit_expr(condition);
-			v.visit_scope(statements);
+			v.visit_scope(v.ast().get_scope(*statements));
 			for elif in elif_statements {
 				v.visit_expr(&elif.condition);
-				v.visit_scope(&elif.statements);
+				v.visit_scope(v.ast().get_scope(elif.statements));
 			}
 			if let Some(statements) = else_statements {
-				v.visit_scope(statements);
+				v.visit_scope(v.ast().get_scope(*statements));
 			}
 		}
 		StmtKind::Expression(expr) => v.visit_expr(&expr),
@@ -198,7 +200,7 @@ where
 			}
 		}
 		StmtKind::Throw(expr) => v.visit_expr(expr),
-		StmtKind::Scope(scope) => v.visit_scope(scope),
+		StmtKind::Scope(scope) => v.visit_scope(v.ast().get_scope(*scope)),
 		StmtKind::Class(class) => v.visit_class(class),
 		StmtKind::Interface(interface) => v.visit_interface(interface),
 		StmtKind::Struct(st) => v.visit_struct(st),
@@ -208,15 +210,15 @@ where
 			catch_block,
 			finally_statements,
 		} => {
-			v.visit_scope(try_statements);
+			v.visit_scope(v.ast().get_scope(*try_statements));
 			if let Some(catch_block) = catch_block {
 				if let Some(exception_var) = &catch_block.exception_var {
 					v.visit_symbol(exception_var);
 				}
-				v.visit_scope(&catch_block.statements);
+				v.visit_scope(v.ast().get_scope(catch_block.statements));
 			}
 			if let Some(finally_statements) = finally_statements {
-				v.visit_scope(finally_statements);
+				v.visit_scope(v.ast().get_scope(*finally_statements));
 			}
 		}
 		StmtKind::CompilerDebugEnv => {}
@@ -440,7 +442,7 @@ where
 {
 	v.visit_function_signature(&node.signature);
 	if let FunctionBody::Statements(scope) = &node.body {
-		v.visit_scope(scope);
+		v.visit_scope(v.ast().get_scope(*scope));
 	};
 }
 

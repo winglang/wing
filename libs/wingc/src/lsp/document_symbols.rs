@@ -7,20 +7,26 @@ use lsp_types::{DocumentSymbol, SymbolKind};
 
 use super::sync::check_utf8;
 
-pub struct DocumentSymbolVisitor {
+pub struct DocumentSymbolVisitor<'a> {
 	pub document_symbols: Vec<DocumentSymbol>,
+	pub ast: &'a Ast,
 }
 
-impl DocumentSymbolVisitor {
-	pub fn new() -> Self {
+impl<'a> DocumentSymbolVisitor<'a> {
+	pub fn new(ast: &'a Ast) -> Self {
 		Self {
 			document_symbols: vec![],
+			ast,
 		}
 	}
 }
 
-impl Visit<'_> for DocumentSymbolVisitor {
-	fn visit_stmt(&mut self, statement: &Stmt) {
+impl<'a> Visit<'a> for DocumentSymbolVisitor<'a> {
+	fn ast(&self) -> &'a Ast {
+		self.ast
+	}
+
+	fn visit_stmt(&mut self, statement: &'a Stmt) {
 		match &statement.kind {
 			StmtKind::Bring { source, identifier } => {
 				if let Some(identifier) = identifier {
@@ -95,9 +101,10 @@ pub fn on_document_symbols(params: lsp_types::DocumentSymbolParams) -> Vec<Docum
 		let project_data = project_data.borrow();
 		let uri = params.text_document.uri;
 		let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
-		let scope = project_data.asts.get(&file).unwrap();
+		let ast = project_data.asts.get(&file).unwrap();
+		let scope = ast.root();
 
-		let mut visitor = DocumentSymbolVisitor::new();
+		let mut visitor = DocumentSymbolVisitor::new(ast);
 		visitor.visit_scope(scope);
 
 		visitor
