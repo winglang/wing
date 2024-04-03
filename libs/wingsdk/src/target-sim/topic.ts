@@ -63,12 +63,15 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     props: cloud.TopicOnMessageOptions = {}
   ): void {
     const functionHandler = convertBetweenHandlers(
-      Testing.makeHandler("async handle(event) { return await this.queue.push(event); }", {
-        queue: {
-          obj: queue,
-          ops: [QUEUE_PUSH_METHOD]
+      Testing.makeHandler(
+        "async handle(event) { return await this.queue.push(event); }",
+        {
+          queue: {
+            obj: queue,
+            ops: [QUEUE_PUSH_METHOD],
+          },
         }
-      }),
+      ),
       join(__dirname, "topic.onmessage.inflight.js"),
       "TopicOnMessageHandlerClient"
     );
