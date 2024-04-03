@@ -7,8 +7,8 @@ description: Spec and design for adding cloud snapshots to the Wing test framewo
 
 - **Author(s)**: @eladb
 - **Submission Date**: 2024-03-24
-- **Stage**: Proposal
-- **Stage Date**: 2024-03-24
+- **Stage**: Approved
+- **Stage Date**: 2024-04-03
 
 ## Requirements
 
