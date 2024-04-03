@@ -50,14 +50,15 @@ export class Api
   implements IApiClient, ISimulatorResourceInstance, IEventPublisher
 {
   private readonly routes: ApiRouteWithFunctionHandle[];
-  private _context: ISimulatorContext | undefined;
+  private readonly context: ISimulatorContext;
   private readonly app: express.Application;
   private server: Server | undefined;
   private url: string | undefined;
   private port: number | undefined;
 
-  constructor(props: ApiSchema["props"]) {
+  constructor(props: ApiSchema["props"], context: ISimulatorContext) {
     this.routes = [];
+    this.context = context;
     const { corsHeaders } = props;
 
     // Set up an express server that handles the routes.
@@ -93,15 +94,7 @@ export class Api
     }
   }
 
-  private get context(): ISimulatorContext {
-    if (!this._context) {
-      throw new Error("Cannot access context during class construction");
-    }
-    return this._context;
-  }
-
-  public async init(context: ISimulatorContext): Promise<ApiAttributes> {
-    this._context = context;
+  public async init(): Promise<ApiAttributes> {
     // Check for a previous state file to see if there was a port that was previously being used
     // if so, try to use it out of convenience
     let lastPort: number | undefined;

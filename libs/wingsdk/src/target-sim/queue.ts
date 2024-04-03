@@ -2,11 +2,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import {
-  Function,
-  FunctionInflightMethods as SimFunctionInflightMethods,
-} from "./function";
-import { Policy } from "./policy";
+import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
@@ -24,7 +20,6 @@ import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: Duration;
   private readonly retentionPeriod: Duration;
-  private readonly policy: Policy;
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
@@ -47,8 +42,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
         "Retention period must be greater than or equal to timeout"
       );
     }
-
-    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
   /** @internal */
@@ -116,12 +109,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       name: "setConsumer()",
     });
 
-    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
-    this.policy.addStatement(
-      fn,
-      SimFunctionInflightMethods.HAS_AVAILABLE_WORKERS
-    );
-
     return fn;
   }
 
@@ -140,7 +127,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(__filename, this, host);
     super.onLift(host, ops);
   }
 

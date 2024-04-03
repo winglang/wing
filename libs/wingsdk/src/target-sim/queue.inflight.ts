@@ -5,7 +5,7 @@ import {
   QueueSchema,
   QueueSubscriber,
   EventSubscription,
-  ResourceHandle,
+  FunctionHandle,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient, QUEUE_FQN } from "../cloud";
 import {
@@ -21,25 +21,18 @@ export class Queue
   private readonly messages = new Array<QueueMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly processLoop: LoopController;
-  private _context: ISimulatorContext | undefined;
+  private readonly context: ISimulatorContext;
   private readonly timeoutSeconds: number;
   private readonly retentionPeriod: number;
 
-  constructor(props: QueueSchema["props"]) {
+  constructor(props: QueueSchema["props"], context: ISimulatorContext) {
     this.timeoutSeconds = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
     this.processLoop = runEvery(100, async () => this.processMessages()); // every 0.1 seconds
+    this.context = context;
   }
 
-  private get context(): ISimulatorContext {
-    if (!this._context) {
-      throw new Error("Cannot access context during class construction");
-    }
-    return this._context;
-  }
-
-  public async init(context: ISimulatorContext): Promise<QueueAttributes> {
-    this._context = context;
+  public async init(): Promise<QueueAttributes> {
     return {};
   }
 
@@ -54,7 +47,7 @@ export class Queue
   }
 
   public async addEventSubscription(
-    subscriber: ResourceHandle,
+    subscriber: FunctionHandle,
     subscriptionProps: EventSubscription
   ): Promise<void> {
     const s = {
@@ -65,7 +58,7 @@ export class Queue
   }
 
   public async removeEventSubscription(
-    subscriber: ResourceHandle
+    subscriber: FunctionHandle
   ): Promise<void> {
     const index = this.subscribers.findIndex(
       (s) => s.functionHandle === subscriber

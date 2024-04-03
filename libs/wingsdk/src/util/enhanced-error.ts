@@ -79,7 +79,8 @@ export async function prettyPrintError(
     )
     // special: remove the handler wrapper (See `cloud.Function` entrypoint for where this comes from)
     .filter(
-      (item) => !normalPath(item.file).match(/\.wing\/\w+(\.sandbox)?\.js$/)
+      (item) =>
+        !normalPath(item.file).match(/\.wing\/handler_\w+(\.sandbox)?\.js$/)
     )
     .withSourcesAsync();
 

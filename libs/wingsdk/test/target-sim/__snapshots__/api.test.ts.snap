@@ -48,31 +48,6 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/OnRequestHandler0",
@@ -221,14 +196,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -268,21 +235,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -295,19 +247,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -340,15 +279,11 @@ exports[`api handler can read the request params 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -399,31 +334,6 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/OnRequestHandler0",
@@ -558,14 +468,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -605,21 +507,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -632,19 +519,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -677,15 +551,11 @@ exports[`api handler can read the request path 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -736,31 +606,6 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/OnRequestHandler0",
@@ -895,14 +740,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -942,21 +779,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -969,19 +791,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -1014,15 +823,11 @@ exports[`api handler can set response headers 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -1073,31 +878,6 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/OnRequestHandler0",
@@ -1232,14 +1012,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1279,21 +1051,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -1306,19 +1063,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -1351,15 +1095,11 @@ exports[`api response returns Content-Type header from inflight 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -1410,31 +1150,6 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/OnRequestHandler0",
@@ -1569,14 +1284,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1616,21 +1323,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -1643,19 +1335,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -1688,15 +1367,11 @@ exports[`api response returns default Content-Type header 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -1747,31 +1422,6 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/OnRequestHandler0",
@@ -1906,14 +1556,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1953,21 +1595,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -1980,19 +1607,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -2025,8 +1639,6 @@ exports[`api supports every method type 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
@@ -2050,8 +1662,6 @@ exports[`api supports every method type 1`] = `
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "PATCH /hello - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -2130,31 +1740,6 @@ return class Handler {
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
@@ -2375,14 +1960,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -2422,21 +1999,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -2449,19 +2011,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -2494,15 +2043,11 @@ exports[`api with 'name' & 'age' parameter 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /:name/:age" params={"name":"akhil","age":"23"}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil/23\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}}").",
   "GET /:name/:age - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -2551,31 +2096,6 @@ return class Handler {
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
@@ -2729,14 +2249,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -2776,21 +2288,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -2803,19 +2300,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -2848,15 +2332,11 @@ exports[`api with 'name' parameter 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /:name" params={"name":"akhil"}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\"}}").",
   "GET /:name - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -2905,31 +2385,6 @@ return class Handler {
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
@@ -3075,14 +2530,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -3122,21 +2569,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -3149,19 +2581,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -3229,31 +2648,6 @@ return class Handler {
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
@@ -3406,14 +2800,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -3453,21 +2839,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -3480,19 +2851,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -3525,11 +2883,8 @@ exports[`api with multiple methods on same route 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/OnRequestHandler1 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
-  "root/my_api/OnRequestHandler1/Policy started",
+  "root/my_api/OnRequestHandler1 started",
   "root/my_api/ApiEventMapping1 started",
   "Processing "GET /hello" params={}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
@@ -3538,14 +2893,11 @@ exports[`api with multiple methods on same route 1`] = `
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "POST /hello - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "root/my_api/ApiEventMapping1 stopped",
   "Closing server on http://127.0.0.1:<port>",
   "root/my_api stopped",
-  "root/my_api/OnRequestHandler1/Policy stopped",
   "root/my_api/OnRequestHandler1 stopped",
 ]
 `;
@@ -3613,35 +2965,6 @@ return class Handler {
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler1#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
@@ -3712,16 +3035,6 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      {
-        "addr": "c8603fc16b367fc8cb05634fbb47b4a1e7f873b298",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler1/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler1#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c84819d7712e30f38cf7731fcfbe96cbc39c7e75d3",
@@ -3833,14 +3146,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -3891,21 +3196,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -3920,21 +3210,6 @@ return class Handler {
               "path": "root/my_api/OnRequestHandler0",
             },
             "OnRequestHandler1": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler1/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -3947,19 +3222,6 @@ return class Handler {
               },
               "id": "OnRequestHandler1",
               "path": "root/my_api/OnRequestHandler1",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -3992,11 +3254,8 @@ exports[`api with multiple routes 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/OnRequestHandler1 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
-  "root/my_api/OnRequestHandler1/Policy started",
+  "root/my_api/OnRequestHandler1 started",
   "root/my_api/ApiEventMapping1 started",
   "Processing "GET /hello/world" params={}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/world\\",\\"query\\":{},\\"vars\\":{}}").",
@@ -4005,14 +3264,11 @@ exports[`api with multiple routes 1`] = `
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/wingnuts\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello/wingnuts - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "root/my_api/ApiEventMapping1 stopped",
   "Closing server on http://127.0.0.1:<port>",
   "root/my_api stopped",
-  "root/my_api/OnRequestHandler1/Policy stopped",
   "root/my_api/OnRequestHandler1 stopped",
 ]
 `;
@@ -4080,35 +3336,6 @@ return class Handler {
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler1#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
@@ -4181,16 +3408,6 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      {
-        "addr": "c8603fc16b367fc8cb05634fbb47b4a1e7f873b298",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler1/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler1#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c84819d7712e30f38cf7731fcfbe96cbc39c7e75d3",
@@ -4302,14 +3519,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -4360,21 +3569,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -4389,21 +3583,6 @@ return class Handler {
               "path": "root/my_api/OnRequestHandler0",
             },
             "OnRequestHandler1": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler1/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -4416,19 +3595,6 @@ return class Handler {
               },
               "id": "OnRequestHandler1",
               "path": "root/my_api/OnRequestHandler1",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -4461,15 +3627,11 @@ exports[`api with one GET route 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /hello" params={}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "GET /hello - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -4518,31 +3680,6 @@ return class Handler {
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
@@ -4679,14 +3816,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -4726,21 +3855,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -4753,19 +3867,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -4798,15 +3899,11 @@ exports[`api with one GET route with request params 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "GET /users/:name" params={"name":"tsuf"}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}").",
   "GET /users/:name - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -4855,31 +3952,6 @@ return class Handler {
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
@@ -5025,14 +4097,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -5072,21 +4136,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -5099,19 +4148,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -5144,15 +4180,11 @@ exports[`api with one POST route, with body 1`] = `
   "root/my_api started",
   "root/my_api/Endpoint started",
   "root/my_api/OnRequestHandler0 started",
-  "root/my_api/Policy started",
-  "root/my_api/OnRequestHandler0/Policy started",
   "root/my_api/ApiEventMapping0 started",
   "Processing "POST /hello" params={}).",
   "Invoke (payload="{\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/json\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"node\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"25\\"},\\"body\\":\\"{\\\\\\"message\\\\\\":\\\\\\"hello world\\\\\\"}\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}").",
   "POST /hello - 200.",
   "root/my_api/Endpoint stopped",
-  "root/my_api/Policy stopped",
-  "root/my_api/OnRequestHandler0/Policy stopped",
   "root/my_api/ApiEventMapping0 stopped",
   "root/my_api/OnRequestHandler0 stopped",
   "Closing server on http://127.0.0.1:<port>",
@@ -5201,31 +4233,6 @@ return class Handler {
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c8b0396e20397567e34feafb703cea1bc0b968dc05",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
@@ -5362,14 +4369,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -5409,21 +4408,6 @@ return class Handler {
               "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_api/OnRequestHandler0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -5436,19 +4420,6 @@ return class Handler {
               },
               "id": "OnRequestHandler0",
               "path": "root/my_api/OnRequestHandler0",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {
@@ -5505,16 +4476,6 @@ exports[`create an api 1`] = `
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -5591,14 +4552,6 @@ exports[`create an api 1`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -5625,19 +4578,6 @@ exports[`create an api 1`] = `
               },
               "id": "Endpoint",
               "path": "root/my_api/Endpoint",
-            },
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_api/Policy",
             },
           },
           "constructInfo": {

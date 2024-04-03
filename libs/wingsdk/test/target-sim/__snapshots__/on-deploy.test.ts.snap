@@ -39,21 +39,10 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
-        "addr": "c84ce37dba3dd1bd3d5c4ab27cb72c54e2b1a75821",
-        "attrs": {},
-        "path": "root/my_on_deploy/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_on_deploy/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c8e2618b976544550a8396a3817f0bad07099f7050",
         "attrs": {},
         "deps": [
           "root/my_on_deploy/Function",
-          "root/my_on_deploy/Function/Policy",
         ],
         "path": "root/my_on_deploy",
         "props": {
@@ -136,14 +125,6 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -160,21 +141,6 @@ return class Handler {
         "my_on_deploy": {
           "children": {
             "Function": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_on_deploy/Function/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -215,13 +181,11 @@ return class Handler {
 exports[`create an OnDeploy 2`] = `
 [
   "root/my_on_deploy/Function started",
-  "root/my_on_deploy/Function/Policy started",
   "super duper success",
   "Invoke (payload=undefined).",
   "OnDeploy invoked.",
   "root/my_on_deploy started",
   "root/my_on_deploy stopped",
-  "root/my_on_deploy/Function/Policy stopped",
   "root/my_on_deploy/Function stopped",
 ]
 `;

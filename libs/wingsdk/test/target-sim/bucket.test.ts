@@ -39,9 +39,7 @@ test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const testInflight = Testing.makeHandler(
-    "async handle() { console.log('I am done'); }"
-  );
+  const testInflight = Testing.makeHandler("async handle() {}");
   bucket.onCreate(testInflight);
 
   const s = await app.startSimulator();
@@ -50,17 +48,13 @@ test("update an object in bucket", async () => {
 
   // WHEN
   await client.put(KEY, JSON.stringify({ msg: "Hello world 1!" }));
+  await waitUntilTraceCount(s, 4, (trace) => trace.data.message.includes(KEY));
   await client.put(KEY, JSON.stringify({ msg: "Hello world 2!" }));
-  await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.includes(`I am done`)
-  );
+  await waitUntilTraceCount(s, 5, (trace) => trace.data.message.includes(KEY));
 
   // THEN
-  await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
-  // The bucket notification topic should only publish one message, since the
-  // second put() call counts as an update, not a create.
-  expect(listMessages(s).filter((m) => m.includes(`Publish`))).toHaveLength(1);
+  await s.stop();
 });
 
 test("bucket on event creates 3 topics, and sends the right event and key in the event handlers", async () => {
@@ -337,7 +331,7 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.status).toEqual("failure");
+  expect(s.listTraces()[1].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });
 

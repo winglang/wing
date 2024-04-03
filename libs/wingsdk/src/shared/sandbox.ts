@@ -222,14 +222,14 @@ process.on("message", async (message) => {
 
       // "exit" could be emitted if the user code called process.exit(), or if we killed the process
       // due to a timeout or unexpected error. In any case, we reject the promise.
-      this.onChildExit = (code: number | null, signal: unknown) => {
+      this.onChildExit = (code: number | null) => {
         this.debugLog("Child processed stopped.");
         this.child = undefined;
         this.available = true;
         if (this.timeout) {
           clearTimeout(this.timeout);
         }
-        reject(new Error(`Process exited with code ${code}, signal ${signal}`));
+        reject(new Error(`Process exited with code ${code}`));
       };
 
       if (this.options.timeout) {

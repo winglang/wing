@@ -3,47 +3,34 @@ import {
   EventMappingAttributes,
   EventMappingSchema,
   EventSubscription,
-  ResourceHandle,
+  FunctionHandle,
+  PublisherHandle,
 } from "./schema-resources";
 import { ISimulatorContext } from "../simulator";
 import { ISimulatorResourceInstance, UpdatePlan } from "../simulator/simulator";
 
 export class EventMapping implements ISimulatorResourceInstance {
-  private readonly publisher: ResourceHandle;
-  private readonly subscriber: ResourceHandle;
+  private readonly publisher: PublisherHandle;
+  private readonly subscriber: FunctionHandle;
   private readonly eventSubscription: EventSubscription;
-  private _context: ISimulatorContext | undefined;
+  private readonly context: ISimulatorContext;
 
-  constructor(props: EventMappingSchema["props"]) {
+  constructor(props: EventMappingSchema["props"], context: ISimulatorContext) {
     this.publisher = props.publisher;
     this.subscriber = props.subscriber;
     this.eventSubscription = props.subscriptionProps;
+
+    this.context = context;
   }
 
-  private get context(): ISimulatorContext {
-    if (!this._context) {
-      throw new Error("Cannot access context during class construction");
-    }
-    return this._context;
-  }
-
-  public async init(
-    context: ISimulatorContext
-  ): Promise<EventMappingAttributes> {
-    this._context = context;
-    const client = this.context.getClient(
-      this.publisher,
-      true
-    ) as IEventPublisher;
+  public async init(): Promise<EventMappingAttributes> {
+    const client = this.context.getClient(this.publisher) as IEventPublisher;
     await client.addEventSubscription(this.subscriber, this.eventSubscription);
     return {};
   }
 
   public async cleanup(): Promise<void> {
-    const client = this.context.getClient(
-      this.publisher,
-      true
-    ) as IEventPublisher;
+    const client = this.context.getClient(this.publisher) as IEventPublisher;
     await client.removeEventSubscription(this.subscriber);
   }
 
