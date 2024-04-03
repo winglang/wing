@@ -140,6 +140,10 @@ process.on("message", async (message) => {
     this.child = cp.fork(this.entrypoint, {
       env: childEnv,
       stdio: "pipe",
+      // keep the process detached so in the case of cloud.Service, if the parent process is killed
+      // (e.g. someone presses Ctrl+C while using Wing Console),
+      // we can gracefully call any cleanup code in the child process
+      detached: true,
       // this option allows complex objects like Error to be sent from the child process to the parent
       serialization: "advanced",
     });

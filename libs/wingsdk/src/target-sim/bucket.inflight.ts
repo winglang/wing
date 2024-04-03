@@ -21,6 +21,7 @@ import { deserialize, serialize } from "../simulator/serialization";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { Datetime, Json, TraceType } from "../std";
 
@@ -78,6 +79,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async save(): Promise<void> {
     // no need to save individual files, since they are already persisted in the state dir

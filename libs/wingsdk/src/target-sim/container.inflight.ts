@@ -4,6 +4,7 @@ import { isPath, runCommand } from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { Duration, TraceType } from "../std";
 import { Util } from "../util";
@@ -129,6 +130,10 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 }
 
 async function waitUntil(predicate: () => Promise<boolean>) {
