@@ -405,10 +405,8 @@ export class Simulator {
       console.warn(err);
     }
 
-    // if the resource is a policy, remove it from the policy registry
-    if (this.getResourceConfig(path).type === POLICY_FQN) {
-      this._policyRegistry.deregister(path);
-    }
+    // remove the resource's policy from the policy registry
+    this._policyRegistry.deregister(path);
 
     this.addSimulatorTrace(path, { message: `${path} stopped` });
     delete this.state[path]; // delete the state of the resource

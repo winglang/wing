@@ -29,7 +29,9 @@ test("create a service with on start method", async () => {
     },
     path: "root/my_service",
     addr: expect.any(String),
+    policy: [],
     props: {
+      autoStart: true,
       sourceCodeFile: expect.any(String),
       environmentVariables: {},
     },
@@ -59,7 +61,9 @@ test("create a service with a on stop method", async () => {
     },
     path: "root/my_service",
     addr: expect.any(String),
+    policy: [],
     props: {
+      autoStart: true,
       sourceCodeFile: expect.any(String),
       environmentVariables: {},
     },
@@ -74,8 +78,8 @@ test("create a service with a on stop method", async () => {
       .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
   ).toEqual([
-    "root/my_service started",
     "start!",
+    "root/my_service started",
     "stop!",
     "root/my_service stopped",
   ]);
@@ -101,7 +105,9 @@ test("create a service without autostart", async () => {
     },
     path: "root/my_service",
     addr: expect.any(String),
+    policy: [],
     props: {
+      autoStart: false,
       sourceCodeFile: expect.any(String),
       environmentVariables: {},
     },

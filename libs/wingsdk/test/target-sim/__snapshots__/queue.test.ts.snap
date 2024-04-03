@@ -107,10 +107,6 @@ exports[`create a queue 1`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -732,10 +728,6 @@ exports[`push rejects empty message 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -910,10 +902,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1066,19 +1054,10 @@ async handle(message) {
         "type": "@winglang/sdk.sim.Policy",
       },
       {
-        "addr": "c850ec3b050199141fa07ce182e2e0711e60d2d193",
-        "attrs": {},
-        "path": "root/my_queue/SetConsumer0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1122,6 +1101,12 @@ async handle(message) {
           "root/my_queue",
         ],
         "path": "root/my_queue_messages/Function",
+        "policy": [
+          {
+            "operation": "push",
+            "resourceHandle": "\${wsim#root/my_queue#attrs.handle}",
+          },
+        ],
         "props": {
           "concurrency": 100,
           "environmentVariables": {
@@ -1134,26 +1119,10 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
-        "addr": "c8a0157ce3fdc8f4da43f974ef4b722745f359650f",
-        "attrs": {},
-        "path": "root/my_queue_messages/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_queue_messages/Function#attrs.handle}",
-          "statements": [
-            {
-              "operation": "push",
-              "resourceHandle": "\${wsim#root/my_queue#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c8e2354407fd3536187725c2b37c5327f47bb841e9",
         "attrs": {},
         "deps": [
           "root/my_queue_messages/Function",
-          "root/my_queue_messages/Function/Policy",
         ],
         "path": "root/my_queue_messages",
         "props": {
@@ -1240,10 +1209,6 @@ async handle(message) {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1284,21 +1249,6 @@ async handle(message) {
               "path": "root/my_queue/QueueEventMapping0",
             },
             "SetConsumer0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_queue/SetConsumer0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -1326,21 +1276,6 @@ async handle(message) {
         "my_queue_messages": {
           "children": {
             "Function": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_queue_messages/Function/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -1434,19 +1369,10 @@ async handle(message) {
         "type": "@winglang/sdk.sim.Policy",
       },
       {
-        "addr": "c850ec3b050199141fa07ce182e2e0711e60d2d193",
-        "attrs": {},
-        "path": "root/my_queue/SetConsumer0/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1562,10 +1488,6 @@ async handle(message) {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1606,21 +1528,6 @@ async handle(message) {
               "path": "root/my_queue/QueueEventMapping0",
             },
             "SetConsumer0": {
-              "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/my_queue/SetConsumer0/Policy",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",

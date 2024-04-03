@@ -10,15 +10,12 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "root/log_bucket started",
   "root/my_bucket/oncreate/OnMessage0 started",
   "root/my_bucket/oncreate/Policy started",
-  "root/my_bucket/oncreate/OnMessage0/Policy started",
   "root/my_bucket/oncreate/TopicEventMapping0 started",
   "root/my_bucket/onupdate/OnMessage0 started",
   "root/my_bucket/onupdate/Policy started",
-  "root/my_bucket/onupdate/OnMessage0/Policy started",
   "root/my_bucket/onupdate/TopicEventMapping0 started",
   "root/my_bucket/ondelete/OnMessage0 started",
   "root/my_bucket/ondelete/Policy started",
-  "root/my_bucket/ondelete/OnMessage0/Policy started",
   "root/my_bucket/ondelete/TopicEventMapping0 started",
   "root/log_bucket/Policy started",
   "Publish (message=a).",
@@ -29,14 +26,14 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "I am done",
   "Get (key=a).",
   "Publish (message=a).",
-  "Sending message (message=a, subscriber=sim-10).",
+  "Sending message (message=a, subscriber=sim-9).",
   "InvokeAsync (payload="a").",
   "Put (key=a).",
   "Put (key=a).",
   "I am done",
   "Get (key=a).",
   "Publish (message=a).",
-  "Sending message (message=a, subscriber=sim-14).",
+  "Sending message (message=a, subscriber=sim-12).",
   "InvokeAsync (payload="a").",
   "Delete (key=a).",
   "Put (key=a).",
@@ -53,11 +50,8 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "root/my_bucket/ondelete/Policy stopped",
   "root/my_bucket/ondelete/TopicEventMapping0 stopped",
   "root/my_bucket/ondelete stopped",
-  "root/my_bucket/oncreate/OnMessage0/Policy stopped",
   "root/my_bucket/oncreate/OnMessage0 stopped",
-  "root/my_bucket/onupdate/OnMessage0/Policy stopped",
   "root/my_bucket/onupdate/OnMessage0 stopped",
-  "root/my_bucket/ondelete/OnMessage0/Policy stopped",
   "root/my_bucket/ondelete/OnMessage0 stopped",
   "root/log_bucket/Policy stopped",
   "root/log_bucket stopped",
@@ -186,10 +180,6 @@ exports[`can add file in preflight 2`] = `
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -367,10 +357,6 @@ exports[`can add object in preflight 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -531,10 +517,6 @@ exports[`create a bucket 1`] = `
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -707,10 +689,6 @@ exports[`get invalid object throws an error 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -880,7 +858,6 @@ exports[`removing a key will call onDelete method 1`] = `
   "root/my_bucket/Policy started",
   "root/my_bucket/ondelete/OnMessage0 started",
   "root/my_bucket/ondelete/Policy started",
-  "root/my_bucket/ondelete/OnMessage0/Policy started",
   "root/my_bucket/ondelete/TopicEventMapping0 started",
   "Put (key=unknown.txt).",
   "Publish (message=unknown.txt).",
@@ -893,7 +870,6 @@ exports[`removing a key will call onDelete method 1`] = `
   "root/my_bucket/ondelete/Policy stopped",
   "root/my_bucket/ondelete/TopicEventMapping0 stopped",
   "root/my_bucket/ondelete stopped",
-  "root/my_bucket/ondelete/OnMessage0/Policy stopped",
   "root/my_bucket/ondelete/OnMessage0 stopped",
 ]
 `;
@@ -905,7 +881,6 @@ exports[`update an object in bucket 1`] = `
   "root/my_bucket/Policy started",
   "root/my_bucket/oncreate/OnMessage0 started",
   "root/my_bucket/oncreate/Policy started",
-  "root/my_bucket/oncreate/OnMessage0/Policy started",
   "root/my_bucket/oncreate/TopicEventMapping0 started",
   "Publish (message=1.txt).",
   "Sending message (message=1.txt, subscriber=sim-3).",
@@ -918,7 +893,6 @@ exports[`update an object in bucket 1`] = `
   "root/my_bucket/oncreate/Policy stopped",
   "root/my_bucket/oncreate/TopicEventMapping0 stopped",
   "root/my_bucket/oncreate stopped",
-  "root/my_bucket/oncreate/OnMessage0/Policy stopped",
   "root/my_bucket/oncreate/OnMessage0 stopped",
 ]
 `;

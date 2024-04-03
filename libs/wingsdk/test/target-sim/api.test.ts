@@ -41,6 +41,7 @@ test("create an api", async () => {
     },
     path: "root/my_api",
     addr: expect.any(String),
+    policy: [],
     props: {
       openApiSpec: {
         openapi: expect.any(String),
