@@ -115,9 +115,8 @@ export class Api
       });
     }
 
-    // The routes are populated by the addEventSubscription method and removed
-    // by the removeEventSubscription method. Since the routes can change,
-    // we just maintain a list of routes internally and do the routing ourselves.
+    // A custom middleware to handle the API routes by matching
+    // the method and path of the request to the routes in `this.routes`.
     this.app.use(
       asyncMiddleware(
         async (
@@ -136,6 +135,7 @@ export class Api
             return next();
           }
 
+          // Extract path parameters from the request path, and add them to the request object.
           const keys = route.pathRegexKeys ?? [];
           const match = route.pathRegex.exec(req.path);
           if (match) {
@@ -164,18 +164,20 @@ export class Api
             );
             const response: ApiResponse = JSON.parse(responseString ?? "{}");
 
+            // Set the status code, headers, and body of the response.
             const status = response.status ?? DEFAULT_RESPONSE_STATUS;
             res.status(status);
-            for (const [key, value] of Object.entries(
-              response?.headers ?? {}
-            )) {
+
+            for (const [key, value] of Object.entries(response.headers ?? {})) {
               res.set(key, value);
             }
-            if (response?.body !== undefined) {
+
+            if (response.body !== undefined) {
               res.send(response.body);
             } else {
               res.end();
             }
+
             this.addTrace(
               `${route.method} ${route.originalPathPattern} - ${status}.`
             );
