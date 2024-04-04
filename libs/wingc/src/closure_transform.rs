@@ -3,7 +3,7 @@ use indexmap::IndexMap;
 use crate::{
 	ast::{
 		AccessModifier, ArgList, AssignmentKind, Ast, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, FunctionParameter, FunctionSignature, Literal, New, Phase, Reference, Scope, ScopeId, Stmt,
+		FunctionDefinition, FunctionParameter, FunctionSignature, Literal, New, Phase, Reference, Scope, ScopeId, StmtId,
 		StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	diagnostic::WingSpan,
@@ -50,7 +50,7 @@ pub struct ClosureTransformer<'a> {
 	// Helper state for generating unique class names
 	closure_counter: usize,
 	// Stores the list of class definitions that need to be added to the nearest scope
-	class_statements: Vec<Stmt>,
+	class_statements: Vec<StmtId>,
 	// Track the statement index of the nearest statement we're inside so that
 	// newly-inserted classes will have access to the correct state
 	nearest_stmt_idx: usize,
@@ -84,12 +84,13 @@ impl<'a> Fold for ClosureTransformer<'a> {
 		let mut statements = vec![];
 
 		let scope = self.ast_mut().remove_scope(node);
-		for stmt in scope.statements.into_iter() {
+		for stmt_id in scope.statements.into_iter() {
+			let stmt = self.ast().get_stmt(stmt_id);
 			// TODO: can we remove "idx" from Stmt to avoid having to reason about this?
 			// or add a compiler step that updates statement indices after folding?
 			let old_nearest_stmt_idx = self.nearest_stmt_idx;
 			self.nearest_stmt_idx = stmt.idx;
-			let new_stmt = self.fold_stmt(stmt);
+			let new_stmt = self.fold_stmt(stmt_id);
 			self.nearest_stmt_idx = old_nearest_stmt_idx;
 
 			// Add any new statements we have accumulated that define temporary classes
@@ -221,9 +222,9 @@ impl<'a> Fold for ClosureTransformer<'a> {
 					},
 					WingSpan::for_file(file_id),
 				);
-				let class_init_body = vec![Stmt {
-					idx: 0,
-					kind: StmtKind::Assignment {
+
+				let class_init_body = vec![self.ast.new_stmt(
+					StmtKind::Assignment {
 						kind: AssignmentKind::Assign,
 						variable: Reference::InstanceMember {
 							object: Box::new(std_display_of_this),
@@ -233,8 +234,10 @@ impl<'a> Fold for ClosureTransformer<'a> {
 
 						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::for_file(file_id)),
 					},
-					span: WingSpan::for_file(file_id),
-				}];
+					0,
+					WingSpan::for_file(file_id),
+				)];
+				let class_init_body = self.ast.new_scope(class_init_body, WingSpan::for_file(file_id));
 
 				// If we are inside a scope with "this", add define `let __parent_this_${CLOSURE_COUNT} = this` which can be
 				// used by the newly-created preflight classes
@@ -244,19 +247,20 @@ impl<'a> Fold for ClosureTransformer<'a> {
 						WingSpan::for_file(file_id),
 					);
 					let this_name = Symbol::new("this", WingSpan::for_file(file_id));
-					let parent_this_def = Stmt {
-						kind: StmtKind::Let {
+					let parent_this_def = self.ast.new_stmt(
+						StmtKind::Let {
 							reassignable: false,
 							var_name: parent_this_name,
 							initial_value: Expr::new(
-								ExprKind::Reference(Reference::Identifier(this_name)),
+								ExprKind::Reference(Reference::Identifier(this_name.clone())),
 								WingSpan::for_file(file_id),
 							),
 							type_: None,
 						},
-						span: WingSpan::for_file(file_id),
-						idx: 0,
-					};
+						0,
+						WingSpan::for_file(file_id),
+					);
+
 					self.class_statements.push(parent_this_def);
 				}
 
@@ -269,8 +273,9 @@ impl<'a> Fold for ClosureTransformer<'a> {
 				//   }
 				// }
 				// ```
-				let class_def = Stmt {
-					kind: StmtKind::Class(Class {
+				let empty_scope = self.ast.new_scope(vec![], WingSpan::for_file(file_id));
+				let class_def = self.ast.new_stmt(
+					StmtKind::Class(Class {
 						name: new_class_name.clone(),
 						span: new_func_def.span.clone(),
 						phase: Phase::Preflight,
@@ -282,7 +287,7 @@ impl<'a> Fold for ClosureTransformer<'a> {
 								phase: Phase::Preflight,
 							},
 							is_static: true,
-							body: FunctionBody::Statements(self.ast_mut().new_scope(class_init_body, WingSpan::for_file(file_id))),
+							body: FunctionBody::Statements(class_init_body),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
 						},
@@ -301,16 +306,16 @@ impl<'a> Fold for ClosureTransformer<'a> {
 								phase: Phase::Inflight,
 							},
 							is_static: false,
-							body: FunctionBody::Statements(self.ast_mut().new_scope(vec![], WingSpan::for_file(file_id))),
+							body: FunctionBody::Statements(empty_scope),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
 						},
 						access: AccessModifier::Private,
 						auto_id: true,
 					}),
-					idx: self.nearest_stmt_idx,
-					span: WingSpan::for_file(file_id),
-				};
+					self.nearest_stmt_idx,
+					WingSpan::for_file(file_id),
+				);
 
 				// new_class_instance :=
 				// ```

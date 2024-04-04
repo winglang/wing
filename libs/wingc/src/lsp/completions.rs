@@ -636,7 +636,12 @@ fn get_current_scope_completions(
 
 	for symbol_data in found_env.symbol_map.iter().filter(|s| {
 		if let StatementIdx::Index(stmt_idx) = s.1.statement_idx {
-			if let Some(defined_stmt) = scope_visitor.found_scope.statements.get(stmt_idx) {
+			if let Some(defined_stmt) = scope_visitor
+				.found_scope
+				.statements
+				.get(stmt_idx)
+				.map(|s| scope_visitor.ast.get_stmt(*s))
+			{
 				scope_visitor.exact_position > defined_stmt.span.end
 			} else {
 				true
@@ -1186,7 +1191,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 		if node.span.file_id != "" && node.span.contains_location(&self.exact_position) {
 			self.found_scope = node;
 
-			for statement in node.statements.iter() {
+			for statement in node.get_statements(self.ast) {
 				if statement.span.start <= self.exact_position {
 					self.visit_stmt(&statement);
 				} else if self.found_stmt_index.is_none() && statement.span.file_id != "" {

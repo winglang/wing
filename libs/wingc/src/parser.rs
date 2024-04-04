@@ -13,8 +13,8 @@ use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, Ast, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
 	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
 	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
-	ScopeId, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
-	UserDefinedType,
+	ScopeId, Spanned, Stmt, StmtId, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
+	UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
@@ -434,8 +434,8 @@ impl<'s> Parser<'s> {
 		if !is_entrypoint_file(&self.source_name) {
 			let ast = self.ast.borrow();
 			let scope = ast.root();
-			for stmt in &scope.statements {
-				if !is_valid_module_statement(&stmt) {
+			for stmt in scope.get_statements(&ast) {
+				if !is_valid_module_statement(stmt) {
 					Diagnostic::new(
 						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` or `.test.w` to make this an entrypoint file.",
 						stmt,
@@ -590,7 +590,7 @@ impl<'s> Parser<'s> {
 		self.ast.borrow_mut().new_scope(statements, span)
 	}
 
-	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase) -> DiagnosticResult<Stmt> {
+	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase) -> DiagnosticResult<StmtId> {
 		let span = self.node_span(statement_node);
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let stmt_kind = match statement_node.kind() {
@@ -631,11 +631,7 @@ impl<'s> Parser<'s> {
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
 
-		Ok(Stmt {
-			kind: stmt_kind,
-			span,
-			idx,
-		})
+		Ok(self.ast.borrow_mut().new_stmt(stmt_kind, idx, span))
 	}
 
 	fn build_try_catch_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {

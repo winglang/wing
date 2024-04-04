@@ -2,8 +2,8 @@ use crate::{
 	ast::{
 		ArgList, Ast, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum, Expr,
 		ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface,
-		InterpolatedString, InterpolatedStringPart, Literal, New, Reference, Scope, ScopeId, Stmt, StmtKind, Struct,
-		StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		InterpolatedString, InterpolatedStringPart, Literal, New, Reference, Scope, ScopeId, Stmt, StmtId, StmtKind,
+		Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -19,7 +19,7 @@ pub trait Fold {
 	fn fold_scope(&mut self, node: ScopeId) -> ScopeId {
 		fold_scope(self, node)
 	}
-	fn fold_stmt(&mut self, node: Stmt) -> Stmt {
+	fn fold_stmt(&mut self, node: StmtId) -> StmtId {
 		fold_stmt(self, node)
 	}
 	fn fold_class(&mut self, node: Class) -> Class {
@@ -89,11 +89,12 @@ where
 	node
 }
 
-pub fn fold_stmt<F>(f: &mut F, node: Stmt) -> Stmt
+pub fn fold_stmt<F>(f: &mut F, node: StmtId) -> StmtId
 where
 	F: Fold + ?Sized,
 {
-	let kind = match node.kind {
+	let stmt = f.ast_mut().remove_stmt(node);
+	let kind = match stmt.kind {
 		StmtKind::Bring { source, identifier } => StmtKind::Bring {
 			source: match source {
 				BringSource::BuiltinModule(name) => BringSource::BuiltinModule(f.fold_symbol(name)),
@@ -211,11 +212,14 @@ where
 			arg_list: f.fold_args(arg_list),
 		},
 	};
-	Stmt {
+	let stmt = Stmt {
+		id: stmt.id,
 		kind,
-		span: node.span,
-		idx: node.idx,
-	}
+		span: stmt.span,
+		idx: stmt.idx,
+	};
+	f.ast_mut().set_stmt(stmt);
+	node
 }
 
 pub fn fold_class<F>(f: &mut F, node: Class) -> Class

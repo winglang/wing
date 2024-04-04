@@ -381,8 +381,7 @@ pub fn compile(
 		let dtsifier = dtsify::DTSifier::new(&mut types, &preflight_file_map, &mut file_graph);
 		for file in &topo_sorted_files {
 			let ast = asts.get_mut(file).expect("matching AST not found");
-			let root = ast.root();
-			dtsifier.dtsify(file, root);
+			dtsifier.dtsify(file, ast);
 		}
 		if !found_errors() {
 			let output_files = dtsifier.output_files.borrow();

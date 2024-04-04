@@ -353,8 +353,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				// If this is a method (of a non-inner inflight class), make sure there are no `lift()` calls that aren't at the top of the method
 				if node.name.is_some() && self.in_inner_inflight_class == 0 {
 					// Skip all statments that are a lift call and then search to see if there are further lift calls
-					let stmts = scope.statements.iter();
-					let lift_stmts = stmts
+					let lift_stmts = scope
+						.get_statements(self.ast)
 						.skip_while(|s| {
 							if let StmtKind::Expression(expr) = &s.kind {
 								return Self::is_lift_builtin_call(expr).is_some();
@@ -381,7 +381,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 					}
 				} else {
 					// This isn't a method, don't allow any lift statments
-					let lift_stmts = scope.statements.iter().filter(|s| {
+					let lift_stmts = scope.get_statements(self.ast).filter(|s| {
 						if let StmtKind::Expression(expr) = &s.kind {
 							return Self::is_lift_builtin_call(expr).is_some();
 						}

@@ -143,7 +143,7 @@ impl<'a> JSifier<'a> {
 		jsify_context
 			.visit_ctx
 			.push_env(self.types.get_scope_env(ast, scope_id));
-		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
+		for statement in scope.get_statements(ast).sorted_by(|a, b| match (&a.kind, &b.kind) {
 			// Put type definitions first so JS won't complain of unknown types
 			(StmtKind::Enum(_), StmtKind::Enum(_)) => Ordering::Equal,
 			(StmtKind::Enum(_), _) => Ordering::Less,
@@ -329,7 +329,7 @@ impl<'a> JSifier<'a> {
 
 		let scope_env = self.types.get_scope_env(ctx.ast, scope_id);
 		ctx.visit_ctx.push_env(scope_env);
-		for statement in scope.statements.iter() {
+		for statement in scope.get_statements(ctx.ast) {
 			let statement_code = self.jsify_statement(&scope_env, statement, ctx);
 			code.add_code(statement_code);
 		}
@@ -1281,7 +1281,7 @@ impl<'a> JSifier<'a> {
 			if let Some(Stmt {
 				kind: StmtKind::SuperConstructor { arg_list },
 				..
-			}) = ctx.ast.get_scope(*body_scope).statements.iter().next()
+			}) = ctx.ast.get_scope(*body_scope).get_statements(ctx.ast).next()
 			{
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
 				code.line("super(");
@@ -1545,7 +1545,7 @@ impl<'a> JSifier<'a> {
 		};
 
 		// Check if the first statement is a super constructor call, if not we need to add one
-		let super_called = if let Some(s) = ctx.ast.get_scope(*init_statements).statements.first() {
+		let super_called = if let Some(s) = ctx.ast.get_scope(*init_statements).get_statements(ctx.ast).next() {
 			matches!(s.kind, StmtKind::SuperConstructor { .. })
 		} else {
 			false
@@ -1900,7 +1900,7 @@ impl<'a> JSifier<'a> {
 fn get_public_symbols(ast: &Ast, scope: ScopeId) -> Vec<Symbol> {
 	let mut symbols = Vec::new();
 
-	for stmt in &ast.get_scope(scope).statements {
+	for stmt in ast.get_scope(scope).get_statements(ast) {
 		match &stmt.kind {
 			StmtKind::Bring { .. } => {}
 			StmtKind::SuperConstructor { .. } => {}

@@ -92,7 +92,7 @@ pub fn visit_scope<'ast, V>(v: &mut V, node: &'ast Scope)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	for stmt in &node.statements {
+	for stmt in node.get_statements(v.ast()) {
 		v.visit_stmt(stmt);
 	}
 }

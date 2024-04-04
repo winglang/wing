@@ -19,7 +19,10 @@ impl<'a> HasStatementVisitor<'a> {
 		}
 	}
 
-	pub fn visit(&mut self, statements: &'a [Stmt]) {
+	pub fn visit<I>(&mut self, statements: I)
+	where
+		I: IntoIterator<Item = &'a Stmt>,
+	{
 		for stmt in statements {
 			self.visit_stmt(stmt);
 		}

@@ -15,47 +15,70 @@ static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 //static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
 static AST_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
-struct AstElementArena<T> {
-	// TODO: make T a trait with an id() method
-	elements: HashMap<usize, T>,
-	id_counter: usize,
+macro_rules! ast_type_id {
+	($name:ident) => {
+		#[derive(Default, Eq, PartialEq, Hash, Debug, Copy, Clone)]
+		pub struct $name(usize);
+
+		impl AstElementId for $name {}
+
+		impl std::ops::AddAssign<usize> for $name {
+			fn add_assign(&mut self, rhs: usize) {
+				self.0 += rhs;
+			}
+		}
+	};
 }
 
-impl<T> AstElementArena<T> {
+trait AstElementId: Default + std::ops::AddAssign<usize> + Eq + PartialEq + Hash + Copy {}
+
+trait AstElement<IDT: AstElementId> {
+	fn id(&self) -> IDT;
+	// TODO add a reference to the AST this element belongs to
+	// fn ast(&self) -> &Ast;
+}
+
+struct AstElementAllocator<IDT: AstElementId, T: AstElement<IDT>> {
+	elements: HashMap<IDT, T>,
+	id_counter: IDT,
+}
+
+impl<IDT: AstElementId, T: AstElement<IDT>> AstElementAllocator<IDT, T> {
 	fn new() -> Self {
 		Self {
 			elements: HashMap::new(),
-			id_counter: 0,
+			id_counter: IDT::default(),
 		}
 	}
 
-	fn gen_id(&mut self) -> usize {
+	fn gen_id(&mut self) -> IDT {
 		let res = self.id_counter;
 		self.id_counter += 1;
 		res
 	}
 
-	fn add(&mut self, id: usize, element: T) {
+	fn add(&mut self, id: IDT, element: T) {
 		assert!(!self.elements.contains_key(&id), "Cannot add element with existing id");
 		self.elements.insert(id, element);
 	}
 
-	fn get(&self, id: usize) -> &T {
+	fn get(&self, id: IDT) -> &T {
 		self.elements.get(&id).expect("Element to exist")
 	}
 
-	fn remove(&mut self, id: usize) -> T {
+	fn remove(&mut self, id: IDT) -> T {
 		self.elements.remove(&id).expect("Element to exist")
 	}
 
-	fn set(&mut self, id: usize, element: T) {
+	fn set(&mut self, id: IDT, element: T) {
 		assert!(!self.elements.contains_key(&id), "Element already set");
 		self.elements.insert(id, element);
 	}
 }
 
 pub struct Ast {
-	scopes: AstElementArena<Scope>,
+	scopes: AstElementAllocator<ScopeId, Scope>,
+	stmts: AstElementAllocator<StmtId, Stmt>,
 	root_scope: Option<ScopeId>,
 	/// Unique identifier for this AST
 	pub id: usize,
@@ -64,13 +87,14 @@ pub struct Ast {
 impl Ast {
 	pub fn new() -> Self {
 		Self {
-			scopes: AstElementArena::new(),
+			scopes: AstElementAllocator::new(),
+			stmts: AstElementAllocator::new(),
 			root_scope: None,
 			id: AST_COUNTER.fetch_add(1, Ordering::Relaxed),
 		}
 	}
 
-	pub fn new_scope(&mut self, statements: Vec<Stmt>, span: WingSpan) -> ScopeId {
+	pub fn new_scope(&mut self, statements: Vec<StmtId>, span: WingSpan) -> ScopeId {
 		let id = self.scopes.gen_id();
 		let scope = Scope { id, statements, span };
 		self.scopes.add(id, scope);
@@ -87,6 +111,24 @@ impl Ast {
 
 	pub fn set_scope(&mut self, scope: Scope) {
 		self.scopes.set(scope.id, scope);
+	}
+
+	pub fn new_stmt(&mut self, kind: StmtKind, idx: usize, span: WingSpan) -> StmtId {
+		let id = self.stmts.gen_id();
+		self.stmts.add(id, Stmt { id, kind, span, idx });
+		id
+	}
+
+	pub fn get_stmt(&self, id: StmtId) -> &Stmt {
+		self.stmts.get(id)
+	}
+
+	pub fn remove_stmt(&mut self, id: StmtId) -> Stmt {
+		self.stmts.remove(id)
+	}
+
+	pub fn set_stmt(&mut self, stmt: Stmt) {
+		self.stmts.set(stmt.id, stmt);
 	}
 
 	/// Gets the root scope of the AST.
@@ -385,11 +427,20 @@ pub struct FunctionDefinition {
 	pub span: WingSpan,
 }
 
+ast_type_id!(StmtId);
+
 #[derive(Debug)]
 pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
 	pub idx: usize,
+	pub id: StmtId,
+}
+
+impl AstElement<StmtId> for Stmt {
+	fn id(&self) -> StmtId {
+		self.id
+	}
 }
 
 #[derive(Debug)]
@@ -765,31 +816,28 @@ pub enum InterpolatedStringPart {
 	Expr(Expr),
 }
 
-pub type ScopeId = usize; // TODO: Consider `pub struct ScopeId(pub usize);` instead of alias for better type safety
-
 // do not derive Default, as we want to explicitly generate IDs
 #[derive(Debug)]
 pub struct Scope {
 	/// An identifier that is unique among all scopes in the AST.
 	pub id: ScopeId,
-	pub statements: Vec<Stmt>,
+	pub statements: Vec<StmtId>,
 	pub span: WingSpan,
 }
 
-// impl Scope {
-// 	pub fn empty() -> Self {
-// 		Self {
-// 			id: SCOPE_COUNTER.fetch_add(1, Ordering::SeqCst),
-// 			statements: vec![],
-// 			span: WingSpan::default(),
-// 		}
-// 	}
+impl Scope {
+	pub fn get_statements<'a>(&'a self, ast: &'a Ast) -> impl Iterator<Item = &Stmt> + 'a {
+		self.statements.iter().map(|id| ast.get_stmt(*id))
+	}
+}
 
-// 	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
-// 		let id = SCOPE_COUNTER.fetch_add(1, Ordering::SeqCst);
-// 		Self { id, statements, span }
-// 	}
-// }
+ast_type_id!(ScopeId);
+
+impl AstElement<ScopeId> for Scope {
+	fn id(&self) -> ScopeId {
+		self.id
+	}
+}
 
 #[derive(Debug)]
 pub enum UnaryOperator {

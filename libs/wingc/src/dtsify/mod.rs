@@ -35,7 +35,7 @@ impl<'a> DTSifier<'a> {
 		}
 	}
 
-	pub fn dtsify(&self, source_path: &Utf8Path, scope: &Scope) {
+	pub fn dtsify(&self, source_path: &Utf8Path, ast: &Ast) {
 		let mut dts = CodeMaker::default();
 
 		if source_path.is_dir() {
@@ -57,8 +57,9 @@ impl<'a> DTSifier<'a> {
 			dts.line(format!("import {{ {TYPE_STD} }} from \"{WINGSDK_ASSEMBLY_NAME}\""));
 		}
 
-		for statement in &scope.statements {
-			dts.add_code(self.dtsify_statement(statement));
+		let root_scope = ast.root();
+		for statement in root_scope.statements.iter() {
+			dts.add_code(self.dtsify_statement(ast, *statement));
 		}
 
 		let mut dts_file_name = self.preflight_file_map.get(source_path).unwrap().clone();
@@ -245,7 +246,8 @@ impl<'a> DTSifier<'a> {
 		code
 	}
 
-	fn dtsify_statement(&self, stmt: &Stmt) -> CodeMaker {
+	fn dtsify_statement(&self, ast: &Ast, stmt_id: StmtId) -> CodeMaker {
+		let stmt = ast.get_stmt(stmt_id);
 		let mut code = CodeMaker::default();
 		match &stmt.kind {
 			StmtKind::Interface(interface) => {

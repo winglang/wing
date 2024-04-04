@@ -14,7 +14,10 @@ impl<'a> VisitClassInit<'a> {
 		Self { ast, fields: vec![] }
 	}
 
-	pub fn analyze_statements(mut self, statements: &'a [Stmt]) -> Vec<Symbol> {
+	pub fn analyze_statements<I>(mut self, statements: I) -> Vec<Symbol>
+	where
+		I: IntoIterator<Item = &'a Stmt>,
+	{
 		for stmt in statements {
 			self.visit_stmt(stmt);
 		}

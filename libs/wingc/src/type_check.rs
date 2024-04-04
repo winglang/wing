@@ -3396,7 +3396,7 @@ impl<'a> TypeChecker<'a> {
 		self.hoist_type_definitions(scope_id, &mut env);
 
 		let scope = self.ast.get_scope(scope_id);
-		for statement in scope.statements.iter() {
+		for statement in scope.get_statements(self.ast) {
 			self.type_check_statement(statement, &mut env);
 		}
 
@@ -3419,7 +3419,7 @@ impl<'a> TypeChecker<'a> {
 			// iterate over the statements in the scope and check if there are any statements
 			// we care about
 			let mut has_stmt_visitor = HasStatementVisitor::new(self.ast);
-			has_stmt_visitor.visit(&scope.statements);
+			has_stmt_visitor.visit(scope.get_statements(self.ast));
 
 			// If the scope doesn't contain any return statements and the return type isn't void or T? or
 			// the scope itself does not have a throw error, throw an error to the user
@@ -3458,7 +3458,7 @@ impl<'a> TypeChecker<'a> {
 	/// If so, define the the respective types in the environment so that the type can be referenced by other
 	/// type declarations, even if they come before the type declaration.
 	fn hoist_type_definitions(&mut self, scope: ScopeId, env: &mut SymbolEnv) {
-		for statement in self.ast.get_scope(scope).statements.iter() {
+		for statement in self.ast.get_scope(scope).get_statements(self.ast) {
 			match &statement.kind {
 				StmtKind::Bring { source, identifier } => self.hoist_bring_statement(source, identifier, statement, env),
 				StmtKind::Struct(st) => self.hoist_struct_definition(st, env),
@@ -4796,7 +4796,7 @@ impl<'a> TypeChecker<'a> {
 	///
 	fn check_class_field_initialization(&mut self, scope: ScopeId, fields: &[ClassField], phase: Phase) {
 		let visit_init = VisitClassInit::new(self.ast);
-		let initialized_fields = visit_init.analyze_statements(&self.ast.get_scope(scope).statements);
+		let initialized_fields = visit_init.analyze_statements(self.ast.get_scope(scope).get_statements(self.ast));
 
 		let (current_phase, forbidden_phase) = if phase == Phase::Inflight {
 			("Inflight", Phase::Preflight)
