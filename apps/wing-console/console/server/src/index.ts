@@ -59,6 +59,8 @@ export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
 export { isTermsAccepted } from "./utils/terms-and-conditions.js";
 
+const enableSimUpdates = process.env.ENABLE_SIM_UPDATES === "true";
+
 export interface CreateConsoleServerOptions {
   wingfile: string;
   log: LogInterface;
@@ -134,7 +136,10 @@ export const createConsoleServer = async ({
   let isStarting = false;
   let isStopping = false;
 
-  const simulator = createSimulator({ stateDir });
+  const simulator = createSimulator({
+    stateDir,
+    enableSimUpdates,
+  });
   if (onTrace) {
     simulator.on("trace", onTrace);
   }
@@ -150,7 +155,7 @@ export const createConsoleServer = async ({
     platform,
     testing: true,
   });
-  const testSimulator = createSimulator();
+  const testSimulator = createSimulator({ enableSimUpdates });
   testCompiler.on("compiled", ({ simfile }) => {
     testSimulator.start(simfile);
   });
