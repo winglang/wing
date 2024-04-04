@@ -18,6 +18,7 @@ export const tmpDir = path.join(hangarDir, "tmp");
 export const npmCacheDir = path.join(tmpDir, ".npm");
 export const tmpNodeModulesDir = path.join(tmpDir, "node_modules");
 export const wingSdkDir = path.join(tmpNodeModulesDir, "@winglang/sdk");
+export const docsRoot = path.join(repoRoot, "docs");
 
 export const npmBin = path.join(hangarDir, "node_modules/.bin/npm");
 export const wingBin = path.join(tmpNodeModulesDir, ".bin/wing");

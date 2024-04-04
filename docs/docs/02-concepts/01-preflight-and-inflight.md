@@ -28,7 +28,7 @@ Your preflight code runs once, at compile time, and defines your application's i
 
 For example, this code snippet defines a storage bucket using a class from the standard library:
 
-```js playground
+```js playground example
 bring cloud;
 
 let bucket = new cloud.Bucket();
@@ -42,7 +42,7 @@ Preflight code can be also used to configure services or set up more complex eve
 
 In this code snippet, we've specified the bucket's contents will be publicly accessible, and it will be pre-populated with a file during the app's deployment (not while the app is running).
 
-```js playground
+```js playground example
 bring cloud;
 
 let bucket = new cloud.Bucket(public: true);
@@ -52,7 +52,7 @@ bucket.addObject("file1.txt", "Hello world!");
 There are a few global functions with specific behaviors in preflight.
 For example, adding a `log()` statement to your preflight code will result in Wing printing a message to the console after compilation.
 
-```js
+```js example
 // hello.w
 log("7 * 6 = {7 * 6}");
 ```

@@ -1,13 +1,16 @@
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from "fs";
-import { appWithParamsDir, sdkTestsDir, validTestDir } from "./paths";
+import { appWithParamsDir, sdkTestsDir, validTestDir, docsRoot } from "./paths";
 import { join, extname } from "path";
 import { parseMetaCommentFromPath } from "./meta_comment";
+import { searchDirectoryForWingExamples } from "./test_examples";
 
 const generatedTestDir = join(__dirname, "test_corpus", "valid");
 const generatedSDKTestDir = join(__dirname, "test_corpus", "sdk_tests");
+const generatedWingExamplesDir = join(__dirname, "test_corpus", "doc_examples");
 
 rmSync(generatedTestDir, { recursive: true, force: true });
 rmSync(generatedSDKTestDir, { recursive: true, force: true });
+rmSync(generatedWingExamplesDir, { recursive: true, force: true });
 
 interface GenerateTestsOptions {
   sourceDir: string;
@@ -89,6 +92,28 @@ function generateTests(options: GenerateTestsOptions) {
     writeFileSync(join(destination, `${filename}.test.ts`), fileContents);
   }
 }
+
+function generateTestsFromDocExamples(): void {
+  const examples = searchDirectoryForWingExamples(docsRoot);
+  // Example for how you might generate files (adjust according to your requirements)
+  examples.forEach((example, index) => {
+    const testName = `${example.filePath.split('/').pop()}_example_${example.exampleNumber}`;
+    const testPath = join(generatedWingExamplesDir, testName);
+    const testFilePath = join(testPath, `example.test.w`);
+    mkdirSync(testPath, { recursive: true });
+    writeFileSync(testFilePath, example.code);
+  });
+}
+
+
+generateTestsFromDocExamples();
+
+generateTests({
+  sourceDir: generatedWingExamplesDir,
+  destination: generatedWingExamplesDir,
+  isRecursive: true,
+  includeJavaScriptInSnapshots: true,
+});
 
 generateTests({
   sourceDir: validTestDir,
