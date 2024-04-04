@@ -60,3 +60,21 @@ test "invalid tryParseJson()" {
     assert(false); // should not happen
   }
 }
+
+struct Foo {
+  someJson: Json;
+}
+
+test "valid Json types" {
+  let s = Foo.fromJson({someJson: "wow"});
+  let b = Foo.fromJson({someJson: true});
+  let n = Foo.fromJson({someJson: 123});
+  let arr = Foo.fromJson({someJson: [1, 2, 3]});
+  let j = Foo.fromJson({someJson: {even: "more json!"}});
+
+  expect.equal(s.someJson, "wow");
+  expect.equal(b.someJson, true);
+  expect.equal(n.someJson, 123);
+  expect.equal(arr.someJson, [1, 2, 3]);
+  expect.equal(j.someJson, {even: "more json!"});
+}
