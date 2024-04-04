@@ -51,13 +51,11 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
       return true;
     }
     if (props?.enableSimUpdates) {
-      console.log("Simulator updates enabled");
       await events.emit("starting", { instance });
       await instance.update(simfile);
       await events.emit("started");
       return false;
     } else {
-      console.log("Stopping simulator");
       await events.emit("stopping");
       await stopSilently(instance);
       return true;
@@ -67,7 +65,6 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
     try {
       const shouldStartSim = await handleExistingInstance(simfile);
       if (shouldStartSim) {
-        console.log("Starting simulator");
         instance = new simulator.Simulator({
           simfile,
           stateDir: props?.stateDir,
