@@ -95,8 +95,7 @@ function generateTests(options: GenerateTestsOptions) {
 
 function generateTestsFromDocExamples(): void {
   const examples = searchDirectoryForWingExamples(docsRoot);
-  // Example for how you might generate files (adjust according to your requirements)
-  examples.forEach((example, index) => {
+  examples.forEach((example) => {
     const testName = `${example.filePath.split('/').pop()}_example_${example.exampleNumber}`;
     const testPath = join(generatedWingExamplesDir, testName);
     const testFilePath = join(testPath, `example.test.w`);
