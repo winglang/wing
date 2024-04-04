@@ -35,7 +35,7 @@ export class JsonSchema {
 
   constructor(schema: Json) {
     this._rawSchema = schema;
-    this.validator = new Ajv({ allErrors: true, allowUnionTypes: true});
+    this.validator = new Ajv({ allErrors: true, allowUnionTypes: true });
   }
 
   /**
