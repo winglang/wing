@@ -10,7 +10,7 @@ let assertThrows = inflight (expected: str, block: (): void) => {
   try {
     block();
   } catch actual {
-    assert(actual == expected);
+    expect.equal(actual, expected);
     error = true;
   }
   assert(error);
@@ -48,7 +48,7 @@ test "tryParseJson()" {
 test "invalid parseJson()" {
   let jsonString = "\{\"name\": \"Billy\", \"age\": false}";
   
-  assertThrows("unable to parse Person:\n- instance.age is not of a type(s) number", () => {
+  assertThrows("unable to parse Person:\n- Person/age must be number", () => {
     Person.parseJson(jsonString);
   });
 }
