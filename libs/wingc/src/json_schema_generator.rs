@@ -79,7 +79,7 @@ impl JsonSchemaGenerator {
 				code.to_string()
 			}
 			Type::Optional(t) => self.get_struct_schema_field(&t),
-			Type::Json(_) => "{ type: \"object\" }".to_string(),
+			Type::Json(_) => "{ type: [\"object\", \"string\", \"boolean\", \"number\", \"array\"] }".to_string(),
 			_ => "{ type: \"null\" }".to_string(),
 		}
 	}
