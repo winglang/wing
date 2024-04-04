@@ -1341,9 +1341,6 @@ importers:
       ioredis:
         specifier: ^5.3.2
         version: 5.3.2
-      jsonschema:
-        specifier: ^1.4.1
-        version: 1.4.1
       mime:
         specifier: ^3.0.0
         version: 3.0.0(patch_hash=2he2uszztbibyal6zfzmv2a2oa)
@@ -14194,7 +14191,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240328
+      typescript: 5.5.0-dev.20240404
     dev: true
 
   /dset@3.1.2:
@@ -17871,6 +17868,7 @@ packages:
 
   /jsonschema@1.4.1:
     resolution: {integrity: sha512-S6cATIPVv1z0IlxdN+zUk5EPjkGCdnhN4wVSBlvoUO1tOLJootbo9CquNJmbIh4yikWHiUedhRYrNPn1arpEmQ==}
+    dev: true
 
   /jsonwebtoken@9.0.2:
     resolution: {integrity: sha512-PRp66vJ865SSqOlgqS8hujT5U4AOgMfhrwYIuIhfKaoSCZcirrmASQr8CX7cUg+RMih+hgznrjp99o+W4pJLHQ==}
@@ -22802,8 +22800,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240328:
-    resolution: {integrity: sha512-psmUop0GPegCmqZqysToBqpX/pKW/0YGwVc/Ma0kDOkruXO40euXu2GL5UM6KbL+nnyHiMtWiTmVQ+7To9s9yQ==}
+  /typescript@5.5.0-dev.20240404:
+    resolution: {integrity: sha512-Knb9Yx0JJHc0mmqXLEPPKNSwOvPQrtYZEDLQY7Wns7LckkQl82AZ+OGTPG/ofwqx2QeDCHCtKjutZPy1UEiwKA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
