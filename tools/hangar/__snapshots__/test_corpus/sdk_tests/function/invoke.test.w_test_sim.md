@@ -9,6 +9,9 @@ pass ┌ invoke.test.wsim » root/env0/test:invoke
      │ log inside function
      └ contains 2 lines
 pass ┌ invoke.test.wsim » root/env1/test:invoke without inputs and outputs
+     │ log inside test
+     │ log inside function
+     │ contains 2 lines
      │ no event, no return!
      └ bang!
  
