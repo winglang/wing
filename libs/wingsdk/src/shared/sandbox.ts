@@ -50,14 +50,14 @@ export class Sandbox {
     // wrap contents with a shim that handles the communication with the parent process
     // we insert this shim before bundling to ensure source maps are generated correctly
     contents += `
+process.setUncaughtExceptionCaptureCallback((reason) => {
+  process.send({ type: "reject", reason });
+});
+
 process.on("message", async (message) => {
   const { fn, args } = message;
-  try {
-    const value = await exports[fn](...args);
-    process.send({ type: "resolve", value });
-  } catch (err) {
-    process.send({ type: "reject", reason: err });
-  }
+  const value = await exports[fn](...args);
+  process.send({ type: "resolve", value });
 });
 `;
     const wrappedPath = entrypoint.replace(/\.js$/, ".sandbox.js");
