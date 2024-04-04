@@ -101,7 +101,9 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
   public subscribeQueue(queue: cloud.Queue): void {
     if (!(queue instanceof Queue)) {
-      throw new Error("'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic");
+      throw new Error(
+        "'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic"
+      );
     }
 
     new SnsTopicSubscription(
@@ -123,16 +125,16 @@ export class Topic extends cloud.Topic implements IAwsTopic {
           {
             Effect: "Allow",
             Principal: {
-              Service: "sns.amazonaws.com"
+              Service: "sns.amazonaws.com",
             },
             Action: "sqs:SendMessage",
             Resource: `${queue.queueArn}`,
             Condition: {
               ArnEquals: {
-                "aws:SourceArn": `${this.topicArn}`
-              }
-            }
-          }
+                "aws:SourceArn": `${this.topicArn}`,
+              },
+            },
+          },
         ],
       }),
     });

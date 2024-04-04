@@ -53,11 +53,7 @@ t.subscribeQueue(q2);
 
 test "functions and queues receiving messages from the topic" {
   t.publish(msg_test);
-
-  let q1_ok = util.waitUntil(inflight () => { return c.peek("q1") == 1; });
-  let q2_ok = util.waitUntil(inflight () => { return c.peek("q2") == 1; });
-
-  let t_ok =  util.waitUntil(inflight () => { return c.peek("t") == 1; });
-
-  assert(t_ok && q1_ok && q2_ok);
+  assert(util.waitUntil(inflight () => { return c.peek("q1") == 1; }));
+  assert(util.waitUntil(inflight () => { return c.peek("q2") == 1; }));
+  assert(util.waitUntil(inflight () => { return c.peek("t") == 1; }));
 }
