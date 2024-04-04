@@ -5,7 +5,7 @@ import { Testing } from "../../src/simulator";
 import { SimApp } from "../sim-app";
 
 const script = (simdir: string) => `
-const { simulator } = require("./");
+const { simulator } = require("./src");
 
 async function main() {
   const sim = new simulator.Simulator({ simfile: "${simdir}" });

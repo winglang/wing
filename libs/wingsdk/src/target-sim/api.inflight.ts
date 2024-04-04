@@ -44,7 +44,7 @@ interface StateFileContents {
 
 interface ApiRouteWithFunctionHandle extends ApiRoute {
   functionHandle: string;
-  expressRouteHandle: any;
+  expressLayer: any;
 }
 
 export class Api
@@ -203,7 +203,7 @@ export class Api
         this.app._router.stack[this.app._router.stack.length - 1];
       this.routes.push({
         ...s,
-        expressRouteHandle,
+        expressLayer: expressRouteHandle,
       });
     }
   }
@@ -216,13 +216,15 @@ export class Api
       );
       return;
     }
-    const route = this.routes[index];
-    for (const layer of this.app._router.stack) {
-      if (layer === route.expressRouteHandle) {
-        this.app._router.stack.splice(this.app._router.stack.indexOf(layer), 1);
-        break;
-      }
+    const layer = this.routes[index].expressLayer;
+    const layerIndex = this.app._router.stack.indexOf(layer);
+    if (layerIndex === -1) {
+      this.addTrace(
+        `Internal error: No express layer found for route ${this.routes[index].pathPattern}.`
+      );
+      return;
     }
+    this.app._router.stack.splice(layerIndex, 1);
     this.routes.splice(index, 1);
   }
 
