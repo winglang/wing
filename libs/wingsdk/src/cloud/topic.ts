@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
-import { Queue } from "./queue";
+import { Queue, QueueProps } from "./queue";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
@@ -11,7 +11,7 @@ export const TOPIC_FQN = fqnForType("cloud.Topic");
 /**
  * Options for `Topic`.
  */
-export interface TopicProps {}
+export interface TopicProps { }
 
 /**
  * A topic.
@@ -63,7 +63,11 @@ export class Topic extends Resource {
 /**
  * Options for `Topic.onMessage`.
  */
-export interface TopicOnMessageOptions extends FunctionProps {}
+export interface TopicOnMessageOptions extends FunctionProps { }
+/**
+ * Options for `Topic.subscribeQueue`.
+ */
+export interface TopicSubscribeQueueOptions extends QueueProps { }
 
 /**
  * Inflight interface for `Topic`.

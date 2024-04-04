@@ -111,13 +111,13 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
     new SnsTopicSubscription(
       this,
-      App.of(this).makeId(this, `TopicSubscription-${queue.node.addr}`),
+      App.of(this).makeId(this, "TopicSubscription"),
       {
-        topicArn: this.topic.arn,
+        topicArn: this.topicArn,
         protocol: "sqs",
         endpoint: queue.queueArn,
         rawMessageDelivery: true
-      }
+      },
     );
 
     new SqsQueuePolicy(this, `SqsQueuePolicy-${queue.node.addr}`, {
@@ -132,7 +132,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
           Resource: [queue.queueArn],
           Condition: {
             ArnEquals: {
-              "arn:SourceArn": this.topic.arn
+              "arn:SourceArn": this.topicArn
             }
           }
         },
