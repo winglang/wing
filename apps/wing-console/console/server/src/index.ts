@@ -59,7 +59,8 @@ export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
 export { isTermsAccepted } from "./utils/terms-and-conditions.js";
 
-const enableSimUpdates = process.env.ENABLE_SIM_UPDATES === "true";
+const enableSimUpdates = process.env.WING_ENABLE_INPLACE_UPDATES === "true"
+                      || process.env.WING_ENABLE_INPLACE_UPDATES === "1";
 
 export interface CreateConsoleServerOptions {
   wingfile: string;
