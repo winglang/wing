@@ -82,6 +82,7 @@ const project = new cdk.JsiiProject({
     "ioredis",
     "jsonschema",
     "ajv",
+    "cron-validator",
     // fs module dependency
     "yaml",
     "toml",
@@ -90,6 +91,7 @@ const project = new cdk.JsiiProject({
     "ulid",
     // tunnels
     "@winglang/wingtunnels@workspace:^",
+    "glob",
   ],
   devDeps: [
     `@cdktf/provider-aws@^19`, // only for testing Wing plugins
@@ -100,6 +102,7 @@ const project = new cdk.JsiiProject({
     "@types/mime-types",
     "mock-gcs@^1.2.0",
     "@types/express",
+    "@types/glob",
     "aws-sdk-client-mock@3.0.0",
     "aws-sdk-client-mock-jest@3.0.0",
     `cdktf-cli@${CDKTF_VERSION}`,

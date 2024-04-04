@@ -6,6 +6,7 @@ import { ICounterClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 
 const VALUES_FILENAME = "values.json";
@@ -37,8 +38,12 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
 
   public async cleanup(): Promise<void> {}
 
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
   public async save(): Promise<void> {
-    await fs.promises.writeFile(
+    fs.writeFileSync(
       join(this.context.statedir, VALUES_FILENAME),
       JSON.stringify(Array.from(this.values.entries()))
     );

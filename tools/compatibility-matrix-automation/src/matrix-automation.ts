@@ -42,7 +42,7 @@ export function updateMatrix(outFolderPath: string, matrixPath = MATRIX_PATH) {
     }
   }
 
-  writeFileSync(MATRIX_PATH, JSON.stringify(matrix, null, 2));
+  writeFileSync(MATRIX_PATH, `${JSON.stringify(matrix, null, 2)}\n`);
 }
 
 export function updateMatrixFromFile(

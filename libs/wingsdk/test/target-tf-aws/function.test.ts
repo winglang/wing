@@ -45,7 +45,7 @@ test("basic function", () => {
 test("function will be behind a vpc when vpc_lambda is set to true", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const parameters = app.platformParameters;
+  const parameters = app.parameters;
   parameters._rawParameters["tf-aws"] = {
     vpc: "new",
     vpc_lambda: true,

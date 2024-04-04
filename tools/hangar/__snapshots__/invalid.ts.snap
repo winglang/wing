@@ -1816,11 +1816,11 @@ error: Variable is not reassignable
    | ^^^^^^ Variable is not reassignable
 
 
-error: Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+error: Expected type to be \\"(condition: bool, message: str?): void\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/global_symbols.test.w:12:10
    |
 12 | assert = \\"there\\";
-   |          ^^^^^^^ Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+   |          ^^^^^^^ Expected type to be \\"(condition: bool, message: str?): void\\", but got \\"str\\" instead
 
 
 error: Variable is not reassignable
@@ -2840,24 +2840,6 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`new_in_static_without_scope.test.w 1`] = `
-"Error: Cannot read properties of undefined (reading 'addChild')
-  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:5:7
-  | // explicit \`scope\`.
-  | bring cloud;
-  | 
-5 | class MyClass {
-  |       ^
-at new MyClass <ABSOLUTE>/new_in_static_without_scope.test.w:5:7
-at createMyClass <ABSOLUTE>/new_in_static_without_scope.test.w:10:16
-at <ABSOLUTE>/new_in_static_without_scope.test.w:14:1
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
 exports[`nil.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"nil\\" instead
   --> ../../../examples/tests/invalid/nil.test.w:3:14
@@ -3060,6 +3042,19 @@ Duration <DURATION>"
 `;
 
 exports[`panic.test.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
+
+exports[`parameters.test.w 1`] = `
+"Error: Parameter validation errors:
+- must have required property 'foo'
+
+(hint: make sure to use --values to provide the required parameters file)
+        
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
 
 exports[`phase_mismatch.test.w 1`] = `
 "error: Expected type to be \\"inflight (num): num\\", but got \\"preflight (n: num): num\\" instead
@@ -3748,6 +3743,25 @@ error: Expected between 2 and 3 positional arguments or named arguments for the 
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
 
 
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`struct_from_parameter.test.w 1`] = `
+"Error: unable to parse MyParams:
+- instance requires property \\"bar\\"
+- instance requires property \\"baz\\"
+- instance requires property \\"foo\\"
+   --> ../../../examples/tests/invalid/struct_from_parameter.test.w:14:1
+   | // technically we never enforced the parameters must have been
+   | // provided
+   | 
+14 | MyParams.fromJson(app.parameters.read());
+   | ^
+at <ABSOLUTE>/struct_from_parameter.test.w:14:1
  
  
 Tests 1 failed (1)

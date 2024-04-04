@@ -24,15 +24,3 @@ pnpm docs
 This magical script will clone the [winglang/docsite](https://github.com/winglang/docsite)
 repository into `~/.winglang-docsite`, symlink your local copy into it and start a browser with the
 site.
-
-## 🖼️ How do I add an example?
-
-Adding a code example is a great way to contribute to Wing.  Here's how to do it:
-
-* Fork this repository on GitHub.
-* Create a new branch for your example.
-* Add your Wing code to the `examples` directory.
-  * If your example involves multiple files, create a dedicated directory for it.
-* Add a link to your example to the `examples/README.md` file.
-* Commit your changes and push them to your fork.
-* Open a pull request. A Wing maintainer will review it as soon as possible!

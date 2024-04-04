@@ -41,16 +41,6 @@
       "type": "build"
     },
     {
-      "name": "@wingconsole/app",
-      "version": "workspace:^",
-      "type": "build"
-    },
-    {
-      "name": "@wingconsole/server",
-      "version": "workspace:^",
-      "type": "build"
-    },
-    {
       "name": "eslint-config-prettier",
       "type": "build"
     },

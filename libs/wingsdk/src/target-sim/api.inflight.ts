@@ -24,6 +24,7 @@ import {
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -146,6 +147,10 @@ export class Api
     await this.saveState({ lastPort: this.port });
   }
 
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
   private async loadState(): Promise<StateFileContents> {
     const stateFileExists = await exists(
       join(this.context.statedir, STATE_FILENAME)
@@ -162,7 +167,7 @@ export class Api
   }
 
   private async saveState(state: StateFileContents): Promise<void> {
-    await fs.promises.writeFile(
+    fs.writeFileSync(
       join(this.context.statedir, STATE_FILENAME),
       JSON.stringify(state)
     );
@@ -177,7 +182,7 @@ export class Api
       const s = {
         functionHandle: subscriber,
         method: r.method,
-        path: r.path,
+        pathPattern: r.pathPattern,
       };
       this.routes.push(s);
       this.populateRoute(s, subscriber);
@@ -202,15 +207,9 @@ export class Api
       | "patch"
       | "connect";
 
-    const fnClient = this.context.findInstance(
-      functionHandle
-    ) as IFunctionClient & ISimulatorResourceInstance;
-    if (!fnClient) {
-      throw new Error("No function client found!");
-    }
-
+    const fnClient = this.context.getClient(functionHandle) as IFunctionClient;
     this.app[method](
-      transformRoutePath(route.path),
+      transformRoutePath(route.pathPattern),
       asyncMiddleware(
         async (
           req: express.Request,
@@ -218,9 +217,9 @@ export class Api
           next: express.NextFunction
         ) => {
           this.addTrace(
-            `Processing "${route.method} ${route.path}" params=${JSON.stringify(
-              req.params
-            )}).`
+            `Processing "${route.method} ${
+              route.pathPattern
+            }" params=${JSON.stringify(req.params)}).`
           );
 
           const apiRequest = transformRequest(req);
@@ -243,7 +242,7 @@ export class Api
             } else {
               res.end();
             }
-            this.addTrace(`${route.method} ${route.path} - ${status}.`);
+            this.addTrace(`${route.method} ${route.pathPattern} - ${status}.`);
           } catch (err) {
             return next(err);
           }

@@ -15,7 +15,7 @@ export class Number {
    */
   public static fromJson(json: Json, options?: JsonValidationOptions): number {
     const schema = JsonSchema._createJsonSchema({
-      id: "num",
+      $id: "num",
       type: "number",
     } as any);
     schema.validate(json, options);
