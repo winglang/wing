@@ -6,6 +6,8 @@ pass ┌ container.test.wsim » root/env0/test:get echo
      │ bang
      └ 
 pass ┌ container.test.wsim » root/env1/test:get app 
+     │ bang
+     │ 
      └ Hello, Wingnuts!
  
  
