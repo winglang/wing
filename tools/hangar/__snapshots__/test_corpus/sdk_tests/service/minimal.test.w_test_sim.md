@@ -3,6 +3,7 @@
 ## stdout.log
 ```log
 pass ┌ minimal.test.wsim » root/env0/test:start and stop
+     │ hello, service!
      └ stopping!
  
  

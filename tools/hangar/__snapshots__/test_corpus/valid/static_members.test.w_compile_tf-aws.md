@@ -84,7 +84,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.instanceField = 100;
       }
-      static m() {
+      static m($scope) {
         return 99;
       }
       static _toInflightType() {
@@ -151,7 +151,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const foo = new Foo(this, "Foo");
     $helpers.assert($helpers.eq(foo.instanceField, 100), "foo.instanceField == 100");
-    $helpers.assert($helpers.eq((Foo.m()), 99), "Foo.m() == 99");
+    $helpers.assert($helpers.eq((Foo.m(this)), 99), "Foo.m() == 99");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
