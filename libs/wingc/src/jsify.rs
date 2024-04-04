@@ -1388,13 +1388,13 @@ impl<'a> JSifier<'a> {
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => {
-				let function_env = self.types.get_scope_env(&scope);
+				let function_env = self.types.get_scope_env(ctx.ast, *scope);
 				ctx.with_function_def(
 					func_def.name.as_ref(),
 					&func_def.signature,
 					func_def.is_static,
 					function_env,
-					|ctx| self.jsify_scope_body(scope, ctx),
+					|ctx| self.jsify_scope_body(*scope, ctx),
 				)
 			}
 			FunctionBody::External(extern_path) => {
@@ -1612,13 +1612,13 @@ impl<'a> JSifier<'a> {
 		);
 		code.indent();
 
-		let init_statements = match &class.initializer.body {
+		let init_statements = match class.initializer.body {
 			FunctionBody::Statements(s) => s,
 			FunctionBody::External(_) => panic!("'init' cannot be 'extern'"),
 		};
 
 		// Check if the first statement is a super constructor call, if not we need to add one
-		let super_called = if let Some(s) = ctx.ast.get_scope(*init_statements).get_statements(ctx.ast).next() {
+		let super_called = if let Some(s) = ctx.ast.get_scope(init_statements).get_statements(ctx.ast).next() {
 			matches!(s.kind, StmtKind::SuperConstructor { .. })
 		} else {
 			false
@@ -1635,7 +1635,7 @@ impl<'a> JSifier<'a> {
 			class.initializer.name.as_ref(),
 			&class.initializer.signature,
 			class.initializer.is_static,
-			self.types.get_scope_env(init_statements),
+			self.types.get_scope_env(ctx.ast, init_statements),
 			|ctx| self.jsify_scope_body(init_statements, ctx),
 		);
 		body_code.add_code(init_code);
