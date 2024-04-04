@@ -99,14 +99,9 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     return fn;
   }
 
-  public subscribeQueue(
-    queue: cloud.Queue,
-    props: cloud.TopicOnMessageOptions = {}
-  ): void {
+  public subscribeQueue(queue: cloud.Queue): void {
     if (!(queue instanceof Queue)) {
-      throw new Error(
-        "Topic only supports subscribing a tfaws.Queue"
-      );
+      throw new Error("'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic");
     }
 
     new SnsTopicSubscription(
@@ -117,30 +112,30 @@ export class Topic extends cloud.Topic implements IAwsTopic {
         protocol: "sqs",
         endpoint: queue.queueArn,
         rawMessageDelivery: true
-      },
+      }
     );
 
     new SqsQueuePolicy(this, `SqsQueuePolicy-${queue.node.addr}`, {
+      queueUrl: queue.queueUrl,
       policy: JSON.stringify({
         Version: "2012-10-17",
-        Statement: {
-          Effect: "Allow",
-          Principal: {
-            Service: "sns.amazonaws.com"
-          },
-          Action: ["sqs:SendMessage"],
-          Resource: [queue.queueArn],
-          Condition: {
-            ArnEquals: {
-              "arn:SourceArn": this.topicArn
+        Statement: [
+          {
+            Effect: "Allow",
+            Principal: {
+              Service: "sns.amazonaws.com"
+            },
+            Action: "sqs:SendMessage",
+            Resource: `${queue.queueArn}`,
+            Condition: {
+              ArnEquals: {
+                "aws:SourceArn": `${this.topicArn}`
+              }
             }
           }
-        },
+        ],
       }),
-      queueUrl: queue.queueUrl,
     });
-
-    props;
   }
 
   /**

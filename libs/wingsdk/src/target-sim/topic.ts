@@ -58,10 +58,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     return fn;
   }
 
-  public subscribeQueue(
-    queue: cloud.Queue,
-    props: cloud.TopicOnMessageOptions = {}
-  ): void {
+  public subscribeQueue(queue: cloud.Queue): void {
     const functionHandler = convertBetweenHandlers(
       Testing.makeHandler(
         "async handle(event) { return await this.queue.push(event); }",
@@ -80,7 +77,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       this,
       App.of(this).makeId(this, "subscribeQueue"),
       functionHandler,
-      props
+      {}
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "subscribeQueue()";
@@ -110,7 +107,10 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [cloud.QueueInflightMethods.PUSH, cloud.TopicInflightMethods.PUBLISH];
+    return [
+      cloud.QueueInflightMethods.PUSH,
+      cloud.TopicInflightMethods.PUBLISH,
+    ];
   }
 
   public toSimulator(): BaseResourceSchema {
