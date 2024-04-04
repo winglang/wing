@@ -111,7 +111,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
         topicArn: this.topicArn,
         protocol: "sqs",
         endpoint: queue.queueArn,
-        rawMessageDelivery: true
+        rawMessageDelivery: true,
       }
     );
 
