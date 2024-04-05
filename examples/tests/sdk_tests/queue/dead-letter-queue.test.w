@@ -33,7 +33,7 @@ let dlq_with_retries = new cloud.Queue() as "dlq with retries";
 let queue_with_retries = new cloud.Queue(
   dlq: {
     queue: dlq_with_retries,
-    maxDeliveryAttemps: 3
+    maxDeliveryAttemps: 2
   }
 ) as "queue with retries";
 queue_with_retries.setConsumer(inflight (msg: str) => {
@@ -49,7 +49,7 @@ new std.Test(inflight () => {
   queue_with_retries.push("World!");
 
   // wait until it executes once and retry three more times.
-  assert(util.waitUntil(inflight () => { return c.peek(key_with_retries) == 3; }));
+  assert(util.waitUntil(inflight () => { return c.peek(key_with_retries) == 2; }));
 
   // check if the "fail" message has arrived at the dead-letter queue
   assert(util.waitUntil(inflight () => { return dlq_with_retries.pop() == "fail"; }));
