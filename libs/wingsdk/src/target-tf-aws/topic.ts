@@ -2,9 +2,11 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
+import { Queue } from "./queue";
 import { SnsTopic } from "../.gen/providers/aws/sns-topic";
 import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
 import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
+import { SqsQueuePolicy } from "../.gen/providers/aws/sqs-queue-policy";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
@@ -80,7 +82,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       this,
       App.of(this).makeId(this, "TopicSubscription"),
       {
-        topicArn: this.topic.arn,
+        topicArn: this.topicArn,
         protocol: "lambda",
         endpoint: fn.functionArn,
       }
@@ -95,6 +97,47 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     });
 
     return fn;
+  }
+
+  public subscribeQueue(queue: cloud.Queue): void {
+    if (!(queue instanceof Queue)) {
+      throw new Error(
+        "'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic"
+      );
+    }
+
+    new SnsTopicSubscription(
+      this,
+      App.of(this).makeId(this, "TopicSubscription"),
+      {
+        topicArn: this.topicArn,
+        protocol: "sqs",
+        endpoint: queue.queueArn,
+        rawMessageDelivery: true,
+      }
+    );
+
+    new SqsQueuePolicy(this, `SqsQueuePolicy-${queue.node.addr}`, {
+      queueUrl: queue.queueUrl,
+      policy: JSON.stringify({
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Effect: "Allow",
+            Principal: {
+              Service: "sns.amazonaws.com",
+            },
+            Action: "sqs:SendMessage",
+            Resource: `${queue.queueArn}`,
+            Condition: {
+              ArnEquals: {
+                "aws:SourceArn": `${this.topicArn}`,
+              },
+            },
+          },
+        ],
+      }),
+    });
   }
 
   /**
