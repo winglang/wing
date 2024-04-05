@@ -53,4 +53,4 @@ new std.Test(inflight () => {
 
   // check if the "fail" message has arrived at the dead-letter queue
   assert(util.waitUntil(inflight () => { return dlq_with_retries.pop() == "fail"; }));
-}, std.TestProps {timeout: 5m}) as "one execution, two retries and send the fail message to dead-letter queue";
+}, timeout: 5m) as "one execution, two retries and send the fail message to dead-letter queue";
