@@ -137,7 +137,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       sourcePath: this.context.resourcePath,
       sourceType: "container",
       timestamp: new Date().toISOString(),
-      type: TraceType.LOG,
+      type: TraceType.RESOURCE,
     });
   }
 }
