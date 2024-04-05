@@ -81,6 +81,12 @@ test("simulator cleanup", async () => {
         resolve(undefined);
       }
     });
+    child.stderr?.on("data", (data) => {
+      if (data.toString().includes("Simulator started")) {
+        child.kill("SIGTERM");
+        resolve(undefined);
+      }
+    });
   });
 
   // Wait for the "stopped!" message from cloud.Service (running in a grandchild process)
