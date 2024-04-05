@@ -787,8 +787,12 @@ describe("in-place updates", () => {
       "root/Api started",
       "root/Api/Endpoint started",
       "root/Api/OnRequestHandler0 started",
+      "root/Api/Policy started",
+      "root/Api/OnRequestHandler0/Policy started",
       "root/Api/ApiEventMapping0 started",
       "Update: 0 added, 3 updated, 0 deleted",
+      "root/Api/Policy stopped",
+      "root/Api/OnRequestHandler0/Policy stopped",
       "root/Api/ApiEventMapping0 stopped",
       "root/Api/OnRequestHandler0 stopped",
       "root/Api/Endpoint stopped",
@@ -796,6 +800,8 @@ describe("in-place updates", () => {
       "root/Api started",
       "root/Api/Endpoint started",
       "root/Api/OnRequestHandler0 started",
+      "root/Api/Policy started",
+      "root/Api/OnRequestHandler0/Policy started",
       "root/Api/ApiEventMapping0 started",
     ]);
   });
