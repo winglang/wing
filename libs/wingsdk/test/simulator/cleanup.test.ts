@@ -71,6 +71,12 @@ test("simulator cleanup", async () => {
         resolve(undefined);
       }
     });
+    child.stderr?.on("data", (data) => {
+      if (data.toString().includes("stopped!")) {
+        stopped = true;
+        resolve(undefined);
+      }
+    });
   });
 
   // Wait for the "Simulator started" message, then kill the child process
