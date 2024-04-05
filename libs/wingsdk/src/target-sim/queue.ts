@@ -38,7 +38,14 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
     this.timeout = props.timeout ?? Duration.fromSeconds(30);
     this.retentionPeriod = props.retentionPeriod ?? Duration.fromHours(1);
-    this.dlq = props.dlq;
+    if (props.dlq && props.dlq.queue) {
+      this.dlq = props.dlq;
+      Node.of(this).addConnection({
+        source: this,
+        target: this.dlq.queue,
+        name: "dead-letter queue",
+      });
+    }
 
     if (this.retentionPeriod.seconds < this.timeout.seconds) {
       throw new Error(
@@ -118,10 +125,10 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   public toSimulator(): BaseResourceSchema {
     const dlqSchema = this.dlq
       ? {
-          dlqHandler: simulatorHandleToken(this.dlq.queue),
-          maxDeliveryAttemps:
-            this.dlq.maxDeliveryAttemps ?? cloud.DEFAULT_DELIVERY_ATTEMPS,
-        }
+        dlqHandler: simulatorHandleToken(this.dlq.queue),
+        maxDeliveryAttemps:
+          this.dlq.maxDeliveryAttemps ?? cloud.DEFAULT_DELIVERY_ATTEMPS,
+      }
       : undefined;
     const schema: QueueSchema = {
       type: cloud.QUEUE_FQN,
