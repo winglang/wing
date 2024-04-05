@@ -98,6 +98,8 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       target: fn,
       name: "subscribeQueue()",
     });
+
+    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE_ASYNC);
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
