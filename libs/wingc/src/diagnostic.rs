@@ -296,6 +296,10 @@ impl Diagnostic {
 		});
 	}
 
+	pub fn add_hint(&mut self, hint: impl ToString) {
+		self.hints.push(hint.to_string());
+	}
+
 	pub fn report(&self) {
 		report_diagnostic(self.clone());
 	}

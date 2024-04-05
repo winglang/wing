@@ -395,6 +395,11 @@ impl<'a> ParseErrorBuilder<'a> {
 		self
 	}
 
+	fn with_hint(mut self, message: impl ToString) -> Self {
+		self.diag.add_hint(message);
+		self
+	}
+
 	fn report(self) {
 		self.diag.report();
 		self.parser.error_nodes.borrow_mut().insert(self.node.id());
@@ -926,7 +931,18 @@ impl<'s> Parser<'s> {
 				return self.with_error("Cannot bring a module into itself", &module_name_node);
 			}
 			if !source_path.exists() {
-				return self.with_error(format!("Cannot find module \"{}\"", module_path), &module_name_node);
+				if source_path.with_extension("w").exists() {
+					// Give a hint if the user forgot to add .w
+					let err = self.build_error(format!("Cannot find module \"{}\"", module_path), &module_name_node);
+					let err = err.with_hint(format!(
+						"found \"{}.w\" - did you forget to add the file extension?",
+						module_path
+					));
+					err.report();
+					return Err(());
+				} else {
+					return self.with_error(format!("Cannot find module \"{}\"", module_path), &module_name_node);
+				}
 			}
 
 			// case: .w file

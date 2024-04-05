@@ -9,3 +9,6 @@ bring "/hello.w" as baz;
 
 bring "./bring_local_dir.test.w" as qux;
 // ^ error: Cannot bring "./main.w": entrypoint files cannot be imported
+
+bring "./subdir/inner/foo1" as foo1;
+// ^ error: Cannot find module "./subdir/inner/foo1", did you mean "./subdir/inner/foo1.w"?
