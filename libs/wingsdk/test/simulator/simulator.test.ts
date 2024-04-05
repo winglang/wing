@@ -754,6 +754,51 @@ describe("in-place updates", () => {
       "root/OnDeploy started",
     ]);
   });
+
+  test("cloud.Api routes are updated", async () => {
+    const app = new SimApp();
+    const handler = Testing.makeHandler(
+      `async handle(req) { return { status: 200 }; }`
+    );
+    const api = new Api(app, "Api");
+    api.get("/hello", handler);
+
+    const sim = await app.startSimulator();
+    const apiUrl = sim.getResourceConfig("/Api").attrs.url as string;
+    const response1 = await fetch(`${apiUrl}/hello`, { method: "GET" });
+    expect(response1.status).toEqual(200);
+
+    const app2 = new SimApp();
+    const api2 = new Api(app2, "Api");
+    api2.get("/world", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    // /hello route should be removed
+    const response2 = await fetch(`${apiUrl}/hello`, { method: "GET" });
+    expect(response2.status).toEqual(404);
+
+    // /world route should be added
+    const response3 = await fetch(`${apiUrl}/world`, { method: "GET" });
+    expect(response3.status).toEqual(200);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Api started",
+      "root/Api/Endpoint started",
+      "root/Api/OnRequestHandler0 started",
+      "root/Api/ApiEventMapping0 started",
+      "Update: 0 added, 3 updated, 0 deleted",
+      "root/Api/ApiEventMapping0 stopped",
+      "root/Api/OnRequestHandler0 stopped",
+      "root/Api/Endpoint stopped",
+      "root/Api stopped",
+      "root/Api started",
+      "root/Api/Endpoint started",
+      "root/Api/OnRequestHandler0 started",
+      "root/Api/ApiEventMapping0 started",
+    ]);
+  });
 });
 
 test("debugging inspector inherited by sandbox", async () => {

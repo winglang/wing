@@ -4,6 +4,7 @@ import { basename, join, relative, resolve, sep } from "path";
 import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
+import { TraceType } from "@winglang/sdk/lib/std";
 import { Util } from "@winglang/sdk/lib/util";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
@@ -199,10 +200,10 @@ export async function renderTestReport(
     // add any log messages that were emitted during the test
     for (const trace of result.traces) {
       // only show detailed traces if we are in debug mode
-      if (trace.type === "resource" && process.env.DEBUG) {
+      if (trace.type === TraceType.RESOURCE && process.env.DEBUG) {
         details.push(chalk.gray("[trace] " + trace.data.message));
       }
-      if (trace.type === "log") {
+      if (trace.type === TraceType.LOG) {
         details.push(chalk.gray(trace.data.message));
       }
     }

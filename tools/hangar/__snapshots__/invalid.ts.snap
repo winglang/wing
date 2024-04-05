@@ -3778,9 +3778,9 @@ Duration <DURATION>"
 
 exports[`struct_from_parameter.test.w 1`] = `
 "Error: unable to parse MyParams:
-- instance requires property \\"bar\\"
-- instance requires property \\"baz\\"
-- instance requires property \\"foo\\"
+- MyParams must have required property 'bar'
+- MyParams must have required property 'baz'
+- MyParams must have required property 'foo'
    --> ../../../examples/tests/invalid/struct_from_parameter.test.w:14:1
    | // technically we never enforced the parameters must have been
    | // provided
