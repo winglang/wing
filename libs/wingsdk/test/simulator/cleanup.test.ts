@@ -55,13 +55,12 @@ test("simulator cleanup", async () => {
     stdio: ["pipe", "pipe", "pipe"],
   });
 
-  // Uncomment the following lines to see the output of the child process
-  // child.stdout?.on("data", (data) => {
-  //   console.error(data.toString());
-  // });
-  // child.stderr?.on("data", (data) => {
-  //   console.error(data.toString());
-  // });
+  child.stdout?.on("data", (data) => {
+    console.error(data.toString());
+  });
+  child.stderr?.on("data", (data) => {
+    console.error(data.toString());
+  });
 
   let stopped = false;
 
