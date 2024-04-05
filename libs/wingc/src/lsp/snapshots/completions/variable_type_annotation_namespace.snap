@@ -329,7 +329,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct TopicSubscribeQueueOptions extends QueueProps\n```\n---\nOptions for `Topic.subscribeQueue`.\n### Fields\n- `retentionPeriod?` — `duration?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct TopicSubscribeQueueOptions extends QueueProps\n```\n---\nOptions for `Topic.subscribeQueue`.\n### Fields\n- `dlq?` — `DeadLetterQueueProps?`\n- `retentionPeriod?` — `duration?`\n- `timeout?` — `duration?`"
   sortText: hh|TopicSubscribeQueueOptions
 - label: WebsiteDomainOptions
   kind: 22
