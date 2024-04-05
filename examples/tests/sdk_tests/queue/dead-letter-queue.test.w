@@ -3,7 +3,6 @@ bring util;
 
 let c = new cloud.Counter();
 
-
 let key_without_retries = "without_retries";
 let dlq_without_retries = new cloud.Queue() as "dlq without retries";
 let queue_without_retries = new cloud.Queue(
@@ -22,18 +21,10 @@ new std.Test(inflight () => {
   queue_without_retries.push("World!");
 
   // wait until it executes once.
-  util.waitUntil(
-    inflight () => { return c.peek(key_without_retries) == 1; }, 
-    timeout: 3m, interval: 1s, throws: false
-  );
+  assert(util.waitUntil(inflight () => { return c.peek(key_without_retries) == 1; }));
 
   // check if the "fail" message has arrived at the dead-letter queue
-  let result = util.waitUntil(
-    inflight () => { return dlq_without_retries.pop() == "fail"; }, 
-    timeout: 4m, interval: 10s, throws: false
-  );
-
-  assert(result);
+  assert(util.waitUntil(inflight () => { return dlq_without_retries.pop() == "fail"; }));
 }, std.TestProps {timeout: 5m}) as "one execution and send fail message to dead-letter queue";
 
 
@@ -58,16 +49,8 @@ new std.Test(inflight () => {
   queue_with_retries.push("World!");
 
   // wait until it executes once and retry three more times.
-  util.waitUntil(
-    inflight () => { return c.peek(key_with_retries) == 3; }, 
-    timeout: 3m, interval: 1s, throws: false
-  );
+  assert(util.waitUntil(inflight () => { return c.peek(key_with_retries) == 3; }));
 
   // check if the "fail" message has arrived at the dead-letter queue
-  let result = util.waitUntil(
-    inflight () => { return dlq_with_retries.pop() == "fail"; }, 
-    timeout: 4m, interval: 10s, throws: false
-  );
-
-  assert(result);
+  assert(util.waitUntil(inflight () => { return dlq_with_retries.pop() == "fail"; }));
 }, std.TestProps {timeout: 5m}) as "one execution, two retries and send the fail message to dead-letter queue";

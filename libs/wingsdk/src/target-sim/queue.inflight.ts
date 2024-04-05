@@ -22,8 +22,7 @@ import {
 import { TraceType } from "../std";
 
 export class Queue
-  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
-{
+  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher {
   private readonly messages = new Array<QueueMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly processLoop: LoopController;
@@ -48,7 +47,7 @@ export class Queue
     await this.processLoop.stop();
   }
 
-  public async save(): Promise<void> {}
+  public async save(): Promise<void> { }
 
   public async plan() {
     return UpdatePlan.AUTO;
@@ -201,7 +200,7 @@ export class Queue
               let retriesMessages = [];
               for (const msg of errorList) {
                 if (msg.maxDeliveryAttemps < this.dlq.maxDeliveryAttemps) {
-                  msg.retries++;
+                  msg.maxDeliveryAttemps++;
                   retriesMessages.push(msg);
                 } else {
                   let dlq = this.context.getClient(
@@ -262,14 +261,14 @@ export class Queue
 class QueueMessage {
   public readonly retentionTimeout: Date;
   public readonly payload: string;
-  public retries: number;
+  public maxDeliveryAttemps: number;
 
-  constructor(retentionPeriod: number, retries: number, message: string) {
+  constructor(retentionPeriod: number, maxDeliveryAttemps: number, message: string) {
     const currentTime = new Date();
     currentTime.setSeconds(retentionPeriod + currentTime.getSeconds());
     this.retentionTimeout = currentTime;
     this.payload = message;
-    this.retries = retries;
+    this.maxDeliveryAttemps = maxDeliveryAttemps;
   }
 }
 
