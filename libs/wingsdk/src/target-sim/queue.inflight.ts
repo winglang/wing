@@ -22,7 +22,8 @@ import {
 import { TraceType } from "../std";
 
 export class Queue
-  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher {
+  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
+{
   private readonly messages = new Array<QueueMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly processLoop: LoopController;
@@ -47,7 +48,7 @@ export class Queue
     await this.processLoop.stop();
   }
 
-  public async save(): Promise<void> { }
+  public async save(): Promise<void> {}
 
   public async plan() {
     return UpdatePlan.AUTO;
@@ -263,7 +264,11 @@ class QueueMessage {
   public readonly payload: string;
   public maxDeliveryAttemps: number;
 
-  constructor(retentionPeriod: number, maxDeliveryAttemps: number, message: string) {
+  constructor(
+    retentionPeriod: number,
+    maxDeliveryAttemps: number,
+    message: string
+  ) {
     const currentTime = new Date();
     currentTime.setSeconds(retentionPeriod + currentTime.getSeconds());
     this.retentionTimeout = currentTime;
