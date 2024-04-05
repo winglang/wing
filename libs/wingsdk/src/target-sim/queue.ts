@@ -125,10 +125,10 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   public toSimulator(): BaseResourceSchema {
     const dlqSchema = this.dlq
       ? {
-        dlqHandler: simulatorHandleToken(this.dlq.queue),
-        maxDeliveryAttemps:
-          this.dlq.maxDeliveryAttemps ?? cloud.DEFAULT_DELIVERY_ATTEMPS,
-      }
+          dlqHandler: simulatorHandleToken(this.dlq.queue),
+          maxDeliveryAttemps:
+            this.dlq.maxDeliveryAttemps ?? cloud.DEFAULT_DELIVERY_ATTEMPS,
+        }
       : undefined;
     const schema: QueueSchema = {
       type: cloud.QUEUE_FQN,
