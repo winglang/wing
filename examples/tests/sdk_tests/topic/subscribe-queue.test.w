@@ -1,24 +1,3 @@
-// bring cloud;
-
-// // https://repost.aws/questions/QURhOWYtseQ6Ovy6GGpSTnTw/sqs-not-receiving-sns-message
-
-// let t = new cloud.Topic();
-
-// let q1 = new cloud.Queue() as "q1";
-// q1.setConsumer(inflight (msg: str) => {
-//   log("from topic to queue 1: {msg}");
-// });
-// t.subscribeQueue(q1);
-
-// let q2 = new cloud.Queue() as "q2";
-// q2.setConsumer(inflight (msg: str) => {
-//   log("from topic to queue 2: {msg}");
-// });
-// t.subscribeQueue(q2);
-
-// t.onMessage(inflight (msg: str) => {
-//   log("from topic: {msg}");
-// });
 
 
 bring cloud;
