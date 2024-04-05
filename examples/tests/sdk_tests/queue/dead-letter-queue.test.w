@@ -48,7 +48,7 @@ new std.Test(inflight () => {
   queue_with_retries.push("fail");
   queue_with_retries.push("World!");
 
-  // wait until it executes once and retry three more times.
+  // wait until it executes once and retry one more times.
   assert(util.waitUntil(inflight () => { return c.peek(key_with_retries) == 2; }));
 
   // check if the "fail" message has arrived at the dead-letter queue
