@@ -71,7 +71,9 @@ export class Regexp {
    * @returns An array containing all matches found.
    */
   public findAll(text: string): string[] {
+    // Create global version of the regex
     const globalRegex = new RegExp(this.regex, "g");
+
     return [...text.matchAll(globalRegex)].map((match) => match[0]);
   }
 
@@ -91,12 +93,15 @@ export class Regexp {
    * @returns An array containing arrays of start and end indices for each match found.
    */
   public findAllIndex(text: string): number[][] {
+    // Create global version of the regex
     const globalRegex = new RegExp(this.regex, "g");
+
     const matches = Array.from(text.matchAll(globalRegex));
-    return matches.map((match) => [
-      match.index as number,
-      (match.index as number) + match[0].length,
-    ]);
+    return matches.map((match) => {
+      const startIndex = match.index as number;
+      const endIndex = startIndex + match[0].length;
+      return [startIndex, endIndex];
+    });
   }
 
   /**
