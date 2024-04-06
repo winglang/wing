@@ -5,15 +5,20 @@ import { InflightClient } from "../core";
  */
 export class Util {
   /**
-   * Check if a regex pattern is matched by a given string
-   * @param pattern - regex pattern
-   * @param text - given input string
-   * @returns true if it matches the pattern, false otherwise
+   * Checks whether a given string matches a specified regex pattern.
+   * @param pattern The regex pattern to match against.
+   * @param text The input string to check for a match.
+   * @returns `true` if the pattern matches the input string, otherwise `false`.
    */
   public static match(pattern: string, text: string): boolean {
     return new RegExp(pattern).test(text);
   }
 
+  /**
+   * Compiles the provided regex pattern into a `Regexp` object.
+   * @param pattern The regex pattern to compile.
+   * @returns A new `Regexp` object representing the compiled pattern.
+   */
   public static compile(pattern: string): Regexp {
     return new Regexp(pattern);
   }
@@ -28,13 +33,13 @@ export class Util {
 }
 
 /**
- * A regular expression
+ * Represents a compiled regular expression pattern.
  */
 export class Regexp {
   private regex: RegExp;
 
   /**
-   * Constructs a new Regexp object with the specified pattern.
+   * Constructs a new `Regexp` object with the specified pattern.
    * @param pattern The regular expression pattern.
    */
   constructor(pattern: string) {
