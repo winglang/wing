@@ -124,12 +124,17 @@ export class Regexp {
     if (!result) {
       return undefined;
     }
+
+    // Initialize the array with the match's start and end indices
     const indices = [[result.index, result.index + result[0].length]];
+
+    // Add submatch indices
     result.slice(1).forEach((submatch) => {
       const start = text.indexOf(submatch, indices[indices.length - 1][0]);
       const end = start + submatch.length;
       indices.push([start, end]);
     });
+
     return indices;
   }
 
