@@ -8,7 +8,7 @@ test "regex.Regexp" {
   expect.equal(r.matches("peach"), true);
 
   // returns the first match, if there is one
-  expect.equal(r.find("peach peach"), true);
+  expect.equal(r.find("peach peach"), "peach");
 
   // returns all of the non-overlapping matches
   expect.equal(r.findAll("peach punch pinch"), ["peach", "punch", "pinch"]);
