@@ -296,10 +296,6 @@
       "type": "bundled"
     },
     {
-      "name": "jsonschema",
-      "type": "bundled"
-    },
-    {
       "name": "mime-types",
       "type": "bundled"
     },
