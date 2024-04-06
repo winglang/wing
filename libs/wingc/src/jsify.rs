@@ -1811,29 +1811,28 @@ impl<'a> JSifier<'a> {
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
 		// in the generated constructor
 		let lifted_fields = if let Some(lifts) = &class_type.lifts {
-			lifts.lifted_fields().map(|(f, _)| f.clone()).collect_vec()
+			lifts.lifted_fields().map(|(f, _)| f.clone()).collect()
 		} else {
-			vec![]
+			IndexSet::new()
 		};
 
 		let parent_fields = if let Some(parent) = class_type.parent {
-			Self::class_lifted_fields(parent).keys().cloned().collect_vec()
+			Self::class_lifted_fields(parent).keys().cloned().collect()
 		} else {
-			vec![]
+			IndexSet::new()
 		};
 
 		class_code.open(format!(
 			"{JS_CONSTRUCTOR}({{ {} }}) {{",
 			lifted_fields
-				.iter()
-				.merge(parent_fields.iter())
+				.union(&parent_fields)
 				.map(|token| { token.clone() })
 				.collect_vec()
 				.join(", ")
 		));
 
 		if class.parent.is_some() {
-			class_code.line(format!("super({{ {} }});", parent_fields.join(", ")));
+			class_code.line(format!("super({{ {} }});", parent_fields.iter().join(", ")));
 		}
 
 		for token in &lifted_fields {
