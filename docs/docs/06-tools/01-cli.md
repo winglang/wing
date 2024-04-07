@@ -211,16 +211,16 @@ Snapshot mismatch:
  - Actual: test_bucket.test.w.tf-aws.snap.md.actual
 ```
 
-The `--snapshots <mode>` or `-s <mode<>` switch can be used to determine the behavior of the
+The `--snapshots <mode>` or `-s <mode>` switch can be used to determine the behavior of the
 snapshots mechanism:
 
 * `never` - Disables the snapshots mechanism altogether. Should be used, for example, if you wish to
   run cloud tests from within a CI system.
-* `wet` - Deploys and captures the snapshot if test passed. This is the default behavior when
+* `deploy` - Deploys and captures the snapshot if test passed. This is the default behavior when
   running cloud tests and `CI` is not set.
 * `assert` - Only verifies that the snapshots haven't changed. This is the default behavior when
   running cloud tests and `CI` is set.
-* `dry` - Only updates the snapshots without deploying. Use this with caution as this can
+* `update` - Only updates the snapshots without deploying. Use this with caution as this can
   potentially result in a regressed behavior.
 * `auto` - Auto-detect `wet` or `assert` based on the `CI` environment variable (the behavior
   described above).
