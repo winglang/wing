@@ -1,13 +1,13 @@
 import * as cp from "child_process";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import * as fs from "fs/promises";
 import { join, extname, basename } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
 import * as glob from "glob";
 import { TestOptions } from "./test";
-import { withSpinner } from "../../util";
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import { compile } from "../compile";
 import { renderTestName } from "./util";
+import { withSpinner } from "../../util";
+import { compile } from "../compile";
 
 export const SNAPSHOTS_HELP = `
 Snapshots (s, --snapshots <mode>):
@@ -24,7 +24,7 @@ Snapshots (s, --snapshots <mode>):
 const SNAPSHOTS_ERROR_HELP = [
   "To update, run in a non-CI environment with cloud credentials or with '--snapshots=update'",
   "To disable this behavior run with '--snapshots=never'",
-  "See https://www.winglang.io/docs/tools/cli#cloud-test-snapshots"
+  "See https://www.winglang.io/docs/tools/cli#cloud-test-snapshots",
 ].join("\n");
 
 export enum SnapshotMode {
@@ -103,11 +103,9 @@ export async function captureSnapshot(entrypoint: string, target: string, option
 
       case SnapshotMode.ASSERT:
         if (!existsSync(snapshotFile)) {
-          throw new Error([
-            `Snapshot file does not exist: ${snapshotFile}`,
-            "",
-            SNAPSHOTS_ERROR_HELP,
-          ].join("\n"));
+          throw new Error(
+            [`Snapshot file does not exist: ${snapshotFile}`, "", SNAPSHOTS_ERROR_HELP].join("\n")
+          );
         }
 
         const expectedSnapshot = readFileSync(snapshotFile, "utf-8");
@@ -115,21 +113,11 @@ export async function captureSnapshot(entrypoint: string, target: string, option
           const actualFile = `${snapshotFile}.actual`;
           writeFileSync(actualFile, snapshot);
 
+          const diff =
+            tryRenderDiff(snapshotFile, actualFile) ??
+            [` - Expected: ${snapshotFile}`, ` - Actual: ${actualFile}`].join("\n");
 
-          const diff = tryRenderDiff(snapshotFile, actualFile) ?? [
-            ` - Expected: ${snapshotFile}`,
-            ` - Actual: ${actualFile}`,
-          ].join("\n");
-
-          throw new Error(
-            [
-              "Snapshot mismatch:",
-              "",
-              diff,
-              "",
-              SNAPSHOTS_ERROR_HELP,
-            ].join("\n")
-          );
+          throw new Error(["Snapshot mismatch:", "", diff, "", SNAPSHOTS_ERROR_HELP].join("\n"));
         }
         break;
     }
@@ -139,7 +127,7 @@ export async function captureSnapshot(entrypoint: string, target: string, option
 /**
  * Uses the "diff" command to render a diff between two files. Returns `undefined` if the diff command
  * is not available or if there was an error.
- * 
+ *
  * @param expectedFile A snapshot file with the expected content
  * @param actualFile The actual snapshot content
  * @returns The diff output or `undefined`
@@ -156,7 +144,7 @@ function tryRenderDiff(expectedFile: string, actualFile: string) {
 
 /**
  * Creates a markdown snapshot of the synthesis output.
- * 
+ *
  * @param baseName The base name of the test
  * @param synthDir The directory containing the synthesis output
  * @returns The snapshot content in markdown format

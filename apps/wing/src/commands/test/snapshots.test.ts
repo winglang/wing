@@ -1,8 +1,8 @@
+import { readFile, readdir, writeFile } from "fs/promises";
+import { dirname, join } from "path";
 import { describe, test, expect, beforeEach, afterEach } from "vitest";
 import { SnapshotMode, captureSnapshot, determineSnapshotMode } from "./snapshots";
 import { generateTmpDir } from "src/util";
-import { readFile, readdir, writeFile } from "fs/promises";
-import { dirname, join } from "path";
 
 const prevCI = process.env.CI;
 
@@ -123,10 +123,13 @@ describe("captureSnapshot", async () => {
     const workdir = await generateTmpDir();
     const entrypoint = join(workdir, "main.w");
 
-    await writeFile(entrypoint, `
+    await writeFile(
+      entrypoint,
+      `
       bring cloud;
       new cloud.Bucket();
-    `);
+    `
+    );
 
     return entrypoint;
   }
@@ -171,28 +174,33 @@ describe("captureSnapshot", async () => {
   test("ASSERT fails if there is no existing snapshot", async () => {
     const entrypoint = await makeEntrypoint();
 
-    expect(captureSnapshot(entrypoint, "tf-aws", {
-      clean: false,
-      platform: ["tf-aws"],
-      snapshots: SnapshotMode.ASSERT,
-    })).rejects.toThrow(/Snapshot file does not exist/);
+    await expect(
+      captureSnapshot(entrypoint, "tf-aws", {
+        clean: false,
+        platform: ["tf-aws"],
+        snapshots: SnapshotMode.ASSERT,
+      })
+    ).rejects.toThrowError(/Snapshot file does not exist/);
   });
 
-  test('ASSERT fails if snapshot does not match', async () => {
+  test("ASSERT fails if snapshot does not match", async () => {
     const entrypoint = await makeEntrypoint();
 
     await writeFile(
-      join(dirname(entrypoint), "main.w.tf-aws.snap.md"), 
-      expected.replace(`"force_destroy": false`, `"force_destroy": true`));
+      join(dirname(entrypoint), "main.w.tf-aws.snap.md"),
+      expected.replace(`"force_destroy": false`, `"force_destroy": true`)
+    );
 
-    expect(captureSnapshot(entrypoint, "tf-aws", {
-      clean: false,
-      platform: ["tf-aws"],
-      snapshots: SnapshotMode.ASSERT,
-    })).rejects.toThrow(/\+        "force_destroy": false/);
+    await expect(
+      captureSnapshot(entrypoint, "tf-aws", {
+        clean: false,
+        platform: ["tf-aws"],
+        snapshots: SnapshotMode.ASSERT,
+      })
+    ).rejects.toThrowError(/\+        "force_destroy": false/);
   });
 
-  test('ASSERT succeeds if snapshots match', async () => {
+  test("ASSERT succeeds if snapshots match", async () => {
     const entrypoint = await makeEntrypoint();
 
     await writeFile(join(dirname(entrypoint), "main.w.tf-aws.snap.md"), expected);
@@ -203,5 +211,4 @@ describe("captureSnapshot", async () => {
       snapshots: SnapshotMode.ASSERT,
     });
   });
-
 });

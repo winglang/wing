@@ -1,13 +1,5 @@
 import * as cp from "child_process";
-import {
-  existsSync,
-  readFile,
-  readFileSync,
-  realpathSync,
-  rm,
-  rmSync,
-  statSync,
-} from "fs";
+import { existsSync, readFile, readFileSync, realpathSync, rm, rmSync, statSync } from "fs";
 import { basename, join, relative, resolve } from "path";
 import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
@@ -21,9 +13,9 @@ import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
 import { SnapshotMode, captureSnapshot, determineSnapshotMode } from "./snapshots";
+import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
-import { renderTestName } from "./util";
 
 const log = debug("wing:test");
 
@@ -155,8 +147,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
 
   // determine snapshot behavior
   const snapshotMode = determineSnapshotMode(target, options);
-  const shouldExecute =
-    snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.DEPLOY;
+  const shouldExecute = snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.DEPLOY;
 
   let results: std.TestResult[] = [];
   if (shouldExecute) {
@@ -174,7 +165,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
   }
 
   // if one of the tests failed, return the results without updating any snapshots.
-  const success = !(results.some((r) => !r.pass));
+  const success = !results.some((r) => !r.pass);
 
   // if all tests pass, capture snapshots
   if (success) {
@@ -183,7 +174,6 @@ async function testOne(entrypoint: string, options: TestOptions) {
 
   return results;
 }
-
 
 async function executeTest(
   synthDir: string,
