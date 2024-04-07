@@ -5,7 +5,7 @@ import { BuiltinPlatform } from "@winglang/compiler";
 import * as glob from "glob";
 import { TestOptions } from "./test";
 import { withSpinner } from "../../util";
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { compile } from "../compile";
 import { renderTestName } from "./util";
 
@@ -20,6 +20,12 @@ Snapshots (s, --snapshots <mode>):
   When testing against a cloud target (e.g. -t tf-aws), if all tests pass, the compiler output 
   will be captured under "<entrypoint>.snap.md".
 `;
+
+const SNAPSHOTS_ERROR_HELP = [
+  "To update, run in a non-CI environment with cloud credentials or with '--snapshots=update'",
+  "To disable this behavior run with '--snapshots=never'",
+  "See https://www.winglang.io/docs/tools/cli#cloud-test-snapshots"
+].join("\n");
 
 export enum SnapshotMode {
   /**
@@ -96,6 +102,14 @@ export async function captureSnapshot(entrypoint: string, target: string, option
         break;
 
       case SnapshotMode.ASSERT:
+        if (!existsSync(snapshotFile)) {
+          throw new Error([
+            `Snapshot file does not exist: ${snapshotFile}`,
+            "",
+            SNAPSHOTS_ERROR_HELP,
+          ].join("\n"));
+        }
+
         const expectedSnapshot = readFileSync(snapshotFile, "utf-8");
         if (expectedSnapshot !== snapshot) {
           const actualFile = `${snapshotFile}.actual`;
@@ -113,9 +127,7 @@ export async function captureSnapshot(entrypoint: string, target: string, option
               "",
               diff,
               "",
-              "To update, run in a non-CI environment with cloud credentials or with '--snapshots=dry'",
-              "To disable this behavior run with '--snapshots=never'",
-              "See https://www.winglang.io/docs/tools/cli#cloud-test-snapshots"
+              SNAPSHOTS_ERROR_HELP,
             ].join("\n")
           );
         }
