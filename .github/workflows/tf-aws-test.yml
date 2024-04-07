@@ -187,7 +187,7 @@ jobs:
               echo $COMPATIBILITY
             fi
             cd ${{ matrix.test.directory }}
-            $WING_CLI test --snapshots=never -t ${{ matrix.target }} $COMPATIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
+            $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} $COMPATIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
 
       - name: Upload Artifacts
         if: ${{ env.LOCAL_BUILD ==  'true' }}
