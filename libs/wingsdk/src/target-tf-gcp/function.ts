@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
-import { AssetType, Lazy, TerraformAsset } from "cdktf";
+import { AssetType, Lazy, TerraformAsset, Fn } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket } from "./bucket";
@@ -321,9 +321,9 @@ export class Function extends cloud.Function {
    * @param serviceAccount The service account to grant invoke permissions to.
    */
   public addPermissionToInvoke(serviceAccount: ServiceAccount): void {
-    const random = Math.floor(Math.random() * (1 - 100 + 1)) + 1;
+    const hash = Fn.sha256(serviceAccount.email).slice(-8);
 
-    new CloudfunctionsFunctionIamMember(this, `invoker-permission-${random}`, {
+    new CloudfunctionsFunctionIamMember(this, `invoker-permission-${hash}`, {
       project: this.function.project,
       region: this.function.region,
       cloudFunction: this.function.name,
@@ -336,10 +336,10 @@ export class Function extends cloud.Function {
     serviceAccount: ServiceAccount,
     scheduleExpression: string
   ): void {
-    const random = Math.floor(Math.random() * (1 - 100 + 1)) + 1;
+    const hash = Fn.sha256(serviceAccount.email).slice(-8);
 
     new CloudSchedulerJob(this, "Scheduler", {
-      name: `scheduler-${random}`,
+      name: `scheduler-${hash}`,
       description: `Trigger`,
       schedule: scheduleExpression,
       timeZone: "Etc/UTC",
