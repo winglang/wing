@@ -7,6 +7,7 @@ pass ┌ get.test.wsim » root/env0/test:http.get and http.fetch can preform a c
      │ 
      └ ok
  
+ 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

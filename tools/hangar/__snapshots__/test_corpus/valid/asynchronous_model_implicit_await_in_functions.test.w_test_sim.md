@@ -4,6 +4,7 @@
 ```log
 pass ─ asynchronous_model_implicit_await_in_functions.test.wsim (no tests)
  
+ 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

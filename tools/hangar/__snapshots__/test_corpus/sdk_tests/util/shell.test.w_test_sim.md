@@ -10,6 +10,7 @@ pass ─ shell.test.wsim » root/env4/test:shell() with inheritEnv option
 pass ─ shell.test.wsim » root/env5/test:shell() with cwd option                   
 pass ─ shell.test.wsim » root/env6/test:shell() with throw option                 
  
+ 
 Tests 7 passed (7)
 Test Files 1 passed (1)
 Duration <DURATION>

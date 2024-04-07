@@ -4,6 +4,7 @@
 ```log
 pass ─ purge.test.wsim » root/env0/test:purge
  
+ 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

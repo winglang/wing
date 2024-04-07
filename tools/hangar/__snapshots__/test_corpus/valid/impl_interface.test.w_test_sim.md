@@ -4,6 +4,7 @@
 ```log
 pass ─ impl_interface.test.wsim » root/env0/test:can call inherited inflight interface method
  
+ 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>
