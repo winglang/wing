@@ -1,9 +1,8 @@
 import { createPersistentState } from "@wingconsole/use-persistent-state";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback } from "react";
 
 import { useOpenExternal } from "../services/use-open-external.js";
 import { useRedis } from "../services/use-redis.js";
-import { TerminalHistoryItem } from "../shared/ternimal.js";
 import { useTerminalHistory } from "../shared/use-terminal-history.js";
 import { RedisInteraction } from "../ui/redis-interaction.js";
 

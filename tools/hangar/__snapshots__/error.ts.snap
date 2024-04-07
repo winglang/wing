@@ -2,7 +2,7 @@
 
 exports[`bool_from_json.test.w 1`] = `
 "Error: unable to parse bool:
-- instance is not of a type(s) boolean
+- bool must be boolean
   --> ../../../examples/tests/error/bool_from_json.test.w:5:15
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
   | let j = Json { a: 123 };
@@ -18,7 +18,7 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_stacktraces.test.w 1`] = `
-"fail ┌ inflight_stacktraces.test.wsim » root/env0/test:assert            
+"fail ┌ inflight_stacktraces.test.wsim » root/env0/test:assert             
      │ Error: assertion failed: false
      │   --> ../../../examples/tests/error/inflight_stacktraces.test.w:7:3
      │   | let bucket = new cloud.Bucket();
@@ -27,7 +27,7 @@ exports[`inflight_stacktraces.test.w 1`] = `
      │ 7 |   assert(false);
      │   |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:7:3
-fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal      
+fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal       
      │ Error: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
      │ 
      │ 1 !== 2
@@ -39,7 +39,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal
      │ 11 |   expect.equal(1,2 );
      │    |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:11:3
-fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get 
+fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get  
      │ Error: Object does not exist (key=doesn't exist): Error: ENOENT: no such file or directory, open '../../../examples/tests/error/target/test/inflight_stacktraces.test.wsim/.state/<STATE_FILE>'
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:15:3
      │    | }
@@ -48,7 +48,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get
      │ 15 |   bucket.get(\\"doesn't exist\\");
      │    |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:15:3
-fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure
+fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure 
      │ Error: ouch
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:20:5
      │    | 
@@ -58,9 +58,18 @@ fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure
      │    |     ^
      │ at closure <ABSOLUTE>/inflight_stacktraces.test.w:20:5
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:22:3
+fail ┌ inflight_stacktraces.test.wsim » root/env4/test:assert with message
+     │ Error: assertion failed: x is false
+     │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:27:3
+     │    | 
+     │    | test \\"assert with message\\" {
+     │    |   let x = false;
+     │ 27 |   assert(x, \\"x is false\\");
+     │    |   ^
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:27:3
  
  
-Tests 4 failed (4)
+Tests 5 failed (5)
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -82,7 +91,7 @@ Duration <DURATION>"
 
 exports[`number_from_json.test.w 1`] = `
 "Error: unable to parse num:
-- instance is not of a type(s) number
+- num must be number
   --> ../../../examples/tests/error/number_from_json.test.w:5:14
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
   | let j = Json { a: \\"apples\\" };
@@ -143,7 +152,7 @@ Duration <DURATION>"
 
 exports[`string_from_json.test.w 1`] = `
 "Error: unable to parse string:
-- instance is not of a type(s) string
+- string must be string
   --> ../../../examples/tests/error/string_from_json.test.w:5:14
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
   | let j = Json { a: 123 };
@@ -160,7 +169,7 @@ Duration <DURATION>"
 
 exports[`struct_from_json_1.test.w 1`] = `
 "Error: unable to parse Person:
-- instance.age is not of a type(s) number
+- Person/age must be number
    --> ../../../examples/tests/error/struct_from_json_1.test.w:11:1
    | 
    | let j = {name: \\"cool\\", age: \\"not a number\\"};
@@ -177,8 +186,8 @@ Duration <DURATION>"
 
 exports[`struct_from_json_2.test.w 1`] = `
 "Error: unable to parse Student:
-- instance.age is not of a type(s) number
-- instance requires property \\"advisor\\"
+- Student must have required property 'advisor'
+- Student/age must be number
    --> ../../../examples/tests/error/struct_from_json_2.test.w:22:1
    |   age: \\"not a number\\"
    | };
@@ -195,8 +204,8 @@ Duration <DURATION>"
 
 exports[`struct_from_json_3.test.w 1`] = `
 "Error: unable to parse Student:
-- instance.advisors[1].id is not of a type(s) string
-- instance.age is not of a type(s) number
+- Student/advisors/1/id must be string
+- Student/age must be number
    --> ../../../examples/tests/error/struct_from_json_3.test.w:26:1
    |   ]
    | };
@@ -213,7 +222,7 @@ Duration <DURATION>"
 
 exports[`struct_from_json_4.test.w 1`] = `
 "Error: unable to parse Student:
-- instance.advisors contains duplicate item
+- Student/advisors must NOT have duplicate items (items ## 0 and 1 are identical)
    --> ../../../examples/tests/error/struct_from_json_4.test.w:27:1
    |   ]
    | };
@@ -230,7 +239,7 @@ Duration <DURATION>"
 
 exports[`struct_from_json_5.test.w 1`] = `
 "Error: unable to parse Foo:
-- instance.names.c is not of a type(s) string
+- Foo/names/c must be string
    --> ../../../examples/tests/error/struct_from_json_5.test.w:16:1
    |   }
    | };

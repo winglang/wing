@@ -347,7 +347,7 @@ module.exports = function({  }) {
             "uniqueId": "BigPublisher_b2_oncreate-OnMessage0_IamRolePolicy_983EC08F"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_Queue_2C024F97.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:GetQueueUrl\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_Queue_2C024F97.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_Queue_2C024F97.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.BigPublisher_b2_oncreate-OnMessage0_IamRole_FF154497.name}"
       }
     },
@@ -745,7 +745,7 @@ class $Root extends $stdlib.std.Resource {
             [this.c, ["peek"]],
           ],
           "$inflight_init": [
-            [this.c, ["dec", "inc"]],
+            [this.c, [].concat(["inc"], ["dec"])],
           ],
           "inflightField": [
           ],
@@ -792,8 +792,8 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "myMethod": [
             [Foo, ["fooStatic"]],
-            [this.b, ["get", "put"]],
-            [this.foo, ["fooGet", "fooInc"]],
+            [this.b, [].concat(["put"], ["get"])],
+            [this.foo, [].concat(["fooInc"], ["fooGet"])],
           ],
           "testTypeAccess": [
             [Bar, ["barStatic"]],
@@ -846,7 +846,7 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [bucket, ["list"]],
-            [res, ["myMethod", "testTypeAccess"]],
+            [res, [].concat(["myMethod"], ["testTypeAccess"])],
             [res.foo, ["inflightField"]],
           ],
           "$inflight_init": [
@@ -1043,7 +1043,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [bigOlPublisher, ["getObjectCount", "publish"]],
+            [bigOlPublisher, [].concat(["publish"], ["getObjectCount"])],
           ],
           "$inflight_init": [
             [bigOlPublisher, []],
@@ -1055,7 +1055,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static getInstance(scope) {
+      static getInstance($scope, scope) {
         return new Dummy(scope, "StaticDummy");
       }
       static _toInflightType() {
@@ -1089,7 +1089,7 @@ class $Root extends $stdlib.std.Resource {
         $helpers.assert(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"), "d1.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy\")");
         const d2 = new Dummy(d1, "Dummy");
         $helpers.assert(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"), "d2.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")");
-        const d3 = new Dummy((Dummy.getInstance(d2)), "Dummy");
+        const d3 = new Dummy((Dummy.getInstance(this, d2)), "Dummy");
         $helpers.assert(d3.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"), "d3.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy\")");
         for (const i of $helpers.range(0,3,false)) {
           const x = new Dummy(this, String.raw({ raw: ["tc", ""] }, i));

@@ -2,6 +2,7 @@ import { ISimulatorResource } from "./resource";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost, Json, Resource } from "../std";
 
@@ -25,6 +26,9 @@ export const STATE_FQN = fqnForType("sim.State");
  * @inflight `@winglang/sdk.sim.IStateClient`
  */
 export class State extends Resource implements ISimulatorResource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IStateClient;
+
   /**
    * Returns a token that can be used to retrieve the value of the state after the simulation has
    * run.

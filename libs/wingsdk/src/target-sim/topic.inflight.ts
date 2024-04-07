@@ -10,6 +10,7 @@ import { IFunctionClient, ITopicClient, TOPIC_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -32,16 +33,15 @@ export class Topic
 
   public async save(): Promise<void> {}
 
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
   private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {
-      const fnClient = this.context.findInstance(
-        subscriber.functionHandle!
-      ) as IFunctionClient & ISimulatorResourceInstance;
-
-      if (!fnClient) {
-        throw new Error("No function client found!");
-      }
-
+      const fnClient = this.context.getClient(
+        subscriber.functionHandle
+      ) as IFunctionClient;
       this.context.addTrace({
         type: TraceType.RESOURCE,
         data: {

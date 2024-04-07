@@ -458,7 +458,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static m() {
+      static m($scope) {
         return 1;
       }
       static _toInflightType() {
@@ -546,7 +546,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [c5, ["set", "x", "y"]],
+            [c5, [].concat(["x"], ["y"], ["set"])],
           ],
           "$inflight_init": [
             [c5, []],
@@ -993,7 +993,7 @@ class $Root extends $stdlib.std.Resource {
     const c3 = new C3(this, "C3", 1, 2);
     $helpers.assert($helpers.eq(c3.x, 1), "c3.x == 1");
     $helpers.assert($helpers.eq(c3.y, 2), "c3.y == 2");
-    $helpers.assert($helpers.eq((C4.m()), 1), "C4.m() == 1");
+    $helpers.assert($helpers.eq((C4.m(this)), 1), "C4.m() == 1");
     const c5 = new C5(this, "C5");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access inflight field", new $Closure1(this, "$Closure1"));
     const student = new PaidStudent(this, "PaidStudent", "Tom", "MySpace", 38);

@@ -56,12 +56,12 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       (await $kv.get("k"));
       (await $kv.get("k"));
       (await $kv.get("k2"));
-      $helpers.assert((await $util_Util.waitUntil((async () => {
+      (await $util_Util.waitUntil((async () => {
         return $helpers.eq((await $counter.peek("k")), 2);
-      }))), "util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })");
-      $helpers.assert((await $util_Util.waitUntil((async () => {
+      })));
+      (await $util_Util.waitUntil((async () => {
         return $helpers.eq((await $counter.peek("k2")), 1);
-      }))), "util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })");
+      })));
     }
   }
   return $Closure3;
@@ -300,7 +300,7 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [counter, ["peek"]],
-            [kv, ["get", "set"]],
+            [kv, [].concat(["set"], ["get"])],
           ],
           "$inflight_init": [
             [counter, []],

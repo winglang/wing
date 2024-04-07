@@ -7,7 +7,11 @@ import {
   ScheduleTask,
 } from "./schema-resources";
 import { IFunctionClient, IScheduleClient, SCHEDULE_FQN } from "../cloud";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
 import { TraceType } from "../std";
 
 export class Schedule
@@ -47,6 +51,10 @@ export class Schedule
 
   public async save(): Promise<void> {}
 
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
   public async addEventSubscription(
     subscriber: string,
     subscriptionProps: EventSubscription
@@ -67,9 +75,9 @@ export class Schedule
 
   private runTasks() {
     for (const task of this.tasks) {
-      const fnClient = this.context.findInstance(
-        task.functionHandle!
-      ) as IFunctionClient & ISimulatorResourceInstance;
+      const fnClient = this.context.getClient(
+        task.functionHandle
+      ) as IFunctionClient;
       if (!fnClient) {
         throw new Error("No function client found for task.");
       }

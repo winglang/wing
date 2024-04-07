@@ -18,15 +18,10 @@ export type {
 
 export type { ITestRunnerClient } from "@winglang/sdk/lib/std/index.js";
 
-export type {
-  IRedisClient,
-  ITableClient,
-  IDynamodbTableClient,
-} from "@winglang/sdk/lib/ex/index.js";
+export type { IRedisClient, ITableClient } from "@winglang/sdk/lib/ex/index.js";
 
 export type {
   ApiSchema,
-  DynamodbTableSchema,
   TableSchema,
   WebsiteSchema,
 } from "@winglang/sdk/lib/target-sim/schema-resources.js";

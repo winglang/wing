@@ -93,6 +93,7 @@ export interface UIField {
   /** The construct path to a cloud.Function */
   readonly handler: string;
   readonly refreshRate: number | undefined;
+  readonly link?: boolean;
 }
 
 /** @internal */

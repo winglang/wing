@@ -6,6 +6,7 @@ import { Sandbox } from "../shared/sandbox";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -49,6 +50,12 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 
   public async save(): Promise<void> {}
+
+  public async plan(): Promise<UpdatePlan> {
+    // for now, always replace because we can't determine if the function code
+    // has changed since the last update. see https://github.com/winglang/wing/issues/6116
+    return UpdatePlan.REPLACE;
+  }
 
   public async invoke(payload: string): Promise<string> {
     return this.context.withTrace({

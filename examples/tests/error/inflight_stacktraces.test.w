@@ -21,3 +21,8 @@ test "throw from closure" {
   };
   closure();
 }
+
+test "assert with message" {
+  let x = false;
+  assert(x, "x is false");
+}

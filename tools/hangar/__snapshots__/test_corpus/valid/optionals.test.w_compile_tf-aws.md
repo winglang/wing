@@ -52,19 +52,19 @@ module.exports = function({ $Super }) {
 //# sourceMappingURL=inflight.Sub-1.js.map
 ```
 
-## inflight.Sub1-1.js
+## inflight.SubSub-1.js
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $Super }) {
-  class Sub1 extends $Super {
+module.exports = function({ $Sub }) {
+  class SubSub extends $Sub {
     constructor({  }) {
       super({  });
     }
   }
-  return Sub1;
+  return SubSub;
 }
-//# sourceMappingURL=inflight.Sub1-1.js.map
+//# sourceMappingURL=inflight.SubSub-1.js.map
 ```
 
 ## inflight.Super-1.js
@@ -127,7 +127,7 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const Person = $stdlib.std.Struct._createJsonSchema({id:"/Person",type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]});
+    const Person = $stdlib.std.Struct._createJsonSchema({$id:"/Person",type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]});
     class Super extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -187,23 +187,23 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    class Sub1 extends Super {
+    class SubSub extends Sub {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.name = "Sub";
+        this.name = "SubSub";
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Sub1-1.js")({
-            $Super: ${$stdlib.core.liftObject(Super)},
+          require("${$helpers.normalPath(__dirname)}/inflight.SubSub-1.js")({
+            $Sub: ${$stdlib.core.liftObject(Sub)},
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const Sub1Client = ${Sub1._toInflightType()};
-            const client = new Sub1Client({
+            const SubSubClient = ${SubSub._toInflightType()};
+            const client = new SubSubClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -298,6 +298,7 @@ class $Root extends $stdlib.std.Resource {
     const optionalSup = new Super(this, "Super");
     const s = (optionalSup ?? new Sub(this, "Sub"));
     $helpers.assert($helpers.eq(s.name, "Super"), "s.name == \"Super\"");
+    const s2 = (optionalSup ?? (optionalSup ?? new SubSub(this, "SubSub")));
     let name = ({"first": "John", "last": "Doe"});
     {
       const $if_let_value = name;

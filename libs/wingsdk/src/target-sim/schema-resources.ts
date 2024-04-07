@@ -1,3 +1,4 @@
+import { SIM_CONTAINER_FQN } from "./container";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { STATE_FQN } from "./state";
 import {
@@ -18,14 +19,7 @@ import {
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
-import {
-  ColumnType,
-  DYNAMODB_TABLE_FQN,
-  REACT_APP_FQN,
-  REDIS_FQN,
-  TABLE_FQN,
-} from "../ex";
-import { GlobalSecondaryIndex as DynamodbTableGlobalSecondaryIndex } from "../ex/dynamodb-table";
+import { ColumnType, REACT_APP_FQN, REDIS_FQN, TABLE_FQN } from "../ex";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
@@ -58,8 +52,8 @@ export interface ApiAttributes {
 
 /** Schema for cloud.Api.props.routes */
 export interface ApiRoute {
-  /** The path to handle. */
-  readonly path: string;
+  /** The HTTP path pattern to handle. */
+  readonly pathPattern: string;
   /** The HTTP method to handle. */
   readonly method: HttpMethod;
 }
@@ -229,8 +223,11 @@ export interface TestRunnerAttributes {}
 /** Schema for redis.Redis */
 export interface RedisSchema extends BaseResourceSchema {
   readonly type: typeof REDIS_FQN;
-  readonly props: {};
+  readonly props: {
+    readonly port: string;
+  };
 }
+
 /**
  * Custom routes created in preflight.
  * Each contains the data to send to the user and a contentType header.
@@ -298,33 +295,6 @@ export interface OnDeploySchema extends BaseResourceSchema {
 /** Runtime attributes for cloud.OnDeploy */
 export interface OnDeployAttributes {}
 
-/** Runtime attributes for ex.DynamodbTable */
-export interface DynamodbTableAttributes {}
-
-/** Schema for ex.DynamodbTable */
-export interface DynamodbTableSchema extends BaseResourceSchema {
-  readonly type: typeof DYNAMODB_TABLE_FQN;
-  readonly props: {
-    readonly name: string;
-    /**
-     * Table attribute definitions. e.g. { "myKey": "S", "myOtherKey": "S" }.
-     */
-    readonly attributeDefinitions: Json;
-    /**
-     * Hash key for this table.
-     */
-    readonly hashKey: string;
-    /**
-     * Range key for this table.
-     */
-    readonly rangeKey?: string;
-    /**
-     * The GSI for the table.
-     */
-    readonly globalSecondaryIndex?: DynamodbTableGlobalSecondaryIndex[];
-  };
-}
-
 /** Schema for simulator.State */
 export interface StateSchema extends BaseResourceSchema {
   readonly type: typeof STATE_FQN;
@@ -364,3 +334,20 @@ export interface EndpointSchema extends BaseResourceSchema {
   };
   readonly attrs: EndpointAttributes & BaseResourceAttributes;
 }
+
+/** Schema for sim.Container */
+export interface ContainerSchema extends BaseResourceSchema {
+  readonly type: typeof SIM_CONTAINER_FQN;
+  readonly props: {
+    imageTag: string;
+    image: string;
+    containerPort?: number;
+    env?: Record<string, string>;
+    args?: string[];
+    cwd: string;
+  };
+  readonly attrs: ContainerAttributes & BaseResourceAttributes;
+}
+
+/** Runtime attributes for sim.Container */
+export interface ContainerAttributes {}

@@ -391,13 +391,13 @@ class $Root extends $stdlib.std.Resource {
             [this.myOptStr, []],
           ],
           "testCaptureResource": [
-            [this.myResource, ["get", "list", "put"]],
+            [this.myResource, [].concat(["put"], ["get"], ["list"])],
           ],
           "testNestedInflightField": [
             [this.another.myField, []],
           ],
           "testNestedResource": [
-            [this.another.first.myResource, ["get", "list", "put"]],
+            [this.another.first.myResource, [].concat(["list"], ["put"], ["get"])],
             [this.myStr, []],
           ],
           "testExpressionRecursive": [
@@ -409,7 +409,7 @@ class $Root extends $stdlib.std.Resource {
             [this.extNum, []],
           ],
           "testUserDefinedResource": [
-            [this.another, ["anotherFunc", "meaningOfLife"]],
+            [this.another, [].concat(["meaningOfLife"], ["anotherFunc"])],
           ],
           "testInflightField": [
           ],
@@ -466,7 +466,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [r, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]],
+            [r, [].concat(["testNoCapture"], ["testCaptureCollectionsOfData"], ["testCapturePrimitives"], ["testCaptureOptional"], ["testCaptureResource"], ["testNestedInflightField"], ["testNestedResource"], ["testExpressionRecursive"], ["testExternal"], ["testUserDefinedResource"], ["testInflightField"])],
           ],
           "$inflight_init": [
             [r, []],

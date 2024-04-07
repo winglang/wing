@@ -59,6 +59,14 @@
     {
       "name": "CLI",
       "path": "./apps/wing"
+    },
+    {
+      "name": "CLIv2",
+      "path": "./apps/wingcli-v2"
+    },
+    {
+      "name": "Tunnel Server",
+      "path": "./libs/wingtunnels"
     }
   ],
   "settings": {}

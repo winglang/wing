@@ -11,6 +11,7 @@ import { IFunctionClient, IQueueClient, QUEUE_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -40,6 +41,10 @@ export class Queue
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async addEventSubscription(
     subscriber: FunctionHandle,
@@ -144,9 +149,9 @@ export class Queue
           continue;
         }
 
-        const fnClient = this.context.findInstance(
-          subscriber.functionHandle!
-        ) as IFunctionClient & ISimulatorResourceInstance;
+        const fnClient = this.context.getClient(
+          subscriber.functionHandle
+        ) as IFunctionClient;
         if (!fnClient) {
           throw new Error("No function client found");
         }
