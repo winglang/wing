@@ -78,6 +78,8 @@ findAll(text: str): MutArray<str>
 
 Finds all non-overlapping occurrences of the pattern within the text.
 
+Returns an empty array if no matches are found.
+
 ###### `text`<sup>Required</sup> <a name="text" id="@winglang/sdk.regex.Regexp.findAll.parameter.text"></a>
 
 - *Type:* str
@@ -93,6 +95,8 @@ findAllIndex(text: str): MutArray<MutArray<num>>
 ```
 
 Finds the start and end index of all matches within the text.
+
+Indices are zero-based.
 
 ###### `text`<sup>Required</sup> <a name="text" id="@winglang/sdk.regex.Regexp.findAllIndex.parameter.text"></a>
 
