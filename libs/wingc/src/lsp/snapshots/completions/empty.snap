@@ -10,10 +10,10 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: bb|this
 - label: assert
   kind: 3
-  detail: "(condition: bool): void"
+  detail: "(condition: bool, message: str?): void"
   documentation:
     kind: markdown
-    value: "```wing\nassert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n### Parameters\n- `condition` — `bool` — The condition to assert"
+    value: "```wing\nassert: (condition: bool, message: str?): void\n```\n---\nAsserts that a condition is true\n### Parameters\n- `condition` — `bool` — The condition to assert\n- `message` — `str?` — The message to log if the condition is false"
   sortText: cc|assert
   insertText: assert($1)
   insertTextFormat: 2

@@ -558,6 +558,7 @@ log("UTC: {t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 > ```TS
 > log("Hello {name}");
 > assert(x > 0);
+> assert(x > 0, "x should be positive");
 > ```
 
 [`▲ top`][top]
@@ -1366,8 +1367,8 @@ scope in which it is declared. This implies that, if a class is declared at the 
 program's entrypoint), it will be a *preflight class*. If a class is declared within an inflight
 scope, it will be implicitly an inflight class.
 
-A method that has the name **init** is considered to be a class
-constructor (or initializer).
+A method that has the name **new** is considered to be a class
+constructor.
 
 ```TS
 inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
@@ -1861,6 +1862,17 @@ let bucket = new awscdk.aws_s3.Bucket(
   blockPublicAccess: awscdk.aws_s3.BlockPublicAccess.BLOCK_ALL,
 );
 ```
+
+### 5.1.2 Type System
+
+Mapping JSII types to Wing types:
+
+| **JSII Type** |  **Wing Type** |
+|---------------|--------------------|
+| [class](https://aws.github.io/jsii/user-guides/language-support/assembly/#classes) | A [Wing class](#32-classes).<br> The [phase](#13-phase-modifiers) of the class will be `preflight` if the imported class is a [construct](https://github.com/aws/constructs) (derived from `constructs.Construct`). Otherwise the class will be phase independent.<br> By convention construct constructors have a `scope` and `id` as their first parameters. These will be used by Wing to define the default scope and id for new instances of this [preflight class](#33-preflight-classes) or explicit scope and id using the `in` and `as` keywords. |
+| [interface](https://aws.github.io/jsii/user-guides/language-support/assembly/#interfaces) | A [Wing interface](#34-interfaces). All imported interfaces are `preflight` interfaces.<br> JSII library authors may annotate their interface with a docstring tag like `@inflight IMyClient` to indicate a second interface that'll be used to import inflight methods **into** this Wing interface. |
+| [struct (a.k.a. data-type)](https://aws.github.io/jsii/user-guides/language-support/assembly/#structs-aka-data-types) | A [Wing struct](#31-structs). Always phase independent. |
+| [enum](https://aws.github.io/jsii/user-guides/language-support/assembly/#enums) | A [Wing enum](#38-enumeration). |
 
 ## 5.2 JavaScript
 

@@ -24,6 +24,7 @@ import {
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -43,6 +44,7 @@ interface StateFileContents {
 
 interface ApiRouteWithFunctionHandle extends ApiRoute {
   functionHandle: string;
+  expressLayer: any;
 }
 
 export class Api
@@ -146,6 +148,10 @@ export class Api
     await this.saveState({ lastPort: this.port });
   }
 
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
   private async loadState(): Promise<StateFileContents> {
     const stateFileExists = await exists(
       join(this.context.statedir, STATE_FILENAME)
@@ -173,22 +179,53 @@ export class Api
     subscriptionProps: EventSubscription
   ): Promise<void> {
     const routes = (subscriptionProps as any).routes as ApiRoute[];
-    routes.forEach((r) => {
+    for (const route of routes) {
       const s = {
         functionHandle: subscriber,
-        method: r.method,
-        pathPattern: r.pathPattern,
+        method: route.method,
+        pathPattern: route.pathPattern,
       };
-      this.routes.push(s);
       this.populateRoute(s, subscriber);
-    });
+
+      // Keep track of the internal express function so we can remove it later
+      // Each layer object in express looks something like this:
+      //
+      // Layer {
+      //   handle: [Function: bound dispatch],
+      //   name: 'bound dispatch',
+      //   params: undefined,
+      //   path: undefined,
+      //   keys: [ [Object] ],
+      //   regexp: /^\/foo\/(?:([^\/]+?))\/?$/i { fast_star: false, fast_slash: false },
+      //   route: Route { path: '/foo/:bar', stack: [Array], methods: [Object] }
+      // }
+      const expressRouteHandle =
+        this.app._router.stack[this.app._router.stack.length - 1];
+      this.routes.push({
+        ...s,
+        expressLayer: expressRouteHandle,
+      });
+    }
   }
 
   public async removeEventSubscription(subscriber: string): Promise<void> {
     const index = this.routes.findIndex((s) => s.functionHandle === subscriber);
-    if (index >= 0) {
-      this.routes.splice(index, 1);
+    if (index === -1) {
+      this.addTrace(
+        `Internal error: No route found for subscriber ${subscriber}.`
+      );
+      return;
     }
+    const layer = this.routes[index].expressLayer;
+    const layerIndex = this.app._router.stack.indexOf(layer);
+    if (layerIndex === -1) {
+      this.addTrace(
+        `Internal error: No express layer found for route ${this.routes[index].pathPattern}.`
+      );
+      return;
+    }
+    this.app._router.stack.splice(layerIndex, 1);
+    this.routes.splice(index, 1);
   }
 
   private populateRoute(route: ApiRoute, functionHandle: string): void {

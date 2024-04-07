@@ -50,14 +50,14 @@ export class Sandbox {
     // wrap contents with a shim that handles the communication with the parent process
     // we insert this shim before bundling to ensure source maps are generated correctly
     contents += `
+process.setUncaughtExceptionCaptureCallback((reason) => {
+  process.send({ type: "reject", reason });
+});
+
 process.on("message", async (message) => {
   const { fn, args } = message;
-  try {
-    const value = await exports[fn](...args);
-    process.send({ type: "resolve", value });
-  } catch (err) {
-    process.send({ type: "reject", reason: err });
-  }
+  const value = await exports[fn](...args);
+  process.send({ type: "resolve", value });
 });
 `;
     const wrappedPath = entrypoint.replace(/\.js$/, ".sandbox.js");
@@ -140,6 +140,10 @@ process.on("message", async (message) => {
     this.child = cp.fork(this.entrypoint, {
       env: childEnv,
       stdio: "pipe",
+      // keep the process detached so in the case of cloud.Service, if the parent process is killed
+      // (e.g. someone presses Ctrl+C while using Wing Console),
+      // we can gracefully call any cleanup code in the child process
+      detached: true,
       // this option allows complex objects like Error to be sent from the child process to the parent
       serialization: "advanced",
     });

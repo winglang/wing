@@ -869,6 +869,14 @@
       "tf-aws": {
         "implemented": true
       }
+    },
+    "subscribeQueue": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
   "Schedule": {
