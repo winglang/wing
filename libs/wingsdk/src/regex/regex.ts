@@ -66,18 +66,6 @@ export class Regexp {
   }
 
   /**
-   * Finds all non-overlapping occurrences of the pattern within the text.
-   * @param text The text to search within.
-   * @returns An array containing all matches found.
-   */
-  public findAll(text: string): string[] {
-    // Create global version of the regex
-    const globalRegex = new RegExp(this.regex, "g");
-
-    return [...text.matchAll(globalRegex)].map((match) => match[0]);
-  }
-
-  /**
    * Finds the start and end index of the first match within the text.
    * @param text The text to search within.
    * @returns An array containing the start and end index of the match if found, otherwise `undefined`.
@@ -85,23 +73,6 @@ export class Regexp {
   public findIndex(text: string): number[] | undefined {
     const result = this.regex.exec(text);
     return result ? [result.index, result.index + result[0].length] : undefined;
-  }
-
-  /**
-   * Finds the start and end index of all matches within the text.
-   * @param text The text to search within.
-   * @returns An array containing arrays of start and end indices for each match found.
-   */
-  public findAllIndex(text: string): number[][] {
-    // Create global version of the regex
-    const globalRegex = new RegExp(this.regex, "g");
-
-    const matches = Array.from(text.matchAll(globalRegex));
-    return matches.map((match) => {
-      const startIndex = match.index as number;
-      const endIndex = startIndex + match[0].length;
-      return [startIndex, endIndex];
-    });
   }
 
   /**
@@ -139,20 +110,50 @@ export class Regexp {
   }
 
   /**
+   * Finds all non-overlapping occurrences of the pattern within the text.
+   * Returns an empty array if no matches are found.
+   * @param text The text to search within.
+   * @returns An array containing all matches found.
+   */
+  public findAll(text: string): string[] {
+    const globalRegex = this.getGlobalRegex();
+    return [...text.matchAll(globalRegex)].map((match) => match[0]);
+  }
+
+  /**
+   * Finds the start and end index of all matches within the text.
+   * Indices are zero-based.
+   * @param text The text to search within.
+   * @returns An array containing arrays of start and end indices for each match found.
+   */
+  public findAllIndex(text: string): number[][] {
+    const matches: number[][] = [];
+    const globalRegex = this.getGlobalRegex();
+
+    let match;
+    while ((match = globalRegex.exec(text)) !== null) {
+      matches.push([match.index, match.index + match[0].length]);
+    }
+
+    return matches;
+  }
+
+  /**
    * Replaces all occurrences of the match with a replacement string.
    * @param text The text to search and replace within.
    * @param replacement The replacement string.
    * @returns The resulting text after all replacements.
    */
   public replaceAll(text: string, replacement: string): string {
-    return text.replace(
-      new RegExp(
-        this.regex.source,
-        this.regex.flags.includes("g")
-          ? this.regex.flags
-          : this.regex.flags + "g"
-      ),
-      replacement
-    );
+    const globalRegex = this.getGlobalRegex();
+    return text.replace(globalRegex, replacement);
+  }
+
+  /**
+   * Helper method to get the global version of a regex.
+   * @returns The current regex if it's already global, otherwise a new global regex.
+   */
+  private getGlobalRegex(): RegExp {
+    return this.regex.global ? this.regex : new RegExp(this.regex, "g");
   }
 }
