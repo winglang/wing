@@ -8,7 +8,6 @@ import { core } from "..";
 import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
-// import { CloudfunctionsFunctionIamBinding } from "../.gen/providers/google/cloudfunctions-function-iam-binding";
 import { ProjectIamCustomRole } from "../.gen/providers/google/project-iam-custom-role";
 import { ProjectIamMember } from "../.gen/providers/google/project-iam-member";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
