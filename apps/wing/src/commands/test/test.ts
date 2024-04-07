@@ -156,7 +156,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
   // determine snapshot behavior
   const snapshotMode = determineSnapshotMode(target, options);
   const shouldExecute =
-    snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.UPDATE_WET;
+    snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.DEPLOY;
 
   let results: std.TestResult[] = [];
   if (shouldExecute) {

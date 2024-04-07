@@ -27,19 +27,19 @@ describe("determineSnapshotMode", () => {
       determineSnapshotMode("tf-aws", {
         clean: false,
         platform: [],
-        snapshots: SnapshotMode.UPDATE_DRY,
+        snapshots: SnapshotMode.UPDATE,
       })
-    ).toBe(SnapshotMode.UPDATE_DRY);
+    ).toBe(SnapshotMode.UPDATE);
   });
 
-  test("--snapshots=wet", () => {
+  test("--snapshots=deploy", () => {
     expect(
       determineSnapshotMode("tf-aws", {
         clean: false,
         platform: [],
-        snapshots: SnapshotMode.UPDATE_WET,
+        snapshots: SnapshotMode.DEPLOY,
       })
-    ).toBe(SnapshotMode.UPDATE_WET);
+    ).toBe(SnapshotMode.DEPLOY);
   });
 
   test("target=sim always disables (even if explicitly set)", () => {
@@ -47,7 +47,7 @@ describe("determineSnapshotMode", () => {
       determineSnapshotMode("sim", {
         clean: false,
         platform: [],
-        snapshots: SnapshotMode.UPDATE_WET,
+        snapshots: SnapshotMode.DEPLOY,
       })
     ).toBe(SnapshotMode.NEVER);
 
@@ -63,7 +63,7 @@ describe("determineSnapshotMode", () => {
       determineSnapshotMode("sim", {
         clean: false,
         platform: [],
-        snapshots: SnapshotMode.UPDATE_DRY,
+        snapshots: SnapshotMode.UPDATE,
       })
     ).toBe(SnapshotMode.NEVER);
   });
@@ -103,13 +103,13 @@ describe("determineSnapshotMode", () => {
           })
         ).toBe(SnapshotMode.NEVER);
       });
-      test("non sim => wet", () => {
+      test("non sim => deploy", () => {
         expect(
           determineSnapshotMode("tf-azure", {
             clean: false,
             platform: [],
           })
-        ).toBe(SnapshotMode.UPDATE_WET);
+        ).toBe(SnapshotMode.DEPLOY);
       });
     });
   });

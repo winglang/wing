@@ -12,10 +12,10 @@ import { renderTestName } from "./util";
 export const SNAPSHOTS_HELP = `
 Snapshots (s, --snapshots <mode>):
   never  \t Snapshot are never captured
-  auto   \t Determines behavior based on the "CI" environment variable: "assert" if CI=1 or "wet" otherwise
-  wet    \t Execute tests on the target platform and update snapshots if all tests pass
+  auto   \t Determines behavior based on the "CI" environment variable: "assert" if CI=1 or "deploy" otherwise
+  deploy  \t Execute tests on the target platform and update snapshots if all tests pass
   assert \t verifies that the snapshot is up-to-date and fails the test is they are not
-  dry    \t Only update the snapshots without actually executing the tests on the target platform
+  update \t Only update the snapshots without actually executing the tests on the target platform
 
   When testing against a cloud target (e.g. -t tf-aws), if all tests pass, the compiler output 
   will be captured under "<entrypoint>.snap.md".
@@ -23,7 +23,7 @@ Snapshots (s, --snapshots <mode>):
 
 export enum SnapshotMode {
   /**
-   * Auto-detect. If CI=1, SnapshotMode.ASSERT otherwise SnapshotMode.WET.
+   * Auto-detect. If CI=1, SnapshotMode.ASSERT otherwise SnapshotMode.DEPLOY.
    */
   AUTO = "auto",
 
@@ -35,12 +35,12 @@ export enum SnapshotMode {
   /**
    * Deploy and test in the cloud and update the snapshot only if all tests passed.
    */
-  UPDATE_WET = "wet",
+  DEPLOY = "deploy",
 
   /**
    * Update the snapshots without deploying (dry run).
    */
-  UPDATE_DRY = "dry",
+  UPDATE = "update",
 
   /**
    * Just verify that the snapshots are correct.
@@ -63,7 +63,7 @@ export function determineSnapshotMode(
     if (process.env.CI) {
       return SnapshotMode.ASSERT;
     } else {
-      return SnapshotMode.UPDATE_WET;
+      return SnapshotMode.DEPLOY;
     }
   }
 
@@ -90,8 +90,8 @@ export async function captureSnapshot(entrypoint: string, target: string, option
 
     // update the snapshots if needed
     switch (snapshotMode) {
-      case SnapshotMode.UPDATE_WET:
-      case SnapshotMode.UPDATE_DRY:
+      case SnapshotMode.DEPLOY:
+      case SnapshotMode.UPDATE:
         writeFileSync(snapshotFile, snapshot);
         break;
 

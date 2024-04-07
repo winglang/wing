@@ -195,7 +195,7 @@ async function main() {
     )
     .addOption(
       new Option("-s, --snapshots <mode>", "Capture snapshots of compiler output")
-        .choices(["auto", "never", "dry", "wet", "assert"])
+        .choices(["auto", "never", "update", "deploy", "assert"])
         .default("auto")
     )
     .addHelpText("afterAll", SNAPSHOTS_HELP)
