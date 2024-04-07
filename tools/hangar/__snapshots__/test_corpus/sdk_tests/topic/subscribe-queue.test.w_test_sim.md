@@ -4,6 +4,7 @@
 ```log
 pass ─ subscribe-queue.test.wsim » root/env0/test:functions and queues receiving messages from the topic
  
+ 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

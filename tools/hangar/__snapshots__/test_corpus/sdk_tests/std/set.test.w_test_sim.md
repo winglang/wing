@@ -13,6 +13,7 @@ pass ─ set.test.wsim » root/env7/test:delete()
 pass ─ set.test.wsim » root/env8/test:clear()   
 pass ─ set.test.wsim » root/env9/test:copy()    
  
+ 
 Tests 10 passed (10)
 Test Files 1 passed (1)
 Duration <DURATION>

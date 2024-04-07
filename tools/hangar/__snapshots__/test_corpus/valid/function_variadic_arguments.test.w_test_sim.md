@@ -4,6 +4,7 @@
 ```log
 pass ─ function_variadic_arguments.test.wsim (no tests)
  
+ 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

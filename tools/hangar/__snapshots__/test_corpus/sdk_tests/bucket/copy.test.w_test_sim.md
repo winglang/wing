@@ -4,6 +4,7 @@
 ```log
 pass ─ copy.test.wsim » root/env0/test:copy()
  
+ 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>
