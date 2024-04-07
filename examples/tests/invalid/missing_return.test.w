@@ -23,3 +23,11 @@ let returnString2 = inflight (): str => {
     return "hi";
   }
 };
+
+// Ignore return statements in inner closures when searching for return statements
+let returnString3 = (): str => {
+  let x = (): str => {
+    return "what?"; // This should be ignored and we should produce a missing return error
+  };
+};
+//^ A function whose return type is "str" must return a value.
