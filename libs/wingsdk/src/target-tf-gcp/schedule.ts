@@ -2,8 +2,6 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
-// import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
-// import { ProjectService } from "../.gen/providers/google/project-service";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
 import * as cloud from "../cloud";
 import * as core from "../core";
