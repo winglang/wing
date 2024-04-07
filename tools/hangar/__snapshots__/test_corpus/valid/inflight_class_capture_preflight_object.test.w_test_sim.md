@@ -4,7 +4,6 @@
 ```log
 pass ─ inflight_class_capture_preflight_object.test.wsim (no tests)
  
- 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

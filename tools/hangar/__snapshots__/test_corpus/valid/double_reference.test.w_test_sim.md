@@ -4,7 +4,6 @@
 ```log
 pass ─ double_reference.test.wsim » root/env0/test:hello
  
- 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

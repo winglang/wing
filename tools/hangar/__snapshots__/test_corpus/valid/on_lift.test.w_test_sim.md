@@ -6,7 +6,6 @@ pass ┌ on_lift.test.wsim » root/env0/test:onLift and onLiftType allow capabil
      │ I'm expecting ABC to be set
      └ I'm expecting XYZ to be set
  
- 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

@@ -4,7 +4,6 @@
 ```log
 pass ─ tan.test.wsim » root/env0/test:inflight tangent
  
- 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

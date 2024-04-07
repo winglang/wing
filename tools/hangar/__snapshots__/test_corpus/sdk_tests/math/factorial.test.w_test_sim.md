@@ -4,7 +4,6 @@
 ```log
 pass ─ factorial.test.wsim » root/env0/test:inflight factorial
  
- 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

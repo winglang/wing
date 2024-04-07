@@ -4,7 +4,6 @@
 ```log
 pass ─ aws-queue.test.wsim » root/env0/test:validates the AWS queue name
  
- 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>

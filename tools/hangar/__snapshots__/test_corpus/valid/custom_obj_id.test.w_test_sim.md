@@ -4,7 +4,6 @@
 ```log
 pass ─ custom_obj_id.test.wsim (no tests)
  
- 
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>
