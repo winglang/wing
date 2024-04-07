@@ -73,7 +73,7 @@ function generateTests(options: GenerateTestsOptions) {
     .fill("../")
     .join("")}../../generated_test_targets";
   
-  test${skipText}("wing compile -t tf-aws", async () => {
+  test${skipText}("wing compile -s never -t tf-aws", async () => {
     await compileTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(
       metaComment?.env
     )}, ${includeJavaScriptInSnapshots});
