@@ -9,7 +9,6 @@ pass ─ wait-until.test.wsim » root/env3/test:waitUntil returns true if the pr
 pass ─ wait-until.test.wsim » root/env4/test:waitUntil with custom props                                                     
 pass ─ wait-until.test.wsim » root/env5/test:throwing exception from predicate should throw immediately                      
  
- 
 Tests 6 passed (6)
 Test Files 1 passed (1)
 Duration <DURATION>

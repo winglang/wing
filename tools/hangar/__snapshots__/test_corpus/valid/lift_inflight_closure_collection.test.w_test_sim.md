@@ -7,7 +7,6 @@ pass ─ lift_inflight_closure_collection.test.wsim » root/env1/test:lift closu
 pass ─ lift_inflight_closure_collection.test.wsim » root/env2/test:lift closure set                  
 pass ─ lift_inflight_closure_collection.test.wsim » root/env3/test:lift closure in complex collection
  
- 
 Tests 4 passed (4)
 Test Files 1 passed (1)
 Duration <DURATION>

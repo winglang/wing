@@ -9,7 +9,6 @@ exports[`access_hidden_namespace.test.w 1`] = `
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -291,7 +290,6 @@ error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -361,7 +359,6 @@ error: Expected identifier \\"subdir2\\" to be a variable, but it's a namespace
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -404,7 +401,6 @@ error: Member \\"f\\" doesn't exist in \\"Construct\\"
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -419,7 +415,6 @@ exports[`ambiguous_api_paths.test.w 1`] = `
 12 | api.get(\\"<ABSOLUTE>/:variable\\", handler);
    | ^
 at <ABSOLUTE>/ambiguous_api_paths.test.w:12:1
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -456,7 +451,6 @@ error: \\"cloud\\" is already defined
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -472,7 +466,6 @@ error: Cannot bring Wing directories that contain invalid characters: \\"in.vali
 error: Cannot bring Wing directories that contain invalid characters: \\"not-valid\\"
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -494,7 +487,6 @@ error: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE>/bring_jsii
   | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE>/bring_jsii.test.w\\"
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -523,7 +515,6 @@ error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -560,7 +551,6 @@ error: Cannot bring module \\"./bring_local_dir.test.w\\" since it is an entrypo
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -596,7 +586,6 @@ error: Preflight field \\"x\\" is not initialized
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -624,7 +613,6 @@ error: Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`
    |                                                                                     ^^^^ Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`in\`
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -661,7 +649,6 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -682,7 +669,6 @@ error: Cannot call into inflight phase while preflight
    | ^^^^^^^^ Cannot call into inflight phase while preflight
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -711,7 +697,6 @@ error: Cannot access \\"x\\" because it is shadowed by another symbol with the s
    |       ^ Cannot access \\"x\\" because it is shadowed by another symbol with the same name
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -1045,7 +1030,6 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -1075,7 +1059,6 @@ error: Expected type to be \\"inflight (message: str): void\\", but got \\"infli
    | \\\\-^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -1266,7 +1249,6 @@ error: Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -1293,7 +1275,6 @@ error: Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -1322,7 +1303,6 @@ error: Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -1350,7 +1330,6 @@ error: Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -1364,7 +1343,6 @@ exports[`diags_with_multibyte_chars.test.w 1`] = `
   | ^^^^ Unknown symbol \\"asdf\\"
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -1386,7 +1364,6 @@ error: Property not found
   |                        ^^^ Property not found
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -1458,7 +1435,6 @@ error: Expression of type \\"Bucket\\" references an unknown preflight object, c
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -1473,7 +1449,6 @@ exports[`extern.test.w 1`] = `
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -1487,7 +1462,6 @@ exports[`extern_static.test.w 1`] = `
   |                                             ^^^^^^^^^^^ Extern methods must be declared \\"static\\" (they cannot access instance members)
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -1524,7 +1498,6 @@ error: Preflight field \\"x\\" is not initialized
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -1545,7 +1518,6 @@ error: Unable to iterate over \\"Bucket\\"
   |             ^^^^^^ Unable to iterate over \\"Bucket\\"
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -1638,7 +1610,6 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -1674,7 +1645,6 @@ error: Expected type to be \\"str\\", but got \\"Array<str>\\" instead
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -1702,7 +1672,6 @@ error: Optional parameters must always be after all non-optional parameters.
   |                         ^ Optional parameters must always be after all non-optional parameters.
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -1759,7 +1728,6 @@ error: Expected type to be \\"Bucket\\", but got \\"bool\\" instead
    |                     ^^^^ Expected type to be \\"Bucket\\", but got \\"bool\\" instead
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -1851,7 +1819,6 @@ error: Expected type to be \\"preflight (construct: IConstruct): Node\\", but go
    |          ^^^ Expected type to be \\"preflight (construct: IConstruct): Node\\", but got \\"str\\" instead
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -1951,7 +1918,6 @@ error: Expected type to be \\"bool\\", but got \\"Array<num>\\" instead
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2000,7 +1966,6 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
    |       ^ Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\\"
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -2195,7 +2160,6 @@ error: Unable to infer type
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2238,7 +2202,6 @@ error: Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2255,7 +2218,6 @@ exports[`inflight_class_dup_init.test.w 1`] = `
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2270,7 +2232,6 @@ exports[`inflight_class_in_preflight.test.w 1`] = `
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2284,7 +2245,6 @@ exports[`inflight_class_interface_structural_typing.test.w 1`] = `
    |                 ^^^^^^^^^^^^ Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -2309,7 +2269,6 @@ error: Variable is not reassignable
   |   ^^^^ Variable is not reassignable
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -2339,7 +2298,6 @@ error: Expression of type \\"Bucket\\" references an unknown preflight object, c
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2361,7 +2319,6 @@ error: Expression of type \\"Queue\\" references an unknown preflight object, ca
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2382,7 +2339,6 @@ error: Expression of type \\"Bucket\\" references an unknown preflight object, c
    |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -2466,7 +2422,6 @@ error: Symbol \\"foo\\" already defined in this scope
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2491,7 +2446,6 @@ exports[`issue_2767.test.w 1`] = `
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2507,7 +2461,6 @@ exports[`jsii_access_modifiers.test.w 1`] = `
    = hint: the definition of \\"createTopic\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Bucket\\"
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -2665,7 +2618,6 @@ error: \\"Bucket\\" is not a legal JSON value
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2680,7 +2632,6 @@ exports[`json_static.test.w 1`] = `
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2694,7 +2645,6 @@ exports[`map_entries.test.w 1`] = `
   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -2712,7 +2662,6 @@ exports[`missing_return.test.w 1`] = `
   | \\\\-^ A function whose return type is \\"str\\" must return a value.
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -2741,7 +2690,6 @@ error: Expected '}'
    |             ^ Expected '}'
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -2834,7 +2782,6 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -2880,7 +2827,6 @@ error: Expected type to be \\"num\\", but got \\"nil\\" instead
    = hint: to allow \\"nil\\" assignment use optional type: \\"num?\\"
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3018,7 +2964,6 @@ error: Variable is not reassignable
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3035,7 +2980,6 @@ User invoked panic'), please report at https://www.winglang.io/contributing/star
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3049,7 +2993,6 @@ exports[`parameters.test.w 1`] = `
 
 (hint: make sure to use --values to provide the required parameters file)
         
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3101,7 +3044,6 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3115,7 +3057,6 @@ exports[`preflight_from_inflight.test.w 1`] = `
    |     ^^^^^^^^^^^^^^^^^^^^ Cannot call into preflight phase while inflight
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3152,7 +3093,6 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3187,7 +3127,6 @@ error: Enums must be public (\\"pub\\") or private
    | ^^^^^^^^^ Enums must be public (\\"pub\\") or private
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3243,7 +3182,6 @@ error: Variable is not reassignable
    |   ^^^ Variable is not reassignable
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3373,7 +3311,6 @@ error: Multiple or ambiguous modifiers found
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3388,7 +3325,6 @@ exports[`resource_access_field_as_method.test.w 1`] = `
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3402,7 +3338,6 @@ exports[`resource_captures.test.w 1`] = `
    |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3424,7 +3359,6 @@ error: Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.c
   |       ^^^^^^^^^^^^ Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3460,7 +3394,6 @@ error: Inflight initializers cannot have parameters
   |               ^^^^^^^^ Inflight initializers cannot have parameters
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3504,7 +3437,6 @@ error: Unexpected return value from void function. Return type annotations are r
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3539,7 +3471,6 @@ error: Inflight classes cannot have a scope
    |                          ^^ Inflight classes cannot have a scope
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3576,7 +3507,6 @@ error: Expected \\"b\\" to be a type but it's a variable
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3612,7 +3542,6 @@ error: Expected continue statement to be inside of a loop (while/for)
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3641,7 +3570,6 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3655,7 +3583,6 @@ exports[`std_containers.test.w 1`] = `
   |                  ^ Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3681,7 +3608,6 @@ error: Expected type to be stringable, but got \\"str?\\" instead
   = hint: str? is an optional, try unwrapping it with 'x ?? \\"nil\\"' or 'x!'
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3744,7 +3670,6 @@ error: Expected between 2 and 3 positional arguments or named arguments for the 
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3762,7 +3687,6 @@ exports[`struct_from_parameter.test.w 1`] = `
 14 | MyParams.fromJson(app.parameters.read());
    | ^
 at <ABSOLUTE>/struct_from_parameter.test.w:14:1
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3791,7 +3715,6 @@ error: Struct \\"C\\" contains field \\"b\\" which cannot be represented in Json
    |   ^^^^^^^^ Struct \\"C\\" contains field \\"b\\" which cannot be represented in Json
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3863,7 +3786,6 @@ error: struct \\"InflightStruct\\" must be declared at the top-level of a file
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3927,7 +3849,6 @@ error: \`super\` calls inside inflight closures not supported yet, see: https://
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3942,7 +3863,6 @@ exports[`this.w 1`] = `
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3956,7 +3876,6 @@ exports[`throw_non_string.test.w 1`] = `
   |       ^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -3973,7 +3892,6 @@ exports[`try_no_catch_or_finally.test.w 1`] = `
   | \\\\-^ Missing \`catch\` or \`finally\` blocks for this try statement
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -4009,7 +3927,6 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |      ^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -4053,7 +3970,6 @@ error: Unable to infer type
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -4068,7 +3984,6 @@ exports[`unknown_field.test.w 1`] = `
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -4082,7 +3997,6 @@ exports[`unknown_submodule.test.w 1`] = `
   | ^^^ Expected identifier \\"std\\" to be a variable, but it's a namespace
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -4161,7 +4075,6 @@ error: Member \\"methodWhichIsNotPartOfBucketApi\\" doesn't exist in \\"Bucket\\
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -4169,7 +4082,6 @@ Duration <DURATION>"
 
 exports[`unresolved_state.test.w 1`] = `
 "Could not start resource after 10 attempts: Unable to resolve attribute 'my_unresolved_token' for resource: root/env0/State
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -4195,7 +4107,6 @@ error: Symbol \\"x\\" used before being defined
 
 
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -4209,7 +4120,6 @@ exports[`variable_scoping.test.w 1`] = `
   |           ^ Unknown symbol \\"x\\"
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -4261,7 +4171,6 @@ error: Expected type to be \\"str?\\", but got \\"void\\" instead
    |               ^^^^^^^^^^^^^^^^^ Expected type to be \\"str?\\", but got \\"void\\" instead
 
 
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)

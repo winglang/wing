@@ -5,7 +5,6 @@
 pass ─ path.test.wsim » root/env0/test:inflight path conversion
 pass ─ path.test.wsim » root/env1/test:extension()             
  
- 
 Tests 2 passed (2)
 Test Files 1 passed (1)
 Duration <DURATION>

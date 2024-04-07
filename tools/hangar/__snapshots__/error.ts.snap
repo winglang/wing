@@ -11,7 +11,6 @@ exports[`bool_from_json.test.w 1`] = `
   |               ^
 at <ABSOLUTE>/bool_from_json.test.w:5:15
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -68,7 +67,6 @@ fail ┌ inflight_stacktraces.test.wsim » root/env4/test:assert with message
      │    |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:27:3
  
- 
 Tests 5 failed (5)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -82,7 +80,6 @@ exports[`num_from_str.test.w 1`] = `
 3 | let a: num = num.fromStr(\\"123a\\");
   |              ^
 at <ABSOLUTE>/num_from_str.test.w:3:14
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -99,7 +96,6 @@ exports[`number_from_json.test.w 1`] = `
 5 | let a: num = num.fromJson(j.get(\\"a\\"));
   |              ^
 at <ABSOLUTE>/number_from_json.test.w:5:14
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -122,7 +118,6 @@ For more information, see https://www.winglang.io/docs/concepts/application-tree
   |               ^
 at <ABSOLUTE>/repeat_construct_id.test.w:4:15
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -144,7 +139,6 @@ For more information, see https://www.winglang.io/docs/concepts/application-tree
   |               ^
 at <ABSOLUTE>/repeat_construct_id2.test.w:8:15
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -161,7 +155,6 @@ exports[`string_from_json.test.w 1`] = `
   |              ^
 at <ABSOLUTE>/string_from_json.test.w:5:14
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -177,7 +170,6 @@ exports[`struct_from_json_1.test.w 1`] = `
 11 | Person.fromJson(j);
    | ^
 at <ABSOLUTE>/struct_from_json_1.test.w:11:1
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -196,7 +188,6 @@ exports[`struct_from_json_2.test.w 1`] = `
    | ^
 at <ABSOLUTE>/struct_from_json_2.test.w:22:1
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -214,7 +205,6 @@ exports[`struct_from_json_3.test.w 1`] = `
    | ^
 at <ABSOLUTE>/struct_from_json_3.test.w:26:1
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -230,7 +220,6 @@ exports[`struct_from_json_4.test.w 1`] = `
 27 | Student.fromJson(invalidAdvisorInArray);
    | ^
 at <ABSOLUTE>/struct_from_json_4.test.w:27:1
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
@@ -248,7 +237,6 @@ exports[`struct_from_json_5.test.w 1`] = `
    | ^
 at <ABSOLUTE>/struct_from_json_5.test.w:16:1
  
- 
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -260,7 +248,6 @@ exports[`utilities.test.w 1`] = `
 1 | assert(false);
   | ^
 at <ABSOLUTE>/utilities.test.w:1:1
- 
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
