@@ -41,11 +41,6 @@ export class Schedule extends cloud.Schedule {
   ): cloud.Function {
     const uniqueId = this.node.addr.substring(0, 8);
 
-    // const cloudSchedulerApi = new ProjectService(this, "CloudSchedulerAPI", {
-    //   service: "cloudscheduler.googleapis.com",
-    //   disableOnDestroy: false,
-    // });
-
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
