@@ -124,9 +124,17 @@ export async function captureSnapshot(entrypoint: string, target: string, option
   });
 }
 
-function tryRenderDiff(snapshotFile: string, actualFile: string) {
+/**
+ * Uses the "diff" command to render a diff between two files. Returns `undefined` if the diff command
+ * is not available or if there was an error.
+ * 
+ * @param expectedFile A snapshot file with the expected content
+ * @param actualFile The actual snapshot content
+ * @returns The diff output or `undefined`
+ */
+function tryRenderDiff(expectedFile: string, actualFile: string) {
   const color = process.env.CI ? "never" : "always";
-  const out = cp.spawnSync("diff", ["-u", snapshotFile, actualFile, `--color=${color}`]);
+  const out = cp.spawnSync("diff", ["-u", expectedFile, actualFile, `--color=${color}`]);
   if (out.error) {
     return undefined;
   }
@@ -134,6 +142,13 @@ function tryRenderDiff(snapshotFile: string, actualFile: string) {
   return out.stdout?.toString();
 }
 
+/**
+ * Creates a markdown snapshot of the synthesis output.
+ * 
+ * @param baseName The base name of the test
+ * @param synthDir The directory containing the synthesis output
+ * @returns The snapshot content in markdown format
+ */
 async function createMarkdownSnapshot(baseName: string, synthDir: string) {
   const fileMap: Record<string, string> = {};
   const exclude = ["connections.json", "tree.json", "**/*.zip", "**/*.map"];
@@ -157,7 +172,7 @@ async function createMarkdownSnapshot(baseName: string, synthDir: string) {
   return createMarkdown(baseName, fileMap);
 }
 
-async function createMarkdown(baseName: string, fileMap: Record<string, string>) {
+function createMarkdown(baseName: string, fileMap: Record<string, string>) {
   const files = Object.keys(fileMap);
   files.sort();
 
