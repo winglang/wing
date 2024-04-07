@@ -2662,6 +2662,18 @@ exports[`missing_return.test.w 1`] = `
   | \\\\-^ A function whose return type is \\"str\\" must return a value.
 
 
+error: A function whose return type is \\"str\\" must return a value.
+   --> ../../../examples/tests/invalid/missing_return.test.w:28:32
+   |  
+28 |   let returnString3 = (): str => {
+   | /--------------------------------^
+29 | |   let x = (): str => {
+30 | |     return \\"what?\\"; // This should be ignored and we should produce a missing return error
+31 | |   };
+32 | | };
+   | \\\\-^ A function whose return type is \\"str\\" must return a value.
+
+
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
