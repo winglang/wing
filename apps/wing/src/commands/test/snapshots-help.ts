@@ -11,7 +11,7 @@ Snapshots (s, --snapshots <mode>):
 `;
 
 export const SNAPSHOTS_ERROR_HELP = [
-  "To update, run in a non-CI environment with cloud credentials or with '--snapshots=update'",
+  "Update with '--snapshots=update'",
   "To disable this behavior run with '--snapshots=never'",
   "See https://www.winglang.io/docs/tools/cli#cloud-test-snapshots",
 ].join("\n");
