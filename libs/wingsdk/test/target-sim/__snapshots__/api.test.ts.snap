@@ -35,48 +35,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -111,7 +71,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -137,7 +97,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -356,48 +356,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -422,7 +382,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -444,7 +404,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -663,48 +663,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -729,7 +689,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -751,7 +711,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -970,48 +970,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -1036,7 +996,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -1058,7 +1018,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1277,48 +1277,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -1343,7 +1303,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -1365,7 +1325,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1584,48 +1584,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -1650,7 +1610,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -1672,7 +1632,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1939,48 +1939,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -2065,7 +2025,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -2111,7 +2071,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -2330,48 +2330,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -2413,7 +2373,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -2435,7 +2395,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -2654,48 +2654,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -2729,7 +2689,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -2751,7 +2711,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -2950,48 +2950,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -3028,7 +2988,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -3054,7 +3014,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -3302,52 +3302,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler1#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -3382,7 +3338,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -3404,21 +3360,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "addr": "c84819d7712e30f38cf7731fcfbe96cbc39c7e75d3",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler1",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler1_c84819d7.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+      "root/my_api/ApiEventMapping1": {
         "addr": "c874047faffbf7bc1cdc78bb5f3f942cf01cd31844",
         "attrs": {},
         "deps": [
@@ -3440,7 +3382,65 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/OnRequestHandler1": {
+        "addr": "c84819d7712e30f38cf7731fcfbe96cbc39c7e75d3",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler1",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler1_c84819d7.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler1#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -3713,52 +3713,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler1#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -3795,7 +3751,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -3817,21 +3773,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "addr": "c84819d7712e30f38cf7731fcfbe96cbc39c7e75d3",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler1",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler1_c84819d7.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+      "root/my_api/ApiEventMapping1": {
         "addr": "c874047faffbf7bc1cdc78bb5f3f942cf01cd31844",
         "attrs": {},
         "deps": [
@@ -3853,7 +3795,65 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/OnRequestHandler1": {
+        "addr": "c84819d7712e30f38cf7731fcfbe96cbc39c7e75d3",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler1",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler1_c84819d7.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler1#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -4097,48 +4097,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -4163,7 +4123,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -4185,7 +4145,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -4404,48 +4404,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -4479,7 +4439,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -4501,7 +4461,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -4720,48 +4720,8 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
-        "attrs": {},
-        "path": "root/my_api/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_api#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -4786,7 +4746,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/ApiEventMapping0": {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "deps": [
@@ -4808,7 +4768,47 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_api/Endpoint": {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      "root/my_api/OnRequestHandler0": {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/my_api/Policy": {
+        "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
+        "attrs": {},
+        "path": "root/my_api/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_api#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_api/OnRequestHandler0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -4984,8 +4984,8 @@ exports[`create an api 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_api": {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -4997,7 +4997,7 @@ exports[`create an api 1`] = `
         },
         "type": "@winglang/sdk.cloud.Api",
       },
-      {
+      "root/my_api/Endpoint": {
         "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
         "attrs": {},
         "path": "root/my_api/Endpoint",
@@ -5008,7 +5008,7 @@ exports[`create an api 1`] = `
         },
         "type": "@winglang/sdk.cloud.Endpoint",
       },
-      {
+      "root/my_api/Policy": {
         "addr": "c8d2997625976ba9bc7be90fefe7930aebab104a2a",
         "attrs": {},
         "path": "root/my_api/Policy",
@@ -5018,7 +5018,7 @@ exports[`create an api 1`] = `
         },
         "type": "@winglang/sdk.sim.Policy",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {

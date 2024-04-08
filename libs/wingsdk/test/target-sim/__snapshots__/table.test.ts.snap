@@ -16,8 +16,8 @@ exports[`can add row in preflight 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
@@ -38,7 +38,7 @@ exports[`can add row in preflight 2`] = `
         },
         "type": "@winglang/sdk.ex.Table",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -162,8 +162,8 @@ exports[`create a table 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
@@ -178,7 +178,7 @@ exports[`create a table 1`] = `
         },
         "type": "@winglang/sdk.ex.Table",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -312,8 +312,8 @@ exports[`get row 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
@@ -328,7 +328,7 @@ exports[`get row 2`] = `
         },
         "type": "@winglang/sdk.ex.Table",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -460,8 +460,8 @@ exports[`insert row 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
@@ -476,7 +476,7 @@ exports[`insert row 2`] = `
         },
         "type": "@winglang/sdk.ex.Table",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -610,8 +610,8 @@ exports[`list table 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
@@ -626,7 +626,7 @@ exports[`list table 2`] = `
         },
         "type": "@winglang/sdk.ex.Table",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -759,8 +759,8 @@ exports[`tryGet row 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
@@ -775,7 +775,7 @@ exports[`tryGet row 2`] = `
         },
         "type": "@winglang/sdk.ex.Table",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -911,8 +911,8 @@ exports[`update row 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
@@ -927,7 +927,7 @@ exports[`update row 2`] = `
         },
         "type": "@winglang/sdk.ex.Table",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {

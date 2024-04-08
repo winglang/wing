@@ -43,7 +43,11 @@ import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { registerTokenResolver } from "../core/tokens";
 import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN } from "../ex";
-import { TypeSchema, WingSimulatorSchema } from "../simulator/simulator";
+import {
+  BaseResourceSchema,
+  TypeSchema,
+  WingSimulatorSchema,
+} from "../simulator/simulator";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
@@ -278,10 +282,12 @@ export class App extends core.App {
           };
     };
 
-    const resources = new core.DependencyGraph(this.node)
-      .topology()
-      .filter(isSimulatorResource)
-      .map(toSimulatorWithDeps);
+    const resources: Record<string, BaseResourceSchema> = {};
+    for (const resource of new core.DependencyGraph(this.node).topology()) {
+      if (isSimulatorResource(resource)) {
+        resources[resource.node.path] = toSimulatorWithDeps(resource);
+      }
+    }
 
     const types: { [fqn: string]: TypeSchema } = {};
     for (const [fqn, className] of Object.entries(SIMULATOR_CLASS_DATA)) {

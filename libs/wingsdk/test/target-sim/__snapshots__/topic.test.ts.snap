@@ -7,15 +7,15 @@ exports[`create a topic 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_topic": {
         "addr": "c81b9a117401b1959f70a55462f9df8add290b0fda",
         "attrs": {},
         "path": "root/my_topic",
         "props": {},
         "type": "@winglang/sdk.cloud.Topic",
       },
-      {
+      "root/my_topic/Policy": {
         "addr": "c8635ef174eab9aa010e5bed09a712307a6b70e731",
         "attrs": {},
         "path": "root/my_topic/Policy",
@@ -25,7 +25,7 @@ exports[`create a topic 1`] = `
         },
         "type": "@winglang/sdk.sim.Policy",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {

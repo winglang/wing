@@ -7,8 +7,8 @@ exports[`create a schedule 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_schedule": {
         "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
         "attrs": {},
         "path": "root/my_schedule",
@@ -17,7 +17,7 @@ exports[`create a schedule 1`] = `
         },
         "type": "@winglang/sdk.cloud.Schedule",
       },
-      {
+      "root/my_schedule/Policy": {
         "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
         "attrs": {},
         "path": "root/my_schedule/Policy",
@@ -27,7 +27,7 @@ exports[`create a schedule 1`] = `
         },
         "type": "@winglang/sdk.sim.Policy",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -192,23 +192,17 @@ console.log("Hello from schedule!");
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+    "resources": {
+      "root/my_schedule": {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
         "attrs": {},
-        "path": "root/my_schedule/Policy",
+        "path": "root/my_schedule",
         "props": {
-          "principal": "\${wsim#root/my_schedule#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
-            },
-          ],
+          "cronExpression": "* */3 * * *",
         },
-        "type": "@winglang/sdk.sim.Policy",
+        "type": "@winglang/sdk.cloud.Schedule",
       },
-      {
+      "root/my_schedule/OnTick0": {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
@@ -222,16 +216,7 @@ console.log("Hello from schedule!");
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
-        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
-        "attrs": {},
-        "path": "root/my_schedule",
-        "props": {
-          "cronExpression": "* */3 * * *",
-        },
-        "type": "@winglang/sdk.cloud.Schedule",
-      },
-      {
+      "root/my_schedule/OnTickMapping0": {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
         "attrs": {},
         "deps": [
@@ -246,7 +231,22 @@ console.log("Hello from schedule!");
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_schedule/Policy": {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "attrs": {},
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -435,23 +435,17 @@ console.log("Hello from schedule!");
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+    "resources": {
+      "root/my_schedule": {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
         "attrs": {},
-        "path": "root/my_schedule/Policy",
+        "path": "root/my_schedule",
         "props": {
-          "principal": "\${wsim#root/my_schedule#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
-            },
-          ],
+          "cronExpression": "*/10 * * * *",
         },
-        "type": "@winglang/sdk.sim.Policy",
+        "type": "@winglang/sdk.cloud.Schedule",
       },
-      {
+      "root/my_schedule/OnTick0": {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
@@ -465,16 +459,7 @@ console.log("Hello from schedule!");
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
-        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
-        "attrs": {},
-        "path": "root/my_schedule",
-        "props": {
-          "cronExpression": "*/10 * * * *",
-        },
-        "type": "@winglang/sdk.cloud.Schedule",
-      },
-      {
+      "root/my_schedule/OnTickMapping0": {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
         "attrs": {},
         "deps": [
@@ -489,7 +474,22 @@ console.log("Hello from schedule!");
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_schedule/Policy": {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "attrs": {},
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -678,23 +678,17 @@ console.log("Hello from schedule!");
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+    "resources": {
+      "root/my_schedule": {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
         "attrs": {},
-        "path": "root/my_schedule/Policy",
+        "path": "root/my_schedule",
         "props": {
-          "principal": "\${wsim#root/my_schedule#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
-            },
-          ],
+          "cronExpression": "* * * * *",
         },
-        "type": "@winglang/sdk.sim.Policy",
+        "type": "@winglang/sdk.cloud.Schedule",
       },
-      {
+      "root/my_schedule/OnTick0": {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
@@ -708,16 +702,7 @@ console.log("Hello from schedule!");
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
-        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
-        "attrs": {},
-        "path": "root/my_schedule",
-        "props": {
-          "cronExpression": "* * * * *",
-        },
-        "type": "@winglang/sdk.cloud.Schedule",
-      },
-      {
+      "root/my_schedule/OnTickMapping0": {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
         "attrs": {},
         "deps": [
@@ -732,7 +717,22 @@ console.log("Hello from schedule!");
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+      "root/my_schedule/Policy": {
+        "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
+        "attrs": {},
+        "path": "root/my_schedule/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_schedule#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_schedule/OnTick0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {

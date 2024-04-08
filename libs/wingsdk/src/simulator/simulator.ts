@@ -258,7 +258,7 @@ export class Simulator {
       );
     }
     const connections = readJsonSync(connectionJson).connections;
-    const graph = new Graph(schema.resources);
+    const graph = new Graph(Object.values(schema.resources));
 
     return { schema, tree, connections, simdir, graph };
   }
@@ -953,18 +953,18 @@ export class Simulator {
    * all of it's dependents will be stopped and started again.
    */
   private async planUpdate(
-    current: BaseResourceSchema[],
-    next: BaseResourceSchema[]
+    current: Record<string, BaseResourceSchema>,
+    next: Record<string, BaseResourceSchema>
   ) {
-    const currentByPath = toMap(current);
-    const nextByPath = toMap(next);
+    // Make sure we're working on a copy of "current"
+    current = { ...current };
 
     const added: string[] = [];
     const updated: string[] = [];
     const deleted: string[] = [];
 
-    for (const [path, nextConfig] of Object.entries(nextByPath)) {
-      const currConfig = currentByPath[path];
+    for (const [path, nextConfig] of Object.entries(next)) {
+      const currConfig = current[path];
 
       // if the resource is not in "current", it means it was added
       if (!currConfig) {
@@ -978,30 +978,15 @@ export class Simulator {
       }
 
       // remove it from "current" so we know what's left to be deleted
-      delete currentByPath[path];
+      delete current[path];
     }
 
     // everything left in "current" is to be deleted
-    for (const config of Object.values(currentByPath)) {
+    for (const config of Object.values(current)) {
       deleted.push(config.path);
     }
 
     return { added, updated, deleted };
-
-    function toMap(list: BaseResourceSchema[]): {
-      [path: string]: BaseResourceSchema;
-    } {
-      const ret: { [path: string]: BaseResourceSchema } = {};
-      for (const resource of list) {
-        if (ret[resource.path]) {
-          throw new Error(
-            `unexpected - duplicate resources with the same path: ${resource.path}`
-          );
-        }
-        ret[resource.path] = resource;
-      }
-      return ret;
-    }
   }
 
   private async shouldReplace(
@@ -1154,8 +1139,8 @@ export enum UpdatePlan {
 
 /** Schema for simulator.json */
 export interface WingSimulatorSchema {
-  /** The list of resources. */
-  readonly resources: BaseResourceSchema[];
+  /** The resources, indexed by their construct path. */
+  readonly resources: Record<string, BaseResourceSchema>;
   /** The map of types. */
   readonly types: { [fqn: string]: TypeSchema };
   /** The version of the Wing SDK used to synthesize the .wsim file. */

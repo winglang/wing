@@ -7,8 +7,8 @@ exports[`create a counter 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
@@ -17,7 +17,7 @@ exports[`create a counter 1`] = `
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -152,8 +152,8 @@ exports[`dec 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
@@ -162,7 +162,7 @@ exports[`dec 2`] = `
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -297,8 +297,8 @@ exports[`inc 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
@@ -307,7 +307,7 @@ exports[`inc 2`] = `
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -442,8 +442,8 @@ exports[`key dec 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
@@ -452,7 +452,7 @@ exports[`key dec 2`] = `
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -587,8 +587,8 @@ exports[`key inc 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
@@ -597,7 +597,7 @@ exports[`key inc 2`] = `
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -730,8 +730,8 @@ exports[`key set to new value 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
@@ -740,7 +740,7 @@ exports[`key set to new value 2`] = `
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -873,8 +873,8 @@ exports[`set to new value 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
@@ -883,7 +883,7 @@ exports[`set to new value 2`] = `
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
