@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Stmt, StmtKind},
+	ast::{Expr, ExprKind, Stmt, StmtKind},
 	visit::{self, Visit},
 };
 
@@ -26,5 +26,13 @@ impl Visit<'_> for HasStatementVisitor {
 			_ => (),
 		}
 		visit::visit_stmt(self, node);
+	}
+
+	fn visit_expr(&mut self, node: &'_ Expr) {
+		// Don't recurse into closures. This way our search will ignore stmts in inner closures.
+		if matches!(node.kind, ExprKind::FunctionClosure(_)) {
+			return;
+		}
+		visit::visit_expr(self, node);
 	}
 }
