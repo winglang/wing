@@ -54,4 +54,9 @@ export interface IPlatform {
    * @param config generated config
    */
   validate?(config: any): any;
+
+  /**
+   * Hook for creating secrets
+   */
+  createSecrets?(secrets: {[name: string]: string}): Promise<string>;
 }

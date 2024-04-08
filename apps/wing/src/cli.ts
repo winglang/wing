@@ -182,6 +182,22 @@ async function main() {
     .action(runSubCommand("compile"));
 
   program
+    .command("secrets")
+    .description("Manage secrets")
+    .argument("[entrypoint]", "program .w entrypoint")
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
+    )
+    .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
+    .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
+    .hook("preAction", progressHook)
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("secrets"));
+
+  program
     .command("test")
     .description(
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"

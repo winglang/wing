@@ -34,6 +34,9 @@ export class Secret extends Resource {
   /** @internal */
   public [INFLIGHT_SYMBOL]?: ISecretClient;
 
+  /** @internal */
+  protected _name?: string;
+
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
     if (new.target === Secret) {
       return Resource._newFromFactory(SECRET_FQN, scope, id, props);
@@ -44,7 +47,11 @@ export class Secret extends Resource {
     Node.of(this).title = "Secret";
     Node.of(this).description = "A cloud secret";
 
-    props;
+    this._name = props.name;
+  }
+
+  public get name(): string | undefined {
+    return this._name;
   }
 }
 

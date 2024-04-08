@@ -1,10 +1,11 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { basename, dirname, join } from "path";
 import { cwd } from "process";
 import * as vm from "vm";
 import { IPlatform } from "./platform";
 import { scanDirForPlatformFile } from "./util";
 import { App, AppProps, SynthHooks } from "../core";
+import { Secret } from "../cloud";
 
 interface PlatformManagerOptions {
   /**
@@ -19,10 +20,16 @@ const BUILTIN_PLATFORMS = ["tf-aws", "tf-azure", "tf-gcp", "sim"];
 export class PlatformManager {
   private readonly platformPaths: string[];
   private readonly platformInstances: IPlatform[] = [];
+  private synthHooks: SynthHooks = {};
+  private newInstanceOverridesHooks: any[] = [];
+  private parameterSchemas: any[] = [];
+  private createSecretsHook: any;
 
   constructor(options: PlatformManagerOptions) {
     this.platformPaths = options.platformPaths ?? [];
     this.retrieveImplicitPlatforms();
+    this.createPlatformInstances();
+    this.collectHooks();
   }
 
   /**
@@ -97,19 +104,14 @@ export class PlatformManager {
     });
   }
 
-  // This method is called from preflight.cjs in order to return an App instance
-  // that can be synthesized
-  public createApp(appProps: AppProps): App {
-    this.createPlatformInstances();
-
-    let appCall = this.platformInstances[0].newApp;
-
-    if (!appCall) {
-      throw new Error(
-        `No newApp method found on platform: ${this.platformPaths[0]} (Hint: The first platform provided must have a newApp method)`
-      );
+  public async createSecrets(secretNames: string[]): Promise<any> {
+    if (!this.createSecretsHook) {
+      throw new Error("No createSecrets method found on platform");
     }
+    return await this.createSecretsHook(secretNames);
+  }
 
+  private collectHooks() {
     let synthHooks: SynthHooks = {
       preSynthesize: [],
       postSynthesize: [],
@@ -140,17 +142,46 @@ export class PlatformManager {
       if (instance.newInstance) {
         newInstanceOverrides.push(instance.newInstance.bind(instance));
       }
+
+      if (instance.createSecrets) {
+        this.createSecretsHook = instance.createSecrets.bind(instance);
+      }
     });
+
+    this.synthHooks = synthHooks;
+    this.newInstanceOverridesHooks = newInstanceOverrides;
+    this.parameterSchemas = parameterSchemas;
+  }
+
+  // This method is called from preflight.cjs in order to return an App instance
+  // that can be synthesized
+  public createApp(appProps: AppProps): App {
+    let appCall = this.platformInstances[0].newApp;
+
+    if (!appCall) {
+      throw new Error(
+        `No newApp method found on platform: ${this.platformPaths[0]} (Hint: The first platform provided must have a newApp method)`
+      );
+    }
 
     const app = appCall!({
       ...appProps,
-      synthHooks,
-      newInstanceOverrides,
+      synthHooks: this.synthHooks,
+      newInstanceOverrides: this.newInstanceOverridesHooks,
     }) as App;
+
+    let secretsIds = [];
+    for (const c of app.node.findAll()) {
+      if (c instanceof Secret) {
+        const secret = c as Secret;
+        secretsIds.push(secret.name);
+      }
+    }
+    writeFileSync(join(app.outdir, "secrets.json"), JSON.stringify(secretsIds));
 
     let registrar = app.parameters;
 
-    parameterSchemas.forEach((schema) => {
+    this.parameterSchemas.forEach((schema) => {
       registrar.addSchema(schema);
     });
 
