@@ -45,11 +45,34 @@ return class Handler {
         "attrs": {},
         "path": "root/my_service",
         "props": {
-          "autoStart": true,
           "environmentVariables": {},
           "sourceCodeFile": ".wing/my_service_c815f66e.js",
         },
         "type": "@winglang/sdk.cloud.Service",
+      },
+      {
+        "addr": "c845f08fe23811b5ba949f822a6bc3077a050f801b",
+        "attrs": {},
+        "path": "root/my_service/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_service#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+      {
+        "addr": "c810e24e6e3ab8b88ceddbbe1ac7323d46de30a969",
+        "attrs": {},
+        "deps": [
+          "root/my_service",
+          "root/my_service/Policy",
+        ],
+        "path": "root/my_service/Helper",
+        "props": {
+          "autoStart": true,
+          "service": "\${wsim#root/my_service#attrs.handle}",
+        },
+        "type": "@winglang/sdk.sim.ServiceHelper",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -126,6 +149,14 @@ return class Handler {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.ServiceHelper": {
+        "className": "ServiceHelper",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -140,6 +171,32 @@ return class Handler {
     "tree": {
       "children": {
         "my_service": {
+          "children": {
+            "Helper": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "Helper",
+              "path": "root/my_service/Helper",
+            },
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_service/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",

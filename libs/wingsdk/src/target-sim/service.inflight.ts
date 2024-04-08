@@ -1,5 +1,9 @@
 import { resolve } from "path";
-import { ServiceAttributes, ServiceSchema } from "./schema-resources";
+import {
+  ServiceAttributes,
+  ServiceHelperSchema,
+  ServiceSchema,
+} from "./schema-resources";
 import { IServiceClient, SERVICE_FQN } from "../cloud";
 import { Bundle } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
@@ -11,38 +15,45 @@ import {
 import { TraceType } from "../std";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {
-  private readonly context: ISimulatorContext;
-  private readonly originalFile: string;
-  private readonly autoStart: boolean;
+  private _context: ISimulatorContext | undefined;
+  private readonly sourceCodeFile: string;
+  private resolvedSourceCodeFile!: string;
   private sandbox: Sandbox | undefined;
   private bundle: Bundle | undefined;
-  private createBundlePromise: Promise<void>;
   private running: boolean = false;
   private environmentVariables: Record<string, string>;
+  private createBundlePromise!: Promise<void>;
 
-  constructor(props: ServiceSchema["props"], context: ISimulatorContext) {
-    this.context = context;
-    this.originalFile = resolve(context.simdir, props.sourceCodeFile);
-    this.autoStart = props.autoStart;
+  constructor(props: ServiceSchema["props"]) {
+    this.sourceCodeFile = props.sourceCodeFile;
     this.environmentVariables = props.environmentVariables ?? {};
+  }
 
-    this.createBundlePromise = this.createBundle();
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
   }
 
   private async createBundle(): Promise<void> {
-    this.bundle = await Sandbox.createBundle(this.originalFile, (msg) => {
-      this.addTrace(msg);
-    });
+    this.bundle = await Sandbox.createBundle(
+      this.resolvedSourceCodeFile,
+      (msg) => {
+        this.addTrace(msg);
+      }
+    );
   }
 
-  public async init(): Promise<ServiceAttributes> {
-    if (this.autoStart) {
-      await this.start();
-    }
+  public async init(context: ISimulatorContext): Promise<ServiceAttributes> {
+    this._context = context;
+    this.resolvedSourceCodeFile = resolve(context.simdir, this.sourceCodeFile);
+    this.createBundlePromise = this.createBundle();
     return {};
   }
 
   public async cleanup(): Promise<void> {
+    await this.createBundlePromise;
     await this.stop();
   }
 
@@ -71,6 +82,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       env: {
         ...this.environmentVariables,
         WING_SIMULATOR_URL: this.context.serverUrl,
+        WING_SIMULATOR_CALLER: this.context.resourceHandle,
       },
       log: (internal, _level, message) => {
         this.addTrace(message, internal);
@@ -97,7 +109,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       await this.sandbox.call("stop");
       await this.sandbox.cleanup();
     } catch (e: any) {
-      this.addTrace(`Failed to stop service: ${e.message}`);
+      this.addTrace(`Failed to stop service: ${e.message} ${e.stack}`);
     }
   }
 
@@ -113,5 +125,43 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       sourceType: SERVICE_FQN,
       timestamp: new Date().toISOString(),
     });
+  }
+}
+
+export class ServiceHelper implements ISimulatorResourceInstance {
+  private readonly serviceHandle: string;
+  private readonly autoStart: boolean;
+  private _context: ISimulatorContext | undefined;
+
+  public constructor(props: ServiceHelperSchema["props"]) {
+    this.serviceHandle = props.service;
+    this.autoStart = props.autoStart;
+  }
+
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<ServiceAttributes> {
+    this._context = context;
+    if (this.autoStart) {
+      const service = context.getClient(this.serviceHandle, true) as Service;
+      await service.start();
+    }
+    return {};
+  }
+
+  public async cleanup(): Promise<void> {
+    const service = this.context.getClient(this.serviceHandle, true) as Service;
+    await service.stop();
+  }
+
+  public async save(): Promise<void> {}
+
+  public async plan(): Promise<UpdatePlan> {
+    return UpdatePlan.AUTO;
   }
 }

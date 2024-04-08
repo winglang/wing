@@ -1,12 +1,13 @@
 import { relative } from "path";
 import { Construct } from "constructs";
-import { ISimulatorResource } from "./resource";
+import { Policy } from "./policy";
+import { ISimulatorInflightHost, ISimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { App } from "../core";
 import { BaseResourceSchema } from "../simulator/simulator";
-import { IInflightHost } from "../std";
+import { IInflightHost, IResource } from "../std";
 import { Duration } from "../std/duration";
 
 export const ENV_WING_SIM_INFLIGHT_RESOURCE_PATH =
@@ -19,9 +20,15 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.Function implements ISimulatorResource {
+export class Function
+  extends cloud.Function
+  implements ISimulatorResource, ISimulatorInflightHost
+{
   private readonly timeout: Duration;
   private readonly concurrency: number;
+  public readonly policy: Policy;
+  public _liftMap = undefined;
+
   constructor(
     scope: Construct,
     id: string,
@@ -33,6 +40,11 @@ export class Function extends cloud.Function implements ISimulatorResource {
     // props.memory is unused since we are not simulating it
     this.timeout = props.timeout ?? Duration.fromMinutes(1);
     this.concurrency = props.concurrency ?? 100;
+    this.policy = new Policy(this, "Policy", { principal: this });
+  }
+
+  public addPermission(resource: IResource, op: string): void {
+    this.policy.addStatement(resource, op);
   }
 
   public toSimulator(): BaseResourceSchema {
@@ -62,7 +74,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 
@@ -70,4 +82,11 @@ export class Function extends cloud.Function implements ISimulatorResource {
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
+}
+
+/**
+ * Simulator-specific inflight methods for `cloud.Function`.
+ */
+export enum FunctionInflightMethods {
+  HAS_AVAILABLE_WORKERS = "hasAvailableWorkers",
 }

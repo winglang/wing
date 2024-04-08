@@ -12,7 +12,7 @@ import {
 import { TraceType } from "../std";
 
 export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
   private readonly startCommand: string;
   private readonly path: string;
   private readonly environmentVariables: Record<string, string>;
@@ -21,8 +21,7 @@ export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
   private childProcess?: ChildProcess;
   private url: string;
 
-  constructor(props: ReactAppSchema["props"], context: ISimulatorContext) {
-    this.context = context;
+  constructor(props: ReactAppSchema["props"]) {
     this.path = props.path;
     this.startCommand = props.startCommand;
     this.environmentVariables = props.environmentVariables;
@@ -31,7 +30,15 @@ export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
     this.url = props.url;
   }
 
-  public async init(): Promise<ReactAppAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<ReactAppAttributes> {
+    this._context = context;
     this.addTrace(`Executing start command: ${this.startCommand}`);
 
     writeFileSync(
