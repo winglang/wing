@@ -208,10 +208,10 @@ export const ApiInteraction = memo(
           return item.route === currentRoute;
         })
         .map((route) => route.method);
-      if (methods.length > 0 && methods[0]) {
+      if (methods.length > 0 && methods[0] && !currentMethod) {
         setCurrentMethod(methods[0]);
       }
-    }, [currentRoute, schemaData, setCurrentMethod]);
+    }, [currentRoute, schemaData, setCurrentMethod, currentMethod]);
 
     // TODO: Refactor inline functions below. For example, with `useCallback` or with additional memo components.
 
