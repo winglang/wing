@@ -22,6 +22,7 @@ export async function runWingCommand(options: RunWingCommandOptions) {
     [
       "--no-update-check",
       "--no-analytics",
+      "--snapshots never",
       ...options.args,
       options.wingFile ?? "",
       ...platformOptions,
