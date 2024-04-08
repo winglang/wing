@@ -83,7 +83,11 @@ describe("wing test (custom platform)", () => {
       module.exports = { Platform }`
     );
 
-    await wingTest([], { clean: true, platform: ["./custom-platform.js"], snapshots: SnapshotMode.NEVER });
+    await wingTest([], {
+      clean: true,
+      platform: ["./custom-platform.js"],
+      snapshots: SnapshotMode.NEVER,
+    });
 
     expect(logSpy).toHaveBeenCalledWith(
       expect.stringMatching(/^pass ─ foo\.test\.tfaws\.\d+ \(no tests\)$/)
