@@ -5,7 +5,7 @@ import { Testing } from "../../src/simulator";
 import { SimApp } from "../sim-app";
 
 const script = (simdir: string) => `
-const { simulator } = require("./");
+const { simulator } = require("./src");
 
 async function main() {
   const sim = new simulator.Simulator({ simfile: "${simdir}" });
@@ -19,7 +19,7 @@ async function main() {
   console.log("Simulator started");
 
   process.on("SIGTERM", async () => {
-    console.log("SIGTERM received, stopping simulator..");
+    console.log("SIGTERM received, stopping simulator...");
     await sim.stop();
     process.exit(1);
   });
@@ -43,9 +43,7 @@ async handle() {
 // and that process has code set up for gracefully shutting down the simulator,
 // then the simulator will be stopped correctly (including child processes
 // like services).
-//
-// TODO: failing in CI... :-(
-test.skip("simulator cleanup", async () => {
+test("simulator cleanup", async () => {
   // Synthesize configuration for the simulator to use in the test
   const app = new SimApp({ isTestEnvironment: true });
   const handler = Testing.makeHandler(code);
@@ -57,13 +55,12 @@ test.skip("simulator cleanup", async () => {
     stdio: ["pipe", "pipe", "pipe"],
   });
 
-  // Uncomment the following lines to see the output of the child process
-  // child.stdout?.on("data", (data) => {
-  //   console.error(data.toString());
-  // });
-  // child.stderr?.on("data", (data) => {
-  //   console.error(data.toString());
-  // });
+  child.stdout?.on("data", (data) => {
+    console.error(data.toString());
+  });
+  child.stderr?.on("data", (data) => {
+    console.error(data.toString());
+  });
 
   let stopped = false;
 
@@ -74,11 +71,23 @@ test.skip("simulator cleanup", async () => {
         resolve(undefined);
       }
     });
+    child.stderr?.on("data", (data) => {
+      if (data.toString().includes("stopped!")) {
+        stopped = true;
+        resolve(undefined);
+      }
+    });
   });
 
   // Wait for the "Simulator started" message, then kill the child process
   await new Promise((resolve) => {
     child.stdout?.on("data", (data) => {
+      if (data.toString().includes("Simulator started")) {
+        child.kill("SIGTERM");
+        resolve(undefined);
+      }
+    });
+    child.stderr?.on("data", (data) => {
       if (data.toString().includes("Simulator started")) {
         child.kill("SIGTERM");
         resolve(undefined);

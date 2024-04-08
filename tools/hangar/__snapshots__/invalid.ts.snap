@@ -2712,6 +2712,18 @@ exports[`missing_return.test.w 1`] = `
   | \\\\-^ A function whose return type is \\"str\\" must return a value.
 
 
+error: A function whose return type is \\"str\\" must return a value.
+   --> ../../../examples/tests/invalid/missing_return.test.w:28:32
+   |  
+28 |   let returnString3 = (): str => {
+   | /--------------------------------^
+29 | |   let x = (): str => {
+30 | |     return \\"what?\\"; // This should be ignored and we should produce a missing return error
+31 | |   };
+32 | | };
+   | \\\\-^ A function whose return type is \\"str\\" must return a value.
+
+
  
  
 Tests 1 failed (1)
@@ -3778,9 +3790,9 @@ Duration <DURATION>"
 
 exports[`struct_from_parameter.test.w 1`] = `
 "Error: unable to parse MyParams:
-- instance requires property \\"bar\\"
-- instance requires property \\"baz\\"
-- instance requires property \\"foo\\"
+- MyParams must have required property 'bar'
+- MyParams must have required property 'baz'
+- MyParams must have required property 'foo'
    --> ../../../examples/tests/invalid/struct_from_parameter.test.w:14:1
    | // technically we never enforced the parameters must have been
    | // provided

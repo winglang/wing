@@ -1529,12 +1529,7 @@ impl<'a> JSifier<'a> {
 
 			if let Some(parent) = &class.parent {
 				// If this is an imported type (with a package fqn) attemp to go through the stdlib target dep-injection mechanism
-				let parent_type = env
-					.lookup_nested_str(&parent.full_path_str(), None)
-					.unwrap()
-					.0
-					.as_type()
-					.unwrap();
+				let parent_type = class_type.as_class().unwrap().parent.unwrap();
 				if let Some(fqn) = &parent_type.as_class().unwrap().fqn {
 					code.append(new_code!(
 						&class.name.span,
@@ -1583,7 +1578,7 @@ impl<'a> JSifier<'a> {
 			// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
 			// `_liftType`).
 			code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
-			code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
+			code.add_code(self.jsify_to_inflight_method(&class.name, class_type));
 
 			// emit `onLift` and `onLiftType` to bind permissions and environment variables to inflight hosts
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
@@ -1666,8 +1661,24 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_to_inflight_method(&self, resource_name: &Symbol, ctx: &JSifyContext) -> CodeMaker {
-		let mut code = CodeMaker::with_source(&resource_name.span);
+	// Recursively get all lifted fields from a class and its ancestry
+	fn class_lifted_fields(class_type: TypeRef) -> IndexMap<String, String> {
+		let mut res = IndexMap::new();
+		let class_type = class_type.as_class().unwrap();
+
+		if let Some(lifts) = &class_type.lifts {
+			res.extend(lifts.lifted_fields());
+		}
+
+		if let Some(parent) = class_type.parent {
+			res.extend(Self::class_lifted_fields(parent));
+		}
+
+		res
+	}
+
+	fn jsify_to_inflight_method(&self, class_name: &Symbol, class_type: TypeRef) -> CodeMaker {
+		let mut code = CodeMaker::with_source(&class_name.span);
 
 		code.open("_toInflight() {");
 
@@ -1677,15 +1688,16 @@ impl<'a> JSifier<'a> {
 
 		code.line(format!(
 			"const {}Client = ${{{}._toInflightType()}};",
-			resource_name.name, resource_name.name,
+			class_name.name, class_name.name,
 		));
 
-		code.open(format!("const client = new {}Client({{", resource_name.name));
+		code.open(format!("const client = new {}Client({{", class_name.name));
 
-		if let Some(lifts) = &ctx.lifts {
-			for (token, obj) in lifts.lifted_fields() {
-				code.line(format!("{token}: ${{{STDLIB_CORE}.liftObject({obj})}},"));
-			}
+		// Get lifted fields from entire class ancestry
+		let lifts = Self::class_lifted_fields(class_type);
+
+		for (token, obj) in lifts {
+			code.line(format!("{token}: ${{{STDLIB_CORE}.liftObject({obj})}},"));
 		}
 
 		code.close("});");
@@ -1719,7 +1731,7 @@ impl<'a> JSifier<'a> {
 
 		// if this is a preflight class, emit the binding constructor
 		if class.phase == Phase::Preflight {
-			self.jsify_inflight_binding_constructor(class, &mut class_code, &ctx);
+			self.jsify_inflight_binding_constructor(class, class_type, &mut class_code);
 		}
 
 		for def in class.inflight_methods(false) {
@@ -1793,43 +1805,34 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_inflight_binding_constructor(&self, class: &AstClass, class_code: &mut CodeMaker, ctx: &JSifyContext) {
+	fn jsify_inflight_binding_constructor(&self, class: &AstClass, class_type: TypeRef, class_code: &mut CodeMaker) {
+		let class_type = class_type.as_class().unwrap();
+
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
 		// in the generated constructor
-		let lifted_fields = if let Some(lifts) = &ctx.lifts {
-			lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec()
+		let lifted_fields = if let Some(lifts) = &class_type.lifts {
+			lifts.lifted_fields().map(|(f, _)| f.clone()).collect()
 		} else {
-			vec![]
+			IndexSet::new()
 		};
 
-		let parent_fields = if let Some(parent) = &class.parent {
-			let parent_type = resolve_user_defined_type(
-				parent,
-				ctx.visit_ctx.current_env().expect("an env"),
-				ctx.visit_ctx.current_stmt_idx(),
-			)
-			.expect("resolved type");
-			if let Some(parent_lifts) = &parent_type.as_class().unwrap().lifts {
-				parent_lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec()
-			} else {
-				vec![]
-			}
+		let parent_fields = if let Some(parent) = class_type.parent {
+			Self::class_lifted_fields(parent).keys().cloned().collect()
 		} else {
-			vec![]
+			IndexSet::new()
 		};
 
 		class_code.open(format!(
 			"{JS_CONSTRUCTOR}({{ {} }}) {{",
 			lifted_fields
-				.iter()
-				.merge(parent_fields.iter())
+				.union(&parent_fields)
 				.map(|token| { token.clone() })
 				.collect_vec()
 				.join(", ")
 		));
 
 		if class.parent.is_some() {
-			class_code.line(format!("super({{ {} }});", parent_fields.join(", ")));
+			class_code.line(format!("super({{ {} }});", parent_fields.iter().join(", ")));
 		}
 
 		for token in &lifted_fields {
