@@ -1,8 +1,8 @@
-export const SNAPSHOTS_HELP = `
+export const SNAPSHOTS_HELP = `\
 Snapshots (s, --snapshots <mode>):
   never  \t Snapshot are never captured
   auto   \t Determines behavior based on the "CI" environment variable: "assert" if CI=1 or "deploy" otherwise
-  deploy  \t Execute tests on the target platform and update snapshots if all tests pass
+  deploy \t Execute tests on the target platform and update snapshots if all tests pass
   assert \t verifies that the snapshot is up-to-date and fails the test is they are not
   update \t Only update the snapshots without actually executing the tests on the target platform
 
