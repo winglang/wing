@@ -13,7 +13,7 @@ import { POLICY_FQN, Policy } from "./policy";
 import { Queue } from "./queue";
 import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
-import { ISimulatorResource, isSimulatorResource } from "./resource";
+import { isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Service } from "./service";
@@ -270,22 +270,17 @@ export class App extends core.App {
   }
 
   private synthSimulatorFile(outdir: string) {
-    const toSimulatorWithDeps = (res: ISimulatorResource) => {
-      const cfg = res.toSimulator();
-      const deps = res.node.dependencies.map((d) => d.node.path);
-
-      return deps.length === 0
-        ? cfg
-        : {
-            ...cfg,
-            deps,
-          };
-    };
-
     const resources: Record<string, BaseResourceSchema> = {};
-    for (const resource of new core.DependencyGraph(this.node).topology()) {
-      if (isSimulatorResource(resource)) {
-        resources[resource.node.path] = toSimulatorWithDeps(resource);
+    for (const r of new core.DependencyGraph(this.node).topology()) {
+      if (isSimulatorResource(r)) {
+        const deps = r.node.dependencies.map((d) => d.node.path);
+        resources[r.node.path] = {
+          ...r.toSimulator(),
+          path: r.node.path,
+          addr: r.node.addr,
+          deps: deps.length === 0 ? undefined : deps,
+          attrs: undefined as any,
+        };
       }
     }
 

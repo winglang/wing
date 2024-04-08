@@ -10,7 +10,6 @@ exports[`create a schedule 1`] = `
     "resources": {
       "root/my_schedule": {
         "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
-        "attrs": {},
         "path": "root/my_schedule",
         "props": {
           "cronExpression": "*/1 * * * *",
@@ -19,7 +18,6 @@ exports[`create a schedule 1`] = `
       },
       "root/my_schedule/Policy": {
         "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
-        "attrs": {},
         "path": "root/my_schedule/Policy",
         "props": {
           "principal": "\${wsim#root/my_schedule#attrs.handle}",
@@ -195,7 +193,6 @@ console.log("Hello from schedule!");
     "resources": {
       "root/my_schedule": {
         "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
-        "attrs": {},
         "path": "root/my_schedule",
         "props": {
           "cronExpression": "* */3 * * *",
@@ -204,7 +201,6 @@ console.log("Hello from schedule!");
       },
       "root/my_schedule/OnTick0": {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
-        "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "policy": [],
         "props": {
@@ -218,7 +214,6 @@ console.log("Hello from schedule!");
       },
       "root/my_schedule/OnTickMapping0": {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
-        "attrs": {},
         "deps": [
           "root/my_schedule/OnTick0",
           "root/my_schedule",
@@ -233,7 +228,6 @@ console.log("Hello from schedule!");
       },
       "root/my_schedule/Policy": {
         "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
-        "attrs": {},
         "path": "root/my_schedule/Policy",
         "props": {
           "principal": "\${wsim#root/my_schedule#attrs.handle}",
@@ -438,7 +432,6 @@ console.log("Hello from schedule!");
     "resources": {
       "root/my_schedule": {
         "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
-        "attrs": {},
         "path": "root/my_schedule",
         "props": {
           "cronExpression": "*/10 * * * *",
@@ -447,7 +440,6 @@ console.log("Hello from schedule!");
       },
       "root/my_schedule/OnTick0": {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
-        "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "policy": [],
         "props": {
@@ -461,7 +453,6 @@ console.log("Hello from schedule!");
       },
       "root/my_schedule/OnTickMapping0": {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
-        "attrs": {},
         "deps": [
           "root/my_schedule/OnTick0",
           "root/my_schedule",
@@ -476,7 +467,6 @@ console.log("Hello from schedule!");
       },
       "root/my_schedule/Policy": {
         "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
-        "attrs": {},
         "path": "root/my_schedule/Policy",
         "props": {
           "principal": "\${wsim#root/my_schedule#attrs.handle}",
@@ -681,7 +671,6 @@ console.log("Hello from schedule!");
     "resources": {
       "root/my_schedule": {
         "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
-        "attrs": {},
         "path": "root/my_schedule",
         "props": {
           "cronExpression": "* * * * *",
@@ -690,7 +679,6 @@ console.log("Hello from schedule!");
       },
       "root/my_schedule/OnTick0": {
         "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
-        "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "policy": [],
         "props": {
@@ -704,7 +692,6 @@ console.log("Hello from schedule!");
       },
       "root/my_schedule/OnTickMapping0": {
         "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
-        "attrs": {},
         "deps": [
           "root/my_schedule/OnTick0",
           "root/my_schedule",
@@ -719,7 +706,6 @@ console.log("Hello from schedule!");
       },
       "root/my_schedule/Policy": {
         "addr": "c8c7f555c253f79a2cdcd8a13c6772cfd654e2bf0b",
-        "attrs": {},
         "path": "root/my_schedule/Policy",
         "props": {
           "principal": "\${wsim#root/my_schedule#attrs.handle}",

@@ -33,7 +33,6 @@ return class Handler {
     "resources": {
       "root/my_bucket": {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
@@ -44,7 +43,6 @@ return class Handler {
       },
       "root/my_bucket/Policy": {
         "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
-        "attrs": {},
         "path": "root/my_bucket/Policy",
         "props": {
           "principal": "\${wsim#root/my_bucket#attrs.handle}",
@@ -54,7 +52,6 @@ return class Handler {
       },
       "root/my_function": {
         "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
-        "attrs": {},
         "path": "root/my_function",
         "policy": [],
         "props": {

@@ -6,7 +6,7 @@ import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { App } from "../core";
-import { BaseResourceSchema, PolicyStatement } from "../simulator";
+import { PolicyStatement, ToSimulatorOutput } from "../simulator";
 import { IInflightHost, IResource } from "../std";
 
 export class Service
@@ -31,7 +31,7 @@ export class Service
     this.permissions.push([resource, op]);
   }
 
-  public toSimulator(): BaseResourceSchema {
+  public toSimulator(): ToSimulatorOutput {
     const policy: Array<PolicyStatement> = [];
     for (const [resource, operation] of this.permissions) {
       policy.push({
@@ -39,19 +39,16 @@ export class Service
         resourceHandle: simulatorHandleToken(resource),
       });
     }
-    const schema: ServiceSchema = {
-      type: cloud.SERVICE_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        environmentVariables: this.env,
-        sourceCodeFile: relative(App.of(this).outdir, this.entrypoint),
-        autoStart: this.autoStart,
-      },
-      policy: policy,
-      attrs: {} as any,
+    const props: ServiceSchema = {
+      environmentVariables: this.env,
+      sourceCodeFile: relative(App.of(this).outdir, this.entrypoint),
+      autoStart: this.autoStart,
     };
-    return schema;
+    return {
+      type: cloud.SERVICE_FQN,
+      props,
+      policy,
+    };
   }
 
   /** @internal */

@@ -30,7 +30,6 @@ async handle(event) {
     "resources": {
       "root/cloud.TestRunner": {
         "addr": "c8647dd8d2adabe83cc081ebe0ccbefe4a068ef3bf",
-        "attrs": {},
         "deps": [
           "root/env0/test:my_test/Handler",
         ],
@@ -44,7 +43,6 @@ async handle(event) {
       },
       "root/env0/test:my_test/Handler": {
         "addr": "c86fc1804106bd848769cb0ddbcb872aa1e47943f4",
-        "attrs": {},
         "path": "root/env0/test:my_test/Handler",
         "policy": [],
         "props": {

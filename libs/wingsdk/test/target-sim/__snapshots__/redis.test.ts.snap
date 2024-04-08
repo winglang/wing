@@ -10,7 +10,6 @@ exports[`create a Redis resource 1`] = `
     "resources": {
       "root/my_redis": {
         "addr": "c84bd402f6d507613026d171fe74fc8ce07ced29ae",
-        "attrs": {},
         "path": "root/my_redis",
         "props": {
           "port": "\${wsim#root/my_redis/Container#attrs.host_port}",
@@ -19,7 +18,6 @@ exports[`create a Redis resource 1`] = `
       },
       "root/my_redis/Container": {
         "addr": "c80acc96b1d952059eb0beee72912b94d23302fa03",
-        "attrs": {},
         "path": "root/my_redis/Container",
         "props": {
           "containerPort": 6379,

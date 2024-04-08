@@ -10,7 +10,6 @@ exports[`create a counter 1`] = `
     "resources": {
       "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
@@ -155,7 +154,6 @@ exports[`dec 2`] = `
     "resources": {
       "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
@@ -300,7 +298,6 @@ exports[`inc 2`] = `
     "resources": {
       "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
@@ -445,7 +442,6 @@ exports[`key dec 2`] = `
     "resources": {
       "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 0,
@@ -590,7 +586,6 @@ exports[`key inc 2`] = `
     "resources": {
       "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 0,
@@ -733,7 +728,6 @@ exports[`key set to new value 2`] = `
     "resources": {
       "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 0,
@@ -876,7 +870,6 @@ exports[`set to new value 2`] = `
     "resources": {
       "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,

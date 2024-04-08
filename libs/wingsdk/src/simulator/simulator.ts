@@ -13,7 +13,7 @@ import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
 import { POLICY_FQN } from "../target-sim";
-import { PolicySchemaProps } from "../target-sim/schema-resources";
+import { PolicySchema } from "../target-sim/schema-resources";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 const HANDLE_ATTRIBUTE = "handle";
@@ -800,7 +800,7 @@ export class Simulator {
 
     // if the resource is a policy, add it to the policy registry
     if (resourceConfig.type === POLICY_FQN) {
-      const policy = resolvedProps as PolicySchemaProps;
+      const policy = resolvedProps as PolicySchema;
       this._policyRegistry.register(resourceConfig.path, policy);
     } else {
       // otherwise, add the resource's inline policy to the policy registry
@@ -1155,20 +1155,27 @@ export interface TypeSchema {
   readonly className: string;
 }
 
-/** Schema for individual resources */
-export interface BaseResourceSchema {
-  /** The resource path from the app's construct tree. */
-  readonly path: string;
-  /** An opaque tree-unique address of the resource, calculated as a SHA-1 hash of the resource path. */
-  readonly addr: string;
+/**
+ * Schema for individual resources.
+ * Only contains fields that need to be returned by `toSimulator()`.
+ */
+export interface ToSimulatorOutput {
   /** The type of the resource. */
   readonly type: string;
   /** The resource-specific properties needed to create this resource. */
   readonly props: { [key: string]: any };
-  /** The resource-specific attributes that are set after the resource is created. */
-  readonly attrs: Record<string, any>;
   /** A list of inline policy statements that define permissions for this resource. */
   readonly policy?: PolicyStatement[];
+}
+
+/** Schema for individual resources */
+export interface BaseResourceSchema extends ToSimulatorOutput {
+  /** The resource path from the app's construct tree. */
+  readonly path: string;
+  /** An opaque tree-unique address of the resource, calculated as a SHA-1 hash of the resource path. */
+  readonly addr: string;
+  /** The resource-specific attributes that are set after the resource is created. */
+  readonly attrs: Record<string, any>;
   /** Resources that should be deployed before this resource. */
   readonly deps?: string[];
 }
@@ -1224,13 +1231,13 @@ export interface SimulatorServerResponse {
 }
 
 class PolicyRegistry {
-  private readonly policies: Record<string, PolicySchemaProps>;
+  private readonly policies: Record<string, PolicySchema>;
 
   constructor() {
     this.policies = {};
   }
 
-  public register(id: string, policy: PolicySchemaProps) {
+  public register(id: string, policy: PolicySchema) {
     if (this.policies[id]) {
       throw new Error(`Policy with id ${id} already registered.`);
     }

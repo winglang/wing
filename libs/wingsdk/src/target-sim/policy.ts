@@ -3,7 +3,7 @@ import { ISimulatorResource } from "./resource";
 import { PolicySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { fqnForType } from "../constants";
-import { BaseResourceSchema, PolicyStatement } from "../simulator";
+import { PolicyStatement, ToSimulatorOutput } from "../simulator";
 import { IResource, Node, Resource } from "../std";
 
 export const POLICY_FQN = fqnForType("sim.Policy");
@@ -42,7 +42,7 @@ export class Policy extends Resource implements ISimulatorResource {
     this.statements.get(resource)!.add(op);
   }
 
-  public toSimulator(): BaseResourceSchema {
+  public toSimulator(): ToSimulatorOutput {
     const statements: Array<PolicyStatement> = [];
     for (const [resource, ops] of this.statements.entries()) {
       for (const op of ops) {
@@ -52,17 +52,14 @@ export class Policy extends Resource implements ISimulatorResource {
         });
       }
     }
-    const schema: PolicySchema = {
-      type: POLICY_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        principal: simulatorHandleToken(this.principal),
-        statements,
-      },
-      attrs: {} as any,
+    const props: PolicySchema = {
+      principal: simulatorHandleToken(this.principal),
+      statements,
     };
-    return schema;
+    return {
+      type: POLICY_FQN,
+      props,
+    };
   }
 }
 

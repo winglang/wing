@@ -32,7 +32,6 @@ my_capture: ["hello","dude"]
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -193,7 +192,6 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -353,7 +351,6 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -512,7 +509,6 @@ my_capture: false
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -673,7 +669,6 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -836,7 +831,6 @@ my_capture: new Map([["foo",123],["bar",456]])
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1001,7 +995,6 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1163,7 +1156,6 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1322,7 +1314,6 @@ my_capture: 123
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1484,7 +1475,6 @@ my_capture: new Set(["boom","bam","bang"])
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1645,7 +1635,6 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1805,7 +1794,6 @@ my_capture: "bam bam bam"
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1967,7 +1955,6 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -2129,7 +2116,6 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
     "resources": {
       "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {

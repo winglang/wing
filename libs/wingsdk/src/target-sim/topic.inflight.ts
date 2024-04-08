@@ -20,7 +20,7 @@ export class Topic
   private readonly subscribers = new Array<TopicSubscriber>();
   private _context: ISimulatorContext | undefined;
 
-  constructor(_props: TopicSchema["props"]) {}
+  constructor(_props: TopicSchema) {}
 
   private get context(): ISimulatorContext {
     if (!this._context) {

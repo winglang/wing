@@ -35,7 +35,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly topicHandlers: Partial<Record<BucketEventType, string>>;
   private _metadata: Map<string, ObjectMetadata>;
 
-  public constructor(props: BucketSchema["props"]) {
+  public constructor(props: BucketSchema) {
     this.initialObjects = props.initialObjects ?? {};
     this._public = props.public ?? false;
     this.topicHandlers = props.topics;

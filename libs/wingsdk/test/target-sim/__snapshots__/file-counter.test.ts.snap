@@ -76,7 +76,6 @@ bucket: (function() {
     "resources": {
       "root/HelloWorld/Bucket": {
         "addr": "c80e3625bbefd53d8c61fbb978711d410b5f2a41c8",
-        "attrs": {},
         "path": "root/HelloWorld/Bucket",
         "props": {
           "initialObjects": {},
@@ -87,7 +86,6 @@ bucket: (function() {
       },
       "root/HelloWorld/Bucket/Policy": {
         "addr": "c86eb36bbe6e764a632afaaea5db2d4bd693c92624",
-        "attrs": {},
         "path": "root/HelloWorld/Bucket/Policy",
         "props": {
           "principal": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
@@ -97,7 +95,6 @@ bucket: (function() {
       },
       "root/HelloWorld/Counter": {
         "addr": "c87855e817fa3df0d5ce8ae290bf53c8ce4ecd8d46",
-        "attrs": {},
         "path": "root/HelloWorld/Counter",
         "props": {
           "initial": 1000,
@@ -106,7 +103,6 @@ bucket: (function() {
       },
       "root/HelloWorld/Queue": {
         "addr": "c8de0494647ac0bdaec85a77e2a164cfbcfecc5ca1",
-        "attrs": {},
         "path": "root/HelloWorld/Queue",
         "props": {
           "retentionPeriod": 3600,
@@ -116,7 +112,6 @@ bucket: (function() {
       },
       "root/HelloWorld/Queue/Policy": {
         "addr": "c86b009930462795eeb90e647a56dbfc5356d9ea80",
-        "attrs": {},
         "path": "root/HelloWorld/Queue/Policy",
         "props": {
           "principal": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
@@ -135,7 +130,6 @@ bucket: (function() {
       },
       "root/HelloWorld/Queue/QueueEventMapping0": {
         "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
-        "attrs": {},
         "deps": [
           "root/HelloWorld/Queue/SetConsumer0",
           "root/HelloWorld/Queue",
@@ -152,7 +146,6 @@ bucket: (function() {
       },
       "root/HelloWorld/Queue/SetConsumer0": {
         "addr": "c8e82e9fd83d9e59c5af169a3042b9ed0b40e91185",
-        "attrs": {},
         "deps": [
           "root/HelloWorld/Counter",
           "root/HelloWorld/Bucket",

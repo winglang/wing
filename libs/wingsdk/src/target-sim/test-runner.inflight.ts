@@ -14,7 +14,7 @@ export class TestRunner
   private readonly tests: Map<string, string>;
   private _context: ISimulatorContext | undefined;
 
-  constructor(props: TestRunnerSchema["props"]) {
+  constructor(props: TestRunnerSchema) {
     this.tests = new Map(Object.entries(props.tests));
   }
 

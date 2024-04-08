@@ -19,7 +19,6 @@ exports[`can add row in preflight 2`] = `
     "resources": {
       "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
-        "attrs": {},
         "path": "root/my_table",
         "props": {
           "columns": {
@@ -165,7 +164,6 @@ exports[`create a table 1`] = `
     "resources": {
       "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
-        "attrs": {},
         "path": "root/my_table",
         "props": {
           "columns": {
@@ -315,7 +313,6 @@ exports[`get row 2`] = `
     "resources": {
       "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
-        "attrs": {},
         "path": "root/my_table",
         "props": {
           "columns": {
@@ -463,7 +460,6 @@ exports[`insert row 2`] = `
     "resources": {
       "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
-        "attrs": {},
         "path": "root/my_table",
         "props": {
           "columns": {
@@ -613,7 +609,6 @@ exports[`list table 2`] = `
     "resources": {
       "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
-        "attrs": {},
         "path": "root/my_table",
         "props": {
           "columns": {
@@ -762,7 +757,6 @@ exports[`tryGet row 2`] = `
     "resources": {
       "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
-        "attrs": {},
         "path": "root/my_table",
         "props": {
           "columns": {
@@ -914,7 +908,6 @@ exports[`update row 2`] = `
     "resources": {
       "root/my_table": {
         "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
-        "attrs": {},
         "path": "root/my_table",
         "props": {
           "columns": {

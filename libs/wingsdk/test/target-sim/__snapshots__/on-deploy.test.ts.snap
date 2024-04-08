@@ -27,7 +27,6 @@ return class Handler {
     "resources": {
       "root/my_on_deploy": {
         "addr": "c8e2618b976544550a8396a3817f0bad07099f7050",
-        "attrs": {},
         "deps": [
           "root/my_on_deploy/Function",
         ],
@@ -39,7 +38,6 @@ return class Handler {
       },
       "root/my_on_deploy/Function": {
         "addr": "c83fbf14da06343c694e42a8758f43bcb1f1c2c389",
-        "attrs": {},
         "path": "root/my_on_deploy/Function",
         "policy": [],
         "props": {

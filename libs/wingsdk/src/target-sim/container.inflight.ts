@@ -1,5 +1,5 @@
 import { IContainerClient, HOST_PORT_ATTR } from "./container";
-import { ContainerSchema, ContainerAttributes } from "./schema-resources";
+import { ContainerAttributes, ContainerSchema } from "./schema-resources";
 import { isPath, runCommand } from "../shared/misc";
 import {
   ISimulatorContext,
@@ -14,7 +14,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   private readonly containerName: string;
   private _context: ISimulatorContext | undefined;
 
-  public constructor(private readonly props: ContainerSchema["props"]) {
+  public constructor(private readonly props: ContainerSchema) {
     this.imageTag = props.imageTag;
 
     this.containerName = `wing-container-${Util.ulid()}`;
