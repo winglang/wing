@@ -70,6 +70,8 @@ let slackSigningSecret = new cloud.Secret(name: "SLACK_SIGNING_SECRET");
 let slackBotToken = new cloud.Secret(name: "SLACK_BOT_TOKEN");
 ```
 
+### Creating Secrets
+
 Running `wing secrets main.w` will result in an interactive experience where the user is prompted to enter the values for the secrets:
 
 ```bash
@@ -98,4 +100,17 @@ Enter the value for SLACK_SIGNING_SECRET: ********
 Enter the value for SLACK_BOT_TOKEN: ********
 
 Secrets saved to AWS Secrets Manager
+```
+
+### Listing Secrets
+
+If the user prefers to ignore the interactive experience of creating secrets in favor of creating the secrets themselves, there is an option to list the secrets in the Wing application:
+
+```bash
+wing secrets main.w --list
+
+2 secrets found in main.w
+
+- SLACK_SIGNING_SECRET
+- SLACK_BOT_TOKEN
 ```
