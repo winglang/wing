@@ -4,11 +4,11 @@ import * as fs from "fs/promises";
 import { join, extname, basename } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
 import * as glob from "glob";
+import { SNAPSHOTS_ERROR_HELP } from "./snapshots-help";
 import { TestOptions } from "./test";
 import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile } from "../compile";
-import { SNAPSHOTS_ERROR_HELP } from "./snapshots-help";
 
 export enum SnapshotMode {
   /**
