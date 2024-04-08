@@ -1,12 +1,12 @@
 import { relative } from "path";
 import { Construct } from "constructs";
-import { Policy } from "./policy";
 import { ISimulatorInflightHost, ISimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { App } from "../core";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { BaseResourceSchema, PolicyStatement } from "../simulator/simulator";
 import { IInflightHost, IResource } from "../std";
 import { Duration } from "../std/duration";
 
@@ -26,7 +26,7 @@ export class Function
 {
   private readonly timeout: Duration;
   private readonly concurrency: number;
-  public readonly policy: Policy;
+  private readonly permissions: Array<[IResource, string]> = [];
   public _liftMap = undefined;
 
   constructor(
@@ -40,15 +40,23 @@ export class Function
     // props.memory is unused since we are not simulating it
     this.timeout = props.timeout ?? Duration.fromMinutes(1);
     this.concurrency = props.concurrency ?? 100;
-    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
   public addPermission(resource: IResource, op: string): void {
-    this.policy.addStatement(resource, op);
+    this.permissions.push([resource, op]);
   }
 
   public toSimulator(): BaseResourceSchema {
     const outdir = App.of(this).outdir;
+
+    const policy: Array<PolicyStatement> = [];
+    for (const [resource, operation] of this.permissions) {
+      policy.push({
+        operation,
+        resourceHandle: simulatorHandleToken(resource),
+      });
+    }
+
     const schema: FunctionSchema = {
       type: cloud.FUNCTION_FQN,
       path: this.node.path,
@@ -60,8 +68,10 @@ export class Function
         timeout: this.timeout.seconds * 1000,
         concurrency: this.concurrency,
       },
+      policy: policy,
       attrs: {} as any,
     };
+
     return schema;
   }
 

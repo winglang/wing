@@ -78,10 +78,8 @@ test("tests are synthesized into individual environments when test mode is on", 
     "root/env0/my_bucket",
     "root/env0/my_bucket/Policy",
     "root/env0/test:my_test1/Handler",
-    "root/env0/test:my_test1/Handler/Policy",
     "root/env1/my_bucket",
     "root/env1/my_bucket/Policy",
     "root/env1/test:my_test2/Handler",
-    "root/env1/test:my_test2/Handler/Policy",
   ]);
 });

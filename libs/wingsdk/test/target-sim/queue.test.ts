@@ -30,6 +30,7 @@ test("create a queue", async () => {
     },
     path: "root/my_queue",
     addr: expect.any(String),
+    policy: [],
     props: {
       retentionPeriod: 3600,
       timeout: 30,

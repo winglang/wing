@@ -34,6 +34,7 @@ my_capture: ["hello","dude"]
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -42,16 +43,6 @@ my_capture: ["hello","dude"]
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -132,10 +123,6 @@ my_capture: ["hello","dude"]
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -150,21 +137,6 @@ my_capture: ["hello","dude"]
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -223,6 +195,7 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -231,16 +204,6 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -321,10 +284,6 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -339,21 +298,6 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -411,6 +355,7 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -419,16 +364,6 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -509,10 +444,6 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -527,21 +458,6 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -598,6 +514,7 @@ my_capture: false
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -606,16 +523,6 @@ my_capture: false
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -696,10 +603,6 @@ my_capture: false
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -714,21 +617,6 @@ my_capture: false
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -787,6 +675,7 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -795,16 +684,6 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -885,10 +764,6 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -903,21 +778,6 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -978,6 +838,7 @@ my_capture: new Map([["foo",123],["bar",456]])
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -986,16 +847,6 @@ my_capture: new Map([["foo",123],["bar",456]])
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1076,10 +927,6 @@ my_capture: new Map([["foo",123],["bar",456]])
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1094,21 +941,6 @@ my_capture: new Map([["foo",123],["bar",456]])
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -1171,6 +1003,7 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1179,16 +1012,6 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1269,10 +1092,6 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1287,21 +1106,6 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -1361,6 +1165,7 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1369,16 +1174,6 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1459,10 +1254,6 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1477,21 +1268,6 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -1548,6 +1324,7 @@ my_capture: 123
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1556,16 +1333,6 @@ my_capture: 123
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1646,10 +1413,6 @@ my_capture: 123
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1664,21 +1427,6 @@ my_capture: 123
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -1738,6 +1486,7 @@ my_capture: new Set(["boom","bam","bang"])
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1746,16 +1495,6 @@ my_capture: new Set(["boom","bam","bang"])
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1836,10 +1575,6 @@ my_capture: new Set(["boom","bam","bang"])
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1854,21 +1589,6 @@ my_capture: new Set(["boom","bam","bang"])
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -1927,6 +1647,7 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1935,16 +1656,6 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -2025,10 +1736,6 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -2043,21 +1750,6 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -2115,6 +1807,7 @@ my_capture: "bam bam bam"
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -2123,16 +1816,6 @@ my_capture: "bam bam bam"
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -2213,10 +1896,6 @@ my_capture: "bam bam bam"
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -2231,21 +1910,6 @@ my_capture: "bam bam bam"
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -2305,6 +1969,7 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -2313,16 +1978,6 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -2403,10 +2058,6 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -2421,21 +2072,6 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -2495,6 +2131,7 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -2503,16 +2140,6 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c82c6881e1717b3b64913c3a5c4d7843012f2897e9",
-        "attrs": {},
-        "path": "root/Function/Policy",
-        "props": {
-          "principal": "\${wsim#root/Function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -2593,10 +2220,6 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -2611,21 +2234,6 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
     "tree": {
       "children": {
         "Function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/Function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",

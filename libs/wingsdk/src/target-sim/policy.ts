@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { PolicySchema, PolicyStatement } from "./schema-resources";
+import { PolicySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { fqnForType } from "../constants";
-import { BaseResourceSchema } from "../simulator";
+import { BaseResourceSchema, PolicyStatement } from "../simulator";
 import { IResource, Node, Resource } from "../std";
 
 export const POLICY_FQN = fqnForType("sim.Policy");

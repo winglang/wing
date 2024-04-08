@@ -3,14 +3,10 @@
 exports[`can obtain ui components 1`] = `
 [
   "root/MyClass/Button/Handler started",
-  "root/MyClass/Button/Handler/Policy started",
   "root/MyClass/Field/Handler started",
-  "root/MyClass/Field/Handler/Policy started",
   "Invoke (payload="").",
   "Invoke (payload="").",
-  "root/MyClass/Button/Handler/Policy stopped",
   "root/MyClass/Button/Handler stopped",
-  "root/MyClass/Field/Handler/Policy stopped",
   "root/MyClass/Field/Handler stopped",
 ]
 `;

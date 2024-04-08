@@ -56,6 +56,7 @@ return class Handler {
         "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
         "attrs": {},
         "path": "root/my_function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -64,16 +65,6 @@ return class Handler {
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
-      },
-      {
-        "addr": "c8d421ed6ca2ddf857d835791bcde9240c8682a8d9",
-        "attrs": {},
-        "path": "root/my_function/Policy",
-        "props": {
-          "principal": "\${wsim#root/my_function#attrs.handle}",
-          "statements": [],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -154,10 +145,6 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -199,21 +186,6 @@ return class Handler {
           "path": "root/my_bucket",
         },
         "my_function": {
-          "children": {
-            "Policy": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A simulated resource policy",
-                "hidden": true,
-                "title": "Policy",
-              },
-              "id": "Policy",
-              "path": "root/my_function/Policy",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",

@@ -104,25 +104,6 @@ bucket: (function() {
         "type": "@winglang/sdk.sim.Policy",
       },
       {
-        "addr": "c88f4eae8103e33f1cf696aa3dad78ce4f1e5a2caa",
-        "attrs": {},
-        "path": "root/HelloWorld/Queue/SetConsumer0/Policy",
-        "props": {
-          "principal": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
-          "statements": [
-            {
-              "operation": "inc",
-              "resourceHandle": "\${wsim#root/HelloWorld/Counter#attrs.handle}",
-            },
-            {
-              "operation": "put",
-              "resourceHandle": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      {
         "addr": "c87855e817fa3df0d5ce8ae290bf53c8ce4ecd8d46",
         "attrs": {},
         "path": "root/HelloWorld/Counter",
@@ -150,6 +131,16 @@ bucket: (function() {
           "root/HelloWorld/Bucket",
         ],
         "path": "root/HelloWorld/Queue/SetConsumer0",
+        "policy": [
+          {
+            "operation": "inc",
+            "resourceHandle": "\${wsim#root/HelloWorld/Counter#attrs.handle}",
+          },
+          {
+            "operation": "put",
+            "resourceHandle": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
+          },
+        ],
         "props": {
           "concurrency": 100,
           "environmentVariables": {
@@ -268,10 +259,6 @@ bucket: (function() {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
-      "@winglang/sdk.sim.ServiceHelper": {
-        "className": "ServiceHelper",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -353,21 +340,6 @@ bucket: (function() {
                   "path": "root/HelloWorld/Queue/QueueEventMapping0",
                 },
                 "SetConsumer0": {
-                  "children": {
-                    "Policy": {
-                      "constructInfo": {
-                        "fqn": "constructs.Construct",
-                        "version": "10.3.0",
-                      },
-                      "display": {
-                        "description": "A simulated resource policy",
-                        "hidden": true,
-                        "title": "Policy",
-                      },
-                      "id": "Policy",
-                      "path": "root/HelloWorld/Queue/SetConsumer0/Policy",
-                    },
-                  },
                   "constructInfo": {
                     "fqn": "constructs.Construct",
                     "version": "10.3.0",

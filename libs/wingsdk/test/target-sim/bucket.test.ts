@@ -23,6 +23,7 @@ test("create a bucket", async () => {
     },
     path: "root/my_bucket",
     addr: expect.any(String),
+    policy: [],
     props: {
       public: false,
       initialObjects: {},

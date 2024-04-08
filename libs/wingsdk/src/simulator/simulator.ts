@@ -183,6 +183,7 @@ interface Model {
 interface ResourceState {
   props: Record<string, any>;
   attrs: Record<string, any>;
+  policy: PolicyStatement[];
 }
 
 /**
@@ -404,10 +405,8 @@ export class Simulator {
       console.warn(err);
     }
 
-    // if the resource is a policy, remove it from the policy registry
-    if (this.getResourceConfig(path).type === POLICY_FQN) {
-      this._policyRegistry.deregister(path);
-    }
+    // remove the resource's policy from the policy registry
+    this._policyRegistry.deregister(path);
 
     this.addSimulatorTrace(path, { message: `${path} stopped` });
     delete this.state[path]; // delete the state of the resource
@@ -773,6 +772,8 @@ export class Simulator {
     const resourceConfig = this.getResourceConfig(path);
 
     const resolvedProps = this.resolveTokens(resourceConfig.props);
+    const resolvedPolicy: PolicyStatement[] =
+      this.resolveTokens(resourceConfig.policy) ?? [];
 
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
@@ -786,6 +787,7 @@ export class Simulator {
     this.state[path] = {
       props: resolvedProps,
       attrs: {},
+      policy: resolvedPolicy,
     };
 
     // create the resource based on its type
@@ -795,6 +797,19 @@ export class Simulator {
 
     // allocate a handle for the resource so others can find it
     const handle = this._handles.allocate(path, resourceObject);
+
+    // if the resource is a policy, add it to the policy registry
+    if (resourceConfig.type === POLICY_FQN) {
+      const policy = resolvedProps as PolicySchemaProps;
+      this._policyRegistry.register(resourceConfig.path, policy);
+    } else {
+      // otherwise, add the resource's inline policy to the policy registry
+      const policy = {
+        statements: resolvedPolicy,
+        principal: handle,
+      };
+      this._policyRegistry.register(resourceConfig.path, policy);
+    }
 
     // initialize the resource with the simulator context
     const context = this.createContext(resourceConfig, handle);
@@ -814,12 +829,6 @@ export class Simulator {
     this.addSimulatorTrace(path, {
       message: `${resourceConfig.path} started`,
     });
-
-    // if the resource is a policy, add it to the policy registry
-    if (resourceConfig.type === POLICY_FQN) {
-      const policyProps = resolvedProps as PolicySchemaProps;
-      this._policyRegistry.register(resourceConfig.path, policyProps);
-    }
   }
 
   private createContext(
@@ -1013,7 +1022,11 @@ export class Simulator {
 
       case UpdatePlan.AUTO:
         const state = (r: BaseResourceSchema) =>
-          JSON.stringify({ props: r.props, type: r.type });
+          JSON.stringify({
+            props: r.props,
+            type: r.type,
+            policyStatements: r.policy,
+          });
 
         return state(oldConfig) !== state(newConfig);
     }
@@ -1169,6 +1182,8 @@ export interface BaseResourceSchema {
   readonly props: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
   readonly attrs: Record<string, any>;
+  /** A list of inline policy statements that define permissions for this resource. */
+  readonly policy?: PolicyStatement[];
   /** Resources that should be deployed before this resource. */
   readonly deps?: string[];
 }
@@ -1177,6 +1192,14 @@ export interface BaseResourceSchema {
 export interface BaseResourceAttributes {
   /** The resource's simulator-unique id. */
   readonly [HANDLE_ATTRIBUTE]: string;
+}
+
+/** A policy statement that defines a permission for a resource. */
+export interface PolicyStatement {
+  /** The operation that can be performed. */
+  readonly operation: string;
+  /** The resource the operation can be performed on. */
+  readonly resourceHandle: string;
 }
 
 /** Schema for `.connections` in connections.json */

@@ -428,7 +428,6 @@ describe("in-place updates", () => {
         "root/Api/Endpoint",
         "root/Api/Policy",
         "root/Function",
-        "root/Function/Policy",
       ],
       deleted: [],
       updated: ["root/Bucket1"],
@@ -437,7 +436,7 @@ describe("in-place updates", () => {
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
       "root/Bucket1/Policy started",
-      "Update: 5 added, 1 updated, 0 deleted",
+      "Update: 4 added, 1 updated, 0 deleted",
       "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
       "root/Api started",
@@ -446,7 +445,6 @@ describe("in-place updates", () => {
       "root/Api/Endpoint started",
       "root/Api/Policy started",
       "root/Function started",
-      "root/Function/Policy started",
     ]);
 
     expect(sim.listResources()).toEqual([
@@ -456,7 +454,6 @@ describe("in-place updates", () => {
       "root/Bucket1",
       "root/Bucket1/Policy",
       "root/Function",
-      "root/Function/Policy",
     ]);
 
     const bucketClient = sim.getResource("root/Bucket1") as IBucketClient;
@@ -616,24 +613,15 @@ describe("in-place updates", () => {
 
     expect(simTraces(sim)).toEqual([
       "root/State started",
-      "root/Service started",
-      "root/Service/Policy started",
       "root/State.my_value = bang",
-      "root/Service/Helper started",
-      "root/Function started",
-      "root/Function/Policy started",
-      "Update: 0 added, 2 updated, 0 deleted",
-      "root/Service/Helper stopped",
-      "root/Service/Policy stopped",
-      "root/Service stopped",
-      "root/Function/Policy stopped",
-      "root/Function stopped",
       "root/Service started",
-      "root/Service/Policy started",
-      "root/State.my_value = bing",
-      "root/Service/Helper started",
       "root/Function started",
-      "root/Function/Policy started",
+      "Update: 0 added, 2 updated, 0 deleted",
+      "root/Service stopped",
+      "root/Function stopped",
+      "root/State.my_value = bing",
+      "root/Service started",
+      "root/Function started",
     ]);
   });
 
@@ -661,18 +649,15 @@ describe("in-place updates", () => {
       "root/Bucket1 started",
       "root/Bucket1/Policy started",
       "root/OnDeploy/Function started",
-      "root/OnDeploy/Function/Policy started",
       "root/OnDeploy started",
       "Update: 0 added, 3 updated, 0 deleted",
       "root/OnDeploy stopped",
-      "root/OnDeploy/Function/Policy stopped",
       "root/OnDeploy/Function stopped",
       "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
       "root/Bucket1 started",
       "root/Bucket1/Policy started",
       "root/OnDeploy/Function started",
-      "root/OnDeploy/Function/Policy started",
       "root/OnDeploy started",
     ]);
   });
@@ -692,12 +677,9 @@ describe("in-place updates", () => {
 
     expect(simTraces(sim)).toEqual([
       "root/Function started",
-      "root/Function/Policy started",
       "Update: 0 added, 1 updated, 0 deleted",
-      "root/Function/Policy stopped",
       "root/Function stopped",
       "root/Function started",
-      "root/Function/Policy started",
     ]);
   });
 
@@ -716,15 +698,9 @@ describe("in-place updates", () => {
 
     expect(simTraces(sim)).toEqual([
       "root/Service started",
-      "root/Service/Policy started",
-      "root/Service/Helper started",
       "Update: 0 added, 1 updated, 0 deleted",
-      "root/Service/Helper stopped",
-      "root/Service/Policy stopped",
       "root/Service stopped",
       "root/Service started",
-      "root/Service/Policy started",
-      "root/Service/Helper started",
     ]);
   });
 
@@ -743,14 +719,11 @@ describe("in-place updates", () => {
 
     expect(simTraces(sim)).toEqual([
       "root/OnDeploy/Function started",
-      "root/OnDeploy/Function/Policy started",
       "root/OnDeploy started",
       "Update: 0 added, 2 updated, 0 deleted",
       "root/OnDeploy stopped",
-      "root/OnDeploy/Function/Policy stopped",
       "root/OnDeploy/Function stopped",
       "root/OnDeploy/Function started",
-      "root/OnDeploy/Function/Policy started",
       "root/OnDeploy started",
     ]);
   });
@@ -788,11 +761,9 @@ describe("in-place updates", () => {
       "root/Api/Endpoint started",
       "root/Api/OnRequestHandler0 started",
       "root/Api/Policy started",
-      "root/Api/OnRequestHandler0/Policy started",
       "root/Api/ApiEventMapping0 started",
       "Update: 0 added, 3 updated, 0 deleted",
       "root/Api/Policy stopped",
-      "root/Api/OnRequestHandler0/Policy stopped",
       "root/Api/ApiEventMapping0 stopped",
       "root/Api/OnRequestHandler0 stopped",
       "root/Api/Endpoint stopped",
@@ -801,7 +772,6 @@ describe("in-place updates", () => {
       "root/Api/Endpoint started",
       "root/Api/OnRequestHandler0 started",
       "root/Api/Policy started",
-      "root/Api/OnRequestHandler0/Policy started",
       "root/Api/ApiEventMapping0 started",
     ]);
   });
