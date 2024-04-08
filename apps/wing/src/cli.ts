@@ -3,7 +3,7 @@ import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
-import { SNAPSHOTS_HELP } from "./commands/test/snapshots";
+import { SNAPSHOTS_HELP } from "./commands/test/snapshots-help";
 import { loadEnvVariables } from "./env";
 import { currentPackage, projectTemplateNames } from "./util";
 

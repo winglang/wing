@@ -8,24 +8,7 @@ import { TestOptions } from "./test";
 import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile } from "../compile";
-
-export const SNAPSHOTS_HELP = `
-Snapshots (s, --snapshots <mode>):
-  never  \t Snapshot are never captured
-  auto   \t Determines behavior based on the "CI" environment variable: "assert" if CI=1 or "deploy" otherwise
-  deploy  \t Execute tests on the target platform and update snapshots if all tests pass
-  assert \t verifies that the snapshot is up-to-date and fails the test is they are not
-  update \t Only update the snapshots without actually executing the tests on the target platform
-
-  When testing against a cloud target (e.g. -t tf-aws), if all tests pass, the compiler output 
-  will be captured under "<entrypoint>.snap.md".
-`;
-
-const SNAPSHOTS_ERROR_HELP = [
-  "To update, run in a non-CI environment with cloud credentials or with '--snapshots=update'",
-  "To disable this behavior run with '--snapshots=never'",
-  "See https://www.winglang.io/docs/tools/cli#cloud-test-snapshots",
-].join("\n");
+import { SNAPSHOTS_ERROR_HELP } from "./snapshots-help";
 
 export enum SnapshotMode {
   /**
