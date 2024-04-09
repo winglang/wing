@@ -2724,6 +2724,20 @@ error: A function whose return type is \\"str\\" must return a value.
    | \\\\-^ A function whose return type is \\"str\\" must return a value.
 
 
+error: A function whose return type is \\"str\\" must return a value.
+   --> ../../../examples/tests/invalid/missing_return.test.w:36:32
+   |  
+36 |   let returnString4 = (): str => {
+   | /--------------------------------^
+37 | |   class Foo {
+38 | |     pub static blah(): num {
+39 | |       return 5;
+40 | |     }
+41 | |   }
+42 | | };
+   | \\\\-^ A function whose return type is \\"str\\" must return a value.
+
+
  
  
 Tests 1 failed (1)
