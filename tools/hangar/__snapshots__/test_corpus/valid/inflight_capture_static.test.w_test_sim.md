@@ -10,6 +10,7 @@ pass ┌ inflight_capture_static.test.wsim » root/env3/test:call static method 
  
  
 Tests 4 passed (4)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

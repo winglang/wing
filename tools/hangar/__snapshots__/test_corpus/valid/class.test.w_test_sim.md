@@ -9,6 +9,7 @@ pass ─ class.test.wsim » root/env3/test:inflight super constructor
  
  
 Tests 4 passed (4)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

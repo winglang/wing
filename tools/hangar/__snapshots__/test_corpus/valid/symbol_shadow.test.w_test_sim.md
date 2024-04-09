@@ -9,6 +9,7 @@ pass ─ symbol_shadow.test.wsim » root/env3/test:insideInflight should capture
  
  
 Tests 4 passed (4)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
