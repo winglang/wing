@@ -12,7 +12,8 @@ import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
-import { SnapshotMode, captureSnapshot, determineSnapshotMode } from "./snapshots";
+import { SnapshotMode, SnapshotResult, captureSnapshot, determineSnapshotMode } from "./snapshots";
+import { SNAPSHOT_ERROR_PREFIX } from "./snapshots-help";
 import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
@@ -98,17 +99,22 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   }
 
   const startTime = Date.now();
-  const results: { testName: string; results: std.TestResult[] }[] = [];
+  const results: SingleTestResult[] = [];
   process.env.WING_TARGET = determineTargetFromPlatforms(options.platform ?? []);
   const testFile = async (entrypoint: string) => {
     const testName = renderTestName(entrypoint);
     try {
-      const singleTestResults: std.TestResult[] = await testOne(entrypoint, options);
-      results.push({ testName, results: singleTestResults ?? [] });
+      const singleTestResults = await testOne(testName, entrypoint, options);
+      results.push(singleTestResults);
     } catch (error: any) {
       console.log(error.message);
+      const snapshot = error.message?.startsWith(SNAPSHOT_ERROR_PREFIX)
+        ? SnapshotResult.MISMATCH
+        : SnapshotResult.SKIPPED;
+
       results.push({
         testName,
+        snapshot,
         results: [
           {
             pass: false,
@@ -142,7 +148,17 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   return 0;
 }
 
-async function testOne(entrypoint: string, options: TestOptions) {
+export type SingleTestResult = {
+  readonly testName: string;
+  readonly results: std.TestResult[];
+  readonly snapshot: SnapshotResult;
+};
+
+async function testOne(
+  testName: string,
+  entrypoint: string,
+  options: TestOptions
+): Promise<SingleTestResult> {
   const target = determineTargetFromPlatforms(options.platform);
 
   // determine snapshot behavior
@@ -166,13 +182,18 @@ async function testOne(entrypoint: string, options: TestOptions) {
 
   // if one of the tests failed, return the results without updating any snapshots.
   const success = !results.some((r) => !r.pass);
+  let snapshot = SnapshotResult.SKIPPED;
 
   // if all tests pass, capture snapshots
   if (success) {
-    await captureSnapshot(entrypoint, target, options);
+    snapshot = await captureSnapshot(entrypoint, target, options);
   }
 
-  return results;
+  return {
+    testName,
+    results: results,
+    snapshot,
+  };
 }
 
 async function executeTest(

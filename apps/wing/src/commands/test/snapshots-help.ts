@@ -10,6 +10,8 @@ Snapshots (s, --snapshots <mode>):
   will be captured under "<entrypoint>.snap.md".
 `;
 
+export const SNAPSHOT_ERROR_PREFIX = "Snapshot mismatch:";
+
 export const SNAPSHOTS_ERROR_HELP = [
   "Update with '--snapshots=update'",
   "To disable this behavior run with '--snapshots=never'",

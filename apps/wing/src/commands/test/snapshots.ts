@@ -1,10 +1,9 @@
 import * as cp from "child_process";
-import { existsSync, readFileSync, writeFileSync } from "fs";
 import * as fs from "fs/promises";
 import { join, extname, basename } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
 import * as glob from "glob";
-import { SNAPSHOTS_ERROR_HELP } from "./snapshots-help";
+import { SNAPSHOTS_ERROR_HELP, SNAPSHOT_ERROR_PREFIX } from "./snapshots-help";
 import { TestOptions } from "./test";
 import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
@@ -59,51 +58,75 @@ export function determineSnapshotMode(
   return options.snapshots;
 }
 
-export async function captureSnapshot(entrypoint: string, target: string, options: TestOptions) {
+export enum SnapshotResult {
+  SKIPPED = "skipped",
+  NEW = "new",
+  UPDATED = "updated",
+  MISMATCH = "mismatched",
+  VERIFIED = "verified",
+}
+
+export async function captureSnapshot(
+  entrypoint: string,
+  target: string,
+  options: TestOptions
+): Promise<SnapshotResult> {
   const snapshotMode = determineSnapshotMode(target, options);
 
   // skip if snapshots are disabled
   if (snapshotMode === SnapshotMode.NEVER) {
-    return;
+    return SnapshotResult.SKIPPED;
   }
 
   const snapshotFile = `${entrypoint}.${target}.snap.md`;
+  const oldSnapshot = await tryReadFile(snapshotFile);
 
-  await withSpinner(`Snapshot ${renderTestName(snapshotFile)}...`, async () => {
+  return withSpinner(`Snapshot ${renderTestName(snapshotFile)}...`, async () => {
     // we need to compile again in order for snapshots because we can't afford the snapshot to be
     // based on a random root id (which is the default for tests)
     const snapshotDir = await compile(entrypoint, options);
 
     // take a snapshot of the synthesis output
-    const snapshot = await createMarkdownSnapshot(basename(snapshotFile), snapshotDir);
+    const newSnapshot = await createMarkdownSnapshot(basename(snapshotFile), snapshotDir);
 
-    // update the snapshots if needed
+    // if the snapshot is the same, we're done
+    if (oldSnapshot === newSnapshot) {
+      return SnapshotResult.VERIFIED;
+    }
+
+    // snapshot are mismatched, decide if we want to update or assert based on the mode
     switch (snapshotMode) {
       case SnapshotMode.DEPLOY:
       case SnapshotMode.UPDATE:
-        writeFileSync(snapshotFile, snapshot);
-        break;
+        await fs.writeFile(snapshotFile, newSnapshot);
+        return !oldSnapshot ? SnapshotResult.NEW : SnapshotResult.UPDATED;
 
       case SnapshotMode.ASSERT:
-        if (!existsSync(snapshotFile)) {
+        if (!oldSnapshot) {
           throw new Error(
-            [`Snapshot file does not exist: ${snapshotFile}`, "", SNAPSHOTS_ERROR_HELP].join("\n")
+            [
+              SNAPSHOT_ERROR_PREFIX,
+              `Snapshot file does not exist: ${snapshotFile}`,
+              "",
+              SNAPSHOTS_ERROR_HELP,
+            ].join("\n")
           );
         }
 
-        const expectedSnapshot = readFileSync(snapshotFile, "utf-8");
-        if (expectedSnapshot !== snapshot) {
-          const actualFile = `${snapshotFile}.actual`;
-          writeFileSync(actualFile, snapshot);
+        const actualFile = `${snapshotFile}.actual`;
+        await fs.writeFile(actualFile, newSnapshot);
 
-          const diff =
-            tryRenderDiff(snapshotFile, actualFile) ??
-            [` - Expected: ${snapshotFile}`, ` - Actual: ${actualFile}`].join("\n");
+        const diff =
+          tryRenderDiff(snapshotFile, actualFile) ??
+          [` - Expected: ${snapshotFile}`, ` - Actual: ${actualFile}`].join("\n");
 
-          throw new Error(["Snapshot mismatch:", "", diff, "", SNAPSHOTS_ERROR_HELP].join("\n"));
-        }
-        break;
+        // don't keep the actual file around
+        await fs.rm(actualFile);
+
+        throw new Error([SNAPSHOT_ERROR_PREFIX, "", diff, "", SNAPSHOTS_ERROR_HELP].join("\n"));
     }
+
+    throw new Error(`Unexpected snapshot mode: ${snapshotMode}`);
   });
 }
 
@@ -123,6 +146,14 @@ function tryRenderDiff(expectedFile: string, actualFile: string) {
   }
 
   return out.stdout?.toString();
+}
+
+async function tryReadFile(file: string): Promise<string | undefined> {
+  try {
+    return await fs.readFile(file, "utf-8");
+  } catch {
+    return undefined;
+  }
 }
 
 /**
