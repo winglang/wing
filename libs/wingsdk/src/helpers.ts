@@ -52,3 +52,15 @@ export function unwrap<T>(value: T): T | never {
   }
   throw new Error("Unexpected nil");
 }
+
+export function createExternRequire(dirname: string) {
+  return (externPath: string) => {
+    // using eval to always avoid bundling jiti
+    const jiti: typeof import("jiti").default = eval("require('jiti')");
+    const newRequire = jiti(dirname, {
+      sourceMaps: true,
+      interopDefault: true,
+    });
+    return newRequire(externPath);
+  };
+}

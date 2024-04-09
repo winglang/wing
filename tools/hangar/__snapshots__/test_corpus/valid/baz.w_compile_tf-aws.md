@@ -20,6 +20,7 @@ module.exports = function({  }) {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class Baz extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);

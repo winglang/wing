@@ -4,6 +4,7 @@
   "description": "Wing Compiler",
   "files": [
     "wingc.wasm",
+    "preflight.shim.js",
     "dist/"
   ],
   "license": "MIT",
@@ -23,8 +24,9 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
-    "@winglang/sdk": "workspace:^",
     "@wingcloud/framework": "workspace:^",
+    "@winglang/sdk": "workspace:^",
+    "jiti": "^1.21.0",
     "wasi-js": "^1.7.3"
   },
   "bundledDependencies": [

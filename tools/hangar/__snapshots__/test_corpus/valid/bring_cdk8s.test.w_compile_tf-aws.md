@@ -28,6 +28,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cdk8s = require("cdk8s");
 const kplus = require("cdk8s-plus-27");
 class $Root extends $stdlib.std.Resource {

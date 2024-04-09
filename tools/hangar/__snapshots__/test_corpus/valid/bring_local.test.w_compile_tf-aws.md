@@ -274,6 +274,7 @@ module.exports = function({  }) {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {  };
 //# sourceMappingURL=preflight.empty-1.js.map
 ```
@@ -287,6 +288,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const file1 = require("./preflight.store-2.js");
 const file2 = require("./preflight.subfile-3.js");
 const file3 = require("./preflight.empty-1.js");
@@ -409,6 +411,7 @@ $APP.synth();
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const file3 = require("./preflight.empty-1.js");
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
@@ -529,6 +532,7 @@ module.exports = { Util, Store, Color };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const math = $stdlib.math;
 class Q extends $stdlib.std.Resource {
   constructor($scope, $id, ) {

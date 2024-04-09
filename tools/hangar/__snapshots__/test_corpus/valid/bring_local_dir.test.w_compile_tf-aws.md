@@ -81,6 +81,7 @@ module.exports = function({  }) {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const blah = require("./preflight.inner-2.js");
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
@@ -128,6 +129,7 @@ module.exports = { Foo };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const util = $stdlib.util;
 class Bar extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
@@ -199,6 +201,7 @@ module.exports = { Bar };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {
   ...require("./preflight.widget-1.js"),
 };
@@ -214,6 +217,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const w = require("./preflight.widget-1.js");
 const subdir = require("./preflight.subdir2-5.js");
 class $Root extends $stdlib.std.Resource {
@@ -242,6 +246,7 @@ $APP.synth();
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {
   get inner() { return require("./preflight.inner-2.js") },
   ...require("./preflight.file2-4.js"),
@@ -256,6 +261,7 @@ module.exports = {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class Widget extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);

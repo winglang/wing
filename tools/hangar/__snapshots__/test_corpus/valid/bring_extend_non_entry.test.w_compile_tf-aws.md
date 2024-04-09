@@ -40,6 +40,7 @@ module.exports = function({ $cdk8s_Chart }) {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cdk8s = require("cdk8s");
 class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
   constructor($scope, $id, ) {
@@ -83,6 +84,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const lib = require("./preflight.extendnonentrypoint-1.js");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
