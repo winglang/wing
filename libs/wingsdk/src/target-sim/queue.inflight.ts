@@ -5,7 +5,6 @@ import {
   QueueSchema,
   QueueSubscriber,
   EventSubscription,
-  FunctionHandle,
   DeadLetterQueueSchema,
   ResourceHandle,
 } from "./schema-resources";
