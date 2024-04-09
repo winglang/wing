@@ -31,3 +31,13 @@ let returnString3 = (): str => {
   };
 };
 //^ A function whose return type is "str" must return a value.
+
+// Ignore return statements in inner methods when searching for return statements
+let returnString4 = (): str => {
+  class Foo {
+    pub static blah(): num {
+      return 5;
+    }
+  }
+};
+//^ A function whose return type is "str" must return a value.
