@@ -10,6 +10,7 @@ pass ─ struct.test.wsim » root/env4/test:valid Json types
  
  
 Tests 5 passed (5)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

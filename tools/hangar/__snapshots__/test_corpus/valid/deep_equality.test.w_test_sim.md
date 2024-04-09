@@ -18,6 +18,7 @@ pass ─ deep_equality.test.wsim » root/env9/test:Array with the same value
  
  
 Tests 13 passed (13)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

@@ -3,6 +3,7 @@ import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
+import { SNAPSHOTS_HELP } from "./commands/test/snapshots-help";
 import { loadEnvVariables } from "./env";
 import { currentPackage, projectTemplateNames } from "./util";
 
@@ -17,6 +18,7 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 
 const DEFAULT_PLATFORM = ["sim"];
+
 let analyticsExportFile: Promise<string | undefined> | undefined;
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
@@ -191,6 +193,12 @@ async function main() {
       collectPlatformVariadic,
       DEFAULT_PLATFORM
     )
+    .addOption(
+      new Option("-s, --snapshots <mode>", "Capture snapshots of compiler output")
+        .choices(["auto", "never", "update", "deploy", "assert"])
+        .default("auto")
+    )
+    .addHelpText("afterAll", SNAPSHOTS_HELP)
     .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-f, --test-filter <regex>",

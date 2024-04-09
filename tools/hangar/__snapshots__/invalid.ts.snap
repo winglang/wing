@@ -11,6 +11,7 @@ exports[`access_hidden_namespace.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -293,6 +294,7 @@ error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -363,6 +365,7 @@ error: Expected identifier \\"subdir2\\" to be a variable, but it's a namespace
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -406,6 +409,7 @@ error: Member \\"f\\" doesn't exist in \\"Construct\\"
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -422,6 +426,7 @@ at <ABSOLUTE>/ambiguous_api_paths.test.w:12:1
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -458,6 +463,7 @@ error: \\"cloud\\" is already defined
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -475,6 +481,7 @@ error: Cannot bring Wing directories that contain invalid characters: \\"not-val
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -497,6 +504,7 @@ error: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE>/bring_jsii
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -526,6 +534,7 @@ error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -562,6 +571,7 @@ error: Cannot bring module \\"./bring_local_dir.test.w\\" since it is an entrypo
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -598,6 +608,7 @@ error: Preflight field \\"x\\" is not initialized
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -627,6 +638,7 @@ error: Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -663,6 +675,7 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -685,6 +698,7 @@ error: Cannot call into inflight phase while preflight
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -714,6 +728,7 @@ error: Cannot access \\"x\\" because it is shadowed by another symbol with the s
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1047,6 +1062,7 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1078,6 +1094,7 @@ error: Expected type to be \\"inflight (message: str): void\\", but got \\"infli
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1268,6 +1285,7 @@ error: Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1296,6 +1314,7 @@ error: Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1324,6 +1343,7 @@ error: Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1352,6 +1372,7 @@ error: Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1367,6 +1388,7 @@ exports[`diags_with_multibyte_chars.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1389,6 +1411,7 @@ error: Property not found
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1460,6 +1483,7 @@ error: Expression of type \\"Bucket\\" references an unknown preflight object, c
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1475,6 +1499,7 @@ exports[`extern.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1490,6 +1515,7 @@ exports[`extern_static.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1526,6 +1552,7 @@ error: Preflight field \\"x\\" is not initialized
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1548,6 +1575,7 @@ error: Unable to iterate over \\"Bucket\\"
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1640,6 +1668,7 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1676,6 +1705,7 @@ error: Expected type to be \\"str\\", but got \\"Array<str>\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1705,6 +1735,7 @@ error: Optional parameters must always be after all non-optional parameters.
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1762,6 +1793,7 @@ error: Expected type to be \\"Bucket\\", but got \\"bool\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1854,6 +1886,7 @@ error: Expected type to be \\"preflight (construct: IConstruct): Node\\", but go
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -1953,6 +1986,7 @@ error: Expected type to be \\"bool\\", but got \\"Array<num>\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2003,6 +2037,7 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2197,6 +2232,7 @@ error: Unable to infer type
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2240,6 +2276,7 @@ error: Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2257,6 +2294,7 @@ exports[`inflight_class_dup_init.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2272,6 +2310,7 @@ exports[`inflight_class_in_preflight.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2287,6 +2326,7 @@ exports[`inflight_class_interface_structural_typing.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2312,6 +2352,7 @@ error: Variable is not reassignable
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2341,6 +2382,7 @@ error: Expression of type \\"Bucket\\" references an unknown preflight object, c
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2363,6 +2405,7 @@ error: Expression of type \\"Queue\\" references an unknown preflight object, ca
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2385,6 +2428,7 @@ error: Expression of type \\"Bucket\\" references an unknown preflight object, c
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2468,6 +2512,7 @@ error: Symbol \\"foo\\" already defined in this scope
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2493,6 +2538,7 @@ exports[`issue_2767.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2510,6 +2556,7 @@ exports[`jsii_access_modifiers.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2667,6 +2714,7 @@ error: \\"Bucket\\" is not a legal JSON value
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2682,6 +2730,7 @@ exports[`json_static.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2697,6 +2746,7 @@ exports[`map_entries.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2741,6 +2791,7 @@ error: A function whose return type is \\"str\\" must return a value.
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2770,6 +2821,7 @@ error: Expected '}'
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2862,6 +2914,7 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -2909,6 +2962,7 @@ error: Expected type to be \\"num\\", but got \\"nil\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3046,6 +3100,7 @@ error: Variable is not reassignable
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3063,6 +3118,7 @@ User invoked panic'), please report at https://www.winglang.io/contributing/star
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3078,6 +3134,7 @@ exports[`parameters.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3129,6 +3186,7 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3144,6 +3202,7 @@ exports[`preflight_from_inflight.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3180,6 +3239,7 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3216,6 +3276,7 @@ error: Enums must be public (\\"pub\\") or private
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3272,6 +3333,7 @@ error: Variable is not reassignable
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3401,6 +3463,7 @@ error: Multiple or ambiguous modifiers found
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3416,6 +3479,7 @@ exports[`resource_access_field_as_method.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3431,6 +3495,7 @@ exports[`resource_captures.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3453,6 +3518,7 @@ error: Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.c
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3489,6 +3555,7 @@ error: Inflight initializers cannot have parameters
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3532,6 +3599,7 @@ error: Unexpected return value from void function. Return type annotations are r
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3568,6 +3636,7 @@ error: Inflight classes cannot have a scope
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3594,6 +3663,7 @@ fail ┌ simulator_permissions.test.wsim » root/env1/test:incorrect permission 
  
  
 Tests 2 failed (2)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3630,6 +3700,7 @@ error: Expected \\"b\\" to be a type but it's a variable
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3666,6 +3737,7 @@ error: Expected continue statement to be inside of a loop (while/for)
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3695,6 +3767,7 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3710,6 +3783,7 @@ exports[`std_containers.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3736,6 +3810,7 @@ error: Expected type to be stringable, but got \\"str?\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3798,6 +3873,7 @@ error: Expected between 2 and 3 positional arguments or named arguments for the 
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3817,6 +3893,7 @@ at <ABSOLUTE>/struct_from_parameter.test.w:14:1
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3846,6 +3923,7 @@ error: Struct \\"C\\" contains field \\"b\\" which cannot be represented in Json
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3917,6 +3995,7 @@ error: struct \\"InflightStruct\\" must be declared at the top-level of a file
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3981,6 +4060,7 @@ error: \`super\` calls inside inflight closures not supported yet, see: https://
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -3996,6 +4076,7 @@ exports[`this.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4011,6 +4092,7 @@ exports[`throw_non_string.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4028,6 +4110,7 @@ exports[`try_no_catch_or_finally.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4064,6 +4147,7 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4107,6 +4191,7 @@ error: Unable to infer type
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4122,6 +4207,7 @@ exports[`unknown_field.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4137,6 +4223,7 @@ exports[`unknown_submodule.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4215,6 +4302,7 @@ error: Member \\"methodWhichIsNotPartOfBucketApi\\" doesn't exist in \\"Bucket\\
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4224,6 +4312,7 @@ exports[`unresolved_state.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4249,6 +4338,7 @@ error: Symbol \\"x\\" used before being defined
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4264,6 +4354,7 @@ exports[`variable_scoping.test.w 1`] = `
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -4316,6 +4407,7 @@ error: Expected type to be \\"str?\\", but got \\"void\\" instead
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
