@@ -54,11 +54,15 @@ describe(`${__dirname}/main.w`, () => {
   });
 
   test.skip("test multiple routes with same name", async ({ page }) => {
-    await runApiTest(
-      page,
-      "POST",
-      "/test-endpoint",
-      "Hello test post endpoint!",
-    );
+    await getResourceNode(page, "root/Default/Api").click();
+
+    // Select POST route
+    await page.getByTestId("cloud.api:route").click();
+    await page.getByTestId("cloud.api:route-POST /test-endpoint").click();
+
+    // Ensure POST method is selected
+    expect(
+      await page.getByTestId("cloud.api:method-value").textContent(),
+    ).toEqual("POST");
   });
 });

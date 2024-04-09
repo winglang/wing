@@ -76,7 +76,7 @@ export const Select = memo(
                     {placeholder}
                   </div>
                 )}
-                <div className="truncate">
+                <div className="truncate" data-testid={`${dataTestid}-value`}>
                   {items.find((item) => item.value === value)?.label ?? value}
                 </div>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1.5">
