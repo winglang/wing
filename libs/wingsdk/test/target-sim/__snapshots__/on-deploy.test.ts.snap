@@ -29,6 +29,7 @@ return class Handler {
         "addr": "c83fbf14da06343c694e42a8758f43bcb1f1c2c389",
         "attrs": {},
         "path": "root/my_on_deploy/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -124,6 +125,10 @@ return class Handler {
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

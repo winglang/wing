@@ -55,13 +55,12 @@ test("simulator cleanup", async () => {
     stdio: ["pipe", "pipe", "pipe"],
   });
 
-  // Uncomment the following lines to see the output of the child process
-  // child.stdout?.on("data", (data) => {
-  //   console.error(data.toString());
-  // });
-  // child.stderr?.on("data", (data) => {
-  //   console.error(data.toString());
-  // });
+  child.stdout?.on("data", (data) => {
+    console.error(data.toString());
+  });
+  child.stderr?.on("data", (data) => {
+    console.error(data.toString());
+  });
 
   let stopped = false;
 
@@ -72,11 +71,23 @@ test("simulator cleanup", async () => {
         resolve(undefined);
       }
     });
+    child.stderr?.on("data", (data) => {
+      if (data.toString().includes("stopped!")) {
+        stopped = true;
+        resolve(undefined);
+      }
+    });
   });
 
   // Wait for the "Simulator started" message, then kill the child process
   await new Promise((resolve) => {
     child.stdout?.on("data", (data) => {
+      if (data.toString().includes("Simulator started")) {
+        child.kill("SIGTERM");
+        resolve(undefined);
+      }
+    });
+    child.stderr?.on("data", (data) => {
       if (data.toString().includes("Simulator started")) {
         child.kill("SIGTERM");
         resolve(undefined);

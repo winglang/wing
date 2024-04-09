@@ -29,7 +29,7 @@ test("reloading the simulator updates the state of the tree", async () => {
   app2.synth();
 
   // Reload the simulator
-  await s.reload();
+  await s.reload(false);
   expect(s.getResourceConfig("/my_bucket").props.public).toEqual(true);
   expect(s.tree().rawData().tree.children?.my_bucket.display?.hidden).toEqual(
     true

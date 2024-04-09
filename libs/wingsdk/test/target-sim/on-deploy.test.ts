@@ -21,6 +21,7 @@ test("create an OnDeploy", async () => {
     deps: ["root/my_on_deploy/Function"],
     path: "root/my_on_deploy",
     addr: expect.any(String),
+    policy: [],
     props: {
       functionHandle: expect.any(String),
     },

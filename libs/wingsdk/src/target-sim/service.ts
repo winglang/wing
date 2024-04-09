@@ -1,15 +1,21 @@
 import { relative } from "path";
 import { Construct } from "constructs";
-import { ISimulatorResource } from "./resource";
+import { ISimulatorInflightHost, ISimulatorResource } from "./resource";
 import { ServiceSchema } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { App } from "../core";
-import { BaseResourceSchema } from "../simulator";
-import { IInflightHost } from "../std";
+import { BaseResourceSchema, PolicyStatement } from "../simulator";
+import { IInflightHost, IResource } from "../std";
 
-export class Service extends cloud.Service implements ISimulatorResource {
+export class Service
+  extends cloud.Service
+  implements ISimulatorResource, ISimulatorInflightHost
+{
+  private readonly permissions: Array<[IResource, string]> = [];
   private readonly autoStart: boolean;
+  public _liftMap = undefined;
 
   constructor(
     scope: Construct,
@@ -21,7 +27,18 @@ export class Service extends cloud.Service implements ISimulatorResource {
     this.autoStart = props.autoStart ?? true;
   }
 
+  public addPermission(resource: IResource, op: string): void {
+    this.permissions.push([resource, op]);
+  }
+
   public toSimulator(): BaseResourceSchema {
+    const policy: Array<PolicyStatement> = [];
+    for (const [resource, operation] of this.permissions) {
+      policy.push({
+        operation,
+        resourceHandle: simulatorHandleToken(resource),
+      });
+    }
     const schema: ServiceSchema = {
       type: cloud.SERVICE_FQN,
       path: this.node.path,
@@ -31,6 +48,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
         sourceCodeFile: relative(App.of(this).outdir, this.entrypoint),
         autoStart: this.autoStart,
       },
+      policy: policy,
       attrs: {} as any,
     };
     return schema;
@@ -46,7 +64,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

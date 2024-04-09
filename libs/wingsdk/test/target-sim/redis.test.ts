@@ -19,6 +19,7 @@ test("create a Redis resource", async () => {
     },
     path: "root/my_redis",
     addr: expect.any(String),
+    policy: [],
     props: {
       port: expect.any(String),
     },

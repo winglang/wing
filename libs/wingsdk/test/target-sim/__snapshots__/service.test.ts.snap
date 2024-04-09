@@ -44,6 +44,7 @@ return class Handler {
         "addr": "c815f66e1cb1ce843a78fc0ecb05e6fc56e3b51516",
         "attrs": {},
         "path": "root/my_service",
+        "policy": [],
         "props": {
           "autoStart": true,
           "environmentVariables": {},
@@ -125,6 +126,10 @@ return class Handler {
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

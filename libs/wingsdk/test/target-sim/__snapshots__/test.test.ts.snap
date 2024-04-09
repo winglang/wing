@@ -32,6 +32,7 @@ async handle(event) {
         "addr": "c86fc1804106bd848769cb0ddbcb872aa1e47943f4",
         "attrs": {},
         "path": "root/env0/test:my_test/Handler",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -129,6 +130,10 @@ async handle(event) {
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

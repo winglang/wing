@@ -34,6 +34,7 @@ my_capture: ["hello","dude"]
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -117,6 +118,10 @@ my_capture: ["hello","dude"]
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -190,6 +195,7 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -273,6 +279,10 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -345,6 +355,7 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -428,6 +439,10 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -499,6 +514,7 @@ my_capture: false
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -582,6 +598,10 @@ my_capture: false
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -655,6 +675,7 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -738,6 +759,10 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -813,6 +838,7 @@ my_capture: new Map([["foo",123],["bar",456]])
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -896,6 +922,10 @@ my_capture: new Map([["foo",123],["bar",456]])
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -973,6 +1003,7 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1056,6 +1087,10 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1130,6 +1165,7 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1213,6 +1249,10 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1284,6 +1324,7 @@ my_capture: 123
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1367,6 +1408,10 @@ my_capture: 123
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1441,6 +1486,7 @@ my_capture: new Set(["boom","bam","bang"])
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1524,6 +1570,10 @@ my_capture: new Set(["boom","bam","bang"])
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1597,6 +1647,7 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1680,6 +1731,10 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1752,6 +1807,7 @@ my_capture: "bam bam bam"
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1835,6 +1891,10 @@ my_capture: "bam bam bam"
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1909,6 +1969,7 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -1992,6 +2053,10 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -2066,6 +2131,7 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
@@ -2149,6 +2215,10 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

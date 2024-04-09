@@ -2,6 +2,7 @@ import { access, constants } from "fs";
 import { basename } from "path";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
+import { isSimulatorInflightHost } from "./resource";
 import { simulatorHandleToken } from "./tokens";
 import { Duration, IInflightHost, Resource } from "../std";
 
@@ -31,13 +32,23 @@ function makeEnvVarName(type: string, resource: IConstruct): string {
 export function bindSimulatorResource(
   filename: string,
   resource: Resource,
-  host: IInflightHost
+  host: IInflightHost,
+  ops: string[]
 ) {
+  // Check if host implements ISimulatorInflightHost
+  if (!isSimulatorInflightHost(host)) {
+    throw new Error(
+      "Host resource must implement sim.ISimulatorInflightHost to bind simulator resources"
+    );
+  }
   const type = basename(filename).split(".")[0];
   const env = makeEnvVarName(type, resource);
   const handle = simulatorHandleToken(resource);
   host.addEnvironment(env, handle);
   host.node.addDependency(resource);
+  for (const op of ops) {
+    host.addPermission(resource, op);
+  }
 }
 
 export function makeSimulatorJsClient(filename: string, resource: Resource) {
@@ -52,7 +63,11 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
   if (!simulatorUrl) {
     throw new Error("Missing environment variable: WING_SIMULATOR_URL");
   }
-  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle);
+  const caller = process.env.WING_SIMULATOR_CALLER;
+  if (!caller) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+  }
+  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
 })()`;
 }
 
