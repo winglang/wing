@@ -127,7 +127,12 @@ describe("captureSnapshot", async () => {
       entrypoint,
       `
       bring cloud;
-      new cloud.Bucket();
+      let b = new cloud.Bucket();
+
+      test "put" {
+        b.put("key", "value");
+        assert(b.get("key") == "value");
+      }
     `
     );
 
