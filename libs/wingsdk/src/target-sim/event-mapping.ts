@@ -9,8 +9,8 @@ import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
 import {
-  BaseResourceSchema,
   ISimulatorResourceInstance,
+  ToSimulatorOutput,
 } from "../simulator/simulator";
 import { IInflightHost, IResource, Node, Resource } from "../std";
 
@@ -71,19 +71,16 @@ export class EventMapping extends Resource implements ISimulatorResource {
     return this._eventProps;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: EventMappingSchema = {
-      type: EVENT_MAPPING_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        subscriber: simulatorHandleToken(this.eventProps.subscriber),
-        publisher: simulatorHandleToken(this.eventProps.publisher),
-        subscriptionProps: this.eventProps.subscriptionProps,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: EventMappingSchema = {
+      subscriber: simulatorHandleToken(this.eventProps.subscriber),
+      publisher: simulatorHandleToken(this.eventProps.publisher),
+      subscriptionProps: this.eventProps.subscriptionProps,
     };
-    return schema;
+    return {
+      type: EVENT_MAPPING_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

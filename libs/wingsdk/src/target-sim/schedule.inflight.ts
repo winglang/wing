@@ -22,7 +22,7 @@ export class Schedule
   private interval: CronExpression;
   private intervalTimeout?: NodeJS.Timeout;
 
-  constructor(props: ScheduleSchema["props"]) {
+  constructor(props: ScheduleSchema) {
     this.interval = parseExpression(props.cronExpression, { utc: true });
     this.scheduleFunction();
   }

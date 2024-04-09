@@ -21,7 +21,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly workers = new Array<Sandbox>();
   private createBundlePromise!: Promise<void>;
 
-  constructor(props: FunctionSchema["props"]) {
+  constructor(props: FunctionSchema) {
     this.sourceCodeFile = props.sourceCodeFile;
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");

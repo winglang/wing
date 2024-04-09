@@ -5,7 +5,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import * as ex from "../ex";
-import { BaseResourceSchema } from "../simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost } from "../std";
 
 const DEFAULT_START_COMMAND = "npm run start";
@@ -40,24 +40,21 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
     return this._host ?? { url: `http://localhost:${this._localPort}` };
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: ReactAppSchema = {
-      type: ex.REACT_APP_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        path: this._projectPath,
-        startCommand: this._startCommand,
-        environmentVariables: Object.fromEntries(
-          this._environmentVariables.entries()
-        ),
-        useBuildCommand: this._useBuildCommand,
-        url: this.url,
-        localPort: this._localPort,
-      },
-      attrs: {},
+  public toSimulator(): ToSimulatorOutput {
+    const props: ReactAppSchema = {
+      path: this._projectPath,
+      startCommand: this._startCommand,
+      environmentVariables: Object.fromEntries(
+        this._environmentVariables.entries()
+      ),
+      useBuildCommand: this._useBuildCommand,
+      url: this.url,
+      localPort: this._localPort,
     };
-    return schema;
+    return {
+      type: ex.REACT_APP_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

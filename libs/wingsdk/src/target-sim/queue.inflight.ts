@@ -25,7 +25,7 @@ export class Queue
   private readonly timeoutSeconds: number;
   private readonly retentionPeriod: number;
 
-  constructor(props: QueueSchema["props"]) {
+  constructor(props: QueueSchema) {
     this.timeoutSeconds = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
     this.processLoop = runEvery(100, async () => this.processMessages()); // every 0.1 seconds

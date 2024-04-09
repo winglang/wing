@@ -1,9 +1,10 @@
 import { ISimulatorResource } from "./resource";
+import { StateSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
 import { INFLIGHT_SYMBOL } from "../core/types";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Json, Resource } from "../std";
 
 /**
@@ -57,13 +58,11 @@ export class State extends Resource implements ISimulatorResource {
     super.onLift(host, ops);
   }
 
-  public toSimulator(): BaseResourceSchema {
+  public toSimulator(): ToSimulatorOutput {
+    const props: StateSchema = {};
     return {
       type: STATE_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {},
-      attrs: {},
+      props,
     };
   }
 }

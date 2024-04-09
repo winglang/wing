@@ -21,7 +21,7 @@ export class ReactApp implements IReactAppClient, ISimulatorResourceInstance {
   private childProcess?: ChildProcess;
   private url: string;
 
-  constructor(props: ReactAppSchema["props"]) {
+  constructor(props: ReactAppSchema) {
     this.path = props.path;
     this.startCommand = props.startCommand;
     this.environmentVariables = props.environmentVariables;

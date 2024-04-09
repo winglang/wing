@@ -31,7 +31,7 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
   private status: EndpointExposeStatus = "disconnected";
   private _context: ISimulatorContext | undefined;
 
-  constructor(private readonly _props: EndpointSchema["props"]) {}
+  constructor(private readonly _props: EndpointSchema) {}
 
   private get context(): ISimulatorContext {
     if (!this._context) {
