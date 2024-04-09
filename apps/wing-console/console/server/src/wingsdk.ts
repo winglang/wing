@@ -4,7 +4,6 @@ import type {
   TableSchema as TableSchema_,
   WebsiteSchema as WebsiteSchema_,
   EndpointSchema as EndpointSchema_,
-  ReactAppSchema as ReactAppSchema_,
 } from "@winglang/sdk/lib/target-sim/schema-resources.js";
 
 export {
@@ -41,7 +40,4 @@ export type WebsiteSchema = BaseResourceSchema & {
 };
 export type EndpointSchema = BaseResourceSchema & {
   props: EndpointSchema_;
-};
-export type ReactAppSchema = BaseResourceSchema & {
-  props: ReactAppSchema_;
 };
