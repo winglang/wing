@@ -24,7 +24,7 @@ The `cloud.Domain` resource represents a domain configuration in the cloud.
 bring cloud;
 
 let domain = new cloud.Domain(
-  domain: "www.example.com",
+  domainName: "www.example.com",
 );
 
 new cloud.Website(path: "./site", domain: domain);
@@ -42,14 +42,20 @@ Note that domain data is not persisted between simulator runs.
 
 The AWS implementation of `cloud.Domain` requires certain platform-specific values such as the `hostedZoneId` and either `iamCertificate` or `acmCertificateArn` to be provided.
 
-To provide these values, there are two options. You can either pass the values in the command line or you can provide a YAML file with the configurations.
+To provide these values, there are two options.
 
-This YAML file should contain the data as shown in the example below:
+You can either pass the values in the command line or you can provide a TOML file with the configurations:
 
-```yaml
-root/Default/Default/cloud.Domain:
-  hostedZoneId: Z0XXXXXXXXXXXXXXXXXXF
-  acmCertificateArn: arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+```
+wing compile -t tf-aws main.w --value root/Default/Default/Domain/acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee --value root/Default/Default/Domain/hostedZoneId=Z0111111111111111111F
+```
+
+Alternatively, create a `wing.toml` file in your project directory:
+
+```toml
+[root.Default.Default.Domain]
+hostedZoneId = "Z0XXXXXXXXXXXXXXXXXXF"
+acmCertificateArn = "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
 ```
 
 ### Azure (`tf-azure`)
