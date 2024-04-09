@@ -9,7 +9,7 @@ import { Json } from "../std";
 
 export class State implements IStateClient, ISimulatorResourceInstance {
   private _context: ISimulatorContext | undefined;
-  constructor(_props: StateSchema["props"]) {}
+  constructor(_props: StateSchema) {}
 
   private get context(): ISimulatorContext {
     if (!this._context) {

@@ -13,7 +13,7 @@ import {
 } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { BaseResourceSchema } from "../simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
@@ -68,17 +68,14 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     return fn;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: ScheduleSchema = {
-      type: cloud.SCHEDULE_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        cronExpression: this.cronExpression,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: ScheduleSchema = {
+      cronExpression: this.cronExpression,
     };
-    return schema;
+    return {
+      type: cloud.SCHEDULE_FQN,
+      props,
+    };
   }
 
   /** @internal */

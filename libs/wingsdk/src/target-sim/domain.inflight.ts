@@ -7,7 +7,7 @@ import {
 } from "../simulator";
 
 export class Domain implements IDomainClient, ISimulatorResourceInstance {
-  constructor(_props: DomainSchema["props"]) {}
+  constructor(_props: DomainSchema) {}
   public async init(_context: ISimulatorContext): Promise<Record<string, any>> {
     return {};
   }

@@ -1,4 +1,4 @@
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost, IResource } from "../std";
 
 /**
@@ -29,7 +29,7 @@ export interface ISimulatorResource extends IResource {
   /**
    * Convert this resource to a resource schema for the simulator.
    */
-  toSimulator(): BaseResourceSchema;
+  toSimulator(): ToSimulatorOutput;
 }
 
 export function isSimulatorResource(obj: any): obj is ISimulatorResource {

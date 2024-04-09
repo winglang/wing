@@ -6,8 +6,8 @@ import express from "express";
 import { IEventPublisher } from "./event-mapping";
 import {
   ApiAttributes,
-  ApiRoute,
   ApiSchema,
+  ApiRoute,
   EventSubscription,
 } from "./schema-resources";
 import { exists } from "./util";
@@ -57,7 +57,7 @@ export class Api
   private url: string | undefined;
   private port: number | undefined;
 
-  constructor(props: ApiSchema["props"]) {
+  constructor(props: ApiSchema) {
     this.routes = [];
     const { corsHeaders } = props;
 

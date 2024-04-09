@@ -15,7 +15,7 @@ export class Redis
   private connection?: IoRedis;
   private isCleanedUp = false;
 
-  public constructor(private readonly props: RedisSchema["props"]) {
+  public constructor(private readonly props: RedisSchema) {
     super();
   }
 

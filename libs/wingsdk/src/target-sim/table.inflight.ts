@@ -16,7 +16,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
   private _context: ISimulatorContext | undefined;
   private readonly initialRows: Record<string, Json>;
 
-  public constructor(props: TableSchema["props"]) {
+  public constructor(props: TableSchema) {
     this.name = props.name;
     this.columns = props.columns;
     this.primaryKey = props.primaryKey;

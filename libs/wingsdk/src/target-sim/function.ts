@@ -6,7 +6,7 @@ import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { App } from "../core";
-import { BaseResourceSchema, PolicyStatement } from "../simulator/simulator";
+import { PolicyStatement, ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost, IResource } from "../std";
 import { Duration } from "../std/duration";
 
@@ -46,7 +46,7 @@ export class Function
     this.permissions.push([resource, op]);
   }
 
-  public toSimulator(): BaseResourceSchema {
+  public toSimulator(): ToSimulatorOutput {
     const outdir = App.of(this).outdir;
 
     const policy: Array<PolicyStatement> = [];
@@ -57,22 +57,18 @@ export class Function
       });
     }
 
-    const schema: FunctionSchema = {
-      type: cloud.FUNCTION_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        sourceCodeFile: relative(outdir, this.entrypoint),
-        sourceCodeLanguage: "javascript",
-        environmentVariables: this.env,
-        timeout: this.timeout.seconds * 1000,
-        concurrency: this.concurrency,
-      },
-      policy: policy,
-      attrs: {} as any,
+    const props: FunctionSchema = {
+      sourceCodeFile: relative(outdir, this.entrypoint),
+      sourceCodeLanguage: "javascript",
+      environmentVariables: this.env,
+      timeout: this.timeout.seconds * 1000,
+      concurrency: this.concurrency,
     };
-
-    return schema;
+    return {
+      type: cloud.FUNCTION_FQN,
+      props,
+      policy,
+    };
   }
 
   /** @internal */

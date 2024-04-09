@@ -4,7 +4,7 @@ import { WebsiteSchema, FileRoutes } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost } from "../std";
 
 /**
@@ -47,19 +47,16 @@ export class Website extends cloud.Website implements ISimulatorResource {
   }
 
   /** Returns sim schema */
-  public toSimulator(): BaseResourceSchema {
-    const schema: WebsiteSchema = {
-      type: cloud.WEBSITE_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        staticFilesPath: this.path,
-        fileRoutes: this.fileRoutes,
-        errorDocument: this.errorDocument,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: WebsiteSchema = {
+      staticFilesPath: this.path,
+      fileRoutes: this.fileRoutes,
+      errorDocument: this.errorDocument,
     };
-    return schema;
+    return {
+      type: cloud.WEBSITE_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

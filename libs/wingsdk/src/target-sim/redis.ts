@@ -4,7 +4,7 @@ import { ISimulatorResource } from "./resource";
 import { RedisSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as ex from "../ex";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost } from "../std";
 
 /**
@@ -36,17 +36,14 @@ export class Redis extends ex.Redis implements ISimulatorResource {
     this.hostPort = c.hostPort;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: RedisSchema = {
-      type: ex.REDIS_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        port: this.hostPort,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: RedisSchema = {
+      port: this.hostPort,
     };
-    return schema;
+    return {
+      type: ex.REDIS_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
