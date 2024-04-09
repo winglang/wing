@@ -2,7 +2,11 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
+import {
+  Function,
+  FunctionInflightMethods as SimFunctionInflightMethods,
+} from "./function";
+import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
@@ -10,7 +14,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { NotImplementedError } from "../core/errors";
 import { convertBetweenHandlers } from "../shared/convert";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
@@ -22,6 +26,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: Duration;
   private readonly retentionPeriod: Duration;
   private readonly dlq?: cloud.DeadLetterQueueProps;
+  private readonly policy: Policy;
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
@@ -52,6 +57,8 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
         "Retention period must be greater than or equal to timeout"
       );
     }
+
+    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
   /** @internal */
@@ -119,33 +126,32 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       name: "setConsumer()",
     });
 
+    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
+    this.policy.addStatement(
+      fn,
+      SimFunctionInflightMethods.HAS_AVAILABLE_WORKERS
+    );
+
     return fn;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const dlqSchema = this.dlq
-      ? {
+  public toSimulator(): ToSimulatorOutput {
+    const props: QueueSchema = {
+      timeout: this.timeout.seconds,
+      retentionPeriod: this.retentionPeriod.seconds,
+      dlq: this.dlq ? {
           dlqHandler: simulatorHandleToken(this.dlq.queue),
-          maxDeliveryAttemps:
-            this.dlq.maxDeliveryAttemps ?? cloud.DEFAULT_DELIVERY_ATTEMPS,
-        }
-      : undefined;
-    const schema: QueueSchema = {
-      type: cloud.QUEUE_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        timeout: this.timeout.seconds,
-        retentionPeriod: this.retentionPeriod.seconds,
-        dlq: dlqSchema,
-      },
-      attrs: {} as any,
+          maxDeliveryAttemps: this.dlq.maxDeliveryAttemps ?? cloud.DEFAULT_DELIVERY_ATTEMPS,
+        } : undefined,
     };
-    return schema;
+    return {
+      type: cloud.QUEUE_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

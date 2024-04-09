@@ -11,6 +11,7 @@ pass ─ exec.test.wsim » root/env5/test:exec() with cwd option
  
  
 Tests 6 passed (6)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

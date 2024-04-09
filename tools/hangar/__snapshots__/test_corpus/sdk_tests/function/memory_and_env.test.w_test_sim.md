@@ -6,6 +6,7 @@ pass ─ memory_and_env.test.wsim » root/env0/test:function with memory and fun
  
  
 Tests 1 passed (1)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

@@ -7,6 +7,7 @@ pass ─ explicit_lift_qualification.test.wsim » root/env1/test:explicit closur
  
  
 Tests 2 passed (2)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

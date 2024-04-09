@@ -1,10 +1,9 @@
 import { ENDPOINT_FQN } from "@winglang/sdk/lib/cloud/endpoint.js";
 import { type Endpoint } from "@winglang/sdk/lib/target-sim/endpoint.inflight.js";
-import type { EndpointSchema } from "@winglang/sdk/lib/target-sim/schema-resources.js";
 import * as z from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import type { Simulator } from "../wingsdk.js";
+import type { EndpointSchema, Simulator } from "../wingsdk.js";
 
 export type EndpointExposeStatus = "connected" | "disconnected" | "connecting";
 

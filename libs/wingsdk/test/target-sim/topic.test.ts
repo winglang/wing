@@ -18,6 +18,7 @@ test("create a topic", async () => {
     },
     path: "root/my_topic",
     addr: expect.any(String),
+    policy: [],
     props: {},
     type: cloud.TOPIC_FQN,
   });

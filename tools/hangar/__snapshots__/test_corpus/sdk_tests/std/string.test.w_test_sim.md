@@ -20,6 +20,7 @@ pass ─ string.test.wsim » root/env9/test:startsWith()
  
  
 Tests 15 passed (15)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

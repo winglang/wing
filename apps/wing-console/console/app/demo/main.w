@@ -82,7 +82,7 @@ new cloud.Service(
 );
 
 let cronSchedule = new cloud.Schedule(cloud.ScheduleProps{
-  cron: "* * * * ?"
+  cron: "* * * * *"
 }) as "Cron Schedule";
 
 // cronSchedule.onTick(inflight () => {

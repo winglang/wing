@@ -15,6 +15,7 @@ pass ─ set.test.wsim » root/env9/test:copy()
  
  
 Tests 10 passed (10)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

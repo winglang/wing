@@ -107,7 +107,7 @@ export class Bucket extends Resource {
    * Gets topic form the topics map, or creates if not exists
    * @param actionType
    */
-  private getTopic(actionType: BucketEventType): Topic {
+  protected getTopic(actionType: BucketEventType): Topic {
     if (!this._topics.has(actionType)) {
       this._topics.set(actionType, this.createTopic(actionType));
     }

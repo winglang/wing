@@ -24,23 +24,9 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c83fbf14da06343c694e42a8758f43bcb1f1c2c389",
-        "attrs": {},
-        "path": "root/my_on_deploy/Function",
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c83fbf14.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/my_on_deploy": {
         "addr": "c8e2618b976544550a8396a3817f0bad07099f7050",
-        "attrs": {},
         "deps": [
           "root/my_on_deploy/Function",
         ],
@@ -50,7 +36,20 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.OnDeploy",
       },
-    ],
+      "root/my_on_deploy/Function": {
+        "addr": "c83fbf14da06343c694e42a8758f43bcb1f1c2c389",
+        "path": "root/my_on_deploy/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c83fbf14.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -124,6 +123,10 @@ return class Handler {
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

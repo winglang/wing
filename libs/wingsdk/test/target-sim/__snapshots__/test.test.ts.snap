@@ -27,23 +27,9 @@ async handle(event) {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c86fc1804106bd848769cb0ddbcb872aa1e47943f4",
-        "attrs": {},
-        "path": "root/env0/test:my_test/Handler",
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/handler_c86fc180.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/cloud.TestRunner": {
         "addr": "c8647dd8d2adabe83cc081ebe0ccbefe4a068ef3bf",
-        "attrs": {},
         "deps": [
           "root/env0/test:my_test/Handler",
         ],
@@ -55,7 +41,20 @@ async handle(event) {
         },
         "type": "@winglang/sdk.std.TestRunner",
       },
-    ],
+      "root/env0/test:my_test/Handler": {
+        "addr": "c86fc1804106bd848769cb0ddbcb872aa1e47943f4",
+        "path": "root/env0/test:my_test/Handler",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/handler_c86fc180.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -129,6 +128,10 @@ async handle(event) {
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

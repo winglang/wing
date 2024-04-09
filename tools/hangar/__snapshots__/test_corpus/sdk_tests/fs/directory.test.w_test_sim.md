@@ -8,6 +8,7 @@ pass ─ directory.test.wsim » root/env2/test:isDir()
  
  
 Tests 3 passed (3)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
