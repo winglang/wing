@@ -55,11 +55,21 @@ export function unwrap<T>(value: T): T | never {
 
 export function createExternRequire(dirname: string) {
   return (externPath: string) => {
-    // using eval to always avoid bundling jiti
+    // using eval to always avoid bundling
     const jiti: typeof import("jiti").default = eval("require('jiti')");
+    const esbuild: typeof import("esbuild") = eval("require('esbuild')");
+
     const newRequire = jiti(dirname, {
       sourceMaps: true,
       interopDefault: true,
+      transform(opts) {
+        return esbuild.transformSync(opts.source, {
+          format: "cjs",
+          target: "node20",
+          sourcemap: "inline",
+          loader: opts.ts ? "ts" : "js",
+        });
+      },
     });
     return newRequire(externPath);
   };
