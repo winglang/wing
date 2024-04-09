@@ -4,7 +4,7 @@ import { eventHandler, Events } from "./events.js";
 import { onMessage } from "./onmessage.js";
 import { ErrorMessage, InitializedMessage } from "./messages.js";
 
-const WING_CLOUD_URL = "wss://4lc628cb78.execute-api.us-east-1.amazonaws.com/prod";
+const WING_CLOUD_URL = "wss://xhvezvbg16.execute-api.us-east-1.amazonaws.com/prod";
 
 export interface ConnectProps {
   subdomain?: string;
