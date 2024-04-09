@@ -6,7 +6,6 @@ import { CounterInteractionView } from "./counter-interaction-view.js";
 import { EndpointInteractionView } from "./endpoint-interaction-view.js";
 import { FunctionInteractionView } from "./function-interaction-view.js";
 import { QueueInteractionView } from "./queue-interaction-view.js";
-import { ReactAppInteractionView } from "./react-app-interaction-view.js";
 import { RedisInteractionView } from "./redis-interaction-view.js";
 import { ScheduleInteractionView } from "./schedule-interaction-view.js";
 import { TableInteractionView } from "./table-interaction-view.js";
@@ -49,9 +48,6 @@ export const ResourceInteractionView = memo(
         }
         case "@winglang/sdk.ex.Redis": {
           return <RedisInteractionView resourcePath={resourcePath} />;
-        }
-        case "@winglang/sdk.ex.ReactApp": {
-          return <ReactAppInteractionView resourcePath={resourcePath} />;
         }
         case "@winglang/sdk.cloud.Website": {
           return <WebsiteInteractionView resourcePath={resourcePath} />;
