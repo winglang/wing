@@ -6,6 +6,7 @@ pass ─ structs.test.wsim » root/env0/test:struct definitions are phase indepe
  
  
 Tests 1 passed (1)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
