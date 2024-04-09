@@ -166,7 +166,8 @@ async function tryReadFile(file: string): Promise<string | undefined> {
 async function createMarkdownSnapshot(baseName: string, synthDir: string) {
   const fileMap: Record<string, string> = {};
   const exclude = ["connections.json", "tree.json", "**/*.zip", "**/*.map"];
-  for await (const subpath of glob.iterate("**/*", {
+  const include = ["**/*.js", "**/*.json", "**/*.tf", "**/*.ts", "**/*.yaml", "**/*.yml"];
+  for await (const subpath of glob.iterate(include, {
     cwd: synthDir,
     nodir: true,
     dot: false, // don't include the `.wing` directory
