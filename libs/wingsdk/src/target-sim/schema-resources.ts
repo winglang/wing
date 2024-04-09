@@ -20,7 +20,7 @@ import {
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
-import { ColumnType, REACT_APP_FQN, REDIS_FQN, TABLE_FQN } from "../ex";
+import { ColumnType, REDIS_FQN, TABLE_FQN } from "../ex";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
@@ -253,21 +253,6 @@ export interface WebsiteSchema extends BaseResourceSchema {
 export interface WebsiteAttributes {
   /** The URL of the Website. */
   readonly url: string;
-}
-
-export interface ReactAppSchema extends BaseResourceSchema {
-  readonly type: typeof REACT_APP_FQN;
-  readonly props: {
-    path: string;
-    startCommand: string;
-    environmentVariables: Record<string, string>;
-    useBuildCommand: boolean;
-    url: string;
-    localPort: string | number;
-  };
-}
-export interface ReactAppAttributes {
-  url: string;
 }
 
 export interface RedisAttributes {}
