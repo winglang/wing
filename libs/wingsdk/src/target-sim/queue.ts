@@ -13,7 +13,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { NotImplementedError } from "../core/errors";
 import { convertBetweenHandlers } from "../shared/convert";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
@@ -125,18 +125,15 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     return fn;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: QueueSchema = {
-      type: cloud.QUEUE_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        timeout: this.timeout.seconds,
-        retentionPeriod: this.retentionPeriod.seconds,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: QueueSchema = {
+      timeout: this.timeout.seconds,
+      retentionPeriod: this.retentionPeriod.seconds,
     };
-    return schema;
+    return {
+      type: cloud.QUEUE_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

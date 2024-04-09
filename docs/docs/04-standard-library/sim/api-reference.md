@@ -51,7 +51,7 @@ new sim.Container(props: ContainerProps);
 ##### `toSimulator` <a name="toSimulator" id="@winglang/sdk.sim.Container.toSimulator"></a>
 
 ```wing
-toSimulator(): BaseResourceSchema
+toSimulator(): ToSimulatorOutput
 ```
 
 Convert this resource to a resource schema for the simulator.
@@ -184,7 +184,7 @@ Adds a statement to the policy.
 ##### `toSimulator` <a name="toSimulator" id="@winglang/sdk.sim.Policy.toSimulator"></a>
 
 ```wing
-toSimulator(): BaseResourceSchema
+toSimulator(): ToSimulatorOutput
 ```
 
 Convert this resource to a resource schema for the simulator.
@@ -312,7 +312,7 @@ The object key retrieved through the inflight `state.get()`.
 ##### `toSimulator` <a name="toSimulator" id="@winglang/sdk.sim.State.toSimulator"></a>
 
 ```wing
-toSimulator(): BaseResourceSchema
+toSimulator(): ToSimulatorOutput
 ```
 
 Convert this resource to a resource schema for the simulator.
@@ -677,7 +677,7 @@ Interfaces shared by all preflight classes targeting the simulator.
 ##### `toSimulator` <a name="toSimulator" id="@winglang/sdk.sim.ISimulatorResource.toSimulator"></a>
 
 ```wing
-toSimulator(): BaseResourceSchema
+toSimulator(): ToSimulatorOutput
 ```
 
 Convert this resource to a resource schema for the simulator.

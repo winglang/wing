@@ -15,7 +15,7 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
   private readonly secretsFile: string;
   private readonly name: string;
 
-  constructor(props: SecretSchema["props"]) {
+  constructor(props: SecretSchema) {
     this.secretsFile = path.join(os.homedir(), ".wing", "secrets.json");
     if (!fs.existsSync(this.secretsFile)) {
       throw new Error(

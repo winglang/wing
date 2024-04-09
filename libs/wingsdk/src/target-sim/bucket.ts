@@ -6,7 +6,7 @@ import { BucketSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost } from "../std";
 
 /**
@@ -108,19 +108,16 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     return join(__dirname, "bucket.onevent.inflight.js");
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: BucketSchema = {
-      type: cloud.BUCKET_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        public: this.public,
-        initialObjects: this.initialObjects,
-        topics: this.convertTopicsToHandles(),
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: BucketSchema = {
+      public: this.public,
+      initialObjects: this.initialObjects,
+      topics: this.convertTopicsToHandles(),
     };
-    return schema;
+    return {
+      type: cloud.BUCKET_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

@@ -7,7 +7,7 @@ import {
 } from "../simulator";
 
 export class Policy implements IPolicyClient, ISimulatorResourceInstance {
-  constructor(_props: PolicySchema["props"]) {}
+  constructor(_props: PolicySchema) {}
   public async init(_context: ISimulatorContext): Promise<Record<string, any>> {
     return {};
   }

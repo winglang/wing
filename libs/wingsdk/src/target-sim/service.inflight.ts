@@ -21,7 +21,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   private environmentVariables: Record<string, string>;
   private createBundlePromise!: Promise<void>;
 
-  constructor(props: ServiceSchema["props"]) {
+  constructor(props: ServiceSchema) {
     this.sourceCodeFile = props.sourceCodeFile;
     this.autoStart = props.autoStart;
     this.environmentVariables = props.environmentVariables ?? {};

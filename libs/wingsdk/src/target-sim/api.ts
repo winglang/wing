@@ -5,12 +5,12 @@ import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
-import { ApiSchema, ApiRoute } from "./schema-resources";
+import { ApiRoute, ApiSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
@@ -234,18 +234,15 @@ export class Api extends cloud.Api implements ISimulatorResource {
     this.addEndpoint(path, cloud.HttpMethod.CONNECT, inflight, props);
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: ApiSchema = {
-      type: cloud.API_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        openApiSpec: this._getOpenApiSpec(),
-        corsHeaders: this._generateCorsHeaders(this.corsOptions),
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: ApiSchema = {
+      openApiSpec: this._getOpenApiSpec(),
+      corsHeaders: this._generateCorsHeaders(this.corsOptions),
     };
-    return schema;
+    return {
+      type: cloud.API_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

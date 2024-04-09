@@ -19,7 +19,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
   private server?: Server;
   private url?: string;
 
-  constructor(props: WebsiteSchema["props"]) {
+  constructor(props: WebsiteSchema) {
     // Set up an express server that handles the routes.
     this.app = express();
 

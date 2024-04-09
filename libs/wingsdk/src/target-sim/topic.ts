@@ -9,8 +9,7 @@ import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Testing } from "../simulator";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { Testing, ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 const QUEUE_PUSH_METHOD = "push";
@@ -120,14 +119,11 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     ];
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: TopicSchema = {
+  public toSimulator(): ToSimulatorOutput {
+    const props: TopicSchema = {};
+    return {
       type: cloud.TOPIC_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {},
-      attrs: {} as any,
+      props,
     };
-    return schema;
   }
 }

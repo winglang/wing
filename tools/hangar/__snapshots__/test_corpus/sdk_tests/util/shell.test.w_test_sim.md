@@ -12,6 +12,7 @@ pass ─ shell.test.wsim » root/env6/test:shell() with throw option
  
  
 Tests 7 passed (7)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
