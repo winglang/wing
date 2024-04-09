@@ -42,7 +42,7 @@ Note that domain data is not persisted between simulator runs.
 
 The AWS implementation of `cloud.Domain` requires certain platform-specific values such as the `hostedZoneId` and either `iamCertificate` or `acmCertificateArn` to be provided.
 
-To provide these values, there are two options. you can either pass the values in the command line or you can provide a TOML file with the configurations:
+To provide these values, there are two options. You can either pass the values in the command line or you can provide a TOML file with the configurations:
 
 ```
 wing compile -t tf-aws main.w --value root/Default/Default/Domain/acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee --value root/Default/Default/Domain/hostedZoneId=Z0111111111111111111F
