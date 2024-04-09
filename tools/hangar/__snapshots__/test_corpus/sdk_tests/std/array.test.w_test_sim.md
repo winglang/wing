@@ -23,6 +23,7 @@ pass ─ array.test.wsim » root/env9/test:join()
  
  
 Tests 18 passed (18)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

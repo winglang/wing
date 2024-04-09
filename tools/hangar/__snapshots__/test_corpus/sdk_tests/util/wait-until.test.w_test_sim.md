@@ -11,6 +11,7 @@ pass ─ wait-until.test.wsim » root/env5/test:throwing exception from predicat
  
  
 Tests 6 passed (6)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

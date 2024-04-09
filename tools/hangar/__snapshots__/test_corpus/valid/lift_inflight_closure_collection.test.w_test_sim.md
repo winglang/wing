@@ -9,6 +9,7 @@ pass ─ lift_inflight_closure_collection.test.wsim » root/env3/test:lift closu
  
  
 Tests 4 passed (4)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

@@ -1,6 +1,6 @@
 import * as cp from "child_process";
 import { existsSync, readFile, readFileSync, realpathSync, rm, rmSync, statSync } from "fs";
-import { basename, join, relative, resolve, sep } from "path";
+import { basename, join, relative, resolve } from "path";
 import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
@@ -12,6 +12,9 @@ import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
+import { SnapshotMode, SnapshotResult, captureSnapshot, determineSnapshotMode } from "./snapshots";
+import { SNAPSHOT_ERROR_PREFIX } from "./snapshots-help";
+import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
 
@@ -21,31 +24,30 @@ const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_IDE
 const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
 
 /**
- * @param path path to the test/s file
- * @returns the file name and parent dir in the following format: "folder/file.ext"
- */
-const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
-
-/**
  * Options for the `test` command.
  */
 export interface TestOptions extends CompileOptions {
   /**
    * Whether the output artifacts should be kept or cleaned up after the test run.
    */
-  clean: boolean;
+  readonly clean: boolean;
   /**
    * The name of the output file.
    */
-  outputFile?: string;
+  readonly outputFile?: string;
   /**
    * String representing a regex pattern used to selectively filter which tests to run.
    */
-  testFilter?: string;
+  readonly testFilter?: string;
   /**
    * How many times failed tests should be retried.
    */
-  retry?: number;
+  readonly retry?: number;
+
+  /**
+   * Determine snapshot behavior.
+   */
+  readonly snapshots?: SnapshotMode;
 }
 
 const TEST_FILE_PATTERNS = ["**/*.test.w", "**/{main,*.main}.{w,ts}"];
@@ -97,17 +99,22 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   }
 
   const startTime = Date.now();
-  const results: { testName: string; results: std.TestResult[] }[] = [];
+  const results: SingleTestResult[] = [];
   process.env.WING_TARGET = determineTargetFromPlatforms(options.platform ?? []);
   const testFile = async (entrypoint: string) => {
-    const testName = generateTestName(entrypoint);
+    const testName = renderTestName(entrypoint);
     try {
-      const singleTestResults: std.TestResult[] | void = await testOne(entrypoint, options);
-      results.push({ testName, results: singleTestResults ?? [] });
+      const singleTestResults = await testOne(testName, entrypoint, options);
+      results.push(singleTestResults);
     } catch (error: any) {
       console.log(error.message);
+      const snapshot = error.message?.startsWith(SNAPSHOT_ERROR_PREFIX)
+        ? SnapshotResult.MISMATCH
+        : SnapshotResult.SKIPPED;
+
       results.push({
-        testName: generateTestName(entrypoint),
+        testName,
+        snapshot,
         results: [
           {
             pass: false,
@@ -141,18 +148,59 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   return 0;
 }
 
-async function testOne(entrypoint: string, options: TestOptions) {
-  const target = process.env.WING_TARGET; // TODO: try to just call method
-  const synthDir = await withSpinner(
-    `Compiling ${generateTestName(entrypoint)} to ${target}...`,
-    async () =>
-      compile(entrypoint, {
-        ...options,
-        rootId: options.rootId ?? `Test.${nanoid(10)}`,
-        testing: true,
-      })
-  );
+export type SingleTestResult = {
+  readonly testName: string;
+  readonly results: std.TestResult[];
+  readonly snapshot: SnapshotResult;
+};
 
+async function testOne(
+  testName: string,
+  entrypoint: string,
+  options: TestOptions
+): Promise<SingleTestResult> {
+  const target = determineTargetFromPlatforms(options.platform);
+
+  // determine snapshot behavior
+  const snapshotMode = determineSnapshotMode(target, options);
+  const shouldExecute = snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.DEPLOY;
+
+  let results: std.TestResult[] = [];
+  if (shouldExecute) {
+    const synthDir = await withSpinner(
+      `Compiling ${renderTestName(entrypoint)} to ${target}...`,
+      async () =>
+        compile(entrypoint, {
+          ...options,
+          rootId: options.rootId ?? `Test.${nanoid(10)}`,
+          testing: true,
+        })
+    );
+
+    results = await executeTest(synthDir, target, options);
+  }
+
+  // if one of the tests failed, return the results without updating any snapshots.
+  const success = !results.some((r) => !r.pass);
+  let snapshot = SnapshotResult.SKIPPED;
+
+  // if all tests pass, capture snapshots
+  if (success) {
+    snapshot = await captureSnapshot(entrypoint, target, options);
+  }
+
+  return {
+    testName,
+    results: results,
+    snapshot,
+  };
+}
+
+async function executeTest(
+  synthDir: string,
+  target: string | undefined,
+  options: TestOptions
+): Promise<std.TestResult[]> {
   switch (target) {
     case BuiltinPlatform.SIM:
       return testSimulator(synthDir, options);
@@ -323,7 +371,9 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   await s.stop();
 
   const testReport = await renderTestReport(synthDir, results);
-  console.log(testReport);
+  if (testReport.length > 0) {
+    console.log(testReport);
+  }
 
   let args: { methods: Record<string, Record<string, string>> };
   if (existsSync(join(synthDir, "usage_context.json"))) {
@@ -339,7 +389,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   return results.map((r) => ({ ...r, args }));
 }
 
-async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
+async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
   const { clean, testFilter, retry, platform = [BuiltinPlatform.SIM] } = options;
 
   try {
@@ -372,7 +422,9 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
     });
 
     const testReport = await renderTestReport(synthDir, results);
-    console.log(testReport);
+    if (testReport.length > 0) {
+      console.log(testReport);
+    }
 
     if (testResultsContainsFailure(results)) {
       console.log("One or more tests failed. Cleaning up resources...");
@@ -427,7 +479,9 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
     });
 
     const testReport = await renderTestReport(synthDir, results);
-    console.log(testReport);
+    if (testReport.length > 0) {
+      console.log(testReport);
+    }
 
     if (testResultsContainsFailure(results)) {
       console.log("One or more tests failed. Cleaning up resources...");

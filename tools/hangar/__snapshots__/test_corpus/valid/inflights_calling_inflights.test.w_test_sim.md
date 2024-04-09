@@ -7,6 +7,7 @@ pass ─ inflights_calling_inflights.test.wsim » root/env1/test:variable can be
  
  
 Tests 2 passed (2)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
