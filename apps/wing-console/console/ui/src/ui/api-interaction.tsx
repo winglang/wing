@@ -285,7 +285,7 @@ export const ApiInteraction = memo(
                       return (
                         <div
                           className="flex items-center pl-2"
-                          data-testid={`cloud.api:route-${route}`}
+                          data-testid={`cloud.api:route-${item.value}`}
                         >
                           <span className="shrink-0 w-[78px]">{method}</span>
                           <span className="w-full">{route}</span>

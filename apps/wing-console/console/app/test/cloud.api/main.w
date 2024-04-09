@@ -43,3 +43,17 @@ api.options("/test-options", inflight (req: cloud.ApiRequest): cloud.ApiResponse
     body: "Hello OPTIONS!"
   };
 });
+
+api.get("/test-endpoint", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+  return cloud.ApiResponse {
+    status: 200,
+    body: "Hello test get endpoint!"
+  };
+});
+
+api.post("/test-endpoint", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+  return cloud.ApiResponse {
+    status: 200,
+    body: "Hello test post endpoint!"
+  };
+});

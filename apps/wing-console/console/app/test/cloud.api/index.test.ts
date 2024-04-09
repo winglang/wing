@@ -16,7 +16,7 @@ const runApiTest = async (
   await page.getByTestId(`cloud.api:method-entry-${method}`).click();
 
   await page.getByTestId("cloud.api:route").click();
-  await page.getByTestId(`cloud.api:route-${route}`).click();
+  await page.getByTestId(`cloud.api:route-${method} ${route}`).click();
 
   await page.getByTestId("cloud.api:send").click({ force: true });
 
@@ -51,5 +51,14 @@ describe(`${__dirname}/main.w`, () => {
 
   test.skip("options method", async ({ page }) => {
     await runApiTest(page, "OPTIONS", "/test-options", "Hello OPTIONS!");
+  });
+
+  test.skip("test multiple routes with same name", async ({ page }) => {
+    await runApiTest(
+      page,
+      "POST",
+      "/test-endpoint",
+      "Hello test post endpoint!",
+    );
   });
 });
