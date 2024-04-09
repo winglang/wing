@@ -29,7 +29,7 @@ Since secrets creation is platform specific, platforms can now implement a new h
 For example the `sim` platform implementation which needs to store secrets in a `.env` file, would look something like this:
 
 ```js
-public async createSecrets(secrets: { [key: string]: string }): Promise<string> {
+public async configureSecrets(secrets: { [key: string]: string }): Promise<string> {
   let existingSecretsContent = "";
   try {
     existingSecretsContent = fs.readFileSync('./.env', 'utf8');
