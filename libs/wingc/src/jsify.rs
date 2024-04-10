@@ -36,7 +36,7 @@ use crate::{
 
 use self::codemaker::CodeMaker;
 
-const PREFLIGHT_FILE_NAME: &str = "preflight.js";
+const PREFLIGHT_FILE_NAME: &str = "preflight.cjs";
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE: &str = formatcp!("{STDLIB}.core");
@@ -79,7 +79,7 @@ pub struct JSifier<'a> {
 	inflight_file_map: RefCell<IndexMap<String, usize>>,
 
 	/// Map from source file paths to the JS file names they are emitted to.
-	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
+	/// e.g. "bucket.w" -> "preflight.bucket-1.cjs"
 	pub preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
 	source_file_graph: &'a FileGraph,
@@ -218,10 +218,10 @@ impl<'a> JSifier<'a> {
 			// we generate code like this:
 			// ```
 			// module.exports = {
-			//   get inner_directory1() { return require("./preflight.inner-directory1.js") },
-			//   get inner_directory2() { return require("./preflight.inner-directory2.js") },
-			//   ...require("./preflight.inner-file1.js"),
-			//   ...require("./preflight.inner-file2.js"),
+			//   get inner_directory1() { return require("./preflight.inner-directory1.cjs") },
+			//   get inner_directory2() { return require("./preflight.inner-directory2.cjs") },
+			//   ...require("./preflight.inner-file1.cjs"),
+			//   ...require("./preflight.inner-file2.cjs"),
 			// };
 			// ```
 			output.open("module.exports = {");
@@ -261,7 +261,7 @@ impl<'a> JSifier<'a> {
 			// add a number to the end to avoid name collisions
 			let mut preflight_file_counter = self.preflight_file_counter.borrow_mut();
 			*preflight_file_counter += 1;
-			format!("preflight.{}-{}.js", sanitized_name, preflight_file_counter)
+			format!("preflight.{}-{}.cjs", sanitized_name, preflight_file_counter)
 		};
 
 		// Store the file name in a map so if anyone tries to "bring" it as a module,
@@ -1968,7 +1968,7 @@ impl<'a> JSifier<'a> {
 			file_map.insert(class.name.span.file_id.clone(), *id);
 			*id
 		};
-		format!("inflight.{}-{}.js", class.name.name, id)
+		format!("inflight.{}-{}.cjs", class.name.name, id)
 	}
 }
 
