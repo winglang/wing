@@ -1,6 +1,6 @@
 bring expect;
 
-let r: regex = regex.compile("p([a-z]+)ch");
+let r = regex.compile("p([a-z]+)ch");
 
 test "regex.Regexp" {
   // check if there are any matches

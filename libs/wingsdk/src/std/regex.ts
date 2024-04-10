@@ -1,9 +1,19 @@
+import { ILiftable } from "./resource";
 import { InflightClient } from "../core";
+import { normalPath } from "../shared/misc";
 
 /**
- * Regex utilities and functions
+ * Represents a compiled regular expression pattern.
+ * @wingType regex
  */
-export class Util {
+export class Regex implements ILiftable {
+  /**
+   * @internal
+   */
+  public static _toInflightType(): string {
+    return InflightClient.forType(__filename, this.name);
+  }
+
   /**
    * Checks whether a given string matches a specified regex pattern.
    * @param pattern The regex pattern to match against.
@@ -23,28 +33,20 @@ export class Util {
     return new Regex(pattern);
   }
 
-  /**
-   * @internal
-   */
-  public static _toInflightType(): string {
-    return InflightClient.forType(__filename, this.name);
-  }
-  private constructor() {}
-}
-
-/**
- * Represents a compiled regular expression pattern.
- * @wingType regex
- */
-export class Regex {
-  private regex: RegExp;
+  /** @internal */
+  private readonly _regex: RegExp;
 
   /**
    * Constructs a new `Regex` object with the specified pattern.
    * @param pattern The regular expression pattern.
    */
-  constructor(pattern: string) {
-    this.regex = new RegExp(pattern);
+  private constructor(pattern: string) {
+    this._regex = new RegExp(pattern);
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(new (require("${normalPath(__filename)}").Regex)(${this._regex}))`;
   }
 
   /**
@@ -53,7 +55,7 @@ export class Regex {
    * @returns true if there is a match, otherwise false.
    */
   public test(text: string): boolean {
-    return this.regex.test(text);
+    return this._regex.test(text);
   }
 
   /**
@@ -62,7 +64,7 @@ export class Regex {
    * @returns The first match if found, otherwise `undefined`.
    */
   public find(text: string): string | undefined {
-    const result = text.match(this.regex);
+    const result = text.match(this._regex);
     return result ? result[0] : undefined;
   }
 
@@ -72,7 +74,7 @@ export class Regex {
    * @returns An array containing the start and end index of the match if found, otherwise `undefined`.
    */
   public findIndex(text: string): number[] | undefined {
-    const result = this.regex.exec(text);
+    const result = this._regex.exec(text);
     return result ? [result.index, result.index + result[0].length] : undefined;
   }
 
@@ -82,7 +84,7 @@ export class Regex {
    * @returns An array containing the match and all submatches.
    */
   public findSubmatch(text: string): string[] | undefined {
-    const result = text.match(this.regex);
+    const result = text.match(this._regex);
     return result ?? undefined;
   }
 
@@ -92,7 +94,7 @@ export class Regex {
    * @returns An array containing arrays of start and end indices for the match and all submatches.
    */
   public findSubmatchIndex(text: string): number[][] | undefined {
-    const result = this.regex.exec(text);
+    const result = this._regex.exec(text);
     if (!result) {
       return undefined;
     }
@@ -155,6 +157,6 @@ export class Regex {
    * @returns The current regex if it's already global, otherwise a new global regex.
    */
   private getGlobalRegex(): RegExp {
-    return this.regex.global ? this.regex : new RegExp(this.regex, "g");
+    return this._regex.global ? this._regex : new RegExp(this._regex, "g");
   }
 }
