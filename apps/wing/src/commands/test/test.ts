@@ -362,6 +362,38 @@ async function runTestsWithRetry(
   return results;
 }
 
+function inferSeverityOfEvent(trace: std.Trace): "error" | "warn" | "info" | "debug" | "verbose" {
+  if (trace.data.status === "failure") {
+    return "error";
+  }
+  if (trace.type === TraceType.LOG) {
+    return "info";
+  }
+  if (trace.type === TraceType.RESOURCE) {
+    return "debug";
+  }
+  if (trace.type === TraceType.SIMULATOR) {
+    return "verbose";
+  }
+  return "verbose";
+}
+
+const SEVERITY_STRING = {
+  error: "ERROR  ",
+  warn: "WARNING",
+  info: "INFO   ",
+  debug: "DEBUG  ",
+  verbose: "VERBOSE",
+};
+
+const LOG_STREAM_COLORS = {
+  error: chalk.red,
+  warn: chalk.yellow,
+  info: chalk.green,
+  debug: chalk.blue,
+  verbose: chalk.gray,
+};
+
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
   const { clean, testFilter, retry } = options;
@@ -403,13 +435,19 @@ async function testSimulator(synthDir: string, options: TestOptions) {
         }
 
         const pathSuffix = event.sourcePath.split("/").slice(2).join("/");
+        const severity = inferSeverityOfEvent(event);
+        const date = new Date(event.timestamp);
+        const hours = date.getHours().toString().padStart(2, "0");
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+        const seconds = date.getSeconds().toString().padStart(2, "0");
+        const milliseconds = date.getMilliseconds().toString().padStart(3, "0");
+        const timestamp = `${hours}:${minutes}:${seconds}.${milliseconds}`;
         let msg = "";
-        msg += chalk.gray(`[${event.timestamp}] ${testName}`);
-        // msg += chalk.gray(` » /${pathSuffix}`);
-        // msg += "\n";
+        msg += chalk.gray(`[${timestamp}]`);
+        msg += LOG_STREAM_COLORS[severity](` [${SEVERITY_STRING[severity]}]`);
+        msg += chalk.white(` "${testName}" » /${pathSuffix}`);
         msg += "\n";
-        msg += chalk.yellow(`/${pathSuffix}`);
-        msg += chalk.whiteBright(` » ${event.data.message}`);
+        msg += chalk.whiteBright(`${event.data.message}`);
         msg += "\n";
         outputStream!.write(msg);
       },
