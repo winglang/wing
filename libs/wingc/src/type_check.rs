@@ -4140,7 +4140,7 @@ impl<'a> TypeChecker<'a> {
 
 		let extend_interfaces = &interface_type.as_interface().unwrap().extends;
 
-		// If this is a preflight interface and it doesn't extend any other preflight interfacs then implicitly make it extend
+		// If this is a preflight interface and it doesn't extend any other preflight interfaces then implicitly make it extend
 		// the base resource interface. This is so there's some expression in the type system that this is an
 		// interface that can only be implemented on a preflight class. This is safe because all preflight classes implement
 		// `std.Resource` which itself implements `std.IResource`.
