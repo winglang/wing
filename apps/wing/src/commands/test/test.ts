@@ -404,6 +404,10 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   if (options.stream) {
     outputStream = new SpinnerStream(process.stdout, "Running tests...");
 
+    // As of this comment, each Wing test is associated with an isolated environment.
+    // (All resources for test #0 are in root/env0/..., etc.)
+    // This means we can use the environment number to map each environment # to a test name,
+    // so when we receive a trace from the simulator, we can infer which test it's associated with.
     const testMappings = extractTestMappings(s.listResources());
 
     s.onTrace({
