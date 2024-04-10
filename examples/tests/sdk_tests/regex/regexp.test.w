@@ -5,7 +5,7 @@ let r: regex.Regexp = regex.compile("p([a-z]+)ch");
 
 test "regex.Regexp" {
   // check if there are any matches
-  expect.equal(r.matches("peach"), true);
+  expect.equal(r.test("peach"), true);
 
   // returns the first match, if there is one
   expect.equal(r.find("peach peach"), "peach");

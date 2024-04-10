@@ -51,7 +51,7 @@ export class Regexp {
    * @param text The text to check against.
    * @returns true if there is a match, otherwise false.
    */
-  public matches(text: string): boolean {
+  public test(text: string): boolean {
     return this.regex.test(text);
   }
 
