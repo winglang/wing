@@ -4,7 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $api_url, $regex_Util, $token_len, $url_regex }) {
+module.exports = function({ $_urlRegex_test_api_url__, $api_url, $expect_Util, $tokenLength }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,9 +12,9 @@ module.exports = function({ $api_url, $regex_Util, $token_len, $url_regex }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert((await $regex_Util.match($url_regex, $api_url)), "regex.match(url_regex, api.url)");
-      $helpers.assert($api_url.startsWith("http"), "api.url.startsWith(\"http\")");
-      $helpers.assert($helpers.neq($api_url.length, $token_len), "api.url.length != token_len");
+      (await $expect_Util.equal($_urlRegex_test_api_url__, false));
+      (await $expect_Util.equal($api_url.startsWith("http"), true));
+      (await $expect_Util.notEqual($api_url.length, $tokenLength));
     }
   }
   return $Closure1;
@@ -138,7 +138,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
-const regex = $stdlib.regex;
+const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -151,10 +151,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+            $_urlRegex_test_api_url__: ${$stdlib.core.liftObject((urlRegex.test(api.url)))},
             $api_url: ${$stdlib.core.liftObject(api.url)},
-            $regex_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(regex.Util, "@winglang/sdk/regex", "Util"))},
-            $token_len: ${$stdlib.core.liftObject(token_len)},
-            $url_regex: ${$stdlib.core.liftObject(url_regex)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $tokenLength: ${$stdlib.core.liftObject(tokenLength)},
           })
         `;
       }
@@ -172,22 +172,22 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [(urlRegex.test(api.url)), []],
             [api.url, [].concat(["startsWith"], ["length"])],
-            [token_len, []],
-            [url_regex, []],
+            [tokenLength, []],
           ],
           "$inflight_init": [
+            [(urlRegex.test(api.url)), []],
             [api.url, []],
-            [token_len, []],
-            [url_regex, []],
+            [tokenLength, []],
           ],
         });
       }
     }
     const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
-    const url_regex = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256\}\\.[a-zA-Z0-9()]{1,6\}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)";
-    $helpers.assert((!(regex.Util.match(url_regex, api.url))), "!regex.match(url_regex, api.url)");
-    const token_len = api.url.length;
+    const urlRegex = (std.Regex.compile("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256\}\\.[a-zA-Z0-9()]{1,6\}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"));
+    (expect.Util.equal((urlRegex.test(api.url)), false));
+    const tokenLength = api.url.length;
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:phase independent method on string evaluated inflight", new $Closure1(this, "$Closure1"));
   }
 }

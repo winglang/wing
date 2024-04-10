@@ -8,7 +8,6 @@ export * as helpers from "./helpers";
 export * as http from "./http";
 export * as math from "./math";
 export * as platform from "./platform";
-export * as regex from "./regex";
 export * as aws from "./shared-aws";
 export * as simulator from "./simulator";
 export * as std from "./std";
