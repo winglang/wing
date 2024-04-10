@@ -1,5 +1,4 @@
 bring fs;
-bring regex;
 bring expect;
 
 test "write and read file with `encoding` option" {
