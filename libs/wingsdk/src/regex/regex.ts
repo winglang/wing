@@ -15,12 +15,12 @@ export class Util {
   }
 
   /**
-   * Compiles the provided regex pattern into a `Regexp` object.
+   * Compiles the provided regex pattern into a `Regex` object.
    * @param pattern The regex pattern to compile.
-   * @returns A new `Regexp` object representing the compiled pattern.
+   * @returns A new `Regex` object representing the compiled pattern.
    */
-  public static compile(pattern: string): Regexp {
-    return new Regexp(pattern);
+  public static compile(pattern: string): Regex {
+    return new Regex(pattern);
   }
 
   /**
@@ -35,11 +35,11 @@ export class Util {
 /**
  * Represents a compiled regular expression pattern.
  */
-export class Regexp {
+export class Regex {
   private regex: RegExp;
 
   /**
-   * Constructs a new `Regexp` object with the specified pattern.
+   * Constructs a new `Regex` object with the specified pattern.
    * @param pattern The regular expression pattern.
    */
   constructor(pattern: string) {
