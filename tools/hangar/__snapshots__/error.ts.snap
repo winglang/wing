@@ -27,9 +27,7 @@ exports[`inflight_stacktraces.test.w 1`] = `
      │   | test \\"assert\\" {
      │ 7 |   assert(false);
      │   |   ^
-     │ at <ABSOLUTE>/inflight_stacktraces.test.w:7:3
-     │ at handler <ABSOLUTE>/handler_c8b175d2.sandbox.cjs:16:25
-     └ at <ABSOLUTE>/handler_c8b175d2.sandbox.cjs:24:17
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:7:3
 fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal       
      │ Error: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
      │ 
@@ -41,9 +39,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal
      │    | test \\"expect.equal\\" {
      │ 11 |   expect.equal(1,2 );
      │    |   ^
-     │ at <ABSOLUTE>/inflight_stacktraces.test.w:11:3
-     │ at handler <ABSOLUTE>/handler_c822920b.sandbox.cjs:17:25
-     └ at <ABSOLUTE>/handler_c822920b.sandbox.cjs:25:17
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:11:3
 fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get  
      │ Error: Object does not exist (key=doesn't exist): Error: ENOENT: no such file or directory, open '../../../examples/tests/error/target/test/inflight_stacktraces.test.wsim/.state/<STATE_FILE>'
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:15:3
@@ -52,9 +48,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get
      │    | test \\"bucket failed get\\" {
      │ 15 |   bucket.get(\\"doesn't exist\\");
      │    |   ^
-     │ at <ABSOLUTE>/inflight_stacktraces.test.w:15:3
-     │ at handler <ABSOLUTE>/handler_c894fc5f.sandbox.cjs:31:10
-     └ at <ABSOLUTE>/handler_c894fc5f.sandbox.cjs:39:17
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:15:3
 fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure 
      │ Error: ouch
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:20:5
@@ -64,9 +58,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure
      │ 20 |     throw \\"ouch\\";
      │    |     ^
      │ at closure <ABSOLUTE>/inflight_stacktraces.test.w:20:5
-     │ at <ABSOLUTE>/inflight_stacktraces.test.w:22:3
-     │ at handler <ABSOLUTE>/handler_c829ffec.sandbox.cjs:16:25
-     └ at <ABSOLUTE>/handler_c829ffec.sandbox.cjs:24:17
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:22:3
 fail ┌ inflight_stacktraces.test.wsim » root/env4/test:assert with message
      │ Error: assertion failed: x is false
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:27:3
@@ -75,9 +67,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env4/test:assert with message
      │    |   let x = false;
      │ 27 |   assert(x, \\"x is false\\");
      │    |   ^
-     │ at <ABSOLUTE>/inflight_stacktraces.test.w:27:3
-     │ at handler <ABSOLUTE>/handler_c870c4db.sandbox.cjs:16:25
-     └ at <ABSOLUTE>/handler_c870c4db.sandbox.cjs:24:17
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:27:3
  
  
 Tests 5 failed (5)

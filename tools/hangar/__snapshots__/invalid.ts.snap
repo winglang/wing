@@ -3650,9 +3650,7 @@ exports[`simulator_permissions.test.w 1`] = `
      │    | }
      │ 15 | buckets.at(i).put(\\"key\\", \\"value\\");
      │    | ^
-     │ at <ABSOLUTE>/simulator_permissions.test.w:15:3
-     │ at handler <ABSOLUTE>/handler_c81fc91d.sandbox.cjs:60:10
-     └ at <ABSOLUTE>/handler_c81fc91d.sandbox.cjs:68:17
+     └ at <ABSOLUTE>/simulator_permissions.test.w:15:3
 fail ┌ simulator_permissions.test.wsim » root/env1/test:incorrect permission operation
      │ Error: Resource \\"root/env1/test:incorrect permission operation/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env1/b1\\".
      │    --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
@@ -3661,9 +3659,7 @@ fail ┌ simulator_permissions.test.wsim » root/env1/test:incorrect permission 
      │    | }
      │ 25 | buckets.at(i).put(\\"key\\", \\"value\\");
      │    | ^
-     │ at <ABSOLUTE>/simulator_permissions.test.w:25:3
-     │ at handler <ABSOLUTE>/handler_c8f0855e.sandbox.cjs:60:10
-     └ at <ABSOLUTE>/handler_c8f0855e.sandbox.cjs:68:17
+     └ at <ABSOLUTE>/simulator_permissions.test.w:25:3
  
  
 Tests 2 failed (2)
