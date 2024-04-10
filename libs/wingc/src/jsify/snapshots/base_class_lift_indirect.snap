@@ -27,7 +27,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.Base-1.js
+## inflight.Base-1.cjs
 
 ```js
 "use strict";
@@ -44,10 +44,10 @@ module.exports = function({  }) {
   }
   return Base;
 }
-//# sourceMappingURL=inflight.Base-1.js.map
+//# sourceMappingURL=inflight.Base-1.cjs.map
 ```
 
-## inflight.Derived-1.js
+## inflight.Derived-1.cjs
 
 ```js
 "use strict";
@@ -63,10 +63,10 @@ module.exports = function({ $Base }) {
   }
   return Derived;
 }
-//# sourceMappingURL=inflight.Derived-1.js.map
+//# sourceMappingURL=inflight.Derived-1.cjs.map
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -87,7 +87,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Base-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Base-1.cjs")({
           })
         `;
       }
@@ -120,7 +120,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Derived-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Derived-1.cjs")({
             $Base: ${$stdlib.core.liftObject(Base)},
           })
         `;
@@ -152,6 +152,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

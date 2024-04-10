@@ -13,7 +13,7 @@ use serde_json::Value;
 
 static ROOT: &str = "/";
 static NODE_WING_FIELD: &str = "wing";
-static NODE_EXTENSIONS: [&str; 3] = [".js", "json", ".node"];
+static NODE_EXTENSIONS: [&str; 5] = [".js", ".cjs", ".mjs", "json", ".node"];
 static NODE_MAIN_FIELDS: [&str; 1] = ["main"];
 static NODE_BUILTINS: [&str; 33] = [
 	"assert",

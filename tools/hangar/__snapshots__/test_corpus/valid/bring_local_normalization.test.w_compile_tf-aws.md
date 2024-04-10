@@ -1,7 +1,7 @@
 # [bring_local_normalization.test.w](../../../../../examples/tests/valid/bring_local_normalization.test.w) | compile | tf-aws
 
-## inflight.Bar-1.js
-```js
+## inflight.Bar-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -11,11 +11,11 @@ module.exports = function({  }) {
   }
   return Bar;
 }
-//# sourceMappingURL=inflight.Bar-1.js.map
+//# sourceMappingURL=inflight.Bar-1.cjs.map
 ```
 
-## inflight.Baz-2.js
-```js
+## inflight.Baz-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -25,11 +25,11 @@ module.exports = function({  }) {
   }
   return Baz;
 }
-//# sourceMappingURL=inflight.Baz-2.js.map
+//# sourceMappingURL=inflight.Baz-2.cjs.map
 ```
 
-## inflight.Foo-3.js
-```js
+## inflight.Foo-3.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -39,7 +39,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-//# sourceMappingURL=inflight.Foo-3.js.map
+//# sourceMappingURL=inflight.Foo-3.cjs.map
 ```
 
 ## main.tf.json
@@ -61,8 +61,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.bar-1.js
-```js
+## preflight.bar-1.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
@@ -76,7 +76,7 @@ class Bar extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Bar-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Bar-1.cjs")({
       })
     `;
   }
@@ -99,11 +99,11 @@ class Bar extends $stdlib.std.Resource {
   }
 }
 module.exports = { Bar };
-//# sourceMappingURL=preflight.bar-1.js.map
+//# sourceMappingURL=preflight.bar-1.cjs.map
 ```
 
-## preflight.baz-2.js
-```js
+## preflight.baz-2.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
@@ -117,7 +117,7 @@ class Baz extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Baz-2.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Baz-2.cjs")({
       })
     `;
   }
@@ -140,17 +140,45 @@ class Baz extends $stdlib.std.Resource {
   }
 }
 module.exports = { Baz };
-//# sourceMappingURL=preflight.baz-2.js.map
+//# sourceMappingURL=preflight.baz-2.cjs.map
 ```
 
-## preflight.foo-3.js
-```js
+## preflight.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const foo = require("./preflight.foo-3.cjs");
+const bar = require("./preflight.bar-1.cjs");
+const baz = require("./preflight.baz-2.cjs");
+class $Root extends $stdlib.std.Resource {
+  constructor($scope, $id) {
+    super($scope, $id);
+    $helpers.assert($helpers.eq((foo.Foo.foo(this)), "foo"), "foo.Foo.foo() == \"foo\"");
+    $helpers.assert($helpers.eq((foo.Foo.bar(this)), "bar"), "foo.Foo.bar() == \"bar\"");
+    $helpers.assert($helpers.eq((foo.Foo.baz(this)), "baz"), "foo.Foo.baz() == \"baz\"");
+    $helpers.assert($helpers.eq((bar.Bar.bar(this)), "bar"), "bar.Bar.bar() == \"bar\"");
+    $helpers.assert($helpers.eq((baz.Baz.baz(this)), "baz"), "baz.Baz.baz() == \"baz\"");
+  }
+}
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local_normalization.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.cjs.map
+```
+
+## preflight.foo-3.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-const bar = require("./preflight.bar-1.js");
-const baz = require("./preflight.baz-2.js");
+const bar = require("./preflight.bar-1.cjs");
+const baz = require("./preflight.baz-2.cjs");
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -166,7 +194,7 @@ class Foo extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Foo-3.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Foo-3.cjs")({
       })
     `;
   }
@@ -189,34 +217,6 @@ class Foo extends $stdlib.std.Resource {
   }
 }
 module.exports = { Foo };
-//# sourceMappingURL=preflight.foo-3.js.map
-```
-
-## preflight.js
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
-const std = $stdlib.std;
-const $helpers = $stdlib.helpers;
-const foo = require("./preflight.foo-3.js");
-const bar = require("./preflight.bar-1.js");
-const baz = require("./preflight.baz-2.js");
-class $Root extends $stdlib.std.Resource {
-  constructor($scope, $id) {
-    super($scope, $id);
-    $helpers.assert($helpers.eq((foo.Foo.foo(this)), "foo"), "foo.Foo.foo() == \"foo\"");
-    $helpers.assert($helpers.eq((foo.Foo.bar(this)), "bar"), "foo.Foo.bar() == \"bar\"");
-    $helpers.assert($helpers.eq((foo.Foo.baz(this)), "baz"), "foo.Foo.baz() == \"baz\"");
-    $helpers.assert($helpers.eq((bar.Bar.bar(this)), "bar"), "bar.Bar.bar() == \"bar\"");
-    $helpers.assert($helpers.eq((baz.Baz.baz(this)), "baz"), "baz.Baz.baz() == \"baz\"");
-  }
-}
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local_normalization.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
-$APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.foo-3.cjs.map
 ```
 

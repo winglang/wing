@@ -1,7 +1,7 @@
 # [deep_equality.test.w](../../../../../examples/tests/valid/deep_equality.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $numA, $numB, $strA, $strB }) {
@@ -20,11 +20,11 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.$Closure10-1.js
-```js
+## inflight.$Closure10-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $arrayA, $arrayB }) {
@@ -41,11 +41,11 @@ module.exports = function({ $arrayA, $arrayB }) {
   }
   return $Closure10;
 }
-//# sourceMappingURL=inflight.$Closure10-1.js.map
+//# sourceMappingURL=inflight.$Closure10-1.cjs.map
 ```
 
-## inflight.$Closure11-1.js
-```js
+## inflight.$Closure11-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $arrayA, $arrayB, $arrayC }) {
@@ -62,11 +62,11 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
   }
   return $Closure11;
 }
-//# sourceMappingURL=inflight.$Closure11-1.js.map
+//# sourceMappingURL=inflight.$Closure11-1.cjs.map
 ```
 
-## inflight.$Closure12-1.js
-```js
+## inflight.$Closure12-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $cat1, $cat2 }) {
@@ -83,11 +83,11 @@ module.exports = function({ $cat1, $cat2 }) {
   }
   return $Closure12;
 }
-//# sourceMappingURL=inflight.$Closure12-1.js.map
+//# sourceMappingURL=inflight.$Closure12-1.cjs.map
 ```
 
-## inflight.$Closure13-1.js
-```js
+## inflight.$Closure13-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $cat1, $cat2, $cat3 }) {
@@ -104,11 +104,11 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
   }
   return $Closure13;
 }
-//# sourceMappingURL=inflight.$Closure13-1.js.map
+//# sourceMappingURL=inflight.$Closure13-1.cjs.map
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $numA, $numC, $strA, $strC }) {
@@ -125,11 +125,11 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $jsonA, $jsonB }) {
@@ -146,11 +146,11 @@ module.exports = function({ $jsonA, $jsonB }) {
   }
   return $Closure3;
 }
-//# sourceMappingURL=inflight.$Closure3-1.js.map
+//# sourceMappingURL=inflight.$Closure3-1.cjs.map
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $jsonA, $jsonB, $jsonC }) {
@@ -167,11 +167,11 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
   }
   return $Closure4;
 }
-//# sourceMappingURL=inflight.$Closure4-1.js.map
+//# sourceMappingURL=inflight.$Closure4-1.cjs.map
 ```
 
-## inflight.$Closure5-1.js
-```js
+## inflight.$Closure5-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $std_Json }) {
@@ -188,11 +188,11 @@ module.exports = function({ $std_Json }) {
   }
   return $Closure5;
 }
-//# sourceMappingURL=inflight.$Closure5-1.js.map
+//# sourceMappingURL=inflight.$Closure5-1.cjs.map
 ```
 
-## inflight.$Closure6-1.js
-```js
+## inflight.$Closure6-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $setA, $setB }) {
@@ -209,11 +209,11 @@ module.exports = function({ $setA, $setB }) {
   }
   return $Closure6;
 }
-//# sourceMappingURL=inflight.$Closure6-1.js.map
+//# sourceMappingURL=inflight.$Closure6-1.cjs.map
 ```
 
-## inflight.$Closure7-1.js
-```js
+## inflight.$Closure7-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $setA, $setB, $setC }) {
@@ -230,11 +230,11 @@ module.exports = function({ $setA, $setB, $setC }) {
   }
   return $Closure7;
 }
-//# sourceMappingURL=inflight.$Closure7-1.js.map
+//# sourceMappingURL=inflight.$Closure7-1.cjs.map
 ```
 
-## inflight.$Closure8-1.js
-```js
+## inflight.$Closure8-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $mapA, $mapB }) {
@@ -251,11 +251,11 @@ module.exports = function({ $mapA, $mapB }) {
   }
   return $Closure8;
 }
-//# sourceMappingURL=inflight.$Closure8-1.js.map
+//# sourceMappingURL=inflight.$Closure8-1.cjs.map
 ```
 
-## inflight.$Closure9-1.js
-```js
+## inflight.$Closure9-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $mapA, $mapB, $mapC }) {
@@ -272,7 +272,7 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
   }
   return $Closure9;
 }
-//# sourceMappingURL=inflight.$Closure9-1.js.map
+//# sourceMappingURL=inflight.$Closure9-1.cjs.map
 ```
 
 ## main.tf.json
@@ -294,8 +294,8 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -314,7 +314,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $numA: ${$stdlib.core.liftObject(numA)},
             $numB: ${$stdlib.core.liftObject(numB)},
             $strA: ${$stdlib.core.liftObject(strA)},
@@ -358,7 +358,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $numA: ${$stdlib.core.liftObject(numA)},
             $numC: ${$stdlib.core.liftObject(numC)},
             $strA: ${$stdlib.core.liftObject(strA)},
@@ -402,7 +402,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.cjs")({
             $jsonA: ${$stdlib.core.liftObject(jsonA)},
             $jsonB: ${$stdlib.core.liftObject(jsonB)},
           })
@@ -440,7 +440,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
             $jsonA: ${$stdlib.core.liftObject(jsonA)},
             $jsonB: ${$stdlib.core.liftObject(jsonB)},
             $jsonC: ${$stdlib.core.liftObject(jsonC)},
@@ -481,7 +481,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.cjs")({
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
@@ -514,7 +514,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure6-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure6-1.cjs")({
             $setA: ${$stdlib.core.liftObject(setA)},
             $setB: ${$stdlib.core.liftObject(setB)},
           })
@@ -552,7 +552,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure7-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure7-1.cjs")({
             $setA: ${$stdlib.core.liftObject(setA)},
             $setB: ${$stdlib.core.liftObject(setB)},
             $setC: ${$stdlib.core.liftObject(setC)},
@@ -593,7 +593,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure8-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure8-1.cjs")({
             $mapA: ${$stdlib.core.liftObject(mapA)},
             $mapB: ${$stdlib.core.liftObject(mapB)},
           })
@@ -631,7 +631,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure9-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure9-1.cjs")({
             $mapA: ${$stdlib.core.liftObject(mapA)},
             $mapB: ${$stdlib.core.liftObject(mapB)},
             $mapC: ${$stdlib.core.liftObject(mapC)},
@@ -672,7 +672,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure10-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure10-1.cjs")({
             $arrayA: ${$stdlib.core.liftObject(arrayA)},
             $arrayB: ${$stdlib.core.liftObject(arrayB)},
           })
@@ -710,7 +710,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure11-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure11-1.cjs")({
             $arrayA: ${$stdlib.core.liftObject(arrayA)},
             $arrayB: ${$stdlib.core.liftObject(arrayB)},
             $arrayC: ${$stdlib.core.liftObject(arrayC)},
@@ -751,7 +751,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure12-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure12-1.cjs")({
             $cat1: ${$stdlib.core.liftObject(cat1)},
             $cat2: ${$stdlib.core.liftObject(cat2)},
           })
@@ -789,7 +789,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure13-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure13-1.cjs")({
             $cat1: ${$stdlib.core.liftObject(cat1)},
             $cat2: ${$stdlib.core.liftObject(cat2)},
             $cat3: ${$stdlib.core.liftObject(cat3)},
@@ -861,6 +861,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "deep_equality.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
