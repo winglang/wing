@@ -4394,7 +4394,7 @@ impl<'a> TypeChecker<'a> {
 				{
 					let class_method_var = symbol.as_variable().expect("Expected method to be a variable");
 					let class_method_type = class_method_var.type_;
-					self.validate_type(class_method_type, method_type, &ast_class.name);
+					self.validate_type(class_method_type, method_type, &class_method_var.name);
 					// Make sure the method is public (interface methods must be public)
 					if class_method_var.access != AccessModifier::Public {
 						self.spanned_error(
