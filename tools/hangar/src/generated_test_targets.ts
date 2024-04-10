@@ -55,7 +55,7 @@ export async function compileTest(
     if (!include.find((f) => subpath.includes(f))) {
       continue;
     }
-    if (subpath.endsWith(".js") && !includeJavaScriptInSnapshots) {
+    if ((subpath.endsWith(".js") || subpath.endsWith(".cjs")) && !includeJavaScriptInSnapshots) {
       continue;
     }
     let fileContents = await fs.readFile(dotFile, "utf8");

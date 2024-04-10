@@ -1,7 +1,7 @@
 # [baz.w](../../../../../examples/tests/valid/baz.w) | compile | tf-aws
 
-## inflight.Baz-1.js
-```js
+## inflight.Baz-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -11,11 +11,11 @@ module.exports = function({  }) {
   }
   return Baz;
 }
-//# sourceMappingURL=inflight.Baz-1.js.map
+//# sourceMappingURL=inflight.Baz-1.cjs.map
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
@@ -29,7 +29,7 @@ class Baz extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Baz-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Baz-1.cjs")({
       })
     `;
   }
@@ -52,6 +52,6 @@ class Baz extends $stdlib.std.Resource {
   }
 }
 module.exports = { Baz };
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
