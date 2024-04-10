@@ -65,6 +65,7 @@ export * from "./preflight.lib-1.cjs"
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class ParentClass extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -134,48 +135,3 @@ export class ParentClass$Inflight implements ClassInterface$Inflight
 }
 ```
 
-<<<<<<< HEAD
-## preflight.lib-1.js
-
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const std = $stdlib.std;
-const $helpers = $stdlib.helpers;
-const $extern = $helpers.createExternRequire(__dirname);
-class ParentClass extends $stdlib.std.Resource {
-  constructor($scope, $id, ) {
-    super($scope, $id);
-  }
-  addHandler(handler, s) {
-  }
-  static _toInflightType() {
-    return `
-      require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.js")({
-      })
-    `;
-  }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const ParentClassClient = ${ParentClass._toInflightType()};
-        const client = new ParentClassClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
-  }
-  get _liftMap() {
-    return ({
-      "$inflight_init": [
-      ],
-    });
-  }
-}
-module.exports = { ParentClass };
-//# sourceMappingURL=preflight.lib-1.js.map
-```
-
-=======
->>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
