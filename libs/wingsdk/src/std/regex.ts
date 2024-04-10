@@ -85,7 +85,10 @@ export class Regex implements ILiftable {
    */
   public findSubmatch(text: string): string[] | undefined {
     const result = text.match(this._regex);
-    return result ?? undefined;
+    if (result) {
+      return [result[0], ...result.slice(1)];
+    }
+    return undefined;
   }
 
   /**
