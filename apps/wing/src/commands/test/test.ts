@@ -253,10 +253,12 @@ export async function renderTestReport(
 
     if (includeLogs) {
       for (const trace of result.traces) {
+        // only show detailed traces if we are in debug mode
+        if (trace.type === TraceType.RESOURCE && process.env.DEBUG) {
+          details.push(chalk.gray("[trace] " + trace.data.message));
+        }
         if (trace.type === TraceType.LOG) {
           details.push(chalk.gray(trace.data.message));
-        } else if (process.env.DEBUG) {
-          details.push(chalk.gray("[trace] " + trace.data.message));
         }
       }
     }

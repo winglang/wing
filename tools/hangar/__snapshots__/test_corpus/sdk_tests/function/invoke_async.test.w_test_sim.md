@@ -7,8 +7,7 @@ pass ┌ invoke_async.test.wsim » root/env0/test:invoke() waits for function to
 pass ┌ invoke_async.test.wsim » root/env1/test:invokeAsync() returns without waiting for the function finishes
      │ log inside fn
      └ log inside fn
- 
- 
+
 Tests 2 passed (2)
 Snapshots 1 skipped
 Test Files 1 passed (1)

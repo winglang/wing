@@ -3,8 +3,7 @@
 ## stdout.log
 ```log
 pass ─ lift_with_phase_ind.test.wsim » root/env0/test:Use phase independent methods on lifted object
- 
- 
+
 Tests 1 passed (1)
 Snapshots 1 skipped
 Test Files 1 passed (1)

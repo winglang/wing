@@ -61,7 +61,7 @@ export async function compileTest(
     let fileContents = await fs.readFile(dotFile, "utf8");
 
     // ensure no absolute requires are included in the snapshot
-    if(/require\("(\/|\w:).*\/(.+)"\)/g.test(fileContents)) {
+    if (/require\("(\/|\w:).*\/(.+)"\)/g.test(fileContents)) {
       throw new Error(`Found absolute path in ${dotFile}`);
     }
 
@@ -78,7 +78,7 @@ export async function testTest(
 ) {
   const fileMap: Record<string, string> = {};
   const platforms = ["sim"];
-  const args = ["test"];
+  const args = ["test", "--no-stream"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
 
   // only entrypoint files have tests (for now)

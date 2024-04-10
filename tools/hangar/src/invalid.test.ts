@@ -7,7 +7,7 @@ import { parseMetaCommentFromPath } from "./meta_comment";
 invalidWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
     const platforms = ["sim"];
-    const args = ["test"];
+    const args = ["test", "--no-stream"];
 
     const absoluteWingFile = path.join(invalidTestDir, wingFile);
     const relativeWingFile = path.relative(tmpDir, absoluteWingFile);
@@ -47,4 +47,4 @@ test("invalid compile directory", async ({ expect }) => {
   });
 
   expect(out.stderr).toMatchSnapshot();
-})
+});
