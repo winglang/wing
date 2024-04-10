@@ -23,7 +23,7 @@ pub class ParentClass impl ClassInterface {
 
 ```
 
-## inflight.ParentClass-1.js
+## inflight.ParentClass-1.cjs
 
 ```js
 "use strict";
@@ -35,16 +35,10 @@ module.exports = function({  }) {
   }
   return ParentClass;
 }
-//# sourceMappingURL=inflight.ParentClass-1.js.map
+//# sourceMappingURL=inflight.ParentClass-1.cjs.map
 ```
 
-## preflight.d.ts
-
-```js
-export * from "./preflight.lib-1.js"
-```
-
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -52,9 +46,56 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 module.exports = {
-  ...require("./preflight.lib-1.js"),
+  ...require("./preflight.lib-1.cjs"),
 };
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
+```
+
+## preflight.d.ts
+
+```js
+export * from "./preflight.lib-1.cjs"
+```
+
+## preflight.lib-1.cjs
+
+```js
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+class ParentClass extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  addHandler(handler, s) {
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.cjs")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const ParentClassClient = ${ParentClass._toInflightType()};
+        const client = new ParentClassClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+module.exports = { ParentClass };
+//# sourceMappingURL=preflight.lib-1.cjs.map
 ```
 
 ## preflight.lib-1.d.ts
@@ -90,46 +131,5 @@ export class ParentClass$Inflight implements ClassInterface$Inflight
 {
   constructor();
 }
-```
-
-## preflight.lib-1.js
-
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const std = $stdlib.std;
-const $helpers = $stdlib.helpers;
-class ParentClass extends $stdlib.std.Resource {
-  constructor($scope, $id, ) {
-    super($scope, $id);
-  }
-  addHandler(handler, s) {
-  }
-  static _toInflightType() {
-    return `
-      require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.js")({
-      })
-    `;
-  }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const ParentClassClient = ${ParentClass._toInflightType()};
-        const client = new ParentClassClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
-  }
-  get _liftMap() {
-    return ({
-      "$inflight_init": [
-      ],
-    });
-  }
-}
-module.exports = { ParentClass };
-//# sourceMappingURL=preflight.lib-1.js.map
 ```
 
