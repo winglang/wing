@@ -1070,7 +1070,7 @@ impl TypeRef {
 		return false;
 	}
 
-	pub fn is_preflight_type(&self) -> bool {
+	pub fn is_preflight_object_type(&self) -> bool {
 		if let Type::Class(ref class) = **self {
 			return class.phase == Phase::Preflight;
 		}
