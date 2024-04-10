@@ -1,5 +1,5 @@
 bring fs;
-bring regex;
+bring expect;
 
 let tmpdir = fs.mkdtemp();
 let filepath = "{tmpdir}/test-preflight.json";
@@ -12,22 +12,23 @@ try {
     fs.writeFile(filepath, "invalid content");
     fs.readJson(filepath);
 } catch e {
-    assert(regex.match("^Unexpected token", e) == true);
+    let re = regex.compile("^Unexpected token");
+    expect.equal(re.test(e), true);
 }
 
 fs.writeJson(filepath, data);
-assert(fs.exists(filepath) == true);
+expect.equal(fs.exists(filepath), true);
 
 let obj = fs.readJson(filepath);
-assert(Json.stringify(obj) == Json.stringify(data));
+expect.equal(Json.stringify(obj), Json.stringify(data));
 
 fs.remove(filepath);
-assert(fs.exists(filepath) == false);
+expect.equal(fs.exists(filepath), false);
 
-assert(fs.tryReadJson(filepath) == nil);
+expect.equal(fs.tryReadJson(filepath), nil);
 
 fs.remove(tmpdir, { recursive: true });
-assert(fs.exists(tmpdir) == false);
+expect.equal(fs.exists(tmpdir), false);
 
 test "inflight json operations" {
     let tmpdir = fs.mkdtemp();
@@ -37,20 +38,21 @@ test "inflight json operations" {
         fs.writeFile(filepath, "invalid content");
         fs.readJson(filepath);
     } catch e {
-        assert(regex.match("^Unexpected token", e) == true);
+        let re = regex.compile("^Unexpected token");
+        expect.equal(re.test(e), true);
     }
 
     fs.writeJson(filepath, data);
-    assert(fs.exists(filepath) == true);
+    expect.equal(fs.exists(filepath), true);
 
     let obj = fs.readJson(filepath);
-    assert(Json.stringify(obj) == Json.stringify(data));
+    expect.equal(Json.stringify(obj), Json.stringify(data));
 
     fs.remove(filepath);
-    assert(fs.exists(filepath) == false);
+    expect.equal(fs.exists(filepath), false);
 
-    assert(fs.tryReadJson(filepath) == nil);
+    expect.equal(fs.tryReadJson(filepath), nil);
 
     fs.remove(tmpdir, { recursive: true });
-    assert(fs.exists(tmpdir) == false);
+    expect.equal(fs.exists(tmpdir), false);
 }
