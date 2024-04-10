@@ -15,16 +15,6 @@ export class Regex implements ILiftable {
   }
 
   /**
-   * Checks whether a given string matches a specified regex pattern.
-   * @param pattern The regex pattern to match against.
-   * @param text The input string to check for a match.
-   * @returns `true` if the pattern matches the input string, otherwise `false`.
-   */
-  public static match(pattern: string, text: string): boolean {
-    return new RegExp(pattern).test(text);
-  }
-
-  /**
    * Compiles the provided regex pattern into a `Regex` object.
    * @param pattern The regex pattern to compile.
    * @returns A new `Regex` object representing the compiled pattern.
