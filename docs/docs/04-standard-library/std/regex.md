@@ -174,7 +174,6 @@ The text to check against.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Regex.compile">compile</a></code> | Compiles the provided regex pattern into a `Regex` object. |
-| <code><a href="#@winglang/sdk.std.Regex.match">match</a></code> | Checks whether a given string matches a specified regex pattern. |
 
 ---
 
@@ -191,30 +190,6 @@ Compiles the provided regex pattern into a `Regex` object.
 - *Type:* str
 
 The regex pattern to compile.
-
----
-
-##### `match` <a name="match" id="@winglang/sdk.std.Regex.match"></a>
-
-```wing
-regex.match(pattern: str, text: str);
-```
-
-Checks whether a given string matches a specified regex pattern.
-
-###### `pattern`<sup>Required</sup> <a name="pattern" id="@winglang/sdk.std.Regex.match.parameter.pattern"></a>
-
-- *Type:* str
-
-The regex pattern to match against.
-
----
-
-###### `text`<sup>Required</sup> <a name="text" id="@winglang/sdk.std.Regex.match.parameter.text"></a>
-
-- *Type:* str
-
-The input string to check for a match.
 
 ---
 
