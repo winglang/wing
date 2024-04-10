@@ -62,7 +62,7 @@ impl<'a> DTSifier<'a> {
 		}
 
 		let mut dts_file_name = self.preflight_file_map.get(source_path).unwrap().clone();
-		assert!(dts_file_name.ends_with(".js"));
+		assert!(dts_file_name.ends_with(".cjs"));
 
 		dts_file_name.replace_range((dts_file_name.len() - 3).., ".d.ts");
 
@@ -290,20 +290,20 @@ impl<'a> DTSifier<'a> {
 				match source {
 					BringSource::BuiltinModule(sym) => code.line(format!("import {{ {sym} }} from \"{WINGSDK_ASSEMBLY_NAME}\"")),
 					BringSource::TrustedModule(sym, path) => {
-						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".js", "");
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".cjs", "");
 						code.line(format!("import * as {sym} from \"./{preflight_file_name}\";"))
 					}
 					BringSource::WingLibrary(sym, path) => {
-						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".js", "");
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".cjs", "");
 						code.line(format!("import * as {sym} from \"./{preflight_file_name}\";"))
 					}
 					BringSource::JsiiModule(sym) => code.line(format!("import * as {identifier} from \"{sym}\"")),
 					BringSource::WingFile(path) => {
-						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".js", "");
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".cjs", "");
 						code.line(format!("import * as {identifier} from \"./{preflight_file_name}\";"))
 					}
 					BringSource::Directory(path) => {
-						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".js", "");
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".cjs", "");
 						code.line(format!("import * as {identifier} from \"./{preflight_file_name}\";"))
 					}
 				}

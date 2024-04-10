@@ -368,7 +368,7 @@ mod tests {
 		assert_eq!(code.to_string(), "1\n2\n3");
 
 		let sourcemap: Value =
-			serde_json::from_str(&code.generate_sourcemap("test.w", "1\n2\n3", "test.js")).expect("sourcemap");
+			serde_json::from_str(&code.generate_sourcemap("test.w", "1\n2\n3", "test.cjs")).expect("sourcemap");
 
 		// "A" just means the line comes from somewhere in the provided source root
 		assert_eq!(sourcemap["mappings"], "A;A;A");
@@ -400,10 +400,10 @@ mod tests {
 		assert!(code.lines.len() == 4);
 		assert_eq!(code.to_string(), "1\n2\n3\n4");
 		let sourcemap: Value =
-			serde_json::from_str(&code.generate_sourcemap("test.w", "1\n2\n3", "test.js")).expect("sourcemap");
+			serde_json::from_str(&code.generate_sourcemap("test.w", "1\n2\n3", "test.cjs")).expect("sourcemap");
 
 		assert_eq!(sourcemap["version"], 3);
-		assert_eq!(sourcemap["file"], "test.js");
+		assert_eq!(sourcemap["file"], "test.cjs");
 		assert_eq!(sourcemap["sources"], json!(["test.w"]));
 		assert_eq!(sourcemap["names"], json!([]));
 

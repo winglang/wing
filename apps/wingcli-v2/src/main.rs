@@ -140,7 +140,7 @@ fn run_javascript_node(source_file: &Utf8Path, target_dir: &Utf8Path, target: Ta
 	let source_dir = source_file_canonical.parent().expect("source file has no parent");
 
 	let mut command = std::process::Command::new("node");
-	command.arg(target_dir.join(".wing").join("preflight.js"));
+	command.arg(target_dir.join(".wing").join("preflight.cjs"));
 	command.env("NODE_PATH", WING_CACHE_DIR.join("node_modules").as_str());
 	command.env("WING_PLATFORMS", target.to_string());
 	command.env("WING_SOURCE_DIR", source_dir);
