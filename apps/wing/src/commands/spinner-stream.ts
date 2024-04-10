@@ -9,18 +9,28 @@ export class SpinnerStream {
   private stream: WriteStream;
   private spinner: ora.Ora;
   private buffer: string[] = [];
-  private interval: NodeJS.Timeout;
+  private interval: NodeJS.Timeout | undefined;
+  private isTty: boolean;
 
   constructor(stream: WriteStream, text: string) {
     this.stream = stream;
+    this.isTty = stream.isTTY;
     this.spinner = ora({ stream: this.stream, text, isEnabled: false });
-    this.interval = setInterval(() => {
-      this.updateSpinner();
-    }, 80);
+    if (this.isTty) {
+      this.interval = setInterval(() => {
+        this.updateSpinner();
+      }, 80);
+    }
   }
 
   public write(log: string): void {
-    this.buffer.push(log);
+    if (this.isTty) {
+      this.buffer.push(log);
+    } else {
+      // If not a TTY, write logs directly to the stream since the spinner
+      // won't be displayed
+      this.stream.write(log);
+    }
   }
 
   private updateSpinner(): void {
@@ -39,17 +49,19 @@ export class SpinnerStream {
   }
 
   public stopSpinner(): void {
-    // Stop looping
-    clearInterval(this.interval);
+    if (this.isTty) {
+      // Stop looping
+      clearInterval(this.interval);
 
-    // Clear the spinner
-    this.stream.cursorTo(0);
-    this.stream.clearLine(1);
+      // Clear the spinner
+      this.stream.cursorTo(0);
+      this.stream.clearLine(1);
 
-    // Print any remaining logs
-    for (const log of this.buffer) {
-      this.stream.write(log);
+      // Print any remaining logs
+      for (const log of this.buffer) {
+        this.stream.write(log);
+      }
+      this.buffer = [];
     }
-    this.buffer = [];
   }
 }
