@@ -1876,7 +1876,8 @@ Mapping JSII types to Wing types:
 
 ## 5.2 JavaScript
 
-The `extern "<commonjs module path>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module must be a relative path and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+The `extern "<javascript module path>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module must be a relative path and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+This module can be either CJS or ESM and may be written in JavaScript or TypeScript.
 
 In the following example, the static inflight method `makeId` is implemented
 in `helper.js`:
@@ -1911,13 +1912,7 @@ matching name (without any case conversion).
 
 Extern methods do not support access to class's members through `this`, so they must be declared `static`.
 
-### 5.2.1 TypeScript
-
-It is possible to use TypeScript to write helpers, but at the moment this is not
-directly supported by Wing. This means that you will need to setup the TypeScript toolchain
-to compile your code to JavaScript and then use `extern` against the JavaScript file.
-
-### 5.2.2 Type model
+### 5.2.1 Type model
 
 The table below shows the mapping between Wing types and JavaScript values, shown with TypeScript types.
 When calling **extern** function, the parameter and return types are **assumed** to be satisfied by the called function.
