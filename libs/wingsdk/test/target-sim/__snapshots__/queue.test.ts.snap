@@ -81,10 +81,6 @@ exports[`create a queue 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -700,10 +696,6 @@ exports[`push rejects empty message 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -872,10 +864,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -951,7 +939,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
 {
-  ".wing/function_c8ab799f.js": ""use strict";
+  ".wing/function_c8ab799f.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -989,7 +977,7 @@ queue: (function() {
 }));
   return await $handler.handle(event);
 };",
-  ".wing/setconsumer0_c8e33b9b.js": ""use strict";
+  ".wing/setconsumer0_c8e33b9b.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js")).QueueSetConsumerHandlerClient({ handler: new ((function(){
@@ -1078,7 +1066,7 @@ async handle(message) {
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
+          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1112,7 +1100,7 @@ async handle(message) {
           "environmentVariables": {
             "QUEUE_HANDLE_54fcf4cd": "\${wsim#root/my_queue#attrs.handle}",
           },
-          "sourceCodeFile": ".wing/function_c8ab799f.js",
+          "sourceCodeFile": ".wing/function_c8ab799f.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1172,10 +1160,6 @@ async handle(message) {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -1303,7 +1287,7 @@ async handle(message) {
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 {
-  ".wing/setconsumer0_c8e33b9b.js": ""use strict";
+  ".wing/setconsumer0_c8e33b9b.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js")).QueueSetConsumerHandlerClient({ handler: new ((function(){
@@ -1387,7 +1371,7 @@ async handle(message) {
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
+          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1447,10 +1431,6 @@ async handle(message) {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",

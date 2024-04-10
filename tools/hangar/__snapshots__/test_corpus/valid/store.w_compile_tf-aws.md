@@ -1,7 +1,7 @@
 # [store.w](../../../../../examples/tests/valid/store.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $__parent_this_1_b }) {
@@ -17,11 +17,11 @@ module.exports = function({ $__parent_this_1_b }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.Store-1.js
-```js
+## inflight.Store-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -35,11 +35,11 @@ module.exports = function({  }) {
   }
   return Store;
 }
-//# sourceMappingURL=inflight.Store-1.js.map
+//# sourceMappingURL=inflight.Store-1.cjs.map
 ```
 
-## inflight.Util-1.js
-```js
+## inflight.Util-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -49,15 +49,16 @@ module.exports = function({  }) {
   }
   return Util;
 }
-//# sourceMappingURL=inflight.Util-1.js.map
+//# sourceMappingURL=inflight.Util-1.cjs.map
 ```
 
-## preflight.empty-1.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+<<<<<<< HEAD
 const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {  };
 //# sourceMappingURL=preflight.empty-1.js.map
@@ -71,6 +72,9 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const file3 = require("./preflight.empty-1.js");
+=======
+const file3 = require("./preflight.empty-1.cjs");
+>>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
 const Color =
@@ -87,7 +91,7 @@ class Util extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.cjs")({
       })
     `;
   }
@@ -122,7 +126,7 @@ class Store extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
           })
         `;
@@ -153,7 +157,7 @@ class Store extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Store-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Store-1.cjs")({
       })
     `;
   }
@@ -181,6 +185,16 @@ class Store extends $stdlib.std.Resource {
   }
 }
 module.exports = { Util, Store, Color };
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
+```
+
+## preflight.empty-1.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+module.exports = {  };
+//# sourceMappingURL=preflight.empty-1.cjs.map
 ```
 

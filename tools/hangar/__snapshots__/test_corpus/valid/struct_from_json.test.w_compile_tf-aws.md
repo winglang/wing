@@ -1,7 +1,7 @@
 # [struct_from_json.test.w](../../../../../examples/tests/valid/struct_from_json.test.w) | compile | tf-aws
 
-## inflight.$Closure1-2.js
-```js
+## inflight.$Closure1-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $cloud_BucketProps, $j }) {
@@ -18,11 +18,11 @@ module.exports = function({ $cloud_BucketProps, $j }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-2.js.map
+//# sourceMappingURL=inflight.$Closure1-2.cjs.map
 ```
 
-## inflight.$Closure2-2.js
-```js
+## inflight.$Closure2-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student }) {
@@ -59,11 +59,11 @@ module.exports = function({ $Student }) {
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-2.js.map
+//# sourceMappingURL=inflight.$Closure2-2.cjs.map
 ```
 
-## inflight.$Closure3-2.js
-```js
+## inflight.$Closure3-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student, $jStudent1 }) {
@@ -86,11 +86,11 @@ module.exports = function({ $Student, $jStudent1 }) {
   }
   return $Closure3;
 }
-//# sourceMappingURL=inflight.$Closure3-2.js.map
+//# sourceMappingURL=inflight.$Closure3-2.cjs.map
 ```
 
-## inflight.$Closure4-2.js
-```js
+## inflight.$Closure4-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyStruct, $std_Json }) {
@@ -108,11 +108,11 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
   }
   return $Closure4;
 }
-//# sourceMappingURL=inflight.$Closure4-2.js.map
+//# sourceMappingURL=inflight.$Closure4-2.cjs.map
 ```
 
-## inflight.$Closure5-2.js
-```js
+## inflight.$Closure5-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) {
@@ -131,11 +131,11 @@ module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) 
   }
   return $Closure5;
 }
-//# sourceMappingURL=inflight.$Closure5-2.js.map
+//# sourceMappingURL=inflight.$Closure5-2.cjs.map
 ```
 
-## inflight.UsesStructInImportedFile-1.js
-```js
+## inflight.UsesStructInImportedFile-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -145,7 +145,7 @@ module.exports = function({  }) {
   }
   return UsesStructInImportedFile;
 }
-//# sourceMappingURL=inflight.UsesStructInImportedFile-1.js.map
+//# sourceMappingURL=inflight.UsesStructInImportedFile-1.cjs.map
 ```
 
 ## main.tf.json
@@ -167,8 +167,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -178,8 +178,8 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
-const externalStructs = require("./preflight.structs-1.js");
-const otherExternalStructs = require("./preflight.structs2-2.js");
+const externalStructs = require("./preflight.structs-1.cjs");
+const otherExternalStructs = require("./preflight.structs2-2.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -199,7 +199,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-2.cjs")({
             $cloud_BucketProps: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"))},
             $j: ${$stdlib.core.liftObject(j)},
           })
@@ -235,7 +235,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-2.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
           })
         `;
@@ -268,7 +268,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-2.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
             $jStudent1: ${$stdlib.core.liftObject(jStudent1)},
           })
@@ -304,7 +304,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-2.cjs")({
             $MyStruct: ${$stdlib.core.liftObject(MyStruct)},
             $_schema_asStr___: ${$stdlib.core.liftObject((schema.asStr()))},
             $expectedSchema: ${$stdlib.core.liftObject(expectedSchema)},
@@ -347,7 +347,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-2.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
             $std_Boolean: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
             $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
@@ -503,11 +503,11 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "struct_from_json.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
-## preflight.structs-1.js
-```js
+## preflight.structs-1.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
@@ -522,11 +522,11 @@ const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"objec
 const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({$id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
 const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
 module.exports = {  };
-//# sourceMappingURL=preflight.structs-1.js.map
+//# sourceMappingURL=preflight.structs-1.cjs.map
 ```
 
-## preflight.structs2-2.js
-```js
+## preflight.structs2-2.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
@@ -547,7 +547,7 @@ class UsesStructInImportedFile extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.UsesStructInImportedFile-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.UsesStructInImportedFile-1.cjs")({
       })
     `;
   }
@@ -570,6 +570,6 @@ class UsesStructInImportedFile extends $stdlib.std.Resource {
   }
 }
 module.exports = { UsesStructInImportedFile };
-//# sourceMappingURL=preflight.structs2-2.js.map
+//# sourceMappingURL=preflight.structs2-2.cjs.map
 ```
 

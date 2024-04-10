@@ -16,7 +16,7 @@ Error.stackTraceLimit = 50;
 
 // const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
-const WINGC_PREFLIGHT = "preflight.js";
+const WINGC_PREFLIGHT = "preflight.cjs";
 const DOT_WING = ".wing";
 
 const BUILTIN_PLATFORMS = [

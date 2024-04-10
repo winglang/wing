@@ -35,7 +35,7 @@ pub class Child extends ParentClass impl ClassInterface {
 }
 ```
 
-## inflight.Child-1.js
+## inflight.Child-1.cjs
 
 ```js
 "use strict";
@@ -48,10 +48,10 @@ module.exports = function({ $ParentClass }) {
   }
   return Child;
 }
-//# sourceMappingURL=inflight.Child-1.js.map
+//# sourceMappingURL=inflight.Child-1.cjs.map
 ```
 
-## inflight.ParentClass-1.js
+## inflight.ParentClass-1.cjs
 
 ```js
 "use strict";
@@ -69,16 +69,10 @@ module.exports = function({  }) {
   }
   return ParentClass;
 }
-//# sourceMappingURL=inflight.ParentClass-1.js.map
+//# sourceMappingURL=inflight.ParentClass-1.cjs.map
 ```
 
-## preflight.d.ts
-
-```js
-export * from "./preflight.lib-1.js"
-```
-
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -87,9 +81,95 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {
-  ...require("./preflight.lib-1.js"),
+  ...require("./preflight.lib-1.cjs"),
 };
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
+```
+
+## preflight.d.ts
+
+```js
+export * from "./preflight.lib-1.cjs"
+```
+
+## preflight.lib-1.cjs
+
+```js
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+class ParentClass extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  addHandler(handler) {
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.cjs")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const ParentClassClient = ${ParentClass._toInflightType()};
+        const client = new ParentClassClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "foo": [
+      ],
+      "bar": [
+      ],
+      "$inflight_init": [
+      ],
+    });
+  }
+  static get _liftTypeMap() {
+    return ({
+      "static_method": [
+      ],
+    });
+  }
+}
+class Child extends ParentClass {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.Child-1.cjs")({
+        $ParentClass: ${$stdlib.core.liftObject(ParentClass)},
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const ChildClient = ${Child._toInflightType()};
+        const client = new ChildClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return $stdlib.core.mergeLiftDeps(super._liftMap, {
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+module.exports = { ParentClass, Child };
+//# sourceMappingURL=preflight.lib-1.cjs.map
 ```
 
 ## preflight.lib-1.d.ts
@@ -143,6 +223,7 @@ export class Child$Inflight extends ParentClass$Inflight implements ClassInterfa
 }
 ```
 
+<<<<<<< HEAD
 ## preflight.lib-1.js
 
 ```js
@@ -224,3 +305,5 @@ module.exports = { ParentClass, Child };
 //# sourceMappingURL=preflight.lib-1.js.map
 ```
 
+=======
+>>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a

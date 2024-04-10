@@ -31,7 +31,7 @@ export function createBundle(
     : `${normalEntrypoint}.bundle`;
   mkdirSync(outdir, { recursive: true });
 
-  const outfileName = "index.js";
+  const outfileName = "index.cjs";
   const soucemapFilename = `${outfileName}.map`;
 
   const outfile = posix.join(outdir, outfileName);
@@ -57,7 +57,7 @@ export function createBundle(
     minify: false,
     sourcemap: "linked",
     platform: "node",
-    target: "node18",
+    target: "node20",
     format: "cjs",
     external,
     write: false,

@@ -92,10 +92,6 @@ exports[`can add row in preflight 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -230,10 +226,6 @@ exports[`create a table 1`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -380,10 +372,6 @@ exports[`get row 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -526,10 +514,6 @@ exports[`insert row 2`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -676,10 +660,6 @@ exports[`list table 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -823,10 +803,6 @@ exports[`tryGet row 2`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -974,10 +950,6 @@ exports[`update row 2`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",

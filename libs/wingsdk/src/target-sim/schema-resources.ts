@@ -196,21 +196,6 @@ export interface WebsiteAttributes {
   readonly url: string;
 }
 
-/** Properties for ex.ReactApp */
-export interface ReactAppSchema {
-  readonly path: string;
-  readonly startCommand: string;
-  readonly environmentVariables: Record<string, string>;
-  readonly useBuildCommand: boolean;
-  readonly url: string;
-  readonly localPort: string | number;
-}
-
-/** Runtime attributes for ex.ReactApp */
-export interface ReactAppAttributes {
-  readonly url: string;
-}
-
 /** Properties for cloud.Secret */
 export interface SecretSchema {
   /** The name of the secret */

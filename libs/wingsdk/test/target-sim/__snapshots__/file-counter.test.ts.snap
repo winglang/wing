@@ -2,7 +2,7 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/setconsumer0_c8e82e9f.js": ""use strict";
+  ".wing/setconsumer0_c8e82e9f.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js")).QueueSetConsumerHandlerClient({ handler: new ((function(){
@@ -167,7 +167,7 @@ bucket: (function() {
             "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${wsim#root/HelloWorld/Counter#attrs.handle}",
           },
-          "sourceCodeFile": ".wing/setconsumer0_c8e82e9f.js",
+          "sourceCodeFile": ".wing/setconsumer0_c8e82e9f.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -227,10 +227,6 @@ bucket: (function() {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",

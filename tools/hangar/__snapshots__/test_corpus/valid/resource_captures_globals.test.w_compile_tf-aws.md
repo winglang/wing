@@ -1,7 +1,7 @@
 # [resource_captures_globals.test.w](../../../../../examples/tests/valid/resource_captures_globals.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $res }) {
@@ -17,11 +17,11 @@ module.exports = function({ $res }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Another }) {
@@ -37,11 +37,11 @@ module.exports = function({ $Another }) {
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
-## inflight.Another-1.js
-```js
+## inflight.Another-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $globalCounter }) {
@@ -61,11 +61,11 @@ module.exports = function({ $globalCounter }) {
   }
   return Another;
 }
-//# sourceMappingURL=inflight.Another-1.js.map
+//# sourceMappingURL=inflight.Another-1.cjs.map
 ```
 
-## inflight.First-1.js
-```js
+## inflight.First-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -75,11 +75,11 @@ module.exports = function({  }) {
   }
   return First;
 }
-//# sourceMappingURL=inflight.First-1.js.map
+//# sourceMappingURL=inflight.First-1.cjs.map
 ```
 
-## inflight.MyResource-1.js
-```js
+## inflight.MyResource-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Another, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
@@ -104,11 +104,11 @@ module.exports = function({ $Another, $__arr__index_______if__index___0____index
   }
   return MyResource;
 }
-//# sourceMappingURL=inflight.MyResource-1.js.map
+//# sourceMappingURL=inflight.MyResource-1.cjs.map
 ```
 
-## inflight.R-1.js
-```js
+## inflight.R-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
@@ -125,7 +125,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   }
   return R;
 }
-//# sourceMappingURL=inflight.R-1.js.map
+//# sourceMappingURL=inflight.R-1.cjs.map
 ```
 
 ## main.tf.json
@@ -349,8 +349,8 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -370,7 +370,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.First-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.First-1.cjs")({
           })
         `;
       }
@@ -400,7 +400,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.cjs")({
             $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
           })
         `;
@@ -447,7 +447,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("${$helpers.normalPath(__dirname)}/inflight.R-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.R-1.cjs")({
                 $_parentThis_localCounter: ${$stdlib.core.liftObject($parentThis.localCounter)},
                 $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
               })
@@ -481,7 +481,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.cjs")({
             $Another: ${$stdlib.core.liftObject(Another)},
             $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0))},
             $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"))},
@@ -549,7 +549,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $res: ${$stdlib.core.liftObject(res)},
           })
         `;
@@ -584,7 +584,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $Another: ${$stdlib.core.liftObject(Another)},
           })
         `;
@@ -628,6 +628,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource_captures_globals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

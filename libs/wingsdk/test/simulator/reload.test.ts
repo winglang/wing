@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { Bucket } from "../../src/cloud";
+import { Bucket, IBucketClient } from "../../src/cloud";
 import * as testing from "../../src/simulator";
 import { Node } from "../../src/std";
 import { App } from "../../src/target-sim/app";
@@ -34,4 +34,22 @@ test("reloading the simulator updates the state of the tree", async () => {
   expect(s.tree().rawData().tree.children?.my_bucket.display?.hidden).toEqual(
     true
   );
+});
+
+test("traces are cleared when reloading the simulator with reset state set to true", async () => {
+  let workdir = mkdtemp();
+
+  // Create a .wsim file
+  const app = new App({ outdir: workdir, entrypointDir: __dirname });
+  new Bucket(app, "my_bucket", { public: false });
+  const simfile = app.synth();
+  // Start the simulator
+  const s = new testing.Simulator({ simfile });
+  await s.start();
+  const client = s.getResource("/my_bucket") as IBucketClient;
+  await client.put("traces.txt", "Hello world!");
+  expect(s.listTraces().filter((t) => t.type === "resource").length).toEqual(1);
+  // Reload the simulator and reset state
+  await s.reload(true);
+  expect(s.listTraces().filter((t) => t.type === "resource").length).toEqual(0);
 });

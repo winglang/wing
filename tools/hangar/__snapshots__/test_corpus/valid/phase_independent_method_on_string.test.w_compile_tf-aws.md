@@ -1,7 +1,7 @@
 # [phase_independent_method_on_string.test.w](../../../../../examples/tests/valid/phase_independent_method_on_string.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url, $regex_Util, $token_len, $url_regex }) {
@@ -19,7 +19,7 @@ module.exports = function({ $api_url, $regex_Util, $token_len, $url_regex }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -127,8 +127,8 @@ module.exports = function({ $api_url, $regex_Util, $token_len, $url_regex }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -150,7 +150,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $api_url: ${$stdlib.core.liftObject(api.url)},
             $regex_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(regex.Util, "@winglang/sdk/regex", "Util"))},
             $token_len: ${$stdlib.core.liftObject(token_len)},
@@ -194,6 +194,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "phase_independent_method_on_string.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

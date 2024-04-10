@@ -2,7 +2,7 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c86fc180.js": ""use strict";
+  ".wing/handler_c86fc180.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -48,7 +48,7 @@ async handle(event) {
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/handler_c86fc180.js",
+          "sourceCodeFile": ".wing/handler_c86fc180.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -108,10 +108,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
