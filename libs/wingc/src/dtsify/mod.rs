@@ -13,6 +13,7 @@ pub mod extern_dtsify;
 pub const TYPE_INFLIGHT_POSTFIX: &str = "$Inflight";
 const TYPE_INTERNAL_NAMESPACE: &str = "$internal";
 const TYPE_STD: &str = "std";
+const EMIT_FILE_EXTENSION: &str = ".cjs";
 
 pub struct DTSifier<'a> {
 	preflight_file_map: &'a IndexMap<Utf8PathBuf, String>,
@@ -62,9 +63,10 @@ impl<'a> DTSifier<'a> {
 		}
 
 		let mut dts_file_name = self.preflight_file_map.get(source_path).unwrap().clone();
-		assert!(dts_file_name.ends_with(".cjs"));
 
-		dts_file_name.replace_range((dts_file_name.len() - 3).., ".d.ts");
+		assert!(dts_file_name.ends_with(EMIT_FILE_EXTENSION));
+
+		dts_file_name.replace_range((dts_file_name.len() - EMIT_FILE_EXTENSION.len()).., ".d.ts");
 
 		match self.output_files.borrow_mut().add_file(dts_file_name, dts.to_string()) {
 			Ok(()) => {}
