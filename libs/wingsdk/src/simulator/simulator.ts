@@ -13,7 +13,7 @@ import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
 import { POLICY_FQN } from "../target-sim";
-import { PolicySchemaProps } from "../target-sim/schema-resources";
+import { PolicySchema } from "../target-sim/schema-resources";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 const HANDLE_ATTRIBUTE = "handle";
@@ -258,7 +258,7 @@ export class Simulator {
       );
     }
     const connections = readJsonSync(connectionJson).connections;
-    const graph = new Graph(schema.resources);
+    const graph = new Graph(Object.values(schema.resources));
 
     return { schema, tree, connections, simdir, graph };
   }
@@ -800,7 +800,7 @@ export class Simulator {
 
     // if the resource is a policy, add it to the policy registry
     if (resourceConfig.type === POLICY_FQN) {
-      const policy = resolvedProps as PolicySchemaProps;
+      const policy = resolvedProps as PolicySchema;
       this._policyRegistry.register(resourceConfig.path, policy);
     } else {
       // otherwise, add the resource's inline policy to the policy registry
@@ -953,18 +953,18 @@ export class Simulator {
    * all of it's dependents will be stopped and started again.
    */
   private async planUpdate(
-    current: BaseResourceSchema[],
-    next: BaseResourceSchema[]
+    current: Record<string, BaseResourceSchema>,
+    next: Record<string, BaseResourceSchema>
   ) {
-    const currentByPath = toMap(current);
-    const nextByPath = toMap(next);
+    // Make sure we're working on a copy of "current"
+    current = { ...current };
 
     const added: string[] = [];
     const updated: string[] = [];
     const deleted: string[] = [];
 
-    for (const [path, nextConfig] of Object.entries(nextByPath)) {
-      const currConfig = currentByPath[path];
+    for (const [path, nextConfig] of Object.entries(next)) {
+      const currConfig = current[path];
 
       // if the resource is not in "current", it means it was added
       if (!currConfig) {
@@ -978,30 +978,15 @@ export class Simulator {
       }
 
       // remove it from "current" so we know what's left to be deleted
-      delete currentByPath[path];
+      delete current[path];
     }
 
     // everything left in "current" is to be deleted
-    for (const config of Object.values(currentByPath)) {
+    for (const config of Object.values(current)) {
       deleted.push(config.path);
     }
 
     return { added, updated, deleted };
-
-    function toMap(list: BaseResourceSchema[]): {
-      [path: string]: BaseResourceSchema;
-    } {
-      const ret: { [path: string]: BaseResourceSchema } = {};
-      for (const resource of list) {
-        if (ret[resource.path]) {
-          throw new Error(
-            `unexpected - duplicate resources with the same path: ${resource.path}`
-          );
-        }
-        ret[resource.path] = resource;
-      }
-      return ret;
-    }
   }
 
   private async shouldReplace(
@@ -1154,8 +1139,8 @@ export enum UpdatePlan {
 
 /** Schema for simulator.json */
 export interface WingSimulatorSchema {
-  /** The list of resources. */
-  readonly resources: BaseResourceSchema[];
+  /** The resources, indexed by their construct path. */
+  readonly resources: Record<string, BaseResourceSchema>;
   /** The map of types. */
   readonly types: { [fqn: string]: TypeSchema };
   /** The version of the Wing SDK used to synthesize the .wsim file. */
@@ -1170,20 +1155,27 @@ export interface TypeSchema {
   readonly className: string;
 }
 
-/** Schema for individual resources */
-export interface BaseResourceSchema {
-  /** The resource path from the app's construct tree. */
-  readonly path: string;
-  /** An opaque tree-unique address of the resource, calculated as a SHA-1 hash of the resource path. */
-  readonly addr: string;
+/**
+ * Schema for individual resources.
+ * Only contains fields that need to be returned by `toSimulator()`.
+ */
+export interface ToSimulatorOutput {
   /** The type of the resource. */
   readonly type: string;
   /** The resource-specific properties needed to create this resource. */
   readonly props: { [key: string]: any };
-  /** The resource-specific attributes that are set after the resource is created. */
-  readonly attrs: Record<string, any>;
   /** A list of inline policy statements that define permissions for this resource. */
   readonly policy?: PolicyStatement[];
+}
+
+/** Schema for individual resources */
+export interface BaseResourceSchema extends ToSimulatorOutput {
+  /** The resource path from the app's construct tree. */
+  readonly path: string;
+  /** An opaque tree-unique address of the resource, calculated as a SHA-1 hash of the resource path. */
+  readonly addr: string;
+  /** The resource-specific attributes that are set after the resource is created. */
+  readonly attrs: Record<string, any>;
   /** Resources that should be deployed before this resource. */
   readonly deps?: string[];
 }
@@ -1239,13 +1231,13 @@ export interface SimulatorServerResponse {
 }
 
 class PolicyRegistry {
-  private readonly policies: Record<string, PolicySchemaProps>;
+  private readonly policies: Record<string, PolicySchema>;
 
   constructor() {
     this.policies = {};
   }
 
-  public register(id: string, policy: PolicySchemaProps) {
+  public register(id: string, policy: PolicySchema) {
     if (this.policies[id]) {
       throw new Error(`Policy with id ${id} already registered.`);
     }

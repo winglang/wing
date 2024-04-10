@@ -11,9 +11,8 @@ import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { POLICY_FQN, Policy } from "./policy";
 import { Queue } from "./queue";
-import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
-import { ISimulatorResource, isSimulatorResource } from "./resource";
+import { isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Service } from "./service";
@@ -42,8 +41,12 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { registerTokenResolver } from "../core/tokens";
-import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN } from "../ex";
-import { TypeSchema, WingSimulatorSchema } from "../simulator/simulator";
+import { REDIS_FQN, TABLE_FQN } from "../ex";
+import {
+  BaseResourceSchema,
+  TypeSchema,
+  WingSimulatorSchema,
+} from "../simulator";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
@@ -62,7 +65,6 @@ const SIMULATOR_CLASS_DATA = {
   [ON_DEPLOY_FQN]: "OnDeploy",
   [POLICY_FQN]: "Policy",
   [QUEUE_FQN]: "Queue",
-  [REACT_APP_FQN]: "ReactApp",
   [REDIS_FQN]: "Redis",
   [SCHEDULE_FQN]: "Schedule",
   [SECRET_FQN]: "Secret",
@@ -126,9 +128,6 @@ export class App extends core.App {
 
       case QUEUE_FQN:
         return require.resolve("./queue.inflight");
-
-      case REACT_APP_FQN:
-        return require.resolve("./react-app.inflight");
 
       case REDIS_FQN:
         return require.resolve("./redis.inflight");
@@ -194,9 +193,6 @@ export class App extends core.App {
 
       case QUEUE_FQN:
         return Queue;
-
-      case REACT_APP_FQN:
-        return ReactApp;
 
       case REDIS_FQN:
         return Redis;
@@ -266,22 +262,19 @@ export class App extends core.App {
   }
 
   private synthSimulatorFile(outdir: string) {
-    const toSimulatorWithDeps = (res: ISimulatorResource) => {
-      const cfg = res.toSimulator();
-      const deps = res.node.dependencies.map((d) => d.node.path);
-
-      return deps.length === 0
-        ? cfg
-        : {
-            ...cfg,
-            deps,
-          };
-    };
-
-    const resources = new core.DependencyGraph(this.node)
-      .topology()
-      .filter(isSimulatorResource)
-      .map(toSimulatorWithDeps);
+    const resources: Record<string, BaseResourceSchema> = {};
+    for (const r of new core.DependencyGraph(this.node).topology()) {
+      if (isSimulatorResource(r)) {
+        const deps = r.node.dependencies.map((d) => d.node.path);
+        resources[r.node.path] = {
+          ...r.toSimulator(),
+          path: r.node.path,
+          addr: r.node.addr,
+          deps: deps.length === 0 ? undefined : deps,
+          attrs: undefined as any,
+        };
+      }
+    }
 
     const types: { [fqn: string]: TypeSchema } = {};
     for (const [fqn, className] of Object.entries(SIMULATOR_CLASS_DATA)) {

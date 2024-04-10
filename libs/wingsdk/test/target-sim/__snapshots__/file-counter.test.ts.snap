@@ -73,10 +73,19 @@ bucket: (function() {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/HelloWorld/Bucket": {
+        "addr": "c80e3625bbefd53d8c61fbb978711d410b5f2a41c8",
+        "path": "root/HelloWorld/Bucket",
+        "props": {
+          "initialObjects": {},
+          "public": false,
+          "topics": {},
+        },
+        "type": "@winglang/sdk.cloud.Bucket",
+      },
+      "root/HelloWorld/Bucket/Policy": {
         "addr": "c86eb36bbe6e764a632afaaea5db2d4bd693c92624",
-        "attrs": {},
         "path": "root/HelloWorld/Bucket/Policy",
         "props": {
           "principal": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
@@ -84,9 +93,25 @@ bucket: (function() {
         },
         "type": "@winglang/sdk.sim.Policy",
       },
-      {
+      "root/HelloWorld/Counter": {
+        "addr": "c87855e817fa3df0d5ce8ae290bf53c8ce4ecd8d46",
+        "path": "root/HelloWorld/Counter",
+        "props": {
+          "initial": 1000,
+        },
+        "type": "@winglang/sdk.cloud.Counter",
+      },
+      "root/HelloWorld/Queue": {
+        "addr": "c8de0494647ac0bdaec85a77e2a164cfbcfecc5ca1",
+        "path": "root/HelloWorld/Queue",
+        "props": {
+          "retentionPeriod": 3600,
+          "timeout": 30,
+        },
+        "type": "@winglang/sdk.cloud.Queue",
+      },
+      "root/HelloWorld/Queue/Policy": {
         "addr": "c86b009930462795eeb90e647a56dbfc5356d9ea80",
-        "attrs": {},
         "path": "root/HelloWorld/Queue/Policy",
         "props": {
           "principal": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
@@ -103,29 +128,24 @@ bucket: (function() {
         },
         "type": "@winglang/sdk.sim.Policy",
       },
-      {
-        "addr": "c87855e817fa3df0d5ce8ae290bf53c8ce4ecd8d46",
-        "attrs": {},
-        "path": "root/HelloWorld/Counter",
+      "root/HelloWorld/Queue/QueueEventMapping0": {
+        "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
+        "deps": [
+          "root/HelloWorld/Queue/SetConsumer0",
+          "root/HelloWorld/Queue",
+        ],
+        "path": "root/HelloWorld/Queue/QueueEventMapping0",
         "props": {
-          "initial": 1000,
+          "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
+          "subscriber": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "addr": "c80e3625bbefd53d8c61fbb978711d410b5f2a41c8",
-        "attrs": {},
-        "path": "root/HelloWorld/Bucket",
-        "props": {
-          "initialObjects": {},
-          "public": false,
-          "topics": {},
-        },
-        "type": "@winglang/sdk.cloud.Bucket",
-      },
-      {
+      "root/HelloWorld/Queue/SetConsumer0": {
         "addr": "c8e82e9fd83d9e59c5af169a3042b9ed0b40e91185",
-        "attrs": {},
         "deps": [
           "root/HelloWorld/Counter",
           "root/HelloWorld/Bucket",
@@ -153,34 +173,7 @@ bucket: (function() {
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
-        "addr": "c8de0494647ac0bdaec85a77e2a164cfbcfecc5ca1",
-        "attrs": {},
-        "path": "root/HelloWorld/Queue",
-        "props": {
-          "retentionPeriod": 3600,
-          "timeout": 30,
-        },
-        "type": "@winglang/sdk.cloud.Queue",
-      },
-      {
-        "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
-        "attrs": {},
-        "deps": [
-          "root/HelloWorld/Queue/SetConsumer0",
-          "root/HelloWorld/Queue",
-        ],
-        "path": "root/HelloWorld/Queue/QueueEventMapping0",
-        "props": {
-          "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
-          "subscriber": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
-          "subscriptionProps": {
-            "batchSize": 1,
-          },
-        },
-        "type": "@winglang/sdk.sim.EventMapping",
-      },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -234,10 +227,6 @@ bucket: (function() {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",

@@ -39,10 +39,9 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_service": {
         "addr": "c815f66e1cb1ce843a78fc0ecb05e6fc56e3b51516",
-        "attrs": {},
         "path": "root/my_service",
         "policy": [],
         "props": {
@@ -52,7 +51,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Service",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -106,10 +105,6 @@ return class Handler {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",

@@ -78,10 +78,9 @@ exports[`can add file in preflight 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_bucket": {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {
@@ -92,9 +91,8 @@ exports[`can add file in preflight 2`] = `
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-      {
+      "root/my_bucket/Policy": {
         "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
-        "attrs": {},
         "path": "root/my_bucket/Policy",
         "props": {
           "principal": "\${wsim#root/my_bucket#attrs.handle}",
@@ -102,7 +100,7 @@ exports[`can add file in preflight 2`] = `
         },
         "type": "@winglang/sdk.sim.Policy",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -156,10 +154,6 @@ exports[`can add file in preflight 2`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -254,10 +248,9 @@ exports[`can add object in preflight 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_bucket": {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {
@@ -268,9 +261,8 @@ exports[`can add object in preflight 2`] = `
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-      {
+      "root/my_bucket/Policy": {
         "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
-        "attrs": {},
         "path": "root/my_bucket/Policy",
         "props": {
           "principal": "\${wsim#root/my_bucket#attrs.handle}",
@@ -278,7 +270,7 @@ exports[`can add object in preflight 2`] = `
         },
         "type": "@winglang/sdk.sim.Policy",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -332,10 +324,6 @@ exports[`can add object in preflight 2`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -417,10 +405,9 @@ exports[`create a bucket 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_bucket": {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
@@ -429,9 +416,8 @@ exports[`create a bucket 1`] = `
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-      {
+      "root/my_bucket/Policy": {
         "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
-        "attrs": {},
         "path": "root/my_bucket/Policy",
         "props": {
           "principal": "\${wsim#root/my_bucket#attrs.handle}",
@@ -439,7 +425,7 @@ exports[`create a bucket 1`] = `
         },
         "type": "@winglang/sdk.sim.Policy",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -493,10 +479,6 @@ exports[`create a bucket 1`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -588,10 +570,9 @@ exports[`get invalid object throws an error 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_bucket": {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
@@ -600,9 +581,8 @@ exports[`get invalid object throws an error 2`] = `
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-      {
+      "root/my_bucket/Policy": {
         "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
-        "attrs": {},
         "path": "root/my_bucket/Policy",
         "props": {
           "principal": "\${wsim#root/my_bucket#attrs.handle}",
@@ -610,7 +590,7 @@ exports[`get invalid object throws an error 2`] = `
         },
         "type": "@winglang/sdk.sim.Policy",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -664,10 +644,6 @@ exports[`get invalid object throws an error 2`] = `
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",

@@ -16,7 +16,7 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
   private initial: number;
   private _context: ISimulatorContext | undefined;
 
-  public constructor(props: CounterSchema["props"]) {
+  public constructor(props: CounterSchema) {
     this.initial = props.initial ?? 0;
     this.values = new Map().set("default", this.initial);
   }

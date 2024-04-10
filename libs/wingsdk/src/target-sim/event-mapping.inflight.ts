@@ -14,7 +14,7 @@ export class EventMapping implements ISimulatorResourceInstance {
   private readonly eventSubscription: EventSubscription;
   private _context: ISimulatorContext | undefined;
 
-  constructor(props: EventMappingSchema["props"]) {
+  constructor(props: EventMappingSchema) {
     this.publisher = props.publisher;
     this.subscriber = props.subscriber;
     this.eventSubscription = props.subscriptionProps;

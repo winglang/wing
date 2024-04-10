@@ -9,7 +9,7 @@ import {
 export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
   private functionHandle: string;
 
-  public constructor(props: OnDeploySchema["props"]) {
+  public constructor(props: OnDeploySchema) {
     this.functionHandle = props.functionHandle;
   }
 

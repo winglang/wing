@@ -4,7 +4,6 @@ export * from "./counter";
 export * from "./domain";
 export * from "./function";
 export * from "./queue";
-export * from "./react-app";
 export * from "./table";
 export * from "./topic";
 export * from "./types";

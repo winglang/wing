@@ -29,10 +29,9 @@ my_capture: ["hello","dude"]
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -44,7 +43,7 @@ my_capture: ["hello","dude"]
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -98,10 +97,6 @@ my_capture: ["hello","dude"]
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -190,10 +185,9 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -205,7 +199,7 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -259,10 +253,6 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -350,10 +340,9 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -365,7 +354,7 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -419,10 +408,6 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -509,10 +494,9 @@ my_capture: false
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -524,7 +508,7 @@ my_capture: false
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -578,10 +562,6 @@ my_capture: false
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -670,10 +650,9 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -685,7 +664,7 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -739,10 +718,6 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -833,10 +808,9 @@ my_capture: new Map([["foo",123],["bar",456]])
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -848,7 +822,7 @@ my_capture: new Map([["foo",123],["bar",456]])
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -902,10 +876,6 @@ my_capture: new Map([["foo",123],["bar",456]])
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -998,10 +968,9 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1013,7 +982,7 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1067,10 +1036,6 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -1160,10 +1125,9 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1175,7 +1139,7 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1229,10 +1193,6 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -1319,10 +1279,9 @@ my_capture: 123
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1334,7 +1293,7 @@ my_capture: 123
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1388,10 +1347,6 @@ my_capture: 123
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -1481,10 +1436,9 @@ my_capture: new Set(["boom","bam","bang"])
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1496,7 +1450,7 @@ my_capture: new Set(["boom","bam","bang"])
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1550,10 +1504,6 @@ my_capture: new Set(["boom","bam","bang"])
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -1642,10 +1592,9 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1657,7 +1606,7 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1711,10 +1660,6 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -1802,10 +1747,9 @@ my_capture: "bam bam bam"
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1817,7 +1761,7 @@ my_capture: "bam bam bam"
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1871,10 +1815,6 @@ my_capture: "bam bam bam"
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -1964,10 +1904,9 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -1979,7 +1918,7 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -2033,10 +1972,6 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
@@ -2126,10 +2061,9 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
         "policy": [],
         "props": {
@@ -2141,7 +2075,7 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -2195,10 +2129,6 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",

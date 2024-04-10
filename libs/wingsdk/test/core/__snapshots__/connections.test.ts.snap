@@ -30,10 +30,9 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_bucket": {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
@@ -42,9 +41,8 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-      {
+      "root/my_bucket/Policy": {
         "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
-        "attrs": {},
         "path": "root/my_bucket/Policy",
         "props": {
           "principal": "\${wsim#root/my_bucket#attrs.handle}",
@@ -52,9 +50,8 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.Policy",
       },
-      {
+      "root/my_function": {
         "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
-        "attrs": {},
         "path": "root/my_function",
         "policy": [],
         "props": {
@@ -66,7 +63,7 @@ return class Handler {
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -120,10 +117,6 @@ return class Handler {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
