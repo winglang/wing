@@ -1,5 +1,4 @@
 bring fs;
-bring regex;
 bring expect;
 
 let tmpdir = fs.mkdtemp();

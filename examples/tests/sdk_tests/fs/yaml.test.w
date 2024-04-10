@@ -1,5 +1,4 @@
 bring fs;
-bring regex;
 
 let tmpdir = fs.mkdtemp();
 let filepath = "{tmpdir}/test-preflight.yaml";
