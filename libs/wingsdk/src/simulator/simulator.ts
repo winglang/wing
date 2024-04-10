@@ -432,6 +432,7 @@ export class Simulator {
 
     if (resetState) {
       await rm(this.statedir, { recursive: true });
+      this._traces = [];
     }
 
     this._model = this._loadApp(this._model.simdir);
