@@ -104,29 +104,21 @@ bucket: (function() {
       "root/HelloWorld/Queue": {
         "addr": "c8de0494647ac0bdaec85a77e2a164cfbcfecc5ca1",
         "path": "root/HelloWorld/Queue",
+        "policy": [
+          {
+            "operation": "invoke",
+            "resourceHandle": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
+          },
+          {
+            "operation": "hasAvailableWorkers",
+            "resourceHandle": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
+          },
+        ],
         "props": {
           "retentionPeriod": 3600,
           "timeout": 30,
         },
         "type": "@winglang/sdk.cloud.Queue",
-      },
-      "root/HelloWorld/Queue/Policy": {
-        "addr": "c86b009930462795eeb90e647a56dbfc5356d9ea80",
-        "path": "root/HelloWorld/Queue/Policy",
-        "props": {
-          "principal": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
-            },
-            {
-              "operation": "hasAvailableWorkers",
-              "resourceHandle": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
       },
       "root/HelloWorld/Queue/QueueEventMapping0": {
         "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
@@ -304,19 +296,6 @@ bucket: (function() {
             },
             "Queue": {
               "children": {
-                "Policy": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A simulated resource policy",
-                    "hidden": true,
-                    "title": "Policy",
-                  },
-                  "id": "Policy",
-                  "path": "root/HelloWorld/Queue/Policy",
-                },
                 "QueueEventMapping0": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
