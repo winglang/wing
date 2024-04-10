@@ -445,11 +445,11 @@ async function testSimulator(synthDir: string, options: TestOptions) {
         const milliseconds = date.getMilliseconds().toString().padStart(3, "0");
         const timestamp = `${hours}:${minutes}:${seconds}.${milliseconds}`;
         let msg = "";
-        msg += chalk.gray(`[${timestamp}]`);
+        msg += chalk.dim(`[${timestamp}]`);
         msg += LOG_STREAM_COLORS[severity](` [${SEVERITY_STRING[severity]}]`);
-        msg += chalk.white(` "${testName}" » /${pathSuffix}`);
+        msg += ` ${chalk.bold(testName)} » /${pathSuffix}`;
         msg += "\n";
-        msg += chalk.whiteBright(`${event.data.message}`);
+        msg += event.data.message;
         msg += "\n";
         outputStream!.write(msg);
       },
