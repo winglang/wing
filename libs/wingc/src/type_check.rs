@@ -4210,7 +4210,7 @@ impl<'a> TypeChecker<'a> {
 			})
 			.collect::<Vec<_>>();
 
-		// Verify impelmented interfaces are of valid phase for this class
+		// Verify implemented interfaces are of valid phase for this class
 		for interface in impl_interfaces.iter().map(|t| t.as_interface().unwrap()) {
 			if ast_class.phase == Phase::Inflight && interface.phase == Phase::Preflight {
 				self.spanned_error(
