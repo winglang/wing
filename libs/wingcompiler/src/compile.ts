@@ -335,7 +335,7 @@ async function runPreflightCodeInWorkerThread(
     env.WING_PREFLIGHT_ENTRYPOINT = JSON.stringify(entrypoint);
 
     await new Promise((resolve, reject) => {
-      const worker = fork(join(__dirname, "..", "preflight.shim.js"), {
+      const worker = fork(join(__dirname, "..", "preflight.shim.cjs"), {
         env,
         stdio: "inherit",
       });
