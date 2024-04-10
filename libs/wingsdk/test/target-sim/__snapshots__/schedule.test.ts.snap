@@ -155,7 +155,7 @@ exports[`create a schedule 1`] = `
 
 exports[`schedule with one task using rate of 3h 1`] = `
 {
-  ".wing/ontick0_c83eddbe.js": ""use strict";
+  ".wing/ontick0_c83eddbe.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js")).ScheduleOnTickHandlerClient({ handler: new ((function(){
@@ -202,7 +202,7 @@ console.log("Hello from schedule!");
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
+          "sourceCodeFile": ".wing/ontick0_c83eddbe.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -390,7 +390,7 @@ console.log("Hello from schedule!");
 
 exports[`schedule with one task using rate of 10m 1`] = `
 {
-  ".wing/ontick0_c83eddbe.js": ""use strict";
+  ".wing/ontick0_c83eddbe.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js")).ScheduleOnTickHandlerClient({ handler: new ((function(){
@@ -437,7 +437,7 @@ console.log("Hello from schedule!");
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
+          "sourceCodeFile": ".wing/ontick0_c83eddbe.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -625,7 +625,7 @@ console.log("Hello from schedule!");
 
 exports[`schedule with one task with cron 1`] = `
 {
-  ".wing/ontick0_c83eddbe.js": ""use strict";
+  ".wing/ontick0_c83eddbe.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js")).ScheduleOnTickHandlerClient({ handler: new ((function(){
@@ -672,7 +672,7 @@ console.log("Hello from schedule!");
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
+          "sourceCodeFile": ".wing/ontick0_c83eddbe.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
