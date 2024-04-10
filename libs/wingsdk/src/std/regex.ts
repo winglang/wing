@@ -136,9 +136,10 @@ export class Regex implements ILiftable {
     const matches: number[][] = [];
     const globalRegex = this.getGlobalRegex();
 
-    let match;
-    while ((match = globalRegex.exec(text)) !== null) {
-      matches.push([match.index, match.index + match[0].length]);
+    for (const match of text.matchAll(globalRegex)) {
+      if (match.index !== undefined) {
+        matches.push([match.index, match.index + match[0].length]);
+      }
     }
 
     return matches;
