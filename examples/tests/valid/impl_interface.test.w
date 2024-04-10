@@ -1,4 +1,5 @@
 bring cloud;
+bring "jsii-fixture" as jsii_fixture;
 
 class A impl cloud.IQueueSetConsumerHandler {
   pub inflight handle(msg: str) {
@@ -82,3 +83,16 @@ let f = inflight () => {
   let dog = new MyDog();
   dog.bark();
 };
+
+interface ExtendJsiiIface extends jsii_fixture.ISomeInterface {
+  inflight inflight_method(): void;
+}
+
+class ImplementJsiiIface impl ExtendJsiiIface {
+  pub method() {
+    return;
+  }
+  pub inflight inflight_method() {
+    return;
+  }
+}
