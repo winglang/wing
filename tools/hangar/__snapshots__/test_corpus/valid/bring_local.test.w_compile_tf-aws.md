@@ -1,7 +1,7 @@
 # [bring_local.test.w](../../../../../examples/tests/valid/bring_local.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $__parent_this_1_b }) {
@@ -17,11 +17,11 @@ module.exports = function({ $__parent_this_1_b }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.$Closure1-3.js
-```js
+## inflight.$Closure1-3.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $store }) {
@@ -37,11 +37,11 @@ module.exports = function({ $store }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-3.js.map
+//# sourceMappingURL=inflight.$Closure1-3.cjs.map
 ```
 
-## inflight.Q-2.js
-```js
+## inflight.Q-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -54,11 +54,11 @@ module.exports = function({  }) {
   }
   return Q;
 }
-//# sourceMappingURL=inflight.Q-2.js.map
+//# sourceMappingURL=inflight.Q-2.cjs.map
 ```
 
-## inflight.Store-1.js
-```js
+## inflight.Store-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -72,11 +72,11 @@ module.exports = function({  }) {
   }
   return Store;
 }
-//# sourceMappingURL=inflight.Store-1.js.map
+//# sourceMappingURL=inflight.Store-1.cjs.map
 ```
 
-## inflight.Triangle-3.js
-```js
+## inflight.Triangle-3.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -86,11 +86,11 @@ module.exports = function({  }) {
   }
   return Triangle;
 }
-//# sourceMappingURL=inflight.Triangle-3.js.map
+//# sourceMappingURL=inflight.Triangle-3.cjs.map
 ```
 
-## inflight.Util-1.js
-```js
+## inflight.Util-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -100,11 +100,11 @@ module.exports = function({  }) {
   }
   return Util;
 }
-//# sourceMappingURL=inflight.Util-1.js.map
+//# sourceMappingURL=inflight.Util-1.cjs.map
 ```
 
-## inflight.Util-3.js
-```js
+## inflight.Util-3.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -114,7 +114,7 @@ module.exports = function({  }) {
   }
   return Util;
 }
-//# sourceMappingURL=inflight.Util-3.js.map
+//# sourceMappingURL=inflight.Util-3.cjs.map
 ```
 
 ## main.tf.json
@@ -268,18 +268,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.empty-1.js
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const std = $stdlib.std;
-const $helpers = $stdlib.helpers;
-module.exports = {  };
-//# sourceMappingURL=preflight.empty-1.js.map
-```
-
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -287,9 +277,9 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-const file1 = require("./preflight.store-2.js");
-const file2 = require("./preflight.subfile-3.js");
-const file3 = require("./preflight.empty-1.js");
+const file1 = require("./preflight.store-2.cjs");
+const file2 = require("./preflight.subfile-3.cjs");
+const file3 = require("./preflight.empty-1.cjs");
 const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -302,7 +292,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-3.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-3.cjs")({
             $store: ${$stdlib.core.liftObject(store)},
           })
         `;
@@ -338,7 +328,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Triangle-3.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Triangle-3.cjs")({
           })
         `;
       }
@@ -366,7 +356,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Util-3.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Util-3.cjs")({
           })
         `;
       }
@@ -400,16 +390,26 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
-## preflight.store-2.js
-```js
+## preflight.empty-1.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-const file3 = require("./preflight.empty-1.js");
+module.exports = {  };
+//# sourceMappingURL=preflight.empty-1.cjs.map
+```
+
+## preflight.store-2.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const file3 = require("./preflight.empty-1.cjs");
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
 const Color =
@@ -426,7 +426,7 @@ class Util extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.cjs")({
       })
     `;
   }
@@ -461,7 +461,7 @@ class Store extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
           })
         `;
@@ -492,7 +492,7 @@ class Store extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Store-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Store-1.cjs")({
       })
     `;
   }
@@ -520,11 +520,11 @@ class Store extends $stdlib.std.Resource {
   }
 }
 module.exports = { Util, Store, Color };
-//# sourceMappingURL=preflight.store-2.js.map
+//# sourceMappingURL=preflight.store-2.cjs.map
 ```
 
-## preflight.subfile-3.js
-```js
+## preflight.subfile-3.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
@@ -536,7 +536,7 @@ class Q extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Q-2.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Q-2.cjs")({
       })
     `;
   }
@@ -565,6 +565,6 @@ class Q extends $stdlib.std.Resource {
   }
 }
 module.exports = { Q };
-//# sourceMappingURL=preflight.subfile-3.js.map
+//# sourceMappingURL=preflight.subfile-3.cjs.map
 ```
 

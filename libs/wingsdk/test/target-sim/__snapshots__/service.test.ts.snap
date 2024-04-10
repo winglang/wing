@@ -2,7 +2,7 @@
 
 exports[`create a service with on start method 1`] = `
 {
-  ".wing/my_service_c815f66e.js": "      "use strict";
+  ".wing/my_service_c815f66e.cjs": "      "use strict";
       let $stop;
       exports.start = async function() {
         if ($stop) {
@@ -47,7 +47,7 @@ return class Handler {
         "props": {
           "autoStart": true,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_service_c815f66e.js",
+          "sourceCodeFile": ".wing/my_service_c815f66e.cjs",
         },
         "type": "@winglang/sdk.cloud.Service",
       },
@@ -105,10 +105,6 @@ return class Handler {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",

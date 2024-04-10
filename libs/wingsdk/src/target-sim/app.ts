@@ -11,7 +11,6 @@ import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { POLICY_FQN, Policy } from "./policy";
 import { Queue } from "./queue";
-import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
@@ -42,12 +41,12 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { registerTokenResolver } from "../core/tokens";
-import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN } from "../ex";
+import { REDIS_FQN, TABLE_FQN } from "../ex";
 import {
   BaseResourceSchema,
   TypeSchema,
   WingSimulatorSchema,
-} from "../simulator/simulator";
+} from "../simulator";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
@@ -66,7 +65,6 @@ const SIMULATOR_CLASS_DATA = {
   [ON_DEPLOY_FQN]: "OnDeploy",
   [POLICY_FQN]: "Policy",
   [QUEUE_FQN]: "Queue",
-  [REACT_APP_FQN]: "ReactApp",
   [REDIS_FQN]: "Redis",
   [SCHEDULE_FQN]: "Schedule",
   [SECRET_FQN]: "Secret",
@@ -130,9 +128,6 @@ export class App extends core.App {
 
       case QUEUE_FQN:
         return require.resolve("./queue.inflight");
-
-      case REACT_APP_FQN:
-        return require.resolve("./react-app.inflight");
 
       case REDIS_FQN:
         return require.resolve("./redis.inflight");
@@ -198,9 +193,6 @@ export class App extends core.App {
 
       case QUEUE_FQN:
         return Queue;
-
-      case REACT_APP_FQN:
-        return ReactApp;
 
       case REDIS_FQN:
         return Redis;

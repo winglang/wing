@@ -1,7 +1,7 @@
 # [lift_with_phase_ind.test.w](../../../../../examples/tests/valid/lift_with_phase_ind.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______ar__0_, $ar, $ar_length, $math_Util }) {
@@ -22,7 +22,7 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -44,8 +44,8 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -65,7 +65,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______ar__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(ar, 0))},
             $ar: ${$stdlib.core.liftObject(ar)},
             $ar_length: ${$stdlib.core.liftObject(ar.length)},
@@ -106,6 +106,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "lift_with_phase_ind.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
