@@ -8,7 +8,7 @@ import { App } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Util as fs } from "../fs";
 import { isPath } from "../shared/misc";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Resource } from "../std";
 
 export const SIM_CONTAINER_FQN = fqnForType("sim.Container");
@@ -99,27 +99,23 @@ export class Container extends Resource implements ISimulatorResource {
     }
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: ContainerSchema = {
-      type: SIM_CONTAINER_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        image: this.props.image,
-        imageTag: this.imageTag,
-        containerPort: this.props.containerPort,
-        env: this.props.env,
-        args: this.props.args,
-        cwd: App.of(this).entrypointDir,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: ContainerSchema = {
+      image: this.props.image,
+      imageTag: this.imageTag,
+      containerPort: this.props.containerPort,
+      env: this.props.env,
+      args: this.props.args,
+      cwd: App.of(this).entrypointDir,
     };
-
-    return schema;
+    return {
+      type: SIM_CONTAINER_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

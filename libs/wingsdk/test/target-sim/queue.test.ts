@@ -30,6 +30,7 @@ test("create a queue", async () => {
     },
     path: "root/my_queue",
     addr: expect.any(String),
+    policy: [],
     props: {
       retentionPeriod: 3600,
       timeout: 30,
@@ -369,6 +370,6 @@ test("push rejects empty message", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[1].data.status).toEqual("failure");
+  expect(s.listTraces()[2].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });

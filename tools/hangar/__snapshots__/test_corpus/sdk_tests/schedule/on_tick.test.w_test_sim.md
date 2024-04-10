@@ -6,6 +6,7 @@ pass ─ on_tick.test.wsim » root/env0/on tick is called both for rate and cron
  
  
 Tests 1 passed (1)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

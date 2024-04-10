@@ -7,17 +7,16 @@ exports[`create a counter 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -72,10 +71,6 @@ exports[`create a counter 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -91,6 +86,10 @@ exports[`create a counter 1`] = `
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -148,17 +147,16 @@ exports[`dec 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -213,10 +211,6 @@ exports[`dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -232,6 +226,10 @@ exports[`dec 2`] = `
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -289,17 +287,16 @@ exports[`inc 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -354,10 +351,6 @@ exports[`inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -373,6 +366,10 @@ exports[`inc 2`] = `
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -430,17 +427,16 @@ exports[`key dec 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 0,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -495,10 +491,6 @@ exports[`key dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -514,6 +506,10 @@ exports[`key dec 2`] = `
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -571,17 +567,16 @@ exports[`key inc 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 0,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -636,10 +631,6 @@ exports[`key inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -655,6 +646,10 @@ exports[`key inc 2`] = `
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -710,17 +705,16 @@ exports[`key set to new value 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 0,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -775,10 +769,6 @@ exports[`key set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -794,6 +784,10 @@ exports[`key set to new value 2`] = `
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -849,17 +843,16 @@ exports[`set to new value 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -914,10 +907,6 @@ exports[`set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -933,6 +922,10 @@ exports[`set to new value 2`] = `
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

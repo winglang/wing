@@ -6,6 +6,7 @@ pass ─ function_returns_function.test.wsim » root/env0/test:inflight function
  
  
 Tests 1 passed (1)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

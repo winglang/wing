@@ -14,6 +14,7 @@ pass ─ assert.test.wsim » root/env8/test:equal durations
  
  
 Tests 9 passed (9)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

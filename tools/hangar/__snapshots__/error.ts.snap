@@ -13,6 +13,7 @@ at <ABSOLUTE>/bool_from_json.test.w:5:15
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -70,6 +71,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env4/test:assert with message
  
  
 Tests 5 failed (5)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -85,6 +87,7 @@ at <ABSOLUTE>/num_from_str.test.w:3:14
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -102,6 +105,7 @@ at <ABSOLUTE>/number_from_json.test.w:5:14
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -124,6 +128,7 @@ at <ABSOLUTE>/repeat_construct_id.test.w:4:15
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -146,6 +151,7 @@ at <ABSOLUTE>/repeat_construct_id2.test.w:8:15
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -163,6 +169,7 @@ at <ABSOLUTE>/string_from_json.test.w:5:14
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -180,6 +187,7 @@ at <ABSOLUTE>/struct_from_json_1.test.w:11:1
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -198,6 +206,7 @@ at <ABSOLUTE>/struct_from_json_2.test.w:22:1
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -216,6 +225,7 @@ at <ABSOLUTE>/struct_from_json_3.test.w:26:1
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -233,6 +243,7 @@ at <ABSOLUTE>/struct_from_json_4.test.w:27:1
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -250,6 +261,7 @@ at <ABSOLUTE>/struct_from_json_5.test.w:16:1
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -263,6 +275,7 @@ at <ABSOLUTE>/utilities.test.w:1:1
  
  
 Tests 1 failed (1)
+Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;

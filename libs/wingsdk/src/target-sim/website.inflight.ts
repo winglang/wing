@@ -14,14 +14,12 @@ import { TraceType } from "../std";
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
 export class Website implements IWebsiteClient, ISimulatorResourceInstance {
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
   private readonly app: express.Application;
   private server?: Server;
   private url?: string;
 
-  constructor(props: WebsiteSchema["props"], context: ISimulatorContext) {
-    this.context = context;
-
+  constructor(props: WebsiteSchema) {
     // Set up an express server that handles the routes.
     this.app = express();
 
@@ -48,7 +46,15 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
     }
   }
 
-  public async init(): Promise<ApiAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<ApiAttributes> {
+    this._context = context;
     // `server.address()` returns `null` until the server is listening
     // on a port. We use a promise to wait for the server to start
     // listening before returning the URL.

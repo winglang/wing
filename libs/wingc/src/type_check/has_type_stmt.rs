@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Stmt, StmtKind},
+	ast::{FunctionDefinition, Stmt, StmtKind},
 	visit::{self, Visit},
 };
 
@@ -26,5 +26,10 @@ impl Visit<'_> for HasStatementVisitor {
 			_ => (),
 		}
 		visit::visit_stmt(self, node);
+	}
+
+	fn visit_function_definition(&mut self, _: &'_ FunctionDefinition) {
+		// Don't recurse into functions. This way our search will ignore stmts in inner functions.
+		return;
 	}
 }

@@ -146,17 +146,12 @@ impl Lifts {
 	}
 
 	/// List of all lifted fields in the class. (map from lift token to preflight code)
-	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
-		let mut result: BTreeMap<String, String> = BTreeMap::new();
-
+	pub fn lifted_fields(&self) -> impl Iterator<Item = (String, String)> + '_ {
 		self
 			.captures
 			.iter()
 			.filter(|(_, lift)| lift.is_field)
-			.for_each(|(token, lift)| {
-				result.insert(token.clone(), lift.code.clone());
-			});
-		result
+			.map(|(t, c)| (t.clone(), c.code.clone()))
 	}
 }
 

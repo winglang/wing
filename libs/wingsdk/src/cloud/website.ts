@@ -36,7 +36,7 @@ export interface WebsiteOptions {
 }
 
 /**
- * Options for `Website`, and `ReactApp`
+ * Options for `Website`
  */
 export interface WebsiteDomainOptions {
   /**

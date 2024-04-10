@@ -2,7 +2,7 @@ bring cloud;
 
 let queue = new cloud.Queue();
 
-let handler = inflight (body: str): str => {
+let handler = inflight (body: str): void => {
     let i = 0;
     let iterator = inflight (j: num): num => {
         return j+1;
