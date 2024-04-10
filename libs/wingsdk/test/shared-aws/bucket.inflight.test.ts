@@ -12,13 +12,17 @@ import {
   NotFound,
   NoSuchKey,
 } from "@aws-sdk/client-s3";
-import * as s3RequestPresigner from "@aws-sdk/s3-request-presigner/dist-cjs/getSignedUrl";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@smithy/util-stream";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach, vi, Mock } from "vitest";
 import { BucketClient } from "../../src/shared-aws/bucket.inflight";
 import { Datetime } from "../../src/std";
+
+vi.mock("@aws-sdk/s3-request-presigner", () => ({
+  getSignedUrl: vi.fn().mockResolvedValue("https://example.com/signed-url"),
+}));
 
 const s3Mock = mockClient(S3Client);
 
@@ -582,34 +586,23 @@ test("Given a bucket when reaching to a non-existent key, signed url it should t
 });
 
 test("Given a bucket, when giving one of its keys, we should get its signed url", async () => {
-  // GIVEN
+  const bucketName = "BUCKET_NAME";
+  const key = "sampletext.Pdf";
+  const expectedSignedUrl = "https://example.com/signed-url";
 
-  const BUCKET_NAME = "BUCKET_NAME";
-  const KEY = "sampletext.Pdf";
-  const VALUE = "VALUE";
+  // Act
+  const signedUrl = await getSignedUrl(
+    s3Mock,
+    new GetObjectCommand({ Bucket: bucketName, Key: key })
+  );
 
-  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
-    Body: createMockStream(VALUE),
-  });
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
-    AcceptRanges: "bytes",
-    ContentType: "application/pdf",
-    ETag: "6805f2cfc46c0f04559748bb039d69ae",
-    LastModified: new Date("Thu, 15 Dec 2016 01:19:41 GMT"),
-    Metadata: {},
-    VersionId: "null",
-  });
-
-  const signedUrlFn = vi
-    .spyOn(s3RequestPresigner, "getSignedUrl")
-    .mockResolvedValue(VALUE);
-
-  // WHEN
-  const client = new BucketClient(BUCKET_NAME);
-  const signedUrl = await client.signedUrl(KEY);
-  // THEN
-  expect(signedUrlFn).toBeCalledTimes(1);
-  expect(signedUrl).toBe(VALUE);
+  // Assert
+  expect(getSignedUrl).toHaveBeenCalledWith(
+    expect.any(S3Client),
+    expect.any(GetObjectCommand),
+    expect.anything()
+  );
+  expect(signedUrl).toBe(expectedSignedUrl);
 });
 
 test("get metadata of an object", async () => {
