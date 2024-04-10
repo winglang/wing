@@ -34,6 +34,7 @@ export class Util {
 
 /**
  * Represents a compiled regular expression pattern.
+ * @wingType regex
  */
 export class Regex {
   private regex: RegExp;
