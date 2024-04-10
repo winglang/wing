@@ -11,12 +11,20 @@ exports[`create a queue 1`] = `
       "root/my_queue": {
         "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "path": "root/my_queue",
-        "policy": [],
         "props": {
           "retentionPeriod": 3600,
           "timeout": 30,
         },
         "type": "@winglang/sdk.cloud.Queue",
+      },
+      "root/my_queue/Policy": {
+        "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
+        "path": "root/my_queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_queue#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
       },
     },
     "sdkVersion": "0.0.0",
@@ -107,6 +115,21 @@ exports[`create a queue 1`] = `
     "tree": {
       "children": {
         "my_queue": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_queue/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -585,7 +608,9 @@ async handle(message) {
 exports[`push rejects empty message 1`] = `
 [
   "root/my_queue started",
+  "root/my_queue/Policy started",
   "Push (messages=).",
+  "root/my_queue/Policy stopped",
   "root/my_queue stopped",
 ]
 `;
@@ -601,12 +626,20 @@ exports[`push rejects empty message 2`] = `
       "root/my_queue": {
         "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "path": "root/my_queue",
-        "policy": [],
         "props": {
           "retentionPeriod": 3600,
           "timeout": 30,
         },
         "type": "@winglang/sdk.cloud.Queue",
+      },
+      "root/my_queue/Policy": {
+        "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
+        "path": "root/my_queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_queue#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
       },
     },
     "sdkVersion": "0.0.0",
@@ -697,6 +730,21 @@ exports[`push rejects empty message 2`] = `
     "tree": {
       "children": {
         "my_queue": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_queue/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -724,11 +772,13 @@ exports[`push rejects empty message 2`] = `
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
   "root/my_queue started",
+  "root/my_queue/Policy started",
   "Push (messages=A).",
   "Push (messages=B).",
   "ApproxSize ().",
   "Purge ().",
   "ApproxSize ().",
+  "root/my_queue/Policy stopped",
   "root/my_queue stopped",
 ]
 `;
@@ -744,12 +794,20 @@ exports[`queue batch size of 2, purge the queue 2`] = `
       "root/my_queue": {
         "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "path": "root/my_queue",
-        "policy": [],
         "props": {
           "retentionPeriod": 3600,
           "timeout": 30,
         },
         "type": "@winglang/sdk.cloud.Queue",
+      },
+      "root/my_queue/Policy": {
+        "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
+        "path": "root/my_queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_queue#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
       },
     },
     "sdkVersion": "0.0.0",
@@ -840,6 +898,21 @@ exports[`queue batch size of 2, purge the queue 2`] = `
     "tree": {
       "children": {
         "my_queue": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_queue/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -946,27 +1019,36 @@ async handle(message) {
       "root/my_queue": {
         "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "path": "root/my_queue",
-        "policy": [
-          {
-            "operation": "invoke",
-            "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
-          },
-          {
-            "operation": "hasAvailableWorkers",
-            "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
-          },
-        ],
         "props": {
           "retentionPeriod": 3600,
           "timeout": 30,
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
+      "root/my_queue/Policy": {
+        "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
+        "path": "root/my_queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_queue#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+            },
+            {
+              "operation": "hasAvailableWorkers",
+              "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
       "root/my_queue/QueueEventMapping0": {
         "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "deps": [
           "root/my_queue/SetConsumer0",
           "root/my_queue",
+          "root/my_queue/Policy",
         ],
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
@@ -1115,6 +1197,19 @@ async handle(message) {
       "children": {
         "my_queue": {
           "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_queue/Policy",
+            },
             "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1230,27 +1325,36 @@ async handle(message) {
       "root/my_queue": {
         "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "path": "root/my_queue",
-        "policy": [
-          {
-            "operation": "invoke",
-            "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
-          },
-          {
-            "operation": "hasAvailableWorkers",
-            "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
-          },
-        ],
         "props": {
           "retentionPeriod": 3600,
           "timeout": 30,
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
+      "root/my_queue/Policy": {
+        "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
+        "path": "root/my_queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_queue#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+            },
+            {
+              "operation": "hasAvailableWorkers",
+              "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
       "root/my_queue/QueueEventMapping0": {
         "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "deps": [
           "root/my_queue/SetConsumer0",
           "root/my_queue",
+          "root/my_queue/Policy",
         ],
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
@@ -1365,6 +1469,19 @@ async handle(message) {
       "children": {
         "my_queue": {
           "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_queue/Policy",
+            },
             "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",

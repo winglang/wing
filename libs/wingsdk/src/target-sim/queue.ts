@@ -6,9 +6,9 @@ import {
   Function,
   FunctionInflightMethods as SimFunctionInflightMethods,
 } from "./function";
+import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
-import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { NotImplementedError } from "../core/errors";
@@ -24,7 +24,7 @@ import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: Duration;
   private readonly retentionPeriod: Duration;
-  private readonly consumers: Function[] = [];
+  private readonly policy: Policy;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
@@ -48,6 +48,8 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
         "Retention period must be greater than or equal to timeout"
       );
     }
+
+    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
   /** @internal */
@@ -102,13 +104,24 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     fnNode.sourceModule = SDK_SOURCE_MODULE;
     fnNode.title = "setConsumer()";
 
-    new EventMapping(this, App.of(this).makeId(this, "QueueEventMapping"), {
-      subscriber: fn,
-      publisher: this,
-      subscriptionProps: {
-        batchSize: props.batchSize ?? 1,
-      },
-    });
+    const mapping = new EventMapping(
+      this,
+      App.of(this).makeId(this, "QueueEventMapping"),
+      {
+        subscriber: fn,
+        publisher: this,
+        subscriptionProps: {
+          batchSize: props.batchSize ?? 1,
+        },
+      }
+    );
+
+    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
+    this.policy.addStatement(
+      fn,
+      SimFunctionInflightMethods.HAS_AVAILABLE_WORKERS
+    );
+    mapping.node.addDependency(this.policy);
 
     Node.of(this).addConnection({
       source: this,
@@ -116,7 +129,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       name: "setConsumer()",
     });
 
-    this.consumers.push(fn);
     return fn;
   }
 
@@ -127,16 +139,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     };
     return {
       type: cloud.QUEUE_FQN,
-      policy: this.consumers.flatMap((fn) => [
-        {
-          operation: cloud.FunctionInflightMethods.INVOKE,
-          resourceHandle: simulatorHandleToken(fn),
-        },
-        {
-          operation: SimFunctionInflightMethods.HAS_AVAILABLE_WORKERS,
-          resourceHandle: simulatorHandleToken(fn),
-        },
-      ]),
       props,
     };
   }
