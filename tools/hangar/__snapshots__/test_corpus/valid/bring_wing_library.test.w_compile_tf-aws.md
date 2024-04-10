@@ -98,31 +98,8 @@ module.exports = function({  }) {
 }
 ```
 
-<<<<<<< HEAD
-## preflight.enums-1.js
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const std = $stdlib.std;
-const $helpers = $stdlib.helpers;
-const $extern = $helpers.createExternRequire(__dirname);
-const FavoriteNumbers =
-  (function (tmp) {
-    tmp["SEVEN"] = "SEVEN";
-    tmp["FORTY_TWO"] = "FORTY_TWO";
-    return tmp;
-  })({})
-;
-module.exports = { FavoriteNumbers };
-//# sourceMappingURL=preflight.enums-1.js.map
-```
-
-## preflight.js
-```js
-=======
 ## preflight.cjs
 ```cjs
->>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -130,16 +107,10 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-<<<<<<< HEAD
 const $extern = $helpers.createExternRequire(__dirname);
-const fixture = require("./preflight.testfixture-5.js");
-const testfixture = require("./preflight.testfixture-5.js");
-const testfixture2 = require("./preflight.testfixture-5.js");
-=======
 const fixture = require("./preflight.testfixture-5.cjs");
 const testfixture = require("./preflight.testfixture-5.cjs");
 const testfixture2 = require("./preflight.testfixture-5.cjs");
->>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -198,6 +169,7 @@ $APP.synth();
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const FavoriteNumbers =
   (function (tmp) {
     tmp["SEVEN"] = "SEVEN";

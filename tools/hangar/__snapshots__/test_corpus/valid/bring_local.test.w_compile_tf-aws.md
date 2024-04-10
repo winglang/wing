@@ -268,24 +268,8 @@ module.exports = function({  }) {
 }
 ```
 
-<<<<<<< HEAD
-## preflight.empty-1.js
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const std = $stdlib.std;
-const $helpers = $stdlib.helpers;
-const $extern = $helpers.createExternRequire(__dirname);
-module.exports = {  };
-//# sourceMappingURL=preflight.empty-1.js.map
-```
-
-## preflight.js
-```js
-=======
 ## preflight.cjs
 ```cjs
->>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -293,16 +277,10 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-<<<<<<< HEAD
 const $extern = $helpers.createExternRequire(__dirname);
-const file1 = require("./preflight.store-2.js");
-const file2 = require("./preflight.subfile-3.js");
-const file3 = require("./preflight.empty-1.js");
-=======
 const file1 = require("./preflight.store-2.cjs");
 const file2 = require("./preflight.subfile-3.cjs");
 const file3 = require("./preflight.empty-1.cjs");
->>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
 const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -422,10 +400,7 @@ $APP.synth();
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-<<<<<<< HEAD
 const $extern = $helpers.createExternRequire(__dirname);
-const file3 = require("./preflight.empty-1.js");
-=======
 module.exports = {  };
 //# sourceMappingURL=preflight.empty-1.cjs.map
 ```
@@ -436,8 +411,8 @@ module.exports = {  };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const file3 = require("./preflight.empty-1.cjs");
->>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
 const Color =

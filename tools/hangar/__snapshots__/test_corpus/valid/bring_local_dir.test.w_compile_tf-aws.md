@@ -84,6 +84,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const w = require("./preflight.widget-1.cjs");
 const subdir = require("./preflight.subdir2-5.cjs");
 class $Root extends $stdlib.std.Resource {
@@ -112,12 +113,8 @@ $APP.synth();
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-<<<<<<< HEAD
 const $extern = $helpers.createExternRequire(__dirname);
-const blah = require("./preflight.inner-2.js");
-=======
 const blah = require("./preflight.inner-2.cjs");
->>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 class Foo extends $stdlib.std.Resource {
@@ -243,45 +240,8 @@ module.exports = {
 //# sourceMappingURL=preflight.inner-2.cjs.map
 ```
 
-<<<<<<< HEAD
-## preflight.js
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
-const std = $stdlib.std;
-const $helpers = $stdlib.helpers;
-const $extern = $helpers.createExternRequire(__dirname);
-const w = require("./preflight.widget-1.js");
-const subdir = require("./preflight.subdir2-5.js");
-class $Root extends $stdlib.std.Resource {
-  constructor($scope, $id) {
-    super($scope, $id);
-    const widget1 = new w.Widget(this, "widget1");
-    $helpers.assert($helpers.eq((widget1.compute()), 42), "widget1.compute() == 42");
-    const foo = new subdir.Foo(this, "Foo");
-    $helpers.assert($helpers.eq((foo.foo()), "foo"), "foo.foo() == \"foo\"");
-    const bar = new subdir.Bar(this, "Bar");
-    $helpers.assert($helpers.eq((bar.bar()), "bar"), "bar.bar() == \"bar\"");
-    const widget2 = new subdir.inner.Widget(this, "widget2");
-    $helpers.assert($helpers.eq((widget2.compute()), 42), "widget2.compute() == 42");
-    $helpers.assert($helpers.eq((foo.checkWidget(widget2)), 1379), "foo.checkWidget(widget2) == 1379");
-  }
-}
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local_dir.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
-$APP.synth();
-//# sourceMappingURL=preflight.js.map
-```
-
-## preflight.subdir2-5.js
-```js
-=======
 ## preflight.subdir2-5.cjs
 ```cjs
->>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;

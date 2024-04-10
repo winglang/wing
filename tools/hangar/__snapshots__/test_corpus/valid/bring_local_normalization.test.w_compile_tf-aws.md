@@ -154,6 +154,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const foo = require("./preflight.foo-3.cjs");
 const bar = require("./preflight.bar-1.cjs");
 const baz = require("./preflight.baz-2.cjs");
@@ -179,14 +180,9 @@ $APP.synth();
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-<<<<<<< HEAD
 const $extern = $helpers.createExternRequire(__dirname);
-const bar = require("./preflight.bar-1.js");
-const baz = require("./preflight.baz-2.js");
-=======
 const bar = require("./preflight.bar-1.cjs");
 const baz = require("./preflight.baz-2.cjs");
->>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -225,39 +221,6 @@ class Foo extends $stdlib.std.Resource {
   }
 }
 module.exports = { Foo };
-<<<<<<< HEAD
-//# sourceMappingURL=preflight.foo-3.js.map
-```
-
-## preflight.js
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
-const std = $stdlib.std;
-const $helpers = $stdlib.helpers;
-const $extern = $helpers.createExternRequire(__dirname);
-const foo = require("./preflight.foo-3.js");
-const bar = require("./preflight.bar-1.js");
-const baz = require("./preflight.baz-2.js");
-class $Root extends $stdlib.std.Resource {
-  constructor($scope, $id) {
-    super($scope, $id);
-    $helpers.assert($helpers.eq((foo.Foo.foo(this)), "foo"), "foo.Foo.foo() == \"foo\"");
-    $helpers.assert($helpers.eq((foo.Foo.bar(this)), "bar"), "foo.Foo.bar() == \"bar\"");
-    $helpers.assert($helpers.eq((foo.Foo.baz(this)), "baz"), "foo.Foo.baz() == \"baz\"");
-    $helpers.assert($helpers.eq((bar.Bar.bar(this)), "bar"), "bar.Bar.bar() == \"bar\"");
-    $helpers.assert($helpers.eq((baz.Baz.baz(this)), "baz"), "baz.Baz.baz() == \"baz\"");
-  }
-}
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local_normalization.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
-$APP.synth();
-//# sourceMappingURL=preflight.js.map
-=======
 //# sourceMappingURL=preflight.foo-3.cjs.map
->>>>>>> f0e2479d64ee2fc807ed12331edf77cd3d30276a
 ```
 
