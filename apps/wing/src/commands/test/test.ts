@@ -17,6 +17,7 @@ import { SNAPSHOT_ERROR_PREFIX } from "./snapshots-help";
 import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
+import { SpinnerStream } from "../spinner-stream";
 
 const log = debug("wing:test");
 
@@ -43,6 +44,10 @@ export interface TestOptions extends CompileOptions {
    * How many times failed tests should be retried.
    */
   readonly retry?: number;
+  /**
+   * Whether to stream the logs of the test run.
+   */
+  readonly stream?: boolean;
 
   /**
    * Determine snapshot behavior.
@@ -220,7 +225,8 @@ async function executeTest(
  */
 export async function renderTestReport(
   entrypoint: string,
-  results: std.TestResult[]
+  results: std.TestResult[],
+  includeLogs: boolean = true
 ): Promise<string> {
   const out = new Array<string>();
 
@@ -245,14 +251,13 @@ export async function renderTestReport(
 
     const details = new Array<string>();
 
-    // add any log messages that were emitted during the test
-    for (const trace of result.traces) {
-      // only show detailed traces if we are in debug mode
-      if (trace.type === TraceType.RESOURCE && process.env.DEBUG) {
-        details.push(chalk.gray("[trace] " + trace.data.message));
-      }
-      if (trace.type === TraceType.LOG) {
-        details.push(chalk.gray(trace.data.message));
+    if (includeLogs) {
+      for (const trace of result.traces) {
+        if (trace.type === TraceType.LOG) {
+          details.push(chalk.gray(trace.data.message));
+        } else if (process.env.DEBUG) {
+          details.push(chalk.gray("[trace] " + trace.data.message));
+        }
       }
     }
 
@@ -360,6 +365,57 @@ async function runTestsWithRetry(
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
   const { clean, testFilter, retry } = options;
+
+  let outputStream: SpinnerStream | undefined;
+  if (options.stream) {
+    outputStream = new SpinnerStream(process.stdout, "Running tests...");
+
+    const testMappings = extractTestMappings(s.listResources());
+
+    s.onTrace({
+      callback: (event) => {
+        // Filter out simulator and resource events if DEBUG isn't set
+        if (
+          (event.type === TraceType.SIMULATOR || event.type === TraceType.RESOURCE) &&
+          !process.env.DEBUG
+        ) {
+          return;
+        }
+
+        // Filter out simulator events if DEBUG=verbose isn't set
+        if (event.type === TraceType.SIMULATOR && process.env.DEBUG !== "verbose") {
+          return;
+        }
+
+        const env = extractTestEnvFromPath(event.sourcePath);
+        if (env === undefined) {
+          // This event is not associated with any test environment, so skip it.
+          return;
+        }
+        const testName = testMappings[env];
+        if (testName === undefined) {
+          // This event is not associated with any test environment, so skip it.
+          return;
+        }
+        if (testFilter && !testName.includes(testFilter)) {
+          // This test does not match the filter, so skip it.
+          return;
+        }
+
+        const pathSuffix = event.sourcePath.split("/").slice(2).join("/");
+        let msg = "";
+        msg += chalk.gray(`[${event.timestamp}] ${testName}`);
+        // msg += chalk.gray(` » /${pathSuffix}`);
+        // msg += "\n";
+        msg += "\n";
+        msg += chalk.yellow(`/${pathSuffix}`);
+        msg += chalk.whiteBright(` » ${event.data.message}`);
+        msg += "\n";
+        outputStream!.write(msg);
+      },
+    });
+  }
+
   await s.start();
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
@@ -370,7 +426,11 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
   await s.stop();
 
-  const testReport = await renderTestReport(synthDir, results);
+  if (options.stream) {
+    outputStream!.stopSpinner();
+  }
+
+  const testReport = await renderTestReport(synthDir, results, !options.stream);
   if (testReport.length > 0) {
     console.log(testReport);
   }
@@ -579,6 +639,62 @@ function sortTests(a: std.TestResult, b: std.TestResult) {
     return 1;
   }
   return a.path.localeCompare(b.path);
+}
+
+/**
+ * Take a path like "root/env123/foo/bar" and return the environment number (123).
+ */
+function extractTestEnvFromPath(path: string): number | undefined {
+  const parts = path.split("/");
+  const envPart = parts[1];
+  if (!envPart.startsWith("env")) {
+    return undefined;
+  }
+  return parseInt(envPart.substring(3));
+}
+
+/*
+ * Take a path like "root/env123/foo/test:first test/bar" and return "first test".
+ */
+function extractTestNameFromPath(path: string): string | undefined {
+  const parts = path.split("/");
+  for (const part of parts) {
+    if (part.startsWith("test:")) {
+      return part.substring(5);
+    }
+  }
+  return undefined;
+}
+
+/*
+ * Take a list of paths like:
+ *
+ * root/env0/foo
+ * root/env0/test:first test        <-- this is a test
+ * root/env1/bar/test:second test   <-- this is a test
+ * root/env1/bar
+ *
+ * and extract the mapping from environment indices to test names:
+ *
+ * { 0: "first test", 1: "second test" }
+ */
+function extractTestMappings(paths: string[]): Record<number, string> {
+  const mappings: Record<number, string> = {};
+  for (const path of paths) {
+    const parts = path.split("/");
+    if (parts.some((p) => p.startsWith("test:"))) {
+      const env = extractTestEnvFromPath(path);
+      if (env === undefined) {
+        continue;
+      }
+      const testName = extractTestNameFromPath(path);
+      if (testName === undefined) {
+        continue;
+      }
+      mappings[env] = testName;
+    }
+  }
+  return mappings;
 }
 
 const MAX_BUFFER = 10 * 1024 * 1024;

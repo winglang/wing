@@ -198,12 +198,6 @@ export abstract class Resource extends Construct implements IResource {
    * actually bound.
    */
   public onLift(host: IInflightHost, ops: string[]): void {
-    log(
-      `onLift called on a resource (${this.node.path}) with a host (${
-        host.node.path
-      }) and ops: ${JSON.stringify(ops)}`
-    );
-
     for (const op of ops) {
       // Add connection metadata
       Node.of(this).addConnection({
