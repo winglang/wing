@@ -3,37 +3,38 @@ bring expect;
 
 let from = "/a/b/c/d";
 let to = "/a/b/e/f";
+let r = regex.compile("/a/b/e/f");
 
 let var result = fs.join(from, to);
-assert(result == "/a/b/c/d/a/b/e/f");
+expect.equal(result, "/a/b/c/d/a/b/e/f");
 
 result = fs.relative(from ,to);
-assert(result == "../../e/f");
+expect.equal(result, "../../e/f");
 
 result = fs.absolute(from, to);
-assert(regex.match("/a/b/e/f", result));
+expect.equal(r.test(result), true);
 
 result = fs.dirname(from);
-assert(result == "/a/b/c");
+expect.equal(result, "/a/b/c");
 
 result = fs.basename(from);
-assert(result == "d");
+expect.equal(result, "d");
 
 test "inflight path conversion" {
     let var result = fs.join(from, to);
-    assert(result == "/a/b/c/d/a/b/e/f");
+    expect.equal(result, "/a/b/c/d/a/b/e/f");
     
     result = fs.relative(from ,to);
-    assert(result == "../../e/f");
+    expect.equal(result, "../../e/f");
 
     result = fs.absolute(from, to);
-    assert(regex.match("/a/b/e/f", result));
+    expect.equal(r.test(result), true);
 
     result = fs.dirname(from);
-    assert(result == "/a/b/c");
+    expect.equal(result, "/a/b/c");
 
     result = fs.basename(from);
-    assert(result == "d");
+    expect.equal(result, "d");
 }
 
 test "extension()" {

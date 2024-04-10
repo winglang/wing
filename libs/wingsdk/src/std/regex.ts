@@ -42,7 +42,7 @@ export class Regex implements ILiftable {
   /**
    * Checks if the regular expression matches the provided text.
    * @param text The text to check against.
-   * @returns true if there is a match, otherwise false.
+   * @returns `true` if there is a match, otherwise `false`.
    */
   public test(text: string): boolean {
     return this._regex.test(text);

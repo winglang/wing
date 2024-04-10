@@ -11,41 +11,43 @@ assert(fs.exists(dirpath) == true);
 try {
     fs.mkdir(dirpath);
 } catch e {
-    assert(regex.match("^EEXIST: file already exists", e) == true);
+    let re = regex.compile("^EEXIST: file already exists");
+    expect.equal(re.test(e), true);
 }
 
 fs.writeFile(fs.join(dirpath, filename), "");
 let files = fs.readdir(dirpath);
-assert(files.length == 1);
+expect.equal(files.length, 1);
 
 fs.remove(dirpath);
-assert(fs.exists(dirpath) == false);
+expect.equal(fs.exists(dirpath), false);
 
 let nilFiles = fs.tryReaddir(dirpath);
-assert(nilFiles == nil);
+expect.equal(nilFiles, nil);
 
 test "inflight create normal directory" {
     let tmpdir = fs.mkdtemp();
     let dirpath = "{tmpdir}/wingdir-inflight";
 
     fs.mkdir(dirpath);
-    assert(fs.exists(dirpath) == true);
+    expect.equal(fs.exists(dirpath), true);
 
     try {
         fs.mkdir(dirpath);
     } catch e {
-        assert(regex.match("^EEXIST: file already exists", e) == true);
+        let re = regex.compile("^EEXIST: file already exists");
+        expect.equal(re.test(e), true);
     }
     
     fs.writeFile(fs.join(dirpath, filename), "");
     let files = fs.readdir(dirpath);
-    assert(files.length == 1);
+    expect.equal(files.length, 1);
 
     fs.remove(dirpath);
-    assert(fs.exists(dirpath) == false);
+    expect.equal(fs.exists(dirpath), false);
 
     let nilFiles = fs.tryReaddir(dirpath);
-    assert(nilFiles == nil);
+    expect.equal(nilFiles, nil);
 }
 
 test "cannot overwrite directory with a file" {
@@ -54,18 +56,19 @@ test "cannot overwrite directory with a file" {
     let var errorCaught = false;
 
     fs.mkdir(dirpath);
-    assert(fs.exists(dirpath) == true);
+    expect.equal(fs.exists(dirpath), true);
 
     try {
         fs.writeFile(dirpath, "This should fail.");
     } catch e {
-        errorCaught = regex.match("^EISDIR: illegal operation on a directory", e);
+        let re = regex.compile("^EISDIR: illegal operation on a directory");
+        errorCaught = re.test(e);
     }
-    assert(errorCaught == true);
+    expect.equal(errorCaught, true);
 
     // Cleanup
     fs.remove(dirpath);
-    assert(fs.exists(dirpath) == false);
+    expect.equal(fs.exists(dirpath), false);
 }
 
 test "isDir()" {
