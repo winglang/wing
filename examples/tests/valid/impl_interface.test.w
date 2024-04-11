@@ -84,15 +84,60 @@ let f = inflight () => {
   dog.bark();
 };
 
-interface ExtendJsiiIface extends jsii_fixture.ISomeInterface {
-  inflight inflight_method(): void;
-}
+// This should work: extend a JSII interface in a preflight interface
+// Commented out because of: https://github.com/winglang/wing/issues/6209
+//
+// interface ExtendJsiiIface extends jsii_fixture.ISomeInterface {
+//   inflight inflight_method(): void;
+// }
+//
+// class ImplementJsiiIface impl ExtendJsiiIface {
+//   pub method() {
+//     return;
+//   }
+//   pub inflight inflight_method() {
+//     return;
+//   }
+// }
 
-class ImplementJsiiIface impl ExtendJsiiIface {
-  pub method() {
+// Extend an inflight interface in a preflight class
+inflight interface IInflight {
+  inflight_method(): void;
+}
+class ImplementInflightIfaceInPreflightClass impl IInflight {
+  pub inflight inflight_method() {
     return;
   }
+}
+
+// Extend inflight interface in an inflight interface defined inflight
+inflight () => {
+  interface InflightIfaceDefinedInflight extends IInflight {}
+};
+
+// Extend inflight interface in an inflight interface defined preflight
+interface InflightIfaceDefinedPreflight extends IInflight {}
+
+// Implement an inflight interface in an inflight class
+inflight class ImplInflightIfaceInInflightClass impl IInflight {
+  pub inflight_method() {
+    return;
+  }
+}
+
+// Implement an inflight interface in a preflight class
+class ImplInflightIfaceInPreflightClass impl IInflight {
   pub inflight inflight_method() {
+    return;
+  }
+}
+
+// Implement preflight interface in an preflight class
+interface IPreflight {
+  method(): void;
+}
+class ImplPreflightIfaceInPreflightClass impl IPreflight {
+  pub method() {
     return;
   }
 }

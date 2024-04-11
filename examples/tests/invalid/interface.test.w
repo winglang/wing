@@ -63,7 +63,7 @@ inflight interface IInflightExtendsJsii extends jsii_fixture.ISomeInterface {
   method(): void;
 }
 
-// Inflight calasses can't implement JSII interfaces
+// Inflight classes can't implement JSII interfaces
 inflight class CInflightImplJsii impl jsii_fixture.ISomeInterface {
   pub method(): void {}
 }
