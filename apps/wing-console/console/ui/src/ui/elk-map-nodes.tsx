@@ -100,8 +100,11 @@ export const ContainerNode = memo(
     );
 
     const compilerNamed = useMemo(() => {
-      return !!display?.title;
-    }, [display]);
+      const cloudResourceType = resourceType
+        ? resourceType.split(".").at(-1)
+        : "";
+      return !!display?.title && display?.title !== cloudResourceType;
+    }, [display, resourceType]);
 
     return (
       // TODO: Fix a11y
