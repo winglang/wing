@@ -5132,7 +5132,6 @@ impl<'a> TypeChecker<'a> {
 				assembly_name: assembly_name.to_string(),
 				namespace_filter,
 				alias: alias.clone(),
-				import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
 			});
 
 			self
@@ -5143,10 +5142,7 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// check if we've already defined the given alias in the current scope
-		if env
-			.lookup(&jsii.alias.name.as_str().into(), Some(jsii.import_statement_idx))
-			.is_some()
-		{
+		if env.lookup(&jsii.alias.name.as_str().into(), None).is_some() {
 			self.spanned_error(alias, format!("\"{}\" is already defined", alias.name));
 		} else {
 			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
