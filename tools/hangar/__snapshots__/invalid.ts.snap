@@ -2323,36 +2323,11 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_interface_structural_typing.test.w 1`] = `
-"error: Inflight class YesGoo cannot implement a preflight interface IGoo
-   --> ../../../examples/tests/invalid/inflight_class_interface_structural_typing.test.w:15:3
-   |  
-15 | /   inflight class YesGoo impl IGoo {
-16 | |     pub notHandle(): void {
-17 | |       log(\\"i am goo\\");
-18 | |     }
-19 | |   }
-   | \\\\---^ Inflight class YesGoo cannot implement a preflight interface IGoo
-
-
-error: Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
+"error: Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
    --> ../../../examples/tests/invalid/inflight_class_interface_structural_typing.test.w:26:17
    |
 26 |   let x: IGoo = new NotGoo();
    |                 ^^^^^^^^^^^^ Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
-
-
-error: Expression of type \\"IGoo\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/inflight_class_interface_structural_typing.test.w:23:3
-   |
-23 |   y.notHandle();
-   |   ^ Expression of type \\"IGoo\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-
-
-error: Expression of type \\"IGoo\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/inflight_class_interface_structural_typing.test.w:27:3
-   |
-27 |   x.notHandle();
-   |   ^ Expression of type \\"IGoo\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
  
