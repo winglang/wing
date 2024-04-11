@@ -100,6 +100,7 @@ export const ContainerNode = memo(
     );
 
     const compilerNamed = useMemo(() => {
+      // sdk cloud resource type has a fixed convention: @winglang/sdk.cloud.*
       const cloudResourceType = resourceType
         ? resourceType.split(".").at(-1)
         : "";
