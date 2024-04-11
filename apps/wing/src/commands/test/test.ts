@@ -364,6 +364,7 @@ async function runTestsWithRetry(
   return results;
 }
 
+// TODO: can we share this logic with the Wing Console?
 function inferSeverityOfEvent(trace: std.Trace): "error" | "warn" | "info" | "debug" | "verbose" {
   if (trace.data.status === "failure") {
     return "error";
@@ -381,11 +382,11 @@ function inferSeverityOfEvent(trace: std.Trace): "error" | "warn" | "info" | "de
 }
 
 const SEVERITY_STRING = {
-  error: "ERROR  ",
-  warn: "WARNING",
-  info: "INFO   ",
-  debug: "DEBUG  ",
-  verbose: "VERBOSE",
+  error: "[ERROR]  ",
+  warn: "[WARNING]",
+  info: "[INFO]   ",
+  debug: "[DEBUG]  ",
+  verbose: "[VERBOSE]",
 };
 
 const LOG_STREAM_COLORS = {
@@ -410,54 +411,62 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     // so when we receive a trace from the simulator, we can infer which test it's associated with.
     const testMappings = extractTestMappings(s.listResources());
 
-    s.onTrace({
-      callback: (event) => {
-        // Filter out simulator and resource events if DEBUG isn't set
-        if (
-          (event.type === TraceType.SIMULATOR || event.type === TraceType.RESOURCE) &&
-          !process.env.DEBUG
-        ) {
-          return;
-        }
+    const printEvent = async (event: std.Trace) => {
+      const env = extractTestEnvFromPath(event.sourcePath);
+      if (env === undefined) {
+        // This event is not associated with any test environment, so skip it.
+        return;
+      }
+      const testName = testMappings[env];
+      if (testName === undefined) {
+        // This event is not associated with any test environment, so skip it.
+        return;
+      }
+      if (testFilter && !testName.includes(testFilter)) {
+        // This test does not match the filter, so skip it.
+        return;
+      }
 
-        // Filter out simulator events if DEBUG=verbose isn't set
-        if (event.type === TraceType.SIMULATOR && process.env.DEBUG !== "verbose") {
-          return;
-        }
+      const severity = inferSeverityOfEvent(event);
 
-        const env = extractTestEnvFromPath(event.sourcePath);
-        if (env === undefined) {
-          // This event is not associated with any test environment, so skip it.
-          return;
-        }
-        const testName = testMappings[env];
-        if (testName === undefined) {
-          // This event is not associated with any test environment, so skip it.
-          return;
-        }
-        if (testFilter && !testName.includes(testFilter)) {
-          // This test does not match the filter, so skip it.
-          return;
-        }
+      // Skip debug events if DEBUG isn't set
+      if ((severity === "debug" || severity === "verbose") && !process.env.DEBUG) {
+        return;
+      }
 
-        const pathSuffix = event.sourcePath.split("/").slice(2).join("/");
-        const severity = inferSeverityOfEvent(event);
-        const date = new Date(event.timestamp);
-        const hours = date.getHours().toString().padStart(2, "0");
-        const minutes = date.getMinutes().toString().padStart(2, "0");
-        const seconds = date.getSeconds().toString().padStart(2, "0");
-        const milliseconds = date.getMilliseconds().toString().padStart(3, "0");
-        const timestamp = `${hours}:${minutes}:${seconds}.${milliseconds}`;
-        let msg = "";
-        msg += chalk.dim(`[${timestamp}]`);
-        msg += LOG_STREAM_COLORS[severity](` [${SEVERITY_STRING[severity]}]`);
-        msg += ` ${chalk.bold(testName)} » /${pathSuffix}`;
-        msg += "\n";
+      // Skip verbose events if DEBUG=verbose isn't set
+      if (severity === "verbose" && process.env.DEBUG !== "verbose") {
+        return;
+      }
+
+      const pathSuffix = event.sourcePath.split("/").slice(2).join("/");
+      const date = new Date(event.timestamp);
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const seconds = date.getSeconds().toString().padStart(2, "0");
+      const milliseconds = date.getMilliseconds().toString().padStart(3, "0");
+      const timestamp = `${hours}:${minutes}:${seconds}.${milliseconds}`;
+      let msg = "";
+      msg += chalk.dim(`[${timestamp}]`);
+      msg += LOG_STREAM_COLORS[severity](` ${SEVERITY_STRING[severity]}`);
+      msg += chalk.dim(` ${testName} » /${pathSuffix}`);
+      msg += "\n";
+      if (severity === "error") {
+        msg += chalk.dim(" | ");
         msg += event.data.message;
         msg += "\n";
-        outputStream!.write(msg);
-      },
-    });
+        msg += chalk.dim(" └ ");
+        msg += await prettyPrintError(event.data.error, { chalk });
+      } else {
+        msg += chalk.dim(" └ ");
+        msg += event.data.message;
+      }
+      msg += "\n";
+      outputStream!.write(msg);
+    };
+
+    // TODO: support async callbacks with onTrace?
+    s.onTrace({ callback: (event) => void printEvent(event) });
   }
 
   await s.start();
