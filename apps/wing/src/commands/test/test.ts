@@ -364,8 +364,10 @@ async function runTestsWithRetry(
   return results;
 }
 
+type TraceSeverity = "error" | "warn" | "info" | "debug" | "verbose";
+
 // TODO: can we share this logic with the Wing Console?
-function inferSeverityOfEvent(trace: std.Trace): "error" | "warn" | "info" | "debug" | "verbose" {
+function inferSeverityOfEvent(trace: std.Trace): TraceSeverity {
   if (trace.data.status === "failure") {
     return "error";
   }
@@ -382,10 +384,10 @@ function inferSeverityOfEvent(trace: std.Trace): "error" | "warn" | "info" | "de
 }
 
 const SEVERITY_STRING = {
-  error: "[ERROR]  ",
+  error: "[ERROR]",
   warn: "[WARNING]",
-  info: "[INFO]   ",
-  debug: "[DEBUG]  ",
+  info: "[INFO]",
+  debug: "[DEBUG]",
   verbose: "[VERBOSE]",
 };
 
@@ -396,6 +398,56 @@ const LOG_STREAM_COLORS = {
   debug: chalk.blue,
   verbose: chalk.gray,
 };
+
+async function formatTrace(
+  trace: std.Trace,
+  testName: string,
+  mode: "short" | "full"
+): Promise<string> {
+  const severity = inferSeverityOfEvent(trace);
+  // const pathSuffix = trace.sourcePath.split("/").slice(2).join("/");
+  const date = new Date(trace.timestamp);
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
+  const milliseconds = date.getMilliseconds().toString().padStart(3, "0");
+  const timestamp = `${hours}:${minutes}:${seconds}.${milliseconds}`;
+
+  if (mode === "full") {
+    let msg = "";
+    msg += chalk.dim(`[${timestamp}]`);
+    msg += LOG_STREAM_COLORS[severity](` ${SEVERITY_STRING[severity]}`);
+    msg += chalk.dim(` ${testName} » ${trace.sourcePath}`);
+    msg += "\n";
+    if (severity === "error") {
+      msg += chalk.dim(" │ ");
+      msg += trace.data.message;
+      msg += "\n";
+      msg += chalk.dim(" └ ");
+      msg += await prettyPrintError(trace.data.error, { chalk });
+    } else {
+      msg += chalk.dim(" └ ");
+      msg += trace.data.message;
+    }
+    msg += "\n";
+    return msg;
+  } else if (mode === "short") {
+    let msg = "";
+    msg += LOG_STREAM_COLORS[severity](`${SEVERITY_STRING[severity]}`);
+    msg += chalk.dim(` ${testName} | `);
+    if (severity === "error") {
+      msg += trace.data.message;
+      msg += " ";
+      msg += await prettyPrintError(trace.data.error, { chalk });
+    } else {
+      msg += trace.data.message;
+    }
+    msg += "\n";
+    return msg;
+  } else {
+    throw new Error(`Unknown mode: ${mode}`);
+  }
+}
 
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
@@ -439,30 +491,9 @@ async function testSimulator(synthDir: string, options: TestOptions) {
         return;
       }
 
-      const pathSuffix = event.sourcePath.split("/").slice(2).join("/");
-      const date = new Date(event.timestamp);
-      const hours = date.getHours().toString().padStart(2, "0");
-      const minutes = date.getMinutes().toString().padStart(2, "0");
-      const seconds = date.getSeconds().toString().padStart(2, "0");
-      const milliseconds = date.getMilliseconds().toString().padStart(3, "0");
-      const timestamp = `${hours}:${minutes}:${seconds}.${milliseconds}`;
-      let msg = "";
-      msg += chalk.dim(`[${timestamp}]`);
-      msg += LOG_STREAM_COLORS[severity](` ${SEVERITY_STRING[severity]}`);
-      msg += chalk.dim(` ${testName} » /${pathSuffix}`);
-      msg += "\n";
-      if (severity === "error") {
-        msg += chalk.dim(" | ");
-        msg += event.data.message;
-        msg += "\n";
-        msg += chalk.dim(" └ ");
-        msg += await prettyPrintError(event.data.error, { chalk });
-      } else {
-        msg += chalk.dim(" └ ");
-        msg += event.data.message;
-      }
-      msg += "\n";
-      outputStream!.write(msg);
+      const formatStyle = process.env.DEBUG ? "full" : "short";
+      const formatted = await formatTrace(event, testName, formatStyle);
+      outputStream!.write(formatted);
     };
 
     // TODO: support async callbacks with onTrace?
