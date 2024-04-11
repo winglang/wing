@@ -8,7 +8,7 @@ compatibilityTestFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
     // "@winglang/compatibility-spy" will be installed in the tmpDir
     const platforms = ["sim", "node_modules/@winglang/compatibility-spy/lib"];
-    const args = ["test", "-o", "out.json", "--no-stream"];
+    const args = ["test", "-o", "out.json"];
 
     const absoluteWingFile = join(compatibilityTestsDir, wingFile);
     const relativeWingFile = relative(tmpDir, absoluteWingFile);
