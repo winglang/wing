@@ -5,6 +5,8 @@ import {
   languages,
   workspace,
   window,
+  debug,
+  DebugConfiguration,
 } from "vscode";
 import { getWingBin, updateStatusBar } from "./bin-helper";
 import { CFG_WING, CFG_WING_BIN, COMMAND_OPEN_CONSOLE } from "./constants";
@@ -17,7 +19,6 @@ let languageServerManager: LanguageServerManager | undefined;
 export async function deactivate() {
   wingBinWatcher?.close();
   await languageServerManager?.stop();
-  await wingConsoleContext?.stop();
 }
 
 export async function activate(context: ExtensionContext) {
@@ -28,6 +29,57 @@ export async function activate(context: ExtensionContext) {
   });
 
   languageServerManager = new LanguageServerManager();
+
+  // Create a debug command that users node debug terminal
+  commands.registerCommand("wing.debugLaunch", async () => {
+    const editor = window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    let uriOptions = await workspace.findFiles(
+      `**/*.{main,test}.w`,
+      "**/{node_modules,target}/**"
+    );
+    uriOptions.concat(
+      await workspace.findFiles(`**/main.w`, "**/{node_modules,target}/**")
+    );
+
+    const fileOptions = uriOptions.map((f) => f.fsPath);
+
+    const currentFilename = editor.document.fileName;
+    if (
+      currentFilename.endsWith("main.w") ||
+      currentFilename.endsWith(".test.w")
+    ) {
+      fileOptions.unshift(currentFilename);
+    }
+
+    const currentWingBin = await getWingBin();
+
+    const entrypoint = await window.showQuickPick(fileOptions, {
+      placeHolder: "Choose a file to debug",
+    });
+
+    if (!entrypoint) {
+      return;
+    }
+
+    const command = await window.showQuickPick(["test", "compile", "run"]);
+
+    if (!command) {
+      return;
+    }
+
+    const debugConfig: DebugConfiguration = {
+      name: `Debug ${entrypoint}`,
+      command: `${currentWingBin} ${command} ${entrypoint} && exit 0`,
+      request: "launch",
+      type: "node-terminal",
+    };
+
+    await debug.startDebugging(undefined, debugConfig);
+  });
 
   const wingBinChanged = async () => {
     Loggers.default.appendLine(`Setting up wing bin...`);

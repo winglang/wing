@@ -1368,6 +1368,9 @@ importers:
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
+      vlq:
+        specifier: ^2.0.4
+        version: 2.0.4
       yaml:
         specifier: ^2.3.2
         version: 2.3.2
@@ -14191,7 +14194,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240404
+      typescript: 5.5.0-dev.20240411
     dev: true
 
   /dset@3.1.2:
@@ -22800,8 +22803,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240404:
-    resolution: {integrity: sha512-Knb9Yx0JJHc0mmqXLEPPKNSwOvPQrtYZEDLQY7Wns7LckkQl82AZ+OGTPG/ofwqx2QeDCHCtKjutZPy1UEiwKA==}
+  /typescript@5.5.0-dev.20240411:
+    resolution: {integrity: sha512-6MgPdKI7M05MarqCNIN0Shk4TwuEOFDsXIMOaEsvsRfoq32zZ3+fAuzB/y+nhs+Q2yGtEO8Or/NIdWU6t+B75g==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -23392,6 +23395,10 @@ packages:
       - supports-color
       - terser
     dev: true
+
+  /vlq@2.0.4:
+    resolution: {integrity: sha512-aodjPa2wPQFkra1G8CzJBTHXhgk3EVSwxSWXNPr1fgdFLUb8kvLV1iEb6rFgasIsjP82HWI6dsb5Io26DDnasA==}
+    dev: false
 
   /vscode-jsonrpc@8.1.0:
     resolution: {integrity: sha512-6TDy/abTQk+zDGYazgbIPc+4JoXdwC8NHU9Pbn4UJP1fehUyZmM4RHp5IthX7A6L5KS30PRui+j+tbbMMMafdw==}

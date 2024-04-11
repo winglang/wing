@@ -133,6 +133,10 @@ const contributes: VSCodeExtensionContributions = {
         dark: "resources/icon-dark.svg",
       },
     },
+    {
+      command: "wing.debugLaunch",
+      title: "Debug Wing",
+    },
   ],
   menus: {
     "editor/title": [

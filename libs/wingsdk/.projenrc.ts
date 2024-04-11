@@ -88,6 +88,7 @@ const project = new cdk.JsiiProject({
     // enhanced diagnostics
     "stacktracey",
     "ulid",
+    "vlq",
     // tunnels
     "@winglang/wingtunnels@workspace:^",
     "glob",

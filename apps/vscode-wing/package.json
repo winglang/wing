@@ -135,6 +135,10 @@
           "light": "resources/icon-light.svg",
           "dark": "resources/icon-dark.svg"
         }
+      },
+      {
+        "command": "wing.debugLaunch",
+        "title": "Debug Wing"
       }
     ],
     "menus": {
