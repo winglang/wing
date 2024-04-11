@@ -131,7 +131,7 @@ export class BucketRef extends Resource {
           const region = await this.bucket.bucketRegion();
           return "https://" + region + ".console.aws.amazon.com/s3/buckets/" + this.bucket.bucketName + "?region=" + region;
         } catch (e) {
-          return JSON.stringify(e);
+          return e.message;
         }
       }`,
       {
