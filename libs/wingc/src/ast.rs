@@ -741,6 +741,8 @@ pub enum Reference {
 		property: Symbol,
 		optional_accessor: bool,
 	},
+	/// A reference to an accessed member of an object `expression[x]`
+	ElementAccess { object: Box<Expr>, index: Box<Expr> },
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember {
 		type_name: UserDefinedType,
@@ -757,6 +759,7 @@ impl Clone for Reference {
 				type_name: type_name.clone(),
 				property: property.clone(),
 			},
+			Reference::ElementAccess { .. } => panic!("Unable to clone reference to element access"),
 		}
 	}
 }
@@ -771,6 +774,7 @@ impl Spanned for Reference {
 				optional_accessor: _,
 			} => object.span().merge(&property.span()),
 			Reference::TypeMember { type_name, property } => type_name.span().merge(&property.span()),
+			Reference::ElementAccess { object, index } => object.span().merge(&index.span()),
 		}
 	}
 }
@@ -792,6 +796,9 @@ impl Display for Reference {
 			}
 			Reference::TypeMember { type_name, property } => {
 				write!(f, "{}.{}", type_name, property.name)
+			}
+			Reference::ElementAccess { .. } => {
+				write!(f, "element access") // TODO!
 			}
 		}
 	}

@@ -5511,6 +5511,8 @@ impl<'a> TypeChecker<'a> {
 					path.push(type_name.root.clone());
 					break;
 				}
+				// a[b] cannot be a type reference
+				Reference::ElementAccess { .. } => return None,
 			}
 		}
 
@@ -5775,6 +5777,9 @@ impl<'a> TypeChecker<'a> {
 					}
 					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
 				}
+			}
+			Reference::ElementAccess { object, index } => {
+				todo!()
 			}
 		}
 	}

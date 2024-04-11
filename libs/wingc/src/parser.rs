@@ -1939,11 +1939,25 @@ impl<'s> Parser<'s> {
 				actual_node_span,
 			)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node, phase)?),
-			"structured_access_expression" => {
-				self.report_unimplemented_grammar("structured_access_expression", "reference", &actual_node)
-			}
+			"structured_access_expression" => Ok(self.build_structured_access_expression(&actual_node, phase)?),
 			other => self.with_error(format!("Expected reference, got {other}"), &actual_node),
 		}
+	}
+
+	fn build_structured_access_expression(&self, structured_access_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
+		let object_expr = structured_access_node.named_child(0).unwrap();
+		let object_expr = self.build_expression(&object_expr, phase)?;
+
+		let index_expr = dbg!(structured_access_node.named_child(1).unwrap());
+		let index_expr = self.build_expression(&index_expr, phase)?;
+
+		Ok(Expr::new(
+			ExprKind::Reference(Reference::ElementAccess {
+				object: Box::new(object_expr),
+				index: Box::new(index_expr),
+			}),
+			self.node_span(structured_access_node),
+		))
 	}
 
 	fn build_arg_list(&self, arg_list_node: &Node, phase: Phase) -> DiagnosticResult<ArgList> {
@@ -2323,6 +2337,9 @@ impl<'s> Parser<'s> {
 					},
 					expression_span,
 				))
+			}
+			"structured_access_expression" => {
+				self.report_unimplemented_grammar("structured_access_expression", "expression", &expression_node)
 			}
 			"compiler_dbg_panic" => {
 				// Handle the debug panic expression (during parsing)

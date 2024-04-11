@@ -354,6 +354,13 @@ impl<'a> JSifier<'a> {
 					&property.name
 				)
 			}
+			Reference::ElementAccess { object, index } => new_code!(
+				&object.span,
+				self.jsify_expression(object, ctx),
+				"[",
+				self.jsify_expression(index, ctx),
+				"]"
+			),
 		}
 	}
 
