@@ -5470,6 +5470,10 @@ impl<'a> TypeChecker<'a> {
 				name: "Datetime".to_string(),
 				span: symbol.span.clone(),
 			}),
+			"regex" => Some(Symbol {
+				name: "Regex".to_string(),
+				span: symbol.span.clone(),
+			}),
 			"str" => Some(Symbol {
 				name: "String".to_string(),
 				span: symbol.span.clone(),
@@ -6411,11 +6415,12 @@ pub fn import_udt_from_jsii(
 pub fn fully_qualify_std_type(type_: &str) -> String {
 	// Additionally, this doesn't handle for generics
 	let type_ = match type_ {
-		"str" => "String",
 		"duration" => "Duration",
 		"datetime" => "Datetime",
-		"bool" => "Boolean",
+		"regex" => "Regex",
+		"str" => "String",
 		"num" => "Number",
+		"bool" => "Boolean",
 		_ => {
 			// Check for generics or Json
 			let type_ = if let Some((prefix, _)) = type_.split_once(" ") {
