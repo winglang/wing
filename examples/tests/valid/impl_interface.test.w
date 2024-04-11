@@ -100,7 +100,7 @@ let f = inflight () => {
 //   }
 // }
 
-// Extend an inflight interface in a preflight class
+// Implement an inflight interface in a preflight class
 inflight interface IInflight {
   inflight_method(): void;
 }
