@@ -283,6 +283,13 @@ export const ResourceMetadata = memo(
       };
     }, [node, inbound, outbound]);
 
+    const nodeLabel = useMemo(() => {
+      const cloudResourceTypeName = node.type.split(".").at(-1) || "";
+      const compilerNamed =
+        !!node.display?.title && node.display?.title !== cloudResourceTypeName;
+      return compilerNamed ? node.display?.title : node.id;
+    }, [node]);
+
     const toggleInspectorSection = useCallback((section: string) => {
       setOpenInspectorSections(([...sections]) => {
         const index = sections.indexOf(section);
@@ -317,9 +324,7 @@ export const ResourceMetadata = memo(
           </div>
 
           <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate">
-              {node?.display?.title ?? node.id}
-            </div>
+            <div className="text-sm font-medium truncate">{nodeLabel}</div>
             <div className="flex">
               <Pill>{node.type}</Pill>
             </div>
@@ -328,7 +333,7 @@ export const ResourceMetadata = memo(
         {resourceUI.data && resourceUI.data.length > 0 && (
           <InspectorSection
             icon={CubeIcon}
-            text={(node.display?.title || node.id) ?? "Properties"}
+            text={nodeLabel ?? "Properties"}
             open={openInspectorSections.includes("resourceUI")}
             onClick={() => toggleInspectorSection("resourceUI")}
             headingClassName="pl-2"

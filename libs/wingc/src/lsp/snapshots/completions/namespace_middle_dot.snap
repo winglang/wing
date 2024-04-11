@@ -335,7 +335,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WebsiteDomainOptions\n```\n---\nOptions for `Website`, and `ReactApp`.\n### Fields\n- `domain?` — `Domain?` — The website's custom domain object."
+    value: "```wing\nstruct WebsiteDomainOptions\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — `Domain?` — The website's custom domain object."
   sortText: hh|WebsiteDomainOptions
 - label: WebsiteOptions
   kind: 22

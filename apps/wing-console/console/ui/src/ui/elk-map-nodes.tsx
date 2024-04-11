@@ -100,8 +100,12 @@ export const ContainerNode = memo(
     );
 
     const compilerNamed = useMemo(() => {
-      return !!display?.title;
-    }, [display]);
+      // sdk cloud resource type has a fixed convention: @winglang/sdk.cloud.*
+      const cloudResourceType = resourceType
+        ? resourceType.split(".").at(-1)
+        : "";
+      return !!display?.title && display?.title !== cloudResourceType;
+    }, [display, resourceType]);
 
     return (
       // TODO: Fix a11y

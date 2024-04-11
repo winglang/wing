@@ -15,6 +15,11 @@ import { compile } from "./compile";
 
 const defaultGlobs = [
   "**/*.js",
+  "**/*.cjs",
+  "**/*.mjs",
+  "**/*.ts",
+  "**/*.cts",
+  "**/*.mts",
   "**/*.w",
   "README*",
   "LICENSE*",
@@ -133,7 +138,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
       }
     }
     pkgJson.files = [...pkgJsonFiles];
-    pkgJson.main = path.join(compilerOutputFolder, dotWingDir, "preflight.js");
+    pkgJson.main = path.join(compilerOutputFolder, dotWingDir, "preflight.cjs");
 
     // add "winglang" to "keywords"
     const keywords = new Set(pkgJson.keywords ?? []);

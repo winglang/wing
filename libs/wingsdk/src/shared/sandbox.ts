@@ -60,7 +60,7 @@ process.on("message", async (message) => {
   process.send({ type: "resolve", value });
 });
 `;
-    const wrappedPath = entrypoint.replace(/\.js$/, ".sandbox.js");
+    const wrappedPath = entrypoint.replace(/\.cjs$/, ".sandbox.cjs");
     writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
     const bundle = createBundle(wrappedPath);
 

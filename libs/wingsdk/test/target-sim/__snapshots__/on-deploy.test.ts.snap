@@ -2,7 +2,7 @@
 
 exports[`create an OnDeploy 1`] = `
 {
-  ".wing/function_c83fbf14.js": ""use strict";
+  ".wing/function_c83fbf14.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -43,7 +43,7 @@ return class Handler {
         "props": {
           "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c83fbf14.js",
+          "sourceCodeFile": ".wing/function_c83fbf14.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -103,10 +103,6 @@ return class Handler {
       "@winglang/sdk.cloud.Website": {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
       },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
