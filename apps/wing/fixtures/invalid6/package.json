@@ -1,5 +1,5 @@
 {
-  "name": "valid1",
+  "name": "invalid6",
   "version": "0.0.0",
   "description": "description",
   "author": "author",
@@ -7,5 +7,7 @@
   "files": [
     "**/*.ts"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "some-dependency": "^1.0.0"
+  }
 }
