@@ -4,9 +4,6 @@ import { readFile, stat } from "fs/promises";
 import { url as inspectorUrl } from "inspector";
 import { Bundle, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
-
-const DEBUGGER_EXPOSED = inspectorUrl?.() !== undefined;
-
 export interface SandboxOptions {
   readonly env?: { [key: string]: string };
   readonly context?: { [key: string]: any };
@@ -50,7 +47,7 @@ export class Sandbox {
     }
 
     let debugShim = "";
-    if (DEBUGGER_EXPOSED) {
+    if (inspectorUrl?.()) {
       // If we're debugging, we need to make sure the debugger has enough time to attach
       // to the child process. This gives enough time for the debugger load sourcemaps and set breakpoints.
       // See https://github.com/microsoft/vscode-js-debug/issues/1510
@@ -125,7 +122,7 @@ process.on("message", async (message) => {${debugShim}
   public async initialize() {
     this.debugLog("Initializing sandbox.");
     const childEnv = this.options.env ?? {};
-    if (DEBUGGER_EXPOSED) {
+    if (inspectorUrl?.()) {
       // We're exposing a debugger, let's attempt to ensure the child process automatically attaches
       childEnv.NODE_OPTIONS =
         (childEnv.NODE_OPTIONS ?? "") + (process.env.NODE_OPTIONS ?? "");
@@ -244,7 +241,7 @@ process.on("message", async (message) => {${debugShim}
         reject(new Error(`Process exited with code ${code}, signal ${signal}`));
       };
 
-      if (this.options.timeout && !DEBUGGER_EXPOSED) {
+      if (this.options.timeout && !inspectorUrl?.()) {
         this.timeout = setTimeout(() => {
           this.debugLog("Killing process after timeout.");
           this.child?.kill("SIGTERM");
