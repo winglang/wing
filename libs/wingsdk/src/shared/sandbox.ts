@@ -4,6 +4,7 @@ import { readFile, stat } from "fs/promises";
 import { url as inspectorUrl } from "inspector";
 import { Bundle, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
+
 export interface SandboxOptions {
   readonly env?: { [key: string]: string };
   readonly context?: { [key: string]: any };
