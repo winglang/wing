@@ -1586,7 +1586,7 @@ Preflight interfaces are defined in preflight scope and can contain both preflig
 Only preflight classes may implement preflight interfaces.
 Inflight interfaces are either defined with the `inflight` modifier in preflight scope or simply defined in inflight scope.
 All methods of inflight interfaces are implicitly inflight (no need to use the `inflight` keyword).
-Both preflight and inflight classes may implement an inflight interface.
+Since both preflight and inflight classes can have inflight methods defined inside them, they are both capable of implementing inflight interfaces.
 `impl` keyword is used to implement an interface or multiple interfaces that are
 separated with commas.
 
