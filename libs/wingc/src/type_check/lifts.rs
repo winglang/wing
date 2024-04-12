@@ -65,7 +65,7 @@ impl Lifts {
 		self.add_lift(
 			method.to_string(),
 			code,
-			qualification.as_ref().map(|s| s.clone()),
+			qualification.clone(),
 			explicit,
 		);
 
