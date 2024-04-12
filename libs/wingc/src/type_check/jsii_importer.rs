@@ -29,12 +29,6 @@ trait JsiiInterface {
 	fn properties(&self) -> &Option<Vec<jsii::Property>>;
 }
 
-fn color() {
-	Colorize::color();
-}
-
-use colored::Colorize;
-
 impl JsiiInterface for jsii::ClassType {
 	fn methods(&self) -> &Option<Vec<jsii::Method>> {
 		&self.methods
