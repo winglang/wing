@@ -84,21 +84,19 @@ let f = inflight () => {
   dog.bark();
 };
 
-// This should work: extend a JSII interface in a preflight interface
-// Commented out because of: https://github.com/winglang/wing/issues/6209
-//
-// interface ExtendJsiiIface extends jsii_fixture.ISomeInterface {
-//   inflight inflight_method(): void;
-// }
-//
-// class ImplementJsiiIface impl ExtendJsiiIface {
-//   pub method() {
-//     return;
-//   }
-//   pub inflight inflight_method() {
-//     return;
-//   }
-// }
+// Extend a JSII interface in a preflight interface
+interface ExtendJsiiIface extends jsii_fixture.ISomeInterface {
+  inflight inflight_method(): void;
+}
+
+class ImplementJsiiIface impl ExtendJsiiIface {
+  pub method() {
+    return;
+  }
+  pub inflight inflight_method() {
+    return;
+  }
+}
 
 // Implement an inflight interface in a preflight class
 inflight interface IInflight {
