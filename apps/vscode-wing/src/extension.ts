@@ -30,61 +30,68 @@ export async function activate(context: ExtensionContext) {
 
   languageServerManager = new LanguageServerManager();
 
-  // Create a debug command that users node debug terminal
-  commands.registerCommand("wing.debugLaunch", async () => {
-    const editor = window.activeTextEditor;
-    if (!editor) {
-      return;
-    }
+  debug.registerDebugConfigurationProvider("wing", {
+    async resolveDebugConfiguration(_, _config: DebugConfiguration) {
+      Loggers.default.appendLine(
+        `Resolving debug configuration... ${JSON.stringify(_config)}`
+      );
+      const editor = window.activeTextEditor;
 
-    let uriOptions = await workspace.findFiles(
-      `**/*.{main,test}.w`,
-      "**/{node_modules,target}/**"
-    );
-    uriOptions.concat(
-      await workspace.findFiles(`**/main.w`, "**/{node_modules,target}/**")
-    );
+      const currentFilename = editor?.document.fileName;
+      let chosenFile;
+      if (
+        currentFilename?.endsWith("main.w") ||
+        currentFilename?.endsWith(".test.w")
+      ) {
+        chosenFile = currentFilename;
+      } else {
+        let uriOptions = await workspace.findFiles(
+          `**/*.{main,test}.w`,
+          "**/{node_modules,target}/**"
+        );
+        uriOptions.concat(
+          await workspace.findFiles(`**/main.w`, "**/{node_modules,target}/**")
+        );
 
-    const fileOptions = uriOptions.map((f) => f.fsPath);
+        const entrypoint = await window.showQuickPick(
+          uriOptions.map((f) => f.fsPath),
+          {
+            placeHolder: "Choose entrypoint to debug",
+          }
+        );
 
-    const currentFilename = editor.document.fileName;
-    if (
-      currentFilename.endsWith("main.w") ||
-      currentFilename.endsWith(".test.w")
-    ) {
-      fileOptions.unshift(currentFilename);
-    }
+        if (!entrypoint) {
+          return;
+        }
 
-    const currentWingBin = await getWingBin();
+        chosenFile = entrypoint;
+      }
 
-    const entrypoint = await window.showQuickPick(fileOptions, {
-      placeHolder: "Choose file to debug",
-    });
+      const command = await window.showInputBox({
+        title: `Debugging ${chosenFile}`,
+        prompt: "Wing CLI arguments",
+        value: "test",
+      });
 
-    if (!entrypoint) {
-      return;
-    }
+      if (!command) {
+        return;
+      }
 
-    const command = await window.showQuickPick(["test", "compile", "run"], {
-      placeHolder: "Choose command to run",
-    });
+      const currentWingBin = await getWingBin();
 
-    if (!command) {
-      return;
-    }
-
-    const debugConfig: DebugConfiguration = {
-      name: `Debug ${entrypoint}`,
-      request: "launch",
-      type: "node",
-      args: [currentWingBin, command, entrypoint],
-      outFiles: ["${workspaceFolder}/**/target/**/*.cjs"],
-      runtimeSourcemapPausePatterns: ["${workspaceFolder}/**/target/**/*.cjs"],
-      autoAttachChildProcesses: true,
-      pauseForSourceMap: true,
-    };
-
-    await debug.startDebugging(undefined, debugConfig);
+      // Use builtin node debugger
+      return {
+        name: `Debug ${chosenFile}`,
+        request: "launch",
+        type: "node",
+        args: [currentWingBin, command, chosenFile],
+        runtimeSourcemapPausePatterns: [
+          "${workspaceFolder}/**/target/**/*.cjs",
+        ],
+        autoAttachChildProcesses: true,
+        pauseForSourceMap: true,
+      };
+    },
   });
 
   const wingBinChanged = async () => {

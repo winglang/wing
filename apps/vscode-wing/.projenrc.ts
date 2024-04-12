@@ -108,6 +108,49 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   ],
+  debuggers: [
+    {
+      type: "wing",
+      label: "Wing Debug",
+      program: "",
+      configurationAttributes: {
+        launch: {
+          entrypoint: {
+            type: "string",
+            description: "The entrypoint to run",
+            default: "${file}",
+          },
+          arguments: {
+            type: "string",
+            description: "Wing CLI arguments",
+            default: "test",
+          },
+        },
+      },
+      initialConfigurations: [
+        {
+          label: "Wing Debug: Launch",
+          description: "Launch a Wing program",
+          body: {
+            type: "wing",
+            request: "launch",
+            name: "Launch",
+          },
+        },
+      ],
+      configurationSnippets: [
+        {
+          label: "Wing Debug: Launch",
+          description: "Launch a Wing program",
+          body: {
+            type: "wing",
+            request: "launch",
+            name: "Launch",
+          },
+        },
+      ],
+    },
+  ],
   grammars: [
     {
       language: "wing",
@@ -132,10 +175,6 @@ const contributes: VSCodeExtensionContributions = {
         light: "resources/icon-light.svg",
         dark: "resources/icon-dark.svg",
       },
-    },
-    {
-      command: "wing.debugLaunch",
-      title: "Debug Wing",
     },
   ],
   menus: {
@@ -171,7 +210,7 @@ project.addFields({
     vscode: `^${VSCODE_BASE_VERSION}`,
   },
   categories: ["Programming Languages"],
-  activationEvents: ["onLanguage:wing"],
+  activationEvents: ["onLanguage:wing", "onDebug"],
   contributes,
 });
 
