@@ -123,7 +123,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     // check package.json has `dependencies`
     if (pkgJson.dependencies) {
       throw new Error(
-        `Wing libraries should use "peerDependencies" instead of "dependencies" in package.json.`
+        `Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead.`
       );
     }
 
