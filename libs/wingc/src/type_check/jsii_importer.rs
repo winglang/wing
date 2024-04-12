@@ -12,7 +12,7 @@ use crate::{
 	},
 	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
-//use colored::Colorize;
+use colored::Colorize;
 use wingii::{
 	fqn::FQN,
 	jsii::{self, CollectionKind, PrimitiveType, TypeReference},
