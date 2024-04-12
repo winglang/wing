@@ -1,9 +1,9 @@
 import { fileURLToPath } from "node:url";
 
 import react from "@vitejs/plugin-react";
-import { type InlineConfig } from "vite";
 
-export const viteConfig: InlineConfig = {
+/** @type {import("vite".InlineConfig)} */
+export const viteConfig = {
   configFile: false,
   root: fileURLToPath(new URL("../web", import.meta.url)),
   plugins: [react()],
