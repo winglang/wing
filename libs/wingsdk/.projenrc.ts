@@ -43,6 +43,7 @@ const project = new cdk.JsiiProject({
     ...sideLoad,
     // preflight dependencies
     "safe-stable-stringify",
+    "jiti",
     // aws sdk client dependencies
     // change `AWS_SDK_VERSION` to update all deps at once
     "@aws-sdk/client-cloudwatch-logs",

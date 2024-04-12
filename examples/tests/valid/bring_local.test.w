@@ -5,13 +5,19 @@ bring "./store.w" as file1;
 bring "./subdir/subfile.w" as file2;
 bring "./subdir/empty.w" as file3;
 bring math;
+bring expect;
 
 // classes from other files can be used
 let store = new file1.Store();
 let q = new file2.Q();
+expect.equal(file2.Q.preflightGreet("foo"), "Hello foo");
 
 test "add data to store" {
   store.store("foo");
+}
+
+test "greet" {
+  expect.equal(file2.Q.greet("bar"), "Hello bar");
 }
 
 // structs from other files can be used

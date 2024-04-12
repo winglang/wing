@@ -1515,7 +1515,7 @@ exports[`extern_static.test.w 1`] = `
 "error: Extern methods must be declared \\"static\\" (they cannot access instance members)
   --> ../../../examples/tests/invalid/extern_static.test.w:2:45
   |
-2 |   extern \\"../valid/external_js.js\\" inflight getGreeting(name: str): str;
+2 |   extern \\"../valid/external_ts.ts\\" inflight getGreeting(name: str): str;
   |                                             ^^^^^^^^^^^ Extern methods must be declared \\"static\\" (they cannot access instance members)
 
 
@@ -2582,11 +2582,11 @@ Duration <DURATION>"
 `;
 
 exports[`invalid compile directory 1`] = `
-"error: <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/lib
+"error: <ABSOLUTE>/external_ts.ts must be a sub directory of <ABSOLUTE>/lib
   --> ../../../examples/tests/invalid/lib/extern_above.w:2:3
   |
-2 |   extern \\"../../valid/external_js.js\\" static getGreeting(name: str): str;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/lib
+2 |   extern \\"../../valid/external_ts.ts\\" static getGreeting(name: str): str;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_ts.ts must be a sub directory of <ABSOLUTE>/lib
 
 "
 `;
