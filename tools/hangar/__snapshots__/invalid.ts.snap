@@ -8,8 +8,7 @@ exports[`access_hidden_namespace.test.w 1`] = `
   |     ^^^^ Unknown symbol \\"core\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -291,8 +290,7 @@ error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
     = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -362,8 +360,7 @@ error: Expected identifier \\"subdir2\\" to be a variable, but it's a namespace
    |         ^^^^^^^ Expected identifier \\"subdir2\\" to be a variable, but it's a namespace
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -406,8 +403,7 @@ error: Member \\"f\\" doesn't exist in \\"Construct\\"
   |          ^ Member \\"f\\" doesn't exist in \\"Construct\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -423,8 +419,7 @@ exports[`ambiguous_api_paths.test.w 1`] = `
 12 | api.get(\\"<ABSOLUTE>/:variable\\", handler);
    | ^
 at <ABSOLUTE>/ambiguous_api_paths.test.w:12:1
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -460,8 +455,7 @@ error: \\"cloud\\" is already defined
   |       ^^^^^ \\"cloud\\" is already defined
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -478,8 +472,7 @@ error: Cannot bring Wing directories that contain invalid characters: \\"in.vali
 error: Cannot bring Wing directories that contain invalid characters: \\"not-valid\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -501,8 +494,7 @@ error: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE>/bring_jsii
   | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE>/bring_jsii.test.w\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -531,8 +523,7 @@ error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -568,8 +559,7 @@ error: Cannot bring module \\"./bring_local_dir.test.w\\" since it is an entrypo
    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring module \\"./bring_local_dir.test.w\\" since it is an entrypoint file
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -605,8 +595,7 @@ error: Preflight field \\"x\\" is not initialized
    |   ^ Preflight field \\"x\\" is not initialized
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -635,8 +624,7 @@ error: Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`
    |                                                                                     ^^^^ Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`in\`
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -672,8 +660,7 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -695,8 +682,7 @@ error: Cannot call into inflight phase while preflight
    | ^^^^^^^^ Cannot call into inflight phase while preflight
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -725,8 +711,7 @@ error: Cannot access \\"x\\" because it is shadowed by another symbol with the s
    |       ^ Cannot access \\"x\\" because it is shadowed by another symbol with the same name
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1059,8 +1044,7 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
     |            ^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1091,8 +1075,7 @@ error: Expected type to be \\"inflight (message: str): void\\", but got \\"infli
    | \\\\-^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1282,8 +1265,7 @@ error: Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
    |               ^^^^^^^ Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1311,8 +1293,7 @@ error: Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1340,8 +1321,7 @@ error: Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1369,8 +1349,7 @@ error: Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1385,8 +1364,7 @@ exports[`diags_with_multibyte_chars.test.w 1`] = `
   | ^^^^ Unknown symbol \\"asdf\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1408,8 +1386,7 @@ error: Property not found
   |                        ^^^ Property not found
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1487,8 +1464,7 @@ error: Expression of type \\"IPreflightInterface\\" references an unknown prefli
    |     ^ Expression of type \\"IPreflightInterface\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1503,8 +1479,7 @@ exports[`extern.test.w 1`] = `
   |   ^^^^^^^^^^^^^^^^^ File not found: \\"./sad.js\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1519,8 +1494,7 @@ exports[`extern_static.test.w 1`] = `
   |                                             ^^^^^^^^^^^ Extern methods must be declared \\"static\\" (they cannot access instance members)
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1556,8 +1530,7 @@ error: Preflight field \\"x\\" is not initialized
    |   ^ Preflight field \\"x\\" is not initialized
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1579,8 +1552,7 @@ error: Unable to iterate over \\"Bucket\\"
   |             ^^^^^^ Unable to iterate over \\"Bucket\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1672,8 +1644,7 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
    |                            ^ Expected type to be \\"bool\\", but got \\"num\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1709,8 +1680,7 @@ error: Expected type to be \\"str\\", but got \\"Array<str>\\" instead
   |      ^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"Array<str>\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1739,8 +1709,7 @@ error: Optional parameters must always be after all non-optional parameters.
   |                         ^ Optional parameters must always be after all non-optional parameters.
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1797,8 +1766,7 @@ error: Expected type to be \\"Bucket\\", but got \\"bool\\" instead
    |                     ^^^^ Expected type to be \\"Bucket\\", but got \\"bool\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1890,8 +1858,7 @@ error: Expected type to be \\"preflight (construct: IConstruct): Node\\", but go
    |          ^^^ Expected type to be \\"preflight (construct: IConstruct): Node\\", but got \\"str\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -1990,8 +1957,7 @@ error: Expected type to be \\"bool\\", but got \\"Array<num>\\" instead
    |                               ^^^ Expected type to be \\"bool\\", but got \\"Array<num>\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2041,8 +2007,7 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
    |       ^ Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2236,8 +2201,7 @@ error: Unable to infer type
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unable to infer type
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2280,8 +2244,7 @@ error: Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://
    |       ^^^^^^^^^^^^^^ Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2298,8 +2261,7 @@ exports[`inflight_class_dup_init.test.w 1`] = `
   | \\\\---^ Multiple inflight initializers defined in class Foo
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2314,8 +2276,7 @@ exports[`inflight_class_in_preflight.test.w 1`] = `
   | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2330,8 +2291,7 @@ exports[`inflight_class_interface_structural_typing.test.w 1`] = `
    |                 ^^^^^^^^^^^^ Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2356,8 +2316,7 @@ error: Variable is not reassignable
   |   ^^^^ Variable is not reassignable
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2386,8 +2345,7 @@ error: Expression of type \\"Bucket\\" references an unknown preflight object, c
    |            ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2409,8 +2367,7 @@ error: Expression of type \\"Queue\\" references an unknown preflight object, ca
    |     ^^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2432,8 +2389,7 @@ error: Expression of type \\"Bucket\\" references an unknown preflight object, c
    |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2573,8 +2529,7 @@ error: Expected type to be \\"preflight (): void\\", but got \\"inflight (): voi
    = hint: expected phase to be preflight, but got inflight instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2599,8 +2554,7 @@ exports[`issue_2767.test.w 1`] = `
   |                ^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutJson\\", but got \\"Bucket\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2617,8 +2571,7 @@ exports[`jsii_access_modifiers.test.w 1`] = `
    = hint: the definition of \\"createTopic\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Bucket\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2775,8 +2728,7 @@ error: \\"Bucket\\" is not a legal JSON value
     |                     ^^^^^^^^^^^^^^^^^^ \\"Bucket\\" is not a legal JSON value
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2791,8 +2743,7 @@ exports[`json_static.test.w 1`] = `
   |          ^^^ Member \\"set\\" doesn't exist in \\"Json\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2807,8 +2758,7 @@ exports[`map_entries.test.w 1`] = `
   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2852,8 +2802,7 @@ error: A function whose return type is \\"str\\" must return a value.
    | \\\\-^ A function whose return type is \\"str\\" must return a value.
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2882,8 +2831,7 @@ error: Expected '}'
    |             ^ Expected '}'
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -2975,8 +2923,7 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
    |                       ^^ Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3023,8 +2970,7 @@ error: Expected type to be \\"num\\", but got \\"nil\\" instead
    = hint: to allow \\"nil\\" assignment use optional type: \\"num?\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3161,8 +3107,7 @@ error: Variable is not reassignable
    |   ^^ Variable is not reassignable
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3179,8 +3124,7 @@ User invoked panic'), please report at https://www.winglang.io/contributing/star
 User invoked panic'), please report at https://www.winglang.io/contributing/start-here/bugs
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3195,8 +3139,7 @@ exports[`parameters.test.w 1`] = `
 
 (hint: make sure to use --values to provide the required parameters file)
         
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3247,8 +3190,7 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
    |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3263,8 +3205,7 @@ exports[`preflight_from_inflight.test.w 1`] = `
    |     ^^^^^^^^^^^^^^^^^^^^ Cannot call into preflight phase while inflight
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3300,8 +3241,7 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
    |              ^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3337,8 +3277,7 @@ error: Enums must be public (\\"pub\\") or private
    | ^^^^^^^^^ Enums must be public (\\"pub\\") or private
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3394,8 +3333,7 @@ error: Variable is not reassignable
    |   ^^^ Variable is not reassignable
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3524,8 +3462,7 @@ error: Multiple or ambiguous modifiers found
    | possible redundant modifier
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3540,8 +3477,7 @@ exports[`resource_access_field_as_method.test.w 1`] = `
   | ^^^^^^ Expected a function or method, found \\"str\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3556,8 +3492,7 @@ exports[`resource_captures.test.w 1`] = `
    |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3579,8 +3514,7 @@ error: Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.c
   |       ^^^^^^^^^^^^ Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3616,8 +3550,7 @@ error: Inflight initializers cannot have parameters
   |               ^^^^^^^^ Inflight initializers cannot have parameters
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3660,8 +3593,7 @@ error: Unexpected return value from void function. Return type annotations are r
    |     ^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3697,8 +3629,7 @@ error: Inflight classes cannot have a scope
    |                          ^^ Inflight classes cannot have a scope
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3706,7 +3637,23 @@ Duration <DURATION>"
 `;
 
 exports[`simulator_permissions.test.w 1`] = `
-"fail ┌ simulator_permissions.test.wsim » root/env0/test:incorrect resource permission 
+"[ERROR] incorrect resource permission | Invoke (payload=undefined). Error: Resource \\"root/env0/test:incorrect resource permission/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env0/b1\\".
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
+   | while i > 0 {
+   |   i -= 1;
+   | }
+15 | buckets.at(i).put(\\"key\\", \\"value\\");
+   | ^
+at <ABSOLUTE>/simulator_permissions.test.w:15:3
+[ERROR] incorrect permission operation | Invoke (payload=undefined). Error: Resource \\"root/env1/test:incorrect permission operation/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env1/b1\\".
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
+   | while i > 0 {
+   |   i -= 1;
+   | }
+25 | buckets.at(i).put(\\"key\\", \\"value\\");
+   | ^
+at <ABSOLUTE>/simulator_permissions.test.w:25:3
+fail ┌ simulator_permissions.test.wsim » root/env0/test:incorrect resource permission 
      │ Error: Resource \\"root/env0/test:incorrect resource permission/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env0/b1\\".
      │    --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
      │    | while i > 0 {
@@ -3724,8 +3671,7 @@ fail ┌ simulator_permissions.test.wsim » root/env1/test:incorrect permission 
      │ 25 | buckets.at(i).put(\\"key\\", \\"value\\");
      │    | ^
      └ at <ABSOLUTE>/simulator_permissions.test.w:25:3
- 
- 
+
 Tests 2 failed (2)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3761,8 +3707,7 @@ error: Expected \\"b\\" to be a type but it's a variable
   |                          ^ Expected \\"b\\" to be a type but it's a variable
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3798,8 +3743,7 @@ error: Expected continue statement to be inside of a loop (while/for)
    |     ^^^^^^^^^ Expected continue statement to be inside of a loop (while/for)
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3828,8 +3772,7 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
   |     ^ Expected type to be \\"bool\\", but got \\"num\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3844,8 +3787,7 @@ exports[`std_containers.test.w 1`] = `
   |                  ^ Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3871,8 +3813,7 @@ error: Expected type to be stringable, but got \\"str?\\" instead
   = hint: str? is an optional, try unwrapping it with 'x ?? \\"nil\\"' or 'x!'
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3934,8 +3875,7 @@ error: Expected between 2 and 3 positional arguments or named arguments for the 
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3954,8 +3894,7 @@ exports[`struct_from_parameter.test.w 1`] = `
 14 | MyParams.fromJson(app.parameters.read());
    | ^
 at <ABSOLUTE>/struct_from_parameter.test.w:14:1
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -3984,8 +3923,7 @@ error: Struct \\"C\\" contains field \\"b\\" which cannot be represented in Json
    |   ^^^^^^^^ Struct \\"C\\" contains field \\"b\\" which cannot be represented in Json
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4056,8 +3994,7 @@ error: struct \\"InflightStruct\\" must be declared at the top-level of a file
    |          ^^^^^^^^^^^^^^ struct \\"InflightStruct\\" must be declared at the top-level of a file
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4121,8 +4058,7 @@ error: \`super\` calls inside inflight closures not supported yet, see: https://
    |                                                ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4137,8 +4073,7 @@ exports[`this.w 1`] = `
   |         ^^^^ Unknown symbol \\"this\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4153,8 +4088,7 @@ exports[`throw_non_string.test.w 1`] = `
   |       ^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4171,8 +4105,7 @@ exports[`try_no_catch_or_finally.test.w 1`] = `
   | \\\\-^ Missing \`catch\` or \`finally\` blocks for this try statement
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4208,8 +4141,7 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |      ^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4252,8 +4184,7 @@ error: Unable to infer type
   |     ^^^^^^^^^^^ Unable to infer type
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4268,8 +4199,7 @@ exports[`unknown_field.test.w 1`] = `
   |            ^ Member \\"a\\" doesn't exist in \\"String\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4284,8 +4214,7 @@ exports[`unknown_submodule.test.w 1`] = `
   | ^^^ Expected identifier \\"std\\" to be a variable, but it's a namespace
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4363,8 +4292,7 @@ error: Member \\"methodWhichIsNotPartOfBucketApi\\" doesn't exist in \\"Bucket\\
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Member \\"methodWhichIsNotPartOfBucketApi\\" doesn't exist in \\"Bucket\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4373,8 +4301,7 @@ Duration <DURATION>"
 
 exports[`unresolved_state.test.w 1`] = `
 "Could not start resource after 10 attempts: Unable to resolve attribute 'my_unresolved_token' for resource: root/env0/State
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4399,8 +4326,7 @@ error: Symbol \\"x\\" used before being defined
   |     - defined later here
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4415,8 +4341,7 @@ exports[`variable_scoping.test.w 1`] = `
   |           ^ Unknown symbol \\"x\\"
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
@@ -4468,8 +4393,7 @@ error: Expected type to be \\"str?\\", but got \\"void\\" instead
    |               ^^^^^^^^^^^^^^^^^ Expected type to be \\"str?\\", but got \\"void\\" instead
 
 
- 
- 
+
 Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
