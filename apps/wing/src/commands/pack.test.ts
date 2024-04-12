@@ -77,7 +77,7 @@ describe("wing pack", () => {
 
     // WHEN
     await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow(
-      /Wing libraries should use "peerDependencies" instead of "dependencies" in package.json/
+      /Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead./
     );
 
     // THEN
