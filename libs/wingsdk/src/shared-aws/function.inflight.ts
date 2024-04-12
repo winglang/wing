@@ -6,7 +6,7 @@ import {
 } from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@smithy/util-utf8";
 import { IFunctionClient } from "../cloud";
-import { Trace, TraceType } from "../std";
+import { Trace, TraceType, Json } from "../std";
 
 export class FunctionClient implements IFunctionClient {
   constructor(
@@ -19,7 +19,7 @@ export class FunctionClient implements IFunctionClient {
    * Invokes the function with a payload and waits for the result.
    *  @returns the function response payload.
    */
-  public async invoke(payload?: string): Promise<string | undefined> {
+  public async invoke(payload?: Json): Promise<Json | undefined> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
       // If payload is undefined, pass json `null` as the payload to the function
@@ -37,7 +37,7 @@ export class FunctionClient implements IFunctionClient {
    * Kicks off the execution of the function with a payload and returns immediately while the function is running.
    * @returns immediately once the event has been handed off to AWS Lambda.
    */
-  public async invokeAsync(payload: string): Promise<void> {
+  public async invokeAsync(payload: Json): Promise<void> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
       Payload: fromUtf8(JSON.stringify(payload)),
@@ -86,7 +86,7 @@ export class FunctionClient implements IFunctionClient {
 function parseCommandOutput(
   payload: InvokeCommandOutput,
   functionArn: string
-): string | undefined {
+): Json | undefined {
   if (payload.FunctionError) {
     let errorText = toUtf8(payload.Payload!);
     let errorData;

@@ -5,7 +5,14 @@ import { fqnForType } from "../constants";
 import { App, Lifting } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
+import {
+  Duration,
+  IInflight,
+  IInflightHost,
+  Node,
+  Resource,
+  Json,
+} from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -135,8 +142,12 @@ export class Function extends Resource implements IInflightHost {
     lines.push('"use strict";');
     lines.push(`var ${client} = undefined;`);
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
-    lines.push(`  return await ${client}.handle(event);`);
+    lines.push(` ${client} = ${client} ?? (${inflightClient});`);
+    lines.push(` const input = event ? JSON.parse(event) : undefined;`);
+    lines.push(` const output = await ${client}.handle(input);`);
+    lines.push(
+      ` return output !== undefined ? JSON.stringify(output) : undefined;`
+    );
     lines.push("};");
 
     return lines;
@@ -172,14 +183,14 @@ export interface IFunctionClient {
    * @returns An optional response from the function
    * @inflight
    */
-  invoke(payload?: string): Promise<string | undefined>;
+  invoke(payload?: Json): Promise<Json | undefined>;
 
   /**
    * Kicks off the execution of the function with a payload and returns immediately while the function is running.
    * @param payload payload to pass to the function. If not defined, an empty string will be passed.
    * @inflight
    */
-  invokeAsync(payload?: string): Promise<void>;
+  invokeAsync(payload?: Json): Promise<void>;
 }
 
 /**
@@ -201,7 +212,7 @@ export interface IFunctionHandlerClient {
    * Entrypoint function that will be called when the cloud function is invoked.
    * @inflight
    */
-  handle(event?: string): Promise<string | undefined>;
+  handle(event?: Json): Promise<Json | undefined>;
 }
 
 /**

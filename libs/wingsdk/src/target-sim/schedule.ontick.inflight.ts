@@ -12,6 +12,6 @@ export class ScheduleOnTickHandlerClient
   }
 
   public async handle() {
-    await this.handler.handle("");
+    await this.handler.handle();
   }
 }

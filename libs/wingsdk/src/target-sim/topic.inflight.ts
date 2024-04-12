@@ -57,7 +57,7 @@ export class Topic
         timestamp: new Date().toISOString(),
       });
 
-      await fnClient.invokeAsync(message);
+      await fnClient.invokeAsync(JSON.parse(message));
     }
   }
 

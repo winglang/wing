@@ -11,6 +11,6 @@ export class TopicOnMessageHandlerClient
     this.handler = handler;
   }
   public async handle(event: string) {
-    await this.handler.handle(event);
+    await this.handler.handle(JSON.parse(event));
   }
 }
