@@ -2,10 +2,9 @@
 
 ## stdout.log
 ```log
-pass ┌ fetch.test.wsim » root/env0/test:redirect is 'follow' by default
-     └ I am the target
-pass ┌ fetch.test.wsim » root/env1/test:redirect 'manual'              
-     └ I am the target
+[INFO] redirect is 'follow' by default | I am the target
+pass ─ fetch.test.wsim » root/env0/test:redirect is 'follow' by default
+pass ─ fetch.test.wsim » root/env1/test:redirect 'manual'              
 
 Tests 2 passed (2)
 Snapshots 1 skipped

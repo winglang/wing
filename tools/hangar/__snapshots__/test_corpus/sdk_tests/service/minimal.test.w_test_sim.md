@@ -2,9 +2,9 @@
 
 ## stdout.log
 ```log
-pass ┌ minimal.test.wsim » root/env0/test:start and stop
-     │ hello, service!
-     └ stopping!
+[INFO] start and stop | hello, service!
+[INFO] start and stop | stopping!
+pass ─ minimal.test.wsim » root/env0/test:start and stop
 
 Tests 1 passed (1)
 Snapshots 1 skipped

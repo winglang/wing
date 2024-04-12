@@ -6,7 +6,7 @@ import { runWingCommand } from "./utils";
 errorWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
     const platforms = ["sim"];
-    const args = ["test", "--no-stream"];
+    const args = ["test"];
 
     const relativeWingFile = path.relative(
       tmpDir,

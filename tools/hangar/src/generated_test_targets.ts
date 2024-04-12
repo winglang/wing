@@ -55,7 +55,10 @@ export async function compileTest(
     if (!include.find((f) => subpath.includes(f))) {
       continue;
     }
-    if ((subpath.endsWith(".js") || subpath.endsWith(".cjs")) && !includeJavaScriptInSnapshots) {
+    if (
+      (subpath.endsWith(".js") || subpath.endsWith(".cjs")) &&
+      !includeJavaScriptInSnapshots
+    ) {
       continue;
     }
     let fileContents = await fs.readFile(dotFile, "utf8");
@@ -78,7 +81,7 @@ export async function testTest(
 ) {
   const fileMap: Record<string, string> = {};
   const platforms = ["sim"];
-  const args = ["test", "--no-stream"];
+  const args = ["test"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
 
   // only entrypoint files have tests (for now)
