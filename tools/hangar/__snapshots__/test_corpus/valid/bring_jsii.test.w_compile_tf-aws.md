@@ -22,6 +22,20 @@ module.exports = function({ $greeting, $stuff_HelloWorld }) {
 //# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
+## inflight.X-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class X {
+    constructor({  }) {
+    }
+  }
+  return X;
+}
+//# sourceMappingURL=inflight.X-1.cjs.map
+```
+
 ## main.tf.json
 ```json
 {
@@ -88,6 +102,36 @@ class $Root extends $stdlib.std.Resource {
           ],
           "$inflight_init": [
             [greeting, []],
+          ],
+        });
+      }
+    }
+    class X extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      method() {
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.X-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const XClient = ${X._toInflightType()};
+            const client = new XClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
           ],
         });
       }
