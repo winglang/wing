@@ -1,6 +1,6 @@
 bring cloud;
 
-interface IGoo {
+inflight interface IGoo {
   inflight handle(): num;
 }
 

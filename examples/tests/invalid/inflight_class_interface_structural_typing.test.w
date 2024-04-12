@@ -1,7 +1,7 @@
 bring cloud;
 
-interface IGoo {
-  inflight notHandle(): void;
+inflight interface IGoo {
+  notHandle(): void;
 }
 
 inflight class NotGoo {

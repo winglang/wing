@@ -31,9 +31,7 @@ const options = parseArgs({
     config: {
       addEventListener(event, listener) {},
       removeEventListener(event, listener) {},
-      get(key: any) {
-        return undefined as any;
-      },
+      get(key) {},
       set(key, value) {},
     },
     hostUtils: {

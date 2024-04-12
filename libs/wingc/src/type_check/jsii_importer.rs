@@ -388,6 +388,7 @@ impl<'a> JsiiImporter<'a> {
 		let phase = if is_struct {
 			Phase::Independent
 		} else {
+			// All JSII imported interfaces are considered preflight interfaces
 			Phase::Preflight
 		};
 
@@ -415,6 +416,7 @@ impl<'a> JsiiImporter<'a> {
 				docs: Docs::from(&jsii_interface.docs),
 				// Will be replaced below
 				env: SymbolEnv::new(None, SymbolEnvKind::Type(self.wing_types.void()), phase, 0),
+				phase,
 			})),
 		};
 
