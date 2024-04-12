@@ -13,7 +13,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { TraceType } from "../std";
+import { Json, TraceType } from "../std";
 
 export class Queue
   implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
@@ -187,7 +187,7 @@ export class Queue
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
         void fnClient
-          .invoke(JSON.stringify({ messages: messagesPayload }))
+          .invoke({ messages: messagesPayload } as unknown as Json)
           .catch((err) => {
             // If the function is at a concurrency limit, pretend we just didn't call it
             if (

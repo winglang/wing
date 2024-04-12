@@ -14,7 +14,6 @@ return class Handler {
   }
   
 async handle(event) {
-  event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
@@ -24,7 +23,7 @@ async handle(event) {
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return JSON.stringify({ msg });
+  return { msg };
 }
 };
 })())({
@@ -169,7 +168,7 @@ async handle(event) {
 exports[`invoke function fails 1`] = `
 [
   "root/my_function started",
-  "Invoke (payload="{\\"name\\":\\"alice\\"}").",
+  "Invoke (payload={"name":"alice"}).",
   "root/my_function stopped",
 ]
 `;
@@ -188,7 +187,6 @@ return class Handler {
   }
   
 async handle(event) {
-  event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
@@ -198,7 +196,7 @@ async handle(event) {
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return JSON.stringify({ msg });
+  return { msg };
 }
 };
 })())({
@@ -341,7 +339,7 @@ async handle(event) {
 exports[`invoke function succeeds 1`] = `
 [
   "root/my_function started",
-  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
+  "Invoke (payload={"name":"Alice"}).",
   "root/my_function stopped",
 ]
 `;
@@ -360,7 +358,6 @@ return class Handler {
   }
   
 async handle(event) {
-  event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
@@ -370,7 +367,7 @@ async handle(event) {
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return JSON.stringify({ msg });
+  return { msg };
 }
 };
 })())({
@@ -513,7 +510,7 @@ async handle(event) {
 exports[`invoke function with environment variables 1`] = `
 [
   "root/my_function started",
-  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
+  "Invoke (payload={"name":"Alice"}).",
   "root/my_function stopped",
 ]
 `;
@@ -532,7 +529,6 @@ return class Handler {
   }
   
 async handle(event) {
-  event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
@@ -542,7 +538,7 @@ async handle(event) {
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return JSON.stringify({ msg });
+  return { msg };
 }
 };
 })())({
@@ -687,7 +683,7 @@ async handle(event) {
 exports[`invoke function with process.exit(1) 1`] = `
 [
   "root/my_function started",
-  "Invoke (payload="{}").",
+  "Invoke (payload=undefined).",
   "root/my_function stopped",
 ]
 `;

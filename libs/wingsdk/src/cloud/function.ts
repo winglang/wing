@@ -142,12 +142,8 @@ export class Function extends Resource implements IInflightHost {
     lines.push('"use strict";');
     lines.push(`var ${client} = undefined;`);
     lines.push("exports.handler = async function(event) {");
-    lines.push(` ${client} = ${client} ?? (${inflightClient});`);
-    lines.push(` const input = event ? JSON.parse(event) : undefined;`);
-    lines.push(` const output = await ${client}.handle(input);`);
-    lines.push(
-      ` return output !== undefined ? JSON.stringify(output) : undefined;`
-    );
+    lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
+    lines.push(`  return await ${client}.handle(event);`);
     lines.push("};");
 
     return lines;

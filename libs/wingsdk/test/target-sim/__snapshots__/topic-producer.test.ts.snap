@@ -10,6 +10,7 @@ exports[`publishing messages to topic 1`] = `
   "Publish (message=ABC).",
   "Sending message (message=ABC, subscriber=sim-1).",
   "InvokeAsync (payload="ABC").",
+  "resp {}",
   "Invoke (payload="ABC").",
   "Message received",
   "root/TopicTester/MyTopic/Policy stopped",
