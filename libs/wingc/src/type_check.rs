@@ -1567,10 +1567,10 @@ impl Types {
 		self
 			.libraries
 			.lookup_nested_str(&resource_fqn, None)
-			.expect("Resouce base class to be loaded")
+			.expect("Resource base class to be loaded")
 			.0
 			.as_type()
-			.expect("Resouce base class to be a type")
+			.expect("Resource base class to be a type")
 	}
 
 	pub fn resource_base_interface(&self) -> TypeRef {
@@ -1578,10 +1578,10 @@ impl Types {
 		self
 			.libraries
 			.lookup_nested_str(&resource_fqn, None)
-			.expect("Resouce base interface to be loaded")
+			.expect("Resource base interface to be loaded")
 			.0
 			.as_type()
-			.expect("Resouce base interface to be a type")
+			.expect("Resource base interface to be a type")
 	}
 
 	pub fn construct_base_type(&self) -> TypeRef {
