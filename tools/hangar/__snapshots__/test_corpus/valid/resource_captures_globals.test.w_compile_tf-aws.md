@@ -82,9 +82,10 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $Another, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
+module.exports = function({ $Another, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr, $util_Util }) {
   class MyResource {
-    constructor({ $this_localTopic }) {
+    constructor({ $this_localCounter, $this_localTopic }) {
+      this.$this_localCounter = $this_localCounter;
       this.$this_localTopic = $this_localTopic;
     }
     async myPut() {
@@ -100,6 +101,9 @@ module.exports = function({ $Another, $__arr__index_______if__index___0____index
       (await $globalAnother_first_myResource.put("key", "value"));
       $helpers.assert(((await $globalAnother.myMethod()) > 0), "globalAnother.myMethod() > 0");
       $helpers.assert(((await $Another.myStaticMethod()) > 0), "Another.myStaticMethod() > 0");
+      (await $util_Util.waitUntil((async () => {
+        return ((await this.$this_localCounter.peek()) > 0);
+      })));
     }
   }
   return MyResource;
@@ -360,6 +364,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -493,6 +498,7 @@ class $Root extends $stdlib.std.Resource {
             $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
             $globalNum: ${$stdlib.core.liftObject(globalNum)},
             $globalStr: ${$stdlib.core.liftObject(globalStr)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -501,6 +507,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType()};
             const client = new MyResourceClient({
+              $this_localCounter: ${$stdlib.core.liftObject(this.localCounter)},
               $this_localTopic: ${$stdlib.core.liftObject(this.localTopic)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -522,6 +529,7 @@ class $Root extends $stdlib.std.Resource {
             [globalBucket, ["put"]],
             [globalNum, []],
             [globalStr, []],
+            [this.localCounter, ["peek"]],
             [this.localTopic, ["publish"]],
           ],
           "$inflight_init": [
@@ -536,6 +544,7 @@ class $Root extends $stdlib.std.Resource {
             [globalBucket, []],
             [globalNum, []],
             [globalStr, []],
+            [this.localCounter, []],
             [this.localTopic, []],
           ],
         });

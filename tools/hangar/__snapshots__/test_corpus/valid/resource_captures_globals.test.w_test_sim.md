@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] test | InvokeAsync (payload="hello") failure. Error: Process exited with code null, signal SIGTERM
 pass ─ resource_captures_globals.test.wsim » root/env0/test:test                                             
 pass ─ resource_captures_globals.test.wsim » root/env1/test:access cloud resource through static methods only
 
