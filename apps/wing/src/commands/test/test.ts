@@ -413,8 +413,8 @@ async function formatTrace(
   const milliseconds = date.getMilliseconds().toString().padStart(3, "0");
   const timestamp = `${hours}:${minutes}:${seconds}.${milliseconds}`;
 
+  let msg = "";
   if (mode === "full") {
-    let msg = "";
     msg += chalk.dim(`[${timestamp}]`);
     msg += LOG_STREAM_COLORS[severity](` ${SEVERITY_STRING[severity]}`);
     msg += chalk.dim(` ${testName} » ${trace.sourcePath}`);
@@ -432,7 +432,6 @@ async function formatTrace(
     msg += "\n";
     return msg;
   } else if (mode === "short") {
-    let msg = "";
     msg += LOG_STREAM_COLORS[severity](`${SEVERITY_STRING[severity]}`);
     msg += chalk.dim(` ${testName} | `);
     if (severity === "error") {
