@@ -1,7 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { App, LiftDepsMatrixRaw } from "../core";
 import { AbstractMemberError } from "../core/errors";
-import { log } from "../shared/log";
 import { Node } from "../std";
 
 /**
@@ -138,11 +137,8 @@ export abstract class Resource extends Construct implements IResource {
    * other capabilities to the inflight host.
    */
   public static onLiftType(host: IInflightHost, ops: string[]): void {
-    log(
-      `onLiftType called on a resource type (${
-        this.constructor.name
-      }) with a host (${host.node.path}) and ops: ${JSON.stringify(ops)}`
-    );
+    host;
+    ops;
   }
 
   /**
