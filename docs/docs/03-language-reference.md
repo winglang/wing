@@ -1441,10 +1441,14 @@ class Boo extends Foo {
 ```
 
 Classes can inherit and extend other classes using the `extends` keyword.  
-Classes can implement interfaces iff the interfaces do not contain `inflight`.
+Classes can implement multiple interfaces using the `impl` keyword. 
+Inflight classes may only implement inflight interfaces.
 
 ```TS
-class Foo {
+interface IFoo {
+  method(): void;
+}
+class Foo impl IFoo {
   x: num;
   new() { this.x = 0; }
   pub method() { }
@@ -1577,7 +1581,12 @@ of methods with different phases is not allowed as well.
 
 Interfaces represent a contract that a class must fulfill.
 Interfaces are defined with the `interface` keyword.
-Currently, preflight interfaces are allowed, while inflight interfaces are not supported yet (see https://github.com/winglang/wing/issues/1961).
+Interfaces may be either preflight interfaces or inflight interfaces.
+Preflight interfaces are defined in preflight scope and can contain both preflight and inflight methods.
+Only preflight classes may implement preflight interfaces.
+Inflight interfaces are either defined with the `inflight` modifier in preflight scope or simply defined in inflight scope.
+All methods of inflight interfaces are implicitly inflight (no need to use the `inflight` keyword).
+Since both preflight and inflight classes can have inflight methods defined inside them, they are both capable of implementing inflight interfaces.
 `impl` keyword is used to implement an interface or multiple interfaces that are
 separated with commas.
 
@@ -1594,7 +1603,7 @@ Interface fields are not supported.
 >   inflight method3(): void;
 > }
 >
-> interface IMyInterface2 {
+> inflight interface IMyInterface2 {
 >   method2(): str; 
 > }
 >
@@ -1610,7 +1619,7 @@ Interface fields are not supported.
 >     return "sample: {x}";
 >   }
 >   inflight method3(): void { }
->   method2(): str {
+>   inflight method2(): str {
 >     return this.field2;
 >   }
 > }

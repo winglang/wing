@@ -1445,6 +1445,14 @@ impl<'s> Parser<'s> {
 		let mut cursor = statement_node.walk();
 		let mut extends = vec![];
 		let mut methods = vec![];
+
+		let interface_modifiers = statement_node.child_by_field_name("modifiers");
+		let phase = if self.get_modifier("inflight_specifier", &interface_modifiers)?.is_some() {
+			Phase::Inflight
+		} else {
+			phase
+		};
+
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 
 		for interface_element in statement_node
@@ -1514,12 +1522,11 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(&access_modifier_node);
+		let access = self.get_access_modifier(&interface_modifiers)?;
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Interfaces must be public (\"pub\") or private",
-				&access_modifier_node.expect("access modifier node"),
+				&interface_modifiers.expect("access modifier node"),
 			)?;
 		}
 
@@ -1528,6 +1535,7 @@ impl<'s> Parser<'s> {
 			methods,
 			extends,
 			access,
+			phase,
 		}))
 	}
 

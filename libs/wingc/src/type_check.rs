@@ -26,9 +26,9 @@ use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_JSON, WINGSDK_MAP,
-	WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON,
+	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -356,23 +356,9 @@ pub struct Interface {
 	pub fqn: Option<String>,
 	pub docs: Docs,
 	pub extends: Vec<TypeRef>, // Must be a Type::Interface type
+	pub phase: Phase,
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
-}
-
-impl Interface {
-	fn is_resource(&self) -> bool {
-		// TODO: This should check that the interface extends `IResource` from
-		// the SDK, not just any interface with the name `IResource`
-		// https://github.com/winglang/wing/issues/2098
-		self.name.name == "IResource"
-			|| self.extends.iter().any(|i| {
-				i.as_interface()
-					.expect("Interface extends a type that isn't an interface")
-					.name
-					.name == "IResource"
-			})
-	}
 }
 
 impl Display for Interface {
@@ -1084,6 +1070,18 @@ impl TypeRef {
 		return false;
 	}
 
+	pub fn is_preflight_object_type(&self) -> bool {
+		if let Type::Class(ref class) = **self {
+			return class.phase == Phase::Preflight;
+		}
+
+		if let Type::Interface(ref iface) = **self {
+			return iface.phase == Phase::Preflight;
+		}
+
+		false
+	}
+
 	/// Returns whether type represents a closure (either a function or a closure class).
 	pub fn is_closure(&self) -> bool {
 		if self.as_function_sig().is_some() {
@@ -1178,36 +1176,6 @@ impl TypeRef {
 			**self,
 			Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_)
 		)
-	}
-
-	pub fn is_capturable(&self) -> bool {
-		match &**self {
-			Type::Interface(iface) => iface.is_resource(),
-			Type::Enum(_) => true,
-			Type::Number => true,
-			Type::String => true,
-			Type::Duration => true,
-			Type::Boolean => true,
-			Type::Json(_) => true,
-			Type::Nil => true,
-			Type::Array(v) => v.is_capturable(),
-			Type::Map(v) => v.is_capturable(),
-			Type::Set(v) => v.is_capturable(),
-			Type::Struct(_) => true,
-			Type::Optional(v) => v.is_capturable(),
-			Type::Anything => false,
-			Type::Unresolved => false,
-			Type::Inferred(..) => false,
-			Type::Void => false,
-			Type::MutJson => true,
-			Type::MutArray(v) => v.is_capturable(),
-			Type::MutMap(v) => v.is_capturable(),
-			Type::MutSet(v) => v.is_capturable(),
-			Type::Function(sig) => sig.phase == Phase::Inflight,
-
-			// only preflight classes can be captured
-			Type::Class(c) => c.phase == Phase::Preflight,
-		}
 	}
 
 	// returns true if mutable type or if immutable container type contains a mutable type
@@ -1599,10 +1567,21 @@ impl Types {
 		self
 			.libraries
 			.lookup_nested_str(&resource_fqn, None)
-			.expect("Resouce base class to be loaded")
+			.expect("Resource base class to be loaded")
 			.0
 			.as_type()
-			.expect("Resouce base class to be a type")
+			.expect("Resource base class to be a type")
+	}
+
+	pub fn resource_base_interface(&self) -> TypeRef {
+		let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_IRESOURCE);
+		self
+			.libraries
+			.lookup_nested_str(&resource_fqn, None)
+			.expect("Resource base interface to be loaded")
+			.0
+			.as_type()
+			.expect("Resource base interface to be a type")
 	}
 
 	pub fn construct_base_type(&self) -> TypeRef {
@@ -2059,7 +2038,7 @@ impl<'a> TypeChecker<'a> {
 				parameters: vec![
 					FunctionParameter {
 						name: "preflightObject".into(),
-						typeref: self.types.resource_base_type(),
+						typeref: self.types.resource_base_interface(),
 						docs: Docs::with_summary("The preflight object to qualify"),
 						variadic: false,
 					},
@@ -3713,6 +3692,7 @@ impl<'a> TypeChecker<'a> {
 			docs: Docs::default(),
 			env: dummy_env,
 			extends: extend_interfaces.clone(),
+			phase: iface.phase,
 		};
 		let interface_type = self.types.add_type(Type::Interface(interface_spec));
 
@@ -4108,20 +4088,13 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_interface(&mut self, ast_iface: &AstInterface, env: &mut SymbolEnv) {
-		let AstInterface {
-			name,
-			extends: _,
-			methods,
-			access: _,
-		} = ast_iface;
-
 		// Note: to support mutually recursive type definitions (types that refer to each other), interface types
 		// are initialized during `type_check_scope`. The interface type is created with a dummy environment and
 		// then replaced with the real environment after the interface's fields are type checked.
 		// In this method, we are filling in the interface's environment with its members
 		// and updating the interface's Type with the new environment.
 		let mut interface_type = env
-			.lookup(name, Some(self.ctx.current_stmt_idx()))
+			.lookup(&ast_iface.name, Some(self.ctx.current_stmt_idx()))
 			.expect("interface type should have been defined in the environment")
 			.as_type()
 			.unwrap();
@@ -4135,7 +4108,7 @@ impl<'a> TypeChecker<'a> {
 		);
 
 		// Add methods to the interface env
-		for (method_name, sig) in methods.iter() {
+		for (method_name, sig) in ast_iface.methods.iter() {
 			let mut method_type = self.resolve_type_annotation(&sig.to_type_annotation(), env);
 			// use the interface type as the function's "this" type
 			if let Type::Function(ref mut f) = *method_type {
@@ -4165,14 +4138,42 @@ impl<'a> TypeChecker<'a> {
 			};
 		}
 
-		// add methods from all extended interfaces to the interface env
 		let extend_interfaces = &interface_type.as_interface().unwrap().extends;
-		if let Err(e) = add_parent_members_to_iface_env(extend_interfaces, name, &mut interface_env) {
+
+		// If this is a preflight interface and it doesn't extend any other preflight interfaces then implicitly make it extend
+		// the base resource interface. This is so there's some expression in the type system that this is an
+		// interface that can only be implemented on a preflight class. This is safe because all preflight classes implement
+		// `std.Resource` which itself implements `std.IResource`.
+		let need_to_add_base_iresource = ast_iface.phase == Phase::Preflight
+			&& !extend_interfaces
+				.iter()
+				.any(|i| i.as_interface().unwrap().phase == Phase::Preflight);
+
+		// Verify extended interfaces are of valid phase for this interface
+		for interface in extend_interfaces.iter().map(|t| t.as_interface().unwrap()) {
+			if ast_iface.phase == Phase::Inflight && interface.phase == Phase::Preflight {
+				self.spanned_error(
+					&ast_iface.name,
+					format!(
+						"Inflight interface {} cannot extend a preflight interface {}",
+						ast_iface.name, interface.name
+					),
+				);
+			}
+		}
+
+		// add methods from all extended interfaces to the interface env
+		if let Err(e) = add_parent_members_to_iface_env(extend_interfaces, &ast_iface.name, &mut interface_env) {
 			self.type_error(e);
 		}
 
 		// Replace the dummy interface environment with the real one
 		interface_type.as_mut_interface().unwrap().env = interface_env;
+
+		if need_to_add_base_iresource {
+			let base_resource = self.types.resource_base_interface();
+			interface_type.as_mut_interface().unwrap().extends.push(base_resource);
+		}
 	}
 
 	fn type_check_class(&mut self, stmt: &Stmt, ast_class: &AstClass, env: &mut SymbolEnv) {
@@ -4208,6 +4209,19 @@ impl<'a> TypeChecker<'a> {
 				}
 			})
 			.collect::<Vec<_>>();
+
+		// Verify implemented interfaces are of valid phase for this class
+		for interface in impl_interfaces.iter().map(|t| t.as_interface().unwrap()) {
+			if ast_class.phase == Phase::Inflight && interface.phase == Phase::Preflight {
+				self.spanned_error(
+					stmt,
+					format!(
+						"Inflight class {} cannot implement a preflight interface {}",
+						ast_class.name, interface.name
+					),
+				);
+			}
+		}
 
 		// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 		let class_spec = Class {
@@ -4380,7 +4394,7 @@ impl<'a> TypeChecker<'a> {
 				{
 					let class_method_var = symbol.as_variable().expect("Expected method to be a variable");
 					let class_method_type = class_method_var.type_;
-					self.validate_type(class_method_type, method_type, &ast_class.name);
+					self.validate_type(class_method_type, method_type, &class_method_var.name);
 					// Make sure the method is public (interface methods must be public)
 					if class_method_var.access != AccessModifier::Public {
 						self.spanned_error(
@@ -5132,7 +5146,6 @@ impl<'a> TypeChecker<'a> {
 				assembly_name: assembly_name.to_string(),
 				namespace_filter,
 				alias: alias.clone(),
-				import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
 			});
 
 			self
@@ -5143,10 +5156,7 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// check if we've already defined the given alias in the current scope
-		if env
-			.lookup(&jsii.alias.name.as_str().into(), Some(jsii.import_statement_idx))
-			.is_some()
-		{
+		if env.lookup(&jsii.alias.name.as_str().into(), None).is_some() {
 			self.spanned_error(alias, format!("\"{}\" is already defined", alias.name));
 		} else {
 			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
@@ -5253,6 +5263,7 @@ impl<'a> TypeChecker<'a> {
 				fqn: iface.fqn.clone(),
 				docs: iface.docs.clone(),
 				extends: iface.extends.clone(),
+				phase: iface.phase,
 			}),
 			Type::Struct(s) => Type::Struct(Struct {
 				name: s.name.clone(),
