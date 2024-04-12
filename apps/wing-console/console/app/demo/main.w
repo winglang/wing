@@ -128,10 +128,25 @@ bring ui;
 class WidgetService {
   data: cloud.Bucket;
   counter: cloud.Counter;
+  api: cloud.Api;
 
   new() {
     this.data = new cloud.Bucket();
     this.counter = new cloud.Counter();
+    this.api = new cloud.Api();
+    
+    this.api.post("/widgets", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+      let input = Json.parse(request.body ?? "");
+
+      let name = input.get("name").asStr();
+      log("Creating widget with name: {name}");
+      this.addWidget(name);
+    
+      return cloud.ApiResponse {
+        status: 200,
+        body: Json.stringify(this.data.list())
+      };
+    });
     
     // a field displays a labeled value, with optional refreshing
     new ui.Field(
@@ -142,11 +157,63 @@ class WidgetService {
 
     // a button lets you invoke any inflight function
     new ui.Button("Add widget", inflight () => { this.addWidget(); });
+    
+    new ui.HttpClient(
+      "Test POST /widgets",
+      this.api.url,
+      {
+        "paths": {
+          "/users": {
+            "post": {
+              "summary": "Create a new user",
+              "operationId": "createWidget",
+              "parameters": [
+                // {
+                //   "in": "header",
+                //   "name": "X-Request-ID",
+                //   "schema": {
+                //     "type": "string"
+                //   },
+                //   "required": true,
+                //   "description": "A unique identifier for the request"
+                // },
+                // {
+                //   "in": "query",
+                //   "name": "role",
+                //   "schema": {
+                //     "type": "string"
+                //   },
+                //   "description": "The role to assign to the user"
+                // }
+              ],
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                      }
+                    }
+                  }
+                }
+              },
+            }
+          }
+        }
+      }
+   );
   }
 
-  inflight addWidget() {
-    let id = this.counter.inc();
-    this.data.put("widget-{id}", "my data");
+  inflight addWidget(name: str?) {
+    let id = "{this.counter.inc()}";
+    this.data.put("widget-{name ?? id}", "my data");
   }
 
   inflight countWidgets(): str {
