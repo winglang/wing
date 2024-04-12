@@ -120,6 +120,13 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
       }
     }
 
+    // check package.json has `dependencies`
+    if (pkgJson.dependencies) {
+      throw new Error(
+        `Wing libraries should use "peerDependencies" instead of "dependencies" in package.json.`
+      );
+    }
+
     // move compiler output
     await fs.rename(compilerOutputDir, path.join(workdir, compilerOutputFolder));
 

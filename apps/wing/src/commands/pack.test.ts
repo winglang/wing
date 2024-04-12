@@ -69,6 +69,21 @@ describe("wing pack", () => {
     await expectNoTarball(outdir);
   });
 
+  it("throws an error if package.json uses dependencies instead of peerDependencies", async () => {
+    // GIVEN
+    const projectDir = join(fixturesDir, "invalid6");
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+
+    // WHEN
+    await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow(
+      /Wing libraries should use "peerDependencies" instead of "dependencies" in package.json/
+    );
+
+    // THEN
+    await expectNoTarball(outdir);
+  });
+
   it("includes extra files specified by package.json", async () => {
     // valid1's package.json contains this:
     // {
