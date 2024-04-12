@@ -120,8 +120,8 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
       }
     }
 
-    // check package.json has `dependencies`
-    if (pkgJson.dependencies) {
+    // Check if package.json has non-empty "dependencies"
+    if (pkgJson.dependencies && Object.keys(pkgJson.dependencies).length > 0) {
       throw new Error(
         `Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead.`
       );
