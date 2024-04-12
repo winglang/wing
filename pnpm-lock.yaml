@@ -1036,6 +1036,9 @@ importers:
       jsii-code-samples:
         specifier: 1.7.0
         version: 1.7.0
+      jsii-fixture:
+        specifier: workspace:^
+        version: link:../../jsii-fixture
 
   examples/tests/sdk_tests:
     dependencies:
@@ -14191,7 +14194,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240404
+      typescript: 5.5.0-dev.20240410
     dev: true
 
   /dset@3.1.2:
@@ -22800,8 +22803,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240404:
-    resolution: {integrity: sha512-Knb9Yx0JJHc0mmqXLEPPKNSwOvPQrtYZEDLQY7Wns7LckkQl82AZ+OGTPG/ofwqx2QeDCHCtKjutZPy1UEiwKA==}
+  /typescript@5.5.0-dev.20240410:
+    resolution: {integrity: sha512-OvGiFb8iPBHHqR8RuhIeCM+j2W1TtPbTZLuesCEi4gulAxzkOP2B3jDPTWmcOmxvUeJN5pNzlKoi/reRn1BZww==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

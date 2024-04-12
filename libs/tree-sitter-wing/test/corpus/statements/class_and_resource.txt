@@ -202,7 +202,7 @@ class A extends B impl C, D {}
 Interface definition
 ================================================================================
 
-interface A extends B, C {
+pub inflight interface A extends B, C {
     do_something();
     inflight do_something_else(x: str): num;
     some_field: num;
@@ -212,6 +212,9 @@ interface A extends B, C {
 
 (source
   (interface_definition
+    modifiers: (interface_modifiers
+      (access_modifier)
+      (inflight_specifier))
     name: (identifier)
     extends: (custom_type
       object: (type_identifier))
