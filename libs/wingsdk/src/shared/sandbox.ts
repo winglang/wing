@@ -47,6 +47,15 @@ export class Sandbox {
       );
     }
 
+    let debugShim = "";
+    if (inspectorUrl?.()) {
+      // If we're debugging, we need to make sure the debugger has enough time to attach
+      // to the child process. This gives enough time for the debugger load sourcemaps and set breakpoints.
+      // See https://github.com/microsoft/vscode-js-debug/issues/1510
+      debugShim =
+        "\n  await new Promise((resolve) => setTimeout(resolve, 25));";
+    }
+
     // wrap contents with a shim that handles the communication with the parent process
     // we insert this shim before bundling to ensure source maps are generated correctly
     contents += `
@@ -54,12 +63,13 @@ process.setUncaughtExceptionCaptureCallback((reason) => {
   process.send({ type: "reject", reason });
 });
 
-process.on("message", async (message) => {
+process.on("message", async (message) => {${debugShim}
   const { fn, args } = message;
   const value = await exports[fn](...args);
   process.send({ type: "resolve", value });
 });
 `;
+
     const wrappedPath = entrypoint.replace(/\.cjs$/, ".sandbox.cjs");
     writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
     const bundle = createBundle(wrappedPath);

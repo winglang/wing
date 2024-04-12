@@ -58,14 +58,16 @@ export async function activate(context: ExtensionContext) {
     const currentWingBin = await getWingBin();
 
     const entrypoint = await window.showQuickPick(fileOptions, {
-      placeHolder: "Choose a file to debug",
+      placeHolder: "Choose file to debug",
     });
 
     if (!entrypoint) {
       return;
     }
 
-    const command = await window.showQuickPick(["test", "compile", "run"]);
+    const command = await window.showQuickPick(["test", "compile", "run"], {
+      placeHolder: "Choose command to run",
+    });
 
     if (!command) {
       return;
@@ -73,9 +75,13 @@ export async function activate(context: ExtensionContext) {
 
     const debugConfig: DebugConfiguration = {
       name: `Debug ${entrypoint}`,
-      command: `${currentWingBin} ${command} ${entrypoint} && exit 0`,
       request: "launch",
-      type: "node-terminal",
+      type: "node",
+      args: [currentWingBin, command, entrypoint],
+      outFiles: ["${workspaceFolder}/**/target/**/*.cjs"],
+      runtimeSourcemapPausePatterns: ["${workspaceFolder}/**/target/**/*.cjs"],
+      autoAttachChildProcesses: true,
+      pauseForSourceMap: true,
     };
 
     await debug.startDebugging(undefined, debugConfig);
