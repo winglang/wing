@@ -66,6 +66,25 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.$Closure3-1.cjs.map
 ```
 
+## inflight.$Closure4-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class $Closure4 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+    }
+  }
+  return $Closure4;
+}
+//# sourceMappingURL=inflight.$Closure4-1.cjs.map
+```
+
 ## inflight.A-1.cjs
 ```cjs
 "use strict";
@@ -101,6 +120,86 @@ module.exports = function({  }) {
   return Dog;
 }
 //# sourceMappingURL=inflight.Dog-1.cjs.map
+```
+
+## inflight.ImplInflightIfaceInInflightClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class ImplInflightIfaceInInflightClass {
+    async inflight_method() {
+      return;
+    }
+  }
+  return ImplInflightIfaceInInflightClass;
+}
+//# sourceMappingURL=inflight.ImplInflightIfaceInInflightClass-1.cjs.map
+```
+
+## inflight.ImplInflightIfaceInPreflightClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class ImplInflightIfaceInPreflightClass {
+    constructor({  }) {
+    }
+    async inflight_method() {
+      return;
+    }
+  }
+  return ImplInflightIfaceInPreflightClass;
+}
+//# sourceMappingURL=inflight.ImplInflightIfaceInPreflightClass-1.cjs.map
+```
+
+## inflight.ImplPreflightIfaceInPreflightClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class ImplPreflightIfaceInPreflightClass {
+    constructor({  }) {
+    }
+  }
+  return ImplPreflightIfaceInPreflightClass;
+}
+//# sourceMappingURL=inflight.ImplPreflightIfaceInPreflightClass-1.cjs.map
+```
+
+## inflight.ImplementInflightIfaceInPreflightClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class ImplementInflightIfaceInPreflightClass {
+    constructor({  }) {
+    }
+    async inflight_method() {
+      return;
+    }
+  }
+  return ImplementInflightIfaceInPreflightClass;
+}
+//# sourceMappingURL=inflight.ImplementInflightIfaceInPreflightClass-1.cjs.map
+```
+
+## inflight.ImplementJsiiIface-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class ImplementJsiiIface {
+    constructor({  }) {
+    }
+    async inflight_method() {
+      return;
+    }
+  }
+  return ImplementJsiiIface;
+}
+//# sourceMappingURL=inflight.ImplementJsiiIface-1.cjs.map
 ```
 
 ## inflight.Terrier-1.cjs
@@ -166,7 +265,9 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
+const jsii_fixture = require("jsii-fixture");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -400,6 +501,192 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class ImplementJsiiIface extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      method() {
+        return;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.ImplementJsiiIface-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const ImplementJsiiIfaceClient = ${ImplementJsiiIface._toInflightType()};
+            const client = new ImplementJsiiIfaceClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "inflight_method": [
+          ],
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class ImplementInflightIfaceInPreflightClass extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.ImplementInflightIfaceInPreflightClass-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const ImplementInflightIfaceInPreflightClassClient = ${ImplementInflightIfaceInPreflightClass._toInflightType()};
+            const client = new ImplementInflightIfaceInPreflightClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "inflight_method": [
+          ],
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class $Closure4 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure4Client = ${$Closure4._toInflightType()};
+            const client = new $Closure4Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class ImplInflightIfaceInInflightClass extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.ImplInflightIfaceInInflightClass-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const ImplInflightIfaceInInflightClassClient = ${ImplInflightIfaceInInflightClass._toInflightType()};
+            const client = new ImplInflightIfaceInInflightClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "inflight_method": [
+          ],
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class ImplInflightIfaceInPreflightClass extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.ImplInflightIfaceInPreflightClass-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const ImplInflightIfaceInPreflightClassClient = ${ImplInflightIfaceInPreflightClass._toInflightType()};
+            const client = new ImplInflightIfaceInPreflightClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "inflight_method": [
+          ],
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class ImplPreflightIfaceInPreflightClass extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      method() {
+        return;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.ImplPreflightIfaceInPreflightClass-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const ImplPreflightIfaceInPreflightClassClient = ${ImplPreflightIfaceInPreflightClass._toInflightType()};
+            const client = new ImplPreflightIfaceInPreflightClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
     const x = new A(this, "A");
     const y = new $Closure1(this, "$Closure1");
     const i3 = ((() => {
@@ -411,6 +698,7 @@ class $Root extends $stdlib.std.Resource {
     const z = new Dog(this, "Dog");
     const w = new Terrier(this, "Terrier");
     const f = new $Closure3(this, "$Closure3");
+    new $Closure4(this, "$Closure4");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
