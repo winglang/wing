@@ -10,12 +10,20 @@ export class QueueSetConsumerHandlerClient implements IFunctionHandlerClient {
     this.handler = handler;
   }
   public async handle(event?: Json) {
-    // let parsed = JSON.stringify(event ?? "{}");
-    // if (!parsed.messages) throw new Error('No "messages" field in event.');
-    // for (const $message of parsed.messages) {
-    //   await this.handler.handle($message);
-    // }
-    this.handler;
-    return event;
+    if (!event) {
+      throw new Error("Invalid topic message event");
+    }
+
+    const typedEvent = event as unknown as { messages: string[] };
+
+    if (!typedEvent.messages) {
+      throw new Error('No "messages" field in event.');
+    }
+
+    for (const message of typedEvent.messages) {
+      await this.handler.handle(message);
+    }
+
+    return undefined;
   }
 }
