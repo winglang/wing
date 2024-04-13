@@ -6,7 +6,6 @@ import { normalPath } from "./misc";
 const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
 
 export interface Bundle {
-  entrypointPath: string;
   directory: string;
   hash: string;
   outfilePath: string;
@@ -94,7 +93,6 @@ export function createBundle(
     .digest("hex");
 
   return {
-    entrypointPath: outfile,
     directory: outdir,
     hash: codeHash,
     outfilePath: outfile,
