@@ -484,7 +484,7 @@ export const createAppRouter = () => {
           input.resourcePath,
         ) as IFunctionClient;
         return {
-          value: await client.invoke(""),
+          value: await client.invoke(undefined),
         };
       }),
 
@@ -499,7 +499,7 @@ export const createAppRouter = () => {
         const client = simulator.getResource(
           input.resourcePath,
         ) as IFunctionClient;
-        await client.invoke("");
+        await client.invoke(undefined);
       }),
 
     "app.analytics": createProcedure.query(async ({ ctx }) => {
