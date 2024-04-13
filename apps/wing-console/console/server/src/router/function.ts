@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import type { IFunctionClient } from "../wingsdk.js";
+import type { IFunctionClient, Json } from "../wingsdk.js";
 
 export type ResponseEnvelope =
   | {
       success: true;
-      response: string | undefined;
+      response: Json | undefined;
     }
   | {
       success: false;
