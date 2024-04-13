@@ -2,7 +2,7 @@
 // so avoid importing anything heavy here.
 import { deepStrictEqual, notDeepStrictEqual } from "node:assert";
 import type { Construct } from "constructs";
-import { Node } from "./std/node";
+import type { Node } from "./std/node";
 
 export function eq(a: any, b: any): boolean {
   try {
@@ -39,6 +39,8 @@ export function range(start: number, end: number, inclusive: boolean) {
 }
 
 export function nodeof(construct: Construct): Node {
+  // Should only be used preflight, avoid bundling
+  const Node = eval("require('./std/node').Node");
   return Node.of(construct);
 }
 
@@ -51,4 +53,26 @@ export function unwrap<T>(value: T): T | never {
     return value;
   }
   throw new Error("Unexpected nil");
+}
+
+export function createExternRequire(dirname: string) {
+  return (externPath: string) => {
+    // using eval to always avoid bundling
+    const jiti: typeof import("jiti").default = eval("require('jiti')");
+    const esbuild: typeof import("esbuild") = eval("require('esbuild')");
+
+    const newRequire = jiti(dirname, {
+      sourceMaps: true,
+      interopDefault: true,
+      transform(opts) {
+        return esbuild.transformSync(opts.source, {
+          format: "cjs",
+          target: "node20",
+          sourcemap: "inline",
+          loader: opts.ts ? "ts" : "js",
+        });
+      },
+    });
+    return newRequire(externPath);
+  };
 }

@@ -1048,6 +1048,7 @@ async handle(message) {
         "deps": [
           "root/my_queue/SetConsumer0",
           "root/my_queue",
+          "root/my_queue/Policy",
         ],
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
@@ -1353,6 +1354,7 @@ async handle(message) {
         "deps": [
           "root/my_queue/SetConsumer0",
           "root/my_queue",
+          "root/my_queue/Policy",
         ],
         "path": "root/my_queue/QueueEventMapping0",
         "props": {

@@ -120,6 +120,13 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
       }
     }
 
+    // Check if package.json has non-empty "dependencies"
+    if (pkgJson.dependencies && Object.keys(pkgJson.dependencies).length > 0) {
+      throw new Error(
+        `Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead.`
+      );
+    }
+
     // move compiler output
     await fs.rename(compilerOutputDir, path.join(workdir, compilerOutputFolder));
 

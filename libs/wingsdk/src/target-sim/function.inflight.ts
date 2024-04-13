@@ -115,7 +115,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   private async createBundle(): Promise<void> {
     this.bundle = await Sandbox.createBundle(this.originalFile, (msg) => {
-      this.addTrace(msg);
+      this.addTrace(msg, TraceType.SIMULATOR);
     });
   }
 
@@ -158,15 +158,15 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       },
       timeout: this.timeout,
       log: (internal, _level, message) => {
-        this.addTrace(message, internal);
+        this.addTrace(message, internal ? TraceType.SIMULATOR : TraceType.LOG);
       },
     });
   }
 
-  private addTrace(message: string, internal: boolean = true) {
+  private addTrace(message: string, type: TraceType) {
     this.context.addTrace({
       data: { message },
-      type: internal ? TraceType.RESOURCE : TraceType.LOG,
+      type,
       sourcePath: this.context.resourcePath,
       sourceType: FUNCTION_FQN,
       timestamp: new Date().toISOString(),

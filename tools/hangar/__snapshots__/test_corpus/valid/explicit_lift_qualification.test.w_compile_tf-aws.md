@@ -63,6 +63,28 @@ module.exports = function({ $inflight_closure }) {
 //# sourceMappingURL=inflight.$Closure3-1.cjs.map
 ```
 
+## inflight.$Closure4-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $bar }) {
+  class $Closure4 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      ;
+      const x = $bar;
+      $helpers.assert($helpers.eq((await x.method()), "ahoy there"), "x.method() == \"ahoy there\"");
+    }
+  }
+  return $Closure4;
+}
+//# sourceMappingURL=inflight.$Closure4-1.cjs.map
+```
+
 ## inflight.Foo-1.cjs
 ```cjs
 "use strict";
@@ -84,6 +106,23 @@ module.exports = function({ $bucket, $put_and_list }) {
   return Foo;
 }
 //# sourceMappingURL=inflight.Foo-1.cjs.map
+```
+
+## inflight.PreflightClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class PreflightClass {
+    constructor({  }) {
+    }
+    async method() {
+      return "ahoy there";
+    }
+  }
+  return PreflightClass;
+}
+//# sourceMappingURL=inflight.PreflightClass-1.cjs.map
 ```
 
 ## main.tf.json
@@ -141,6 +180,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -286,6 +326,71 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class PreflightClass extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.PreflightClass-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const PreflightClassClient = ${PreflightClass._toInflightType()};
+            const client = new PreflightClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "method": [
+          ],
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class $Closure4 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
+            $bar: ${$stdlib.core.liftObject(bar)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure4Client = ${$Closure4._toInflightType()};
+            const client = new $Closure4Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [bar, ["method"]],
+          ],
+          "$inflight_init": [
+            [bar, []],
+          ],
+        });
+      }
+    }
     const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     (bucket.addObject("k", "value"));
     const put_and_list = ["put", "list"];
@@ -293,6 +398,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit method lift qualification", new $Closure1(this, "$Closure1"));
     const inflight_closure = new $Closure2(this, "$Closure2");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit closure lift qualification", new $Closure3(this, "$Closure3"));
+    const bar = new PreflightClass(this, "PreflightClass");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit interface lift qualification", new $Closure4(this, "$Closure4"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
