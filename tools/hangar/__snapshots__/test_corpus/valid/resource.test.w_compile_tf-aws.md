@@ -89,7 +89,7 @@ module.exports = function({ $__parent_this_4_q }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $bigOlPublisher }) {
+module.exports = function({ $bigOlPublisher, $util_Util }) {
   class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -98,7 +98,11 @@ module.exports = function({ $bigOlPublisher }) {
     }
     async handle() {
       (await $bigOlPublisher.publish("foo"));
-      const count = (await $bigOlPublisher.getObjectCount());
+      (await $util_Util.waitUntil((async () => {
+        const count = (await $bigOlPublisher.getObjectCount());
+        return $helpers.eq(count, 2);
+      })));
+      $helpers.assert($helpers.eq((await $bigOlPublisher.getObjectCount()), 2), "bigOlPublisher.getObjectCount() == 2");
     }
   }
   return $Closure5;
@@ -704,7 +708,9 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -1029,6 +1035,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.cjs")({
             $bigOlPublisher: ${$stdlib.core.liftObject(bigOlPublisher)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }

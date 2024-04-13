@@ -1441,10 +1441,14 @@ class Boo extends Foo {
 ```
 
 Classes can inherit and extend other classes using the `extends` keyword.  
-Classes can implement interfaces iff the interfaces do not contain `inflight`.
+Classes can implement multiple interfaces using the `impl` keyword. 
+Inflight classes may only implement inflight interfaces.
 
 ```TS
-class Foo {
+interface IFoo {
+  method(): void;
+}
+class Foo impl IFoo {
   x: num;
   new() { this.x = 0; }
   pub method() { }
@@ -1577,7 +1581,12 @@ of methods with different phases is not allowed as well.
 
 Interfaces represent a contract that a class must fulfill.
 Interfaces are defined with the `interface` keyword.
-Currently, preflight interfaces are allowed, while inflight interfaces are not supported yet (see https://github.com/winglang/wing/issues/1961).
+Interfaces may be either preflight interfaces or inflight interfaces.
+Preflight interfaces are defined in preflight scope and can contain both preflight and inflight methods.
+Only preflight classes may implement preflight interfaces.
+Inflight interfaces are either defined with the `inflight` modifier in preflight scope or simply defined in inflight scope.
+All methods of inflight interfaces are implicitly inflight (no need to use the `inflight` keyword).
+Since both preflight and inflight classes can have inflight methods defined inside them, they are both capable of implementing inflight interfaces.
 `impl` keyword is used to implement an interface or multiple interfaces that are
 separated with commas.
 
@@ -1594,7 +1603,7 @@ Interface fields are not supported.
 >   inflight method3(): void;
 > }
 >
-> interface IMyInterface2 {
+> inflight interface IMyInterface2 {
 >   method2(): str; 
 > }
 >
@@ -1610,7 +1619,7 @@ Interface fields are not supported.
 >     return "sample: {x}";
 >   }
 >   inflight method3(): void { }
->   method2(): str {
+>   inflight method2(): str {
 >     return this.field2;
 >   }
 > }
@@ -1876,7 +1885,8 @@ Mapping JSII types to Wing types:
 
 ## 5.2 JavaScript
 
-The `extern "<commonjs module path>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module must be a relative path and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+The `extern "<javascript module path>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module must be a relative path and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+This module can be either CJS or ESM and may be written in JavaScript or TypeScript.
 
 In the following example, the static inflight method `makeId` is implemented
 in `helper.js`:
@@ -1911,13 +1921,7 @@ matching name (without any case conversion).
 
 Extern methods do not support access to class's members through `this`, so they must be declared `static`.
 
-### 5.2.1 TypeScript
-
-It is possible to use TypeScript to write helpers, but at the moment this is not
-directly supported by Wing. This means that you will need to setup the TypeScript toolchain
-to compile your code to JavaScript and then use `extern` against the JavaScript file.
-
-### 5.2.2 Type model
+### 5.2.1 Type model
 
 The table below shows the mapping between Wing types and JavaScript values, shown with TypeScript types.
 When calling **extern** function, the parameter and return types are **assumed** to be satisfied by the called function.

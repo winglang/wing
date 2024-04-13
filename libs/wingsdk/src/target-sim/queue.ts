@@ -27,6 +27,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly retentionPeriod: Duration;
   private readonly dlq?: cloud.DeadLetterQueueProps;
   private readonly policy: Policy;
+
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
@@ -113,28 +114,34 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       functionHandler,
       props
     );
-    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = "setConsumer()";
+    const fnNode = Node.of(fn);
+    fnNode.sourceModule = SDK_SOURCE_MODULE;
+    fnNode.title = "setConsumer()";
 
-    new EventMapping(this, App.of(this).makeId(this, "QueueEventMapping"), {
-      subscriber: fn,
-      publisher: this,
-      subscriptionProps: {
-        batchSize: props.batchSize ?? 1,
-      },
-    });
-
-    Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "setConsumer()",
-    });
+    const mapping = new EventMapping(
+      this,
+      App.of(this).makeId(this, "QueueEventMapping"),
+      {
+        subscriber: fn,
+        publisher: this,
+        subscriptionProps: {
+          batchSize: props.batchSize ?? 1,
+        },
+      }
+    );
 
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
     this.policy.addStatement(
       fn,
       SimFunctionInflightMethods.HAS_AVAILABLE_WORKERS
     );
+    mapping.node.addDependency(this.policy);
+
+    Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "setConsumer()",
+    });
 
     return fn;
   }

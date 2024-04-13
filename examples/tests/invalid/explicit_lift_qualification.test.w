@@ -1,8 +1,16 @@
 bring cloud;
 
+interface IPreflightInterface {
+  inflight method(): void;
+}
+class PreflightClass impl IPreflightInterface {
+  pub inflight method(): void {}
+}
+
 let bucket = new cloud.Bucket();
 
 let prelight_string = "hi";
+let preflight_class = new PreflightClass();
 
 class Foo {
   pub inflight mehtod1() {
@@ -36,5 +44,9 @@ class Foo {
     let b = bucket;
     b.put("k", "v"); // With no explicit qualification this should be an error
     //^ Expression of type "Bucket" references an unknown preflight object
+
+    let i: IPreflightInterface = preflight_class;
+    i.method(); // With no explicit qualification this should be an error
+    //^ Expression of type "IPreflightInterface" references an unknown preflight object
   }
 }

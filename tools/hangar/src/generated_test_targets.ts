@@ -55,13 +55,16 @@ export async function compileTest(
     if (!include.find((f) => subpath.includes(f))) {
       continue;
     }
-    if ((subpath.endsWith(".js") || subpath.endsWith(".cjs")) && !includeJavaScriptInSnapshots) {
+    if (
+      (subpath.endsWith(".js") || subpath.endsWith(".cjs")) &&
+      !includeJavaScriptInSnapshots
+    ) {
       continue;
     }
     let fileContents = await fs.readFile(dotFile, "utf8");
 
     // ensure no absolute requires are included in the snapshot
-    if(/require\("(\/|\w:).*\/(.+)"\)/g.test(fileContents)) {
+    if (/require\("(\/|\w:).*\/(.+)"\)/g.test(fileContents)) {
       throw new Error(`Found absolute path in ${dotFile}`);
     }
 

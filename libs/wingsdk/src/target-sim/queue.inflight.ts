@@ -48,6 +48,7 @@ export class Queue
 
   public async init(context: ISimulatorContext): Promise<QueueAttributes> {
     this._context = context;
+    await this.processLoop.start();
     return {};
   }
 
@@ -312,6 +313,7 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
 
 interface LoopController {
   stop(): Promise<void>;
+  start(): Promise<void>;
 }
 
 /**
@@ -356,8 +358,10 @@ function runEvery(interval: number, fn: () => Promise<void>): LoopController {
         await stopPromise; // wait for the loop to finish
       }
     },
+    async start() {
+      void loop();
+    },
   };
 
-  void loop(); // start the loop
   return controller;
 }
