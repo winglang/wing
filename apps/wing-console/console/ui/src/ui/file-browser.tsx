@@ -20,9 +20,9 @@ import { useCallback, useContext, useMemo, useRef, useState } from "react";
 
 import { LayoutContext, LayoutType } from "../layout/layout-provider.js";
 
-export interface BucketInteractionProps {
-  selectedEntries: string[];
-  entries: TreeEntry[];
+export interface FileBrowserProps {
+  selectedFiles: string[];
+  files: TreeEntry[];
   fileInputId: string;
   selectedFile: string;
   isLoading: boolean;
@@ -35,9 +35,9 @@ export interface BucketInteractionProps {
   onCurrentEntryChange: (index: string | undefined) => void;
 }
 
-export const BucketInteraction = ({
-  selectedEntries,
-  entries,
+export const FileBrowser = ({
+  selectedFiles,
+  files,
   fileInputId,
   selectedFileData,
   selectedFile,
@@ -48,7 +48,7 @@ export const BucketInteraction = ({
   onUploadSelectedFilesClick,
   onSelectedEntriesChange,
   onCurrentEntryChange,
-}: BucketInteractionProps) => {
+}: FileBrowserProps) => {
   const { theme } = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -82,13 +82,13 @@ export const BucketInteraction = ({
         <div className="flex items-center gap-1">
           <Button
             label="Download"
-            disabled={selectedEntries.length === 0}
+            disabled={selectedFiles.length === 0}
             onClick={onDownloadSelectedFilesClick}
             dataTestid="cloud.bucket:download"
           />
           <Button
             label="Delete"
-            disabled={selectedEntries.length === 0}
+            disabled={selectedFiles.length === 0}
             onClick={onDeleteSelectedFilesClick}
             dataTestid="cloud.bucket:delete-file"
           />
@@ -113,7 +113,7 @@ export const BucketInteraction = ({
         </div>
       </div>
 
-      {entries.length === 0 && (
+      {files.length === 0 && (
         <div
           className={classNames(
             theme.bgInput,
@@ -127,11 +127,11 @@ export const BucketInteraction = ({
           No files
         </div>
       )}
-      {entries.length > 0 && (
+      {files.length > 0 && (
         <Tree
           currentRef={currentRef}
-          entries={entries}
-          selectedEntries={selectedEntries}
+          entries={files}
+          selectedEntries={selectedFiles}
           onCurrentChange={onCurrentEntryChange}
           onSelectionChange={onSelectedEntriesChange}
           onOpenEntry={onOpenEntry}
