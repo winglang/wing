@@ -61,6 +61,7 @@ mod lifting;
 pub mod lsp;
 pub mod parser;
 pub mod struct_schema;
+mod ts_traversal;
 pub mod type_check;
 mod type_check_assert;
 mod valid_json_visitor;

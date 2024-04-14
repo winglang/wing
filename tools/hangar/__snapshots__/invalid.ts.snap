@@ -1560,18 +1560,18 @@ Duration <DURATION>"
 `;
 
 exports[`function_call_arity.test.w 1`] = `
-"error: Unexpected 'identifier'
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:62
+"error: Positional arguments must come before named arguments
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:61
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
-   |                                                              ^^^^^ Unexpected 'identifier'
+   |                                                             ^^^^^^^ Positional arguments must come before named arguments
 
 
-error: Unexpected 'identifier'
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:71
+error: Positional arguments must come before named arguments
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:70
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
-   |                                                                       ^^^^^ Unexpected 'identifier'
+   |                                                                      ^^^^^^^ Positional arguments must come before named arguments
 
 
 error: Expected 2 positional argument(s) but got 0
@@ -1642,6 +1642,13 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
    |                            ^ Expected type to be \\"bool\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"Options\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:61
+   |
+31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
+   |                                                             ^^^^^^^ Expected type to be \\"Options\\", but got \\"str\\" instead
 
 
 
@@ -1717,11 +1724,11 @@ Duration <DURATION>"
 `;
 
 exports[`function_variadic_definition.test.w 1`] = `
-"error: Unknown parser error
+"error: Positional arguments must come before named arguments
    --> ../../../examples/tests/invalid/function_variadic_definition.test.w:15:13
    |
 15 | f5(args: 1, 2);
-   |             ^ Unknown parser error
+   |             ^ Positional arguments must come before named arguments
 
 
 error: Variadic parameters must always be the last parameter in a function.
@@ -2818,10 +2825,10 @@ exports[`missing_semicolon.test.w 1`] = `
 
 
 error: Expected ';'
-   --> ../../../examples/tests/invalid/missing_semicolon.test.w:16:9
+   --> ../../../examples/tests/invalid/missing_semicolon.test.w:16:10
    |
 16 | let x = 5 //
-   |         ^ Expected ';'
+   |          ^ Expected ';'
 
 
 error: Expected '}'
@@ -3821,11 +3828,11 @@ Duration <DURATION>"
 `;
 
 exports[`struct_expansion.test.w 1`] = `
-"error: Unexpected 'keyword_argument'
-   --> ../../../examples/tests/invalid/struct_expansion.test.w:11:15
+"error: Positional arguments must come before named arguments
+   --> ../../../examples/tests/invalid/struct_expansion.test.w:11:33
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |               ^^^^^^^^^^^^^^^^ Unexpected 'keyword_argument'
+   |                                 ^^^^^^ Positional arguments must come before named arguments
 
 
 error: \\"bublic\\" is not a field of \\"BucketProps\\"
@@ -3868,11 +3875,18 @@ error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflig
    |   ^^^^^^^ Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (event: str): unknown\\" instead
 
 
-error: Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
+error: \\"file\\" is not a field of \\"BucketPutOptions\\"
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \\"file\\" is not a field of \\"BucketPutOptions\\"
+
+
+error: Missing required field \\"contentType\\" from \\"BucketPutOptions\\"
+   --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
+   |
+11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Missing required field \\"contentType\\" from \\"BucketPutOptions\\"
 
 
 
