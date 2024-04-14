@@ -53,6 +53,7 @@ export interface VSCodeDebugger {
   readonly type: string;
   readonly runtime?: string;
   readonly program?: string;
+  readonly languages: string[];
   readonly request?: string;
   readonly variables?: string;
   readonly configurationAttributes?: any;

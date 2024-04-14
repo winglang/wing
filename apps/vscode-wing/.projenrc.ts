@@ -113,6 +113,7 @@ const contributes: VSCodeExtensionContributions = {
       type: "wing",
       label: "Wing Debug",
       program: "",
+      languages: ["wing"],
       configurationAttributes: {
         launch: {
           entrypoint: {
