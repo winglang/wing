@@ -296,6 +296,10 @@
       "type": "bundled"
     },
     {
+      "name": "jiti",
+      "type": "bundled"
+    },
+    {
       "name": "mime-types",
       "type": "bundled"
     },

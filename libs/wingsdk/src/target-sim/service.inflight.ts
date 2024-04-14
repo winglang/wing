@@ -38,7 +38,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     this.bundle = await Sandbox.createBundle(
       this.resolvedSourceCodeFile,
       (msg) => {
-        this.addTrace(msg);
+        this.addTrace(msg, TraceType.SIMULATOR);
       }
     );
   }
@@ -75,7 +75,10 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     await this.createBundlePromise;
 
     if (!this.bundle) {
-      this.addTrace("Failed to start service: bundle is not created");
+      this.addTrace(
+        "Failed to start service: bundle is not created",
+        TraceType.RESOURCE
+      );
       return;
     }
 
@@ -86,7 +89,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
         WING_SIMULATOR_CALLER: this.context.resourceHandle,
       },
       log: (internal, _level, message) => {
-        this.addTrace(message, internal);
+        this.addTrace(message, internal ? TraceType.SIMULATOR : TraceType.LOG);
       },
     });
 
@@ -94,7 +97,10 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       await this.sandbox.call("start");
       this.running = true;
     } catch (e: any) {
-      this.addTrace(`Failed to start service: ${e.message}`);
+      this.addTrace(
+        `Failed to start service: ${e.message}`,
+        TraceType.RESOURCE
+      );
     }
   }
 
@@ -110,7 +116,10 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       await this.sandbox.call("stop");
       await this.sandbox.cleanup();
     } catch (e: any) {
-      this.addTrace(`Failed to stop service: ${e.message} ${e.stack}`);
+      this.addTrace(
+        `Failed to stop service: ${e.message} ${e.stack}`,
+        TraceType.RESOURCE
+      );
     }
   }
 
@@ -118,10 +127,10 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     return this.running;
   }
 
-  private addTrace(message: string, internal: boolean = true) {
+  private addTrace(message: string, type: TraceType) {
     this.context.addTrace({
       data: { message },
-      type: internal ? TraceType.RESOURCE : TraceType.LOG,
+      type,
       sourcePath: this.context.resourcePath,
       sourceType: SERVICE_FQN,
       timestamp: new Date().toISOString(),

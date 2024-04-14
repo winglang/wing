@@ -1,3 +1,5 @@
+bring "jsii-fixture" as jsii_fixture;
+
 // interface extend loop
 interface IA extends IB {
                   // ^^ Unknown symbol "IB"
@@ -41,4 +43,27 @@ interface IPointy {
 interface IMissingParamTypes {
   method1(a, b): void;
   //^ Expected type annotation
+}
+
+// Can't implement preflight interface on inflight class
+interface IPreflight {
+  method1(): void;
+}
+inflight class CImplPreflightIface impl IPreflight {
+  pub method1(): void {}
+}
+
+// Can't extend preflight interface on inflight interface
+inflight interface IInflightExtendsPreflight extends IPreflight {
+  method2(): void;
+}
+
+// Inflight interfaces can't extend JSII interfaces
+inflight interface IInflightExtendsJsii extends jsii_fixture.ISomeInterface {
+  method(): void;
+}
+
+// Inflight classes can't implement JSII interfaces
+inflight class CInflightImplJsii impl jsii_fixture.ISomeInterface {
+  pub method(): void {}
 }

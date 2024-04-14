@@ -40,7 +40,7 @@ module.exports = grammar({
 
     // These modifier conflicts should be solved through GLR parsing
     [$.field_modifiers, $.method_modifiers],
-    [$.class_modifiers, $.closure_modifiers],
+    [$.class_modifiers, $.closure_modifiers, $.interface_modifiers],
     [$.inflight_method_signature, $.field_modifiers],
   ],
 
@@ -225,14 +225,20 @@ module.exports = grammar({
         $._semicolon
       ),
 
+    /// Interfaces
+
+    interface_modifiers: ($) =>
+      repeat1(choice($.access_modifier, $.inflight_specifier)),
+
     interface_definition: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
+        optional(field("modifiers", $.interface_modifiers)),
         "interface",
         field("name", $.identifier),
         optional(seq("extends", field("extends", commaSep1($.custom_type)))),
         field("implementation", $.interface_implementation)
       ),
+
     interface_implementation: ($) =>
       braced(
         repeat(
@@ -422,15 +428,7 @@ module.exports = grammar({
     argument_list: ($) =>
       seq(
         "(",
-        choice(
-          commaSep($.positional_argument),
-          commaSep($.keyword_argument),
-          seq(
-            commaSep($.positional_argument),
-            ",",
-            commaSep($.keyword_argument)
-          )
-        ),
+        commaSep(choice($.positional_argument, $.keyword_argument)),
         ")"
       ),
 
@@ -569,13 +567,15 @@ module.exports = grammar({
     _container_value_type: ($) =>
       seq("<", field("type_parameter", $._type), ">"),
 
-    unwrap_or: ($) => prec.right(PREC.UNWRAP_OR,
-      seq(
-        field("left", $.expression),
-        field("op", "??"),
-        field("right", $.expression)
-      )
-    ),
+    unwrap_or: ($) =>
+      prec.right(
+        PREC.UNWRAP_OR,
+        seq(
+          field("left", $.expression),
+          field("op", "??"),
+          field("right", $.expression)
+        )
+      ),
 
     optional_unwrap: ($) =>
       prec.right(PREC.OPTIONAL_UNWRAP, seq($.expression, "!")),

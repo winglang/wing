@@ -79,6 +79,7 @@ module.exports = function({  }) {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {
   ...require("./preflight.lib-1.cjs"),
 };
@@ -98,6 +99,7 @@ export * from "./preflight.lib-1.cjs"
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class ParentClass extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);

@@ -2,7 +2,7 @@ export default interface extern {
   getData: () => Promise<string>,
   getGreeting: (name: string) => string,
   getUuid: () => Promise<string>,
-  preflightBucket: (bucket: Bucket, id: string) => Readonly<any>,
+  preflightBucket: (bucket: Bucket, id: string) => void,
   print: (msg: string) => Promise<void>,
   regexInflight: (pattern: string, text: string) => Promise<boolean>,
 }
