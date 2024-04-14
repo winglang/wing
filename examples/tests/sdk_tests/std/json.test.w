@@ -179,3 +179,24 @@ test "deepCopy(), deepCopyMut()" {
 
   assert(copyMut.get("object") == mutation);
 }
+
+test "delete() for MutJson" {
+  let mutObj = MutJson { x: 1, y: 2 };
+  mutObj.delete("x");
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
+
+  let JSON_PROPERTY_DOES_NOT_EXIST_ERROR = "Json property \"x\" does not exist";
+  assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
+    mutObj.get("x");
+  });
+  assert(mutObj.delete("random key that doesn't exist") == true);
+}

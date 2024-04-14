@@ -453,4 +453,17 @@ export class MutJson {
   public tryAsBool(): boolean | undefined {
     throw new Error("Macro");
   }
+
+    /**
+   * Removes the specified element from a map.
+   *
+   * @macro (delete ($self$)[$args$])
+   *
+   * @param key The key
+   * @returns true if the given key is no longer present
+   */
+    public delete(key: string): boolean {
+      key;
+      throw new Error("Macro");
+    }
 }
