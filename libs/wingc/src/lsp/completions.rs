@@ -411,6 +411,12 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							};
 
 							(fields, *structy)
+						} else if let ExprKind::JsonMapLiteral { fields } = &expr.kind {
+							let Some(structy) = types.get_type_from_json_cast(expr.id) else {
+								return vec![];
+							};
+
+							(fields, *structy)
 						} else {
 							return vec![];
 						};
@@ -1616,6 +1622,18 @@ struct Foo {
 }
 
 Foo { x: "hi", }
+            //^
+"#
+	);
+
+	test_completion_list!(
+		struct_literal_empty_nospace,
+		r#"
+struct Foo {
+	x: str;
+}
+
+let x: Foo = {}
             //^
 "#
 	);
