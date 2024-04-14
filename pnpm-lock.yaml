@@ -1380,6 +1380,9 @@ importers:
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
+      vlq:
+        specifier: ^2.0.4
+        version: 2.0.4
       yaml:
         specifier: ^2.3.2
         version: 2.3.2
@@ -23428,6 +23431,10 @@ packages:
       - supports-color
       - terser
     dev: true
+
+  /vlq@2.0.4:
+    resolution: {integrity: sha512-aodjPa2wPQFkra1G8CzJBTHXhgk3EVSwxSWXNPr1fgdFLUb8kvLV1iEb6rFgasIsjP82HWI6dsb5Io26DDnasA==}
+    dev: false
 
   /vscode-jsonrpc@8.1.0:
     resolution: {integrity: sha512-6TDy/abTQk+zDGYazgbIPc+4JoXdwC8NHU9Pbn4UJP1fehUyZmM4RHp5IthX7A6L5KS30PRui+j+tbbMMMafdw==}

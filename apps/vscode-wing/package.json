@@ -84,7 +84,8 @@
     "Programming Languages"
   ],
   "activationEvents": [
-    "onLanguage:wing"
+    "onLanguage:wing",
+    "onDebug"
   ],
   "contributes": {
     "breakpoints": [
@@ -108,6 +109,49 @@
           "light": "resources/icon-light.png",
           "dark": "resources/icon-dark.png"
         }
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "wing",
+        "label": "Wing Debug",
+        "program": "",
+        "configurationAttributes": {
+          "launch": {
+            "entrypoint": {
+              "type": "string",
+              "description": "The entrypoint to run",
+              "default": "${file}"
+            },
+            "arguments": {
+              "type": "string",
+              "description": "Wing CLI arguments",
+              "default": "test"
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "label": "Wing Debug: Launch",
+            "description": "Launch a Wing program",
+            "body": {
+              "type": "wing",
+              "request": "launch",
+              "name": "Launch"
+            }
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Wing Debug: Launch",
+            "description": "Launch a Wing program",
+            "body": {
+              "type": "wing",
+              "request": "launch",
+              "name": "Launch"
+            }
+          }
+        ]
       }
     ],
     "grammars": [
