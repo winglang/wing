@@ -13,7 +13,7 @@ export class Platform implements IPlatform {
     return new App(appProps);
   }
 
-  public async createSecrets(secrets: { [key: string]: string }): Promise<string> {
+  public async storeSecrets(secrets: { [key: string]: string }): Promise<string> {
     let existingSecretsContent = "";
     try {
       existingSecretsContent = fs.readFileSync('./.env', 'utf8');
@@ -21,10 +21,10 @@ export class Platform implements IPlatform {
   
     const existingSecrets = existingSecretsContent.split('\n')
       .filter(line => line.trim() !== '')
-      .reduce((acc, line) => {
+      .reduce((s, line) => {
         const [key, value] = line.split('=', 2);
-        acc[key] = value;
-        return acc;
+        s[key] = value;
+        return s;
       }, {} as { [key: string]: string });
   
     for (const key in secrets) {
@@ -36,8 +36,7 @@ export class Platform implements IPlatform {
       .join('\n');
 
     fs.writeFileSync('./.env', updatedContent);
-  
-    // Step 5: Return success message
+    
     return "Secrets created/updated for sim platform";
   }
 }
