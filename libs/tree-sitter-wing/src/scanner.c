@@ -105,8 +105,9 @@ static bool scan_automatic_semicolon(TSLexer * lexer) {
 
   skip(lexer);
 
-  if (!scan_whitespace_and_comments(lexer))
-    return false;
+  while (iswspace(lexer -> lookahead)) {
+      skip(lexer);
+  }
 
   switch (lexer -> lookahead) {
   case ',':
@@ -124,8 +125,12 @@ static bool scan_automatic_semicolon(TSLexer * lexer) {
   case '^':
   case '|':
   case '&':
-  case '/':
     return false;
+
+    // Insert a semicolon before `//` and `/*`
+  case '/':
+    skip(lexer);
+    return lexer -> lookahead == '/' || lexer -> lookahead == '*';
 
     // Insert a semicolon before `--` and `++`, but not before binary `+` or `-`.
   case '+':
