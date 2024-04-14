@@ -14206,11 +14206,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-<<<<<<< HEAD
-      typescript: 5.5.0-dev.20240411
-=======
       typescript: 5.5.0-dev.20240414
->>>>>>> c6fccec536c63fc0296a604c21bd5a40ab530be4
     dev: true
 
   /dset@3.1.2:
@@ -22843,13 +22839,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-<<<<<<< HEAD
-  /typescript@5.5.0-dev.20240411:
-    resolution: {integrity: sha512-6MgPdKI7M05MarqCNIN0Shk4TwuEOFDsXIMOaEsvsRfoq32zZ3+fAuzB/y+nhs+Q2yGtEO8Or/NIdWU6t+B75g==}
-=======
   /typescript@5.5.0-dev.20240414:
     resolution: {integrity: sha512-VEXaVJweoalMohUIdPBNAI0OzBuzR6caL8w3XW+R8jewwxn6iD9t2zAO1DkqYmYDDYlu2kp8L61Vk9SDsvv4Hw==}
->>>>>>> c6fccec536c63fc0296a604c21bd5a40ab530be4
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
