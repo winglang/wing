@@ -25,6 +25,18 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nasStr: (): str\n```\n---\nConvert Json element to string if possible.\n\n### Returns\na string."
   sortText: ff|asStr
   insertText: asStr()
+- label: delete
+  kind: 2
+  detail: "(key: str): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\ndelete: (key: str): bool\n```\n---\nRemoves the specified element from a map.\n### Parameters\n- `key` — `str` — The key.\n\n### Returns\ntrue if the given key is no longer present"
+  sortText: ff|delete
+  insertText: delete($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: get
   kind: 2
   detail: "(key: str): MutJson"

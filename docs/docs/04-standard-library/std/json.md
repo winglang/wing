@@ -417,6 +417,7 @@ Mutable Json.
 | <code><a href="#@winglang/sdk.std.MutJson.asBool">asBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asNum">asNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asStr">asStr</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
@@ -452,6 +453,22 @@ asStr(): str
 ```
 
 Convert Json element to string if possible.
+
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutJson.delete"></a>
+
+```wing
+delete(key: str): bool
+```
+
+Removes the specified element from a map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.delete.parameter.key"></a>
+
+- *Type:* str
+
+The key.
+
+---
 
 ##### `get` <a name="get" id="@winglang/sdk.std.MutJson.get"></a>
 
