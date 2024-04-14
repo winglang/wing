@@ -4,8 +4,7 @@ version = "0.0.0"
 edition = "2021"
 
 [dependencies]
-# Waiting for https://github.com/tree-sitter/tree-sitter/pull/3293 to be released
-tree-sitter = { git = "https://github.com/tree-sitter/tree-sitter.git", rev = "a7a47d561d4e64eaf226f93c4d68076afa67fdda" }
+tree-sitter = "0.22.5"
 derivative = "2.2"
 tree-sitter-wing = { path = "../tree-sitter-wing" }
 wingii = { path = "../wingii" }

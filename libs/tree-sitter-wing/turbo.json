@@ -4,7 +4,7 @@
   "pipeline": {
     "build:generate": {
       "inputs": ["!*.wasm", "*", "grammar.js", "src/scanner.c"],
-      "outputs": ["src/**", "!src/scanner.c", "bindings/**", "binding.gyp"]
+      "outputs": ["src/**", "!src/scanner.c"]
     },
     "build:wasm": {
       "dependsOn": ["build:generate"],

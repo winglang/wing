@@ -52,6 +52,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.0",
-    "tree-sitter-cli": "0.22.4"
+    "tree-sitter-cli": "0.22.5"
   }
 }
