@@ -23,7 +23,7 @@ export class PlatformManager {
   private synthHooks: SynthHooks = {};
   private newInstanceOverridesHooks: any[] = [];
   private parameterSchemas: any[] = [];
-  private createSecretsHook: any;
+  private storeSecretsHook: any;
 
   constructor(options: PlatformManagerOptions) {
     this.platformPaths = options.platformPaths ?? [];
@@ -104,11 +104,11 @@ export class PlatformManager {
     });
   }
 
-  public async createSecrets(secretNames: string[]): Promise<any> {
-    if (!this.createSecretsHook) {
+  public async storeSecrets(secretNames: string[]): Promise<any> {
+    if (!this.storeSecretsHook) {
       throw new Error("No createSecrets method found on platform");
     }
-    return await this.createSecretsHook(secretNames);
+    return await this.storeSecretsHook(secretNames);
   }
 
   private collectHooks() {
@@ -143,8 +143,8 @@ export class PlatformManager {
         newInstanceOverrides.push(instance.newInstance.bind(instance));
       }
 
-      if (instance.createSecrets) {
-        this.createSecretsHook = instance.createSecrets.bind(instance);
+      if (instance.storeSecrets) {
+        this.storeSecretsHook = instance.storeSecrets.bind(instance);
       }
     });
 

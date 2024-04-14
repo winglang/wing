@@ -56,7 +56,7 @@ export interface IPlatform {
   validate?(config: any): any;
 
   /**
-   * Hook for creating secrets
+   * Hook for creating and storing secrets
    */
-  createSecrets?(secrets: {[name: string]: string}): Promise<string>;
+  storeSecrets?(secrets: {[name: string]: string}): Promise<string>;
 }

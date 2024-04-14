@@ -28,7 +28,7 @@ export async function secrets(entrypoint?: string, options?: SecretsOptions): Pr
   }
 
   const plaformManager = new PlatformManager({platformPaths: options?.platform})
-  const response = await plaformManager.createSecrets(secretValues);
+  const response = await plaformManager.storeSecrets(secretValues);
 
   console.log(`\n${response}`);
 }
