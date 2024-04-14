@@ -95,8 +95,8 @@ export function createBundle(
   };
 }
 
-interface SourceMap {
-  sourceRoot: string;
+export interface SourceMap {
+  sourceRoot?: string;
   sources: string[];
   sourcesContent: string[];
   mappings: string;
@@ -111,7 +111,7 @@ interface SourceMap {
  * The duplicate sources come from esbuild's strange handling of multiple files being bundled that point to the same source (e.g. inflights that point to one .w file)
  * See https://github.com/evanw/esbuild/issues/933
  */
-function fixSourcemaps(sourcemapData: SourceMap): void {
+export function fixSourcemaps(sourcemapData: SourceMap): void {
   // normalize sourceRoot
   if (sourcemapData.sourceRoot) {
     sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot);
