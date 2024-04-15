@@ -504,13 +504,13 @@ export const ApiInteraction = memo(
                   },
                   {
                     id: "body",
-                    name: `Body ${body ? "*" : ""}`,
+                    name: `Body ${body || bodyPlaceholder ? "*" : ""}`,
                     panel: (
                       <div className="pt-2">
                         <TextArea
                           id={bodyId}
                           containerClassName="w-full"
-                          className="text-sm min-h-[2rem]"
+                          className="text-sm min-h-[6rem]"
                           placeholder={bodyPlaceholder ?? "Body..."}
                           value={body}
                           onInput={(event) =>
