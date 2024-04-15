@@ -208,12 +208,13 @@ export const ApiInteraction = memo(
           method,
           openApiSpec,
         );
+        setBody(JSON.stringify(bodyFromSpec, undefined, 2));
         setBodyPlaceholder(JSON.stringify(bodyFromSpec, undefined, 2));
       },
       [
         openApiSpec,
         setHeaders,
-        setBodyPlaceholder,
+        setBody,
         setQueryParameters,
         setPathVariables,
         queryParameters,
