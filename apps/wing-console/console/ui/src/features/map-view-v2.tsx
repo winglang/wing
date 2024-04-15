@@ -214,7 +214,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
     </div> */}
             <span
               // className="text-sm font-semibold leading-relaxed tracking-wide whitespace-nowrap"
-              className="text-sm font-medium leading-relaxed tracking-wide whitespace-nowrap"
+              className="text-sm font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-500"
             >
               {props.name}
             </span>
