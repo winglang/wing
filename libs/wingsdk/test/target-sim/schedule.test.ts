@@ -12,7 +12,7 @@ console.log("Hello from schedule!");
 test("create a schedule", async () => {
   // GIVEN
   const app = new SimApp();
-  const cron = "*/1 * * * ?";
+  const cron = "*/1 * * * *";
   new cloud.Schedule(app, "my_schedule", { cron });
   const s = await app.startSimulator();
 
@@ -23,6 +23,7 @@ test("create a schedule", async () => {
     },
     path: "root/my_schedule",
     addr: expect.any(String),
+    policy: [],
     props: {
       cronExpression: cron,
     },
@@ -39,7 +40,7 @@ test("schedule with one task with cron", async () => {
   const app = new SimApp();
   const handler = Testing.makeHandler(INFLIGHT_CODE);
   const schedule = new cloud.Schedule(app, "my_schedule", {
-    cron: "* * * * ?",
+    cron: "* * * * *",
   });
   schedule.onTick(handler);
 
@@ -59,12 +60,11 @@ test("schedule with one task using rate of 10m", async () => {
   const schedule = new cloud.Schedule(app, "my_schedule", {
     rate: Duration.fromMinutes(10),
   });
-  const expectedCron = "*/10 * * * ?"; // every 10 minutes cron expression
+  const expectedCron = "*/10 * * * *"; // every 10 minutes cron expression
   schedule.onTick(handler);
   const s = await app.startSimulator();
 
   // THEN
-  await s.stop();
   expect(app.snapshot()).toMatchSnapshot();
   expect(s.getResourceConfig("/my_schedule")).toEqual({
     attrs: {
@@ -72,11 +72,14 @@ test("schedule with one task using rate of 10m", async () => {
     },
     path: "root/my_schedule",
     addr: expect.any(String),
+    policy: [],
     props: {
       cronExpression: expectedCron,
     },
     type: cloud.SCHEDULE_FQN,
   });
+
+  await s.stop();
 });
 
 test("schedule with one task using rate of 3h", async () => {
@@ -86,12 +89,11 @@ test("schedule with one task using rate of 3h", async () => {
   const schedule = new cloud.Schedule(app, "my_schedule", {
     rate: Duration.fromHours(3),
   });
-  const expectedCron = "* */3 * * ?"; // every 3 hours cron expression
+  const expectedCron = "* */3 * * *"; // every 3 hours cron expression
   schedule.onTick(handler);
   const s = await app.startSimulator();
 
   // THEN
-  await s.stop();
   expect(app.snapshot()).toMatchSnapshot();
   expect(s.getResourceConfig("/my_schedule")).toEqual({
     attrs: {
@@ -99,9 +101,12 @@ test("schedule with one task using rate of 3h", async () => {
     },
     path: "root/my_schedule",
     addr: expect.any(String),
+    policy: [],
     props: {
       cronExpression: expectedCron,
     },
     type: cloud.SCHEDULE_FQN,
   });
+
+  await s.stop();
 });

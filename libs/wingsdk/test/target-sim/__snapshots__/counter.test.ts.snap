@@ -7,17 +7,16 @@ exports[`create a counter 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -72,14 +71,6 @@ exports[`create a counter 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -88,9 +79,17 @@ exports[`create a counter 1`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -132,12 +131,12 @@ exports[`create a counter 1`] = `
 
 exports[`dec 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Dec (amount=1).",
   "Dec (amount=1).",
   "Dec (amount=10).",
   "Dec (amount=10).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -148,17 +147,16 @@ exports[`dec 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -213,14 +211,6 @@ exports[`dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -229,9 +219,17 @@ exports[`dec 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -273,12 +271,12 @@ exports[`dec 2`] = `
 
 exports[`inc 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Inc (amount=1).",
   "Inc (amount=1).",
   "Inc (amount=10).",
   "Inc (amount=10).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -289,17 +287,16 @@ exports[`inc 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -354,14 +351,6 @@ exports[`inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -370,9 +359,17 @@ exports[`inc 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -414,12 +411,12 @@ exports[`inc 2`] = `
 
 exports[`key dec 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Dec (amount=1, key: my-key).",
   "Dec (amount=1, key: my-key).",
   "Dec (amount=10, key: my-key).",
   "Dec (amount=10, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -430,17 +427,16 @@ exports[`key dec 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 0,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -495,14 +491,6 @@ exports[`key dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -511,9 +499,17 @@ exports[`key dec 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -555,12 +551,12 @@ exports[`key dec 2`] = `
 
 exports[`key inc 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Inc (amount=1, key: my-key).",
   "Inc (amount=1, key: my-key).",
   "Inc (amount=10, key: my-key).",
   "Inc (amount=10, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -571,17 +567,16 @@ exports[`key inc 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 0,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -636,14 +631,6 @@ exports[`key inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -652,9 +639,17 @@ exports[`key inc 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -696,10 +691,10 @@ exports[`key inc 2`] = `
 
 exports[`key set to new value 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Set (value=5, key: my-key).",
   "Peek (value=5, key: my-key).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -710,17 +705,16 @@ exports[`key set to new value 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 0,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -775,14 +769,6 @@ exports[`key set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -791,9 +777,17 @@ exports[`key set to new value 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -835,10 +829,10 @@ exports[`key set to new value 2`] = `
 
 exports[`set to new value 1`] = `
 [
-  "@winglang/sdk.cloud.Counter created.",
+  "root/my_counter started",
   "Set (value=5).",
   "Peek (value=5).",
-  "@winglang/sdk.cloud.Counter deleted.",
+  "root/my_counter stopped",
 ]
 `;
 
@@ -849,17 +843,16 @@ exports[`set to new value 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_counter": {
         "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
         "path": "root/my_counter",
         "props": {
           "initial": 123,
         },
         "type": "@winglang/sdk.cloud.Counter",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -914,14 +907,6 @@ exports[`set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -930,9 +915,17 @@ exports[`set to new value 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

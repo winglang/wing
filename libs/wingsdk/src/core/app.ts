@@ -155,7 +155,7 @@ export abstract class App extends Construct implements IApp {
    * Parameter registrar of composed platforms
    * @internal
    */
-  protected _platformParameters?: ParameterRegistrar;
+  protected _parameters?: ParameterRegistrar;
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
@@ -187,14 +187,11 @@ export abstract class App extends Construct implements IApp {
    * The parameter registrar for the app, can be used to find and register
    * parameter values that were provided to the wing application.
    */
-  public get platformParameters() {
-    if (!this._platformParameters) {
-      this._platformParameters = new ParameterRegistrar(
-        this,
-        "ParameterRegistrar"
-      );
+  public get parameters() {
+    if (!this._parameters) {
+      this._parameters = new ParameterRegistrar(this, "ParameterRegistrar");
     }
-    return this._platformParameters!;
+    return this._parameters!;
   }
 
   /**

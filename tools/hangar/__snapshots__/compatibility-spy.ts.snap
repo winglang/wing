@@ -494,6 +494,7 @@ exports[`initial.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "initial",
               "peek",
             ],
             "TestRunner": [
@@ -531,6 +532,7 @@ exports[`initial.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "initial",
               "peek",
             ],
             "TestRunner": [
@@ -568,6 +570,7 @@ exports[`initial.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "initial",
               "peek",
             ],
             "TestRunner": [
@@ -619,8 +622,8 @@ exports[`peek.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
-              "inc",
               "peek",
+              "inc",
             ],
             "TestRunner": [
               "findTests",
@@ -636,7 +639,7 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-            "sourcePath": "root/env1/cloud.Counter",
+            "sourcePath": "root/env1/Counter",
             "sourceType": "@winglang/sdk.cloud.Counter",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -647,7 +650,7 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-            "sourcePath": "root/env1/cloud.Counter",
+            "sourcePath": "root/env1/Counter",
             "sourceType": "@winglang/sdk.cloud.Counter",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -658,7 +661,7 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-            "sourcePath": "root/env1/cloud.Counter",
+            "sourcePath": "root/env1/Counter",
             "sourceType": "@winglang/sdk.cloud.Counter",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -669,7 +672,7 @@ exports[`peek.test.w 1`] = `
               "result": "1",
               "status": "success",
             },
-            "sourcePath": "root/env1/cloud.Counter",
+            "sourcePath": "root/env1/Counter",
             "sourceType": "@winglang/sdk.cloud.Counter",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -690,8 +693,8 @@ exports[`peek.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
-              "inc",
               "peek",
+              "inc",
             ],
             "TestRunner": [
               "findTests",
@@ -707,7 +710,7 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-            "sourcePath": "root/env0/cloud.Counter",
+            "sourcePath": "root/env0/Counter",
             "sourceType": "@winglang/sdk.cloud.Counter",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -718,7 +721,7 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-            "sourcePath": "root/env0/cloud.Counter",
+            "sourcePath": "root/env0/Counter",
             "sourceType": "@winglang/sdk.cloud.Counter",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -729,7 +732,7 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-            "sourcePath": "root/env0/cloud.Counter",
+            "sourcePath": "root/env0/Counter",
             "sourceType": "@winglang/sdk.cloud.Counter",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -740,7 +743,7 @@ exports[`peek.test.w 1`] = `
               "result": "1",
               "status": "success",
             },
-            "sourcePath": "root/env0/cloud.Counter",
+            "sourcePath": "root/env0/Counter",
             "sourceType": "@winglang/sdk.cloud.Counter",
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
@@ -775,8 +778,8 @@ exports[`set.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
-              "peek",
               "set",
+              "peek",
             ],
             "TestRunner": [
               "findTests",
@@ -865,8 +868,8 @@ exports[`set.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
-              "peek",
               "set",
+              "peek",
             ],
             "TestRunner": [
               "findTests",

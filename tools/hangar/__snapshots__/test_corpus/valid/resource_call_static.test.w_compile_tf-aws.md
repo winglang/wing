@@ -1,7 +1,7 @@
 # [resource_call_static.test.w](../../../../../examples/tests/valid/resource_call_static.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Another }) {
@@ -17,11 +17,11 @@ module.exports = function({ $Another }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.Another-1.js
-```js
+## inflight.Another-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $globalCounter }) {
@@ -34,7 +34,7 @@ module.exports = function({ $globalCounter }) {
   }
   return Another;
 }
-//# sourceMappingURL=inflight.Another-1.js.map
+//# sourceMappingURL=inflight.Another-1.cjs.map
 ```
 
 ## main.tf.json
@@ -55,11 +55,11 @@ module.exports = function({ $globalCounter }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "cloudCounter": {
+      "Counter": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "cloudCounter"
+            "path": "root/Default/Default/Counter/Default",
+            "uniqueId": "Counter"
           }
         },
         "attribute": [
@@ -70,15 +70,15 @@ module.exports = function({ $globalCounter }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c866f225"
+        "name": "wing-counter-Counter-c824ef62"
       }
     }
   }
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -86,6 +86,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -96,7 +97,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.cjs")({
             $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
           })
         `;
@@ -135,7 +136,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $Another: ${$stdlib.core.liftObject(Another)},
           })
         `;
@@ -162,13 +163,13 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access cloud resource through static methods only", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource_call_static.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

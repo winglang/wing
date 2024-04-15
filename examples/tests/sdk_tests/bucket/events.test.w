@@ -51,8 +51,8 @@ struct CheckHitCountOptions {
   count: num;
 }
 
-let checkHitCount = inflight (opts: CheckHitCountOptions): bool => {
-  return util.waitUntil(inflight () => {
+let checkHitCount = inflight (opts: CheckHitCountOptions): void => {
+  util.waitUntil(inflight () => {
     let var count = 0;
     for u in table.list() {
       if (u.get("key") == opts.key && u.get("operation") == opts.type && u.get("source") == "{opts.source}") {
@@ -74,19 +74,19 @@ new std.Test(inflight () => {
 // https://github.com/winglang/wing/issues/2724
   if (util.env("WING_TARGET") != "tf-aws") {
     // assert that onCreate events about the "a", "b", and "c" objects were each produced exactly 1 time
-    assert(checkHitCount(key: "a", type: "onCreate()", source: Source.anyEvent, count: 1));
-    assert(checkHitCount(key: "b", type: "onCreate()", source: Source.anyEvent, count: 1));
-    assert(checkHitCount(key: "c", type: "onCreate()", source: Source.anyEvent, count: 1));
+    checkHitCount(key: "a", type: "onCreate()", source: Source.anyEvent, count: 1);
+    checkHitCount(key: "b", type: "onCreate()", source: Source.anyEvent, count: 1);
+    checkHitCount(key: "c", type: "onCreate()", source: Source.anyEvent, count: 1);
 
-    assert(checkHitCount(key: "a", type: "onCreate()", source: Source.onEvent, count: 1));
-    assert(checkHitCount(key: "b", type: "onCreate()", source:  Source.onEvent, count: 1));
-    assert(checkHitCount(key: "c", type: "onCreate()", source:  Source.onEvent, count: 1));
+    checkHitCount(key: "a", type: "onCreate()", source: Source.onEvent, count: 1);
+    checkHitCount(key: "b", type: "onCreate()", source:  Source.onEvent, count: 1);
+    checkHitCount(key: "c", type: "onCreate()", source:  Source.onEvent, count: 1);
 
-    assert(checkHitCount(key: "b", type: "onUpdate()", source: Source.anyEvent, count: 1));
-    assert(checkHitCount(key: "c", type: "onDelete()", source: Source.anyEvent, count: 1));
+    checkHitCount(key: "b", type: "onUpdate()", source: Source.anyEvent, count: 1);
+    checkHitCount(key: "c", type: "onDelete()", source: Source.anyEvent, count: 1);
 
-    assert(checkHitCount(key: "b", type: "onUpdate()", source: Source.onEvent, count: 1));
-    assert(checkHitCount(key: "c", type: "onDelete()", source: Source.onEvent, count: 1));
+    checkHitCount(key: "b", type: "onUpdate()", source: Source.onEvent, count: 1);
+    checkHitCount(key: "c", type: "onDelete()", source: Source.onEvent, count: 1);
   }
 
 }, timeout: 8m) as "hitCount is incremented according to the bucket event";

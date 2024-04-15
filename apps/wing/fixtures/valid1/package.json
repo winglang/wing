@@ -6,5 +6,6 @@
   "license": "MIT",
   "files": [
     "**/*.ts"
-  ]
+  ],
+  "dependencies": {}
 }

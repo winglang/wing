@@ -25,7 +25,6 @@
             "uniqueId": "from_cron_Schedule_6C1613E8"
           }
         },
-        "is_enabled": true,
         "schedule_expression": "cron(* * * * ? *)"
       },
       "from_rate_Schedule_5B82E706": {
@@ -35,7 +34,6 @@
             "uniqueId": "from_rate_Schedule_5B82E706"
           }
         },
-        "is_enabled": true,
         "schedule_expression": "rate(1 minute)"
       }
     },

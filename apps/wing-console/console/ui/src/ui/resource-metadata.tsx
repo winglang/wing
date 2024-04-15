@@ -20,13 +20,23 @@ import {
   Button,
 } from "@wingconsole/design-system";
 import type { NodeDisplay } from "@wingconsole/server";
+import type {
+  UIButton,
+  UIComponent,
+  UIField,
+  UISection,
+} from "@winglang/sdk/lib/core/tree.js";
 import classNames from "classnames";
-import { memo, useCallback, useId, useMemo, useState } from "react";
+import { memo, useCallback, useContext, useId, useMemo, useState } from "react";
 
+import type { UIHttpClient } from "../../../../../../libs/wingsdk/lib/core/tree.js";
+import { AppContext } from "../AppContext.js";
 import { QueueMetadataView } from "../features/queue-metadata-view.js";
 import { ResourceInteractionView } from "../features/resource-interaction-view.js";
 import { trpc } from "../services/trpc.js";
+import { useApi } from "../services/use-api.js";
 
+import { ApiInteraction } from "./api-interaction.js";
 import { BucketMetadata } from "./bucket-metadata.js";
 import { CounterMetadata } from "./counter-metadata.js";
 import { FunctionMetadata } from "./function-metadata.js";
@@ -82,24 +92,93 @@ const CustomResourceUiButtomItem = ({
   );
 };
 
-interface CustomResourceUiItemProps {
-  kind: string;
+interface CustomResourceHttpClientItemProps {
   label: string;
-  handlerPath: string;
+  getUrlHandler: string;
+  getApiSpecHandler: string;
 }
 
-const CustomResourceUiItem = ({
-  handlerPath,
-  kind,
+const CustomResourceHttpClientItem = ({
   label,
-}: CustomResourceUiItemProps) => {
+  getUrlHandler,
+  getApiSpecHandler,
+}: CustomResourceHttpClientItemProps) => {
+  const { theme } = useTheme();
+  const { appMode } = useContext(AppContext);
+
+  const data = trpc["app.getResourceUiHttpClient"].useQuery(
+    {
+      getUrlResourcePath: getUrlHandler,
+      getApiSpecResourcePath: getApiSpecHandler,
+    },
+    { enabled: !!getUrlHandler && !!getApiSpecHandler },
+  );
+
+  const [response, setResponse] = useState();
+  const { callFetch, isLoading } = useApi({
+    onFetchDataUpdate: (data) => {
+      setResponse(data);
+    },
+  });
+
+  return (
+    <div className="pl-4">
+      <div className="mb-1">
+        <Attribute name="Name" value={label} noLeftPadding />
+      </div>
+      {data.data?.url && data.data?.openApiSpec && (
+        <ApiInteraction
+          resourceId={getUrlHandler}
+          url={data.data.url}
+          appMode={appMode}
+          openApiSpec={data.data.openApiSpec}
+          callFetch={callFetch}
+          isLoading={isLoading}
+          apiResponse={response}
+        />
+      )}
+    </div>
+  );
+};
+
+const getUiComponent = (item: UIComponent) => {
+  if (item.kind === "field") {
+    return item as UIField;
+  }
+  if (item.kind === "button") {
+    return item as UIButton;
+  }
+  if (item.kind === "section") {
+    return item as UISection;
+  }
+  if (item.kind === "http-client") {
+    return item as UIHttpClient;
+  }
+  return item;
+};
+
+const CustomResourceUiItem = ({ item }: { item: UIComponent }) => {
+  const uiComponent = getUiComponent(item);
   return (
     <>
-      {kind === "field" && (
-        <CustomResourceUiFieldItem label={label} handlerPath={handlerPath} />
+      {uiComponent.kind === "field" && (
+        <CustomResourceUiFieldItem
+          label={uiComponent.label}
+          handlerPath={uiComponent.handler}
+        />
       )}
-      {kind === "button" && (
-        <CustomResourceUiButtomItem label={label} handlerPath={handlerPath} />
+      {uiComponent.kind === "button" && (
+        <CustomResourceUiButtomItem
+          label={uiComponent.label}
+          handlerPath={uiComponent.handler}
+        />
+      )}
+      {uiComponent.kind === "http-client" && (
+        <CustomResourceHttpClientItem
+          label={uiComponent.label}
+          getUrlHandler={uiComponent.getUrlHandler}
+          getApiSpecHandler={uiComponent.getApiSpecHandler}
+        />
       )}
     </>
   );
@@ -125,6 +204,7 @@ interface Relationship {
   id: string;
   path: string;
   type: string;
+  display?: NodeDisplay;
 }
 
 export interface MetadataNode {
@@ -252,6 +332,7 @@ export const ResourceMetadata = memo(
                 resourceType={relationship.type}
                 resourcePath={relationship.path}
                 className="w-4 h-4"
+                color={relationship.display?.color}
               />
             ),
           })),
@@ -269,6 +350,7 @@ export const ResourceMetadata = memo(
                 resourceType={relationship.type}
                 resourcePath={relationship.path}
                 className="w-4 h-4"
+                color={relationship.display?.color}
               />
             ),
           })),
@@ -279,6 +361,13 @@ export const ResourceMetadata = memo(
         connectionsGroups: connectionsGroupsArray,
       };
     }, [node, inbound, outbound]);
+
+    const nodeLabel = useMemo(() => {
+      const cloudResourceTypeName = node.type.split(".").at(-1) || "";
+      const compilerNamed =
+        !!node.display?.title && node.display?.title !== cloudResourceTypeName;
+      return compilerNamed ? node.display?.title : node.id;
+    }, [node]);
 
     const toggleInspectorSection = useCallback((section: string) => {
       setOpenInspectorSections(([...sections]) => {
@@ -309,11 +398,12 @@ export const ResourceMetadata = memo(
               className="w-6 h-6"
               resourceType={node.type}
               resourcePath={node.path}
+              color={node.display?.color}
             />
           </div>
 
           <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate">{node.id}</div>
+            <div className="text-sm font-medium truncate">{nodeLabel}</div>
             <div className="flex">
               <Pill>{node.type}</Pill>
             </div>
@@ -322,7 +412,7 @@ export const ResourceMetadata = memo(
         {resourceUI.data && resourceUI.data.length > 0 && (
           <InspectorSection
             icon={CubeIcon}
-            text="Properties"
+            text={nodeLabel ?? "Properties"}
             open={openInspectorSections.includes("resourceUI")}
             onClick={() => toggleInspectorSection("resourceUI")}
             headingClassName="pl-2"
@@ -336,12 +426,7 @@ export const ResourceMetadata = memo(
                 )}
               >
                 {resourceUI.data.map((item, index) => (
-                  <CustomResourceUiItem
-                    key={index}
-                    handlerPath={item.handler}
-                    kind={item.kind}
-                    label={item.label}
-                  />
+                  <CustomResourceUiItem key={index} item={item} />
                 ))}
               </div>
             </div>

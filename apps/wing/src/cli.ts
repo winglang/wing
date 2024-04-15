@@ -3,6 +3,7 @@ import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
+import { SNAPSHOTS_HELP } from "./commands/test/snapshots-help";
 import { loadEnvVariables } from "./env";
 import { currentPackage, projectTemplateNames } from "./util";
 
@@ -17,6 +18,7 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 
 const DEFAULT_PLATFORM = ["sim"];
+
 let analyticsExportFile: Promise<string | undefined> | undefined;
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
@@ -191,12 +193,19 @@ async function main() {
       collectPlatformVariadic,
       DEFAULT_PLATFORM
     )
+    .addOption(
+      new Option("-s, --snapshots <mode>", "Capture snapshots of compiler output")
+        .choices(["auto", "never", "update", "deploy", "assert"])
+        .default("auto")
+    )
+    .addHelpText("afterAll", SNAPSHOTS_HELP)
     .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-f, --test-filter <regex>",
       "Run tests that match the provided regex pattern within the selected entrypoint files"
     )
     .option("--no-clean", "Keep build output")
+    .option("--no-stream", "Do not stream logs")
     .option(
       "-o, --output-file <outputFile>",
       "File name to write test results to (file extension is required, supports only .json at the moment)"

@@ -2,26 +2,24 @@
 
 exports[`bucket on event creates 3 topics, and sends the right event and key in the event handlers 1`] = `
 [
-  "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.cloud.Bucket created.",
-  "@winglang/sdk.cloud.Bucket created.",
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.sim.EventMapping created.",
+  "root/my_bucket/oncreate started",
+  "root/my_bucket/onupdate started",
+  "root/my_bucket/ondelete started",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
+  "root/log_bucket started",
+  "root/my_bucket/oncreate/OnMessage0 started",
+  "root/my_bucket/oncreate/Policy started",
+  "root/my_bucket/oncreate/TopicEventMapping0 started",
+  "root/my_bucket/onupdate/OnMessage0 started",
+  "root/my_bucket/onupdate/Policy started",
+  "root/my_bucket/onupdate/TopicEventMapping0 started",
+  "root/my_bucket/ondelete/OnMessage0 started",
+  "root/my_bucket/ondelete/Policy started",
+  "root/my_bucket/ondelete/TopicEventMapping0 started",
+  "root/log_bucket/Policy started",
   "Publish (message=a).",
-  "Sending message (message=a, subscriber=sim-5).",
-  "InvokeAsync (payload="a").",
-  "Put (key=a).",
-  "Put (key=a).",
-  "I am done",
-  "Get (key=a).",
-  "Publish (message=a).",
-  "Sending message (message=a, subscriber=sim-7).",
+  "Sending message (message=a, subscriber=sim-6).",
   "InvokeAsync (payload="a").",
   "Put (key=a).",
   "Put (key=a).",
@@ -30,32 +28,46 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "Publish (message=a).",
   "Sending message (message=a, subscriber=sim-9).",
   "InvokeAsync (payload="a").",
+  "Put (key=a).",
+  "Put (key=a).",
+  "I am done",
+  "Get (key=a).",
+  "Publish (message=a).",
+  "Sending message (message=a, subscriber=sim-12).",
+  "InvokeAsync (payload="a").",
   "Delete (key=a).",
   "Put (key=a).",
   "I am done",
   "Get (key=a).",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
+  "root/my_bucket/oncreate/Policy stopped",
+  "root/my_bucket/oncreate/TopicEventMapping0 stopped",
+  "root/my_bucket/oncreate stopped",
+  "root/my_bucket/onupdate/Policy stopped",
+  "root/my_bucket/onupdate/TopicEventMapping0 stopped",
+  "root/my_bucket/onupdate stopped",
+  "root/my_bucket/ondelete/Policy stopped",
+  "root/my_bucket/ondelete/TopicEventMapping0 stopped",
+  "root/my_bucket/ondelete stopped",
+  "root/my_bucket/oncreate/OnMessage0 stopped",
+  "root/my_bucket/onupdate/OnMessage0 stopped",
+  "root/my_bucket/ondelete/OnMessage0 stopped",
+  "root/log_bucket/Policy stopped",
+  "root/log_bucket stopped",
 ]
 `;
 
 exports[`can add file in preflight 1`] = `
 [
   "Adding object from preflight (key=test.txt).",
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Get (key=test.txt).",
   "Get (key=test.txt).",
   "List (prefix=null).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
@@ -66,10 +78,9 @@ exports[`can add file in preflight 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_bucket": {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {
@@ -80,7 +91,16 @@ exports[`can add file in preflight 2`] = `
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-    ],
+      "root/my_bucket/Policy": {
+        "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
+        "path": "root/my_bucket/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_bucket#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -135,14 +155,6 @@ exports[`can add file in preflight 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -151,9 +163,17 @@ exports[`can add file in preflight 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -169,6 +189,21 @@ exports[`can add file in preflight 2`] = `
     "tree": {
       "children": {
         "my_bucket": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_bucket/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -196,11 +231,13 @@ exports[`can add file in preflight 2`] = `
 exports[`can add object in preflight 1`] = `
 [
   "Adding object from preflight (key=greeting.txt).",
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Get (key=greeting.txt).",
   "Get (key=greeting.txt).",
   "List (prefix=null).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
@@ -211,10 +248,9 @@ exports[`can add object in preflight 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_bucket": {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {
@@ -225,7 +261,16 @@ exports[`can add object in preflight 2`] = `
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-    ],
+      "root/my_bucket/Policy": {
+        "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
+        "path": "root/my_bucket/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_bucket#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -280,14 +325,6 @@ exports[`can add object in preflight 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -296,9 +333,17 @@ exports[`can add object in preflight 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -314,6 +359,21 @@ exports[`can add object in preflight 2`] = `
     "tree": {
       "children": {
         "my_bucket": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_bucket/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -345,10 +405,9 @@ exports[`create a bucket 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_bucket": {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
@@ -357,7 +416,16 @@ exports[`create a bucket 1`] = `
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-    ],
+      "root/my_bucket/Policy": {
+        "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
+        "path": "root/my_bucket/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_bucket#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -412,14 +480,6 @@ exports[`create a bucket 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -428,9 +488,17 @@ exports[`create a bucket 1`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -446,6 +514,21 @@ exports[`create a bucket 1`] = `
     "tree": {
       "children": {
         "my_bucket": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_bucket/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -472,9 +555,11 @@ exports[`create a bucket 1`] = `
 
 exports[`get invalid object throws an error 1`] = `
 [
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Get (key=unknown.txt).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
@@ -485,10 +570,9 @@ exports[`get invalid object throws an error 2`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_bucket": {
         "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
-        "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
@@ -497,7 +581,16 @@ exports[`get invalid object throws an error 2`] = `
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-    ],
+      "root/my_bucket/Policy": {
+        "addr": "c8b5ba55132964ee19331fb9f46241560e67fed76b",
+        "path": "root/my_bucket/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_bucket#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -552,14 +645,6 @@ exports[`get invalid object throws an error 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -568,9 +653,17 @@ exports[`get invalid object throws an error 2`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -586,6 +679,21 @@ exports[`get invalid object throws an error 2`] = `
     "tree": {
       "children": {
         "my_bucket": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_bucket/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -612,20 +720,23 @@ exports[`get invalid object throws an error 2`] = `
 
 exports[`list respects prefixes 1`] = `
 [
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Put (key=path/dir1/file1.txt).",
   "Put (key=path/dir2/file2.txt).",
   "List (prefix=null).",
   "List (prefix=path).",
   "List (prefix=path/dir1).",
   "List (prefix=path/dir2).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
 exports[`objects can have keys that look like directories 1`] = `
 [
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Put (key=foo).",
   "Put (key=foo/).",
   "Put (key=foo/bar).",
@@ -637,105 +748,127 @@ exports[`objects can have keys that look like directories 1`] = `
   "List (prefix=foo/bar).",
   "List (prefix=foo/bar/).",
   "List (prefix=foo/bar/baz).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
 exports[`put and get metadata of objects from bucket 1`] = `
 [
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Put (key=file1.main.w).",
   "Put (key=file2.txt).",
   "Put (key=file3.txt).",
   "Metadata (key=file1.main.w).",
   "Metadata (key=file2.txt).",
   "Metadata (key=file3.txt).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
 exports[`put and get object from bucket 1`] = `
 [
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Put (key=greeting.txt).",
   "Get (key=greeting.txt).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
 exports[`put multiple json objects and list all from bucket 1`] = `
 [
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Put Json (key=greeting1.json).",
   "Put Json (key=greeting2.json).",
   "Put Json (key=greeting3.json).",
   "List (prefix=null).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
 exports[`put multiple objects and list all from bucket 1`] = `
 [
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Put (key=greeting1.txt).",
   "Put (key=greeting2.txt).",
   "Put (key=greeting3.txt).",
   "List (prefix=null).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
 exports[`remove object from a bucket 1`] = `
 [
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Put (key=unknown.txt).",
   "Delete (key=unknown.txt).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
 exports[`remove object from a bucket with mustExist as option 1`] = `
 [
-  "@winglang/sdk.cloud.Bucket created.",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
   "Put (key=unknown.txt).",
   "Delete (key=unknown.txt).",
-  "@winglang/sdk.cloud.Bucket deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
 ]
 `;
 
 exports[`removing a key will call onDelete method 1`] = `
 [
-  "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.cloud.Bucket created.",
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.sim.EventMapping created.",
+  "root/my_bucket/ondelete started",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
+  "root/my_bucket/ondelete/OnMessage0 started",
+  "root/my_bucket/ondelete/Policy started",
+  "root/my_bucket/ondelete/TopicEventMapping0 started",
   "Put (key=unknown.txt).",
   "Publish (message=unknown.txt).",
-  "Sending message (message=unknown.txt, subscriber=sim-2).",
+  "Sending message (message=unknown.txt, subscriber=sim-3).",
   "InvokeAsync (payload="unknown.txt").",
   "Delete (key=unknown.txt).",
   "Received unknown.txt",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
+  "root/my_bucket/ondelete/Policy stopped",
+  "root/my_bucket/ondelete/TopicEventMapping0 stopped",
+  "root/my_bucket/ondelete stopped",
+  "root/my_bucket/ondelete/OnMessage0 stopped",
 ]
 `;
 
 exports[`update an object in bucket 1`] = `
 [
-  "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.cloud.Bucket created.",
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "Publish (message=greeting.txt).",
-  "Sending message (message=greeting.txt, subscriber=sim-2).",
-  "InvokeAsync (payload="greeting.txt").",
-  "Put (key=greeting.txt).",
-  "Put (key=greeting.txt).",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
+  "root/my_bucket/oncreate started",
+  "root/my_bucket started",
+  "root/my_bucket/Policy started",
+  "root/my_bucket/oncreate/OnMessage0 started",
+  "root/my_bucket/oncreate/Policy started",
+  "root/my_bucket/oncreate/TopicEventMapping0 started",
+  "Publish (message=1.txt).",
+  "Sending message (message=1.txt, subscriber=sim-3).",
+  "InvokeAsync (payload="1.txt").",
+  "Put (key=1.txt).",
+  "Put (key=1.txt).",
+  "I am done",
+  "root/my_bucket/Policy stopped",
+  "root/my_bucket stopped",
+  "root/my_bucket/oncreate/Policy stopped",
+  "root/my_bucket/oncreate/TopicEventMapping0 stopped",
+  "root/my_bucket/oncreate stopped",
+  "root/my_bucket/oncreate/OnMessage0 stopped",
 ]
 `;

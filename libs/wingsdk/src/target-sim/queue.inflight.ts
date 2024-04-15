@@ -1,15 +1,17 @@
 import { IEventPublisher } from "./event-mapping";
+import type { Function as FunctionClient } from "./function.inflight";
 import {
   QueueAttributes,
   QueueSchema,
   QueueSubscriber,
   EventSubscription,
-  FunctionHandle,
+  ResourceHandle,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient, QUEUE_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -19,18 +21,26 @@ export class Queue
   private readonly messages = new Array<QueueMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly processLoop: LoopController;
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
   private readonly timeoutSeconds: number;
   private readonly retentionPeriod: number;
 
-  constructor(props: QueueSchema["props"], context: ISimulatorContext) {
+  constructor(props: QueueSchema) {
     this.timeoutSeconds = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
     this.processLoop = runEvery(100, async () => this.processMessages()); // every 0.1 seconds
-    this.context = context;
   }
 
-  public async init(): Promise<QueueAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<QueueAttributes> {
+    this._context = context;
+    await this.processLoop.start();
     return {};
   }
 
@@ -40,8 +50,12 @@ export class Queue
 
   public async save(): Promise<void> {}
 
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
   public async addEventSubscription(
-    subscriber: FunctionHandle,
+    subscriber: ResourceHandle,
     subscriptionProps: EventSubscription
   ): Promise<void> {
     const s = {
@@ -52,7 +66,7 @@ export class Queue
   }
 
   public async removeEventSubscription(
-    subscriber: FunctionHandle
+    subscriber: ResourceHandle
   ): Promise<void> {
     const index = this.subscribers.findIndex(
       (s) => s.functionHandle === subscriber
@@ -143,12 +157,22 @@ export class Queue
           continue;
         }
 
-        const fnClient = this.context.findInstance(
-          subscriber.functionHandle!
-        ) as IFunctionClient & ISimulatorResourceInstance;
+        const fnClient = this.context.getClient(
+          subscriber.functionHandle
+        ) as IFunctionClient;
         if (!fnClient) {
           throw new Error("No function client found");
         }
+
+        // If the function we picked is at capacity, keep the messages in the queue
+        const hasWorkers = await (
+          fnClient as FunctionClient
+        ).hasAvailableWorkers();
+        if (!hasWorkers) {
+          this.messages.push(...messages);
+          continue;
+        }
+
         this.context.addTrace({
           type: TraceType.RESOURCE,
           data: {
@@ -166,6 +190,14 @@ export class Queue
         void fnClient
           .invoke(JSON.stringify({ messages: messagesPayload }))
           .catch((err) => {
+            // If the function is at a concurrency limit, pretend we just didn't call it
+            if (
+              err.message ===
+              "Too many requests, the function has reached its concurrency limit."
+            ) {
+              this.messages.push(...messages);
+              return;
+            }
             // If the function returns an error, put the message back on the queue after timeout period
             this.context.addTrace({
               data: {
@@ -243,6 +275,7 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
 
 interface LoopController {
   stop(): Promise<void>;
+  start(): Promise<void>;
 }
 
 /**
@@ -287,8 +320,10 @@ function runEvery(interval: number, fn: () => Promise<void>): LoopController {
         await stopPromise; // wait for the loop to finish
       }
     },
+    async start() {
+      void loop();
+    },
   };
 
-  void loop(); // start the loop
   return controller;
 }

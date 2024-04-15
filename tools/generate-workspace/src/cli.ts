@@ -44,6 +44,8 @@ const nameMapping: Record<string, string> = {
   "vscode-wing": "VSCode",
   "wing-api-checker": "API Checker",
   winglang: "CLI",
+  "wingcli-v2": "CLIv2",
+  "@winglang/wingtunnels": "Tunnel Server",
 };
 
 async function getWorkspaceDir() {

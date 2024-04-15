@@ -4,7 +4,7 @@ import { CounterSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { LiftDepsMatrixRaw } from "../core";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost } from "../std";
 
 /**
@@ -30,21 +30,18 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
     };
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: CounterSchema = {
-      type: cloud.COUNTER_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        initial: this.initial,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: CounterSchema = {
+      initial: this.initial,
     };
-    return schema;
+    return {
+      type: cloud.COUNTER_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

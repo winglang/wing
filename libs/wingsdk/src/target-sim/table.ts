@@ -4,7 +4,7 @@ import { TableSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { LiftDepsMatrixRaw } from "../core";
 import * as ex from "../ex";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator/simulator";
 import { Json, IInflightHost } from "../std";
 
 /**
@@ -22,20 +22,17 @@ export class Table extends ex.Table implements ISimulatorResource {
     this.initialRows[key] = { ...row, [this.primaryKey]: key } as Json;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: TableSchema = {
-      type: ex.TABLE_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        name: this.name,
-        columns: this.columns,
-        primaryKey: this.primaryKey,
-        initialRows: this.initialRows,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: TableSchema = {
+      name: this.name,
+      columns: this.columns,
+      primaryKey: this.primaryKey,
+      initialRows: this.initialRows,
     };
-    return schema;
+    return {
+      type: ex.TABLE_FQN,
+      props,
+    };
   }
 
   /** @internal */
@@ -52,7 +49,7 @@ export class Table extends ex.Table implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

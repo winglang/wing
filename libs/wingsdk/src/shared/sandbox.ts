@@ -1,9 +1,8 @@
 import * as cp from "child_process";
 import { writeFileSync } from "fs";
-import { mkdtemp, readFile, stat } from "fs/promises";
-import { tmpdir } from "os";
-import * as path from "path";
-import { createBundle } from "./bundling";
+import { readFile, stat } from "fs/promises";
+import { url as inspectorUrl } from "inspector";
+import { Bundle, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
 
 export interface SandboxOptions {
@@ -35,82 +34,126 @@ type ProcessResponse =
     };
 
 export class Sandbox {
-  private createBundlePromise: Promise<void>;
-  private entrypoint: string;
-  private readonly exitingChildren: Promise<void>[] = [];
-  private readonly timeouts: NodeJS.Timeout[] = [];
-  private readonly options: SandboxOptions;
-
-  constructor(entrypoint: string, options: SandboxOptions = {}) {
-    this.entrypoint = entrypoint;
-    this.options = options;
-    this.createBundlePromise = this.createBundle();
-  }
-
-  public async cleanup() {
-    await this.createBundlePromise;
-    for (const timeout of this.timeouts) {
-      clearTimeout(timeout);
-    }
-    // Make sure all child processes have exited before cleaning up the sandbox.
-    for (const exitingChild of this.exitingChildren) {
-      await exitingChild;
-    }
-  }
-
-  private async createBundle() {
-    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-
-    // wrap contents with a shim that handles the communication with the parent process
-    // we insert this shim before bundling to ensure source maps are generated correctly
-    let contents = (await readFile(this.entrypoint)).toString();
+  public static async createBundle(
+    entrypoint: string,
+    log?: (message: string) => void
+  ): Promise<Bundle> {
+    let contents = await readFile(entrypoint, "utf-8");
 
     // log a warning if contents includes __dirname or __filename
     if (contents.includes("__dirname") || contents.includes("__filename")) {
-      this.options.log?.(
-        false,
-        "warn",
+      log?.(
         `Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.`
       );
     }
 
-    contents = `
-"use strict";
-${contents}
-process.on("message", async (message) => {
+    let debugShim = "";
+    if (inspectorUrl?.()) {
+      // If we're debugging, we need to make sure the debugger has enough time to attach
+      // to the child process. This gives enough time for the debugger load sourcemaps and set breakpoints.
+      // See https://github.com/microsoft/vscode-js-debug/issues/1510
+      debugShim =
+        "\n  await new Promise((resolve) => setTimeout(resolve, 25));";
+    }
+
+    // wrap contents with a shim that handles the communication with the parent process
+    // we insert this shim before bundling to ensure source maps are generated correctly
+    contents += `
+process.setUncaughtExceptionCaptureCallback((reason) => {
+  process.send({ type: "reject", reason });
+});
+
+process.on("message", async (message) => {${debugShim}
   const { fn, args } = message;
-  try {
-    const value = await exports[fn](...args);
-    process.send({ type: "resolve", value });
-  } catch (err) {
-    process.send({ type: "reject", reason: err });
-  }
+  const value = await exports[fn](...args);
+  process.send({ type: "resolve", value });
 });
 `;
-    const wrappedPath = this.entrypoint.replace(/\.js$/, ".sandbox.js");
+
+    const wrappedPath = entrypoint.replace(/\.cjs$/, ".sandbox.cjs");
     writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
-    const bundle = createBundle(wrappedPath, [], workdir);
-    this.entrypoint = bundle.entrypointPath;
+    const bundle = createBundle(wrappedPath);
 
     if (process.env.DEBUG) {
-      const bundleSize = (await stat(bundle.entrypointPath)).size;
-      this.debugLog(`Bundled code (${bundleSize} bytes).`);
+      const fileStats = await stat(entrypoint);
+      log?.(`Bundled code (${fileStats.size} bytes).`);
+    }
+
+    return bundle;
+  }
+
+  private readonly entrypoint: string;
+  private readonly options: SandboxOptions;
+
+  private child: cp.ChildProcess | undefined;
+  private onChildMessage: ((message: ProcessResponse) => void) | undefined;
+  private onChildError: ((error: Error) => void) | undefined;
+  private onChildExit:
+    | ((code: number | null, signal: NodeJS.Signals | null) => void)
+    | undefined;
+
+  private timeout: NodeJS.Timeout | undefined;
+
+  // Tracks whether the sandbox is available to process a new request
+  // When call() is called, it sets this to false, and when it's returning
+  // a response or error, it sets it back to true.
+  private available = true;
+
+  constructor(entrypoint: string, options: SandboxOptions = {}) {
+    this.entrypoint = entrypoint;
+    this.options = options;
+  }
+
+  public async cleanup() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+
+    if (this.child) {
+      this.child.kill("SIGTERM");
+      this.child = undefined;
+      this.available = true;
     }
   }
 
-  public async call(fn: string, ...args: any[]): Promise<any> {
-    // wait for the bundle to finish creation
-    await this.createBundlePromise;
+  public isAvailable(): boolean {
+    return this.available;
+  }
 
-    this.debugLog("Forking process to run bundled code.");
+  public async initialize() {
+    this.debugLog("Initializing sandbox.");
+    const childEnv = this.options.env ?? {};
+    if (inspectorUrl?.()) {
+      // We're exposing a debugger, let's attempt to ensure the child process automatically attaches
+      childEnv.NODE_OPTIONS =
+        (childEnv.NODE_OPTIONS ?? "") + (process.env.NODE_OPTIONS ?? "");
 
-    // start a Node.js process that runs the bundled code
+      // If the child process is not already configured to attach a debugger, add a flag to do so
+      if (
+        !childEnv.NODE_OPTIONS.includes("--inspect") &&
+        !process.execArgv.includes("--inspect")
+      ) {
+        childEnv.NODE_OPTIONS += " --inspect=0";
+      }
+
+      // VSCode's debugger adds some environment variables that we want to pass to the child process
+      for (const key in process.env) {
+        if (key.startsWith("VSCODE_")) {
+          childEnv[key] = process.env[key]!;
+        }
+      }
+    }
+
+    // start a Node.js process that runs the inflight code
     // note: unlike the fork(2) POSIX system call, child_process.fork()
     // does not clone the current process
-    const child = cp.fork(this.entrypoint, [], {
-      env: this.options.env,
+    this.child = cp.fork(this.entrypoint, {
+      env: childEnv,
       stdio: "pipe",
-      // execArgv: ["--enable-source-maps"],
+      // keep the process detached so in the case of cloud.Service, if the parent process is killed
+      // (e.g. someone presses Ctrl+C while using Wing Console),
+      // we can gracefully call any cleanup code in the child process
+      detached: true,
       // this option allows complex objects like Error to be sent from the child process to the parent
       serialization: "advanced",
     });
@@ -120,82 +163,97 @@ process.on("message", async (message) => {
       this.options.log?.(false, "error", message);
 
     // pipe stdout and stderr from the child process
-    if (child.stdout) {
-      processStream(child.stdout, log);
+    if (this.child.stdout) {
+      processStream(this.child.stdout, log);
     }
-    if (child.stderr) {
-      processStream(child.stderr, logError);
+    if (this.child.stderr) {
+      processStream(this.child.stderr, logError);
     }
 
-    // Keep track of when the child process exits so that the simulator doesn't try
-    // to clean up the sandbox before the child process has exited.
-    // NOTE: If child processes are taking too long to exit (preventing simulator cleanups),
-    // we could add a mechanism to send SIGKILL to the child process after a certain amount of time.
-    let childExited: (value?: any) => void;
-    this.exitingChildren.push(
-      new Promise((resolve) => {
-        childExited = resolve;
-      })
-    );
+    this.child.on("message", (message: ProcessResponse) => {
+      this.onChildMessage?.(message);
+    });
+    this.child!.on("error", (error) => {
+      this.onChildError?.(error);
+    });
+    this.child!.on("exit", (code, signal) => {
+      this.onChildExit?.(code, signal);
+    });
+  }
+
+  public async call(fn: string, ...args: any[]): Promise<any> {
+    // Prevent multiple calls to the same sandbox running concurrently.
+    this.available = false;
+
+    // If this sandbox doesn't have a child process running (because it
+    // just got created, OR because the previous child process was killed due
+    // to timeout or an unexpected error), initialize one.
+    if (!this.child) {
+      await this.initialize();
+    }
 
     // Send the function name and arguments to the child process.
-    // When a message is received, kill the child process.
-    // Once the child process is killed (by the parent process or because the user code
-    // exited on its own), resolve or reject the promise.
+    // When a message is received, resolve or reject the promise.
     return new Promise((resolve, reject) => {
-      child.send({ fn, args } as ProcessRequest);
+      this.child!.send({ fn, args } as ProcessRequest);
 
-      let result: any;
-      let status: "resolve" | "reject" | "pending" = "pending";
-
-      child.on("message", (message: ProcessResponse) => {
-        this.debugLog("Received a message, killing child process.");
-        child.kill();
-        if (message.type === "resolve") {
-          result = message.value;
-          status = "resolve";
-        } else if (message.type === "reject") {
-          result = message.reason;
-          status = "reject";
-        } else {
-          result = `Parent received unexpected message from child process: ${message}`;
-          status = "reject";
+      this.onChildMessage = (message: ProcessResponse) => {
+        this.debugLog("Received a message from the sandbox.");
+        this.available = true;
+        if (this.timeout) {
+          clearTimeout(this.timeout);
         }
-      });
+        if (message.type === "resolve") {
+          resolve(message.value);
+        } else if (message.type === "reject") {
+          reject(message.reason);
+        } else {
+          reject(
+            new Error(
+              `Unexpected message from sandbox child process: ${message}`
+            )
+          );
+        }
+      };
 
       // "error" could be emitted for any number of reasons
       // (e.g. the process couldn't be spawned or killed, or a message couldn't be sent).
       // Since this is unexpected, we kill the process with SIGKILL to ensure it's dead, and reject the promise.
-      child.on("error", (error) => {
-        this.debugLog("Killing process after error.");
-        child.kill("SIGKILL");
-        childExited();
-        reject(`Unexpected error: ${error}`);
-      });
-
-      child.on("exit", (code, _signal) => {
-        this.debugLog("Child processed stopped.");
-        childExited();
-        if (status === "pending") {
-          // If the child process stopped without sending us back a message, reject the promise.
-          reject(new Error(`Process exited with code ${code}`));
-        } else if (status === "resolve") {
-          resolve(result);
-        } else if (status === "reject") {
-          reject(result);
+      this.onChildError = (error: Error) => {
+        this.debugLog("Unexpected error from the sandbox.");
+        this.child?.kill("SIGKILL");
+        this.child = undefined;
+        this.available = true;
+        if (this.timeout) {
+          clearTimeout(this.timeout);
         }
-      });
+        reject(error);
+      };
 
-      if (this.options.timeout) {
-        const timeout = setTimeout(() => {
+      // "exit" could be emitted if the user code called process.exit(), or if we killed the process
+      // due to a timeout or unexpected error. In any case, we reject the promise.
+      this.onChildExit = (code: number | null, signal: unknown) => {
+        this.debugLog("Child processed stopped.");
+        this.child = undefined;
+        this.available = true;
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        reject(new Error(`Process exited with code ${code}, signal ${signal}`));
+      };
+
+      if (this.options.timeout && !inspectorUrl?.()) {
+        this.timeout = setTimeout(() => {
           this.debugLog("Killing process after timeout.");
-          child.kill();
-          status = "reject";
-          result = new Error(
-            `Function timed out (it was configured to only run for ${this.options.timeout}ms)`
+          this.child?.kill("SIGTERM");
+          this.child = undefined;
+          this.available = true;
+          reject(
+            new Error(
+              `Function timed out (it was configured to only run for ${this.options.timeout}ms)`
+            )
           );
         }, this.options.timeout);
-        this.timeouts.push(timeout);
       }
     });
   }

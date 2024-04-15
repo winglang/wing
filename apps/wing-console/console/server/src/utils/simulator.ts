@@ -25,6 +25,7 @@ export interface Simulator {
 
 export interface CreateSimulatorProps {
   stateDir?: string;
+  enableSimUpdates?: boolean;
 }
 
 const stopSilently = async (simulator: simulator.Simulator) => {
@@ -45,27 +46,38 @@ const stopSilently = async (simulator: simulator.Simulator) => {
 export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
   const events = new Emittery<SimulatorEvents>();
   let instance: simulator.Simulator | undefined;
+  const handleExistingInstance = async (simfile: string): Promise<boolean> => {
+    if (!instance) {
+      return true;
+    }
+    if (props?.enableSimUpdates) {
+      await events.emit("starting", { instance });
+      await instance.update(simfile);
+      await events.emit("started");
+      return false;
+    } else {
+      await events.emit("stopping");
+      await stopSilently(instance);
+      return true;
+    }
+  };
   const start = async (simfile: string) => {
     try {
-      if (instance) {
-        await events.emit("stopping");
-        await stopSilently(instance);
+      const shouldStartSim = await handleExistingInstance(simfile);
+      if (shouldStartSim) {
+        instance = new simulator.Simulator({
+          simfile,
+          stateDir: props?.stateDir,
+        });
+        instance.onTrace({
+          callback(trace) {
+            events.emit("trace", trace);
+          },
+        });
+        await events.emit("starting", { instance });
+        await instance.start();
+        await events.emit("started");
       }
-
-      instance = new simulator.Simulator({
-        simfile,
-        stateDir: props?.stateDir,
-      });
-      instance.onTrace({
-        callback(trace) {
-          events.emit("trace", trace);
-        },
-      });
-
-      await events.emit("starting", { instance });
-
-      await instance.start();
-      await events.emit("started");
     } catch (error) {
       await events.emit(
         "error",

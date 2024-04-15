@@ -7,6 +7,7 @@ import {
   IValidation,
 } from "constructs";
 import { Connections } from "../core/connections";
+import { ParameterRegistrar } from "../platform";
 
 const NODE_SYMBOL = Symbol.for("@winglang/sdk.std.Node");
 export const APP_SYMBOL = Symbol.for("@winglang/sdk.std.Node/app");
@@ -61,6 +62,23 @@ export class Node {
    * Whether the construct should be hidden by default in tree visualizations.
    */
   public hidden?: boolean;
+
+  /**
+   * The color of the construct for display purposes.
+   * Supported colors are:
+   * - orange
+   * - sky
+   * - emerald
+   * - lime
+   * - pink
+   * - amber
+   * - cyan
+   * - purple
+   * - red
+   * - violet
+   * - slate
+   */
+  public color?: string;
 
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
@@ -446,6 +464,11 @@ export interface IApp extends IConstruct {
    * The directory of the entrypoint of the current program.
    */
   readonly entrypointDir: string;
+
+  /**
+   * The application's parameter registrar
+   */
+  readonly parameters: ParameterRegistrar;
 
   /**
    * Generate a unique ID for the given scope and prefix. The newly generated ID is

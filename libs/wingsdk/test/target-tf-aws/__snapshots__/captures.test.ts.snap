@@ -199,7 +199,7 @@ exports[`function with a queue binding 3`] = `
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:SendMessage"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:GetQueueUrl"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"},{"Action":["sqs:SendMessage"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
       "Queue-SetConsumer0_IamRolePolicy_0299B5AB": {

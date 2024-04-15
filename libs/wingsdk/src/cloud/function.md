@@ -34,8 +34,8 @@ bring cloud;
 bring util;
 
 // defining a cloud.Function resource
-let countWords = new cloud.Function(inflight (s: str): str => {
-  return "${s.split(" ").length}";
+let countWords = new cloud.Function(inflight (s: str?): str => {
+  return "{s?.split(" ")?.length ?? 0}";
 }) as "countWords";
 
 let longTask = new cloud.Function(inflight () => {
@@ -47,7 +47,7 @@ new cloud.Function(inflight () => {
   let sentence = "I am a sentence with 7 words";
   // invoking cloud.Function from inflight context
   let wordsCount = countWords.invoke(sentence);
-  log("'${sentence}' has ${wordsCount} words");
+  log("'{sentence}' has {wordsCount ?? "0"} words");
 
   longTask.invokeAsync("");
   log("task started");
@@ -56,12 +56,12 @@ new cloud.Function(inflight () => {
 
 ## Function container reuse
 
-Most cloud providers will opportunistically reuse the function's container in additional invocations. It is possible
-to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
+Most cloud providers will opportunistically reuse the function's container in additional invocations.
+It is possible to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
 
 The following example reads the `bigdata.json` file once and reuses it every time `query()` is called.
 
-```js
+```ts playground
 bring cloud;
 
 let big = new cloud.Bucket();
@@ -94,6 +94,14 @@ new cloud.Function(inflight () => {
 ### Simulator (`sim`)
 
 The sim implementation of `cloud.Function` runs the inflight code as a JavaScript function.
+
+By default, a maximum of 10 workers can be processing requests sent to a `cloud.Function` concurrently, but this number can be adjusted with the `concurrency` property:
+
+```ts playground
+new cloud.Function(inflight () => {
+  // ... code that shouldn't run concurrently ...
+}, concurrency: 1);
+```
 
 ### AWS (`tf-aws` and `awscdk`)
 

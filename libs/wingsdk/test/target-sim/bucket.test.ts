@@ -1,11 +1,12 @@
 import * as fs from "fs";
-import { resolve } from "path";
-import { vi, test, expect } from "vitest";
+import { resolve, join } from "path";
+import { test, expect } from "vitest";
 import { listMessages, treeJsonOf, waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
 import { BucketEventType } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
+import { METADATA_FILENAME } from "../../src/target-sim/bucket.inflight";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
 
@@ -22,6 +23,7 @@ test("create a bucket", async () => {
     },
     path: "root/my_bucket",
     addr: expect.any(String),
+    policy: [],
     props: {
       public: false,
       initialObjects: {},
@@ -38,22 +40,28 @@ test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const testInflight = Testing.makeHandler("async handle() {}");
+  const testInflight = Testing.makeHandler(
+    "async handle() { console.log('I am done'); }"
+  );
   bucket.onCreate(testInflight);
 
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
-
-  const KEY = "greeting.txt";
-  const VALUE = JSON.stringify({ msg: "Hello world!" });
+  const KEY = "1.txt";
 
   // WHEN
-  await client.put(KEY, VALUE);
-  await client.put(KEY, JSON.stringify({ msg: "another msg" }));
+  await client.put(KEY, JSON.stringify({ msg: "Hello world 1!" }));
+  await client.put(KEY, JSON.stringify({ msg: "Hello world 2!" }));
+  await waitUntilTraceCount(s, 1, (trace) =>
+    trace.data.message.includes(`I am done`)
+  );
 
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
+  // The bucket notification topic should only publish one message, since the
+  // second put() call counts as an update, not a create.
+  expect(listMessages(s).filter((m) => m.includes(`Publish`))).toHaveLength(1);
 });
 
 test("bucket on event creates 3 topics, and sends the right event and key in the event handlers", async () => {
@@ -330,7 +338,7 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[1].data.status).toEqual("failure");
+  expect(s.listTraces()[2].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -904,6 +912,35 @@ test("bucket is stateful across simulations", async () => {
   expect(dataB).toEqual("2"); // "b" will be remembered
   expect(metadata1).not.toEqual(metadata3);
   expect(metadata2).toEqual(metadata4);
+});
+
+test("bucket ignores corrupted state file", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  // run simulator one time
+  const stateDir = mkdtemp();
+  const s = await app.startSimulator(stateDir);
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  await client.put("a", "1");
+  await s.stop();
+
+  // WHEN
+  // corrupt the state file
+  const metadata = join(s.getResourceStateDir("/my_bucket"), METADATA_FILENAME);
+  fs.writeFileSync(metadata, "corrupted");
+
+  // restart the simulator
+  await s.start();
+  const client2 = s.getResource("/my_bucket") as cloud.IBucketClient;
+  await client2.put("b", "2");
+  const files = await client2.list();
+  await s.stop();
+
+  // THEN
+  // we lost all metadata, but the bucket is still functional
+  expect(files).toEqual(["b"]);
 });
 
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)

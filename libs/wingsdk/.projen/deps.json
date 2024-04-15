@@ -18,6 +18,10 @@
       "type": "build"
     },
     {
+      "name": "@types/glob",
+      "type": "build"
+    },
+    {
       "name": "@types/mime-types",
       "type": "build"
     },
@@ -254,6 +258,11 @@
       "type": "bundled"
     },
     {
+      "name": "@winglang/wingtunnels",
+      "version": "workspace:^",
+      "type": "bundled"
+    },
+    {
       "name": "ajv",
       "type": "bundled"
     },
@@ -267,7 +276,15 @@
       "type": "bundled"
     },
     {
+      "name": "cron-validator",
+      "type": "bundled"
+    },
+    {
       "name": "express",
+      "type": "bundled"
+    },
+    {
+      "name": "glob",
       "type": "bundled"
     },
     {
@@ -279,7 +296,7 @@
       "type": "bundled"
     },
     {
-      "name": "jsonschema",
+      "name": "jiti",
       "type": "bundled"
     },
     {
@@ -319,6 +336,10 @@
     },
     {
       "name": "uuid",
+      "type": "bundled"
+    },
+    {
+      "name": "vlq",
       "type": "bundled"
     },
     {

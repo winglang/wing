@@ -1,7 +1,7 @@
 # [capture_resource_and_data.test.w](../../../../../examples/tests/valid/capture_resource_and_data.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $data_size, $queue, $res }) {
@@ -20,7 +20,7 @@ module.exports = function({ $data_size, $queue, $res }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -41,27 +41,27 @@ module.exports = function({ $data_size, $queue, $res }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "cloudBucket": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       }
     },
     "aws_sqs_queue": {
-      "cloudQueue": {
+      "Queue": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue/Default",
-            "uniqueId": "cloudQueue"
+            "path": "root/Default/Default/Queue/Default",
+            "uniqueId": "Queue"
           }
         },
         "message_retention_seconds": 3600,
-        "name": "cloud-Queue-c86e03d8",
+        "name": "Queue-c822c726",
         "visibility_timeout_seconds": 30
       }
     }
@@ -69,8 +69,8 @@ module.exports = function({ $data_size, $queue, $res }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -78,6 +78,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -90,7 +91,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $data_size: ${$stdlib.core.liftObject(data.size)},
             $queue: ${$stdlib.core.liftObject(queue)},
             $res: ${$stdlib.core.liftObject(res)},
@@ -113,7 +114,7 @@ class $Root extends $stdlib.std.Resource {
           "handle": [
             [data.size, []],
             [queue, ["push"]],
-            [res, ["get", "put"]],
+            [res, [].concat(["put"], ["get"])],
           ],
           "$inflight_init": [
             [data.size, []],
@@ -124,14 +125,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const data = new Set([1, 2, 3]);
-    const res = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
-    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+    const res = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:resource and data", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "capture_resource_and_data.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

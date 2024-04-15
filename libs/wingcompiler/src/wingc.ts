@@ -188,7 +188,7 @@ export async function load(options: WingCompilerLoadOptions) {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      send_diagnostic: () => { },
+      send_diagnostic: () => {},
     },
     ...(options.imports ?? {}),
   } as any;
@@ -222,32 +222,26 @@ const HIGH_MASK = BigInt(32);
 // From diagnostic.rs
 export interface WingDiagnostic {
   message: string;
-  span?: {
-    start: {
-      line: number;
-      col: number;
-    };
-    end: {
-      line: number;
-      col: number;
-    };
-    file_id: string;
-  };
+  span?: WingSpan;
   annotations: {
     message: string;
-    span: {
-      start: {
-        line: number;
-        col: number;
-      };
-      end: {
-        line: number;
-        col: number;
-      };
-      file_id: string;
-    };
+    span: WingSpan;
   }[];
   hints: string[];
+}
+
+export interface WingSpan {
+  start: {
+    line: number;
+    col: number;
+  };
+  end: {
+    line: number;
+    col: number;
+  };
+  file_id: string;
+  start_offset: number;
+  end_offset: number;
 }
 
 /**

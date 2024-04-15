@@ -1,7 +1,7 @@
 # [structs.test.w](../../../../../examples/tests/valid/structs.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -18,11 +18,11 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -36,7 +36,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-//# sourceMappingURL=inflight.Foo-1.js.map
+//# sourceMappingURL=inflight.Foo-1.cjs.map
 ```
 
 ## main.tf.json
@@ -58,8 +58,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -67,6 +67,8 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -77,7 +79,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
           })
         `;
       }
@@ -112,7 +114,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
           })
         `;
       }
@@ -144,11 +146,14 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(y.field3.field0, "foo"), "y.field3.field0 == \"foo\"");
     const s = ({"a": "Boom baby"});
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:struct definitions are phase independant", new $Closure1(this, "$Closure1"));
+    const aNode = ({"val": "someval"});
+    const bNode = ({"val": "otherval", "next": aNode});
+    (expect.Util.equal(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(bNode), "{\"val\":\"otherval\",\"next\":{\"val\":\"someval\"\}\}"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "structs.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
