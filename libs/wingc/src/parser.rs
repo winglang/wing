@@ -115,7 +115,6 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"inflight",
 	"preflight",
 	"elif",
-	"init",
 	"any",
 	"num",
 	"str",
@@ -1228,14 +1227,14 @@ impl<'s> Parser<'s> {
 					if initializer.is_some() && !is_inflight {
 						self
 							.with_error::<Node>(
-								format!("Multiple initializers defined in class {}", name.name),
+								format!("Multiple constructors defined in class {}", name.name),
 								&class_element,
 							)
 							.err();
 					} else if inflight_initializer.is_some() && is_inflight {
 						self
 							.with_error::<Node>(
-								format!("Multiple inflight initializers defined in class {}", name.name),
+								format!("Multiple inflight constructors defined in class {}", name.name),
 								&class_element,
 							)
 							.err();
@@ -1244,7 +1243,7 @@ impl<'s> Parser<'s> {
 					let parameters = self.build_parameter_list(&parameters_node, class_phase, false)?;
 					if !parameters.is_empty() && is_inflight && class_phase == Phase::Preflight {
 						self
-							.with_error::<Node>("Inflight initializers cannot have parameters", &parameters_node)
+							.with_error::<Node>("Inflight constructors cannot have parameters", &parameters_node)
 							.err();
 					}
 
@@ -1303,7 +1302,7 @@ impl<'s> Parser<'s> {
 		for method in &methods {
 			if method.0.name == "constructor" {
 				Diagnostic::new(
-					"Reserved method name. Initializers are declared with \"init\"",
+					"Reserved method name. Constructors are declared with a method named \"new\"",
 					&method.0,
 				)
 				.report();
