@@ -95,7 +95,7 @@ export interface IHttpClientGetUrlHandler extends IInflight {}
 export interface IHttpClientGetApiSpecHandler extends IInflight {}
 
 /**
- * Inflight client for `IHttpClientHandler`.
+ * Inflight client for `IHttpClientGetUrlHandler`.
  */
 export interface IHttpClientGetUrlHandlerClient {
   /**
@@ -104,7 +104,9 @@ export interface IHttpClientGetUrlHandlerClient {
    */
   handle(): Promise<string>;
 }
-
+/**
+ * Inflight client for `IHttpClientGetApiSpecHandler`.
+ */
 export interface IHttpClientGetApiSpecHandlerClient {
   /**
    * Function that returns the OpenAPI spec.
