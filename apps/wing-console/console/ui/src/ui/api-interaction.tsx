@@ -239,12 +239,11 @@ export const ApiInteraction = memo(
         const isListedRoute = routes.some(
           (item) => item.route === path && item.method === method,
         );
-        console.log("isListedRoute", isListedRoute);
 
         if (!isListedRoute) {
           setHeaders([]);
           setBody("");
-          setBodyPlaceholder();
+          setBodyPlaceholder(undefined);
           setPathVariables([]);
           setQueryParameters([]);
         }
