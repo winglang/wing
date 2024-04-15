@@ -63,7 +63,9 @@ export const ApiInteraction = memo(
     const [currentMethod, setCurrentMethod] = usePersistentState("GET");
 
     const bodyId = useId();
-    const [bodyPlaceholder, setBodyPlaceholder] = useState<string>("Body...");
+    const [bodyPlaceholder, setBodyPlaceholder] = useState<
+      string | undefined
+    >();
     const [body, setBody] = usePersistentState("");
 
     const [currentOptionsTab, setCurrentOptionsTab] =
@@ -166,6 +168,7 @@ export const ApiInteraction = memo(
               (existingParameter) => existingParameter.key === parameter.key,
             ),
         );
+
         setQueryParameters((queryParameters) => [
           ...queryParameters,
           ...newQueryParameters,
@@ -219,15 +222,32 @@ export const ApiInteraction = memo(
 
     const handleRouteChange = useCallback(
       (value: string) => {
-        const [method, route] = value.split(" ");
+        let [method, route] = value.split(" ");
         if (!route) {
-          return;
+          method = currentMethod;
+          route = value;
         }
+
         const newRoute = route && !route.startsWith("/") ? `/${route}` : route;
         setCurrentRoute(newRoute);
 
         const search = newRoute.split(/\?(.*)/s)[1];
         const urlParameters = new URLSearchParams(search || "");
+
+        const path = newRoute.split(/\?(.*)/s)[0] || "";
+
+        const isListedRoute = routes.some(
+          (item) => item.route === path && item.method === method,
+        );
+        console.log("isListedRoute", isListedRoute);
+
+        if (!isListedRoute) {
+          setHeaders([]);
+          setBody("");
+          setBodyPlaceholder();
+          setPathVariables([]);
+          setQueryParameters([]);
+        }
 
         setQueryParameters(() => {
           const newUrlParameters: {
@@ -262,12 +282,16 @@ export const ApiInteraction = memo(
           return newPathVariables;
         });
 
-        if (method) {
-          handleMethodChange(route, method);
+        if (isListedRoute && method) {
+          handleMethodChange(path, method);
         }
       },
       [
+        setHeaders,
+        routes,
+        setBody,
         setCurrentRoute,
+        currentMethod,
         setPathVariables,
         setQueryParameters,
         handleMethodChange,
@@ -315,7 +339,7 @@ export const ApiInteraction = memo(
       }
       const urlParameters = new URLSearchParams();
       for (const item of queryParameters) {
-        urlParameters.append(item.key, item.value);
+        urlParameters.append(item.key, item.value ?? "");
       }
       let newRoute = currentRoute.split("?")[0] || "";
       if (urlParameters.toString()) {
@@ -373,6 +397,7 @@ export const ApiInteraction = memo(
                         value: `${route.method} ${route.route}`,
                       };
                     })}
+                    filter={false}
                     value={currentRoute}
                     onChange={handleRouteChange}
                     className="w-full"
