@@ -114,6 +114,7 @@ export interface UISection {
 /** @internal */
 export interface UIHttpClient {
   readonly kind: "http-client";
+  readonly label: string;
   readonly url: string;
   readonly openApiSpec: string;
 }

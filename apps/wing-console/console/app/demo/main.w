@@ -161,7 +161,7 @@ class WidgetService {
     new ui.HttpClient(
       "Test POST /widgets",
       this.api.url,
-      {
+      Json.stringify({
         "paths": {
           "/users": {
             "post": {
@@ -207,7 +207,7 @@ class WidgetService {
             }
           }
         }
-      }
+      })
    );
   }
 

@@ -9,21 +9,6 @@ import { App, UIComponent } from "../core";
 export const API_FQN = fqnForType("ui.HttpClient");
 
 /**
- * Props for `HttpClient`.
- */
-export interface httpClientProps {
-  /**
-   * The URL of the API.
-   */
-  readonly url: string;
-
-  /**
-   * The OpenAPI spec of the API.
-   */
-  readonly openApiSpec: string;
-}
-
-/**
  * A button can be used to perform an action.
  */
 export class HttpClient extends VisualComponent {
@@ -34,24 +19,42 @@ export class HttpClient extends VisualComponent {
   public static _newHttpClient(
     scope: Construct,
     id: string,
-    httpClientProps: {}
+    label: string,
+    url: string,
+    openApiSpec: string
   ): HttpClient {
-    return App.of(scope).newAbstract(API_FQN, scope, id, httpClientProps);
+    return App.of(scope).newAbstract(
+      API_FQN,
+      scope,
+      id,
+      label,
+      url,
+      openApiSpec
+    );
   }
 
+  private readonly label: string;
   private readonly url: string;
   private readonly openApiSpec: string;
 
-  constructor(scope: Construct, id: string, httpClientProps: httpClientProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    label: string,
+    url: string,
+    openApiSpec: string
+  ) {
     super(scope, id);
-    this.url = httpClientProps.url;
-    this.openApiSpec = httpClientProps.openApiSpec;
+    this.label = label;
+    this.url = url;
+    this.openApiSpec = openApiSpec;
   }
 
   /** @internal */
   public _toUIComponent(): UIComponent {
     return {
       kind: "http-client",
+      label: this.label,
       url: this.url,
       openApiSpec: this.openApiSpec,
     };
