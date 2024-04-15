@@ -469,7 +469,7 @@ export const createAppRouter = () => {
         return ui as Array<{
           kind: string;
           label: string;
-          handler: string;
+          handler: string | Record<string, string>;
         }>;
       }),
     "app.getResourceUiField": createProcedure
@@ -500,6 +500,96 @@ export const createAppRouter = () => {
           input.resourcePath,
         ) as IFunctionClient;
         await client.invoke("");
+      }),
+
+    "app.invokeResourceGetQuery": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+          fileName: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        return await client.invoke(
+          JSON.stringify({ fileName: input.fileName }),
+        );
+      }),
+
+    "app.invokeResourceListQuery": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        return await client.invoke();
+      }),
+
+    "app.invokeFileBrowserPutMutation": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+          fileName: z.string(),
+          fileContent: z.string(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        return await client.invoke(
+          JSON.stringify({
+            fileName: input.fileName,
+            fileContent: input.fileContent,
+          }),
+        );
+      }),
+
+    "app.invokeFileBrowserDeleteMutation": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+          fileName: z.string(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        return await client.invoke(
+          JSON.stringify({
+            fileName: input.fileName,
+          }),
+        );
+      }),
+
+    "app.invokeFileBrowserDownloadMutation": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+          fileName: z.string(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        return await client.invoke(
+          JSON.stringify({
+            fileName: input.fileName,
+          }),
+        );
       }),
 
     "app.analytics": createProcedure.query(async ({ ctx }) => {

@@ -29,6 +29,7 @@ import { trpc } from "../services/trpc.js";
 
 import { BucketMetadata } from "./bucket-metadata.js";
 import { CounterMetadata } from "./counter-metadata.js";
+import { CustomResourceFileBrowser } from "./custom-resource-file-browser.js";
 import { FunctionMetadata } from "./function-metadata.js";
 import { ScheduleMetadata } from "./schedule-metadata.js";
 
@@ -55,7 +56,7 @@ interface CustomResourceUiButtomItemProps {
   handlerPath: string;
 }
 
-const CustomResourceUiButtomItem = ({
+const CustomResourceUiButtonItem = ({
   label,
   handlerPath,
 }: CustomResourceUiButtomItemProps) => {
@@ -86,12 +87,14 @@ interface CustomResourceUiItemProps {
   kind: string;
   label: string;
   handlerPath: string;
+  others?: any;
 }
 
 const CustomResourceUiItem = ({
   handlerPath,
   kind,
   label,
+  others,
 }: CustomResourceUiItemProps) => {
   return (
     <>
@@ -99,7 +102,16 @@ const CustomResourceUiItem = ({
         <CustomResourceUiFieldItem label={label} handlerPath={handlerPath} />
       )}
       {kind === "button" && (
-        <CustomResourceUiButtomItem label={label} handlerPath={handlerPath} />
+        <CustomResourceUiButtonItem label={label} handlerPath={handlerPath} />
+      )}
+      {kind === "file-browser" && (
+        <CustomResourceFileBrowser
+          label={label}
+          putHandler={others.putHandler}
+          getHandler={others.getHandler}
+          listHandler={others.listHandler}
+          deleteHandler={others.deleteHandler}
+        />
       )}
     </>
   );
@@ -349,9 +361,10 @@ export const ResourceMetadata = memo(
                 {resourceUI.data.map((item, index) => (
                   <CustomResourceUiItem
                     key={index}
-                    handlerPath={item.handler}
                     kind={item.kind}
                     label={item.label}
+                    handlerPath={item?.handlerPath}
+                    others={item}
                   />
                 ))}
               </div>

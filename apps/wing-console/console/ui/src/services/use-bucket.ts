@@ -46,7 +46,7 @@ export const useBucket = ({ resourcePath, currentFile }: UseBucketOptions) => {
 
   useEffect(() => {
     if (!list.data) return;
-    setFiles([...list.data] ?? []);
+    setFiles([...list.data]);
   }, [list.data]);
 
   const putFile = useCallback(

@@ -1,5 +1,7 @@
 bring cloud;
 bring ex;
+bring ui;
+
 // @see https://github.com/winglang/wing/issues/4237 it crashes the Console preview env.
 //let secret = new cloud.Secret(name: "my-secret");
 
@@ -7,7 +9,60 @@ let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 let api = new cloud.Api();
 let counter = new cloud.Counter(initial: 0);
+struct PutData {
+  fileName: str;
+  fileContent: str;
+}
+struct GetData {
+  fileName: str;
+}
+struct DeleteData {
+  fileName: str;
+}
 
+class myBucket {
+    b: cloud.Bucket;
+    new() {
+        log("Bucket created!");
+        this.b = new cloud.Bucket();
+            // a button lets you invoke any inflight function
+        new ui.FileBrowser("File Browser",
+            inflight (payload: str) => {
+                log("Put {payload}");
+                let data: PutData = PutData.fromJson(Json.parse(payload));
+                this.b.put(data.fileName, data.fileContent);
+            },
+             inflight (payload: str) => {
+                log("Delete {payload}");
+                let data: DeleteData = DeleteData.fromJson(Json.parse(payload));
+                this.b.delete(data.fileName);
+            },
+            inflight (payload: str) => {
+                let data: GetData = GetData.fromJson(Json.parse(payload));
+                return this.b.get(data.fileName);
+                },
+             inflight () => {return this.b.list();},
+        );
+
+        new cloud.Service(
+            inflight () => {
+                log("start!");
+                this.b.put("hello.txt", "Hello, GET!");
+                return inflight () => {
+                    log("stop!");
+                };
+            },
+        );
+    }
+    pub inflight put(key: str, value: str) {
+        this.b.put(key, value);
+    }
+}
+
+let myB = new myBucket() as "MyUIComponentBucket";
+let putfucn = new cloud.Function(inflight () => {
+    myB.put("test", "Test");
+}) as "PutFileInCustomBucket";
 
 api.get("/test-get", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   bucket.put("hello.txt", "Hello, GET!");
@@ -25,7 +80,8 @@ api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 });
 
 let handler = inflight (message: str): str => {
-  bucket.put("hello.txt", "Hello, {message}!");
+   counter.inc();
+  bucket.put("hello{counter.peek()}.txt", "Hello, {message}!");
   log("Hello, {message}!");
   return message;
 };
@@ -123,7 +179,6 @@ test "Add fixtures" {
   counter.inc(100);
 }
 
-bring ui;
 
 class WidgetService {
   data: cloud.Bucket;
