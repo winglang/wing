@@ -41,3 +41,22 @@ let inflight_closure = inflight () => {
 test "explicit closure lift qualification" {
   inflight_closure();
 }
+
+// Explicit qualification of preflight interface type
+interface PreflightInterface {
+  inflight method(): str;
+}
+
+class PreflightClass impl PreflightInterface {
+  pub inflight method(): str {
+    return "ahoy there";
+  }
+}
+
+let bar = new PreflightClass();
+
+test "explicit interface lift qualification" {
+  lift(bar, ["method"]);
+  let x: PreflightInterface = bar;
+  assert(x.method() == "ahoy there");
+}

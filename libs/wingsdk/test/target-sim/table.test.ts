@@ -22,6 +22,7 @@ test("create a table", async () => {
     },
     path: "root/my_table",
     addr: expect.any(String),
+    policy: [],
     props: {
       name: "new_table",
       columns: {
@@ -60,6 +61,7 @@ test("insert row", async () => {
     },
     path: "root/my_table",
     addr: expect.any(String),
+    policy: [],
     props: {
       name: "my_insert_table",
       columns: {
@@ -106,6 +108,7 @@ test("get row", async () => {
     },
     path: "root/my_table",
     addr: expect.any(String),
+    policy: [],
     props: {
       name: "my_get_table",
       columns: {
@@ -151,6 +154,7 @@ test("tryGet row", async () => {
     },
     path: "root/my_table",
     addr: expect.any(String),
+    policy: [],
     props: {
       name: "my_get_table",
       columns: {
@@ -195,6 +199,7 @@ test("update row", async () => {
     },
     path: "root/my_table",
     addr: expect.any(String),
+    policy: [],
     props: {
       name: "my_update_table",
       columns: {
@@ -238,6 +243,7 @@ test("list table", async () => {
     },
     path: "root/my_table",
     addr: expect.any(String),
+    policy: [],
     props: {
       name: "my_list_table",
       columns: {
@@ -343,6 +349,7 @@ test("can add row in preflight", async () => {
     },
     path: "root/my_table",
     addr: expect.any(String),
+    policy: [],
     props: {
       name: "my_addrow_table",
       columns: {

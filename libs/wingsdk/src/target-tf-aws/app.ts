@@ -5,7 +5,6 @@ import { Endpoint } from "./endpoint";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
-import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
@@ -41,7 +40,7 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
-import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Domain } from "../shared-aws/domain";
 import { CdktfApp } from "../shared-tf/app";
@@ -121,9 +120,6 @@ export class App extends CdktfApp {
       case DOMAIN_FQN:
         return Domain;
 
-      case REACT_APP_FQN:
-        return ReactApp;
-
       case ENDPOINT_FQN:
         return Endpoint;
     }
@@ -170,20 +166,17 @@ export class App extends CdktfApp {
       return this._vpc;
     }
 
-    return this.platformParameters.getParameterValue(`${this._target}/vpc`) ===
-      "existing"
+    return this.parameters.value(`${this._target}/vpc`) === "existing"
       ? this.importExistingVpc()
       : this.createDefaultVpc();
   }
 
   private importExistingVpc(): DataAwsVpc {
-    const vpcId = this.platformParameters.getParameterValue(
-      `${this._target}/vpc_id`
-    );
-    const privateSubnetIds = this.platformParameters.getParameterValue(
+    const vpcId = this.parameters.value(`${this._target}/vpc_id`);
+    const privateSubnetIds = this.parameters.value(
       `${this._target}/private_subnet_ids`
     );
-    const publicSubnetIds = this.platformParameters.getParameterValue(
+    const publicSubnetIds = this.parameters.value(
       `${this._target}/public_subnet_ids`
     );
 

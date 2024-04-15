@@ -103,8 +103,8 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
         if (span?.file_id) {
           // `span` should only be null if source file couldn't be read etc.
           const source = await fsPromise.readFile(span.file_id, "utf8");
-          const start = byteOffsetFromLineAndColumn(source, span.start.line, span.start.col);
-          const end = byteOffsetFromLineAndColumn(source, span.end.line, span.end.col);
+          const start = span.start_offset;
+          const end = span.end_offset;
           const filePath = relative(cwd, span.file_id);
           files.push({ name: filePath, source });
           labels.push({
@@ -122,16 +122,8 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
             continue;
           }
           const source = await fsPromise.readFile(annotation.span.file_id, "utf8");
-          const start = byteOffsetFromLineAndColumn(
-            source,
-            annotation.span.start.line,
-            annotation.span.start.col
-          );
-          const end = byteOffsetFromLineAndColumn(
-            source,
-            annotation.span.end.line,
-            annotation.span.end.col
-          );
+          const start = annotation.span.start_offset;
+          const end = annotation.span.end_offset;
           const filePath = relative(cwd, annotation.span.file_id);
           files.push({ name: filePath, source });
           labels.push({
@@ -178,17 +170,4 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       throw error;
     }
   }
-}
-
-function byteOffsetFromLineAndColumn(source: string, line: number, column: number) {
-  const lines = source.split("\n");
-  let offset = 0;
-  for (let i = 0; i < line; i++) {
-    offset += lines[i].length + 1;
-  }
-
-  // Convert char offset to byte offset
-  const encoder = new TextEncoder();
-  const srouce_bytes = encoder.encode(source.substring(0, offset));
-  return srouce_bytes.length + column;
 }

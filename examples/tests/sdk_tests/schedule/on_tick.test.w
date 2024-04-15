@@ -2,7 +2,7 @@ bring cloud;
 bring util;
 
 // every minute
-let from_cron = new cloud.Schedule( cron: "* * * * ?" ) as "from_cron";
+let from_cron = new cloud.Schedule( cron: "* * * * *" ) as "from_cron";
 let from_rate = new cloud.Schedule( rate: 1m ) as "from_rate";
 let c1 = new cloud.Counter() as "c1";
 let c2 = new cloud.Counter() as "c2";

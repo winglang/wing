@@ -7,8 +7,11 @@ export function isValidArn(arn: string, service: string) {
     return true;
   }
 
+  // ARN format: arn:partition:service:region:account-id:resource-type?:resource
+  // e.g. arn:aws:lambda:us-east-1:111111111111:function:Function-11111111
+  // or,  arn:aws:sqs:us-east-1:111111111111:Queue-11111111
   const parts = arn.split(":");
-  if (parts.length !== 6) {
+  if (parts.length < 6 || parts.length > 7) {
     return false;
   }
 

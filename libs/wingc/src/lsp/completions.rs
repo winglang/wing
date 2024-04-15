@@ -179,11 +179,15 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					start: parent.start_position().into(),
 					end: parent.end_position().into(),
 					file_id: file.to_string(),
+					start_offset: parent.start_byte(),
+					end_offset: parent.end_byte(),
 				}),
 				WingSpan {
 					start: node_to_complete.start_position().into(),
 					end: node_to_complete.end_position().into(),
 					file_id: file.to_string(),
+					start_offset: node_to_complete.start_byte(),
+					end_offset: node_to_complete.end_byte(),
 				},
 				params.text_document_position.position.into(),
 				&root_scope,
@@ -403,6 +407,12 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								return vec![];
 							};
 							let Some(structy) = types.get_type_from_json_cast(element.id) else {
+								return vec![];
+							};
+
+							(fields, *structy)
+						} else if let ExprKind::JsonMapLiteral { fields } = &expr.kind {
+							let Some(structy) = types.get_type_from_json_cast(expr.id) else {
 								return vec![];
 							};
 
@@ -1612,6 +1622,18 @@ struct Foo {
 }
 
 Foo { x: "hi", }
+            //^
+"#
+	);
+
+	test_completion_list!(
+		struct_literal_empty_nospace,
+		r#"
+struct Foo {
+	x: str;
+}
+
+let x: Foo = {}
             //^
 "#
 	);

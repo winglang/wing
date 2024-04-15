@@ -131,11 +131,11 @@ export function directorySnapshot(initialRoot: string) {
         continue;
       }
       // skip sandbox entrypoints since they are mostly a duplicate of the original
-      if (f.endsWith(".sandbox.js")) {
+      if (f.endsWith(".sandbox.cjs")) {
         continue;
       }
       // skip esbuild output
-      if (f.endsWith(".js.bundle")) {
+      if (f.endsWith(".cjs.bundle")) {
         continue;
       }
 
@@ -157,6 +157,7 @@ export function directorySnapshot(initialRoot: string) {
             }
             break;
 
+          case ".cjs":
           case ".js":
             const code = readFileSync(abspath, "utf-8");
             snapshot[key] = sanitizeCode(code);

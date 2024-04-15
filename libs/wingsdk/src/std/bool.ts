@@ -15,7 +15,7 @@ export class Boolean {
    */
   public static fromJson(json: Json, options?: JsonValidationOptions): boolean {
     const schema = JsonSchema._createJsonSchema({
-      id: "bool",
+      $id: "bool",
       type: "boolean",
     } as any);
     schema.validate(json, options);

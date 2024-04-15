@@ -26,9 +26,9 @@ use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_JSON, WINGSDK_MAP,
-	WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON,
+	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -356,23 +356,9 @@ pub struct Interface {
 	pub fqn: Option<String>,
 	pub docs: Docs,
 	pub extends: Vec<TypeRef>, // Must be a Type::Interface type
+	pub phase: Phase,
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
-}
-
-impl Interface {
-	fn is_resource(&self) -> bool {
-		// TODO: This should check that the interface extends `IResource` from
-		// the SDK, not just any interface with the name `IResource`
-		// https://github.com/winglang/wing/issues/2098
-		self.name.name == "IResource"
-			|| self.extends.iter().any(|i| {
-				i.as_interface()
-					.expect("Interface extends a type that isn't an interface")
-					.name
-					.name == "IResource"
-			})
-	}
 }
 
 impl Display for Interface {
@@ -793,9 +779,15 @@ pub struct FunctionSignature {
 	/// The type of "this" inside the function, if any. This should be None for
 	/// static or anonymous functions.
 	pub this_type: Option<TypeRef>,
+	/// The parameters of the function.
 	pub parameters: Vec<FunctionParameter>,
+	/// The return type of the function.
 	pub return_type: TypeRef,
+	/// The phase in which this function exists
 	pub phase: Phase,
+	/// Expects an implicit caller scope argument to be passed to the function (for static preflight functions
+	/// so they can instantiate preflight classes)
+	pub implicit_scope_param: bool,
 	/// During jsify, calls to this function will be replaced with this string
 	/// In JSII imports, this is denoted by the `@macro` attribute
 	/// This string may contain special tokens:
@@ -1078,6 +1070,18 @@ impl TypeRef {
 		return false;
 	}
 
+	pub fn is_preflight_object_type(&self) -> bool {
+		if let Type::Class(ref class) = **self {
+			return class.phase == Phase::Preflight;
+		}
+
+		if let Type::Interface(ref iface) = **self {
+			return iface.phase == Phase::Preflight;
+		}
+
+		false
+	}
+
 	/// Returns whether type represents a closure (either a function or a closure class).
 	pub fn is_closure(&self) -> bool {
 		if self.as_function_sig().is_some() {
@@ -1172,36 +1176,6 @@ impl TypeRef {
 			**self,
 			Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_)
 		)
-	}
-
-	pub fn is_capturable(&self) -> bool {
-		match &**self {
-			Type::Interface(iface) => iface.is_resource(),
-			Type::Enum(_) => true,
-			Type::Number => true,
-			Type::String => true,
-			Type::Duration => true,
-			Type::Boolean => true,
-			Type::Json(_) => true,
-			Type::Nil => true,
-			Type::Array(v) => v.is_capturable(),
-			Type::Map(v) => v.is_capturable(),
-			Type::Set(v) => v.is_capturable(),
-			Type::Struct(_) => true,
-			Type::Optional(v) => v.is_capturable(),
-			Type::Anything => false,
-			Type::Unresolved => false,
-			Type::Inferred(..) => false,
-			Type::Void => false,
-			Type::MutJson => true,
-			Type::MutArray(v) => v.is_capturable(),
-			Type::MutMap(v) => v.is_capturable(),
-			Type::MutSet(v) => v.is_capturable(),
-			Type::Function(sig) => sig.phase == Phase::Inflight,
-
-			// only preflight classes can be captured
-			Type::Class(c) => c.phase == Phase::Preflight,
-		}
 	}
 
 	// returns true if mutable type or if immutable container type contains a mutable type
@@ -1593,10 +1567,21 @@ impl Types {
 		self
 			.libraries
 			.lookup_nested_str(&resource_fqn, None)
-			.expect("Resouce base class to be loaded")
+			.expect("Resource base class to be loaded")
 			.0
 			.as_type()
-			.expect("Resouce base class to be a type")
+			.expect("Resource base class to be a type")
+	}
+
+	pub fn resource_base_interface(&self) -> TypeRef {
+		let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_IRESOURCE);
+		self
+			.libraries
+			.lookup_nested_str(&resource_fqn, None)
+			.expect("Resource base interface to be loaded")
+			.0
+			.as_type()
+			.expect("Resource base interface to be a type")
 	}
 
 	pub fn construct_base_type(&self) -> TypeRef {
@@ -1953,6 +1938,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn add_builtins(&mut self, scope: &mut Scope) {
+		let optional_string = self.types.make_option(self.types.string());
 		self.add_builtin(
 			UtilityFunctions::Log.to_string().as_str(),
 			Type::Function(FunctionSignature {
@@ -1967,6 +1953,7 @@ impl<'a> TypeChecker<'a> {
 				phase: Phase::Independent,
 				js_override: Some("console.log($args$)".to_string()),
 				docs: Docs::with_summary("Logs a message"),
+				implicit_scope_param: false,
 			}),
 			scope,
 		);
@@ -1974,16 +1961,25 @@ impl<'a> TypeChecker<'a> {
 			UtilityFunctions::Assert.to_string().as_str(),
 			Type::Function(FunctionSignature {
 				this_type: None,
-				parameters: vec![FunctionParameter {
-					name: "condition".into(),
-					typeref: self.types.bool(),
-					docs: Docs::with_summary("The condition to assert"),
-					variadic: false,
-				}],
+				parameters: vec![
+					FunctionParameter {
+						name: "condition".into(),
+						typeref: self.types.bool(),
+						docs: Docs::with_summary("The condition to assert"),
+						variadic: false,
+					},
+					FunctionParameter {
+						name: "message".into(),
+						typeref: optional_string,
+						docs: Docs::with_summary("The message to log if the condition is false"),
+						variadic: false,
+					},
+				],
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
 				docs: Docs::with_summary("Asserts that a condition is true"),
+				implicit_scope_param: false,
 			}),
 			scope,
 		);
@@ -2001,6 +1997,7 @@ impl<'a> TypeChecker<'a> {
 				phase: Phase::Independent,
 				js_override: Some("$args$".to_string()),
 				docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
+				implicit_scope_param: false,
 			}),
 			scope,
 		);
@@ -2028,6 +2025,7 @@ impl<'a> TypeChecker<'a> {
 				phase: Phase::Preflight,
 				js_override: Some("$helpers.nodeof($args$)".to_string()),
 				docs: Docs::with_summary("Obtain the tree node of a preflight resource."),
+				implicit_scope_param: false,
 			}),
 			scope,
 		);
@@ -2040,7 +2038,7 @@ impl<'a> TypeChecker<'a> {
 				parameters: vec![
 					FunctionParameter {
 						name: "preflightObject".into(),
-						typeref: self.types.resource_base_type(),
+						typeref: self.types.resource_base_interface(),
 						docs: Docs::with_summary("The preflight object to qualify"),
 						variadic: false,
 					},
@@ -2063,6 +2061,7 @@ impl<'a> TypeChecker<'a> {
 				docs: Docs::with_summary(
 					"Explicitly apply qualifications to a preflight object used in the current method/function",
 				),
+				implicit_scope_param: false,
 			}),
 			scope,
 		)
@@ -2930,7 +2929,7 @@ impl<'a> TypeChecker<'a> {
 				arg_list.pos_args.iter().skip(variadic_index),
 				arg_list_types.pos_args.iter().skip(variadic_index),
 			) {
-				// If your calling a method on some container type, and it takes a generic variadic argument,
+				// If you're calling a method on some container type, and it takes a generic variadic argument,
 				// then substitute that argument type (T1) with the container's element type when typechecking the function arguments
 				if let Some(element_type) = func_sig.this_type.and_then(|x| x.collection_item_type()) {
 					if let Some(object) = variadic_args_inner_type.as_class() {
@@ -3693,6 +3692,7 @@ impl<'a> TypeChecker<'a> {
 			docs: Docs::default(),
 			env: dummy_env,
 			extends: extend_interfaces.clone(),
+			phase: iface.phase,
 		};
 		let interface_type = self.types.add_type(Type::Interface(interface_spec));
 
@@ -3794,6 +3794,7 @@ impl<'a> TypeChecker<'a> {
 					phase: ast_sig.phase,
 					js_override: None,
 					docs: Docs::default(),
+					implicit_scope_param: false,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
@@ -4087,20 +4088,13 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_interface(&mut self, ast_iface: &AstInterface, env: &mut SymbolEnv) {
-		let AstInterface {
-			name,
-			extends: _,
-			methods,
-			access: _,
-		} = ast_iface;
-
 		// Note: to support mutually recursive type definitions (types that refer to each other), interface types
 		// are initialized during `type_check_scope`. The interface type is created with a dummy environment and
 		// then replaced with the real environment after the interface's fields are type checked.
 		// In this method, we are filling in the interface's environment with its members
 		// and updating the interface's Type with the new environment.
 		let mut interface_type = env
-			.lookup(name, Some(self.ctx.current_stmt_idx()))
+			.lookup(&ast_iface.name, Some(self.ctx.current_stmt_idx()))
 			.expect("interface type should have been defined in the environment")
 			.as_type()
 			.unwrap();
@@ -4114,7 +4108,7 @@ impl<'a> TypeChecker<'a> {
 		);
 
 		// Add methods to the interface env
-		for (method_name, sig) in methods.iter() {
+		for (method_name, sig) in ast_iface.methods.iter() {
 			let mut method_type = self.resolve_type_annotation(&sig.to_type_annotation(), env);
 			// use the interface type as the function's "this" type
 			if let Type::Function(ref mut f) = *method_type {
@@ -4144,14 +4138,42 @@ impl<'a> TypeChecker<'a> {
 			};
 		}
 
-		// add methods from all extended interfaces to the interface env
 		let extend_interfaces = &interface_type.as_interface().unwrap().extends;
-		if let Err(e) = add_parent_members_to_iface_env(extend_interfaces, name, &mut interface_env) {
+
+		// If this is a preflight interface and it doesn't extend any other preflight interfaces then implicitly make it extend
+		// the base resource interface. This is so there's some expression in the type system that this is an
+		// interface that can only be implemented on a preflight class. This is safe because all preflight classes implement
+		// `std.Resource` which itself implements `std.IResource`.
+		let need_to_add_base_iresource = ast_iface.phase == Phase::Preflight
+			&& !extend_interfaces
+				.iter()
+				.any(|i| i.as_interface().unwrap().phase == Phase::Preflight);
+
+		// Verify extended interfaces are of valid phase for this interface
+		for interface in extend_interfaces.iter().map(|t| t.as_interface().unwrap()) {
+			if ast_iface.phase == Phase::Inflight && interface.phase == Phase::Preflight {
+				self.spanned_error(
+					&ast_iface.name,
+					format!(
+						"Inflight interface {} cannot extend a preflight interface {}",
+						ast_iface.name, interface.name
+					),
+				);
+			}
+		}
+
+		// add methods from all extended interfaces to the interface env
+		if let Err(e) = add_parent_members_to_iface_env(extend_interfaces, &ast_iface.name, &mut interface_env) {
 			self.type_error(e);
 		}
 
 		// Replace the dummy interface environment with the real one
 		interface_type.as_mut_interface().unwrap().env = interface_env;
+
+		if need_to_add_base_iresource {
+			let base_resource = self.types.resource_base_interface();
+			interface_type.as_mut_interface().unwrap().extends.push(base_resource);
+		}
 	}
 
 	fn type_check_class(&mut self, stmt: &Stmt, ast_class: &AstClass, env: &mut SymbolEnv) {
@@ -4187,6 +4209,19 @@ impl<'a> TypeChecker<'a> {
 				}
 			})
 			.collect::<Vec<_>>();
+
+		// Verify implemented interfaces are of valid phase for this class
+		for interface in impl_interfaces.iter().map(|t| t.as_interface().unwrap()) {
+			if ast_class.phase == Phase::Inflight && interface.phase == Phase::Preflight {
+				self.spanned_error(
+					stmt,
+					format!(
+						"Inflight class {} cannot implement a preflight interface {}",
+						ast_class.name, interface.name
+					),
+				);
+			}
+		}
 
 		// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 		let class_spec = Class {
@@ -4247,6 +4282,7 @@ impl<'a> TypeChecker<'a> {
 			let mut method_type = self.resolve_type_annotation(&method_def.signature.to_type_annotation(), env);
 			self.add_method_to_class_env(
 				&mut method_type,
+				method_def,
 				if method_def.is_static { None } else { Some(class_type) },
 				method_def.access,
 				&mut class_env,
@@ -4264,6 +4300,7 @@ impl<'a> TypeChecker<'a> {
 		let mut init_func_type = self.resolve_type_annotation(&ast_class.initializer.signature.to_type_annotation(), env);
 		self.add_method_to_class_env(
 			&mut init_func_type,
+			&ast_class.initializer,
 			None,
 			ast_class.initializer.access,
 			&mut class_env,
@@ -4281,6 +4318,7 @@ impl<'a> TypeChecker<'a> {
 			self.resolve_type_annotation(&ast_class.inflight_initializer.signature.to_type_annotation(), env);
 		self.add_method_to_class_env(
 			&mut inflight_init_func_type,
+			&ast_class.inflight_initializer,
 			Some(class_type),
 			ast_class.inflight_initializer.access,
 			&mut class_env,
@@ -4356,7 +4394,7 @@ impl<'a> TypeChecker<'a> {
 				{
 					let class_method_var = symbol.as_variable().expect("Expected method to be a variable");
 					let class_method_type = class_method_var.type_;
-					self.validate_type(class_method_type, method_type, &ast_class.name);
+					self.validate_type(class_method_type, method_type, &class_method_var.name);
 					// Make sure the method is public (interface methods must be public)
 					if class_method_var.access != AccessModifier::Public {
 						self.spanned_error(
@@ -4951,16 +4989,44 @@ impl<'a> TypeChecker<'a> {
 	fn add_method_to_class_env(
 		&mut self,
 		method_type: &mut TypeRef,
+		method_def: &FunctionDefinition,
 		instance_type: Option<TypeRef>,
 		access: AccessModifier,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
 	) {
-		// use the class type as the function's "this" type (or None if static)
-		method_type
+		// Modify the method's type based on the fact we know it's a method and not just a function
+		let method_sig = method_type
 			.as_mut_function_sig()
-			.expect("Expected method type to be a function")
-			.this_type = instance_type;
+			.expect("Expected method type to be a function");
+
+		// use the class type as the function's "this" type (or None if static)
+		method_sig.this_type = instance_type;
+
+		// For now all static preflight methods require an implicit scope argument. In the future we may be smart and if
+		// the method doesn't instantiate any preflight classes then we can do away with it.
+		//
+		// Special cases:
+		// 1) If we're overriding a method from a parent class, we assume its `implicit_scope_param`. Note that
+		//    this isn't stricly correct and we don't have clearly defined rules for static method inheritance, but this
+		//    resolves the issue of calling the base `Resource` class's onTypeLift method which doesn't expect a scope param.
+		// 2) If the method is extern we can't add any implicit params.
+		let inherit_implicit_scope_param = class_env.parent.and_then(|e| {
+			e.lookup(method_name, None).and_then(|s| {
+				s.as_variable()
+					.unwrap()
+					.type_
+					.as_function_sig()
+					.map(|s| s.implicit_scope_param)
+			})
+		});
+		method_sig.implicit_scope_param = if let Some(inherit_implicit_scope_param) = inherit_implicit_scope_param {
+			inherit_implicit_scope_param
+		} else {
+			instance_type.is_none()
+				&& method_sig.phase == Phase::Preflight
+				&& !matches!(method_def.body, FunctionBody::External(_))
+		};
 
 		// If this method is overriding a parent method, check access modifiers allow it, note this is only relevant for instance methods
 		if instance_type.is_some() {
@@ -5080,7 +5146,6 @@ impl<'a> TypeChecker<'a> {
 				assembly_name: assembly_name.to_string(),
 				namespace_filter,
 				alias: alias.clone(),
-				import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
 			});
 
 			self
@@ -5091,10 +5156,7 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// check if we've already defined the given alias in the current scope
-		if env
-			.lookup(&jsii.alias.name.as_str().into(), Some(jsii.import_statement_idx))
-			.is_some()
-		{
+		if env.lookup(&jsii.alias.name.as_str().into(), None).is_some() {
 			self.spanned_error(alias, format!("\"{}\" is already defined", alias.name));
 		} else {
 			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
@@ -5201,6 +5263,7 @@ impl<'a> TypeChecker<'a> {
 				fqn: iface.fqn.clone(),
 				docs: iface.docs.clone(),
 				extends: iface.extends.clone(),
+				phase: iface.phase,
 			}),
 			Type::Struct(s) => Type::Struct(Struct {
 				name: s.name.clone(),
@@ -5316,6 +5379,7 @@ impl<'a> TypeChecker<'a> {
 					phase: if new_this_type.is_none() { env.phase } else { sig.phase },
 					js_override: sig.js_override.clone(),
 					docs: sig.docs.clone(),
+					implicit_scope_param: sig.implicit_scope_param,
 				};
 
 				return self.types.add_type(Type::Function(new_sig));
@@ -5402,6 +5466,10 @@ impl<'a> TypeChecker<'a> {
 				name: "Datetime".to_string(),
 				span: symbol.span.clone(),
 			}),
+			"regex" => Some(Symbol {
+				name: "Regex".to_string(),
+				span: symbol.span.clone(),
+			}),
 			"str" => Some(Symbol {
 				name: "String".to_string(),
 				span: symbol.span.clone(),
@@ -5464,11 +5532,19 @@ impl<'a> TypeChecker<'a> {
 		let start = root.span.start;
 		let end = path.last().map(|s| s.span.end).unwrap_or(root.span.end);
 		let file_id = root.span.file_id.clone();
+		let start_offset = root.span.start_offset;
+		let end_offset = path.last().map(|s| s.span.end_offset).unwrap_or(root.span.end_offset);
 
 		Some(UserDefinedType {
 			root,
 			fields: path,
-			span: WingSpan { start, end, file_id },
+			span: WingSpan {
+				start,
+				end,
+				file_id,
+				start_offset,
+				end_offset,
+			},
 		})
 	}
 
@@ -6335,11 +6411,12 @@ pub fn import_udt_from_jsii(
 pub fn fully_qualify_std_type(type_: &str) -> String {
 	// Additionally, this doesn't handle for generics
 	let type_ = match type_ {
-		"str" => "String",
 		"duration" => "Duration",
 		"datetime" => "Datetime",
-		"bool" => "Boolean",
+		"regex" => "Regex",
+		"str" => "String",
 		"num" => "Number",
+		"bool" => "Boolean",
 		_ => {
 			// Check for generics or Json
 			let type_ = if let Some((prefix, _)) = type_.split_once(" ") {
@@ -6405,6 +6482,7 @@ mod tests {
 			phase,
 			js_override: None,
 			docs: Docs::default(),
+			implicit_scope_param: false,
 		})
 	}
 

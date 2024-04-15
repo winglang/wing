@@ -4,6 +4,7 @@ import { RedisClientBase } from "../ex";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 
 export class Redis
@@ -14,14 +15,11 @@ export class Redis
   private connection?: IoRedis;
   private isCleanedUp = false;
 
-  public constructor(
-    private readonly props: RedisSchema["props"],
-    _context: ISimulatorContext
-  ) {
+  public constructor(private readonly props: RedisSchema) {
     super();
   }
 
-  public async init(): Promise<RedisAttributes> {
+  public async init(_context: ISimulatorContext): Promise<RedisAttributes> {
     try {
       if (this.isCleanedUp) {
         return {};
@@ -45,6 +43,10 @@ export class Redis
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async rawClient(): Promise<any> {
     if (this.connection) {

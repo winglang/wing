@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { isValidCron } from "cron-validator";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
@@ -70,10 +71,18 @@ export class Schedule extends Resource {
     if (rate && rate.seconds < 60) {
       throw new Error("rate can not be set to less than 1 minute.");
     }
-    if (cron && cron.split(" ").length > 5) {
-      throw new Error(
-        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
-      );
+    // Check for valid UNIX cron format
+    // https://www.ibm.com/docs/en/db2/11.5?topic=task-unix-cron-format
+    if (
+      cron &&
+      !isValidCron(cron, {
+        alias: true,
+        allowSevenAsSunday: true,
+        allowBlankDay: false,
+        seconds: false,
+      })
+    ) {
+      throw new Error("cron string must be in UNIX cron format");
     }
   }
 

@@ -17,10 +17,10 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: bb|x
 - label: assert
   kind: 3
-  detail: "(condition: bool): void"
+  detail: "(condition: bool, message: str?): void"
   documentation:
     kind: markdown
-    value: "```wing\nassert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n### Parameters\n- `condition` — `bool` — The condition to assert"
+    value: "```wing\nassert: (condition: bool, message: str?): void\n```\n---\nAsserts that a condition is true\n### Parameters\n- `condition` — `bool` — The condition to assert\n- `message` — `str?` — The message to log if the condition is false"
   sortText: cc|assert
   insertText: assert($1)
   insertTextFormat: 2
@@ -29,10 +29,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: lift
   kind: 3
-  detail: "inflight (preflightObject: Resource, qualifications: Array<str>): void"
+  detail: "inflight (preflightObject: IResource, qualifications: Array<str>): void"
   documentation:
     kind: markdown
-    value: "```wing\nlift: inflight (preflightObject: Resource, qualifications: Array<str>): void\n```\n---\nExplicitly apply qualifications to a preflight object used in the current method/function\n### Parameters\n- `preflightObject` — `Resource` — The preflight object to qualify\n- `qualifications` — `Array<str>` — \n\t\t\t\t\t\t\tThe qualifications to apply to the preflight object.\n\n\t\t\t\t\t\t\tThis is an array of strings denoting members of the object that are accessed in the current method/function.\n\n\t\t\t\t\t\t\tFor example, if the method accesses the `push` and `pop` members of a `cloud.Queue` object, the qualifications should be `[\"push\", \"pop\"]`."
+    value: "```wing\nlift: inflight (preflightObject: IResource, qualifications: Array<str>): void\n```\n---\nExplicitly apply qualifications to a preflight object used in the current method/function\n### Parameters\n- `preflightObject` — `IResource` — The preflight object to qualify\n- `qualifications` — `Array<str>` — \n\t\t\t\t\t\t\tThe qualifications to apply to the preflight object.\n\n\t\t\t\t\t\t\tThis is an array of strings denoting members of the object that are accessed in the current method/function.\n\n\t\t\t\t\t\t\tFor example, if the method accesses the `push` and `pop` members of a `cloud.Queue` object, the qualifications should be `[\"push\", \"pop\"]`."
   sortText: cc|lift
   insertText: lift($1)
   insertTextFormat: 2

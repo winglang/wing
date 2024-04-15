@@ -158,9 +158,7 @@ test("cron with more than five values", () => {
       new cloud.Schedule(app, "Schedule", {
         cron: "0/1 * ? * * *",
       })
-  ).toThrow(
-    "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
-  );
+  ).toThrow("cron string must be in UNIX cron format");
 });
 
 test("schedule without rate or cron", () => {
@@ -196,5 +194,7 @@ test("cron with day of month and day of week configured at the same time", () =>
       new cloud.Schedule(app, "Schedule", {
         cron: "* * 1 * 1",
       })
-  ).toThrow("Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'");
+  ).toThrow(
+    "Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'"
+  );
 });
