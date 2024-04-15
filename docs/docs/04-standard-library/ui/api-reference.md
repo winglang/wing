@@ -240,13 +240,14 @@ An HttpClient can be used to make HTTP requests.
 ```wing
 bring ui;
 
-new ui.HttpClient(label: str, handler: IHttpClientHandler);
+new ui.HttpClient(label: str, getUrlHandler: IHttpClientGetUrlHandler, getApiSpecHandler: IHttpClientGetApiSpecHandler);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ui.HttpClient.Initializer.parameter.label">label</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.ui.HttpClient.Initializer.parameter.handler">handler</a></code> | <code><a href="#@winglang/sdk.ui.IHttpClientHandler">IHttpClientHandler</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.ui.HttpClient.Initializer.parameter.getUrlHandler">getUrlHandler</a></code> | <code><a href="#@winglang/sdk.ui.IHttpClientGetUrlHandler">IHttpClientGetUrlHandler</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.ui.HttpClient.Initializer.parameter.getApiSpecHandler">getApiSpecHandler</a></code> | <code><a href="#@winglang/sdk.ui.IHttpClientGetApiSpecHandler">IHttpClientGetApiSpecHandler</a></code> | *No description.* |
 
 ---
 
@@ -256,9 +257,15 @@ new ui.HttpClient(label: str, handler: IHttpClientHandler);
 
 ---
 
-##### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.ui.HttpClient.Initializer.parameter.handler"></a>
+##### `getUrlHandler`<sup>Required</sup> <a name="getUrlHandler" id="@winglang/sdk.ui.HttpClient.Initializer.parameter.getUrlHandler"></a>
 
-- *Type:* <a href="#@winglang/sdk.ui.IHttpClientHandler">IHttpClientHandler</a>
+- *Type:* <a href="#@winglang/sdk.ui.IHttpClientGetUrlHandler">IHttpClientGetUrlHandler</a>
+
+---
+
+##### `getApiSpecHandler`<sup>Required</sup> <a name="getApiSpecHandler" id="@winglang/sdk.ui.HttpClient.Initializer.parameter.getApiSpecHandler"></a>
+
+- *Type:* <a href="#@winglang/sdk.ui.IHttpClientGetApiSpecHandler">IHttpClientGetApiSpecHandler</a>
 
 ---
 
@@ -761,38 +768,73 @@ inflight handle(): str
 Function that returns a string to display.
 
 
-### IHttpClientHandler <a name="IHttpClientHandler" id="@winglang/sdk.ui.IHttpClientHandler"></a>
+### IHttpClientGetApiSpecHandler <a name="IHttpClientGetApiSpecHandler" id="@winglang/sdk.ui.IHttpClientGetApiSpecHandler"></a>
 
 - *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
-- *Implemented By:* <a href="#@winglang/sdk.ui.IHttpClientHandler">IHttpClientHandler</a>
+- *Implemented By:* <a href="#@winglang/sdk.ui.IHttpClientGetApiSpecHandler">IHttpClientGetApiSpecHandler</a>
 
-**Inflight client:** [@winglang/sdk.ui.IHttpClientHandlerClient](#@winglang/sdk.ui.IHttpClientHandlerClient)
+**Inflight client:** [@winglang/sdk.ui.IHttpClientGetApiSpecHandlerClient](#@winglang/sdk.ui.IHttpClientGetApiSpecHandlerClient)
 
-A resource with an inflight "handle" method that can be passed to `addHttpClient`.
+A resource with an inflight "handle" method that can be passed to `IHttpClient`.
 
 
 
-### IHttpClientHandlerClient <a name="IHttpClientHandlerClient" id="@winglang/sdk.ui.IHttpClientHandlerClient"></a>
+### IHttpClientGetApiSpecHandlerClient <a name="IHttpClientGetApiSpecHandlerClient" id="@winglang/sdk.ui.IHttpClientGetApiSpecHandlerClient"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.ui.IHttpClientHandlerClient">IHttpClientHandlerClient</a>
+- *Implemented By:* <a href="#@winglang/sdk.ui.IHttpClientGetApiSpecHandlerClient">IHttpClientGetApiSpecHandlerClient</a>
 
-Inflight client for `IHttpClientHandler`.
+Inflight client for `IHttpClientGetApiSpecHandler`.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.ui.IHttpClientHandlerClient.handle">handle</a></code> | Function that returns a stringified JSON that contains a url and a openApiSpe keys. |
+| <code><a href="#@winglang/sdk.ui.IHttpClientGetApiSpecHandlerClient.handle">handle</a></code> | Function that returns the OpenAPI spec. |
 
 ---
 
-##### `handle` <a name="handle" id="@winglang/sdk.ui.IHttpClientHandlerClient.handle"></a>
+##### `handle` <a name="handle" id="@winglang/sdk.ui.IHttpClientGetApiSpecHandlerClient.handle"></a>
 
 ```wing
 inflight handle(): str
 ```
 
-Function that returns a stringified JSON that contains a url and a openApiSpe keys.
+Function that returns the OpenAPI spec.
+
+
+### IHttpClientGetUrlHandler <a name="IHttpClientGetUrlHandler" id="@winglang/sdk.ui.IHttpClientGetUrlHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IHttpClientGetUrlHandler">IHttpClientGetUrlHandler</a>
+
+**Inflight client:** [@winglang/sdk.ui.IHttpClientGetUrlHandlerClient](#@winglang/sdk.ui.IHttpClientGetUrlHandlerClient)
+
+A resource with an inflight "handle" method that can be passed to `IHttpClient`.
+
+
+
+### IHttpClientGetUrlHandlerClient <a name="IHttpClientGetUrlHandlerClient" id="@winglang/sdk.ui.IHttpClientGetUrlHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IHttpClientGetUrlHandlerClient">IHttpClientGetUrlHandlerClient</a>
+
+Inflight client for `IHttpClientGetUrlHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ui.IHttpClientGetUrlHandlerClient.handle">handle</a></code> | Function that returns the URL to make a request to. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.ui.IHttpClientGetUrlHandlerClient.handle"></a>
+
+```wing
+inflight handle(): str
+```
+
+Function that returns the URL to make a request to.
 
 
