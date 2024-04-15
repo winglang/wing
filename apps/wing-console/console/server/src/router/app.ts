@@ -425,6 +425,17 @@ export const createAppRouter = () => {
           edges,
         };
       }),
+    "app.map.v2": createProcedure.query(async ({ ctx }) => {
+      const simulator = await ctx.simulator();
+
+      const { tree } = simulator.tree().rawData();
+      const connections = simulator.connections();
+
+      return {
+        tree,
+        connections,
+      };
+    }),
     "app.state": createProcedure.query(async ({ ctx }) => {
       return ctx.appState();
     }),

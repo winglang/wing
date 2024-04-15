@@ -12,6 +12,7 @@ import classNames from "classnames";
 import { useCallback, useEffect, useMemo } from "react";
 
 import { EndpointsTreeView } from "../features/endpoints-tree-view.js";
+import { MapViewV2 } from "../features/map-view-v2.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
@@ -296,7 +297,16 @@ export const DefaultLayout = ({
                         )}
                         data-testid="map-view"
                       >
-                        <MapView
+                        {/* <MapView
+                          showTests={showTests}
+                          selectedNodeId={selectedItems[0]}
+                          onSelectedNodeIdChange={(nodeId) =>
+                            setSelectedItems(nodeId ? [nodeId] : [])
+                          }
+                          selectedEdgeId={selectedEdgeId}
+                          onSelectedEdgeIdChange={setSelectedEdgeId}
+                        /> */}
+                        <MapViewV2
                           showTests={showTests}
                           selectedNodeId={selectedItems[0]}
                           onSelectedNodeIdChange={(nodeId) =>
