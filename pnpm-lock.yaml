@@ -1207,8 +1207,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       tree-sitter-cli:
-        specifier: 0.22.4
-        version: 0.22.4
+        specifier: 0.22.5
+        version: 0.22.5
 
   libs/wingc:
     devDependencies:
@@ -1380,6 +1380,9 @@ importers:
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
+      vlq:
+        specifier: ^2.0.4
+        version: 2.0.4
       yaml:
         specifier: ^2.3.2
         version: 2.3.2
@@ -14203,7 +14206,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240413
+      typescript: 5.5.0-dev.20240414
     dev: true
 
   /dset@3.1.2:
@@ -22378,8 +22381,8 @@ packages:
     hasBin: true
     dev: true
 
-  /tree-sitter-cli@0.22.4:
-    resolution: {integrity: sha512-Zli7yeD+ocVWm+au5YLJKLyxzvUirenomOgwapNZU8bpYt/CZMpEeya9eK/tEQAd7NDOQSvAnvhJXbPbwUdgMQ==}
+  /tree-sitter-cli@0.22.5:
+    resolution: {integrity: sha512-c3VT46Bc3a6pEd0JAwufbqEw9Q2FRLDp5E230hGvnr+Hivw+Y6jyeP+3T89KDptvn48MOPVmbgaLm69xYgLVTw==}
     hasBin: true
     requiresBuild: true
     dev: true
@@ -22836,8 +22839,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240413:
-    resolution: {integrity: sha512-9Xha/54eUa9rMSYHTmP37pxf7NoWEWR/URl9TjZy2Fd7931boHHrE7k0QrtXFs2uXaIyC9v7I/Se8pGsQ7V14A==}
+  /typescript@5.5.0-dev.20240414:
+    resolution: {integrity: sha512-VEXaVJweoalMohUIdPBNAI0OzBuzR6caL8w3XW+R8jewwxn6iD9t2zAO1DkqYmYDDYlu2kp8L61Vk9SDsvv4Hw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -23428,6 +23431,10 @@ packages:
       - supports-color
       - terser
     dev: true
+
+  /vlq@2.0.4:
+    resolution: {integrity: sha512-aodjPa2wPQFkra1G8CzJBTHXhgk3EVSwxSWXNPr1fgdFLUb8kvLV1iEb6rFgasIsjP82HWI6dsb5Io26DDnasA==}
+    dev: false
 
   /vscode-jsonrpc@8.1.0:
     resolution: {integrity: sha512-6TDy/abTQk+zDGYazgbIPc+4JoXdwC8NHU9Pbn4UJP1fehUyZmM4RHp5IthX7A6L5KS30PRui+j+tbbMMMafdw==}

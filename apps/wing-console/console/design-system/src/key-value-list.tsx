@@ -14,7 +14,10 @@ import { useTheme } from "./theme-provider.js";
 
 export interface KeyValueItem {
   key: string;
-  value: string;
+  value?: string;
+  type?: string;
+  required?: boolean;
+  description?: string;
 }
 
 export interface UseKeyValueListOptions {
@@ -159,9 +162,11 @@ export const KeyValueList = ({
           />
 
           <Combobox
-            placeholder={valuePlaceholder}
+            placeholder={`${item.type ?? valuePlaceholder} ${
+              item.required === true ? " (required)" : ""
+            }${item.description ? ` - ${item.description}` : ""}`}
             items={comboboxValues}
-            value={item.value}
+            value={item.value ?? ""}
             onChange={(value) => {
               onItemChange(index, {
                 key: item.key,

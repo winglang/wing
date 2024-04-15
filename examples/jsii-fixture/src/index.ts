@@ -31,6 +31,14 @@ export class JsiiClass {
   }
 }
 
+export class JsiiClassWithPrivateConstructor {
+  private constructor() {}
+
+  public static makeInstance(): JsiiClassWithPrivateConstructor {
+    return new JsiiClassWithPrivateConstructor();
+  }
+}
+
 /**
  * @callable
  */
