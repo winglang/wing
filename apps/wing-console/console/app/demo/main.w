@@ -227,3 +227,107 @@ class WidgetService {
 }
 
 new WidgetService();
+
+
+class ApiFileService {
+  api: cloud.Api; 
+  db: cloud.Bucket;
+  
+  new() {
+    this.api = new cloud.Api();
+    this.db = new cloud.Bucket();
+    
+    this.api.post("/users", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {  
+      let input = Json.parse(request.body ?? "");
+      let name = input.tryGet("name")?.tryAsStr() ?? "";
+      if name == "" {
+        return cloud.ApiResponse {
+          status: 400,
+          body: "Name is required"
+        };
+      }
+      this.db.put("user-{name}", Json.stringify(input));
+      return cloud.ApiResponse {
+        status: 200,
+        body: Json.stringify(input)
+      };
+    });
+    this.api.get("/users", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+      let name = request.query.tryGet("name") ?? "";
+      
+      if name != "" {
+        return cloud.ApiResponse {
+          status: 200,
+          body: this.db.get("user-{name}")
+        };
+      }
+      
+      return cloud.ApiResponse {
+        status: 200,
+        body: Json.stringify(this.db.list())
+      };
+    });
+
+    new ui.HttpClient(
+      "Test POST /widgets",
+      inflight () => {
+        return Json.stringify({
+          url: this.api.url,
+          openApiSpec: {
+            "paths": {
+              "/users": {
+                "post": {
+                  "summary": "Create a new user",
+                  "parameters": [
+                    {
+                      "in": "header",
+                      "name": "cookie",
+                    },
+                  ],
+                  "requestBody": {
+                    "required": true,
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "required": [
+                            "name",
+                          ],
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "The name of the user"
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "The email of the user",
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                },
+                "get": {
+                  "summary": "List all widgets",
+                  "parameters": [
+                    {
+                      "in": "query",
+                      "name": "name",
+                      "schema": {
+                        "type": "string"
+                      },
+                      "description": "The name of the user"
+                    }
+                  ],
+                }
+              },
+            }
+          }
+        });
+      }
+   );
+  }
+}
+
+new ApiFileService();
