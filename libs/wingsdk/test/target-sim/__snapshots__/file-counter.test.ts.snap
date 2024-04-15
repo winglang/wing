@@ -133,6 +133,7 @@ bucket: (function() {
         "deps": [
           "root/HelloWorld/Queue/SetConsumer0",
           "root/HelloWorld/Queue",
+          "root/HelloWorld/Queue/Policy",
         ],
         "path": "root/HelloWorld/Queue/QueueEventMapping0",
         "props": {

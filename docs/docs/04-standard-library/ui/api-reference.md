@@ -231,6 +231,112 @@ The tree node.
 ---
 
 
+### HttpClient <a name="HttpClient" id="@winglang/sdk.ui.HttpClient"></a>
+
+An HttpClient can be used to make HTTP requests.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.ui.HttpClient.Initializer"></a>
+
+```wing
+bring ui;
+
+new ui.HttpClient(label: str, handler: IHttpClientHandler);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.HttpClient.Initializer.parameter.label">label</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#@winglang/sdk.ui.HttpClient.Initializer.parameter.handler">handler</a></code> | <code><a href="#@winglang/sdk.ui.IHttpClientHandler">IHttpClientHandler</a></code> | *No description.* |
+
+---
+
+##### `label`<sup>Required</sup> <a name="label" id="@winglang/sdk.ui.HttpClient.Initializer.parameter.label"></a>
+
+- *Type:* str
+
+---
+
+##### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.ui.HttpClient.Initializer.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.ui.IHttpClientHandler">IHttpClientHandler</a>
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ui.HttpClient.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.HttpClient.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.ui.HttpClient.onLiftType"></a>
+
+```wing
+bring ui;
+
+ui.HttpClient.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ui.HttpClient.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.HttpClient.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `isVisualComponent` <a name="isVisualComponent" id="@winglang/sdk.ui.HttpClient.isVisualComponent"></a>
+
+```wing
+bring ui;
+
+ui.HttpClient.isVisualComponent(c: IConstruct);
+```
+
+Returns whether the given construct is a visual component.
+
+###### `c`<sup>Required</sup> <a name="c" id="@winglang/sdk.ui.HttpClient.isVisualComponent.parameter.c"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.HttpClient.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.ui.HttpClient.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+
 ### Section <a name="Section" id="@winglang/sdk.ui.Section"></a>
 
 A section can be used to group other visual components.
@@ -653,5 +759,40 @@ inflight handle(): str
 ```
 
 Function that returns a string to display.
+
+
+### IHttpClientHandler <a name="IHttpClientHandler" id="@winglang/sdk.ui.IHttpClientHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IHttpClientHandler">IHttpClientHandler</a>
+
+**Inflight client:** [@winglang/sdk.ui.IHttpClientHandlerClient](#@winglang/sdk.ui.IHttpClientHandlerClient)
+
+A resource with an inflight "handle" method that can be passed to `addHttpClient`.
+
+
+
+### IHttpClientHandlerClient <a name="IHttpClientHandlerClient" id="@winglang/sdk.ui.IHttpClientHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IHttpClientHandlerClient">IHttpClientHandlerClient</a>
+
+Inflight client for `IHttpClientHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ui.IHttpClientHandlerClient.handle">handle</a></code> | Function that returns a stringified JSON that contains a url and a openApiSpe keys. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.ui.IHttpClientHandlerClient.handle"></a>
+
+```wing
+inflight handle(): str
+```
+
+Function that returns a stringified JSON that contains a url and a openApiSpe keys.
 
 

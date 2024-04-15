@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
 import { VisualComponent } from "./base";
+import { Function } from "../cloud";
 import { fqnForType } from "../constants";
 import { App, UIComponent } from "../core";
 import { IInflight } from "../std";
-import { Function } from "../cloud";
 
 /**
  * Global identifier for `HttpClient`.

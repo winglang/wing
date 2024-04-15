@@ -40,6 +40,26 @@ module.exports = function({ $store }) {
 //# sourceMappingURL=inflight.$Closure1-3.cjs.map
 ```
 
+## inflight.$Closure2-3.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $expect_Util, $file2_Q }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $expect_Util.equal((await $file2_Q.greet("bar")), "Hello bar"));
+    }
+  }
+  return $Closure2;
+}
+//# sourceMappingURL=inflight.$Closure2-3.cjs.map
+```
+
 ## inflight.Q-2.cjs
 ```cjs
 "use strict";
@@ -277,10 +297,12 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const file1 = require("./preflight.store-2.cjs");
 const file2 = require("./preflight.subfile-3.cjs");
 const file3 = require("./preflight.empty-1.cjs");
 const math = $stdlib.math;
+const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -315,6 +337,42 @@ class $Root extends $stdlib.std.Resource {
           ],
           "$inflight_init": [
             [store, []],
+          ],
+        });
+      }
+    }
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-3.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $file2_Q: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(file2.Q, "", "Q"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType()};
+            const client = new $Closure2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [$stdlib.core.toLiftableModuleType(file2.Q, "", "Q"), ["greet"]],
+          ],
+          "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(file2.Q, "", "Q"), []],
           ],
         });
       }
@@ -380,7 +438,9 @@ class $Root extends $stdlib.std.Resource {
     }
     const store = new file1.Store(this, "Store");
     const q = new file2.Q(this, "Q");
+    (expect.Util.equal((file2.Q.preflightGreet("foo")), "Hello foo"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:add data to store", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:greet", new $Closure2(this, "$Closure2"));
     const s = ({"x": 1, "y": 2});
     const c = file1.Color.BLUE;
     $helpers.assert($helpers.neq(c, file1.Color.RED), "c != file1.Color.RED");
@@ -399,6 +459,7 @@ $APP.synth();
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {  };
 //# sourceMappingURL=preflight.empty-1.cjs.map
 ```
@@ -409,6 +470,7 @@ module.exports = {  };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const file3 = require("./preflight.empty-1.cjs");
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
@@ -529,10 +591,14 @@ module.exports = { Util, Store, Color };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const math = $stdlib.math;
 class Q extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
+  }
+  static preflightGreet(name) {
+    return ($extern("../../../subdir/util.ts")["preflightGreet"])(name)
   }
   static _toInflightType() {
     return `
