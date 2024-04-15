@@ -1,4 +1,5 @@
 import { CubeIcon, BoltIcon } from "@heroicons/react/24/solid";
+import { ResourceIcon } from "@wingconsole/design-system";
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import clsx from "classnames";
 import type { ElkPoint, LayoutOptions } from "elkjs";
@@ -12,7 +13,6 @@ import { NodeChildren } from "../ui/elk-flow/node-children.js";
 import { Node } from "../ui/elk-flow/node.js";
 import { Port } from "../ui/elk-flow/port.js";
 import type { EdgeComponent } from "../ui/elk-flow/types.js";
-import { ResourceIcon } from "@wingconsole/design-system";
 
 interface InflightPortProps {
   occupied?: boolean;
