@@ -20,6 +20,13 @@ import {
   Button,
 } from "@wingconsole/design-system";
 import type { NodeDisplay } from "@wingconsole/server";
+import type {
+  UIButton,
+  UIComponent,
+  UIField,
+  UISection,
+  UIFileBrowser,
+} from "@winglang/sdk/lib/core/tree.js";
 import classNames from "classnames";
 import { memo, useCallback, useId, useMemo, useState } from "react";
 
@@ -90,27 +97,45 @@ interface CustomResourceUiItemProps {
   others?: any;
 }
 
-const CustomResourceUiItem = ({
-  handlerPath,
-  kind,
-  label,
-  others,
-}: CustomResourceUiItemProps) => {
+const getUiComponent = (item: UIComponent) => {
+  if (item.kind === "field") {
+    return item as UIField;
+  }
+  if (item.kind === "button") {
+    return item as UIButton;
+  }
+  if (item.kind === "section") {
+    return item as UISection;
+  }
+  if (item.kind === "file-browser") {
+    return item as UIFileBrowser;
+  }
+  return item;
+};
+
+const CustomResourceUiItem = ({ item }: { item: UIComponent }) => {
+  const uiComponent = getUiComponent(item);
   return (
     <>
-      {kind === "field" && (
-        <CustomResourceUiFieldItem label={label} handlerPath={handlerPath} />
+      {uiComponent.kind === "field" && (
+        <CustomResourceUiFieldItem
+          label={uiComponent.label}
+          handlerPath={uiComponent.handler}
+        />
       )}
-      {kind === "button" && (
-        <CustomResourceUiButtonItem label={label} handlerPath={handlerPath} />
+      {uiComponent.kind === "button" && (
+        <CustomResourceUiButtonItem
+          label={uiComponent.label}
+          handlerPath={uiComponent.handler}
+        />
       )}
-      {kind === "file-browser" && (
+      {uiComponent.kind === "file-browser" && (
         <CustomResourceFileBrowser
-          label={label}
-          putHandler={others.putHandler}
-          getHandler={others.getHandler}
-          listHandler={others.listHandler}
-          deleteHandler={others.deleteHandler}
+          label={uiComponent.label}
+          putHandler={uiComponent.putHandler}
+          getHandler={uiComponent.getHandler}
+          listHandler={uiComponent.listHandler}
+          deleteHandler={uiComponent.deleteHandler}
         />
       )}
     </>
@@ -359,13 +384,7 @@ export const ResourceMetadata = memo(
                 )}
               >
                 {resourceUI.data.map((item, index) => (
-                  <CustomResourceUiItem
-                    key={index}
-                    kind={item.kind}
-                    label={item.label}
-                    handlerPath={item?.handlerPath}
-                    others={item}
-                  />
+                  <CustomResourceUiItem key={index} item={item} />
                 ))}
               </div>
             </div>
