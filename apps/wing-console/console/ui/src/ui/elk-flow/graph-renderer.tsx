@@ -187,8 +187,6 @@ export const GraphRenderer: FunctionComponent<
         height: `${props.graph.height ?? 0}px`,
       }}
     >
-      <div ref={portalTarget} />
-
       <svg
         width={props.graph.width}
         height={props.graph.height}
@@ -210,6 +208,8 @@ export const GraphRenderer: FunctionComponent<
           />
         ))}
       </svg>
+
+      <div ref={portalTarget} />
 
       {portal && (
         <OriginsContext.Provider value={origins}>

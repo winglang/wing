@@ -55,6 +55,7 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
 const SPACING_BASE_VALUE = 48;
 // const PORT_ANCHOR = SPACING_BASE_VALUE / 5;
 const PORT_ANCHOR = 0;
+const EDGE_ROUNDED_RADIUS = 14;
 // For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
 const baseLayoutOptions: LayoutOptions = {
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
@@ -76,10 +77,12 @@ const baseLayoutOptions: LayoutOptions = {
   "elk.spacing.nodeNode": `${SPACING_BASE_VALUE}`,
   "elk.layered.spacing.nodeNodeBetweenLayers": `${SPACING_BASE_VALUE}`,
 
-  // "elk.spacing.edgeEdge": "128",
-  "elk.spacing.edgeEdge": "10",
-  // "elk.layered.spacing.edgeEdgeBetweenLayers": "16",
-  "elk.layered.spacing.edgeEdgeBetweenLayers": "10",
+  "elk.spacing.edgeEdge": "64",
+  "elk.layered.spacing.edgeEdgeBetweenLayers": "64",
+  // // "elk.spacing.edgeEdge": "128",
+  // "elk.spacing.edgeEdge": "10",
+  // // "elk.layered.spacing.edgeEdgeBetweenLayers": "16",
+  // "elk.layered.spacing.edgeEdgeBetweenLayers": "10",
 
   // "elk.layered.spacing.baseValue": "20",
 
@@ -111,11 +114,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             ...baseLayoutOptions,
           },
         }}
-        className={clsx(
-          "inline-block",
-          "group",
-          //"pointer-events-none"
-        )}
+        className={clsx("inline-block", "group", "pointer-events-none")}
       >
         <div className="w-full h-full relative">
           <div className="absolute inset-x-0 top-0">
@@ -201,14 +200,17 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             "transition-all",
           )}
         >
-          <div className="px-2.5 py-2.5 flex items-center gap-2">
+          <div
+            // className="px-2.5 py-2.5 flex items-center gap-2"
+            className="px-2.5 py-1 flex items-center gap-2"
+          >
             {/* <CubeIcon className="-ml-1.5 size-6 text-emerald-400" /> */}
             {/* <div className="-ml-1 rounded px-1.5 py-1 bg-emerald-400">
       <CubeIcon className="size-6 text-white" />
     </div> */}
-            <div className="rounded p-1.5 bg-gray-400">
+            {/* <div className="rounded p-1.5 bg-gray-400">
               <CubeIcon className="size-5 text-white" />
-            </div>
+            </div> */}
             {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow">
       <CubeIcon className="size-6 text-emerald-400" />
     </div> */}
@@ -239,7 +241,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           </div>
         </div> */}
                 <div className="border-t border-gray-300">
-                  <div className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap">
+                  <div className="px-2.5 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap">
                     <span className="text-sky-600 italic">inflight</span>{" "}
                     {inflight.name}
                   </div>
@@ -306,8 +308,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
 
 interface FunctionNodeProps {
   id: string;
-  sourceOccupied?: true;
-  targetOccupied?: true;
+  sourceOccupied?: boolean;
+  targetOccupied?: boolean;
 }
 
 const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
@@ -454,9 +456,9 @@ const RoundedEdge: EdgeComponent = memo(
         const [start, middle, end] = points.slice(index, index + 3);
         assert(start && middle && end);
         additionalPoints.push(
-          midPoint(start, middle, 10),
+          midPoint(start, middle, EDGE_ROUNDED_RADIUS),
           middle,
-          midPoint(end, middle, 10),
+          midPoint(end, middle, EDGE_ROUNDED_RADIUS),
         );
       }
       {
@@ -539,7 +541,40 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
     console.log({ tree, connections, nodeInfo });
   }, [nodeInfo]);
 
-  const RenderConstructNode = useCallback<
+  const getConnectionId = useCallback(
+    (nodePath: string, name: string, type: "source" | "target") => {
+      const info = nodeInfo?.get(nodePath);
+
+      if (info?.type === "function") {
+        return `${nodePath}#${type}`;
+      }
+
+      if (
+        info?.type === "construct" &&
+        info.inflights.some((inflight) => inflight.name === name)
+      ) {
+        return `${nodePath}#${name}#${type}`;
+      }
+
+      return nodePath;
+    },
+    [nodeInfo],
+  );
+  // const getConnectionSource = useCallback(
+  //   (connection: ConnectionData) => {
+  //     const sourceInfo = nodeInfo?.get(connection.source);
+  //     if (sourceInfo?.type === "function") {
+  //       return `${connection.source}#source`;
+  //     }
+  //     if (sourceInfo?.type === "construct") {
+  //       return `${connection.source}#${connection.name}#source`;
+  //     }
+  //     return connection.source;
+  //   },
+  //   [nodeInfo],
+  // );
+
+  const RenderNode = useCallback<
     FunctionComponent<{
       constructTreeNode: ConstructTreeNode;
     }>
@@ -574,7 +609,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
           >
             {Object.values(props.constructTreeNode.children ?? {}).map(
               (child) => (
-                <RenderConstructNode key={child.id} constructTreeNode={child} />
+                <RenderNode key={child.id} constructTreeNode={child} />
               ),
             )}
           </ConstructNode>
@@ -585,8 +620,14 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
         return (
           <FunctionNode
             id={props.constructTreeNode.path}
-            // sourceOccupied={info.sourceOccupied}
-            // targetOccupied={info.targetOccupied}
+            sourceOccupied={connections?.some(
+              (connection) =>
+                connection.source === props.constructTreeNode.path,
+            )}
+            targetOccupied={connections?.some(
+              (connection) =>
+                connection.target === props.constructTreeNode.path,
+            )}
           />
         );
       }
@@ -609,7 +650,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
         >
           {Object.values(props.constructTreeNode.children ?? {}).map(
             (child) => (
-              <RenderConstructNode key={child.id} constructTreeNode={child} />
+              <RenderNode key={child.id} constructTreeNode={child} />
             ),
           )}
         </ContainerNode>
@@ -633,11 +674,36 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
               "elk.padding": "[top=24,left=20,bottom=20,right=20]",
             },
           }}
-          edges={connections?.map((connection) => ({
-            id: `${connection.source}#${connection.target}#${connection.name}`,
-            sources: [connection.source],
-            targets: [connection.target],
-          }))}
+          edges={connections?.map((connection) => {
+            return {
+              id: `${connection.source}#${connection.target}#${connection.name}`,
+              sources: [
+                getConnectionId(connection.source, connection.name, "source"),
+              ],
+              targets: [
+                getConnectionId(connection.target, connection.name, "target"),
+              ],
+            };
+            // const sourceInfo = nodeInfo?.get(connection.source);
+            // const source =
+            //   sourceInfo?.type === "function"
+            //     ? `${connection.source}#source`
+            //     : connection.source;
+
+            // const targetInfo = nodeInfo?.get(connection.target);
+            // const target =
+            //   targetInfo?.type === "function"
+            //     ? `${connection.target}#target`
+            //     : connection.target;
+            // // if (targetInfo?.type === "function") {
+
+            // // }
+            // return {
+            //   id: `${connection.source}#${connection.target}#${connection.name}`,
+            //   sources: [source],
+            //   targets: [target],
+            // };
+          })}
           // edges={[
           //   {
           //     id: useId(),
@@ -673,7 +739,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
           edgeComponent={RoundedEdge}
           className="bg-white"
         >
-          <RenderConstructNode constructTreeNode={tree} />
+          <RenderNode constructTreeNode={tree} />
         </Graph>
       )}
     </div>

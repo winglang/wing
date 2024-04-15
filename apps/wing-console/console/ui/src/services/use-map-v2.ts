@@ -36,6 +36,8 @@ export type NodeV2 =
       inflights: {
         id: string;
         name: string;
+        sourceOccupied?: boolean;
+        targetOccupied?: boolean;
       }[];
     };
 
@@ -127,6 +129,16 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
             ).map((connection) => ({
               id: `${connection.target}#${connection.name}`,
               name: connection.name,
+              sourceOccupied: connections.some(
+                (otherConnection) =>
+                  connection.source === node.path &&
+                  connection.name === otherConnection.name,
+              ),
+              targetOccupied: connections.some(
+                (otherConnection) =>
+                  connection.target === node.path &&
+                  connection.name === otherConnection.name,
+              ),
             })),
           });
         }
