@@ -119,8 +119,6 @@ const CustomResourceHttpClientItem = ({
     },
   });
 
-  console.log("data", data);
-
   return (
     <div className="pl-4">
       <label
