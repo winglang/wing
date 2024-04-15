@@ -198,58 +198,58 @@ class ApiUsersService {
     new ui.HttpClient(
       "Test POST /widgets",
       inflight () => {
+        return this.api.url;
+      },
+      inflight () => {
         return Json.stringify({
-          url: this.api.url,
-          openApiSpec: {
-            "paths": {
-              "/users": {
-                "post": {
-                  "summary": "Create a new user",
-                  "parameters": [
-                    {
-                      "in": "header",
-                      "name": "cookie",
-                    },
-                  ],
-                  "requestBody": {
-                    "required": true,
-                    "content": {
-                      "application/json": {
-                        "schema": {
-                          "type": "object",
-                          "required": [
-                            "name",
-                          ],
-                          "properties": {
-                            "name": {
-                              "type": "string",
-                              "description": "The name of the user"
-                            },
-                            "email": {
-                              "type": "string",
-                              "description": "The email of the user",
-                            }
+          "paths": {
+            "/users": {
+              "post": {
+                "summary": "Create a new user",
+                "parameters": [
+                  {
+                    "in": "header",
+                    "name": "cookie",
+                  },
+                ],
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the user"
+                          },
+                          "email": {
+                            "type": "string",
+                            "description": "The email of the user",
                           }
                         }
                       }
                     }
-                  },
+                  }
                 },
-                "get": {
-                  "summary": "List all widgets",
-                  "parameters": [
-                    {
-                      "in": "query",
-                      "name": "name",
-                      "schema": {
-                        "type": "string"
-                      },
-                      "description": "The name of the user"
-                    }
-                  ],
-                }
               },
-            }
+              "get": {
+                "summary": "List all widgets",
+                "parameters": [
+                  {
+                    "in": "query",
+                    "name": "name",
+                    "schema": {
+                      "type": "string"
+                    },
+                    "description": "The name of the user"
+                  }
+                ],
+              }
+            },
           }
         });
       }

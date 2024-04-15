@@ -115,8 +115,8 @@ export interface UISection {
 export interface UIHttpClient {
   readonly kind: "http-client";
   readonly label: string;
-  /** The construct path to a cloud.Function */
-  readonly handler: string;
+  readonly getUrlHandler: string;
+  readonly getApiSpecHandler: string;
 }
 
 /**

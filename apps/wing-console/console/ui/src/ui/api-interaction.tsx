@@ -123,9 +123,19 @@ export const ApiInteraction = memo(
       callFetch({
         url,
         route: currentRoute,
-        variables: pathVariables,
+        variables: pathVariables.map((variable) => {
+          return {
+            key: variable.key,
+            value: variable.value ?? "",
+          };
+        }),
         method: currentMethod,
-        headers,
+        headers: headers.map((header) => {
+          return {
+            key: header.key,
+            value: header.value ?? "",
+          };
+        }),
         body,
       });
     }, [
@@ -320,7 +330,7 @@ export const ApiInteraction = memo(
     // Load the routes from the OpenAPI spec
     useEffect(() => {
       loadRoutesFromOpenApi();
-    }, [loadRoutesFromOpenApi]);
+    }, [openApiSpec, loadRoutesFromOpenApi]);
 
     // Load the possible values for the current header key
     useEffect(() => {

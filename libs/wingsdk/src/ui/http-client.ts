@@ -22,24 +22,39 @@ export class HttpClient extends VisualComponent {
     scope: Construct,
     id: string,
     label: string,
-    handler: IHttpClientHandler
+    getUrlHandler: IHttpClientGetUrlHandler,
+    getApiSpecHandler: IHttpClientGetApiSpecHandler
   ): HttpClient {
-    return App.of(scope).newAbstract(API_FQN, scope, id, label, handler);
+    return App.of(scope).newAbstract(
+      API_FQN,
+      scope,
+      id,
+      label,
+      getUrlHandler,
+      getApiSpecHandler
+    );
   }
 
-  private readonly fn: Function;
+  private readonly getUrlfn: Function;
+  private readonly getApiSpecfn: Function;
   private readonly label: string;
 
   constructor(
     scope: Construct,
     id: string,
     label: string,
-    handler: IHttpClientHandler
+    getUrlHandler: IHttpClientGetUrlHandler,
+    getApiSpecHandler: IHttpClientGetApiSpecHandler
   ) {
     super(scope, id);
 
     this.label = label;
-    this.fn = new Function(this, "Handler", handler);
+    this.getUrlfn = new Function(this, "GetUrlHandler", getUrlHandler);
+    this.getApiSpecfn = new Function(
+      this,
+      "GetApiSpecHandler",
+      getApiSpecHandler
+    );
   }
 
   /** @internal */
@@ -47,7 +62,8 @@ export class HttpClient extends VisualComponent {
     return {
       kind: "http-client",
       label: this.label,
-      handler: this.fn.node.path,
+      getUrlHandler: this.getUrlfn.node.path,
+      getApiSpecHandler: this.getApiSpecfn.node.path,
     };
   }
 
@@ -64,18 +80,34 @@ export class HttpClient extends VisualComponent {
 
 /**
  * A resource with an inflight "handle" method that can be passed to
- * `addHttpClient`.
+ * `IHttpClient`.
  *
- * @inflight `@winglang/sdk.ui.IHttpClientHandlerClient`
+ * @inflight `@winglang/sdk.ui.IHttpClientGetUrlHandlerClient`
  */
-export interface IHttpClientHandler extends IInflight {}
+export interface IHttpClientGetUrlHandler extends IInflight {}
+
+/**
+ * A resource with an inflight "handle" method that can be passed to
+ * `IHttpClient`.
+ *
+ * @inflight `@winglang/sdk.ui.IHttpClientGetApiSpecHandlerClient`
+ */
+export interface IHttpClientGetApiSpecHandler extends IInflight {}
 
 /**
  * Inflight client for `IHttpClientHandler`.
  */
-export interface IHttpClientHandlerClient {
+export interface IHttpClientGetUrlHandlerClient {
   /**
-   * Function that returns a stringified JSON that contains a url and a openApiSpe keys.
+   * Function that returns the URL to make a request to.
+   * @inflight
+   */
+  handle(): Promise<string>;
+}
+
+export interface IHttpClientGetApiSpecHandlerClient {
+  /**
+   * Function that returns the OpenAPI spec.
    * @inflight
    */
   handle(): Promise<string>;

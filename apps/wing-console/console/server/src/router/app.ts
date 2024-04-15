@@ -491,23 +491,26 @@ export const createAppRouter = () => {
     "app.getResourceUiHttpClient": createProcedure
       .input(
         z.object({
-          resourcePath: z.string(),
+          getUrlResourcePath: z.string(),
+          getApiSpecResourcePath: z.string(),
         }),
       )
       .query(async ({ input, ctx }) => {
         const simulator = await ctx.simulator();
-        const client = simulator.getResource(
-          input.resourcePath,
+        const getUrlClient = simulator.getResource(
+          input.getUrlResourcePath,
         ) as IFunctionClient;
 
-        const response = await client.invoke("");
-        if (!response) {
-          return {};
-        }
-        const data = JSON.parse(response);
+        const url = await getUrlClient.invoke("");
+
+        const getApiSpecClient = simulator.getResource(
+          input.getApiSpecResourcePath,
+        ) as IFunctionClient;
+        const openApiSpec = await getApiSpecClient.invoke("");
+
         return {
-          url: data.url,
-          openApiSpec: data.openApiSpec,
+          url: url,
+          openApiSpec: JSON.parse(openApiSpec ?? "{}"),
         };
       }),
 
