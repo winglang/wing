@@ -165,12 +165,12 @@ class ApiUsersService {
     this.db = new cloud.Bucket();
     
     this.api.post("/users", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {  
-      let input = Json.parse(request.body ?? "");
+      let input = Json.tryParse(request.body ?? "") ?? "";
       let name = input.tryGet("name")?.tryAsStr() ?? "";
       if name == "" {
         return cloud.ApiResponse {
           status: 400,
-          body: "Name is required"
+          body: "Body parameter 'name' is required"
         };
       }
       this.db.put("user-{name}", Json.stringify(input));
