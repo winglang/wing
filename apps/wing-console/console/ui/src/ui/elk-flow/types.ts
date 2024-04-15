@@ -11,4 +11,8 @@ export interface ElkOptions {
   layoutOptions?: Record<string, string>;
 }
 
-export type EdgeComponent = FunctionComponent<{ edge: ElkExtendedEdge }>;
+export type EdgeComponent = FunctionComponent<{
+  edge: ElkExtendedEdge;
+  offsetX?: number;
+  offsetY?: number;
+}>;

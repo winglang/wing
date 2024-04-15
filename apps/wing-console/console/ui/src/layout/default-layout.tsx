@@ -236,7 +236,7 @@ export const DefaultLayout = ({
                 )}
 
                 <div className="flex-1 flex relative gap-0.5">
-                  {!layout.leftPanel?.hide &&
+                  {/* {!layout.leftPanel?.hide &&
                     layout.leftPanel?.components?.length && (
                       <RightResizableWidget
                         className={classNames(
@@ -284,7 +284,7 @@ export const DefaultLayout = ({
                           },
                         )}
                       </RightResizableWidget>
-                    )}
+                    )} */}
 
                   <div className="flex-1 flex flex-col">
                     <div className="flex-1 flex gap-0.5">
@@ -307,16 +307,16 @@ export const DefaultLayout = ({
                           onSelectedEdgeIdChange={setSelectedEdgeId}
                         /> */}
                         <MapViewV2
-                          showTests={showTests}
-                          selectedNodeId={selectedItems[0]}
-                          onSelectedNodeIdChange={(nodeId) =>
-                            setSelectedItems(nodeId ? [nodeId] : [])
-                          }
-                          selectedEdgeId={selectedEdgeId}
-                          onSelectedEdgeIdChange={setSelectedEdgeId}
+                        // showTests={showTests}
+                        // selectedNodeId={selectedItems[0]}
+                        // onSelectedNodeIdChange={(nodeId) =>
+                        //   setSelectedItems(nodeId ? [nodeId] : [])
+                        // }
+                        // selectedEdgeId={selectedEdgeId}
+                        // onSelectedEdgeIdChange={setSelectedEdgeId}
                         />
                       </div>
-                      {!layout.rightPanel?.hide && (
+                      {/* {!layout.rightPanel?.hide && (
                         <LeftResizableWidget
                           className={classNames(
                             theme.border4,
@@ -364,13 +364,13 @@ export const DefaultLayout = ({
                             )}
                           </div>
                         </LeftResizableWidget>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>
               </>
             )}
-            {!layout.bottomPanel?.hide && (
+            {/* {!layout.bottomPanel?.hide && (
               <TopResizableWidget
                 className={classNames(
                   USE_EXTERNAL_THEME_COLOR,
@@ -417,7 +417,7 @@ export const DefaultLayout = ({
                   },
                 )}
               </TopResizableWidget>
-            )}
+            )} */}
 
             {cloudAppState === "error" &&
               layout.errorScreen?.position === "bottom" && (

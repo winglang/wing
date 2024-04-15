@@ -1,7 +1,7 @@
 import { CubeIcon, BoltIcon } from "@heroicons/react/24/solid";
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import clsx from "classnames";
-import type { ElkPoint } from "elkjs";
+import type { ElkPoint, LayoutOptions } from "elkjs";
 import type { FunctionComponent } from "react";
 import { memo, useCallback, useEffect, useId, useMemo } from "react";
 
@@ -54,6 +54,29 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
 const SPACING_BASE_VALUE = 64;
 // const PORT_ANCHOR = SPACING_BASE_VALUE / 5;
 const PORT_ANCHOR = 0;
+// For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
+const baseLayoutOptions: LayoutOptions = {
+  "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+  "elk.direction": "RIGHT",
+  "elk.alignment": "CENTER",
+  "elk.algorithm": "org.eclipse.elk.layered",
+  // "elk.layered.layering.strategy": "MIN_WIDTH",
+  "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
+  "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
+  "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
+
+  // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
+
+  // "elk.layered.spacing.baseValue": "20",
+
+  // "elk.layered.spacing.baseValue": "0",
+  // "elk.spacing.edgeEdge": "128",
+  // "elk.spacing.edgeNode": "32",
+  // "elk.spacing.nodeNode": "48",
+  // "elk.layered.spacing.edgeEdgeBetweenLayers": "16",
+  // "elk.layered.spacing.nodeNodeBetweenLayers": "64",
+  // "elk.layered.spacing.edgeNodeBetweenLayers": "16",
+};
 
 interface ConstructNodeProps {
   id: string;
@@ -301,105 +324,111 @@ const APINode: FunctionComponent<APINodeProps> = (props) => {
  */
 const midPoint = (pt1: ElkPoint, pt2: ElkPoint, radius: number) => {
   const distance = Math.sqrt((pt2.x - pt1.x) ** 2 + (pt2.y - pt1.y) ** 2);
+  const radiusCapped = Math.min(radius, distance / 2);
   const diffX = (pt2.x - pt1.x) / distance;
   const diffY = (pt2.y - pt1.y) / distance;
-  return { x: pt2.x - radius * diffX, y: pt2.y - radius * diffY };
+  return { x: pt2.x - radiusCapped * diffX, y: pt2.y - radiusCapped * diffY };
 };
 
-const RoundedEdge: EdgeComponent = memo(({ edge }) => {
-  const points = useMemo(
-    () =>
-      edge.sections?.flatMap((section) => [
-        section.startPoint,
-        ...(section.bendPoints ?? []),
-        section.endPoint,
-      ]) ?? [],
-    [edge.sections],
-  );
+const RoundedEdge: EdgeComponent = memo(
+  ({ edge, offsetX = 0, offsetY = 0 }) => {
+    const points = useMemo(
+      () =>
+        edge.sections?.flatMap((section) => [
+          section.startPoint,
+          ...(section.bendPoints ?? []),
+          section.endPoint,
+        ]) ?? [],
+      [edge.sections],
+    );
 
-  const additionalPoints = useMemo(() => {
-    const additionalPoints: ElkPoint[] = [];
-    {
-      const startPoint = points[0];
-      assert(startPoint);
-      additionalPoints.push(startPoint);
-    }
-    for (let index = 0; index < points.length - 2; index++) {
-      const [start, middle, end] = points.slice(index, index + 3);
-      assert(start && middle && end);
-      additionalPoints.push(
-        midPoint(start, middle, 10),
-        middle,
-        midPoint(end, middle, 10),
-      );
-    }
-    {
-      const lastPoint = points.at(-1);
-      assert(lastPoint);
-      additionalPoints.push(lastPoint);
-    }
-    return additionalPoints;
-  }, [points]);
-
-  const d = useMemo(() => {
-    if (additionalPoints.length === 0) {
-      return "";
-    }
-
-    if (additionalPoints.length === 2) {
-      const [start, end] = additionalPoints;
-      assert(start);
-      assert(end);
-      return `M${start.x},${start.y} L${end.x},${end.y}`;
-    }
-
-    let path = "";
-    for (
-      let index = 0;
-      index < additionalPoints.length - 1;
-      index = index + 3
-    ) {
-      const [start, c1, c2, c3] = additionalPoints.slice(index, index + 4);
-      if (!start) {
-        return path;
+    const additionalPoints = useMemo(() => {
+      const additionalPoints: ElkPoint[] = [];
+      {
+        const startPoint = points[0];
+        assert(startPoint);
+        additionalPoints.push(startPoint);
       }
-      if (c1 && c2 && c3) {
-        path = `${path} M${start.x},${start.y} L${c1.x},${c1.y} Q${c2.x},${c2.y} ${c3.x},${c3.y}`;
-      } else if (c1) {
-        path = `${path} L${c1.x},${c1.y}`;
+      for (let index = 0; index < points.length - 2; index++) {
+        const [start, middle, end] = points.slice(index, index + 3);
+        assert(start && middle && end);
+        additionalPoints.push(
+          midPoint(start, middle, 10),
+          middle,
+          midPoint(end, middle, 10),
+        );
       }
-    }
-    return path;
-  }, [additionalPoints]);
+      {
+        const lastPoint = points.at(-1);
+        assert(lastPoint);
+        additionalPoints.push(lastPoint);
+      }
+      return additionalPoints;
+    }, [points]);
 
-  return (
-    <g
-      className={clsx(
-        "fill-none stroke-2 group transition-all pointer-events-auto",
-        // "stroke-sky-500",
-        // "stroke-sky-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
-        // "stroke-sky-200 hover:stroke-sky-500",
-        // "stroke-gray-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
-        "stroke-gray-400 hover:stroke-sky-500",
-      )}
-    >
-      <path className="stroke-[8] opacity-0" d={d}>
-        <title>
-          {edge.id} (from {edge.sources.join(",")} to {edge.targets.join(",")})
-        </title>
-      </path>
-      <path
-        className="stroke-[6] opacity-0 group-hover:opacity-100 stroke-sky-100"
-        d={d}
+    const d = useMemo(() => {
+      if (additionalPoints.length === 0) {
+        return "";
+      }
+
+      if (additionalPoints.length === 2) {
+        const [start, end] = additionalPoints;
+        assert(start);
+        assert(end);
+        return `M${start.x},${start.y} L${end.x},${end.y}`;
+      }
+
+      let path = "";
+      for (
+        let index = 0;
+        index < additionalPoints.length - 1;
+        index = index + 3
+      ) {
+        const [start, c1, c2, c3] = additionalPoints.slice(index, index + 4);
+        if (!start) {
+          return path;
+        }
+        if (c1 && c2 && c3) {
+          path = `${path} M${start.x},${start.y} L${c1.x},${c1.y} Q${c2.x},${c2.y} ${c3.x},${c3.y}`;
+        } else if (c1) {
+          path = `${path} L${c1.x},${c1.y}`;
+        }
+      }
+      return path;
+    }, [additionalPoints]);
+
+    return (
+      <g
+        className={clsx(
+          "fill-none stroke-2 group transition-all pointer-events-auto",
+          // "stroke-sky-500",
+          // "stroke-sky-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
+          // "stroke-sky-200 hover:stroke-sky-500",
+          // "stroke-gray-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
+          "stroke-gray-400 hover:stroke-sky-500",
+        )}
+        transform={`translate(${offsetX} ${offsetY})`}
       >
-        <title>
-          {edge.id} (from {edge.sources.join(",")} to {edge.targets.join(",")})
-        </title>
-      </path>
-      <path d={d} />
-    </g>
-  );
-});
+        <path className="stroke-[8] opacity-0" d={d}>
+          <title>
+            {edge.id} (from {edge.sources.join(",")} to {edge.targets.join(",")}
+            )
+          </title>
+        </path>
+        <path
+          className="stroke-[6] opacity-0 group-hover:opacity-100 stroke-sky-100"
+          d={d}
+        >
+          <title>
+            {edge.id} (from {edge.sources.join(",")} to {edge.targets.join(",")}
+            )
+          </title>
+        </path>
+        <path d={d} />
+      </g>
+    );
+  },
+);
 
 export interface MapViewV2Props {}
 
@@ -431,10 +460,11 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
           elk={{
             id: props.constructTreeNode.path,
             layoutOptions: {
-              "elk.algorithm": "org.eclipse.elk.layered",
-              "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-              "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
-              "elk.direction": "RIGHT",
+              // "elk.algorithm": "org.eclipse.elk.layered",
+              // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+              // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
+              // "elk.direction": "RIGHT",
+              ...baseLayoutOptions,
             },
           }}
           className={clsx(
@@ -442,30 +472,45 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
             //"pointer-events-none"
           )}
         >
-          <div className="whitespace-nowrap">{props.constructTreeNode.id}</div>
-          <div
-            className={clsx(
-              "w-full h-full rounded-lg",
-              "shadow-sm",
-              "transition-all",
-              "flex flex-col",
-              "overflow-hidden",
-              "border border-gray-500 border-dashed",
-            )}
-          >
-            <div className={clsx("grow shadow-inner", "p-8")}>
-              <NodeChildren>
-                <div className="absolute">
-                  {Object.values(props.constructTreeNode.children ?? {}).map(
-                    (child) => (
-                      <RenderConstructNode
-                        key={child.id}
-                        constructTreeNode={child}
-                      />
-                    ),
-                  )}
+          <div className="w-full h-full relative">
+            <div className="absolute inset-x-0 top-0">
+              <div className="relative">
+                <div className="absolute bottom-0">
+                  <div className="whitespace-nowrap">
+                    {props.constructTreeNode.id}
+                  </div>
                 </div>
-              </NodeChildren>
+              </div>
+            </div>
+
+            <div className="whitespace-nowrap h-0 invisible">
+              {props.constructTreeNode.id}
+            </div>
+
+            <div
+              className={clsx(
+                "w-full h-full rounded-lg",
+                "shadow-sm",
+                "transition-all",
+                "flex flex-col",
+                "overflow-hidden",
+                "border border-gray-500 border-dashed",
+              )}
+            >
+              <div className={clsx("grow shadow-inner", "p-8")}>
+                <NodeChildren>
+                  <div className="absolute">
+                    {Object.values(props.constructTreeNode.children ?? {}).map(
+                      (child) => (
+                        <RenderConstructNode
+                          key={child.id}
+                          constructTreeNode={child}
+                        />
+                      ),
+                    )}
+                  </div>
+                </NodeChildren>
+              </div>
             </div>
           </div>
         </Node>
@@ -481,17 +526,18 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
           elk={{
             id: "root",
             layoutOptions: {
-              "elk.algorithm": "org.eclipse.elk.layered",
-              "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-              "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
-              "elk.direction": "RIGHT",
+              // "elk.algorithm": "org.eclipse.elk.layered",
+              // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+              // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
+              // "elk.direction": "RIGHT",
+              ...baseLayoutOptions,
             },
           }}
-          // edges={connections?.map((connection) => ({
-          //   id: `${connection.source}#${connection.target}#${connection.name}`,
-          //   sources: [connection.source],
-          //   targets: [connection.target],
-          // }))}
+          edges={connections?.map((connection) => ({
+            id: `${connection.source}#${connection.target}#${connection.name}`,
+            sources: [connection.source],
+            targets: [connection.target],
+          }))}
           // edges={[
           //   {
           //     id: useId(),

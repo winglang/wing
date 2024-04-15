@@ -9,6 +9,7 @@ import {
   useMemo,
   useEffect,
   useRef,
+  useState,
 } from "react";
 
 import { assert } from "./assert.js";
@@ -50,6 +51,7 @@ const NodeComponent = <K extends keyof IntrinsicElements = "div">({
 
   const origins = useContext(OriginsContext);
   const origin = origins.get(node.id);
+  assert(origin);
 
   return createPrependPortal(
     createElement(
@@ -61,8 +63,8 @@ const NodeComponent = <K extends keyof IntrinsicElements = "div">({
           position: "absolute",
           // top: `${node.y ?? 0}px`,
           // left: `${node.x ?? 0}px`,
-          top: `${origin?.y ?? 0}px`,
-          left: `${origin?.x ?? 0}px`,
+          top: `${origin.y}px`,
+          left: `${origin.x}px`,
           width: `${node.width ?? 0}px`,
           height: `${node.height ?? 0}px`,
           // transform: `translate(${origin?.x ?? 0}px, ${origin?.y ?? 0}px)`,
@@ -120,22 +122,28 @@ const PortComponent = <K extends keyof IntrinsicElements = "div">({
   );
 };
 
-const DefaultEdge: EdgeComponent = memo(({ edge }) => {
-  const d = useMemo(() => {
-    return edge.sections
-      ?.map((section) => {
-        const points =
-          [...(section.bendPoints ?? []), section.endPoint]
-            ?.map((point) => `L${point.x},${point.y}`)
-            .join(" ") ?? "";
+const DefaultEdge: EdgeComponent = memo(
+  ({ edge, offsetX = 0, offsetY = 0 }) => {
+    const d = useMemo(() => {
+      return edge.sections
+        ?.map((section) => {
+          const points =
+            [...(section.bendPoints ?? []), section.endPoint]
+              ?.map((point) => `L${point.x},${point.y}`)
+              .join(" ") ?? "";
 
-        return `M${section.startPoint.x},${section.startPoint.y} ${points}`;
-      })
-      .join(" ");
-  }, [edge.sections]);
+          return `M${section.startPoint.x},${section.startPoint.y} ${points}`;
+        })
+        .join(" ");
+    }, [edge.sections]);
 
-  return <path d={d} fill="none" stroke="black" />;
-});
+    return (
+      <g transform={`translate(${offsetX} ${offsetY})`}>
+        <path d={d} fill="none" stroke="black" />
+      </g>
+    );
+  },
+);
 
 export interface GraphRendererProps {
   graph: ElkNode;
@@ -162,17 +170,26 @@ export const GraphRenderer: FunctionComponent<
   }, [props.graph]);
 
   const portalTarget = useRef<HTMLDivElement | null>(null);
+  const [portal, setPortal] = useState<HTMLDivElement | undefined>();
+  useEffect(() => {
+    setPortal(portalTarget.current ?? undefined);
+  }, []);
+
+  useEffect(() => {
+    console.log("graph", props.graph);
+  });
 
   return (
-    <OriginsContext.Provider value={origins}>
-      <div
-        style={{
-          position: "relative",
-          width: `${props.graph?.width ?? 0}px`,
-          height: `${props.graph?.height ?? 0}px`,
-        }}
-      >
-        {/* <svg
+    <div
+      style={{
+        position: "relative",
+        width: `${props.graph.width ?? 0}px`,
+        height: `${props.graph.height ?? 0}px`,
+      }}
+    >
+      <div ref={portalTarget} />
+
+      <svg
         width={props.graph.width}
         height={props.graph.height}
         style={{
@@ -185,15 +202,19 @@ export const GraphRenderer: FunctionComponent<
         }}
       >
         {props.graph.edges?.map((edge) => (
-          <Edge key={edge.id} edge={edge} />
+          <Edge
+            key={edge.id}
+            edge={edge}
+            offsetX={origins.get((edge as any).container)?.x}
+            offsetY={origins.get((edge as any).container)?.y}
+          />
         ))}
-      </svg> */}
+      </svg>
 
-        <div ref={portalTarget} />
-
-        {portalTarget.current && (
+      {portal && (
+        <OriginsContext.Provider value={origins}>
           <ElkNodeContext.Provider value={props.graph}>
-            <PortalContext.Provider value={portalTarget.current}>
+            <PortalContext.Provider value={portal}>
               <NodeContext.Provider value={NodeComponent}>
                 <NodeChildrenContext.Provider value={NodeChildrenComponent}>
                   <PortContext.Provider value={PortComponent}>
@@ -203,8 +224,8 @@ export const GraphRenderer: FunctionComponent<
               </NodeContext.Provider>
             </PortalContext.Provider>
           </ElkNodeContext.Provider>
-        )}
-      </div>
-    </OriginsContext.Provider>
+        </OriginsContext.Provider>
+      )}
+    </div>
   );
 });
