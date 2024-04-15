@@ -773,7 +773,7 @@ impl<'a> JsiiImporter<'a> {
 		let mut class_env = SymbolEnv::new(base_class_env, SymbolEnvKind::Type(new_type), class_phase, 0);
 		class_env.type_parameters = self.type_param_from_docs(&jsii_class_fqn, &jsii_class.docs);
 
-		// Add constructor to the class environment
+		// Add the class's constructor to the class environment, if the class has one which is public
 		let jsii_initializer = jsii_class.initializer.as_ref();
 		if let Some(initializer) = jsii_initializer {
 			let mut fn_params = vec![];
