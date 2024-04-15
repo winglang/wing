@@ -22,7 +22,7 @@
     "@segment/analytics-node": "^1.1.0",
     "@wingconsole/server": "workspace:^",
     "cross-spawn": "^7.0.3",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "open": "^8.4.2",
     "picocolors": "^1.0.0"
   },
