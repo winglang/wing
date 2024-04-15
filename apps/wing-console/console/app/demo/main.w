@@ -183,10 +183,17 @@ class ApiUsersService {
       let name = request.query.tryGet("name") ?? "";
       
       if name != "" {
-        return cloud.ApiResponse {
-          status: 200,
-          body: this.db.get("user-{name}")
-        };
+        try {
+          return cloud.ApiResponse {
+            status: 200,
+            body: this.db.get("user-{name}")
+          };
+        } catch {
+          return cloud.ApiResponse {
+            status: 404,
+            body: "User not found"
+          };
+        }
       }
       
       return cloud.ApiResponse {
