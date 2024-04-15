@@ -10,7 +10,7 @@ description: Protection of resources from accidental deletion/moves
 - **Stage**: Proposal
 - **Stage Date**: 2024-02-15
 
-Introduce a mechanism to protect resources from accidental deletion/moves in the logical application tree.
+Introduce a mechanism to protect resources from accidental deletion/moves in the physical application tree.
 
 ## Requirements
 
@@ -57,7 +57,7 @@ Running `wing compile -t tf-aws` also succeeds with the following output and a n
 
 ```shell
 # (output)
-[+pin] /root/CoolBucket
+[+pin] aws_s3_bucket.CoolBucket
 ```
 
 ```json
@@ -66,10 +66,12 @@ Running `wing compile -t tf-aws` also succeeds with the following output and a n
   "version": "1",
   "pinned": {
     "tf-aws": {
-      "/root/CoolBucket": {
-        "type": "aws_s3_bucket",
-        "uniqueId": "CoolBucket",
-        "path": "/root/CoolBucket",
+      "aws_s3_bucket.CoolBucket": {
+        "type": "@cdktf/provider-aws.s3bucket.S3Bucket",
+        "attributes": {
+          "bucket_prefix": "coolbucket-c87e9a4d-",
+          "force_destroy": false
+        }
       }
     }
   }
@@ -93,26 +95,31 @@ class MyBucket {
 }
 
 let myBucket = new MyBucket();
-
 ```
 
-`wing compile` and `wing test` still work as expected.
+`wing compile` and `wing test` still work as expected with simulator output.
 
 `wing compile -t tf-aws` however fails with an error message
 
 ```shell
 # (output)
-[-pin] /root/CoolBucket
-[+pin] /root/MyBucket/cloud.Bucket
+[-pin] aws_s3_bucket.CoolBucket
+[+pin] aws_s3_bucket.MyBucket_AD8CE4AC
 
 Error: The following pinned resource has been moved or deleted:
-  - /root/CoolBucket
+  - aws_s3_bucket.CoolBucket
 
-If moved, update "path" property in the pinfile to the new path.
+If moved, update the key in the pinfile to reflect the new path.
 If deleted, remove the entry from the pinfile.
+
 ```
 > In the future we will add support for `wing pin mv` and `wing pin rm`
-For now, Sally wants to avoid the destructive move of the bucket so she updates the `path` in the pinfile.
+
+This refactor changed the location of the bucket in the generated terraform, but more importantly the name/prefix of the bucket to be deployed.
+This change is a destructive operation that required replacement.
+
+For now, Sally wants to avoid this destruction so she updates the pinfile to keep attributes the same 
+but updates the key to reflect the new path in the generated terraform.
 
 ```json
 // main.w.pin.json
@@ -120,10 +127,12 @@ For now, Sally wants to avoid the destructive move of the bucket so she updates 
   "version": "1",
   "pinned": {
     "tf-aws": {
-      "/root/CoolBucket": {
-        "type": "aws_s3_bucket",
-        "uniqueId": "CoolBucket",
-        "path": "/root/MyBucket/cloud.Bucket"
+      "aws_s3_bucket.MyBucket_AD8CE4AC": {
+        "type": "@cdktf/provider-aws.s3bucket.S3Bucket",
+        "attributes": {
+          "bucket_prefix": "coolbucket-c87e9a4d-",
+          "force_destroy": false
+        }
       }
     }
   }
@@ -154,8 +163,10 @@ Running `wing compile -t tf-aws` automatically updates the pinfile (because the 
 
 ```shell
 # (output)
-[-pin] /root/CoolBucket
+[-pin] aws_s3_bucket.CoolBucket
 ```
+
+At this point, the pinfile is empty and is automatically deleted.
 
 ## Implementation
 
@@ -172,25 +183,20 @@ This information will be available to the target platform/app which can choose w
   "version": "1",
   "pinned": {
     "tf-aws": {
-      // The original logical path to the resource. These will only be leaves of the resource tree
-      "/root/CoolBucket": {
+      // The original physical/platform path to the resource.
+      // These will only be leaves of the resource tree
+      "aws_s3_bucket.CoolBucket": {
         // These attributes have platform-specific values and only make sense in that context.
         // The keys however are platform-agnostic.
 
-        // a string to identify the resource. Often matches the id but this value is platform-specific.
-        "uniqueId": "CoolBucket",
+        // The type where this leaf resource is defined
+        "fqn": "@cdktf/provider-aws.s3bucket.S3Bucket",
 
-        // The platform type of the resource. Together with uniqueId, this must uniquely identify the resource.
-        "type": "aws_s3_bucket",
-        
-        // The logical path to the resource. If moved this can be updated.
-        "path": "/root/CoolBucket",
-
-        // The resulting attributes of the resource.
+        // The final attributes of the resource, added automatically to the pinfile
         // Data provided here will overwrite the resource's attributes.
-        // e.g. For terraform this is effectively an escape hatch for the user write their own.
         "attributes": {
-          "name": "cool-bucket",
+          "bucket_prefix": "coolbucket-c87e9a4d-",
+          "force_destroy": false
         }
       }
     }
