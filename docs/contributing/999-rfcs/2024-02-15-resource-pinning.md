@@ -118,8 +118,7 @@ If deleted, remove the entry from the pinfile.
 This refactor changed the location of the bucket in the generated terraform, but more importantly the name/prefix of the bucket to be deployed.
 This change is a destructive operation that required replacement.
 
-For now, Sally wants to avoid this destruction so she updates the pinfile to keep attributes the same 
-but updates the key to reflect the new path in the generated terraform.
+For now, Sally wants to avoid this destruction so she updates the pinfile to reflect the new path while adding an "originalPath" for the original.
 
 ```json
 // main.w.pin.json
@@ -129,6 +128,7 @@ but updates the key to reflect the new path in the generated terraform.
     "tf-aws": {
       "aws_s3_bucket.MyBucket_AD8CE4AC": {
         "type": "@cdktf/provider-aws.s3bucket.S3Bucket",
+        "originalPath": "aws_s3_bucket.CoolBucket",
         "attributes": {
           "bucket_prefix": "coolbucket-c87e9a4d-",
           "force_destroy": false
@@ -172,7 +172,7 @@ At this point, the pinfile is empty and is automatically deleted.
 
 ### pinning
 
-The `pinned` property is used to mark a created resource as "pinned" in the resource tree. This api is available on the a resource's Node (`nodeof(this).pinned`). This is an inherent public property of all resource nods. Setting this means that the user does not intend for the resource to be deleted or moved. Pinning is deep, meaning that pinning a parent inherently pins all of its children.
+The `pinned` property is used to mark a created resource as "pinned" in the resource tree. This api is available on the a resource's Node (`nodeof(this).pinned`). This is an inherent public property of all resource nodes. Setting this means that the user does not intend for the resource to be deleted or moved. Pinning is deep, meaning that pinning a parent inherently pins all of its children.
 
 This information will be available to the target platform/app which can choose what to do with this information. For example, the sim target can simply ignore this while the terraform target can manage a pinfile to inform the user when this changes between compilation and allow them to resolve any renames.
 
@@ -191,6 +191,9 @@ This information will be available to the target platform/app which can choose w
 
         // The type where this leaf resource is defined
         "fqn": "@cdktf/provider-aws.s3bucket.S3Bucket",
+
+        // The originally pinned key. This is only needed if the resource was moved.
+        "originalPath": "aws_s3_bucket.SomethingElse",
 
         // The final attributes of the resource, added automatically to the pinfile
         // Data provided here will overwrite the resource's attributes.
