@@ -28,9 +28,10 @@ import type {
   UISection,
 } from "@winglang/sdk/lib/core/tree.js";
 import classNames from "classnames";
-import { memo, useCallback, useId, useMemo, useState } from "react";
+import { memo, useCallback, useContext, useId, useMemo, useState } from "react";
 
 import type { UIHttpClient } from "../../../../../../libs/wingsdk/lib/core/tree.js";
+import { AppContext } from "../AppContext.js";
 import { QueueMetadataView } from "../features/queue-metadata-view.js";
 import { ResourceInteractionView } from "../features/resource-interaction-view.js";
 import { trpc } from "../services/trpc.js";
@@ -104,6 +105,8 @@ const CustomResourceHttpClientItem = ({
   getApiSpecHandler,
 }: CustomResourceHttpClientItemProps) => {
   const { theme } = useTheme();
+  const { appMode } = useContext(AppContext);
+
   const data = trpc["app.getResourceUiHttpClient"].useQuery(
     {
       getUrlResourcePath: getUrlHandler,
@@ -121,16 +124,14 @@ const CustomResourceHttpClientItem = ({
 
   return (
     <div className="pl-4">
-      <label
-        htmlFor={getUrlHandler}
-        className={classNames("min-w-[100px]", theme.text2)}
-      >
-        {label}
-      </label>
+      <div className="mb-1">
+        <Attribute name="Name" value={label} noLeftPadding />
+      </div>
       {data.data?.url && data.data?.openApiSpec && (
         <ApiInteraction
           resourceId={getUrlHandler}
           url={data.data.url}
+          appMode={appMode}
           openApiSpec={data.data.openApiSpec}
           callFetch={callFetch}
           isLoading={isLoading}

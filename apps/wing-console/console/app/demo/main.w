@@ -203,7 +203,7 @@ class ApiUsersService {
     });
 
     new ui.HttpClient(
-      "Test POST /widgets",
+      "Test HttpClient UI component",
       inflight () => {
         return this.api.url;
       },
