@@ -2,6 +2,8 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { fqnForType } from "../constants";
 import { App, UIComponent } from "../core";
+import { IInflight } from "../std";
+import { Function } from "../cloud";
 
 /**
  * Global identifier for `HttpClient`.
@@ -9,7 +11,7 @@ import { App, UIComponent } from "../core";
 export const API_FQN = fqnForType("ui.HttpClient");
 
 /**
- * A button can be used to perform an action.
+ * An HttpClient can be used to make HTTP requests.
  */
 export class HttpClient extends VisualComponent {
   /**
@@ -20,34 +22,24 @@ export class HttpClient extends VisualComponent {
     scope: Construct,
     id: string,
     label: string,
-    url: string,
-    openApiSpec: string
+    handler: IHttpClientHandler
   ): HttpClient {
-    return App.of(scope).newAbstract(
-      API_FQN,
-      scope,
-      id,
-      label,
-      url,
-      openApiSpec
-    );
+    return App.of(scope).newAbstract(API_FQN, scope, id, label, handler);
   }
 
+  private readonly fn: Function;
   private readonly label: string;
-  private readonly url: string;
-  private readonly openApiSpec: string;
 
   constructor(
     scope: Construct,
     id: string,
     label: string,
-    url: string,
-    openApiSpec: string
+    handler: IHttpClientHandler
   ) {
     super(scope, id);
+
     this.label = label;
-    this.url = url;
-    this.openApiSpec = openApiSpec;
+    this.fn = new Function(this, "Handler", handler);
   }
 
   /** @internal */
@@ -55,8 +47,7 @@ export class HttpClient extends VisualComponent {
     return {
       kind: "http-client",
       label: this.label,
-      url: this.url,
-      openApiSpec: this.openApiSpec,
+      handler: this.fn.node.path,
     };
   }
 
@@ -69,4 +60,23 @@ export class HttpClient extends VisualComponent {
   public _toInflight(): string {
     throw new Error("Method not implemented.");
   }
+}
+
+/**
+ * A resource with an inflight "handle" method that can be passed to
+ * `addHttpClient`.
+ *
+ * @inflight `@winglang/sdk.ui.IHttpClientHandlerClient`
+ */
+export interface IHttpClientHandler extends IInflight {}
+
+/**
+ * Inflight client for `IHttpClientHandler`.
+ */
+export interface IHttpClientHandlerClient {
+  /**
+   * Function that returns a stringified JSON that contains a url and a openApiSpe keys.
+   * @inflight
+   */
+  handle(): Promise<string>;
 }

@@ -9,6 +9,7 @@ import {
   useKeyValueList,
   useTheme,
 } from "@wingconsole/design-system";
+import type { OpenApiSpec } from "@wingconsole/server/src/wingsdk.js";
 import { createPersistentState } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { memo, useCallback, useEffect, useId, useState } from "react";
@@ -16,10 +17,12 @@ import { memo, useCallback, useEffect, useId, useState } from "react";
 import type { AppMode } from "../AppContext.js";
 import type { ApiRequest, ApiResponse, ApiRoute } from "../shared/api.js";
 import {
+  getParametersFromOpenApi,
   getHeaderValues,
   getRoutesFromOpenApi,
   HTTP_HEADERS,
   HTTP_METHODS,
+  getRequestBodyFromOpenApi,
 } from "../shared/api.js";
 
 import { ApiResponseBodyPanel } from "./api-response-body-panel.js";
@@ -27,9 +30,10 @@ import { ApiResponseHeadersPanel } from "./api-response-headers-panel.js";
 
 export interface ApiInteractionProps {
   resourceId: string;
-  appMode: AppMode;
+  appMode?: AppMode;
   apiResponse?: ApiResponse;
-  schemaData: any;
+  url: string;
+  openApiSpec: OpenApiSpec;
   callFetch: (data: ApiRequest) => void;
   isLoading: boolean;
 }
@@ -40,23 +44,26 @@ export const ApiInteraction = memo(
     appMode,
     apiResponse,
     callFetch,
-    schemaData,
+    url,
+    openApiSpec,
     isLoading,
   }: ApiInteractionProps) => {
     const { theme } = useTheme();
 
     const { usePersistentState } = createPersistentState(resourceId);
-    const bodyId = useId();
 
-    const [url, setUrl] = useState("");
     const [routes, setRoutes] = useState<ApiRoute[]>([]);
 
-    const [valuesList, setValuesList] = useState<string[]>([]);
-
     const [currentHeaderKey, setCurrentHeaderKey] = usePersistentState("");
+    const [currentHeaderValues, setCurrentHeaderValues] = useState<string[]>(
+      [],
+    );
     const [currentRoute, setCurrentRoute] = usePersistentState("");
 
     const [currentMethod, setCurrentMethod] = usePersistentState("GET");
+
+    const bodyId = useId();
+    const [bodyPlaceholder, setBodyPlaceholder] = useState<string>("Body...");
     const [body, setBody] = usePersistentState("");
 
     const [currentOptionsTab, setCurrentOptionsTab] =
@@ -69,7 +76,7 @@ export const ApiInteraction = memo(
       addItem: addHeader,
       removeItem: removeHeader,
       editItem: editHeader,
-      removeAll: removeAllHeaders,
+      setItems: setHeaders,
     } = useKeyValueList({
       useState: usePersistentState,
     });
@@ -80,7 +87,6 @@ export const ApiInteraction = memo(
       removeItem: removeQueryParameter,
       editItem: editQueryParameter,
       setItems: setQueryParameters,
-      removeAll: removeAllQueryParameters,
     } = useKeyValueList({
       useState: usePersistentState,
     });
@@ -92,6 +98,21 @@ export const ApiInteraction = memo(
     } = useKeyValueList({
       useState: usePersistentState,
     });
+
+    // TODO revisit
+    const openResponseTab = useCallback(
+      (tabId: string) => {
+        setCurrentResponseTab(tabId);
+      },
+      [setCurrentResponseTab],
+    );
+
+    const openOptionTab = useCallback(
+      (tabId: string) => {
+        setCurrentOptionsTab(tabId);
+      },
+      [setCurrentOptionsTab],
+    );
 
     const apiCall = useCallback(async () => {
       if (!url || !currentMethod || !currentRoute) {
@@ -115,32 +136,96 @@ export const ApiInteraction = memo(
       body,
     ]);
 
-    // TODO revisit
-    const openResponseTab = useCallback(
-      (tabId: string) => {
-        setCurrentResponseTab(tabId);
+    const loadDataFromOpenApi = useCallback(
+      (path: string, method: string) => {
+        // Set the headers
+        const headersFromSpec = getParametersFromOpenApi({
+          path: path,
+          method: method,
+          openApi: openApiSpec,
+          type: "header",
+        });
+        const newHeaders = headersFromSpec.filter(
+          (header) =>
+            !headers.some(
+              (existingHeader) => existingHeader.key === header.key,
+            ),
+        );
+        setHeaders((headers) => [...headers, ...newHeaders]);
+
+        // Set Query Parameters
+        const queryParametersFromSpec = getParametersFromOpenApi({
+          path: path,
+          method: method,
+          openApi: openApiSpec,
+          type: "query",
+        });
+        const newQueryParameters = queryParametersFromSpec.filter(
+          (parameter) =>
+            !queryParameters.some(
+              (existingParameter) => existingParameter.key === parameter.key,
+            ),
+        );
+        setQueryParameters((queryParameters) => [
+          ...queryParameters,
+          ...newQueryParameters,
+        ]);
+
+        // Set Path Variables
+        const variablesFromSpec = getParametersFromOpenApi({
+          path: path,
+          method: method,
+          openApi: openApiSpec,
+          type: "path",
+        });
+        const newPathVariables = variablesFromSpec.filter(
+          (variable) =>
+            !pathVariables.some(
+              (existingVariable) => existingVariable.key === variable.key,
+            ),
+        );
+        setPathVariables((pathVariables) => [
+          ...pathVariables,
+          ...newPathVariables,
+        ]);
+
+        // Set the body
+        const bodyFromSpec = getRequestBodyFromOpenApi(
+          path,
+          method,
+          openApiSpec,
+        );
+        setBodyPlaceholder(JSON.stringify(bodyFromSpec, undefined, 2));
       },
-      [setCurrentResponseTab],
-    );
-    const openOptionTab = useCallback(
-      (tabId: string) => {
-        setCurrentOptionsTab(tabId);
-      },
-      [setCurrentOptionsTab],
+      [
+        openApiSpec,
+        setHeaders,
+        setBodyPlaceholder,
+        setQueryParameters,
+        setPathVariables,
+        queryParameters,
+        pathVariables,
+        headers,
+      ],
     );
 
-    useEffect(() => {
-      if (!currentHeaderKey) {
-        setValuesList([]);
-        return;
-      }
-      setValuesList(getHeaderValues(currentHeaderKey));
-    }, [currentHeaderKey]);
+    const handleMethodChange = useCallback(
+      (route: string, method: string) => {
+        setCurrentMethod(method);
+        loadDataFromOpenApi(route, method);
+      },
+      [setCurrentMethod, loadDataFromOpenApi],
+    );
 
     const handleRouteChange = useCallback(
       (value: string) => {
-        const newRoute = value && !value.startsWith("/") ? `/${value}` : value;
+        const [method, route] = value.split(" ");
+        if (!route) {
+          return;
+        }
+        const newRoute = route && !route.startsWith("/") ? `/${route}` : route;
         setCurrentRoute(newRoute);
+
         const search = newRoute.split(/\?(.*)/s)[1];
         const urlParameters = new URLSearchParams(search || "");
 
@@ -176,10 +261,54 @@ export const ApiInteraction = memo(
           }
           return newPathVariables;
         });
+
+        if (method) {
+          handleMethodChange(route, method);
+        }
       },
-      [setCurrentRoute, setPathVariables, setQueryParameters],
+      [
+        setCurrentRoute,
+        setPathVariables,
+        setQueryParameters,
+        handleMethodChange,
+      ],
     );
 
+    const loadRoutesFromOpenApi = useCallback(() => {
+      const routes = getRoutesFromOpenApi(openApiSpec);
+      setRoutes(routes);
+
+      if (!currentMethod) {
+        const methods = routes
+          .filter((item) => {
+            return item.route === currentRoute;
+          })
+          .map((route) => route.method);
+        handleMethodChange(currentRoute, methods[0] ?? "GET");
+      }
+    }, [
+      openApiSpec,
+      currentMethod,
+      currentRoute,
+      setRoutes,
+      handleMethodChange,
+    ]);
+
+    // Load the routes from the OpenAPI spec
+    useEffect(() => {
+      loadRoutesFromOpenApi();
+    }, [loadRoutesFromOpenApi]);
+
+    // Load the possible values for the current header key
+    useEffect(() => {
+      if (!currentHeaderKey) {
+        setCurrentHeaderValues([]);
+        return;
+      }
+      setCurrentHeaderValues(getHeaderValues(currentHeaderKey));
+    }, [currentHeaderKey]);
+
+    // Sync the query parameters with the current route.
     useEffect(() => {
       if (!currentRoute) {
         return;
@@ -195,26 +324,7 @@ export const ApiInteraction = memo(
       setCurrentRoute(newRoute);
     }, [currentRoute, queryParameters, setCurrentRoute]);
 
-    useEffect(() => {
-      if (!schemaData) {
-        return;
-      }
-
-      setUrl(schemaData.url);
-      const routes = getRoutesFromOpenApi(schemaData.openApiSpec);
-      setRoutes(routes);
-      const methods = routes
-        .filter((item) => {
-          return item.route === currentRoute;
-        })
-        .map((route) => route.method);
-      if (methods.length > 0 && methods[0] && !currentMethod) {
-        setCurrentMethod(methods[0]);
-      }
-    }, [currentRoute, schemaData, setCurrentMethod, currentMethod]);
-
     // TODO: Refactor inline functions below. For example, with `useCallback` or with additional memo components.
-
     return (
       <div className="h-full flex-1 flex flex-col text-sm space-y-1">
         <div className="relative grow">
@@ -241,9 +351,9 @@ export const ApiInteraction = memo(
                       return { label: method, value: method };
                     })}
                     value={currentMethod}
-                    onChange={(method) => {
-                      setCurrentMethod(method);
-                    }}
+                    onChange={(value) =>
+                      handleMethodChange(currentRoute, value)
+                    }
                     btnClassName={classNames(
                       theme.bgInput,
                       theme.bgInputHover,
@@ -264,15 +374,7 @@ export const ApiInteraction = memo(
                       };
                     })}
                     value={currentRoute}
-                    onChange={(value) => {
-                      const [method, route] = value.split(" ");
-                      if (method && HTTP_METHODS.includes(method) && route) {
-                        setCurrentMethod(method);
-                        handleRouteChange(route);
-                      } else {
-                        handleRouteChange(value);
-                      }
-                    }}
+                    onChange={handleRouteChange}
                     className="w-full"
                     inputClassName={classNames(
                       "border-none focus-none text-xs outline-none w-full rounded-r",
@@ -322,7 +424,7 @@ export const ApiInteraction = memo(
                           onEditItem={editHeader}
                           disabled={isLoading}
                           keysList={Object.keys(HTTP_HEADERS)}
-                          valuesList={valuesList}
+                          valuesList={currentHeaderValues}
                           onKeyChange={setCurrentHeaderKey}
                         />
                       </div>
@@ -368,14 +470,14 @@ export const ApiInteraction = memo(
                   },
                   {
                     id: "body",
-                    name: `Body`,
+                    name: `Body ${body ? "*" : ""}`,
                     panel: (
                       <div className="pt-2">
                         <TextArea
                           id={bodyId}
                           containerClassName="w-full"
                           className="text-sm min-h-[2rem]"
-                          placeholder="Body..."
+                          placeholder={bodyPlaceholder ?? "Body..."}
                           value={body}
                           onInput={(event) =>
                             setBody(event.currentTarget.value)

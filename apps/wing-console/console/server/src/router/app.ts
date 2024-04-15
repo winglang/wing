@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
+import type { HttpClient } from "@winglang/sdk/lib/ui/http-client.js";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
@@ -487,6 +488,25 @@ export const createAppRouter = () => {
           value: await client.invoke(""),
         };
       }),
+    "app.getResourceUiHttpClient": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+
+        let response = await client.invoke("");
+        let data = response && JSON.parse(response);
+        return {
+          url: data.url,
+          openApiSpec: data.openApiSpec,
+        };
+      }),
 
     "app.invokeResourceUiButton": createProcedure
       .input(
@@ -501,7 +521,6 @@ export const createAppRouter = () => {
         ) as IFunctionClient;
         await client.invoke("");
       }),
-
     "app.analytics": createProcedure.query(async ({ ctx }) => {
       const requireSignIn = (await ctx.requireSignIn?.()) ?? false;
       if (requireSignIn) {

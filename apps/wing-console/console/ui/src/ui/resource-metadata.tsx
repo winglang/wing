@@ -20,13 +20,16 @@ import {
   Button,
 } from "@wingconsole/design-system";
 import type { NodeDisplay } from "@wingconsole/server";
+import type { Json } from "@wingconsole/server/src/wingsdk.js";
 import classNames from "classnames";
 import { memo, useCallback, useId, useMemo, useState } from "react";
 
 import { QueueMetadataView } from "../features/queue-metadata-view.js";
 import { ResourceInteractionView } from "../features/resource-interaction-view.js";
 import { trpc } from "../services/trpc.js";
+import { useApi } from "../services/use-api.js";
 
+import { ApiInteraction } from "./api-interaction.js";
 import { BucketMetadata } from "./bucket-metadata.js";
 import { CounterMetadata } from "./counter-metadata.js";
 import { FunctionMetadata } from "./function-metadata.js";
@@ -82,6 +85,49 @@ const CustomResourceUiButtomItem = ({
   );
 };
 
+interface CustomResourceHttpClientItemProps {
+  label: string;
+  handlerPath: string;
+}
+
+const CustomResourceHttpClientItem = ({
+  label,
+  handlerPath,
+}: CustomResourceHttpClientItemProps) => {
+  const { theme } = useTheme();
+
+  const data = trpc["app.getResourceUiHttpClient"].useQuery(
+    {
+      resourcePath: handlerPath,
+    },
+    { enabled: !!handlerPath },
+  );
+
+  const [response, setResponse] = useState();
+  const { callFetch, isLoading } = useApi({
+    onFetchDataUpdate: (data) => {
+      setResponse(data);
+    },
+  });
+
+  const id = useId();
+  return (
+    <div className="pl-4">
+      <label htmlFor={id} className={classNames("min-w-[100px]", theme.text2)}>
+        {label}
+      </label>
+      <ApiInteraction
+        resourceId={handlerPath}
+        url={data.data?.url}
+        openApiSpec={data.data?.openApiSpec}
+        callFetch={callFetch}
+        isLoading={isLoading}
+        apiResponse={response}
+      />
+    </div>
+  );
+};
+
 interface CustomResourceUiItemProps {
   kind: string;
   label: string;
@@ -100,6 +146,9 @@ const CustomResourceUiItem = ({
       )}
       {kind === "button" && (
         <CustomResourceUiButtomItem label={label} handlerPath={handlerPath} />
+      )}
+      {kind === "http-client" && (
+        <CustomResourceHttpClientItem label={label} handlerPath={handlerPath} />
       )}
     </>
   );

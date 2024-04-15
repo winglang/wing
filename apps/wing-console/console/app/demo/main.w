@@ -136,10 +136,10 @@ class WidgetService {
     this.api = new cloud.Api();
     
     this.api.post("/widgets", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
-      let input = Json.parse(request.body ?? "");
+      let input = Json.tryParse(request.body ?? "");
 
-      let name = input.get("name").asStr();
-      log("Creating widget with name: {name}");
+      let name = input?.tryGet("name")?.tryAsStr();
+      log("Creating widget with name: {name ?? "unnamed"}");
       this.addWidget(name);
     
       return cloud.ApiResponse {
@@ -147,67 +147,72 @@ class WidgetService {
         body: Json.stringify(this.data.list())
       };
     });
-    
-    // a field displays a labeled value, with optional refreshing
-    new ui.Field(
-      "Total widgets",
-      inflight () => { return this.countWidgets(); },
-      refreshRate: 5s,
-    );
-
-    // a button lets you invoke any inflight function
-    new ui.Button("Add widget", inflight () => { this.addWidget(); });
-    
+    this.api.get("/widgets", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+      log("Listing widgets");
+      return cloud.ApiResponse {
+        status: 200,
+        body: Json.stringify(this.data.list())
+      };
+    });
+  
     new ui.HttpClient(
       "Test POST /widgets",
-      this.api.url,
-      Json.stringify({
-        "paths": {
-          "/users": {
-            "post": {
-              "summary": "Create a new user",
-              "operationId": "createWidget",
-              "parameters": [
-                // {
-                //   "in": "header",
-                //   "name": "X-Request-ID",
-                //   "schema": {
-                //     "type": "string"
-                //   },
-                //   "required": true,
-                //   "description": "A unique identifier for the request"
-                // },
-                // {
-                //   "in": "query",
-                //   "name": "role",
-                //   "schema": {
-                //     "type": "string"
-                //   },
-                //   "description": "The role to assign to the user"
-                // }
-              ],
-              "requestBody": {
-                "required": true,
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "type": "object",
-                      "required": [
-                        "name",
-                      ],
-                      "properties": {
-                        "name": {
-                          "type": "string"
-                        },
+      inflight () => {
+        return Json.stringify({
+          url: this.api.url,
+          openApiSpec: {
+            "paths": {
+              "/widgets": {
+                "post": {
+                  "summary": "Create a new widget",
+                  "parameters": [
+                    {
+                      "in": "header",
+                      "name": "X-Request-ID",
+                      "schema": {
+                        "type": "string"
+                      },
+                      "required": true,
+                      "description": "A unique identifier for the request"
+                    },
+                    {
+                      "in": "query",
+                      "name": "role",
+                      "schema": {
+                        "type": "string"
+                      },
+                      "required": true,
+                      "description": "The role to assign to the user"
+                    }
+                  ],
+                  "requestBody": {
+                    "required": true,
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "required": [
+                            "name",
+                          ],
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "The name of the widget"
+                            },
+                          }
+                        }
                       }
                     }
-                  }
+                  },
+                },
+                "get": {
+                  "summary": "List all widgets",
                 }
               },
             }
           }
-        }
-      })
+        });
+      }
    );
   }
 
