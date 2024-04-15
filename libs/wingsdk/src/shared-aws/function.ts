@@ -150,18 +150,11 @@ export class FunctionRef extends Resource {
       link: true,
     });
 
-    const functionArnHandler = Testing.makeHandler(
-      `async handle() {
-        return this.functionArn;
-      }`,
-      {
-        functionArn: {
-          obj: this.functionArn,
-          ops: [],
-        },
-      }
+    ui.Field._newValueField(
+      this,
+      "FunctionArnField",
+      "Function ARN",
+      this.functionArn
     );
-
-    new ui.Field(this, "FunctionArnField", "Function ARN", functionArnHandler);
   }
 }

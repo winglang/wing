@@ -3,6 +3,7 @@ import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
 import { App, UIComponent } from "../core";
+import { Testing } from "../simulator";
 import { Duration, IInflight } from "../std";
 
 /**
@@ -51,6 +52,28 @@ export class Field extends VisualComponent {
       handler,
       props
     );
+  }
+
+  /** @internal */
+  public static _newValueField(
+    scope: Construct,
+    id: string,
+    label: string,
+    value: string
+  ): void {
+    const handler = Testing.makeHandler(
+      `async handle() { 
+        return this.value;
+      }`,
+      {
+        value: {
+          obj: value,
+          ops: [],
+        },
+      }
+    );
+
+    new Field(scope, id, label, handler);
   }
 
   private readonly fn: Function;

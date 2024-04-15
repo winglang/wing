@@ -146,32 +146,17 @@ export class BucketRef extends Resource {
       link: true,
     });
 
-    const bucketNameHandler = Testing.makeHandler(
-      `async handle() {
-        return this.bucketName;
-      }`,
-      {
-        bucketName: {
-          obj: this.bucketName,
-          ops: [],
-        },
-      }
+    ui.Field._newValueField(
+      this,
+      "BucketNameField",
+      "Bucket Name",
+      this.bucketName
     );
-
-    new ui.Field(this, "BucketNameField", "Bucket Name", bucketNameHandler);
-
-    const bucketArnHandler = Testing.makeHandler(
-      `async handle() {
-        return this.bucketArn;
-      }`,
-      {
-        bucketArn: {
-          obj: this.bucketArn,
-          ops: [],
-        },
-      }
+    ui.Field._newValueField(
+      this,
+      "BucketArnField",
+      "Bucket ARN",
+      this.bucketArn
     );
-
-    new ui.Field(this, "BucketArnField", "Bucket ARN", bucketArnHandler);
   }
 }
