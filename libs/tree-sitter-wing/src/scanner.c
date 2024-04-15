@@ -35,7 +35,7 @@ static void skip(TSLexer * lexer) {
  * Assumes all initial whitespace has been skipped already
  */
 static void skip_strings(TSLexer * lexer) {
-    if (lexer -> lookahead == '"') {
+    while (lexer -> lookahead == '"') {
       skip(lexer);
       while (lexer -> lookahead != 0) {
         if (lexer -> lookahead == '\\') {
