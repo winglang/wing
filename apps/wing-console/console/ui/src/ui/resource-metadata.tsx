@@ -20,7 +20,6 @@ import {
   Button,
 } from "@wingconsole/design-system";
 import type { NodeDisplay } from "@wingconsole/server";
-import type { Json } from "@wingconsole/server/src/wingsdk.js";
 import type {
   UIButton,
   UIComponent,
