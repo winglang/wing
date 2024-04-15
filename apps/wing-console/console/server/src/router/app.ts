@@ -500,8 +500,11 @@ export const createAppRouter = () => {
           input.resourcePath,
         ) as IFunctionClient;
 
-        let response = await client.invoke("");
-        let data = response && JSON.parse(response);
+        const response = await client.invoke("");
+        if (!response) {
+          return {};
+        }
+        const data = JSON.parse(response);
         return {
           url: data.url,
           openApiSpec: data.openApiSpec,
