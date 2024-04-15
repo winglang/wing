@@ -30,12 +30,34 @@ static void skip(TSLexer * lexer) {
 }
 
 /**
+ * Skip through a strings until the end of the string or the end of the file.
+ * Handle any escaped \"
+ * Assumes all initial whitespace has been skipped already
+ */
+static void skip_strings(TSLexer * lexer) {
+    while (lexer -> lookahead == '"') {
+      skip(lexer);
+      while (lexer -> lookahead != 0) {
+        if (lexer -> lookahead == '\\') {
+          skip(lexer);
+          if (lexer -> lookahead == '"') {
+            skip(lexer);
+          }
+        } else if (lexer -> lookahead == '"') {
+          skip(lexer);
+          break;
+        } else {
+          skip(lexer);
+        }
+      }
+    }
+}
+
+/**
  * Skip through any whitespace or comments until
  * we've reached a non-whitespace/comment character
- *
- * @return true if we've reached a non-whitespace/comment character, false otherwise (comment is unterminated)
  */
-static bool scan_whitespace_and_comments(TSLexer * lexer) {
+static void skip_whitespace_and_comments(TSLexer * lexer) {
   for (;;) {
     while (iswspace(lexer -> lookahead)) {
       skip(lexer);
@@ -62,11 +84,9 @@ static bool scan_whitespace_and_comments(TSLexer * lexer) {
             skip(lexer);
           }
         }
-      } else {
-        return false;
       }
     } else {
-      return true;
+      break;
     }
   }
 }
@@ -179,24 +199,21 @@ static bool scan_automatic_block(TSLexer * lexer) {
   lexer -> mark_end(lexer);
 
   for (;;) {
-    if (lexer -> lookahead == 0)
-      return true;
-    if (lexer -> lookahead == '}')
-      return false;
-    if (lexer -> is_at_included_range_start(lexer))
-      return true;
-    if (!iswspace(lexer -> lookahead))
-      return false;
+    skip_whitespace_and_comments(lexer);
+    skip_strings(lexer);
+
+    switch (lexer -> lookahead) {
+      case '{':
+        return false;
+      case '}':
+        return true;
+      case ';':
+        return true;
+      case 0:
+        return true;
+    }
     skip(lexer);
   }
-
-  skip(lexer);
-
-  if (!scan_whitespace_and_comments(lexer))
-    return false;
-
-  if (lexer -> lookahead != '{')
-    return false;
 
   return true;
 }
