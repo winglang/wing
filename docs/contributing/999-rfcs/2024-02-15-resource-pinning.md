@@ -183,7 +183,7 @@ This information will be available to the target platform/app which can choose w
   "version": "1",
   "pinned": {
     "tf-aws": {
-      // The original physical/platform path to the resource.
+      // The physical/platform path to the resource. Must be updated if moved.
       // These will only be leaves of the resource tree
       "aws_s3_bucket.CoolBucket": {
         // These attributes have platform-specific values and only make sense in that context.
