@@ -17,12 +17,20 @@ export type NodeV2 =
   | {
       type: "function";
     }
-  | {
-      type: "queue";
-    }
-  | {
-      type: "topic";
-    }
+  // | {
+  //     type: "queue";
+  //     inflights: {
+  //       id: string;
+  //       name: string;
+  //     }[];
+  //   }
+  // | {
+  //     type: "topic";
+  //     inflights: {
+  //       id: string;
+  //       name: string;
+  //     }[];
+  //   }
   | {
       type: "construct";
       inflights: {
@@ -41,17 +49,17 @@ const getNodeType = (
   if (node.constructInfo?.fqn === "@winglang/sdk.std.AutoIdResource") {
     return "autoId";
   }
-  if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Queue") {
-    return "queue";
-  }
-  if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Topic") {
-    return "topic";
-  }
+  // if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Queue") {
+  //   return "queue";
+  // }
+  // if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Topic") {
+  //   return "topic";
+  // }
   if (
     (node.children ?? []).length === 0 ||
     connections.some(
       (connection) =>
-        connection.source === node.id || connection.target === node.id,
+        connection.source === node.path || connection.target === node.path,
     )
   ) {
     return "construct";
@@ -96,18 +104,18 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
           });
           break;
         }
-        case "queue": {
-          nodeMap.set(node.path, {
-            type: nodeType,
-          });
-          break;
-        }
-        case "topic": {
-          nodeMap.set(node.path, {
-            type: nodeType,
-          });
-          break;
-        }
+        // case "queue": {
+        //   nodeMap.set(node.path, {
+        //     type: nodeType,
+        //   });
+        //   break;
+        // }
+        // case "topic": {
+        //   nodeMap.set(node.path, {
+        //     type: nodeType,
+        //   });
+        //   break;
+        // }
         default: {
           nodeMap.set(node.path, {
             type: "construct",

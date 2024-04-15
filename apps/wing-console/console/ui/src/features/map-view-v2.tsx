@@ -2,7 +2,7 @@ import { CubeIcon, BoltIcon } from "@heroicons/react/24/solid";
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import clsx from "classnames";
 import type { ElkPoint, LayoutOptions } from "elkjs";
-import type { FunctionComponent } from "react";
+import type { FunctionComponent, PropsWithChildren } from "react";
 import { memo, useCallback, useEffect, useId, useMemo } from "react";
 
 import { useMapV2 } from "../services/use-map-v2.js";
@@ -51,7 +51,8 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
   </>
 );
 
-const SPACING_BASE_VALUE = 64;
+// const SPACING_BASE_VALUE = 64;
+const SPACING_BASE_VALUE = 48;
 // const PORT_ANCHOR = SPACING_BASE_VALUE / 5;
 const PORT_ANCHOR = 0;
 // For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
@@ -61,11 +62,24 @@ const baseLayoutOptions: LayoutOptions = {
   "elk.alignment": "CENTER",
   "elk.algorithm": "org.eclipse.elk.layered",
   // "elk.layered.layering.strategy": "MIN_WIDTH",
-  "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
+  // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
+  // "elk.layered.layering.strategy": "LONGEST_PATH",
+  // "elk.layered.layering.strategy": "LONGEST_PATH_SOURCE",
+  // "elk.layered.layering.strategy": "STRETCH_WIDTH",
+  // "elk.layered.layering.strategy": "BF_MODEL_ORDER",
+  "elk.layered.layering.strategy": "DF_MODEL_ORDER",
   "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
   "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
 
   // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
+
+  "elk.spacing.nodeNode": `${SPACING_BASE_VALUE}`,
+  "elk.layered.spacing.nodeNodeBetweenLayers": `${SPACING_BASE_VALUE}`,
+
+  // "elk.spacing.edgeEdge": "128",
+  "elk.spacing.edgeEdge": "10",
+  // "elk.layered.spacing.edgeEdgeBetweenLayers": "16",
+  "elk.layered.spacing.edgeEdgeBetweenLayers": "10",
 
   // "elk.layered.spacing.baseValue": "20",
 
@@ -77,6 +91,69 @@ const baseLayoutOptions: LayoutOptions = {
   // "elk.layered.spacing.nodeNodeBetweenLayers": "64",
   // "elk.layered.spacing.edgeNodeBetweenLayers": "16",
 };
+
+interface ContainerNodeProps {
+  id: string;
+  name: string;
+}
+
+const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
+  memo((props) => {
+    return (
+      <Node
+        elk={{
+          id: props.id,
+          layoutOptions: {
+            // "elk.algorithm": "org.eclipse.elk.layered",
+            // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+            // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
+            // "elk.direction": "RIGHT",
+            ...baseLayoutOptions,
+          },
+        }}
+        className={clsx(
+          "inline-block",
+          "group",
+          //"pointer-events-none"
+        )}
+      >
+        <div className="w-full h-full relative">
+          <div className="absolute inset-x-0 top-0">
+            <div className="relative">
+              <div className="absolute bottom-0">
+                <div className="text-sm font-medium leading-relaxed tracking-wide whitespace-nowrap group-hover:text-sky-600">
+                  {props.name}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-xs whitespace-nowrap h-0 invisible">
+            {props.name}
+          </div>
+
+          <div
+            className={clsx(
+              "w-full h-full rounded-lg",
+              // "shadow",
+              "transition-all",
+              "flex flex-col",
+              "overflow-hidden",
+              "border border-gray-300 border-dashed",
+              "hover:border-sky-300",
+              "outline outline-0 outline-sky-200 hover:outline-2",
+            )}
+          >
+            <div className={clsx("grow shadow-inner", "p-8")}>
+              <NodeChildren>
+                <div className="absolute">{props.children}</div>
+              </NodeChildren>
+            </div>
+          </div>
+        </div>
+      </Node>
+    );
+  });
 
 interface ConstructNodeProps {
   id: string;
@@ -90,118 +167,142 @@ interface ConstructNodeProps {
   highlight?: boolean;
 }
 
-const ConstructNode: FunctionComponent<ConstructNodeProps> = memo((props) => {
-  return (
-    <Node
-      elk={{
-        id: props.id,
-        layoutOptions: {
-          "elk.direction": "DOWN",
-          "elk.layered.spacing.baseValue": "1",
-          // "elk.edgeRouting": "UNDEFINED",
-          // "elk.edgeRouting": "ORTHOGONAL",
-          // "elk.edgeRouting": "POLYLINE",
-          // "elk.edgeRouting": "SPLINES",
-        },
-      }}
-      className="inline-block group/construct"
-    >
-      <div
-        className={clsx(
-          "w-full h-full rounded-lg  bg-white",
-          // "outline outline-1 outline-gray-300",
-          "border border-gray-300",
-          "group-hover/construct:border-sky-300",
-          "outline outline-0 outline-sky-200",
-          "group-hover/construct:outline-2",
-          props.highlight && "outline-2 border-sky-300",
-          "shadow-sm",
-          "transition-all",
-        )}
+const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
+  memo((props) => {
+    const hasChildren = Array.isArray(props.children)
+      ? props.children.length > 0
+      : false;
+
+    const renderedNode = (
+      <Node
+        elk={{
+          id: props.id,
+          layoutOptions: {
+            "elk.direction": "DOWN",
+            "elk.layered.spacing.baseValue": "1",
+            // "elk.edgeRouting": "UNDEFINED",
+            // "elk.edgeRouting": "ORTHOGONAL",
+            // "elk.edgeRouting": "POLYLINE",
+            // "elk.edgeRouting": "SPLINES",
+          },
+        }}
+        className="inline-block group/construct"
       >
-        <div className="px-2.5 py-2.5 flex items-center gap-2">
-          {/* <CubeIcon className="-ml-1.5 size-6 text-emerald-400" /> */}
-          {/* <div className="-ml-1 rounded px-1.5 py-1 bg-emerald-400">
-						<CubeIcon className="size-6 text-white" />
-					</div> */}
-          <div className="rounded p-1.5 bg-gray-400">
-            <CubeIcon className="size-5 text-white" />
-          </div>
-          {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow-sm">
-						<CubeIcon className="size-6 text-emerald-400" />
-					</div> */}
-          <span className="text-sm font-semibold leading-relaxed tracking-wide">
-            {props.name}
-          </span>
-        </div>
-
-        <NodeChildren className="text-xs">
-          {props.inflights.map((inflight) => (
-            <Node
-              key={inflight.id}
-              elk={{
-                id: inflight.id,
-                layoutOptions: {
-                  "elk.portConstraints": "FIXED_SIDE",
-                },
-              }}
+        <div
+          className={clsx(
+            "w-full h-full rounded-lg  bg-white",
+            // "outline outline-1 outline-gray-300",
+            "border border-gray-300",
+            "group-hover/construct:border-sky-300",
+            "outline outline-0 outline-sky-200",
+            "group-hover/construct:outline-2",
+            props.highlight && "outline-2 border-sky-300",
+            "shadow",
+            "transition-all",
+          )}
+        >
+          <div className="px-2.5 py-2.5 flex items-center gap-2">
+            {/* <CubeIcon className="-ml-1.5 size-6 text-emerald-400" /> */}
+            {/* <div className="-ml-1 rounded px-1.5 py-1 bg-emerald-400">
+      <CubeIcon className="size-6 text-white" />
+    </div> */}
+            <div className="rounded p-1.5 bg-gray-400">
+              <CubeIcon className="size-5 text-white" />
+            </div>
+            {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow">
+      <CubeIcon className="size-6 text-emerald-400" />
+    </div> */}
+            <span
+              // className="text-sm font-semibold leading-relaxed tracking-wide whitespace-nowrap"
+              className="text-sm font-medium leading-relaxed tracking-wide whitespace-nowrap"
             >
-              {/* <div className="border-t border-gray-300">
-								<div className="px-3 py-1.5 text-gray-600 font-mono text-xs tracking-tighter whitespace-nowrap">
-									<span className="text-sky-600 italic">inflight</span>{" "}
-									{inflight.name}(<span className="text-gray-400">…</span>
-									): <span className="italic text-gray-400">unknown</span>
-								</div>
-							</div> */}
-              <div className="border-t border-gray-300">
-                <div className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap">
-                  <span className="text-sky-600 italic">inflight</span>{" "}
-                  {inflight.name}
-                </div>
-              </div>
-              {/* <div className="border-t border-gray-300">
-								<div className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap">
-									{inflight.name}
-								</div>
-							</div> */}
+              {props.name}
+            </span>
+          </div>
 
-              <Port
+          <NodeChildren className="text-xs">
+            {props.inflights.map((inflight) => (
+              <Node
+                key={inflight.id}
                 elk={{
-                  id: `${inflight.id}#target`,
+                  id: inflight.id,
                   layoutOptions: {
-                    "elk.port.side": "WEST",
-                    // "elk.port.borderOffset": "100",
-                    "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                    "elk.portConstraints": "FIXED_SIDE",
                   },
                 }}
               >
-                <InflightPort
-                  occupied={inflight.targetOccupied}
-                  highlight={props.highlight}
-                />
-              </Port>
-              <Port
-                elk={{
-                  id: `${inflight.id}#source`,
-                  layoutOptions: {
-                    "elk.port.side": "EAST",
-                    // "elk.port.borderOffset": "100",
-                    "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                  },
-                }}
-              >
-                <InflightPort
-                  occupied={inflight.sourceOccupied}
-                  highlight={props.highlight}
-                />
-              </Port>
-            </Node>
-          ))}
-        </NodeChildren>
-      </div>
-    </Node>
-  );
-});
+                {/* <div className="border-t border-gray-300">
+          <div className="px-3 py-1.5 text-gray-600 font-mono text-xs tracking-tighter whitespace-nowrap">
+            <span className="text-sky-600 italic">inflight</span>{" "}
+            {inflight.name}(<span className="text-gray-400">…</span>
+            ): <span className="italic text-gray-400">unknown</span>
+          </div>
+        </div> */}
+                <div className="border-t border-gray-300">
+                  <div className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap">
+                    <span className="text-sky-600 italic">inflight</span>{" "}
+                    {inflight.name}
+                  </div>
+                </div>
+                {/* <div className="border-t border-gray-300">
+          <div className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap">
+            {inflight.name}
+          </div>
+        </div> */}
+
+                <Port
+                  elk={{
+                    id: `${inflight.id}#target`,
+                    layoutOptions: {
+                      "elk.port.side": "WEST",
+                      // "elk.port.borderOffset": "100",
+                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                    },
+                  }}
+                >
+                  <InflightPort
+                    occupied={inflight.targetOccupied}
+                    highlight={props.highlight}
+                  />
+                </Port>
+                <Port
+                  elk={{
+                    id: `${inflight.id}#source`,
+                    layoutOptions: {
+                      "elk.port.side": "EAST",
+                      // "elk.port.borderOffset": "100",
+                      "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                    },
+                  }}
+                >
+                  <InflightPort
+                    occupied={inflight.sourceOccupied}
+                    highlight={props.highlight}
+                  />
+                </Port>
+              </Node>
+            ))}
+          </NodeChildren>
+        </div>
+      </Node>
+    );
+
+    if (hasChildren) {
+      return (
+        <ContainerNode
+          id={`${props.id}#container`}
+          name={props.name}
+          // name={""}
+        >
+          {renderedNode}
+
+          {props.children}
+        </ContainerNode>
+      );
+    }
+
+    return renderedNode;
+  });
 
 interface FunctionNodeProps {
   id: string;
@@ -223,7 +324,7 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
       <div className="group">
         <div
           className={clsx(
-            "p-3 rounded-full bg-white shadow-sm",
+            "p-3 rounded-full bg-white shadow",
             "transition-all",
             "border border-gray-300",
             "group-hover:border-sky-300",
@@ -400,7 +501,8 @@ const RoundedEdge: EdgeComponent = memo(
     return (
       <g
         className={clsx(
-          "fill-none stroke-2 group transition-all pointer-events-auto",
+          // "fill-none stroke-2 group transition-all pointer-events-auto",
+          "fill-none stroke-1 group transition-all pointer-events-auto",
           // "stroke-sky-500",
           // "stroke-sky-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
           // "stroke-sky-200 hover:stroke-sky-500",
@@ -429,7 +531,6 @@ const RoundedEdge: EdgeComponent = memo(
     );
   },
 );
-
 export interface MapViewV2Props {}
 
 export const MapViewV2 = memo(({}: MapViewV2Props) => {
@@ -444,76 +545,74 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
     }>
   >(
     (props) => {
-      return (
-        // <ConstructNode elk={{}}>
-        //   <div>{props.constructTreeNode.path}</div>
+      // if (props.constructTreeNode.display?.hidden) {
+      //   return <></>;
+      // }
+      const info = nodeInfo?.get(props.constructTreeNode.path);
 
-        //   <div>
-        //     {Object.values(props.constructTreeNode.children ?? {}).map(
-        //       (child) => (
-        //         <RenderConstructNode key={child.id} constructTreeNode={child} />
-        //       ),
-        //     )}
-        //   </div>
-        // </ConstructNode>
-        <Node
-          elk={{
-            id: props.constructTreeNode.path,
-            layoutOptions: {
-              // "elk.algorithm": "org.eclipse.elk.layered",
-              // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-              // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
-              // "elk.direction": "RIGHT",
-              ...baseLayoutOptions,
-            },
-          }}
-          className={clsx(
-            "inline-block",
-            //"pointer-events-none"
-          )}
-        >
-          <div className="w-full h-full relative">
-            <div className="absolute inset-x-0 top-0">
-              <div className="relative">
-                <div className="absolute bottom-0">
-                  <div className="whitespace-nowrap">
-                    {props.constructTreeNode.id}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="whitespace-nowrap h-0 invisible">
-              {props.constructTreeNode.id}
-            </div>
-
+      if (info?.type === "autoId") {
+        return (
+          <Node elk={{ id: props.constructTreeNode.path }}>
             <div
               className={clsx(
-                "w-full h-full rounded-lg",
-                "shadow-sm",
+                "size-6 border border-gray-300 border-dashed hover:border-sky-300 rounded-full outline-0 outline outline-sky-300 hover:outline-2",
                 "transition-all",
-                "flex flex-col",
-                "overflow-hidden",
-                "border border-gray-500 border-dashed",
+                "shadow",
               )}
-            >
-              <div className={clsx("grow shadow-inner", "p-8")}>
-                <NodeChildren>
-                  <div className="absolute">
-                    {Object.values(props.constructTreeNode.children ?? {}).map(
-                      (child) => (
-                        <RenderConstructNode
-                          key={child.id}
-                          constructTreeNode={child}
-                        />
-                      ),
-                    )}
-                  </div>
-                </NodeChildren>
-              </div>
-            </div>
-          </div>
-        </Node>
+            ></div>
+          </Node>
+        );
+      }
+
+      if (info?.type === "construct") {
+        return (
+          <ConstructNode
+            id={props.constructTreeNode.path}
+            name={props.constructTreeNode.id}
+            inflights={info.inflights}
+            // highlight={}
+          >
+            {Object.values(props.constructTreeNode.children ?? {}).map(
+              (child) => (
+                <RenderConstructNode key={child.id} constructTreeNode={child} />
+              ),
+            )}
+          </ConstructNode>
+        );
+      }
+
+      if (info?.type === "function") {
+        return (
+          <FunctionNode
+            id={props.constructTreeNode.path}
+            // sourceOccupied={info.sourceOccupied}
+            // targetOccupied={info.targetOccupied}
+          />
+        );
+      }
+
+      // if (info?.type === "queue") {
+      //   return (
+      //     <ConstructNode
+      //       id={props.constructTreeNode.path}
+      //       name={props.constructTreeNode.id}
+      //       inflights={info.inflights}
+      //       // highlight={}
+      //     />
+      //   );
+      // }
+
+      return (
+        <ContainerNode
+          id={props.constructTreeNode.path}
+          name={props.constructTreeNode.id}
+        >
+          {Object.values(props.constructTreeNode.children ?? {}).map(
+            (child) => (
+              <RenderConstructNode key={child.id} constructTreeNode={child} />
+            ),
+          )}
+        </ContainerNode>
       );
     },
     [nodeInfo],
@@ -531,6 +630,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
               // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
               // "elk.direction": "RIGHT",
               ...baseLayoutOptions,
+              "elk.padding": "[top=24,left=20,bottom=20,right=20]",
             },
           }}
           edges={connections?.map((connection) => ({
@@ -571,6 +671,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
           //   },
           // ]}
           edgeComponent={RoundedEdge}
+          className="bg-white"
         >
           <RenderConstructNode constructTreeNode={tree} />
         </Graph>
