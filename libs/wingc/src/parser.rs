@@ -7,7 +7,6 @@ use std::cell::RefCell;
 use std::collections::HashSet;
 use std::{fs, str, vec};
 use tree_sitter::Node;
-use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
@@ -17,7 +16,9 @@ use crate::ast::{
 	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
+use crate::diagnostic::{
+	report_diagnostic, Diagnostic, DiagnosticResult, WingLocation, WingSpan, ERR_EXPECTED_SEMICOLON,
+};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
@@ -239,7 +240,7 @@ fn parse_wing_file(
 
 	let language = tree_sitter_wing::language();
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
-	tree_sitter_parser.set_language(language).unwrap();
+	tree_sitter_parser.set_language(&language).unwrap();
 
 	let tree_sitter_tree = match tree_sitter_parser.parse(&source_text.as_bytes(), None) {
 		Some(tree) => tree,
@@ -346,7 +347,7 @@ fn parse_wing_directory(
 
 	// Create a fake AST (since the directory doesn't have any source code to parse)
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
-	tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
+	tree_sitter_parser.set_language(&tree_sitter_wing::language()).unwrap();
 	let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
 	let scope = Scope::empty();
 	let dependent_wing_paths = files_and_dirs;
@@ -2418,41 +2419,56 @@ impl<'s> Parser<'s> {
 	}
 	/// Given a node, returns the last non-extra node before it.
 	fn last_non_extra(node: Node) -> Node {
-		let parent = node.parent();
-		if let Some(parent) = parent {
-			if parent.is_extra() {
-				return Self::last_non_extra(parent);
+		let mut sibling = node.prev_sibling();
+		while let Some(s) = sibling {
+			if !s.is_extra() {
+				break;
 			}
+			sibling = s.prev_sibling();
 		}
-		if node.is_extra() {
-			let mut sibling = node.prev_sibling();
-			while let Some(s) = sibling {
-				if !s.is_extra() {
-					break;
-				}
-				sibling = s.prev_sibling();
-			}
 
-			return sibling.unwrap_or(node);
-		} else {
-			return node;
-		}
+		return sibling.unwrap_or(node);
 	}
 
 	fn report_unhandled_errors(&self, root: &Node) {
-		let iter = traverse(root.walk(), Order::Pre);
-		for node in iter {
+		let iterator = crate::ts_traversal::PostOrderIter::new(root);
+		for node in iterator {
 			if node.kind() == "AUTOMATIC_SEMICOLON" {
-				let target_node = Self::last_non_extra(node);
+				let target_node = Self::last_non_extra(node).range();
+				let end_byte = target_node.end_byte;
+				let end_point: WingLocation = target_node.end_point.into();
+
 				let diag = Diagnostic {
 					message: ERR_EXPECTED_SEMICOLON.to_string(),
-					span: Some(self.node_span(&target_node)),
+					span: Some(WingSpan {
+						start: end_point,
+						end: end_point,
+						end_offset: end_byte,
+						start_offset: end_byte,
+						file_id: self.source_name.to_string(),
+					}),
 					annotations: vec![],
 					hints: vec![],
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
-				self.add_error("Expected block".to_string(), &Self::last_non_extra(node));
+				let target_node = Self::last_non_extra(node).range();
+				let end_byte = target_node.end_byte;
+				let end_point: WingLocation = target_node.end_point.into();
+
+				let diag = Diagnostic {
+					message: "Expected block".to_string(),
+					span: Some(WingSpan {
+						start: end_point,
+						end: end_point,
+						end_offset: end_byte,
+						start_offset: end_byte,
+						file_id: self.source_name.to_string(),
+					}),
+					annotations: vec![],
+					hints: vec![],
+				};
+				report_diagnostic(diag);
 			} else if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
 					if node.named_child_count() == 0 {
@@ -2738,7 +2754,7 @@ mod tests {
 		// Test get_actual_children_by_field_name
 		let language = tree_sitter_wing::language();
 		let mut tree_sitter_parser = tree_sitter::Parser::new();
-		tree_sitter_parser.set_language(language).unwrap();
+		tree_sitter_parser.set_language(&language).unwrap();
 
 		let tree_sitter_tree = tree_sitter_parser
 			.parse("let x: ((num)) = 1;".as_bytes(), None)

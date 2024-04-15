@@ -205,6 +205,7 @@ async function main() {
       "Run tests that match the provided regex pattern within the selected entrypoint files"
     )
     .option("--no-clean", "Keep build output")
+    .option("--no-stream", "Do not stream logs")
     .option(
       "-o, --output-file <outputFile>",
       "File name to write test results to (file extension is required, supports only .json at the moment)"

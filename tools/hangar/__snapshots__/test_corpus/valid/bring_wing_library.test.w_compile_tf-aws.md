@@ -107,6 +107,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const fixture = require("./preflight.testfixture-5.cjs");
 const testfixture = require("./preflight.testfixture-5.cjs");
 const testfixture2 = require("./preflight.testfixture-5.cjs");
@@ -168,6 +169,7 @@ $APP.synth();
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const FavoriteNumbers =
   (function (tmp) {
     tmp["SEVEN"] = "SEVEN";
@@ -185,6 +187,7 @@ module.exports = { FavoriteNumbers };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 const myutil = require("./preflight.util-2.cjs");
 class Store extends $stdlib.std.Resource {
@@ -194,7 +197,7 @@ class Store extends $stdlib.std.Resource {
     this.handlers = [];
   }
   static makeKey(name) {
-    return (require("@winglibs/testfixture/util.js")["makeKey"])(name)
+    return ($extern("@winglibs/testfixture/util.js")["makeKey"])(name)
   }
   onSet(handler) {
     this.handlers.push(handler);
@@ -250,6 +253,7 @@ module.exports = { Store };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {
   ...require("./preflight.util-2.cjs"),
 };
@@ -262,6 +266,7 @@ module.exports = {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {
   get subdir() { return require("./preflight.subdir-4.cjs") },
   ...require("./preflight.store-3.cjs"),
@@ -276,6 +281,7 @@ module.exports = {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class Util extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);

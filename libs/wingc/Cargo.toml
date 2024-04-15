@@ -4,8 +4,7 @@ version = "0.0.0"
 edition = "2021"
 
 [dependencies]
-tree-sitter = "0.20.10"
-tree-sitter-traversal = "0.1"
+tree-sitter = "0.22.5"
 derivative = "2.2"
 tree-sitter-wing = { path = "../tree-sitter-wing" }
 wingii = { path = "../wingii" }

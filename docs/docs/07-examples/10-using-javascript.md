@@ -6,7 +6,7 @@ keywords: [example, javascript, extern, typescript, js, ts]
 
 Calling a Javascript function from Wing requires two steps.
 
-1. Create a .js file that exports some functions
+1. Create a .js/.ts file that exports some functions
 
 ```js
 // util.js
@@ -16,7 +16,7 @@ exports.isValidUrl = function (url) {
 };
 ```
 
-In preflight, this file must be a CommonJS module written in Javascript. Inflight, it may be CJS/ESM and either JavaScript or TypeScript.
+It may be CJS/ESM written in either JavaScript or TypeScript.
 
 2. Use the `extern` keyword in a class to expose the function to Wing. Note that this must be `static`. It may also be `inflight`
 

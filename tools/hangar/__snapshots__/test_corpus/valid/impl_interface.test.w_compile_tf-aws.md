@@ -185,6 +185,23 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.ImplementInflightIfaceInPreflightClass-1.cjs.map
 ```
 
+## inflight.ImplementJsiiIface-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class ImplementJsiiIface {
+    constructor({  }) {
+    }
+    async inflight_method() {
+      return;
+    }
+  }
+  return ImplementJsiiIface;
+}
+//# sourceMappingURL=inflight.ImplementJsiiIface-1.cjs.map
+```
+
 ## inflight.Terrier-1.cjs
 ```cjs
 "use strict";
@@ -248,6 +265,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 const jsii_fixture = require("jsii-fixture");
 class $Root extends $stdlib.std.Resource {
@@ -477,6 +495,39 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class ImplementJsiiIface extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      method() {
+        return;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.ImplementJsiiIface-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const ImplementJsiiIfaceClient = ${ImplementJsiiIface._toInflightType()};
+            const client = new ImplementJsiiIfaceClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "inflight_method": [
           ],
           "$inflight_init": [
           ],

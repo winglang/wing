@@ -1567,10 +1567,10 @@ impl Types {
 		self
 			.libraries
 			.lookup_nested_str(&resource_fqn, None)
-			.expect("Resouce base class to be loaded")
+			.expect("Resource base class to be loaded")
 			.0
 			.as_type()
-			.expect("Resouce base class to be a type")
+			.expect("Resource base class to be a type")
 	}
 
 	pub fn resource_base_interface(&self) -> TypeRef {
@@ -1578,10 +1578,10 @@ impl Types {
 		self
 			.libraries
 			.lookup_nested_str(&resource_fqn, None)
-			.expect("Resouce base interface to be loaded")
+			.expect("Resource base interface to be loaded")
 			.0
 			.as_type()
-			.expect("Resouce base interface to be a type")
+			.expect("Resource base interface to be a type")
 	}
 
 	pub fn construct_base_type(&self) -> TypeRef {
@@ -5146,7 +5146,6 @@ impl<'a> TypeChecker<'a> {
 				assembly_name: assembly_name.to_string(),
 				namespace_filter,
 				alias: alias.clone(),
-				import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
 			});
 
 			self
@@ -5157,10 +5156,7 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// check if we've already defined the given alias in the current scope
-		if env
-			.lookup(&jsii.alias.name.as_str().into(), Some(jsii.import_statement_idx))
-			.is_some()
-		{
+		if env.lookup(&jsii.alias.name.as_str().into(), None).is_some() {
 			self.spanned_error(alias, format!("\"{}\" is already defined", alias.name));
 		} else {
 			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
