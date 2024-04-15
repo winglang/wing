@@ -69,6 +69,41 @@ describe("wing pack", () => {
     await expectNoTarball(outdir);
   });
 
+  it("throws an error if package.json uses dependencies instead of peerDependencies", async () => {
+    // GIVEN
+    const projectDir = join(fixturesDir, "invalid6");
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+
+    // WHEN
+    await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow(
+      /Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead./
+    );
+
+    // THEN
+    await expectNoTarball(outdir);
+  });
+
+  it("includes empty dependencies in package.json", async () => {
+    // valid1's package.json contains this:
+    // {
+    //   ...
+    //   "dependencies": {}
+    // }
+
+    // GIVEN
+    const projectDir = join(fixturesDir, "valid1");
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+
+    // WHEN
+    await expect(pack({ outFile: join(outdir, "tarball.tgz") })).resolves.not.toThrow();
+
+    // THEN
+    const tarballContents = await extractTarball(join(outdir, "tarball.tgz"), outdir);
+    expect(tarballContents).toBeDefined();
+  });
+
   it("includes extra files specified by package.json", async () => {
     // valid1's package.json contains this:
     // {

@@ -11,8 +11,7 @@ pass ─ assert.test.wsim » root/env5/test:equal objects
 pass ─ assert.test.wsim » root/env6/test:equal maps            
 pass ─ assert.test.wsim » root/env7/test:equal sets            
 pass ─ assert.test.wsim » root/env8/test:equal durations       
- 
- 
+
 Tests 9 passed (9)
 Snapshots 1 skipped
 Test Files 1 passed (1)

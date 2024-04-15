@@ -62,12 +62,7 @@ impl Lifts {
 
 	/// Adds a lift for an expression.
 	pub fn lift(&mut self, method: Symbol, qualification: Option<String>, code: &str, explicit: bool) {
-		self.add_lift(
-			method.to_string(),
-			code,
-			qualification.as_ref().map(|s| s.clone()),
-			explicit,
-		);
+		self.add_lift(method.to_string(), code, qualification.clone(), explicit);
 
 		// Add a lift to the inflight initializer to signify this class requires access to that preflight object.
 		// "this" is a special case since it's already in scope and doesn't need to be lifted.

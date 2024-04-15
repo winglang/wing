@@ -1,4 +1,5 @@
 bring cloud;
+bring util;
 
 // User defined resource
 class Foo {
@@ -139,8 +140,12 @@ let bigOlPublisher = new BigPublisher();
 
 test "dependency cycles" {
   bigOlPublisher.publish("foo");
-  let count = bigOlPublisher.getObjectCount();
-  // assert(count == 2); // TODO: This fails due to issue: https://github.com/winglang/wing/issues/2082
+
+  util.waitUntil(inflight () => {
+    let count = bigOlPublisher.getObjectCount();
+    return count == 2;
+  });
+  assert(bigOlPublisher.getObjectCount() == 2);
 }
 
 // Scope and ID tests

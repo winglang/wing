@@ -21,6 +21,7 @@ module.exports = function({ $cdk8s_Chart }) {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cdk8s = require("cdk8s");
 class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
   constructor($scope, $id, ) {
