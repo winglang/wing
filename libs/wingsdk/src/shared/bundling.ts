@@ -1,6 +1,7 @@
 import * as crypto from "crypto";
 import { mkdirSync, realpathSync, writeFileSync } from "fs";
 import { posix, resolve } from "path";
+import { decode, encode } from "vlq";
 import { normalPath } from "./misc";
 
 const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
@@ -73,15 +74,7 @@ export function createBundle(
   const sourcemapData = JSON.parse(
     new TextDecoder().decode(esbuild.outputFiles[0].contents)
   );
-  if (sourcemapData.sourceRoot) {
-    sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot);
-  }
-
-  for (const [idx, source] of Object.entries(
-    sourcemapData.sources as string[]
-  )) {
-    sourcemapData.sources[idx] = normalPath(source);
-  }
+  fixSourcemaps(sourcemapData);
 
   writeFileSync(outfile, bundleOutput.contents);
   writeFileSync(outfileMap, JSON.stringify(sourcemapData));
@@ -98,4 +91,101 @@ export function createBundle(
     outfilePath: outfile,
     sourcemapPath: outfileMap,
   };
+}
+
+export interface SourceMap {
+  sourceRoot?: string;
+  sources: string[];
+  sourcesContent: string[];
+  mappings: string;
+}
+
+/**
+ * Takes a bundled sourcemap and does the following fixes:
+ * - Normalizes paths in sources and sourceRoot
+ * - Removes duplicate sources and sourcesContent
+ * - Updates mappings to reflect the new source indices
+ *
+ * The duplicate sources come from esbuild's strange handling of multiple files being bundled that point to the same source (e.g. inflights that point to one .w file)
+ * See https://github.com/evanw/esbuild/issues/933
+ */
+export function fixSourcemaps(sourcemapData: SourceMap): void {
+  // normalize sourceRoot
+  if (sourcemapData.sourceRoot) {
+    sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot);
+  }
+
+  // normalize sources and remove duplicates
+  const sourceSet: string[] = [];
+  const newSourceContents: string[] = [];
+  const sourceIndexMap: Record<number, number> = {};
+  let hasSourceDupes = false;
+  sourcemapData.sources.forEach((source, idx) => {
+    const newPath = normalPath(source);
+    sourcemapData.sources[idx] = newPath;
+
+    const existingIndex = sourceSet.indexOf(newPath);
+    if (existingIndex === -1) {
+      sourceSet.push(newPath);
+      newSourceContents.push(sourcemapData.sourcesContent[idx]);
+      sourceIndexMap[idx] = sourceSet.length - 1;
+    } else {
+      hasSourceDupes = true;
+      sourceIndexMap[idx] = existingIndex;
+    }
+  });
+
+  sourcemapData.sources = sourceSet;
+  sourcemapData.sourcesContent = newSourceContents;
+
+  // fast path: No source duplicates so no need to update mappings
+  if (!hasSourceDupes) {
+    return;
+  }
+
+  // update mappings
+  let newMapping = "";
+  let characterIndex = 0;
+  let lastFile = 0;
+  let lastTrueFile = 0;
+  while (characterIndex < sourcemapData.mappings.length) {
+    const char = sourcemapData.mappings[characterIndex];
+    // `;` and `,` are separators between the segments of interest
+    if (char === ";" || char === ",") {
+      newMapping += char;
+      characterIndex++;
+      continue;
+    }
+
+    // get next slice of segment data
+    let segment = "";
+    let nextChar = char;
+    while (nextChar !== undefined && nextChar !== "," && nextChar !== ";") {
+      segment += nextChar;
+      nextChar = sourcemapData.mappings[++characterIndex];
+    }
+    const decoded = decode(segment);
+    if (decoded.length === 1) {
+      newMapping += segment;
+      continue;
+    }
+
+    const sourceRelative = decoded[1];
+    const originalSource = lastTrueFile + sourceRelative;
+    const newSourceIndex = sourceIndexMap[originalSource];
+    lastTrueFile = originalSource;
+
+    const newRelativeValue = newSourceIndex - lastFile;
+    lastFile = newSourceIndex;
+
+    if (newRelativeValue === decoded[1]) {
+      // no change was made, avoid re-encoding
+      newMapping += segment;
+    } else {
+      decoded[1] = newRelativeValue;
+      newMapping += encode(decoded);
+    }
+  }
+
+  sourcemapData.mappings = newMapping;
 }

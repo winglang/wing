@@ -17,8 +17,7 @@ include = ["bindings/rust/*", "grammar.js", "queries/*", "src/*"]
 path = "bindings/rust/lib.rs"
 
 [dependencies]
-# Waiting for https://github.com/tree-sitter/tree-sitter/pull/3293 to be released
-tree-sitter = { git = "https://github.com/tree-sitter/tree-sitter.git", rev = "a7a47d561d4e64eaf226f93c4d68076afa67fdda" }
+tree-sitter = "0.22.5"
 
 [build-dependencies]
 cc = "1.0.87"

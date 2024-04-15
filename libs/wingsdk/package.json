@@ -117,6 +117,7 @@
     "toml": "^3.0.0",
     "ulid": "^2.3.0",
     "uuid": "^8.3.2",
+    "vlq": "^2.0.4",
     "yaml": "^2.3.2"
   },
   "bundledDependencies": [
@@ -159,6 +160,7 @@
     "toml",
     "ulid",
     "uuid",
+    "vlq",
     "yaml"
   ],
   "engines": {
