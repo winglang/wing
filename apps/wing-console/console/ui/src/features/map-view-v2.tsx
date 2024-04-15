@@ -12,6 +12,7 @@ import { NodeChildren } from "../ui/elk-flow/node-children.js";
 import { Node } from "../ui/elk-flow/node.js";
 import { Port } from "../ui/elk-flow/port.js";
 import type { EdgeComponent } from "../ui/elk-flow/types.js";
+import { ResourceIcon } from "@wingconsole/design-system";
 
 interface InflightPortProps {
   occupied?: boolean;
@@ -29,6 +30,7 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
         "outline outline-0 group-hover/construct:outline-2 outline-sky-200",
         props.highlight && "outline-2 border-sky-300",
         "transition-all",
+        "invisible",
       )}
     >
       <div className="w-full h-full relative group/inflight-port">
@@ -120,7 +122,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
           <div className="absolute inset-x-0 top-0">
             <div className="relative">
               <div className="absolute bottom-0">
-                <div className="text-sm font-medium leading-relaxed tracking-wide whitespace-nowrap group-hover:text-sky-600">
+                <div className="text-sm leading-relaxed tracking-wide whitespace-nowrap group-hover:text-sky-600">
                   {props.name}
                 </div>
               </div>
@@ -157,6 +159,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
 interface ConstructNodeProps {
   id: string;
   name: string;
+  fqn: string;
   inflights: {
     id: string;
     name: string;
@@ -201,8 +204,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           )}
         >
           <div
-            // className="px-2.5 py-2.5 flex items-center gap-2"
-            className="px-2.5 py-1 flex items-center gap-2"
+            className="px-4 py-2.5 flex items-center gap-2"
+            // className="px-2.5 py-1 flex items-center gap-2"
           >
             {/* <CubeIcon className="-ml-1.5 size-6 text-emerald-400" /> */}
             {/* <div className="-ml-1 rounded px-1.5 py-1 bg-emerald-400">
@@ -211,6 +214,12 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             {/* <div className="rounded p-1.5 bg-gray-400">
               <CubeIcon className="size-5 text-white" />
             </div> */}
+            {/* {props.fqn === "@winglang/sdk.cloud.Bucket" && (
+              <div className="-ml-1 rounded p-1.5 bg-emerald-400">
+                <ArchiveBoxIcon className="size-5 text-white" />
+              </div>
+            )} */}
+            <ResourceIcon className="size-6 -ml-2" resourceType={props.fqn} />
             {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow">
       <CubeIcon className="size-6 text-emerald-400" />
     </div> */}
@@ -219,6 +228,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               className="text-sm font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-500"
             >
               {props.name}
+              {/* ({props.fqn}) */}
             </span>
           </div>
 
@@ -232,6 +242,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                     "elk.portConstraints": "FIXED_SIDE",
                   },
                 }}
+                className="pointer-events-none"
               >
                 {/* <div className="border-t border-gray-300">
           <div className="px-3 py-1.5 text-gray-600 font-mono text-xs tracking-tighter whitespace-nowrap">
@@ -241,7 +252,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           </div>
         </div> */}
                 <div className="border-t border-gray-300">
-                  <div className="px-2.5 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap">
+                  <div className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap">
                     <span className="text-sky-600 italic">inflight</span>{" "}
                     {inflight.name}
                   </div>
@@ -604,6 +615,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
           <ConstructNode
             id={props.constructTreeNode.path}
             name={props.constructTreeNode.id}
+            fqn={props.constructTreeNode.constructInfo?.fqn ?? ""}
             inflights={info.inflights}
             // highlight={}
           >
