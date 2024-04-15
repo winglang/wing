@@ -179,24 +179,20 @@ static bool scan_automatic_block(TSLexer * lexer) {
   lexer -> mark_end(lexer);
 
   for (;;) {
-    if (lexer -> lookahead == 0)
+    if (!scan_whitespace_and_comments(lexer))
       return true;
-    if (lexer -> lookahead == '}')
-      return false;
-    if (lexer -> is_at_included_range_start(lexer))
-      return true;
-    if (!iswspace(lexer -> lookahead))
-      return false;
+    switch (lexer -> lookahead) {
+      case '{':
+        return false;
+      case '}':
+        return true;
+      case ';':
+        return true;
+      case 0:
+        return true;
+    }
     skip(lexer);
   }
-
-  skip(lexer);
-
-  if (!scan_whitespace_and_comments(lexer))
-    return false;
-
-  if (lexer -> lookahead != '{')
-    return false;
 
   return true;
 }

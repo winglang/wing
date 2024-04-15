@@ -1941,7 +1941,7 @@ let s: S = { a: 1, b:  };
 		partial_type_reference,
 		r#"
 class C {
-	pub static func() {}
+  pub static func() {}
 }
 C.fu
   //^
@@ -1987,10 +1987,44 @@ let s1 = S { s: "" };
 
 let x: (): S = () => {
   s1.
-	 //^
+   //^
   return { s: "" };
 };
 "#,
 		assert!(dot_before_returning_struct.get(0).unwrap().label == "s")
 	);
+
+	test_completion_list!(
+			if_before_return_type_ref,
+			r#"
+class C {
+static inflight staticMethod(): num { return 0; }
+inflight otherInflight(){}
+inflight status(): num {
+  if this.
+        //^
+  return C.staticMethod();
+} 
+}
+"#,
+	assert!(if_before_return_type_ref.iter().any(|c| c.label == "otherInflight"))
+	assert!(!if_before_return_type_ref.iter().any(|c| c.label == "staticMethod"))
+		);
+
+	test_completion_list!(
+			forin_before_return_type_ref,
+			r#"
+class C {
+static inflight staticMethod(): num { return 0; }
+inflight otherInflight(){}
+inflight status(): num {
+  for x in this.
+              //^
+  return C.staticMethod();
+} 
+}
+"#,
+	assert!(forin_before_return_type_ref.iter().any(|c| c.label == "otherInflight"))
+	assert!(!forin_before_return_type_ref.iter().any(|c| c.label == "staticMethod"))
+		);
 }
