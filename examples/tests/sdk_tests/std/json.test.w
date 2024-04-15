@@ -6,8 +6,8 @@ bring cloud;
 test "has()" {
   let obj = Json { key1: 1, key2: 2};
 
-  assert(Json.has(obj, "key1") == true);
-  assert(Json.has(obj, "key3") == false);
+  assert(obj.has("key1") == true);
+  assert(obj.has("key3") == false);
 }
 
 test "get()" {
@@ -183,20 +183,7 @@ test "deepCopy(), deepCopyMut()" {
 test "delete() for MutJson" {
   let mutObj = MutJson { x: 1, y: 2 };
   mutObj.delete("x");
-  let assertThrows = (expected: str, block: (): void) => {
-    let var error = false;
-    try {
-      block();
-    } catch actual {
-      assert(actual == expected);
-      error = true;
-    }
-    assert(error);
-  };
-
-  let JSON_PROPERTY_DOES_NOT_EXIST_ERROR = "Json property \"x\" does not exist";
-  assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, () => {
-    mutObj.get("x");
-  });
+  assert(mutObj.has("x") == false);
+  assert(mutObj.has("y")==true);
   assert(mutObj.delete("random key that doesn't exist") == true);
 }

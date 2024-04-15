@@ -156,17 +156,15 @@ export class Json {
     throw new Error("Macro");
   }
 
-  /**
+   /**
    * Checks if a Json object has a given key
    *
-   * @macro ((json, key) => { return json.hasOwnProperty(key); })($args$)
-   *
-   * @param json The json object to inspect
+   * @macro ((obj, key) => { return obj.hasOwnProperty(key); })($self$,$args$)
+   * 
    * @param key The key to check
    * @returns Boolean value corresponding to whether the key exists
    */
-  public static has(json: Json, key: string): boolean {
-    json;
+   public has(key: string): boolean {
     key;
     throw new Error("Macro");
   }
@@ -462,7 +460,21 @@ export class MutJson {
    * @param key The key
    * @returns true if the given key is no longer present
    */
+
   public delete(key: string): boolean {
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Checks if a Json object has a given key
+   *
+   * @macro ((obj, key) => { return obj.hasOwnProperty(key); })($self$,$args$)
+   * 
+   * @param key The key to check
+   * @returns Boolean value corresponding to whether the key exists
+   */
+  public has(key: string): boolean {
     key;
     throw new Error("Macro");
   }
