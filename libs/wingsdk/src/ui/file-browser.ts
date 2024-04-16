@@ -10,10 +10,25 @@ import { IInflight } from "../std";
  */
 export const FILE_BROWSER_FQN = fqnForType("ui.FileBrowser");
 
+/**
+ * File browser handlers.
+ */
 export interface FileBrowserHandlers {
+  /**
+   * Handler for putting a file.
+   */
   readonly put: IFileBrowserPutHandler;
+  /**
+   * Handler for deleting a file.
+   */
   readonly delete: IFileBrowserDeleteHandler;
+  /**
+   * Handler for getting a file.
+   */
   readonly get: IFileBrowserGetHandler;
+  /**
+   * Handler for listing files.
+   */
   readonly list: IFileBrowserListHandler;
 }
 
