@@ -14,7 +14,6 @@ import type {
 import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
 import type { FileLink } from "../utils/createRouter.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { isTermsAccepted, getLicense } from "../utils/terms-and-conditions.js";
 import type { IFunctionClient, Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -527,7 +526,7 @@ export const createAppRouter = () => {
         await client.invoke("");
       }),
 
-    "app.invokeResourceGetQuery": createProcedure
+    "app.invokeFileBrowserGetQuery": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -544,7 +543,7 @@ export const createAppRouter = () => {
         );
       }),
 
-    "app.invokeResourceListQuery": createProcedure
+    "app.invokeFileBrowserListQuery": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -552,10 +551,8 @@ export const createAppRouter = () => {
       )
       .query(async ({ input, ctx }) => {
         const simulator = await ctx.simulator();
-        const client = simulator.getResource(
-          input.resourcePath,
-        ) as IFunctionClient;
-        return await client.invoke();
+        const client = simulator.getResource(input.resourcePath);
+        return (await client.invoke()) as string[];
       }),
 
     "app.invokeFileBrowserPutMutation": createProcedure

@@ -25,14 +25,16 @@ export const CustomResourceFileBrowser = ({
 
   const [currentFile, setCurrentFile] = useState<string>();
 
-  const listQuery = trpc["app.invokeResourceListQuery"].useQuery(
+  const listQuery = trpc["app.invokeFileBrowserListQuery"].useQuery(
     {
       resourcePath: listHandler,
     },
     { enabled: !!listHandler },
   );
 
-  const currentFileContentQuery = trpc["app.invokeResourceGetQuery"].useQuery(
+  const currentFileContentQuery = trpc[
+    "app.invokeFileBrowserGetQuery"
+  ].useQuery(
     {
       fileName: currentFile ?? "",
       resourcePath: getHandler,
