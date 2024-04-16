@@ -164,18 +164,6 @@ export class QueueRef extends Resource {
       link: true,
     });
 
-    const queueArnHandler = Testing.makeHandler(
-      `async handle() { 
-        return this.queueArn;
-      }`,
-      {
-        queueArn: {
-          obj: this.queueArn,
-          ops: [],
-        },
-      }
-    );
-
-    new ui.Field(this, "QueueArnField", "SQS Queue ARN", queueArnHandler);
+    new ui.ValueField(this, "QueueArnField", "SQS Queue ARN", this.queueArn);
   }
 }
