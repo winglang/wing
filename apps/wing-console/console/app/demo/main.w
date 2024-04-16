@@ -21,42 +21,37 @@ struct DeleteData {
 }
 
 class myBucket {
-    b: cloud.Bucket;
-    new() {
-        log("Bucket created!");
-        this.b = new cloud.Bucket();
-            // a button lets you invoke any inflight function
-        new ui.FileBrowser("File Browser",
-            inflight (payload: str) => {
-                log("Put {payload}");
-                let data: PutData = PutData.fromJson(Json.parse(payload));
-                this.b.put(data.fileName, data.fileContent);
-            },
-             inflight (payload: str) => {
-                log("Delete {payload}");
-                let data: DeleteData = DeleteData.fromJson(Json.parse(payload));
-                this.b.delete(data.fileName);
-            },
-            inflight (payload: str) => {
-                let data: GetData = GetData.fromJson(Json.parse(payload));
-                return this.b.get(data.fileName);
-                },
-             inflight () => {return this.b.list();},
-        );
+  b: cloud.Bucket;
+  new() {
+    log("Bucket created!");
+    this.b = new cloud.Bucket();
+    new ui.FileBrowser("File Browser",
+      inflight (payload: str) => {
+        let data: PutData = PutData.fromJson(Json.parse(payload));
+        this.b.put(data.fileName, data.fileContent);
+      },
+      inflight (payload: str) => {
+        let data: DeleteData = DeleteData.fromJson(Json.parse(payload));
+        this.b.delete(data.fileName);
+      },
+      inflight (payload: str) => {
+        let data: GetData = GetData.fromJson(Json.parse(payload));
+        return this.b.get(data.fileName);
+      },
+      inflight () => {return this.b.list();},
+    );
 
-        new cloud.Service(
-            inflight () => {
-                log("start!");
-                this.b.put("hello.txt", "Hello, GET!");
-                return inflight () => {
-                    log("stop!");
-                };
-            },
-        );
-    }
-    pub inflight put(key: str, value: str) {
-        this.b.put(key, value);
-    }
+    new cloud.Service(
+      inflight () => {
+        this.b.put("hello.txt", "Hello, GET!");
+        return inflight () => {
+        };
+      },
+    );
+  }
+  pub inflight put(key: str, value: str) {
+    this.b.put(key, value);
+  }
 }
 
 let myB = new myBucket() as "MyUIComponentBucket";
