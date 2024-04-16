@@ -279,6 +279,7 @@ where
 			.map(|interface| f.fold_user_defined_type(interface))
 			.collect(),
 		access: node.access,
+		phase: node.phase,
 	}
 }
 

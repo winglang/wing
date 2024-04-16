@@ -17,8 +17,7 @@ pass ─ string.test.wsim » root/env6/test:lowercase()
 pass ─ string.test.wsim » root/env7/test:uppercase()  
 pass ─ string.test.wsim » root/env8/test:split()      
 pass ─ string.test.wsim » root/env9/test:startsWith() 
- 
- 
+
 Tests 15 passed (15)
 Snapshots 1 skipped
 Test Files 1 passed (1)

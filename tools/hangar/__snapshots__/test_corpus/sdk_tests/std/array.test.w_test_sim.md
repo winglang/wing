@@ -20,8 +20,7 @@ pass ─ array.test.wsim » root/env6/test:contains()
 pass ─ array.test.wsim » root/env7/test:indexOf()                  
 pass ─ array.test.wsim » root/env8/test:indexOfArray()             
 pass ─ array.test.wsim » root/env9/test:join()                     
- 
- 
+
 Tests 18 passed (18)
 Snapshots 1 skipped
 Test Files 1 passed (1)

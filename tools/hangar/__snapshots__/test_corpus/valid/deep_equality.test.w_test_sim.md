@@ -15,8 +15,7 @@ pass ─ deep_equality.test.wsim » root/env6/test:Set types with different valu
 pass ─ deep_equality.test.wsim » root/env7/test:Map with the same value              
 pass ─ deep_equality.test.wsim » root/env8/test:Map with different values            
 pass ─ deep_equality.test.wsim » root/env9/test:Array with the same value            
- 
- 
+
 Tests 13 passed (13)
 Snapshots 1 skipped
 Test Files 1 passed (1)

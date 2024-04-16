@@ -47,4 +47,4 @@ test("invalid compile directory", async ({ expect }) => {
   });
 
   expect(out.stderr).toMatchSnapshot();
-})
+});

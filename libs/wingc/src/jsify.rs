@@ -48,6 +48,7 @@ const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
 const PLATFORMS_VAR: &str = "$platforms";
 const HELPERS_VAR: &str = "$helpers";
+const EXTERN_VAR: &str = "$extern";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
@@ -170,7 +171,7 @@ impl<'a> JSifier<'a> {
 
 		output.line("\"use strict\";");
 
-		output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+		output.line(format!("const {STDLIB} = require('{STDLIB_MODULE}');"));
 
 		if is_entrypoint {
 			output.line(format!(
@@ -187,6 +188,9 @@ impl<'a> JSifier<'a> {
 		// "std" is implicitly imported
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.line(format!("const {HELPERS_VAR} = {STDLIB}.helpers;"));
+		output.line(format!(
+			"const {EXTERN_VAR} = {HELPERS_VAR}.createExternRequire(__dirname);"
+		));
 		output.add_code(imports);
 
 		if is_entrypoint {
@@ -1480,9 +1484,15 @@ impl<'a> JSifier<'a> {
 						format!("{up_dirs}{rel_path}")
 					};
 
+				let require = if ctx.visit_ctx.current_phase() == Phase::Inflight {
+					"require"
+				} else {
+					EXTERN_VAR
+				};
+
 				new_code!(
 					&func_def.span,
-					format!("return (require(\"{require_path}\")[\"{name}\"])("),
+					format!("return ({require}(\"{require_path}\")[\"{name}\"])("),
 					parameters.clone(),
 					")"
 				)

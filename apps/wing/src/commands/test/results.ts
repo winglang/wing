@@ -28,7 +28,6 @@ export function printResults(testResults: SingleTestResult[], duration: number) 
     (acc, { results }) => acc + results.filter(({ pass }) => !!pass).length,
     0
   );
-  console.log(" "); // for getting a new line- \n does't seem to work :(
   const areErrors = failing.length + unsupportedFiles.length > 0 && totalSum > 1;
   const showTitle = totalSum > 1;
 
@@ -36,6 +35,7 @@ export function printResults(testResults: SingleTestResult[], duration: number) 
 
   if (showTitle) {
     // prints a list of the tests names with an icon
+    res.push("");
     res.push(`Results:`);
     res.push(...passing.map(({ testName }) => `    ${chalk.green("✓")} ${testName}`));
     res.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
@@ -44,7 +44,7 @@ export function printResults(testResults: SingleTestResult[], duration: number) 
 
   if (areErrors) {
     // prints error messages form failed tests
-    res.push(" ");
+    res.push("");
     res.push("Errors:");
     res.push(
       ...[...failing, ...unsupportedFiles].map(({ testName, results }) =>
@@ -61,7 +61,7 @@ export function printResults(testResults: SingleTestResult[], duration: number) 
   }
 
   // prints a summary of how many tests passed and failed
-  res.push(" ");
+  res.push("");
   const testCount = [
     failingTestsNumber && chalk.red(` ${failingTestsNumber} failed`),
     passingTestsNumber && chalk.green(` ${passingTestsNumber} passed`),
@@ -99,7 +99,7 @@ export function printResults(testResults: SingleTestResult[], duration: number) 
     ).toFixed(2)}s`
   );
 
-  console.log(res.filter((value) => !!value).join("\n"));
+  console.log(res.join("\n"));
 }
 
 export interface TestResultsJson {

@@ -3,8 +3,7 @@
 ## stdout.log
 ```log
 pass ─ aws-react-app.test.wsim » root/env0/test:validates the AWS bucket name
- 
- 
+
 Tests 1 passed (1)
 Snapshots 1 skipped
 Test Files 1 passed (1)

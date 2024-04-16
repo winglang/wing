@@ -58,6 +58,7 @@ module.exports = function({  }) {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const file3 = require("./preflight.empty-1.cjs");
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
@@ -178,6 +179,7 @@ module.exports = { Util, Store, Color };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {  };
 //# sourceMappingURL=preflight.empty-1.cjs.map
 ```

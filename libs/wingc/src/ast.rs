@@ -393,6 +393,7 @@ pub struct Interface {
 	pub methods: Vec<(Symbol, FunctionSignature)>,
 	pub extends: Vec<UserDefinedType>,
 	pub access: AccessModifier,
+	pub phase: Phase,
 }
 
 #[derive(Debug)]
