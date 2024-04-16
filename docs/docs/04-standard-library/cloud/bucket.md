@@ -597,7 +597,7 @@ Key of the object.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
 
 ```wing
-inflight tryGet(key: str, options?: BucketTryGetOptions): str
+inflight tryGet(key: str, options?: BucketTryGetOptions): str?
 ```
 
 Get an object from the bucket if it exists If the bytes returned are not a valid UTF-8 string, an error is thrown.
@@ -621,7 +621,7 @@ Additional get options.
 ##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
 
 ```wing
-inflight tryGetJson(key: str): Json
+inflight tryGetJson(key: str): Json?
 ```
 
 Gets an object from the bucket if it exists, parsing it as Json.

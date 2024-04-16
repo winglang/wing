@@ -62,7 +62,7 @@ the key.
 ##### `get` <a name="get" id="@winglang/sdk.ex.IRedisClient.get"></a>
 
 ```wing
-inflight get(key: str): str
+inflight get(key: str): str?
 ```
 
 Get value at given key.
@@ -78,7 +78,7 @@ the key to get.
 ##### `hget` <a name="hget" id="@winglang/sdk.ex.IRedisClient.hget"></a>
 
 ```wing
-inflight hget(key: str, field: str): str
+inflight hget(key: str, field: str): str?
 ```
 
 Returns the value associated with field in the hash stored at key.
@@ -313,7 +313,7 @@ Removes the specified key.
 ##### `get` <a name="get" id="@winglang/sdk.ex.RedisClientBase.get"></a>
 
 ```wing
-get(key: str): str
+get(key: str): str?
 ```
 
 Get value at given key.
@@ -327,7 +327,7 @@ Get value at given key.
 ##### `hget` <a name="hget" id="@winglang/sdk.ex.RedisClientBase.hget"></a>
 
 ```wing
-hget(key: str, field: str): str
+hget(key: str, field: str): str?
 ```
 
 Returns the value associated with field in the hash stored at key.

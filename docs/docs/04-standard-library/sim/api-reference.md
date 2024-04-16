@@ -362,7 +362,7 @@ The object's value.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.sim.IStateClient.tryGet"></a>
 
 ```wing
-tryGet(key: str): Json
+tryGet(key: str): Json?
 ```
 
 Checks if runtime state exists for this object and returns it's value.
