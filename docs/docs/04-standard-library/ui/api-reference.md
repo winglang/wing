@@ -240,16 +240,13 @@ A file browser can be used to browse files.
 ```wing
 bring ui;
 
-new ui.FileBrowser(label: str, putHandler: IFileBrowserPutHandler, deleteHandler: IFileBrowserDeleteHandler, getHandler: IFileBrowserGetHandler, listHandler: IFileBrowserListHandler);
+new ui.FileBrowser(label: str, handlers: FileBrowserHandlers);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.label">label</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.putHandler">putHandler</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a></code> | *No description.* |
-| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.deleteHandler">deleteHandler</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a></code> | *No description.* |
-| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.getHandler">getHandler</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a></code> | *No description.* |
-| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.listHandler">listHandler</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.handlers">handlers</a></code> | <code><a href="#@winglang/sdk.ui.FileBrowserHandlers">FileBrowserHandlers</a></code> | *No description.* |
 
 ---
 
@@ -259,27 +256,9 @@ new ui.FileBrowser(label: str, putHandler: IFileBrowserPutHandler, deleteHandler
 
 ---
 
-##### `putHandler`<sup>Required</sup> <a name="putHandler" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.putHandler"></a>
+##### `handlers`<sup>Required</sup> <a name="handlers" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.handlers"></a>
 
-- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a>
-
----
-
-##### `deleteHandler`<sup>Required</sup> <a name="deleteHandler" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.deleteHandler"></a>
-
-- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a>
-
----
-
-##### `getHandler`<sup>Required</sup> <a name="getHandler" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.getHandler"></a>
-
-- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a>
-
----
-
-##### `listHandler`<sup>Required</sup> <a name="listHandler" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.listHandler"></a>
-
-- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a>
+- *Type:* <a href="#@winglang/sdk.ui.FileBrowserHandlers">FileBrowserHandlers</a>
 
 ---
 
@@ -646,6 +625,112 @@ The tree node.
 ---
 
 
+### ValueField <a name="ValueField" id="@winglang/sdk.ui.ValueField"></a>
+
+A value field can be used to display a string value.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.ui.ValueField.Initializer"></a>
+
+```wing
+bring ui;
+
+new ui.ValueField(label: str, value: str);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.ValueField.Initializer.parameter.label">label</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#@winglang/sdk.ui.ValueField.Initializer.parameter.value">value</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `label`<sup>Required</sup> <a name="label" id="@winglang/sdk.ui.ValueField.Initializer.parameter.label"></a>
+
+- *Type:* str
+
+---
+
+##### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.ui.ValueField.Initializer.parameter.value"></a>
+
+- *Type:* str
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ui.ValueField.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.ValueField.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.ui.ValueField.onLiftType"></a>
+
+```wing
+bring ui;
+
+ui.ValueField.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ui.ValueField.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.ValueField.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `isVisualComponent` <a name="isVisualComponent" id="@winglang/sdk.ui.ValueField.isVisualComponent"></a>
+
+```wing
+bring ui;
+
+ui.ValueField.isVisualComponent(c: IConstruct);
+```
+
+Returns whether the given construct is a visual component.
+
+###### `c`<sup>Required</sup> <a name="c" id="@winglang/sdk.ui.ValueField.isVisualComponent.parameter.c"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.ValueField.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.ui.ValueField.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+
 ### VisualComponent <a name="VisualComponent" id="@winglang/sdk.ui.VisualComponent"></a>
 
 A visual component is used to customize the view of other classes in the Wing Console.
@@ -787,6 +872,77 @@ refreshRate: duration;
 - *Default:* no automatic refresh
 
 How often the field should be refreshed.
+
+---
+
+### FileBrowserHandlers <a name="FileBrowserHandlers" id="@winglang/sdk.ui.FileBrowserHandlers"></a>
+
+File browser handlers.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.ui.FileBrowserHandlers.Initializer"></a>
+
+```wing
+bring ui;
+
+let FileBrowserHandlers = ui.FileBrowserHandlers{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.delete">delete</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a></code> | Handler for deleting a file. |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.get">get</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a></code> | Handler for getting a file. |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.list">list</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a></code> | Handler for listing files. |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.put">put</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a></code> | Handler for putting a file. |
+
+---
+
+##### `delete`<sup>Required</sup> <a name="delete" id="@winglang/sdk.ui.FileBrowserHandlers.property.delete"></a>
+
+```wing
+delete: IFileBrowserDeleteHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a>
+
+Handler for deleting a file.
+
+---
+
+##### `get`<sup>Required</sup> <a name="get" id="@winglang/sdk.ui.FileBrowserHandlers.property.get"></a>
+
+```wing
+get: IFileBrowserGetHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a>
+
+Handler for getting a file.
+
+---
+
+##### `list`<sup>Required</sup> <a name="list" id="@winglang/sdk.ui.FileBrowserHandlers.property.list"></a>
+
+```wing
+list: IFileBrowserListHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a>
+
+Handler for listing files.
+
+---
+
+##### `put`<sup>Required</sup> <a name="put" id="@winglang/sdk.ui.FileBrowserHandlers.property.put"></a>
+
+```wing
+put: IFileBrowserPutHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a>
+
+Handler for putting a file.
 
 ---
 
