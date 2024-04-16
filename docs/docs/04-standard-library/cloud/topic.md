@@ -149,7 +149,6 @@ new cloud.Topic(props?: TopicProps);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.onMessage">onMessage</a></code> | Run an inflight whenever an message is published to the topic. |
-| <code><a href="#@winglang/sdk.cloud.Topic.subscribeQueue">subscribeQueue</a></code> | Subscribing queue to the topic. |
 
 ##### Inflight Methods
 
@@ -176,26 +175,6 @@ Run an inflight whenever an message is published to the topic.
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.onMessage.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.TopicOnMessageOptions">TopicOnMessageOptions</a>
-
----
-
-##### `subscribeQueue` <a name="subscribeQueue" id="@winglang/sdk.cloud.Topic.subscribeQueue"></a>
-
-```wing
-subscribeQueue(queue: Queue, props?: TopicSubscribeQueueOptions): void
-```
-
-Subscribing queue to the topic.
-
-###### `queue`<sup>Required</sup> <a name="queue" id="@winglang/sdk.cloud.Topic.subscribeQueue.parameter.queue"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.subscribeQueue.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions">TopicSubscribeQueueOptions</a>
 
 ---
 
@@ -378,53 +357,6 @@ bring cloud;
 let TopicProps = cloud.TopicProps{ ... };
 ```
 
-
-### TopicSubscribeQueueOptions <a name="TopicSubscribeQueueOptions" id="@winglang/sdk.cloud.TopicSubscribeQueueOptions"></a>
-
-Options for `Topic.subscribeQueue`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicSubscribeQueueOptions.Initializer"></a>
-
-```wing
-bring cloud;
-
-let TopicSubscribeQueueOptions = cloud.TopicSubscribeQueueOptions{ ... };
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue retains a message. |
-| <code><a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue's consumers have to process a message. |
-
----
-
-##### `retentionPeriod`<sup>Optional</sup> <a name="retentionPeriod" id="@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.retentionPeriod"></a>
-
-```wing
-retentionPeriod: duration;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
-- *Default:* 1h
-
-How long a queue retains a message.
-
----
-
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.timeout"></a>
-
-```wing
-timeout: duration;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
-- *Default:* 30s
-
-How long a queue's consumers have to process a message.
-
----
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
