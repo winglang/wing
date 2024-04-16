@@ -55,47 +55,19 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
 );
 
 // const SPACING_BASE_VALUE = 64;
-const SPACING_BASE_VALUE = 48;
+// const SPACING_BASE_VALUE = 48;
+const SPACING_BASE_VALUE = 30;
 // const PORT_ANCHOR = SPACING_BASE_VALUE / 5;
 const PORT_ANCHOR = 0;
-const EDGE_ROUNDED_RADIUS = 14;
+// const EDGE_ROUNDED_RADIUS = 14;
+const EDGE_ROUNDED_RADIUS = 10;
 // For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
 const baseLayoutOptions: LayoutOptions = {
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
   "elk.direction": "RIGHT",
   "elk.alignment": "CENTER",
   "elk.algorithm": "org.eclipse.elk.layered",
-  // "elk.layered.layering.strategy": "MIN_WIDTH",
-  // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
-  // "elk.layered.layering.strategy": "LONGEST_PATH",
-  // "elk.layered.layering.strategy": "LONGEST_PATH_SOURCE",
-  // "elk.layered.layering.strategy": "STRETCH_WIDTH",
-  // "elk.layered.layering.strategy": "BF_MODEL_ORDER",
-  "elk.layered.layering.strategy": "DF_MODEL_ORDER",
-  "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
-  "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
-
-  // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
-
-  "elk.spacing.nodeNode": `${SPACING_BASE_VALUE}`,
-  "elk.layered.spacing.nodeNodeBetweenLayers": `${SPACING_BASE_VALUE}`,
-
-  "elk.spacing.edgeEdge": "64",
-  "elk.layered.spacing.edgeEdgeBetweenLayers": "64",
-  // // "elk.spacing.edgeEdge": "128",
-  // "elk.spacing.edgeEdge": "10",
-  // // "elk.layered.spacing.edgeEdgeBetweenLayers": "16",
-  // "elk.layered.spacing.edgeEdgeBetweenLayers": "10",
-
-  // "elk.layered.spacing.baseValue": "20",
-
-  // "elk.layered.spacing.baseValue": "0",
-  // "elk.spacing.edgeEdge": "128",
-  // "elk.spacing.edgeNode": "32",
-  // "elk.spacing.nodeNode": "48",
-  // "elk.layered.spacing.edgeEdgeBetweenLayers": "16",
-  // "elk.layered.spacing.nodeNodeBetweenLayers": "64",
-  // "elk.layered.spacing.edgeNodeBetweenLayers": "16",
+  "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
 };
 
 interface ContainerNodeProps {
@@ -123,7 +95,12 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
           <div className="absolute inset-x-0 top-0">
             <div className="relative">
               <div className="absolute bottom-0">
-                <div className="text-sm leading-relaxed tracking-wide whitespace-nowrap group-hover:text-sky-600">
+                <div
+                  className={clsx(
+                    "text-sm leading-relaxed tracking-wide whitespace-nowrap group-hover:text-sky-600",
+                    "invisible",
+                  )}
+                >
                   {props.name}
                 </div>
               </div>
@@ -338,11 +315,12 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
         },
       }}
       className="inline-flex group/construct"
+      title={props.id}
     >
-      <div className="group">
+      <div className="group relative">
         <div
           className={clsx(
-            "p-3 rounded-full bg-white shadow",
+            "p-1 rounded-full bg-white shadow",
             "transition-all",
             "border border-gray-300",
             "group-hover:border-sky-300",
@@ -350,7 +328,7 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
             "group-hover:outline-2",
           )}
         >
-          <BoltIcon className="size-6 text-sky-500" />
+          <BoltIcon className="size-5 text-sky-500" />
         </div>
 
         <Port
@@ -376,6 +354,21 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
         >
           <InflightPort occupied={props.sourceOccupied} />
         </Port>
+
+        <div className="absolute bottom-0 inset-x-0 invisible group-hover:visible">
+          <div className="relative">
+            <div className="absolute top-0 inset-x-0">
+              <div className="flex justify-around">
+                {/* <div className="size-3 rounded-full bg-red-500"></div> */}
+                <div className="absolute text-center">
+                  <div className="text-xs text-gray-500 backdrop-blur">
+                    {props.id.split("/").slice(-1).join("")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </Node>
   );
@@ -730,7 +723,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
           //   };
           // })}
           edgeComponent={RoundedEdge}
-          className="bg-white"
+          className="bg-gray-50"
         >
           <RenderNode constructTreeNode={tree} />
         </Graph>
@@ -760,6 +753,7 @@ const AutoIdNode: FunctionComponent<{
           "transition-all",
           "shadow",
           "relative",
+          "bg-white",
         )}
       >
         <Port
