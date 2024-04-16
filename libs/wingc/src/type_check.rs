@@ -4507,21 +4507,21 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error_with_hints(
 						variable,
 						"Cannot update elements of an immutable Map".to_string(),
-						vec!["Consider using a MutMap instead".to_string()],
+						vec!["Consider using MutMap instead".to_string()],
 					);
 				}
 				Type::Json(_) => {
 					self.spanned_error_with_hints(
 						variable,
 						"Cannot update elements of an immutable Json".to_string(),
-						vec!["Consider using a MutJson instead".to_string()],
+						vec!["Consider using MutJson instead".to_string()],
 					);
 				}
 				Type::Array(_) => {
 					self.spanned_error_with_hints(
 						variable,
 						"Cannot update elements of an immutable Array".to_string(),
-						vec!["Consider using a MutArray instead".to_string()],
+						vec!["Consider using MutArray instead".to_string()],
 					);
 				}
 				Type::String => {
