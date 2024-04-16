@@ -646,6 +646,112 @@ The tree node.
 ---
 
 
+### ValueField <a name="ValueField" id="@winglang/sdk.ui.ValueField"></a>
+
+A value field can be used to display a string value.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.ui.ValueField.Initializer"></a>
+
+```wing
+bring ui;
+
+new ui.ValueField(label: str, value: str);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.ValueField.Initializer.parameter.label">label</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#@winglang/sdk.ui.ValueField.Initializer.parameter.value">value</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `label`<sup>Required</sup> <a name="label" id="@winglang/sdk.ui.ValueField.Initializer.parameter.label"></a>
+
+- *Type:* str
+
+---
+
+##### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.ui.ValueField.Initializer.parameter.value"></a>
+
+- *Type:* str
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ui.ValueField.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.ValueField.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.ui.ValueField.onLiftType"></a>
+
+```wing
+bring ui;
+
+ui.ValueField.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ui.ValueField.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.ValueField.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `isVisualComponent` <a name="isVisualComponent" id="@winglang/sdk.ui.ValueField.isVisualComponent"></a>
+
+```wing
+bring ui;
+
+ui.ValueField.isVisualComponent(c: IConstruct);
+```
+
+Returns whether the given construct is a visual component.
+
+###### `c`<sup>Required</sup> <a name="c" id="@winglang/sdk.ui.ValueField.isVisualComponent.parameter.c"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.ValueField.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.ui.ValueField.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+
 ### VisualComponent <a name="VisualComponent" id="@winglang/sdk.ui.VisualComponent"></a>
 
 A visual component is used to customize the view of other classes in the Wing Console.
