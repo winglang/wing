@@ -158,7 +158,7 @@ inflight class Jet extends Plane{
 //  ^^^^^^^^ Expected 1 positional argument(s) but got 0
   }
   constructor() {
-//^^^^^^^^^^^ To declare a initializer, use "init"
+//^^^^^^^^^^^ To declare a constructor, use "new"
   }
 }
 
