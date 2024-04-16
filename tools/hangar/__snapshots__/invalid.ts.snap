@@ -2021,6 +2021,76 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`indexing.test.w 1`] = `
+"error: Cannot update elements of an immutable Array
+  --> ../../../examples/tests/invalid/indexing.test.w:6:1
+  |
+6 | arr[0] = 5;
+  | ^^^^^^ Cannot update elements of an immutable Array
+  |
+  = hint: Consider using MutArray instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/indexing.test.w:9:5
+  |
+9 | arr[\\"key\\"];
+  |     ^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Type \\"Bucket\\" is not indexable
+   --> ../../../examples/tests/invalid/indexing.test.w:13:1
+   |
+13 | b[0] = 5;
+   | ^ Type \\"Bucket\\" is not indexable
+
+
+error: Type \\"Array<num>?\\" is not indexable
+   --> ../../../examples/tests/invalid/indexing.test.w:17:1
+   |
+17 | optarr[0] = 5;
+   | ^^^^^^ Type \\"Array<num>?\\" is not indexable
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/indexing.test.w:21:5
+   |
+21 | map[0];
+   |     ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Cannot update elements of an immutable Map
+   --> ../../../examples/tests/invalid/indexing.test.w:25:1
+   |
+25 | mutmap[\\"a\\"] = false;
+   | ^^^^^^^^^^^ Cannot update elements of an immutable Map
+   |
+   = hint: Consider using MutMap instead
+
+
+error: Cannot update elements of an immutable Json
+   --> ../../../examples/tests/invalid/indexing.test.w:29:1
+   |
+29 | json[0] = 5;
+   | ^^^^^^^ Cannot update elements of an immutable Json
+   |
+   = hint: Consider using MutJson instead
+
+
+error: Strings are immutable
+   --> ../../../examples/tests/invalid/indexing.test.w:33:1
+   |
+33 | s[0] = \\"H\\";
+   | ^^^^ Strings are immutable
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`inference.test.w 1`] = `
 "error: Missing required type annotation for method signature
    --> ../../../examples/tests/invalid/inference.test.w:78:8
@@ -3220,14 +3290,7 @@ Duration <DURATION>"
 `;
 
 exports[`primitives.test.w 1`] = `
-"error: Unexpected reference \\"structured_access_expression\\"
-  --> ../../../examples/tests/invalid/primitives.test.w:5:5
-  |
-5 | log(y[0]);
-  |     ^^^^ Unexpected reference \\"structured_access_expression\\"
-
-
-error: Member \\"blabla\\" doesn't exist in \\"Array\\"
+"error: Member \\"blabla\\" doesn't exist in \\"Array\\"
   --> ../../../examples/tests/invalid/primitives.test.w:9:16
   |
 9 | let join = arr.blabla(\\",\\");
