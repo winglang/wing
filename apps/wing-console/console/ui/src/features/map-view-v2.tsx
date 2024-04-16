@@ -13,6 +13,7 @@ import { NodeChildren } from "../ui/elk-flow/node-children.js";
 import { Node } from "../ui/elk-flow/node.js";
 import { Port } from "../ui/elk-flow/port.js";
 import type { EdgeComponent } from "../ui/elk-flow/types.js";
+import { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
 
 interface InflightPortProps {
   occupied?: boolean;
@@ -24,8 +25,8 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
     <div
       className={clsx(
         "size-3 rounded-full bg-white border border-gray-300",
-        "opacity-0",
-        props.occupied && "opacity-100",
+        // "opacity-0",
+        // props.occupied && "opacity-100",
         "group-hover/construct:opacity-100 group-hover/construct:border-sky-300",
         "outline outline-0 group-hover/construct:outline-2 outline-sky-200",
         props.highlight && "outline-2 border-sky-300",
@@ -204,8 +205,9 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           )}
         >
           <div
-            className="px-4 py-2.5 flex items-center gap-2"
-            // className="px-2.5 py-1 flex items-center gap-2"
+            // className="px-4 py-2.5 flex items-center gap-2"
+            // className="px-4 py-1 flex items-center gap-2"
+            className="px-2.5 py-1 flex items-center gap-2"
           >
             {/* <CubeIcon className="-ml-1.5 size-6 text-emerald-400" /> */}
             {/* <div className="-ml-1 rounded px-1.5 py-1 bg-emerald-400">
@@ -219,7 +221,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 <ArchiveBoxIcon className="size-5 text-white" />
               </div>
             )} */}
-            <ResourceIcon className="size-6 -ml-2" resourceType={props.fqn} />
+            {/* <ResourceIcon className="size-6 -ml-2" resourceType={props.fqn} /> */}
             {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow">
       <CubeIcon className="size-6 text-emerald-400" />
     </div> */}
@@ -252,7 +254,10 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           </div>
         </div> */}
                 <div className="border-t border-gray-300">
-                  <div className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap">
+                  <div
+                    // className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap"
+                    className="px-2.5 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap"
+                  >
                     <span className="text-sky-600 italic">inflight</span>{" "}
                     {inflight.name}
                   </div>
@@ -350,7 +355,7 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
 
         <Port
           elk={{
-            id: `${props.id}#target`,
+            id: `${props.id}#invoke#target`,
             layoutOptions: {
               "elk.port.side": "WEST",
               "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
@@ -362,7 +367,7 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
 
         <Port
           elk={{
-            id: `${props.id}#source`,
+            id: `${props.id}#invoke#source`,
             layoutOptions: {
               "elk.port.side": "EAST",
               "elk.port.anchor": `[${PORT_ANCHOR},0]`,
@@ -552,22 +557,39 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
     console.log({ tree, connections, nodeInfo });
   }, [nodeInfo]);
 
+  // const getConnectionId = useCallback(
+  //   (nodePath: string, name: string, type: "source" | "target") => {
+  //     const info = nodeInfo?.get(nodePath);
+
+  //     if (info?.type === "function") {
+  //       return `${nodePath}#${type}`;
+  //     }
+
+  //     if (info?.type === "}") {
+  //       return `${nodePath}#${type}`;
+  //     }
+
+  //     if (
+  //       info?.type === "construct" &&
+  //       info.inflights.some((inflight) => inflight.name === name)
+  //     ) {
+  //       return `${nodePath}#${name}#${type}`;
+  //     }
+
+  //     return nodePath;
+  //   },
+  //   [nodeInfo],
+  // );
   const getConnectionId = useCallback(
-    (nodePath: string, name: string, type: "source" | "target") => {
-      const info = nodeInfo?.get(nodePath);
+    (connection: ConnectionData, type: "source" | "target") => {
+      const info = nodeInfo?.get(connection[type]);
 
       if (info?.type === "function") {
-        return `${nodePath}#${type}`;
+        // Ignore `invokeAsync`.
+        return `${connection[type]}#invoke#${type}`;
       }
 
-      if (
-        info?.type === "construct" &&
-        info.inflights.some((inflight) => inflight.name === name)
-      ) {
-        return `${nodePath}#${name}#${type}`;
-      }
-
-      return nodePath;
+      return `${connection[type]}#${(connection as any)[`${type}Op`]}#${type}`;
     },
     [nodeInfo],
   );
@@ -597,17 +619,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
       const info = nodeInfo?.get(props.constructTreeNode.path);
 
       if (info?.type === "autoId") {
-        return (
-          <Node elk={{ id: props.constructTreeNode.path }}>
-            <div
-              className={clsx(
-                "size-6 border border-gray-300 border-dashed hover:border-sky-300 rounded-full outline-0 outline outline-sky-300 hover:outline-2",
-                "transition-all",
-                "shadow",
-              )}
-            ></div>
-          </Node>
-        );
+        return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
       }
 
       if (info?.type === "construct") {
@@ -686,68 +698,37 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
               "elk.padding": "[top=24,left=20,bottom=20,right=20]",
             },
           }}
+          // edges={connections?.map((connection) => {
+          //   return {
+          //     id: `${connection.source}#${connection.target}#${connection.name}`,
+          //     sources: [
+          //       getConnectionId(connection.source, connection.name, "source"),
+          //     ],
+          //     targets: [
+          //       getConnectionId(connection.target, connection.name, "target"),
+          //     ],
+          //   };
+          // })}
           edges={connections?.map((connection) => {
             return {
               id: `${connection.source}#${connection.target}#${connection.name}`,
-              sources: [
-                getConnectionId(connection.source, connection.name, "source"),
-              ],
-              targets: [
-                getConnectionId(connection.target, connection.name, "target"),
-              ],
+              sources: [getConnectionId(connection, "source")],
+              targets: [getConnectionId(connection, "target")],
             };
-            // const sourceInfo = nodeInfo?.get(connection.source);
-            // const source =
-            //   sourceInfo?.type === "function"
-            //     ? `${connection.source}#source`
-            //     : connection.source;
-
-            // const targetInfo = nodeInfo?.get(connection.target);
-            // const target =
-            //   targetInfo?.type === "function"
-            //     ? `${connection.target}#target`
-            //     : connection.target;
-            // // if (targetInfo?.type === "function") {
-
-            // // }
-            // return {
-            //   id: `${connection.source}#${connection.target}#${connection.name}`,
-            //   sources: [source],
-            //   targets: [target],
-            // };
           })}
-          // edges={[
-          //   {
-          //     id: useId(),
-          //     sources: ["FileProcessor#processFile#source"],
-          //     targets: ["StorageBucket#putObject#target"],
-          //   },
-          //   {
-          //     id: useId(),
-          //     sources: ["Function1#source"],
-          //     targets: ["UploadsBucket#putObject#target"],
-          //   },
-          //   {
-          //     id: useId(),
-          //     sources: ["UploadsBucket#putObject#source"],
-          //     targets: ["FileProcessor#processFile#target"],
-          //   },
-          //   {
-          //     id: useId(),
-          //     sources: ["Function2#source"],
-          //     targets: ["FileProcessor#getProcessedFile#target"],
-          //   },
-          //   {
-          //     id: useId(),
-          //     sources: ["FileProcessor#getProcessedFile#source"],
-          //     targets: ["StorageBucket#getObject#target"],
-          //   },
-          //   {
-          //     id: useId(),
-          //     sources: ["FileProcessor#processFile#source"],
-          //     targets: ["UploadsBucket#getObject#target"],
-          //   },
-          // ]}
+          // edges={connections?.map((connection) => {
+          //   const source = `${connection.source}#${
+          //     (connection as any).sourceOp
+          //   }#source`;
+          //   const target = `${connection.target}#${
+          //     (connection as any).targetOp
+          //   }#target`;
+          //   return {
+          //     id: `${source}##${target}`,
+          //     sources: [source],
+          //     targets: [target],
+          //   };
+          // })}
           edgeComponent={RoundedEdge}
           className="bg-white"
         >
@@ -757,3 +738,54 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
     </div>
   );
 });
+
+const AutoIdNode: FunctionComponent<{
+  constructTreeNode: ConstructTreeNode;
+}> = (props) => {
+  return (
+    <Node
+      elk={{
+        id: props.constructTreeNode.path,
+        layoutOptions: {
+          "elk.portConstraints": "FIXED_SIDE",
+        },
+      }}
+      className="inline-block"
+    >
+      <div
+        className={clsx(
+          "size-6",
+          "border border-gray-300 border-dashed",
+          "hover:border-sky-300 rounded-full outline-0 outline outline-sky-300 hover:outline-2",
+          "transition-all",
+          "shadow",
+          "relative",
+        )}
+      >
+        <Port
+          elk={{
+            id: `${props.constructTreeNode.path}#handle#target`,
+            layoutOptions: {
+              "elk.port.side": "WEST",
+              "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+            },
+          }}
+        >
+          <InflightPort />
+        </Port>
+
+        <Port
+          elk={{
+            id: `${props.constructTreeNode.path}#handle#source`,
+            layoutOptions: {
+              "elk.port.side": "EAST",
+              "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+            },
+          }}
+        >
+          <InflightPort />
+        </Port>
+      </div>
+    </Node>
+  );
+};

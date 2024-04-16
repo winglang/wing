@@ -5,6 +5,13 @@ import { useMemo } from "react";
 
 import { trpc } from "./trpc.js";
 
+export type NodeInflight = {
+  id: string;
+  name: string;
+  sourceOccupied?: boolean;
+  targetOccupied?: boolean;
+};
+
 export type NodeV2 =
   | {
       type: "container";
@@ -33,12 +40,7 @@ export type NodeV2 =
   //   }
   | {
       type: "construct";
-      inflights: {
-        id: string;
-        name: string;
-        sourceOccupied?: boolean;
-        targetOccupied?: boolean;
-      }[];
+      inflights: NodeInflight[];
     };
 
 const getNodeType = (
@@ -69,6 +71,37 @@ const getNodeType = (
   return "container";
 };
 
+const getNodeInflights = (
+  node: ConstructTreeNode,
+  connections: ConnectionData[],
+): NodeInflight[] => {
+  const inflights = new Array<string>();
+  for (const connection of connections.filter(
+    (connection) => connection.target === node.path,
+  )) {
+    inflights.push((connection as any).targetOp);
+  }
+  for (const connection of connections.filter(
+    (connection) => connection.source === node.path,
+  )) {
+    inflights.push((connection as any).sourceOp);
+  }
+  return uniqBy(inflights, (inflight) => inflight).map((connection) => ({
+    id: `${node.path}#${connection}`,
+    name: connection,
+    sourceOccupied: connections.some(
+      (otherConnection) =>
+        otherConnection.source === node.path &&
+        otherConnection.name === connection,
+    ),
+    targetOccupied: connections.some(
+      (otherConnection) =>
+        otherConnection.target === node.path &&
+        otherConnection.name === connection,
+    ),
+  }));
+};
+
 export interface UseMapOptionsV2 {
   // showTests: boolean;
 }
@@ -84,6 +117,8 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
     const nodeMap = new Map<string, NodeV2>();
     const processNode = (node: ConstructTreeNode) => {
       const nodeType = getNodeType(node, connections);
+      const inflights = getNodeInflights(node, connections);
+      console.log(node.path, nodeType, inflights);
       switch (nodeType) {
         case "container": {
           nodeMap.set(node.path, {
@@ -121,25 +156,7 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
         default: {
           nodeMap.set(node.path, {
             type: "construct",
-            inflights: uniqBy(
-              connections.filter(
-                (connection) => connection.target === node.path,
-              ),
-              (connection) => connection.name,
-            ).map((connection) => ({
-              id: `${connection.target}#${connection.name}`,
-              name: connection.name,
-              sourceOccupied: connections.some(
-                (otherConnection) =>
-                  connection.source === node.path &&
-                  connection.name === otherConnection.name,
-              ),
-              targetOccupied: connections.some(
-                (otherConnection) =>
-                  connection.target === node.path &&
-                  connection.name === otherConnection.name,
-              ),
-            })),
+            inflights,
           });
         }
       }
