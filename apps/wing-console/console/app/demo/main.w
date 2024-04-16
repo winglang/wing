@@ -25,19 +25,21 @@ class myBucket {
   new() {
     this.b = new cloud.Bucket();
     new ui.FileBrowser("File Browser",
-      inflight (payload: str) => {
-        let data: PutData = PutData.fromJson(Json.parse(payload));
-        this.b.put(data.fileName, data.fileContent);
-      },
-      inflight (payload: str) => {
-        let data: DeleteData = DeleteData.fromJson(Json.parse(payload));
-        this.b.delete(data.fileName);
-      },
-      inflight (payload: str) => {
-        let data: GetData = GetData.fromJson(Json.parse(payload));
-        return this.b.get(data.fileName);
-      },
-      inflight () => {return this.b.list();},
+      {
+        put: inflight (payload: str) => {
+          let data: PutData = PutData.fromJson(Json.parse(payload));
+          this.b.put(data.fileName, data.fileContent);
+        },
+        delete: inflight (payload: str) => {
+          let data: DeleteData = DeleteData.fromJson(Json.parse(payload));
+          this.b.delete(data.fileName);
+        },
+        get: inflight (payload: str) => {
+          let data: GetData = GetData.fromJson(Json.parse(payload));
+          return this.b.get(data.fileName);
+        },
+        list: inflight () => {return this.b.list();},
+      }
     );
 
     new cloud.Service(

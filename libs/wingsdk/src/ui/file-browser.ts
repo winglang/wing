@@ -10,6 +10,13 @@ import { IInflight } from "../std";
  */
 export const FILE_BROWSER_FQN = fqnForType("ui.FileBrowser");
 
+export interface FileBrowserHandlers {
+  readonly put: IFileBrowserPutHandler;
+  readonly delete: IFileBrowserDeleteHandler;
+  readonly get: IFileBrowserGetHandler;
+  readonly list: IFileBrowserListHandler;
+}
+
 /**
  * A file browser can be used to browse files.
  */
@@ -22,20 +29,14 @@ export class FileBrowser extends VisualComponent {
     scope: Construct,
     id: string,
     label: string,
-    putHandler: IFileBrowserPutHandler,
-    deleteHandler: IFileBrowserDeleteHandler,
-    getHandler: IFileBrowserGetHandler,
-    listHandler: IFileBrowserListHandler
+    handlers: FileBrowserHandlers
   ): FileBrowser {
     return App.of(scope).newAbstract(
       FILE_BROWSER_FQN,
       scope,
       id,
       label,
-      putHandler,
-      getHandler,
-      deleteHandler,
-      listHandler
+      handlers
     );
   }
 
@@ -49,17 +50,14 @@ export class FileBrowser extends VisualComponent {
     scope: Construct,
     id: string,
     label: string,
-    putHandler: IFileBrowserPutHandler,
-    deleteHandler: IFileBrowserDeleteHandler,
-    getHandler: IFileBrowserGetHandler,
-    listHandler: IFileBrowserListHandler
+    handlers: FileBrowserHandlers
   ) {
     super(scope, id);
     this.label = label;
-    this.getFn = new Function(this, "get", getHandler);
-    this.putFn = new Function(this, "put", putHandler);
-    this.deleteFn = new Function(this, "delete", deleteHandler);
-    this.listFn = new Function(this, "list", listHandler);
+    this.getFn = new Function(this, "get", handlers.get);
+    this.putFn = new Function(this, "put", handlers.put);
+    this.deleteFn = new Function(this, "delete", handlers.delete);
+    this.listFn = new Function(this, "list", handlers.list);
   }
 
   /** @internal */
