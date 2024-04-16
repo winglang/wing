@@ -164,11 +164,6 @@ export class QueueRef extends Resource {
       link: true,
     });
 
-    ui.Field._newValueField(
-      this,
-      "QueueArnField",
-      "SQS Queue ARN",
-      this.queueArn
-    );
+    new ui.ValueField(this, "QueueArnField", "SQS Queue ARN", this.queueArn);
   }
 }

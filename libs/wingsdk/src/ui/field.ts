@@ -54,28 +54,6 @@ export class Field extends VisualComponent {
     );
   }
 
-  /** @internal */
-  public static _newValueField(
-    scope: Construct,
-    id: string,
-    label: string,
-    value: string
-  ): void {
-    const handler = Testing.makeHandler(
-      `async handle() { 
-        return this.value;
-      }`,
-      {
-        value: {
-          obj: value,
-          ops: [],
-        },
-      }
-    );
-
-    new Field(scope, id, label, handler);
-  }
-
   private readonly fn: Function;
   private readonly label: string;
   private readonly refreshRate: number | undefined;
@@ -135,4 +113,25 @@ export interface IFieldHandlerClient {
    * @inflight
    */
   handle(): Promise<string>;
+}
+
+/**
+ * A value field can be used to display a string value.
+ */
+export class ValueField extends Field {
+  constructor(scope: Construct, id: string, label: string, value: string) {
+    const handler = Testing.makeHandler(
+      `async handle() { 
+        return this.value;
+      }`,
+      {
+        value: {
+          obj: value,
+          ops: [],
+        },
+      }
+    );
+
+    super(scope, id, label, handler);
+  }
 }

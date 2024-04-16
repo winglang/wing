@@ -150,7 +150,7 @@ export class FunctionRef extends Resource {
       link: true,
     });
 
-    ui.Field._newValueField(
+    new ui.ValueField(
       this,
       "FunctionArnField",
       "Function ARN",

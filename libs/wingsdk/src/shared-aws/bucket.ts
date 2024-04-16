@@ -146,17 +146,7 @@ export class BucketRef extends Resource {
       link: true,
     });
 
-    ui.Field._newValueField(
-      this,
-      "BucketNameField",
-      "Bucket Name",
-      this.bucketName
-    );
-    ui.Field._newValueField(
-      this,
-      "BucketArnField",
-      "Bucket ARN",
-      this.bucketArn
-    );
+    new ui.ValueField(this, "BucketNameField", "Bucket Name", this.bucketName);
+    new ui.ValueField(this, "BucketArnField", "Bucket ARN", this.bucketArn);
   }
 }
