@@ -2346,9 +2346,6 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
-			"structured_access_expression" => {
-				self.report_unimplemented_grammar("structured_access_expression", "expression", &expression_node)
-			}
 			"compiler_dbg_panic" => {
 				// Handle the debug panic expression (during parsing)
 				dbg_panic!();
