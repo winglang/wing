@@ -1004,12 +1004,9 @@ async handle(message) {
       {
         "name": "setConsumer()",
         "source": "root/my_queue",
+        "sourceOp": "push",
         "target": "root/my_queue/SetConsumer0",
-      },
-      {
-        "name": "push()",
-        "source": "root/my_queue_messages/Function",
-        "target": "root/my_queue",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -1315,7 +1312,9 @@ async handle(message) {
       {
         "name": "setConsumer()",
         "source": "root/my_queue",
+        "sourceOp": "push",
         "target": "root/my_queue/SetConsumer0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",

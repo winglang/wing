@@ -5,7 +5,7 @@ import { ServiceSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { App } from "../core";
+import { App, LiftDepsMatrixRaw } from "../core";
 import { PolicyStatement, ToSimulatorOutput } from "../simulator";
 import { IInflightHost, IResource } from "../std";
 
@@ -15,7 +15,6 @@ export class Service
 {
   private readonly permissions: Array<[IResource, string]> = [];
   private readonly autoStart: boolean;
-  public _liftMap = undefined;
 
   constructor(
     scope: Construct,
@@ -52,12 +51,12 @@ export class Service
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.ServiceInflightMethods.START,
-      cloud.ServiceInflightMethods.STOP,
-      cloud.ServiceInflightMethods.STARTED,
-    ];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {
+      [cloud.ServiceInflightMethods.START]: [[this.handler, ["handle"]]],
+      [cloud.ServiceInflightMethods.STOP]: [],
+      [cloud.ServiceInflightMethods.STARTED]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

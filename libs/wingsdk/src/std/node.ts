@@ -418,9 +418,21 @@ export interface AddConnectionProps {
   readonly source: IConstruct;
 
   /**
+   * An operation that the source construct supports.
+   * @default - no operation
+   */
+  readonly sourceOp?: string;
+
+  /**
    * The target of the connection.
    */
   readonly target: IConstruct;
+
+  /**
+   * An operation that the target construct supports.
+   * @default - no operation
+   */
+  readonly targetOp?: string;
 
   /**
    * A name for the connection.

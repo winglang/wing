@@ -747,11 +747,11 @@ error: Call to super constructor can only be done from within a class constructo
     |    ^^^^^^^^ Call to super constructor can only be done from within a class constructor
 
 
-error: Reserved method name. Initializers are declared with \\"init\\"
+error: Reserved method name. Constructors are declared with a method named \\"new\\"
     --> ../../../examples/tests/invalid/class.test.w:160:3
     |
 160 |   constructor() {
-    |   ^^^^^^^^^^^ Reserved method name. Initializers are declared with \\"init\\"
+    |   ^^^^^^^^^^^ Reserved method name. Constructors are declared with a method named \\"new\\"
 
 
 error: Expected block
@@ -838,18 +838,18 @@ error: Inflight field \\"x\\" is not initialized
    |            ^ Inflight field \\"x\\" is not initialized
 
 
-error: \\"y\\" cannot be initialized in the inflight initializer
+error: \\"y\\" cannot be initialized in the inflight constructor
    --> ../../../examples/tests/invalid/class.test.w:61:10
    |
 61 |     this.y = 1;
-   |          ^ \\"y\\" cannot be initialized in the inflight initializer
+   |          ^ \\"y\\" cannot be initialized in the inflight constructor
 
 
-error: \\"x\\" cannot be initialized in the preflight initializer
+error: \\"x\\" cannot be initialized in the preflight constructor
    --> ../../../examples/tests/invalid/class.test.w:56:10
    |
 56 |     this.x = 1;
-   |          ^ \\"x\\" cannot be initialized in the preflight initializer
+   |          ^ \\"x\\" cannot be initialized in the preflight constructor
 
 
 error: Preflight field \\"y\\" is not initialized
@@ -2259,13 +2259,13 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_dup_init.test.w 1`] = `
-"error: Multiple inflight initializers defined in class Foo
+"error: Multiple inflight constructors defined in class Foo
   --> ../../../examples/tests/invalid/inflight_class_dup_init.test.w:6:3
   |  
 6 | /   inflight new() {
 7 | | 
 8 | |   }
-  | \\\\---^ Multiple inflight initializers defined in class Foo
+  | \\\\---^ Multiple inflight constructors defined in class Foo
 
 
 
@@ -3255,6 +3255,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`private_constructor.test.w 1`] = `
+"error: Constructor for class \\"JsiiClassWithPrivateConstructor\\" is private
+  --> ../../../examples/tests/invalid/private_constructor.test.w:3:1
+  |
+3 | new jsii_fixture.JsiiClassWithPrivateConstructor();
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Constructor for class \\"JsiiClassWithPrivateConstructor\\" is private
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`protected_access_modifiers.test.w 1`] = `
 "error: Structs must be public (\\"pub\\") or private
   --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:1:1
@@ -3529,32 +3544,32 @@ Duration <DURATION>"
 `;
 
 exports[`resource_init.test.w 1`] = `
-"error: Multiple initializers defined in class R
+"error: Multiple constructors defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:3:3
   |
 3 |   new() {}
-  |   ^^^^^^^^ Multiple initializers defined in class R
+  |   ^^^^^^^^ Multiple constructors defined in class R
 
 
-error: Multiple inflight initializers defined in class R
+error: Multiple inflight constructors defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:6:3
   |
 6 |   inflight new() {}
-  |   ^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+  |   ^^^^^^^^^^^^^^^^^ Multiple inflight constructors defined in class R
 
 
-error: Multiple inflight initializers defined in class R
+error: Multiple inflight constructors defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:9:3
   |
 9 |   inflight new(x: num) {}
-  |   ^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+  |   ^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight constructors defined in class R
 
 
-error: Inflight initializers cannot have parameters
+error: Inflight constructors cannot have parameters
   --> ../../../examples/tests/invalid/resource_init.test.w:9:15
   |
 9 |   inflight new(x: num) {}
-  |               ^^^^^^^^ Inflight initializers cannot have parameters
+  |               ^^^^^^^^ Inflight constructors cannot have parameters
 
 
 
