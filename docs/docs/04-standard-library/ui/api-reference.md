@@ -240,16 +240,13 @@ A file browser can be used to browse files.
 ```wing
 bring ui;
 
-new ui.FileBrowser(label: str, putHandler: IFileBrowserPutHandler, deleteHandler: IFileBrowserDeleteHandler, getHandler: IFileBrowserGetHandler, listHandler: IFileBrowserListHandler);
+new ui.FileBrowser(label: str, handlers: FileBrowserHandlers);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.label">label</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.putHandler">putHandler</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a></code> | *No description.* |
-| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.deleteHandler">deleteHandler</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a></code> | *No description.* |
-| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.getHandler">getHandler</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a></code> | *No description.* |
-| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.listHandler">listHandler</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.handlers">handlers</a></code> | <code><a href="#@winglang/sdk.ui.FileBrowserHandlers">FileBrowserHandlers</a></code> | *No description.* |
 
 ---
 
@@ -259,27 +256,9 @@ new ui.FileBrowser(label: str, putHandler: IFileBrowserPutHandler, deleteHandler
 
 ---
 
-##### `putHandler`<sup>Required</sup> <a name="putHandler" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.putHandler"></a>
+##### `handlers`<sup>Required</sup> <a name="handlers" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.handlers"></a>
 
-- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a>
-
----
-
-##### `deleteHandler`<sup>Required</sup> <a name="deleteHandler" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.deleteHandler"></a>
-
-- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a>
-
----
-
-##### `getHandler`<sup>Required</sup> <a name="getHandler" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.getHandler"></a>
-
-- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a>
-
----
-
-##### `listHandler`<sup>Required</sup> <a name="listHandler" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.listHandler"></a>
-
-- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a>
+- *Type:* <a href="#@winglang/sdk.ui.FileBrowserHandlers">FileBrowserHandlers</a>
 
 ---
 
@@ -893,6 +872,77 @@ refreshRate: duration;
 - *Default:* no automatic refresh
 
 How often the field should be refreshed.
+
+---
+
+### FileBrowserHandlers <a name="FileBrowserHandlers" id="@winglang/sdk.ui.FileBrowserHandlers"></a>
+
+File browser handlers.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.ui.FileBrowserHandlers.Initializer"></a>
+
+```wing
+bring ui;
+
+let FileBrowserHandlers = ui.FileBrowserHandlers{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.delete">delete</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a></code> | Handler for deleting a file. |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.get">get</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a></code> | Handler for getting a file. |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.list">list</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a></code> | Handler for listing files. |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.put">put</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a></code> | Handler for putting a file. |
+
+---
+
+##### `delete`<sup>Required</sup> <a name="delete" id="@winglang/sdk.ui.FileBrowserHandlers.property.delete"></a>
+
+```wing
+delete: IFileBrowserDeleteHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a>
+
+Handler for deleting a file.
+
+---
+
+##### `get`<sup>Required</sup> <a name="get" id="@winglang/sdk.ui.FileBrowserHandlers.property.get"></a>
+
+```wing
+get: IFileBrowserGetHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a>
+
+Handler for getting a file.
+
+---
+
+##### `list`<sup>Required</sup> <a name="list" id="@winglang/sdk.ui.FileBrowserHandlers.property.list"></a>
+
+```wing
+list: IFileBrowserListHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a>
+
+Handler for listing files.
+
+---
+
+##### `put`<sup>Required</sup> <a name="put" id="@winglang/sdk.ui.FileBrowserHandlers.property.put"></a>
+
+```wing
+put: IFileBrowserPutHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a>
+
+Handler for putting a file.
 
 ---
 
