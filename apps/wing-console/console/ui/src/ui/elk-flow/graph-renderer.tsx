@@ -187,7 +187,7 @@ export const GraphRenderer: FunctionComponent<
         height: `${props.graph.height ?? 0}px`,
       }}
     >
-      <svg
+      {/* <svg
         width={props.graph.width}
         height={props.graph.height}
         style={{
@@ -205,9 +205,21 @@ export const GraphRenderer: FunctionComponent<
             edge={edge}
             offsetX={origins.get((edge as any).container)?.x}
             offsetY={origins.get((edge as any).container)?.y}
+            graphWidth={props.graph.width!}
+            graphHeight={props.graph.height!}
           />
         ))}
-      </svg>
+      </svg> */}
+      {props.graph.edges?.map((edge) => (
+        <Edge
+          key={edge.id}
+          edge={edge}
+          offsetX={origins.get((edge as any).container)?.x}
+          offsetY={origins.get((edge as any).container)?.y}
+          graphWidth={props.graph.width!}
+          graphHeight={props.graph.height!}
+        />
+      ))}
 
       <div ref={portalTarget} />
 

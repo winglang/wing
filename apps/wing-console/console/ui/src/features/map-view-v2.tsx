@@ -118,7 +118,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
               "transition-all",
               "flex flex-col",
               "overflow-hidden",
-              "border border-gray-300 border-dashed",
+              "border border-gray-200 border-dashed",
               "hover:border-sky-300",
               "outline outline-0 outline-sky-200 hover:outline-2",
             )}
@@ -443,7 +443,7 @@ const midPoint = (pt1: ElkPoint, pt2: ElkPoint, radius: number) => {
 };
 
 const RoundedEdge: EdgeComponent = memo(
-  ({ edge, offsetX = 0, offsetY = 0 }) => {
+  ({ edge, offsetX = 0, offsetY = 0, graphWidth, graphHeight }) => {
     const points = useMemo(
       () =>
         edge.sections?.flatMap((section) => [
@@ -510,35 +510,41 @@ const RoundedEdge: EdgeComponent = memo(
     }, [additionalPoints]);
 
     return (
-      <g
-        className={clsx(
-          // "fill-none stroke-2 group transition-all pointer-events-auto",
-          "fill-none stroke-1 group transition-all pointer-events-auto",
-          // "stroke-sky-500",
-          // "stroke-sky-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
-          // "stroke-sky-200 hover:stroke-sky-500",
-          // "stroke-gray-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
-          "stroke-gray-400 hover:stroke-sky-500",
-        )}
-        transform={`translate(${offsetX} ${offsetY})`}
+      <svg
+        width={graphWidth}
+        height={graphHeight}
+        className="absolute inset-0 pointer-events-none hover:z-10"
       >
-        <path className="stroke-[8] opacity-0" d={d}>
-          <title>
-            {edge.id} (from {edge.sources.join(",")} to {edge.targets.join(",")}
-            )
-          </title>
-        </path>
-        <path
-          className="stroke-[6] opacity-0 group-hover:opacity-100 stroke-sky-100"
-          d={d}
+        <g
+          className={clsx(
+            // "fill-none stroke-2 group transition-all pointer-events-auto",
+            "fill-none stroke-1 group transition-all pointer-events-auto",
+            // "stroke-sky-500",
+            // "stroke-sky-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
+            // "stroke-sky-200 hover:stroke-sky-500",
+            // "stroke-gray-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
+            "stroke-gray-300 hover:stroke-sky-500",
+          )}
+          transform={`translate(${offsetX} ${offsetY})`}
         >
-          <title>
-            {edge.id} (from {edge.sources.join(",")} to {edge.targets.join(",")}
-            )
-          </title>
-        </path>
-        <path d={d} />
-      </g>
+          <path className="stroke-[8] opacity-0" d={d}>
+            <title>
+              {edge.id} (from {edge.sources.join(",")} to{" "}
+              {edge.targets.join(",")})
+            </title>
+          </path>
+          <path
+            className="stroke-[6] opacity-0 group-hover:opacity-100 stroke-sky-100"
+            d={d}
+          >
+            <title>
+              {edge.id} (from {edge.sources.join(",")} to{" "}
+              {edge.targets.join(",")})
+            </title>
+          </path>
+          <path d={d} />
+        </g>
+      </svg>
     );
   },
 );

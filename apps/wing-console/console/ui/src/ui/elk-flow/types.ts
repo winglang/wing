@@ -1,4 +1,4 @@
-import type { ElkExtendedEdge } from "elkjs";
+import type { ElkExtendedEdge, ElkNode } from "elkjs";
 import type { FunctionComponent } from "react";
 
 // export type IntrinsicElements = JSX.IntrinsicElements;
@@ -15,4 +15,6 @@ export type EdgeComponent = FunctionComponent<{
   edge: ElkExtendedEdge;
   offsetX?: number;
   offsetY?: number;
+  graphWidth: number;
+  graphHeight: number;
 }>;
