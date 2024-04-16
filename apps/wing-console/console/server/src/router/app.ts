@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
-import type { HttpClient } from "@winglang/sdk/lib/ui/http-client.js";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 

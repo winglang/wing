@@ -23,7 +23,6 @@ struct DeleteData {
 class myBucket {
   b: cloud.Bucket;
   new() {
-    log("Bucket created!");
     this.b = new cloud.Bucket();
     new ui.FileBrowser("File Browser",
       inflight (payload: str) => {
