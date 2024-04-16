@@ -52,3 +52,97 @@ export function unwrap<T>(value: T): T | never {
   }
   throw new Error("Unexpected nil");
 }
+
+export function lookup(obj: any, index: string | number): any {
+  if (typeof index !== "string" && typeof index !== "number") {
+    throw new TypeError(
+      `Index must be a string or number (found "${typeof index}")`
+    );
+  }
+
+  if (typeof index === "number") {
+    if (
+      !Array.isArray(obj) &&
+      !Buffer.isBuffer(obj) &&
+      typeof obj !== "string"
+    ) {
+      throw new TypeError(
+        "Index is a number but collection is not an array or string"
+      );
+    }
+    if (index < 0 && index >= -obj.length) {
+      index = obj.length + index;
+    }
+    if (index < 0 || index >= obj.length) {
+      throw new RangeError(
+        `Index ${index} out of bounds for array of length ${obj.length}`
+      );
+    }
+    return obj[index];
+  }
+
+  if (typeof obj !== "object") {
+    throw new TypeError(
+      `Lookup failed, value is not an object (found "${typeof obj}")`
+    );
+  }
+
+  if (!(index in obj)) {
+    throw new RangeError(`Key "${index}" not found`);
+  }
+
+  return obj[index];
+}
+
+export function assign(
+  obj: any,
+  index: string | number,
+  kind: "=" | "+=" | "-=",
+  value: any
+) {
+  if (typeof index !== "string" && typeof index !== "number") {
+    throw new TypeError(
+      `Index must be a string or number, found ("${typeof index}")`
+    );
+  }
+
+  if (typeof index === "number") {
+    if (
+      !Array.isArray(obj) &&
+      !Buffer.isBuffer(obj) &&
+      typeof obj !== "string"
+    ) {
+      throw new TypeError(
+        "Index is a number but collection is not an array or string"
+      );
+    }
+    if (index < 0 && index >= -obj.length) {
+      index = obj.length + index;
+    }
+    if (index < 0 || index >= obj.length) {
+      throw new RangeError(
+        `Index ${index} out of bounds for array of length ${obj.length}`
+      );
+    }
+  }
+
+  if (typeof index === "string" && typeof obj !== "object") {
+    throw new TypeError(
+      `Lookup failed, value is not an object (found \"${typeof obj}\")`
+    );
+  }
+
+  switch (kind) {
+    case "=":
+      obj[index] = value;
+      break;
+    case "+=":
+      obj[index] += value;
+      break;
+    case "-=":
+      obj[index] -= value;
+      break;
+    default:
+      throw new Error(`Invalid assignment kind: ${kind}`);
+  }
+}

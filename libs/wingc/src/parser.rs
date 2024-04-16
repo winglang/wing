@@ -1948,7 +1948,7 @@ impl<'s> Parser<'s> {
 		let object_expr = structured_access_node.named_child(0).unwrap();
 		let object_expr = self.build_expression(&object_expr, phase)?;
 
-		let index_expr = dbg!(structured_access_node.named_child(1).unwrap());
+		let index_expr = structured_access_node.named_child(1).unwrap();
 		let index_expr = self.build_expression(&index_expr, phase)?;
 
 		Ok(Expr::new(

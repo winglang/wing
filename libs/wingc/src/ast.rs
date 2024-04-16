@@ -774,7 +774,12 @@ impl Spanned for Reference {
 				optional_accessor: _,
 			} => object.span().merge(&property.span()),
 			Reference::TypeMember { type_name, property } => type_name.span().merge(&property.span()),
-			Reference::ElementAccess { object, index } => object.span().merge(&index.span()),
+			Reference::ElementAccess { object, index } => {
+				let mut span = object.span().merge(&index.span());
+				span.end.col += 1; // Add one to include the closing bracket
+				span.end_offset += 1;
+				span
+			}
 		}
 	}
 }

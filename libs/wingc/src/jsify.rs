@@ -356,10 +356,11 @@ impl<'a> JSifier<'a> {
 			}
 			Reference::ElementAccess { object, index } => new_code!(
 				&object.span,
+				"$helpers.lookup(",
 				self.jsify_expression(object, ctx),
-				"[",
+				", ",
 				self.jsify_expression(index, ctx),
-				"]"
+				")"
 			),
 		}
 	}
@@ -1174,15 +1175,35 @@ impl<'a> JSifier<'a> {
 					AssignmentKind::AssignDecr => "-=",
 				};
 
-				code.line(new_code!(
-					&statement.span,
-					self.jsify_reference(variable, ctx),
-					" ",
-					operator,
-					" ",
-					self.jsify_expression(value, ctx),
-					";"
-				));
+				match variable {
+					Reference::ElementAccess { object, index } => {
+						let object = self.jsify_expression(object, ctx);
+						let index = self.jsify_expression(index, ctx);
+						code.line(new_code!(
+							&statement.span,
+							"$helpers.assign(",
+							object,
+							", ",
+							index,
+							", \"",
+							operator,
+							"\", ",
+							self.jsify_expression(value, ctx),
+							");"
+						));
+					}
+					_ => {
+						code.line(new_code!(
+							&statement.span,
+							self.jsify_reference(variable, ctx),
+							" ",
+							operator,
+							" ",
+							self.jsify_expression(value, ctx),
+							";"
+						));
+					}
+				};
 			}
 			StmtKind::Scope(scope) => {
 				if !scope.statements.is_empty() {
