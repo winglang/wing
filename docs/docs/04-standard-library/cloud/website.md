@@ -279,7 +279,7 @@ File's content type.
 
 ### WebsiteDomainOptions <a name="WebsiteDomainOptions" id="@winglang/sdk.cloud.WebsiteDomainOptions"></a>
 
-Options for `Website`, and `ReactApp`.
+Options for `Website`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.WebsiteDomainOptions.Initializer"></a>
 
