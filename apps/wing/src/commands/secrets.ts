@@ -16,6 +16,7 @@ export async function secrets(entrypoint?: string, options?: SecretsOptions): Pr
   process.env.WING_SOURCE_DIR = cwd();
   let secretValues: any = {};
   console.log(`${secrets.length} secret(s) found in ${entrypoint}\n`);
+
   for (const secret of secrets) {
     const response = await inquirer.prompt([
       {
@@ -28,7 +29,5 @@ export async function secrets(entrypoint?: string, options?: SecretsOptions): Pr
   }
 
   const plaformManager = new PlatformManager({platformPaths: options?.platform})
-  const response = await plaformManager.storeSecrets(secretValues);
-
-  console.log(`\n${response}`);
+  await plaformManager.storeSecrets(secretValues);
 }

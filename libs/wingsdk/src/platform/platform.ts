@@ -58,5 +58,5 @@ export interface IPlatform {
   /**
    * Hook for creating and storing secrets
    */
-  storeSecrets?(secrets: {[name: string]: string}): Promise<string>;
+  storeSecrets?(secrets: {[name: string]: string}): Promise<void>;
 }

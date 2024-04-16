@@ -13,7 +13,7 @@ export class Platform implements IPlatform {
     return new App(appProps);
   }
 
-  public async storeSecrets(secrets: { [key: string]: string }): Promise<string> {
+  public async storeSecrets(secrets: { [key: string]: string }): Promise<void> {
     let existingSecretsContent = "";
     try {
       existingSecretsContent = fs.readFileSync('./.env', 'utf8');
@@ -37,6 +37,6 @@ export class Platform implements IPlatform {
 
     fs.writeFileSync('./.env', updatedContent);
     
-    return "Secrets created/updated for sim platform";
+    console.log("Secrets created/updated for sim platform");
   }
 }
