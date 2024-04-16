@@ -17,185 +17,20 @@ import {
   getResourceIconComponent,
   Attribute,
   ScrollableArea,
-  Button,
 } from "@wingconsole/design-system";
 import type { NodeDisplay } from "@wingconsole/server";
-import type {
-  UIButton,
-  UIComponent,
-  UIField,
-  UISection,
-  UIFileBrowser,
-} from "@winglang/sdk/lib/core/tree.js";
 import classNames from "classnames";
-import { memo, useCallback, useContext, useId, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 
-import type { UIHttpClient } from "../../../../../../libs/wingsdk/lib/core/tree.js";
-import { AppContext } from "../AppContext.js";
 import { QueueMetadataView } from "../features/queue-metadata-view.js";
 import { ResourceInteractionView } from "../features/resource-interaction-view.js";
 import { trpc } from "../services/trpc.js";
-import { useApi } from "../services/use-api.js";
 
-import { ApiInteraction } from "./api-interaction.js";
 import { BucketMetadata } from "./bucket-metadata.js";
 import { CounterMetadata } from "./counter-metadata.js";
-import { CustomResourceFileBrowser } from "./custom-resource-file-browser.js";
+import { CustomResourceUiItem } from "./custom-resource-item.js";
 import { FunctionMetadata } from "./function-metadata.js";
 import { ScheduleMetadata } from "./schedule-metadata.js";
-
-interface CustomResourceUiFieldItemProps {
-  label: string;
-  handlerPath: string;
-}
-
-const CustomResourceUiFieldItem = ({
-  label,
-  handlerPath,
-}: CustomResourceUiFieldItemProps) => {
-  const field = trpc["app.getResourceUiField"].useQuery(
-    {
-      resourcePath: handlerPath,
-    },
-    { enabled: !!handlerPath },
-  );
-  return <Attribute name={label} value={field.data?.value ?? ""} />;
-};
-
-interface CustomResourceUiButtomItemProps {
-  label: string;
-  handlerPath: string;
-}
-
-const CustomResourceUiButtonItem = ({
-  label,
-  handlerPath,
-}: CustomResourceUiButtomItemProps) => {
-  const { theme } = useTheme();
-  const { mutate: invokeMutation } =
-    trpc["app.invokeResourceUiButton"].useMutation();
-  const invoke = useCallback(() => {
-    invokeMutation({
-      resourcePath: handlerPath,
-    });
-  }, [handlerPath, invokeMutation]);
-
-  const id = useId();
-  return (
-    <div className="pl-4 flex flex-row items-center">
-      <label
-        htmlFor={id}
-        className={classNames("min-w-[100px] invisible", theme.text2)}
-      >
-        {label}
-      </label>
-      <Button id={id} title={label} label={label} onClick={invoke} />
-    </div>
-  );
-};
-
-interface CustomResourceHttpClientItemProps {
-  label: string;
-  getUrlHandler: string;
-  getApiSpecHandler: string;
-}
-
-const CustomResourceHttpClientItem = ({
-  label,
-  getUrlHandler,
-  getApiSpecHandler,
-}: CustomResourceHttpClientItemProps) => {
-  const { appMode } = useContext(AppContext);
-
-  const data = trpc["app.getResourceUiHttpClient"].useQuery(
-    {
-      getUrlResourcePath: getUrlHandler,
-      getApiSpecResourcePath: getApiSpecHandler,
-    },
-    { enabled: !!getUrlHandler && !!getApiSpecHandler },
-  );
-
-  const [response, setResponse] = useState();
-  const { callFetch, isLoading } = useApi({
-    onFetchDataUpdate: (data) => {
-      setResponse(data);
-    },
-  });
-
-  return (
-    <div className="pl-4">
-      <div className="mb-1">
-        <Attribute name="Name" value={label} noLeftPadding />
-      </div>
-      {data.data?.url && data.data?.openApiSpec && (
-        <ApiInteraction
-          resourceId={getUrlHandler}
-          url={data.data.url}
-          appMode={appMode}
-          openApiSpec={data.data.openApiSpec}
-          callFetch={callFetch}
-          isLoading={isLoading}
-          apiResponse={response}
-        />
-      )}
-    </div>
-  );
-};
-
-const getUiComponent = (item: UIComponent) => {
-  if (item.kind === "field") {
-    return item as UIField;
-  }
-  if (item.kind === "button") {
-    return item as UIButton;
-  }
-  if (item.kind === "section") {
-    return item as UISection;
-  }
-  if (item.kind === "file-browser") {
-    return item as UIFileBrowser;
-  }
-  if (item.kind === "http-client") {
-    return item as UIHttpClient;
-  }
-  return item;
-};
-
-const CustomResourceUiItem = ({ item }: { item: UIComponent }) => {
-  const uiComponent = getUiComponent(item);
-  return (
-    <>
-      {uiComponent.kind === "field" && (
-        <CustomResourceUiFieldItem
-          label={uiComponent.label}
-          handlerPath={uiComponent.handler}
-        />
-      )}
-      {uiComponent.kind === "button" && (
-        <CustomResourceUiButtonItem
-          label={uiComponent.label}
-          handlerPath={uiComponent.handler}
-        />
-      )}
-      {uiComponent.kind === "file-browser" && (
-        <CustomResourceFileBrowser
-          label={uiComponent.label}
-          putHandler={uiComponent.putHandler}
-          getHandler={uiComponent.getHandler}
-          listHandler={uiComponent.listHandler}
-          deleteHandler={uiComponent.deleteHandler}
-        />
-      )}
-      {uiComponent.kind === "http-client" && (
-        <CustomResourceHttpClientItem
-          label={uiComponent.label}
-          getUrlHandler={uiComponent.getUrlHandler}
-          getApiSpecHandler={uiComponent.getApiSpecHandler}
-        />
-      )}
-    </>
-  );
-};
 
 interface AttributeGroup {
   groupName: string;

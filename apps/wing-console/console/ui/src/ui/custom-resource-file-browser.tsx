@@ -25,16 +25,14 @@ export const CustomResourceFileBrowser = ({
 
   const [currentFile, setCurrentFile] = useState<string>();
 
-  const listQuery = trpc["app.invokeFileBrowserListQuery"].useQuery(
+  const listQuery = trpc["fileBrowser.list"].useQuery(
     {
       resourcePath: listHandler,
     },
     { enabled: !!listHandler },
   );
 
-  const currentFileContentQuery = trpc[
-    "app.invokeFileBrowserGetQuery"
-  ].useQuery(
+  const currentFileContentQuery = trpc["fileBrowser.get"].useQuery(
     {
       fileName: currentFile ?? "",
       resourcePath: getHandler,
@@ -45,11 +43,9 @@ export const CustomResourceFileBrowser = ({
     },
   );
 
-  const deleteMutation =
-    trpc["app.invokeFileBrowserDeleteMutation"].useMutation();
-  const downloadMutation =
-    trpc["app.invokeFileBrowserDownloadMutation"].useMutation();
-  const putMutation = trpc["app.invokeFileBrowserPutMutation"].useMutation();
+  const deleteMutation = trpc["fileBrowser.delete"].useMutation();
+  const downloadMutation = trpc["fileBrowser.download"].useMutation();
+  const putMutation = trpc["fileBrowser.put"].useMutation();
 
   const [currentFileContent, setCurrentFileContent] = useState<string>();
 
