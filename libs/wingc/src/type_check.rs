@@ -250,7 +250,7 @@ pub enum Type {
 	Enum(Enum),
 }
 
-pub const CLASS_INIT_NAME: &'static str = "init";
+pub const CLASS_INIT_NAME: &'static str = "new";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
 pub const CLOSURE_CLASS_HANDLE_METHOD: &'static str = "handle";
@@ -2314,17 +2314,28 @@ impl<'a> TypeChecker<'a> {
 					};
 
 					let lookup_res = class_env.lookup_ext(&init_method_name.into(), None);
-					let constructor_type = if let LookupResult::Found(k, _) = lookup_res {
-						k.as_variable().expect("Expected constructor to be a variable").type_
-					} else {
-						self.type_error(lookup_result_to_type_error(
-							lookup_res,
-							&Symbol {
-								name: CLASS_INIT_NAME.into(),
-								span: class_symbol.span.clone(),
-							},
-						));
-						return self.resolved_error();
+					let constructor_type = match lookup_res {
+						LookupResult::Found(k, _) => k.as_variable().expect("Expected constructor to be a variable").type_,
+						LookupResult::NotFound(_, _) => {
+							self.spanned_error(
+								exp,
+								format!("Constructor for class \"{}\" is private", class_symbol.name),
+							);
+							return self.resolved_error();
+						}
+						LookupResult::NotPublic(_, _)
+						| LookupResult::MultipleFound
+						| LookupResult::DefinedLater(_)
+						| LookupResult::ExpectedNamespace(_) => {
+							self.type_error(lookup_result_to_type_error(
+								lookup_res,
+								&Symbol {
+									name: CLASS_INIT_NAME.into(),
+									span: class_symbol.span.clone(),
+								},
+							));
+							return self.resolved_error();
+						}
 					};
 					let constructor_sig = constructor_type
 						.as_function_sig()
@@ -4798,7 +4809,7 @@ impl<'a> TypeChecker<'a> {
 			return;
 		};
 
-		// If the parent class is phase independent than its init name is just "init" regadless of
+		// If the parent class is phase independent than its constructor name is just "new" regardless of
 		// whether we're inflight or not.
 		let parent_init_name = if parent_class.as_class().unwrap().phase == Phase::Independent {
 			CLASS_INIT_NAME
@@ -4851,7 +4862,7 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error(
 						matching_field,
 						format!(
-							"\"{}\" cannot be initialized in the {} initializer",
+							"\"{}\" cannot be initialized in the {} constructor",
 							matching_field.name,
 							current_phase.to_lowercase()
 						),

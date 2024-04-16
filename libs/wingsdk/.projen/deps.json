@@ -339,6 +339,10 @@
       "type": "bundled"
     },
     {
+      "name": "vlq",
+      "type": "bundled"
+    },
+    {
       "name": "yaml",
       "type": "bundled"
     },

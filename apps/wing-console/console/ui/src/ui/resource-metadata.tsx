@@ -28,12 +28,16 @@ import type {
   UIFileBrowser,
 } from "@winglang/sdk/lib/core/tree.js";
 import classNames from "classnames";
-import { memo, useCallback, useId, useMemo, useState } from "react";
+import { memo, useCallback, useContext, useId, useMemo, useState } from "react";
 
+import type { UIHttpClient } from "../../../../../../libs/wingsdk/lib/core/tree.js";
+import { AppContext } from "../AppContext.js";
 import { QueueMetadataView } from "../features/queue-metadata-view.js";
 import { ResourceInteractionView } from "../features/resource-interaction-view.js";
 import { trpc } from "../services/trpc.js";
+import { useApi } from "../services/use-api.js";
 
+import { ApiInteraction } from "./api-interaction.js";
 import { BucketMetadata } from "./bucket-metadata.js";
 import { CounterMetadata } from "./counter-metadata.js";
 import { CustomResourceFileBrowser } from "./custom-resource-file-browser.js";
@@ -90,12 +94,53 @@ const CustomResourceUiButtonItem = ({
   );
 };
 
-interface CustomResourceUiItemProps {
-  kind: string;
+interface CustomResourceHttpClientItemProps {
   label: string;
-  handlerPath: string;
-  others?: any;
+  getUrlHandler: string;
+  getApiSpecHandler: string;
 }
+
+const CustomResourceHttpClientItem = ({
+  label,
+  getUrlHandler,
+  getApiSpecHandler,
+}: CustomResourceHttpClientItemProps) => {
+  const { appMode } = useContext(AppContext);
+
+  const data = trpc["app.getResourceUiHttpClient"].useQuery(
+    {
+      getUrlResourcePath: getUrlHandler,
+      getApiSpecResourcePath: getApiSpecHandler,
+    },
+    { enabled: !!getUrlHandler && !!getApiSpecHandler },
+  );
+
+  const [response, setResponse] = useState();
+  const { callFetch, isLoading } = useApi({
+    onFetchDataUpdate: (data) => {
+      setResponse(data);
+    },
+  });
+
+  return (
+    <div className="pl-4">
+      <div className="mb-1">
+        <Attribute name="Name" value={label} noLeftPadding />
+      </div>
+      {data.data?.url && data.data?.openApiSpec && (
+        <ApiInteraction
+          resourceId={getUrlHandler}
+          url={data.data.url}
+          appMode={appMode}
+          openApiSpec={data.data.openApiSpec}
+          callFetch={callFetch}
+          isLoading={isLoading}
+          apiResponse={response}
+        />
+      )}
+    </div>
+  );
+};
 
 const getUiComponent = (item: UIComponent) => {
   if (item.kind === "field") {
@@ -109,6 +154,9 @@ const getUiComponent = (item: UIComponent) => {
   }
   if (item.kind === "file-browser") {
     return item as UIFileBrowser;
+  }
+  if (item.kind === "http-client") {
+    return item as UIHttpClient;
   }
   return item;
 };
@@ -136,6 +184,13 @@ const CustomResourceUiItem = ({ item }: { item: UIComponent }) => {
           getHandler={uiComponent.getHandler}
           listHandler={uiComponent.listHandler}
           deleteHandler={uiComponent.deleteHandler}
+        />
+      )}
+      {uiComponent.kind === "http-client" && (
+        <CustomResourceHttpClientItem
+          label={uiComponent.label}
+          getUrlHandler={uiComponent.getUrlHandler}
+          getApiSpecHandler={uiComponent.getApiSpecHandler}
         />
       )}
     </>

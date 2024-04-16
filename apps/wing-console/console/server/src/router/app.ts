@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
+import type { HttpClient } from "@winglang/sdk/lib/ui/http-client.js";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
@@ -485,6 +486,31 @@ export const createAppRouter = () => {
         ) as IFunctionClient;
         return {
           value: await client.invoke(""),
+        };
+      }),
+    "app.getResourceUiHttpClient": createProcedure
+      .input(
+        z.object({
+          getUrlResourcePath: z.string(),
+          getApiSpecResourcePath: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const getUrlClient = simulator.getResource(
+          input.getUrlResourcePath,
+        ) as IFunctionClient;
+
+        const url = await getUrlClient.invoke("");
+
+        const getApiSpecClient = simulator.getResource(
+          input.getApiSpecResourcePath,
+        ) as IFunctionClient;
+        const openApiSpec = await getApiSpecClient.invoke("");
+
+        return {
+          url: url,
+          openApiSpec: JSON.parse(openApiSpec ?? "{}"),
         };
       }),
 

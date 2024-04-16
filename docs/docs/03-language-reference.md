@@ -642,7 +642,7 @@ let handler2 = inflight() => {
 Bridge between preflight and inflight is crossed with the help of immutable data
 structures, "structs" (user definable and `Struct`), and the capture mechanism.
 
-Preflight class methods and initializers can receive an inflight function as an argument. This
+Preflight class methods and constructors can receive an inflight function as an argument. This
 enables preflight classes to define code that will be executed on a cloud compute platform such as
 lambda functions, docker, virtual machines etc.
 
