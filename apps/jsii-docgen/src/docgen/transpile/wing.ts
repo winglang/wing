@@ -212,7 +212,7 @@ export class WingTranspile extends transpile.TranspileBase {
     if (reflect.Initializer.isInitializer(callable)) {
       returnType = this.typeReference(callable.parentType.reference);
     } else if (reflect.Method.isMethod(callable)) {
-      isReturnOptional = callable?.returns.optional;
+      isReturnOptional = callable.returns.optional;
       returnType = this.typeReference(callable.returns.type);
     }
     const returns = returnType?.toString(typeToString);
