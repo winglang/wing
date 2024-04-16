@@ -21,6 +21,7 @@ Immutable Json.
 | <code><a href="#@winglang/sdk.std.Json.asStr">asStr</a></code> | Convert Json element to string if possible. |
 | <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.Json.getAt">getAt</a></code> | Returns a specified element at a given index from Json Array. |
+| <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsNum">tryAsNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsStr">tryAsStr</a></code> | Convert Json element to string if possible. |
@@ -82,6 +83,22 @@ Returns a specified element at a given index from Json Array.
 - *Type:* num
 
 The index of the element in the Json Array to return.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
+
+```wing
+has(key: str): bool
+```
+
+Checks if a Json object has a given key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.has.parameter.key"></a>
+
+- *Type:* str
+
+The key to check.
 
 ---
 
@@ -149,7 +166,6 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
 | <code><a href="#@winglang/sdk.std.Json.entries">entries</a></code> | Returns the entries from the Json. |
-| <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
@@ -227,30 +243,6 @@ Returns the entries from the Json.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 map to get the entries from.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
-
-```wing
-Json.has(json: Json, key: str);
-```
-
-Checks if a Json object has a given key.
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.has.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-The json object to inspect.
-
----
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.has.parameter.key"></a>
-
-- *Type:* str
-
-The key to check.
 
 ---
 
@@ -420,6 +412,7 @@ Mutable Json.
 | <code><a href="#@winglang/sdk.std.MutJson.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
+| <code><a href="#@winglang/sdk.std.MutJson.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
@@ -499,6 +492,22 @@ Returns a specified element at a given index from MutJson Array.
 - *Type:* num
 
 The index of the element in the MutJson Array to return.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutJson.has"></a>
+
+```wing
+has(key: str): bool
+```
+
+Checks if a Json object has a given key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.has.parameter.key"></a>
+
+- *Type:* str
+
+The key to check.
 
 ---
 

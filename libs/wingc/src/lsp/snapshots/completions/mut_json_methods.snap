@@ -61,6 +61,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: has
+  kind: 2
+  detail: "(key: str): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\nhas: (key: str): bool\n```\n---\nChecks if a Json object has a given key.\n### Parameters\n- `key` — `str` — The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
+  sortText: ff|has
+  insertText: has($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: set
   kind: 2
   detail: "(key: str, value: MutJson): void"
