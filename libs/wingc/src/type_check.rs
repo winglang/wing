@@ -4493,10 +4493,6 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_assignment(&mut self, kind: &AssignmentKind, value: &Expr, variable: &Reference, env: &mut SymbolEnv) {
 		let (exp_type, _) = self.type_check_exp(value, env);
-
-		// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
-		// being captured) it cannot be reassigned: https://github.com/winglang/wing/issues/3069
-
 		let (var, var_phase) = self.resolve_reference(&variable, env, false);
 		let var_type = match &var {
 			ResolveReferenceResult::Variable(var) => var.type_,
