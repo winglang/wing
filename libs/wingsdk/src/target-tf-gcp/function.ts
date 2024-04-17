@@ -1,5 +1,5 @@
 import { writeFileSync } from "fs";
-import { join } from "path";
+import { join, basename } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -197,7 +197,7 @@ export class Function extends cloud.Function {
       packageJson,
       JSON.stringify(
         {
-          main: "index.js",
+          main: basename(bundle.outfilePath),
           dependencies: {
             "@google-cloud/functions-framework": "^3.0.0",
             "@google-cloud/datastore": "8.4.0",
