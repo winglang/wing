@@ -743,6 +743,8 @@ pub enum Reference {
 		optional_accessor: bool,
 	},
 	/// A reference to an accessed member of an object `expression[x]`
+	///
+	/// TODO: should this be a separate type of Expr? (this would require changing how `Assignment` statements are modeled)
 	ElementAccess { object: Box<Expr>, index: Box<Expr> },
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember {
