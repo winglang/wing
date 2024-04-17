@@ -4263,51 +4263,60 @@ Duration <DURATION>"
 
 exports[`un_mut_lifted_objects.test.w 1`] = `
 "error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:22:7
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:22:6
    |
-22 |   ar?.push(2); // Error: push doesn't exist in Array
-   |       ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+22 |   ar.push(2); // Error: push doesn't exist in Array
+   |      ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+
+
+error: Cannot update elements of an immutable Array
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:23:3
+   |
+23 |   ar[0] = 1; // Error: Cannot update elements of an immutable Array
+   |   ^^^^^ Cannot update elements of an immutable Array
+   |
+   = hint: Consider using MutArray instead
 
 
 error: Member \\"set\\" doesn't exist in \\"Json\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:23:5
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:24:5
    |
-23 |   j.set(\\"a\\", 3); // Error: set doesn't exist in Json
+24 |   j.set(\\"a\\", 3); // Error: set doesn't exist in Json
    |     ^^^ Member \\"set\\" doesn't exist in \\"Json\\"
 
 
 error: Member \\"add\\" doesn't exist in \\"Set\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:24:6
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:25:6
    |
-24 |   st.add(4); // Error: add doesn't exist in Set
+25 |   st.add(4); // Error: add doesn't exist in Set
    |      ^^^ Member \\"add\\" doesn't exist in \\"Set\\"
 
 
 error: Member \\"set\\" doesn't exist in \\"Map\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:25:6
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:26:6
    |
-25 |   mp.set(\\"a\\", 3); // Error: set doesn't exist in Map
+26 |   mp.set(\\"a\\", 3); // Error: set doesn't exist in Map
    |      ^^^ Member \\"set\\" doesn't exist in \\"Map\\"
 
 
 error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:26:11
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:27:11
    |
-26 |   opt_ar?.push(2); // Error: push doesn't exist in Array
+27 |   opt_ar?.push(2); // Error: push doesn't exist in Array
    |           ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
 
 
 error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:27:16
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:28:16
    |
-27 |   recursive_ar.push(MutArray<num>[2]); // Error: push doesn't exist in Array
+28 |   recursive_ar.push(MutArray<num>[2]); // Error: push doesn't exist in Array
    |                ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
 
 
 error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:28:22
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:29:22
    |
-28 |   recursive_ar.at(0).push(3); // Error: push doesn't exist in Array
+29 |   recursive_ar.at(0).push(3); // Error: push doesn't exist in Array
    |                      ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
 
 
