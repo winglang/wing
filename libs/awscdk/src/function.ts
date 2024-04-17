@@ -16,7 +16,6 @@ import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
-import * as ec2 from "aws-cdk-lib/aws-ec2";
 
 /**
  * Implementation of `awscdk.Function` are expected to implement this

@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import * as os from "os";
 import * as path from "path";
 import { SecretAttributes, SecretSchema } from "./schema-resources";
 import { ISecretClient, SECRET_FQN } from "../cloud";
@@ -16,7 +15,8 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
   private readonly name: string;
 
   constructor(props: SecretSchema) {
-    this.secretsFile = path.join(os.homedir(), ".wing", "secrets.json");
+    this.secretsFile = path.join(process.cwd(), ".env");
+    
     if (!fs.existsSync(this.secretsFile)) {
       throw new Error(
         `No secrets file found at ${this.secretsFile} while looking for secret ${props.name}`
@@ -57,7 +57,8 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
 
-    const secrets = JSON.parse(fs.readFileSync(this.secretsFile, "utf-8"));
+    const secretsContent = fs.readFileSync(this.secretsFile, "utf-8");
+    const secrets = this.parseEnvFile(secretsContent);
 
     if (!secrets[this.name]) {
       throw new Error(`No secret value for secret ${this.name}`);
@@ -68,5 +69,18 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
 
   public async valueJson(): Promise<Json> {
     return JSON.parse(await this.value());
+  }
+
+  private parseEnvFile(contents: string): { [key: string]: string } {
+    return contents.split('\n')
+      .map(line => line.trim())
+      .filter(line => line && !line.startsWith('#')) // Ignore empty lines and comments
+      .reduce((acc, line) => {
+        const [key, value] = line.split('=', 2);
+        if (key) {
+          acc[key.trim()] = value.trim();
+        }
+        return acc;
+      }, {} as { [key: string]: string });
   }
 }

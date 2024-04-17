@@ -37,6 +37,6 @@ export class Platform implements IPlatform {
 
     fs.writeFileSync('./.env', updatedContent);
     
-    console.log("Secrets created/updated for sim platform");
+    console.log(`${Object.keys(secrets).length} secret(s) stored in .env`);
   }
 }

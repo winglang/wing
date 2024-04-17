@@ -31,7 +31,6 @@ describe(
         [
           ".wing",
           "connections.json",
-          "secrets.json",
           "simulator.json",
           "tree.json",
         ]
