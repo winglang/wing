@@ -32,3 +32,7 @@ json[0] = 5;
 let s = "hello";
 s[0] = "H";
 // ^ error: Strings are immutable
+
+let var x = 3 + "hello";
+x["hi"] = 4;
+// ^ error: Unsupported reassignment of element of type unresolved

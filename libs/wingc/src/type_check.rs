@@ -6656,6 +6656,7 @@ fn lookup_known_type(name: &'static str, env: &SymbolEnv) -> TypeRef {
 		.expect(&format!("Expected known type \"{}\" to be a type", name))
 }
 
+#[derive(Debug)]
 enum ResolveReferenceResult {
 	Variable(VariableInfo),
 	Location(TypeRef, TypeRef), // (container type, element type)
