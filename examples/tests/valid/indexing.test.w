@@ -4,7 +4,7 @@ bring expect;
 let arr = Array<num>[1, 2, 3];
 
 assert(arr[0] == 1);
-assert(arr[-3] == 1);
+assert(arr[2 - 5] == 1);
 
 try {
   arr[-5];
@@ -50,7 +50,8 @@ try {
 
 let mutarr = MutArray<num>[1, 2, 3];
 mutarr[-3] = 5;
-expect.equal(mutarr, [5, 2, 3]);
+mutarr[10 - 8] = 10;
+expect.equal(mutarr, [5, 2, 10]);
 
 let s = "hello world";
 expect.equal(s[4], "o");
@@ -66,3 +67,9 @@ let a = new A();
 let mutarr2 = MutArray<A>[a];
 mutarr2[0].value = 10;
 expect.equal(a.value, 10);
+
+let nested = MutArray<MutArray<num>>[MutArray<num>[1, 2], MutArray<num>[3, 4]];
+assert(nested[0][0] == 1);
+assert(nested[-1][-1] == 4);
+nested[0][0] = 5;
+assert(nested[0][0] == 5);
