@@ -35,7 +35,7 @@ describe("secrets", () => {
       targetDir: workdir,
     });
 
-    expect(console.log).toHaveBeenCalledWith("0 secret(s) found in main.w\n");
+    expect(console.log).toHaveBeenCalledWith("0 secret(s) found\n");
   });
 
   test("secrets found", async () => {
@@ -56,7 +56,7 @@ describe("secrets", () => {
       targetDir: workdir,
     });
 
-    expect(console.log).toHaveBeenCalledWith("2 secret(s) found in main.w\n");
+    expect(console.log).toHaveBeenCalledWith("2 secret(s) found\n");
   });
 
 });

@@ -1,10 +1,11 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { basename, dirname, join } from "path";
 import { cwd } from "process";
 import * as vm from "vm";
 import { IPlatform } from "./platform";
 import { scanDirForPlatformFile } from "./util";
 import { App, AppProps, SynthHooks } from "../core";
+import { Secret } from "../cloud";
 
 interface PlatformManagerOptions {
   /**
@@ -117,6 +118,18 @@ export class PlatformManager {
       synthHooks: hooks.synthHooks,
       newInstanceOverrides: hooks.newInstanceOverrides,
     }) as App;
+
+    let secretNames = [];
+    for (const c of app.node.findAll()) {
+      if (c instanceof Secret) {
+        const secret = c as Secret;
+        secretNames.push(secret.name);
+      }
+    }
+
+    if (secretNames.length > 0) {
+      writeFileSync(join(app.outdir, "secrets.json"), JSON.stringify(secretNames));
+    }
 
     let registrar = app.parameters;
 
