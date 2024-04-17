@@ -79,7 +79,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const arr = [1, 2, 3];
     $helpers.assert($helpers.eq($helpers.lookup(arr, 0), 1), "arr[0] == 1");
-    $helpers.assert($helpers.eq($helpers.lookup(arr, (-3)), 1), "arr[-3] == 1");
+    $helpers.assert($helpers.eq($helpers.lookup(arr, (2 - 5)), 1), "arr[2 - 5] == 1");
     try {
       $helpers.lookup(arr, (-5));
     }
@@ -126,13 +126,19 @@ class $Root extends $stdlib.std.Resource {
     }
     const mutarr = [1, 2, 3];
     $helpers.assign(mutarr, (-3), "=", 5);
-    (expect.Util.equal(mutarr, [5, 2, 3]));
+    $helpers.assign(mutarr, (10 - 8), "=", 10);
+    (expect.Util.equal(mutarr, [5, 2, 10]));
     const s = "hello world";
     (expect.Util.equal($helpers.lookup(s, 4), "o"));
     const a = new A(this, "A");
     const mutarr2 = [a];
     $helpers.lookup(mutarr2, 0).value = 10;
     (expect.Util.equal(a.value, 10));
+    const nested = [[1, 2], [3, 4]];
+    $helpers.assert($helpers.eq($helpers.lookup($helpers.lookup(nested, 0), 0), 1), "nested[0][0] == 1");
+    $helpers.assert($helpers.eq($helpers.lookup($helpers.lookup(nested, (-1)), (-1)), 4), "nested[-1][-1] == 4");
+    $helpers.assign($helpers.lookup(nested, 0), 0, "=", 5);
+    $helpers.assert($helpers.eq($helpers.lookup($helpers.lookup(nested, 0), 0), 5), "nested[0][0] == 5");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
