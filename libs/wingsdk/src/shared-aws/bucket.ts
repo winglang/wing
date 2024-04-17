@@ -148,5 +148,51 @@ export class BucketRef extends Resource {
 
     new ui.ValueField(this, "BucketNameField", "Bucket Name", this.bucketName);
     new ui.ValueField(this, "BucketArnField", "Bucket ARN", this.bucketArn);
+    new ui.FileBrowser(this, "FileBrowser", "File Browser", {
+      put: Testing.makeHandler(
+        `async handle(fileName, fileContent) {
+        this.bucket.put(fileName, fileContent);
+      }`,
+        {
+          bucket: {
+            obj: this,
+            ops: [],
+          },
+        }
+      ),
+      get: Testing.makeHandler(
+        `async handle(fileName) {
+        return this.bucket.get(fileName);
+      }`,
+        {
+          bucket: {
+            obj: this,
+            ops: [],
+          },
+        }
+      ),
+      delete: Testing.makeHandler(
+        `async handle(fileName) {
+        return this.bucket.delete(fileName);
+      }`,
+        {
+          bucket: {
+            obj: this,
+            ops: [],
+          },
+        }
+      ),
+      list: Testing.makeHandler(
+        `async handle() {
+        return this.bucket.list();
+      }`,
+        {
+          bucket: {
+            obj: this,
+            ops: [],
+          },
+        }
+      ),
+    });
   }
 }
