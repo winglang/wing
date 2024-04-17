@@ -32,7 +32,7 @@ Represents a compiled regular expression pattern.
 ##### `find` <a name="find" id="@winglang/sdk.std.Regex.find"></a>
 
 ```wing
-find(text: str): str
+find(text: str): str?
 ```
 
 Finds the first occurrence of the pattern within the text.
@@ -84,7 +84,7 @@ The text to search within.
 ##### `findIndex` <a name="findIndex" id="@winglang/sdk.std.Regex.findIndex"></a>
 
 ```wing
-findIndex(text: str): MutArray<num>
+findIndex(text: str): MutArray<num>?
 ```
 
 Finds the start and end index of the first match within the text.
@@ -100,7 +100,7 @@ The text to search within.
 ##### `findSubmatch` <a name="findSubmatch" id="@winglang/sdk.std.Regex.findSubmatch"></a>
 
 ```wing
-findSubmatch(text: str): MutArray<str>
+findSubmatch(text: str): MutArray<str>?
 ```
 
 Finds the first match and its submatches.
@@ -116,7 +116,7 @@ The text to search within.
 ##### `findSubmatchIndex` <a name="findSubmatchIndex" id="@winglang/sdk.std.Regex.findSubmatchIndex"></a>
 
 ```wing
-findSubmatchIndex(text: str): MutArray<MutArray<num>>
+findSubmatchIndex(text: str): MutArray<MutArray<num>>?
 ```
 
 Finds the start and end index of the match and all submatches.

@@ -464,6 +464,9 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 					self.visit_user_defined_type(type_name);
 				}
 			}
+			Reference::ElementAccess { object, .. } => {
+				self.visit_expr(object);
+			}
 		}
 
 		visit_reference(self, node);

@@ -99,7 +99,7 @@ TODO: For now this has to be a method rather than a getter as macros only work o
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.Map.tryGet"></a>
 
 ```wing
-tryGet(key: str): <T>
+tryGet(key: str): <T>?
 ```
 
 Optionally returns a specified element from the map.
@@ -267,7 +267,7 @@ TODO: For now this has to be a method rather than a getter as macros only work o
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.MutMap.tryGet"></a>
 
 ```wing
-tryGet(key: str): <T>
+tryGet(key: str): <T>?
 ```
 
 Optionally returns a specified element from the map.
