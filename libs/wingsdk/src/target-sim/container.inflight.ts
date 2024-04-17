@@ -75,6 +75,11 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       }
     }
 
+    for (const volume of this.props.volumes ?? []) {
+      dockerRun.push("-v");
+      dockerRun.push(volume);
+    }
+
     dockerRun.push(this.imageTag);
 
     for (const a of this.props.args ?? []) {

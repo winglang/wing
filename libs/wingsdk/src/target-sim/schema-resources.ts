@@ -256,6 +256,7 @@ export interface ContainerSchema {
   readonly image: string;
   readonly containerPort?: number;
   readonly env?: Record<string, string>;
+  readonly volumes?: string[];
   readonly args?: string[];
   readonly cwd: string;
 }
