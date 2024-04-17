@@ -98,6 +98,7 @@ process.on("message", async (message) => {${debugShim}
   // When call() is called, it sets this to false, and when it's returning
   // a response or error, it sets it back to true.
   private available = true;
+  private cleaningUp = false;
 
   constructor(entrypoint: string, options: SandboxOptions = {}) {
     this.entrypoint = entrypoint;
@@ -105,6 +106,7 @@ process.on("message", async (message) => {${debugShim}
   }
 
   public async cleanup() {
+    this.cleaningUp = true;
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
@@ -227,7 +229,11 @@ process.on("message", async (message) => {${debugShim}
         if (this.timeout) {
           clearTimeout(this.timeout);
         }
-        reject(error);
+        if (this.cleaningUp) {
+          resolve(undefined);
+        } else {
+          reject(error);
+        }
       };
 
       // "exit" could be emitted if the user code called process.exit(), or if we killed the process
@@ -239,7 +245,13 @@ process.on("message", async (message) => {${debugShim}
         if (this.timeout) {
           clearTimeout(this.timeout);
         }
-        reject(new Error(`Process exited with code ${code}, signal ${signal}`));
+        if (this.cleaningUp) {
+          resolve(undefined);
+        } else {
+          reject(
+            new Error(`Process exited with code ${code}, signal ${signal}`)
+          );
+        }
       };
 
       if (this.options.timeout && !inspectorUrl?.()) {
@@ -248,11 +260,15 @@ process.on("message", async (message) => {${debugShim}
           this.child?.kill("SIGTERM");
           this.child = undefined;
           this.available = true;
-          reject(
-            new Error(
-              `Function timed out (it was configured to only run for ${this.options.timeout}ms)`
-            )
-          );
+          if (this.cleaningUp) {
+            resolve(undefined);
+          } else {
+            reject(
+              new Error(
+                `Function timed out (it was configured to only run for ${this.options.timeout}ms)`
+              )
+            );
+          }
         }, this.options.timeout);
       }
     });

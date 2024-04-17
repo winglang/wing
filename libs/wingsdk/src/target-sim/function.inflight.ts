@@ -51,10 +51,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     // and the bundling code is allowed to run after the simulator has stopped, it might fail
     // and throw an error to the user because the files the simulator was using may no longer be there there.
     await this.createBundlePromise;
-
-    for (const worker of this.workers) {
-      await worker.cleanup();
-    }
+    await Promise.all(this.workers.map((w) => w.cleanup()));
   }
 
   public async save(): Promise<void> {}
