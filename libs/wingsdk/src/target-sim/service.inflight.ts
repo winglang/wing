@@ -82,7 +82,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       return;
     }
 
-    this.sandbox = new Sandbox(this.bundle.entrypointPath, {
+    this.sandbox = new Sandbox(this.bundle.outfilePath, {
       env: {
         ...this.environmentVariables,
         WING_SIMULATOR_URL: this.context.serverUrl,

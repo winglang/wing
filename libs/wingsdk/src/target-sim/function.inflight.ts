@@ -147,7 +147,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       throw new Error("Bundle not created");
     }
 
-    return new Sandbox(this.bundle.entrypointPath, {
+    return new Sandbox(this.bundle.outfilePath, {
       env: {
         ...this.env,
         WING_SIMULATOR_CALLER: this.context.resourceHandle,
