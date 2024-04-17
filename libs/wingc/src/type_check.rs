@@ -2846,6 +2846,11 @@ impl<'a> TypeChecker<'a> {
 			}
 		}(exp, env);
 
+		// If we're inflight but the expression is a lifted (preflight) expression then make it immutable
+		if env.phase == Phase::Inflight && phase == Phase::Preflight {
+			t = self.make_immutable(t);
+		}
+
 		self.types.assign_type_to_expr(exp, t, phase);
 
 		self.curr_expr_info.pop();
@@ -4488,10 +4493,6 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_assignment(&mut self, kind: &AssignmentKind, value: &Expr, variable: &Reference, env: &mut SymbolEnv) {
 		let (exp_type, _) = self.type_check_exp(value, env);
-
-		// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
-		// being captured) it cannot be reassigned: https://github.com/winglang/wing/issues/3069
-
 		let (var, var_phase) = self.resolve_reference(&variable, env, false);
 		let var_type = match &var {
 			ResolveReferenceResult::Variable(var) => var.type_,
@@ -5689,6 +5690,29 @@ impl<'a> TypeChecker<'a> {
 			.resolve_user_defined_type(&base_udt, env, self.ctx.current_stmt_idx())
 			.ok()
 			.map(|_| base_udt)
+	}
+
+	fn make_immutable(&mut self, type_: TypeRef) -> TypeRef {
+		match *type_ {
+			Type::MutArray(inner) => {
+				let inner = self.make_immutable(inner);
+				self.types.add_type(Type::Array(inner))
+			}
+			Type::MutJson => self.types.json(),
+			Type::MutMap(inner) => {
+				let inner = self.make_immutable(inner);
+				self.types.add_type(Type::Map(inner))
+			}
+			Type::MutSet(inner) => {
+				let inner = self.make_immutable(inner);
+				self.types.add_type(Type::Set(inner))
+			}
+			Type::Optional(inner) => {
+				let inner = self.make_immutable(inner);
+				self.types.add_type(Type::Optional(inner))
+			}
+			_ => type_,
+		}
 	}
 
 	fn resolve_reference(
