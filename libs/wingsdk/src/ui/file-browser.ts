@@ -1,8 +1,10 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
 import { App, UIComponent } from "../core";
+import { convertBetweenHandlers } from "../shared/convert";
 import { IInflight } from "../std";
 
 /**
@@ -69,10 +71,35 @@ export class FileBrowser extends VisualComponent {
   ) {
     super(scope, id);
     this.label = label;
-    this.getFn = new Function(this, "get", handlers.get);
-    this.putFn = new Function(this, "put", handlers.put);
-    this.deleteFn = new Function(this, "delete", handlers.delete);
-    this.listFn = new Function(this, "list", handlers.list);
+
+    const getHandler = convertBetweenHandlers(
+      handlers.get,
+      join(__dirname, "file-browser.get.inflight.js"),
+      "FileBrowserGetHandlerClient"
+    );
+
+    const putHandler = convertBetweenHandlers(
+      handlers.put,
+      join(__dirname, "file-browser.put.inflight.js"),
+      "FileBrowserPutHandlerClient"
+    );
+
+    const deleteHandler = convertBetweenHandlers(
+      handlers.delete,
+      join(__dirname, "file-browser.delete.inflight.js"),
+      "FileBrowserDeleteHandlerClient"
+    );
+
+    const listHandler = convertBetweenHandlers(
+      handlers.list,
+      join(__dirname, "file-browser.list.inflight.js"),
+      "FileBrowserListHandlerClient"
+    );
+
+    this.getFn = new Function(this, "get", getHandler);
+    this.putFn = new Function(this, "put", putHandler);
+    this.deleteFn = new Function(this, "delete", deleteHandler);
+    this.listFn = new Function(this, "list", listHandler);
   }
 
   /** @internal */
@@ -135,7 +162,7 @@ export interface IFileBrowserPutHandlerClient {
    * Function that performs an action.
    * @inflight
    */
-  handle(payload: string): Promise<void>;
+  handle(fileName: string, fileContent: string): Promise<void>;
 }
 
 /**
@@ -146,7 +173,7 @@ export interface IFileBrowserGetHandlerClient {
    * Function that performs an action.
    * @inflight
    */
-  handle(payload: string): Promise<string>;
+  handle(fileName: string): Promise<string>;
 }
 
 /**
@@ -157,7 +184,7 @@ export interface IFileBrowserDeleteHandlerClient {
    * Function that performs an action.
    * @inflight
    */
-  handle(payload: string): Promise<void>;
+  handle(fileName: string): Promise<void>;
 }
 
 /**
