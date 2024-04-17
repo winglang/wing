@@ -110,51 +110,31 @@ export class PlatformManager {
       );
     }
 
-    let synthHooks: SynthHooks = {
-      preSynthesize: [],
-      postSynthesize: [],
-      validate: [],
-    };
-
-    let newInstanceOverrides: any[] = [];
-
-    let parameterSchemas: any[] = [];
-
-    this.platformInstances.forEach((instance) => {
-      if (instance.parameters) {
-        parameterSchemas.push(instance.parameters);
-      }
-
-      if (instance.preSynth) {
-        synthHooks.preSynthesize!.push(instance.preSynth.bind(instance));
-      }
-
-      if (instance.postSynth) {
-        synthHooks.postSynthesize!.push(instance.postSynth.bind(instance));
-      }
-
-      if (instance.validate) {
-        synthHooks.validate!.push(instance.validate.bind(instance));
-      }
-
-      if (instance.newInstance) {
-        newInstanceOverrides.push(instance.newInstance.bind(instance));
-      }
-    });
+    let hooks = collectHooks(this.platformInstances);
 
     const app = appCall!({
       ...appProps,
-      synthHooks,
-      newInstanceOverrides,
+      synthHooks: hooks.synthHooks,
+      newInstanceOverrides: hooks.newInstanceOverrides,
     }) as App;
 
     let registrar = app.parameters;
 
-    parameterSchemas.forEach((schema) => {
+    hooks.parameterSchemas.forEach((schema) => {
       registrar.addSchema(schema);
     });
 
     return app;
+  }
+
+  public async storeSecrets(secretNames: string[]): Promise<any> {
+    const hooks = collectHooks(this.platformInstances);
+    if (!hooks.storeSecretsHook) {
+      throw new Error(
+        `No storeSecrets method found on any platform`
+      );
+    }
+    return await hooks.storeSecretsHook(secretNames);
   }
 }
 
@@ -240,7 +220,7 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
   }
 }
 
-export interface CollectHooksResult {
+interface CollectHooksResult {
   synthHooks: SynthHooks;
   newInstanceOverrides: any[];
   parameterSchemas: any[];
