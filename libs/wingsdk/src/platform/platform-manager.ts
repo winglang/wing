@@ -5,7 +5,7 @@ import * as vm from "vm";
 import { IPlatform } from "./platform";
 import { scanDirForPlatformFile } from "./util";
 import { App, AppProps, SynthHooks } from "../core";
-import { Secret } from "../cloud";
+import { SECRET_SYMBOL } from "../core/types";
 
 interface PlatformManagerOptions {
   /**
@@ -121,8 +121,10 @@ export class PlatformManager {
 
     let secretNames = [];
     for (const c of app.node.findAll()) {
-      if (c instanceof Secret) {
-        const secret = c as Secret;
+      // This duplicates the symbol from ../cloud/secret.ts, we cant import it here
+      // due to circular dependencies, which need to be revisited
+      if ((c as any)[SECRET_SYMBOL]) {
+        const secret = c as any;
         secretNames.push(secret.name);
       }
     }

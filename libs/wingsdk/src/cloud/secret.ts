@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { INFLIGHT_SYMBOL } from "../core/types";
+import { INFLIGHT_SYMBOL, SECRET_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -33,6 +33,8 @@ export interface SecretProps {
 export class Secret extends Resource {
   /** @internal */
   public [INFLIGHT_SYMBOL]?: ISecretClient;
+  /** @internal */
+  public [SECRET_SYMBOL] = true;
 
   /** @internal */
   protected _name?: string;

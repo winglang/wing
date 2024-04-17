@@ -54,6 +54,7 @@ describe("secrets", () => {
     await secrets("main.w", {
       platform: [BuiltinPlatform.SIM],
       targetDir: workdir,
+      list: true,
     });
 
     expect(console.log).toHaveBeenCalledWith("2 secret(s) found\n");
