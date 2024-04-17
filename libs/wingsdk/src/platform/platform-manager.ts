@@ -170,15 +170,15 @@ export class PlatformManager {
       newInstanceOverrides: this.newInstanceOverridesHooks,
     }) as App;
 
-    let secretsIds = [];
+    let secretsNames = [];
     for (const c of app.node.findAll()) {
       if (c instanceof Secret) {
         const secret = c as Secret;
-        secretsIds.push(secret.name);
+        secretsNames.push(secret.name);
       }
     }
-    if (secretsIds.length > 0) {
-      writeFileSync(join(app.outdir, "secrets.json"), JSON.stringify(secretsIds));
+    if (secretsNames.length > 0) {
+      writeFileSync(join(app.outdir, "secrets.json"), JSON.stringify(secretsNames));
     }
 
     let registrar = app.parameters;

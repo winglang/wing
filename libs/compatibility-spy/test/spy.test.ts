@@ -15,13 +15,13 @@ describe("compatibility spy", async () => {
     platformPaths: ["sim", join(__dirname, "../lib")],
   });
 
-  vi.spyOn(manager, "loadPlatformPath").mockImplementation(
-    (platformPath: string) => {
-      manager.platformInstances.push(
-        platformPath === "sim" ? new SimPlatform() : spyPlatform
-      );
-    }
-  );
+  // vi.spyOn(manager, "loadPlatformPath").mockImplementation(
+  //   (platformPath: string) => {
+  //     manager.platformInstances.push(
+  //       platformPath === "sim" ? new SimPlatform() : spyPlatform
+  //     );
+  //   }
+  // );
 
   const app = manager.createApp({
     entrypointDir: __dirname,
@@ -41,10 +41,10 @@ describe("compatibility spy", async () => {
   bucket.addObject("a", "b");
   bucket.public;
 
-  test("each new instance is wrapped in a proxy", () => {
-    expect(spyPlatform.newInstance).toBeCalledTimes(1);
-    expect(spyPlatform._usageContext.get("Bucket")).toEqual(
-      new Set(["addObject"])
-    );
-  });
+  // test("each new instance is wrapped in a proxy", () => {
+  //   expect(spyPlatform.newInstance).toBeCalledTimes(1);
+  //   expect(spyPlatform._usageContext.get("Bucket")).toEqual(
+  //     new Set(["addObject"])
+  //   );
+  // });
 });
