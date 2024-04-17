@@ -1,11 +1,10 @@
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
 import { basename, dirname, join } from "path";
 import { cwd } from "process";
 import * as vm from "vm";
 import { IPlatform } from "./platform";
 import { scanDirForPlatformFile } from "./util";
 import { App, AppProps, SynthHooks } from "../core";
-import { Secret } from "../cloud";
 
 interface PlatformManagerOptions {
   /**
@@ -20,16 +19,10 @@ const BUILTIN_PLATFORMS = ["tf-aws", "tf-azure", "tf-gcp", "sim"];
 export class PlatformManager {
   private readonly platformPaths: string[];
   private readonly platformInstances: IPlatform[] = [];
-  private synthHooks: SynthHooks = {};
-  private newInstanceOverridesHooks: any[] = [];
-  private parameterSchemas: any[] = [];
-  private storeSecretsHook: any;
 
   constructor(options: PlatformManagerOptions) {
     this.platformPaths = options.platformPaths ?? [];
     this.retrieveImplicitPlatforms();
-    this.createPlatformInstances();
-    this.collectHooks();
   }
 
   /**
@@ -104,14 +97,19 @@ export class PlatformManager {
     });
   }
 
-  public async storeSecrets(secretNames: string[]): Promise<any> {
-    if (!this.storeSecretsHook) {
-      throw new Error("No createSecrets method found on platform");
-    }
-    return await this.storeSecretsHook(secretNames);
-  }
+  // This method is called from preflight.cjs in order to return an App instance
+  // that can be synthesized
+  public createApp(appProps: AppProps): App {
+    this.createPlatformInstances();
 
-  private collectHooks() {
+    let appCall = this.platformInstances[0].newApp;
+
+    if (!appCall) {
+      throw new Error(
+        `No newApp method found on platform: ${this.platformPaths[0]} (Hint: The first platform provided must have a newApp method)`
+      );
+    }
+
     let synthHooks: SynthHooks = {
       preSynthesize: [],
       postSynthesize: [],
@@ -142,56 +140,24 @@ export class PlatformManager {
       if (instance.newInstance) {
         newInstanceOverrides.push(instance.newInstance.bind(instance));
       }
-
-      if (instance.storeSecrets) {
-        this.storeSecretsHook = instance.storeSecrets.bind(instance);
-      }
     });
-
-    this.synthHooks = synthHooks;
-    this.newInstanceOverridesHooks = newInstanceOverrides;
-    this.parameterSchemas = parameterSchemas;
-  }
-
-  // This method is called from preflight.cjs in order to return an App instance
-  // that can be synthesized
-  public createApp(appProps: AppProps): App {
-    this.createPlatformInstances();
-    
-    let appCall = this.platformInstances[0].newApp;
-
-    if (!appCall) {
-      throw new Error(
-        `No newApp method found on platform: ${this.platformPaths[0]} (Hint: The first platform provided must have a newApp method)`
-      );
-    }
 
     const app = appCall!({
       ...appProps,
-      synthHooks: this.synthHooks,
-      newInstanceOverrides: this.newInstanceOverridesHooks,
+      synthHooks,
+      newInstanceOverrides,
     }) as App;
-
-    let secretsNames = [];
-    for (const c of app.node.findAll()) {
-      if (c instanceof Secret) {
-        const secret = c as Secret;
-        secretsNames.push(secret.name);
-      }
-    }
-    if (secretsNames.length > 0) {
-      writeFileSync(join(app.outdir, "secrets.json"), JSON.stringify(secretsNames));
-    }
 
     let registrar = app.parameters;
 
-    this.parameterSchemas.forEach((schema) => {
+    parameterSchemas.forEach((schema) => {
       registrar.addSchema(schema);
     });
 
     return app;
   }
 }
+
 
 /**
  * Custom platforms need to be loaded into a custom context in order to
@@ -272,4 +238,52 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
       error
     );
   }
+}
+
+export interface CollectHooksResult {
+  synthHooks: SynthHooks;
+  newInstanceOverrides: any[];
+  parameterSchemas: any[];
+  storeSecretsHook?: any;
+}
+
+function collectHooks(platformInstances: IPlatform[]) {
+  let result: CollectHooksResult = {
+    synthHooks: {
+      preSynthesize: [],
+      postSynthesize: [],
+      validate: [],
+    },
+    newInstanceOverrides: [],
+    parameterSchemas: [],
+    storeSecretsHook: undefined
+  };
+
+  platformInstances.forEach((instance) => {
+    if (instance.parameters) {
+      result.parameterSchemas.push(instance.parameters);
+    }
+
+    if (instance.preSynth) {
+      result.synthHooks.preSynthesize!.push(instance.preSynth.bind(instance));
+    }
+
+    if (instance.postSynth) {
+      result.synthHooks.postSynthesize!.push(instance.postSynth.bind(instance));
+    }
+
+    if (instance.validate) {
+      result.synthHooks.validate!.push(instance.validate.bind(instance));
+    }
+
+    if (instance.newInstance) {
+      result.newInstanceOverrides.push(instance.newInstance.bind(instance));
+    }
+
+    if (instance.storeSecrets) {
+      result.storeSecretsHook = instance.storeSecrets.bind(instance);
+    }
+  });
+
+  return result;
 }
