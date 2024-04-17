@@ -211,7 +211,7 @@ export const buildTheme = (color?: string): Theme => {
 
 export interface ThemeProviderProps {
   theme: Theme;
-  mode: Mode;
+  mode?: Mode;
   setThemeMode?: (mode: Mode) => void;
   mediaTheme?: Mode;
 }

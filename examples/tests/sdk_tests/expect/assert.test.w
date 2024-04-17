@@ -129,7 +129,7 @@ test "equal sets" {
 // FIXME: Doesn't work
 // ERROR: unable to serialize immutable data object of type Datetime
 
-// examples/tests/sdk_tests/expect/target/test/assert.main.wsim.256800.tmp/.wing/preflight.js:319
+// examples/tests/sdk_tests/expect/target/test/assert.main.wsim.256800.tmp/.wing/preflight.cjs:319
 
 // let dt = datetime.fromIso("2023-07-18T20:18:25.177+03:00");
 

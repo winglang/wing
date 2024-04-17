@@ -142,7 +142,7 @@ List all rows in the table.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.ex.ITableClient.tryGet"></a>
 
 ```wing
-inflight tryGet(key: str): Json
+inflight tryGet(key: str): Json?
 ```
 
 Get a row from the table if exists, by primary key.

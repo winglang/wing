@@ -69,6 +69,8 @@ export function sanitizeOutput(output: string) {
       .replace(/\/.state\/[^ '"]+/g, "/.state/<STATE_FILE>")
       // Remove duration from test results
       .replace(/Duration \d+m[\d.]+s/g, "Duration <DURATION>")
+      // remove changing ports
+      .replace(/port \d+/g, "port <PORT>")
   );
 }
 

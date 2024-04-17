@@ -43,6 +43,7 @@ test("create a function", async () => {
     },
     path: "root/my_function",
     addr: expect.any(String),
+    policy: [],
     props: {
       sourceCodeFile: expect.any(String),
       sourceCodeLanguage: "javascript",
@@ -80,6 +81,32 @@ test("invoke function succeeds", async () => {
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
+
+test("async invoke function cleanup while running", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const handler = Testing.makeHandler(`
+  async handle(event) {
+    // sleep forever
+    await new Promise(() => {});
+  }`);
+  new cloud.Function(app, "my_function", handler);
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
+
+  // WHEN
+  await client.invokeAsync();
+
+  // THEN
+  await s.stop();
+
+  // wait for a small time to let the child process fail to exit
+  await new Promise((resolve) => setTimeout(resolve, 150));
+
+  expect(s.listTraces().every((t) => t.data.error === undefined)).toBe(true);
+}, 10000);
 
 test("invoke function with environment variables", async () => {
   // GIVEN
@@ -190,13 +217,13 @@ test("invoke function with process.exit(1)", async () => {
   // WHEN
   const PAYLOAD = {};
   await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-    "Process exited with code 1"
+    "Process exited with code 1, signal null"
   );
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
   expect(s.listTraces()[1].data.error).toMatchObject({
-    message: "Process exited with code 1",
+    message: "Process exited with code 1, signal null",
   });
   expect(app.snapshot()).toMatchSnapshot();
 });
@@ -247,5 +274,13 @@ test("__dirname and __filename cannot be used within inflight code", async () =>
   await dirnameInvoker(s);
   await filenameInvoker(s);
 
-  expect(listMessages(s)).toMatchSnapshot();
+  await s.stop();
+
+  expect(
+    listMessages(s).filter((m) =>
+      m.includes(
+        "Warning: __dirname and __filename cannot be used within bundled cloud functions."
+      )
+    )
+  ).toHaveLength(2);
 });

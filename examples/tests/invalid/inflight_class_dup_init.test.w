@@ -6,5 +6,5 @@ inflight class Foo {
   inflight new() {
 
   }
-//^ Multiple inflight initializers defined in class Foo
+//^ Multiple inflight constructors defined in class Foo
 }

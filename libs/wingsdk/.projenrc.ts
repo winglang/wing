@@ -43,6 +43,7 @@ const project = new cdk.JsiiProject({
     ...sideLoad,
     // preflight dependencies
     "safe-stable-stringify",
+    "jiti",
     // aws sdk client dependencies
     // change `AWS_SDK_VERSION` to update all deps at once
     "@aws-sdk/client-cloudwatch-logs",
@@ -80,7 +81,6 @@ const project = new cdk.JsiiProject({
     "cron-parser",
     // shared client dependencies
     "ioredis",
-    "jsonschema",
     "ajv",
     "cron-validator",
     // fs module dependency
@@ -89,6 +89,7 @@ const project = new cdk.JsiiProject({
     // enhanced diagnostics
     "stacktracey",
     "ulid",
+    "vlq",
     // tunnels
     "@winglang/wingtunnels@workspace:^",
     "glob",

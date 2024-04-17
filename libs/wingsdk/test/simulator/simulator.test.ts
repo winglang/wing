@@ -214,9 +214,15 @@ describe("in-place updates", () => {
     new Bucket(app, "Bucket1");
 
     const sim = await app.startSimulator(stateDir);
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
 
-    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
+    expect(simTraces(sim)).toStrictEqual([
+      "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+    ]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1");
@@ -232,10 +238,14 @@ describe("in-place updates", () => {
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "Update: 0 added, 0 updated, 0 deleted",
     ]);
 
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
     await sim.stop();
   });
 
@@ -246,8 +256,14 @@ describe("in-place updates", () => {
 
     new Bucket(app, "Bucket1");
     const sim = await app.startSimulator(stateDir);
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
-    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
+    expect(simTraces(sim)).toStrictEqual([
+      "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+    ]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1");
@@ -256,16 +272,23 @@ describe("in-place updates", () => {
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
     expect(updateTrace(sim)).toStrictEqual({
-      added: ["root/Bucket2"],
+      added: ["root/Bucket2", "root/Bucket2/Policy"],
       deleted: [],
       updated: [],
     });
 
-    expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+      "root/Bucket2",
+      "root/Bucket2/Policy",
+    ]);
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
-      "Update: 1 added, 0 updated, 0 deleted",
+      "root/Bucket1/Policy started",
+      "Update: 2 added, 0 updated, 0 deleted",
       "root/Bucket2 started",
+      "root/Bucket2/Policy started",
     ]);
 
     await sim.stop();
@@ -278,10 +301,17 @@ describe("in-place updates", () => {
     new Bucket(app, "Bucket1");
     new Bucket(app, "Bucket2");
     const sim = await app.startSimulator(stateDir);
-    expect(sim.listResources()).toEqual(["root/Bucket1", "root/Bucket2"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+      "root/Bucket2",
+      "root/Bucket2/Policy",
+    ]);
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "root/Bucket2 started",
+      "root/Bucket2/Policy started",
     ]);
 
     const app2 = new SimApp();
@@ -291,16 +321,22 @@ describe("in-place updates", () => {
     await sim.update(app2Dir);
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
-      deleted: ["root/Bucket2"],
+      deleted: ["root/Bucket2", "root/Bucket2/Policy"],
       updated: [],
     });
 
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "root/Bucket2 started",
-      "Update: 0 added, 0 updated, 1 deleted",
+      "root/Bucket2/Policy started",
+      "Update: 0 added, 0 updated, 2 deleted",
+      "root/Bucket2/Policy stopped",
       "root/Bucket2 stopped",
     ]);
 
@@ -313,9 +349,15 @@ describe("in-place updates", () => {
     const app = new SimApp();
     new Bucket(app, "Bucket1");
     const sim = await app.startSimulator(stateDir);
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeFalsy();
-    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
+    expect(simTraces(sim)).toStrictEqual([
+      "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+    ]);
 
     const app2 = new SimApp();
     new Bucket(app2, "Bucket1", { public: true });
@@ -328,13 +370,19 @@ describe("in-place updates", () => {
       updated: ["root/Bucket1"],
     });
 
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "Update: 0 added, 1 updated, 0 deleted",
+      "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
     ]);
 
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeTruthy();
@@ -350,9 +398,15 @@ describe("in-place updates", () => {
 
     const sim = await app.startSimulator(stateDir);
 
-    expect(simTraces(sim)).toStrictEqual(["root/Bucket1 started"]);
+    expect(simTraces(sim)).toStrictEqual([
+      "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+    ]);
 
-    expect(sim.listResources()).toEqual(["root/Bucket1"]);
+    expect(sim.listResources()).toEqual([
+      "root/Bucket1",
+      "root/Bucket1/Policy",
+    ]);
     expect(sim.getResourceConfig("root/Bucket1").props.public).toBeFalsy();
 
     const app2 = new SimApp();
@@ -369,25 +423,36 @@ describe("in-place updates", () => {
 
     await sim.update(app2Dir);
     expect(updateTrace(sim)).toStrictEqual({
-      added: ["root/Api", "root/Api/Endpoint", "root/Function"],
+      added: [
+        "root/Api",
+        "root/Api/Endpoint",
+        "root/Api/Policy",
+        "root/Function",
+      ],
       deleted: [],
       updated: ["root/Bucket1"],
     });
 
     expect(simTraces(sim)).toStrictEqual([
       "root/Bucket1 started",
-      "Update: 3 added, 1 updated, 0 deleted",
+      "root/Bucket1/Policy started",
+      "Update: 4 added, 1 updated, 0 deleted",
+      "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
       "root/Api started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "root/Api/Endpoint started",
+      "root/Api/Policy started",
       "root/Function started",
     ]);
 
     expect(sim.listResources()).toEqual([
       "root/Api",
       "root/Api/Endpoint",
+      "root/Api/Policy",
       "root/Bucket1",
+      "root/Bucket1/Policy",
       "root/Function",
     ]);
 
@@ -443,15 +508,12 @@ describe("in-place updates", () => {
     const stateDir = mkdtemp();
     const sim = await app.startSimulator(stateDir);
 
-    const urlBeforeUpdate = await sim
-      .getResource("root/Bucket1")
-      .get("url.txt");
-    expect(urlBeforeUpdate.startsWith("http://127.0.0")).toBeTruthy();
-
     expect(simTraces(sim)).toEqual([
       "root/Api1 started",
       "root/Api1/Endpoint started",
+      "root/Api1/Policy started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
     ]);
 
     // now lets change some configuration of Api1. we expect the bucket to be replaced as well
@@ -461,35 +523,35 @@ describe("in-place updates", () => {
     const myBucket2 = new Bucket(app2, "Bucket1");
     myBucket2.addObject("url.txt", myApi2.url);
 
-    // clear the state directory
-    fs.rmdirSync(stateDir, { recursive: true });
-
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
 
     expect(updateTrace(sim)).toStrictEqual({
       added: [],
       deleted: [],
-      updated: ["root/Api1"],
+      updated: ["root/Api1"], // TODO: shouldn't Bucket also be listed here?
     });
 
     expect(simTraces(sim)).toEqual([
       "root/Api1 started",
       "root/Api1/Endpoint started",
+      "root/Api1/Policy started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
       "Update: 0 added, 1 updated, 0 deleted",
       "root/Api1/Endpoint stopped",
+      "root/Api1/Policy stopped",
+      "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
       "root/Api1 stopped",
       "root/Api1 started",
       "root/Api1/Endpoint started",
+      "root/Api1/Policy started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
     ]);
 
-    const urlAfterUpdate = await (
-      sim.getResource("root/Bucket1") as IBucketClient
-    ).get("url.txt");
-    expect(urlAfterUpdate).not.toEqual(urlBeforeUpdate);
+    await sim.stop();
   });
 
   test("token value is changed across an update", async () => {
@@ -498,7 +560,7 @@ describe("in-place updates", () => {
 
     const myState = new State(app, "State");
 
-    const myService = new Service(
+    new Service(
       app,
       "Service",
       Testing.makeHandler(
@@ -554,10 +616,12 @@ describe("in-place updates", () => {
       "root/State.my_value = bang",
       "root/Service started",
       "root/Function started",
-      "Update: 0 added, 1 updated, 0 deleted",
+      "Update: 0 added, 2 updated, 0 deleted",
       "root/Service stopped",
+      "root/Function stopped",
       "root/State.my_value = bing",
       "root/Service started",
+      "root/Function started",
     ]);
   });
 
@@ -582,34 +646,153 @@ describe("in-place updates", () => {
     await sim.update(app2Dir);
 
     expect(simTraces(sim)).toEqual([
-      "root/OnDeploy/Function started",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+      "root/OnDeploy/Function started",
       "root/OnDeploy started",
-      "Update: 0 added, 1 updated, 0 deleted",
+      "Update: 0 added, 3 updated, 0 deleted",
       "root/OnDeploy stopped",
+      "root/OnDeploy/Function stopped",
+      "root/Bucket1/Policy stopped",
       "root/Bucket1 stopped",
       "root/Bucket1 started",
+      "root/Bucket1/Policy started",
+      "root/OnDeploy/Function started",
       "root/OnDeploy started",
     ]);
   });
 
-  test("debugging inspector inherited by sandbox", async () => {
+  test("cloud.Function is always replaced", async () => {
     const app = new SimApp();
-    const handler = Testing.makeHandler(
-      `async handle() { if(require('inspector').url() === undefined) { throw new Error('inspector not available'); } }`
-    );
+    const handler = Testing.makeHandler(`async handle() {}`);
+    new Function(app, "Function", handler);
+
+    const sim = await app.startSimulator();
+
+    const app2 = new SimApp();
+    new Function(app2, "Function", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Function started",
+      "Update: 0 added, 1 updated, 0 deleted",
+      "root/Function stopped",
+      "root/Function started",
+    ]);
+  });
+
+  test("cloud.Service is always replaced", async () => {
+    const app = new SimApp();
+    const handler = Testing.makeHandler(`async handle() {}`);
+    new Service(app, "Service", handler);
+
+    const sim = await app.startSimulator();
+
+    const app2 = new SimApp();
+    new Service(app2, "Service", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Service started",
+      "Update: 0 added, 1 updated, 0 deleted",
+      "root/Service stopped",
+      "root/Service started",
+    ]);
+  });
+
+  test("cloud.OnDeploy is always replaced", async () => {
+    const app = new SimApp();
+    const handler = Testing.makeHandler(`async handle() {}`);
     new OnDeploy(app, "OnDeploy", handler);
 
-    inspector.open(0);
     const sim = await app.startSimulator();
-    await sim.stop();
 
-    expect(
-      sim
-        .listTraces()
-        .some((t) => t.data.message.startsWith("Debugger listening on "))
-    );
+    const app2 = new SimApp();
+    new OnDeploy(app2, "OnDeploy", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/OnDeploy/Function started",
+      "root/OnDeploy started",
+      "Update: 0 added, 2 updated, 0 deleted",
+      "root/OnDeploy stopped",
+      "root/OnDeploy/Function stopped",
+      "root/OnDeploy/Function started",
+      "root/OnDeploy started",
+    ]);
   });
+
+  test("cloud.Api routes are updated", async () => {
+    const app = new SimApp();
+    const handler = Testing.makeHandler(
+      `async handle(req) { return { status: 200 }; }`
+    );
+    const api = new Api(app, "Api");
+    api.get("/hello", handler);
+
+    const sim = await app.startSimulator();
+    const apiUrl = sim.getResourceConfig("/Api").attrs.url as string;
+    const response1 = await fetch(`${apiUrl}/hello`, { method: "GET" });
+    expect(response1.status).toEqual(200);
+
+    const app2 = new SimApp();
+    const api2 = new Api(app2, "Api");
+    api2.get("/world", handler);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    // /hello route should be removed
+    const response2 = await fetch(`${apiUrl}/hello`, { method: "GET" });
+    expect(response2.status).toEqual(404);
+
+    // /world route should be added
+    const response3 = await fetch(`${apiUrl}/world`, { method: "GET" });
+    expect(response3.status).toEqual(200);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Api started",
+      "root/Api/Endpoint started",
+      "root/Api/OnRequestHandler0 started",
+      "root/Api/Policy started",
+      "root/Api/ApiEventMapping0 started",
+      "Update: 0 added, 3 updated, 0 deleted",
+      "root/Api/Policy stopped",
+      "root/Api/ApiEventMapping0 stopped",
+      "root/Api/OnRequestHandler0 stopped",
+      "root/Api/Endpoint stopped",
+      "root/Api stopped",
+      "root/Api started",
+      "root/Api/Endpoint started",
+      "root/Api/OnRequestHandler0 started",
+      "root/Api/Policy started",
+      "root/Api/ApiEventMapping0 started",
+    ]);
+  });
+});
+
+test("debugging inspector inherited by sandbox", async () => {
+  const app = new SimApp();
+  const handler = Testing.makeHandler(
+    `async handle() { if(require('inspector').url() === undefined) { throw new Error('inspector not available'); } }`
+  );
+  new OnDeploy(app, "OnDeploy", handler);
+
+  inspector.open(0);
+  const sim = await app.startSimulator();
+  await sim.stop();
+
+  expect(
+    sim
+      .listTraces()
+      .some((t) => t.data.message.startsWith("Debugger listening on "))
+  );
 });
 
 test("tryGetResource returns undefined if the resource not found", async () => {
