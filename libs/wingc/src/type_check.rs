@@ -2838,6 +2838,11 @@ impl<'a> TypeChecker<'a> {
 			}
 		}(exp, env);
 
+		// If we're inflight but the expression is a lifted (preflight) expression then make it immutable
+		if env.phase == Phase::Inflight && phase == Phase::Preflight {
+			t = self.make_immutable(t);
+		}
+
 		self.types.assign_type_to_expr(exp, t, phase);
 
 		self.curr_expr_info.pop();
@@ -5597,6 +5602,16 @@ impl<'a> TypeChecker<'a> {
 			.resolve_user_defined_type(&base_udt, env, self.ctx.current_stmt_idx())
 			.ok()
 			.map(|_| base_udt)
+	}
+
+	fn make_immutable(&mut self, type_: TypeRef) -> TypeRef {
+		match *type_ {
+			Type::MutArray(inner) => self.types.add_type(Type::Array(inner)),
+			Type::MutJson => self.types.json(),
+			Type::MutMap(inner) => self.types.add_type(Type::Map(inner)),
+			Type::MutSet(inner) => self.types.add_type(Type::Set(inner)),
+			_ => type_,
+		}
 	}
 
 	fn resolve_reference(
