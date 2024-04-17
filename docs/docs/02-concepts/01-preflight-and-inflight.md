@@ -252,7 +252,7 @@ new cloud.Function(checkEndpoint);
 ```
 
 However, mutation to preflight data is not allowed.
-This mean means that variables from preflight cannot be reassigned to, and mutable collections like `MutArray` and `MutMap` cannot be modified (they're turned into their immutable counterparts, `Array` and `Map`, respectively when accessed inflight).
+This mean means that variables from preflight cannot be reassigned to, and mutable collections like `MutArray` and `MutMap` cannot be modified.
 
 ```js playground
 let var count = 3;
@@ -263,7 +263,8 @@ names.push("Jack"); // OK
 
 inflight () => {
   count = count + 1; // error: Variable cannot be reassigned from inflight
-  names.push("Jill"); // error: push doesn't exist in Array
+  names.push("Jill"); // error: variable "names" cannot be mutated in inflight - error message not 
+                      // implemented yet, see https://github.com/winglang/wing/issues/3069
 };
 ```
 
