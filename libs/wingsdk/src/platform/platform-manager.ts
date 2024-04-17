@@ -24,6 +24,7 @@ export class PlatformManager {
   constructor(options: PlatformManagerOptions) {
     this.platformPaths = options.platformPaths ?? [];
     this.retrieveImplicitPlatforms();
+    this.createPlatformInstances();
   }
 
   /**
@@ -101,8 +102,6 @@ export class PlatformManager {
   // This method is called from preflight.cjs in order to return an App instance
   // that can be synthesized
   public createApp(appProps: AppProps): App {
-    this.createPlatformInstances();
-
     let appCall = this.platformInstances[0].newApp;
 
     if (!appCall) {
@@ -121,8 +120,6 @@ export class PlatformManager {
 
     let secretNames = [];
     for (const c of app.node.findAll()) {
-      // This duplicates the symbol from ../cloud/secret.ts, we cant import it here
-      // due to circular dependencies, which need to be revisited
       if ((c as any)[SECRET_SYMBOL]) {
         const secret = c as any;
         secretNames.push(secret.name);
