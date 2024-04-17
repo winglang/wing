@@ -36,3 +36,9 @@ s[0] = "H";
 let var x = 3 + "hello";
 x["hi"] = 4;
 // ^ error: Unsupported reassignment of element of type unresolved
+
+let f = (x): Array<str> => {
+  log(x[0]);
+  // ^ error: Indexing into an inferred type is not supported
+  return x;
+};

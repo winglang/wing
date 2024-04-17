@@ -5964,10 +5964,13 @@ impl<'a> TypeChecker<'a> {
 						ResolveReferenceResult::Location(self.types.error(), self.types.error()),
 						instance_phase,
 					),
-					Type::Inferred(_) => (
-						ResolveReferenceResult::Location(self.types.error(), self.types.error()),
-						instance_phase,
-					),
+					Type::Inferred(_) => {
+						self.spanned_error(object, "Indexing into an inferred type is not supported");
+						(
+							ResolveReferenceResult::Location(self.types.error(), self.types.error()),
+							instance_phase,
+						)
+					}
 					Type::String => {
 						self.validate_type(index_type, self.types.number(), index);
 						(
