@@ -5699,7 +5699,6 @@ impl<'a> TypeChecker<'a> {
 					return (self.make_error_variable_info(), Phase::Independent);
 				}
 
-				println!("resolving property: {property} on {instance_type}");
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env);
 
 				// Make sure we're not referencing a preflight field on an inflight instance
