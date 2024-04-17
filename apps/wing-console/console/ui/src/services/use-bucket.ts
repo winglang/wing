@@ -7,14 +7,10 @@ import { trpc } from "./trpc.js";
 
 export interface UseBucketOptions {
   resourcePath: string;
-  onFileListChange: (files: string[]) => void;
   currentFile?: string;
 }
-export const useBucket = ({
-  resourcePath,
-  onFileListChange,
-  currentFile,
-}: UseBucketOptions) => {
+export const useBucket = ({ resourcePath, currentFile }: UseBucketOptions) => {
+  const [files, setFiles] = useState<string[]>([]);
   const { readBlob } = useUploadFile();
   const { download: downloadFileLocally, downloadFiles: downloadFilesLocally } =
     useDownloadFile();
@@ -23,7 +19,7 @@ export const useBucket = ({
     { resourcePath },
     {
       onSuccess(data) {
-        onFileListChange(data);
+        setFiles(data);
       },
     },
   );
@@ -49,8 +45,9 @@ export const useBucket = ({
   }, [currentFileContentQuery.data]);
 
   useEffect(() => {
-    onFileListChange(list.data ?? []);
-  }, [list.data, onFileListChange]);
+    if (!list.data) return;
+    setFiles([...list.data]);
+  }, [list.data]);
 
   const putFile = useCallback(
     (fileName: string, fileContent: string) => {
@@ -130,5 +127,6 @@ export const useBucket = ({
     deleteFile,
     currentFileContent,
     isLoading,
+    files,
   };
 };

@@ -231,6 +231,112 @@ The tree node.
 ---
 
 
+### FileBrowser <a name="FileBrowser" id="@winglang/sdk.ui.FileBrowser"></a>
+
+A file browser can be used to browse files.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.ui.FileBrowser.Initializer"></a>
+
+```wing
+bring ui;
+
+new ui.FileBrowser(label: str, handlers: FileBrowserHandlers);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.label">label</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#@winglang/sdk.ui.FileBrowser.Initializer.parameter.handlers">handlers</a></code> | <code><a href="#@winglang/sdk.ui.FileBrowserHandlers">FileBrowserHandlers</a></code> | *No description.* |
+
+---
+
+##### `label`<sup>Required</sup> <a name="label" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.label"></a>
+
+- *Type:* str
+
+---
+
+##### `handlers`<sup>Required</sup> <a name="handlers" id="@winglang/sdk.ui.FileBrowser.Initializer.parameter.handlers"></a>
+
+- *Type:* <a href="#@winglang/sdk.ui.FileBrowserHandlers">FileBrowserHandlers</a>
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ui.FileBrowser.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.FileBrowser.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.ui.FileBrowser.onLiftType"></a>
+
+```wing
+bring ui;
+
+ui.FileBrowser.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ui.FileBrowser.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.FileBrowser.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `isVisualComponent` <a name="isVisualComponent" id="@winglang/sdk.ui.FileBrowser.isVisualComponent"></a>
+
+```wing
+bring ui;
+
+ui.FileBrowser.isVisualComponent(c: IConstruct);
+```
+
+Returns whether the given construct is a visual component.
+
+###### `c`<sup>Required</sup> <a name="c" id="@winglang/sdk.ui.FileBrowser.isVisualComponent.parameter.c"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.FileBrowser.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.ui.FileBrowser.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+
 ### HttpClient <a name="HttpClient" id="@winglang/sdk.ui.HttpClient"></a>
 
 An HttpClient can be used to make HTTP requests.
@@ -769,6 +875,77 @@ How often the field should be refreshed.
 
 ---
 
+### FileBrowserHandlers <a name="FileBrowserHandlers" id="@winglang/sdk.ui.FileBrowserHandlers"></a>
+
+File browser handlers.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.ui.FileBrowserHandlers.Initializer"></a>
+
+```wing
+bring ui;
+
+let FileBrowserHandlers = ui.FileBrowserHandlers{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.delete">delete</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a></code> | Handler for deleting a file. |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.get">get</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a></code> | Handler for getting a file. |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.list">list</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a></code> | Handler for listing files. |
+| <code><a href="#@winglang/sdk.ui.FileBrowserHandlers.property.put">put</a></code> | <code><a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a></code> | Handler for putting a file. |
+
+---
+
+##### `delete`<sup>Required</sup> <a name="delete" id="@winglang/sdk.ui.FileBrowserHandlers.property.delete"></a>
+
+```wing
+delete: IFileBrowserDeleteHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a>
+
+Handler for deleting a file.
+
+---
+
+##### `get`<sup>Required</sup> <a name="get" id="@winglang/sdk.ui.FileBrowserHandlers.property.get"></a>
+
+```wing
+get: IFileBrowserGetHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a>
+
+Handler for getting a file.
+
+---
+
+##### `list`<sup>Required</sup> <a name="list" id="@winglang/sdk.ui.FileBrowserHandlers.property.list"></a>
+
+```wing
+list: IFileBrowserListHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a>
+
+Handler for listing files.
+
+---
+
+##### `put`<sup>Required</sup> <a name="put" id="@winglang/sdk.ui.FileBrowserHandlers.property.put"></a>
+
+```wing
+put: IFileBrowserPutHandler;
+```
+
+- *Type:* <a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a>
+
+Handler for putting a file.
+
+---
+
 ### SectionProps <a name="SectionProps" id="@winglang/sdk.ui.SectionProps"></a>
 
 Props for `Section`.
@@ -872,6 +1049,170 @@ inflight handle(): str
 ```
 
 Function that returns a string to display.
+
+
+### IFileBrowserDeleteHandler <a name="IFileBrowserDeleteHandler" id="@winglang/sdk.ui.IFileBrowserDeleteHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IFileBrowserDeleteHandler">IFileBrowserDeleteHandler</a>
+
+**Inflight client:** [@winglang/sdk.ui.IFileBrowserDeleteHandlerClient](#@winglang/sdk.ui.IFileBrowserDeleteHandlerClient)
+
+A resource with an inflight "handle" method that can be passed to `IFileBrowser`.
+
+
+
+### IFileBrowserDeleteHandlerClient <a name="IFileBrowserDeleteHandlerClient" id="@winglang/sdk.ui.IFileBrowserDeleteHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IFileBrowserDeleteHandlerClient">IFileBrowserDeleteHandlerClient</a>
+
+Inflight client for `IFileBrowserDeleteHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ui.IFileBrowserDeleteHandlerClient.handle">handle</a></code> | Function that performs an action. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.ui.IFileBrowserDeleteHandlerClient.handle"></a>
+
+```wing
+inflight handle(fileName: str): void
+```
+
+Function that performs an action.
+
+###### `fileName`<sup>Required</sup> <a name="fileName" id="@winglang/sdk.ui.IFileBrowserDeleteHandlerClient.handle.parameter.fileName"></a>
+
+- *Type:* str
+
+---
+
+
+### IFileBrowserGetHandler <a name="IFileBrowserGetHandler" id="@winglang/sdk.ui.IFileBrowserGetHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IFileBrowserGetHandler">IFileBrowserGetHandler</a>
+
+**Inflight client:** [@winglang/sdk.ui.IFileBrowserGetHandlerClient](#@winglang/sdk.ui.IFileBrowserGetHandlerClient)
+
+A resource with an inflight "handle" method that can be passed to `IFileBrowser`.
+
+
+
+### IFileBrowserGetHandlerClient <a name="IFileBrowserGetHandlerClient" id="@winglang/sdk.ui.IFileBrowserGetHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IFileBrowserGetHandlerClient">IFileBrowserGetHandlerClient</a>
+
+Inflight client for `IFileBrowserGetHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ui.IFileBrowserGetHandlerClient.handle">handle</a></code> | Function that performs an action. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.ui.IFileBrowserGetHandlerClient.handle"></a>
+
+```wing
+inflight handle(fileName: str): str
+```
+
+Function that performs an action.
+
+###### `fileName`<sup>Required</sup> <a name="fileName" id="@winglang/sdk.ui.IFileBrowserGetHandlerClient.handle.parameter.fileName"></a>
+
+- *Type:* str
+
+---
+
+
+### IFileBrowserListHandler <a name="IFileBrowserListHandler" id="@winglang/sdk.ui.IFileBrowserListHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IFileBrowserListHandler">IFileBrowserListHandler</a>
+
+**Inflight client:** [@winglang/sdk.ui.IFileBrowserListHandlerClient](#@winglang/sdk.ui.IFileBrowserListHandlerClient)
+
+A resource with an inflight "handle" method that can be passed to `IFileBrowser`.
+
+
+
+### IFileBrowserListHandlerClient <a name="IFileBrowserListHandlerClient" id="@winglang/sdk.ui.IFileBrowserListHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IFileBrowserListHandlerClient">IFileBrowserListHandlerClient</a>
+
+Inflight client for `IFileBrowserListHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ui.IFileBrowserListHandlerClient.handle">handle</a></code> | Function that performs an action. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.ui.IFileBrowserListHandlerClient.handle"></a>
+
+```wing
+inflight handle(): MutArray<str>
+```
+
+Function that performs an action.
+
+
+### IFileBrowserPutHandler <a name="IFileBrowserPutHandler" id="@winglang/sdk.ui.IFileBrowserPutHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IFileBrowserPutHandler">IFileBrowserPutHandler</a>
+
+**Inflight client:** [@winglang/sdk.ui.IFileBrowserPutHandlerClient](#@winglang/sdk.ui.IFileBrowserPutHandlerClient)
+
+A resource with an inflight "handle" method that can be passed to `IFileBrowser`.
+
+
+
+### IFileBrowserPutHandlerClient <a name="IFileBrowserPutHandlerClient" id="@winglang/sdk.ui.IFileBrowserPutHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.ui.IFileBrowserPutHandlerClient">IFileBrowserPutHandlerClient</a>
+
+Inflight client for `IFileBrowserVoidHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ui.IFileBrowserPutHandlerClient.handle">handle</a></code> | Function that performs an action. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.ui.IFileBrowserPutHandlerClient.handle"></a>
+
+```wing
+inflight handle(fileName: str, fileContent: str): void
+```
+
+Function that performs an action.
+
+###### `fileName`<sup>Required</sup> <a name="fileName" id="@winglang/sdk.ui.IFileBrowserPutHandlerClient.handle.parameter.fileName"></a>
+
+- *Type:* str
+
+---
+
+###### `fileContent`<sup>Required</sup> <a name="fileContent" id="@winglang/sdk.ui.IFileBrowserPutHandlerClient.handle.parameter.fileContent"></a>
+
+- *Type:* str
+
+---
 
 
 ### IHttpClientGetApiSpecHandler <a name="IHttpClientGetApiSpecHandler" id="@winglang/sdk.ui.IHttpClientGetApiSpecHandler"></a>
