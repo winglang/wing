@@ -156,6 +156,8 @@ export class PlatformManager {
   // This method is called from preflight.cjs in order to return an App instance
   // that can be synthesized
   public createApp(appProps: AppProps): App {
+    this.createPlatformInstances();
+    
     let appCall = this.platformInstances[0].newApp;
 
     if (!appCall) {
