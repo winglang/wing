@@ -1,9 +1,9 @@
-import { PlatformManager } from "@winglang/sdk/lib/platform";
-import { CompileOptions, compile } from "./compile";
 import fs from "fs";
 import path from "path";
 import { cwd } from "process";
+import { PlatformManager } from "@winglang/sdk/lib/platform";
 import inquirer from "inquirer";
+import { CompileOptions, compile } from "./compile";
 
 export interface SecretsOptions extends CompileOptions {
   readonly list?: boolean;
@@ -14,15 +14,17 @@ export async function secrets(entrypoint?: string, options?: SecretsOptions): Pr
   const outdir = await compile(entrypoint, options);
   const secretsFile = path.join(outdir, "secrets.json");
 
-  let secretNames = fs.existsSync(secretsFile) ? JSON.parse(fs.readFileSync(path.join(outdir, "secrets.json"), "utf-8")) : [];
+  let secretNames = fs.existsSync(secretsFile)
+    ? JSON.parse(fs.readFileSync(path.join(outdir, "secrets.json"), "utf-8"))
+    : [];
 
   process.env.WING_SOURCE_DIR = cwd();
-  
+
   let secretValues: any = {};
   console.log(`${secretNames.length} secret(s) found\n`);
 
   if (options?.list) {
-    console.log("- "+secretNames.join("\n- "));
+    console.log("- " + secretNames.join("\n- "));
     return;
   }
 
@@ -41,6 +43,6 @@ export async function secrets(entrypoint?: string, options?: SecretsOptions): Pr
     secretValues[secret] = response.value;
   }
 
-  const plaformManager = new PlatformManager({platformPaths: options?.platform})
+  const plaformManager = new PlatformManager({ platformPaths: options?.platform });
   await plaformManager.storeSecrets(secretValues);
 }

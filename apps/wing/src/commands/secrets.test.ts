@@ -3,8 +3,8 @@ import { join } from "path";
 // import inquirer from "inquirer";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { describe, expect, test, vitest, beforeEach, afterEach, vi } from "vitest";
-import { generateTmpDir } from "../util";
 import { secrets } from "../commands/secrets";
+import { generateTmpDir } from "../util";
 
 vitest.mock("inquirer");
 
@@ -59,5 +59,4 @@ describe("secrets", () => {
 
     expect(console.log).toHaveBeenCalledWith("2 secret(s) found\n");
   });
-
 });

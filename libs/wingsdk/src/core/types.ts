@@ -8,10 +8,10 @@ export { Construct } from "constructs";
 /** Flag to signify the `inflight` side of a `preflight` object  */
 export const INFLIGHT_SYMBOL: unique symbol = Symbol("@winglang/sdk.inflight");
 
-/** This symbol is not defined in cloud/secrets.ts due to circular dependencies 
+/** This symbol is not defined in cloud/secrets.ts due to circular dependencies
  * between cloud/secrets.ts and platform/platform-manager.ts, which need to be revisited
  * in the meantime this dependency inversion is used to avoid the circular dependency
-*/
+ */
 export const SECRET_SYMBOL = Symbol("@winglang/sdk.cloud.Secret");
 
 /** `preflight` representation of an `inflight`  */
