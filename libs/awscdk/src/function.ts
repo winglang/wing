@@ -1,4 +1,4 @@
-import { Duration, Lazy } from "aws-cdk-lib";
+import { Duration } from "aws-cdk-lib";
 import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
 import {
   Architecture,
@@ -174,11 +174,6 @@ export class Function
       memorySize: props.memory ?? 1024,
       architecture: Architecture.ARM_64,
       logGroup: logs,
-      vpcSubnets: {
-        subnets: Lazy.list({
-          produce: () => [],
-        }) as any,
-      }
     });
   }
 
