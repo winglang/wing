@@ -134,6 +134,7 @@ export class PlatformManager {
         `No storeSecrets method found on any platform`
       );
     }
+    // @typescript-eslint/return-await
     return await hooks.storeSecretsHook(secretNames);
   }
 }
