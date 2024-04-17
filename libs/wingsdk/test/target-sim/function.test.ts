@@ -82,7 +82,7 @@ test("invoke function succeeds", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test.only("async invoke function cleanup while running", async () => {
+test("async invoke function cleanup while running", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(`
