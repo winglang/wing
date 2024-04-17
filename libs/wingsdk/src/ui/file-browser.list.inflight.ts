@@ -11,7 +11,7 @@ export class FileBrowserListHandlerClient
     try {
       return await this.handler.handle();
     } catch (e) {
-      throw new Error("Invalid payload for file browser get handler client");
+      throw new Error("Invalid payload for file browser list handler client");
     }
   }
 }

@@ -211,7 +211,7 @@ Add an environment variable to the function.
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-inflight invoke(payload?: str): str
+inflight invoke(payload?: str): str?
 ```
 
 Invokes the function with a payload and waits for the result.
@@ -439,7 +439,7 @@ Inflight client for `IFunctionHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle"></a>
 
 ```wing
-inflight handle(event?: str): str
+inflight handle(event?: str): str?
 ```
 
 Entrypoint function that will be called when the cloud function is invoked.

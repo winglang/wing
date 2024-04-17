@@ -1,5 +1,5 @@
-import { copyFileSync, cpSync, writeFileSync } from "fs";
-import { join } from "path";
+import { cpSync, writeFileSync } from "fs";
+import { join, basename } from "path";
 import { test, expect } from "vitest";
 import { Function, IFunctionClient } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
@@ -136,4 +136,39 @@ test("rebuild only if content had changes", async () => {
   const r3 = await app3.cycle();
 
   expect(r3[0].startsWith(`building locally from ${workdir}`)).toBeTruthy();
+});
+
+test("simple container with a volume", async () => {
+  const app = new SimApp();
+
+  const c = new Container(app, "Container", {
+    name: "my-app",
+    image: join(__dirname, "my-docker-image.volume"),
+    containerPort: 3000,
+    volumes: [`${__dirname}:/tmp`],
+  });
+
+  new Function(
+    app,
+    "Function",
+    Testing.makeHandler(
+      `
+      async handle() {
+        const url = "http://localhost:" + this.hostPort;
+        const res = await fetch(url);
+        return res.text();
+      }
+      `,
+      { hostPort: { obj: c.hostPort, ops: [] } }
+    )
+  );
+
+  const sim = await app.startSimulator();
+  sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
+
+  const fn = sim.getResource("root/Function") as IFunctionClient;
+  const response = await fn.invoke();
+  expect(response).contains(basename(__filename));
+
+  await sim.stop();
 });

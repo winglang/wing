@@ -88,7 +88,7 @@ The index of the element in the Json Array to return.
 ##### `tryAsBool` <a name="tryAsBool" id="@winglang/sdk.std.Json.tryAsBool"></a>
 
 ```wing
-tryAsBool(): bool
+tryAsBool(): bool?
 ```
 
 Convert Json element to boolean if possible.
@@ -96,7 +96,7 @@ Convert Json element to boolean if possible.
 ##### `tryAsNum` <a name="tryAsNum" id="@winglang/sdk.std.Json.tryAsNum"></a>
 
 ```wing
-tryAsNum(): num
+tryAsNum(): num?
 ```
 
 Convert Json element to number if possible.
@@ -104,7 +104,7 @@ Convert Json element to number if possible.
 ##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.Json.tryAsStr"></a>
 
 ```wing
-tryAsStr(): str
+tryAsStr(): str?
 ```
 
 Convert Json element to string if possible.
@@ -112,7 +112,7 @@ Convert Json element to string if possible.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.Json.tryGet"></a>
 
 ```wing
-tryGet(key: str): Json
+tryGet(key: str): Json?
 ```
 
 Optionally returns an specified element from the Json.
@@ -128,7 +128,7 @@ The key of the element to return.
 ##### `tryGetAt` <a name="tryGetAt" id="@winglang/sdk.std.Json.tryGetAt"></a>
 
 ```wing
-tryGetAt(index: num): Json
+tryGetAt(index: num): Json?
 ```
 
 Optionally returns a specified element at a given index from Json Array.
@@ -534,7 +534,7 @@ The value of the element to set.
 ##### `tryAsBool` <a name="tryAsBool" id="@winglang/sdk.std.MutJson.tryAsBool"></a>
 
 ```wing
-tryAsBool(): bool
+tryAsBool(): bool?
 ```
 
 Convert Json element to boolean if possible.
@@ -542,7 +542,7 @@ Convert Json element to boolean if possible.
 ##### `tryAsNum` <a name="tryAsNum" id="@winglang/sdk.std.MutJson.tryAsNum"></a>
 
 ```wing
-tryAsNum(): num
+tryAsNum(): num?
 ```
 
 Convert Json element to number if possible.
@@ -550,7 +550,7 @@ Convert Json element to number if possible.
 ##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.MutJson.tryAsStr"></a>
 
 ```wing
-tryAsStr(): str
+tryAsStr(): str?
 ```
 
 Convert Json element to string if possible.
@@ -558,7 +558,7 @@ Convert Json element to string if possible.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.MutJson.tryGet"></a>
 
 ```wing
-tryGet(key: str): MutJson
+tryGet(key: str): MutJson?
 ```
 
 Optionally returns an specified element from the Json.
@@ -574,7 +574,7 @@ The key of the element to return.
 ##### `tryGetAt` <a name="tryGetAt" id="@winglang/sdk.std.MutJson.tryGetAt"></a>
 
 ```wing
-tryGetAt(index: num): MutJson
+tryGetAt(index: num): MutJson?
 ```
 
 Optionally returns a specified element at a given index from Json Array.
