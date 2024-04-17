@@ -470,7 +470,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
         testName = testMappings[env] ?? testName;
       }
 
-      if (testFilter && !testName.includes(testFilter) && process.env.DEBUG !== "verbose") {
+      if (testFilter && !testName.includes(testFilter) && testName !== "(no test)") {
         // This test does not match the filter, so skip it.
         return;
       }
