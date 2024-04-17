@@ -2084,6 +2084,20 @@ error: Strings are immutable
    | ^^^^ Strings are immutable
 
 
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+   --> ../../../examples/tests/invalid/indexing.test.w:36:13
+   |
+36 | let var x = 3 + \\"hello\\";
+   |             ^^^^^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Unsupported reassignment of element of type unresolved
+   --> ../../../examples/tests/invalid/indexing.test.w:37:1
+   |
+37 | x[\\"hi\\"] = 4;
+   | ^^^^^^^ Unsupported reassignment of element of type unresolved
+
+
 
 Tests 1 failed (1)
 Snapshots 1 skipped
