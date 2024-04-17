@@ -56,30 +56,10 @@ export function unwrap<T>(value: T): T | never {
 }
 
 export function lookup(obj: any, index: string | number): any {
-  if (typeof index !== "string" && typeof index !== "number") {
-    throw new TypeError(
-      `Index must be a string or number (found "${typeof index}")`
-    );
-  }
+  checkIndex(index);
 
   if (typeof index === "number") {
-    if (
-      !Array.isArray(obj) &&
-      !Buffer.isBuffer(obj) &&
-      typeof obj !== "string"
-    ) {
-      throw new TypeError(
-        "Index is a number but collection is not an array or string"
-      );
-    }
-    if (index < 0 && index >= -obj.length) {
-      index = obj.length + index;
-    }
-    if (index < 0 || index >= obj.length) {
-      throw new RangeError(
-        `Index ${index} out of bounds for array of length ${obj.length}`
-      );
-    }
+    index = checkArrayAccess(obj, index);
     return obj[index];
   }
 
@@ -102,35 +82,15 @@ export function assign(
   kind: "=" | "+=" | "-=",
   value: any
 ) {
-  if (typeof index !== "string" && typeof index !== "number") {
-    throw new TypeError(
-      `Index must be a string or number, found ("${typeof index}")`
-    );
-  }
+  checkIndex(index);
 
   if (typeof index === "number") {
-    if (
-      !Array.isArray(obj) &&
-      !Buffer.isBuffer(obj) &&
-      typeof obj !== "string"
-    ) {
-      throw new TypeError(
-        "Index is a number but collection is not an array or string"
-      );
-    }
-    if (index < 0 && index >= -obj.length) {
-      index = obj.length + index;
-    }
-    if (index < 0 || index >= obj.length) {
-      throw new RangeError(
-        `Index ${index} out of bounds for array of length ${obj.length}`
-      );
-    }
+    index = checkArrayAccess(obj, index);
   }
 
   if (typeof index === "string" && typeof obj !== "object") {
     throw new TypeError(
-      `Lookup failed, value is not an object (found \"${typeof obj}\")`
+      `Assignment failed, value is not an object (found \"${typeof obj}\")`
     );
   }
 
@@ -147,6 +107,31 @@ export function assign(
     default:
       throw new Error(`Invalid assignment kind: ${kind}`);
   }
+}
+
+function checkIndex(index: string | number) {
+  if (typeof index !== "string" && typeof index !== "number") {
+    throw new TypeError(
+      `Index must be a string or number (found "${typeof index}")`
+    );
+  }
+}
+
+function checkArrayAccess(obj: any, index: number): number {
+  if (!Array.isArray(obj) && !Buffer.isBuffer(obj) && typeof obj !== "string") {
+    throw new TypeError(
+      "Index is a number but collection is not an array or string"
+    );
+  }
+  if (index < 0 && index >= -obj.length) {
+    index = obj.length + index;
+  }
+  if (index < 0 || index >= obj.length) {
+    throw new RangeError(
+      `Index ${index} out of bounds for array of length ${obj.length}`
+    );
+  }
+  return index;
 }
 
 export function createExternRequire(dirname: string) {
