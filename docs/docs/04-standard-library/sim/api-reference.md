@@ -461,6 +461,7 @@ let ContainerProps = sim.ContainerProps{ ... };
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to set in the container. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.sourceHash">sourceHash</a></code> | <code>str</code> | An explicit source hash that represents the container source. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.sourcePattern">sourcePattern</a></code> | <code>str</code> | A glob of local files to consider as input sources for the container, relative to the build context directory. |
+| <code><a href="#@winglang/sdk.sim.ContainerProps.property.volumes">volumes</a></code> | <code>MutArray&lt;str&gt;</code> | Volume mount points. |
 
 ---
 
@@ -555,6 +556,26 @@ sourcePattern: str;
 A glob of local files to consider as input sources for the container, relative to the build context directory.
 
 ---
+
+##### `volumes`<sup>Optional</sup> <a name="volumes" id="@winglang/sdk.sim.ContainerProps.property.volumes"></a>
+
+```wing
+volumes: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* []
+
+Volume mount points.
+
+---
+
+*Example*
+
+```wing
+['/host:/container']
+```
+
 
 ### PolicyProps <a name="PolicyProps" id="@winglang/sdk.sim.PolicyProps"></a>
 

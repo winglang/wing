@@ -1,5 +1,3 @@
-import fs from "node:fs";
-
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";
