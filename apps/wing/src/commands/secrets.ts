@@ -10,12 +10,17 @@ export interface SecretsOptions extends CompileOptions {}
 export async function secrets(entrypoint?: string, options?: SecretsOptions): Promise<void> {
   // Compile the program to generate secrets file
   const outdir = await compile(entrypoint, options);
-  
-  let secrets = JSON.parse(fs.readFileSync(path.join(outdir, "secrets.json"), "utf-8"));
+  const secretsFile = path.join(outdir, "secrets.json");
+
+  let secrets = fs.existsSync(secretsFile) ? JSON.parse(fs.readFileSync(path.join(outdir, "secrets.json"), "utf-8")) : [];
 
   process.env.WING_SOURCE_DIR = cwd();
   let secretValues: any = {};
   console.log(`${secrets.length} secret(s) found in ${entrypoint}\n`);
+
+  if (secrets.length === 0) {
+    return;
+  }
 
   for (const secret of secrets) {
     const response = await inquirer.prompt([

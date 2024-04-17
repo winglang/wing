@@ -1,4 +1,4 @@
-import { Duration } from "aws-cdk-lib";
+import { Duration, Lazy } from "aws-cdk-lib";
 import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
 import {
   Architecture,
@@ -16,6 +16,7 @@ import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
 
 /**
  * Implementation of `awscdk.Function` are expected to implement this
@@ -174,6 +175,11 @@ export class Function
       memorySize: props.memory ?? 1024,
       architecture: Architecture.ARM_64,
       logGroup: logs,
+      vpcSubnets: {
+        subnets: Lazy.list({
+          produce: () => [],
+        }) as any,
+      }
     });
   }
 

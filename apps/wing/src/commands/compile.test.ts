@@ -66,7 +66,6 @@ describe(
         [
           ".wing",
           "connections.json",
-          "secrets.json",
           "simulator.json",
           "tree.json",
         ]
@@ -156,7 +155,6 @@ describe(
           [
             ".wing",
             "connections.json",
-            "secrets.json",
             "simulator.json",
             "tree.json",
           ]

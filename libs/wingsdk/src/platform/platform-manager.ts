@@ -177,7 +177,9 @@ export class PlatformManager {
         secretsIds.push(secret.name);
       }
     }
-    writeFileSync(join(app.outdir, "secrets.json"), JSON.stringify(secretsIds));
+    if (secretsIds.length > 0) {
+      writeFileSync(join(app.outdir, "secrets.json"), JSON.stringify(secretsIds));
+    }
 
     let registrar = app.parameters;
 

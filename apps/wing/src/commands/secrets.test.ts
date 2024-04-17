@@ -35,7 +35,28 @@ describe("secrets", () => {
       targetDir: workdir,
     });
 
-    expect(console.log).toHaveBeenCalledWith("0 secrets(s) found in main.w\n");
-  })
+    expect(console.log).toHaveBeenCalledWith("0 secret(s) found in main.w\n");
+  });
+
+  test("secrets found", async () => {
+    const workdir = await generateTmpDir();
+    process.chdir(workdir);
+
+    const wingCode = `
+    bring cloud;
+
+    let s1 = new cloud.Secret(name: "my-secret") as "s1";
+    let s2 = new cloud.Secret(name: "other-secret") as "s2";
+    `;
+
+    await writeFile(join(workdir, "main.w"), wingCode);
+
+    await secrets("main.w", {
+      platform: [BuiltinPlatform.SIM],
+      targetDir: workdir,
+    });
+
+    expect(console.log).toHaveBeenCalledWith("2 secret(s) found in main.w\n");
+  });
 
 });
