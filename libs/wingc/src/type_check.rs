@@ -1098,6 +1098,10 @@ impl TypeRef {
 		matches!(**self, Type::String)
 	}
 
+	pub fn is_number(&self) -> bool {
+		matches!(**self, Type::Number)
+	}
+
 	pub fn is_struct(&self) -> bool {
 		matches!(**self, Type::Struct(_))
 	}
@@ -2224,7 +2228,11 @@ impl<'a> TypeChecker<'a> {
 				}
 				ExprKind::Reference(_ref) => {
 					let (vi, phase) = self.resolve_reference(_ref, env, self.curr_expr_is_callee_with_inflight_args());
-					(vi.type_, phase)
+					let var_type = match vi {
+						ResolveReferenceResult::Variable(var) => var.type_,
+						ResolveReferenceResult::Location(_, type_) => type_,
+					};
+					(var_type, phase)
 				}
 				ExprKind::New(new_expr) => {
 					let New {
@@ -4485,30 +4493,112 @@ impl<'a> TypeChecker<'a> {
 		// being captured) it cannot be reassigned: https://github.com/winglang/wing/issues/3069
 
 		let (var, var_phase) = self.resolve_reference(&variable, env, false);
+		let var_type = match &var {
+			ResolveReferenceResult::Variable(var) => var.type_,
+			ResolveReferenceResult::Location(_, elem_type) => *elem_type,
+		};
 
-		if !var.type_.is_unresolved() && !var.reassignable {
-			report_diagnostic(Diagnostic {
-				message: "Variable is not reassignable".to_string(),
-				span: Some(variable.span()),
-				annotations: vec![DiagnosticAnnotation {
-					message: "defined here (try adding \"var\" in front)".to_string(),
-					span: var.name.span(),
-				}],
-				hints: vec![],
-			});
-		} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
-			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
+		// First, check if the assignment violates any mutability restrictions.
+		//
+		// Examples:
+		//
+		// ```
+		// let x = 5;
+		// x = 6; // error: x is not reassignable
+		// ```
+		//
+		// ```
+		// let x = Array<num>[1, 2, 3];
+		// x[0] = 4; // error: cannot update elements of an immutable array
+		// ```
+		match &var {
+			ResolveReferenceResult::Variable(var) => {
+				if !var.reassignable && !var.type_.is_unresolved() {
+					self.spanned_error_with_annotations(
+						variable,
+						"Variable is not reassignable".to_string(),
+						vec![DiagnosticAnnotation {
+							message: "defined here (try adding \"var\" in front)".to_string(),
+							span: var.name.span(),
+						}],
+					);
+				} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
+					self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
+				}
+			}
+			ResolveReferenceResult::Location(container_type, _) => match **container_type {
+				Type::Anything | Type::MutJson | Type::MutArray(_) | Type::MutMap(_) => {}
+				Type::Map(_) => {
+					self.spanned_error_with_hints(
+						variable,
+						"Cannot update elements of an immutable Map".to_string(),
+						vec!["Consider using MutMap instead".to_string()],
+					);
+				}
+				Type::Json(_) => {
+					self.spanned_error_with_hints(
+						variable,
+						"Cannot update elements of an immutable Json".to_string(),
+						vec!["Consider using MutJson instead".to_string()],
+					);
+				}
+				Type::Array(_) => {
+					self.spanned_error_with_hints(
+						variable,
+						"Cannot update elements of an immutable Array".to_string(),
+						vec!["Consider using MutArray instead".to_string()],
+					);
+				}
+				Type::String => {
+					self.spanned_error(variable, "Strings are immutable".to_string());
+				}
+				Type::Inferred(_)
+				| Type::Unresolved
+				| Type::Number
+				| Type::Duration
+				| Type::Boolean
+				| Type::Void
+				| Type::Nil
+				| Type::Optional(_)
+				| Type::Set(_)
+				| Type::MutSet(_)
+				| Type::Function(_)
+				| Type::Class(_)
+				| Type::Interface(_)
+				| Type::Struct(_)
+				| Type::Enum(_) => self.spanned_error(
+					variable,
+					format!("Unsupported reassignment of element of type {}", var_type),
+				),
+			},
 		}
 
-		if matches!(kind, AssignmentKind::AssignIncr) {
-			self.validate_type_in(exp_type, &[self.types.number(), self.types.string()], value);
-			self.validate_type_in(var.type_, &[self.types.number(), self.types.string()], value);
-		} else if matches!(kind, AssignmentKind::AssignDecr) {
-			self.validate_type(exp_type, self.types.number(), value);
-			self.validate_type(var.type_, self.types.number(), variable);
+		// Next, check if the RHS type is compatible the LHS type and satisfies
+		// the assignment kind (like +=, -=, etc.).
+		//
+		// Examples:
+		//
+		// ```
+		// let x = 5;
+		// x = "hello"; // error: cannot assign a string to a number
+		// ```
+		//
+		// ```
+		// let y = MutArray<num>["hello", "world"];
+		// y[0] -= "!"; // error: expected a number, found a string
+		// ```
+		match kind {
+			AssignmentKind::AssignIncr => {
+				self.validate_type_in(exp_type, &[self.types.number(), self.types.string()], value);
+				self.validate_type_in(var_type, &[self.types.number(), self.types.string()], value);
+			}
+			AssignmentKind::AssignDecr => {
+				self.validate_type(exp_type, self.types.number(), value);
+				self.validate_type(var_type, self.types.number(), variable);
+			}
+			AssignmentKind::Assign => {}
 		}
-
-		self.validate_type(exp_type, var.type_, value);
+		self.validate_type(exp_type, var_type, value);
 	}
 
 	fn type_check_if(
@@ -5533,6 +5623,8 @@ impl<'a> TypeChecker<'a> {
 					path.push(type_name.root.clone());
 					break;
 				}
+				// a[b] cannot be a type reference
+				Reference::ElementAccess { .. } => return None,
 			}
 		}
 
@@ -5604,7 +5696,7 @@ impl<'a> TypeChecker<'a> {
 		reference: &Reference,
 		env: &mut SymbolEnv,
 		callee_with_inflight_args: bool,
-	) -> (VariableInfo, Phase) {
+	) -> (ResolveReferenceResult, Phase) {
 		match reference {
 			Reference::Identifier(symbol) => {
 				let lookup_res = env.lookup_ext_mut(symbol, Some(self.ctx.current_stmt_idx()));
@@ -5612,12 +5704,13 @@ impl<'a> TypeChecker<'a> {
 					if let Some(var) = var.as_variable_mut() {
 						let phase = var.phase;
 						self.update_known_inferences(&mut var.type_, &var.name.span);
-						(var.clone(), phase)
+						(ResolveReferenceResult::Variable(var.clone()), phase)
 					} else {
-						self.spanned_error_with_var(
+						let err = self.spanned_error_with_var(
 							symbol,
 							format!("Expected identifier \"{symbol}\" to be a variable, but it's a {var}",),
-						)
+						);
+						(ResolveReferenceResult::Variable(err.0), err.1)
 					}
 				} else {
 					// Give a specific error message if someone tries to write "print" instead of "log"
@@ -5626,7 +5719,10 @@ impl<'a> TypeChecker<'a> {
 					} else {
 						self.type_error(lookup_result_mut_to_type_error(lookup_res, symbol));
 					}
-					(self.make_error_variable_info(), Phase::Independent)
+					(
+						ResolveReferenceResult::Variable(self.make_error_variable_info()),
+						Phase::Independent,
+					)
 				}
 			}
 			Reference::InstanceMember {
@@ -5668,7 +5764,10 @@ impl<'a> TypeChecker<'a> {
 
 				// If resolving the object's type failed, we can't resolve the property either
 				if instance_type.is_unresolved() {
-					return (self.make_error_variable_info(), Phase::Independent);
+					return (
+						ResolveReferenceResult::Variable(self.make_error_variable_info()),
+						Phase::Independent,
+					);
 				}
 
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env);
@@ -5681,7 +5780,10 @@ impl<'a> TypeChecker<'a> {
 						format!("Can't access preflight member \"{property}\" on inflight instance of type \"{instance_type}\"",),
 						vec![DiagnosticAnnotation::new("Object phase is in inflight", object)],
 					);
-					return (self.make_error_variable_info(), Phase::Independent);
+					return (
+						ResolveReferenceResult::Variable(self.make_error_variable_info()),
+						Phase::Independent,
+					);
 				}
 
 				// Try to resolve phase independent property's actual phase
@@ -5726,7 +5828,7 @@ impl<'a> TypeChecker<'a> {
 					property_variable.type_ = self.types.make_option(property_variable.type_);
 				}
 
-				(property_variable, property_phase)
+				(ResolveReferenceResult::Variable(property_variable), property_phase)
 			}
 			Reference::TypeMember { type_name, property } => {
 				let type_ = self
@@ -5736,7 +5838,7 @@ impl<'a> TypeChecker<'a> {
 					Type::Enum(ref e) => {
 						if e.values.contains(property) {
 							(
-								VariableInfo {
+								ResolveReferenceResult::Variable(VariableInfo {
 									name: property.clone(),
 									kind: VariableKind::StaticMember,
 									type_,
@@ -5744,14 +5846,15 @@ impl<'a> TypeChecker<'a> {
 									phase: Phase::Independent,
 									access: AccessModifier::Public,
 									docs: None,
-								},
+								}),
 								Phase::Independent,
 							)
 						} else {
-							self.spanned_error_with_var(
+							let err = self.spanned_error_with_var(
 								property,
 								format!("Enum \"{}\" does not contain value \"{}\"", type_, property.name),
-							)
+							);
+							(ResolveReferenceResult::Variable(err.0), err.1)
 						}
 					}
 					Type::Struct(ref s) => {
@@ -5769,22 +5872,26 @@ impl<'a> TypeChecker<'a> {
 											type_, name
 										),
 									);
-									return (self.make_error_variable_info(), Phase::Independent);
+									return (
+										ResolveReferenceResult::Variable(self.make_error_variable_info()),
+										Phase::Independent,
+									);
 								}
 							}
 						}
 
 						let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_STRUCT, env), vec![type_]);
 						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true, env);
-						(v, Phase::Independent)
+						(ResolveReferenceResult::Variable(v), Phase::Independent)
 					}
 					Type::Class(ref c) => {
 						let v = self.get_property_from_class_like(c, property, true, env);
 						if matches!(v.kind, VariableKind::InstanceMember) {
-							return self.spanned_error_with_var(
+							let err = self.spanned_error_with_var(
 								property,
 								format!("Class \"{c}\" contains a member \"{property}\" but it is not static"),
 							);
+							return (ResolveReferenceResult::Variable(err.0), err.1);
 						}
 						// If the property is phase independent then but it's a method call with inflight
 						// args then treat it as an inflight property
@@ -5793,9 +5900,100 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							v.phase
 						};
-						(v.clone(), phase)
+						(ResolveReferenceResult::Variable(v.clone()), phase)
 					}
-					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
+					_ => {
+						let err = self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference));
+						(ResolveReferenceResult::Variable(err.0), err.1)
+					}
+				}
+			}
+			Reference::ElementAccess { object, index } => {
+				let (instance_type, instance_phase) = self.type_check_exp(object, env);
+				let (index_type, _index_phase) = self.type_check_exp(index, env);
+
+				match *instance_type {
+					// TODO: it might be possible to look at Type::Json's inner data to give a more specific type
+					Type::Json(_) => {
+						self.validate_type_in(index_type, &[self.types.number(), self.types.string()], index);
+						(
+							ResolveReferenceResult::Location(instance_type, self.types.json()), // indexing into a Json object returns a Json object
+							instance_phase,
+						)
+					}
+					Type::MutJson => {
+						self.validate_type_in(index_type, &[self.types.number(), self.types.string()], index);
+						(
+							ResolveReferenceResult::Location(instance_type, self.types.mut_json()), // indexing into a MutJson object returns a MutJson object
+							instance_phase,
+						)
+					}
+					Type::Array(inner_type) => {
+						self.validate_type(index_type, self.types.number(), index);
+						(
+							ResolveReferenceResult::Location(instance_type, inner_type),
+							instance_phase,
+						)
+					}
+					Type::MutArray(inner_type) => {
+						self.validate_type(index_type, self.types.number(), index);
+						(
+							ResolveReferenceResult::Location(instance_type, inner_type),
+							instance_phase,
+						)
+					}
+					Type::Map(inner_type) => {
+						self.validate_type(index_type, self.types.string(), index);
+						(
+							ResolveReferenceResult::Location(instance_type, inner_type),
+							instance_phase,
+						)
+					}
+					Type::MutMap(inner_type) => {
+						self.validate_type(index_type, self.types.string(), index);
+						(
+							ResolveReferenceResult::Location(instance_type, inner_type),
+							instance_phase,
+						)
+					}
+					Type::Anything => (
+						ResolveReferenceResult::Location(self.types.anything(), self.types.anything()),
+						instance_phase,
+					),
+					Type::Unresolved => (
+						ResolveReferenceResult::Location(self.types.error(), self.types.error()),
+						instance_phase,
+					),
+					Type::Inferred(_) => {
+						self.spanned_error(object, "Indexing into an inferred type is not supported");
+						(
+							ResolveReferenceResult::Location(self.types.error(), self.types.error()),
+							instance_phase,
+						)
+					}
+					Type::String => {
+						self.validate_type(index_type, self.types.number(), index);
+						(
+							ResolveReferenceResult::Location(instance_type, self.types.string()),
+							instance_phase,
+						)
+					}
+					Type::Number
+					| Type::Duration
+					| Type::Boolean
+					| Type::Void
+					| Type::Nil
+					| Type::Optional(_)
+					| Type::Set(_)
+					| Type::MutSet(_)
+					| Type::Function(_)
+					| Type::Class(_)
+					| Type::Interface(_)
+					| Type::Struct(_)
+					| Type::Enum(_) => {
+						let err = self.spanned_error_with_var(object, format!("Type \"{}\" is not indexable", instance_type));
+						(ResolveReferenceResult::Variable(err.0), err.1)
+					}
 				}
 			}
 		}
@@ -6459,6 +6657,12 @@ fn lookup_known_type(name: &'static str, env: &SymbolEnv) -> TypeRef {
 		.0
 		.as_type()
 		.expect(&format!("Expected known type \"{}\" to be a type", name))
+}
+
+#[derive(Debug)]
+enum ResolveReferenceResult {
+	Variable(VariableInfo),
+	Location(TypeRef, TypeRef), // (container type, element type)
 }
 
 #[cfg(test)]
