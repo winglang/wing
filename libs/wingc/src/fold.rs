@@ -445,6 +445,10 @@ where
 			type_name: f.fold_user_defined_type(type_name),
 			property: f.fold_symbol(property),
 		},
+		Reference::ElementAccess { object, index } => Reference::ElementAccess {
+			object: Box::new(f.fold_expr(*object)),
+			index: Box::new(f.fold_expr(*index)),
+		},
 	}
 }
 
