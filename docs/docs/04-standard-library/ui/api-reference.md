@@ -1080,12 +1080,12 @@ Inflight client for `IFileBrowserDeleteHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.ui.IFileBrowserDeleteHandlerClient.handle"></a>
 
 ```wing
-inflight handle(payload: str): void
+inflight handle(fileName: str): void
 ```
 
 Function that performs an action.
 
-###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.ui.IFileBrowserDeleteHandlerClient.handle.parameter.payload"></a>
+###### `fileName`<sup>Required</sup> <a name="fileName" id="@winglang/sdk.ui.IFileBrowserDeleteHandlerClient.handle.parameter.fileName"></a>
 
 - *Type:* str
 
@@ -1121,12 +1121,12 @@ Inflight client for `IFileBrowserGetHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.ui.IFileBrowserGetHandlerClient.handle"></a>
 
 ```wing
-inflight handle(payload: str): str
+inflight handle(fileName: str): str
 ```
 
 Function that performs an action.
 
-###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.ui.IFileBrowserGetHandlerClient.handle.parameter.payload"></a>
+###### `fileName`<sup>Required</sup> <a name="fileName" id="@winglang/sdk.ui.IFileBrowserGetHandlerClient.handle.parameter.fileName"></a>
 
 - *Type:* str
 
@@ -1197,12 +1197,18 @@ Inflight client for `IFileBrowserVoidHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.ui.IFileBrowserPutHandlerClient.handle"></a>
 
 ```wing
-inflight handle(payload: str): void
+inflight handle(fileName: str, fileContent: str): void
 ```
 
 Function that performs an action.
 
-###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.ui.IFileBrowserPutHandlerClient.handle.parameter.payload"></a>
+###### `fileName`<sup>Required</sup> <a name="fileName" id="@winglang/sdk.ui.IFileBrowserPutHandlerClient.handle.parameter.fileName"></a>
+
+- *Type:* str
+
+---
+
+###### `fileContent`<sup>Required</sup> <a name="fileContent" id="@winglang/sdk.ui.IFileBrowserPutHandlerClient.handle.parameter.fileContent"></a>
 
 - *Type:* str
 
