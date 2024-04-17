@@ -2098,6 +2098,13 @@ error: Unsupported reassignment of element of type unresolved
    | ^^^^^^^ Unsupported reassignment of element of type unresolved
 
 
+error: Indexing into an inferred type is not supported
+   --> ../../../examples/tests/invalid/indexing.test.w:41:7
+   |
+41 |   log(x[0]);
+   |       ^ Indexing into an inferred type is not supported
+
+
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3305,23 +3312,23 @@ Duration <DURATION>"
 
 exports[`primitives.test.w 1`] = `
 "error: Member \\"blabla\\" doesn't exist in \\"Array\\"
-  --> ../../../examples/tests/invalid/primitives.test.w:9:16
+  --> ../../../examples/tests/invalid/primitives.test.w:6:16
   |
-9 | let join = arr.blabla(\\",\\");
+6 | let join = arr.blabla(\\",\\");
   |                ^^^^^^ Member \\"blabla\\" doesn't exist in \\"Array\\"
 
 
 error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/primitives.test.w:11:5
-   |
-11 | arr.push(4);
-   |     ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+  --> ../../../examples/tests/invalid/primitives.test.w:8:5
+  |
+8 | arr.push(4);
+  |     ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/primitives.test.w:13:14
+   --> ../../../examples/tests/invalid/primitives.test.w:10:14
    |
-13 | let n: str = arr.at(0);
+10 | let n: str = arr.at(0);
    |              ^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
