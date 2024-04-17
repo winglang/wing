@@ -1,6 +1,10 @@
 bring util;
 bring expect;
 
+class Util {
+  extern "./util.js" pub static inflight platform(): str;
+}
+
 let assertThrows = inflight (expected: str, block: (): void) => {
   let var error = false;
   try {
@@ -31,7 +35,11 @@ test "spawn() with empty args" {
   let child = util.spawn(program, args);
   let output = child.wait();
 
-  expect.equal(output.stdout, "\n");
+  if Util.platform() != "darwin" {
+    expect.equal(output.stdout, "\n");
+  } else {
+    expect.equal(output.stdout, "");
+  }
   expect.equal(output.status, 0);
 }
 
