@@ -193,6 +193,7 @@ async function main() {
     )
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
     .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
+    .addOption(new Option("--list", "List required application secrets"))
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("secrets"));

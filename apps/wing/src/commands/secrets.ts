@@ -5,7 +5,9 @@ import path from "path";
 import { cwd } from "process";
 import inquirer from "inquirer";
 
-export interface SecretsOptions extends CompileOptions {}
+export interface SecretsOptions extends CompileOptions {
+  readonly list?: boolean;
+}
 
 export async function secrets(entrypoint?: string, options?: SecretsOptions): Promise<void> {
   // Compile the program to generate secrets file
@@ -15,8 +17,14 @@ export async function secrets(entrypoint?: string, options?: SecretsOptions): Pr
   let secrets = fs.existsSync(secretsFile) ? JSON.parse(fs.readFileSync(path.join(outdir, "secrets.json"), "utf-8")) : [];
 
   process.env.WING_SOURCE_DIR = cwd();
+  
   let secretValues: any = {};
-  console.log(`${secrets.length} secret(s) found in ${entrypoint}\n`);
+  console.log(`${secrets.length} secret(s) found\n`);
+
+  if (options?.list) {
+    console.log("- "+secrets.join("\n- "));
+    return;
+  }
 
   if (secrets.length === 0) {
     return;

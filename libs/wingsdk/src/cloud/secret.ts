@@ -50,6 +50,7 @@ export class Secret extends Resource {
     this._name = props.name;
   }
 
+  /** get secret name */
   public get name(): string | undefined {
     return this._name;
   }
