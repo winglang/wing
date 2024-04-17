@@ -341,7 +341,7 @@ Key of the object.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
 
 ```wing
-inflight tryGet(key: str, options?: BucketTryGetOptions): str
+inflight tryGet(key: str, options?: BucketTryGetOptions): str?
 ```
 
 Get an object from the bucket if it exists If the bytes returned are not a valid UTF-8 string, an error is thrown.
@@ -365,7 +365,7 @@ Additional get options.
 ##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
 
 ```wing
-inflight tryGetJson(key: str): Json
+inflight tryGetJson(key: str): Json?
 ```
 
 Gets an object from the bucket if it exists, parsing it as Json.
@@ -633,7 +633,7 @@ new aws.FunctionRef(functionArn: str);
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-inflight invoke(payload?: str): str
+inflight invoke(payload?: str): str?
 ```
 
 Invokes the function with a payload and waits for the result.
@@ -784,7 +784,7 @@ Retrieve the approximate number of messages in the queue.
 ##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
 
 ```wing
-inflight pop(): str
+inflight pop(): str?
 ```
 
 Pop a message from the queue.

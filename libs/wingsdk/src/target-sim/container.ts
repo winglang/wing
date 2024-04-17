@@ -41,6 +41,13 @@ export interface ContainerProps {
   readonly env?: Record<string, string>;
 
   /**
+   * Volume mount points.
+   * @default []
+   * @example ['/host:/container']
+   */
+  readonly volumes?: string[];
+
+  /**
    * Container arguments
    * @default []
    */
@@ -105,6 +112,7 @@ export class Container extends Resource implements ISimulatorResource {
       imageTag: this.imageTag,
       containerPort: this.props.containerPort,
       env: this.props.env,
+      volumes: this.props.volumes,
       args: this.props.args,
       cwd: App.of(this).entrypointDir,
     };
