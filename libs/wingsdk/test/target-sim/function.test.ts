@@ -82,6 +82,32 @@ test("invoke function succeeds", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("async invoke function cleanup while running", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const handler = Testing.makeHandler(`
+  async handle(event) {
+    // sleep forever
+    await new Promise(() => {});
+  }`);
+  new cloud.Function(app, "my_function", handler);
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
+
+  // WHEN
+  await client.invokeAsync();
+
+  // THEN
+  await s.stop();
+
+  // wait for a small time to let the child process fail to exit
+  await new Promise((resolve) => setTimeout(resolve, 150));
+
+  expect(s.listTraces().every((t) => t.data.error === undefined)).toBe(true);
+}, 10000);
+
 test("invoke function with environment variables", async () => {
   // GIVEN
   const app = new SimApp();

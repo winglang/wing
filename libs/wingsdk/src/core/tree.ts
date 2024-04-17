@@ -84,7 +84,12 @@ export interface DisplayInfo {
 }
 
 /** @internal */
-export type UIComponent = UIField | UISection | UIButton | UIHttpClient;
+export type UIComponent =
+  | UIField
+  | UISection
+  | UIButton
+  | UIHttpClient
+  | UIFileBrowser;
 
 /** @internal */
 export interface UIField {
@@ -117,6 +122,16 @@ export interface UIHttpClient {
   readonly label: string;
   readonly getUrlHandler: string;
   readonly getApiSpecHandler: string;
+}
+
+/** @internal */
+export interface UIFileBrowser {
+  readonly kind: "file-browser";
+  readonly label: string;
+  readonly putHandler: string;
+  readonly deleteHandler: string;
+  readonly getHandler: string;
+  readonly listHandler: string;
 }
 
 /**

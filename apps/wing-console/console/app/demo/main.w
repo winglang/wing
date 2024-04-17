@@ -1,5 +1,7 @@
 bring cloud;
 bring ex;
+bring ui;
+
 // @see https://github.com/winglang/wing/issues/4237 it crashes the Console preview env.
 //let secret = new cloud.Secret(name: "my-secret");
 
@@ -8,6 +10,42 @@ let queue = new cloud.Queue();
 let api = new cloud.Api();
 let counter = new cloud.Counter(initial: 0);
 
+class myBucket {
+  b: cloud.Bucket;
+  new() {
+    this.b = new cloud.Bucket();
+    new ui.FileBrowser("File Browser",
+      {
+        put: inflight (fileName: str, fileContent:str) => {
+          this.b.put(fileName, fileContent);
+        },
+        delete: inflight (fileName: str) => {
+          this.b.delete(fileName);
+        },
+        get: inflight (fileName: str) => {
+          return this.b.get(fileName);
+        },
+        list: inflight () => {return this.b.list();},
+      }
+    );
+
+    new cloud.Service(
+      inflight () => {
+        this.b.put("hello.txt", "Hello, GET!");
+        return inflight () => {
+        };
+      },
+    );
+  }
+  pub inflight put(key: str, value: str) {
+    this.b.put(key, value);
+  }
+}
+
+let myB = new myBucket() as "MyUIComponentBucket";
+let putfucn = new cloud.Function(inflight () => {
+    myB.put("test", "Test");
+}) as "PutFileInCustomBucket";
 
 api.get("/test-get", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   bucket.put("hello.txt", "Hello, GET!");
@@ -25,7 +63,8 @@ api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 });
 
 let handler = inflight (message: str): str => {
-  bucket.put("hello.txt", "Hello, {message}!");
+   counter.inc();
+  bucket.put("hello{counter.peek()}.txt", "Hello, {message}!");
   log("Hello, {message}!");
   return message;
 };
@@ -123,7 +162,6 @@ test "Add fixtures" {
   counter.inc(100);
 }
 
-bring ui;
 
 class WidgetService {
   data: cloud.Bucket;

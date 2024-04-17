@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync, existsSync } from "fs";
+import { join } from "path";
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
@@ -23,6 +25,22 @@ test("basic function", () => {
   // WHEN
   new Function(app, "Function", inflight);
   const output = app.synth();
+
+  const functionOutDir = readdirSync(app.workdir, {
+    recursive: true,
+    withFileTypes: true,
+  }).find((d) => d.isDirectory())!;
+  const packageJson = JSON.parse(
+    readFileSync(
+      join(app.workdir, functionOutDir.name, "package.json"),
+      "utf-8"
+    )
+  );
+  const indexFilename = "index.cjs";
+  expect(packageJson.main).toBe(indexFilename);
+  expect(
+    existsSync(join(app.workdir, functionOutDir.name, indexFilename))
+  ).toBeTruthy();
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([

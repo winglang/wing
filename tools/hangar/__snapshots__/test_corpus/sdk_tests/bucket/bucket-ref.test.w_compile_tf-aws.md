@@ -47,6 +47,46 @@
         },
         "name": "/aws/lambda/Handler-c885f795",
         "retention_in_days": 30
+      },
+      "BucketRef_FileBrowser_delete_CloudwatchLogGroup_03193899": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/delete/CloudwatchLogGroup",
+            "uniqueId": "BucketRef_FileBrowser_delete_CloudwatchLogGroup_03193899"
+          }
+        },
+        "name": "/aws/lambda/delete-c8d8aa8e",
+        "retention_in_days": 30
+      },
+      "BucketRef_FileBrowser_get_CloudwatchLogGroup_F6322EE3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/get/CloudwatchLogGroup",
+            "uniqueId": "BucketRef_FileBrowser_get_CloudwatchLogGroup_F6322EE3"
+          }
+        },
+        "name": "/aws/lambda/get-c8ba1e5f",
+        "retention_in_days": 30
+      },
+      "BucketRef_FileBrowser_list_CloudwatchLogGroup_F3917C68": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/list/CloudwatchLogGroup",
+            "uniqueId": "BucketRef_FileBrowser_list_CloudwatchLogGroup_F3917C68"
+          }
+        },
+        "name": "/aws/lambda/list-c88fd67a",
+        "retention_in_days": 30
+      },
+      "BucketRef_FileBrowser_put_CloudwatchLogGroup_7FDBAF92": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/put/CloudwatchLogGroup",
+            "uniqueId": "BucketRef_FileBrowser_put_CloudwatchLogGroup_7FDBAF92"
+          }
+        },
+        "name": "/aws/lambda/put-c8cdb51a",
+        "retention_in_days": 30
       }
     },
     "aws_iam_role": {
@@ -73,6 +113,42 @@
           "metadata": {
             "path": "root/Default/Default/BucketRef/BucketNameField/Handler/IamRole",
             "uniqueId": "BucketRef_BucketNameField_Handler_IamRole_4C746299"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "BucketRef_FileBrowser_delete_IamRole_A66062FE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/delete/IamRole",
+            "uniqueId": "BucketRef_FileBrowser_delete_IamRole_A66062FE"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "BucketRef_FileBrowser_get_IamRole_8E0DB684": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/get/IamRole",
+            "uniqueId": "BucketRef_FileBrowser_get_IamRole_8E0DB684"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "BucketRef_FileBrowser_list_IamRole_DC0C9222": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/list/IamRole",
+            "uniqueId": "BucketRef_FileBrowser_list_IamRole_DC0C9222"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "BucketRef_FileBrowser_put_IamRole_9C4230CD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/put/IamRole",
+            "uniqueId": "BucketRef_FileBrowser_put_IamRole_9C4230CD"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -108,6 +184,46 @@
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.BucketRef_BucketNameField_Handler_IamRole_4C746299.name}"
+      },
+      "BucketRef_FileBrowser_delete_IamRolePolicy_A19F20B1": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/delete/IamRolePolicy",
+            "uniqueId": "BucketRef_FileBrowser_delete_IamRolePolicy_A19F20B1"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.BucketRef_FileBrowser_delete_IamRole_A66062FE.name}"
+      },
+      "BucketRef_FileBrowser_get_IamRolePolicy_E6B24E15": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/get/IamRolePolicy",
+            "uniqueId": "BucketRef_FileBrowser_get_IamRolePolicy_E6B24E15"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.BucketRef_FileBrowser_get_IamRole_8E0DB684.name}"
+      },
+      "BucketRef_FileBrowser_list_IamRolePolicy_B923CA4C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/list/IamRolePolicy",
+            "uniqueId": "BucketRef_FileBrowser_list_IamRolePolicy_B923CA4C"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.BucketRef_FileBrowser_list_IamRole_DC0C9222.name}"
+      },
+      "BucketRef_FileBrowser_put_IamRolePolicy_F4928644": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/put/IamRolePolicy",
+            "uniqueId": "BucketRef_FileBrowser_put_IamRolePolicy_F4928644"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.BucketRef_FileBrowser_put_IamRole_9C4230CD.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -140,6 +256,46 @@
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.BucketRef_BucketNameField_Handler_IamRole_4C746299.name}"
+      },
+      "BucketRef_FileBrowser_delete_IamRolePolicyAttachment_1539DE0D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/delete/IamRolePolicyAttachment",
+            "uniqueId": "BucketRef_FileBrowser_delete_IamRolePolicyAttachment_1539DE0D"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.BucketRef_FileBrowser_delete_IamRole_A66062FE.name}"
+      },
+      "BucketRef_FileBrowser_get_IamRolePolicyAttachment_3D6DE10D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/get/IamRolePolicyAttachment",
+            "uniqueId": "BucketRef_FileBrowser_get_IamRolePolicyAttachment_3D6DE10D"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.BucketRef_FileBrowser_get_IamRole_8E0DB684.name}"
+      },
+      "BucketRef_FileBrowser_list_IamRolePolicyAttachment_AA2F34CC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/list/IamRolePolicyAttachment",
+            "uniqueId": "BucketRef_FileBrowser_list_IamRolePolicyAttachment_AA2F34CC"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.BucketRef_FileBrowser_list_IamRole_DC0C9222.name}"
+      },
+      "BucketRef_FileBrowser_put_IamRolePolicyAttachment_B78BA9C7": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/put/IamRolePolicyAttachment",
+            "uniqueId": "BucketRef_FileBrowser_put_IamRolePolicyAttachment_B78BA9C7"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.BucketRef_FileBrowser_put_IamRole_9C4230CD.name}"
       }
     },
     "aws_lambda_function": {
@@ -238,6 +394,134 @@
           "security_group_ids": [],
           "subnet_ids": []
         }
+      },
+      "BucketRef_FileBrowser_delete_5803F41A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/delete/Default",
+            "uniqueId": "BucketRef_FileBrowser_delete_5803F41A"
+          }
+        },
+        "architectures": [
+          "arm64"
+        ],
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_bb1ba780": "${aws_s3_bucket.Bucket.bucket}",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "delete-c8d8aa8e",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "delete-c8d8aa8e",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "${aws_iam_role.BucketRef_FileBrowser_delete_IamRole_A66062FE.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.BucketRef_FileBrowser_delete_S3Object_5563CB3A.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "BucketRef_FileBrowser_get_28175BDE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/get/Default",
+            "uniqueId": "BucketRef_FileBrowser_get_28175BDE"
+          }
+        },
+        "architectures": [
+          "arm64"
+        ],
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_bb1ba780": "${aws_s3_bucket.Bucket.bucket}",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "get-c8ba1e5f",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "get-c8ba1e5f",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "${aws_iam_role.BucketRef_FileBrowser_get_IamRole_8E0DB684.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.BucketRef_FileBrowser_get_S3Object_F2A905BD.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "BucketRef_FileBrowser_list_7AD57CAA": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/list/Default",
+            "uniqueId": "BucketRef_FileBrowser_list_7AD57CAA"
+          }
+        },
+        "architectures": [
+          "arm64"
+        ],
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_bb1ba780": "${aws_s3_bucket.Bucket.bucket}",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "list-c88fd67a",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "list-c88fd67a",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "${aws_iam_role.BucketRef_FileBrowser_list_IamRole_DC0C9222.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.BucketRef_FileBrowser_list_S3Object_B982678A.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "BucketRef_FileBrowser_put_C3049759": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/put/Default",
+            "uniqueId": "BucketRef_FileBrowser_put_C3049759"
+          }
+        },
+        "architectures": [
+          "arm64"
+        ],
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_bb1ba780": "${aws_s3_bucket.Bucket.bucket}",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "put-c8cdb51a",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "put-c8cdb51a",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "${aws_iam_role.BucketRef_FileBrowser_put_IamRole_9C4230CD.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.BucketRef_FileBrowser_put_S3Object_FA99EA77.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
       }
     },
     "aws_s3_bucket": {
@@ -289,6 +573,50 @@
           "metadata": {
             "path": "root/Default/Default/BucketRef/BucketNameField/Handler/S3Object",
             "uniqueId": "BucketRef_BucketNameField_Handler_S3Object_4572BF63"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "BucketRef_FileBrowser_delete_S3Object_5563CB3A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/delete/S3Object",
+            "uniqueId": "BucketRef_FileBrowser_delete_S3Object_5563CB3A"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "BucketRef_FileBrowser_get_S3Object_F2A905BD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/get/S3Object",
+            "uniqueId": "BucketRef_FileBrowser_get_S3Object_F2A905BD"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "BucketRef_FileBrowser_list_S3Object_B982678A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/list/S3Object",
+            "uniqueId": "BucketRef_FileBrowser_list_S3Object_B982678A"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "BucketRef_FileBrowser_put_S3Object_FA99EA77": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BucketRef/FileBrowser/put/S3Object",
+            "uniqueId": "BucketRef_FileBrowser_put_S3Object_FA99EA77"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
