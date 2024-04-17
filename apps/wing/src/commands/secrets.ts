@@ -14,23 +14,23 @@ export async function secrets(entrypoint?: string, options?: SecretsOptions): Pr
   const outdir = await compile(entrypoint, options);
   const secretsFile = path.join(outdir, "secrets.json");
 
-  let secrets = fs.existsSync(secretsFile) ? JSON.parse(fs.readFileSync(path.join(outdir, "secrets.json"), "utf-8")) : [];
+  let secretNames = fs.existsSync(secretsFile) ? JSON.parse(fs.readFileSync(path.join(outdir, "secrets.json"), "utf-8")) : [];
 
   process.env.WING_SOURCE_DIR = cwd();
   
   let secretValues: any = {};
-  console.log(`${secrets.length} secret(s) found\n`);
+  console.log(`${secretNames.length} secret(s) found\n`);
 
   if (options?.list) {
-    console.log("- "+secrets.join("\n- "));
+    console.log("- "+secretNames.join("\n- "));
     return;
   }
 
-  if (secrets.length === 0) {
+  if (secretNames.length === 0) {
     return;
   }
 
-  for (const secret of secrets) {
+  for (const secret of secretNames) {
     const response = await inquirer.prompt([
       {
         type: "password",
