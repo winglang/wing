@@ -16,7 +16,7 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
 
   constructor(props: SecretSchema) {
     this.secretsFile = path.join(process.cwd(), ".env");
-    
+
     if (!fs.existsSync(this.secretsFile)) {
       throw new Error(
         `No secrets file found at ${this.secretsFile} while looking for secret ${props.name}`
@@ -72,11 +72,12 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
   }
 
   private parseEnvFile(contents: string): { [key: string]: string } {
-    return contents.split('\n')
-      .map(line => line.trim())
-      .filter(line => line && !line.startsWith('#')) // Ignore empty lines and comments
+    return contents
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line && !line.startsWith("#")) // Ignore empty lines and comments
       .reduce((acc, line) => {
-        const [key, value] = line.split('=', 2);
+        const [key, value] = line.split("=", 2);
         if (key) {
           acc[key.trim()] = value.trim();
         }

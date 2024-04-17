@@ -1,6 +1,6 @@
+import fs from "fs";
 import { App } from "./app";
 import { IPlatform } from "../platform";
-import fs from "fs";
 
 /**
  * Sim Platform
@@ -16,27 +16,28 @@ export class Platform implements IPlatform {
   public async storeSecrets(secrets: { [key: string]: string }): Promise<void> {
     let existingSecretsContent = "";
     try {
-      existingSecretsContent = fs.readFileSync('./.env', 'utf8');
+      existingSecretsContent = fs.readFileSync("./.env", "utf8");
     } catch (error) {}
-  
-    const existingSecrets = existingSecretsContent.split('\n')
-      .filter(line => line.trim() !== '')
+
+    const existingSecrets = existingSecretsContent
+      .split("\n")
+      .filter((line) => line.trim() !== "")
       .reduce((s, line) => {
-        const [key, value] = line.split('=', 2);
+        const [key, value] = line.split("=", 2);
         s[key] = value;
         return s;
       }, {} as { [key: string]: string });
-  
+
     for (const key in secrets) {
       existingSecrets[key] = secrets[key];
     }
-  
+
     const updatedContent = Object.entries(existingSecrets)
       .map(([key, value]) => `${key}=${value}`)
-      .join('\n');
+      .join("\n");
 
-    fs.writeFileSync('./.env', updatedContent);
-    
+    fs.writeFileSync("./.env", updatedContent);
+
     console.log(`${Object.keys(secrets).length} secret(s) stored in .env`);
   }
 }

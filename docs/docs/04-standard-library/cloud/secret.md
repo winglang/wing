@@ -189,6 +189,7 @@ other capabilities to the inflight host.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Secret.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Secret.property.name">name</a></code> | <code>str</code> | Get secret name. |
 
 ---
 
@@ -201,6 +202,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.cloud.Secret.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+
+Get secret name.
 
 ---
 

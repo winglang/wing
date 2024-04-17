@@ -130,14 +130,11 @@ export class PlatformManager {
   public async storeSecrets(secretNames: string[]): Promise<void> {
     const hooks = collectHooks(this.platformInstances);
     if (!hooks.storeSecretsHook) {
-      throw new Error(
-        `No storeSecrets method found on any platform`
-      );
+      throw new Error(`No storeSecrets method found on any platform`);
     }
     await hooks.storeSecretsHook(secretNames);
   }
 }
-
 
 /**
  * Custom platforms need to be loaded into a custom context in order to
@@ -236,7 +233,7 @@ function collectHooks(platformInstances: IPlatform[]) {
     },
     newInstanceOverrides: [],
     parameterSchemas: [],
-    storeSecretsHook: undefined
+    storeSecretsHook: undefined,
   };
 
   platformInstances.forEach((instance) => {
