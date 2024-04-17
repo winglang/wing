@@ -52,15 +52,14 @@ new cloud.Function(inflight () => {
 
 ### Simulator (`sim`)
 
-When using a secret in Wing's simulator, a secrets file must be added to your home directory at `~/.wing/secrets.json`.
+When using a secret in Wing's simulator, a secrets file must be added to your project in a file called: `.env`.
 The simulator will look up secrets in this file by their `name`.
-Secrets should be saved in a JSON format:
+Secrets should be saved in a key=value format:
 
 ```json
-// secrets.json
-{
-  "my-api-key": "1234567890"
-}
+// .env
+my-api-key=1234567890
+secret-key=secret-value
 ```
 
 ### AWS (`tf-aws` and `awscdk`)
