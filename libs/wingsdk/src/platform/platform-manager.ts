@@ -19,7 +19,7 @@ const BUILTIN_PLATFORMS = ["tf-aws", "tf-azure", "tf-gcp", "sim"];
 /** @internal */
 export class PlatformManager {
   private readonly platformPaths: string[];
-  private readonly platformInstances: IPlatform[] = [];
+  private platformInstances: IPlatform[] = [];
 
   constructor(options: PlatformManagerOptions) {
     this.platformPaths = options.platformPaths ?? [];
@@ -94,6 +94,7 @@ export class PlatformManager {
   }
 
   private createPlatformInstances() {
+    this.platformInstances = [];
     this.platformPaths.forEach((platformPath) => {
       this.loadPlatformPath(platformPath);
     });
@@ -102,6 +103,7 @@ export class PlatformManager {
   // This method is called from preflight.cjs in order to return an App instance
   // that can be synthesized
   public createApp(appProps: AppProps): App {
+    this.createPlatformInstances();
     let appCall = this.platformInstances[0].newApp;
 
     if (!appCall) {
