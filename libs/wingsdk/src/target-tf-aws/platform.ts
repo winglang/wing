@@ -85,7 +85,6 @@ export class Platform implements IPlatform {
         // Attempt to retrieve the secret to check if it exists
         await client.send(new GetSecretValueCommand({ SecretId: name }));
         console.log(`Secret ${name} exists, updating it.`);
-        // Update the secret if it exists
         await client.send(
           new UpdateSecretCommand({
             SecretId: name,
@@ -103,9 +102,8 @@ export class Platform implements IPlatform {
             })
           );
         } else {
-          // Log other errors
           console.error(`Failed to store secret ${name}:`, error);
-          throw error; // Re-throw the error if it is not related to the secret not existing
+          throw error;
         }
       }
     }

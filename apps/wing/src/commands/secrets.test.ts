@@ -1,6 +1,5 @@
 import { writeFile } from "fs/promises";
 import { join } from "path";
-// import inquirer from "inquirer";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { describe, expect, test, vitest, beforeEach, afterEach, vi } from "vitest";
 import { secrets } from "../commands/secrets";
