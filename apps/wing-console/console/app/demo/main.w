@@ -9,16 +9,6 @@ let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 let api = new cloud.Api();
 let counter = new cloud.Counter(initial: 0);
-struct PutData {
-  fileName: str;
-  fileContent: str;
-}
-struct GetData {
-  fileName: str;
-}
-struct DeleteData {
-  fileName: str;
-}
 
 class myBucket {
   b: cloud.Bucket;
