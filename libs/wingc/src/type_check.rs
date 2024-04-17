@@ -5606,10 +5606,23 @@ impl<'a> TypeChecker<'a> {
 
 	fn make_immutable(&mut self, type_: TypeRef) -> TypeRef {
 		match *type_ {
-			Type::MutArray(inner) => self.types.add_type(Type::Array(inner)),
+			Type::MutArray(inner) => {
+				let inner = self.make_immutable(inner);
+				self.types.add_type(Type::Array(inner))
+			}
 			Type::MutJson => self.types.json(),
-			Type::MutMap(inner) => self.types.add_type(Type::Map(inner)),
-			Type::MutSet(inner) => self.types.add_type(Type::Set(inner)),
+			Type::MutMap(inner) => {
+				let inner = self.make_immutable(inner);
+				self.types.add_type(Type::Map(inner))
+			}
+			Type::MutSet(inner) => {
+				let inner = self.make_immutable(inner);
+				self.types.add_type(Type::Set(inner))
+			}
+			Type::Optional(inner) => {
+				let inner = self.make_immutable(inner);
+				self.types.add_type(Type::Optional(inner))
+			}
 			_ => type_,
 		}
 	}
@@ -5686,6 +5699,7 @@ impl<'a> TypeChecker<'a> {
 					return (self.make_error_variable_info(), Phase::Independent);
 				}
 
+				println!("resolving property: {property} on {instance_type}");
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env);
 
 				// Make sure we're not referencing a preflight field on an inflight instance
