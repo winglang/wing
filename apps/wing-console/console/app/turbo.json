@@ -2,6 +2,9 @@
   "$schema": "https://turborepo.org/schema.json",
   "extends": ["//"],
   "pipeline": {
+    "dev": {
+      "dependsOn": ["^compile"]
+    },
     "compile": {
       "outputs": ["dist/**"],
       "env": ["SEGMENT_WRITE_KEY", "VITE_WING_CLOUD_SIGN_IN_URL"]
