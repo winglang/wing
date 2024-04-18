@@ -52,7 +52,7 @@ export interface DeadLetterQueueSchema {
   /** Dead-letter queue handler token */
   dlqHandler: string;
   /** Number of time a message will be processed */
-  maxDeliveryAttemps: number;
+  maxDeliveryAttempts: number;
 }
 
 /** Schema for cloud.Queue */
