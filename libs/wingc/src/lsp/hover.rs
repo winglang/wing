@@ -412,4 +412,19 @@ Json.stringify({});
 //^
 "#
 	);
+
+test_hover_list!(
+  variadic_args,
+  r#"
+  class Arr {
+    pub addMany(...items: Array<str>) {
+  
+    }
+  }
+  
+  let arr = new Arr();
+  arr.addMany("a","b","c");
+      //^
+  "#,
+);
 }
