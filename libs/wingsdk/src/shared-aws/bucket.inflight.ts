@@ -17,6 +17,7 @@ import {
   NoSuchKey,
   PutObjectCommand,
   S3Client,
+  HeadBucketCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import mime from "mime-types";
@@ -37,6 +38,15 @@ export class BucketClient implements IBucketClient {
     private readonly bucketName: string,
     private readonly s3Client: S3Client = new S3Client({})
   ) {}
+
+  public async bucketRegion(): Promise<string | undefined> {
+    const res = await this.s3Client.send(
+      new HeadBucketCommand({
+        Bucket: this.bucketName,
+      })
+    );
+    return res.BucketRegion;
+  }
 
   /**
    * Check if an object exists in the bucket

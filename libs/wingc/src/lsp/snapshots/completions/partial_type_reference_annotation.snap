@@ -443,7 +443,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IQueueClient\n```\n---\nInflight interface for `Queue`.\n### Methods\n- `approxSize` — `inflight (): num` — Retrieve the approximate number of messages in the queue.\n- `pop` — `inflight (): str?` — Pop a message from the queue.\n- `purge` — `inflight (): void` — Purge all of the messages in the queue.\n- `push` — `inflight (messages: Array<str>?): void` — Push one or more messages to the queue."
+    value: "```wing\ninterface IQueueClient\n```\n---\nInflight interface for `Queue`.\n### Methods\n- `approxSize` — `inflight (): num` — Retrieve the approximate number of messages in the queue.\n- `pop` — `inflight (): str?` — Pop a message from the queue.\n- `purge` — `inflight (): void` — Purge all of the messages in the queue.\n- `push` — `inflight (...messages: Array<str>?): void` — Push one or more messages to the queue."
   sortText: ii|IQueueClient
 - label: IQueueSetConsumerHandler
   kind: 8

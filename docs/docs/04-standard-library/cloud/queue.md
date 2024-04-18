@@ -179,7 +179,7 @@ Retrieve the approximate number of messages in the queue.
 ##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
 
 ```wing
-inflight pop(): str
+inflight pop(): str?
 ```
 
 Pop a message from the queue.

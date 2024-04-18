@@ -192,7 +192,7 @@ export class Function extends cloud.Function {
     // Move index.js to function name directory. Every Azure function in a function app
     // must be in its own folder containing an index.js and function.json files
     fs.mkdirSync(`${codeDir}/${this.functionName}`);
-    fs.renameSync(bundle.entrypointPath, `${outDir}/index.js`);
+    fs.renameSync(bundle.outfilePath, `${outDir}/index.js`);
 
     // As per documentation "a function must have exactly one trigger" so for now
     // by default a function will support http get requests

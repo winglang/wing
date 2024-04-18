@@ -365,7 +365,9 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::ElementAccess { .. } => {
+				fold::fold_reference(self, node)
+			}
 		}
 	}
 }
