@@ -232,6 +232,9 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
     script.runInContext(context);
     return new (platformModule.exports as any).Platform();
   } catch (error) {
+    if (process.env.DEBUG) {
+      console.error(error);
+    }
     const hint = customPlatformPath.includes(".")
       ? "Ensure the path to the platform is correct"
       : `Ensure you have installed the platform provider by running 'npm install ${customPlatformPath}'`;
