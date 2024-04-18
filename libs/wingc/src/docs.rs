@@ -272,8 +272,8 @@ fn render_signature_help(f: &FunctionSignature) -> String {
 		} else {
 			format!("— `{param_type}`")
 		};
-    let is_last_struct = is_last && param_type_unwrapped.is_struct();
-    let prefix = if param.variadic || is_last_struct {"..."} else {""};
+		let is_last_struct = is_last && param_type_unwrapped.is_struct();
+		let prefix = if param.variadic || is_last_struct { "..." } else { "" };
 
 		if !is_last_struct {
 			markdown.line(format!("- `{prefix}{param_name}` {detail_text}"));

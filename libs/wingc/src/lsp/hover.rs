@@ -413,9 +413,9 @@ Json.stringify({});
 "#
 	);
 
-test_hover_list!(
-  variadic_args,
-  r#"
+	test_hover_list!(
+		variadic_args,
+		r#"
   class Arr {
     pub addMany(...items: Array<str>) {
   
@@ -426,5 +426,5 @@ test_hover_list!(
   arr.addMany("a","b","c");
       //^
   "#,
-);
+	);
 }
