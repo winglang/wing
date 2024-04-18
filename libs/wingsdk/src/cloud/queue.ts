@@ -13,7 +13,7 @@ export const QUEUE_FQN = fqnForType("cloud.Queue");
 /**
  * Dead-letter queue default retries
  */
-export const DEFAULT_DELIVERY_ATTEMPS = 1;
+export const DEFAULT_DELIVERY_ATTEMPTS = 1;
 
 /**
  * Dead letter queue options.
