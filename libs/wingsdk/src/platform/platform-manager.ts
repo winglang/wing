@@ -17,6 +17,9 @@ interface PlatformManagerOptions {
 const BUILTIN_PLATFORMS = ["tf-aws", "tf-azure", "tf-gcp", "sim"];
 
 /** @internal */
+export const SECRETS_FILE_NAME = "secrets.json";
+
+/** @internal */
 export class PlatformManager {
   private readonly platformPaths: string[];
   private platformInstances: IPlatform[] = [];
@@ -130,7 +133,7 @@ export class PlatformManager {
 
     if (secretNames.length > 0) {
       writeFileSync(
-        join(app.outdir, "secrets.json"),
+        join(app.outdir, SECRETS_FILE_NAME),
         JSON.stringify(secretNames)
       );
     }

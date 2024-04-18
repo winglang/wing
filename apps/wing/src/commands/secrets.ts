@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { cwd } from "process";
-import { PlatformManager } from "@winglang/sdk/lib/platform";
+import { PlatformManager, SECRETS_FILE_NAME } from "@winglang/sdk/lib/platform";
 import inquirer from "inquirer";
 import { CompileOptions, compile } from "./compile";
 
@@ -12,10 +12,10 @@ export interface SecretsOptions extends CompileOptions {
 export async function secrets(entrypoint?: string, options?: SecretsOptions): Promise<void> {
   // Compile the program to generate secrets file
   const outdir = await compile(entrypoint, options);
-  const secretsFile = path.join(outdir, "secrets.json");
+  const secretsFile = path.join(outdir, SECRETS_FILE_NAME);
 
   let secretNames = fs.existsSync(secretsFile)
-    ? JSON.parse(fs.readFileSync(path.join(outdir, "secrets.json"), "utf-8"))
+    ? JSON.parse(fs.readFileSync(secretsFile, "utf-8"))
     : [];
 
   process.env.WING_SOURCE_DIR = cwd();
