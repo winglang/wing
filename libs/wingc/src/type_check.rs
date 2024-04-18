@@ -904,7 +904,8 @@ impl Display for FunctionSignature {
 				if a.name.is_empty() {
 					format!("{}", a.typeref)
 				} else {
-					format!("{}: {}", a.name, a.typeref)
+					let prefix = if a.variadic { "..." } else { "" };
+					format!("{}{}: {}", prefix, a.name, a.typeref)
 				}
 			})
 			.collect::<Vec<String>>()
