@@ -23,7 +23,7 @@ use crate::file_graph::FileGraph;
 use crate::type_check::has_type_stmt::HasStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
-use crate::visit_types::{VisitType, VisitTypeMut};
+use crate::visit_types::{visit_typeref, VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
 	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON,
@@ -1080,6 +1080,31 @@ impl TypeRef {
 		}
 
 		false
+	}
+
+	/// A phase independent type is a type that cab be instantiated both in preflight and inflight.
+	/// This traverses over the inner fields of a type and if it finds a preflight class or interface
+	/// it'll return false.
+	pub fn phase_independent(&self) -> bool {
+		struct CanBeInstantiatedInflightVisitor {
+			can_be_instantiated_inflight: bool,
+		}
+
+		impl<'a> VisitType<'a> for CanBeInstantiatedInflightVisitor {
+			fn visit_typeref(&mut self, node: &'a TypeRef) {
+				if node.is_preflight_object_type() {
+					self.can_be_instantiated_inflight = false;
+				} else {
+					visit_typeref(self, node);
+				}
+			}
+		}
+
+		let mut visitor = CanBeInstantiatedInflightVisitor {
+			can_be_instantiated_inflight: true, // By default we're phase independent
+		};
+		visitor.visit_typeref(self);
+		visitor.can_be_instantiated_inflight
 	}
 
 	/// Returns whether type represents a closure (either a function or a closure class).
@@ -4088,7 +4113,11 @@ impl<'a> TypeChecker<'a> {
 					field_type,
 					false,
 					false,
-					Phase::Independent,
+					if field_type.phase_independent() {
+						Phase::Independent
+					} else {
+						Phase::Preflight
+					},
 					AccessModifier::Public,
 					None,
 				),
@@ -5812,20 +5841,15 @@ impl<'a> TypeChecker<'a> {
 
 				// Try to resolve phase independent property's actual phase
 				property_phase = if property_phase == Phase::Independent {
-					// If the object is a string we treat the phase independent property based on our env.
-					// Strings might be tokens and not evaluated yet. Tokenized strings accessed inflight
-					// must be evaluated in inflight.
-					if instance_type.is_string() {
-						env.phase
-					}
-					// When the property is phase independent and either the object phase is inflight or we're
-					// passing inflight args to the method call, then we need treat the property as inflight too.
-					else if instance_phase == Phase::Inflight || callee_with_inflight_args {
-						Phase::Inflight
-					} else {
-						// Default to instance phase
-						instance_phase
-					}
+					// Phase independent properties get the env phase, this makes sure calls to phase independent
+					// methods on lifted preflight objects are executed inflight. This is important in the following cases:
+					// 1. Strings might be tokens and not evaluated yet. Tokenized strings accessed inflight
+					//    must be evaluated in inflight.
+					// 2. Methods returning mutable objects need to be called inflight, because we un-mut these objects
+					//    on lift, but the use expects the return value to be mutable. Calling them inflight resolves this.
+					// 3. Any side effect as a result of the call (non-pure functions) is probably expected to happen inflight.
+					//    So generally, we should call phase independent methods inflight.
+					env.phase
 				} else {
 					property_variable.phase
 				};
