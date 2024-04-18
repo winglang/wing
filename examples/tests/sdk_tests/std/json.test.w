@@ -186,4 +186,26 @@ test "delete() for MutJson" {
   assert(mutObj.has("x") == false);
   assert(mutObj.has("y")==true);
   assert(mutObj.delete("random key that doesn't exist") == true);
+  let nullObj = MutJson{};
+  assert(nullObj.delete("something") == true);
+  let mutJsonArray = MutJson [1, 2, 3];
+  assert(mutJsonArray.delete(1) == true);
+  let boolMutJson = MutJson[true, 1, 2, 3];
+  assert(boolMutJson.delete(true) == true);
+  assert(boolMutJson.has(true) == false);
+  assert(boolMutJson.has(1) == true);
+  let original = MutJson ({
+    "string": "wing",
+    "number": 123,
+    "array": [1, 2, 3],
+    "true": true,
+    "false": false,
+    "object": {
+      "key1": "value1",
+      "key2": 2,
+      "key3": false,
+      "key5": [3, 2, 1]
+    }
+  });
+  assert(original.delete("key5")==true);
 }
