@@ -14,19 +14,25 @@ queue_without_retries.setConsumer(inflight (msg: str) => {
   }
 });
 
-new std.Test(inflight () => {
-  queue_without_retries.push("Hello");
-  queue_without_retries.push("fail");
-  queue_without_retries.push("World!");
 
-  // wait until it executes once.
-  assert(util.waitUntil(inflight () => { return counter_received_messages.peek("Hello") == 1; }));
-  assert(util.waitUntil(inflight () => { return counter_received_messages.peek("World!") == 1; }));
-  assert(util.waitUntil(inflight () => { return counter_received_messages.peek("fail") == 1; }));
+new std.Test(
+  inflight () => {
+    queue_without_retries.push("Hello");
+    queue_without_retries.push("fail");
+    queue_without_retries.push("World!");
 
-  // check if the "fail" message has arrived at the dead-letter queue
-  assert(util.waitUntil(inflight () => { return dlq_without_retries.pop() == "fail"; }));
-}, timeout: 5m) as "one execution and send fail message to dead-letter queue";
+    // wait until it executes once.
+    assert(util.waitUntil(inflight () => { return counter_received_messages.peek("Hello") == 1; }));
+    assert(util.waitUntil(inflight () => { return counter_received_messages.peek("World!") == 1; }));
+    assert(util.waitUntil(inflight () => { return counter_received_messages.peek("fail") == 1; }));
+
+    // check if the "fail" message has arrived at the dead-letter queue
+    assert(util.waitUntil(inflight () => { return dlq_without_retries.pop() == "fail"; }));
+  }, 
+  // To make this test work on AWS, it's necessary to set a high timeout 
+  // because if the message fails, we have to wait for the visibility timeout 
+  // to expire in order to retrieve the same message from the queue again.
+  timeout: 5m) as "one execution and send fail message to dead-letter queue";
 
 let dlq_with_retries = new cloud.Queue() as "dlq with retries";
 let queue_with_retries = new cloud.Queue(
