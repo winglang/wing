@@ -35,28 +35,28 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
     const queueOpt = props.dlq
       ? {
-        visibilityTimeoutSeconds: props.timeout
-          ? props.timeout.seconds
-          : Duration.fromSeconds(30).seconds,
-        messageRetentionSeconds: props.retentionPeriod
-          ? props.retentionPeriod.seconds
-          : Duration.fromHours(1).seconds,
-        name: ResourceNames.generateName(this, NAME_OPTS),
-        redrivePolicy: JSON.stringify({
-          deadLetterTargetArn: AwsQueue.from(props.dlq.queue)?.queueArn,
-          maxReceiveCount:
-            props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
-        }),
-      }
+          visibilityTimeoutSeconds: props.timeout
+            ? props.timeout.seconds
+            : Duration.fromSeconds(30).seconds,
+          messageRetentionSeconds: props.retentionPeriod
+            ? props.retentionPeriod.seconds
+            : Duration.fromHours(1).seconds,
+          name: ResourceNames.generateName(this, NAME_OPTS),
+          redrivePolicy: JSON.stringify({
+            deadLetterTargetArn: AwsQueue.from(props.dlq.queue)?.queueArn,
+            maxReceiveCount:
+              props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
+          }),
+        }
       : {
-        visibilityTimeoutSeconds: props.timeout
-          ? props.timeout.seconds
-          : Duration.fromSeconds(30).seconds,
-        messageRetentionSeconds: props.retentionPeriod
-          ? props.retentionPeriod.seconds
-          : Duration.fromHours(1).seconds,
-        name: ResourceNames.generateName(this, NAME_OPTS),
-      };
+          visibilityTimeoutSeconds: props.timeout
+            ? props.timeout.seconds
+            : Duration.fromSeconds(30).seconds,
+          messageRetentionSeconds: props.retentionPeriod
+            ? props.retentionPeriod.seconds
+            : Duration.fromHours(1).seconds,
+          name: ResourceNames.generateName(this, NAME_OPTS),
+        };
 
     this.queue = new SqsQueue(this, "Default", queueOpt);
   }
