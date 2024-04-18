@@ -28,7 +28,7 @@ export interface DeadLetterQueueProps {
    * sent to the dead-letter queue.
    * @default 1
    */
-  readonly maxDeliveryAttemps?: number;
+  readonly maxDeliveryAttempts?: number;
 }
 
 /**
