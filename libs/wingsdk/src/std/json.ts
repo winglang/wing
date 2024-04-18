@@ -155,23 +155,19 @@ export class Json {
     str;
     throw new Error("Macro");
   }
-
+  private constructor() {}
   /**
    * Checks if a Json object has a given key
    *
-   * @macro ((json, key) => { return json.hasOwnProperty(key); })($args$)
+   * @macro ((obj, key) => { return obj.hasOwnProperty(key); })($self$,$args$)
    *
-   * @param json The json object to inspect
    * @param key The key to check
    * @returns Boolean value corresponding to whether the key exists
    */
-  public static has(json: Json, key: string): boolean {
-    json;
+  public has(key: string): boolean {
     key;
     throw new Error("Macro");
   }
-
-  private constructor() {}
 
   /**
    * Returns the value associated with the specified Json key
@@ -451,6 +447,33 @@ export class MutJson {
    * @returns a boolean.
    */
   public tryAsBool(): boolean | undefined {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Removes the specified element from a map.
+   *
+   * @macro (delete ($self$)[$args$])
+   *
+   * @param key The key
+   * @returns true if the given key is no longer present
+   */
+
+  public delete(key: string): boolean {
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Checks if a Json object has a given key
+   *
+   * @macro ((obj, key) => { return obj.hasOwnProperty(key); })($self$,$args$)
+   *
+   * @param key The key to check
+   * @returns Boolean value corresponding to whether the key exists
+   */
+  public has(key: string): boolean {
+    key;
     throw new Error("Macro");
   }
 }
