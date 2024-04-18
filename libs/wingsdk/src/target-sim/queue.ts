@@ -153,8 +153,8 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       dlq: this.dlq
         ? {
             dlqHandler: simulatorHandleToken(this.dlq.queue),
-            maxDeliveryAttemps:
-              this.dlq.maxDeliveryAttemps ?? cloud.DEFAULT_DELIVERY_ATTEMPS,
+            maxDeliveryAttempts:
+              this.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
           }
         : undefined,
     };

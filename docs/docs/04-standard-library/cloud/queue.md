@@ -287,7 +287,7 @@ let DeadLetterQueueProps = cloud.DeadLetterQueueProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.queue">queue</a></code> | <code><a href="#@winglang/sdk.cloud.Queue">Queue</a></code> | Queue to receive messages that failed processing. |
-| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.maxDeliveryAttemps">maxDeliveryAttemps</a></code> | <code>num</code> | Number of times a message will be processed before being sent to the dead-letter queue. |
+| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.maxDeliveryAttempts">maxDeliveryAttempts</a></code> | <code>num</code> | Number of times a message will be processed before being sent to the dead-letter queue. |
 
 ---
 
@@ -303,10 +303,10 @@ Queue to receive messages that failed processing.
 
 ---
 
-##### `maxDeliveryAttemps`<sup>Optional</sup> <a name="maxDeliveryAttemps" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.maxDeliveryAttemps"></a>
+##### `maxDeliveryAttempts`<sup>Optional</sup> <a name="maxDeliveryAttempts" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.maxDeliveryAttempts"></a>
 
 ```wing
-maxDeliveryAttemps: num;
+maxDeliveryAttempts: num;
 ```
 
 - *Type:* num

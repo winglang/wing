@@ -1,16 +1,15 @@
 bring cloud;
 bring util;
 
-let c = new cloud.Counter();
+let counter_received_messages = new cloud.Counter();
 
-let key_without_retries = "without_retries";
 let dlq_without_retries = new cloud.Queue() as "dlq without retries";
 let queue_without_retries = new cloud.Queue(
   dlq: { queue: dlq_without_retries }
 ) as "queue without retries";
 queue_without_retries.setConsumer(inflight (msg: str) => {
+  counter_received_messages.inc(1, msg);
   if msg == "fail" {
-    c.inc(1, key_without_retries);
     throw "error";
   }
 });
@@ -21,24 +20,24 @@ new std.Test(inflight () => {
   queue_without_retries.push("World!");
 
   // wait until it executes once.
-  assert(util.waitUntil(inflight () => { return c.peek(key_without_retries) == 1; }));
+  assert(util.waitUntil(inflight () => { return counter_received_messages.peek("Hello") == 1; }));
+  assert(util.waitUntil(inflight () => { return counter_received_messages.peek("World!") == 1; }));
+  assert(util.waitUntil(inflight () => { return counter_received_messages.peek("fail") == 1; }));
 
   // check if the "fail" message has arrived at the dead-letter queue
   assert(util.waitUntil(inflight () => { return dlq_without_retries.pop() == "fail"; }));
 }, timeout: 5m) as "one execution and send fail message to dead-letter queue";
 
-
-let key_with_retries = "with_retries";
 let dlq_with_retries = new cloud.Queue() as "dlq with retries";
 let queue_with_retries = new cloud.Queue(
   dlq: {
     queue: dlq_with_retries,
-    maxDeliveryAttemps: 2
+    maxDeliveryAttempts: 2
   }
 ) as "queue with retries";
 queue_with_retries.setConsumer(inflight (msg: str) => {
+  counter_received_messages.inc(1, msg);
   if msg == "fail" {
-    c.inc(1, key_with_retries);
     throw "error";
   }
 });
@@ -49,7 +48,9 @@ new std.Test(inflight () => {
   queue_with_retries.push("World!");
 
   // wait until it executes once and retry one more times.
-  assert(util.waitUntil(inflight () => { return c.peek(key_with_retries) == 2; }));
+  assert(util.waitUntil(inflight () => { return counter_received_messages.peek("Hello") == 1; }));
+  assert(util.waitUntil(inflight () => { return counter_received_messages.peek("World!") == 1; }));
+  assert(util.waitUntil(inflight () => { return counter_received_messages.peek("fail") == 2; }));
 
   // check if the "fail" message has arrived at the dead-letter queue
   assert(util.waitUntil(inflight () => { return dlq_with_retries.pop() == "fail"; }));

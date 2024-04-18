@@ -45,7 +45,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
           redrivePolicy: JSON.stringify({
             deadLetterTargetArn: AwsQueue.from(props.dlq.queue)?.queueArn,
             maxReceiveCount:
-              props.dlq.maxDeliveryAttemps ?? cloud.DEFAULT_DELIVERY_ATTEMPS,
+              props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
           }),
         }
       : {

@@ -9,7 +9,7 @@ import {
   ResourceHandle,
 } from "./schema-resources";
 import {
-  DEFAULT_DELIVERY_ATTEMPS,
+  DEFAULT_DELIVERY_ATTEMPTS,
   IFunctionClient,
   IQueueClient,
   QUEUE_FQN,
@@ -96,7 +96,7 @@ export class Queue
           this.messages.push(
             new QueueMessage(
               this.retentionPeriod,
-              DEFAULT_DELIVERY_ATTEMPS,
+              DEFAULT_DELIVERY_ATTEMPTS,
               message
             )
           );
@@ -208,14 +208,26 @@ export class Queue
               const errorList = JSON.parse(result);
               let retriesMessages = [];
               for (const msg of errorList) {
-                if (msg.maxDeliveryAttemps < this.dlq.maxDeliveryAttemps) {
-                  msg.maxDeliveryAttemps++;
+                if (
+                  msg.remainingDeliveryAttempts < this.dlq.maxDeliveryAttempts
+                ) {
+                  msg.remainingDeliveryAttempts++;
                   retriesMessages.push(msg);
                 } else {
                   let dlq = this.context.getClient(
                     this.dlq.dlqHandler
                   ) as IQueueClient;
-                  void dlq.push(msg.payload);
+                  void dlq.push(msg.payload).catch((err) => {
+                    this.context.addTrace({
+                      type: TraceType.RESOURCE,
+                      data: {
+                        message: `Pushing messages to the dead-letter queue generates an error -> ${err}`,
+                      },
+                      sourcePath: this.context.resourcePath,
+                      sourceType: QUEUE_FQN,
+                      timestamp: new Date().toISOString(),
+                    });
+                  });
                 }
               }
               this.messages.push(...retriesMessages);
@@ -270,18 +282,18 @@ export class Queue
 class QueueMessage {
   public readonly retentionTimeout: Date;
   public readonly payload: string;
-  public maxDeliveryAttemps: number;
+  public remainingDeliveryAttempts: number;
 
   constructor(
     retentionPeriod: number,
-    maxDeliveryAttemps: number,
+    remainingDeliveryAttempts: number,
     message: string
   ) {
     const currentTime = new Date();
     currentTime.setSeconds(retentionPeriod + currentTime.getSeconds());
     this.retentionTimeout = currentTime;
     this.payload = message;
-    this.maxDeliveryAttemps = maxDeliveryAttemps;
+    this.remainingDeliveryAttempts = remainingDeliveryAttempts;
   }
 }
 
