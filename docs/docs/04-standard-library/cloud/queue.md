@@ -43,7 +43,7 @@ new cloud.Function(inflight () => {
 
 ### Using Queue inflight api
 
-Pusing messages, popping them, and purge
+Pushing messages, popping them, and purging.
 
 ```ts playground
 bring cloud;
@@ -61,6 +61,30 @@ new cloud.Function(inflight () => {
   log("approxSize is ${q.approxSize()}");
 });
 ```
+
+### Referencing an external queue
+
+If you would like to reference an existing queue from within your application you can use the
+`QueueRef` classes in the target-specific namespaces.
+
+> This is currently only supported for `aws`.
+
+The following example defines a reference to an Amazon SQS queue with a specific ARN and sends a
+message to the queue from the function:
+
+```js
+bring aws;
+
+let outbox = new aws.QueueRef("arn:aws:sqs:us-east-1:111111111111:Outbox");
+
+new cloud.Function(inflight () => {
+  outbox.push("send an email");
+});
+```
+
+This works both when running in the simulator (requires AWS credentials on the developer's machine)
+and when deployed to AWS. When this is deployed to AWS, the AWS Lambda IAM policy will include the
+needed permissions.
 
 ## Target-specific details
 
@@ -155,7 +179,7 @@ Retrieve the approximate number of messages in the queue.
 ##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
 
 ```wing
-inflight pop(): str
+inflight pop(): str?
 ```
 
 Pop a message from the queue.
@@ -309,11 +333,25 @@ let QueueSetConsumerOptions = cloud.QueueSetConsumerOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.QueueSetConsumerOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
 
 ---
 

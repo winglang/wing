@@ -45,6 +45,49 @@ impl Docs {
 			..Default::default()
 		}
 	}
+
+	pub fn as_jsdoc_comment(&self) -> Option<String> {
+		let mut markdown = CodeMaker::default();
+		let mut has_data = false;
+		markdown.line("/** ");
+
+		if let Some(s) = &self.summary {
+			has_data = true;
+			markdown.append(s);
+		}
+
+		if let Some(s) = &self.remarks {
+			has_data = true;
+			markdown.line(s);
+		}
+
+		if let Some(s) = &self.example {
+			has_data = true;
+			markdown.line(s);
+		}
+
+		if let Some(s) = &self.returns {
+			has_data = true;
+			markdown.line(format!("@returns {s}"));
+		}
+
+		if let Some(s) = &self.deprecated {
+			has_data = true;
+			markdown.line(format!("@deprecated {s}"));
+		}
+
+		if let Some(s) = &self.see {
+			has_data = true;
+			markdown.line(format!("@see {s}"));
+		}
+
+		if has_data {
+			markdown.append(" */");
+			Some(markdown.to_string())
+		} else {
+			None
+		}
+	}
 }
 
 impl Documented for SymbolKind {
@@ -229,11 +272,13 @@ fn render_signature_help(f: &FunctionSignature) -> String {
 		} else {
 			format!("— `{param_type}`")
 		};
+		let is_last_struct = is_last && param_type_unwrapped.is_struct();
+		let prefix = if param.variadic || is_last_struct { "..." } else { "" };
 
-		if !is_last || !param_type_unwrapped.is_struct() {
-			markdown.line(format!("- `{param_name}` {detail_text}"));
+		if !is_last_struct {
+			markdown.line(format!("- `{prefix}{param_name}` {detail_text}"));
 		} else {
-			markdown.line(format!("- `...{param_name}` {detail_text}"));
+			markdown.line(format!("- `{prefix}{param_name}` {detail_text}"));
 
 			let structy = param_type_unwrapped.as_struct().unwrap();
 			let struct_text = render_classlike_members(structy);

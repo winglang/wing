@@ -1,8 +1,10 @@
 import { ISimulatorResource } from "./resource";
+import { StateSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { INFLIGHT_SYMBOL } from "../core/types";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Json, Resource } from "../std";
 
 /**
@@ -25,6 +27,9 @@ export const STATE_FQN = fqnForType("sim.State");
  * @inflight `@winglang/sdk.sim.IStateClient`
  */
 export class State extends Resource implements ISimulatorResource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IStateClient;
+
   /**
    * Returns a token that can be used to retrieve the value of the state after the simulation has
    * run.
@@ -49,17 +54,15 @@ export class State extends Resource implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 
-  public toSimulator(): BaseResourceSchema {
+  public toSimulator(): ToSimulatorOutput {
+    const props: StateSchema = {};
     return {
       type: STATE_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {},
-      attrs: {},
+      props,
     };
   }
 }

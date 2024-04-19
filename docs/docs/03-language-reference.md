@@ -544,6 +544,33 @@ log("Timezone is GMT{d.timezone() / 60}"); // output: Timezone is GMT-2
 log("UTC: {t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 ```
 
+####  1.1.7 Indexing
+
+The `obj[index]` syntax can be used to index into arrays and objects. For example:
+
+```TS
+let arr = MutArray<num>[3, 5];
+assert(arr[0] == 3);
+assert(arr[1] == 5);
+assert(arr[-1] == 5);
+assert(arr[-2] == 3);
+
+arr[42]; // throws an index out of bounds error
+
+arr[0] = 42;
+arr[1] += 3.5;
+```
+
+Negative indices are supported and are counted from the end of the array.
+
+The following is a list of supported indexable types:
+
+* `Array` and `MutArray` - accepts a `num` index
+* `Map` and `MutMap` - accepts a `str` index
+* `Json` and `MutJson` - accepts `num` and `str` index values
+* `str` - accepts a `num` index
+
+[`▲ top`][top]
 
 ### 1.2 Utility Functions
 
@@ -553,10 +580,12 @@ log("UTC: {t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 | `assert`     | checks a condition and _throws_ if evaluated to false |
 | `unsafeCast` | cast a value into a different type                    |
 | `nodeof`     | obtain the [tree node](./02-concepts/02-application-tree.md) of a preflight object |
+| `lift`       | explicitly qualify a [lift](./02-concepts/01-preflight-and-inflight.md#explicit-lift-qualification) of a preflight object |
 
 > ```TS
 > log("Hello {name}");
 > assert(x > 0);
+> assert(x > 0, "x should be positive");
 > ```
 
 [`▲ top`][top]
@@ -640,7 +669,7 @@ let handler2 = inflight() => {
 Bridge between preflight and inflight is crossed with the help of immutable data
 structures, "structs" (user definable and `Struct`), and the capture mechanism.
 
-Preflight class methods and initializers can receive an inflight function as an argument. This
+Preflight class methods and constructors can receive an inflight function as an argument. This
 enables preflight classes to define code that will be executed on a cloud compute platform such as
 lambda functions, docker, virtual machines etc.
 
@@ -1365,8 +1394,8 @@ scope in which it is declared. This implies that, if a class is declared at the 
 program's entrypoint), it will be a *preflight class*. If a class is declared within an inflight
 scope, it will be implicitly an inflight class.
 
-A method that has the name **init** is considered to be a class
-constructor (or initializer).
+A method that has the name **new** is considered to be a class
+constructor.
 
 ```TS
 inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
@@ -1439,10 +1468,14 @@ class Boo extends Foo {
 ```
 
 Classes can inherit and extend other classes using the `extends` keyword.  
-Classes can implement interfaces iff the interfaces do not contain `inflight`.
+Classes can implement multiple interfaces using the `impl` keyword. 
+Inflight classes may only implement inflight interfaces.
 
 ```TS
-class Foo {
+interface IFoo {
+  method(): void;
+}
+class Foo impl IFoo {
   x: num;
   new() { this.x = 0; }
   pub method() { }
@@ -1575,7 +1608,12 @@ of methods with different phases is not allowed as well.
 
 Interfaces represent a contract that a class must fulfill.
 Interfaces are defined with the `interface` keyword.
-Currently, preflight interfaces are allowed, while inflight interfaces are not supported yet (see https://github.com/winglang/wing/issues/1961).
+Interfaces may be either preflight interfaces or inflight interfaces.
+Preflight interfaces are defined in preflight scope and can contain both preflight and inflight methods.
+Only preflight classes may implement preflight interfaces.
+Inflight interfaces are either defined with the `inflight` modifier in preflight scope or simply defined in inflight scope.
+All methods of inflight interfaces are implicitly inflight (no need to use the `inflight` keyword).
+Since both preflight and inflight classes can have inflight methods defined inside them, they are both capable of implementing inflight interfaces.
 `impl` keyword is used to implement an interface or multiple interfaces that are
 separated with commas.
 
@@ -1592,7 +1630,7 @@ Interface fields are not supported.
 >   inflight method3(): void;
 > }
 >
-> interface IMyInterface2 {
+> inflight interface IMyInterface2 {
 >   method2(): str; 
 > }
 >
@@ -1608,7 +1646,7 @@ Interface fields are not supported.
 >     return "sample: {x}";
 >   }
 >   inflight method3(): void { }
->   method2(): str {
+>   inflight method2(): str {
 >     return this.field2;
 >   }
 > }
@@ -1725,7 +1763,7 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 > let arr1 = [1, 2, 3];
 > let arr2 = ["a", "b", "c"];
 > let arr3 = MutArray<str>["a1", "b2", "c3"];
-> let l = arr1.length + arr2.length + arr3.length + arr1.at(0);
+> let l = arr1.length + arr2.length + arr3.length + arr1[0];
 > ```
 
 [`▲ top`][top]
@@ -1861,9 +1899,21 @@ let bucket = new awscdk.aws_s3.Bucket(
 );
 ```
 
+### 5.1.2 Type System
+
+Mapping JSII types to Wing types:
+
+| **JSII Type** |  **Wing Type** |
+|---------------|--------------------|
+| [class](https://aws.github.io/jsii/user-guides/language-support/assembly/#classes) | A [Wing class](#32-classes).<br/> The [phase](#13-phase-modifiers) of the class will be `preflight` if the imported class is a [construct](https://github.com/aws/constructs) (derived from `constructs.Construct`). Otherwise the class will be phase independent.<br/> By convention construct constructors have a `scope` and `id` as their first parameters. These will be used by Wing to define the default scope and id for new instances of this [preflight class](#33-preflight-classes) or explicit scope and id using the `in` and `as` keywords. |
+| [interface](https://aws.github.io/jsii/user-guides/language-support/assembly/#interfaces) | A [Wing interface](#34-interfaces). All imported interfaces are `preflight` interfaces.<br/> JSII library authors may annotate their interface with a docstring tag like `@inflight IMyClient` to indicate a second interface that'll be used to import inflight methods **into** this Wing interface. |
+| [struct (a.k.a. data-type)](https://aws.github.io/jsii/user-guides/language-support/assembly/#structs-aka-data-types) | A [Wing struct](#31-structs). Always phase independent. |
+| [enum](https://aws.github.io/jsii/user-guides/language-support/assembly/#enums) | A [Wing enum](#38-enumeration). |
+
 ## 5.2 JavaScript
 
-The `extern "<commonjs module path>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module must be a relative path and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+The `extern "<javascript module path>"` modifier can be used on method declarations in classes to indicate that a method is backed by an implementation imported from a JavaScript module. The module must be a relative path and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+This module can be either CJS or ESM and may be written in JavaScript or TypeScript.
 
 In the following example, the static inflight method `makeId` is implemented
 in `helper.js`:
@@ -1898,13 +1948,7 @@ matching name (without any case conversion).
 
 Extern methods do not support access to class's members through `this`, so they must be declared `static`.
 
-### 5.2.1 TypeScript
-
-It is possible to use TypeScript to write helpers, but at the moment this is not
-directly supported by Wing. This means that you will need to setup the TypeScript toolchain
-to compile your code to JavaScript and then use `extern` against the JavaScript file.
-
-### 5.2.2 Type model
+### 5.2.1 Type model
 
 The table below shows the mapping between Wing types and JavaScript values, shown with TypeScript types.
 When calling **extern** function, the parameter and return types are **assumed** to be satisfied by the called function.

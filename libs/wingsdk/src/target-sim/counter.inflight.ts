@@ -6,6 +6,7 @@ import { ICounterClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 
 const VALUES_FILENAME = "values.json";
@@ -13,18 +14,22 @@ const VALUES_FILENAME = "values.json";
 export class Counter implements ICounterClient, ISimulatorResourceInstance {
   private values: Map<string, number>;
   private initial: number;
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
 
-  public constructor(
-    props: CounterSchema["props"],
-    context: ISimulatorContext
-  ) {
+  public constructor(props: CounterSchema) {
     this.initial = props.initial ?? 0;
     this.values = new Map().set("default", this.initial);
-    this.context = context;
   }
 
-  public async init(): Promise<CounterAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<CounterAttributes> {
+    this._context = context;
     const valuesFile = join(this.context.statedir, VALUES_FILENAME);
     const valueFilesExists = await exists(valuesFile);
     if (valueFilesExists) {
@@ -37,8 +42,12 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
 
   public async cleanup(): Promise<void> {}
 
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
   public async save(): Promise<void> {
-    await fs.promises.writeFile(
+    fs.writeFileSync(
       join(this.context.statedir, VALUES_FILENAME),
       JSON.stringify(Array.from(this.values.entries()))
     );

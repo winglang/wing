@@ -1,9 +1,10 @@
 import * as cp from "child_process";
 import { existsSync, readFile, readFileSync, realpathSync, rm, rmSync, statSync } from "fs";
-import { basename, join, relative, resolve, sep } from "path";
+import { basename, join, relative, resolve } from "path";
 import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
+import { TraceType } from "@winglang/sdk/lib/std";
 import { Util } from "@winglang/sdk/lib/util";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
@@ -11,19 +12,17 @@ import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
+import { SnapshotMode, SnapshotResult, captureSnapshot, determineSnapshotMode } from "./snapshots";
+import { SNAPSHOT_ERROR_PREFIX } from "./snapshots-help";
+import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
+import { SpinnerStream } from "../spinner-stream";
 
 const log = debug("wing:test");
 
 const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS";
 const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
-
-/**
- * @param path path to the test/s file
- * @returns the file name and parent dir in the following format: "folder/file.ext"
- */
-const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 
 /**
  * Options for the `test` command.
@@ -32,19 +31,28 @@ export interface TestOptions extends CompileOptions {
   /**
    * Whether the output artifacts should be kept or cleaned up after the test run.
    */
-  clean: boolean;
+  readonly clean: boolean;
   /**
    * The name of the output file.
    */
-  outputFile?: string;
+  readonly outputFile?: string;
   /**
    * String representing a regex pattern used to selectively filter which tests to run.
    */
-  testFilter?: string;
+  readonly testFilter?: string;
   /**
    * How many times failed tests should be retried.
    */
-  retry?: number;
+  readonly retry?: number;
+  /**
+   * Whether to stream the logs of the test run.
+   */
+  readonly stream?: boolean;
+
+  /**
+   * Determine snapshot behavior.
+   */
+  readonly snapshots?: SnapshotMode;
 }
 
 const TEST_FILE_PATTERNS = ["**/*.test.w", "**/{main,*.main}.{w,ts}"];
@@ -96,17 +104,22 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   }
 
   const startTime = Date.now();
-  const results: { testName: string; results: std.TestResult[] }[] = [];
+  const results: SingleTestResult[] = [];
   process.env.WING_TARGET = determineTargetFromPlatforms(options.platform ?? []);
   const testFile = async (entrypoint: string) => {
-    const testName = generateTestName(entrypoint);
+    const testName = renderTestName(entrypoint);
     try {
-      const singleTestResults: std.TestResult[] | void = await testOne(entrypoint, options);
-      results.push({ testName, results: singleTestResults ?? [] });
+      const singleTestResults = await testOne(testName, entrypoint, options);
+      results.push(singleTestResults);
     } catch (error: any) {
       console.log(error.message);
+      const snapshot = error.message?.startsWith(SNAPSHOT_ERROR_PREFIX)
+        ? SnapshotResult.MISMATCH
+        : SnapshotResult.SKIPPED;
+
       results.push({
-        testName: generateTestName(entrypoint),
+        testName,
+        snapshot,
         results: [
           {
             pass: false,
@@ -140,18 +153,59 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   return 0;
 }
 
-async function testOne(entrypoint: string, options: TestOptions) {
-  const target = process.env.WING_TARGET; // TODO: try to just call method
-  const synthDir = await withSpinner(
-    `Compiling ${generateTestName(entrypoint)} to ${target}...`,
-    async () =>
-      compile(entrypoint, {
-        ...options,
-        rootId: options.rootId ?? `Test.${nanoid(10)}`,
-        testing: true,
-      })
-  );
+export type SingleTestResult = {
+  readonly testName: string;
+  readonly results: std.TestResult[];
+  readonly snapshot: SnapshotResult;
+};
 
+async function testOne(
+  testName: string,
+  entrypoint: string,
+  options: TestOptions
+): Promise<SingleTestResult> {
+  const target = determineTargetFromPlatforms(options.platform);
+
+  // determine snapshot behavior
+  const snapshotMode = determineSnapshotMode(target, options);
+  const shouldExecute = snapshotMode === SnapshotMode.NEVER || snapshotMode === SnapshotMode.DEPLOY;
+
+  let results: std.TestResult[] = [];
+  if (shouldExecute) {
+    const synthDir = await withSpinner(
+      `Compiling ${renderTestName(entrypoint)} to ${target}...`,
+      async () =>
+        compile(entrypoint, {
+          ...options,
+          rootId: options.rootId ?? `Test.${nanoid(10)}`,
+          testing: true,
+        })
+    );
+
+    results = await executeTest(synthDir, target, options);
+  }
+
+  // if one of the tests failed, return the results without updating any snapshots.
+  const success = !results.some((r) => !r.pass);
+  let snapshot = SnapshotResult.SKIPPED;
+
+  // if all tests pass, capture snapshots
+  if (success) {
+    snapshot = await captureSnapshot(entrypoint, target, options);
+  }
+
+  return {
+    testName,
+    results: results,
+    snapshot,
+  };
+}
+
+async function executeTest(
+  synthDir: string,
+  target: string | undefined,
+  options: TestOptions
+): Promise<std.TestResult[]> {
   switch (target) {
     case BuiltinPlatform.SIM:
       return testSimulator(synthDir, options);
@@ -171,7 +225,8 @@ async function testOne(entrypoint: string, options: TestOptions) {
  */
 export async function renderTestReport(
   entrypoint: string,
-  results: std.TestResult[]
+  results: std.TestResult[],
+  includeLogs: boolean = true
 ): Promise<string> {
   const out = new Array<string>();
 
@@ -196,14 +251,15 @@ export async function renderTestReport(
 
     const details = new Array<string>();
 
-    // add any log messages that were emitted during the test
-    for (const trace of result.traces) {
-      // only show detailed traces if we are in debug mode
-      if (trace.type === "resource" && process.env.DEBUG) {
-        details.push(chalk.gray("[trace] " + trace.data.message));
-      }
-      if (trace.type === "log") {
-        details.push(chalk.gray(trace.data.message));
+    if (includeLogs) {
+      for (const trace of result.traces) {
+        // only show detailed traces if we are in debug mode
+        if (trace.type === TraceType.RESOURCE && process.env.DEBUG) {
+          details.push(chalk.gray("[trace] " + trace.data.message));
+        }
+        if (trace.type === TraceType.LOG) {
+          details.push(chalk.gray(trace.data.message));
+        }
       }
     }
 
@@ -308,9 +364,138 @@ async function runTestsWithRetry(
   return results;
 }
 
+type TraceSeverity = "error" | "warn" | "info" | "debug" | "verbose";
+
+// TODO: can we share this logic with the Wing Console?
+function inferSeverityOfEvent(trace: std.Trace): TraceSeverity {
+  if (trace.data.status === "failure") {
+    return "error";
+  }
+  if (trace.type === TraceType.LOG) {
+    return "info";
+  }
+  if (trace.type === TraceType.RESOURCE) {
+    return "debug";
+  }
+  if (trace.type === TraceType.SIMULATOR) {
+    return "verbose";
+  }
+  return "verbose";
+}
+
+const SEVERITY_STRING = {
+  error: "[ERROR]",
+  warn: "[WARNING]",
+  info: "[INFO]",
+  debug: "[DEBUG]",
+  verbose: "[VERBOSE]",
+};
+
+const LOG_STREAM_COLORS = {
+  error: chalk.red,
+  warn: chalk.yellow,
+  info: chalk.green,
+  debug: chalk.blue,
+  verbose: chalk.gray,
+};
+
+async function formatTrace(
+  trace: std.Trace,
+  testName: string,
+  mode: "short" | "full"
+): Promise<string> {
+  const severity = inferSeverityOfEvent(trace);
+  // const pathSuffix = trace.sourcePath.split("/").slice(2).join("/");
+  const date = new Date(trace.timestamp);
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
+  const milliseconds = date.getMilliseconds().toString().padStart(3, "0");
+  const timestamp = `${hours}:${minutes}:${seconds}.${milliseconds}`;
+
+  let msg = "";
+  if (mode === "full") {
+    msg += chalk.dim(`[${timestamp}]`);
+    msg += LOG_STREAM_COLORS[severity](` ${SEVERITY_STRING[severity]}`);
+    msg += chalk.dim(` ${testName} » ${trace.sourcePath}`);
+    msg += "\n";
+    if (severity === "error") {
+      msg += chalk.dim(" │ ");
+      msg += trace.data.message;
+      msg += "\n";
+      msg += chalk.dim(" └ ");
+      msg += await prettyPrintError(trace.data.error, { chalk });
+    } else {
+      msg += chalk.dim(" └ ");
+      msg += trace.data.message;
+    }
+    msg += "\n";
+    return msg;
+  } else if (mode === "short") {
+    msg += LOG_STREAM_COLORS[severity](`${SEVERITY_STRING[severity]}`);
+    msg += chalk.dim(` ${testName} | `);
+    if (severity === "error") {
+      msg += trace.data.message;
+      msg += " ";
+      msg += await prettyPrintError(trace.data.error, { chalk });
+    } else {
+      msg += trace.data.message;
+    }
+    msg += "\n";
+    return msg;
+  } else {
+    throw new Error(`Unknown mode: ${mode}`);
+  }
+}
+
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
   const { clean, testFilter, retry } = options;
+
+  let outputStream: SpinnerStream | undefined;
+  if (options.stream) {
+    outputStream = new SpinnerStream(process.stdout, "Running tests...");
+
+    // As of this comment, each Wing test is associated with an isolated environment.
+    // (All resources for test #0 are in root/env0/..., etc.)
+    // This means we can use the environment number to map each environment # to a test name,
+    // so when we receive a trace from the simulator, we can infer which test it's associated with.
+    const testMappings = extractTestMappings(s.listResources());
+
+    const printEvent = async (event: std.Trace) => {
+      const env = extractTestEnvFromPath(event.sourcePath);
+
+      let testName = "(no test)";
+      if (env !== undefined) {
+        testName = testMappings[env] ?? testName;
+      }
+
+      if (testFilter && !testName.includes(testFilter) && testName !== "(no test)") {
+        // This test does not match the filter, so skip it.
+        return;
+      }
+
+      const severity = inferSeverityOfEvent(event);
+
+      // Skip debug events if DEBUG isn't set
+      if ((severity === "debug" || severity === "verbose") && !process.env.DEBUG) {
+        return;
+      }
+
+      // Skip verbose events if DEBUG=verbose isn't set
+      if (severity === "verbose" && process.env.DEBUG !== "verbose") {
+        return;
+      }
+
+      const formatStyle = process.env.DEBUG ? "full" : "short";
+      const formatted = await formatTrace(event, testName, formatStyle);
+      outputStream!.write(formatted);
+    };
+
+    // TODO: support async callbacks with onTrace?
+    s.onTrace({ callback: (event) => void printEvent(event) });
+  }
+
   await s.start();
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
@@ -321,8 +506,14 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
   await s.stop();
 
-  const testReport = await renderTestReport(synthDir, results);
-  console.log(testReport);
+  if (options.stream) {
+    outputStream!.stopSpinner();
+  }
+
+  const testReport = await renderTestReport(synthDir, results, !options.stream);
+  if (testReport.length > 0) {
+    console.log(testReport);
+  }
 
   let args: { methods: Record<string, Record<string, string>> };
   if (existsSync(join(synthDir, "usage_context.json"))) {
@@ -338,7 +529,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   return results.map((r) => ({ ...r, args }));
 }
 
-async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
+async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
   const { clean, testFilter, retry, platform = [BuiltinPlatform.SIM] } = options;
 
   try {
@@ -371,7 +562,9 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
     });
 
     const testReport = await renderTestReport(synthDir, results);
-    console.log(testReport);
+    if (testReport.length > 0) {
+      console.log(testReport);
+    }
 
     if (testResultsContainsFailure(results)) {
       console.log("One or more tests failed. Cleaning up resources...");
@@ -426,7 +619,9 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
     });
 
     const testReport = await renderTestReport(synthDir, results);
-    console.log(testReport);
+    if (testReport.length > 0) {
+      console.log(testReport);
+    }
 
     if (testResultsContainsFailure(results)) {
       console.log("One or more tests failed. Cleaning up resources...");
@@ -524,6 +719,62 @@ function sortTests(a: std.TestResult, b: std.TestResult) {
     return 1;
   }
   return a.path.localeCompare(b.path);
+}
+
+/**
+ * Take a path like "root/env123/foo/bar" and return the environment number (123).
+ */
+function extractTestEnvFromPath(path: string): number | undefined {
+  const parts = path.split("/");
+  const envPart = parts[1];
+  if (!envPart.startsWith("env")) {
+    return undefined;
+  }
+  return parseInt(envPart.substring(3));
+}
+
+/*
+ * Take a path like "root/env123/foo/test:first test/bar" and return "first test".
+ */
+function extractTestNameFromPath(path: string): string | undefined {
+  const parts = path.split("/");
+  for (const part of parts) {
+    if (part.startsWith("test:")) {
+      return part.substring(5);
+    }
+  }
+  return undefined;
+}
+
+/*
+ * Take a list of paths like:
+ *
+ * root/env0/foo
+ * root/env0/test:first test        <-- this is a test
+ * root/env1/bar/test:second test   <-- this is a test
+ * root/env1/bar
+ *
+ * and extract the mapping from environment indices to test names:
+ *
+ * { 0: "first test", 1: "second test" }
+ */
+function extractTestMappings(paths: string[]): Record<number, string> {
+  const mappings: Record<number, string> = {};
+  for (const path of paths) {
+    const parts = path.split("/");
+    if (parts.some((p) => p.startsWith("test:"))) {
+      const env = extractTestEnvFromPath(path);
+      if (env === undefined) {
+        continue;
+      }
+      const testName = extractTestNameFromPath(path);
+      if (testName === undefined) {
+        continue;
+      }
+      mappings[env] = testName;
+    }
+  }
+  return mappings;
 }
 
 const MAX_BUFFER = 10 * 1024 * 1024;

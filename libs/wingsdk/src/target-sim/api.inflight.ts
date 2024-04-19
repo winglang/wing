@@ -6,8 +6,8 @@ import express from "express";
 import { IEventPublisher } from "./event-mapping";
 import {
   ApiAttributes,
-  ApiRoute,
   ApiSchema,
+  ApiRoute,
   EventSubscription,
 } from "./schema-resources";
 import { exists } from "./util";
@@ -24,6 +24,7 @@ import {
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
 import { TraceType } from "../std";
 
@@ -43,22 +44,21 @@ interface StateFileContents {
 
 interface ApiRouteWithFunctionHandle extends ApiRoute {
   functionHandle: string;
+  expressLayer: any;
 }
 
 export class Api
   implements IApiClient, ISimulatorResourceInstance, IEventPublisher
 {
   private readonly routes: ApiRouteWithFunctionHandle[];
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
   private readonly app: express.Application;
   private server: Server | undefined;
   private url: string | undefined;
   private port: number | undefined;
 
-  constructor(props: ApiSchema["props"], context: ISimulatorContext) {
-    props;
+  constructor(props: ApiSchema) {
     this.routes = [];
-    this.context = context;
     const { corsHeaders } = props;
 
     // Set up an express server that handles the routes.
@@ -94,7 +94,15 @@ export class Api
     }
   }
 
-  public async init(): Promise<ApiAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<ApiAttributes> {
+    this._context = context;
     // Check for a previous state file to see if there was a port that was previously being used
     // if so, try to use it out of convenience
     let lastPort: number | undefined;
@@ -131,12 +139,24 @@ export class Api
 
   public async cleanup(): Promise<void> {
     this.addTrace(`Closing server on ${this.url}`);
-    this.server?.close();
-    this.server?.closeAllConnections();
+    return new Promise((resolve, reject) => {
+      this.server?.close((err) => {
+        if (err) {
+          return reject(err);
+        }
+
+        this.server?.closeAllConnections();
+        return resolve();
+      });
+    });
   }
 
   public async save(): Promise<void> {
     await this.saveState({ lastPort: this.port });
+  }
+
+  public async plan() {
+    return UpdatePlan.AUTO;
   }
 
   private async loadState(): Promise<StateFileContents> {
@@ -155,7 +175,7 @@ export class Api
   }
 
   private async saveState(state: StateFileContents): Promise<void> {
-    await fs.promises.writeFile(
+    fs.writeFileSync(
       join(this.context.statedir, STATE_FILENAME),
       JSON.stringify(state)
     );
@@ -166,22 +186,53 @@ export class Api
     subscriptionProps: EventSubscription
   ): Promise<void> {
     const routes = (subscriptionProps as any).routes as ApiRoute[];
-    routes.forEach((r) => {
+    for (const route of routes) {
       const s = {
         functionHandle: subscriber,
-        method: r.method,
-        path: r.path,
+        method: route.method,
+        pathPattern: route.pathPattern,
       };
-      this.routes.push(s);
       this.populateRoute(s, subscriber);
-    });
+
+      // Keep track of the internal express function so we can remove it later
+      // Each layer object in express looks something like this:
+      //
+      // Layer {
+      //   handle: [Function: bound dispatch],
+      //   name: 'bound dispatch',
+      //   params: undefined,
+      //   path: undefined,
+      //   keys: [ [Object] ],
+      //   regexp: /^\/foo\/(?:([^\/]+?))\/?$/i { fast_star: false, fast_slash: false },
+      //   route: Route { path: '/foo/:bar', stack: [Array], methods: [Object] }
+      // }
+      const expressRouteHandle =
+        this.app._router.stack[this.app._router.stack.length - 1];
+      this.routes.push({
+        ...s,
+        expressLayer: expressRouteHandle,
+      });
+    }
   }
 
   public async removeEventSubscription(subscriber: string): Promise<void> {
     const index = this.routes.findIndex((s) => s.functionHandle === subscriber);
-    if (index >= 0) {
-      this.routes.splice(index, 1);
+    if (index === -1) {
+      this.addTrace(
+        `Internal error: No route found for subscriber ${subscriber}.`
+      );
+      return;
     }
+    const layer = this.routes[index].expressLayer;
+    const layerIndex = this.app._router.stack.indexOf(layer);
+    if (layerIndex === -1) {
+      this.addTrace(
+        `Internal error: No express layer found for route ${this.routes[index].pathPattern}.`
+      );
+      return;
+    }
+    this.app._router.stack.splice(layerIndex, 1);
+    this.routes.splice(index, 1);
   }
 
   private populateRoute(route: ApiRoute, functionHandle: string): void {
@@ -195,15 +246,9 @@ export class Api
       | "patch"
       | "connect";
 
-    const fnClient = this.context.findInstance(
-      functionHandle
-    ) as IFunctionClient & ISimulatorResourceInstance;
-    if (!fnClient) {
-      throw new Error("No function client found!");
-    }
-
+    const fnClient = this.context.getClient(functionHandle) as IFunctionClient;
     this.app[method](
-      transformRoutePath(route.path),
+      transformRoutePath(route.pathPattern),
       asyncMiddleware(
         async (
           req: express.Request,
@@ -211,9 +256,9 @@ export class Api
           next: express.NextFunction
         ) => {
           this.addTrace(
-            `Processing "${route.method} ${route.path}" params=${JSON.stringify(
-              req.params
-            )}).`
+            `Processing "${route.method} ${
+              route.pathPattern
+            }" params=${JSON.stringify(req.params)}).`
           );
 
           const apiRequest = transformRequest(req);
@@ -236,7 +281,7 @@ export class Api
             } else {
               res.end();
             }
-            this.addTrace(`${route.method} ${route.path} - ${status}.`);
+            this.addTrace(`${route.method} ${route.pathPattern} - ${status}.`);
           } catch (err) {
             return next(err);
           }

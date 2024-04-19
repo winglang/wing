@@ -120,7 +120,7 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 fn partial_compile(
 	source_path: &Path,
 	source_text: String,
-	mut types: &mut Types, // TODO: does this need to be shared between recompiles?
+	mut types: &mut Types,
 	jsii_types: &mut TypeSystem,
 	project_data: &mut ProjectData,
 ) {
@@ -150,8 +150,7 @@ fn partial_compile(
 	}
 
 	// Reset all type information
-	types.reset_expr_types();
-	types.reset_scope_envs();
+	*types = Types::new();
 
 	// -- TYPECHECKING PHASE --
 	let mut jsii_imports = vec![];

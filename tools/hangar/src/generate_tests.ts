@@ -1,5 +1,5 @@
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from "fs";
-import { sdkTestsDir, validTestDir } from "./paths";
+import { appWithParamsDir, sdkTestsDir, validTestDir } from "./paths";
 import { join, extname } from "path";
 import { parseMetaCommentFromPath } from "./meta_comment";
 
@@ -94,6 +94,12 @@ generateTests({
   sourceDir: validTestDir,
   destination: generatedTestDir,
   isRecursive: false,
+  includeJavaScriptInSnapshots: true,
+});
+generateTests({
+  sourceDir: appWithParamsDir,
+  destination: generatedTestDir,
+  isRecursive: true,
   includeJavaScriptInSnapshots: true,
 });
 generateTests({

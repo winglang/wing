@@ -35,6 +35,5 @@ test "hi" {
   util.waitUntil(inflight () => {
     return c.peek() > 0;
   });
-  assert(c.peek() > 0);
 }
 

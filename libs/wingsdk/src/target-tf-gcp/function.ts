@@ -1,5 +1,5 @@
 import { writeFileSync } from "fs";
-import { join } from "path";
+import { join, basename } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -11,6 +11,7 @@ import { ProjectIamMember } from "../.gen/providers/google/project-iam-member";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
+import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import {
@@ -52,6 +53,12 @@ export class Function extends cloud.Function {
 
     // app is a property of the `cloud.Function` class
     const app = App.of(this) as App;
+
+    if (props.concurrency != null) {
+      throw new NotImplementedError(
+        "Function concurrency isn't implemented yet on the current target."
+      );
+    }
 
     // memory limits must be between 128 and 8192 MB
     if (props?.memory && (props.memory < 128 || props.memory > 8192)) {
@@ -132,6 +139,7 @@ export class Function extends cloud.Function {
       sourceArchiveObject: FunctionObjectBucket.name,
       entryPoint: "handler",
       triggerHttp: true,
+      httpsTriggerSecurityLevel: "SECURE_ALWAYS",
       // It takes around 1 minutes to the function invocation permissions to be established -
       // therefore, the timeout is higher than in other targets
       timeout: props.timeout?.seconds ?? 120,
@@ -189,7 +197,7 @@ export class Function extends cloud.Function {
       packageJson,
       JSON.stringify(
         {
-          main: "index.js",
+          main: basename(bundle.outfilePath),
           dependencies: {
             "@google-cloud/functions-framework": "^3.0.0",
             "@google-cloud/datastore": "8.4.0",

@@ -171,7 +171,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WaitUntilProps\n```\n---\nProperties for `util.waitUntil`.\n### Fields\n- `interval?` — `duration?` — Interval between predicate retries.\n- `timeout?` — `duration?` — The timeout for keep trying predicate."
+    value: "```wing\nstruct WaitUntilProps\n```\n---\nProperties for `util.waitUntil`.\n### Fields\n- `interval?` — `duration?` — Interval between predicate retries.\n- `throws?` — `bool?` — Whether to throw an error if the timeout elapses.\n- `timeout?` — `duration?` — The timeout for keep trying predicate."
   sortText: hh|WaitUntilProps
 - label: IPredicateHandler
   kind: 8

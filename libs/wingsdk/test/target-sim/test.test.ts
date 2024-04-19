@@ -30,11 +30,13 @@ test("create a test", async () => {
     },
     path: "root/env0/test:my_test/Handler",
     addr: expect.any(String),
+    policy: [],
     props: {
       environmentVariables: {},
       sourceCodeFile: expect.any(String),
       sourceCodeLanguage: "javascript",
       timeout: 60000,
+      concurrency: 100,
     },
     type: "@winglang/sdk.cloud.Function",
   });

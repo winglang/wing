@@ -43,7 +43,7 @@ new cloud.Function(inflight () => {
 
 ### Using Queue inflight api
 
-Pusing messages, popping them, and purge
+Pushing messages, popping them, and purging.
 
 ```ts playground
 bring cloud;
@@ -61,6 +61,30 @@ new cloud.Function(inflight () => {
   log("approxSize is ${q.approxSize()}");
 });
 ```
+
+### Referencing an external queue
+
+If you would like to reference an existing queue from within your application you can use the
+`QueueRef` classes in the target-specific namespaces.
+
+> This is currently only supported for `aws`.
+
+The following example defines a reference to an Amazon SQS queue with a specific ARN and sends a
+message to the queue from the function:
+
+```js
+bring aws;
+
+let outbox = new aws.QueueRef("arn:aws:sqs:us-east-1:111111111111:Outbox");
+
+new cloud.Function(inflight () => {
+  outbox.push("send an email");
+});
+```
+
+This works both when running in the simulator (requires AWS credentials on the developer's machine)
+and when deployed to AWS. When this is deployed to AWS, the AWS Lambda IAM policy will include the
+needed permissions.
 
 ## Target-specific details
 

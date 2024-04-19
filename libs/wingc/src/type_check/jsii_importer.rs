@@ -61,11 +61,6 @@ pub struct JsiiImportSpec {
 	pub namespace_filter: Vec<String>,
 	/// The name to assign to the module in the Wing type system.
 	pub alias: Symbol,
-	/// The index of the import statement that triggered this import. This is required so we'll know
-	/// later on if types defined by this import come before or after other statements in the code.
-	/// If type definitions in wing are always location agnostic this doesn't really matter and we
-	/// might be able to remove this.
-	pub import_statement_idx: usize,
 }
 
 pub struct JsiiImporter<'a> {
@@ -354,6 +349,7 @@ impl<'a> JsiiImporter<'a> {
 			return_type,
 			phase,
 			js_override: extract_docstring_tag(&first_method.docs, "macro").map(|s| s.to_string()),
+			implicit_scope_param: false,
 		}));
 
 		self.register_jsii_type(&jsii_interface_fqn, &new_type_symbol, wing_type);
@@ -392,6 +388,7 @@ impl<'a> JsiiImporter<'a> {
 		let phase = if is_struct {
 			Phase::Independent
 		} else {
+			// All JSII imported interfaces are considered preflight interfaces
 			Phase::Preflight
 		};
 
@@ -408,7 +405,7 @@ impl<'a> JsiiImporter<'a> {
 					None,
 					SymbolEnvKind::Type(self.wing_types.void()),
 					Phase::Independent, // structs are phase-independent
-					self.jsii_spec.import_statement_idx,
+					0,
 				),
 			})),
 			false => self.wing_types.add_type(Type::Interface(Interface {
@@ -418,12 +415,8 @@ impl<'a> JsiiImporter<'a> {
 				extends: vec![],
 				docs: Docs::from(&jsii_interface.docs),
 				// Will be replaced below
-				env: SymbolEnv::new(
-					None,
-					SymbolEnvKind::Type(self.wing_types.void()),
-					phase,
-					self.jsii_spec.import_statement_idx,
-				),
+				env: SymbolEnv::new(None, SymbolEnvKind::Type(self.wing_types.void()), phase, 0),
+				phase,
 			})),
 		};
 
@@ -440,12 +433,7 @@ impl<'a> JsiiImporter<'a> {
 			}
 		};
 
-		let mut iface_env = SymbolEnv::new(
-			None,
-			SymbolEnvKind::Type(wing_type),
-			phase,
-			self.jsii_spec.import_statement_idx,
-		);
+		let mut iface_env = SymbolEnv::new(None, SymbolEnvKind::Type(wing_type), phase, 0);
 		iface_env.type_parameters = self.type_param_from_docs(&jsii_interface_fqn, &jsii_interface.docs);
 
 		self.add_members_to_class_env(
@@ -577,6 +565,7 @@ impl<'a> JsiiImporter<'a> {
 					return_type,
 					phase: member_phase,
 					js_override: extract_docstring_tag(&m.docs, "macro").map(|s| s.to_string()),
+					implicit_scope_param: false,
 				}));
 				let sym = Self::jsii_name_to_symbol(&m.name, &m.location_in_module);
 				let access_modifier = if matches!(m.protected, Some(true)) {
@@ -784,7 +773,7 @@ impl<'a> JsiiImporter<'a> {
 		let mut class_env = SymbolEnv::new(base_class_env, SymbolEnvKind::Type(new_type), class_phase, 0);
 		class_env.type_parameters = self.type_param_from_docs(&jsii_class_fqn, &jsii_class.docs);
 
-		// Add constructor to the class environment
+		// Add the class's constructor to the class environment, if the class has one which is public
 		let jsii_initializer = jsii_class.initializer.as_ref();
 		if let Some(initializer) = jsii_initializer {
 			let mut fn_params = vec![];
@@ -834,6 +823,7 @@ impl<'a> JsiiImporter<'a> {
 				phase: member_phase,
 				js_override: None,
 				docs: Docs::from(&initializer.docs),
+				implicit_scope_param: false,
 			}));
 			let sym = Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module);
 			let access_modifier = if matches!(initializer.protected, Some(true)) {
@@ -1073,7 +1063,7 @@ impl<'a> JsiiImporter<'a> {
 				&self.jsii_spec.alias,
 				SymbolKind::Namespace(ns),
 				AccessModifier::Private,
-				StatementIdx::Index(self.jsii_spec.import_statement_idx),
+				StatementIdx::Top,
 			)
 			.unwrap();
 	}

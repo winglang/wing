@@ -40,6 +40,12 @@ export interface FunctionProps {
    * @default 30
    */
   readonly logRetentionDays?: number;
+
+  /**
+   * The maximum concurrent invocations that can run at one time.
+   * @default - platform specific limits (100 on the simulator)
+   */
+  readonly concurrency?: number;
 }
 
 /**
@@ -88,11 +94,17 @@ export class Function extends Resource implements IInflightHost {
 
     const workdir = App.of(this).workdir;
     mkdirSync(workdir, { recursive: true });
-    const entrypoint = join(workdir, `${assetName}.js`);
+    const entrypoint = join(workdir, `${assetName}.cjs`);
     this.entrypoint = entrypoint;
 
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
+    }
+
+    if (props.concurrency !== undefined && props.concurrency <= 0) {
+      throw new Error(
+        "concurrency option on cloud.Function must be a positive integer"
+      );
     }
   }
 

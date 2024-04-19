@@ -431,6 +431,10 @@ where
 			v.visit_user_defined_type(type_name);
 			v.visit_symbol(property);
 		}
+		Reference::ElementAccess { object, index } => {
+			v.visit_expr(object);
+			v.visit_expr(index);
+		}
 	}
 }
 

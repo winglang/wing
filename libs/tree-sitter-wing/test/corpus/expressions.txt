@@ -298,17 +298,18 @@ Template string
 maybeVal ?? 2;
 maybeVal ?? 2 + 2;
 maybeVal ?? 2 == 2;
+maybeVal ?? "hi" ?? 2;
 
 --------------------------------------------------------------------------------
 
 (source
   (expression_statement
-    (binary_expression
+    (unwrap_or
       (reference
         (reference_identifier))
       (number)))
   (expression_statement
-    (binary_expression
+    (unwrap_or
       (reference
         (reference_identifier))
       (binary_expression
@@ -316,11 +317,18 @@ maybeVal ?? 2 == 2;
         (number))))
   (expression_statement
     (binary_expression
-      (binary_expression
+      (unwrap_or
         (reference
           (reference_identifier))
         (number))
-      (number))))
+      (number)))
+  (expression_statement
+    (unwrap_or
+      (reference
+        (reference_identifier))
+      (unwrap_or
+        (string)
+        (number)))))
 
 ================================================================================
 Unwrap expression
@@ -588,3 +596,55 @@ let mo = 10mo;
     value: (duration
       (months
         value: (number)))))
+
+================================================================================
+Array access
+================================================================================
+
+log(x[y]);
+x[y] += 3;
+assert(x[y] == w[z]);
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (call
+      (reference
+        (reference_identifier))
+      (argument_list
+        (positional_argument
+          (reference
+            (structured_access_expression
+              (reference
+                (reference_identifier))
+              (reference
+                (reference_identifier))))))))
+  (variable_assignment_statement
+    (lvalue
+      (structured_access_expression
+        (reference
+          (reference_identifier))
+        (reference
+          (reference_identifier))))
+    (assignment_operator)
+    (number))
+  (expression_statement
+    (call
+      (reference
+        (reference_identifier))
+      (argument_list
+        (positional_argument
+          (binary_expression
+            (reference
+              (structured_access_expression
+                (reference
+                  (reference_identifier))
+                (reference
+                  (reference_identifier))))
+            (reference
+              (structured_access_expression
+                (reference
+                  (reference_identifier))
+                (reference
+                  (reference_identifier))))))))))

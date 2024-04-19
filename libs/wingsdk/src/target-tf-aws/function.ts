@@ -11,6 +11,7 @@ import { S3Object } from "../.gen/providers/aws/s3-object";
 import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
@@ -90,6 +91,12 @@ export class Function extends cloud.Function implements IAwsFunction {
     props: cloud.FunctionProps = {}
   ) {
     super(scope, id, inflight, props);
+
+    if (props.concurrency != null) {
+      throw new NotImplementedError(
+        "Function concurrency isn't implemented yet on the current target."
+      );
+    }
 
     // Create unique S3 bucket for hosting Lambda code
     const app = App.of(this) as App;
@@ -234,9 +241,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       architectures: ["arm64"],
     });
 
-    if (
-      app.platformParameters.getParameterValue("tf-aws/vpc_lambda") === true
-    ) {
+    if (app.parameters.value("tf-aws/vpc_lambda") === true) {
       const sg = new SecurityGroup(this, `${id}SecurityGroup`, {
         vpcId: app.vpc.id,
         egress: [

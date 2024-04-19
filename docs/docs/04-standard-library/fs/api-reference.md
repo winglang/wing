@@ -44,8 +44,10 @@ new fs.Util();
 | <code><a href="#@winglang/sdk.fs.Util.dirname">dirname</a></code> | Retrieve the name of the directory from a given file path. |
 | <code><a href="#@winglang/sdk.fs.Util.exists">exists</a></code> | Check if the path exists. |
 | <code><a href="#@winglang/sdk.fs.Util.extension">extension</a></code> | Extracts the extension (without the leading dot) from the path, if possible. |
+| <code><a href="#@winglang/sdk.fs.Util.glob">glob</a></code> | Match files using the patterns the shell uses. |
 | <code><a href="#@winglang/sdk.fs.Util.isDir">isDir</a></code> | Checks if the given path is a directory and exists. |
 | <code><a href="#@winglang/sdk.fs.Util.join">join</a></code> | Join all arguments together and normalize the resulting path. |
+| <code><a href="#@winglang/sdk.fs.Util.md5">md5</a></code> | Calculate an MD5 content hash of all the files that match a glob pattern. |
 | <code><a href="#@winglang/sdk.fs.Util.metadata">metadata</a></code> | Gets the stats of the given path. |
 | <code><a href="#@winglang/sdk.fs.Util.mkdir">mkdir</a></code> | Create a directory. |
 | <code><a href="#@winglang/sdk.fs.Util.mkdtemp">mkdtemp</a></code> | Create a temporary directory. |
@@ -202,6 +204,34 @@ The path to get extension for.
 
 ---
 
+##### `glob` <a name="glob" id="@winglang/sdk.fs.Util.glob"></a>
+
+```wing
+bring fs;
+
+fs.glob(pattern: str, options?: GlobOptions);
+```
+
+Match files using the patterns the shell uses.
+
+Built with the great `glob` package, based on https://www.npmjs.com/package/glob
+
+###### `pattern`<sup>Required</sup> <a name="pattern" id="@winglang/sdk.fs.Util.glob.parameter.pattern"></a>
+
+- *Type:* str
+
+The pattern to match.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.fs.Util.glob.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.fs.GlobOptions">GlobOptions</a>
+
+Glob options.
+
+---
+
 ##### `isDir` <a name="isDir" id="@winglang/sdk.fs.Util.isDir"></a>
 
 ```wing
@@ -235,6 +265,32 @@ Join all arguments together and normalize the resulting path.
 - *Type:* str
 
 The array of path need to join.
+
+---
+
+##### `md5` <a name="md5" id="@winglang/sdk.fs.Util.md5"></a>
+
+```wing
+bring fs;
+
+fs.md5(dir: str, globPattern?: str);
+```
+
+Calculate an MD5 content hash of all the files that match a glob pattern.
+
+###### `dir`<sup>Required</sup> <a name="dir" id="@winglang/sdk.fs.Util.md5.parameter.dir"></a>
+
+- *Type:* str
+
+The root directory.
+
+---
+
+###### `globPattern`<sup>Optional</sup> <a name="globPattern" id="@winglang/sdk.fs.Util.md5.parameter.globPattern"></a>
+
+- *Type:* str
+
+The glob pattern to match (defaults to all files and subdirectories).
 
 ---
 
@@ -692,6 +748,135 @@ The YANL objects to be dumped.
 
 
 ## Structs <a name="Structs" id="Structs"></a>
+
+### GlobOptions <a name="GlobOptions" id="@winglang/sdk.fs.GlobOptions"></a>
+
+Options for `glob`, based on https://www.npmjs.com/package/glob.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.fs.GlobOptions.Initializer"></a>
+
+```wing
+bring fs;
+
+let GlobOptions = fs.GlobOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.fs.GlobOptions.property.absolute">absolute</a></code> | <code>bool</code> | Set to `true` to always receive absolute paths for matched files. |
+| <code><a href="#@winglang/sdk.fs.GlobOptions.property.cwd">cwd</a></code> | <code>str</code> | The current working directory in which to search. |
+| <code><a href="#@winglang/sdk.fs.GlobOptions.property.dot">dot</a></code> | <code>bool</code> | Include `.dot` files in normal matches and globstar matches. Note that an explicit dot in a portion of the pattern will always match dot files. |
+| <code><a href="#@winglang/sdk.fs.GlobOptions.property.follow">follow</a></code> | <code>bool</code> | Follow symlinked directories when expanding `**` patterns. |
+| <code><a href="#@winglang/sdk.fs.GlobOptions.property.ignore">ignore</a></code> | <code>MutArray&lt;str&gt;</code> | An array of glob patterns to exclude from matches. |
+| <code><a href="#@winglang/sdk.fs.GlobOptions.property.maxDepth">maxDepth</a></code> | <code>num</code> | Specify a number to limit the depth of the directory traversal to this many levels below the cwd. |
+| <code><a href="#@winglang/sdk.fs.GlobOptions.property.nodir">nodir</a></code> | <code>bool</code> | Do not match directories, only files. |
+
+---
+
+##### `absolute`<sup>Optional</sup> <a name="absolute" id="@winglang/sdk.fs.GlobOptions.property.absolute"></a>
+
+```wing
+absolute: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Set to `true` to always receive absolute paths for matched files.
+
+Set to `false` to always
+receive relative paths for matched files.
+
+---
+
+##### `cwd`<sup>Optional</sup> <a name="cwd" id="@winglang/sdk.fs.GlobOptions.property.cwd"></a>
+
+```wing
+cwd: str;
+```
+
+- *Type:* str
+- *Default:* process.cwd()
+
+The current working directory in which to search.
+
+---
+
+##### `dot`<sup>Optional</sup> <a name="dot" id="@winglang/sdk.fs.GlobOptions.property.dot"></a>
+
+```wing
+dot: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Include `.dot` files in normal matches and globstar matches. Note that an explicit dot in a portion of the pattern will always match dot files.
+
+---
+
+##### `follow`<sup>Optional</sup> <a name="follow" id="@winglang/sdk.fs.GlobOptions.property.follow"></a>
+
+```wing
+follow: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Follow symlinked directories when expanding `**` patterns.
+
+This can result in a lot of
+duplicate references in the presence of cyclic links, and make performance quite bad.
+
+---
+
+##### `ignore`<sup>Optional</sup> <a name="ignore" id="@winglang/sdk.fs.GlobOptions.property.ignore"></a>
+
+```wing
+ignore: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* []
+
+An array of glob patterns to exclude from matches.
+
+To ignore all children within a directory,
+as well as the entry itself, append '/**' to the ignore pattern.
+
+---
+
+##### `maxDepth`<sup>Optional</sup> <a name="maxDepth" id="@winglang/sdk.fs.GlobOptions.property.maxDepth"></a>
+
+```wing
+maxDepth: num;
+```
+
+- *Type:* num
+- *Default:* no limit
+
+Specify a number to limit the depth of the directory traversal to this many levels below the cwd.
+
+---
+
+##### `nodir`<sup>Optional</sup> <a name="nodir" id="@winglang/sdk.fs.GlobOptions.property.nodir"></a>
+
+```wing
+nodir: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Do not match directories, only files.
+
+(Note: to match only directories, put a `/` at the end of
+the pattern.)
+
+---
 
 ### Metadata <a name="Metadata" id="@winglang/sdk.fs.Metadata"></a>
 

@@ -14,7 +14,6 @@ import type {
 import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
 import type { FileLink } from "../utils/createRouter.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { isTermsAccepted, getLicense } from "../utils/terms-and-conditions.js";
 import type { IFunctionClient, Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -263,6 +262,7 @@ export const createAppRouter = () => {
                 id: sourceNode.id,
                 path: sourceNode.path,
                 type: getResourceType(sourceNode, simulator),
+                display: sourceNode.display,
               };
             })
             .filter(({ path }) => {
@@ -283,6 +283,7 @@ export const createAppRouter = () => {
                 id: targetNode.id,
                 path: targetNode.path,
                 type: getResourceType(targetNode, simulator),
+                display: targetNode.display,
               };
             })
             .filter(({ path }) => {
@@ -467,37 +468,8 @@ export const createAppRouter = () => {
         return ui as Array<{
           kind: string;
           label: string;
-          handler: string;
+          handler: string | Record<string, string>;
         }>;
-      }),
-    "app.getResourceUiField": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string(),
-        }),
-      )
-      .query(async ({ input, ctx }) => {
-        const simulator = await ctx.simulator();
-        const client = simulator.getResource(
-          input.resourcePath,
-        ) as IFunctionClient;
-        return {
-          value: await client.invoke(""),
-        };
-      }),
-
-    "app.invokeResourceUiButton": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string(),
-        }),
-      )
-      .mutation(async ({ input, ctx }) => {
-        const simulator = await ctx.simulator();
-        const client = simulator.getResource(
-          input.resourcePath,
-        ) as IFunctionClient;
-        await client.invoke("");
       }),
 
     "app.analytics": createProcedure.query(async ({ ctx }) => {
@@ -549,10 +521,7 @@ function createExplorerItemFromConstructTreeNode(
   showTests = false,
   includeHiddens = false,
 ): ExplorerItem {
-  const label =
-    node.display?.sourceModule === "@winglang/sdk" && node.display?.title
-      ? node.display?.title
-      : node.id;
+  const label = node.display?.title ?? node.id;
 
   return {
     id: node.path,

@@ -2,7 +2,7 @@
 // to avoid a conflict with the "new" keyword in JavaScript
 import { exec } from "child_process";
 import { existsSync, constants } from "fs";
-import { copyFile, mkdir, readFile, readdir, writeFile } from "fs/promises";
+import { cp, mkdir, readFile, readdir, writeFile } from "fs/promises";
 import { join, relative } from "path";
 import { promisify } from "util";
 import chalk from "chalk";
@@ -179,7 +179,7 @@ export async function init(template: string, options: InitOptions = {}): Promise
 
   console.log(`Created a new ${chalk.cyan(template)} project in the current directory! 🎉`);
   console.log();
-  console.log("Not sure where to get started? Try running:");
+  console.log("Not sure where to get started? In your Wing application folder, try running:");
   console.log();
   console.log("  wing compile - build your project");
   console.log("  wing it - simulate your app in the Wing Console");
@@ -202,7 +202,7 @@ async function copyFiles(src: string, dest: string): Promise<void> {
   // Copy all files
   const files = await getFiles(src);
   for (const file of files) {
-    await copyFile(join(src, file), join(dest, file));
+    await cp(join(src, file), join(dest, file));
   }
 }
 

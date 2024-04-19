@@ -1,5 +1,4 @@
 bring fs;
-bring regex;
 bring expect;
 
 test "write and read file with `encoding` option" {
@@ -16,7 +15,7 @@ test "write and read file with `encoding` option" {
     expect.notEqual(contentAscii, data);
 
     fs.remove(tmpdir, { recursive: true });
-    assert(fs.exists(tmpdir) == false);
+    expect.equal(fs.exists(tmpdir), false);
 }
 
 test "write file with `flag` option" {
@@ -33,7 +32,7 @@ test "write file with `flag` option" {
     expect.equal(content, "{data}{appendData}");
 
     fs.remove(tmpdir, { recursive: true });
-    assert(fs.exists(tmpdir) == false);
+    expect.equal(fs.exists(tmpdir), false);
 }
 
 test "removing non-existent file with `force: false` raises error" {
@@ -44,13 +43,14 @@ test "removing non-existent file with `force: false` raises error" {
     try {
         fs.remove(nonExistentFilePath, { force: false });
     } catch e {
-        errorCaught = regex.match("^ENOENT: no such file or directory", e);
+        let re = regex.compile("^ENOENT: no such file or directory");
+        errorCaught = re.test(e);
     }
 
     expect.equal(errorCaught, true);
 
     fs.remove(tmpdir);
-    assert(fs.exists(tmpdir) == false);
+    expect.equal(fs.exists(tmpdir), false);
 }
 
 test "removing directory with `recursive: false` raises error" {
@@ -65,13 +65,14 @@ test "removing directory with `recursive: false` raises error" {
     try {
         fs.remove(dirpath, { recursive: false });
     } catch e {
-        errorCaught = regex.match("^Path is a directory: rm returned EISDIR", e);
+        let re = regex.compile("^Path is a directory: rm returned EISDIR");
+        errorCaught = re.test(e);
     }
 
     expect.equal(errorCaught, true);
 
     fs.remove(dirpath);
     fs.remove(tmpdir);
-    assert(fs.exists(dirpath) == false);
-    assert(fs.exists(tmpdir) == false);
+    expect.equal(fs.exists(dirpath), false);
+    expect.equal(fs.exists(tmpdir), false);
 }

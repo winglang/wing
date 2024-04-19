@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
+import { Queue, QueueProps } from "./queue";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
@@ -47,12 +48,29 @@ export class Topic extends Resource {
     props;
     throw new AbstractMemberError();
   }
+
+  /**
+   * Subscribing queue to the topic
+   * @abstract
+   */
+  public subscribeQueue(
+    queue: Queue,
+    props?: TopicSubscribeQueueOptions
+  ): void {
+    queue;
+    props;
+    throw new AbstractMemberError();
+  }
 }
 
 /**
  * Options for `Topic.onMessage`.
  */
 export interface TopicOnMessageOptions extends FunctionProps {}
+/**
+ * Options for `Topic.subscribeQueue`.
+ */
+export interface TopicSubscribeQueueOptions extends QueueProps {}
 
 /**
  * Inflight interface for `Topic`.

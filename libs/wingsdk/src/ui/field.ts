@@ -3,6 +3,7 @@ import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
 import { App, UIComponent } from "../core";
+import { Testing } from "../simulator";
 import { Duration, IInflight } from "../std";
 
 /**
@@ -19,6 +20,13 @@ export interface FieldProps {
    * @default - no automatic refresh
    */
   readonly refreshRate?: Duration;
+
+  /**
+   * Indicates that this field is a link.
+   *
+   * @default false
+   */
+  readonly link?: boolean;
 }
 
 /**
@@ -49,6 +57,7 @@ export class Field extends VisualComponent {
   private readonly fn: Function;
   private readonly label: string;
   private readonly refreshRate: number | undefined;
+  private readonly link: boolean | undefined;
 
   constructor(
     scope: Construct,
@@ -62,6 +71,7 @@ export class Field extends VisualComponent {
     this.label = label;
     this.refreshRate = props.refreshRate?.seconds;
     this.fn = new Function(this, "Handler", handler);
+    this.link = props.link;
   }
 
   /** @internal */
@@ -71,6 +81,7 @@ export class Field extends VisualComponent {
       label: this.label,
       handler: this.fn.node.path,
       refreshRate: this.refreshRate,
+      link: this.link,
     };
   }
 
@@ -102,4 +113,25 @@ export interface IFieldHandlerClient {
    * @inflight
    */
   handle(): Promise<string>;
+}
+
+/**
+ * A value field can be used to display a string value.
+ */
+export class ValueField extends Field {
+  constructor(scope: Construct, id: string, label: string, value: string) {
+    const handler = Testing.makeHandler(
+      `async handle() { 
+        return this.value;
+      }`,
+      {
+        value: {
+          obj: value,
+          ops: [],
+        },
+      }
+    );
+
+    super(scope, id, label, handler);
+  }
 }

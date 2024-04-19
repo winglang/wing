@@ -8,13 +8,13 @@ test "purge" {
   q.push("bar");
   q.push("baz");
 
-  assert(util.waitUntil(inflight () => { 
+  util.waitUntil(inflight () => {
     return q.approxSize() == 3;
-  }, timeout: 1m, interval: 1s));
+  }, timeout: 1m, interval: 1s);
 
   q.purge();
 
-  assert(util.waitUntil(inflight () => {
+  util.waitUntil(inflight () => {
     return q.approxSize() == 0;
-  }, timeout: 1m, interval: 1s));
+  }, timeout: 1m, interval: 1s);
 }

@@ -2,7 +2,7 @@
 
 exports[`array 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -29,20 +29,21 @@ my_capture: ["hello","dude"]
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -97,14 +98,6 @@ my_capture: ["hello","dude"]
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -113,9 +106,17 @@ my_capture: ["hello","dude"]
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -157,7 +158,7 @@ my_capture: ["hello","dude"]
 
 exports[`array of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -184,20 +185,21 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -252,14 +254,6 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -268,9 +262,17 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -312,7 +314,7 @@ my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600
 
 exports[`array of maps 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -338,20 +340,21 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -406,14 +409,6 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -422,9 +417,17 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -466,7 +469,7 @@ my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
 
 exports[`boolean 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -491,20 +494,21 @@ my_capture: false
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -559,14 +563,6 @@ my_capture: false
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -575,9 +571,17 @@ my_capture: false
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -619,7 +623,7 @@ my_capture: false
 
 exports[`duration 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -646,20 +650,21 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -714,14 +719,6 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -730,9 +727,17 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -774,7 +779,7 @@ my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(72
 
 exports[`map 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -803,20 +808,21 @@ my_capture: new Map([["foo",123],["bar",456]])
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -871,14 +877,6 @@ my_capture: new Map([["foo",123],["bar",456]])
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -887,9 +885,17 @@ my_capture: new Map([["foo",123],["bar",456]])
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -931,7 +937,7 @@ my_capture: new Map([["foo",123],["bar",456]])
 
 exports[`map of arrays 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -962,20 +968,21 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1030,14 +1037,6 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1046,9 +1045,17 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1090,7 +1097,7 @@ my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
 
 exports[`map of arrays of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1118,20 +1125,21 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1186,14 +1194,6 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1202,9 +1202,17 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1246,7 +1254,7 @@ my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js")
 
 exports[`number 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1271,20 +1279,21 @@ my_capture: 123
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1339,14 +1348,6 @@ my_capture: 123
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1355,9 +1356,17 @@ my_capture: 123
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1399,7 +1408,7 @@ my_capture: 123
 
 exports[`set 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1427,20 +1436,21 @@ my_capture: new Set(["boom","bam","bang"])
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1495,14 +1505,6 @@ my_capture: new Set(["boom","bam","bang"])
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1511,9 +1513,17 @@ my_capture: new Set(["boom","bam","bang"])
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1555,7 +1565,7 @@ my_capture: new Set(["boom","bam","bang"])
 
 exports[`set of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1582,20 +1592,21 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1650,14 +1661,6 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1666,9 +1669,17 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1710,7 +1721,7 @@ my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duratio
 
 exports[`string 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1736,20 +1747,21 @@ my_capture: "bam bam bam"
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1804,14 +1816,6 @@ my_capture: "bam bam bam"
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1820,9 +1824,17 @@ my_capture: "bam bam bam"
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1864,7 +1876,7 @@ my_capture: "bam bam bam"
 
 exports[`struct 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -1892,20 +1904,21 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -1960,14 +1973,6 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1976,9 +1981,17 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -2020,7 +2033,7 @@ my_capture: {"hello": "dude","world": "cup","foo": "bar",}
 
 exports[`struct of maps 1`] = `
 {
-  ".wing/function_c8e6b4af.js": ""use strict";
+  ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -2048,20 +2061,21 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function": {
         "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
-        "attrs": {},
         "path": "root/Function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function_c8e6b4af.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -2116,14 +2130,6 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -2132,9 +2138,17 @@ my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["ba
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

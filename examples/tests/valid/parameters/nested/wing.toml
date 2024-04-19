@@ -1,0 +1,13 @@
+[[houses]]
+address = "123 Main St"
+residents = [
+  {name = "John Doe", age = 30},
+  {name = "Jane Doe", age = 24}
+]
+
+[[houses]]
+address = "456 Elm St"
+residents = [
+  {name = "Tom Smith", age = 45},
+  {name = "Sue Smith", age = 40}
+]

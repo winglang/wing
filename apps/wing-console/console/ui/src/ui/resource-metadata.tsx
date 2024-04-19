@@ -17,11 +17,10 @@ import {
   getResourceIconComponent,
   Attribute,
   ScrollableArea,
-  Button,
 } from "@wingconsole/design-system";
 import type { NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
-import { memo, useCallback, useId, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 
 import { QueueMetadataView } from "../features/queue-metadata-view.js";
 import { ResourceInteractionView } from "../features/resource-interaction-view.js";
@@ -29,81 +28,9 @@ import { trpc } from "../services/trpc.js";
 
 import { BucketMetadata } from "./bucket-metadata.js";
 import { CounterMetadata } from "./counter-metadata.js";
+import { CustomResourceUiItem } from "./custom-resource-item.js";
 import { FunctionMetadata } from "./function-metadata.js";
 import { ScheduleMetadata } from "./schedule-metadata.js";
-
-interface CustomResourceUiFieldItemProps {
-  label: string;
-  handlerPath: string;
-}
-
-const CustomResourceUiFieldItem = ({
-  label,
-  handlerPath,
-}: CustomResourceUiFieldItemProps) => {
-  const field = trpc["app.getResourceUiField"].useQuery(
-    {
-      resourcePath: handlerPath,
-    },
-    { enabled: !!handlerPath },
-  );
-  return <Attribute name={label} value={field.data?.value ?? ""} />;
-};
-
-interface CustomResourceUiButtomItemProps {
-  label: string;
-  handlerPath: string;
-}
-
-const CustomResourceUiButtomItem = ({
-  label,
-  handlerPath,
-}: CustomResourceUiButtomItemProps) => {
-  const { theme } = useTheme();
-  const { mutate: invokeMutation } =
-    trpc["app.invokeResourceUiButton"].useMutation();
-  const invoke = useCallback(() => {
-    invokeMutation({
-      resourcePath: handlerPath,
-    });
-  }, [handlerPath, invokeMutation]);
-
-  const id = useId();
-  return (
-    <div className="pl-4 flex flex-row items-center">
-      <label
-        htmlFor={id}
-        className={classNames("min-w-[100px] invisible", theme.text2)}
-      >
-        {label}
-      </label>
-      <Button id={id} title={label} label={label} onClick={invoke} />
-    </div>
-  );
-};
-
-interface CustomResourceUiItemProps {
-  kind: string;
-  label: string;
-  handlerPath: string;
-}
-
-const CustomResourceUiItem = ({
-  handlerPath,
-  kind,
-  label,
-}: CustomResourceUiItemProps) => {
-  return (
-    <>
-      {kind === "field" && (
-        <CustomResourceUiFieldItem label={label} handlerPath={handlerPath} />
-      )}
-      {kind === "button" && (
-        <CustomResourceUiButtomItem label={label} handlerPath={handlerPath} />
-      )}
-    </>
-  );
-};
 
 interface AttributeGroup {
   groupName: string;
@@ -125,6 +52,7 @@ interface Relationship {
   id: string;
   path: string;
   type: string;
+  display?: NodeDisplay;
 }
 
 export interface MetadataNode {
@@ -252,6 +180,7 @@ export const ResourceMetadata = memo(
                 resourceType={relationship.type}
                 resourcePath={relationship.path}
                 className="w-4 h-4"
+                color={relationship.display?.color}
               />
             ),
           })),
@@ -269,6 +198,7 @@ export const ResourceMetadata = memo(
                 resourceType={relationship.type}
                 resourcePath={relationship.path}
                 className="w-4 h-4"
+                color={relationship.display?.color}
               />
             ),
           })),
@@ -279,6 +209,13 @@ export const ResourceMetadata = memo(
         connectionsGroups: connectionsGroupsArray,
       };
     }, [node, inbound, outbound]);
+
+    const nodeLabel = useMemo(() => {
+      const cloudResourceTypeName = node.type.split(".").at(-1) || "";
+      const compilerNamed =
+        !!node.display?.title && node.display?.title !== cloudResourceTypeName;
+      return compilerNamed ? node.display?.title : node.id;
+    }, [node]);
 
     const toggleInspectorSection = useCallback((section: string) => {
       setOpenInspectorSections(([...sections]) => {
@@ -309,11 +246,12 @@ export const ResourceMetadata = memo(
               className="w-6 h-6"
               resourceType={node.type}
               resourcePath={node.path}
+              color={node.display?.color}
             />
           </div>
 
           <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate">{node.id}</div>
+            <div className="text-sm font-medium truncate">{nodeLabel}</div>
             <div className="flex">
               <Pill>{node.type}</Pill>
             </div>
@@ -322,7 +260,7 @@ export const ResourceMetadata = memo(
         {resourceUI.data && resourceUI.data.length > 0 && (
           <InspectorSection
             icon={CubeIcon}
-            text="Properties"
+            text={nodeLabel ?? "Properties"}
             open={openInspectorSections.includes("resourceUI")}
             onClick={() => toggleInspectorSection("resourceUI")}
             headingClassName="pl-2"
@@ -336,12 +274,7 @@ export const ResourceMetadata = memo(
                 )}
               >
                 {resourceUI.data.map((item, index) => (
-                  <CustomResourceUiItem
-                    key={index}
-                    handlerPath={item.handler}
-                    kind={item.kind}
-                    label={item.label}
-                  />
+                  <CustomResourceUiItem key={index} item={item} />
                 ))}
               </div>
             </div>

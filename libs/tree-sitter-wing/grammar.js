@@ -13,9 +13,10 @@ const PREC = {
   UNARY: 120,
   OPTIONAL_TEST: 130,
   POWER: 140,
-  MEMBER: 150,
-  CALL: 160,
-  OPTIONAL_UNWRAP: 170,
+  STRUCTURED_ACCESS: 150, // x[y]
+  MEMBER: 160,
+  CALL: 170,
+  OPTIONAL_UNWRAP: 180,
 };
 
 module.exports = grammar({
@@ -40,7 +41,7 @@ module.exports = grammar({
 
     // These modifier conflicts should be solved through GLR parsing
     [$.field_modifiers, $.method_modifiers],
-    [$.class_modifiers, $.closure_modifiers],
+    [$.class_modifiers, $.closure_modifiers, $.interface_modifiers],
     [$.inflight_method_signature, $.field_modifiers],
   ],
 
@@ -225,14 +226,20 @@ module.exports = grammar({
         $._semicolon
       ),
 
+    /// Interfaces
+
+    interface_modifiers: ($) =>
+      repeat1(choice($.access_modifier, $.inflight_specifier)),
+
     interface_definition: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
+        optional(field("modifiers", $.interface_modifiers)),
         "interface",
         field("name", $.identifier),
         optional(seq("extends", field("extends", commaSep1($.custom_type)))),
         field("implementation", $.interface_implementation)
       ),
+
     interface_implementation: ($) =>
       braced(
         repeat(
@@ -326,6 +333,7 @@ module.exports = grammar({
 
     expression: ($) =>
       choice(
+        $.unwrap_or,
         $.binary_expression,
         $.unary_expression,
         $.new_expression,
@@ -396,7 +404,7 @@ module.exports = grammar({
             /[0-7]{1,3}/,
             /x[0-9a-fA-F]{2}/,
             /u[0-9a-fA-F]{4}/,
-            /u{[0-9a-fA-F]+}/
+            /u\{[0-9a-fA-F]+\}/
           )
         )
       ),
@@ -421,15 +429,7 @@ module.exports = grammar({
     argument_list: ($) =>
       seq(
         "(",
-        choice(
-          commaSep($.positional_argument),
-          commaSep($.keyword_argument),
-          seq(
-            commaSep($.positional_argument),
-            ",",
-            commaSep($.keyword_argument)
-          )
-        ),
+        commaSep(choice($.positional_argument, $.keyword_argument)),
         ")"
       ),
 
@@ -568,6 +568,16 @@ module.exports = grammar({
     _container_value_type: ($) =>
       seq("<", field("type_parameter", $._type), ">"),
 
+    unwrap_or: ($) =>
+      prec.right(
+        PREC.UNWRAP_OR,
+        seq(
+          field("left", $.expression),
+          field("op", "??"),
+          field("right", $.expression)
+        )
+      ),
+
     optional_unwrap: ($) =>
       prec.right(PREC.OPTIONAL_UNWRAP, seq($.expression, "!")),
 
@@ -614,7 +624,6 @@ module.exports = grammar({
         //['<<', PREC.SHIFT],
         //['>>', PREC.SHIFT],
         //['>>>', PREC.SHIFT],
-        ["??", PREC.UNWRAP_OR],
       ];
 
       return choice(
@@ -666,7 +675,7 @@ module.exports = grammar({
     map_literal_member: ($) => seq($.expression, "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
-      prec.right(seq($.expression, "[", $.expression, "]")),
+      prec.right(PREC.STRUCTURED_ACCESS, seq($.expression, "[", $.expression, "]")),
 
     json_literal: ($) =>
       choice(

@@ -1,7 +1,7 @@
 # [bring_wing_library.test.w](../../../../../examples/tests/valid/bring_wing_library.test.w) | compile | tf-aws
 
-## inflight.$Closure1-3.js
-```js
+## inflight.$Closure1-3.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $fixture_Store }) {
@@ -17,11 +17,11 @@ module.exports = function({ $fixture_Store }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-3.js.map
+//# sourceMappingURL=inflight.$Closure1-3.cjs.map
 ```
 
-## inflight.Store-2.js
-```js
+## inflight.Store-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $myutil_Util }) {
@@ -42,11 +42,11 @@ module.exports = function({ $myutil_Util }) {
   }
   return Store;
 }
-//# sourceMappingURL=inflight.Store-2.js.map
+//# sourceMappingURL=inflight.Store-2.cjs.map
 ```
 
-## inflight.Util-1.js
-```js
+## inflight.Util-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -62,7 +62,7 @@ module.exports = function({  }) {
   }
   return Util;
 }
-//# sourceMappingURL=inflight.Util-1.js.map
+//# sourceMappingURL=inflight.Util-1.cjs.map
 ```
 
 ## main.tf.json
@@ -83,14 +83,14 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "fixtureStore_cloudBucket_0EE75A93": {
+      "Store_Bucket_42A4CEFB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/fixture.Store/cloud.Bucket/Default",
-            "uniqueId": "fixtureStore_cloudBucket_0EE75A93"
+            "path": "root/Default/Default/Store/Bucket/Default",
+            "uniqueId": "Store_Bucket_42A4CEFB"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8afb3a9-",
+        "bucket_prefix": "bucket-c843dbb0-",
         "force_destroy": false
       }
     }
@@ -98,25 +98,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.enums-1.js
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const std = $stdlib.std;
-const $helpers = $stdlib.helpers;
-const FavoriteNumbers =
-  (function (tmp) {
-    tmp[tmp["SEVEN"] = 0] = ",SEVEN";
-    tmp[tmp["FORTY_TWO"] = 1] = ",FORTY_TWO";
-    return tmp;
-  })({})
-;
-module.exports = { FavoriteNumbers };
-//# sourceMappingURL=preflight.enums-1.js.map
-```
-
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -124,9 +107,10 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-const fixture = require("./preflight.testfixture-5.js");
-const testfixture = require("./preflight.testfixture-5.js");
-const testfixture2 = require("./preflight.testfixture-5.js");
+const $extern = $helpers.createExternRequire(__dirname);
+const fixture = require("./preflight.testfixture-5.cjs");
+const testfixture = require("./preflight.testfixture-5.cjs");
+const testfixture2 = require("./preflight.testfixture-5.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -138,7 +122,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-3.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-3.cjs")({
             $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
           })
         `;
@@ -165,7 +149,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    new fixture.Store(this, "fixture.Store");
+    new fixture.Store(this, "Store");
     const fave_num = fixture.FavoriteNumbers.SEVEN;
     const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
@@ -176,32 +160,51 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_wing_library.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
-## preflight.store-3.js
-```js
+## preflight.enums-1.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+const FavoriteNumbers =
+  (function (tmp) {
+    tmp["SEVEN"] = "SEVEN";
+    tmp["FORTY_TWO"] = "FORTY_TWO";
+    return tmp;
+  })({})
+;
+module.exports = { FavoriteNumbers };
+//# sourceMappingURL=preflight.enums-1.cjs.map
+```
+
+## preflight.store-3.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
-const myutil = require("./preflight.util-2.js");
+const myutil = require("./preflight.util-2.cjs");
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, options) {
     super($scope, $id);
-    this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     this.handlers = [];
   }
   static makeKey(name) {
-    return (require("@winglibs/testfixture/util.js")["makeKey"])(name)
+    return ($extern("@winglibs/testfixture/util.js")["makeKey"])(name)
   }
   onSet(handler) {
     this.handlers.push(handler);
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Store-2.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Store-2.cjs")({
         $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
       })
     `;
@@ -241,48 +244,51 @@ class Store extends $stdlib.std.Resource {
   }
 }
 module.exports = { Store };
-//# sourceMappingURL=preflight.store-3.js.map
+//# sourceMappingURL=preflight.store-3.cjs.map
 ```
 
-## preflight.subdir-4.js
-```js
+## preflight.subdir-4.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {
-  ...require("./preflight.util-2.js"),
+  ...require("./preflight.util-2.cjs"),
 };
-//# sourceMappingURL=preflight.subdir-4.js.map
+//# sourceMappingURL=preflight.subdir-4.cjs.map
 ```
 
-## preflight.testfixture-5.js
-```js
+## preflight.testfixture-5.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {
-  get subdir() { return require("./preflight.subdir-4.js") },
-  ...require("./preflight.store-3.js"),
-  ...require("./preflight.enums-1.js"),
+  get subdir() { return require("./preflight.subdir-4.cjs") },
+  ...require("./preflight.store-3.cjs"),
+  ...require("./preflight.enums-1.cjs"),
 };
-//# sourceMappingURL=preflight.testfixture-5.js.map
+//# sourceMappingURL=preflight.testfixture-5.cjs.map
 ```
 
-## preflight.util-2.js
-```js
+## preflight.util-2.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class Util extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.cjs")({
       })
     `;
   }
@@ -313,6 +319,6 @@ class Util extends $stdlib.std.Resource {
   }
 }
 module.exports = { Util };
-//# sourceMappingURL=preflight.util-2.js.map
+//# sourceMappingURL=preflight.util-2.cjs.map
 ```
 

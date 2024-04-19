@@ -10,8 +10,6 @@ use lazy_static::lazy_static;
 use strum::{Display, EnumString};
 use wingc::compile;
 
-pub const VERSION: &str = env!("CARGO_PKG_VERSION");
-
 lazy_static! {
 	static ref HOME_PATH: PathBuf = home_dir().expect("Could not find home directory");
 	pub static ref WING_CACHE_DIR: Utf8PathBuf =
@@ -90,6 +88,10 @@ fn command_build(source_file: Utf8PathBuf, target: Option<Target>) -> Result<(),
 		install_sdk()?;
 	} else {
 		// TODO: check that the SDK version matches the CLI version
+		if cfg!(test) {
+			// For now, always reinstall the SDK in tests
+			install_sdk()?;
+		}
 	}
 	tracing::info!("Using SDK at {}", sdk_root);
 
@@ -117,10 +119,13 @@ fn install_sdk() -> Result<(), Box<dyn Error>> {
 
 	std::fs::create_dir_all(WING_CACHE_DIR.as_str())?;
 	let mut install_command = std::process::Command::new("npm");
-	install_command
-		.arg("install")
-		.arg(format!("@winglang/sdk@{VERSION}"))
-		.arg("esbuild"); // TODO: should this not be an optional dependency?
+	install_command.arg("install").arg("esbuild"); // TODO: should this not be an optional dependency?
+	if cfg!(test) {
+		install_command.arg(format!("file:{}/../../libs/wingsdk", env!("CARGO_MANIFEST_DIR")));
+	} else {
+		install_command.arg(format!("@winglang/sdk@{}", env!("CARGO_PKG_VERSION")));
+	}
+
 	install_command.current_dir(WING_CACHE_DIR.as_str());
 	install_command.stdout(std::process::Stdio::piped());
 	install_command.stderr(std::process::Stdio::piped());
@@ -140,11 +145,13 @@ fn run_javascript_node(source_file: &Utf8Path, target_dir: &Utf8Path, target: Ta
 	let source_dir = source_file_canonical.parent().expect("source file has no parent");
 
 	let mut command = std::process::Command::new("node");
-	command.arg(target_dir.join(".wing").join("preflight.js"));
+	command.arg(target_dir.join(".wing").join("preflight.cjs"));
 	command.env("NODE_PATH", WING_CACHE_DIR.join("node_modules").as_str());
 	command.env("WING_PLATFORMS", target.to_string());
 	command.env("WING_SOURCE_DIR", source_dir);
 	command.env("WING_SYNTH_DIR", target_dir);
+
+	tracing::info!("Running command: {:?}", command);
 	let status = command.status()?;
 	if !status.success() {
 		return Err("Node.js failed".into());

@@ -4,7 +4,7 @@ import { SecretSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { ResourceNames } from "../shared/resource-names";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost } from "../std";
 
 /**
@@ -23,7 +23,7 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 
@@ -40,16 +40,13 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
     ];
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: SecretSchema = {
-      type: cloud.SECRET_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        name: this.name,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: SecretSchema = {
+      name: this.name,
     };
-    return schema;
+    return {
+      type: cloud.SECRET_FQN,
+      props,
+    };
   }
 }

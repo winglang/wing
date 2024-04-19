@@ -33,7 +33,7 @@ test("schedule behavior with cron", () => {
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "0/1 * ? * *",
+    cron: "0/1 * * * *",
   });
   schedule.onTick(fn);
   const output = app.synth();
@@ -42,7 +42,70 @@ test("schedule behavior with cron", () => {
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::Events::Rule", 1);
   template.hasResourceProperties("AWS::Events::Rule", {
-    ScheduleExpression: "cron(0/1 * ? * * *)",
+    ScheduleExpression: "cron(0/1 * * * ? *)",
+  });
+  expect(awscdkSanitize(template)).toMatchSnapshot();
+});
+
+test("convert single dayOfWeek from Unix to AWS", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const fn = simulator.Testing.makeHandler(
+    `async handle(event) { console.log("Received: ", event); }`
+  );
+  const schedule = new cloud.Schedule(app, "Schedule", {
+    cron: "* * * * 1",
+  });
+  schedule.onTick(fn);
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.resourceCountIs("AWS::Events::Rule", 1);
+  template.hasResourceProperties("AWS::Events::Rule", {
+    ScheduleExpression: "cron(* * ? * 0 *)",
+  });
+  expect(awscdkSanitize(template)).toMatchSnapshot();
+});
+
+test("convert the range of dayOfWeek from Unix to AWS", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const fn = simulator.Testing.makeHandler(
+    `async handle(event) { console.log("Received: ", event); }`
+  );
+  const schedule = new cloud.Schedule(app, "Schedule", {
+    cron: "* * * * 1-7",
+  });
+  schedule.onTick(fn);
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.resourceCountIs("AWS::Events::Rule", 1);
+  template.hasResourceProperties("AWS::Events::Rule", {
+    ScheduleExpression: "cron(* * ? * 0-6 *)",
+  });
+  expect(awscdkSanitize(template)).toMatchSnapshot();
+});
+
+test("convert the list of dayOfWeek from Unix to AWS", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const fn = simulator.Testing.makeHandler(
+    `async handle(event) { console.log("Received: ", event); }`
+  );
+  const schedule = new cloud.Schedule(app, "Schedule", {
+    cron: "* * * * 1,3,5,7",
+  });
+  schedule.onTick(fn);
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.resourceCountIs("AWS::Events::Rule", 1);
+  template.hasResourceProperties("AWS::Events::Rule", {
+    ScheduleExpression: "cron(* * ? * 0,2,4,6 *)",
   });
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -54,7 +117,7 @@ test("schedule with two functions", () => {
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "0/1 * ? * *",
+    cron: "0/1 * * * *",
   });
   schedule.onTick(fn);
   const output = app.synth();
@@ -95,9 +158,7 @@ test("cron with more than five values", () => {
       new cloud.Schedule(app, "Schedule", {
         cron: "0/1 * ? * * *",
       })
-  ).toThrow(
-    "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
-  );
+  ).toThrow("cron string must be in UNIX cron format");
 });
 
 test("schedule without rate or cron", () => {
@@ -123,7 +184,7 @@ test("schedule with rate less than 1 minute", () => {
   ).toThrow("rate can not be set to less than 1 minute.");
 });
 
-test("cron with Day-of-month and Day-of-week setting with *", () => {
+test("cron with day of month and day of week configured at the same time", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
@@ -131,9 +192,9 @@ test("cron with Day-of-month and Day-of-week setting with *", () => {
   expect(
     () =>
       new cloud.Schedule(app, "Schedule", {
-        cron: "0/1 * * * *",
+        cron: "* * 1 * 1",
       })
   ).toThrow(
-    "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other"
+    "Cannot restrict both 'day-of-month' and 'day-of-week' in a cron expression, at least one must be '*'"
   );
 });

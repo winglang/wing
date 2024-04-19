@@ -23,6 +23,7 @@ Immutable Array.
 | <code><a href="#@winglang/sdk.std.Array.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.Array.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.Array.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.Array.slice">slice</a></code> | Returns a shallow copy of a portion of the array. |
 | <code><a href="#@winglang/sdk.std.Array.tryAt">tryAt</a></code> | Get the value at the given index, returning nil if the index is out of bounds. |
 
 ---
@@ -132,10 +133,34 @@ to search for.
 
 ---
 
+##### `slice` <a name="slice" id="@winglang/sdk.std.Array.slice"></a>
+
+```wing
+slice(start?: num, end?: num): Array
+```
+
+Returns a shallow copy of a portion of the array.
+
+###### `start`<sup>Optional</sup> <a name="start" id="@winglang/sdk.std.Array.slice.parameter.start"></a>
+
+- *Type:* num
+
+the beginning index of the slice, inclusive.
+
+---
+
+###### `end`<sup>Optional</sup> <a name="end" id="@winglang/sdk.std.Array.slice.parameter.end"></a>
+
+- *Type:* num
+
+the ending index of the slice, exclusive.
+
+---
+
 ##### `tryAt` <a name="tryAt" id="@winglang/sdk.std.Array.tryAt"></a>
 
 ```wing
-tryAt(index: num): <T>
+tryAt(index: num): <T>?
 ```
 
 Get the value at the given index, returning nil if the index is out of bounds.
@@ -191,6 +216,7 @@ Mutable Array.
 | <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add values to end of array. |
 | <code><a href="#@winglang/sdk.std.MutArray.removeFirst">removeFirst</a></code> | Removes first occurrence of a given value in an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.set">set</a></code> | Sets a new value at the given index of an array. |
+| <code><a href="#@winglang/sdk.std.MutArray.slice">slice</a></code> | Returns a shallow copy of a portion of the array. |
 
 ---
 
@@ -400,6 +426,30 @@ the index to set the value at.
 - *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 the value to set at the given index.
+
+---
+
+##### `slice` <a name="slice" id="@winglang/sdk.std.MutArray.slice"></a>
+
+```wing
+slice(start?: num, end?: num): MutArray
+```
+
+Returns a shallow copy of a portion of the array.
+
+###### `start`<sup>Optional</sup> <a name="start" id="@winglang/sdk.std.MutArray.slice.parameter.start"></a>
+
+- *Type:* num
+
+the beginning index of the slice, inclusive.
+
+---
+
+###### `end`<sup>Optional</sup> <a name="end" id="@winglang/sdk.std.MutArray.slice.parameter.end"></a>
+
+- *Type:* num
+
+the ending index of the slice, exclusive.
 
 ---
 
