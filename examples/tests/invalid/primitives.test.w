@@ -2,9 +2,6 @@ let x = "1,2,3";
 let y = x.split(",");
       //^ x is not a class
 
-log(y[0]);
-     //^ no array indexing
-
 let arr = [1, 2, 3];
 let join = arr.blabla(",");
              //^ Property "blabla" doesn't not exist in "Array"

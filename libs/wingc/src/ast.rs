@@ -742,6 +742,10 @@ pub enum Reference {
 		property: Symbol,
 		optional_accessor: bool,
 	},
+	/// A reference to an accessed member of an object `expression[x]`
+	///
+	/// TODO: should this be a separate type of Expr? (this would require changing how `Assignment` statements are modeled)
+	ElementAccess { object: Box<Expr>, index: Box<Expr> },
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember {
 		type_name: UserDefinedType,
@@ -758,6 +762,7 @@ impl Clone for Reference {
 				type_name: type_name.clone(),
 				property: property.clone(),
 			},
+			Reference::ElementAccess { .. } => panic!("Unable to clone reference to element access"),
 		}
 	}
 }
@@ -772,6 +777,14 @@ impl Spanned for Reference {
 				optional_accessor: _,
 			} => object.span().merge(&property.span()),
 			Reference::TypeMember { type_name, property } => type_name.span().merge(&property.span()),
+			Reference::ElementAccess { object, index } => {
+				let mut span = object.span().merge(&index.span());
+				// Add one to include the closing bracket.
+				// TODO: store a dedicated span field?
+				span.end.col += 1;
+				span.end_offset += 1;
+				span
+			}
 		}
 	}
 }
@@ -793,6 +806,9 @@ impl Display for Reference {
 			}
 			Reference::TypeMember { type_name, property } => {
 				write!(f, "{}.{}", type_name, property.name)
+			}
+			Reference::ElementAccess { .. } => {
+				write!(f, "element access") // TODO!
 			}
 		}
 	}

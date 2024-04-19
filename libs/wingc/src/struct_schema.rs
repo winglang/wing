@@ -44,6 +44,9 @@ impl<'a> Visit<'a> for StructSchemaVisitor<'a> {
 			Reference::Identifier(_) => {
 				visit::visit_reference(self, node);
 			}
+			Reference::ElementAccess { .. } => {
+				visit::visit_reference(self, node);
+			}
 		}
 	}
 
