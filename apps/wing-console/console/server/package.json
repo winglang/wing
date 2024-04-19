@@ -21,6 +21,7 @@
     "@winglang/compiler": "workspace:^",
     "@winglang/sdk": "workspace:^",
     "codespan-wasm": "^0.4.0",
+    "conf": "^11.0.2",
     "debug": "^4.3.4",
     "launch-editor": "^2.6.0",
     "ms": "^2.1.3"
@@ -37,7 +38,6 @@
     "@wingconsole/tsconfig": "workspace:^",
     "bump-pack": "workspace:^",
     "chokidar": "^3.5.3",
-    "conf": "^11.0.2",
     "constructs": "^10.3",
     "cors": "^2.8.5",
     "emittery": "^1.0.1",

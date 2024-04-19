@@ -55,7 +55,8 @@
     "tar": "^6.2.0",
     "tiny-updater": "^3.5.1",
     "uuid": "^8.3.2",
-    "vscode-languageserver": "^8.1.0"
+    "vscode-languageserver": "^8.1.0",
+    "when-exit": "^2.1.2"
   },
   "devDependencies": {
     "@types/debug": "^4.1.8",
