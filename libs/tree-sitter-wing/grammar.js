@@ -13,7 +13,7 @@ const PREC = {
   UNARY: 120,
   OPTIONAL_TEST: 130,
   POWER: 140,
-  SUBSCRIPT: 150, // x[0]
+  STRUCTURED_ACCESS: 150, // x[y]
   MEMBER: 160,
   CALL: 170,
   OPTIONAL_UNWRAP: 180,
@@ -675,7 +675,7 @@ module.exports = grammar({
     map_literal_member: ($) => seq($.expression, "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
-      prec.right(PREC.SUBSCRIPT, seq($.expression, "[", $.expression, "]")),
+      prec.right(PREC.STRUCTURED_ACCESS, seq($.expression, "[", $.expression, "]")),
 
     json_literal: ($) =>
       choice(
