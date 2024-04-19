@@ -450,16 +450,16 @@ Convert Json element to string if possible.
 ##### `delete` <a name="delete" id="@winglang/sdk.std.MutJson.delete"></a>
 
 ```wing
-delete(key: str): bool
+delete(key: any): bool
 ```
 
 Removes the specified element from a map.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.delete.parameter.key"></a>
 
-- *Type:* str
+- *Type:* any
 
-The key.
+Either the key or index to delete.
 
 ---
 
@@ -498,14 +498,14 @@ The index of the element in the MutJson Array to return.
 ##### `has` <a name="has" id="@winglang/sdk.std.MutJson.has"></a>
 
 ```wing
-has(key: str): bool
+has(key: any): bool
 ```
 
 Checks if a Json object has a given key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.has.parameter.key"></a>
 
-- *Type:* str
+- *Type:* any
 
 The key to check.
 

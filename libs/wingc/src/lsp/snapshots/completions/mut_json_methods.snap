@@ -27,10 +27,10 @@ source: libs/wingc/src/lsp/completions.rs
   insertText: asStr()
 - label: delete
   kind: 2
-  detail: "(key: str): bool"
+  detail: "(key: any): bool"
   documentation:
     kind: markdown
-    value: "```wing\ndelete: (key: str): bool\n```\n---\nRemoves the specified element from a map.\n### Parameters\n- `key` — `str` — The key.\n\n### Returns\ntrue if the given key is no longer present"
+    value: "```wing\ndelete: (key: any): bool\n```\n---\nRemoves the specified element from a map.\n### Parameters\n- `key` — `any` — Either the key or index to delete.\n\n### Returns\ntrue if the given key is no longer present"
   sortText: ff|delete
   insertText: delete($1)
   insertTextFormat: 2
@@ -63,10 +63,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: has
   kind: 2
-  detail: "(key: str): bool"
+  detail: "(key: any): bool"
   documentation:
     kind: markdown
-    value: "```wing\nhas: (key: str): bool\n```\n---\nChecks if a Json object has a given key.\n### Parameters\n- `key` — `str` — The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
+    value: "```wing\nhas: (key: any): bool\n```\n---\nChecks if a Json object has a given key.\n### Parameters\n- `key` — `any` — The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
   sortText: ff|has
   insertText: has($1)
   insertTextFormat: 2

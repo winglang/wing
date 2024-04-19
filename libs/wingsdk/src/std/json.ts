@@ -452,7 +452,7 @@ export class MutJson {
 
   /**
    * Removes the specified element from a map.
-   * 
+   *
    * @macro delete ($self$)?.[$args$]
    *
    * @param key Either the key or index to delete
@@ -472,7 +472,7 @@ export class MutJson {
    * @param key The key to check
    * @returns Boolean value corresponding to whether the key exists
    */
-  public has(key: string | boolean | number ): boolean {
+  public has(key: string | boolean | number): boolean {
     key;
     throw new Error("Macro");
   }
