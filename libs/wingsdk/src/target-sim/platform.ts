@@ -13,7 +13,7 @@ export class Platform implements IPlatform {
     return new App(appProps);
   }
 
-  public async storeSecrets(secrets: { [key: string]: string }): Promise<void> {
+  public async storeSecrets(secrets: Record<string, string>): Promise<void> {
     let existingSecretsContent = "";
     try {
       existingSecretsContent = fs.readFileSync("./.env", "utf8");

@@ -74,9 +74,7 @@ export class Platform implements IPlatform {
     return new App(appProps);
   }
 
-  public async storeSecrets(secrets: {
-    [name: string]: string;
-  }): Promise<void> {
+  public async storeSecrets(secrets: Record<string, string>): Promise<void> {
     console.log("Storing secrets in AWS Secrets Manager");
     const client = new SecretsManagerClient({});
 

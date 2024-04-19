@@ -20,7 +20,7 @@ export async function secrets(entrypoint?: string, options?: SecretsOptions): Pr
 
   process.env.WING_SOURCE_DIR = cwd();
 
-  let secretValues: any = {};
+  let secretValues: Record<string, string> = {};
   console.log(`${secretNames.length} secret(s) found\n`);
 
   if (options?.list) {

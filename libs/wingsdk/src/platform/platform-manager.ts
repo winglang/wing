@@ -147,12 +147,12 @@ export class PlatformManager {
     return app;
   }
 
-  public async storeSecrets(secretNames: string[]): Promise<void> {
+  public async storeSecrets(secrets: Record<string, string>): Promise<void> {
     const hooks = collectHooks(this.platformInstances);
     if (!hooks.storeSecretsHook) {
       throw new Error(`No storeSecrets method found on any platform`);
     }
-    await hooks.storeSecretsHook(secretNames);
+    await hooks.storeSecretsHook(secrets);
   }
 }
 
