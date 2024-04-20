@@ -2,7 +2,7 @@ import { JsonFile, cdk, javascript, DependencyType } from "projen";
 
 const JSII_DEPS = ["constructs@^10.3"];
 const CDKTF_VERSION = "0.20.3";
-const AWS_SDK_VERSION = "3.523.0";
+const AWS_SDK_VERSION = "3.535.0";
 
 const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
