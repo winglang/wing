@@ -62,6 +62,22 @@ new cloud.Function(inflight () => {
 });
 ```
 
+### Adding a dead-letter queue
+
+Creating a queue and adding a dead-letter queue with the maximum number of attempts configured
+
+```ts playground
+bring cloud;
+
+let dlq = new cloud.Queue() as "dead-letter queue";
+let q = new cloud.Queue(
+  dlq: { 
+    queue: dlq,
+    maxDeliveryAttempts: 2
+  }
+);
+```
+
 ### Referencing an external queue
 
 If you would like to reference an existing queue from within your application you can use the
