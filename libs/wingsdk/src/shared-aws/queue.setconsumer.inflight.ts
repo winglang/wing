@@ -10,9 +10,17 @@ export class QueueSetConsumerHandlerClient
   constructor({ handler }: { handler: IFunctionHandlerClient }) {
     this.handler = handler;
   }
-  public async handle(event: any) {
+  public async handle(event: any): Promise<any> {
+    const batchItemFailures = [];
     for (const record of event.Records ?? []) {
-      await this.handler.handle(record.body);
+      try {
+        await this.handler.handle(record.body);
+      } catch (error) {
+        batchItemFailures.push({
+          itemIdentifier: record.messageId,
+        });
+      }
     }
+    return { batchItemFailures };
   }
 }
