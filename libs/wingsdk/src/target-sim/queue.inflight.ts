@@ -201,7 +201,7 @@ export class Queue
 
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
-        await fnClient
+        void fnClient
           .invoke(JSON.stringify({ messages: messages }))
           .then((result) => {
             if (this.dlq && result) {
