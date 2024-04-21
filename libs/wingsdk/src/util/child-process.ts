@@ -70,15 +70,12 @@ export class ChildProcess {
    */
   public async wait(): Promise<Output> {
     if (this.exitStatus !== null) {
-      console.log("Process already finished, returning output.");
       return {
         stdout: this.stdout,
         stderr: this.stderr,
         status: this.exitStatus,
       };
     }
-
-    console.log("Waiting for child process to finish..." + this.exitStatus);
 
     return new Promise((resolve, reject) => {
       const cleanup = () => {
