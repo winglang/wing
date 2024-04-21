@@ -155,7 +155,7 @@ new cloud.Topic(props?: TopicProps);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish message to topic. |
+| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish messages to topic. |
 
 ---
 
@@ -202,12 +202,12 @@ Subscribing queue to the topic.
 ##### `publish` <a name="publish" id="@winglang/sdk.cloud.ITopicClient.publish"></a>
 
 ```wing
-inflight publish(message: str): void
+inflight publish(...messages: Array<str>): void
 ```
 
-Publish message to topic.
+Publish messages to topic.
 
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.message"></a>
+###### `messages`<sup>Required</sup> <a name="messages" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.messages"></a>
 
 - *Type:* str
 
