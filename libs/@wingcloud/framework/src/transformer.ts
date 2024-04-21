@@ -49,15 +49,14 @@ export class InflightTransformer {
         const decl = sym.declarations?.at(0);
         if (!decl) {
           return true;
-        } else if (
-          decl
-            .getSourceFile()
-            .fileName.replaceAll("\\", "/")
-            .includes("/@wingcloud/framework/")
-        ) {
-          return true;
         } else {
-          return getImportSpecifier(decl) === '"@wingcloud/framework"';
+          const fileName = decl.getSourceFile().fileName.replaceAll("\\", "/");
+          if (fileName.includes("/@wingcloud/framework/") || fileName.includes("/wingsdk/lib/core/")) {
+            return true;
+          }
+
+          const importSpecifier = getImportSpecifier(decl)
+          return importSpecifier === '"@wingcloud/framework"' || importSpecifier === '"@winglang/sdk"';
         }
       }
 

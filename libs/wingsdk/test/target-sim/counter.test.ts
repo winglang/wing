@@ -22,6 +22,7 @@ test("create a counter", async () => {
     },
     path: "root/my_counter",
     addr: expect.any(String),
+    policy: [],
     props: {
       initial: 123,
     },

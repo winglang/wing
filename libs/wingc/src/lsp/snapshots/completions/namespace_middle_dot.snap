@@ -47,7 +47,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Queue\n```\n---\nA queue.\n\n### Initializer\n- `...props` — `QueueProps?`\n  \n  - `retentionPeriod?` — `duration?` — How long a queue retains a message.\n  - `timeout?` — `duration?` — How long a queue's consumers have to process a message.\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `approxSize` — `inflight (): num` — Retrieve the approximate number of messages in the queue.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `pop` — `inflight (): str?` — Pop a message from the queue.\n- `purge` — `inflight (): void` — Purge all of the messages in the queue.\n- `push` — `inflight (messages: Array<str>?): void` — Push one or more messages to the queue.\n- `setConsumer` — `preflight (handler: inflight (message: str): void, props: QueueSetConsumerOptions?): Function` — Create a function to consume messages from this queue.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+    value: "```wing\nclass Queue\n```\n---\nA queue.\n\n### Initializer\n- `...props` — `QueueProps?`\n  \n  - `dlq?` — `DeadLetterQueueProps?` — A dead-letter queue.\n  - `retentionPeriod?` — `duration?` — How long a queue retains a message.\n  - `timeout?` — `duration?` — How long a queue's consumers have to process a message.\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `approxSize` — `inflight (): num` — Retrieve the approximate number of messages in the queue.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `pop` — `inflight (): str?` — Pop a message from the queue.\n- `purge` — `inflight (): void` — Purge all of the messages in the queue.\n- `push` — `inflight (...messages: Array<str>?): void` — Push one or more messages to the queue.\n- `setConsumer` — `preflight (handler: inflight (message: str): void, props: QueueSetConsumerOptions?): Function` — Create a function to consume messages from this queue.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
   sortText: gg|Queue
 - label: Schedule
   kind: 7
@@ -229,6 +229,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct CounterProps\n```\n---\nOptions for `Counter`.\n### Fields\n- `initial?` — `num?` — The initial value of the counter."
   sortText: hh|CounterProps
+- label: DeadLetterQueueProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct DeadLetterQueueProps\n```\n---\nDead letter queue options.\n### Fields\n- `queue` — `Queue` — Queue to receive messages that failed processing.\n- `maxDeliveryAttempts?` — `num?` — Number of times a message will be processed before being sent to the dead-letter queue."
+  sortText: hh|DeadLetterQueueProps
 - label: DomainProps
   kind: 22
   documentation:
@@ -269,7 +275,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct QueueProps\n```\n---\nOptions for `Queue`.\n### Fields\n- `retentionPeriod?` — `duration?` — How long a queue retains a message.\n- `timeout?` — `duration?` — How long a queue's consumers have to process a message."
+    value: "```wing\nstruct QueueProps\n```\n---\nOptions for `Queue`.\n### Fields\n- `dlq?` — `DeadLetterQueueProps?` — A dead-letter queue.\n- `retentionPeriod?` — `duration?` — How long a queue retains a message.\n- `timeout?` — `duration?` — How long a queue's consumers have to process a message."
   sortText: hh|QueueProps
 - label: QueueSetConsumerOptions
   kind: 22
@@ -323,13 +329,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct TopicSubscribeQueueOptions extends QueueProps\n```\n---\nOptions for `Topic.subscribeQueue`.\n### Fields\n- `retentionPeriod?` — `duration?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct TopicSubscribeQueueOptions extends QueueProps\n```\n---\nOptions for `Topic.subscribeQueue`.\n### Fields\n- `dlq?` — `DeadLetterQueueProps?`\n- `retentionPeriod?` — `duration?`\n- `timeout?` — `duration?`"
   sortText: hh|TopicSubscribeQueueOptions
 - label: WebsiteDomainOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WebsiteDomainOptions\n```\n---\nOptions for `Website`, and `ReactApp`.\n### Fields\n- `domain?` — `Domain?` — The website's custom domain object."
+    value: "```wing\nstruct WebsiteDomainOptions\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — `Domain?` — The website's custom domain object."
   sortText: hh|WebsiteDomainOptions
 - label: WebsiteOptions
   kind: 22
@@ -437,7 +443,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IQueueClient\n```\n---\nInflight interface for `Queue`.\n### Methods\n- `approxSize` — `inflight (): num` — Retrieve the approximate number of messages in the queue.\n- `pop` — `inflight (): str?` — Pop a message from the queue.\n- `purge` — `inflight (): void` — Purge all of the messages in the queue.\n- `push` — `inflight (messages: Array<str>?): void` — Push one or more messages to the queue."
+    value: "```wing\ninterface IQueueClient\n```\n---\nInflight interface for `Queue`.\n### Methods\n- `approxSize` — `inflight (): num` — Retrieve the approximate number of messages in the queue.\n- `pop` — `inflight (): str?` — Pop a message from the queue.\n- `purge` — `inflight (): void` — Purge all of the messages in the queue.\n- `push` — `inflight (...messages: Array<str>?): void` — Push one or more messages to the queue."
   sortText: ii|IQueueClient
 - label: IQueueSetConsumerHandler
   kind: 8

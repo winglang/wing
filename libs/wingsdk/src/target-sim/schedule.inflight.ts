@@ -17,15 +17,21 @@ import { TraceType } from "../std";
 export class Schedule
   implements IScheduleClient, ISimulatorResourceInstance, IEventPublisher
 {
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
   private tasks = new Array<ScheduleTask>();
   private interval: CronExpression;
   private intervalTimeout?: NodeJS.Timeout;
 
-  constructor(props: ScheduleSchema["props"], context: ISimulatorContext) {
-    this.context = context;
+  constructor(props: ScheduleSchema) {
     this.interval = parseExpression(props.cronExpression, { utc: true });
     this.scheduleFunction();
+  }
+
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
   }
 
   // Calculate the delay for the next execution
@@ -41,7 +47,8 @@ export class Schedule
     }, this.nextDelay(this.interval));
   }
 
-  public async init(): Promise<ScheduleAttributes> {
+  public async init(context: ISimulatorContext): Promise<ScheduleAttributes> {
+    this._context = context;
     return {};
   }
 

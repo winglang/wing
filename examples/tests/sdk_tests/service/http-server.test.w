@@ -6,9 +6,9 @@ struct Address {
   port: num;
 }
 
-interface IHttpServer {
-  inflight address(): Address;
-  inflight close(): void;
+inflight interface IHttpServer {
+  address(): Address;
+  close(): void;
 }
 
 

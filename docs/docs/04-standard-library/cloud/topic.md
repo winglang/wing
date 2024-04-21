@@ -395,8 +395,22 @@ let TopicSubscribeQueueOptions = cloud.TopicSubscribeQueueOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.dlq">dlq</a></code> | <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps">DeadLetterQueueProps</a></code> | A dead-letter queue. |
 | <code><a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue retains a message. |
 | <code><a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue's consumers have to process a message. |
+
+---
+
+##### `dlq`<sup>Optional</sup> <a name="dlq" id="@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.dlq"></a>
+
+```wing
+dlq: DeadLetterQueueProps;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.DeadLetterQueueProps">DeadLetterQueueProps</a>
+- *Default:* no dead letter queue
+
+A dead-letter queue.
 
 ---
 

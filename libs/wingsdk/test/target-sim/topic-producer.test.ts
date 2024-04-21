@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import { listMessages } from "./util";
+import { listMessages, waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { SimApp } from "../sim-app";
@@ -27,6 +27,7 @@ test("publishing messages to topic", async () => {
 
       const processor = Testing.makeHandler(`async handle(event) {
           if (event.message === "") throw new Error("No message recieved");
+          console.log("Message received");
       }`);
       topic.onMessage(processor);
     }
@@ -43,6 +44,10 @@ test("publishing messages to topic", async () => {
 
   // WHEN
   await publisher.invoke("ABC");
+
+  await waitUntilTraceCount(s, 1, (trace) =>
+    trace.data.message.includes("Message received")
+  );
 
   // THEN
   await s.stop();

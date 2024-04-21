@@ -25,9 +25,17 @@ export class JsiiClass {
   public static staticMethod(arg: string) {
     return `Got ${arg}`;
   }
-  
+
   public methodWithStructParam(s: SomeStruct): string {
     return s.field;
+  }
+}
+
+export class JsiiClassWithPrivateConstructor {
+  private constructor() {}
+
+  public static makeInstance(): JsiiClassWithPrivateConstructor {
+    return new JsiiClassWithPrivateConstructor();
   }
 }
 
@@ -43,4 +51,8 @@ export interface IFakeClosure {
 
 export interface SomeStruct {
   readonly field: string;
+}
+
+export interface ISomeInterface {
+  method(): void;
 }

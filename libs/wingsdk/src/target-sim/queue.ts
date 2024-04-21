@@ -2,14 +2,19 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
+import {
+  Function,
+  FunctionInflightMethods as SimFunctionInflightMethods,
+} from "./function";
+import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { NotImplementedError } from "../core/errors";
 import { convertBetweenHandlers } from "../shared/convert";
-import { BaseResourceSchema } from "../simulator/simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
@@ -20,6 +25,9 @@ import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: Duration;
   private readonly retentionPeriod: Duration;
+  private readonly dlq?: cloud.DeadLetterQueueProps;
+  private readonly policy: Policy;
+
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
@@ -41,6 +49,20 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       throw new Error(
         "Retention period must be greater than or equal to timeout"
       );
+    }
+
+    this.policy = new Policy(this, "Policy", { principal: this });
+
+    if (props.dlq && props.dlq.queue) {
+      this.dlq = props.dlq;
+
+      this.policy.addStatement(this.dlq.queue, cloud.QueueInflightMethods.PUSH);
+
+      Node.of(this).addConnection({
+        source: this,
+        target: this.dlq.queue,
+        name: "dead-letter queue",
+      });
     }
   }
 
@@ -92,16 +114,28 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       functionHandler,
       props
     );
-    Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = "setConsumer()";
+    const fnNode = Node.of(fn);
+    fnNode.sourceModule = SDK_SOURCE_MODULE;
+    fnNode.title = "setConsumer()";
 
-    new EventMapping(this, App.of(this).makeId(this, "QueueEventMapping"), {
-      subscriber: fn,
-      publisher: this,
-      subscriptionProps: {
-        batchSize: props.batchSize ?? 1,
-      },
-    });
+    const mapping = new EventMapping(
+      this,
+      App.of(this).makeId(this, "QueueEventMapping"),
+      {
+        subscriber: fn,
+        publisher: this,
+        subscriptionProps: {
+          batchSize: props.batchSize ?? 1,
+        },
+      }
+    );
+
+    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
+    this.policy.addStatement(
+      fn,
+      SimFunctionInflightMethods.HAS_AVAILABLE_WORKERS
+    );
+    mapping.node.addDependency(this.policy);
 
     Node.of(this).addConnection({
       source: this,
@@ -112,22 +146,26 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     return fn;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: QueueSchema = {
-      type: cloud.QUEUE_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        timeout: this.timeout.seconds,
-        retentionPeriod: this.retentionPeriod.seconds,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: QueueSchema = {
+      timeout: this.timeout.seconds,
+      retentionPeriod: this.retentionPeriod.seconds,
+      dlq: this.dlq
+        ? {
+            dlqHandler: simulatorHandleToken(this.dlq.queue),
+            maxDeliveryAttempts:
+              this.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
+          }
+        : undefined,
     };
-    return schema;
+    return {
+      type: cloud.QUEUE_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

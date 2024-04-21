@@ -1,5 +1,5 @@
 import { IContainerClient, HOST_PORT_ATTR } from "./container";
-import { ContainerSchema, ContainerAttributes } from "./schema-resources";
+import { ContainerAttributes, ContainerSchema } from "./schema-resources";
 import { isPath, runCommand } from "../shared/misc";
 import {
   ISimulatorContext,
@@ -12,27 +12,23 @@ import { Util } from "../util";
 export class Container implements IContainerClient, ISimulatorResourceInstance {
   private readonly imageTag: string;
   private readonly containerName: string;
+  private _context: ISimulatorContext | undefined;
 
-  public constructor(
-    private readonly props: ContainerSchema["props"],
-    private readonly context: ISimulatorContext
-  ) {
+  public constructor(private readonly props: ContainerSchema) {
     this.imageTag = props.imageTag;
 
     this.containerName = `wing-container-${Util.ulid()}`;
   }
 
-  private log(message: string) {
-    this.context.addTrace({
-      data: { message },
-      sourcePath: this.context.resourcePath,
-      sourceType: "container",
-      timestamp: new Date().toISOString(),
-      type: TraceType.RESOURCE, //system messages that will be displayed on debug mode only
-    });
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
   }
 
-  public async init(): Promise<ContainerAttributes> {
+  public async init(context: ISimulatorContext): Promise<ContainerAttributes> {
+    this._context = context;
     // if this a reference to a local directory, build the image from a docker file
     if (isPath(this.props.image)) {
       // check if the image is already built
@@ -77,6 +73,11 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       for (const k of Object.keys(this.props.env)) {
         dockerRun.push(`${k}=${this.props.env[k]}`);
       }
+    }
+
+    for (const volume of this.props.volumes ?? []) {
+      dockerRun.push("-v");
+      dockerRun.push(volume);
     }
 
     dockerRun.push(this.imageTag);
@@ -133,6 +134,16 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
 
   public async plan() {
     return UpdatePlan.AUTO;
+  }
+
+  private log(message: string) {
+    this.context.addTrace({
+      data: { message },
+      sourcePath: this.context.resourcePath,
+      sourceType: "container",
+      timestamp: new Date().toISOString(),
+      type: TraceType.RESOURCE,
+    });
   }
 }
 

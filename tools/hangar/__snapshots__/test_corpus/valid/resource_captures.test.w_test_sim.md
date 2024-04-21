@@ -2,13 +2,13 @@
 
 ## stdout.log
 ```log
-pass ┌ resource_captures.test.wsim » root/env0/test:test
-     │ array.len=3
-     │ field=hello!
-     └ this.another.first.myResource:myString
- 
- 
+[INFO] test | array.len=3
+[INFO] test | field=hello!
+[INFO] test | this.another.first.myResource:myString
+pass ─ resource_captures.test.wsim » root/env0/test:test
+
 Tests 1 passed (1)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

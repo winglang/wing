@@ -179,6 +179,9 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				self.verify_defined_in_current_env(symb);
 				visit::visit_reference(self, &node);
 			}
+			Reference::ElementAccess { .. } => {
+				visit::visit_reference(self, &node);
+			}
 		}
 	}
 
@@ -212,7 +215,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			// Inflight expressions that evaluate to a preflight type are currently unsupported because
 			// we can't determine exactly which preflight object is being accessed and therefore can't
 			// qualify the original lift expression.
-			if expr_phase == Phase::Inflight && expr_type.is_preflight_class() && v.ctx.current_property().is_some() && !v.ignore_unknown_preflight_object_error() {
+			if expr_phase == Phase::Inflight && expr_type.is_preflight_object_type() && v.ctx.current_property().is_some() && !v.ignore_unknown_preflight_object_error() {
 				report_diagnostic(Diagnostic {
 					message: format!(
 						"Expression of type \"{expr_type}\" references an unknown preflight object, can't qualify its capabilities. Use `lift()` to explicitly qualify the preflight object to disable this error."
