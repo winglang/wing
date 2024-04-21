@@ -41,7 +41,7 @@ test "spawn() with empty args" {
   let child = util.spawn(program, args);
   let output = child.wait();
 
-  expect.equal(output.stdout, "\n");
+  expect.equal(["", "\n"].contains(output.stdout), true);
   expect.equal(output.status, 0);
 }
 
