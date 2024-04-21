@@ -15,7 +15,8 @@ import {
 import { TraceType } from "../std";
 
 export class Topic
-  implements ITopicClient, ISimulatorResourceInstance, IEventPublisher {
+  implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
+{
   private readonly subscribers = new Array<TopicSubscriber>();
   private _context: ISimulatorContext | undefined;
 
@@ -33,9 +34,9 @@ export class Topic
     return {};
   }
 
-  public async cleanup(): Promise<void> { }
+  public async cleanup(): Promise<void> {}
 
-  public async save(): Promise<void> { }
+  public async save(): Promise<void> {}
 
   public async plan() {
     return UpdatePlan.AUTO;
@@ -80,17 +81,20 @@ export class Topic
     }
   }
 
-  publish(...messages: string[]): Promise<void> {
+  public publish(...messages: string[]): Promise<void> {
     return this.context.withTrace({
       message: `Publish (messages=${messages}).`,
       activity: async () => {
         if (messages.includes("")) {
           throw new Error("Empty messages are not allowed");
         }
+        let publishMsgList: Array<Promise<void>> = [];
         for (const message of messages) {
-          this.publishMessage(message)
+          publishMsgList.push(this.publishMessage(message));
         }
-      }
+
+        return Promise.all(publishMsgList);
+      },
     });
   }
 }

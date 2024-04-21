@@ -1,4 +1,9 @@
-import { SNSClient, PublishBatchCommand, PublishBatchRequestEntry, InvalidBatchEntryIdException } from "@aws-sdk/client-sns";
+import {
+  SNSClient,
+  PublishBatchCommand,
+  PublishBatchRequestEntry,
+  InvalidBatchEntryIdException,
+} from "@aws-sdk/client-sns";
 import { ITopicClient } from "../cloud";
 import { Util } from "../util/util";
 
@@ -8,7 +13,7 @@ export class TopicClient implements ITopicClient {
   constructor(
     private readonly topicArn: string,
     private readonly client: SNSClient = new SNSClient({})
-  ) { }
+  ) {}
 
   public async publish(...messages: string[]): Promise<void> {
     if (messages.includes("")) {
@@ -25,13 +30,14 @@ export class TopicClient implements ITopicClient {
       try {
         const command = new PublishBatchCommand({
           TopicArn: this.topicArn,
-          PublishBatchRequestEntries: batch
+          PublishBatchRequestEntries: batch,
         });
         await this.client.send(command);
       } catch (e) {
         if (e instanceof InvalidBatchEntryIdException) {
           throw new Error(
-            `The Id of a batch entry in a batch request doesn't abide by the specification. (message=${messages}): ${(e as Error).stack
+            `The Id of a batch entry in a batch request doesn't abide by the specification. (message=${messages}): ${
+              (e as Error).stack
             })}`
           );
         }
@@ -40,14 +46,17 @@ export class TopicClient implements ITopicClient {
     }
   }
 
-  private processBatchMessages(messages: string[], idx: number): PublishBatchRequestEntry[] {
+  private processBatchMessages(
+    messages: string[],
+    idx: number
+  ): PublishBatchRequestEntry[] {
     let batchMessages: Array<PublishBatchRequestEntry> = [];
     let index = idx;
     for (const message of messages) {
       batchMessages.push({
         Id: Util.sha256(`${message}-${++index}`),
-        Message: message
-      })
+        Message: message,
+      });
     }
     return batchMessages;
   }
