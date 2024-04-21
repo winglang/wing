@@ -16,6 +16,15 @@ let assertThrows = inflight (expected: str, block: (): void) => {
     expect.equal(error, true);
 };
 
+// spawn() in preflight doesn't work
+let program = "echo";
+let args = ["undefined"];
+
+let child = util.spawn(program, args);
+let output = child.wait();
+
+expect.equal(output.stdout, nil);
+expect.equal(output.status, nil);
 
 test "spawn() with successful execution" {
   let program = "echo";
