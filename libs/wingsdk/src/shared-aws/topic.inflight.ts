@@ -18,7 +18,7 @@ export class TopicClient implements ITopicClient {
     let batchMessages: Array<PublishBatchRequestEntry[]> = [];
     for (let i = 0; i < messages.length; i += CHUNK_SIZE) {
       const chunk = messages.slice(i, i + CHUNK_SIZE);
-      batchMessages.push(await this.processBatchMessages(chunk, i));
+      batchMessages.push(this.processBatchMessages(chunk, i));
     }
 
     for (const batch of batchMessages) {
@@ -40,7 +40,7 @@ export class TopicClient implements ITopicClient {
     }
   }
 
-  private async processBatchMessages(messages: string[], idx: number): Promise<Array<PublishBatchRequestEntry>> {
+  private processBatchMessages(messages: string[], idx: number): PublishBatchRequestEntry[] {
     let batchMessages: Array<PublishBatchRequestEntry> = [];
     let index = idx;
     for (const message of messages) {
