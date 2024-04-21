@@ -3,7 +3,7 @@ inflight class Foo {
 }
 
 struct Bar {
-  foo: Foo;
+  foo: Foo; // WTF? is this allowed an inflight class in a struct? I can't instantiate in preflight?? not in spec..
 }
 
 let getBar = inflight (): Bar => {

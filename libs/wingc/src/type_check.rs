@@ -1094,6 +1094,12 @@ impl TypeRef {
 			fn visit_typeref(&mut self, node: &'a TypeRef) {
 				if node.is_preflight_object_type() {
 					self.can_be_instantiated_inflight = false;
+				} else if node
+					.as_function_sig()
+					.map(|f| f.phase == Phase::Preflight)
+					.unwrap_or(false)
+				{
+					self.can_be_instantiated_inflight = false;
 				} else {
 					visit_typeref(self, node);
 				}
