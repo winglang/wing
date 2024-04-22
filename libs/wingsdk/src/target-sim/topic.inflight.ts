@@ -15,11 +15,12 @@ import {
 import { TraceType } from "../std";
 
 export class Topic
-  implements ITopicClient, ISimulatorResourceInstance, IEventPublisher {
+  implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
+{
   private readonly subscribers = new Array<TopicSubscriber>();
   private _context: ISimulatorContext | undefined;
 
-  constructor(_props: TopicSchema) { }
+  constructor(_props: TopicSchema) {}
 
   private get context(): ISimulatorContext {
     if (!this._context) {
@@ -33,9 +34,9 @@ export class Topic
     return {};
   }
 
-  public async cleanup(): Promise<void> { }
+  public async cleanup(): Promise<void> {}
 
-  public async save(): Promise<void> { }
+  public async save(): Promise<void> {}
 
   public async plan() {
     return UpdatePlan.AUTO;

@@ -65,10 +65,8 @@ let topic = new cloud.Topic();
 
 inflight () => {
   topic.publish(
-    "It's the End",
-    "of the World",
-    "as we know it",
-    "and I feel fine"
+    "Topics can now publish",
+    "multiple messages at once"
   );
 };
 ```
