@@ -1,9 +1,9 @@
-import {
-  SecretsManagerClient,
-  GetSecretValueCommand,
-  CreateSecretCommand,
-  UpdateSecretCommand,
-} from "@aws-sdk/client-secrets-manager";
+// import {
+//   SecretsManagerClient,
+//   GetSecretValueCommand,
+//   CreateSecretCommand,
+//   UpdateSecretCommand,
+// } from "@aws-sdk/client-secrets-manager";
 import { App } from "./app";
 import { IPlatform } from "../platform";
 
@@ -75,6 +75,13 @@ export class Platform implements IPlatform {
   }
 
   public async storeSecrets(secrets: Record<string, string>): Promise<void> {
+    const {
+      SecretsManagerClient,
+      GetSecretValueCommand,
+      CreateSecretCommand,
+      UpdateSecretCommand,
+    } = await import("@aws-sdk/client-secrets-manager");
+
     console.log("Storing secrets in AWS Secrets Manager");
     const client = new SecretsManagerClient({});
 

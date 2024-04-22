@@ -57,31 +57,16 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
 
-    const secretsContent = fs.readFileSync(this.secretsFile, "utf-8");
-    const secrets = this.parseEnvFile(secretsContent);
+    const secretValue = process.env[this.name];
 
-    if (!secrets[this.name]) {
+    if (!secretValue) {
       throw new Error(`No secret value for secret ${this.name}`);
     }
 
-    return secrets[this.name];
+    return secretValue;
   }
 
   public async valueJson(): Promise<Json> {
     return JSON.parse(await this.value());
-  }
-
-  private parseEnvFile(contents: string): { [key: string]: string } {
-    return contents
-      .split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line && !line.startsWith("#")) // Ignore empty lines and comments
-      .reduce((acc, line) => {
-        const [key, value] = line.split("=", 2);
-        if (key) {
-          acc[key.trim()] = value.trim();
-        }
-        return acc;
-      }, {} as { [key: string]: string });
   }
 }
