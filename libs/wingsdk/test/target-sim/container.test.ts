@@ -1,4 +1,4 @@
-import { cpSync, writeFileSync } from "fs";
+import { cpSync, writeFileSync, readdirSync } from "fs";
 import { join, basename } from "path";
 import { test, expect } from "vitest";
 import { Function, IFunctionClient } from "../../src/cloud";
@@ -169,6 +169,45 @@ test("simple container with a volume", async () => {
   const fn = sim.getResource("root/Function") as IFunctionClient;
   const response = await fn.invoke();
   expect(response).contains(basename(__filename));
+
+  await sim.stop();
+});
+
+test("container can mount a volume to the state directory", async () => {
+  const app = new SimApp();
+
+  const c = new Container(app, "Container", {
+    name: "my-app",
+    image: join(__dirname, "my-docker-image.mounted-volume"),
+    containerPort: 3000,
+    volumes: ["$WING_STATE_DIR:/tmp"],
+  });
+
+  new Function(
+    app,
+    "Function",
+    Testing.makeHandler(
+      `
+      async handle() {
+        const url = "http://localhost:" + this.hostPort;
+        const res = await fetch(url);
+        return res.text();
+      }
+      `,
+      { hostPort: { obj: c.hostPort, ops: [] } }
+    )
+  );
+
+  const sim = await app.startSimulator();
+  sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
+
+  const fn = sim.getResource("root/Function") as IFunctionClient;
+  const response = await fn.invoke();
+  expect(response).contains("hello.txt");
+
+  const statedir = sim.getResourceStateDir("root/Container");
+  const files = readdirSync(statedir);
+  expect(files).toEqual(["hello.txt"]);
 
   await sim.stop();
 });

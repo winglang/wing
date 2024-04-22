@@ -272,11 +272,13 @@ fn render_signature_help(f: &FunctionSignature) -> String {
 		} else {
 			format!("— `{param_type}`")
 		};
+		let is_last_struct = is_last && param_type_unwrapped.is_struct();
+		let prefix = if param.variadic || is_last_struct { "..." } else { "" };
 
-		if !is_last || !param_type_unwrapped.is_struct() {
-			markdown.line(format!("- `{param_name}` {detail_text}"));
+		if !is_last_struct {
+			markdown.line(format!("- `{prefix}{param_name}` {detail_text}"));
 		} else {
-			markdown.line(format!("- `...{param_name}` {detail_text}"));
+			markdown.line(format!("- `{prefix}{param_name}` {detail_text}"));
 
 			let structy = param_type_unwrapped.as_struct().unwrap();
 			let struct_text = render_classlike_members(structy);

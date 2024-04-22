@@ -1,8 +1,5 @@
-import type {
-  IHostedLiftable,
-  ILiftable,
-} from "@winglang/sdk/lib/std/resource";
-import { INFLIGHT_SYMBOL } from "@winglang/sdk/lib/core/types";
+import { INFLIGHT_SYMBOL } from "./types";
+import type { IHostedLiftable, ILiftable } from "../std/resource";
 
 /**
  * Extracts the non-function properties from a given type as an array of their discriminated keys.

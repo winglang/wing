@@ -80,6 +80,7 @@ class $Root extends $stdlib.std.Resource {
     const arr = [1, 2, 3];
     $helpers.assert($helpers.eq($helpers.lookup(arr, 0), 1), "arr[0] == 1");
     $helpers.assert($helpers.eq($helpers.lookup(arr, (2 - 5)), 1), "arr[2 - 5] == 1");
+    $helpers.assert($helpers.neq($helpers.lookup(arr, 0), $helpers.lookup(arr, 1)), "arr[0] != arr[1]");
     try {
       $helpers.lookup(arr, (-5));
     }

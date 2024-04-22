@@ -7,7 +7,7 @@ import { App } from "./app";
 import { std, core, cloud } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
+import { IAwsQueue, Queue as AwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 
 /**
@@ -23,14 +23,27 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     super(scope, id, props);
     this.timeout = props.timeout ?? std.Duration.fromSeconds(30);
 
-    this.queue = new SQSQueue(this, "Default", {
+    const queueOpt = props.dlq ? {
       visibilityTimeout: props.timeout
         ? Duration.seconds(props.timeout?.seconds)
         : Duration.seconds(30),
       retentionPeriod: props.retentionPeriod
         ? Duration.seconds(props.retentionPeriod?.seconds)
         : Duration.hours(1),
-    });
+      deadLetterQueue: {
+        queue: SQSQueue.fromQueueArn(this, "DeadLetterQueue", AwsQueue.from(props.dlq.queue)?.queueArn!),
+        maxReceiveCount: props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
+      }
+    } : {
+      visibilityTimeout: props.timeout
+        ? Duration.seconds(props.timeout?.seconds)
+        : Duration.seconds(30),
+      retentionPeriod: props.retentionPeriod
+        ? Duration.seconds(props.retentionPeriod?.seconds)
+        : Duration.hours(1),
+    }
+
+    this.queue = new SQSQueue(this, "Default", queueOpt);
   }
 
   public setConsumer(
@@ -63,6 +76,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
     const eventSource = new SqsEventSource(this.queue, {
       batchSize: props.batchSize ?? 1,
+      reportBatchItemFailures: true,
     });
 
     fn.awscdkFunction.addEventSource(eventSource);
