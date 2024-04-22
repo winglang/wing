@@ -1,7 +1,7 @@
 import fs from "fs";
+import { join } from "path";
 import { App } from "./app";
 import { IPlatform } from "../platform";
-import { join } from "path";
 
 /**
  * Sim Platform
@@ -17,7 +17,7 @@ export class Platform implements IPlatform {
   public async storeSecrets(secrets: Record<string, string>): Promise<void> {
     let existingSecretsContent = "";
     const envFile = join(process.env.WING_SOURCE_DIR!, ".env");
-    
+
     try {
       existingSecretsContent = fs.readFileSync(envFile, "utf8");
     } catch (error) {}

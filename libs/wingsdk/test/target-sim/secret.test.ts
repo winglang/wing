@@ -45,7 +45,7 @@ describe("secrets", () => {
     new cloud.Secret(app, "my_secret", {
       name: "wing-sim-test-my-secret",
     });
-  
+
     await fs.writeFile(SECRETS_FILE, "wing-sim-test-my-secret=secret-value");
 
     const secretsContent = fs.readFileSync(SECRETS_FILE, "utf-8");

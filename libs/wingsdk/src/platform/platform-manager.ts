@@ -150,7 +150,9 @@ export class PlatformManager {
   public async storeSecrets(secrets: Record<string, string>): Promise<void> {
     const hooks = collectHooks(this.platformInstances);
     if (!hooks.storeSecretsHook) {
-      throw new Error(`Cannot find a platform or platform extension that supports storing secrets`);
+      throw new Error(
+        `Cannot find a platform or platform extension that supports storing secrets`
+      );
     }
     await hooks.storeSecretsHook(secrets);
   }
