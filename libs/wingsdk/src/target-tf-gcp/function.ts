@@ -1,5 +1,5 @@
 import { writeFileSync } from "fs";
-import { join } from "path";
+import { join, basename } from "path";
 import { AssetType, Lazy, TerraformAsset, Fn } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
