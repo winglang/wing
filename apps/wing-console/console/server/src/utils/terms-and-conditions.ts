@@ -10,10 +10,16 @@ const CONFIG_KEY = "termsAndConditions";
 
 const paths = envPaths(PROJECT_NAME);
 
+const configFilename = `${paths.config}/config.json`;
+
 const getConfig = () => {
+  if (!fs.existsSync(configFilename)) {
+    return;
+  }
+
   try {
     return JSON.stringify(
-      fs.readFileSync(paths.config, "utf8"),
+      fs.readFileSync(configFilename, "utf8"),
     ) as unknown as Record<string, any>;
   } catch (error) {
     console.error(error);
@@ -22,7 +28,8 @@ const getConfig = () => {
 
 const saveConfig = (config: Record<string, any>) => {
   try {
-    fs.writeFileSync(paths.config, JSON.stringify(config, undefined, 2));
+    fs.mkdirSync(paths.config, { recursive: true });
+    fs.writeFileSync(configFilename, JSON.stringify(config, undefined, 2));
   } catch (error) {
     console.error(error);
   }
