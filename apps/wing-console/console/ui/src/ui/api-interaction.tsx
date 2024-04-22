@@ -523,8 +523,11 @@ export const ApiInteraction = memo(
                           placeholder={bodyPlaceholder ?? "Body..."}
                           value={body}
                           onInput={(event) => {
-                            setBody(event.currentTarget.value);
-                            setIsBodyEdited(true);
+                            const value = event.currentTarget.value;
+                            setBody(value);
+                            setIsBodyEdited(
+                              value !== "" && value !== bodyPlaceholder,
+                            );
                           }}
                         />
                       </div>
