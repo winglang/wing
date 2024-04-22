@@ -9,6 +9,8 @@ import {
 import { Duration, TraceType } from "../std";
 import { Util } from "../util";
 
+export const WING_STATE_DIR_ENV = "WING_STATE_DIR";
+
 export class Container implements IContainerClient, ISimulatorResourceInstance {
   private readonly imageTag: string;
   private readonly containerName: string;
@@ -89,7 +91,12 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     this.log(`starting container from image ${this.imageTag}`);
     this.log(`docker ${dockerRun.join(" ")}`);
 
-    await runCommand("docker", dockerRun);
+    await runCommand("docker", dockerRun, {
+      env: {
+        ...process.env,
+        [WING_STATE_DIR_ENV]: this.context.statedir,
+      },
+    });
 
     this.log(`containerName=${this.containerName}`);
 

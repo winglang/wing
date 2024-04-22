@@ -1,8 +1,8 @@
-import { ExecFileOptions, execFile } from "child_process";
+import { ExecOptions, exec } from "child_process";
 import { readFileSync } from "fs";
 import { promisify } from "util";
 
-const execFilePromise = promisify(execFile);
+const execPromise = promisify(exec);
 
 export function readJsonSync(file: string) {
   return JSON.parse(readFileSync(file, "utf-8"));
@@ -29,9 +29,9 @@ export function normalPath(path: string) {
 export async function runCommand(
   cmd: string,
   args: string[],
-  options?: ExecFileOptions
+  options?: ExecOptions
 ): Promise<any> {
-  const { stdout } = await execFilePromise(cmd, args, options);
+  const { stdout } = await execPromise(cmd + " " + args.join(" "), options);
   return stdout;
 }
 
