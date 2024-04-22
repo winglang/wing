@@ -41,7 +41,6 @@
     "@wingconsole/ui": "workspace:^",
     "autoprefixer": "^10.4.15",
     "bump-pack": "workspace:^",
-    "conf": "^11.0.2",
     "dotenv": "^16.3.1",
     "eslint": "^8.48.0",
     "nanoid": "^4.0.2",
