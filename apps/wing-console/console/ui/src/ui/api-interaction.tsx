@@ -36,6 +36,7 @@ export interface ApiInteractionProps {
   openApiSpec: OpenApiSpec;
   callFetch: (data: ApiRequest) => void;
   isLoading: boolean;
+  resetApiResponse?: () => void;
 }
 
 export const ApiInteraction = memo(
@@ -47,6 +48,7 @@ export const ApiInteraction = memo(
     url,
     openApiSpec,
     isLoading,
+    resetApiResponse = () => {},
   }: ApiInteractionProps) => {
     const { theme } = useTheme();
 
@@ -296,6 +298,7 @@ export const ApiInteraction = memo(
         if (isListedRoute && method) {
           handleMethodChange(path, method);
         }
+        resetApiResponse();
       },
       [
         setHeaders,
@@ -307,6 +310,7 @@ export const ApiInteraction = memo(
         setPathVariables,
         setQueryParameters,
         handleMethodChange,
+        resetApiResponse,
       ],
     );
 

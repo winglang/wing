@@ -16,7 +16,9 @@ export const ApiInteractionView = memo(({ resourcePath }: ApiViewProps) => {
   const { appMode } = useContext(AppContext);
   const { usePersistentState } = createPersistentState(resourcePath);
 
-  const [apiResponse, setApiResponse] = usePersistentState<ApiResponse>();
+  const [apiResponse, setApiResponse] = usePersistentState<
+    ApiResponse | undefined
+  >();
   const onFetchDataUpdate = useCallback(
     (data: ApiResponse) => {
       if (!data) {
@@ -42,6 +44,7 @@ export const ApiInteractionView = memo(({ resourcePath }: ApiViewProps) => {
       callFetch={callFetch}
       isLoading={isLoading}
       apiResponse={apiResponse}
+      resetApiResponse={() => setApiResponse(undefined)}
     />
   );
 });

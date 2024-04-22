@@ -42,7 +42,9 @@ export const CustomResourceHttpClientItem = ({
     },
   );
 
-  const [apiResponse, setApiResponse] = usePersistentState<ApiResponse>();
+  const [apiResponse, setApiResponse] = usePersistentState<
+    ApiResponse | undefined
+  >();
 
   const { callFetch, isLoading } = useApi({
     onFetchDataUpdate: (data: ApiResponse) => {
@@ -67,7 +69,9 @@ export const CustomResourceHttpClientItem = ({
           callFetch={callFetch}
           isLoading={isLoading}
           apiResponse={apiResponse}
-          setApiResponse={setApiResponse}
+          resetApiResponse={() => {
+            setApiResponse(undefined);
+          }}
         />
       )}
     </div>
