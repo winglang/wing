@@ -12,6 +12,8 @@ let endingWithCoolStrings = "cool -> {regularString} {number}";
 
 let nonInterpolated = #"a non { { {interpolated } } } strin{ g }";
 
+let nonInterpolatedJson = {a: nonInterpolated, b: #"this {one} too"};
+
 expect.equal("{1+1}", "2");
 expect.equal("\{1+1}", "\{1+1}");
 expect.notEqual("\{1+1}", "2");
