@@ -55,15 +55,15 @@ export const ApiInteraction = memo(
     const [routes, setRoutes] = useState<ApiRoute[]>([]);
 
     const [currentHeaderKey, setCurrentHeaderKey] = usePersistentState("");
-    const [currentHeaderValues, setCurrentHeaderValues] = useState<string[]>(
-      [],
-    );
+    const [currentHeaderValues, setCurrentHeaderValues] = usePersistentState<
+      string[]
+    >([]);
     const [currentRoute, setCurrentRoute] = usePersistentState("");
 
     const [currentMethod, setCurrentMethod] = usePersistentState("GET");
 
     const bodyId = useId();
-    const [bodyPlaceholder, setBodyPlaceholder] = useState<
+    const [bodyPlaceholder, setBodyPlaceholder] = usePersistentState<
       string | undefined
     >();
     const [body, setBody] = usePersistentState("");
@@ -215,6 +215,7 @@ export const ApiInteraction = memo(
         openApiSpec,
         setHeaders,
         setBody,
+        setBodyPlaceholder,
         setQueryParameters,
         setPathVariables,
         queryParameters,
@@ -300,6 +301,7 @@ export const ApiInteraction = memo(
         setHeaders,
         routes,
         setBody,
+        setBodyPlaceholder,
         setCurrentRoute,
         currentMethod,
         setPathVariables,
@@ -340,7 +342,7 @@ export const ApiInteraction = memo(
         return;
       }
       setCurrentHeaderValues(getHeaderValues(currentHeaderKey));
-    }, [currentHeaderKey]);
+    }, [currentHeaderKey, setCurrentHeaderValues]);
 
     // Sync the query parameters with the current route.
     useEffect(() => {

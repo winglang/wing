@@ -1,9 +1,11 @@
 import { Attribute } from "@wingconsole/design-system";
-import { useContext, useState } from "react";
+import { createPersistentState } from "@wingconsole/use-persistent-state";
+import { useContext } from "react";
 
 import { AppContext } from "../AppContext.js";
 import { trpc } from "../services/trpc.js";
 import { useApi } from "../services/use-api.js";
+import type { ApiResponse } from "../shared/api.js";
 
 import { ApiInteraction } from "./api-interaction.js";
 
@@ -19,6 +21,9 @@ export const CustomResourceHttpClientItem = ({
   getApiSpecHandler,
 }: CustomResourceHttpClientItemProps) => {
   const { appMode } = useContext(AppContext);
+  const { usePersistentState } = createPersistentState(getUrlHandler);
+
+  const [openApiSpec, setOpenApiSpec] = usePersistentState<ApiResponse>();
 
   const urlData = trpc["httpClient.getUrl"].useQuery(
     {
@@ -27,17 +32,24 @@ export const CustomResourceHttpClientItem = ({
     { enabled: !!getUrlHandler },
   );
 
-  const openApiSpecData = trpc["httpClient.getOpenApiSpec"].useQuery(
+  trpc["httpClient.getOpenApiSpec"].useQuery(
     {
       resourcePath: getApiSpecHandler,
     },
-    { enabled: !!getApiSpecHandler },
+    {
+      enabled: !!getApiSpecHandler,
+      onSuccess: (data) => setOpenApiSpec(data.openApiSpec),
+    },
   );
 
-  const [response, setResponse] = useState();
+  const [apiResponse, setApiResponse] = usePersistentState<ApiResponse>();
+
   const { callFetch, isLoading } = useApi({
-    onFetchDataUpdate: (data) => {
-      setResponse(data);
+    onFetchDataUpdate: (data: ApiResponse) => {
+      if (!data) {
+        return;
+      }
+      setApiResponse(data);
     },
   });
 
@@ -46,15 +58,15 @@ export const CustomResourceHttpClientItem = ({
       <div className="mb-1">
         <Attribute name="Name" value={label} noLeftPadding />
       </div>
-      {urlData.data?.url && openApiSpecData.data?.openApiSpec && (
+      {urlData.data?.url && openApiSpec && (
         <ApiInteraction
           resourceId={getUrlHandler}
           url={urlData.data.url}
           appMode={appMode}
-          openApiSpec={openApiSpecData.data.openApiSpec}
+          openApiSpec={openApiSpec}
           callFetch={callFetch}
           isLoading={isLoading}
-          apiResponse={response}
+          apiResponse={apiResponse}
         />
       )}
     </div>
