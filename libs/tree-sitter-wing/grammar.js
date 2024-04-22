@@ -353,7 +353,14 @@ module.exports = grammar({
 
     // Primitives
     _literal: ($) =>
-      choice($.string, $.number, $.bool, $.duration, $.nil_value),
+      choice(
+        $.string,
+        $.non_interpolated_string,
+        $.number,
+        $.bool,
+        $.duration,
+        $.nil_value
+      ),
 
     number: ($) => choice($._integer, $._decimal),
     _integer: ($) => /\d[\d_]*/,
@@ -379,6 +386,12 @@ module.exports = grammar({
     months: ($) => seq(field("value", $.number), "mo"),
     years: ($) => seq(field("value", $.number), "y"),
     nil_value: ($) => "nil",
+    non_interpolated_string: ($) =>
+      seq(
+        '#"',
+        repeat(choice($._non_interpolated_string_fragment, $._escape_sequence)),
+        '"'
+      ),
     string: ($) =>
       seq(
         '"',
@@ -393,6 +406,8 @@ module.exports = grammar({
       ),
     template_substitution: ($) => seq("{", $.expression, "}"),
     _string_fragment: ($) => token.immediate(prec(1, /[^{"\\]+/)),
+    _non_interpolated_string_fragment: ($) =>
+      token.immediate(prec(1, /[^"\\]+/)),
     _escape_sequence: ($) =>
       token.immediate(
         seq(

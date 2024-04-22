@@ -611,6 +611,11 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::Literal(lit) => match lit {
 				Literal::Nil => new_code!(expr_span, "undefined"),
+        Literal::NonInterpolatedString(s) => {
+					// escape newlines
+					let s = s.replace("\r", "\\r").replace("\n", "\\n");
+					new_code!(expr_span, s)
+				}
 				Literal::String(s) => {
 					// Unescape our string interpolation braces because in JS they don't need escaping
 					let s = s.replace("\\{", "{");
@@ -624,6 +629,8 @@ impl<'a> JSifier<'a> {
 						.iter()
 						.filter_map(|p| match p {
 							InterpolatedStringPart::Static(static_string) => {
+                // Unescape our string interpolation braces because in JS they don't need escaping
+					      let static_string = static_string.replace("\\{", "{");
 								// escape any raw newlines in the string because js `"` strings can't contain them
 								let escaped = static_string.replace("\r\n", "\\r\\n").replace("\n", "\\n");
 

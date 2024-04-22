@@ -1854,6 +1854,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "non_interpolated_string"
+        },
+        {
+          "type": "SYMBOL",
           "name": "number"
         },
         {
@@ -2060,6 +2064,35 @@
       "type": "STRING",
       "value": "nil"
     },
+    "non_interpolated_string": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#\""
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_non_interpolated_string_fragment"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_escape_sequence"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
+    },
     "string": {
       "type": "SEQ",
       "members": [
@@ -2118,6 +2151,17 @@
         "content": {
           "type": "PATTERN",
           "value": "[^{\"\\\\]+"
+        }
+      }
+    },
+    "_non_interpolated_string_fragment": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[^\"\\\\]+"
         }
       }
     },

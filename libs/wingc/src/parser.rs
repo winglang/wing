@@ -1,6 +1,7 @@
 use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
+use std::ops::Range;
 use phf::{phf_map, phf_set};
 use regex::Regex;
 use std::cell::RefCell;
@@ -483,6 +484,10 @@ impl<'s> Parser<'s> {
 	fn node_text<'a>(&'a self, node: &Node) -> &'a str {
 		return str::from_utf8(&self.source[node.byte_range()]).unwrap();
 	}
+
+  fn node_text_from_range<'a>(&'a self, byte_range: Range<usize>) -> &'a str {
+		return str::from_utf8(&self.source[byte_range]).unwrap();
+	} 
 
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
 		if node.is_error() {
@@ -2084,6 +2089,14 @@ impl<'s> Parser<'s> {
 				},
 				expression_span,
 			)),
+      "non_interpolated_string" => {
+        // skipping the first #
+        let byte_range = (expression_node.start_byte() + 1)..expression_node.end_byte();
+					Ok(Expr::new(
+						ExprKind::Literal(Literal::NonInterpolatedString(self.node_text_from_range(byte_range).into())),
+						expression_span,
+					))
+				}
 			"string" => {
 				if expression_node.named_child_count() == 0 {
 					Ok(Expr::new(
