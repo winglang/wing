@@ -1,7 +1,6 @@
 import { Button, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import {
-  MouseEventHandler,
   createContext,
   forwardRef,
   useCallback,
@@ -14,7 +13,7 @@ import {
 } from "react";
 import type { DetailedHTMLProps, HTMLAttributes } from "react";
 import type { ReactNode } from "react";
-import { useEvent, useKeyPress, useKeyPressEvent } from "react-use";
+import { useEvent } from "react-use";
 
 import { MapControls } from "./map-controls.js";
 
