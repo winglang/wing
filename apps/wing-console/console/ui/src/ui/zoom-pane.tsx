@@ -14,7 +14,7 @@ import {
 } from "react";
 import type { DetailedHTMLProps, HTMLAttributes } from "react";
 import type { ReactNode } from "react";
-import { useEvent, useKeyPressEvent } from "react-use";
+import { useEvent, useKeyPress, useKeyPressEvent } from "react-use";
 
 import { MapControls } from "./map-controls.js";
 
@@ -158,16 +158,24 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   // Keep track of whether the space key is pressed so we can show the user the grab cursor.
   // The map is draggable using click only when space is pressed.
   const [isSpacePressed, setSpacePressed] = useState(false);
-  useKeyPressEvent(
-    " ",
-    useCallback(() => {
-      setSpacePressed(true);
-    }, []),
-    useCallback(() => {
-      setSpacePressed(false);
-      setDragging(false);
-    }, []),
-  );
+  useEffect(() => {
+    const listener = (event: KeyboardEvent) => {
+      // Pressing option+cmd+i on Mac (which is used to open the devtools) fires a keydown event with key " " on Chrome.
+      if (event.altKey) {
+        return;
+      }
+
+      if (event.key === " ") {
+        setSpacePressed(event.type === "keydown");
+      }
+    };
+    window.addEventListener("keydown", listener);
+    window.addEventListener("keyup", listener);
+    return () => {
+      window.removeEventListener("keydown", listener);
+      window.removeEventListener("keyup", listener);
+    };
+  }, []);
 
   const dragStart = useRef({ x: 0, y: 0 });
   useEvent(
