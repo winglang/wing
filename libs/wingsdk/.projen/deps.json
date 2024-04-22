@@ -296,6 +296,10 @@
       "type": "bundled"
     },
     {
+      "name": "jiti",
+      "type": "bundled"
+    },
+    {
       "name": "mime-types",
       "type": "bundled"
     },
@@ -332,6 +336,10 @@
     },
     {
       "name": "uuid",
+      "type": "bundled"
+    },
+    {
+      "name": "vlq",
       "type": "bundled"
     },
     {

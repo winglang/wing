@@ -7,19 +7,17 @@ exports[`create a Redis resource 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_redis": {
         "addr": "c84bd402f6d507613026d171fe74fc8ce07ced29ae",
-        "attrs": {},
         "path": "root/my_redis",
         "props": {
           "port": "\${wsim#root/my_redis/Container#attrs.host_port}",
         },
         "type": "@winglang/sdk.ex.Redis",
       },
-      {
+      "root/my_redis/Container": {
         "addr": "c80acc96b1d952059eb0beee72912b94d23302fa03",
-        "attrs": {},
         "path": "root/my_redis/Container",
         "props": {
           "containerPort": 6379,
@@ -29,7 +27,7 @@ exports[`create a Redis resource 1`] = `
         },
         "type": "@winglang/sdk.sim.Container",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -84,10 +82,6 @@ exports[`create a Redis resource 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -103,6 +97,10 @@ exports[`create a Redis resource 1`] = `
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

@@ -1,5 +1,7 @@
 bring cloud;
 bring ex;
+bring ui;
+
 // @see https://github.com/winglang/wing/issues/4237 it crashes the Console preview env.
 //let secret = new cloud.Secret(name: "my-secret");
 
@@ -8,6 +10,42 @@ let queue = new cloud.Queue();
 let api = new cloud.Api();
 let counter = new cloud.Counter(initial: 0);
 
+class myBucket {
+  b: cloud.Bucket;
+  new() {
+    this.b = new cloud.Bucket();
+    new ui.FileBrowser("File Browser",
+      {
+        put: inflight (fileName: str, fileContent:str) => {
+          this.b.put(fileName, fileContent);
+        },
+        delete: inflight (fileName: str) => {
+          this.b.delete(fileName);
+        },
+        get: inflight (fileName: str) => {
+          return this.b.get(fileName);
+        },
+        list: inflight () => {return this.b.list();},
+      }
+    );
+
+    new cloud.Service(
+      inflight () => {
+        this.b.put("hello.txt", "Hello, GET!");
+        return inflight () => {
+        };
+      },
+    );
+  }
+  pub inflight put(key: str, value: str) {
+    this.b.put(key, value);
+  }
+}
+
+let myB = new myBucket() as "MyUIComponentBucket";
+let putfucn = new cloud.Function(inflight () => {
+    myB.put("test", "Test");
+}) as "PutFileInCustomBucket";
 
 api.get("/test-get", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   bucket.put("hello.txt", "Hello, GET!");
@@ -25,7 +63,8 @@ api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 });
 
 let handler = inflight (message: str): str => {
-  bucket.put("hello.txt", "Hello, {message}!");
+   counter.inc();
+  bucket.put("hello{counter.peek()}.txt", "Hello, {message}!");
   log("Hello, {message}!");
   return message;
 };
@@ -82,7 +121,7 @@ new cloud.Service(
 );
 
 let cronSchedule = new cloud.Schedule(cloud.ScheduleProps{
-  cron: "* * * * ?"
+  cron: "* * * * *"
 }) as "Cron Schedule";
 
 // cronSchedule.onTick(inflight () => {
@@ -123,7 +162,6 @@ test "Add fixtures" {
   counter.inc(100);
 }
 
-bring ui;
 
 class WidgetService {
   data: cloud.Bucket;
@@ -155,3 +193,113 @@ class WidgetService {
 }
 
 new WidgetService();
+
+class ApiUsersService {
+  api: cloud.Api; 
+  db: cloud.Bucket;
+  
+  new() {
+    this.api = new cloud.Api();
+    this.db = new cloud.Bucket();
+    
+    this.api.post("/users", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {  
+      let input = Json.tryParse(request.body ?? "") ?? "";
+      let name = input.tryGet("name")?.tryAsStr() ?? "";
+      if name == "" {
+        return cloud.ApiResponse {
+          status: 400,
+          body: "Body parameter 'name' is required"
+        };
+      }
+      this.db.put("user-{name}", Json.stringify(input));
+      return cloud.ApiResponse {
+        status: 200,
+        body: Json.stringify(input)
+      };
+    });
+    this.api.get("/users", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+      let name = request.query.tryGet("name") ?? "";
+      
+      if name != "" {
+        try {
+          return cloud.ApiResponse {
+            status: 200,
+            body: this.db.get("user-{name}")
+          };
+        } catch {
+          return cloud.ApiResponse {
+            status: 404,
+            body: "User not found"
+          };
+        }
+      }
+      
+      return cloud.ApiResponse {
+        status: 200,
+        body: Json.stringify(this.db.list())
+      };
+    });
+
+    new ui.HttpClient(
+      "Test HttpClient UI component",
+      inflight () => {
+        return this.api.url;
+      },
+      inflight () => {
+        return Json.stringify({
+          "paths": {
+            "/users": {
+              "post": {
+                "summary": "Create a new user",
+                "parameters": [
+                  {
+                    "in": "header",
+                    "name": "accept",
+                  },
+                ],
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the user"
+                          },
+                          "email": {
+                            "type": "string",
+                            "description": "The email of the user",
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+              },
+              "get": {
+                "summary": "List all widgets",
+                "parameters": [
+                  {
+                    "in": "query",
+                    "name": "name",
+                    "schema": {
+                      "type": "string"
+                    },
+                    "description": "The name of the user"
+                  }
+                ],
+              }
+            },
+          }
+        });
+      }
+   );
+  }
+}
+
+new ApiUsersService();

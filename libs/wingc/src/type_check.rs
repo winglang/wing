@@ -26,9 +26,9 @@ use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_JSON, WINGSDK_MAP,
-	WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON,
+	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -250,7 +250,7 @@ pub enum Type {
 	Enum(Enum),
 }
 
-pub const CLASS_INIT_NAME: &'static str = "init";
+pub const CLASS_INIT_NAME: &'static str = "new";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
 pub const CLOSURE_CLASS_HANDLE_METHOD: &'static str = "handle";
@@ -356,23 +356,9 @@ pub struct Interface {
 	pub fqn: Option<String>,
 	pub docs: Docs,
 	pub extends: Vec<TypeRef>, // Must be a Type::Interface type
+	pub phase: Phase,
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
-}
-
-impl Interface {
-	fn is_resource(&self) -> bool {
-		// TODO: This should check that the interface extends `IResource` from
-		// the SDK, not just any interface with the name `IResource`
-		// https://github.com/winglang/wing/issues/2098
-		self.name.name == "IResource"
-			|| self.extends.iter().any(|i| {
-				i.as_interface()
-					.expect("Interface extends a type that isn't an interface")
-					.name
-					.name == "IResource"
-			})
-	}
 }
 
 impl Display for Interface {
@@ -918,7 +904,8 @@ impl Display for FunctionSignature {
 				if a.name.is_empty() {
 					format!("{}", a.typeref)
 				} else {
-					format!("{}: {}", a.name, a.typeref)
+					let prefix = if a.variadic { "..." } else { "" };
+					format!("{}{}: {}", prefix, a.name, a.typeref)
 				}
 			})
 			.collect::<Vec<String>>()
@@ -1084,6 +1071,18 @@ impl TypeRef {
 		return false;
 	}
 
+	pub fn is_preflight_object_type(&self) -> bool {
+		if let Type::Class(ref class) = **self {
+			return class.phase == Phase::Preflight;
+		}
+
+		if let Type::Interface(ref iface) = **self {
+			return iface.phase == Phase::Preflight;
+		}
+
+		false
+	}
+
 	/// Returns whether type represents a closure (either a function or a closure class).
 	pub fn is_closure(&self) -> bool {
 		if self.as_function_sig().is_some() {
@@ -1098,6 +1097,10 @@ impl TypeRef {
 
 	pub fn is_string(&self) -> bool {
 		matches!(**self, Type::String)
+	}
+
+	pub fn is_number(&self) -> bool {
+		matches!(**self, Type::Number)
 	}
 
 	pub fn is_struct(&self) -> bool {
@@ -1178,36 +1181,6 @@ impl TypeRef {
 			**self,
 			Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_)
 		)
-	}
-
-	pub fn is_capturable(&self) -> bool {
-		match &**self {
-			Type::Interface(iface) => iface.is_resource(),
-			Type::Enum(_) => true,
-			Type::Number => true,
-			Type::String => true,
-			Type::Duration => true,
-			Type::Boolean => true,
-			Type::Json(_) => true,
-			Type::Nil => true,
-			Type::Array(v) => v.is_capturable(),
-			Type::Map(v) => v.is_capturable(),
-			Type::Set(v) => v.is_capturable(),
-			Type::Struct(_) => true,
-			Type::Optional(v) => v.is_capturable(),
-			Type::Anything => false,
-			Type::Unresolved => false,
-			Type::Inferred(..) => false,
-			Type::Void => false,
-			Type::MutJson => true,
-			Type::MutArray(v) => v.is_capturable(),
-			Type::MutMap(v) => v.is_capturable(),
-			Type::MutSet(v) => v.is_capturable(),
-			Type::Function(sig) => sig.phase == Phase::Inflight,
-
-			// only preflight classes can be captured
-			Type::Class(c) => c.phase == Phase::Preflight,
-		}
 	}
 
 	// returns true if mutable type or if immutable container type contains a mutable type
@@ -1599,10 +1572,21 @@ impl Types {
 		self
 			.libraries
 			.lookup_nested_str(&resource_fqn, None)
-			.expect("Resouce base class to be loaded")
+			.expect("Resource base class to be loaded")
 			.0
 			.as_type()
-			.expect("Resouce base class to be a type")
+			.expect("Resource base class to be a type")
+	}
+
+	pub fn resource_base_interface(&self) -> TypeRef {
+		let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_IRESOURCE);
+		self
+			.libraries
+			.lookup_nested_str(&resource_fqn, None)
+			.expect("Resource base interface to be loaded")
+			.0
+			.as_type()
+			.expect("Resource base interface to be a type")
 	}
 
 	pub fn construct_base_type(&self) -> TypeRef {
@@ -2059,7 +2043,7 @@ impl<'a> TypeChecker<'a> {
 				parameters: vec![
 					FunctionParameter {
 						name: "preflightObject".into(),
-						typeref: self.types.resource_base_type(),
+						typeref: self.types.resource_base_interface(),
 						docs: Docs::with_summary("The preflight object to qualify"),
 						variadic: false,
 					},
@@ -2245,7 +2229,11 @@ impl<'a> TypeChecker<'a> {
 				}
 				ExprKind::Reference(_ref) => {
 					let (vi, phase) = self.resolve_reference(_ref, env, self.curr_expr_is_callee_with_inflight_args());
-					(vi.type_, phase)
+					let var_type = match vi {
+						ResolveReferenceResult::Variable(var) => var.type_,
+						ResolveReferenceResult::Location(_, type_) => type_,
+					};
+					(var_type, phase)
 				}
 				ExprKind::New(new_expr) => {
 					let New {
@@ -2335,17 +2323,28 @@ impl<'a> TypeChecker<'a> {
 					};
 
 					let lookup_res = class_env.lookup_ext(&init_method_name.into(), None);
-					let constructor_type = if let LookupResult::Found(k, _) = lookup_res {
-						k.as_variable().expect("Expected constructor to be a variable").type_
-					} else {
-						self.type_error(lookup_result_to_type_error(
-							lookup_res,
-							&Symbol {
-								name: CLASS_INIT_NAME.into(),
-								span: class_symbol.span.clone(),
-							},
-						));
-						return self.resolved_error();
+					let constructor_type = match lookup_res {
+						LookupResult::Found(k, _) => k.as_variable().expect("Expected constructor to be a variable").type_,
+						LookupResult::NotFound(_, _) => {
+							self.spanned_error(
+								exp,
+								format!("Constructor for class \"{}\" is private", class_symbol.name),
+							);
+							return self.resolved_error();
+						}
+						LookupResult::NotPublic(_, _)
+						| LookupResult::MultipleFound
+						| LookupResult::DefinedLater(_)
+						| LookupResult::ExpectedNamespace(_) => {
+							self.type_error(lookup_result_to_type_error(
+								lookup_res,
+								&Symbol {
+									name: CLASS_INIT_NAME.into(),
+									span: class_symbol.span.clone(),
+								},
+							));
+							return self.resolved_error();
+						}
 					};
 					let constructor_sig = constructor_type
 						.as_function_sig()
@@ -3713,6 +3712,7 @@ impl<'a> TypeChecker<'a> {
 			docs: Docs::default(),
 			env: dummy_env,
 			extends: extend_interfaces.clone(),
+			phase: iface.phase,
 		};
 		let interface_type = self.types.add_type(Type::Interface(interface_spec));
 
@@ -4108,20 +4108,13 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_interface(&mut self, ast_iface: &AstInterface, env: &mut SymbolEnv) {
-		let AstInterface {
-			name,
-			extends: _,
-			methods,
-			access: _,
-		} = ast_iface;
-
 		// Note: to support mutually recursive type definitions (types that refer to each other), interface types
 		// are initialized during `type_check_scope`. The interface type is created with a dummy environment and
 		// then replaced with the real environment after the interface's fields are type checked.
 		// In this method, we are filling in the interface's environment with its members
 		// and updating the interface's Type with the new environment.
 		let mut interface_type = env
-			.lookup(name, Some(self.ctx.current_stmt_idx()))
+			.lookup(&ast_iface.name, Some(self.ctx.current_stmt_idx()))
 			.expect("interface type should have been defined in the environment")
 			.as_type()
 			.unwrap();
@@ -4135,7 +4128,7 @@ impl<'a> TypeChecker<'a> {
 		);
 
 		// Add methods to the interface env
-		for (method_name, sig) in methods.iter() {
+		for (method_name, sig) in ast_iface.methods.iter() {
 			let mut method_type = self.resolve_type_annotation(&sig.to_type_annotation(), env);
 			// use the interface type as the function's "this" type
 			if let Type::Function(ref mut f) = *method_type {
@@ -4165,14 +4158,42 @@ impl<'a> TypeChecker<'a> {
 			};
 		}
 
-		// add methods from all extended interfaces to the interface env
 		let extend_interfaces = &interface_type.as_interface().unwrap().extends;
-		if let Err(e) = add_parent_members_to_iface_env(extend_interfaces, name, &mut interface_env) {
+
+		// If this is a preflight interface and it doesn't extend any other preflight interfaces then implicitly make it extend
+		// the base resource interface. This is so there's some expression in the type system that this is an
+		// interface that can only be implemented on a preflight class. This is safe because all preflight classes implement
+		// `std.Resource` which itself implements `std.IResource`.
+		let need_to_add_base_iresource = ast_iface.phase == Phase::Preflight
+			&& !extend_interfaces
+				.iter()
+				.any(|i| i.as_interface().unwrap().phase == Phase::Preflight);
+
+		// Verify extended interfaces are of valid phase for this interface
+		for interface in extend_interfaces.iter().map(|t| t.as_interface().unwrap()) {
+			if ast_iface.phase == Phase::Inflight && interface.phase == Phase::Preflight {
+				self.spanned_error(
+					&ast_iface.name,
+					format!(
+						"Inflight interface {} cannot extend a preflight interface {}",
+						ast_iface.name, interface.name
+					),
+				);
+			}
+		}
+
+		// add methods from all extended interfaces to the interface env
+		if let Err(e) = add_parent_members_to_iface_env(extend_interfaces, &ast_iface.name, &mut interface_env) {
 			self.type_error(e);
 		}
 
 		// Replace the dummy interface environment with the real one
 		interface_type.as_mut_interface().unwrap().env = interface_env;
+
+		if need_to_add_base_iresource {
+			let base_resource = self.types.resource_base_interface();
+			interface_type.as_mut_interface().unwrap().extends.push(base_resource);
+		}
 	}
 
 	fn type_check_class(&mut self, stmt: &Stmt, ast_class: &AstClass, env: &mut SymbolEnv) {
@@ -4208,6 +4229,19 @@ impl<'a> TypeChecker<'a> {
 				}
 			})
 			.collect::<Vec<_>>();
+
+		// Verify implemented interfaces are of valid phase for this class
+		for interface in impl_interfaces.iter().map(|t| t.as_interface().unwrap()) {
+			if ast_class.phase == Phase::Inflight && interface.phase == Phase::Preflight {
+				self.spanned_error(
+					stmt,
+					format!(
+						"Inflight class {} cannot implement a preflight interface {}",
+						ast_class.name, interface.name
+					),
+				);
+			}
+		}
 
 		// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 		let class_spec = Class {
@@ -4380,7 +4414,7 @@ impl<'a> TypeChecker<'a> {
 				{
 					let class_method_var = symbol.as_variable().expect("Expected method to be a variable");
 					let class_method_type = class_method_var.type_;
-					self.validate_type(class_method_type, method_type, &ast_class.name);
+					self.validate_type(class_method_type, method_type, &class_method_var.name);
 					// Make sure the method is public (interface methods must be public)
 					if class_method_var.access != AccessModifier::Public {
 						self.spanned_error(
@@ -4460,30 +4494,112 @@ impl<'a> TypeChecker<'a> {
 		// being captured) it cannot be reassigned: https://github.com/winglang/wing/issues/3069
 
 		let (var, var_phase) = self.resolve_reference(&variable, env, false);
+		let var_type = match &var {
+			ResolveReferenceResult::Variable(var) => var.type_,
+			ResolveReferenceResult::Location(_, elem_type) => *elem_type,
+		};
 
-		if !var.type_.is_unresolved() && !var.reassignable {
-			report_diagnostic(Diagnostic {
-				message: "Variable is not reassignable".to_string(),
-				span: Some(variable.span()),
-				annotations: vec![DiagnosticAnnotation {
-					message: "defined here (try adding \"var\" in front)".to_string(),
-					span: var.name.span(),
-				}],
-				hints: vec![],
-			});
-		} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
-			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
+		// First, check if the assignment violates any mutability restrictions.
+		//
+		// Examples:
+		//
+		// ```
+		// let x = 5;
+		// x = 6; // error: x is not reassignable
+		// ```
+		//
+		// ```
+		// let x = Array<num>[1, 2, 3];
+		// x[0] = 4; // error: cannot update elements of an immutable array
+		// ```
+		match &var {
+			ResolveReferenceResult::Variable(var) => {
+				if !var.reassignable && !var.type_.is_unresolved() {
+					self.spanned_error_with_annotations(
+						variable,
+						"Variable is not reassignable".to_string(),
+						vec![DiagnosticAnnotation {
+							message: "defined here (try adding \"var\" in front)".to_string(),
+							span: var.name.span(),
+						}],
+					);
+				} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
+					self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
+				}
+			}
+			ResolveReferenceResult::Location(container_type, _) => match **container_type {
+				Type::Anything | Type::MutJson | Type::MutArray(_) | Type::MutMap(_) => {}
+				Type::Map(_) => {
+					self.spanned_error_with_hints(
+						variable,
+						"Cannot update elements of an immutable Map".to_string(),
+						vec!["Consider using MutMap instead".to_string()],
+					);
+				}
+				Type::Json(_) => {
+					self.spanned_error_with_hints(
+						variable,
+						"Cannot update elements of an immutable Json".to_string(),
+						vec!["Consider using MutJson instead".to_string()],
+					);
+				}
+				Type::Array(_) => {
+					self.spanned_error_with_hints(
+						variable,
+						"Cannot update elements of an immutable Array".to_string(),
+						vec!["Consider using MutArray instead".to_string()],
+					);
+				}
+				Type::String => {
+					self.spanned_error(variable, "Strings are immutable".to_string());
+				}
+				Type::Inferred(_)
+				| Type::Unresolved
+				| Type::Number
+				| Type::Duration
+				| Type::Boolean
+				| Type::Void
+				| Type::Nil
+				| Type::Optional(_)
+				| Type::Set(_)
+				| Type::MutSet(_)
+				| Type::Function(_)
+				| Type::Class(_)
+				| Type::Interface(_)
+				| Type::Struct(_)
+				| Type::Enum(_) => self.spanned_error(
+					variable,
+					format!("Unsupported reassignment of element of type {}", var_type),
+				),
+			},
 		}
 
-		if matches!(kind, AssignmentKind::AssignIncr) {
-			self.validate_type_in(exp_type, &[self.types.number(), self.types.string()], value);
-			self.validate_type_in(var.type_, &[self.types.number(), self.types.string()], value);
-		} else if matches!(kind, AssignmentKind::AssignDecr) {
-			self.validate_type(exp_type, self.types.number(), value);
-			self.validate_type(var.type_, self.types.number(), variable);
+		// Next, check if the RHS type is compatible the LHS type and satisfies
+		// the assignment kind (like +=, -=, etc.).
+		//
+		// Examples:
+		//
+		// ```
+		// let x = 5;
+		// x = "hello"; // error: cannot assign a string to a number
+		// ```
+		//
+		// ```
+		// let y = MutArray<num>["hello", "world"];
+		// y[0] -= "!"; // error: expected a number, found a string
+		// ```
+		match kind {
+			AssignmentKind::AssignIncr => {
+				self.validate_type_in(exp_type, &[self.types.number(), self.types.string()], value);
+				self.validate_type_in(var_type, &[self.types.number(), self.types.string()], value);
+			}
+			AssignmentKind::AssignDecr => {
+				self.validate_type(exp_type, self.types.number(), value);
+				self.validate_type(var_type, self.types.number(), variable);
+			}
+			AssignmentKind::Assign => {}
 		}
-
-		self.validate_type(exp_type, var.type_, value);
+		self.validate_type(exp_type, var_type, value);
 	}
 
 	fn type_check_if(
@@ -4784,7 +4900,7 @@ impl<'a> TypeChecker<'a> {
 			return;
 		};
 
-		// If the parent class is phase independent than its init name is just "init" regadless of
+		// If the parent class is phase independent than its constructor name is just "new" regardless of
 		// whether we're inflight or not.
 		let parent_init_name = if parent_class.as_class().unwrap().phase == Phase::Independent {
 			CLASS_INIT_NAME
@@ -4837,7 +4953,7 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error(
 						matching_field,
 						format!(
-							"\"{}\" cannot be initialized in the {} initializer",
+							"\"{}\" cannot be initialized in the {} constructor",
 							matching_field.name,
 							current_phase.to_lowercase()
 						),
@@ -5132,7 +5248,6 @@ impl<'a> TypeChecker<'a> {
 				assembly_name: assembly_name.to_string(),
 				namespace_filter,
 				alias: alias.clone(),
-				import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
 			});
 
 			self
@@ -5143,10 +5258,7 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// check if we've already defined the given alias in the current scope
-		if env
-			.lookup(&jsii.alias.name.as_str().into(), Some(jsii.import_statement_idx))
-			.is_some()
-		{
+		if env.lookup(&jsii.alias.name.as_str().into(), None).is_some() {
 			self.spanned_error(alias, format!("\"{}\" is already defined", alias.name));
 		} else {
 			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
@@ -5253,6 +5365,7 @@ impl<'a> TypeChecker<'a> {
 				fqn: iface.fqn.clone(),
 				docs: iface.docs.clone(),
 				extends: iface.extends.clone(),
+				phase: iface.phase,
 			}),
 			Type::Struct(s) => Type::Struct(Struct {
 				name: s.name.clone(),
@@ -5455,6 +5568,10 @@ impl<'a> TypeChecker<'a> {
 				name: "Datetime".to_string(),
 				span: symbol.span.clone(),
 			}),
+			"regex" => Some(Symbol {
+				name: "Regex".to_string(),
+				span: symbol.span.clone(),
+			}),
 			"str" => Some(Symbol {
 				name: "String".to_string(),
 				span: symbol.span.clone(),
@@ -5507,6 +5624,8 @@ impl<'a> TypeChecker<'a> {
 					path.push(type_name.root.clone());
 					break;
 				}
+				// a[b] cannot be a type reference
+				Reference::ElementAccess { .. } => return None,
 			}
 		}
 
@@ -5578,7 +5697,7 @@ impl<'a> TypeChecker<'a> {
 		reference: &Reference,
 		env: &mut SymbolEnv,
 		callee_with_inflight_args: bool,
-	) -> (VariableInfo, Phase) {
+	) -> (ResolveReferenceResult, Phase) {
 		match reference {
 			Reference::Identifier(symbol) => {
 				let lookup_res = env.lookup_ext_mut(symbol, Some(self.ctx.current_stmt_idx()));
@@ -5586,12 +5705,13 @@ impl<'a> TypeChecker<'a> {
 					if let Some(var) = var.as_variable_mut() {
 						let phase = var.phase;
 						self.update_known_inferences(&mut var.type_, &var.name.span);
-						(var.clone(), phase)
+						(ResolveReferenceResult::Variable(var.clone()), phase)
 					} else {
-						self.spanned_error_with_var(
+						let err = self.spanned_error_with_var(
 							symbol,
 							format!("Expected identifier \"{symbol}\" to be a variable, but it's a {var}",),
-						)
+						);
+						(ResolveReferenceResult::Variable(err.0), err.1)
 					}
 				} else {
 					// Give a specific error message if someone tries to write "print" instead of "log"
@@ -5600,7 +5720,10 @@ impl<'a> TypeChecker<'a> {
 					} else {
 						self.type_error(lookup_result_mut_to_type_error(lookup_res, symbol));
 					}
-					(self.make_error_variable_info(), Phase::Independent)
+					(
+						ResolveReferenceResult::Variable(self.make_error_variable_info()),
+						Phase::Independent,
+					)
 				}
 			}
 			Reference::InstanceMember {
@@ -5642,7 +5765,10 @@ impl<'a> TypeChecker<'a> {
 
 				// If resolving the object's type failed, we can't resolve the property either
 				if instance_type.is_unresolved() {
-					return (self.make_error_variable_info(), Phase::Independent);
+					return (
+						ResolveReferenceResult::Variable(self.make_error_variable_info()),
+						Phase::Independent,
+					);
 				}
 
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env);
@@ -5655,7 +5781,10 @@ impl<'a> TypeChecker<'a> {
 						format!("Can't access preflight member \"{property}\" on inflight instance of type \"{instance_type}\"",),
 						vec![DiagnosticAnnotation::new("Object phase is in inflight", object)],
 					);
-					return (self.make_error_variable_info(), Phase::Independent);
+					return (
+						ResolveReferenceResult::Variable(self.make_error_variable_info()),
+						Phase::Independent,
+					);
 				}
 
 				// Try to resolve phase independent property's actual phase
@@ -5700,7 +5829,7 @@ impl<'a> TypeChecker<'a> {
 					property_variable.type_ = self.types.make_option(property_variable.type_);
 				}
 
-				(property_variable, property_phase)
+				(ResolveReferenceResult::Variable(property_variable), property_phase)
 			}
 			Reference::TypeMember { type_name, property } => {
 				let type_ = self
@@ -5710,7 +5839,7 @@ impl<'a> TypeChecker<'a> {
 					Type::Enum(ref e) => {
 						if e.values.contains(property) {
 							(
-								VariableInfo {
+								ResolveReferenceResult::Variable(VariableInfo {
 									name: property.clone(),
 									kind: VariableKind::StaticMember,
 									type_,
@@ -5718,14 +5847,15 @@ impl<'a> TypeChecker<'a> {
 									phase: Phase::Independent,
 									access: AccessModifier::Public,
 									docs: None,
-								},
+								}),
 								Phase::Independent,
 							)
 						} else {
-							self.spanned_error_with_var(
+							let err = self.spanned_error_with_var(
 								property,
 								format!("Enum \"{}\" does not contain value \"{}\"", type_, property.name),
-							)
+							);
+							(ResolveReferenceResult::Variable(err.0), err.1)
 						}
 					}
 					Type::Struct(ref s) => {
@@ -5743,22 +5873,26 @@ impl<'a> TypeChecker<'a> {
 											type_, name
 										),
 									);
-									return (self.make_error_variable_info(), Phase::Independent);
+									return (
+										ResolveReferenceResult::Variable(self.make_error_variable_info()),
+										Phase::Independent,
+									);
 								}
 							}
 						}
 
 						let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_STRUCT, env), vec![type_]);
 						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true, env);
-						(v, Phase::Independent)
+						(ResolveReferenceResult::Variable(v), Phase::Independent)
 					}
 					Type::Class(ref c) => {
 						let v = self.get_property_from_class_like(c, property, true, env);
 						if matches!(v.kind, VariableKind::InstanceMember) {
-							return self.spanned_error_with_var(
+							let err = self.spanned_error_with_var(
 								property,
 								format!("Class \"{c}\" contains a member \"{property}\" but it is not static"),
 							);
+							return (ResolveReferenceResult::Variable(err.0), err.1);
 						}
 						// If the property is phase independent then but it's a method call with inflight
 						// args then treat it as an inflight property
@@ -5767,9 +5901,100 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							v.phase
 						};
-						(v.clone(), phase)
+						(ResolveReferenceResult::Variable(v.clone()), phase)
 					}
-					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
+					_ => {
+						let err = self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference));
+						(ResolveReferenceResult::Variable(err.0), err.1)
+					}
+				}
+			}
+			Reference::ElementAccess { object, index } => {
+				let (instance_type, instance_phase) = self.type_check_exp(object, env);
+				let (index_type, _index_phase) = self.type_check_exp(index, env);
+
+				match *instance_type {
+					// TODO: it might be possible to look at Type::Json's inner data to give a more specific type
+					Type::Json(_) => {
+						self.validate_type_in(index_type, &[self.types.number(), self.types.string()], index);
+						(
+							ResolveReferenceResult::Location(instance_type, self.types.json()), // indexing into a Json object returns a Json object
+							instance_phase,
+						)
+					}
+					Type::MutJson => {
+						self.validate_type_in(index_type, &[self.types.number(), self.types.string()], index);
+						(
+							ResolveReferenceResult::Location(instance_type, self.types.mut_json()), // indexing into a MutJson object returns a MutJson object
+							instance_phase,
+						)
+					}
+					Type::Array(inner_type) => {
+						self.validate_type(index_type, self.types.number(), index);
+						(
+							ResolveReferenceResult::Location(instance_type, inner_type),
+							instance_phase,
+						)
+					}
+					Type::MutArray(inner_type) => {
+						self.validate_type(index_type, self.types.number(), index);
+						(
+							ResolveReferenceResult::Location(instance_type, inner_type),
+							instance_phase,
+						)
+					}
+					Type::Map(inner_type) => {
+						self.validate_type(index_type, self.types.string(), index);
+						(
+							ResolveReferenceResult::Location(instance_type, inner_type),
+							instance_phase,
+						)
+					}
+					Type::MutMap(inner_type) => {
+						self.validate_type(index_type, self.types.string(), index);
+						(
+							ResolveReferenceResult::Location(instance_type, inner_type),
+							instance_phase,
+						)
+					}
+					Type::Anything => (
+						ResolveReferenceResult::Location(self.types.anything(), self.types.anything()),
+						instance_phase,
+					),
+					Type::Unresolved => (
+						ResolveReferenceResult::Location(self.types.error(), self.types.error()),
+						instance_phase,
+					),
+					Type::Inferred(_) => {
+						self.spanned_error(object, "Indexing into an inferred type is not supported");
+						(
+							ResolveReferenceResult::Location(self.types.error(), self.types.error()),
+							instance_phase,
+						)
+					}
+					Type::String => {
+						self.validate_type(index_type, self.types.number(), index);
+						(
+							ResolveReferenceResult::Location(instance_type, self.types.string()),
+							instance_phase,
+						)
+					}
+					Type::Number
+					| Type::Duration
+					| Type::Boolean
+					| Type::Void
+					| Type::Nil
+					| Type::Optional(_)
+					| Type::Set(_)
+					| Type::MutSet(_)
+					| Type::Function(_)
+					| Type::Class(_)
+					| Type::Interface(_)
+					| Type::Struct(_)
+					| Type::Enum(_) => {
+						let err = self.spanned_error_with_var(object, format!("Type \"{}\" is not indexable", instance_type));
+						(ResolveReferenceResult::Variable(err.0), err.1)
+					}
 				}
 			}
 		}
@@ -6396,11 +6621,12 @@ pub fn import_udt_from_jsii(
 pub fn fully_qualify_std_type(type_: &str) -> String {
 	// Additionally, this doesn't handle for generics
 	let type_ = match type_ {
-		"str" => "String",
 		"duration" => "Duration",
 		"datetime" => "Datetime",
-		"bool" => "Boolean",
+		"regex" => "Regex",
+		"str" => "String",
 		"num" => "Number",
+		"bool" => "Boolean",
 		_ => {
 			// Check for generics or Json
 			let type_ = if let Some((prefix, _)) = type_.split_once(" ") {
@@ -6432,6 +6658,12 @@ fn lookup_known_type(name: &'static str, env: &SymbolEnv) -> TypeRef {
 		.0
 		.as_type()
 		.expect(&format!("Expected known type \"{}\" to be a type", name))
+}
+
+#[derive(Debug)]
+enum ResolveReferenceResult {
+	Variable(VariableInfo),
+	Location(TypeRef, TypeRef), // (container type, element type)
 }
 
 #[cfg(test)]

@@ -9,11 +9,18 @@ export class QueueSetConsumerHandlerClient implements IFunctionHandlerClient {
     this.handler = handler;
   }
   public async handle(event?: string) {
+    const batchItemFailures = [];
     let parsed = JSON.parse(event ?? "{}");
     if (!parsed.messages) throw new Error('No "messages" field in event.');
     for (const $message of parsed.messages) {
-      await this.handler.handle($message);
+      try {
+        await this.handler.handle($message.payload);
+      } catch (error) {
+        batchItemFailures.push($message);
+      }
     }
-    return undefined;
+    return batchItemFailures.length > 0
+      ? JSON.stringify(batchItemFailures)
+      : undefined;
   }
 }

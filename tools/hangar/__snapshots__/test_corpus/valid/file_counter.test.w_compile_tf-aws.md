@@ -1,7 +1,7 @@
 # [file_counter.test.w](../../../../../examples/tests/valid/file_counter.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $bucket, $counter }) {
@@ -19,7 +19,7 @@ module.exports = function({ $bucket, $counter }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -115,7 +115,10 @@ module.exports = function({ $bucket, $counter }) {
         },
         "batch_size": 1,
         "event_source_arn": "${aws_sqs_queue.Queue.arn}",
-        "function_name": "${aws_lambda_function.Queue-SetConsumer0.function_name}"
+        "function_name": "${aws_lambda_function.Queue-SetConsumer0.function_name}",
+        "function_response_types": [
+          "ReportBatchItemFailures"
+        ]
       }
     },
     "aws_lambda_function": {
@@ -204,8 +207,8 @@ module.exports = function({ $bucket, $counter }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -213,6 +216,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -225,7 +229,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $bucket: ${$stdlib.core.liftObject(bucket)},
             $counter: ${$stdlib.core.liftObject(counter)},
           })
@@ -265,6 +269,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "file_counter.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

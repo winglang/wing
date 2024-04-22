@@ -1,7 +1,7 @@
 # [extend_non_entrypoint.w](../../../../../examples/tests/valid/extend_non_entrypoint.w) | compile | tf-aws
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $cdk8s_Chart }) {
@@ -12,15 +12,16 @@ module.exports = function({ $cdk8s_Chart }) {
   }
   return Foo;
 }
-//# sourceMappingURL=inflight.Foo-1.js.map
+//# sourceMappingURL=inflight.Foo-1.cjs.map
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cdk8s = require("cdk8s");
 class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
   constructor($scope, $id, ) {
@@ -28,7 +29,7 @@ class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
         $cdk8s_Chart: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cdk8s.Chart, "cdk8s", "Chart"))},
       })
     `;
@@ -52,6 +53,6 @@ class Foo extends (this?.node?.root?.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
   }
 }
 module.exports = { Foo };
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

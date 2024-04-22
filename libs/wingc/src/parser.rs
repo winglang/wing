@@ -7,7 +7,6 @@ use std::cell::RefCell;
 use std::collections::HashSet;
 use std::{fs, str, vec};
 use tree_sitter::Node;
-use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
@@ -17,7 +16,9 @@ use crate::ast::{
 	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
+use crate::diagnostic::{
+	report_diagnostic, Diagnostic, DiagnosticResult, WingLocation, WingSpan, ERR_EXPECTED_SEMICOLON,
+};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
@@ -114,7 +115,6 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"inflight",
 	"preflight",
 	"elif",
-	"init",
 	"any",
 	"num",
 	"str",
@@ -239,7 +239,7 @@ fn parse_wing_file(
 
 	let language = tree_sitter_wing::language();
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
-	tree_sitter_parser.set_language(language).unwrap();
+	tree_sitter_parser.set_language(&language).unwrap();
 
 	let tree_sitter_tree = match tree_sitter_parser.parse(&source_text.as_bytes(), None) {
 		Some(tree) => tree,
@@ -346,7 +346,7 @@ fn parse_wing_directory(
 
 	// Create a fake AST (since the directory doesn't have any source code to parse)
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
-	tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
+	tree_sitter_parser.set_language(&tree_sitter_wing::language()).unwrap();
 	let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
 	let scope = Scope::empty();
 	let dependent_wing_paths = files_and_dirs;
@@ -1227,14 +1227,14 @@ impl<'s> Parser<'s> {
 					if initializer.is_some() && !is_inflight {
 						self
 							.with_error::<Node>(
-								format!("Multiple initializers defined in class {}", name.name),
+								format!("Multiple constructors defined in class {}", name.name),
 								&class_element,
 							)
 							.err();
 					} else if inflight_initializer.is_some() && is_inflight {
 						self
 							.with_error::<Node>(
-								format!("Multiple inflight initializers defined in class {}", name.name),
+								format!("Multiple inflight constructors defined in class {}", name.name),
 								&class_element,
 							)
 							.err();
@@ -1243,7 +1243,7 @@ impl<'s> Parser<'s> {
 					let parameters = self.build_parameter_list(&parameters_node, class_phase, false)?;
 					if !parameters.is_empty() && is_inflight && class_phase == Phase::Preflight {
 						self
-							.with_error::<Node>("Inflight initializers cannot have parameters", &parameters_node)
+							.with_error::<Node>("Inflight constructors cannot have parameters", &parameters_node)
 							.err();
 					}
 
@@ -1302,7 +1302,7 @@ impl<'s> Parser<'s> {
 		for method in &methods {
 			if method.0.name == "constructor" {
 				Diagnostic::new(
-					"Reserved method name. Initializers are declared with \"init\"",
+					"Reserved method name. Constructors are declared with a method named \"new\"",
 					&method.0,
 				)
 				.report();
@@ -1445,6 +1445,14 @@ impl<'s> Parser<'s> {
 		let mut cursor = statement_node.walk();
 		let mut extends = vec![];
 		let mut methods = vec![];
+
+		let interface_modifiers = statement_node.child_by_field_name("modifiers");
+		let phase = if self.get_modifier("inflight_specifier", &interface_modifiers)?.is_some() {
+			Phase::Inflight
+		} else {
+			phase
+		};
+
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 
 		for interface_element in statement_node
@@ -1514,12 +1522,11 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(&access_modifier_node);
+		let access = self.get_access_modifier(&interface_modifiers)?;
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Interfaces must be public (\"pub\") or private",
-				&access_modifier_node.expect("access modifier node"),
+				&interface_modifiers.expect("access modifier node"),
 			)?;
 		}
 
@@ -1528,6 +1535,7 @@ impl<'s> Parser<'s> {
 			methods,
 			extends,
 			access,
+			phase,
 		}))
 	}
 
@@ -1939,11 +1947,25 @@ impl<'s> Parser<'s> {
 				actual_node_span,
 			)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node, phase)?),
-			"structured_access_expression" => {
-				self.report_unimplemented_grammar("structured_access_expression", "reference", &actual_node)
-			}
+			"structured_access_expression" => Ok(self.build_structured_access_expression(&actual_node, phase)?),
 			other => self.with_error(format!("Expected reference, got {other}"), &actual_node),
 		}
+	}
+
+	fn build_structured_access_expression(&self, structured_access_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
+		let object_expr = structured_access_node.named_child(0).unwrap();
+		let object_expr = self.build_expression(&object_expr, phase)?;
+
+		let index_expr = structured_access_node.named_child(1).unwrap();
+		let index_expr = self.build_expression(&index_expr, phase)?;
+
+		Ok(Expr::new(
+			ExprKind::Reference(Reference::ElementAccess {
+				object: Box::new(object_expr),
+				index: Box::new(index_expr),
+			}),
+			self.node_span(structured_access_node),
+		))
 	}
 
 	fn build_arg_list(&self, arg_list_node: &Node, phase: Phase) -> DiagnosticResult<ArgList> {
@@ -2410,41 +2432,56 @@ impl<'s> Parser<'s> {
 	}
 	/// Given a node, returns the last non-extra node before it.
 	fn last_non_extra(node: Node) -> Node {
-		let parent = node.parent();
-		if let Some(parent) = parent {
-			if parent.is_extra() {
-				return Self::last_non_extra(parent);
+		let mut sibling = node.prev_sibling();
+		while let Some(s) = sibling {
+			if !s.is_extra() {
+				break;
 			}
+			sibling = s.prev_sibling();
 		}
-		if node.is_extra() {
-			let mut sibling = node.prev_sibling();
-			while let Some(s) = sibling {
-				if !s.is_extra() {
-					break;
-				}
-				sibling = s.prev_sibling();
-			}
 
-			return sibling.unwrap_or(node);
-		} else {
-			return node;
-		}
+		return sibling.unwrap_or(node);
 	}
 
 	fn report_unhandled_errors(&self, root: &Node) {
-		let iter = traverse(root.walk(), Order::Pre);
-		for node in iter {
+		let iterator = crate::ts_traversal::PostOrderIter::new(root);
+		for node in iterator {
 			if node.kind() == "AUTOMATIC_SEMICOLON" {
-				let target_node = Self::last_non_extra(node);
+				let target_node = Self::last_non_extra(node).range();
+				let end_byte = target_node.end_byte;
+				let end_point: WingLocation = target_node.end_point.into();
+
 				let diag = Diagnostic {
 					message: ERR_EXPECTED_SEMICOLON.to_string(),
-					span: Some(self.node_span(&target_node)),
+					span: Some(WingSpan {
+						start: end_point,
+						end: end_point,
+						end_offset: end_byte,
+						start_offset: end_byte,
+						file_id: self.source_name.to_string(),
+					}),
 					annotations: vec![],
 					hints: vec![],
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
-				self.add_error("Expected block".to_string(), &Self::last_non_extra(node));
+				let target_node = Self::last_non_extra(node).range();
+				let end_byte = target_node.end_byte;
+				let end_point: WingLocation = target_node.end_point.into();
+
+				let diag = Diagnostic {
+					message: "Expected block".to_string(),
+					span: Some(WingSpan {
+						start: end_point,
+						end: end_point,
+						end_offset: end_byte,
+						start_offset: end_byte,
+						file_id: self.source_name.to_string(),
+					}),
+					annotations: vec![],
+					hints: vec![],
+				};
+				report_diagnostic(diag);
 			} else if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
 					if node.named_child_count() == 0 {
@@ -2730,7 +2767,7 @@ mod tests {
 		// Test get_actual_children_by_field_name
 		let language = tree_sitter_wing::language();
 		let mut tree_sitter_parser = tree_sitter::Parser::new();
-		tree_sitter_parser.set_language(language).unwrap();
+		tree_sitter_parser.set_language(&language).unwrap();
 
 		let tree_sitter_tree = tree_sitter_parser
 			.parse("let x: ((num)) = 1;".as_bytes(), None)

@@ -25,7 +25,7 @@ impl<'a> Fold for TypeReferenceTransformer<'a> {
 					fold::fold_reference(self, node)
 				}
 			}
-			Reference::Identifier(..) | Reference::TypeMember { .. } => node,
+			Reference::Identifier(..) | Reference::TypeMember { .. } | Reference::ElementAccess { .. } => node,
 		}
 	}
 }

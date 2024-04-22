@@ -980,7 +980,7 @@ Inflight client for `IApiEndpointHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IApiEndpointHandlerClient.handle"></a>
 
 ```wing
-inflight handle(request: ApiRequest): ApiResponse
+inflight handle(request: ApiRequest): ApiResponse?
 ```
 
 Inflight that will be called when a request is made to the endpoint.

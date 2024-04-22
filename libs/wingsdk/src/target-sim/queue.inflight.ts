@@ -5,9 +5,15 @@ import {
   QueueSchema,
   QueueSubscriber,
   EventSubscription,
-  FunctionHandle,
+  DeadLetterQueueSchema,
+  ResourceHandle,
 } from "./schema-resources";
-import { IFunctionClient, IQueueClient, QUEUE_FQN } from "../cloud";
+import {
+  DEFAULT_DELIVERY_ATTEMPTS,
+  IFunctionClient,
+  IQueueClient,
+  QUEUE_FQN,
+} from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -21,18 +27,28 @@ export class Queue
   private readonly messages = new Array<QueueMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly processLoop: LoopController;
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
   private readonly timeoutSeconds: number;
   private readonly retentionPeriod: number;
+  private readonly dlq?: DeadLetterQueueSchema;
 
-  constructor(props: QueueSchema["props"], context: ISimulatorContext) {
+  constructor(props: QueueSchema) {
     this.timeoutSeconds = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
+    this.dlq = props.dlq;
     this.processLoop = runEvery(100, async () => this.processMessages()); // every 0.1 seconds
-    this.context = context;
   }
 
-  public async init(): Promise<QueueAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<QueueAttributes> {
+    this._context = context;
+    await this.processLoop.start();
     return {};
   }
 
@@ -47,7 +63,7 @@ export class Queue
   }
 
   public async addEventSubscription(
-    subscriber: FunctionHandle,
+    subscriber: ResourceHandle,
     subscriptionProps: EventSubscription
   ): Promise<void> {
     const s = {
@@ -58,7 +74,7 @@ export class Queue
   }
 
   public async removeEventSubscription(
-    subscriber: FunctionHandle
+    subscriber: ResourceHandle
   ): Promise<void> {
     const index = this.subscribers.findIndex(
       (s) => s.functionHandle === subscriber
@@ -77,7 +93,13 @@ export class Queue
           throw new Error("Empty messages are not allowed");
         }
         for (const message of messages) {
-          this.messages.push(new QueueMessage(this.retentionPeriod, message));
+          this.messages.push(
+            new QueueMessage(
+              this.retentionPeriod,
+              DEFAULT_DELIVERY_ATTEMPTS,
+              message
+            )
+          );
         }
       },
     });
@@ -180,7 +202,37 @@ export class Queue
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
         void fnClient
-          .invoke(JSON.stringify({ messages: messagesPayload }))
+          .invoke(JSON.stringify({ messages: messages }))
+          .then((result) => {
+            if (this.dlq && result) {
+              const errorList = JSON.parse(result);
+              let retriesMessages = [];
+              for (const msg of errorList) {
+                if (
+                  msg.remainingDeliveryAttempts < this.dlq.maxDeliveryAttempts
+                ) {
+                  msg.remainingDeliveryAttempts++;
+                  retriesMessages.push(msg);
+                } else {
+                  let dlq = this.context.getClient(
+                    this.dlq.dlqHandler
+                  ) as IQueueClient;
+                  void dlq.push(msg.payload).catch((err) => {
+                    this.context.addTrace({
+                      type: TraceType.RESOURCE,
+                      data: {
+                        message: `Pushing messages to the dead-letter queue generates an error -> ${err}`,
+                      },
+                      sourcePath: this.context.resourcePath,
+                      sourceType: QUEUE_FQN,
+                      timestamp: new Date().toISOString(),
+                    });
+                  });
+                }
+              }
+              this.messages.push(...retriesMessages);
+            }
+          })
           .catch((err) => {
             // If the function is at a concurrency limit, pretend we just didn't call it
             if (
@@ -230,12 +282,18 @@ export class Queue
 class QueueMessage {
   public readonly retentionTimeout: Date;
   public readonly payload: string;
+  public remainingDeliveryAttempts: number;
 
-  constructor(retentionPeriod: number, message: string) {
+  constructor(
+    retentionPeriod: number,
+    remainingDeliveryAttempts: number,
+    message: string
+  ) {
     const currentTime = new Date();
     currentTime.setSeconds(retentionPeriod + currentTime.getSeconds());
     this.retentionTimeout = currentTime;
     this.payload = message;
+    this.remainingDeliveryAttempts = remainingDeliveryAttempts;
   }
 }
 
@@ -267,6 +325,7 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
 
 interface LoopController {
   stop(): Promise<void>;
+  start(): Promise<void>;
 }
 
 /**
@@ -311,8 +370,10 @@ function runEvery(interval: number, fn: () => Promise<void>): LoopController {
         await stopPromise; // wait for the loop to finish
       }
     },
+    async start() {
+      void loop();
+    },
   };
 
-  void loop(); // start the loop
   return controller;
 }

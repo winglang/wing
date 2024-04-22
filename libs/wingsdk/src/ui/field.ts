@@ -3,6 +3,7 @@ import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
 import { App, UIComponent } from "../core";
+import { Testing } from "../simulator";
 import { Duration, IInflight } from "../std";
 
 /**
@@ -112,4 +113,25 @@ export interface IFieldHandlerClient {
    * @inflight
    */
   handle(): Promise<string>;
+}
+
+/**
+ * A value field can be used to display a string value.
+ */
+export class ValueField extends Field {
+  constructor(scope: Construct, id: string, label: string, value: string) {
+    const handler = Testing.makeHandler(
+      `async handle() { 
+        return this.value;
+      }`,
+      {
+        value: {
+          obj: value,
+          ops: [],
+        },
+      }
+    );
+
+    super(scope, id, label, handler);
+  }
 }
