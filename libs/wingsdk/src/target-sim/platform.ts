@@ -1,6 +1,7 @@
 import fs from "fs";
 import { App } from "./app";
 import { IPlatform } from "../platform";
+import { join } from "path";
 
 /**
  * Sim Platform
@@ -15,8 +16,10 @@ export class Platform implements IPlatform {
 
   public async storeSecrets(secrets: Record<string, string>): Promise<void> {
     let existingSecretsContent = "";
+    const envFile = join(process.env.WING_SOURCE_DIR!, ".env");
+    
     try {
-      existingSecretsContent = fs.readFileSync("./.env", "utf8");
+      existingSecretsContent = fs.readFileSync(envFile, "utf8");
     } catch (error) {}
 
     const existingSecrets = existingSecretsContent
@@ -36,7 +39,7 @@ export class Platform implements IPlatform {
       .map(([key, value]) => `${key}=${value}`)
       .join("\n");
 
-    fs.writeFileSync("./.env", updatedContent);
+    fs.writeFileSync(envFile, updatedContent);
 
     console.log(`${Object.keys(secrets).length} secret(s) stored in .env`);
   }

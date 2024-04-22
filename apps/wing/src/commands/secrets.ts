@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import { cwd } from "process";
 import { PlatformManager, SECRETS_FILE_NAME } from "@winglang/sdk/lib/platform";
 import inquirer from "inquirer";
 import { CompileOptions, compile } from "./compile";
@@ -18,7 +17,7 @@ export async function secrets(entrypoint?: string, options?: SecretsOptions): Pr
     ? JSON.parse(fs.readFileSync(secretsFile, "utf-8"))
     : [];
 
-  process.env.WING_SOURCE_DIR = cwd();
+  process.env.WING_SOURCE_DIR = path.resolve(path.dirname(entrypoint ?? "main.w"));
 
   let secretValues: Record<string, string> = {};
   console.log(`${secretNames.length} secret(s) found\n`);
