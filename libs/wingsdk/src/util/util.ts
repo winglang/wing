@@ -265,7 +265,7 @@ export class Util {
    * @param args - An array of arguments to pass to the program.
    * @param opts - Spawn options including working directory, environment variables, and stdio configurations.
    * @returns The `ChildProcess` instance associated with the spawned process.
-   * @internal
+   * @inflight
    */
   public static spawn(
     program: string,
