@@ -8,8 +8,8 @@ import { ITopicClient } from "../cloud";
 import { Util } from "../util/util";
 
 /**
- * Topics in AWS can receive up to 10 messages at a time 
- * using the PublishBatchCommand, this constant is used 
+ * Topics in AWS can receive up to 10 messages at a time
+ * using the PublishBatchCommand, this constant is used
  * to generate batches respecting the limits.
  */
 const CHUNK_SIZE = 10;
@@ -18,7 +18,7 @@ export class TopicClient implements ITopicClient {
   constructor(
     private readonly topicArn: string,
     private readonly client: SNSClient = new SNSClient({})
-  ) { }
+  ) {}
 
   public async publish(...messages: string[]): Promise<void> {
     if (messages.includes("")) {
@@ -41,7 +41,8 @@ export class TopicClient implements ITopicClient {
       } catch (e) {
         if (e instanceof InvalidBatchEntryIdException) {
           throw new Error(
-            `The Id of a batch entry in a batch request doesn't abide by the specification. (message=${messages}): ${(e as Error).stack
+            `The Id of a batch entry in a batch request doesn't abide by the specification. (message=${messages}): ${
+              (e as Error).stack
             })}`
           );
         }

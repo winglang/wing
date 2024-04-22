@@ -65,10 +65,8 @@ let topic = new cloud.Topic();
 
 inflight () => {
   topic.publish(
-    "It's the End",
-    "of the World",
-    "as we know it",
-    "and I feel fine"
+    "Topics can now publish",
+    "multiple messages at once"
   );
 };
 ```
@@ -160,7 +158,7 @@ new cloud.Topic(props?: TopicProps);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish messages to topic. |
+| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish messages to topic, if multiple messages are passed then they will be published as a batch if supported by the target platform. |
 
 ---
 
@@ -210,7 +208,7 @@ Subscribing queue to the topic.
 inflight publish(...messages: Array<str>): void
 ```
 
-Publish messages to topic.
+Publish messages to topic, if multiple messages are passed then they will be published as a batch if supported by the target platform.
 
 ###### `messages`<sup>Required</sup> <a name="messages" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.messages"></a>
 

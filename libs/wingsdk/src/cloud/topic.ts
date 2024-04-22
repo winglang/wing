@@ -11,7 +11,7 @@ export const TOPIC_FQN = fqnForType("cloud.Topic");
 /**
  * Options for `Topic`.
  */
-export interface TopicProps { }
+export interface TopicProps {}
 
 /**
  * A topic.
@@ -66,11 +66,11 @@ export class Topic extends Resource {
 /**
  * Options for `Topic.onMessage`.
  */
-export interface TopicOnMessageOptions extends FunctionProps { }
+export interface TopicOnMessageOptions extends FunctionProps {}
 /**
  * Options for `Topic.subscribeQueue`.
  */
-export interface TopicSubscribeQueueOptions extends QueueProps { }
+export interface TopicSubscribeQueueOptions extends QueueProps {}
 
 /**
  * Inflight interface for `Topic`.
