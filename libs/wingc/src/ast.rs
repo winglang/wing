@@ -660,7 +660,7 @@ impl ArgList {
 
 #[derive(Debug)]
 pub enum Literal {
-  NonInterpolatedString(String),
+	NonInterpolatedString(String),
 	String(String),
 	InterpolatedString(InterpolatedString),
 	Number(f64),
