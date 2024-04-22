@@ -254,7 +254,7 @@ class ApiUsersService {
                 "parameters": [
                   {
                     "in": "header",
-                    "name": "cookie",
+                    "name": "content-type",
                   },
                 ],
                 "requestBody": {
