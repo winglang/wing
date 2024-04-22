@@ -192,7 +192,7 @@
     },
     "nested_identifier": {
       "type": "PREC",
-      "value": 150,
+      "value": 160,
       "content": {
         "type": "SEQ",
         "members": [
@@ -2250,7 +2250,7 @@
     },
     "call": {
       "type": "PREC_LEFT",
-      "value": 160,
+      "value": 170,
       "content": {
         "type": "SEQ",
         "members": [
@@ -3214,7 +3214,7 @@
     },
     "optional_unwrap": {
       "type": "PREC_RIGHT",
-      "value": 170,
+      "value": 180,
       "content": {
         "type": "SEQ",
         "members": [
@@ -4227,7 +4227,7 @@
     },
     "structured_access_expression": {
       "type": "PREC_RIGHT",
-      "value": 0,
+      "value": 150,
       "content": {
         "type": "SEQ",
         "members": [

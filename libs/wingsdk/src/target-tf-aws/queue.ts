@@ -10,6 +10,7 @@ import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { IAwsQueue } from "../shared-aws";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
+import { Queue as AwsQueue } from "../shared-aws/queue";
 import { Duration, IInflightHost, Node } from "../std";
 
 /**
@@ -32,15 +33,32 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.queue = new SqsQueue(this, "Default", {
-      visibilityTimeoutSeconds: props.timeout
-        ? props.timeout.seconds
-        : Duration.fromSeconds(30).seconds,
-      messageRetentionSeconds: props.retentionPeriod
-        ? props.retentionPeriod.seconds
-        : Duration.fromHours(1).seconds,
-      name: ResourceNames.generateName(this, NAME_OPTS),
-    });
+    const queueOpt = props.dlq
+      ? {
+          visibilityTimeoutSeconds: props.timeout
+            ? props.timeout.seconds
+            : Duration.fromSeconds(30).seconds,
+          messageRetentionSeconds: props.retentionPeriod
+            ? props.retentionPeriod.seconds
+            : Duration.fromHours(1).seconds,
+          name: ResourceNames.generateName(this, NAME_OPTS),
+          redrivePolicy: JSON.stringify({
+            deadLetterTargetArn: AwsQueue.from(props.dlq.queue)?.queueArn,
+            maxReceiveCount:
+              props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
+          }),
+        }
+      : {
+          visibilityTimeoutSeconds: props.timeout
+            ? props.timeout.seconds
+            : Duration.fromSeconds(30).seconds,
+          messageRetentionSeconds: props.retentionPeriod
+            ? props.retentionPeriod.seconds
+            : Duration.fromHours(1).seconds,
+          name: ResourceNames.generateName(this, NAME_OPTS),
+        };
+
+    this.queue = new SqsQueue(this, "Default", queueOpt);
   }
 
   /** @internal */
@@ -99,6 +117,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       functionName: fn.functionName,
       eventSourceArn: this.queue.arn,
       batchSize: props.batchSize ?? 1,
+      functionResponseTypes: ["ReportBatchItemFailures"], // It allows the function to return the messages that failed to the queue
     });
 
     Node.of(this).addConnection({

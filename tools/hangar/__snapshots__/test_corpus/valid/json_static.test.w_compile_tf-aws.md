@@ -25,7 +25,7 @@ module.exports = function({ $jj, $std_Json }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $std_Json }) {
+module.exports = function({  }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -34,8 +34,8 @@ module.exports = function({ $std_Json }) {
     }
     async handle() {
       const hasCheck = ({"a": "hello", "b": "wing"});
-      $helpers.assert($helpers.eq(((json, key) => { return json.hasOwnProperty(key); })(hasCheck, "a"), true), "Json.has(hasCheck, \"a\") == true");
-      $helpers.assert($helpers.eq(((json, key) => { return json.hasOwnProperty(key); })(hasCheck, "c"), false), "Json.has(hasCheck, \"c\") == false");
+      $helpers.assert($helpers.eq(((obj, key) => { return obj.hasOwnProperty(key); })(hasCheck,"a"), true), "hasCheck.has(\"a\") == true");
+      $helpers.assert($helpers.eq(((obj, key) => { return obj.hasOwnProperty(key); })(hasCheck,"c"), false), "hasCheck.has(\"c\") == false");
     }
   }
   return $Closure2;
@@ -121,7 +121,6 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
-            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
