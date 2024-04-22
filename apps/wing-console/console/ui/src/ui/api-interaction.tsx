@@ -270,7 +270,7 @@ export const ApiInteraction = memo(
           setBodyPlaceholder(undefined);
         }
 
-        setQueryParameters((currentQueryParameters) => {
+        setQueryParameters(() => {
           const newUrlParameters: KeyValueItem[] = [];
           for (const [key, value] of urlParameters.entries()) {
             newUrlParameters.push({
@@ -278,10 +278,10 @@ export const ApiInteraction = memo(
               value,
             });
           }
-          return [...currentQueryParameters, ...newUrlParameters];
+          return newUrlParameters;
         });
 
-        setPathVariables((currentVariables) => {
+        setPathVariables(() => {
           const newPathVariables: KeyValueItem[] = [];
 
           const matches = newRoute.matchAll(/{(\w+)}/g) || [];
@@ -294,7 +294,7 @@ export const ApiInteraction = memo(
               value: "",
             });
           }
-          return [...currentVariables, ...newPathVariables];
+          return newPathVariables;
         });
 
         if (isListedRoute && method) {

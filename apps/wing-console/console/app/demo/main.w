@@ -254,7 +254,7 @@ class ApiUsersService {
                 "parameters": [
                   {
                     "in": "header",
-                    "name": "content-type",
+                    "name": "accept",
                   },
                 ],
                 "requestBody": {
