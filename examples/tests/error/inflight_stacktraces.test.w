@@ -12,7 +12,7 @@ test "expect.equal" {
 }
 
 test "bucket failed get" {
-  bucket.get("doesn't exist");
+  bucket.delete("doesn't exist", mustExist: true);
 }
 
 test "throw from closure" {
