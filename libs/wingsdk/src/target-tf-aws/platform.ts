@@ -1,9 +1,3 @@
-// import {
-//   SecretsManagerClient,
-//   GetSecretValueCommand,
-//   CreateSecretCommand,
-//   UpdateSecretCommand,
-// } from "@aws-sdk/client-secrets-manager";
 import { App } from "./app";
 import { IPlatform } from "../platform";
 
