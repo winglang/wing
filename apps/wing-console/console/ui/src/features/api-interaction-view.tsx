@@ -1,4 +1,5 @@
 import type { OpenApiSpec } from "@wingconsole/server/src/wingsdk";
+import { createPersistentState } from "@wingconsole/use-persistent-state";
 import { memo, useCallback, useContext, useState } from "react";
 
 import { AppContext } from "../AppContext.js";
@@ -13,11 +14,17 @@ export interface ApiViewProps {
 
 export const ApiInteractionView = memo(({ resourcePath }: ApiViewProps) => {
   const { appMode } = useContext(AppContext);
+  const { usePersistentState } = createPersistentState(resourcePath);
 
-  const [apiResponse, setApiResponse] = useState<ApiResponse>();
+  const [apiResponse, setApiResponse] = usePersistentState<ApiResponse>();
   const onFetchDataUpdate = useCallback(
-    (data: ApiResponse) => setApiResponse(data),
-    [],
+    (data: ApiResponse) => {
+      if (!data) {
+        return;
+      }
+      setApiResponse(data);
+    },
+    [setApiResponse],
   );
 
   const schema = trpc["api.schema"].useQuery({ resourcePath });

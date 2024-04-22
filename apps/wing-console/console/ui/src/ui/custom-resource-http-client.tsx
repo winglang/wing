@@ -21,7 +21,7 @@ export const CustomResourceHttpClientItem = ({
   getApiSpecHandler,
 }: CustomResourceHttpClientItemProps) => {
   const { appMode } = useContext(AppContext);
-  const { usePersistentState } = createPersistentState(getUrlHandler);
+  const { usePersistentState } = createPersistentState(getApiSpecHandler);
 
   const [openApiSpec, setOpenApiSpec] = usePersistentState<ApiResponse>();
 
@@ -67,6 +67,7 @@ export const CustomResourceHttpClientItem = ({
           callFetch={callFetch}
           isLoading={isLoading}
           apiResponse={apiResponse}
+          setApiResponse={setApiResponse}
         />
       )}
     </div>
