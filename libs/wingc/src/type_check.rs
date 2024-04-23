@@ -1082,37 +1082,6 @@ impl TypeRef {
 		false
 	}
 
-	/// A phase independent type is a type that cab be instantiated both in preflight and inflight.
-	/// This traverses over the inner fields of a type and if it finds a preflight class or interface
-	/// it'll return false.
-	pub fn phase_independent(&self) -> bool {
-		struct CanBeInstantiatedInflightVisitor {
-			can_be_instantiated_inflight: bool,
-		}
-
-		impl<'a> VisitType<'a> for CanBeInstantiatedInflightVisitor {
-			fn visit_typeref(&mut self, node: &'a TypeRef) {
-				if node.is_preflight_object_type() {
-					self.can_be_instantiated_inflight = false;
-				} else if node
-					.as_function_sig()
-					.map(|f| f.phase == Phase::Preflight)
-					.unwrap_or(false)
-				{
-					self.can_be_instantiated_inflight = false;
-				} else {
-					visit_typeref(self, node);
-				}
-			}
-		}
-
-		let mut visitor = CanBeInstantiatedInflightVisitor {
-			can_be_instantiated_inflight: true, // By default we're phase independent
-		};
-		visitor.visit_typeref(self);
-		visitor.can_be_instantiated_inflight
-	}
-
 	/// Returns whether type represents a closure (either a function or a closure class).
 	pub fn is_closure(&self) -> bool {
 		if self.as_function_sig().is_some() {
