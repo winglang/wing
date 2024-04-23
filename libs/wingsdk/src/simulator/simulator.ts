@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { mkdir, rm } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
-import { join } from "path";
+import { join, resolve } from "path";
 import { makeSimulatorClient } from "./client";
 import { Graph } from "./graph";
 import { deserialize, serialize } from "./serialization";
@@ -208,7 +208,7 @@ export class Simulator {
   private state: Record<string, ResourceState> = {};
 
   constructor(props: SimulatorProps) {
-    const simdir = props.simfile;
+    const simdir = resolve(props.simfile);
     this.statedir = props.stateDir ?? join(simdir, ".state");
     this._model = this._loadApp(simdir);
 
@@ -731,14 +731,14 @@ export class Simulator {
 
     // start the server, and wait for it to be listening
     const server = http.createServer(requestListener);
-    await new Promise<void>((resolve) => {
+    await new Promise<void>((ok) => {
       server.listen(0, LOCALHOST_ADDRESS, () => {
         const addr = server.address();
         if (addr && typeof addr === "object" && (addr as any).port) {
           this._serverUrl = `http://${addr.address}:${addr.port}`;
         }
         this._server = server;
-        resolve();
+        ok();
       });
     });
   }
