@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
     let a = [new cloud.Bucket()];
 
     test "test" {
-      a.at(0).put("hello", "world");
+      a[0].put("hello", "world");
     }
     
 ```
@@ -19,7 +19,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_ }) {
+module.exports = function({ $_helpers_lookup_a__0_ }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -27,7 +27,7 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
       return $obj;
     }
     async handle() {
-      (await $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_.put("hello", "world"));
+      (await $_helpers_lookup_a__0_.put("hello", "world"));
     }
   }
   return $Closure1;
@@ -59,7 +59,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0))},
+            $_helpers_lookup_a__0_: ${$stdlib.core.liftObject($helpers.lookup(a, 0))},
           })
         `;
       }
@@ -77,10 +77,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0), ["put"]],
+            [$helpers.lookup(a, 0), ["put"]],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0), []],
+            [$helpers.lookup(a, 0), []],
           ],
         });
       }
