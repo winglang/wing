@@ -106,7 +106,7 @@ module.exports = function({ $f1 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $Object_values_map_ }) {
+module.exports = function({ $map }) {
   class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -114,7 +114,7 @@ module.exports = function({ $Object_values_map_ }) {
       return $obj;
     }
     async handle() {
-      for (const c of $Object_values_map_) {
+      for (const c of Object.values($map)) {
         (await c());
       }
     }
@@ -791,7 +791,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.cjs")({
-            $Object_values_map_: ${$stdlib.core.liftObject(Object.values(map))},
+            $map: ${$stdlib.core.liftObject(map)},
           })
         `;
       }
@@ -809,10 +809,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [Object.values(map), []],
+            [map, ["values"]],
           ],
           "$inflight_init": [
-            [Object.values(map), []],
+            [map, []],
           ],
         });
       }
