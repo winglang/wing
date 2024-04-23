@@ -206,7 +206,7 @@ assert(notSpecified.get("foo") == "bar");
 
 // Check that empty {} is a Json
 let empty = {};
-assert(Json.has(empty, "something") == false);
+assert(empty.has("something") == false);
 
 struct Base {
   base: str;

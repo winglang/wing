@@ -18,7 +18,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_, $a_length }) {
+module.exports = function({ $a }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -26,8 +26,8 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($a_length, 2), "a.length == 2");
-      console.log($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_);
+      $helpers.assert($helpers.eq($a.length, 2), "a.length == 2");
+      console.log(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($a, 0));
     }
   }
   return $Closure1;
@@ -58,8 +58,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0))},
-            $a_length: ${$stdlib.core.liftObject(a.length)},
+            $a: ${$stdlib.core.liftObject(a)},
           })
         `;
       }
@@ -77,12 +76,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0), []],
-            [a.length, []],
+            [a, [].concat(["length"], ["at"])],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0), []],
-            [a.length, []],
+            [a, []],
           ],
         });
       }
