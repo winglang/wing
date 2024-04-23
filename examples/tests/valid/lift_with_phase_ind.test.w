@@ -16,5 +16,5 @@ test "Use phase independent methods on lifted object" {
   // Get mutable copy of lifted array
   // Make sure the `copyMut` method is called inflight and not lifted and turned into an immutable array
   let mut_ar = ar.copyMut();
-  ar.push(4);
+  mut_ar.push(4);
 }

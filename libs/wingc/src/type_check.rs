@@ -4119,11 +4119,7 @@ impl<'a> TypeChecker<'a> {
 					field_type,
 					false,
 					false,
-					if field_type.phase_independent() {
-						Phase::Independent
-					} else {
-						Phase::Preflight
-					},
+					Phase::Independent,
 					AccessModifier::Public,
 					None,
 				),
@@ -5855,7 +5851,13 @@ impl<'a> TypeChecker<'a> {
 					//    on lift, but the use expects the return value to be mutable. Calling them inflight resolves this.
 					// 3. Any side effect as a result of the call (non-pure functions) is probably expected to happen inflight.
 					//    So generally, we should call phase independent methods inflight.
-					env.phase
+					if instance_type.is_struct() {
+						// Struct fields aren't methods so we can safely leave them phase independent,
+						// without this accessing methods on struct fields don't get correctly lift qualified
+						instance_phase
+					} else {
+						env.phase
+					}
 				} else {
 					property_variable.phase
 				};
@@ -5964,73 +5966,36 @@ impl<'a> TypeChecker<'a> {
 			}
 			Reference::ElementAccess { object, index } => {
 				let (instance_type, instance_phase) = self.type_check_exp(object, env);
-				let (index_type, _index_phase) = self.type_check_exp(index, env);
+				let (index_type, index_phase) = self.type_check_exp(index, env);
 
-				match *instance_type {
+				let res = match *instance_type {
 					// TODO: it might be possible to look at Type::Json's inner data to give a more specific type
 					Type::Json(_) => {
 						self.validate_type_in(index_type, &[self.types.number(), self.types.string()], index);
-						(
-							ResolveReferenceResult::Location(instance_type, self.types.json()), // indexing into a Json object returns a Json object
-							instance_phase,
-						)
+						ResolveReferenceResult::Location(instance_type, self.types.json()) // indexing into a Json object returns a Json object
 					}
 					Type::MutJson => {
 						self.validate_type_in(index_type, &[self.types.number(), self.types.string()], index);
-						(
-							ResolveReferenceResult::Location(instance_type, self.types.mut_json()), // indexing into a MutJson object returns a MutJson object
-							instance_phase,
-						)
+						ResolveReferenceResult::Location(instance_type, self.types.mut_json()) // indexing into a MutJson object returns a MutJson object
 					}
-					Type::Array(inner_type) => {
+					Type::Array(inner_type) | Type::MutArray(inner_type) => {
 						self.validate_type(index_type, self.types.number(), index);
-						(
-							ResolveReferenceResult::Location(instance_type, inner_type),
-							instance_phase,
-						)
+						ResolveReferenceResult::Location(instance_type, inner_type)
 					}
-					Type::MutArray(inner_type) => {
-						self.validate_type(index_type, self.types.number(), index);
-						(
-							ResolveReferenceResult::Location(instance_type, inner_type),
-							instance_phase,
-						)
-					}
-					Type::Map(inner_type) => {
+					Type::Map(inner_type) | Type::MutMap(inner_type) => {
 						self.validate_type(index_type, self.types.string(), index);
-						(
-							ResolveReferenceResult::Location(instance_type, inner_type),
-							instance_phase,
-						)
+						ResolveReferenceResult::Location(instance_type, inner_type)
 					}
-					Type::MutMap(inner_type) => {
-						self.validate_type(index_type, self.types.string(), index);
-						(
-							ResolveReferenceResult::Location(instance_type, inner_type),
-							instance_phase,
-						)
-					}
-					Type::Anything => (
-						ResolveReferenceResult::Location(self.types.anything(), self.types.anything()),
-						instance_phase,
-					),
-					Type::Unresolved => (
-						ResolveReferenceResult::Location(self.types.error(), self.types.error()),
-						instance_phase,
-					),
+					Type::Anything => ResolveReferenceResult::Location(self.types.anything(), self.types.anything()),
+					Type::Unresolved => ResolveReferenceResult::Location(self.types.error(), self.types.error()),
 					Type::Inferred(_) => {
 						self.spanned_error(object, "Indexing into an inferred type is not supported");
-						(
-							ResolveReferenceResult::Location(self.types.error(), self.types.error()),
-							instance_phase,
-						)
+						ResolveReferenceResult::Location(self.types.error(), self.types.error())
 					}
 					Type::String => {
 						self.validate_type(index_type, self.types.number(), index);
-						(
-							ResolveReferenceResult::Location(instance_type, self.types.string()),
-							instance_phase,
-						)
+
+						ResolveReferenceResult::Location(instance_type, self.types.string())
 					}
 					Type::Number
 					| Type::Duration
@@ -6046,9 +6011,22 @@ impl<'a> TypeChecker<'a> {
 					| Type::Struct(_)
 					| Type::Enum(_) => {
 						let err = self.spanned_error_with_var(object, format!("Type \"{}\" is not indexable", instance_type));
-						(ResolveReferenceResult::Variable(err.0), err.1)
+						ResolveReferenceResult::Variable(err.0)
 					}
-				}
+				};
+				(
+					res,
+					if index_phase == Phase::Independent && instance_phase == Phase::Preflight {
+						// In case of a phase independent index on a preflight instance we can lift the entire expression
+						// so use the instance phase. Using combine_phases here would result in the entire expression to be
+						// phase independent and then we'll lift only the instance and won't be able to correctly qualify
+						// the expression:
+						// bucket_arr[0].put(..) // we need to qualify the entire expression with "put"
+						instance_phase
+					} else {
+						combine_phases(index_phase, instance_phase)
+					},
+				)
 			}
 		}
 	}
