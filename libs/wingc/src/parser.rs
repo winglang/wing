@@ -549,11 +549,11 @@ impl<'s> Parser<'s> {
 					}),
 					span.clone(),
 				))),
-				arg_list: ArgList {
-					pos_args: vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
-					named_args: IndexMap::new(),
-					span: span.clone(),
-				},
+				arg_list: ArgList::new(
+					vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
+					IndexMap::new(),
+					span.clone(),
+				),
 			},
 			span.clone(),
 		))
@@ -2003,11 +2003,7 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		Ok(ArgList {
-			pos_args,
-			named_args,
-			span,
-		})
+		Ok(ArgList::new(pos_args, named_args, span))
 	}
 
 	fn build_expression(&self, exp_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
@@ -2021,7 +2017,7 @@ impl<'s> Parser<'s> {
 				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node, phase)
 				} else {
-					Ok(ArgList::new(WingSpan::default()))
+					Ok(ArgList::new_empty(WingSpan::default()))
 				};
 
 				let obj_id = if let Some(id_node) = expression_node.child_by_field_name("id") {
@@ -2606,11 +2602,7 @@ impl<'s> Parser<'s> {
 				},
 				obj_id: Some(test_id),
 				obj_scope: None,
-				arg_list: ArgList {
-					pos_args: vec![inflight_closure],
-					named_args: IndexMap::new(),
-					span: type_span.clone(),
-				},
+				arg_list: ArgList::new(vec![inflight_closure], IndexMap::new(), type_span.clone()),
 			}),
 			span,
 		)))
