@@ -32,6 +32,19 @@ expect.equal(#"\\{".length, 2);
 expect.equal(#"a\nb\nc".length, 5);
 expect.equal("{number} \{number}", "1 \{number}");
 
+// multiline
+let ml1 = "this
+is
+multiline";
+
+let ml2 = #"this
+is
+multiline";
+
+let ml3 = "this\n\is\n\multiline";
+
+expect.equal(ml1,ml2);
+expect.equal(ml2,ml3);
 
 test "str interpolation with lifted expr" {
     let i = 1336;
