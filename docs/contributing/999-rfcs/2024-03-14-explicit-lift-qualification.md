@@ -175,11 +175,11 @@ let no_nesting = inflight () => {
 
 ## Next steps
 
-The next step will be to provide use library APIs for programatically creating and manipulating `std.LiftQualification` objects and then reusing them. We can also inherit from them and to provide qualification objects that go beyond only the "operation" being performed on the object. Here's an example:
+The next step will be to provide library APIs for programatically creating and manipulating `std.LiftQualification` objects and then reusing them. We can also inherit from them and to provide qualification objects that go beyond only the "operation" being performed on the object. Here's an example:
 
 ```js
 // stdlib
-class cloud.BucketPutQual extends std.Qualification {
+class cloud.BucketPutQual extends std.LiftQualification {
   this.keyPattern: str;
   
   new(b: cloud.Bucket) {
@@ -193,7 +193,7 @@ class cloud.BucketPutQual extends std.Qualification {
 }
 
 // Create a qualifications container
-let quals = new std.Qualifications();
+let quals = new std.LiftQualificationsContainer();
 
 let b1 = new cloud.Bucket() as "b1";
 let b2 = new cloud.Bucket() as "b1";
@@ -202,7 +202,7 @@ let b2 = new cloud.Bucket() as "b1";
 let b1Quals = new cloud.BucketPutCap(b1);
 b1Quals.setKeyPattern("k*");
 // b2 can put any key
-let b2Quals = new std.Qualification(b2, ["put"]);
+let b2Quals = new std.LiftQualification(b2, ["put"]);
 
 // Add them to our explicit qualifications
 quals.add(b1Quals);
@@ -211,14 +211,14 @@ quals.add(b2Quals);
 let arr = [b1,b2];
 
 // Define get access on all buckets
-let getBucketQuals = new std.Qualifications();
+let getBucketQuals = new std.LiftQualificationsContainer();
 for b in arr {
-  getQuals.add(new std.Qualification(b, ["get"]));
+  getQuals.add(new std.LiftQualification(b, ["get"]));
 }
 
 class A {
   inflight foo() {
-    lift qual { // Use the qualification object programatically defined in preflight code
+    lift quals { // Use the qualification object programatically defined in preflight code
       for b in arr {
         b.put("k99", "v"); // This key pattern should work for both buckets
       }
@@ -236,7 +236,7 @@ class A {
   }
 
   inflight bar() {
-    lift qual { // reuse `qual` for another method of `A`
+    lift quals { // reuse `qual` for another method of `A`
       let b = arr.at(randome(arr.len));
       b.put("k0", "bar");
     }
