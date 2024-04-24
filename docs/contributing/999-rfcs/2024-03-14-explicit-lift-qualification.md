@@ -132,9 +132,9 @@ inflight () => {
 }
 ```
 
-Internally the argument to the `lift` block creates a `std.Qualifications` object which is added to the closures lift qualifications. 
+Internally the argument to the `lift` block creates a `std.LiftQualificationsContainer` object which is added to the closures lift qualifications. 
 
-Note that multiple `lift` blocks in the code just create more `std.Qualifications`s for this closure. 
+Note that multiple `lift` blocks in the code just create more `std.LiftQualificationsContainer`s for this closure. 
 The actual qualification values (`b1` and `"put"`) are just appended to the closure/method and they don't strictly belong to the block.
 
 What does apply to the block are the disabling of qualification errors within the block, so in our example we can use the inflight expression `b`, and inside the block we also don't automatically add qualifications even if the compiler can technically do this. 
