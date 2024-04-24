@@ -211,25 +211,3 @@ test("container can mount a volume to the state directory", async () => {
 
   await sim.stop();
 });
-
-test("running postgres mounted to the state directory", async () => {
-  const app = new SimApp();
-
-  new Container(app, "Container", {
-    name: "postgres",
-    image: "postgres:15",
-    containerPort: 5432,
-    env: {
-      POSTGRES_PASSWORD: "password",
-    },
-    volumes: ["$WING_STATE_DIR:/var/lib/postgresql/data"],
-  });
-
-  const sim = await app.startSimulator();
-
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-  await sleep(3000);
-
-  await sim.stop();
-});

@@ -7,7 +7,7 @@ import { Graph } from "./graph";
 import { deserialize, serialize } from "./serialization";
 import { resolveTokens } from "./tokens";
 import { Tree } from "./tree";
-// import { exists } from "./util";
+import { exists } from "./util";
 import { SDK_VERSION } from "../constants";
 import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
@@ -397,7 +397,7 @@ export class Simulator {
 
     try {
       const resource = this._handles.find(handle);
-      // await this.ensureStateDirExists(path);
+      await this.ensureStateDirExists(path);
       await resource.save(this.getResourceStateDir(path));
       await resource.cleanup();
       this._handles.deallocate(handle);
@@ -530,14 +530,13 @@ export class Simulator {
     return join(this.statedir, config.addr);
   }
 
-  // private async ensureStateDirExists(path: string) {
-  //   const statedir = this.getResourceStateDir(path);
-
-  //   const statedirExists = await exists(statedir);
-  //   if (!statedirExists) {
-  //     await mkdir(statedir, { recursive: true });
-  //   }
-  // }
+  private async ensureStateDirExists(path: string) {
+    const statedir = this.getResourceStateDir(path);
+    const statedirExists = await exists(statedir);
+    if (!statedirExists) {
+      await mkdir(statedir, { recursive: true });
+    }
+  }
 
   /**
    * Obtain a resource's visual interaction components.
