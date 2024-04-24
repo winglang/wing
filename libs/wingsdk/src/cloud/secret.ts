@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { INFLIGHT_SYMBOL } from "../core/types";
+import { INFLIGHT_SYMBOL, SECRET_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -33,6 +33,11 @@ export interface SecretProps {
 export class Secret extends Resource {
   /** @internal */
   public [INFLIGHT_SYMBOL]?: ISecretClient;
+  /** @internal */
+  public [SECRET_SYMBOL] = true;
+
+  /** @internal */
+  protected _name?: string;
 
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
     if (new.target === Secret) {
@@ -44,7 +49,12 @@ export class Secret extends Resource {
     Node.of(this).title = "Secret";
     Node.of(this).description = "A cloud secret";
 
-    props;
+    this._name = props.name;
+  }
+
+  /** Get secret name */
+  public get name(): string | undefined {
+    return this._name;
   }
 }
 
