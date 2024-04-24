@@ -1,6 +1,6 @@
 import { IContainerClient, HOST_PORT_ATTR } from "./container";
 import { ContainerAttributes, ContainerSchema } from "./schema-resources";
-import { isPath, runCommand } from "../shared/misc";
+import { isPath, runCommand, shell } from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -8,6 +8,8 @@ import {
 } from "../simulator/simulator";
 import { Duration, TraceType } from "../std";
 import { Util } from "../util";
+
+export const WING_STATE_DIR_ENV = "WING_STATE_DIR";
 
 export class Container implements IContainerClient, ISimulatorResourceInstance {
   private readonly imageTag: string;
@@ -89,7 +91,12 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     this.log(`starting container from image ${this.imageTag}`);
     this.log(`docker ${dockerRun.join(" ")}`);
 
-    await runCommand("docker", dockerRun);
+    await shell("docker", dockerRun, {
+      env: {
+        ...process.env,
+        [WING_STATE_DIR_ENV]: this.context.statedir,
+      },
+    });
 
     this.log(`containerName=${this.containerName}`);
 

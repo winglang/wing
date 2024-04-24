@@ -22,12 +22,18 @@ source: libs/wingc/src/lsp/completions.rs
 - label: bool
   kind: 14
   sortText: kl|zybool
+- label: datetime
+  kind: 14
+  sortText: kl|zydatetime
 - label: duration
   kind: 14
   sortText: kl|zyduration
 - label: num
   kind: 14
   sortText: kl|zynum
+- label: regex
+  kind: 14
+  sortText: kl|zyregex
 - label: str
   kind: 14
   sortText: kl|zystr

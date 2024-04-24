@@ -32,9 +32,10 @@ export class Secret extends cloud.Secret {
         name: props.name,
       });
     } else {
-      this.secret = new SecretsmanagerSecret(this, "Default", {
-        name: ResourceNames.generateName(this, NAME_OPTS),
-      });
+      (this._name = ResourceNames.generateName(this, NAME_OPTS)),
+        (this.secret = new SecretsmanagerSecret(this, "Default", {
+          name: this._name,
+        }));
 
       new TerraformOutput(this, "SecretArn", {
         value: this.secret.arn,
