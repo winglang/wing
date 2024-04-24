@@ -4,7 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______ar__0_, $ar, $ar_length, $math_Util }) {
+module.exports = function({ $ar, $math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,12 +12,14 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______ar__0_, 1), "ar.at(0) == 1");
-      const i = (await $math_Util.floor(((await $math_Util.random()) * $ar_length)));
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($ar, 0), 1), "ar.at(0) == 1");
+      const i = (await $math_Util.floor(((await $math_Util.random()) * $ar.length)));
       let x = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($ar, i);
       $helpers.assert(((x >= 1) && (x <= 3)), "x >= 1 && x <= 3");
       x = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($ar, ((1 - 1) + i));
       $helpers.assert(((x >= 1) && (x <= 3)), "x >= 1 && x <= 3");
+      const mut_ar = [...($ar)];
+      mut_ar.push(4);
     }
   }
   return $Closure1;
@@ -67,9 +69,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______ar__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(ar, 0))},
             $ar: ${$stdlib.core.liftObject(ar)},
-            $ar_length: ${$stdlib.core.liftObject(ar.length)},
             $math_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(math.Util, "@winglang/sdk/math", "Util"))},
           })
         `;
@@ -88,14 +88,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(ar, 0), []],
-            [ar, ["at"]],
-            [ar.length, []],
+            [ar, [].concat(["at"], ["length"], ["copyMut"])],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(ar, 0), []],
             [ar, []],
-            [ar.length, []],
           ],
         });
       }

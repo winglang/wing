@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import * as os from "os";
 import * as path from "path";
 import { SecretAttributes, SecretSchema } from "./schema-resources";
 import { ISecretClient, SECRET_FQN } from "../cloud";
@@ -16,7 +15,8 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
   private readonly name: string;
 
   constructor(props: SecretSchema) {
-    this.secretsFile = path.join(os.homedir(), ".wing", "secrets.json");
+    this.secretsFile = path.join(process.cwd(), ".env");
+
     if (!fs.existsSync(this.secretsFile)) {
       throw new Error(
         `No secrets file found at ${this.secretsFile} while looking for secret ${props.name}`
@@ -57,13 +57,13 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
 
-    const secrets = JSON.parse(fs.readFileSync(this.secretsFile, "utf-8"));
+    const secretValue = process.env[this.name];
 
-    if (!secrets[this.name]) {
+    if (!secretValue) {
       throw new Error(`No secret value for secret ${this.name}`);
     }
 
-    return secrets[this.name];
+    return secretValue;
   }
 
   public async valueJson(): Promise<Json> {

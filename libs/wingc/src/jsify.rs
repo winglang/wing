@@ -400,7 +400,7 @@ impl<'a> JSifier<'a> {
 			));
 		}
 
-		if !structure_args.is_empty() {
+		if !structure_args.is_empty() || self.types.append_empty_struct_to_arglist.contains(&arg_list.id) {
 			args.push(new_code!(&arg_list.span, "{ ", structure_args, " }"));
 		}
 
@@ -611,6 +611,11 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::Literal(lit) => match lit {
 				Literal::Nil => new_code!(expr_span, "undefined"),
+				Literal::NonInterpolatedString(s) => {
+					// escape newlines
+					let s = s.replace("\r", "\\r").replace("\n", "\\n");
+					new_code!(expr_span, s)
+				}
 				Literal::String(s) => {
 					// Unescape our string interpolation braces because in JS they don't need escaping
 					let s = s.replace("\\{", "{");
@@ -624,6 +629,8 @@ impl<'a> JSifier<'a> {
 						.iter()
 						.filter_map(|p| match p {
 							InterpolatedStringPart::Static(static_string) => {
+								// Unescape our string interpolation braces because in JS they don't need escaping
+								let static_string = static_string.replace("\\{", "{");
 								// escape any raw newlines in the string because js `"` strings can't contain them
 								let escaped = static_string.replace("\r\n", "\\r\\n").replace("\n", "\\n");
 
@@ -2028,22 +2035,24 @@ fn jsify_symbol(symbol: &Symbol) -> CodeMaker {
 	new_code!(&symbol.span, &symbol.name)
 }
 
-fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
+fn parent_class_type(ctx: &JSifyContext<'_>) -> TypeRef {
+	// Get the current class type
 	let current_class_type = resolve_user_defined_type(
 		ctx.visit_ctx.current_class().expect("a class"),
 		ctx.visit_ctx.current_env().expect("an env"),
 		ctx.visit_ctx.current_stmt_idx(),
 	)
 	.expect("a class type");
-	let parent_class_phase = current_class_type
+	// Return the parent class type
+	current_class_type
 		.as_class()
 		.expect("a class")
 		.parent
 		.expect("a parent class")
-		.as_class()
-		.expect("a class")
-		.phase;
-	parent_class_phase
+}
+
+fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
+	parent_class_type(ctx).as_class().expect("a class").phase
 }
 
 fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {

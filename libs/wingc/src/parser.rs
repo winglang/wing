@@ -5,6 +5,7 @@ use phf::{phf_map, phf_set};
 use regex::Regex;
 use std::cell::RefCell;
 use std::collections::HashSet;
+use std::ops::Range;
 use std::{fs, str, vec};
 use tree_sitter::Node;
 
@@ -484,6 +485,10 @@ impl<'s> Parser<'s> {
 		return str::from_utf8(&self.source[node.byte_range()]).unwrap();
 	}
 
+	fn node_text_from_range(&self, byte_range: Range<usize>) -> &str {
+		return str::from_utf8(&self.source[byte_range]).unwrap();
+	}
+
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
 		if node.is_error() {
 			self.with_error(format!("Expected {}", expected), &node)
@@ -549,11 +554,11 @@ impl<'s> Parser<'s> {
 					}),
 					span.clone(),
 				))),
-				arg_list: ArgList {
-					pos_args: vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
-					named_args: IndexMap::new(),
-					span: span.clone(),
-				},
+				arg_list: ArgList::new(
+					vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
+					IndexMap::new(),
+					span.clone(),
+				),
 			},
 			span.clone(),
 		))
@@ -2003,11 +2008,7 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		Ok(ArgList {
-			pos_args,
-			named_args,
-			span,
-		})
+		Ok(ArgList::new(pos_args, named_args, span))
 	}
 
 	fn build_expression(&self, exp_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
@@ -2021,7 +2022,7 @@ impl<'s> Parser<'s> {
 				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node, phase)
 				} else {
-					Ok(ArgList::new(WingSpan::default()))
+					Ok(ArgList::new_empty(WingSpan::default()))
 				};
 
 				let obj_id = if let Some(id_node) = expression_node.child_by_field_name("id") {
@@ -2084,6 +2085,16 @@ impl<'s> Parser<'s> {
 				},
 				expression_span,
 			)),
+			"non_interpolated_string" => {
+				// skipping the first #
+				let byte_range = (expression_node.start_byte() + 1)..expression_node.end_byte();
+				Ok(Expr::new(
+					ExprKind::Literal(Literal::NonInterpolatedString(
+						self.node_text_from_range(byte_range).into(),
+					)),
+					expression_span,
+				))
+			}
 			"string" => {
 				if expression_node.named_child_count() == 0 {
 					Ok(Expr::new(
@@ -2606,11 +2617,7 @@ impl<'s> Parser<'s> {
 				},
 				obj_id: Some(test_id),
 				obj_scope: None,
-				arg_list: ArgList {
-					pos_args: vec![inflight_closure],
-					named_args: IndexMap::new(),
-					span: type_span.clone(),
-				},
+				arg_list: ArgList::new(vec![inflight_closure], IndexMap::new(), type_span.clone()),
 			}),
 			span,
 		)))
