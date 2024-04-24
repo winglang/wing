@@ -1,5 +1,4 @@
 import { join } from "path";
-import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
