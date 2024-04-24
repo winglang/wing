@@ -4,9 +4,9 @@ exports[`create a schedule 1`] = `
 {
   "resource": {
     "google_cloud_scheduler_job": {
-      "Schedule_OnTick0_Scheduler_BA8598C3": {
+      "Schedule_Scheduler_A529D9A8": {
         "attempt_deadline": "300s",
-        "description": "Trigger",
+        "description": "Trigger \${google_cloudfunctions_function.Schedule_OnTick0_DefaultFunction_0D16428E.name}",
         "http_target": {
           "http_method": "GET",
           "oidc_token": {
@@ -14,7 +14,7 @@ exports[`create a schedule 1`] = `
           },
           "uri": "\${google_cloudfunctions_function.Schedule_OnTick0_DefaultFunction_0D16428E.https_trigger_url}",
         },
-        "name": "scheduler-KEN.17]}",
+        "name": "scheduler-c8b3fc39",
         "schedule": "*/2 * * * *",
         "time_zone": "Etc/UTC",
       },
@@ -197,14 +197,6 @@ exports[`create a schedule 2`] = `
                         "id": "ProjectIamMember",
                         "path": "root/Default/Schedule/OnTick0/ProjectIamMember",
                       },
-                      "Scheduler": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "Scheduler",
-                        "path": "root/Default/Schedule/OnTick0/Scheduler",
-                      },
                       "ServiceAccountc8e1d4a853a6dfc6d497de76ef87d4c5a00da4ae0a": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -232,6 +224,14 @@ exports[`create a schedule 2`] = `
                     },
                     "id": "OnTick0",
                     "path": "root/Default/Schedule/OnTick0",
+                  },
+                  "Scheduler": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "Scheduler",
+                    "path": "root/Default/Schedule/Scheduler",
                   },
                   "SchedulerServiceAccount": {
                     "constructInfo": {
