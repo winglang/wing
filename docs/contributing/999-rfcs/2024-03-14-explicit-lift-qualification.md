@@ -175,7 +175,7 @@ let no_nesting = inflight () => {
 
 ## Next steps
 
-The next step will be to provide use library APIs for programatically creating and manipulating `std.Qualifications` objects and then reusing them. We can also inherit from them and to provide qualification objects that go beyond only the "operation" being performed on the object. Here's an example:
+The next step will be to provide use library APIs for programatically creating and manipulating `std.LiftQualification` objects and then reusing them. We can also inherit from them and to provide qualification objects that go beyond only the "operation" being performed on the object. Here's an example:
 
 ```js
 // stdlib
