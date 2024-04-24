@@ -7,8 +7,8 @@ pub mod symbol_env;
 pub(crate) mod type_reference_transform;
 
 use crate::ast::{
-	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,
-	TypeAnnotationKind,
+	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition,
+	IfLet, New, TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -1351,6 +1351,8 @@ pub struct Types {
 	/// Expressions used in references that actually refer to a type.
 	/// Key is the ExprId of the object of a InstanceMember, and the value is a TypeMember representing the whole reference.
 	type_expressions: IndexMap<ExprId, Reference>,
+	/// Append empty struct to end of arg list
+	pub append_empty_struct_to_arglist: HashSet<ArgListId>,
 }
 
 impl Types {
@@ -1400,6 +1402,7 @@ impl Types {
 			scope_envs: Vec::new(),
 			inferences: Vec::new(),
 			type_expressions: IndexMap::new(),
+			append_empty_struct_to_arglist: HashSet::new(),
 		}
 	}
 
@@ -2861,6 +2864,13 @@ impl<'a> TypeChecker<'a> {
 		(self.types.error(), Phase::Independent)
 	}
 
+	pub fn all_optional_struct(t: TypeRef) -> bool {
+		match &*t {
+			Type::Struct(s) => s.fields(true).all(|(_, t)| t.is_option()),
+			_ => false,
+		}
+	}
+
 	fn type_check_arg_list_against_function_sig(
 		&mut self,
 		arg_list: &ArgList,
@@ -2871,6 +2881,7 @@ impl<'a> TypeChecker<'a> {
 		// Verify named args
 		let last_param = func_sig.parameters.last();
 		let is_last_param_struct = last_param.is_some() && last_param.unwrap().typeref.maybe_unwrap_option().is_struct();
+		let last_param_all_optional_struct = last_param.is_some() && Self::all_optional_struct(last_param.unwrap().typeref);
 		let is_last_param_not_optional_struct = last_param.is_some() && last_param.unwrap().typeref.is_struct();
 
 		if !arg_list.named_args.is_empty() {
@@ -2896,7 +2907,7 @@ impl<'a> TypeChecker<'a> {
 			};
 
 		// Verify arity
-		let min_args = func_sig.min_parameters() + if is_last_param_not_optional_struct { 1 } else { 0 };
+		let mut min_args = func_sig.min_parameters() + if is_last_param_not_optional_struct { 1 } else { 0 };
 		let max_args = func_sig.parameters.len() - if variadic_index.is_some() { 1 } else { 0 };
 		let named_args_text = if is_last_param_struct {
 			"or named arguments for the last parameter "
@@ -2908,6 +2919,13 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			""
 		};
+
+		// If the last parameter is an all-optional struct and there's no argument for it,
+		// then append a default empty struct to the argument list and indicate we need one less arg
+		if last_param_all_optional_struct && non_variadic_args_len + 1 == min_args {
+			min_args -= 1;
+			self.types.append_empty_struct_to_arglist.insert(arg_list.id);
+		}
 
 		// Check arity
 		if non_variadic_args_len < min_args || pos_args_len > max_args {
