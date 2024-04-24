@@ -2122,7 +2122,7 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_lit(&mut self, lit: &Literal, env: &mut SymbolEnv) -> (TypeRef, Phase) {
 		match lit {
 			Literal::String(_) => (self.types.string(), Phase::Independent),
-					Literal::NonInterpolatedString(_) => (self.types.string(), Phase::Independent),
+			Literal::NonInterpolatedString(_) => (self.types.string(), Phase::Independent),
 			Literal::Nil => (self.types.nil(), Phase::Independent),
 			Literal::InterpolatedString(s) => {
 				let mut phase = Phase::Independent;
