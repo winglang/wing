@@ -175,7 +175,8 @@ let no_nesting = inflight () => {
 
 ## Next steps
 
-The next step will be to provide library APIs for programatically creating and manipulating `std.LiftQualification` objects and then reusing them. We can also inherit from them and to provide qualification objects that go beyond only the "operation" being performed on the object. Here's an example:
+### SDK API
+The next step will be to provide library APIs for programatically creating and manipulating `std.LiftQualification` objects and their `std.LiftQalificationsContainer` containers and then reusing them. We can also inherit from them and to provide qualification objects that go beyond only the "operation" being performed on the object. Here's an example:
 
 ```js
 // stdlib
@@ -244,3 +245,15 @@ class A {
 }
 
 ```
+
+### Type checking the qualification method names
+Ideally `lift {a: ["put"]}` shouldn't copile if `a` doesn't have an inflight member called `put`.
+We might want to support a syntax like this:
+```
+let a = new A();
+inflight () => {
+  lift {a: [A.put]} // Here we verify that `a` is really of type `A` and that there's an inflight `put` method in `A` instances.
+  {
+
+  }
+};
