@@ -13,7 +13,7 @@ source: libs/wingc/src/jsify/tests.rs
       }
 
       inflight foo() {
-        this.arr.at(0).put("hello", "world");
+        this.arr[0].put("hello", "world");
       }
     }
     
@@ -26,11 +26,11 @@ source: libs/wingc/src/jsify/tests.rs
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
-    constructor({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_ }) {
-      this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_;
+    constructor({ $_helpers_lookup_this_arr__0_ }) {
+      this.$_helpers_lookup_this_arr__0_ = $_helpers_lookup_this_arr__0_;
     }
     async foo() {
-      (await this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_.put("hello", "world"));
+      (await this.$_helpers_lookup_this_arr__0_.put("hello", "world"));
     }
   }
   return Foo;
@@ -69,7 +69,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType()};
             const client = new FooClient({
-              $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 0))},
+              $_helpers_lookup_this_arr__0_: ${$stdlib.core.liftObject($helpers.lookup(this.arr, 0))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -79,10 +79,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "foo": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 0), ["put"]],
+            [$helpers.lookup(this.arr, 0), ["put"]],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 0), []],
+            [$helpers.lookup(this.arr, 0), []],
           ],
         });
       }
