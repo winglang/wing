@@ -521,7 +521,11 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   }
 
   if (clean) {
-    rmSync(synthDir, { recursive: true, force: true });
+    try {
+      rmSync(synthDir, { recursive: true, force: true });
+    } catch (err) {
+      console.error(`Failed to clean up ${synthDir}: ${err} ${(err as any).stack}`);
+    }
   } else {
     noCleanUp(synthDir);
   }
