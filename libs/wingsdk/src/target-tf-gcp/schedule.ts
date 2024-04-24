@@ -1,7 +1,9 @@
 import { join } from "path";
+import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
+import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -61,6 +63,7 @@ export class Schedule extends cloud.Schedule {
     );
     this.handlers[inflight._id] = cronFunction;
 
+    // create scheduler service account
     const schedulerServiceAccount = new ServiceAccount(
       this,
       "SchedulerServiceAccount",
@@ -70,9 +73,24 @@ export class Schedule extends cloud.Schedule {
       }
     );
 
-    cronFunction.addPermissionToInvoke(schedulerServiceAccount);
+    // allow scheduler service account to invoke cron function
+    cronFunction._addPermissionToInvoke(schedulerServiceAccount);
 
-    cronFunction.addScheduler(schedulerServiceAccount, this.scheduleExpression);
+    // create scheduler
+    new CloudSchedulerJob(this, "Scheduler", {
+      name: `scheduler-${uniqueId}`,
+      description: `Trigger ${cronFunction.functionName}`,
+      schedule: this.scheduleExpression,
+      timeZone: "Etc/UTC",
+      attemptDeadline: "300s",
+      httpTarget: {
+        httpMethod: "GET",
+        uri: cronFunction._getHttpsTriggerUrl(),
+        oidcToken: {
+          serviceAccountEmail: schedulerServiceAccount.email,
+        },
+      },
+    });
 
     Node.of(this).addConnection({
       source: this,

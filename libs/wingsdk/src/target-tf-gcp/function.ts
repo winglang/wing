@@ -5,7 +5,6 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket } from "./bucket";
 import { core } from "..";
-import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
 import { ProjectIamCustomRole } from "../.gen/providers/google/project-iam-custom-role";
@@ -316,10 +315,10 @@ export class Function extends cloud.Function {
 
   /**
    * Grants the given service account permission to invoke this function.
-
    * @param serviceAccount The service account to grant invoke permissions to.
+   * @internal
    */
-  public addPermissionToInvoke(serviceAccount: ServiceAccount): void {
+  public _addPermissionToInvoke(serviceAccount: ServiceAccount): void {
     const hash = Fn.sha256(serviceAccount.email).slice(-8);
 
     new CloudfunctionsFunctionIamMember(this, `invoker-permission-${hash}`, {
@@ -331,24 +330,9 @@ export class Function extends cloud.Function {
     });
   }
 
-  public addScheduler(
-    serviceAccount: ServiceAccount,
-    scheduleExpression: string
-  ): void {
-    const hash = Fn.sha256(serviceAccount.email).slice(-8);
-
-    new CloudSchedulerJob(this, "Scheduler", {
-      name: `scheduler-${hash}`,
-      description: `Trigger`,
-      schedule: scheduleExpression,
-      timeZone: "Etc/UTC",
-      attemptDeadline: "300s",
-      httpTarget: {
-        httpMethod: "GET",
-        uri: this.function.httpsTriggerUrl,
-        oidcToken: { serviceAccountEmail: serviceAccount.email },
-      },
-    });
+  /** @internal */
+  public _getHttpsTriggerUrl(): string {
+    return this.function.httpsTriggerUrl;
   }
 
   private envName(): string {
