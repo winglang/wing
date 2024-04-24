@@ -129,7 +129,7 @@ jobs:
 
       - name: Install Playwright
         working-directory: apps/wing-console/console/app
-        run: sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+        run: sudo rm /etc/apt/sources.list.d/microsoft-prod.list &&
           pnpm exec playwright install --with-deps
 
       - name: Test
