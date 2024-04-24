@@ -120,6 +120,11 @@ class $Root extends $stdlib.std.Resource {
     (expect.Util.equal("\\{".length, 2));
     (expect.Util.equal("a\nb\nc".length, 5));
     (expect.Util.equal(String.raw({ raw: ["", " {number}"] }, number), "1 {number}"));
+    const ml1 = "this\nis\nmultiline";
+    const ml2 = "this\nis\nmultiline";
+    const ml3 = "this\n\is\n\multiline";
+    (expect.Util.equal(ml1, ml2));
+    (expect.Util.equal(ml2, ml3));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:str interpolation with lifted expr", new $Closure1(this, "$Closure1"));
   }
 }
