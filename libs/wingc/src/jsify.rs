@@ -400,7 +400,7 @@ impl<'a> JSifier<'a> {
 			));
 		}
 
-		if !structure_args.is_empty() {
+		if !structure_args.is_empty() || self.types.append_empty_struct_to_arglist.contains(&arg_list.id) {
 			args.push(new_code!(&arg_list.span, "{ ", structure_args, " }"));
 		}
 
@@ -673,7 +673,7 @@ impl<'a> JSifier<'a> {
 				};
 				let is_option = function_type.is_option();
 				let function_type = function_type.maybe_unwrap_option();
-				let function_sig = function_type.as_function_sig();
+				let function_sig = function_type.as_function_sig().expect("a function sig");
 				let expr_string = match callee {
 					CalleeKind::Expr(expr) => self.jsify_expression(expr, ctx).to_string(),
 					CalleeKind::SuperCall(method) => format!("super.{}", method),
@@ -687,59 +687,57 @@ impl<'a> JSifier<'a> {
 				}
 				let args_text_string = escape_javascript_string(&args_text_string);
 
-				if let Some(function_sig) = function_sig {
-					if let Some(js_override) = &function_sig.js_override {
-						let self_string = match callee {
-							CalleeKind::Expr(expr) => match &expr.kind {
-								// for "loose" macros, e.g. `print()`, $self$ is the global object
-								ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
-								ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
-									self.jsify_expression(&object, ctx).to_string()
-								}
-								ExprKind::Reference(Reference::TypeMember { property, .. }) => {
-									// remove the property name from the expression string
-									expr_string.split(".").filter(|s| s != &property.name).join(".")
-								}
-								_ => expr_string,
-							},
-							CalleeKind::SuperCall { .. } =>
-							// Note: in case of a $self$ macro override of a super call there's no clear definition of what $self$ should be,
-							// "this" is a decent option because it'll refer to the object where "super" was used, but depending on how
-							// $self$ is used in the macro it might lead to unexpected results if $self$.some_method() is called and is
-							// defined differently in the parent class of "this".
-							{
-								"this".to_string()
+				if let Some(js_override) = &function_sig.js_override {
+					let self_string = match callee {
+						CalleeKind::Expr(expr) => match &expr.kind {
+							// for "loose" macros, e.g. `print()`, $self$ is the global object
+							ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
+							ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
+								self.jsify_expression(&object, ctx).to_string()
 							}
-						};
-						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
-						let replace_with = &[self_string, args_string, args_text_string];
-						let ac = AhoCorasick::new(patterns).expect("Failed to create macro pattern");
-						return new_code!(expr_span, ac.replace_all(js_override, replace_with));
-					}
-
-					// If this function requires an implicit scope argument, we need to add it to the args string
-					if function_sig.implicit_scope_param {
-						// If the current function we're in also has an implicit scope parameter then use it
-						// TODO: make a helper function to get the `current_function_type`
-						let implicit_scope_arg_available = ctx.visit_ctx.current_function_env().map_or(false, |e| {
-							if let SymbolEnvKind::Function { sig, .. } = e.kind {
-								sig.as_function_sig().expect("a function sig").implicit_scope_param
-							} else {
-								false
+							ExprKind::Reference(Reference::TypeMember { property, .. }) => {
+								// remove the property name from the expression string
+								expr_string.split(".").filter(|s| s != &property.name).join(".")
 							}
-						});
-
-						let prepend_scope_arg = if implicit_scope_arg_available {
-							SCOPE_PARAM.to_string()
-						} else {
-							// Otherwise, we can just use `this`. We can assume `this` is available since othesize we should have had an implicit scope arg available.
+							_ => expr_string,
+						},
+						CalleeKind::SuperCall { .. } =>
+						// Note: in case of a $self$ macro override of a super call there's no clear definition of what $self$ should be,
+						// "this" is a decent option because it'll refer to the object where "super" was used, but depending on how
+						// $self$ is used in the macro it might lead to unexpected results if $self$.some_method() is called and is
+						// defined differently in the parent class of "this".
+						{
 							"this".to_string()
-						};
-						if args_string.len() > 0 {
-							args_string = format!("{}, {}", prepend_scope_arg, args_string);
-						} else {
-							args_string = prepend_scope_arg;
 						}
+					};
+					let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
+					let replace_with = &[self_string, args_string, args_text_string];
+					let ac = AhoCorasick::new(patterns).expect("Failed to create macro pattern");
+					return new_code!(expr_span, ac.replace_all(js_override, replace_with));
+				}
+
+				// If this function requires an implicit scope argument, we need to add it to the args string
+				if function_sig.implicit_scope_param {
+					// If the current function we're in also has an implicit scope parameter then use it
+					// TODO: make a helper function to get the `current_function_type`
+					let implicit_scope_arg_available = ctx.visit_ctx.current_function_env().map_or(false, |e| {
+						if let SymbolEnvKind::Function { sig, .. } = e.kind {
+							sig.as_function_sig().expect("a function sig").implicit_scope_param
+						} else {
+							false
+						}
+					});
+
+					let prepend_scope_arg = if implicit_scope_arg_available {
+						SCOPE_PARAM.to_string()
+					} else {
+						// Otherwise, we can just use `this`. We can assume `this` is available since othesize we should have had an implicit scope arg available.
+						"this".to_string()
+					};
+					if args_string.len() > 0 {
+						args_string = format!("{}, {}", prepend_scope_arg, args_string);
+					} else {
+						args_string = prepend_scope_arg;
 					}
 				}
 
@@ -2028,22 +2026,24 @@ fn jsify_symbol(symbol: &Symbol) -> CodeMaker {
 	new_code!(&symbol.span, &symbol.name)
 }
 
-fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
+fn parent_class_type(ctx: &JSifyContext<'_>) -> TypeRef {
+	// Get the current class type
 	let current_class_type = resolve_user_defined_type(
 		ctx.visit_ctx.current_class().expect("a class"),
 		ctx.visit_ctx.current_env().expect("an env"),
 		ctx.visit_ctx.current_stmt_idx(),
 	)
 	.expect("a class type");
-	let parent_class_phase = current_class_type
+	// Return the parent class type
+	current_class_type
 		.as_class()
 		.expect("a class")
 		.parent
 		.expect("a parent class")
-		.as_class()
-		.expect("a class")
-		.phase;
-	parent_class_phase
+}
+
+fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
+	parent_class_type(ctx).as_class().expect("a class").phase
 }
 
 fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
