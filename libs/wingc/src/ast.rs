@@ -12,6 +12,7 @@ use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
+static ARGLIST_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -633,6 +634,8 @@ impl Expr {
 	}
 }
 
+pub type ArgListId = usize;
+
 #[derive(Debug)]
 pub struct New {
 	pub class: UserDefinedType,
@@ -645,16 +648,22 @@ pub struct New {
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
 	pub named_args: IndexMap<Symbol, Expr>,
+	pub id: ArgListId,
 	pub span: WingSpan,
 }
 
 impl ArgList {
-	pub fn new(span: WingSpan) -> Self {
+	pub fn new(pos_args: Vec<Expr>, named_args: IndexMap<Symbol, Expr>, span: WingSpan) -> Self {
 		ArgList {
-			pos_args: vec![],
-			named_args: IndexMap::new(),
+			pos_args,
+			named_args,
 			span,
+			id: ARGLIST_COUNTER.fetch_add(1, Ordering::Relaxed),
 		}
+	}
+
+	pub fn new_empty(span: WingSpan) -> Self {
+		Self::new(vec![], IndexMap::new(), span)
 	}
 }
 
