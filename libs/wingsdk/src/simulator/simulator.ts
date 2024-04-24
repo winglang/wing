@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { mkdir, rm } from "fs/promises";
+import { chmod, mkdir, rm } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join, resolve } from "path";
 import { makeSimulatorClient } from "./client";
@@ -532,6 +532,10 @@ export class Simulator {
 
   private async ensureStateDirExists(path: string) {
     const statedir = this.getResourceStateDir(path);
+
+    // ensure we have permissions to the state directory
+    await chmod(statedir, 0o777);
+
     const statedirExists = await exists(statedir);
     if (!statedirExists) {
       await mkdir(statedir, { recursive: true });
