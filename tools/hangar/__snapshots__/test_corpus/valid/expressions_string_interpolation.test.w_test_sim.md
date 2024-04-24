@@ -2,6 +2,9 @@
 
 ## stdout.log
 ```log
+{1+1} 1
+a non { { {interpolated } } } strin{ g }
+this is 'a non { { {interpolated } } } strin{ g }'
 pass ─ expressions_string_interpolation.test.wsim » root/env0/test:str interpolation with lifted expr
 
 Tests 1 passed (1)

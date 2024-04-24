@@ -422,6 +422,7 @@ where
 		Literal::Boolean(x) => Literal::Boolean(x),
 		Literal::Number(x) => Literal::Number(x),
 		Literal::String(x) => Literal::String(x),
+		Literal::NonInterpolatedString(x) => Literal::NonInterpolatedString(x),
 		Literal::Nil => Literal::Nil,
 	}
 }
