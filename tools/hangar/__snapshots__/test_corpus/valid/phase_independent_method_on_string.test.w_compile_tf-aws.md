@@ -4,7 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $_urlRegex_test_api_url__, $api_url, $expect_Util, $tokenLength }) {
+module.exports = function({ $api_url, $expect_Util, $tokenLength, $urlRegex }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ $_urlRegex_test_api_url__, $api_url, $expect_Util, $
       return $obj;
     }
     async handle() {
-      (await $expect_Util.equal($_urlRegex_test_api_url__, false));
+      (await $expect_Util.equal((await $urlRegex.test($api_url)), true));
       (await $expect_Util.equal($api_url.startsWith("http"), true));
       (await $expect_Util.notEqual($api_url.length, $tokenLength));
     }
@@ -151,10 +151,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $_urlRegex_test_api_url__: ${$stdlib.core.liftObject((urlRegex.test(api.url)))},
             $api_url: ${$stdlib.core.liftObject(api.url)},
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $tokenLength: ${$stdlib.core.liftObject(tokenLength)},
+            $urlRegex: ${$stdlib.core.liftObject(urlRegex)},
           })
         `;
       }
@@ -172,14 +172,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [(urlRegex.test(api.url)), []],
             [api.url, [].concat(["startsWith"], ["length"])],
             [tokenLength, []],
+            [urlRegex, ["test"]],
           ],
           "$inflight_init": [
-            [(urlRegex.test(api.url)), []],
             [api.url, []],
             [tokenLength, []],
+            [urlRegex, []],
           ],
         });
       }
