@@ -7,6 +7,9 @@
       "include": "#template-string"
     },
     {
+      "include": "#non-interpolated-string"
+    },
+    {
       "include": "#object-keys"
     },
     {
@@ -32,6 +35,16 @@
     }
   ],
   "repository": {
+    "non-interpolated-string": {
+      "name": "string.quoted.double.wing",
+      "begin": "#\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "include": "#string-character-escape"
+        }
+      ]
+    },
     "template-string": {
       "name": "string.quoted.double.wing",
       "begin": "\"",
