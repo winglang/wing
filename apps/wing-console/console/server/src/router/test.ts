@@ -119,41 +119,22 @@ export const createTestRouter = () => {
       )
       .mutation(async ({ input, ctx }) => {
         await reloadSimulator(await ctx.testSimulator(), ctx.logger);
-        try {
-          const response = await runTest(
-            await ctx.testSimulator(),
-            input.resourcePath,
-            ctx.logger,
-          );
+        const response = await runTest(
+          await ctx.testSimulator(),
+          input.resourcePath,
+          ctx.logger,
+        );
 
-          const testsState = ctx.testsStateManager();
-          testsState.setTest({
-            id: input.resourcePath,
-            label: getTestName(input.resourcePath),
-            status: response.error ? "error" : "success",
-            time: response.time,
-            datetime: Date.now(),
-          });
+        const testsState = ctx.testsStateManager();
+        testsState.setTest({
+          id: input.resourcePath,
+          label: getTestName(input.resourcePath),
+          status: response.error ? "error" : "success",
+          time: response.time,
+          datetime: Date.now(),
+        });
 
-          return response;
-        } catch (error: any) {
-          const testsState = ctx.testsStateManager();
-          testsState.setTest({
-            id: input.resourcePath,
-            label: getTestName(input.resourcePath),
-            status: "error",
-            time: 0,
-            datetime: Date.now(),
-          });
-          return {
-            response: "",
-            error: error.message,
-            path: input.resourcePath,
-            time: 0,
-            pass: false,
-            traces: [],
-          };
-        }
+        return response;
       }),
     "test.runAll": createProcedure.mutation(async ({ ctx }) => {
       const simulator = await ctx.testSimulator();
@@ -163,25 +144,15 @@ export const createTestRouter = () => {
       const testList = await listTests(simulator);
       const result: InternalTestResult[] = [];
       for (const resourcePath of testList) {
-        try {
-          const response = await runTest(simulator, resourcePath, ctx.logger);
-          result.push(response);
-          testsState.setTest({
-            id: resourcePath,
-            label: getTestName(resourcePath),
-            status: response.error ? "error" : "success",
-            time: response.time,
-            datetime: Date.now(),
-          });
-        } catch {
-          testsState.setTest({
-            id: resourcePath,
-            label: getTestName(resourcePath),
-            status: "error",
-            time: 0,
-            datetime: Date.now(),
-          });
-        }
+        const response = await runTest(simulator, resourcePath, ctx.logger);
+        result.push(response);
+        testsState.setTest({
+          id: resourcePath,
+          label: getTestName(resourcePath),
+          status: response.error ? "error" : "success",
+          time: response.time,
+          datetime: Date.now(),
+        });
       }
 
       const testPassed = result.filter((r) => r.pass);
