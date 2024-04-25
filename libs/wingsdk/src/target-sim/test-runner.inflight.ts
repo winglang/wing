@@ -5,8 +5,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator";
-import { ITestRunnerClient, TestResult } from "../std";
-import { TraceType } from "@winglang/sdk/lib/std";
+import { ITestRunnerClient, TestResult, TraceType } from "../std";
 
 export class TestRunner
   implements ITestRunnerClient, ISimulatorResourceInstance
