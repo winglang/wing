@@ -2727,28 +2727,6 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error(exp, format!("Cannot instantiate abstract class \"{}\"", class.name));
 				}
 
-				// error if we are trying to instantiate a preflight in a static method
-				// without an explicit scope (there is no "this" to use as the scope)
-				if class.phase == Phase::Preflight && obj_scope.is_none() {
-					// check if there is a "this" symbol in the current environment
-					let has_this = env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_some();
-					// if we have a "this", it means we can use it as a default scope, so we are fine
-					if !has_this {
-						// we don't have a "this", so we need to check if we are in a static method
-						// because the entrypoint scope doesn't have a "this" but it is not static
-						let is_static = self.ctx().current_function().map(|f| f.is_static);
-						if let Some(true) = is_static {
-							self.spanned_error(
-								exp,
-								format!(
-									"Cannot instantiate preflight class \"{}\" in a static method without an explicit scope",
-									class.name
-								),
-							);
-						}
-					}
-				}
-
 				if class.phase == Phase::Independent || env.phase == class.phase {
 					(&class.env, &class.name)
 				} else {
