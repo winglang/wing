@@ -2,7 +2,7 @@
 
 ## stderr.log
 ```log
-Failed to clean up test directory: Error: EACCES: permission denied, scandir 'target/test/mount.test.wsim/.state/<STATE_FILE>'
+Warning: unable to clean up test directory: Error: EACCES: permission denied, scandir 'target/test/mount.test.wsim/.state/<STATE_FILE>'
 ```
 
 ## stdout.log
