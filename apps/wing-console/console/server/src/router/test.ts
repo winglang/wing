@@ -114,6 +114,7 @@ export const createTestRouter = () => {
         }),
       )
       .mutation(async ({ input, ctx }) => {
+        await reloadSimulator(await ctx.testSimulator(), ctx.logger);
         try {
           const response = await runTest(
             await ctx.testSimulator(),
