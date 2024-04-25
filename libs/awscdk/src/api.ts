@@ -209,7 +209,7 @@ export class Api extends cloud.Api implements IAwsApi {
         join(__dirname, "api.onrequest.inflight.js"),
         "ApiOnRequestHandlerClient",
         {
-          corsHeaders: this._generateCorsHeaders(this.corsOptions)
+          corsHeaders: Api.renderCorsHeaders(this.corsOptions)
             ?.defaultResponse,
         }
       );
@@ -385,7 +385,7 @@ class WingRestApi extends Construct {
       action: "lambda:InvokeFunction",
       functionName: handler.awscdkFunction.functionName,
       principal: "apigateway.amazonaws.com",
-      sourceArn: this.api.arnForExecuteApi(method, Api._toOpenApiPath(path)),
+      sourceArn: this.api.arnForExecuteApi(method, Api.renderOpenApiPath(path)),
     });
   };
 }
