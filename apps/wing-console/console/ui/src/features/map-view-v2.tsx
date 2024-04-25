@@ -598,7 +598,6 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
         return [connection];
       })();
 
-      const xxx = [];
       for (const sourceConnection of sourceConnections) {
         for (const targetConnection of targetConnections) {
           connectionsV2.push({
@@ -608,85 +607,22 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
             target: targetConnection.target,
             targetOp: targetConnection.targetOp,
           });
-          xxx.push({
-            name: targetConnection.name,
-            source: sourceConnection.source,
-            sourceOp: sourceConnection.sourceOp,
-            target: targetConnection.target,
-            targetOp: targetConnection.targetOp,
-          });
         }
       }
-
-      console.log({
-        source,
-        target,
-        connection,
-        xxx: uniqby(connectionsV2, (connection) => {
-          return `${connection.source}#${connection.target}`;
-        }),
-      });
-
-      // if (source?.type !== "autoId" && target?.type !== "autoId") {
-      //   connectionsV2.push(connection);
-      // }
-
-      // if (target?.type === "autoId") {
-      //   const targetConnections = connections?.filter(
-      //     (otherConnection) => otherConnection.target === connection.target,
-      //   );
-      //   for (const targetConnection of targetConnections ?? []) {
-      //     connectionsV2.push({
-      //       ...targetConnection,
-      //       source: connection.source,
-      //     });
-      //   }
-      // }
-
-      // else {
-      //   const sourceConnections = connections?.filter(
-      //     (otherConnection) => otherConnection.source === connection.source,
-      //   );
-      //   for (const sourceConnection of sourceConnections ?? []) {
-      //     connectionsV2.push({
-      //       ...sourceConnection,
-      //       target: connection.target,
-      //     });
-      //   }
-      // }
     }
 
     return uniqby(connectionsV2, (connection) => {
       return `${connection.source}#${connection.target}`;
+    }).filter((connection) => {
+      // const source = nodeInfo.get(connection.source);
+      // const target = nodeInfo.get(connection.target);
+      return true;
     });
   }, [connections, nodeInfo]);
   useEffect(() => {
     console.log({ connections, connectionsV2 });
   }, [connections, connectionsV2]);
 
-  // const getConnectionId = useCallback(
-  //   (nodePath: string, name: string, type: "source" | "target") => {
-  //     const info = nodeInfo?.get(nodePath);
-
-  //     if (info?.type === "function") {
-  //       return `${nodePath}#${type}`;
-  //     }
-
-  //     if (info?.type === "}") {
-  //       return `${nodePath}#${type}`;
-  //     }
-
-  //     if (
-  //       info?.type === "construct" &&
-  //       info.inflights.some((inflight) => inflight.name === name)
-  //     ) {
-  //       return `${nodePath}#${name}#${type}`;
-  //     }
-
-  //     return nodePath;
-  //   },
-  //   [nodeInfo],
-  // );
   const getConnectionId = useCallback(
     (connection: ConnectionData, type: "source" | "target") => {
       const info = nodeInfo?.get(connection[type]);
@@ -700,19 +636,6 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
     },
     [nodeInfo],
   );
-  // const getConnectionSource = useCallback(
-  //   (connection: ConnectionData) => {
-  //     const sourceInfo = nodeInfo?.get(connection.source);
-  //     if (sourceInfo?.type === "function") {
-  //       return `${connection.source}#source`;
-  //     }
-  //     if (sourceInfo?.type === "construct") {
-  //       return `${connection.source}#${connection.name}#source`;
-  //     }
-  //     return connection.source;
-  //   },
-  //   [nodeInfo],
-  // );
 
   const RenderNode = useCallback<
     FunctionComponent<{
@@ -723,6 +646,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
       // if (props.constructTreeNode.display?.hidden) {
       //   return <></>;
       // }
+
       const info = nodeInfo?.get(props.constructTreeNode.path);
 
       if (info?.type === "autoId") {
