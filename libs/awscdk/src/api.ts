@@ -1,5 +1,4 @@
 import { createHash } from "crypto";
-import { join } from "path";
 import { Lazy } from "aws-cdk-lib";
 import {
   ApiDefinition,
