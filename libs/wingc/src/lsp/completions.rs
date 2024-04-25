@@ -24,7 +24,7 @@ use crate::{UTIL_CLASS_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE};
 
 use super::sync::check_utf8;
 
-const BUILTIN_TYPES: [&str; 6] = ["bool", "duration", "Json", "MutJson", "num", "str"];
+const BUILTIN_TYPES: [&str; 8] = ["bool", "duration", "Json", "MutJson", "num", "str", "datetime", "regex"];
 const BUILTIN_GENERICS: [&str; 6] = ["Array", "Map", "MutArray", "MutMap", "MutSet", "Set"];
 
 #[no_mangle]

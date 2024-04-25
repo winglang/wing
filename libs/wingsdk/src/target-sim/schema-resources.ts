@@ -48,12 +48,21 @@ export interface FunctionSchema {
 /** Runtime attributes for cloud.Function */
 export interface FunctionAttributes {}
 
+export interface DeadLetterQueueSchema {
+  /** Dead-letter queue handler token */
+  dlqHandler: string;
+  /** Number of time a message will be processed */
+  maxDeliveryAttempts: number;
+}
+
 /** Schema for cloud.Queue */
 export interface QueueSchema {
   /** How long a queue's consumers have to process a message, in seconds */
   readonly timeout: number;
   /** How long a queue retains a message, in seconds */
   readonly retentionPeriod: number;
+  /** Dead-letter queue options */
+  readonly dlq?: DeadLetterQueueSchema;
 }
 
 /** Runtime attributes for cloud.Queue */
@@ -256,6 +265,7 @@ export interface ContainerSchema {
   readonly image: string;
   readonly containerPort?: number;
   readonly env?: Record<string, string>;
+  readonly volumes?: string[];
   readonly args?: string[];
   readonly cwd: string;
 }

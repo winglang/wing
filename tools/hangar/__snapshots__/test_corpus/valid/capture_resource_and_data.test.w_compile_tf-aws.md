@@ -4,7 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $data_size, $queue, $res }) {
+module.exports = function({ $data, $queue, $res }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ $data_size, $queue, $res }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($data_size, 3), "data.size == 3");
+      $helpers.assert($helpers.eq($data.size, 3), "data.size == 3");
       (await $res.put("file.txt", "world"));
       $helpers.assert($helpers.eq((await $res.get("file.txt")), "world"), "res.get(\"file.txt\") == \"world\"");
       (await $queue.push("spirulina"));
@@ -92,7 +92,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $data_size: ${$stdlib.core.liftObject(data.size)},
+            $data: ${$stdlib.core.liftObject(data)},
             $queue: ${$stdlib.core.liftObject(queue)},
             $res: ${$stdlib.core.liftObject(res)},
           })
@@ -112,12 +112,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [data.size, []],
+            [data, ["size"]],
             [queue, ["push"]],
             [res, [].concat(["put"], ["get"])],
           ],
           "$inflight_init": [
-            [data.size, []],
+            [data, []],
             [queue, []],
             [res, []],
           ],

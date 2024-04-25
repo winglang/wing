@@ -464,16 +464,13 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
     const printEvent = async (event: std.Trace) => {
       const env = extractTestEnvFromPath(event.sourcePath);
-      if (env === undefined) {
-        // This event is not associated with any test environment, so skip it.
-        return;
+
+      let testName = "(no test)";
+      if (env !== undefined) {
+        testName = testMappings[env] ?? testName;
       }
-      const testName = testMappings[env];
-      if (testName === undefined) {
-        // This event is not associated with any test environment, so skip it.
-        return;
-      }
-      if (testFilter && !testName.includes(testFilter)) {
+
+      if (testFilter && !testName.includes(testFilter) && testName !== "(no test)") {
         // This test does not match the filter, so skip it.
         return;
       }

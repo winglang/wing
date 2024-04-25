@@ -9,6 +9,7 @@ import {
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { LiftDepsMatrixRaw } from "../core";
@@ -25,6 +26,7 @@ import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: Duration;
   private readonly retentionPeriod: Duration;
+  private readonly dlq?: cloud.DeadLetterQueueProps;
   private readonly policy: Policy;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
@@ -51,6 +53,18 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     }
 
     this.policy = new Policy(this, "Policy", { principal: this });
+
+    if (props.dlq && props.dlq.queue) {
+      this.dlq = props.dlq;
+
+      this.policy.addStatement(this.dlq.queue, cloud.QueueInflightMethods.PUSH);
+
+      Node.of(this).addConnection({
+        source: this,
+        target: this.dlq.queue,
+        name: "dead-letter queue",
+      });
+    }
   }
 
   /** @internal */
@@ -139,6 +153,13 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     const props: QueueSchema = {
       timeout: this.timeout.seconds,
       retentionPeriod: this.retentionPeriod.seconds,
+      dlq: this.dlq
+        ? {
+            dlqHandler: simulatorHandleToken(this.dlq.queue),
+            maxDeliveryAttempts:
+              this.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
+          }
+        : undefined,
     };
     return {
       type: cloud.QUEUE_FQN,

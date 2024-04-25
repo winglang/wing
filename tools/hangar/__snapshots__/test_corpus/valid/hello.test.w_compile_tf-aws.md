@@ -94,7 +94,10 @@ module.exports = function({ $bucket }) {
         },
         "batch_size": 1,
         "event_source_arn": "${aws_sqs_queue.Queue.arn}",
-        "function_name": "${aws_lambda_function.Queue-SetConsumer0.function_name}"
+        "function_name": "${aws_lambda_function.Queue-SetConsumer0.function_name}",
+        "function_response_types": [
+          "ReportBatchItemFailures"
+        ]
       }
     },
     "aws_lambda_function": {

@@ -192,7 +192,7 @@
     },
     "nested_identifier": {
       "type": "PREC",
-      "value": 150,
+      "value": 160,
       "content": {
         "type": "SEQ",
         "members": [
@@ -1854,6 +1854,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "non_interpolated_string"
+        },
+        {
+          "type": "SYMBOL",
           "name": "number"
         },
         {
@@ -2060,6 +2064,35 @@
       "type": "STRING",
       "value": "nil"
     },
+    "non_interpolated_string": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "#\""
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_non_interpolated_string_fragment"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_escape_sequence"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
+    },
     "string": {
       "type": "SEQ",
       "members": [
@@ -2118,6 +2151,17 @@
         "content": {
           "type": "PATTERN",
           "value": "[^{\"\\\\]+"
+        }
+      }
+    },
+    "_non_interpolated_string_fragment": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[^\"\\\\]+"
         }
       }
     },
@@ -2206,7 +2250,7 @@
     },
     "call": {
       "type": "PREC_LEFT",
-      "value": 160,
+      "value": 170,
       "content": {
         "type": "SEQ",
         "members": [
@@ -3170,7 +3214,7 @@
     },
     "optional_unwrap": {
       "type": "PREC_RIGHT",
-      "value": 170,
+      "value": 180,
       "content": {
         "type": "SEQ",
         "members": [
@@ -4183,7 +4227,7 @@
     },
     "structured_access_expression": {
       "type": "PREC_RIGHT",
-      "value": 0,
+      "value": 150,
       "content": {
         "type": "SEQ",
         "members": [

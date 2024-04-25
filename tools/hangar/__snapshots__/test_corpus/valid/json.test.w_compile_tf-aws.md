@@ -210,7 +210,7 @@ class $Root extends $stdlib.std.Resource {
     const notSpecified = ({"foo": "bar"});
     $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(notSpecified, "foo"), "bar"), "notSpecified.get(\"foo\") == \"bar\"");
     const empty = ({});
-    $helpers.assert($helpers.eq(((json, key) => { return json.hasOwnProperty(key); })(empty, "something"), false), "Json.has(empty, \"something\") == false");
+    $helpers.assert($helpers.eq(((obj, key) => { return obj.hasOwnProperty(key); })(empty,"something"), false), "empty.has(\"something\") == false");
     const arrayStruct = [({"foo": "", "stuff": []})];
     const setStruct = new Set([({"foo": "", "stuff": []})]);
     const mapStruct = ({["1"]: ({"foo": "", "stuff": []})});

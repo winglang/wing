@@ -2021,6 +2021,97 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`indexing.test.w 1`] = `
+"error: Cannot update elements of an immutable Array
+  --> ../../../examples/tests/invalid/indexing.test.w:6:1
+  |
+6 | arr[0] = 5;
+  | ^^^^^^ Cannot update elements of an immutable Array
+  |
+  = hint: Consider using MutArray instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/indexing.test.w:9:5
+  |
+9 | arr[\\"key\\"];
+  |     ^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Type \\"Bucket\\" is not indexable
+   --> ../../../examples/tests/invalid/indexing.test.w:13:1
+   |
+13 | b[0] = 5;
+   | ^ Type \\"Bucket\\" is not indexable
+
+
+error: Type \\"Array<num>?\\" is not indexable
+   --> ../../../examples/tests/invalid/indexing.test.w:17:1
+   |
+17 | optarr[0] = 5;
+   | ^^^^^^ Type \\"Array<num>?\\" is not indexable
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/indexing.test.w:21:5
+   |
+21 | map[0];
+   |     ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Cannot update elements of an immutable Map
+   --> ../../../examples/tests/invalid/indexing.test.w:25:1
+   |
+25 | mutmap[\\"a\\"] = false;
+   | ^^^^^^^^^^^ Cannot update elements of an immutable Map
+   |
+   = hint: Consider using MutMap instead
+
+
+error: Cannot update elements of an immutable Json
+   --> ../../../examples/tests/invalid/indexing.test.w:29:1
+   |
+29 | json[0] = 5;
+   | ^^^^^^^ Cannot update elements of an immutable Json
+   |
+   = hint: Consider using MutJson instead
+
+
+error: Strings are immutable
+   --> ../../../examples/tests/invalid/indexing.test.w:33:1
+   |
+33 | s[0] = \\"H\\";
+   | ^^^^ Strings are immutable
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+   --> ../../../examples/tests/invalid/indexing.test.w:36:13
+   |
+36 | let var x = 3 + \\"hello\\";
+   |             ^^^^^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Unsupported reassignment of element of type unresolved
+   --> ../../../examples/tests/invalid/indexing.test.w:37:1
+   |
+37 | x[\\"hi\\"] = 4;
+   | ^^^^^^^ Unsupported reassignment of element of type unresolved
+
+
+error: Indexing into an inferred type is not supported
+   --> ../../../examples/tests/invalid/indexing.test.w:41:7
+   |
+41 |   log(x[0]);
+   |       ^ Indexing into an inferred type is not supported
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`inference.test.w 1`] = `
 "error: Missing required type annotation for method signature
    --> ../../../examples/tests/invalid/inference.test.w:78:8
@@ -3220,31 +3311,24 @@ Duration <DURATION>"
 `;
 
 exports[`primitives.test.w 1`] = `
-"error: Unexpected reference \\"structured_access_expression\\"
-  --> ../../../examples/tests/invalid/primitives.test.w:5:5
+"error: Member \\"blabla\\" doesn't exist in \\"Array\\"
+  --> ../../../examples/tests/invalid/primitives.test.w:6:16
   |
-5 | log(y[0]);
-  |     ^^^^ Unexpected reference \\"structured_access_expression\\"
-
-
-error: Member \\"blabla\\" doesn't exist in \\"Array\\"
-  --> ../../../examples/tests/invalid/primitives.test.w:9:16
-  |
-9 | let join = arr.blabla(\\",\\");
+6 | let join = arr.blabla(\\",\\");
   |                ^^^^^^ Member \\"blabla\\" doesn't exist in \\"Array\\"
 
 
 error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/primitives.test.w:11:5
-   |
-11 | arr.push(4);
-   |     ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+  --> ../../../examples/tests/invalid/primitives.test.w:8:5
+  |
+8 | arr.push(4);
+  |     ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/primitives.test.w:13:14
+   --> ../../../examples/tests/invalid/primitives.test.w:10:14
    |
-13 | let n: str = arr.at(0);
+10 | let n: str = arr.at(0);
    |              ^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
@@ -3514,6 +3598,13 @@ exports[`resource_captures.test.w 1`] = `
    |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+   --> ../../../examples/tests/invalid/resource_captures.test.w:17:5
+   |
+17 |     this.collectionOfResources.at(0).put(\\"hello\\", \\"world\\");
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+
+
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3659,42 +3750,36 @@ Duration <DURATION>"
 `;
 
 exports[`simulator_permissions.test.w 1`] = `
-"[ERROR] incorrect resource permission | Invoke (payload=undefined). Error: Resource \\"root/env0/test:incorrect resource permission/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env0/b1\\".
-   --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
-   | while i > 0 {
-   |   i -= 1;
-   | }
-15 | buckets.at(i).put(\\"key\\", \\"value\\");
-   | ^
-at <ABSOLUTE>/simulator_permissions.test.w:15:3
-[ERROR] incorrect permission operation | Invoke (payload=undefined). Error: Resource \\"root/env1/test:incorrect permission operation/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env1/b1\\".
-   --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
-   | while i > 0 {
-   |   i -= 1;
-   | }
-25 | buckets.at(i).put(\\"key\\", \\"value\\");
-   | ^
-at <ABSOLUTE>/simulator_permissions.test.w:25:3
-fail ┌ simulator_permissions.test.wsim » root/env0/test:incorrect resource permission 
-     │ Error: Resource \\"root/env0/test:incorrect resource permission/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env0/b1\\".
-     │    --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
-     │    | while i > 0 {
-     │    |   i -= 1;
-     │    | }
-     │ 15 | buckets.at(i).put(\\"key\\", \\"value\\");
-     │    | ^
-     └ at <ABSOLUTE>/simulator_permissions.test.w:15:3
-fail ┌ simulator_permissions.test.wsim » root/env1/test:incorrect permission operation
-     │ Error: Resource \\"root/env1/test:incorrect permission operation/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env1/b1\\".
-     │    --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
-     │    | while i > 0 {
-     │    |   i -= 1;
-     │    | }
-     │ 25 | buckets.at(i).put(\\"key\\", \\"value\\");
-     │    | ^
-     └ at <ABSOLUTE>/simulator_permissions.test.w:25:3
+"error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:10:8
+   |
+10 |   lift(buckets.at(1), [\\"put\\"]);
+   |        ^^^^^^^^^^^^^ Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
 
-Tests 2 failed (2)
+
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
+   |
+15 |   buckets.at(i).put(\\"key\\", \\"value\\");
+   |   ^^^^^^^^^^^^^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+
+
+error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:20:8
+   |
+20 |   lift(buckets.at(0), [\\"list\\"]);
+   |        ^^^^^^^^^^^^^ Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
+
+
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
+   |
+25 |   buckets.at(i).put(\\"key\\", \\"value\\");
+   |   ^^^^^^^^^^^^^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+
+
+
+Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -4168,6 +4253,72 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |
 15 | a += b;
    |      ^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`un_mut_lifted_objects.test.w 1`] = `
+"error: Member \\"push\\" doesn't exist in \\"Array\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:22:6
+   |
+22 |   ar.push(2); // Error: push doesn't exist in Array
+   |      ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+
+
+error: Cannot update elements of an immutable Array
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:23:3
+   |
+23 |   ar[0] = 1; // Error: Cannot update elements of an immutable Array
+   |   ^^^^^ Cannot update elements of an immutable Array
+   |
+   = hint: Consider using MutArray instead
+
+
+error: Member \\"set\\" doesn't exist in \\"Json\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:24:5
+   |
+24 |   j.set(\\"a\\", 3); // Error: set doesn't exist in Json
+   |     ^^^ Member \\"set\\" doesn't exist in \\"Json\\"
+
+
+error: Member \\"add\\" doesn't exist in \\"Set\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:25:6
+   |
+25 |   st.add(4); // Error: add doesn't exist in Set
+   |      ^^^ Member \\"add\\" doesn't exist in \\"Set\\"
+
+
+error: Member \\"set\\" doesn't exist in \\"Map\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:26:6
+   |
+26 |   mp.set(\\"a\\", 3); // Error: set doesn't exist in Map
+   |      ^^^ Member \\"set\\" doesn't exist in \\"Map\\"
+
+
+error: Member \\"push\\" doesn't exist in \\"Array\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:27:11
+   |
+27 |   opt_ar?.push(2); // Error: push doesn't exist in Array
+   |           ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+
+
+error: Member \\"push\\" doesn't exist in \\"Array\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:28:16
+   |
+28 |   recursive_ar.push(MutArray<num>[2]); // Error: push doesn't exist in Array
+   |                ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+
+
+error: Member \\"push\\" doesn't exist in \\"Array\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:29:22
+   |
+29 |   recursive_ar.at(0).push(3); // Error: push doesn't exist in Array
+   |                      ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
 
 
 

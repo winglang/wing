@@ -196,14 +196,14 @@ impl Fold for ClosureTransformer {
 							))),
 							WingSpan::for_file(file_id),
 						))),
-						arg_list: ArgList {
-							named_args: IndexMap::new(),
-							pos_args: vec![Expr::new(
+						arg_list: ArgList::new(
+							vec![Expr::new(
 								ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::for_file(file_id)))),
 								WingSpan::for_file(file_id),
 							)],
-							span: WingSpan::for_file(file_id),
-						},
+							IndexMap::new(),
+							WingSpan::for_file(file_id),
+						),
 					},
 					WingSpan::for_file(file_id),
 				);
@@ -305,11 +305,7 @@ impl Fold for ClosureTransformer {
 				let new_class_instance = Expr::new(
 					ExprKind::New(New {
 						class: class_udt,
-						arg_list: ArgList {
-							named_args: IndexMap::new(),
-							pos_args: vec![],
-							span: WingSpan::for_file(file_id),
-						},
+						arg_list: ArgList::new_empty(WingSpan::for_file(file_id)),
 						obj_id: None,
 						obj_scope: None,
 					}),
@@ -365,7 +361,9 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::ElementAccess { .. } => {
+				fold::fold_reference(self, node)
+			}
 		}
 	}
 }

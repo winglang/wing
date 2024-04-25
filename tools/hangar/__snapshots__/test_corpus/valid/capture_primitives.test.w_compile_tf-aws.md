@@ -4,7 +4,7 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_seconds, $myNum, $mySecondBool, $myStr }) {
+module.exports = function({ $myBool, $myDur, $myNum, $mySecondBool, $myStr }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -22,9 +22,9 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       else {
         console.log("bool=false");
       }
-      const min = $myDur_minutes;
-      const sec = $myDur_seconds;
-      const hr = $myDur_hours;
+      const min = $myDur.minutes;
+      const sec = $myDur.seconds;
+      const hr = $myDur.hours;
       const split = (await String.raw({ raw: ["min=", " sec=", " hr=", ""] }, min, sec, hr).split(" "));
       $helpers.assert($helpers.eq(split.length, 3), "split.length == 3");
     }
@@ -183,9 +183,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $myBool: ${$stdlib.core.liftObject(myBool)},
-            $myDur_hours: ${$stdlib.core.liftObject(myDur.hours)},
-            $myDur_minutes: ${$stdlib.core.liftObject(myDur.minutes)},
-            $myDur_seconds: ${$stdlib.core.liftObject(myDur.seconds)},
+            $myDur: ${$stdlib.core.liftObject(myDur)},
             $myNum: ${$stdlib.core.liftObject(myNum)},
             $mySecondBool: ${$stdlib.core.liftObject(mySecondBool)},
             $myStr: ${$stdlib.core.liftObject(myStr)},
@@ -207,18 +205,14 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [myBool, []],
-            [myDur.hours, []],
-            [myDur.minutes, []],
-            [myDur.seconds, []],
+            [myDur, [].concat(["minutes"], ["seconds"], ["hours"])],
             [myNum, []],
             [mySecondBool, []],
             [myStr, []],
           ],
           "$inflight_init": [
             [myBool, []],
-            [myDur.hours, []],
-            [myDur.minutes, []],
-            [myDur.seconds, []],
+            [myDur, []],
             [myNum, []],
             [mySecondBool, []],
             [myStr, []],

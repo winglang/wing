@@ -205,7 +205,7 @@ The context value.
 ##### `tryFindChild` <a name="tryFindChild" id="@winglang/sdk.std.Node.tryFindChild"></a>
 
 ```wing
-tryFindChild(): IConstruct
+tryFindChild(): IConstruct?
 ```
 
 Return a direct child by id, or undefined.
