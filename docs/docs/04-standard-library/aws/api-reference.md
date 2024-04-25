@@ -933,6 +933,60 @@ The cloud.Api.
 
 
 
+### ApiEndpointHandler <a name="ApiEndpointHandler" id="@winglang/sdk.aws.ApiEndpointHandler"></a>
+
+A helper class for working with AWS api endpoint handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.ApiEndpointHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.ApiEndpointHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler">toFunctionHandler</a></code> | Returns a `cloud.Function` handler for handling requests from a `cloud.Api`. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.ApiEndpointHandler.toFunctionHandler(handler: IApiEndpointHandler, corsOptions?: ApiCorsOptions);
+```
+
+Returns a `cloud.Function` handler for handling requests from a `cloud.Api`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+The `onRequest` handler.
+
+---
+
+###### `corsOptions`<sup>Optional</sup> <a name="corsOptions" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler.parameter.corsOptions"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a>
+
+The CORS options.
+
+---
+
+
+
 ### Bucket <a name="Bucket" id="@winglang/sdk.aws.Bucket"></a>
 
 A helper class for working with AWS buckets.
@@ -974,6 +1028,60 @@ If the bucket is an AWS Bucket, return a helper interface for working with it.
 - *Type:* <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>
 
 The cloud.Bucket.
+
+---
+
+
+
+### BucketEventHandler <a name="BucketEventHandler" id="@winglang/sdk.aws.BucketEventHandler"></a>
+
+Utility class to work with bucket event handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.BucketEventHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.BucketEventHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler">toTopicOnMessageHandler</a></code> | Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`. |
+
+---
+
+##### `toTopicOnMessageHandler` <a name="toTopicOnMessageHandler" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler"></a>
+
+```wing
+bring aws;
+
+aws.BucketEventHandler.toTopicOnMessageHandler(handler: IBucketEventHandler, eventType: BucketEventType);
+```
+
+Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+
+the handler to convert.
+
+---
+
+###### `eventType`<sup>Required</sup> <a name="eventType" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler.parameter.eventType"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
+
+the event type.
 
 ---
 
@@ -1117,6 +1225,52 @@ The cloud.Queue.
 
 
 
+### QueueSetConsumerHandler <a name="QueueSetConsumerHandler" id="@winglang/sdk.aws.QueueSetConsumerHandler"></a>
+
+Utility class for working with the queue consumer handler.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.QueueSetConsumerHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.QueueSetConsumerHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler">toFunctionHandler</a></code> | Converts a queue consumer handler to a function handler. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.QueueSetConsumerHandler.toFunctionHandler(handler: IQueueSetConsumerHandler);
+```
+
+Converts a queue consumer handler to a function handler.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
+
+The queue consumer handler.
+
+---
+
+
+
 ### Table <a name="Table" id="@winglang/sdk.aws.Table"></a>
 
 A helper class for working with AWS tables.
@@ -1204,6 +1358,52 @@ If the topic is an AWS SNS, return a helper interface for working with it.
 - *Type:* <a href="#@winglang/sdk.cloud.Topic">Topic</a>
 
 The cloud.Topic.
+
+---
+
+
+
+### TopicOnMessageHandler <a name="TopicOnMessageHandler" id="@winglang/sdk.aws.TopicOnMessageHandler"></a>
+
+A helper class for working with AWS topic on message handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.TopicOnMessageHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.TopicOnMessageHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler">toFunctionHandler</a></code> | Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.TopicOnMessageHandler.toFunctionHandler(handler: ITopicOnMessageHandler);
+```
+
+Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
+
+The `onMessage` handler.
 
 ---
 

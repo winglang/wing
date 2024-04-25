@@ -112,63 +112,26 @@ export type OpenApiCorsHeaders = Record<string, { schema: { type: string } }>;
 
 /**
  * Type definition for default CORS headers.
+ * @property {string} "Access-Control-Allow-Origin" - Specifies the origin that is allowed to access the resource. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin}
+ * @property {string} "Access-Control-Expose-Headers" - Lists the headers that the client can access. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers}
+ * @property {string} "Access-Control-Allow-Credentials" - Indicates whether the response to the request can be exposed when the credentials flag is true. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials}
  */
-type CorsDefaultResponseHeaders = {
-  /**
-   * Specifies the origin that is allowed to access the resource.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
-   */
-  "Access-Control-Allow-Origin": string;
-
-  /**
-   * Lists the headers that the client can access.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
-   */
-  "Access-Control-Expose-Headers": string;
-
-  /**
-   * Indicates whether the response to the request can
-   * be exposed when the credentials flag is true.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
-   */
-  "Access-Control-Allow-Credentials": string;
-};
+type CorsDefaultResponseHeaders = { [key: string]: string };
 
 /**
  * Type definition for CORS option headers.
+ * @property {string} "Access-Control-Allow-Origin" - Specifies the origin that is allowed to access the resource. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin}
+ * @property {string} "Access-Control-Allow-Headers" - Specifies the headers that are allowed in a request. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers}
+ * @property {string} "Access-Control-Allow-Methods" - Specifies the methods that are allowed in a request. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods}
+ * @property {string} "Access-Control-Max-Age" - Indicates how long the results of a preflight request can be cached. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age}
  */
-type CorsOptionsResponseHeaders = {
-  /**
-   * Specifies the origin that is allowed to access the resource.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
-   */
-  "Access-Control-Allow-Origin": string;
-
-  /**
-   * Specifies the headers that are allowed in a request.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
-   */
-  "Access-Control-Allow-Headers": string;
-
-  /**
-   * Specifies the methods that are allowed in a request.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
-   */
-  "Access-Control-Allow-Methods": string;
-
-  /**
-   * Indicates how long the results of a preflight request can be cached.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
-   */
-  "Access-Control-Max-Age": string;
-};
+type CorsOptionsResponseHeaders = { [key: string]: string };
 
 /**
  * Type definition for CORS headers which includes default and options headers.
  */
 export type CorsHeaders = {
-  defaultResponse: CorsDefaultResponseHeaders; // Default CORS headers for all requests.
-  optionsResponse: CorsOptionsResponseHeaders; // CORS option headers for OPTIONS requests.
+  [key: string]: CorsDefaultResponseHeaders | CorsOptionsResponseHeaders;
 };
 /**
  * Functionality shared between all `Api` implementations.
@@ -181,7 +144,6 @@ export class Api extends Resource {
    * Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`)
    * @param path The path to convert (assumes path is valid)
    * @returns OpenAPI path
-   * @internal
    */
   public static renderOpenApiPath(path: string) {
     return path.replace(/\/:([A-Za-z0-9_-]+)/g, "/{$1}");
