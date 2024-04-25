@@ -73,6 +73,8 @@ export interface KeyValueListProps {
   readonly?: boolean;
   className?: string;
   placeholder?: string;
+  filter?: boolean;
+  autoComplete?: boolean;
 }
 
 export const KeyValueList = ({
@@ -91,6 +93,8 @@ export const KeyValueList = ({
   valueDisabled = false,
   readonly = false,
   placeholder = "No items",
+  filter = true,
+  autoComplete = true,
 }: KeyValueListProps) => {
   const { theme } = useTheme();
 
@@ -136,6 +140,7 @@ export const KeyValueList = ({
       {editItems.map((item, index) => (
         <div key={index} className="gap-1 flex">
           <Combobox
+            autoComplete={autoComplete}
             placeholder={keyPlaceholder}
             items={comboboxItems}
             value={item.key}
@@ -157,11 +162,12 @@ export const KeyValueList = ({
             )}
             disabled={disabled}
             readonly={readonly || keyDisabled}
-            filter={false}
+            filter={filter}
             showSelected={false}
           />
 
           <Combobox
+            autoComplete={autoComplete}
             placeholder={`${item.type ?? valuePlaceholder} ${
               item.required === true ? " (required)" : ""
             }${item.description ? ` - ${item.description}` : ""}`}
