@@ -11,8 +11,7 @@ import { CfnPermission } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
-import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
-import { IAwsApi, STAGE_NAME } from "@winglang/sdk/lib/shared-aws/api";
+import { ApiEndpointHandler, IAwsApi, STAGE_NAME } from "@winglang/sdk/lib/shared-aws/api";
 import { API_DEFAULT_RESPONSE } from "@winglang/sdk/lib/shared-aws/api.default";
 import { isAwsCdkFunction } from "./function";
 
@@ -204,15 +203,7 @@ export class Api extends cloud.Api implements IAwsApi {
   ): cloud.Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
-      const newInflight = convertBetweenHandlers(
-        inflight,
-        join(__dirname, "api.onrequest.inflight.js"),
-        "ApiOnRequestHandlerClient",
-        {
-          corsHeaders: Api.renderCorsHeaders(this.corsOptions)
-            ?.defaultResponse,
-        }
-      );
+      const newInflight = ApiEndpointHandler.toFunctionHandler(inflight, Api.renderCorsHeaders(this.corsOptions));
       const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
       handler = new cloud.Function(
         this,

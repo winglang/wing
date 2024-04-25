@@ -1,13 +1,11 @@
-import { join } from "path";
 import { Topic as SNSTopic } from "aws-cdk-lib/aws-sns";
 import { Queue as SQSQeueue } from "aws-cdk-lib/aws-sqs";
 import { LambdaSubscription, SqsSubscription } from "aws-cdk-lib/aws-sns-subscriptions";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
-import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsTopic } from "@winglang/sdk/lib/shared-aws/topic";
+import { IAwsTopic, TopicOnMessageHandler } from "@winglang/sdk/lib/shared-aws/topic";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { Queue } from "./queue";
 
@@ -28,15 +26,8 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname,
-        "topic.onmessage.inflight.js"
-      ),
-      "TopicOnMessageHandlerClient"
-    );
-
+    const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
+    
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
       App.of(this).makeId(this, `${this.node.id}-OnMessage`),
