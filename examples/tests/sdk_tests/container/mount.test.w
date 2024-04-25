@@ -1,3 +1,8 @@
+/*\
+skipPlatforms:
+  - win32
+  - darwin
+\*/
 bring sim;
 bring util;
 
