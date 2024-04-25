@@ -175,9 +175,9 @@ export const GraphRenderer: FunctionComponent<
     setPortal(portalTarget.current ?? undefined);
   }, []);
 
-  useEffect(() => {
-    console.log("graph", props.graph);
-  });
+  // useEffect(() => {
+  //   console.log("graph", props.graph);
+  // });
 
   return (
     <div

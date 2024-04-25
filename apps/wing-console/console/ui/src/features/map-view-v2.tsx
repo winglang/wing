@@ -1,11 +1,13 @@
-import { CubeIcon, BoltIcon } from "@heroicons/react/24/solid";
-import { ResourceIcon } from "@wingconsole/design-system";
+import { BoltIcon } from "@heroicons/react/24/solid";
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
+import type { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
 import clsx from "classnames";
 import type { ElkPoint, LayoutOptions } from "elkjs";
+import uniqby from "lodash.uniqby";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { memo, useCallback, useEffect, useId, useMemo } from "react";
+import { memo, useCallback, useEffect, useMemo } from "react";
 
+import type { ConnectionDataV2 } from "../services/use-map-v2.js";
 import { useMapV2 } from "../services/use-map-v2.js";
 import { assert } from "../ui/elk-flow/assert.js";
 import { Graph } from "../ui/elk-flow/graph.js";
@@ -13,7 +15,6 @@ import { NodeChildren } from "../ui/elk-flow/node-children.js";
 import { Node } from "../ui/elk-flow/node.js";
 import { Port } from "../ui/elk-flow/port.js";
 import type { EdgeComponent } from "../ui/elk-flow/types.js";
-import { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
 
 interface InflightPortProps {
   occupied?: boolean;
@@ -56,7 +57,8 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
 
 // const SPACING_BASE_VALUE = 64;
 // const SPACING_BASE_VALUE = 48;
-const SPACING_BASE_VALUE = 30;
+// const SPACING_BASE_VALUE = 30;
+const SPACING_BASE_VALUE = 10;
 // const PORT_ANCHOR = SPACING_BASE_VALUE / 5;
 const PORT_ANCHOR = 0;
 // const EDGE_ROUNDED_RADIUS = 14;
@@ -64,10 +66,16 @@ const EDGE_ROUNDED_RADIUS = 10;
 // For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
 const baseLayoutOptions: LayoutOptions = {
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-  "elk.direction": "RIGHT",
-  "elk.alignment": "CENTER",
+  // "elk.direction": "RIGHT",
+  // "elk.alignment": "CENTER",
   "elk.algorithm": "org.eclipse.elk.layered",
-  "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
+  // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
+  // "elk.layered.spacing.nodeNode": `${SPACING_BASE_VALUE}`, // default 20. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-nodeNode.html.
+  // "elk.layered.spacing.edgeEdge": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-edgeEdge.html
+  // "elk.layered.spacing.edgeNode": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-edgeNode.html
+  // "elk.layered.spacing.nodeNodeBetweenLayers": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-nodeNodeBetweenLayers.html.
+  // "elk.layered.spacing.edgeEdgeBetweenLayers": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-edgeEdgeBetweenLayers.html.
+  // "elk.layered.spacing.edgeNodeBetweenLayers": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-edgeNodeBetweenLayers.html.
 };
 
 interface ContainerNodeProps {
@@ -89,16 +97,23 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             ...baseLayoutOptions,
           },
         }}
-        className={clsx("inline-block", "group", "pointer-events-none")}
+        className={clsx("inline-block", "group", "p-2", "pointer-events-none")}
       >
-        <div className="w-full h-full relative">
+        <div className="w-full h-full relative ">
           <div className="absolute inset-x-0 top-0">
             <div className="relative">
               <div className="absolute bottom-0">
                 <div
                   className={clsx(
-                    "text-sm leading-relaxed tracking-wide whitespace-nowrap group-hover:text-sky-600",
-                    "invisible",
+                    "text-sm leading-tight tracking-wide whitespace-nowrap group-hover:text-sky-600",
+                    "text-gray-400",
+                    // "text-gray-500",
+                    // "text-gray-600",
+                    "font-extralight",
+                    // "italic",
+                    // "invisible",
+                    // "opacity-0 group-hover:opacity-100",
+                    "transition-opacity",
                   )}
                 >
                   {props.name}
@@ -123,7 +138,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
               "outline outline-0 outline-sky-200 hover:outline-2",
             )}
           >
-            <div className={clsx("grow shadow-inner", "p-8")}>
+            <div className={clsx("grow shadow-inner", "px-6 py-6")}>
               <NodeChildren>
                 <div className="absolute">{props.children}</div>
               </NodeChildren>
@@ -314,7 +329,7 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
           "elk.portConstraints": "FIXED_SIDE",
         },
       }}
-      className="inline-flex group/construct"
+      className="inline-flex group/construct hover:z-10"
       title={props.id}
     >
       <div className="group relative">
@@ -552,9 +567,102 @@ export interface MapViewV2Props {}
 
 export const MapViewV2 = memo(({}: MapViewV2Props) => {
   const { tree, connections, nodeInfo } = useMapV2({});
+  // useEffect(() => {
+  //   console.log({ tree, connections, nodeInfo });
+  // }, [nodeInfo]);
+
+  const connectionsV2 = useMemo(() => {
+    if (!nodeInfo) {
+      return [];
+    }
+
+    const connectionsV2 = new Array<ConnectionDataV2>();
+    for (const connection of connections ?? []) {
+      const source = nodeInfo.get(connection.source);
+      const sourceConnections = (() => {
+        if (source?.type === "autoId") {
+          return connections?.filter(
+            (otherConnection) => otherConnection.target === connection.source,
+          );
+        }
+        return [connection];
+      })();
+
+      const target = nodeInfo.get(connection.target);
+      const targetConnections = (() => {
+        if (target?.type === "autoId") {
+          return connections?.filter(
+            (otherConnection) => otherConnection.source === connection.target,
+          );
+        }
+        return [connection];
+      })();
+
+      const xxx = [];
+      for (const sourceConnection of sourceConnections) {
+        for (const targetConnection of targetConnections) {
+          connectionsV2.push({
+            name: targetConnection.name,
+            source: sourceConnection.source,
+            sourceOp: sourceConnection.sourceOp,
+            target: targetConnection.target,
+            targetOp: targetConnection.targetOp,
+          });
+          xxx.push({
+            name: targetConnection.name,
+            source: sourceConnection.source,
+            sourceOp: sourceConnection.sourceOp,
+            target: targetConnection.target,
+            targetOp: targetConnection.targetOp,
+          });
+        }
+      }
+
+      console.log({
+        source,
+        target,
+        connection,
+        xxx: uniqby(connectionsV2, (connection) => {
+          return `${connection.source}#${connection.target}`;
+        }),
+      });
+
+      // if (source?.type !== "autoId" && target?.type !== "autoId") {
+      //   connectionsV2.push(connection);
+      // }
+
+      // if (target?.type === "autoId") {
+      //   const targetConnections = connections?.filter(
+      //     (otherConnection) => otherConnection.target === connection.target,
+      //   );
+      //   for (const targetConnection of targetConnections ?? []) {
+      //     connectionsV2.push({
+      //       ...targetConnection,
+      //       source: connection.source,
+      //     });
+      //   }
+      // }
+
+      // else {
+      //   const sourceConnections = connections?.filter(
+      //     (otherConnection) => otherConnection.source === connection.source,
+      //   );
+      //   for (const sourceConnection of sourceConnections ?? []) {
+      //     connectionsV2.push({
+      //       ...sourceConnection,
+      //       target: connection.target,
+      //     });
+      //   }
+      // }
+    }
+
+    return uniqby(connectionsV2, (connection) => {
+      return `${connection.source}#${connection.target}`;
+    });
+  }, [connections, nodeInfo]);
   useEffect(() => {
-    console.log({ tree, connections, nodeInfo });
-  }, [nodeInfo]);
+    console.log({ connections, connectionsV2 });
+  }, [connections, connectionsV2]);
 
   // const getConnectionId = useCallback(
   //   (nodePath: string, name: string, type: "source" | "target") => {
@@ -618,7 +726,8 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
       const info = nodeInfo?.get(props.constructTreeNode.path);
 
       if (info?.type === "autoId") {
-        return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
+        // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
+        return <></>;
       }
 
       if (info?.type === "construct") {
@@ -708,7 +817,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
           //     ],
           //   };
           // })}
-          edges={connections?.map((connection) => {
+          edges={connectionsV2.map((connection) => {
             return {
               id: `${connection.source}#${connection.target}#${connection.name}`,
               sources: [getConnectionId(connection, "source")],
@@ -759,6 +868,7 @@ const AutoIdNode: FunctionComponent<{
           "transition-all",
           "shadow",
           "relative",
+          "group",
           "bg-white",
         )}
       >
@@ -785,6 +895,21 @@ const AutoIdNode: FunctionComponent<{
         >
           <InflightPort />
         </Port>
+
+        <div className="absolute bottom-0 inset-x-0 invisible group-hover:visible">
+          <div className="relative">
+            <div className="absolute top-0 inset-x-0">
+              <div className="flex justify-around">
+                {/* <div className="size-3 rounded-full bg-red-500"></div> */}
+                <div className="absolute text-center">
+                  <div className="text-xs text-gray-500 backdrop-blur">
+                    {props.constructTreeNode.id.split("/").slice(-1).join("")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </Node>
   );

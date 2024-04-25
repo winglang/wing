@@ -5,6 +5,19 @@ import { useMemo } from "react";
 
 import { trpc } from "./trpc.js";
 
+export type ConnectionDataV2 = {
+  /** The path of the source construct. */
+  readonly source: string;
+  /** The path of the target construct. */
+  readonly target: string;
+
+  readonly sourceOp: string;
+  readonly targetOp: string;
+
+  /** A name for the connection. */
+  readonly name: string;
+};
+
 export type NodeInflight = {
   id: string;
   name: string;
@@ -108,7 +121,8 @@ export interface UseMapOptionsV2 {
 
 export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
   const query = trpc["app.map.v2"].useQuery();
-  const { tree, connections } = query.data ?? {};
+  const { tree, connections: incorrectlyTypedConnections } = query.data ?? {};
+  const connections = incorrectlyTypedConnections as ConnectionDataV2[];
   const nodeInfo = useMemo(() => {
     if (!tree || !connections) {
       return;
@@ -118,7 +132,7 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
     const processNode = (node: ConstructTreeNode) => {
       const nodeType = getNodeType(node, connections);
       const inflights = getNodeInflights(node, connections);
-      console.log(node.path, nodeType, inflights);
+      // console.log(node.path, nodeType, inflights);
       switch (nodeType) {
         case "container": {
           nodeMap.set(node.path, {
