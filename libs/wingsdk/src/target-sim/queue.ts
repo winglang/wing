@@ -102,12 +102,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      * `cloud.Function` and overrides the `invoke` inflight method with the
      * wrapper code directly?
      */
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "queue.setconsumer.inflight.js"),
-      "QueueSetConsumerHandlerClient"
-    );
-
+    const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
       App.of(this).makeId(this, "SetConsumer"),
@@ -172,5 +167,25 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   /** @internal */
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
+  }
+}
+
+/**
+ * Utility class to work with queue set consumer handlers.
+ */
+export class QueueSetConsumerHandler {
+  /**
+   * Converts from a `cloud.IQueueSetConsumerHandler` to a `cloud.IFunctionHandler`.
+   * @param handler The handler to convert.
+   * @returns The function handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.IQueueSetConsumerHandler
+  ): cloud.IFunctionHandler {
+    return convertBetweenHandlers(
+      handler,
+      join(__dirname, "queue.setconsumer.inflight.js"),
+      "QueueSetConsumerHandlerClient"
+    );
   }
 }

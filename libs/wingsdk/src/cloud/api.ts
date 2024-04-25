@@ -183,8 +183,48 @@ export class Api extends Resource {
    * @returns OpenAPI path
    * @internal
    */
-  public static _toOpenApiPath(path: string) {
+  public static renderOpenApiPath(path: string) {
     return path.replace(/\/:([A-Za-z0-9_-]+)/g, "/{$1}");
+  }
+
+  /**
+   * Generates an object containing default CORS response headers and OPTIONS response headers.
+   * @param corsOptions The CORS options to generate the headers from.
+   * @returns An object containing default CORS response headers and OPTIONS response headers.
+   */
+  public static renderCorsHeaders(
+    corsOptions?: ApiCorsOptions
+  ): CorsHeaders | undefined {
+    if (corsOptions == undefined) {
+      return;
+    }
+
+    const {
+      allowOrigin = "*",
+      allowHeaders = [],
+      allowMethods = [],
+      exposeHeaders = [],
+      allowCredentials = false,
+      maxAge = Duration.fromMinutes(5),
+    } = corsOptions;
+
+    const defaultHeaders: CorsDefaultResponseHeaders = {
+      "Access-Control-Allow-Origin": allowOrigin || "*",
+      "Access-Control-Expose-Headers": exposeHeaders.join(",") || "",
+      "Access-Control-Allow-Credentials": allowCredentials ? "true" : "false",
+    };
+
+    const optionsHeaders: CorsOptionsResponseHeaders = {
+      "Access-Control-Allow-Origin": allowOrigin || "*",
+      "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
+      "Access-Control-Allow-Methods": allowMethods.join(",") || "",
+      "Access-Control-Max-Age": maxAge.seconds.toString(),
+    };
+
+    return {
+      defaultResponse: defaultHeaders,
+      optionsResponse: optionsHeaders,
+    };
   }
 
   /**
@@ -489,47 +529,6 @@ export class Api extends Resource {
   }
 
   /**
-   * Generates an object containing default CORS response headers and OPTIONS response headers.
-   * @param corsOptions The CORS options to generate the headers from.
-   * @returns An object containing default CORS response headers and OPTIONS response headers.
-   * @internal
-   */
-  protected _generateCorsHeaders(
-    corsOptions?: ApiCorsOptions
-  ): CorsHeaders | undefined {
-    if (corsOptions == undefined) {
-      return;
-    }
-
-    const {
-      allowOrigin = "*",
-      allowHeaders = [],
-      allowMethods = [],
-      exposeHeaders = [],
-      allowCredentials = false,
-      maxAge = Duration.fromMinutes(5),
-    } = corsOptions;
-
-    const defaultHeaders: CorsDefaultResponseHeaders = {
-      "Access-Control-Allow-Origin": allowOrigin || "*",
-      "Access-Control-Expose-Headers": exposeHeaders.join(",") || "",
-      "Access-Control-Allow-Credentials": allowCredentials ? "true" : "false",
-    };
-
-    const optionsHeaders: CorsOptionsResponseHeaders = {
-      "Access-Control-Allow-Origin": allowOrigin || "*",
-      "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
-      "Access-Control-Allow-Methods": allowMethods.join(",") || "",
-      "Access-Control-Max-Age": maxAge.seconds.toString(),
-    };
-
-    return {
-      defaultResponse: defaultHeaders,
-      optionsResponse: optionsHeaders,
-    };
-  }
-
-  /**
    * Add a route to the api spec.
    * @param path The path to add.
    * @param method The method to add.
@@ -602,7 +601,7 @@ export class Api extends Resource {
     // Convert our paths to valid OpenAPI paths
     let paths: { [key: string]: any } = {};
     Object.keys(this.apiSpec.paths).forEach((key) => {
-      paths[Api._toOpenApiPath(key)] = this.apiSpec.paths[key];
+      paths[Api.renderOpenApiPath(key)] = this.apiSpec.paths[key];
     });
 
     // https://spec.openapis.org/oas/v3.0.3

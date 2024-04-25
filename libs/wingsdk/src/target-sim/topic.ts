@@ -30,12 +30,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "topic.onmessage.inflight.js"),
-      "TopicOnMessageHandlerClient"
-    );
-
+    const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnMessage"),
@@ -125,5 +120,25 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       type: cloud.TOPIC_FQN,
       props,
     };
+  }
+}
+
+/**
+ * Utility class to work with topic message handlers.
+ */
+export class TopicOnMessageHandler {
+  /**
+   * Converts a `cloud.ITopicOnMessageHandler` to a `cloud.IFunctionHandler`
+   * @param handler the handler to convert
+   * @returns the function handler
+   */
+  public static toFunctionHandler(
+    handler: cloud.ITopicOnMessageHandler
+  ): cloud.IFunctionHandler {
+    return convertBetweenHandlers(
+      handler,
+      join(__dirname, "topic.onmessage.inflight.js"),
+      "TopicOnMessageHandlerClient"
+    );
   }
 }

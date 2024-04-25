@@ -1,4 +1,6 @@
+import { join } from "path";
 import { cloud } from "..";
+import { convertBetweenHandlers } from "../shared/convert";
 
 /**
  * The stage name for the API, used in its url.
@@ -65,6 +67,31 @@ export class Api {
       typeof obj.stageName === "string" &&
       typeof obj.invokeUrl === "string" &&
       typeof obj.deploymentId === "string"
+    );
+  }
+}
+
+/**
+ * A helper class for working with AWS api endpoint handlers.
+ */
+export class ApiEndpointHandler {
+  /**
+   * Returns a `cloud.Function` handler for handling requests from a `cloud.Api`.
+   * @param handler The `onRequest` handler.
+   * @param corsOptions The CORS options.
+   * @returns The `cloud.Function` handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.IApiEndpointHandler,
+    corsOptions?: cloud.ApiCorsOptions
+  ): cloud.IFunctionHandler {
+    return convertBetweenHandlers(
+      handler,
+      join(__dirname, "api.onrequest.inflight.js"),
+      "ApiOnRequestHandlerClient",
+      {
+        corsHeaders: cloud.Api.renderCorsHeaders(corsOptions)?.defaultResponse,
+      }
     );
   }
 }

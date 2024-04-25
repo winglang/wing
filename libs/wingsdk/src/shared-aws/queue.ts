@@ -1,3 +1,4 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import { calculateQueuePermissions } from "./permissions";
@@ -6,6 +7,7 @@ import { cloud } from "..";
 import { IQueueClient } from "../cloud";
 import { InflightClient } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
+import { convertBetweenHandlers } from "../shared/convert";
 import { Testing } from "../simulator";
 import { IInflightHost, Node, Resource } from "../std";
 import * as ui from "../ui";
@@ -165,5 +167,25 @@ export class QueueRef extends Resource {
     });
 
     new ui.ValueField(this, "QueueArnField", "SQS Queue ARN", this.queueArn);
+  }
+}
+
+/**
+ * Utility class for working with the queue consumer handler.
+ */
+export class QueueSetConsumerHandler {
+  /**
+   * Converts a queue consumer handler to a function handler.
+   * @param handler The queue consumer handler.
+   * @returns The function handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.IQueueSetConsumerHandler
+  ): cloud.IFunctionHandler {
+    return convertBetweenHandlers(
+      handler,
+      join(__dirname, "queue.setconsumer.inflight.js"),
+      "QueueSetConsumerHandlerClient"
+    );
   }
 }
