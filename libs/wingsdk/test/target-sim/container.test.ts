@@ -43,7 +43,6 @@ test("simple container from registry", async () => {
 });
 
 test("simple container from a dockerfile", async () => {
-  // TODO: fix this test
   const app = new SimApp();
 
   const c = new Container(app, "Container", {
