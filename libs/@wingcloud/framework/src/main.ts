@@ -1,4 +1,5 @@
 import { platform, std } from "@winglang/sdk";
+import { LiftDepsMatrixRaw } from "@winglang/sdk/lib/core";
 import type { Construct } from "@winglang/sdk/lib/core/types";
 
 /**
@@ -75,6 +76,9 @@ This is a Wing app and must be run through the Wing CLI (npm install -f winglang
       fn(this, (name, handler, props) => {
         new std.Test(this, name, handler, props);
       });
+    }
+    get _liftMap(): LiftDepsMatrixRaw {
+      return {};
     }
   }
 

@@ -11,6 +11,7 @@ import {
   QueueSetConsumerHandler,
 } from "@winglang/sdk/lib/shared-aws/queue";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
+import { LiftDepsMatrixRaw } from "@winglang/sdk/lib/core";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -94,12 +95,12 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
   /** @internal */
   public get _liftMap(): LiftDepsMatrixRaw {
-    return [
-      cloud.QueueInflightMethods.PUSH,
-      cloud.QueueInflightMethods.PURGE,
-      cloud.QueueInflightMethods.APPROX_SIZE,
-      cloud.QueueInflightMethods.POP,
-    ];
+    return {
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.QueueInflightMethods.PURGE]: [],
+      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
+      [cloud.QueueInflightMethods.POP]: [],
+    };
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {

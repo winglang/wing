@@ -16,6 +16,7 @@ import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
+import { LiftDepsMatrixRaw } from "@winglang/sdk/lib/core";
 
 /**
  * Implementation of `awscdk.Function` are expected to implement this
@@ -105,10 +106,10 @@ export class Function
 
   /** @internal */
   public get _liftMap(): LiftDepsMatrixRaw {
-    return [
-      cloud.FunctionInflightMethods.INVOKE,
-      cloud.FunctionInflightMethods.INVOKE_ASYNC,
-    ];
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [],
+    };
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {

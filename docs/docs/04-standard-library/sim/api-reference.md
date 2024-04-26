@@ -154,6 +154,8 @@ new sim.Policy(props: PolicyProps);
 
 #### Methods <a name="Methods" id="Methods"></a>
 
+##### Preflight Methods
+
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.sim.Policy.addStatement">addStatement</a></code> | Adds a statement to the policy. |
@@ -610,14 +612,6 @@ The resource to which the policy is attached.
 ---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IPolicyClient <a name="IPolicyClient" id="@winglang/sdk.sim.IPolicyClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.sim.IPolicyClient">IPolicyClient</a>
-
-Inflight interface for `Policy`.
-
-
 
 ### ISimulatorInflightHost <a name="ISimulatorInflightHost" id="@winglang/sdk.sim.ISimulatorInflightHost"></a>
 

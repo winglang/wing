@@ -218,11 +218,12 @@ class Lifter<
     // inflight methods are called on an object
     // The SDK models inflight functions as objects with a "handle" property,
     // so here we annotate that "handle" needs all of the required permissions
-    const _liftMap: LiftDepsMatrixRaw = { handle: [], $inflight_init: [] };
+    const _liftMap: LiftDepsMatrixRaw = { handle: [] };
     for (const [key, obj] of Object.entries(this.lifts)) {
       let knownOps = this.grants[key];
-      knownOps.push(...Object.keys((obj as IHostedLiftable)._liftMap ?? {}));
-      _liftMap.handle.push([obj, knownOps ?? []]);
+      knownOps =
+        knownOps ?? Object.keys((obj as IHostedLiftable)._liftMap ?? {});
+      _liftMap.handle.push([obj, knownOps]);
     }
 
     return {
