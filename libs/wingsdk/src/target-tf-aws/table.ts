@@ -123,16 +123,16 @@ export class Table extends ex.Table implements IAwsTable {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      ex.TableInflightMethods.INSERT,
-      ex.TableInflightMethods.UPSERT,
-      ex.TableInflightMethods.UPDATE,
-      ex.TableInflightMethods.DELETE,
-      ex.TableInflightMethods.GET,
-      ex.TableInflightMethods.TRYGET,
-      ex.TableInflightMethods.LIST,
-    ];
+  public get _liftMap(): core.LiftDepsMatrixRaw {
+    return {
+      [ex.TableInflightMethods.INSERT]: [],
+      [ex.TableInflightMethods.UPSERT]: [],
+      [ex.TableInflightMethods.UPDATE]: [],
+      [ex.TableInflightMethods.DELETE]: [],
+      [ex.TableInflightMethods.GET]: [],
+      [ex.TableInflightMethods.TRYGET]: [],
+      [ex.TableInflightMethods.LIST]: [],
+    };
   }
 
   private envName(): string {

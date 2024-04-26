@@ -11,6 +11,7 @@ import { ProjectIamMember } from "../.gen/providers/google/project-iam-member";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
+import { LiftDepsMatrixRaw } from "../core";
 import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
@@ -233,8 +234,10 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [cloud.FunctionInflightMethods.INVOKE];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [],
+    };
   }
 
   /** @internal */

@@ -8,6 +8,7 @@ import {
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
+import { LiftDepsMatrixRaw } from "../core";
 import {
   ISimulatorResourceInstance,
   ToSimulatorOutput,
@@ -63,8 +64,8 @@ export class EventMapping extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {};
   }
 
   public get eventProps(): EventMappingProps {

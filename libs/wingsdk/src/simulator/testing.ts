@@ -61,7 +61,6 @@ ${Object.entries(clients)
       },
       _liftMap: liftDeps,
       onLift: (_host: IInflightHost, _ops: string[]) => {},
-      _supportedOps: () => [],
     };
   }
 }

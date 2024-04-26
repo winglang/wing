@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { LiftDepsMatrixRaw } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
@@ -97,6 +98,11 @@ export class Table extends Resource {
       throw new Error("No column is defined");
     }
     this.columns = props.columns;
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {};
   }
 
   /**

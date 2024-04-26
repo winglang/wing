@@ -11,6 +11,7 @@ import {
   BigtableTableConfig,
   BigtableTableColumnFamily,
 } from "../.gen/providers/google/bigtable-table";
+import { LiftDepsMatrixRaw } from "../core";
 import { NotImplementedError } from "../core/errors";
 import * as ex from "../ex";
 import {
@@ -90,8 +91,8 @@ export class Table extends ex.Table {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {};
   }
 
   public addRow(_key: string, _row: Json): void {

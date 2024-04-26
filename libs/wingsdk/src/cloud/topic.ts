@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { Queue, QueueProps } from "./queue";
 import { fqnForType } from "../constants";
+import { LiftDepsMatrixRaw } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource, IInflight } from "../std";
@@ -34,6 +35,11 @@ export class Topic extends Resource {
     Node.of(this).description = "A pub/sub notification topic";
 
     props;
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {};
   }
 
   /**

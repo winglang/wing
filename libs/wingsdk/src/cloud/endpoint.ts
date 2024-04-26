@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { LiftDepsMatrixRaw } from "../core";
 import { Node, Resource } from "../std";
 
 /**
@@ -61,6 +62,11 @@ export class Endpoint extends Resource {
     this._url = url;
     this._label = props?.label;
     this._browserSupport = props?.browserSupport;
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {};
   }
 
   /**

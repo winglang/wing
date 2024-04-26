@@ -221,12 +221,7 @@ class Lifter<
     const _liftMap: LiftDepsMatrixRaw = { handle: [], $inflight_init: [] };
     for (const [key, obj] of Object.entries(this.lifts)) {
       let knownOps = this.grants[key];
-      if (
-        knownOps === undefined &&
-        typeof (obj as IHostedLiftable)?._supportedOps === "function"
-      ) {
-        knownOps = (obj as IHostedLiftable)._supportedOps();
-      }
+      knownOps.push(...Object.keys((obj as IHostedLiftable)._liftMap ?? {}));
       _liftMap.handle.push([obj, knownOps ?? []]);
     }
 
@@ -253,7 +248,6 @@ class Lifter<
 )())`;
       },
       _liftMap,
-      _supportedOps: () => [],
       // @ts-expect-error This function's type doesn't actually match, but it will just throw anyways
       [INFLIGHT_SYMBOL]: () => {
         throw new Error(

@@ -2,7 +2,7 @@ import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { cloud } from "..";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, LiftDepsMatrixRaw } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
@@ -77,6 +77,11 @@ export class Website extends Resource implements IWebsite {
       : resolve(App.of(scope).entrypointDir, props.path);
 
     this._domain = props.domain;
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {};
   }
 
   /**

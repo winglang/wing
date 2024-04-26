@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { LiftDepsMatrixRaw } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource } from "../std";
 
@@ -27,6 +28,11 @@ export class Redis extends Resource {
 
     Node.of(this).title = "Redis";
     Node.of(this).description = "A Redis server";
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {};
   }
 }
 

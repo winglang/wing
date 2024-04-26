@@ -104,7 +104,7 @@ export class Function
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public get _liftMap(): LiftDepsMatrixRaw {
     return [
       cloud.FunctionInflightMethods.INVOKE,
       cloud.FunctionInflightMethods.INVOKE_ASYNC,

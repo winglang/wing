@@ -8,7 +8,7 @@ import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
-import { InflightClient } from "../core";
+import { InflightClient, LiftDepsMatrixRaw } from "../core";
 import { NotImplementedError } from "../core/errors";
 import {
   CaseConventions,
@@ -95,24 +95,24 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.BucketInflightMethods.DELETE,
-      cloud.BucketInflightMethods.GET,
-      cloud.BucketInflightMethods.GET_JSON,
-      cloud.BucketInflightMethods.LIST,
-      cloud.BucketInflightMethods.PUT,
-      cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
-      cloud.BucketInflightMethods.EXISTS,
-      cloud.BucketInflightMethods.TRY_GET,
-      cloud.BucketInflightMethods.TRY_GET_JSON,
-      cloud.BucketInflightMethods.TRY_DELETE,
-      cloud.BucketInflightMethods.METADATA,
-      cloud.BucketInflightMethods.COPY,
-      cloud.BucketInflightMethods.RENAME,
-      cloud.BucketInflightMethods.SIGNED_URL,
-    ];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+      [cloud.BucketInflightMethods.SIGNED_URL]: [],
+    };
   }
 
   public addObject(key: string, body: string): void {

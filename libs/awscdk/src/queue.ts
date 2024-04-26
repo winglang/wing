@@ -5,7 +5,11 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { std, core, cloud } from "@winglang/sdk";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsQueue, Queue as AwsQueue, QueueSetConsumerHandler } from "@winglang/sdk/lib/shared-aws/queue";
+import {
+  IAwsQueue,
+  Queue as AwsQueue,
+  QueueSetConsumerHandler,
+} from "@winglang/sdk/lib/shared-aws/queue";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 
 /**
@@ -21,25 +25,32 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     super(scope, id, props);
     this.timeout = props.timeout ?? std.Duration.fromSeconds(30);
 
-    const queueOpt = props.dlq ? {
-      visibilityTimeout: props.timeout
-        ? Duration.seconds(props.timeout?.seconds)
-        : Duration.seconds(30),
-      retentionPeriod: props.retentionPeriod
-        ? Duration.seconds(props.retentionPeriod?.seconds)
-        : Duration.hours(1),
-      deadLetterQueue: {
-        queue: SQSQueue.fromQueueArn(this, "DeadLetterQueue", AwsQueue.from(props.dlq.queue)?.queueArn!),
-        maxReceiveCount: props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
-      }
-    } : {
-      visibilityTimeout: props.timeout
-        ? Duration.seconds(props.timeout?.seconds)
-        : Duration.seconds(30),
-      retentionPeriod: props.retentionPeriod
-        ? Duration.seconds(props.retentionPeriod?.seconds)
-        : Duration.hours(1),
-    }
+    const queueOpt = props.dlq
+      ? {
+          visibilityTimeout: props.timeout
+            ? Duration.seconds(props.timeout?.seconds)
+            : Duration.seconds(30),
+          retentionPeriod: props.retentionPeriod
+            ? Duration.seconds(props.retentionPeriod?.seconds)
+            : Duration.hours(1),
+          deadLetterQueue: {
+            queue: SQSQueue.fromQueueArn(
+              this,
+              "DeadLetterQueue",
+              AwsQueue.from(props.dlq.queue)?.queueArn!
+            ),
+            maxReceiveCount:
+              props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
+          },
+        }
+      : {
+          visibilityTimeout: props.timeout
+            ? Duration.seconds(props.timeout?.seconds)
+            : Duration.seconds(30),
+          retentionPeriod: props.retentionPeriod
+            ? Duration.seconds(props.retentionPeriod?.seconds)
+            : Duration.hours(1),
+        };
 
     this.queue = new SQSQueue(this, "Default", queueOpt);
   }
@@ -82,7 +93,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public get _liftMap(): LiftDepsMatrixRaw {
     return [
       cloud.QueueInflightMethods.PUSH,
       cloud.QueueInflightMethods.PURGE,
@@ -98,7 +109,10 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
     const env = this.envName();
 
-    addPolicyStatements(host.awscdkFunction, calculateQueuePermissions(this.queue.queueArn, ops));
+    addPolicyStatements(
+      host.awscdkFunction,
+      calculateQueuePermissions(this.queue.queueArn, ops)
+    );
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
@@ -109,12 +123,9 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "QueueClient",
-      [`process.env["${this.envName()}"]`]
-    );
+    return core.InflightClient.for(__dirname, __filename, "QueueClient", [
+      `process.env["${this.envName()}"]`,
+    ]);
   }
 
   private envName(): string {

@@ -1,11 +1,17 @@
 import { Topic as SNSTopic } from "aws-cdk-lib/aws-sns";
 import { Queue as SQSQeueue } from "aws-cdk-lib/aws-sqs";
-import { LambdaSubscription, SqsSubscription } from "aws-cdk-lib/aws-sns-subscriptions";
+import {
+  LambdaSubscription,
+  SqsSubscription,
+} from "aws-cdk-lib/aws-sns-subscriptions";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsTopic, TopicOnMessageHandler } from "@winglang/sdk/lib/shared-aws/topic";
+import {
+  IAwsTopic,
+  TopicOnMessageHandler,
+} from "@winglang/sdk/lib/shared-aws/topic";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { Queue } from "./queue";
 
@@ -27,7 +33,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
     const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
-    
+
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
       App.of(this).makeId(this, `${this.node.id}-OnMessage`),
@@ -36,7 +42,9 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     );
 
     if (!isAwsCdkFunction(fn)) {
-      throw new Error("Expected function to implement 'IAwsCdkFunction' method");
+      throw new Error(
+        "Expected function to implement 'IAwsCdkFunction' method"
+      );
     }
 
     const subscription = new LambdaSubscription(fn.awscdkFunction);
@@ -53,7 +61,9 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
   public subscribeQueue(queue: cloud.Queue): void {
     if (!(queue instanceof Queue)) {
-      throw new Error("'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic");
+      throw new Error(
+        "'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic"
+      );
     }
 
     const baseTopic = SNSTopic.fromTopicArn(this, "BaseTopic", this.topicArn);
@@ -66,7 +76,10 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       throw new Error("Expected 'host' to implement 'IAwsCdkFunction' method");
     }
 
-    addPolicyStatements(host.awscdkFunction, calculateTopicPermissions(this.topic.topicArn, ops));
+    addPolicyStatements(
+      host.awscdkFunction,
+      calculateTopicPermissions(this.topic.topicArn, ops)
+    );
 
     host.addEnvironment(this.envName(), this.topic.topicArn);
 
@@ -75,15 +88,12 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "TopicClient",
-      [`process.env["${this.envName()}"]`]
-    );
+    return core.InflightClient.for(__dirname, __filename, "TopicClient", [
+      `process.env["${this.envName()}"]`,
+    ]);
   }
   /** @internal */
-  public _supportedOps(): string[] {
+  public get _liftMap(): LiftDepsMatrixRaw {
     return [cloud.TopicInflightMethods.PUBLISH];
   }
 

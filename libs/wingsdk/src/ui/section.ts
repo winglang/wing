@@ -3,7 +3,7 @@ import { VisualComponent } from "./base";
 import { Button, IButtonHandler } from "./button";
 import { Field, FieldProps, IFieldHandler } from "./field";
 import { fqnForType } from "../constants";
-import { App, UIComponent } from "../core";
+import { App, LiftDepsMatrixRaw, UIComponent } from "../core";
 
 /**
  * Global identifier for `Section`.
@@ -95,8 +95,8 @@ export class Section extends VisualComponent {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [];
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {};
   }
 
   /** @internal */

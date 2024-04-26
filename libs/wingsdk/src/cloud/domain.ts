@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { LiftDepsMatrixRaw } from "../core";
 import { Node, Resource } from "../std";
 
 /**
@@ -37,6 +38,11 @@ export class Domain extends Resource {
     Node.of(this).description = "A cloud domain";
 
     this._domain = props.domainName;
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {};
   }
 
   /**

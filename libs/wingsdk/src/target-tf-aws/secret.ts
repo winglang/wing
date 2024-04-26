@@ -44,11 +44,11 @@ export class Secret extends cloud.Secret {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.SecretInflightMethods.VALUE,
-      cloud.SecretInflightMethods.VALUE_JSON,
-    ];
+  public get _liftMap(): core.LiftDepsMatrixRaw {
+    return {
+      [cloud.SecretInflightMethods.VALUE]: [],
+      [cloud.SecretInflightMethods.VALUE_JSON]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

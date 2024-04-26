@@ -3,6 +3,7 @@ import { ISimulatorResource } from "./resource";
 import { PolicySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { fqnForType } from "../constants";
+import { LiftDepsMatrixRaw } from "../core";
 import { PolicyStatement, ToSimulatorOutput } from "../simulator";
 import { IResource, Node, Resource } from "../std";
 
@@ -20,16 +21,24 @@ export interface PolicyProps {
 
 /**
  * Implementation of `sim.Policy`.
+ *
+ * @inflight `@winglang/sdk.sim.IPolicyClient`
  */
 export class Policy extends Resource implements ISimulatorResource {
   private readonly statements: Map<IResource, Set<string>> = new Map();
   private readonly principal: IResource;
+
   constructor(scope: Construct, id: string, props: PolicyProps) {
     super(scope, id);
     this.principal = props.principal;
     Node.of(this).hidden = true;
     Node.of(this).title = "Policy";
     Node.of(this).description = "A simulated resource policy";
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftDepsMatrixRaw {
+    return {};
   }
 
   /**

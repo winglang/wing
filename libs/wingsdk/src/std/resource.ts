@@ -85,7 +85,7 @@ export interface IHostedLiftable extends ILiftable {
    * inflight host.
    * @internal
    */
-  _liftMap?: LiftDepsMatrixRaw;
+  _liftMap: LiftDepsMatrixRaw;
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
@@ -96,15 +96,6 @@ export interface IHostedLiftable extends ILiftable {
    * other capabilities to the inflight host.
    */
   onLift(host: IInflightHost, ops: string[]): void;
-
-  /**
-   * Return a list of all inflight operations that are supported by this resource.
-   *
-   * If this method doesn't exist, the resource is assumed to not support any inflight operations.
-   *
-   * @internal
-   */
-  _supportedOps(): string[];
 }
 
 /**
@@ -167,12 +158,8 @@ export abstract class Resource extends Construct implements IResource {
     return App.of(scope).newAbstract(fqn, scope, id, ...props);
   }
 
-  /**
-   * @internal
-   * */
-  public _supportedOps(): string[] {
-    return [];
-  }
+  /** @internal */
+  public abstract get _liftMap(): LiftDepsMatrixRaw;
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.

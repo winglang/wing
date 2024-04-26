@@ -26,7 +26,7 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
+  public get _liftMap(): LiftDepsMatrixRaw {
     return [
       cloud.CounterInflightMethods.INC,
       cloud.CounterInflightMethods.DEC,
@@ -40,7 +40,10 @@ export class Counter extends cloud.Counter implements IAwsCounter {
       throw new Error("Expected 'host' to implement 'isAwsCdkFunction' method");
     }
 
-    addPolicyStatements(host.awscdkFunction, calculateCounterPermissions(this.table.tableArn, ops));
+    addPolicyStatements(
+      host.awscdkFunction,
+      calculateCounterPermissions(this.table.tableArn, ops)
+    );
 
     host.addEnvironment(this.envName(), this.table.tableName);
 
@@ -49,12 +52,10 @@ export class Counter extends cloud.Counter implements IAwsCounter {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "CounterClient",
-      [`process.env["${this.envName()}"]`, `${this.initial}`]
-    );
+    return core.InflightClient.for(__dirname, __filename, "CounterClient", [
+      `process.env["${this.envName()}"]`,
+      `${this.initial}`,
+    ]);
   }
 
   private envName(): string {

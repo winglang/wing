@@ -258,22 +258,12 @@ export function collectLifts(
     // Currently there are a few ways to do this:
     // - The compiler may generate a _liftMap property on the object
     // - The compiler may generate a static _liftTypeMap method on a class
-    // - The SDK may have a _supportedOps method on a class (TODO: remove this?)
 
     let matrix: LiftDepsMatrix;
     if (matrixCache.has(obj)) {
       matrix = matrixCache.get(obj)!;
     } else if (typeof obj === "object" && obj._liftMap !== undefined) {
       matrix = parseMatrix(obj._liftMap ?? {});
-      matrixCache.set(obj, matrix);
-    } else if (
-      typeof obj === "object" &&
-      typeof obj._supportedOps === "function"
-    ) {
-      matrix = {};
-      for (const op of obj._supportedOps()) {
-        matrix[op] = new Map();
-      }
       matrixCache.set(obj, matrix);
     } else if (
       typeof obj === "function" &&
