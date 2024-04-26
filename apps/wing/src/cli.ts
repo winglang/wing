@@ -20,24 +20,11 @@ const DEFAULT_PLATFORM = ["sim"];
 
 let analyticsExportFile: Promise<string | undefined> | undefined;
 
-function runSubCommand(subCommand: string, subCommandPath: string = subCommand) {
+function runSubCommand(subCommand: string, path: string = subCommand) {
   return async (...args: any[]) => {
-    const { loadEnvVariables } = await import("./env");
-    const path = await import("path");
-    
-    let entryArg = args[0];
-    if (entryArg instanceof Array) {
-      entryArg = entryArg[0]; // if multiple entries are provided, use the first one
-    }
-
-    loadEnvVariables({
-      mode: subCommand,
-      cwd: entryArg ? path.resolve(path.dirname(entryArg)) : undefined,
-    });
-    
     try {
       // paths other than the root path aren't working unless specified in the path arg
-      const exitCode = await import(`./commands/${subCommandPath}`).then((m) => m[subCommand](...args));
+      const exitCode = await import(`./commands/${path}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
         await exportAnalyticsHook();
         process.exitCode = 1;

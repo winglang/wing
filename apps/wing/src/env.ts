@@ -11,12 +11,6 @@ export interface EnvLoadOptions {
    * @default process.cwd()
    */
   cwd?: string;
-
-  /**
-   * The mode to load additional environment variables from.
-   * e.g. "wing compile" has mode "compile", which will load ".env.compile" and ".env.compile.local".
-   */
-  mode?: string;
 }
 
 /**
@@ -24,9 +18,7 @@ export interface EnvLoadOptions {
  */
 export function loadEnvVariables(options?: EnvLoadOptions): Record<string, string> | undefined {
   const envDir = options?.cwd ?? process.cwd();
-  const envFiles = DEFAULT_ENV_FILES.concat(
-    options?.mode ? [`.env.${options.mode}`, `.env.${options.mode}.local`] : []
-  ).map((file) => join(envDir, file));
+  const envFiles = DEFAULT_ENV_FILES.map((file) => join(envDir, file));
 
   // Parse `envFiles` and combine their variables into a single object
   const parsed = Object.fromEntries(
