@@ -174,14 +174,14 @@ test("simple container with a volume", async () => {
   await sim.stop();
 });
 
-test("container can mount a volume to the state directory", async () => {
+test("anonymous volume can be reused across restarts", async () => {
   const app = new SimApp();
 
   const c = new Container(app, "Container", {
     name: "my-app",
     image: join(__dirname, "my-docker-image.mounted-volume"),
     containerPort: 3000,
-    volumes: ["$WING_STATE_DIR:/tmp"],
+    volumes: ["/tmp"],
   });
 
   new Function(
@@ -204,11 +204,17 @@ test("container can mount a volume to the state directory", async () => {
 
   const fn = sim.getResource("root/Function") as IFunctionClient;
   const response = await fn.invoke();
-  expect(response).contains("hello.txt");
-
-  const statedir = sim.getResourceStateDir("root/Container");
-  const files = readdirSync(statedir);
-  expect(files).toEqual(["hello.txt"]);
+  expect(response?.split("\n").filter((s) => s.endsWith(".txt"))).toEqual([
+    "hello.txt",
+  ]);
 
   await sim.stop();
+  await sim.start();
+
+  const fn2 = sim.getResource("root/Function") as IFunctionClient;
+  const response2 = await fn2.invoke();
+  expect(response2?.split("\n").filter((s) => s.endsWith(".txt"))).toEqual([
+    "hello.txt",
+    "world.txt",
+  ]);
 });

@@ -12,7 +12,13 @@ const server = http.createServer((req, res) => {
   res.end(fs.readdirSync("/tmp").join("\n"));
 });
 
-fs.writeFileSync("/tmp/hello.txt", "Hello, World!", "utf8");
+if (!fs.existsSync("/tmp/hello.txt")) {
+  // on the first run, create a file
+  fs.writeFileSync("/tmp/hello.txt", "Hello, World!", "utf8");
+} else {
+  // on the second run, create a different file
+  fs.writeFileSync("/tmp/world.txt", "Hello, World!", "utf8");
+}
 
 console.log("listening on port 3000");
 server.listen(3000);
