@@ -121,7 +121,7 @@ describe("When creating multiple Redis resources", () => {
       const vpcConfig = JSON.parse(JSON.stringify(lambda.vpc_config));
 
       // THEN
-      expect(vpcConfig.security_group_ids.length).toEqual(2);
+      expect(vpcConfig.security_group_ids.length).toEqual(4);
       expect(vpcConfig.subnet_ids.length).toEqual(2);
     });
   });
