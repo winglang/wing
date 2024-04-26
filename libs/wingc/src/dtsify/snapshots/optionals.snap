@@ -126,7 +126,6 @@ export class ParentClass extends std.Resource implements ClassInterface
 {
   constructor(scope: $internal.Construct, id: string);
   [$internal.INFLIGHT_SYMBOL]?: ParentClass$Inflight;
-  _supportedOps(): $internal.OperationsOf<ParentClass$Inflight>;
   addHandler: (handler: $internal.Inflight<(arg0?: (string) | undefined) => Promise<string>>, s?: (Struct) | undefined) => void;
 }
 export class ParentClass$Inflight implements ClassInterface$Inflight
