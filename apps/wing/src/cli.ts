@@ -25,10 +25,16 @@ function runSubCommand(subCommand: string, subCommandPath: string = subCommand) 
     const { loadEnvVariables } = await import("./env");
     const path = await import("path");
     
+    let entryArg = args[0];
+    if (entryArg instanceof Array) {
+      entryArg = entryArg[0]; // if multiple entries are provided, use the first one
+    }
+
     loadEnvVariables({
       mode: subCommand,
-      cwd: args[0] ? path.resolve(path.dirname(args[0])) : undefined
+      cwd: entryArg ? path.resolve(path.dirname(entryArg)) : undefined,
     });
+    
     try {
       // paths other than the root path aren't working unless specified in the path arg
       const exitCode = await import(`./commands/${subCommandPath}`).then((m) => m[subCommand](...args));
