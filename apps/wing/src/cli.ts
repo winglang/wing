@@ -4,7 +4,6 @@ import { satisfies } from "compare-versions";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
 import { SNAPSHOTS_HELP } from "./commands/test/snapshots-help";
-import { loadEnvVariables } from "./env";
 import { currentPackage, projectTemplateNames } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
@@ -21,15 +20,18 @@ const DEFAULT_PLATFORM = ["sim"];
 
 let analyticsExportFile: Promise<string | undefined> | undefined;
 
-function runSubCommand(subCommand: string, path: string = subCommand) {
-  loadEnvVariables({
-    mode: subCommand,
-  });
-
+function runSubCommand(subCommand: string, subCommandPath: string = subCommand) {
   return async (...args: any[]) => {
+    const { loadEnvVariables } = await import("./env");
+    const path = await import("path");
+    
+    loadEnvVariables({
+      mode: subCommand,
+      cwd: args[0] ? path.resolve(path.dirname(args[0])) : undefined
+    });
     try {
       // paths other than the root path aren't working unless specified in the path arg
-      const exitCode = await import(`./commands/${path}`).then((m) => m[subCommand](...args));
+      const exitCode = await import(`./commands/${subCommandPath}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
         await exportAnalyticsHook();
         process.exitCode = 1;
