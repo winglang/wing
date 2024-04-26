@@ -47,19 +47,19 @@ new sim.Container(
 ### Retaining state
 
 When the Wing Console is closed, all containers are stopped and removed.
-To retain the state of a container across console restarts, you can mount a volume
-to a subdirectory of the resource's simulator state directory, which is available through `$WING_STATE_DIR`:
+To retain the state of a container across console restarts, you can mount an anonymous volume:
 
 ```js
 new sim.Container(
   name: "my-service",
   image: "./my-service",
   containerPort: 8080,
-  volumes: ["$WING_STATE_DIR/volume1:/var/data"],
+  volumes: ["/var/data"],
 );
 ```
 
-`$WING_STATE_DIR` is a directory that is unique to that `sim.Container` instance.
+Wing will automatically name each unnamed volume in `volumes`, and reuse the named
+volumes across console restarts.
 
 ## API
 
