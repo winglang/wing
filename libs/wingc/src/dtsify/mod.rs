@@ -207,9 +207,6 @@ impl<'a> DTSifier<'a> {
 			code.line(format!(
 				"[{TYPE_INTERNAL_NAMESPACE}.INFLIGHT_SYMBOL]?: {inflight_class_name};"
 			));
-			code.line(format!(
-				"_supportedOps(): {TYPE_INTERNAL_NAMESPACE}.OperationsOf<{inflight_class_name}>;"
-			));
 		}
 
 		for field in class
