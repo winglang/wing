@@ -62,12 +62,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       return handler.func;
     }
 
-    // wrap our api handler with a function handler (from (str->str) to (json->json)).
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "api.onrequest.inflight.js"),
-      "ApiOnRequestHandlerClient"
-    );
+    const functionHandler = ApiEndpointHandler.toFunctionHandler(inflight);
 
     const fn = new Function(
       this,
@@ -237,7 +232,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public toSimulator(): ToSimulatorOutput {
     const props: ApiSchema = {
       openApiSpec: this._getOpenApiSpec(),
-      corsHeaders: this._generateCorsHeaders(this.corsOptions),
+      corsHeaders: cloud.Api.renderCorsHeaders(this.corsOptions),
     };
     return {
       type: cloud.API_FQN,
@@ -254,4 +249,27 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
+}
+
+/**
+ * Converts an API endpoint handler to a function handler.
+ */
+export class ApiEndpointHandler {
+  /**
+   * Converts an API endpoint handler to a function handler.
+   * @param handler The API endpoint handler.
+   * @returns The function handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.IApiEndpointHandler
+  ): cloud.IFunctionHandler {
+    // wrap our api handler with a function handler (from (str->str) to (json->json)).
+    return convertBetweenHandlers(
+      handler,
+      join(__dirname, "api.onrequest.inflight.js"),
+      "ApiOnRequestHandlerClient"
+    );
+  }
+
+  private constructor() {}
 }

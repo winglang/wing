@@ -1,13 +1,11 @@
-import { join } from "path";
 import { Duration } from "aws-cdk-lib";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { std, core, cloud } from "@winglang/sdk";
-import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsQueue, Queue as AwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
+import { IAwsQueue, Queue as AwsQueue, QueueSetConsumerHandler } from "@winglang/sdk/lib/shared-aws/queue";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 
 /**
@@ -50,14 +48,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname,
-        "queue.setconsumer.inflight.js"
-      ),
-      "QueueSetConsumerHandlerClient"
-    );
+    const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
 
     const fn = new cloud.Function(
       // ok since we're not a tree root

@@ -421,6 +421,8 @@ Options for the route.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Api.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.cloud.Api.renderCorsHeaders">renderCorsHeaders</a></code> | Generates an object containing default CORS response headers and OPTIONS response headers. |
+| <code><a href="#@winglang/sdk.cloud.Api.renderOpenApiPath">renderOpenApiPath</a></code> | Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`). |
 
 ---
 
@@ -449,6 +451,42 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Api.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `renderCorsHeaders` <a name="renderCorsHeaders" id="@winglang/sdk.cloud.Api.renderCorsHeaders"></a>
+
+```wing
+bring cloud;
+
+cloud.Api.renderCorsHeaders(corsOptions?: ApiCorsOptions);
+```
+
+Generates an object containing default CORS response headers and OPTIONS response headers.
+
+###### `corsOptions`<sup>Optional</sup> <a name="corsOptions" id="@winglang/sdk.cloud.Api.renderCorsHeaders.parameter.corsOptions"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a>
+
+The CORS options to generate the headers from.
+
+---
+
+##### `renderOpenApiPath` <a name="renderOpenApiPath" id="@winglang/sdk.cloud.Api.renderOpenApiPath"></a>
+
+```wing
+bring cloud;
+
+cloud.Api.renderOpenApiPath(path: str);
+```
+
+Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`).
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.renderOpenApiPath.parameter.path"></a>
+
+- *Type:* str
+
+The path to convert (assumes path is valid).
 
 ---
 
