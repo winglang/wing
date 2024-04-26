@@ -17,6 +17,7 @@ import { NodeChildren } from "../ui/elk-flow/node-children.js";
 import { Node } from "../ui/elk-flow/node.js";
 import { Port } from "../ui/elk-flow/port.js";
 import type { EdgeComponent } from "../ui/elk-flow/types.js";
+import { CubeIcon } from "@heroicons/react/24/outline";
 
 interface InflightPortProps {
   occupied?: boolean;
@@ -27,19 +28,19 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
   <>
     <div
       className={clsx(
-        "size-3 rounded-full bg-white border border-gray-300",
+        "size-2.5 rounded-full bg-white border border-gray-300",
         // "opacity-0",
         // props.occupied && "opacity-100",
         "group-hover/construct:opacity-100 group-hover/construct:border-sky-300",
         "outline outline-0 group-hover/construct:outline-2 outline-sky-200",
         props.highlight && "outline-2 border-sky-300",
         "transition-all",
-        "invisible",
+        // "invisible",
       )}
     >
       <div className="w-full h-full relative group/inflight-port">
         <div className="absolute inset-0 flex items-center justify-around pointer-events-none">
-          <div
+          {/* <div
             className={clsx(
               !props.occupied && "size-0",
               props.occupied && "size-1.5",
@@ -50,7 +51,7 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
               "group-hover/construct:bg-sky-400",
               props.highlight && "bg-sky-400",
             )}
-          ></div>
+          ></div> */}
         </div>
       </div>
     </div>
@@ -86,6 +87,7 @@ const baseLayoutOptions: LayoutOptions = {
 interface ContainerNodeProps {
   id: string;
   name: string;
+  pseudoContainer?: boolean;
 }
 
 const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
@@ -102,7 +104,13 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             ...baseLayoutOptions,
           },
         }}
-        className={clsx("inline-block", "group", "p-2", "pointer-events-none")}
+        className={clsx(
+          "inline-block",
+          "group",
+          "p-2",
+          "z-0",
+          // "pointer-events-none"
+        )}
       >
         <div className="w-full h-full relative ">
           <div className="absolute inset-x-0 top-0">
@@ -110,19 +118,25 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
               <div className="absolute bottom-0">
                 <div
                   className={clsx(
-                    "text-sm leading-tight tracking-wide whitespace-nowrap group-hover:text-sky-600",
+                    "text-sm leading-tight tracking-wide whitespace-nowrap",
                     "text-gray-400",
+                    // "group-hover:text-sky-600",
                     // "text-gray-500",
                     // "text-gray-600",
                     "font-extralight",
                     // "italic",
                     // "invisible",
-                    // "opacity-0 group-hover:opacity-100",
+                    props.pseudoContainer &&
+                      "opacity-0 group-hover:opacity-100",
                     "transition-opacity",
                   )}
                 >
                   <div className="flex gap-1">
-                    <CubeTransparentIcon className="size-4" />
+                    {props.pseudoContainer ? (
+                      <CubeTransparentIcon className="size-4" />
+                    ) : (
+                      <CubeIcon className="size-4" />
+                    )}
                     {props.name}
                   </div>
                 </div>
@@ -142,8 +156,8 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
               "flex flex-col",
               "overflow-hidden",
               "border border-gray-200 border-dashed",
-              "hover:border-sky-300",
-              "outline outline-0 outline-sky-200 hover:outline-2",
+              // "hover:border-sky-300",
+              // "outline outline-0 outline-sky-200 hover:outline-2",
             )}
           >
             <div className={clsx("grow shadow-inner", "px-6 py-6")}>
@@ -189,7 +203,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             // "elk.edgeRouting": "SPLINES",
           },
         }}
-        className="inline-block group/construct"
+        className="inline-block group/construct z-20"
       >
         <div
           className={clsx(
@@ -221,7 +235,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 <ArchiveBoxIcon className="size-5 text-white" />
               </div>
             )} */}
-            <ResourceIcon className="size-5 -ml-0.5" resourceType={props.fqn} />
+            <ResourceIcon className="size-4 -ml-0.5" resourceType={props.fqn} />
             {/* <ResourceIcon className="size-6" resourceType={props.fqn} /> */}
             {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow">
       <CubeIcon className="size-6 text-emerald-400" />
@@ -245,7 +259,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                     "elk.portConstraints": "FIXED_SIDE",
                   },
                 }}
-                className="pointer-events-none"
+                className="pointer-events-none z-20"
               >
                 {/* <div className="border-t border-gray-300">
           <div className="px-3 py-1.5 text-gray-600 font-mono text-xs tracking-tighter whitespace-nowrap">
@@ -311,6 +325,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
         <ContainerNode
           id={`${props.id}#container`}
           name={props.name}
+          pseudoContainer
           // name={""}
         >
           {renderedNode}
@@ -338,13 +353,13 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
           "elk.portConstraints": "FIXED_SIDE",
         },
       }}
-      className="inline-flex group/construct hover:z-10"
+      className="inline-flex group/construct z-20"
       title={props.id}
     >
       <div className="group relative">
         <div
           className={clsx(
-            "p-1 rounded-full bg-white shadow",
+            "p-1.5 rounded-full bg-white shadow",
             "transition-all",
             "border border-gray-300",
             "group-hover:border-sky-300",
@@ -398,62 +413,62 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
   );
 };
 
-interface APINodeProps {
-  id: string;
-}
+// interface APINodeProps {
+//   id: string;
+// }
 
-const APINode: FunctionComponent<APINodeProps> = (props) => {
-  return (
-    <Node
-      elk={{
-        id: props.id,
-        layoutOptions: {
-          "elk.portConstraints": "FIXED_SIDE",
-        },
-      }}
-      className="inline-flex"
-    >
-      <div className="group">
-        <div
-          className={clsx(
-            "p-3 rounded-full bg-white shadow",
-            "transition-all",
-            "border border-gray-300",
-            // "group-hover:border-sky-300",
-            "outline outline-0 outline-sky-200",
-            "group-hover:outline-2",
-          )}
-        >
-          <BoltIcon className="size-6 text-yellow-500" />
-        </div>
+// const APINode: FunctionComponent<APINodeProps> = (props) => {
+//   return (
+//     <Node
+//       elk={{
+//         id: props.id,
+//         layoutOptions: {
+//           "elk.portConstraints": "FIXED_SIDE",
+//         },
+//       }}
+//       className="inline-flex"
+//     >
+//       <div className="group">
+//         <div
+//           className={clsx(
+//             "p-3 rounded-full bg-white shadow",
+//             "transition-all",
+//             "border border-gray-300",
+//             // "group-hover:border-sky-300",
+//             "outline outline-0 outline-sky-200",
+//             "group-hover:outline-2",
+//           )}
+//         >
+//           <BoltIcon className="size-6 text-yellow-500" />
+//         </div>
 
-        <Port
-          elk={{
-            id: `${props.id}#target`,
-            layoutOptions: {
-              "elk.port.side": "WEST",
-              "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-            },
-          }}
-        >
-          <InflightPort />
-        </Port>
+//         <Port
+//           elk={{
+//             id: `${props.id}#target`,
+//             layoutOptions: {
+//               "elk.port.side": "WEST",
+//               "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+//             },
+//           }}
+//         >
+//           <InflightPort />
+//         </Port>
 
-        <Port
-          elk={{
-            id: `${props.id}#source`,
-            layoutOptions: {
-              "elk.port.side": "EAST",
-              "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-            },
-          }}
-        >
-          <InflightPort />
-        </Port>
-      </div>
-    </Node>
-  );
-};
+//         <Port
+//           elk={{
+//             id: `${props.id}#source`,
+//             layoutOptions: {
+//               "elk.port.side": "EAST",
+//               "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+//             },
+//           }}
+//         >
+//           <InflightPort />
+//         </Port>
+//       </div>
+//     </Node>
+//   );
+// };
 
 /**
  * Returns the middle point between two points with a given radius.
@@ -537,7 +552,7 @@ const RoundedEdge: EdgeComponent = memo(
       <svg
         width={graphWidth}
         height={graphHeight}
-        className="absolute inset-0 pointer-events-none hover:z-10"
+        className="absolute inset-0 pointer-events-none z-[1] hover:z-[2]"
       >
         <g
           className={clsx(
