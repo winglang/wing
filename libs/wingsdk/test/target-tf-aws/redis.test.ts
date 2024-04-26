@@ -48,8 +48,8 @@ describe("When creating a Redis resource", () => {
 
     // THEN
     expect(tfResourcesOfCount(output, "aws_vpc")).toEqual(1);
-    expect(tfResourcesOfCount(output, "aws_subnet")).toEqual(2);
-    expect(tfResourcesOfCount(output, "aws_route_table")).toEqual(2);
+    expect(tfResourcesOfCount(output, "aws_subnet")).toEqual(3);
+    expect(tfResourcesOfCount(output, "aws_route_table")).toEqual(3);
     expect(tfResourcesOfCount(output, "aws_nat_gateway")).toEqual(1);
     expect(tfResourcesOfCount(output, "aws_internet_gateway")).toEqual(1);
   });
@@ -92,10 +92,10 @@ describe("When creating multiple Redis resources", () => {
     // THEN
     // 2 clusters, 2 security groups, 1 vpc, 2 subnets, 2 route tables, 1 nat gateway, 1 internet gateway
     expect(tfResourcesOfCount(output, "aws_elasticache_cluster")).toEqual(2);
-    expect(tfResourcesOfCount(output, "aws_security_group")).toEqual(2);
+    expect(tfResourcesOfCount(output, "aws_security_group")).toEqual(4);
     expect(tfResourcesOfCount(output, "aws_vpc")).toEqual(1);
-    expect(tfResourcesOfCount(output, "aws_subnet")).toEqual(2);
-    expect(tfResourcesOfCount(output, "aws_route_table")).toEqual(2);
+    expect(tfResourcesOfCount(output, "aws_subnet")).toEqual(3);
+    expect(tfResourcesOfCount(output, "aws_route_table")).toEqual(3);
     expect(tfResourcesOfCount(output, "aws_nat_gateway")).toEqual(1);
     expect(tfResourcesOfCount(output, "aws_internet_gateway")).toEqual(1);
   });
@@ -122,7 +122,7 @@ describe("When creating multiple Redis resources", () => {
 
       // THEN
       expect(vpcConfig.security_group_ids.length).toEqual(4);
-      expect(vpcConfig.subnet_ids.length).toEqual(2);
+      expect(vpcConfig.subnet_ids.length).toEqual(4);
     });
   });
 });
