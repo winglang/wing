@@ -1,4 +1,6 @@
+import { CubeTransparentIcon } from "@heroicons/react/20/solid";
 import { BoltIcon } from "@heroicons/react/24/solid";
+import { ResourceIcon } from "@wingconsole/design-system";
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import type { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
 import clsx from "classnames";
@@ -69,6 +71,9 @@ const baseLayoutOptions: LayoutOptions = {
   // "elk.direction": "RIGHT",
   // "elk.alignment": "CENTER",
   "elk.algorithm": "org.eclipse.elk.layered",
+  "elk.layered.layering.strategy": "MIN_WIDTH",
+  "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
+  "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
   // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
   // "elk.layered.spacing.nodeNode": `${SPACING_BASE_VALUE}`, // default 20. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-nodeNode.html.
   // "elk.layered.spacing.edgeEdge": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-edgeEdge.html
@@ -116,7 +121,10 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
                     "transition-opacity",
                   )}
                 >
-                  {props.name}
+                  <div className="flex gap-1">
+                    <CubeTransparentIcon className="size-4" />
+                    {props.name}
+                  </div>
                 </div>
               </div>
             </div>
@@ -165,7 +173,7 @@ interface ConstructNodeProps {
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
   memo((props) => {
     const hasChildren = Array.isArray(props.children)
-      ? props.children.length > 0
+      ? props.children.length > 1
       : false;
 
     const renderedNode = (
@@ -213,7 +221,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 <ArchiveBoxIcon className="size-5 text-white" />
               </div>
             )} */}
-            {/* <ResourceIcon className="size-6 -ml-2" resourceType={props.fqn} /> */}
+            <ResourceIcon className="size-5 -ml-0.5" resourceType={props.fqn} />
+            {/* <ResourceIcon className="size-6" resourceType={props.fqn} /> */}
             {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow">
       <CubeIcon className="size-6 text-emerald-400" />
     </div> */}
@@ -571,6 +580,25 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
   //   console.log({ tree, connections, nodeInfo });
   // }, [nodeInfo]);
 
+  const hiddenMap = useMemo(() => {
+    const hiddenMap = new Map<string, boolean>();
+    const traverse = (node: ConstructTreeNode, forceHidden?: boolean) => {
+      const hidden = forceHidden || node.display?.hidden || false;
+      hiddenMap.set(node.path, hidden);
+      for (const child of Object.values(node.children ?? {})) {
+        traverse(child, hidden);
+      }
+    };
+    const pseudoRoot = tree?.children?.["Default"];
+    for (const child of Object.values(pseudoRoot?.children ?? {})) {
+      traverse(child!);
+    }
+    return hiddenMap;
+  }, [tree]);
+  // useEffect(() => {
+  //   console.log({ hiddenMap });
+  // }, [hiddenMap]);
+
   const connectionsV2 = useMemo(() => {
     if (!nodeInfo) {
       return [];
@@ -616,12 +644,16 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
     }).filter((connection) => {
       // const source = nodeInfo.get(connection.source);
       // const target = nodeInfo.get(connection.target);
-      return true;
+      // return true;
+      return (
+        hiddenMap.get(connection.source) !== true &&
+        hiddenMap.get(connection.target) !== true
+      );
     });
-  }, [connections, nodeInfo]);
-  useEffect(() => {
-    console.log({ connections, connectionsV2 });
-  }, [connections, connectionsV2]);
+  }, [connections, nodeInfo, hiddenMap]);
+  // useEffect(() => {
+  //   console.log({ connections, connectionsV2 });
+  // }, [connections, connectionsV2]);
 
   const getConnectionId = useCallback(
     (connection: ConnectionData, type: "source" | "target") => {
@@ -646,15 +678,26 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
       // if (props.constructTreeNode.display?.hidden) {
       //   return <></>;
       // }
-
-      const info = nodeInfo?.get(props.constructTreeNode.path);
-
-      if (info?.type === "autoId") {
-        // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
+      if (hiddenMap.get(props.constructTreeNode.path)) {
         return <></>;
       }
 
-      if (info?.type === "construct") {
+      const info = nodeInfo?.get(props.constructTreeNode.path);
+      if (!info) {
+        return <></>;
+      }
+
+      // if (info.type === "autoId") {
+      //   // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
+      //   return <></>;
+      // }
+
+      // if (info.type === "endpoint") {
+      //   // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
+      //   return <></>;
+      // }
+
+      if (info.type === "construct") {
         return (
           <ConstructNode
             id={props.constructTreeNode.path}
@@ -672,7 +715,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
         );
       }
 
-      if (info?.type === "function") {
+      if (info.type === "function") {
         return (
           <FunctionNode
             id={props.constructTreeNode.path}
@@ -688,7 +731,7 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
         );
       }
 
-      // if (info?.type === "queue") {
+      // if (info.type === "queue") {
       //   return (
       //     <ConstructNode
       //       id={props.constructTreeNode.path}
@@ -698,6 +741,11 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
       //     />
       //   );
       // }
+
+      console.log({
+        path: props.constructTreeNode.path,
+        type: info.type,
+      });
 
       return (
         <ContainerNode
@@ -712,8 +760,14 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
         </ContainerNode>
       );
     },
-    [nodeInfo],
+    [nodeInfo, hiddenMap],
   );
+
+  const pseudoRoot = useMemo(() => {
+    return Object.values(
+      tree?.children?.["Default"]?.children ?? {},
+    ) as ConstructTreeNode[];
+  }, [tree]);
 
   return (
     <div className="relative">
@@ -764,77 +818,79 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
           edgeComponent={RoundedEdge}
           className="bg-gray-50"
         >
-          <RenderNode constructTreeNode={tree} />
+          {pseudoRoot.map((node) => (
+            <RenderNode key={node.id} constructTreeNode={node} />
+          ))}
         </Graph>
       )}
     </div>
   );
 });
 
-const AutoIdNode: FunctionComponent<{
-  constructTreeNode: ConstructTreeNode;
-}> = (props) => {
-  return (
-    <Node
-      elk={{
-        id: props.constructTreeNode.path,
-        layoutOptions: {
-          "elk.portConstraints": "FIXED_SIDE",
-        },
-      }}
-      className="inline-block"
-    >
-      <div
-        className={clsx(
-          "size-6",
-          "border border-gray-300 border-dashed",
-          "hover:border-sky-300 rounded-full outline-0 outline outline-sky-300 hover:outline-2",
-          "transition-all",
-          "shadow",
-          "relative",
-          "group",
-          "bg-white",
-        )}
-      >
-        <Port
-          elk={{
-            id: `${props.constructTreeNode.path}#handle#target`,
-            layoutOptions: {
-              "elk.port.side": "WEST",
-              "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-            },
-          }}
-        >
-          <InflightPort />
-        </Port>
+// const AutoIdNode: FunctionComponent<{
+//   constructTreeNode: ConstructTreeNode;
+// }> = (props) => {
+//   return (
+//     <Node
+//       elk={{
+//         id: props.constructTreeNode.path,
+//         layoutOptions: {
+//           "elk.portConstraints": "FIXED_SIDE",
+//         },
+//       }}
+//       className="inline-block"
+//     >
+//       <div
+//         className={clsx(
+//           "size-6",
+//           "border border-gray-300 border-dashed",
+//           "hover:border-sky-300 rounded-full outline-0 outline outline-sky-300 hover:outline-2",
+//           "transition-all",
+//           "shadow",
+//           "relative",
+//           "group",
+//           "bg-white",
+//         )}
+//       >
+//         <Port
+//           elk={{
+//             id: `${props.constructTreeNode.path}#handle#target`,
+//             layoutOptions: {
+//               "elk.port.side": "WEST",
+//               "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+//             },
+//           }}
+//         >
+//           <InflightPort />
+//         </Port>
 
-        <Port
-          elk={{
-            id: `${props.constructTreeNode.path}#handle#source`,
-            layoutOptions: {
-              "elk.port.side": "EAST",
-              "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-            },
-          }}
-        >
-          <InflightPort />
-        </Port>
+//         <Port
+//           elk={{
+//             id: `${props.constructTreeNode.path}#handle#source`,
+//             layoutOptions: {
+//               "elk.port.side": "EAST",
+//               "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+//             },
+//           }}
+//         >
+//           <InflightPort />
+//         </Port>
 
-        <div className="absolute bottom-0 inset-x-0 invisible group-hover:visible">
-          <div className="relative">
-            <div className="absolute top-0 inset-x-0">
-              <div className="flex justify-around">
-                {/* <div className="size-3 rounded-full bg-red-500"></div> */}
-                <div className="absolute text-center">
-                  <div className="text-xs text-gray-500 backdrop-blur">
-                    {props.constructTreeNode.id.split("/").slice(-1).join("")}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Node>
-  );
-};
+//         <div className="absolute bottom-0 inset-x-0 invisible group-hover:visible">
+//           <div className="relative">
+//             <div className="absolute top-0 inset-x-0">
+//               <div className="flex justify-around">
+//                 {/* <div className="size-3 rounded-full bg-red-500"></div> */}
+//                 <div className="absolute text-center">
+//                   <div className="text-xs text-gray-500 backdrop-blur">
+//                     {props.constructTreeNode.id.split("/").slice(-1).join("")}
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </Node>
+//   );
+// };

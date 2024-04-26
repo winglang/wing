@@ -83,7 +83,8 @@ export const getResourceIconComponent = (
       return solid ? SolidKeyIcon : KeyIcon;
     }
     default: {
-      return CubeIcon;
+      // return CubeIcon;
+      return () => [];
     }
   }
 };

@@ -52,6 +52,12 @@ export type NodeV2 =
   //     }[];
   //   }
   | {
+      type: "scheduler";
+    }
+  | {
+      type: "endpoint";
+    }
+  | {
       type: "construct";
       inflights: NodeInflight[];
     };
@@ -72,6 +78,12 @@ const getNodeType = (
   // if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Topic") {
   //   return "topic";
   // }
+  if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Schedule") {
+    return "scheduler";
+  }
+  if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Endpoint") {
+    return "endpoint";
+  }
   if (
     (node.children ?? []).length === 0 ||
     connections.some(
@@ -155,6 +167,12 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
           });
           break;
         }
+        // case "endpoint": {
+        //   nodeMap.set(node.path, {
+        //     type: nodeType,
+        //   });
+        //   break;
+        // }
         // case "queue": {
         //   nodeMap.set(node.path, {
         //     type: nodeType,
