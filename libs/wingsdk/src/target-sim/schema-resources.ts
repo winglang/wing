@@ -209,6 +209,8 @@ export interface WebsiteAttributes {
 export interface SecretSchema {
   /** The name of the secret */
   readonly name: string;
+  /** File where secret can be read from */
+  readonly secretFile: string; // TODO: remove after https://github.com/winglang/wing/issues/6346
 }
 
 /** Runtime attributes for cloud.Secret */

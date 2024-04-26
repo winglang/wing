@@ -1,3 +1,4 @@
+import path from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { SecretSchema } from "./schema-resources";
@@ -42,6 +43,7 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
   public toSimulator(): ToSimulatorOutput {
     const props: SecretSchema = {
       name: this.name!,
+      secretFile: path.join(process.env.WING_SOURCE_DIR!, ".env"),
     };
     return {
       type: cloud.SECRET_FQN,

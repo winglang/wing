@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import * as path from "path";
 import { SecretAttributes, SecretSchema } from "./schema-resources";
 import { ISecretClient, SECRET_FQN } from "../cloud";
 import {
@@ -11,19 +10,31 @@ import { Json, TraceType } from "../std";
 
 export class Secret implements ISecretClient, ISimulatorResourceInstance {
   private _context: ISimulatorContext | undefined;
-  private readonly secretsFile: string;
   private readonly name: string;
+  private readonly secretValue: string;
 
   constructor(props: SecretSchema) {
-    this.secretsFile = path.join(process.cwd(), ".env");
-
-    if (!fs.existsSync(this.secretsFile)) {
+    if (!fs.existsSync(props.secretFile)) {
       throw new Error(
-        `No secrets file found at ${this.secretsFile} while looking for secret ${props.name}`
+        `No secrets file found at ${props.secretFile} while looking for secret ${props.name}`
       );
     }
 
+    // TODO: Reading the secrets file is just a work around until https://github.com/winglang/wing/issues/6346 is resolved
+    // Ideally we should be able to read the secrets from the environment, however at .env files are only loaded in when
+    // compiling from source code directory
+    const secrets = fs
+      .readFileSync(props.secretFile, "utf-8")
+      .split("\n")
+      .filter((line) => line.trim() !== "")
+      .reduce((s, line) => {
+        const [key, value] = line.split("=", 2).map((v) => v.trim());
+        s[key] = value;
+        return s;
+      }, {} as { [key: string]: string });
+
     this.name = props.name;
+    this.secretValue = secrets[this.name];
   }
 
   private get context(): ISimulatorContext {
@@ -57,13 +68,11 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
 
-    const secretValue = process.env[this.name];
-
-    if (!secretValue) {
+    if (!this.secretValue) {
       throw new Error(`No secret value for secret ${this.name}`);
     }
 
-    return secretValue;
+    return this.secretValue;
   }
 
   public async valueJson(): Promise<Json> {

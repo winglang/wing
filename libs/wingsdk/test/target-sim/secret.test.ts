@@ -8,6 +8,7 @@ const SECRETS_FILE = path.join(process.cwd(), ".env");
 describe("secrets", () => {
   beforeEach(() => {
     fs.createFileSync(SECRETS_FILE);
+    process.env.WING_SOURCE_DIR = process.cwd();
   });
 
   afterEach(() => {
@@ -31,6 +32,7 @@ describe("secrets", () => {
       policy: [],
       props: {
         name: "my_secret-c84793b7",
+        secretFile: SECRETS_FILE,
       },
       type: cloud.SECRET_FQN,
     });
