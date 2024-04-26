@@ -5,9 +5,9 @@ import { BuiltinPlatform } from "@winglang/compiler";
 import { debug } from "debug";
 import { glob } from "glob";
 import once from "lodash.once";
+import { loadEnvVariables } from "../env";
 import { parseNumericString } from "../util";
 import { beforeShutdown } from "../util.before-shutdown.js";
-import { loadEnvVariables } from "../env";
 
 /**
  * Options for the `run` command.
@@ -64,7 +64,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     throw new Error(entrypoint + " doesn't exist");
   }
 
-  loadEnvVariables({ cwd: resolve(dirname(entrypoint))});
+  loadEnvVariables({ cwd: resolve(dirname(entrypoint)) });
 
   if (options?.platform && options?.platform[0] !== BuiltinPlatform.SIM) {
     throw new Error(
