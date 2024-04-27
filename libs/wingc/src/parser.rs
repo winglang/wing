@@ -1188,6 +1188,7 @@ impl<'s> Parser<'s> {
 		let mut initializer = None;
 		let mut inflight_initializer = None;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+		let span = self.node_span(statement_node);
 		for class_element in statement_node
 			.child_by_field_name("implementation")
 			.unwrap()
@@ -1325,15 +1326,15 @@ impl<'s> Parser<'s> {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
-							span: WingSpan::default(),
+							span: span.clone(),
 						}),
-						span: WingSpan::default(),
+						span: span.clone(),
 					}),
 					phase: Phase::Preflight,
 				},
-				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
+				body: FunctionBody::Statements(Scope::new(vec![], span.clone())),
 				is_static: false,
-				span: WingSpan::default(),
+				span: span.clone(),
 				access: AccessModifier::Public,
 			},
 		};
@@ -1350,15 +1351,15 @@ impl<'s> Parser<'s> {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
-							span: WingSpan::default(),
+							span: span.clone(),
 						}),
-						span: WingSpan::default(),
+						span: span.clone(),
 					}),
 					phase: Phase::Inflight,
 				},
-				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
+				body: FunctionBody::Statements(Scope::new(vec![], span.clone())),
 				is_static: false,
-				span: WingSpan::default(),
+				span: span.clone(),
 				access: AccessModifier::Public,
 			},
 		};
@@ -1403,8 +1404,6 @@ impl<'s> Parser<'s> {
 				&class_modifiers.expect("access modifier node"),
 			)?;
 		}
-
-		let span = self.node_span(statement_node);
 
 		Ok(StmtKind::Class(Class {
 			name,
