@@ -4432,17 +4432,17 @@ impl<'a> TypeChecker<'a> {
 				.type_
 				.as_function_sig()
 				.expect("ctor to be a function");
-			if let FunctionBody::Statements(ctot_body) = &ctor_def.body {
+			if let FunctionBody::Statements(ctor_body) = &ctor_def.body {
 				if parent_ctor_sig.min_parameters() > 0
 					&& !matches!(
-						ctot_body.statements.first(),
+						ctor_body.statements.first(),
 						Some(Stmt {
 							kind: StmtKind::SuperConstructor { .. },
 							..
 						})
 					) {
 					self.spanned_error(
-						&ast_class.initializer.span,
+						ctor_body,
 						format!(
 							"Missing super() call as first statement of {}'s constructor",
 							ast_class.name
