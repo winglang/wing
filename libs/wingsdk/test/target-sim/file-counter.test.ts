@@ -2,12 +2,13 @@ import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { lift } from "../../src/core";
 import { IResource, Trace } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 test(
   "can create sequential files in a bucket",
+  { timeout: 20_000 },
   async () => {
     // GIVEN
     class HelloWorld extends Construct {
@@ -19,26 +20,22 @@ test(
         const counter = new cloud.Counter(this, "Counter", {
           initial: 1000,
         });
+
         const bucket = new cloud.Bucket(this, "Bucket");
         const queue = new cloud.Queue(this, "Queue");
-        const processor = Testing.makeHandler(
-          `async handle(event) {
-          let next = await this.counter.inc();
-          let key = "file-" + next + ".txt";
-          await this.bucket.put(key, event);
-        }`,
-          {
-            counter: {
-              obj: counter,
-              ops: [cloud.CounterInflightMethods.INC],
-            },
-            bucket: {
-              obj: bucket,
-              ops: [cloud.BucketInflightMethods.PUT],
-            },
-          }
+
+        this.processor = queue.setConsumer(
+          lift({ counter, bucket })
+            .grant({
+              counter: [cloud.CounterInflightMethods.INC],
+              bucket: [cloud.BucketInflightMethods.PUT],
+            })
+            .inflight(async (ctx, event) => {
+              let next = await ctx.counter.inc();
+              let key = "file-" + next + ".txt";
+              await ctx.bucket.put(key, event);
+            })
         );
-        this.processor = queue.setConsumer(processor);
       }
     }
 
@@ -46,6 +43,7 @@ test(
     const helloWorld = new HelloWorld(app, "HelloWorld");
 
     const s = await app.startSimulator();
+    s.onTrace({ callback: (trace) => console.log(trace) });
 
     const pusher = s.getResource("/HelloWorld/Queue") as cloud.IQueueClient;
 
@@ -66,6 +64,5 @@ test(
     await s.stop();
 
     expect(app.snapshot()).toMatchSnapshot();
-  },
-  { timeout: 20000 }
+  }
 );

@@ -6,7 +6,7 @@ import {
   Inflight,
   OperationsOf,
 } from "./types";
-import { LiftableMap, LiftedMap, PickNonFunctions } from "./utility-types";
+import { LiftableHash, LiftedMap, PickNonFunctions } from "./utility-types";
 import { normalPath } from "../shared/misc";
 import type { IHostedLiftable } from "../std/resource";
 
@@ -87,7 +87,7 @@ export class InflightClient {
  *   .inflight(({ bkt, sum, field }) => { ... }))
  * ```
  */
-export function lift<TToLift extends LiftableMap>(
+export function lift<TToLift extends LiftableHash>(
   captures: TToLift
 ): Lifter<LiftedMap<TToLift>, {}> {
   return new Lifter().lift(captures);
@@ -115,7 +115,7 @@ class Lifter<
   TOperations extends Record<string, string[]>
 > {
   constructor(
-    private lifts: LiftableMap = {},
+    private lifts: LiftableHash = {},
     private grants: Record<string, string[]> = {}
   ) {}
 
@@ -144,7 +144,7 @@ class Lifter<
    *   .inflight(({ bkt, sum, field }) => { ... }))
    * ```
    */
-  public lift<TWillLift extends LiftableMap>(captures: TWillLift) {
+  public lift<TWillLift extends LiftableHash>(captures: TWillLift) {
     return new Lifter<
       Omit<TLifted, keyof TWillLift> & LiftedMap<TWillLift>,
       TOperations

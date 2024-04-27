@@ -48,7 +48,7 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
 /**
  * AWS implementation of `cloud.Bucket`.
  *
- * @inflight `@winglang/sdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.aws.IAwsBucketClient`
  */
 export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly bucket: S3Bucket;

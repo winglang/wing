@@ -1,15 +1,16 @@
 import { Construct } from "constructs";
 import { describe, expect, test } from "vitest";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { Test } from "../../src/std";
 import { SimApp } from "../sim-app";
+
+const NOOP = inflight(async () => {});
 
 describe("Single test", () => {
   class Root extends Construct {
     constructor(scope: Construct, id: string) {
       super(scope, id);
-      const handler = Testing.makeHandler("");
-      new Test(this, "test:first test", handler, {});
+      new Test(this, "test:first test", NOOP, {});
     }
   }
 
@@ -37,10 +38,9 @@ describe("Multiple tests", () => {
   class Root extends Construct {
     constructor(scope: Construct, id: string) {
       super(scope, id);
-      const handler = Testing.makeHandler("");
-      new Test(this, "test:first test", handler, {});
-      new Test(this, "test:second test", handler, {});
-      new Test(this, "test:third test", handler, {});
+      new Test(this, "test:first test", NOOP, {});
+      new Test(this, "test:second test", NOOP, {});
+      new Test(this, "test:third test", NOOP, {});
     }
   }
 

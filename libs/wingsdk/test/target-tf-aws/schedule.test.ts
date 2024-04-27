@@ -1,21 +1,22 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
-const CODE_LOG_EVENT = `async handle(event) { console.log("Received: ", event); }`;
+const CODE_LOG_EVENT = inflight(async (_, event) => {
+  console.log("Received: ", event);
+});
 
 test("schedule behavior with rate", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const fn = Testing.makeHandler(CODE_LOG_EVENT);
   const schedule = new cloud.Schedule(app, "Schedule", {
     rate: std.Duration.fromMinutes(2),
   });
-  schedule.onTick(fn);
+  schedule.onTick(CODE_LOG_EVENT);
   const output = app.synth();
 
   // THEN
@@ -47,11 +48,11 @@ test("schedule behavior with rate", () => {
 test("schedule behavior with cron", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const fn = Testing.makeHandler(CODE_LOG_EVENT);
+
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * * * *",
   });
-  schedule.onTick(fn);
+  schedule.onTick(CODE_LOG_EVENT);
   const output = app.synth();
 
   // THEN
@@ -83,11 +84,10 @@ test("schedule behavior with cron", () => {
 test("convert single dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const fn = Testing.makeHandler(CODE_LOG_EVENT);
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1",
   });
-  schedule.onTick(fn);
+  schedule.onTick(CODE_LOG_EVENT);
   const output = app.synth();
 
   // THEN
@@ -119,11 +119,10 @@ test("convert single dayOfWeek from Unix to AWS", () => {
 test("convert the range of dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const fn = Testing.makeHandler(CODE_LOG_EVENT);
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1-7",
   });
-  schedule.onTick(fn);
+  schedule.onTick(CODE_LOG_EVENT);
   const output = app.synth();
 
   // THEN
@@ -155,11 +154,10 @@ test("convert the range of dayOfWeek from Unix to AWS", () => {
 test("convert the list of dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const fn = Testing.makeHandler(CODE_LOG_EVENT);
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1,3,5,7",
   });
-  schedule.onTick(fn);
+  schedule.onTick(CODE_LOG_EVENT);
   const output = app.synth();
 
   // THEN
@@ -191,13 +189,11 @@ test("convert the list of dayOfWeek from Unix to AWS", () => {
 test("schedule with two functions", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const fn1 = Testing.makeHandler(CODE_LOG_EVENT);
-  const fn2 = Testing.makeHandler(CODE_LOG_EVENT);
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * * * *",
   });
-  schedule.onTick(fn1);
-  schedule.onTick(fn2);
+  schedule.onTick(CODE_LOG_EVENT);
+  schedule.onTick(CODE_LOG_EVENT);
   const output = app.synth();
 
   // THEN

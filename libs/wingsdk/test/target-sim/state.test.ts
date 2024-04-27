@@ -1,7 +1,8 @@
 import { test, expect } from "vitest";
 import { cloud } from "../../src";
 import { IFunctionClient, OnDeploy } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight, lift } from "../../src/core";
+import { Json } from "../../src/std";
 import { State } from "../../src/target-sim";
 import { SimApp } from "../sim-app";
 
@@ -17,11 +18,7 @@ test("state can be resolved at any time", async () => {
   const fn = new cloud.Function(
     app,
     "MyFunction",
-    Testing.makeHandler(`
-      async handle(event) {
-        return process.env.MY_KEY;
-      }
-      `),
+    inflight(async () => process.env.MY_KEY),
     {
       env: {
         MY_KEY: token,
@@ -32,20 +29,12 @@ test("state can be resolved at any time", async () => {
   new OnDeploy(
     app,
     "MyOnDeploy",
-    Testing.makeHandler(
-      `
-      async handle() {
-        console.log("setting ${tokenKey}");
-        await this.my_state.set("${tokenKey}", "bang bang");
-      }
-      `,
-      {
-        my_state: {
-          obj: state,
-          ops: ["set"],
-        },
-      }
-    )
+    lift({ my_state: state, tokenKey })
+      .grant({ my_state: ["set"] })
+      .inflight(async (ctx) => {
+        console.log(`setting ${ctx.tokenKey}`);
+        await ctx.my_state.set(`${ctx.tokenKey}`, "bang bang" as any);
+      })
   );
 
   const s = await app.startSimulator();

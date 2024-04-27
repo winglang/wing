@@ -5,15 +5,8 @@ exports[`create a function 1`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -26,10 +19,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -179,15 +178,8 @@ exports[`invoke function fails 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -200,10 +192,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -351,15 +349,8 @@ exports[`invoke function succeeds 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -372,10 +363,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -523,15 +520,8 @@ exports[`invoke function with environment variables 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -544,10 +534,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -670,465 +666,6 @@ async handle(event) {
           },
           "id": "my_function",
           "path": "root/my_function",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.3.0",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
-exports[`invoke function with process.exit(1) 1`] = `
-[
-  "root/my_function started",
-  "Invoke (payload="{}").",
-  "root/my_function stopped",
-]
-`;
-
-exports[`invoke function with process.exit(1) 2`] = `
-{
-  ".wing/my_function_c85c4e0e.cjs": ""use strict";
-var $handler = undefined;
-exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle() {
-  process.exit(1);
-}
-};
-})())({
-
-}));
-  return await $handler.handle(event);
-};",
-  "connections.json": {
-    "connections": [],
-    "version": "connections-0.1",
-  },
-  "simulator.json": {
-    "resources": {
-      "root/my_function": {
-        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
-        "path": "root/my_function",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-    },
-    "sdkVersion": "0.0.0",
-    "types": {
-      "@winglang/sdk.cloud.Api": {
-        "className": "Api",
-        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
-      },
-      "@winglang/sdk.cloud.Bucket": {
-        "className": "Bucket",
-        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
-      "@winglang/sdk.cloud.Domain": {
-        "className": "Domain",
-        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
-      },
-      "@winglang/sdk.cloud.Endpoint": {
-        "className": "Endpoint",
-        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
-      },
-      "@winglang/sdk.cloud.Function": {
-        "className": "Function",
-        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
-      },
-      "@winglang/sdk.cloud.OnDeploy": {
-        "className": "OnDeploy",
-        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
-      },
-      "@winglang/sdk.cloud.Queue": {
-        "className": "Queue",
-        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
-      },
-      "@winglang/sdk.cloud.Schedule": {
-        "className": "Schedule",
-        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
-      },
-      "@winglang/sdk.cloud.Secret": {
-        "className": "Secret",
-        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
-      },
-      "@winglang/sdk.cloud.Service": {
-        "className": "Service",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
-      "@winglang/sdk.cloud.Topic": {
-        "className": "Topic",
-        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
-      },
-      "@winglang/sdk.cloud.Website": {
-        "className": "Website",
-        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
-      "@winglang/sdk.sim.Container": {
-        "className": "Container",
-        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
-      },
-      "@winglang/sdk.sim.EventMapping": {
-        "className": "EventMapping",
-        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
-      },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.State": {
-        "className": "State",
-        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
-      },
-      "@winglang/sdk.std.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
-    },
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "my_function": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.3.0",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_function",
-          "path": "root/my_function",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.3.0",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
-exports[`runtime environment tests 1`] = `
-{
-  ".wing/function.0_c8d5fca2.cjs": ""use strict";
-var $handler = undefined;
-exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle() {
-          
-    const query = "q=URLUtils.searchParams&topic=api";
-    const p = new URLSearchParams(query);
-    return p.get("topic");
-  
-        }
-};
-})())({
-
-}));
-  return await $handler.handle(event);
-};",
-  ".wing/function.1_c89ed254.cjs": ""use strict";
-var $handler = undefined;
-exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle() {
-          
-    return typeof fetch;
-  
-        }
-};
-})())({
-
-}));
-  return await $handler.handle(event);
-};",
-  ".wing/function.2_c8cd6c39.cjs": ""use strict";
-var $handler = undefined;
-exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle() {
-          
-    const c = require("crypto");
-    return typeof c.createHash;
-  
-        }
-};
-})())({
-
-}));
-  return await $handler.handle(event);
-};",
-  ".wing/function.3_c8badafa.cjs": ""use strict";
-var $handler = undefined;
-exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle() {
-          
-    const { nanoid } = await import("nanoid");
-    return nanoid();
-  
-        }
-};
-})())({
-
-}));
-  return await $handler.handle(event);
-};",
-  "connections.json": {
-    "connections": [],
-    "version": "connections-0.1",
-  },
-  "simulator.json": {
-    "resources": {
-      "root/Function.0": {
-        "addr": "c8d5fca2ff1b96bd65cc21384259b53ae9f3d4971c",
-        "path": "root/Function.0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/function.0_c8d5fca2.cjs",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      "root/Function.1": {
-        "addr": "c89ed254f66166d83153cc0a4952a15be63d47b0d2",
-        "path": "root/Function.1",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/function.1_c89ed254.cjs",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      "root/Function.2": {
-        "addr": "c8cd6c39da22910102d0cfeb2cb96f2160fa79e517",
-        "path": "root/Function.2",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/function.2_c8cd6c39.cjs",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      "root/Function.3": {
-        "addr": "c8badafa75a67ff66740e0c5fbbb392ab574b52b3c",
-        "path": "root/Function.3",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/function.3_c8badafa.cjs",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-    },
-    "sdkVersion": "0.0.0",
-    "types": {
-      "@winglang/sdk.cloud.Api": {
-        "className": "Api",
-        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
-      },
-      "@winglang/sdk.cloud.Bucket": {
-        "className": "Bucket",
-        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
-      "@winglang/sdk.cloud.Domain": {
-        "className": "Domain",
-        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
-      },
-      "@winglang/sdk.cloud.Endpoint": {
-        "className": "Endpoint",
-        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
-      },
-      "@winglang/sdk.cloud.Function": {
-        "className": "Function",
-        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
-      },
-      "@winglang/sdk.cloud.OnDeploy": {
-        "className": "OnDeploy",
-        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
-      },
-      "@winglang/sdk.cloud.Queue": {
-        "className": "Queue",
-        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
-      },
-      "@winglang/sdk.cloud.Schedule": {
-        "className": "Schedule",
-        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
-      },
-      "@winglang/sdk.cloud.Secret": {
-        "className": "Secret",
-        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
-      },
-      "@winglang/sdk.cloud.Service": {
-        "className": "Service",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
-      "@winglang/sdk.cloud.Topic": {
-        "className": "Topic",
-        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
-      },
-      "@winglang/sdk.cloud.Website": {
-        "className": "Website",
-        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
-      "@winglang/sdk.sim.Container": {
-        "className": "Container",
-        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
-      },
-      "@winglang/sdk.sim.EventMapping": {
-        "className": "EventMapping",
-        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
-      },
-      "@winglang/sdk.sim.Policy": {
-        "className": "Policy",
-        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
-      },
-      "@winglang/sdk.sim.State": {
-        "className": "State",
-        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
-      },
-      "@winglang/sdk.std.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
-    },
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function.0": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.3.0",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function.0",
-          "path": "root/Function.0",
-        },
-        "Function.1": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.3.0",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function.1",
-          "path": "root/Function.1",
-        },
-        "Function.2": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.3.0",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function.2",
-          "path": "root/Function.2",
-        },
-        "Function.3": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.3.0",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function.3",
-          "path": "root/Function.3",
         },
       },
       "constructInfo": {

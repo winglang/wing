@@ -1,12 +1,11 @@
 import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
 
-const INFLIGHT_CODE = `
-async handle(event) {
+const INFLIGHT_CODE = inflight(async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -18,7 +17,7 @@ async handle(event) {
     msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
-}`;
+});
 
 const INFLIGHT_PANIC = `
 async handle() {
@@ -28,8 +27,7 @@ async handle() {
 test("create a function", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler, {
+  new cloud.Function(app, "my_function", INFLIGHT_CODE, {
     env: {
       ENV_VAR1: "true",
     },
@@ -63,8 +61,7 @@ test("create a function", async () => {
 test("invoke function succeeds", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler);
+  new cloud.Function(app, "my_function", INFLIGHT_CODE);
 
   const s = await app.startSimulator();
 
@@ -85,12 +82,16 @@ test("invoke function succeeds", async () => {
 test("async invoke function cleanup while running", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(`
-  async handle(event) {
-    // sleep forever
-    await new Promise(() => {});
-  }`);
-  new cloud.Function(app, "my_function", handler);
+
+  new cloud.Function(
+    app,
+    "my_function",
+    inflight(async (_, event) => {
+      // sleep forever
+      await new Promise(() => {});
+      return undefined;
+    })
+  );
 
   const s = await app.startSimulator();
 
@@ -111,8 +112,8 @@ test("async invoke function cleanup while running", async () => {
 test("invoke function with environment variables", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler, {
+
+  new cloud.Function(app, "my_function", INFLIGHT_CODE, {
     env: {
       PIG_LATIN: "true",
     },
@@ -141,8 +142,7 @@ test("invoke function with environment variables", async () => {
 test("invoke function fails", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler);
+  new cloud.Function(app, "my_function", INFLIGHT_CODE);
   const s = await app.startSimulator();
 
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
@@ -166,8 +166,7 @@ test("invoke function fails", async () => {
 test("function has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler);
+  new cloud.Function(app, "my_function", INFLIGHT_CODE);
 
   const treeJson = treeJsonOf(app.synth());
   const func = app.node.tryFindChild("my_function") as cloud.Function;
@@ -187,8 +186,7 @@ test("function has no display hidden property", async () => {
 test("function has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler);
+  new cloud.Function(app, "my_function", INFLIGHT_CODE);
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
@@ -210,8 +208,7 @@ test("function has display title and description properties", async () => {
 test("invoke function with process.exit(1)", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_PANIC);
-  new cloud.Function(app, "my_function", handler);
+  new cloud.Function(app, "my_function", INFLIGHT_CODE);
   const s = await app.startSimulator();
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
   // WHEN
@@ -231,27 +228,36 @@ test("invoke function with process.exit(1)", async () => {
 test("runtime environment tests", async () => {
   const app = new SimApp();
 
-  const urlSearchParamsFn = app.newCloudFunction(`
-    const query = "q=URLUtils.searchParams&topic=api";
-    const p = new URLSearchParams(query);
-    return p.get("topic");
-  `);
+  const urlSearchParamsFn = app.newCloudFunction(
+    inflight(async () => {
+      const query = "q=URLUtils.searchParams&topic=api";
+      const p = new URLSearchParams(query);
+      const value = p.get("topic");
+      if (!value) {
+        throw new Error("URLSearchParams failed");
+      }
+      return value;
+    })
+  );
 
   // check that fetch is a function (we can't really make network calls here)
-  const fetchFn = app.newCloudFunction(`
-    return typeof fetch;
-  `);
+  const fetchFn = app.newCloudFunction(inflight(async () => typeof fetch));
 
-  const cryptoFn = app.newCloudFunction(`
-    const c = require("crypto");
-    return typeof c.createHash;
-  `);
+  const cryptoFn = app.newCloudFunction(
+    inflight(async () => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const c = require("crypto");
+      return typeof c.createHash;
+    })
+  );
 
   // check that we can import ESM modules
-  const esmModulesFn = app.newCloudFunction(`
-    const { nanoid } = await import("nanoid");
-    return nanoid();
-  `);
+  const esmModulesFn = app.newCloudFunction(
+    inflight(async () => {
+      const { nanoid } = await import("nanoid");
+      return nanoid();
+    })
+  );
 
   // THEN
   const s = await app.startSimulator();
@@ -266,8 +272,10 @@ test("runtime environment tests", async () => {
 
 test("__dirname and __filename cannot be used within inflight code", async () => {
   const app = new SimApp();
-  const dirnameInvoker = app.newCloudFunction(`__dirname`);
-  const filenameInvoker = app.newCloudFunction(`__filename`);
+  const dirnameInvoker = app.newCloudFunction(inflight(async () => __dirname));
+  const filenameInvoker = app.newCloudFunction(
+    inflight(async () => __filename)
+  );
 
   const s = await app.startSimulator();
 
