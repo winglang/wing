@@ -124,7 +124,8 @@ module.exports = grammar({
         $.try_catch_statement,
         $.compiler_dbg_env,
         $.super_constructor_statement,
-        $.throw_statement
+        $.throw_statement,
+        $.explicit_lift_block,
       ),
 
     import_statement: ($) =>
@@ -159,6 +160,9 @@ module.exports = grammar({
 
     throw_statement: ($) =>
       seq("throw", optional(field("expression", $.expression)), $._semicolon),
+
+    explicit_lift_block: ($) =>
+      seq("lift", field("lift_qualification", $.lift_qualifications), field("block", $.block)),
 
     assignment_operator: ($) => choice("=", "+=", "-="),
 
