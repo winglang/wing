@@ -4244,7 +4244,7 @@ impl<'a> TypeChecker<'a> {
 		}
 		// Verify parent is a known class and get their env
 		let (parent_class, parent_class_env) =
-			self.extract_parent_class(ast_class.parent.as_ref(), ast_class.phase, &ast_class.name, env); // TODO: When will this fail???
+			self.extract_parent_class(ast_class.parent.as_ref(), ast_class.phase, &ast_class.name, env);
 
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
 		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(self.types.void()), env.phase, stmt.idx);
