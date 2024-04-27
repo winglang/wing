@@ -881,9 +881,10 @@ error: Unknown symbol \\"C11\\"
 
 
 error: Missing super() call as first statement of PaidStudent's constructor
-    --> ../../../examples/tests/invalid/class.test.w:96:3
+    --> ../../../examples/tests/invalid/class.test.w:96:45
     |  
- 96 | /   new(name: str, major: str, hrlyWage: num) {
+ 96 |     new(name: str, major: str, hrlyWage: num) {
+    | /---------------------------------------------^
  97 | |     this.hrlyWage = hrlyWage;
  98 | |     super(name, major);
  99 | | //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
@@ -1292,10 +1293,10 @@ exports[`ctor_super.test.w 1`] = `
 
 
 error: Missing super() call as first statement of PreflighChild2's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:13:3
+   --> ../../../examples/tests/invalid/ctor_super.test.w:13:15
    |
 13 |   new(a: num) {}
-   |   ^^^^^^^^^^^^^^ Missing super() call as first statement of PreflighChild2's constructor
+   |               ^^ Missing super() call as first statement of PreflighChild2's constructor
 
 
 error: Missing super() call as first statement of InflightChild1's constructor
@@ -1306,21 +1307,17 @@ error: Missing super() call as first statement of InflightChild1's constructor
 
 
 error: Missing super() call as first statement of InflightChild2's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:32:1
-   |  
-32 | / inflight class InflightChild2 extends InflightBaseWithCtorParam {
-33 | |   new(a: num) {}
-34 | | }
-   | \\\\-^ Missing super() call as first statement of InflightChild2's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:33:15
+   |
+33 |   new(a: num) {}
+   |               ^^ Missing super() call as first statement of InflightChild2's constructor
 
 
 error: Missing super() call as first statement of InflightChild4's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:44:1
-   |  
-44 | / inflight class InflightChild4 extends jf.JsiiClass {
-45 | |   new() {}
-46 | | }
-   | \\\\-^ Missing super() call as first statement of InflightChild4's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:45:9
+   |
+45 |   new() {}
+   |         ^^ Missing super() call as first statement of InflightChild4's constructor
 
 
 error: Expected 1 positional argument(s) but got 0
@@ -1345,21 +1342,17 @@ error: Missing super() call as first statement of InflightChild1's constructor
 
 
 error: Missing super() call as first statement of InflightChild2's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:58:3
-   |  
-58 | /   class InflightChild2 extends InflightBaseWithCtorParam {
-59 | |     new(a: num) {}
-60 | |   }
-   | \\\\---^ Missing super() call as first statement of InflightChild2's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:59:17
+   |
+59 |     new(a: num) {}
+   |                 ^^ Missing super() call as first statement of InflightChild2's constructor
 
 
 error: Missing super() call as first statement of InflightChild4's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:70:3
-   |  
-70 | /   class InflightChild4 extends jf.JsiiClass {
-71 | |     new() {}
-72 | |   }
-   | \\\\---^ Missing super() call as first statement of InflightChild4's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:71:11
+   |
+71 |     new() {}
+   |           ^^ Missing super() call as first statement of InflightChild4's constructor
 
 
 error: Expected 1 positional argument(s) but got 0
