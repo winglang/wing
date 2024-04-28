@@ -1,0 +1,36 @@
+name: Missing Example 🚀
+description: Request for a missing example
+labels: ["✨ example","needs-discussion"]
+body:
+
+- type: markdown
+  attributes:
+    value: |
+      ## Missing Example
+
+- type: textarea
+  id: description
+  attributes:
+    label: Description
+    placeholder: |
+      Couldn't find what you are looking for in https://github.com/winglang/examples, just describe in as much detail what is your use case 
+      and what you are trying to build and we'll try to help out.
+  validations:
+    required: true
+
+- type: textarea
+  id: reference
+  attributes:
+    label: Reference
+    description:
+    placeholder: |
+      Optionally, put links or code snippets as a reference that can help us do a better job.
+
+- type: textarea
+  attributes:
+    label: Community Notes
+    value: |
+      <!-- Please keep this note for the community -->
+      * Please vote by adding a 👍 reaction to the issue to help us prioritize.
+      * If you are interested to work on this issue, please leave a comment.
+      * If this issue is labeled **needs-discussion**, it means the spec has not been finalized yet. Please reach out on the #dev channel in the [Wing Slack](https://t.winglang.io/slack).
