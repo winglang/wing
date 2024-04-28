@@ -7,8 +7,6 @@ import { TestsContext } from "../tests-context.js";
 
 import { trpc } from "./trpc.js";
 
-type RouterOutput = inferRouterOutputs<Router>;
-
 export const useTests = () => {
   const [testList, setTestList] = useState<TestItem[]>([]);
   const { setTestsExists } = useContext(TestsContext);
