@@ -1,4 +1,4 @@
-import type { TestResult } from "@winglang/sdk/lib/std";
+import { TraceType, type TestResult } from "@winglang/sdk/lib/std";
 import { z } from "zod";
 
 import type { ConsoleLogger } from "../consoleLogger.js";
@@ -44,8 +44,12 @@ const runTest = async (
   const startTime = Date.now();
   try {
     const t = await client.runTest(resourcePath);
-    for (const log of t.traces.filter((t) => t.type === "log")) {
-      logger.log(log.data.message);
+    for (const log of t.traces) {
+      if (log.type === TraceType.LOG) {
+        logger.log(log.data.message, "simulator");
+      } else {
+        logger.verbose(log.data.message, "simulator");
+      }
     }
     result = {
       ...result,
@@ -103,6 +107,7 @@ export const createTestRouter = () => {
           label: getTestName(resourcePath),
           status: test?.status ?? "pending",
           time: test?.time ?? 0,
+          datetime: test?.datetime,
         };
       });
     }),
@@ -126,6 +131,7 @@ export const createTestRouter = () => {
           label: getTestName(input.resourcePath),
           status: response.error ? "error" : "success",
           time: response.time,
+          datetime: Date.now(),
         });
 
         return response;
@@ -145,6 +151,7 @@ export const createTestRouter = () => {
           label: getTestName(resourcePath),
           status: response.error ? "error" : "success",
           time: response.time,
+          datetime: Date.now(),
         });
       }
 
