@@ -19,10 +19,10 @@ const shutdownListeners: BeforeShutdownListener[] = [];
  * @param  fn Function to execute on shutdown.
  */
 const processOnce = (fn: BeforeShutdownListener) => {
+  process.once("beforeExit", (code) => void fn(code));
+  process.once("exit", (code) => void fn(code));
   process.once("SIGINT", (signal) => void fn(signal));
   process.once("SIGTERM", (signal) => void fn(signal));
-  process.once("exit", (code) => void fn(code));
-  process.once("beforeExit", (code) => void fn(code));
 };
 
 /**
@@ -55,7 +55,11 @@ async function shutdownHandler(codeOrSignal: string | number) {
     }
   }
 
-  return process.exit(0);
+  if (typeof codeOrSignal === "string") {
+    process.exit();
+  } else {
+    process.exit(codeOrSignal);
+  }
 }
 
 /**

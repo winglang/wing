@@ -4,7 +4,6 @@ import { createConsoleApp } from "@wingconsole/app";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { debug } from "debug";
 import { glob } from "glob";
-import once from "lodash.once";
 import { loadEnvVariables } from "../env";
 import { parseNumericString } from "../util";
 import { beforeShutdown } from "../util.before-shutdown.js";
@@ -92,9 +91,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   const url = `http://localhost:${port}/`;
   console.log(`The Wing Console is running at ${url}`);
 
-  const onExit = once(async (exitCode: number) => {
-    await close(() => process.exit(exitCode));
+  beforeShutdown(async () => {
+    await close();
   });
-
-  beforeShutdown(() => onExit(0));
 }
