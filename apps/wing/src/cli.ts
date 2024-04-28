@@ -170,6 +170,7 @@ async function main() {
       DEFAULT_PLATFORM
     )
     .option("-r, --rootId <rootId>", "App root id")
+    .option("-o, --output <output>", "path to the output directory")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
     .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
     .hook("preAction", progressHook)

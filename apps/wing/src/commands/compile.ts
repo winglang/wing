@@ -50,6 +50,11 @@ export interface CompileOptions {
    */
   readonly targetDir?: string;
   /**
+   * The overrides the location to save the compilation output
+   * @default "./target"
+   */
+  readonly output?: string;
+  /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.
    */
