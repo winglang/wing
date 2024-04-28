@@ -1,11 +1,12 @@
 import { writeFileSync } from "fs";
 import { join, basename } from "path";
-import { AssetType, Lazy, TerraformAsset } from "cdktf";
+import { AssetType, Lazy, TerraformAsset, Fn } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket } from "./bucket";
 import { core } from "..";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
+import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
 import { ProjectIamCustomRole } from "../.gen/providers/google/project-iam-custom-role";
 import { ProjectIamMember } from "../.gen/providers/google/project-iam-member";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
@@ -28,12 +29,48 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 };
 
 /**
+ * Interface for GCP Cloud Function
+ */
+export interface IGcpFunction {
+  /**
+   * GCP Function Name
+   */
+  readonly name: string;
+  /**
+   * GCP HTTPS Trigger URL
+   */
+  readonly httpsTriggerUrl: string;
+}
+
+/**
  * GCP implementation of `cloud.Function`.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-
 export class Function extends cloud.Function {
+  /**
+   * Attempts to cast an IInflightHost to an IGcpFunction if it is one.
+   * @param host The IInflightHost instance to check and cast.
+   * @returns An IGcpFunction if the host is a GCP function, undefined otherwise.
+   */
+  public static from(host: IInflightHost): IGcpFunction | undefined {
+    if (this.isGcpFunction(host)) {
+      return host;
+    }
+    return undefined;
+  }
+
+  /**
+   * Checks if the given object is an instance of IGcpFunction.
+   * @param obj The object to check.
+   * @returns true if the object is an IGcpFunction, false otherwise.
+   */
+  private static isGcpFunction(obj: any): obj is IGcpFunction {
+    return (
+      typeof obj.name === "string" && typeof obj.httpsTriggerUrl === "string"
+    );
+  }
+
   private readonly function: CloudfunctionsFunction;
   private readonly functionServiceAccount: ServiceAccount;
   private readonly functionCustomRole: ProjectIamCustomRole;
@@ -274,6 +311,28 @@ export class Function extends cloud.Function {
     host.addEnvironment(this.regionEnv(), region);
 
     super.onLift(host, ops);
+  }
+
+  /**
+   * Grants the given service account permission to invoke this function.
+   * @param serviceAccount The service account to grant invoke permissions to.
+   * @internal
+   */
+  public _addPermissionToInvoke(serviceAccount: ServiceAccount): void {
+    const hash = Fn.sha256(serviceAccount.email).slice(-8);
+
+    new CloudfunctionsFunctionIamMember(this, `invoker-permission-${hash}`, {
+      project: this.function.project,
+      region: this.function.region,
+      cloudFunction: this.function.name,
+      role: "roles/cloudfunctions.invoker",
+      member: `serviceAccount:${serviceAccount.email}`,
+    });
+  }
+
+  /** @internal */
+  public _getHttpsTriggerUrl(): string {
+    return this.function.httpsTriggerUrl;
   }
 
   private envName(): string {
