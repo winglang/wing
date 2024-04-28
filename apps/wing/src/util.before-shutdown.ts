@@ -56,7 +56,7 @@ async function shutdownHandler(codeOrSignal: string | number) {
   }
 
   if (typeof codeOrSignal === "string") {
-    process.exit(1);
+    process.exit();
   } else {
     process.exit(codeOrSignal);
   }
