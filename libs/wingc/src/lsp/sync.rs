@@ -151,9 +151,9 @@ fn partial_compile(
 
 	// Reset all type information
 	*types = Types::new();
+	project_data.jsii_imports.clear();
 
 	// -- TYPECHECKING PHASE --
-	let mut jsii_imports = vec![];
 
 	// Type check all files in topological order (start with files that don't require any other
 	// Wing files, then move on to files that depend on those, etc.)
@@ -165,7 +165,7 @@ fn partial_compile(
 			&file,
 			&project_data.file_graph,
 			jsii_types,
-			&mut jsii_imports,
+			&mut project_data.jsii_imports,
 		);
 
 		// Make sure all type reference are no longer considered references
