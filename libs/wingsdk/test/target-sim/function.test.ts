@@ -7,7 +7,7 @@ import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = inflight(async (_, event) => {
   event = JSON.parse(event);
-  let msg;
+  let msg: string;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
   }
@@ -19,10 +19,9 @@ const INFLIGHT_CODE = inflight(async (_, event) => {
   return JSON.stringify({ msg });
 });
 
-const INFLIGHT_PANIC = `
-async handle() {
+const INFLIGHT_PANIC = inflight(async () => {
   process.exit(1);
-}`;
+});
 
 test("create a function", async () => {
   // GIVEN
@@ -208,7 +207,7 @@ test("function has display title and description properties", async () => {
 test("invoke function with process.exit(1)", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Function(app, "my_function", INFLIGHT_CODE);
+  new cloud.Function(app, "my_function", INFLIGHT_PANIC);
   const s = await app.startSimulator();
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
   // WHEN
