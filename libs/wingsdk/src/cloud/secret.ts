@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { LiftMap } from "../core";
 import { INFLIGHT_SYMBOL, SECRET_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
 
@@ -51,11 +50,6 @@ export class Secret extends Resource {
     Node.of(this).description = "A cloud secret";
 
     this._name = props.name;
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   /** Get secret name */

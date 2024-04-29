@@ -3,7 +3,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App, LiftMap, Lifting } from "../core";
+import { App, Lifting } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { IInflight, IInflightHost, Node, Resource } from "../std";
@@ -85,11 +85,6 @@ export class Service extends Resource implements IInflightHost {
     }
 
     this.handler = handler;
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   /** @internal */

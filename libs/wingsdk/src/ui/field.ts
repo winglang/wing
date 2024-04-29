@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, LiftMap, UIComponent } from "../core";
+import { App, UIComponent } from "../core";
 import { Testing } from "../simulator";
 import { Duration, IInflight } from "../std";
 
@@ -84,11 +84,6 @@ export class Field extends VisualComponent {
       refreshRate: this.refreshRate,
       link: this.link,
     };
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   /** @internal */

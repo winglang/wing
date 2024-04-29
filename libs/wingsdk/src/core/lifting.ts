@@ -118,8 +118,8 @@ export type LiftMapNormalized = Record<string, Map<any, Set<string>>>;
  * See the unit tests in `lifting.test.ts` for examples.
  */
 export function mergeLiftDeps(
-  matrix1: LiftMapNormalized,
-  matrix2: LiftMapNormalized
+  matrix1: LiftMapNormalized = {},
+  matrix2: LiftMapNormalized = {}
 ): LiftMapNormalized {
   const result: LiftMapNormalized = {};
   for (const [op, deps] of Object.entries(matrix1)) {

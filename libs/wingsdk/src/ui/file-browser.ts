@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, LiftMap, UIComponent } from "../core";
+import { App, UIComponent } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { IInflight } from "../std";
 
@@ -113,11 +113,6 @@ export class FileBrowser extends VisualComponent {
       getHandler: this.getFn.node.path,
       listHandler: this.listFn.node.path,
     };
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   /** @internal */

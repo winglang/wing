@@ -11,7 +11,6 @@ import {
   BigtableTableConfig,
   BigtableTableColumnFamily,
 } from "../.gen/providers/google/bigtable-table";
-import { LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
 import * as ex from "../ex";
 import {
@@ -88,11 +87,6 @@ export class Table extends ex.Table {
     };
 
     new BigtableTable(this, "Default", tableConfig);
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   public addRow(_key: string, _row: Json): void {

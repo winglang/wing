@@ -2,7 +2,6 @@ import { Construct } from "constructs";
 import { isValidCron } from "cron-validator";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Duration, IInflight, Node, Resource } from "../std";
@@ -85,11 +84,6 @@ export class Schedule extends Resource {
     ) {
       throw new Error("cron string must be in UNIX cron format");
     }
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   /**

@@ -85,7 +85,7 @@ export interface IHostedLiftable extends ILiftable {
    * inflight host.
    * @internal
    */
-  _liftMap: LiftMap;
+  _liftMap?: LiftMap;
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
@@ -159,9 +159,6 @@ export abstract class Resource extends Construct implements IResource {
   ): TResource {
     return App.of(scope).newAbstract(fqn, scope, id, ...props);
   }
-
-  /** @internal */
-  public abstract get _liftMap(): LiftMap;
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.

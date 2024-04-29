@@ -3,7 +3,7 @@ import { VisualComponent } from "./base";
 import { Button, IButtonHandler } from "./button";
 import { Field, FieldProps, IFieldHandler } from "./field";
 import { fqnForType } from "../constants";
-import { App, LiftMap, UIComponent } from "../core";
+import { App, UIComponent } from "../core";
 
 /**
  * Global identifier for `Section`.
@@ -93,11 +93,6 @@ export class Section extends VisualComponent {
       label: this.label,
       children: this.subcomponents.map((c) => c._toUIComponent()),
     };
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   /** @internal */

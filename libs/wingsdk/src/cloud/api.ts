@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { Endpoint } from "./endpoint";
 import { fqnForType } from "../constants";
-import { LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource, Duration, IInflight } from "../std";
@@ -246,11 +245,6 @@ export class Api extends Resource {
 
     Node.of(this).title = "Api";
     Node.of(this).description = "A REST API endpoint";
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   /**

@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource } from "../std";
 
@@ -45,11 +44,6 @@ export class Counter extends Resource {
     Node.of(this).description = "A distributed atomic counter";
 
     this.initial = props.initial ?? 0;
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 }
 

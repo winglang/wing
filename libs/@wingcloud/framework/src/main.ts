@@ -77,9 +77,6 @@ This is a Wing app and must be run through the Wing CLI (npm install -f winglang
         new std.Test(this, name, handler, props);
       });
     }
-    get _liftMap(): LiftMap {
-      return {};
-    }
   }
 
   const platformPaths = ((s) => (!s ? [] : s.split(";")))(

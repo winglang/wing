@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, LiftMap, UIComponent } from "../core";
+import { App, UIComponent } from "../core";
 import { IInflight } from "../std";
 
 /**
@@ -49,11 +49,6 @@ export class Button extends VisualComponent {
       label: this.label,
       handler: this.fn.node.path,
     };
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   /** @internal */

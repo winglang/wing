@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { IInflight, Node, Resource } from "../std";
 
@@ -54,11 +53,6 @@ export class OnDeploy extends Resource {
 
     handler;
     props;
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 }
 

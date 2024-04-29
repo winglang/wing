@@ -3,7 +3,7 @@ import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { ITopicOnMessageHandler, Topic } from "./topic";
 import { fqnForType } from "../constants";
-import { App, LiftMap } from "../core";
+import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
@@ -45,11 +45,6 @@ export class Bucket extends Resource {
 
     Node.of(this).title = "Bucket";
     Node.of(this).description = "A cloud object store";
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   /**

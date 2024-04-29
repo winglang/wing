@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, LiftMap, UIComponent } from "../core";
+import { App, UIComponent } from "../core";
 import { IInflight } from "../std";
 
 /**
@@ -66,11 +66,6 @@ export class HttpClient extends VisualComponent {
       getUrlHandler: this.getUrlfn.node.path,
       getApiSpecHandler: this.getApiSpecfn.node.path,
     };
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    return {};
   }
 
   /** @internal */
