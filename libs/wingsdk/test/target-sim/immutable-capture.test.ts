@@ -10,15 +10,12 @@ import { lift } from "../../src/core/inflight";
 import { Duration } from "../../src/std";
 import { SimApp } from "../sim-app";
 
-type CaptureTest = {
-  code: IFunctionHandler;
-};
-
 captureTest("array", () =>
   lift({ my_capture: ["hello", "dude"] }).inflight(async (ctx) => {
     assert(ctx.my_capture.length === 2);
     assert(ctx.my_capture[0] === "hello");
     assert(ctx.my_capture[1] === "dude");
+    return undefined;
   })
 );
 
@@ -26,18 +23,21 @@ captureTest("string", () =>
   lift({ my_capture: "bam bam bam" }).inflight(async (ctx) => {
     assert(ctx.my_capture.length === 11);
     assert(ctx.my_capture === "bam bam bam");
+    return undefined;
   })
 );
 
 captureTest("number", () =>
   lift({ my_capture: 123 }).inflight(async (ctx) => {
     assert(ctx.my_capture + 20 === 143);
+    return undefined;
   })
 );
 
 captureTest("boolean", () =>
   lift({ my_capture: false }).inflight(async (ctx) => {
     assert(ctx.my_capture === false);
+    return undefined;
   })
 );
 
@@ -49,6 +49,7 @@ captureTest("struct", () =>
     assert(ctx.my_capture.world === "cup");
     assert(ctx.my_capture.foo === "bar");
     assert(Object.keys(ctx.my_capture).length === 3);
+    return undefined;
   })
 );
 
@@ -59,6 +60,7 @@ captureTest("set", () =>
       assert(ctx.my_capture.has("bam"));
       assert(ctx.my_capture.has("bang"));
       assert(ctx.my_capture.size === 3);
+      return undefined;
     }
   )
 );
@@ -68,6 +70,7 @@ captureTest("duration", () =>
     assert(ctx.my_capture.minutes === 120);
     assert(ctx.my_capture.seconds === 7200);
     assert(ctx.my_capture.hours === 2);
+    return undefined;
   })
 );
 
@@ -83,6 +86,7 @@ captureTest("map", () =>
     assert(ctx.my_capture.size === 2);
     assert(ctx.my_capture.get("foo") === 123);
     assert(ctx.my_capture.get("bar") === 456);
+    return undefined;
   })
 );
 
@@ -93,6 +97,7 @@ captureTest("array of durations", () =>
     assert(ctx.my_array.length === 2);
     assert(ctx.my_array[0].minutes === 10);
     assert(ctx.my_array[1].minutes === 20);
+    return undefined;
   })
 );
 
@@ -110,6 +115,7 @@ captureTest("map of arrays", () =>
     assert(ctx.my_map.get("foo")?.[1] === 2);
     assert(ctx.my_map.get("bar")?.[0] === 3);
     assert(ctx.my_map.get("bar")?.[1] === 4);
+    return undefined;
   })
 );
 
@@ -129,6 +135,7 @@ captureTest("array of maps", () =>
   }).inflight(async (ctx) => {
     assert(ctx.my_array[0].get("foo") === 1);
     assert(ctx.my_array[1].get("bar") === 4);
+    return undefined;
   })
 );
 
@@ -140,6 +147,7 @@ captureTest("set of durations", () =>
     assert(Array.from(ctx.my_set)[0].minutes === 10);
     assert(Array.from(ctx.my_set)[0].hours === 0.16666666666666666);
     assert(Array.from(ctx.my_set)[1].seconds === 1200);
+    return undefined;
   })
 );
 
@@ -155,6 +163,7 @@ captureTest("map of arrays of durations", () =>
     assert(ctx.my_map.get("foo")?.[1].seconds === 20 * 60);
     assert(ctx.my_map.get("bar")?.[0].minutes === 30);
     assert(ctx.my_map.get("bar")?.[1].seconds === 40 * 60);
+    return undefined;
   })
 );
 
@@ -176,6 +185,7 @@ captureTest("struct of maps", () =>
     assert(ctx.my_struct.foo.get("bar") === 2);
     assert(ctx.my_struct.bar.get("foo") === 3);
     assert(ctx.my_struct.bar.get("bar") === 4);
+    return undefined;
   })
 );
 
