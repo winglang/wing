@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Function } from "./function";
-import {  calculateSecretPermissions } from "./permissions";
+import { calculateSecretPermissions } from "./permissions";
 import { isValidArn } from "./util";
 import { cloud } from "..";
 import { ISecretClient } from "../cloud";
@@ -10,7 +10,7 @@ import { IInflightHost, Resource } from "../std";
 
 /**
  * A reference to an existing secret.
- * 
+ *
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class SecretRef extends Resource {
@@ -26,7 +26,7 @@ export class SecretRef extends Resource {
       throw new Error(`"${secretArn}" is not a valid secretsmanager arn`);
     }
 
-    this.secretArn = secretArn
+    this.secretArn = secretArn;
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
@@ -34,7 +34,7 @@ export class SecretRef extends Resource {
     if (fn) {
       fn.addPolicyStatements(
         ...calculateSecretPermissions(this.secretArn, ops)
-      )
+      );
     }
 
     host.addEnvironment(this.envName(), this.secretArn);
@@ -43,12 +43,9 @@ export class SecretRef extends Resource {
 
   /** @internal */
   public _toInflight(): string {
-    return InflightClient.for(
-      __dirname,
-      __filename,
-      "SecretClient",
-      [`process.env["${this.envName()}"]`]
-    );
+    return InflightClient.for(__dirname, __filename, "SecretClient", [
+      `process.env["${this.envName()}"]`,
+    ]);
   }
 
   private envName(): string {
