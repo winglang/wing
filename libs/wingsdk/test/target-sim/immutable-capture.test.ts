@@ -1,17 +1,21 @@
-import * as assert from "assert";
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import {
-  Function,
-  IFunctionClient,
-  IFunctionHandler,
-} from "../../src/cloud/function";
+import { Function, IFunctionClient } from "../../src/cloud/function";
 import { lift } from "../../src/core/inflight";
-import { Duration } from "../../src/std";
+import { INFLIGHT_SYMBOL } from "../../src/core/types";
+import { Duration, IInflight } from "../../src/std";
 import { SimApp } from "../sim-app";
 
+interface ITestHandler extends IInflight {
+  [INFLIGHT_SYMBOL]?: ITestHandlerClient["handle"];
+}
+
+interface ITestHandlerClient {
+  handle(assert: (cond: boolean) => void): Promise<void>;
+}
+
 captureTest("array", () =>
-  lift({ my_capture: ["hello", "dude"] }).inflight(async (ctx) => {
+  lift({ my_capture: ["hello", "dude"] }).inflight(async (ctx, assert) => {
     assert(ctx.my_capture.length === 2);
     assert(ctx.my_capture[0] === "hello");
     assert(ctx.my_capture[1] === "dude");
@@ -20,7 +24,7 @@ captureTest("array", () =>
 );
 
 captureTest("string", () =>
-  lift({ my_capture: "bam bam bam" }).inflight(async (ctx) => {
+  lift({ my_capture: "bam bam bam" }).inflight(async (ctx, assert) => {
     assert(ctx.my_capture.length === 11);
     assert(ctx.my_capture === "bam bam bam");
     return undefined;
@@ -28,14 +32,14 @@ captureTest("string", () =>
 );
 
 captureTest("number", () =>
-  lift({ my_capture: 123 }).inflight(async (ctx) => {
+  lift({ my_capture: 123 }).inflight(async (ctx, assert) => {
     assert(ctx.my_capture + 20 === 143);
     return undefined;
   })
 );
 
 captureTest("boolean", () =>
-  lift({ my_capture: false }).inflight(async (ctx) => {
+  lift({ my_capture: false }).inflight(async (ctx, assert) => {
     assert(ctx.my_capture === false);
     return undefined;
   })
@@ -44,7 +48,7 @@ captureTest("boolean", () =>
 captureTest("struct", () =>
   lift({
     my_capture: { hello: "dude", world: "cup", foo: "bar" },
-  }).inflight(async (ctx) => {
+  }).inflight(async (ctx, assert) => {
     assert(ctx.my_capture.hello === "dude");
     assert(ctx.my_capture.world === "cup");
     assert(ctx.my_capture.foo === "bar");
@@ -55,7 +59,7 @@ captureTest("struct", () =>
 
 captureTest("set", () =>
   lift({ my_capture: new Set(["boom", "bam", "bang"]) }).inflight(
-    async (ctx) => {
+    async (ctx, assert) => {
       assert(ctx.my_capture.has("boom"));
       assert(ctx.my_capture.has("bam"));
       assert(ctx.my_capture.has("bang"));
@@ -66,7 +70,7 @@ captureTest("set", () =>
 );
 
 captureTest("duration", () =>
-  lift({ my_capture: Duration.fromHours(2) }).inflight(async (ctx) => {
+  lift({ my_capture: Duration.fromHours(2) }).inflight(async (ctx, assert) => {
     assert(ctx.my_capture.minutes === 120);
     assert(ctx.my_capture.seconds === 7200);
     assert(ctx.my_capture.hours === 2);
@@ -80,7 +84,7 @@ captureTest("map", () =>
       ["foo", 123],
       ["bar", 456],
     ]),
-  }).inflight(async (ctx) => {
+  }).inflight(async (ctx, assert) => {
     assert(ctx.my_capture.has("foo"));
     assert(ctx.my_capture.has("bar"));
     assert(ctx.my_capture.size === 2);
@@ -93,7 +97,7 @@ captureTest("map", () =>
 captureTest("array of durations", () =>
   lift({
     my_array: [Duration.fromMinutes(10), Duration.fromMinutes(20)],
-  }).inflight(async (ctx) => {
+  }).inflight(async (ctx, assert) => {
     assert(ctx.my_array.length === 2);
     assert(ctx.my_array[0].minutes === 10);
     assert(ctx.my_array[1].minutes === 20);
@@ -107,7 +111,7 @@ captureTest("map of arrays", () =>
       ["foo", [1, 2]],
       ["bar", [3, 4]],
     ]),
-  }).inflight(async (ctx) => {
+  }).inflight(async (ctx, assert) => {
     assert(ctx.my_map.has("foo"));
     assert(ctx.my_map.has("bar"));
     assert(ctx.my_map.size === 2);
@@ -132,7 +136,7 @@ captureTest("array of maps", () =>
         ["bar", 4],
       ]),
     ],
-  }).inflight(async (ctx) => {
+  }).inflight(async (ctx, assert) => {
     assert(ctx.my_array[0].get("foo") === 1);
     assert(ctx.my_array[1].get("bar") === 4);
     return undefined;
@@ -143,7 +147,7 @@ captureTest("array of maps", () =>
 captureTest("set of durations", () =>
   lift({
     my_set: new Set([Duration.fromMinutes(10), Duration.fromMinutes(20)]),
-  }).inflight(async (ctx) => {
+  }).inflight(async (ctx, assert) => {
     assert(Array.from(ctx.my_set)[0].minutes === 10);
     assert(Array.from(ctx.my_set)[0].hours === 0.16666666666666666);
     assert(Array.from(ctx.my_set)[1].seconds === 1200);
@@ -158,7 +162,7 @@ captureTest("map of arrays of durations", () =>
       ["foo", [Duration.fromMinutes(10), Duration.fromMinutes(20)]],
       ["bar", [Duration.fromMinutes(30), Duration.fromMinutes(40)]],
     ]),
-  }).inflight(async (ctx) => {
+  }).inflight(async (ctx, assert) => {
     assert(ctx.my_map.get("foo")?.[0].minutes === 10);
     assert(ctx.my_map.get("foo")?.[1].seconds === 20 * 60);
     assert(ctx.my_map.get("bar")?.[0].minutes === 30);
@@ -180,7 +184,7 @@ captureTest("struct of maps", () =>
         ["bar", 4],
       ]),
     },
-  }).inflight(async (ctx) => {
+  }).inflight(async (ctx, assert) => {
     assert(ctx.my_struct.foo.get("foo") === 1);
     assert(ctx.my_struct.foo.get("bar") === 2);
     assert(ctx.my_struct.bar.get("foo") === 3);
@@ -259,13 +263,25 @@ captureTest("struct of maps", () =>
 
 // -----------------------------
 
-function captureTest(name: string, t: (scope: Construct) => IFunctionHandler) {
+function captureTest(name: string, t: (scope: Construct) => ITestHandler) {
   test(name, async () => {
     const app = new SimApp();
 
     const handler = t(app);
 
-    new Function(app, "Function", handler);
+    new Function(
+      app,
+      "Function",
+      lift({ handler }).inflight(async (ctx) => {
+        const baseAssert = (cond: boolean) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return undefined;
+      })
+    );
 
     const sim = await app.startSimulator();
     const fn = sim.getResource("root/Function") as IFunctionClient;
