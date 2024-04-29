@@ -50,6 +50,7 @@ export class Bucket {
 export interface IAwsBucketClient extends cloud.IBucketClient {
   /**
    * Get the region of the bucket.
+   * @inflight
    */
   bucketRegion(): Promise<string>;
 }
@@ -127,7 +128,7 @@ export class BucketRef extends Resource {
       [cloud.BucketInflightMethods.METADATA]: [],
       [cloud.BucketInflightMethods.COPY]: [],
       [cloud.BucketInflightMethods.RENAME]: [],
-      "bucketRegion": []
+      bucketRegion: [],
     };
   }
 

@@ -58,6 +58,7 @@ export class Queue {
 export interface IAwsQueueClient extends cloud.IQueueClient {
   /**
    * Get the queue URL.
+   * @inflight
    */
   queueUrl(): Promise<string>;
 }
