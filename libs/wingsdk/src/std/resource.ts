@@ -101,6 +101,7 @@ export interface IHostedLiftable extends ILiftable {
 /**
  * Abstract interface for `Resource`.
  * @skipDocs
+ * @noinflight
  */
 export interface IResource extends IConstruct, IHostedLiftable {
   /**
@@ -117,6 +118,7 @@ export interface IResource extends IConstruct, IHostedLiftable {
 /**
  * Shared behavior between all Wing SDK resources.
  * @skipDocs
+ * @noinflight
  */
 export abstract class Resource extends Construct implements IResource {
   /**
@@ -208,6 +210,7 @@ export abstract class Resource extends Construct implements IResource {
  * A resource that has an automatically generated id.
  * Used by the Wing compiler to generate unique ids for auto generated resources
  * from inflight function closures.
+ * @noinflight
  */
 export abstract class AutoIdResource extends Resource {
   constructor(scope: Construct, idPrefix: string = "") {

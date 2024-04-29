@@ -12,6 +12,7 @@ export const BUTTON_FQN = fqnForType("ui.Button");
 
 /**
  * A button can be used to perform an action.
+ * @noinflight
  */
 export class Button extends VisualComponent {
   /**

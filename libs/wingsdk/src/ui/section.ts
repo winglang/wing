@@ -23,6 +23,7 @@ export interface SectionProps {
 
 /**
  * A section can be used to group other visual components.
+ * @noinflight
  */
 export class Section extends VisualComponent {
   /**

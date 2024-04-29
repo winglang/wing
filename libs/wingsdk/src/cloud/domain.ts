@@ -21,6 +21,7 @@ export interface DomainProps {
 
 /**
  * A cloud Domain
+ * @inflight `@winglang/sdk.cloud.IDomainClient`
  * @abstract
  */
 export class Domain extends Resource {

@@ -31,6 +31,7 @@ export interface FieldProps {
 
 /**
  * A field can be used to display a value.
+ * @noinflight
  */
 export class Field extends VisualComponent {
   /**
@@ -117,6 +118,7 @@ export interface IFieldHandlerClient {
 
 /**
  * A value field can be used to display a string value.
+ * @noinflight
  */
 export class ValueField extends Field {
   constructor(scope: Construct, id: string, label: string, value: string) {

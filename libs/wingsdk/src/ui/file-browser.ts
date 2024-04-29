@@ -36,6 +36,7 @@ export interface FileBrowserHandlers {
 
 /**
  * A file browser can be used to browse files.
+ * @noinflight
  */
 export class FileBrowser extends VisualComponent {
   /**
@@ -132,6 +133,7 @@ export class FileBrowser extends VisualComponent {
  * @inflight `@winglang/sdk.ui.IFileBrowserPutHandlerClient`
  */
 export interface IFileBrowserPutHandler extends IInflight {}
+
 /**
  * A resource with an inflight "handle" method that can be passed to
  * `IFileBrowser`.
@@ -139,6 +141,7 @@ export interface IFileBrowserPutHandler extends IInflight {}
  * @inflight `@winglang/sdk.ui.IFileBrowserGetHandlerClient`
  */
 export interface IFileBrowserGetHandler extends IInflight {}
+
 /**
  * A resource with an inflight "handle" method that can be passed to
  * `IFileBrowser`.
@@ -146,6 +149,7 @@ export interface IFileBrowserGetHandler extends IInflight {}
  * @inflight `@winglang/sdk.ui.IFileBrowserListHandlerClient`
  */
 export interface IFileBrowserListHandler extends IInflight {}
+
 /**
  * A resource with an inflight "handle" method that can be passed to
  * `IFileBrowser`.
