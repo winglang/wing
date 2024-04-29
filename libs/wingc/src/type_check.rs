@@ -288,12 +288,6 @@ pub struct Namespace {
 	#[derivative(Debug = "ignore")]
 	pub envs: Vec<SymbolEnvRef>,
 
-	// Indicate whether all the types in this namespace have been loaded, this is part of our
-	// lazy loading mechanism and is used by the lsp's autocomplete in case we need to load
-	// the types after initial compilation.
-	#[derivative(Debug = "ignore")]
-	pub loaded: bool,
-
 	/// Where we can resolve this namespace from
 	pub module_path: ResolveSource,
 }
@@ -384,18 +378,18 @@ pub trait ClassLike: Display {
 
 	fn methods(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
-			t.as_variable()
-				.unwrap()
-				.type_
-				.as_function_sig()
-				.map(|_| (s.clone(), t.as_variable().unwrap().type_))
+			if t.as_variable()?.type_.as_function_sig().is_some() {
+				Some((s, t.as_variable()?.type_))
+			} else {
+				None
+			}
 		})
 	}
 
 	fn fields(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
-			if t.as_variable().unwrap().type_.as_function_sig().is_none() {
-				Some((s, t.as_variable().unwrap().type_))
+			if t.as_variable()?.type_.as_function_sig().is_none() {
+				Some((s, t.as_variable()?.type_))
 			} else {
 				None
 			}
@@ -403,13 +397,7 @@ pub trait ClassLike: Display {
 	}
 
 	fn get_method(&self, name: &Symbol) -> Option<&VariableInfo> {
-		let v = self
-			.get_env()
-			.lookup_ext(name, None)
-			.ok()?
-			.0
-			.as_variable()
-			.expect("class env should only contain variables");
+		let v = self.get_env().lookup_ext(name, None).ok()?.0.as_variable()?;
 		if v.type_.is_closure() {
 			Some(v)
 		} else {
@@ -418,13 +406,7 @@ pub trait ClassLike: Display {
 	}
 
 	fn get_field(&self, name: &Symbol) -> Option<&VariableInfo> {
-		let v = self
-			.get_env()
-			.lookup_ext(name, None)
-			.ok()?
-			.0
-			.as_variable()
-			.expect("class env should only contain variables");
+		let v = self.get_env().lookup_ext(name, None).ok()?.0.as_variable()?;
 		if !v.type_.is_closure() {
 			Some(v)
 		} else {
@@ -565,7 +547,9 @@ impl Subtype for Type {
 
 				// Next, compare the function to a method on the interface named "handle" if it exists
 				if let Some((method, _)) = r0.get_env().lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None).ok() {
-					let method = method.as_variable().unwrap();
+					let Some(method) = method.as_variable() else {
+						return false;
+					};
 					if !method.phase.is_subtype_of(&Phase::Inflight) {
 						return false;
 					}
@@ -1027,7 +1011,7 @@ impl TypeRef {
 
 		if let Some(class) = self.as_class() {
 			if let LookupResult::Found(method, _) = class.get_env().lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None) {
-				return method.as_variable().unwrap().type_.as_function_sig();
+				return method.as_variable()?.type_.as_function_sig();
 			}
 		}
 
@@ -1036,7 +1020,7 @@ impl TypeRef {
 				.get_env()
 				.lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None)
 			{
-				return method.as_variable().unwrap().type_.as_function_sig();
+				return method.as_variable()?.type_.as_function_sig();
 			}
 		}
 
@@ -3434,7 +3418,6 @@ impl<'a> TypeChecker<'a> {
 		let ns = self.types.add_namespace(Namespace {
 			name: source_path.file_stem().unwrap().to_string(),
 			envs: child_envs,
-			loaded: true,
 			module_path: ResolveSource::WingFile,
 		});
 		self
@@ -3577,7 +3560,6 @@ impl<'a> TypeChecker<'a> {
 				let ns = self.types.add_namespace(Namespace {
 					name: path.to_string(),
 					envs: vec![brought_env],
-					loaded: true,
 					module_path: ResolveSource::WingFile,
 				});
 				if let Err(e) = env.define(
@@ -5294,6 +5276,9 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
 
+			importer.import_root_types();
+			importer.import_submodules_to_env(env);
+
 			// If we're importing from the the wing sdk, eagerly import all the types within it
 			// The wing sdk is special because it's currently the only jsii module we import with a specific target namespace
 			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
@@ -5303,9 +5288,6 @@ impl<'a> TypeChecker<'a> {
 					Some(jsii.namespace_filter.join("."))
 				});
 			}
-
-			importer.import_root_types();
-			importer.import_submodules_to_env(env);
 		}
 	}
 
@@ -6206,12 +6188,8 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// If the type is not found, attempt to import it from a jsii library
-		if import_udt_from_jsii(self.types, self.jsii_types, user_defined_type, &self.jsii_imports) {
-			return resolve_user_defined_type(user_defined_type, env, statement_idx);
-		}
-
-		// If the type is still not found, return the original error
-		res
+		import_udt_from_jsii(self.types, self.jsii_types, user_defined_type, &self.jsii_imports);
+		resolve_user_defined_type(user_defined_type, env, statement_idx)
 	}
 
 	fn extract_parent_class(
@@ -6601,23 +6579,29 @@ pub fn import_udt_from_jsii(
 	jsii_types: &TypeSystem,
 	user_defined_type: &UserDefinedType,
 	jsii_imports: &[JsiiImportSpec],
-) -> bool {
+) {
 	for jsii in jsii_imports {
 		if jsii.alias.name == user_defined_type.root.name {
 			let mut importer = JsiiImporter::new(&jsii, wing_types, jsii_types);
 
 			let mut udt_string = if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
 				// when importing from the std lib, the "alias" is the submodule
-				format!("{}.{}.", jsii.assembly_name, jsii.alias.name)
+				format!("{}.{}", jsii.assembly_name, jsii.alias.name)
 			} else {
-				format!("{}.", jsii.assembly_name)
+				if user_defined_type.fields.is_empty() {
+					return;
+				}
+				jsii.assembly_name.to_string()
 			};
-			udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
 
-			return importer.import_type(&FQN::from(udt_string.as_str()));
+			for field in &user_defined_type.fields {
+				udt_string.push('.');
+				udt_string.push_str(&field.name);
+			}
+
+			importer.import_type(&FQN::from(udt_string.as_str()));
 		}
 	}
-	false
 }
 
 /// *Hacky* If the given type is from the std namespace, add the implicit `std.` to it.

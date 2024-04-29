@@ -704,13 +704,11 @@ mod tests {
 		let ns1 = types.add_namespace(Namespace {
 			name: "ns1".to_string(),
 			envs: vec![ns1_env],
-			loaded: false,
 			module_path: ResolveSource::WingFile,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
 			envs: vec![ns2_env],
-			loaded: false,
 			module_path: ResolveSource::WingFile,
 		});
 
