@@ -189,7 +189,7 @@ export interface IServiceHandlerClient {
    * DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
    * running process, start it asynchronously.
    *
-   *
+   * @inflight
    * @returns an optional function that can be used to cleanup any resources when the service is
    * stopped.
    *
@@ -203,7 +203,6 @@ export interface IServiceHandlerClient {
    *     log("stoping service...");
    *   };
    * });
-   *
    */
   handle(): Promise<IServiceStopHandler | undefined>;
 }

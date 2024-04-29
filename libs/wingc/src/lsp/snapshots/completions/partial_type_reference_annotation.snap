@@ -503,7 +503,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceHandlerClient\n```\n---\nInflight client for `IServiceHandler`.\n### Methods\n- `handle` — `preflight (): inflight (): void?` — Handler to run when the service starts."
+    value: "```wing\ninterface IServiceHandlerClient\n```\n---\nInflight client for `IServiceHandler`.\n### Methods\n- `handle` — `inflight (): inflight (): void?` — Handler to run when the service starts."
   sortText: ii|IServiceHandlerClient
 - label: IServiceStopHandler
   kind: 8
