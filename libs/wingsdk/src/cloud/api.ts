@@ -131,7 +131,14 @@ type CorsOptionsResponseHeaders = { [key: string]: string };
  * Type definition for CORS headers which includes default and options headers.
  */
 export interface CorsHeaders {
+  /**
+   * Default CORS response headers.
+   */
   readonly defaultResponse: CorsDefaultResponseHeaders;
+
+  /**
+   * CORS options response headers.
+   */
   readonly optionsResponse: CorsOptionsResponseHeaders;
 }
 
