@@ -1,4 +1,5 @@
 import { CubeTransparentIcon } from "@heroicons/react/20/solid";
+import { CubeIcon } from "@heroicons/react/24/outline";
 import { BoltIcon } from "@heroicons/react/24/solid";
 import { ResourceIcon } from "@wingconsole/design-system";
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
@@ -17,7 +18,6 @@ import { NodeChildren } from "../ui/elk-flow/node-children.js";
 import { Node } from "../ui/elk-flow/node.js";
 import { Port } from "../ui/elk-flow/port.js";
 import type { EdgeComponent } from "../ui/elk-flow/types.js";
-import { CubeIcon } from "@heroicons/react/24/outline";
 
 interface InflightPortProps {
   occupied?: boolean;
@@ -614,6 +614,59 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
   //   console.log({ hiddenMap });
   // }, [hiddenMap]);
 
+  const isNodeHidden = useCallback(
+    (path: string) => {
+      return hiddenMap.get(path) === true;
+    },
+    [hiddenMap],
+  );
+
+  const getNodeConnections = useCallback(
+    (path: string, type: "source" | "target"): ConnectionDataV2[] => {
+      // if (!isNodeHidden(path)) {
+      //   return connections?.filter((connection) => {
+      //     return connection[type] === path;
+      //   });
+      // }
+
+      const inverseType = type === "source" ? "target" : "source";
+
+      return connections
+        ?.filter((connection) => {
+          return connection[type] === path;
+        })
+        .flatMap((connection) => {
+          if (isNodeHidden(connection[inverseType])) {
+            return (
+              getNodeConnections(connection[inverseType], type) ?? []
+            ).map(
+              (otherConnection) =>
+                ({
+                  name: otherConnection.name,
+                  // [type]: path,
+                  [type]: connection[type],
+                  [`${type}Op`]: connection[`${type}Op`],
+                  [inverseType]: otherConnection[inverseType],
+                  [`${inverseType}Op`]: otherConnection[`${inverseType}Op`],
+                } as ConnectionDataV2),
+            );
+          }
+          return connection;
+        });
+    },
+    [connections, isNodeHidden],
+  );
+  // useEffect(() => {
+  //   console.log(
+  //     "source",
+  //     getNodeConnections("root/Default/Queue/SetConsumer0", "source"),
+  //   );
+  //   // console.log(
+  //   //   "target",
+  //   //   getNodeConnections("root/Default/Queue/SetConsumer0", "target"),
+  //   // );
+  // }, [getNodeConnections]);
+
   const connectionsV2 = useMemo(() => {
     if (!nodeInfo) {
       return [];
@@ -621,25 +674,36 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
 
     const connectionsV2 = new Array<ConnectionDataV2>();
     for (const connection of connections ?? []) {
-      const source = nodeInfo.get(connection.source);
-      const sourceConnections = (() => {
-        if (source?.type === "autoId") {
-          return connections?.filter(
-            (otherConnection) => otherConnection.target === connection.source,
-          );
-        }
-        return [connection];
-      })();
+      // const source = nodeInfo.get(connection.source);
+      // const sourceConnections = (() => {
+      //   if (source?.type === "autoId") {
+      //     return connections?.filter(
+      //       (otherConnection) => otherConnection.target === connection.source,
+      //     );
+      //   }
+      //   return [connection];
+      // })();
+      // const sourceConnections = getNodeConnections(connection.source, "target");
+      const sourceConnections = getNodeConnections(connection.source, "source");
 
-      const target = nodeInfo.get(connection.target);
-      const targetConnections = (() => {
-        if (target?.type === "autoId") {
-          return connections?.filter(
-            (otherConnection) => otherConnection.source === connection.target,
-          );
-        }
-        return [connection];
-      })();
+      // const target = nodeInfo.get(connection.target);
+      // const targetConnections = (() => {
+      //   if (target?.type === "autoId") {
+      //     return connections?.filter(
+      //       (otherConnection) => otherConnection.source === connection.target,
+      //     );
+      //   }
+      //   return [connection];
+      // })();
+      // const targetConnections = getNodeConnections(connection.target, "source");
+      const targetConnections = getNodeConnections(connection.target, "target");
+
+      console.log({
+        source: connection.source,
+        target: connection.target,
+        sourceConnections,
+        targetConnections,
+      });
 
       for (const sourceConnection of sourceConnections) {
         for (const targetConnection of targetConnections) {
@@ -665,10 +729,10 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
         hiddenMap.get(connection.target) !== true
       );
     });
-  }, [connections, nodeInfo, hiddenMap]);
-  // useEffect(() => {
-  //   console.log({ connections, connectionsV2 });
-  // }, [connections, connectionsV2]);
+  }, [connections, nodeInfo, hiddenMap, getNodeConnections]);
+  useEffect(() => {
+    console.log({ connections, connectionsV2 });
+  }, [connections, connectionsV2]);
 
   const getConnectionId = useCallback(
     (connection: ConnectionData, type: "source" | "target") => {
@@ -757,10 +821,10 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
       //   );
       // }
 
-      console.log({
-        path: props.constructTreeNode.path,
-        type: info.type,
-      });
+      // console.log({
+      //   path: props.constructTreeNode.path,
+      //   type: info.type,
+      // });
 
       return (
         <ContainerNode
