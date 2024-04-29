@@ -2,7 +2,7 @@ import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { cloud } from "..";
 import { fqnForType } from "../constants";
-import { App, LiftDepsMatrixRaw } from "../core";
+import { App, LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
@@ -80,7 +80,7 @@ export class Website extends Resource implements IWebsite {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

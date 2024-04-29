@@ -7,7 +7,7 @@ import { Construct } from "constructs";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { calculateSecretPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { LiftDepsMatrixRaw } from "@winglang/sdk/lib/core";
+import { LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS Implemntation of `cloud.Secret`
@@ -34,7 +34,7 @@ export class Secret extends cloud.Secret {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.SecretInflightMethods.VALUE]: [],
       [cloud.SecretInflightMethods.VALUE_JSON]: [],

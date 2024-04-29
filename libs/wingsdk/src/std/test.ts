@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
-import { App, LiftDepsMatrixRaw } from "../core";
+import { App, LiftMap } from "../core";
 import { Node, IInflight, Resource } from "../std";
 
 /**
@@ -54,7 +54,7 @@ export class Test extends Resource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

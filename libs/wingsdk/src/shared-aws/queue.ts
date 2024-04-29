@@ -5,7 +5,7 @@ import { calculateQueuePermissions } from "./permissions";
 import { isValidArn } from "./util";
 import { cloud } from "..";
 import { IQueueClient } from "../cloud";
-import { InflightClient, LiftDepsMatrixRaw } from "../core";
+import { InflightClient, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Testing } from "../simulator";
@@ -108,7 +108,7 @@ export class QueueRef extends Resource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [QUEUE_URL_METHOD]: [], // AWS-specific
       [cloud.QueueInflightMethods.PUSH]: [],

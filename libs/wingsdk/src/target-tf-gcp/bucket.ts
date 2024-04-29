@@ -8,7 +8,7 @@ import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import { Id } from "../.gen/providers/random/id";
 import * as cloud from "../cloud";
-import { InflightClient, LiftDepsMatrixRaw } from "../core";
+import { InflightClient, LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
 import {
   CaseConventions,
@@ -95,7 +95,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.BucketInflightMethods.DELETE]: [],
       [cloud.BucketInflightMethods.GET]: [],

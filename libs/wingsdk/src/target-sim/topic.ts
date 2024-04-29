@@ -8,7 +8,7 @@ import { ISimulatorResource } from "./resource";
 import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Testing, ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
@@ -108,7 +108,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.QueueInflightMethods.PUSH]: [],
       [cloud.TopicInflightMethods.PUBLISH]: [],

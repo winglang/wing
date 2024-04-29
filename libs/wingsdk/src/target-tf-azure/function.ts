@@ -12,7 +12,7 @@ import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import {
@@ -292,7 +292,7 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.FunctionInflightMethods.INVOKE]: [],
     };

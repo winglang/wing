@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, LiftDepsMatrixRaw, UIComponent } from "../core";
+import { App, LiftMap, UIComponent } from "../core";
 import { Testing } from "../simulator";
 import { Duration, IInflight } from "../std";
 
@@ -86,7 +86,7 @@ export class Field extends VisualComponent {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

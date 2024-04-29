@@ -39,7 +39,7 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   /** @internal */
-  public get _liftMap(): core.LiftDepsMatrixRaw {
+  public get _liftMap(): core.LiftMap {
     return {
       [cloud.CounterInflightMethods.INC]: [],
       [cloud.CounterInflightMethods.DEC]: [],

@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, LiftDepsMatrixRaw, Lifting } from "../core";
+import { App, LiftMap, Lifting } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
@@ -109,7 +109,7 @@ export class Function extends Resource implements IInflightHost {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

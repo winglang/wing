@@ -1,5 +1,5 @@
 import { Construct, IConstruct } from "constructs";
-import { App, LiftDepsMatrixRaw } from "../core";
+import { App, LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { Node } from "../std";
 
@@ -85,7 +85,7 @@ export interface IHostedLiftable extends ILiftable {
    * inflight host.
    * @internal
    */
-  _liftMap: LiftDepsMatrixRaw;
+  _liftMap: LiftMap;
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
@@ -159,7 +159,7 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /** @internal */
-  public abstract get _liftMap(): LiftDepsMatrixRaw;
+  public abstract get _liftMap(): LiftMap;
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.

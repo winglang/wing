@@ -6,7 +6,7 @@ import { COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/commons";
 import { calculateCounterPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsCounter } from "@winglang/sdk/lib/shared-aws/counter";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
-import { LiftDepsMatrixRaw } from "@winglang/sdk/lib/core";
+import { LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS implementation of `cloud.Counter`.
@@ -27,7 +27,7 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.CounterInflightMethods.INC]: [],
       [cloud.CounterInflightMethods.DEC]: [],

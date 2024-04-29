@@ -11,7 +11,7 @@ import {
   BigtableTableConfig,
   BigtableTableColumnFamily,
 } from "../.gen/providers/google/bigtable-table";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
 import * as ex from "../ex";
 import {
@@ -91,7 +91,7 @@ export class Table extends ex.Table {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

@@ -73,7 +73,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   /** @internal */
-  public get _liftMap(): core.LiftDepsMatrixRaw {
+  public get _liftMap(): core.LiftMap {
     return {
       [cloud.BucketInflightMethods.DELETE]: [],
       [cloud.BucketInflightMethods.GET]: [],

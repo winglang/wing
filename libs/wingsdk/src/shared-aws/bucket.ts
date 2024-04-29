@@ -4,7 +4,7 @@ import { Function } from "./function";
 import { calculateBucketPermissions } from "./permissions";
 import { cloud, ui } from "..";
 import { IBucketClient } from "../cloud";
-import { InflightClient, LiftDepsMatrixRaw } from "../core";
+import { InflightClient, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Testing } from "../simulator";
@@ -104,7 +104,7 @@ export class BucketRef extends Resource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.BucketInflightMethods.DELETE]: [],
       [cloud.BucketInflightMethods.GET]: [],

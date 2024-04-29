@@ -3,7 +3,7 @@ import { ISimulatorResource } from "./resource";
 import { PolicySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { fqnForType } from "../constants";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { PolicyStatement, ToSimulatorOutput } from "../simulator";
 import { IResource, Node, Resource } from "../std";
 
@@ -37,7 +37,7 @@ export class Policy extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

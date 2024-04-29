@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { isValidCron } from "cron-validator";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Duration, IInflight, Node, Resource } from "../std";
@@ -88,7 +88,7 @@ export class Schedule extends Resource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

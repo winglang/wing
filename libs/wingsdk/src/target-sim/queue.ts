@@ -12,7 +12,7 @@ import { QueueSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
 import { convertBetweenHandlers } from "../shared/convert";
 import { ToSimulatorOutput } from "../simulator";
@@ -68,7 +68,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.QueueInflightMethods.PUSH]: [],
       [cloud.QueueInflightMethods.PURGE]: [],

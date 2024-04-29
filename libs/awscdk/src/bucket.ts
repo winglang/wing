@@ -19,7 +19,7 @@ import {
   addPolicyStatements,
   isAwsCdkFunction,
 } from "./function";
-import { LiftDepsMatrixRaw } from "@winglang/sdk/lib/core";
+import { LiftMap } from "@winglang/sdk/lib/core";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -86,7 +86,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.BucketInflightMethods.DELETE]: [],
       [cloud.BucketInflightMethods.GET]: [],

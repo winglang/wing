@@ -99,7 +99,7 @@ export class Redis extends ex.Redis {
   }
 
   /** @internal */
-  public get _liftMap(): core.LiftDepsMatrixRaw {
+  public get _liftMap(): core.LiftMap {
     return {
       [ex.RedisInflightMethods.URL]: [],
       [ex.RedisInflightMethods.SET]: [],

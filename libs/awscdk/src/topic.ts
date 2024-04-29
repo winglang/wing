@@ -14,7 +14,7 @@ import {
 } from "@winglang/sdk/lib/shared-aws/topic";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { Queue } from "./queue";
-import { LiftDepsMatrixRaw } from "@winglang/sdk/lib/core";
+import { LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -94,7 +94,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     ]);
   }
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.TopicInflightMethods.PUBLISH]: [],
     };

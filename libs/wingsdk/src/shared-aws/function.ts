@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { PolicyStatement } from "./types";
 import { isValidArn } from "./util";
 import { FunctionInflightMethods, IFunctionClient } from "../cloud";
-import { InflightClient, LiftDepsMatrixRaw } from "../core";
+import { InflightClient, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Testing } from "../simulator";
 import { IInflightHost, Node, Resource } from "../std";
@@ -117,7 +117,7 @@ export class FunctionRef extends Resource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [FunctionInflightMethods.INVOKE]: [],
       [FunctionInflightMethods.INVOKE_ASYNC]: [],

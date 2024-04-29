@@ -3,7 +3,7 @@ import { ISimulatorResource } from "./resource";
 import { CounterSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost } from "../std";
 
@@ -21,7 +21,7 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.CounterInflightMethods.INC]: [],
       [cloud.CounterInflightMethods.DEC]: [],

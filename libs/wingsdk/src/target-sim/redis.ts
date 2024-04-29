@@ -3,7 +3,7 @@ import { Container } from "./container";
 import { ISimulatorResource } from "./resource";
 import { RedisSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import * as ex from "../ex";
 import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost } from "../std";
@@ -53,7 +53,7 @@ export class Redis extends ex.Redis implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [ex.RedisInflightMethods.URL]: [],
       [ex.RedisInflightMethods.SET]: [],

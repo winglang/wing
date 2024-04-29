@@ -123,7 +123,7 @@ export class Table extends ex.Table implements IAwsTable {
   }
 
   /** @internal */
-  public get _liftMap(): core.LiftDepsMatrixRaw {
+  public get _liftMap(): core.LiftMap {
     return {
       [ex.TableInflightMethods.INSERT]: [],
       [ex.TableInflightMethods.UPSERT]: [],

@@ -189,7 +189,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     );
   }
   /** @internal */
-  public get _liftMap(): core.LiftDepsMatrixRaw {
+  public get _liftMap(): core.LiftMap {
     return {
       [cloud.TopicInflightMethods.PUBLISH]: [],
     };

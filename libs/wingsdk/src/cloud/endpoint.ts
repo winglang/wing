@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { Node, Resource } from "../std";
 
 /**
@@ -65,7 +65,7 @@ export class Endpoint extends Resource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

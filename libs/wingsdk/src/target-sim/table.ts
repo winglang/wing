@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { TableSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import * as ex from "../ex";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { Json, IInflightHost } from "../std";
@@ -36,7 +36,7 @@ export class Table extends ex.Table implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [ex.TableInflightMethods.INSERT]: [],
       [ex.TableInflightMethods.UPSERT]: [],

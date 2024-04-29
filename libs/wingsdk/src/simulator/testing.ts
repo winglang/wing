@@ -1,9 +1,4 @@
-import {
-  InflightBindings,
-  LiftDepsMatrixRaw,
-  closureId,
-  liftObject,
-} from "../core";
+import { InflightBindings, LiftMap, closureId, liftObject } from "../core";
 import { IInflight, IInflightHost } from "../std";
 
 /**
@@ -26,7 +21,7 @@ export class Testing {
     code: string,
     bindings: InflightBindings = {}
   ): IInflight {
-    const liftDeps: LiftDepsMatrixRaw = {};
+    const liftDeps: LiftMap = {};
     liftDeps.handle = [];
     for (const v of Object.values(bindings)) {
       liftDeps.handle.push([v.obj, v.ops ?? []]);

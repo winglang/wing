@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource } from "../std";
 
@@ -48,7 +48,7 @@ export class Counter extends Resource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 }

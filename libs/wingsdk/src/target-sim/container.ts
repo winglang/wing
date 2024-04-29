@@ -4,7 +4,7 @@ import { ContainerSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { App, LiftDepsMatrixRaw } from "../core";
+import { App, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Util as fs } from "../fs";
 import { isPath } from "../shared/misc";
@@ -128,7 +128,7 @@ export class Container extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

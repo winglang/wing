@@ -63,7 +63,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   /** @internal */
-  public get _liftMap(): core.LiftDepsMatrixRaw {
+  public get _liftMap(): core.LiftMap {
     return {
       [cloud.QueueInflightMethods.PUSH]: [],
       [cloud.QueueInflightMethods.PURGE]: [],

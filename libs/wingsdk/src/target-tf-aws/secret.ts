@@ -44,7 +44,7 @@ export class Secret extends cloud.Secret {
   }
 
   /** @internal */
-  public get _liftMap(): core.LiftDepsMatrixRaw {
+  public get _liftMap(): core.LiftMap {
     return {
       [cloud.SecretInflightMethods.VALUE]: [],
       [cloud.SecretInflightMethods.VALUE_JSON]: [],

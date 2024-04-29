@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Endpoint } from "./endpoint";
 import { fqnForType } from "../constants";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource, Duration, IInflight } from "../std";
@@ -249,7 +249,7 @@ export class Api extends Resource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

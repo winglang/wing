@@ -11,7 +11,7 @@ import {
   QueueSetConsumerHandler,
 } from "@winglang/sdk/lib/shared-aws/queue";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
-import { LiftDepsMatrixRaw } from "@winglang/sdk/lib/core";
+import { LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -94,7 +94,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.QueueInflightMethods.PUSH]: [],
       [cloud.QueueInflightMethods.PURGE]: [],

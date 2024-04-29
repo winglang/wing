@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, LiftDepsMatrixRaw, UIComponent } from "../core";
+import { App, LiftMap, UIComponent } from "../core";
 import { IInflight } from "../std";
 
 /**
@@ -68,7 +68,7 @@ export class HttpClient extends VisualComponent {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {};
   }
 

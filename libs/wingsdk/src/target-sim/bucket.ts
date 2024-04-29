@@ -6,7 +6,7 @@ import { BucketSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost } from "../std";
@@ -29,7 +29,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.BucketInflightMethods.DELETE]: [],
       [cloud.BucketInflightMethods.GET]: [],

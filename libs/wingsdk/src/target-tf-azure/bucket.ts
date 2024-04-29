@@ -99,7 +99,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public get _liftMap(): core.LiftDepsMatrixRaw {
+  public get _liftMap(): core.LiftMap {
     // TODO: After fixing the tests we realized that nothing is working-https://github.com/winglang/wing/issues/5123
     return {
       [cloud.BucketInflightMethods.DELETE]: [],
