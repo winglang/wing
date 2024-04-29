@@ -2,10 +2,6 @@
 
 exports[`compile > fail > tsconfig_respected.ts 1`] = `
 Error: TS compilation failed:
-src/main.ts:2:1 - error TS6133: 'LiftMap' is declared but its value is never read.
-
-2 import { LiftMap } from "@winglang/sdk/lib/core";
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 test/fixtures/fail/tsconfig_respected.ts:5:9 - error TS6133: 'x' is declared but its value is never read.
 
 5     let x = 2;
@@ -15,9 +11,9 @@ test/fixtures/fail/tsconfig_respected.ts:5:9 - error TS6133: 'x' is declared but
 
 exports[`compile > fail > unlifted_reference.ts 1`] = `
 Error: TS compilation failed:
-src/main.ts:2:1 - error TS6133: 'LiftMap' is declared but its value is never read.
+test/fixtures/fail/unlifted_reference.ts:7:17 - error TS0: Unable to access "x" in inflight closure. Use 'lift( { x } )' before 'inflight' and reference through ctx.
 
-2 import { LiftMap } from "@winglang/sdk/lib/core";
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+7     console.log(x);
+                  ~
 
 `;
