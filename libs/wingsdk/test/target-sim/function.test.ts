@@ -253,7 +253,8 @@ test("runtime environment tests", async () => {
   // check that we can import ESM modules
   const esmModulesFn = app.newCloudFunction(
     inflight(async () => {
-      const { nanoid } = await import("nanoid");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { nanoid } = require("nanoid");
       return nanoid();
     })
   );

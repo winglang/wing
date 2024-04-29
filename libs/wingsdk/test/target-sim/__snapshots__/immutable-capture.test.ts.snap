@@ -7,11 +7,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -182,11 +178,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -357,11 +349,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -531,11 +519,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -704,11 +688,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -879,11 +859,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -1056,11 +1032,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -1235,11 +1207,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -1411,11 +1379,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -1584,11 +1548,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -1760,11 +1720,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -1935,11 +1891,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -2109,11 +2061,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }
@@ -2285,11 +2233,7 @@ var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx) => {
-        const baseAssert = (cond) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return void 0;
       }

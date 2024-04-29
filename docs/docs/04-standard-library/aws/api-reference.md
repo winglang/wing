@@ -49,7 +49,7 @@ new aws.BucketRef(bucketName: str);
 ##### `bucketRegion` <a name="bucketRegion" id="@winglang/sdk.aws.IAwsBucketClient.bucketRegion"></a>
 
 ```wing
-bucketRegion(): str
+inflight bucketRegion(): str
 ```
 
 Get the region of the bucket.
@@ -449,7 +449,7 @@ new aws.QueueRef(queueArn: str);
 ##### `queueUrl` <a name="queueUrl" id="@winglang/sdk.aws.IAwsQueueClient.queueUrl"></a>
 
 ```wing
-queueUrl(): str
+inflight queueUrl(): str
 ```
 
 Get the queue URL.

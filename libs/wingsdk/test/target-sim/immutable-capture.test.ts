@@ -273,11 +273,8 @@ function captureTest(name: string, t: (scope: Construct) => ITestHandler) {
       app,
       "Function",
       lift({ handler }).inflight(async (ctx) => {
-        const baseAssert = (cond: boolean) => {
-          if (!cond) {
-            throw new Error("assertion failed");
-          }
-        };
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const baseAssert = require("assert");
         await ctx.handler(baseAssert);
         return undefined;
       })
