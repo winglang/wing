@@ -145,14 +145,19 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       return {};
     }
 
-    const container = JSON.parse(
-      await runCommand("docker", ["inspect", this.containerName])
-    );
+    let hostPort: number | undefined;
+    await waitUntil(async () => {
+      const container = JSON.parse(
+        await runCommand("docker", ["inspect", this.containerName])
+      );
 
-    const hostPort =
-      container?.[0]?.NetworkSettings?.Ports?.[
-        `${this.props.containerPort}/tcp`
-      ]?.[0]?.HostPort;
+      hostPort =
+        container?.[0]?.NetworkSettings?.Ports?.[
+          `${this.props.containerPort}/tcp`
+        ]?.[0]?.HostPort;
+
+      return hostPort !== undefined;
+    });
 
     if (!hostPort) {
       throw new Error(
