@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { describe, expect, test } from "vitest";
 import {
-  LiftDepsMatrix,
+  LiftMapNormalized,
   collectLifts,
   mergeLiftDeps,
 } from "../../src/core/lifting";
@@ -239,9 +239,9 @@ describe("collectLifts", () => {
 });
 
 function expectMergeDeps(
-  deps1: LiftDepsMatrix,
-  deps2: LiftDepsMatrix,
-  expected: LiftDepsMatrix
+  deps1: LiftMapNormalized,
+  deps2: LiftMapNormalized,
+  expected: LiftMapNormalized
 ) {
   const result = mergeLiftDeps(deps1, deps2);
   expect(result).toEqual(expected);
