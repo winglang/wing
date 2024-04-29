@@ -12,7 +12,7 @@ let tokenLength = api.url.length;
 
 test "phase independent method on string evaluated inflight" {
   // Make sure api.url isn't a token but evaled inflight
-  expect.equal(urlRegex.test(api.url), false);
+  expect.equal(urlRegex.test(api.url), true);
   
   // Call a method on the url (should be called inflight)
   expect.equal(api.url.startsWith("http"), true);

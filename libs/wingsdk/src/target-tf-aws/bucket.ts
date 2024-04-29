@@ -1,4 +1,3 @@
-import { join } from "path";
 import { ITerraformDependable } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -20,7 +19,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IAwsBucket } from "../shared-aws/bucket";
+import { BucketEventHandler, IAwsBucket } from "../shared-aws/bucket";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
 
@@ -74,28 +73,31 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.BucketInflightMethods.DELETE,
-      cloud.BucketInflightMethods.GET,
-      cloud.BucketInflightMethods.GET_JSON,
-      cloud.BucketInflightMethods.LIST,
-      cloud.BucketInflightMethods.PUT,
-      cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
-      cloud.BucketInflightMethods.EXISTS,
-      cloud.BucketInflightMethods.TRY_GET,
-      cloud.BucketInflightMethods.TRY_GET_JSON,
-      cloud.BucketInflightMethods.TRY_DELETE,
-      cloud.BucketInflightMethods.SIGNED_URL,
-      cloud.BucketInflightMethods.METADATA,
-      cloud.BucketInflightMethods.COPY,
-      cloud.BucketInflightMethods.RENAME,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.SIGNED_URL]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+    };
   }
 
-  protected eventHandlerLocation(): string {
-    return join(__dirname, "bucket.onevent.inflight.js");
+  protected createTopicHandler(
+    eventType: cloud.BucketEventType,
+    inflight: cloud.IBucketEventHandler
+  ): cloud.ITopicOnMessageHandler {
+    return BucketEventHandler.toTopicOnMessageHandler(inflight, eventType);
   }
 
   protected createTopic(actionType: cloud.BucketEventType): cloud.Topic {

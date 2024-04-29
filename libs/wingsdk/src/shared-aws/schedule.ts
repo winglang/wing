@@ -1,3 +1,7 @@
+import { join } from "path";
+import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../shared/convert";
+
 /**
  * Convert Unix cron to AWS cron
  */
@@ -62,3 +66,23 @@ const convertDayOfWeekFromUnixToAWS = (dayOfWeek: string): string => {
 
   return dayOfWeek;
 };
+
+/**
+ * Utility class for working with the schedule tick handler.
+ */
+export class ScheduleOnTickHandler {
+  /**
+   * Converts a schedule tick handler to a function handler.
+   * @param handler The schedule tick handler.
+   * @returns The function handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.IScheduleOnTickHandler
+  ): cloud.IFunctionHandler {
+    return convertBetweenHandlers(
+      handler,
+      join(__dirname, "schedule.ontick.inflight.js"),
+      "ScheduleOnTickHandlerClient"
+    );
+  }
+}

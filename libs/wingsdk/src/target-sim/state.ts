@@ -3,6 +3,7 @@ import { StateSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
+import { LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Json, Resource } from "../std";
@@ -40,12 +41,12 @@ export class State extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      StateInflightMethods.GET,
-      StateInflightMethods.SET,
-      StateInflightMethods.TRY_GET,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [StateInflightMethods.GET]: [],
+      [StateInflightMethods.SET]: [],
+      [StateInflightMethods.TRY_GET]: [],
+    };
   }
 
   /** @internal */

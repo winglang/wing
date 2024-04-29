@@ -1,6 +1,7 @@
 bring cloud;
 bring "constructs" as c;
 bring "jsii-fixture" as jsii_fixture;
+bring "./new_in_static_lib.w" as new_in_static_lib;
 
 class MyClass {
   pub static createBucket(scope: c.IConstruct): cloud.Bucket {
@@ -80,3 +81,8 @@ class Foo extends FooParent {
   }
 }
 let f = new Foo();
+
+// Create a preflight class from a static method defined in a lib
+// see: https://github.com/winglang/wing/issues/6188
+let lib_f = new_in_static_lib.LibClass.createFoo("lib-foo");
+

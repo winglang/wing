@@ -1,4 +1,6 @@
+import { join } from "path";
 import { cloud } from "..";
+import { convertBetweenHandlers } from "../shared/convert";
 
 /**
  * A shared interface for AWS topics.
@@ -34,6 +36,26 @@ export class Topic {
   private static isAwsTopic(obj: any): obj is IAwsTopic {
     return (
       typeof obj.topicArn === "string" && typeof obj.topicName === "string"
+    );
+  }
+}
+
+/**
+ * A helper class for working with AWS topic on message handlers.
+ */
+export class TopicOnMessageHandler {
+  /**
+   * Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`.
+   * @param handler The `onMessage` handler.
+   * @returns The `cloud.Function` handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.ITopicOnMessageHandler
+  ): cloud.IFunctionHandler {
+    return convertBetweenHandlers(
+      handler,
+      join(__dirname, "topic.onmessage.inflight.js"),
+      "TopicOnMessageHandlerClient"
     );
   }
 }

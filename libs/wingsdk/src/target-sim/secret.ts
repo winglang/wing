@@ -3,6 +3,7 @@ import { ISimulatorResource } from "./resource";
 import { SecretSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { LiftMap } from "../core";
 import { ResourceNames } from "../shared/resource-names";
 import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost } from "../std";
@@ -13,11 +14,10 @@ import { IInflightHost } from "../std";
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret implements ISimulatorResource {
-  private readonly name: string;
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
 
-    this.name =
+    this._name =
       props.name ??
       ResourceNames.generateName(this, { disallowedRegex: /[^\w]/g });
   }
@@ -33,16 +33,16 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.SecretInflightMethods.VALUE,
-      cloud.SecretInflightMethods.VALUE_JSON,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.SecretInflightMethods.VALUE]: [],
+      [cloud.SecretInflightMethods.VALUE_JSON]: [],
+    };
   }
 
   public toSimulator(): ToSimulatorOutput {
     const props: SecretSchema = {
-      name: this.name,
+      name: this.name!,
     };
     return {
       type: cloud.SECRET_FQN,

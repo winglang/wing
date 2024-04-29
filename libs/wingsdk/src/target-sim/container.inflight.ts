@@ -1,5 +1,8 @@
+import * as fs from "fs";
+import { join } from "path";
 import { IContainerClient, HOST_PORT_ATTR } from "./container";
 import { ContainerAttributes, ContainerSchema } from "./schema-resources";
+import { exists } from "./util";
 import { isPath, runCommand, shell } from "../shared/misc";
 import {
   ISimulatorContext,
@@ -9,17 +12,30 @@ import {
 import { Duration, TraceType } from "../std";
 import { Util } from "../util";
 
-export const WING_STATE_DIR_ENV = "WING_STATE_DIR";
+const STATE_FILENAME = "state.json";
+
+/**
+ * Contents of the state file for this resource.
+ */
+interface StateFileContents {
+  /**
+   * A mapping of volume paths to the Wing-managed volume names, which will be reused
+   * across simulator runs.
+   */
+  readonly managedVolumes?: Record<string, string>;
+}
 
 export class Container implements IContainerClient, ISimulatorResourceInstance {
   private readonly imageTag: string;
   private readonly containerName: string;
   private _context: ISimulatorContext | undefined;
+  private managedVolumes: Record<string, string>;
 
   public constructor(private readonly props: ContainerSchema) {
     this.imageTag = props.imageTag;
 
     this.containerName = `wing-container-${Util.ulid()}`;
+    this.managedVolumes = {};
   }
 
   private get context(): ISimulatorContext {
@@ -31,6 +47,14 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
 
   public async init(context: ISimulatorContext): Promise<ContainerAttributes> {
     this._context = context;
+
+    // Check for a previous state file to see if there was a port that was previously being used
+    // if so, try to use it out of convenience
+    const state: StateFileContents = await this.loadState();
+    if (state.managedVolumes) {
+      this.managedVolumes = state.managedVolumes;
+    }
+
     // if this a reference to a local directory, build the image from a docker file
     if (isPath(this.props.image)) {
       // check if the image is already built
@@ -79,7 +103,21 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
 
     for (const volume of this.props.volumes ?? []) {
       dockerRun.push("-v");
-      dockerRun.push(volume);
+
+      // if the user specified an anonymous volume
+      if (volume.startsWith("/") && !volume.includes(":")) {
+        // check if we have a managed volume for this path from a previous run
+        if (this.managedVolumes[volume]) {
+          const volumeName = this.managedVolumes[volume];
+          dockerRun.push(`${volumeName}:${volume}`);
+        } else {
+          const volumeName = `wing-volume-${Util.ulid()}`;
+          dockerRun.push(`${volumeName}:${volume}`);
+          this.managedVolumes[volume] = volumeName;
+        }
+      } else {
+        dockerRun.push(volume);
+      }
     }
 
     dockerRun.push(this.imageTag);
@@ -91,12 +129,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     this.log(`starting container from image ${this.imageTag}`);
     this.log(`docker ${dockerRun.join(" ")}`);
 
-    await shell("docker", dockerRun, {
-      env: {
-        ...process.env,
-        [WING_STATE_DIR_ENV]: this.context.statedir,
-      },
-    });
+    await shell("docker", dockerRun);
 
     this.log(`containerName=${this.containerName}`);
 
@@ -112,14 +145,19 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       return {};
     }
 
-    const container = JSON.parse(
-      await runCommand("docker", ["inspect", this.containerName])
-    );
+    let hostPort: number | undefined;
+    await waitUntil(async () => {
+      const container = JSON.parse(
+        await runCommand("docker", ["inspect", this.containerName])
+      );
 
-    const hostPort =
-      container?.[0]?.NetworkSettings?.Ports?.[
-        `${this.props.containerPort}/tcp`
-      ]?.[0]?.HostPort;
+      hostPort =
+        container?.[0]?.NetworkSettings?.Ports?.[
+          `${this.props.containerPort}/tcp`
+        ]?.[0]?.HostPort;
+
+      return hostPort !== undefined;
+    });
 
     if (!hostPort) {
       throw new Error(
@@ -137,7 +175,31 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     await runCommand("docker", ["rm", "-f", this.containerName]);
   }
 
-  public async save(): Promise<void> {}
+  public async save(): Promise<void> {
+    await this.saveState({ managedVolumes: this.managedVolumes });
+  }
+
+  private async loadState(): Promise<StateFileContents> {
+    const stateFileExists = await exists(
+      join(this.context.statedir, STATE_FILENAME)
+    );
+    if (stateFileExists) {
+      const stateFileContents = await fs.promises.readFile(
+        join(this.context.statedir, STATE_FILENAME),
+        "utf-8"
+      );
+      return JSON.parse(stateFileContents);
+    } else {
+      return {};
+    }
+  }
+
+  private async saveState(state: StateFileContents): Promise<void> {
+    fs.writeFileSync(
+      join(this.context.statedir, STATE_FILENAME),
+      JSON.stringify(state)
+    );
+  }
 
   public async plan() {
     return UpdatePlan.AUTO;

@@ -2,7 +2,7 @@ import { access, constants } from "node:fs";
 import { promisify } from "node:util";
 
 /**
- * Check if a file exists for an specific path
+ * Check if a file exists for a specific path
  * @param filePath
  * @Returns Return `true` if the file exists, `false` otherwise.
  */

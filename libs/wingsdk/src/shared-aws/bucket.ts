@@ -1,10 +1,12 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import { calculateBucketPermissions } from "./permissions";
 import { cloud, ui } from "..";
 import { IBucketClient } from "../cloud";
-import { InflightClient } from "../core";
+import { InflightClient, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
+import { convertBetweenHandlers } from "../shared/convert";
 import { Testing } from "../simulator";
 import { IInflightHost, Node, Resource } from "../std";
 
@@ -102,24 +104,24 @@ export class BucketRef extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.BucketInflightMethods.DELETE,
-      cloud.BucketInflightMethods.GET,
-      cloud.BucketInflightMethods.GET_JSON,
-      cloud.BucketInflightMethods.LIST,
-      cloud.BucketInflightMethods.PUT,
-      cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
-      cloud.BucketInflightMethods.EXISTS,
-      cloud.BucketInflightMethods.TRY_GET,
-      cloud.BucketInflightMethods.TRY_GET_JSON,
-      cloud.BucketInflightMethods.TRY_DELETE,
-      cloud.BucketInflightMethods.SIGNED_URL,
-      cloud.BucketInflightMethods.METADATA,
-      cloud.BucketInflightMethods.COPY,
-      cloud.BucketInflightMethods.RENAME,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.SIGNED_URL]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+    };
   }
 
   private addUserInterface() {
@@ -194,5 +196,29 @@ export class BucketRef extends Resource {
         }
       ),
     });
+  }
+}
+
+/**
+ * Utility class to work with bucket event handlers.
+ */
+export class BucketEventHandler {
+  /**
+   * Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`.
+   * @param handler the handler to convert
+   * @param eventType the event type
+   * @returns the on message handler.
+   */
+  public static toTopicOnMessageHandler(
+    handler: cloud.IBucketEventHandler,
+    eventType: cloud.BucketEventType
+  ): cloud.ITopicOnMessageHandler {
+    return convertBetweenHandlers(
+      handler,
+      // since uses __dirname should be specified under the target directory
+      join(__dirname, "bucket.onevent.inflight.js"),
+      "BucketEventHandlerClient",
+      { eventType }
+    );
   }
 }

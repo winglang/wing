@@ -6,6 +6,8 @@ import { BucketSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { LiftMap } from "../core";
+import { convertBetweenHandlers } from "../shared/convert";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost } from "../std";
 
@@ -27,23 +29,23 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.BucketInflightMethods.DELETE,
-      cloud.BucketInflightMethods.GET,
-      cloud.BucketInflightMethods.GET_JSON,
-      cloud.BucketInflightMethods.LIST,
-      cloud.BucketInflightMethods.PUT,
-      cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
-      cloud.BucketInflightMethods.EXISTS,
-      cloud.BucketInflightMethods.TRY_GET,
-      cloud.BucketInflightMethods.TRY_GET_JSON,
-      cloud.BucketInflightMethods.TRY_DELETE,
-      cloud.BucketInflightMethods.METADATA,
-      cloud.BucketInflightMethods.COPY,
-      cloud.BucketInflightMethods.RENAME,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+    };
   }
 
   /**
@@ -62,6 +64,13 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   public addObject(key: string, body: string): void {
     this.initialObjects[key] = body;
+  }
+
+  protected createTopicHandler(
+    eventType: cloud.BucketEventType,
+    inflight: cloud.IBucketEventHandler
+  ): cloud.ITopicOnMessageHandler {
+    return BucketEventHandler.toTopicOnMessageHandler(inflight, eventType);
   }
 
   public onCreate(
@@ -104,10 +113,6 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     this.policy.addStatement(updateTopic, cloud.TopicInflightMethods.PUBLISH);
   }
 
-  protected eventHandlerLocation(): string {
-    return join(__dirname, "bucket.onevent.inflight.js");
-  }
-
   public toSimulator(): ToSimulatorOutput {
     const props: BucketSchema = {
       public: this.public,
@@ -128,5 +133,29 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   /** @internal */
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
+  }
+}
+
+/**
+ * Utility class to work with bucket event handlers.
+ */
+export class BucketEventHandler {
+  /**
+   * Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`.
+   * @param handler the handler to convert
+   * @param eventType the event type
+   * @returns the on message handler.
+   */
+  public static toTopicOnMessageHandler(
+    handler: cloud.IBucketEventHandler,
+    eventType: cloud.BucketEventType
+  ): cloud.ITopicOnMessageHandler {
+    return convertBetweenHandlers(
+      handler,
+      // since uses __dirname should be specified under the target directory
+      join(__dirname, "bucket.onevent.inflight.js"),
+      "BucketEventHandlerClient",
+      { eventType }
+    );
   }
 }

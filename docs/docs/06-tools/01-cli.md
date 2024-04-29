@@ -239,6 +239,31 @@ This will compile your current Wing directory, and bundle it as a tarball that c
 
 See [Libraries](../05-libraries.md) for more details on packaging and consuming Wing libraries.
 
+:::
+
+## Store Secrets: `wing secrets`
+
+The `wing secrets` command can be used to store secrets needed by your application. The method of storing secrets depends on the target platform.
+
+Take the following Wing application:
+
+```js
+// main.w
+bring cloud;
+
+let secret = new cloud.Secret(name: "slack-token");
+```
+
+Usage:
+
+```sh
+$ wing secrets main.w
+
+1 secret(s) found
+
+? Enter the secret value for slack-token: [hidden]
+```
+
 ## Environment Variables
 
 For development and testing, Wing can automatically read environment variables from `.env` files in your current working directory. These environment variables can be accessed in Wing code using `util.env` and `util.tryEnv` in both preflight. In inflight these functions can also be used but note that the variables are not automatically available, if desired they must be passed explicitly when used like in `cloud.Function`.

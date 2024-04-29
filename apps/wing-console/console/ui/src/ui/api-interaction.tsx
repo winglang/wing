@@ -373,7 +373,7 @@ export const ApiInteraction = memo(
           {appMode === "local" && (
             <Attribute name="URL" value={url} noLeftPadding />
           )}
-          <div className="space-y-2 flex-col grow mt-4">
+          <div className="space-y-4 flex-col grow mt-4">
             <div className="flex gap-1 w-full">
               <div className="group flex grow relative gap-x-1">
                 <div
@@ -409,6 +409,7 @@ export const ApiInteraction = memo(
                   />
                   <Combobox
                     placeholder="Enter a route"
+                    autoComplete={false}
                     items={routes.map((route) => {
                       return {
                         label: `${route.method} ${route.route}`,
@@ -459,7 +460,7 @@ export const ApiInteraction = memo(
                     name: "Headers",
                     count: headers.length,
                     panel: (
-                      <div className="pt-2">
+                      <div className="pt-2 px-1">
                         <KeyValueList
                           items={headers}
                           onAddItem={addHeader}
@@ -469,6 +470,7 @@ export const ApiInteraction = memo(
                           keysList={Object.keys(HTTP_HEADERS)}
                           valuesList={currentHeaderValues}
                           onKeyChange={setCurrentHeaderKey}
+                          autoComplete={false}
                         />
                       </div>
                     ),
@@ -478,7 +480,7 @@ export const ApiInteraction = memo(
                     name: "Params",
                     count: queryParameters.length + pathVariables.length,
                     panel: (
-                      <div className="pt-2 space-y-2">
+                      <div className="pt-2 space-y-2 px-1">
                         <div className="space-y-1">
                           {pathVariables.length > 0 && (
                             <div className={classNames("text-sm", theme.text2)}>
@@ -492,6 +494,7 @@ export const ApiInteraction = memo(
                             onRemoveItem={removeQueryParameter}
                             onEditItem={editQueryParameter}
                             disabled={isLoading}
+                            autoComplete={false}
                           />
                         </div>
                         {pathVariables.length > 0 && (
@@ -505,6 +508,7 @@ export const ApiInteraction = memo(
                               onEditItem={editPathVariable}
                               disabled={isLoading}
                               keyDisabled={true}
+                              autoComplete={false}
                             />
                           </div>
                         )}
@@ -515,7 +519,7 @@ export const ApiInteraction = memo(
                     id: "body",
                     name: `Body ${isBodyEdited ? "*" : ""}`,
                     panel: (
-                      <div className="pt-2">
+                      <div className="pt-2 px-1">
                         <TextArea
                           id={bodyId}
                           containerClassName="w-full"
@@ -551,21 +555,25 @@ export const ApiInteraction = memo(
                       id: "body",
                       name: "Body",
                       panel: (
-                        <ApiResponseBodyPanel
-                          response={apiResponse}
-                          isLoading={isLoading}
-                          dataTestid="cloud.api:response-body"
-                        />
+                        <div className="px-1">
+                          <ApiResponseBodyPanel
+                            response={apiResponse}
+                            isLoading={isLoading}
+                            dataTestid="cloud.api:response-body"
+                          />
+                        </div>
                       ),
                     },
                     {
                       id: "headers",
                       name: "Headers",
                       panel: (
-                        <ApiResponseHeadersPanel
-                          headers={apiResponse?.headers ?? []}
-                          isLoading={isLoading}
-                        />
+                        <div className="px-1">
+                          <ApiResponseHeadersPanel
+                            headers={apiResponse?.headers ?? []}
+                            isLoading={isLoading}
+                          />
+                        </div>
                       ),
                     },
                   ]}

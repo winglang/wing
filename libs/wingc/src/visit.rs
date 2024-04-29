@@ -408,6 +408,7 @@ where
 		Literal::Boolean(_) => {}
 		Literal::Number(_) => {}
 		Literal::String(_) => {}
+		Literal::NonInterpolatedString(_) => {}
 	}
 }
 

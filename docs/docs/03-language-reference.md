@@ -952,6 +952,20 @@ f(myRequired: "hello");
 f(myOptional: 12, myRequired: "dang");
 ```
 
+A method implementation can omit any number of arguments from the end of an argument list when implementing an interface method. This is useful when you want to implement an interface method but don't need all of its arguments.
+
+```TS
+interface MyInterface {
+  myMethod(a: num, b: str, c: bool): void;
+}
+
+class MyClass impl MyInterface {
+  myMethod(a: num, b: str): void {
+    // This is a valid implementation of MyInterface.myMethod
+  }
+}
+```
+
 ##### 1.7.1.5 Function return types
 
 If a function returns an optional type, use the `return nil;` statement to indicate that the value
