@@ -750,6 +750,210 @@ exports[`api with GET route at root 1`] = `
 }
 `;
 
+exports[`api with GET routes with common prefix 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/hello/bat": {
+      "get": {
+        "operationId": "get-hello/bat",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_bat0-c8a08a1c/invocations",
+        },
+      },
+    },
+    "/hello/foo": {
+      "get": {
+        "operationId": "get-hello/foo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
+        },
+      },
+    },
+    "/{proxy+}": {
+      "x-amazon-apigateway-any-method": {
+        "produces": [
+          "application/json",
+        ],
+        "responses": {
+          "404": {
+            "description": "404 response",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+              },
+            },
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
+          "requestTemplates": {
+            "application/json": "
+                {"statusCode": 404}
+              ",
+          },
+          "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
+              },
+              "statusCode": "404",
+            },
+            "default": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
+              },
+              "statusCode": "404",
+            },
+          },
+          "type": "mock",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with GET routes with different prefix 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/foo/bar": {
+      "get": {
+        "operationId": "get-foo/bar",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_foo_bar0-c8d108f9/invocations",
+        },
+      },
+    },
+    "/hello/foo": {
+      "get": {
+        "operationId": "get-hello/foo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
+        },
+      },
+    },
+    "/{proxy+}": {
+      "x-amazon-apigateway-any-method": {
+        "produces": [
+          "application/json",
+        ],
+        "responses": {
+          "404": {
+            "description": "404 response",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+              },
+            },
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
+          "requestTemplates": {
+            "application/json": "
+                {"statusCode": 404}
+              ",
+          },
+          "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
+              },
+              "statusCode": "404",
+            },
+            "default": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
+              },
+              "statusCode": "404",
+            },
+          },
+          "type": "mock",
+        },
+      },
+    },
+  },
+}
+`;
+
 exports[`api with HEAD route 1`] = `
 {
   "openapi": "3.0.3",
@@ -1165,6 +1369,108 @@ exports[`api with multiple GET route and one lambda 1`] = `
           },
           "type": "aws_proxy",
           "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
+        },
+      },
+    },
+    "/hello/foo": {
+      "get": {
+        "operationId": "get-hello/foo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_hello_foo0-c82c3421/invocations",
+        },
+      },
+    },
+    "/{proxy+}": {
+      "x-amazon-apigateway-any-method": {
+        "produces": [
+          "application/json",
+        ],
+        "responses": {
+          "404": {
+            "description": "404 response",
+            "headers": {
+              "Content-Type": {
+                "type": "string",
+              },
+            },
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "passthroughBehavior": "never",
+          "requestTemplates": {
+            "application/json": "
+                {"statusCode": 404}
+              ",
+          },
+          "responses": {
+            "404": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
+              },
+              "statusCode": "404",
+            },
+            "default": {
+              "responseParameters": {
+                "method.response.header.Content-Type": "'application/json'",
+              },
+              "responseTemplates": {
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
+              },
+              "statusCode": "404",
+            },
+          },
+          "type": "mock",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with multiple methods and multiple lambda 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/hello/bat": {
+      "post": {
+        "operationId": "post-hello/bat",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:post_hello_bat0-c8596849/invocations",
         },
       },
     },

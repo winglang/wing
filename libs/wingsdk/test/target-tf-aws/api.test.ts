@@ -4,7 +4,8 @@ import * as tfaws from "../../src/target-tf-aws";
 import { Api, Function } from "../../src/target-tf-aws";
 import { mkdtemp, tfResourcesOfCount, tfSanitize } from "../util";
 
-const INFLIGHT_CODE = inflight(async () => "Hello, world");
+const INFLIGHT_CODE = inflight(async () => ({ body: "Hello, world" }));
+const INFLIGHT_CODE_2 = inflight(async () => ({ body: "Hello, Wing!" }));
 
 const extractApiSpec = (output: any) => {
   const jsonOutput = JSON.parse(output);
@@ -89,7 +90,7 @@ test("api with GET routes with common prefix", () => {
   const api = new Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
-  api.get("/hello/bat", INFLIGHT_CODE);
+  api.get("/hello/bat", INFLIGHT_CODE_2);
 
   const output = app.synth();
 
@@ -105,7 +106,7 @@ test("api with GET routes with different prefix", () => {
   const api = new Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
-  api.get("/foo/bar", INFLIGHT_CODE);
+  api.get("/foo/bar", INFLIGHT_CODE_2);
 
   const output = app.synth();
 
@@ -138,7 +139,7 @@ test("api with multiple methods and multiple lambda", () => {
   const api = new Api(app, "Api");
 
   api.get("/hello/foo", INFLIGHT_CODE);
-  api.post("/hello/bat", INFLIGHT_CODE);
+  api.post("/hello/bat", INFLIGHT_CODE_2);
 
   const output = app.synth();
 
