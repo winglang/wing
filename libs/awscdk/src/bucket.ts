@@ -55,11 +55,11 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   private onEventFunction(
-    eventType: cloud.BucketEventType,
+    event: cloud.BucketEventType,
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions
   ): IAwsCdkFunction {
-    const functionHandler = lift({ handler: inflight, eventType }).inflight(async (ctx, event) => {
+    const functionHandler = lift({ handler: inflight, eventType: event }).inflight(async (ctx, event) => {
       const record = event.Records[0];
       if (!record) {
         throw new Error("No record found in the S3 event");
