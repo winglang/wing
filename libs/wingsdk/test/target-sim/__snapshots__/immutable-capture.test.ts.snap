@@ -1,0 +1,2455 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`array 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture.length === 2);
+    assert(ctx.my_capture[0] === "hello");
+    assert(ctx.my_capture[1] === "dude");
+    return void 0;
+  }
+  const $ctx = {
+  my_capture: ["hello","dude"]
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`array of durations 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_array.length === 2);
+    assert(ctx.my_array[0].minutes === 10);
+    assert(ctx.my_array[1].minutes === 20);
+    return void 0;
+  }
+  const $ctx = {
+  my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))]
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`array of maps 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_array[0].get("foo") === 1);
+    assert(ctx.my_array[1].get("bar") === 4);
+    return void 0;
+  }
+  const $ctx = {
+  my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`boolean 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture === false);
+    return void 0;
+  }
+  const $ctx = {
+  my_capture: false
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`duration 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture.minutes === 120);
+    assert(ctx.my_capture.seconds === 7200);
+    assert(ctx.my_capture.hours === 2);
+    return void 0;
+  }
+  const $ctx = {
+  my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(7200))
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`map 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture.has("foo"));
+    assert(ctx.my_capture.has("bar"));
+    assert(ctx.my_capture.size === 2);
+    assert(ctx.my_capture.get("foo") === 123);
+    assert(ctx.my_capture.get("bar") === 456);
+    return void 0;
+  }
+  const $ctx = {
+  my_capture: new Map([["foo",123],["bar",456]])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`map of arrays 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_map.has("foo"));
+    assert(ctx.my_map.has("bar"));
+    assert(ctx.my_map.size === 2);
+    assert(ctx.my_map.get("foo")?.[0] === 1);
+    assert(ctx.my_map.get("foo")?.[1] === 2);
+    assert(ctx.my_map.get("bar")?.[0] === 3);
+    assert(ctx.my_map.get("bar")?.[1] === 4);
+    return void 0;
+  }
+  const $ctx = {
+  my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`map of arrays of durations 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_map.get("foo")?.[0].minutes === 10);
+    assert(ctx.my_map.get("foo")?.[1].seconds === 20 * 60);
+    assert(ctx.my_map.get("bar")?.[0].minutes === 30);
+    assert(ctx.my_map.get("bar")?.[1].seconds === 40 * 60);
+    return void 0;
+  }
+  const $ctx = {
+  my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))]],["bar",[(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1800)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(2400))]]])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`number 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture + 20 === 143);
+    return void 0;
+  }
+  const $ctx = {
+  my_capture: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`set 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+      assert(ctx.my_capture.has("boom"));
+      assert(ctx.my_capture.has("bam"));
+      assert(ctx.my_capture.has("bang"));
+      assert(ctx.my_capture.size === 3);
+      return void 0;
+    }
+  const $ctx = {
+  my_capture: new Set(["boom","bam","bang"])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`set of durations 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(Array.from(ctx.my_set)[0].minutes === 10);
+    assert(Array.from(ctx.my_set)[0].hours === 0.16666666666666666);
+    assert(Array.from(ctx.my_set)[1].seconds === 1200);
+    return void 0;
+  }
+  const $ctx = {
+  my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`string 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture.length === 11);
+    assert(ctx.my_capture === "bam bam bam");
+    return void 0;
+  }
+  const $ctx = {
+  my_capture: "bam bam bam"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`struct 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture.hello === "dude");
+    assert(ctx.my_capture.world === "cup");
+    assert(ctx.my_capture.foo === "bar");
+    assert(Object.keys(ctx.my_capture).length === 3);
+    return void 0;
+  }
+  const $ctx = {
+  my_capture: {"hello": "dude","world": "cup","foo": "bar",}
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`struct of maps 1`] = `
+{
+  ".wing/function_c8e6b4af.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = (cond) => {
+          if (!cond) {
+            throw new Error("assertion failed");
+          }
+        };
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_struct.foo.get("foo") === 1);
+    assert(ctx.my_struct.foo.get("bar") === 2);
+    assert(ctx.my_struct.bar.get("foo") === 3);
+    assert(ctx.my_struct.bar.get("bar") === 4);
+    return void 0;
+  }
+  const $ctx = {
+  my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["bar",4]]),}
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": {
+      "root/Function": {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
+        "path": "root/Function",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/function_c8e6b4af.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Function": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.3.0",
+          },
+          "display": {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.3.0",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
