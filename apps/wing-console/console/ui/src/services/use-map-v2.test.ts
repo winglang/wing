@@ -233,3 +233,75 @@ test("creates graph bridges", () => {
     },
   ]);
 });
+
+test("handles cyclic graph correctly", () => {
+  const connections: Connection[] = [
+    {
+      source: "1",
+      target: "2",
+    },
+    {
+      source: "2",
+      target: "3",
+    },
+    {
+      source: "3",
+      target: "1",
+    },
+  ];
+  const isNodeHidden = (path: string) => path.startsWith("h");
+
+  expect(
+    bridgeConnections({
+      connections,
+      isNodeHidden,
+    }),
+  ).toEqual([
+    {
+      source: "1",
+      target: "2",
+    },
+    {
+      source: "2",
+      target: "3",
+    },
+    {
+      source: "3",
+      target: "1",
+    },
+  ]);
+});
+
+test("handles cyclic graph with hidden nodes correctly", () => {
+  const connections: Connection[] = [
+    {
+      source: "1",
+      target: "h2",
+    },
+    {
+      source: "h2",
+      target: "3",
+    },
+    {
+      source: "3",
+      target: "1",
+    },
+  ];
+  const isNodeHidden = (path: string) => path.startsWith("h");
+
+  expect(
+    bridgeConnections({
+      connections,
+      isNodeHidden,
+    }),
+  ).toEqual([
+    {
+      source: "1",
+      target: "3",
+    },
+    {
+      source: "3",
+      target: "1",
+    },
+  ]);
+});
