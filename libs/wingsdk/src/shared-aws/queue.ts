@@ -3,7 +3,7 @@ import { Function } from "./function";
 import { calculateQueuePermissions } from "./permissions";
 import { isValidArn } from "./util";
 import { cloud, ui } from "..";
-import { InflightClient, lift } from "../core";
+import { InflightClient, lift, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { IInflightHost, Node, Resource } from "../std";
 
@@ -111,14 +111,14 @@ export class QueueRef extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      "queueUrl",
-      cloud.QueueInflightMethods.PUSH,
-      cloud.QueueInflightMethods.PURGE,
-      cloud.QueueInflightMethods.APPROX_SIZE,
-      cloud.QueueInflightMethods.POP,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      ["queueUrl"]: [], // AWS-specific
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.QueueInflightMethods.PURGE]: [],
+      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
+      [cloud.QueueInflightMethods.POP]: [],
+    };
   }
 
   private addUserInterface() {

@@ -4,11 +4,48 @@ import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
 import { ulid } from "ulid";
 import { v4 } from "uuid";
+import { ChildProcess } from "./child-process";
 import { InflightClient } from "../core";
 import { Duration, IInflight } from "../std";
 
 const execPromise = promisify(exec);
 const execFilePromise = promisify(execFile);
+
+/**
+ * Describes what to do with a standard I/O stream for a child process.
+ */
+export enum Stdio {
+  /**
+   * The child inherits from the corresponding parent descriptor.
+   */
+  INHERIT = "inherit",
+  /**
+   * A new pipe should be arranged to connect the parent and child processes.
+   */
+  PIPED = "pipe",
+  /**
+   * This stream will be ignored. This is the equivalent of attaching the stream to /dev/null.
+   */
+  NULL = "ignore",
+}
+
+/**
+ * Output of a finished process.
+ */
+export interface Output {
+  /**
+   * The standard output of a finished process.
+   */
+  readonly stdout: string;
+  /**
+   * The standard error of a finished process.
+   */
+  readonly stderr: string;
+  /**
+   * A process's exit status.
+   */
+  readonly status: number;
+}
 
 /**
  * Base command options.
@@ -32,6 +69,11 @@ export interface CommandOptions {
 }
 
 /**
+ * Additional options for `util.exec()`
+ */
+export interface ExecOptions extends CommandOptions {}
+
+/**
  * Additional options for `util.shell()`
  */
 export interface ShellOptions extends CommandOptions {
@@ -43,26 +85,24 @@ export interface ShellOptions extends CommandOptions {
 }
 
 /**
- * Additional options for `util.exec()`
+ * Additional options for `util.spawn()`
  */
-export interface ExecOptions extends CommandOptions {}
-
-/**
- * Output of a finished process.
- */
-export interface Output {
+export interface SpawnOptions extends CommandOptions {
   /**
-   * The standard output of a finished process.
+   * Configuration for the process's standard input stream.
+   * @default - Stdio.INHERIT
    */
-  readonly stdout: string;
+  readonly stdin?: Stdio;
   /**
-   * The standard error of a finished process.
+   * Configuration for the process's standard output stream.
+   * @default - Stdio.INHERIT
    */
-  readonly stderr: string;
+  readonly stdout?: Stdio;
   /**
-   * A process's exit status.
+   * Configuration for the process's standard error stream.
+   * @default - Stdio.INHERIT
    */
-  readonly status: number;
+  readonly stderr?: Stdio;
 }
 
 /**
@@ -216,6 +256,23 @@ export class Util {
         };
       }
     }
+  }
+
+  /**
+   * Execute a program with the given arguments, and return a `ChildProcess`
+   * object that can be used to interact with the process while it is running.
+   * @param program - The program to execute.
+   * @param args - An array of arguments to pass to the program.
+   * @param opts - Spawn options including working directory, environment variables, and stdio configurations.
+   * @returns The `ChildProcess` instance associated with the spawned process.
+   * @inflight
+   */
+  public static spawn(
+    program: string,
+    args: Array<string>,
+    opts?: SpawnOptions
+  ): ChildProcess {
+    return new ChildProcess(program, args, opts);
   }
 
   /**

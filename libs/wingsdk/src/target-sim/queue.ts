@@ -11,7 +11,7 @@ import { QueueSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { lift } from "../core";
+import { lift, LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
 import { ToSimulatorOutput } from "../simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
@@ -66,13 +66,13 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.QueueInflightMethods.PUSH,
-      cloud.QueueInflightMethods.PURGE,
-      cloud.QueueInflightMethods.APPROX_SIZE,
-      cloud.QueueInflightMethods.POP,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.QueueInflightMethods.PURGE]: [],
+      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
+      [cloud.QueueInflightMethods.POP]: [],
+    };
   }
 
   public setConsumer(

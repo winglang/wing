@@ -3,6 +3,7 @@ import { App } from "./app";
 import { Function as GCPFunction } from "./function";
 import { calculateCounterPermissions } from "./permissions";
 import { FirestoreDatabase } from "../.gen/providers/google/firestore-database";
+import { ProjectService } from "../.gen/providers/google/project-service";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import {
@@ -38,6 +39,11 @@ export class Counter extends cloud.Counter {
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
 
+    const cloudFirestoreApi = new ProjectService(this, "CloudFirestoreAPI", {
+      service: "firestore.googleapis.com",
+      disableOnDestroy: false,
+    });
+
     this.database = new FirestoreDatabase(this, "Default", {
       name: ResourceNames.generateName(this, NAME_OPTS),
       locationId: (App.of(this) as App).region,
@@ -47,17 +53,18 @@ export class Counter extends cloud.Counter {
       pointInTimeRecoveryEnablement: "POINT_IN_TIME_RECOVERY_DISABLED",
       deleteProtectionState: "DELETE_PROTECTION_DISABLED",
       deletionPolicy: "DELETE",
+      dependsOn: [cloudFirestoreApi],
     });
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.CounterInflightMethods.PEEK,
-      cloud.CounterInflightMethods.INC,
-      cloud.CounterInflightMethods.DEC,
-      cloud.CounterInflightMethods.SET,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.CounterInflightMethods.PEEK]: [],
+      [cloud.CounterInflightMethods.INC]: [],
+      [cloud.CounterInflightMethods.DEC]: [],
+      [cloud.CounterInflightMethods.SET]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

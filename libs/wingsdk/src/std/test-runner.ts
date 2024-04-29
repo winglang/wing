@@ -3,7 +3,7 @@ import { Resource } from "./resource";
 import { Test } from "./test";
 import { Function, FunctionProps, IFunctionHandler } from "../cloud";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, LiftMap } from "../core";
 import { Node } from "../std";
 
 /**
@@ -109,11 +109,11 @@ export class TestRunner extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      TestRunnerInflightMethods.LIST_TESTS,
-      TestRunnerInflightMethods.RUN_TEST,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [TestRunnerInflightMethods.LIST_TESTS]: [],
+      [TestRunnerInflightMethods.RUN_TEST]: [],
+    };
   }
 
   /**

@@ -12,6 +12,7 @@ import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
+import { LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import {
@@ -291,8 +292,10 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [cloud.FunctionInflightMethods.INVOKE];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

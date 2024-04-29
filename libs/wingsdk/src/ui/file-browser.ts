@@ -35,6 +35,7 @@ export interface FileBrowserHandlers {
 
 /**
  * A file browser can be used to browse files.
+ * @noinflight
  */
 export class FileBrowser extends VisualComponent {
   /**
@@ -141,11 +142,6 @@ export class FileBrowser extends VisualComponent {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [];
-  }
-
-  /** @internal */
   public _toInflight(): string {
     throw new Error("Method not implemented.");
   }
@@ -161,6 +157,7 @@ export interface IFileBrowserPutHandler extends IInflight {
   /** @internal */
   [INFLIGHT_SYMBOL]?: IFileBrowserPutHandlerClient["handle"];
 }
+
 /**
  * A resource with an inflight "handle" method that can be passed to
  * `IFileBrowser`.
@@ -171,6 +168,7 @@ export interface IFileBrowserGetHandler extends IInflight {
   /** @internal */
   [INFLIGHT_SYMBOL]?: IFileBrowserGetHandlerClient["handle"];
 }
+
 /**
  * A resource with an inflight "handle" method that can be passed to
  * `IFileBrowser`.
@@ -181,6 +179,7 @@ export interface IFileBrowserListHandler extends IInflight {
   /** @internal */
   [INFLIGHT_SYMBOL]?: IFileBrowserListHandlerClient["handle"];
 }
+
 /**
  * A resource with an inflight "handle" method that can be passed to
  * `IFileBrowser`.

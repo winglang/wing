@@ -5,10 +5,12 @@ import { Resource } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 describe("resource onLift", () => {
-  const inflightOps = ["op1", "op2"];
   class Example extends Resource {
-    public _supportedOps() {
-      return inflightOps;
+    public get _liftMap() {
+      return {
+        op1: [],
+        op2: [],
+      };
     }
     public _toInflight() {
       return "inflight";
@@ -23,6 +25,9 @@ describe("resource onLift", () => {
         Resource._newFromFactory("fqn", scope, id);
       }
       super(scope, id);
+    }
+    public get _liftMap() {
+      return {};
     }
   }
   test("adding supported ops to host should succeed", () => {

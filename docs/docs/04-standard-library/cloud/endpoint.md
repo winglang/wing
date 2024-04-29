@@ -299,13 +299,4 @@ For UI purposes.
 ```
 
 
-## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IEndpointClient <a name="IEndpointClient" id="@winglang/sdk.cloud.IEndpointClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IEndpointClient">IEndpointClient</a>
-
-Inflight interface for `Endpoint`.
-
-
 

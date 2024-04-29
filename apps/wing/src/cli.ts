@@ -4,7 +4,6 @@ import { satisfies } from "compare-versions";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
 import { SNAPSHOTS_HELP } from "./commands/test/snapshots-help";
-import { loadEnvVariables } from "./env";
 import { currentPackage, projectTemplateNames } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
@@ -22,10 +21,6 @@ const DEFAULT_PLATFORM = ["sim"];
 let analyticsExportFile: Promise<string | undefined> | undefined;
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
-  loadEnvVariables({
-    mode: subCommand,
-  });
-
   return async (...args: any[]) => {
     try {
       // paths other than the root path aren't working unless specified in the path arg

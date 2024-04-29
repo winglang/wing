@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { PolicyStatement } from "./types";
 import { isValidArn } from "./util";
 import { FunctionInflightMethods, IFunctionClient } from "../cloud";
-import { InflightClient, lift } from "../core";
+import { InflightClient, lift, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { IInflightHost, Node, Resource } from "../std";
 import * as ui from "../ui";
@@ -116,11 +116,11 @@ export class FunctionRef extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      FunctionInflightMethods.INVOKE,
-      FunctionInflightMethods.INVOKE_ASYNC,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [FunctionInflightMethods.INVOKE]: [],
+      [FunctionInflightMethods.INVOKE_ASYNC]: [],
+    };
   }
 
   private addUserInterface() {
