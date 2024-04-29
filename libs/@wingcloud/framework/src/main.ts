@@ -1,5 +1,4 @@
 import { platform, std } from "@winglang/sdk";
-import { LiftMap } from "@winglang/sdk/lib/core";
 import type { Construct } from "@winglang/sdk/lib/core/types";
 
 /**
