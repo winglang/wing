@@ -5,7 +5,7 @@ import { NotImplementedError } from "../core/errors";
 
 /**
  * AWS implementation of `cloud.Domain`.
- * @inflight `@winglang/sdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.cloud.IDomainClient`
  */
 export class Domain extends cloud.Domain {
   /** @internal */
