@@ -227,6 +227,7 @@ async function main() {
         .preset(3)
         .argParser(parseInt)
     )
+    .addOption(new Option("-b, --batch [batch]", "Number of tests to be executed on parallel"))
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test", "test/test"));

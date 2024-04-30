@@ -53,6 +53,11 @@ export interface TestOptions extends CompileOptions {
    * Determine snapshot behavior.
    */
   readonly snapshots?: SnapshotMode;
+
+  /**
+   * Number of tests to be run in parallel, if zero or none- it will run all in parallel
+   */
+  readonly batch?: number;
 }
 
 const TEST_FILE_PATTERNS = ["**/*.test.w", "**/{main,*.main}.{w,ts}"];
@@ -134,7 +139,14 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       });
     }
   };
-  await Promise.all(selectedEntrypoints.map(testFile));
+
+  // split the entrypoints to smaller batches according to the command options-
+  // if none- it will be preformed in one batch
+  const batchSize = Number(options.batch) || selectedEntrypoints.length;
+  for (let i = 0; i < selectedEntrypoints.length; i += batchSize) {
+    const entrypointBatch = selectedEntrypoints.slice(i, i + batchSize);
+    await Promise.all(entrypointBatch.map(testFile));
+  }
   const testDuration = Date.now() - startTime;
   printResults(results, testDuration);
   if (options.outputFile) {
