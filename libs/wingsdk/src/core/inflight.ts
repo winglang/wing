@@ -1,5 +1,5 @@
 import { basename } from "path";
-import { liftObject, LiftMap } from "./lifting";
+import { liftObject, LiftMap, INFLIGHT_INIT_METHOD_NAME } from "./lifting";
 import {
   AsyncFunction,
   INFLIGHT_SYMBOL,
@@ -220,9 +220,12 @@ class Lifter<
     // so here we annotate that "handle" needs all of the required permissions
     const _liftMap: LiftMap = { handle: [] };
     for (const [key, obj] of Object.entries(this.lifts)) {
-      let knownOps = this.grants[key];
-      knownOps =
-        knownOps ?? Object.keys((obj as IHostedLiftable)._liftMap ?? {});
+      const knownOps =
+        this.grants[key] ??
+        Object.keys((obj as IHostedLiftable)._liftMap ?? {}).filter(
+          (x) => x !== INFLIGHT_INIT_METHOD_NAME // filter "$inflight_init"
+        );
+
       _liftMap.handle.push([obj, knownOps]);
     }
 

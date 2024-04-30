@@ -219,6 +219,12 @@ export function collectLifts(
   initialObj: any,
   initialOps: Array<string>
 ): Map<any, Set<string>> {
+  if (initialOps.includes(INFLIGHT_INIT_METHOD_NAME)) {
+    throw new Error(
+      `The operation ${INFLIGHT_INIT_METHOD_NAME} is implicit and should not be requested explicitly.`
+    );
+  }
+
   const explored = new Map<any, Set<string>>();
   const queue = new Array<[any, Array<string>]>([initialObj, [...initialOps]]);
   const matrixCache = new Map<any, LiftMapNormalized>();
@@ -324,6 +330,11 @@ export function collectLifts(
       }
 
       for (const [depObj, depOps] of objDeps.entries()) {
+        if (depOps.has(INFLIGHT_INIT_METHOD_NAME)) {
+          throw new Error(
+            `The operation ${INFLIGHT_INIT_METHOD_NAME} is implicit and should not be requested explicitly.`
+          );
+        }
         queue.push([depObj, [...depOps]]);
       }
     }
