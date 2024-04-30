@@ -71,6 +71,7 @@ const SPACING_BASE_VALUE = 32;
 // const SPACING_BASE_VALUE = 10;
 // const PORT_ANCHOR = SPACING_BASE_VALUE / 5;
 const PORT_ANCHOR = 0;
+// const PORT_ANCHOR = 24;
 // const EDGE_ROUNDED_RADIUS = 14;
 const EDGE_ROUNDED_RADIUS = 10;
 // For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
@@ -241,7 +242,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           <div
             // className="px-4 py-2.5 flex items-center gap-2"
             // className="px-4 py-1 flex items-center gap-2"
-            className="px-2.5 py-1 flex items-center gap-2"
+            className="px-2.5 py-1 flex items-center gap-1.5"
           >
             {/* <CubeIcon className="-ml-1.5 size-6 text-emerald-400" /> */}
             {/* <div className="-ml-1 rounded px-1.5 py-1 bg-emerald-400">
@@ -255,14 +256,16 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 <ArchiveBoxIcon className="size-5 text-white" />
               </div>
             )} */}
-            <ResourceIcon className="size-4" resourceType={props.fqn} />
+            {/* <ResourceIcon className="size-4" resourceType={props.fqn} /> */}
+            <ResourceIcon className="size-4 -ml-0.5" resourceType={props.fqn} />
             {/* <ResourceIcon className="size-6" resourceType={props.fqn} /> */}
             {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow">
       <CubeIcon className="size-6 text-emerald-400" />
     </div> */}
             <span
               // className="text-sm font-semibold leading-relaxed tracking-wide whitespace-nowrap"
-              className="text-sm font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-500"
+              // className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-500"
+              className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-600"
             >
               {props.name}
               {/* ({props.fqn}) */}
@@ -318,7 +321,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                       // "tracking-tighter",
                       // "text-gray-700",
                       "text-gray-600",
-                      // "font-mono"
+                      // "font-mono",
                     )}
                   >
                     {/* <span className="text-sky-600 italic">inflight</span>{" "} */}
