@@ -1,7 +1,7 @@
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/tree.js";
 import type { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
 import uniqBy from "lodash.uniqby";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { trpc } from "./trpc.js";
 
@@ -134,7 +134,9 @@ export interface UseMapOptionsV2 {
 export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
   const query = trpc["app.map.v2"].useQuery();
   const { tree, connections: incorrectlyTypedConnections } = query.data ?? {};
-  const connections = incorrectlyTypedConnections as ConnectionDataV2[];
+  const connections = incorrectlyTypedConnections as
+    | ConnectionDataV2[]
+    | undefined;
   const nodeInfo = useMemo(() => {
     if (!tree || !connections) {
       return;

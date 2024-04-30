@@ -10,6 +10,7 @@ import uniqby from "lodash.uniqby";
 import type { FunctionComponent, PropsWithChildren } from "react";
 import { memo, useCallback, useEffect, useMemo } from "react";
 
+import { bridgeConnections } from "../services/use-map-v2.bridge-connections.js";
 import type { ConnectionDataV2 } from "../services/use-map-v2.js";
 import { useMapV2 } from "../services/use-map-v2.js";
 import { assert } from "../ui/elk-flow/assert.js";
@@ -616,123 +617,11 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
 
   const isNodeHidden = useCallback(
     (path: string) => {
-      return hiddenMap.get(path) === true;
+      const nodePath = path.match(/^(.+?)#/)?.[1] ?? path;
+      return hiddenMap.get(nodePath) === true;
     },
     [hiddenMap],
   );
-
-  const getNodeConnections = useCallback(
-    (path: string, type: "source" | "target"): ConnectionDataV2[] => {
-      // if (!isNodeHidden(path)) {
-      //   return connections?.filter((connection) => {
-      //     return connection[type] === path;
-      //   });
-      // }
-
-      const inverseType = type === "source" ? "target" : "source";
-
-      return connections
-        ?.filter((connection) => {
-          return connection[type] === path;
-        })
-        .flatMap((connection) => {
-          if (isNodeHidden(connection[inverseType])) {
-            return (
-              getNodeConnections(connection[inverseType], type) ?? []
-            ).map(
-              (otherConnection) =>
-                ({
-                  name: otherConnection.name,
-                  // [type]: path,
-                  [type]: connection[type],
-                  [`${type}Op`]: connection[`${type}Op`],
-                  [inverseType]: otherConnection[inverseType],
-                  [`${inverseType}Op`]: otherConnection[`${inverseType}Op`],
-                } as ConnectionDataV2),
-            );
-          }
-          return connection;
-        });
-    },
-    [connections, isNodeHidden],
-  );
-  // useEffect(() => {
-  //   console.log(
-  //     "source",
-  //     getNodeConnections("root/Default/Queue/SetConsumer0", "source"),
-  //   );
-  //   // console.log(
-  //   //   "target",
-  //   //   getNodeConnections("root/Default/Queue/SetConsumer0", "target"),
-  //   // );
-  // }, [getNodeConnections]);
-
-  const connectionsV2 = useMemo(() => {
-    if (!nodeInfo) {
-      return [];
-    }
-
-    const connectionsV2 = new Array<ConnectionDataV2>();
-    for (const connection of connections ?? []) {
-      // const source = nodeInfo.get(connection.source);
-      // const sourceConnections = (() => {
-      //   if (source?.type === "autoId") {
-      //     return connections?.filter(
-      //       (otherConnection) => otherConnection.target === connection.source,
-      //     );
-      //   }
-      //   return [connection];
-      // })();
-      // const sourceConnections = getNodeConnections(connection.source, "target");
-      const sourceConnections = getNodeConnections(connection.source, "source");
-
-      // const target = nodeInfo.get(connection.target);
-      // const targetConnections = (() => {
-      //   if (target?.type === "autoId") {
-      //     return connections?.filter(
-      //       (otherConnection) => otherConnection.source === connection.target,
-      //     );
-      //   }
-      //   return [connection];
-      // })();
-      // const targetConnections = getNodeConnections(connection.target, "source");
-      const targetConnections = getNodeConnections(connection.target, "target");
-
-      console.log({
-        source: connection.source,
-        target: connection.target,
-        sourceConnections,
-        targetConnections,
-      });
-
-      for (const sourceConnection of sourceConnections) {
-        for (const targetConnection of targetConnections) {
-          connectionsV2.push({
-            name: targetConnection.name,
-            source: sourceConnection.source,
-            sourceOp: sourceConnection.sourceOp,
-            target: targetConnection.target,
-            targetOp: targetConnection.targetOp,
-          });
-        }
-      }
-    }
-
-    return uniqby(connectionsV2, (connection) => {
-      return `${connection.source}#${connection.target}`;
-    }).filter((connection) => {
-      // const source = nodeInfo.get(connection.source);
-      // const target = nodeInfo.get(connection.target);
-      // return true;
-      return (
-        hiddenMap.get(connection.source) !== true &&
-        hiddenMap.get(connection.target) !== true
-      );
-    });
-  }, [connections, nodeInfo, hiddenMap, getNodeConnections]);
-  useEffect(() => {
-    console.log({ connections, connectionsV2 });
-  }, [connections, connectionsV2]);
 
   const getConnectionId = useCallback(
     (connection: ConnectionData, type: "source" | "target") => {
@@ -748,6 +637,26 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
     [nodeInfo],
   );
 
+  const connectionsV2 = useMemo(() => {
+    const x =
+      connections?.map((connection) => {
+        const source = getConnectionId(connection, "source");
+        const target = getConnectionId(connection, "target");
+        return {
+          source,
+          target,
+        };
+      }) ?? [];
+    console.log(hiddenMap, x);
+
+    return bridgeConnections({
+      connections: x,
+      isNodeHidden,
+    });
+  }, [connections, nodeInfo, isNodeHidden]);
+  useEffect(() => {
+    console.log({ connections, connectionsV2 });
+  }, [connections, connectionsV2]);
   const RenderNode = useCallback<
     FunctionComponent<{
       constructTreeNode: ConstructTreeNode;
@@ -876,9 +785,9 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
           // })}
           edges={connectionsV2.map((connection) => {
             return {
-              id: `${connection.source}#${connection.target}#${connection.name}`,
-              sources: [getConnectionId(connection, "source")],
-              targets: [getConnectionId(connection, "target")],
+              id: `${connection.source}#${connection.target}`,
+              sources: [connection.source],
+              targets: [connection.target],
             };
           })}
           // edges={connections?.map((connection) => {

@@ -231,3 +231,81 @@ test("handles cyclic graph with hidden nodes correctly", () => {
     },
   ]);
 });
+
+test("handles hidden leafs correctly", () => {
+  const connections: Connection[] = [
+    {
+      source: "h1",
+      target: "2",
+    },
+    {
+      source: "2",
+      target: "h3",
+    },
+  ];
+
+  expect(
+    bridgeConnections({
+      connections,
+      isNodeHidden,
+    }),
+  ).toEqual([]);
+});
+
+test("handles hidden leafs correctly 2", () => {
+  const connections: Connection[] = [
+    {
+      source: "h1",
+      target: "2",
+    },
+    {
+      source: "2",
+      target: "h3",
+    },
+    {
+      source: "h3",
+      target: "4",
+    },
+  ];
+
+  expect(
+    bridgeConnections({
+      connections,
+      isNodeHidden,
+    }),
+  ).toEqual([
+    {
+      source: "2",
+      target: "4",
+    },
+  ]);
+});
+
+test("xxx", () => {
+  const connections: Connection[] = [
+    {
+      source: "hroot/Default/$Closure1_0#handle#source",
+      target: "root/Default/Counter#inc#target",
+    },
+    {
+      source: "root/Default/IncrementCounter#invoke#source",
+      target: "hroot/Default/$Closure1_0#handle#target",
+    },
+    {
+      source: "root/Default/IncrementCounter#invoke#source",
+      target: "hroot/Default/$Closure1_0#handle#target",
+    },
+  ];
+
+  expect(
+    bridgeConnections({
+      connections,
+      isNodeHidden,
+    }),
+  ).toEqual([
+    {
+      source: "2",
+      target: "4",
+    },
+  ]);
+});

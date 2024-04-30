@@ -155,8 +155,37 @@ export const GraphGenerator: FunctionComponent<
   }));
   useEffect(() => {
     const elk = new ELK();
+
+    const nodeMap = new Map<string, ElkNode>();
+    const processNode = (node: ElkNode) => {
+      nodeMap.set(node.id, node);
+      for (const child of node.children ?? []) {
+        processNode(child);
+      }
+    };
+    processNode(root);
+
+    const edges = (props.edges ?? []).filter((edge) => {
+      return (
+        edge.sources.every((source) => {
+          const exists = nodeMap.has(source);
+          if (!exists) {
+            console.warn(`Edge source ${source} does not exist in node map`);
+          }
+          return exists;
+        }) &&
+        edge.targets.every((target) => {
+          const exists = nodeMap.has(target);
+          if (!exists) {
+            console.warn(`Edge target ${target} does not exist in node map`);
+          }
+          return exists;
+        })
+      );
+    });
+
     void elk
-      .layout({ ...root, edges: [...(props.edges ?? [])] })
+      .layout({ ...root, edges })
       .then((graph) => {
         props.onGraph?.({ ...graph });
       })
