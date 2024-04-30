@@ -51,7 +51,7 @@ export interface CompileOptions {
   readonly targetDir?: string;
   /**
    * The overrides the location to save the compilation output
-   * @default "./target"
+   * @default "./target/<entrypoint>.<target>"
    */
   readonly output?: string;
   /**
