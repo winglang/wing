@@ -341,8 +341,11 @@ impl<'a> JsiiImporter<'a> {
 		let phase = if is_struct {
 			Phase::Independent
 		} else {
-			// All JSII imported interfaces are considered preflight interfaces
-			Phase::Preflight
+			if extract_docstring_tag(&jsii_interface.docs, "inflightinterface").is_some() {
+				Phase::Inflight
+			} else {
+				Phase::Preflight
+			}
 		};
 
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);

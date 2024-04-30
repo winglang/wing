@@ -12,7 +12,7 @@ import { OnDeploy } from "./on-deploy";
 import { POLICY_FQN, Policy } from "./policy";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
-import { isSimulatorResource } from "./resource";
+import { SIM_RESOURCE_FQN, isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Service } from "./service";
@@ -71,6 +71,7 @@ const SIMULATOR_CLASS_DATA = {
   [SERVICE_FQN]: "Service",
   [STATE_FQN]: "State",
   [SIM_CONTAINER_FQN]: "Container",
+  [SIM_RESOURCE_FQN]: "Resource",
   [TABLE_FQN]: "Table",
   [TEST_RUNNER_FQN]: "TestRunner",
   [TOPIC_FQN]: "Topic",
@@ -158,6 +159,9 @@ export class App extends core.App {
 
       case SIM_CONTAINER_FQN:
         return require.resolve("./container.inflight");
+
+      case SIM_RESOURCE_FQN:
+        return require.resolve("./resource.inflight");
     }
 
     return undefined;
@@ -220,6 +224,10 @@ export class App extends core.App {
 
       case WEBSITE_FQN:
         return Website;
+
+      // SIM_CONTAINER_FQN skipped - it's not a multi-target construct
+
+      // SIM_RESOURCE_FQN skipped - it's not a multi-target construct
     }
 
     return undefined;

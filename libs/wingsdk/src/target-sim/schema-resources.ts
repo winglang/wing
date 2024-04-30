@@ -283,3 +283,16 @@ export interface PolicySchema {
 
 /** Runtime attributes for sim.Policy */
 export interface PolicyAttributes {}
+
+/** Properties for sim.Resource */
+export interface SimResourceSchema {
+  /** The environment variables available to the resource. */
+  readonly environmentVariables: Record<string, string>;
+  /** The path to a file containing the resource's source code. */
+  readonly sourceCodeFile: string;
+  /** The language of the resource's source code. */
+  readonly sourceCodeLanguage: string;
+}
+
+/** Runtime attributes for sim.Resource */
+export interface SimResourceAttributes {}

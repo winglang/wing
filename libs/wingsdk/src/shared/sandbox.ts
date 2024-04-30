@@ -198,9 +198,14 @@ process.on("message", async (message) => {${debugShim}
     // When a message is received, resolve or reject the promise.
     return new Promise((resolve, reject) => {
       this.child!.send({ fn, args } as ProcessRequest);
+      this.debugLog(
+        "Sent a message to the sandbox: " + JSON.stringify({ fn, args })
+      );
 
       this.onChildMessage = (message: ProcessResponse) => {
-        this.debugLog("Received a message from the sandbox.");
+        this.debugLog(
+          "Received a message from the sandbox: " + JSON.stringify(message)
+        );
         this.available = true;
         if (this.timeout) {
           clearTimeout(this.timeout);
@@ -239,7 +244,7 @@ process.on("message", async (message) => {${debugShim}
       // "exit" could be emitted if the user code called process.exit(), or if we killed the process
       // due to a timeout or unexpected error. In any case, we reject the promise.
       this.onChildExit = (code: number | null, signal: unknown) => {
-        this.debugLog("Child processed stopped.");
+        this.debugLog("Sandbox child process stopped.");
         this.child = undefined;
         this.available = true;
         if (this.timeout) {
