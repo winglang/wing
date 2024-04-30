@@ -1,3 +1,5 @@
+import once from "lodash.once";
+
 /**
  * Based on https://gist.github.com/nfantone/1eaa803772025df69d07f4dbf5df7e58.
  */
@@ -7,6 +9,16 @@ type BeforeShutdownListener = (codeOrSignal: string | number) => Promise<void> |
  * Time in milliseconds to wait before forcing shutdown.
  */
 const SHUTDOWN_TIMEOUT = 15_000;
+
+/**
+ * Signals/Events that trigger the shutdown process.
+ */
+const HANDLED_SIGNALS: (NodeJS.Signals | "beforeExit")[] = [
+  "beforeExit",
+  "SIGINT",
+  "SIGTERM",
+  "SIGHUP",
+];
 
 /**
  * A queue of listener callbacks to execute before shutting
@@ -19,10 +31,8 @@ const shutdownListeners: BeforeShutdownListener[] = [];
  * @param  fn Function to execute on shutdown.
  */
 const processOnce = (fn: BeforeShutdownListener) => {
-  process.once("SIGINT", (signal) => void fn(signal));
-  process.once("SIGTERM", (signal) => void fn(signal));
-  process.once("exit", (code) => void fn(code));
-  process.once("beforeExit", (code) => void fn(code));
+  const onceFn = once(fn);
+  HANDLED_SIGNALS.forEach((signal) => process.on(signal, (s) => void onceFn(s)));
 };
 
 /**
@@ -55,7 +65,11 @@ async function shutdownHandler(codeOrSignal: string | number) {
     }
   }
 
-  return process.exit(0);
+  if (typeof codeOrSignal === "string") {
+    process.exit();
+  } else {
+    process.exit(codeOrSignal);
+  }
 }
 
 /**

@@ -12,6 +12,7 @@ export const BUTTON_FQN = fqnForType("ui.Button");
 
 /**
  * A button can be used to perform an action.
+ * @noinflight
  */
 export class Button extends VisualComponent {
   /**
@@ -48,11 +49,6 @@ export class Button extends VisualComponent {
       label: this.label,
       handler: this.fn.node.path,
     };
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    return [];
   }
 
   /** @internal */
