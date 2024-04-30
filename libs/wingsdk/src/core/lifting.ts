@@ -109,8 +109,8 @@ export function liftObject(obj: any): string {
   throw new Error(`Unable to lift object of type ${obj?.constructor?.name}`);
 }
 
-export type LiftDepsMatrixRaw = Record<string, Array<[any, Array<string>]>>;
-export type LiftDepsMatrix = Record<string, Map<any, Set<string>>>;
+export type LiftMap = Record<string, Array<[any, Array<string>]>>;
+export type LiftMapNormalized = Record<string, Map<any, Set<string>>>;
 
 /**
  * Merge two matrixes of lifting dependencies.
@@ -118,10 +118,10 @@ export type LiftDepsMatrix = Record<string, Map<any, Set<string>>>;
  * See the unit tests in `lifting.test.ts` for examples.
  */
 export function mergeLiftDeps(
-  matrix1: LiftDepsMatrix,
-  matrix2: LiftDepsMatrix
-): LiftDepsMatrix {
-  const result: LiftDepsMatrix = {};
+  matrix1: LiftMapNormalized = {},
+  matrix2: LiftMapNormalized = {}
+): LiftMapNormalized {
+  const result: LiftMapNormalized = {};
   for (const [op, deps] of Object.entries(matrix1)) {
     result[op] = new Map();
     for (const [obj, objDeps] of deps) {
@@ -162,8 +162,8 @@ export function mergeLiftDeps(
  * new Map([obj1, new Set(["op1", "op2"])])
  * ```
  */
-function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
-  const result: LiftDepsMatrix = {};
+function parseMatrix(data: LiftMap): LiftMapNormalized {
+  const result: LiftMapNormalized = {};
   for (const [op, pairs] of Object.entries(data)) {
     result[op] = new Map();
     for (const [obj, objDeps] of pairs) {
@@ -180,7 +180,7 @@ function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
 }
 
 // for debugging
-// function printMatrix(data: LiftDepsMatrix): string {
+// function printMatrix(data: LiftMapNormalized): string {
 //   const lines = [];
 //   for (const [op, pairs] of Object.entries(data)) {
 //     lines.push(`${op}: {`);
@@ -227,7 +227,7 @@ export function collectLifts(
 
   const explored = new Map<any, Set<string>>();
   const queue = new Array<[any, Array<string>]>([initialObj, [...initialOps]]);
-  const matrixCache = new Map<any, LiftDepsMatrix>();
+  const matrixCache = new Map<any, LiftMapNormalized>();
 
   while (queue.length > 0) {
     // `obj` and `ops` are the preflight object and operations requested on it
@@ -258,22 +258,12 @@ export function collectLifts(
     // Currently there are a few ways to do this:
     // - The compiler may generate a _liftMap property on the object
     // - The compiler may generate a static _liftTypeMap method on a class
-    // - The SDK may have a _supportedOps method on a class (TODO: remove this?)
 
-    let matrix: LiftDepsMatrix;
+    let matrix: LiftMapNormalized;
     if (matrixCache.has(obj)) {
       matrix = matrixCache.get(obj)!;
     } else if (typeof obj === "object" && obj._liftMap !== undefined) {
       matrix = parseMatrix(obj._liftMap ?? {});
-      matrixCache.set(obj, matrix);
-    } else if (
-      typeof obj === "object" &&
-      typeof obj._supportedOps === "function"
-    ) {
-      matrix = {};
-      for (const op of obj._supportedOps()) {
-        matrix[op] = new Map();
-      }
       matrixCache.set(obj, matrix);
     } else if (
       typeof obj === "function" &&
@@ -377,7 +367,7 @@ export interface ILiftableType {
    * inflight host.
    * @internal
    */
-  _liftTypeMap?: LiftDepsMatrixRaw;
+  _liftTypeMap?: LiftMap;
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to

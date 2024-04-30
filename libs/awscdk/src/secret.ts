@@ -7,6 +7,7 @@ import { Construct } from "constructs";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { calculateSecretPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
+import { LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS Implemntation of `cloud.Secret`
@@ -33,11 +34,11 @@ export class Secret extends cloud.Secret {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.SecretInflightMethods.VALUE,
-      cloud.SecretInflightMethods.VALUE_JSON,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.SecretInflightMethods.VALUE]: [],
+      [cloud.SecretInflightMethods.VALUE_JSON]: [],
+    };
   }
 
   /**
@@ -52,7 +53,10 @@ export class Secret extends cloud.Secret {
       throw new Error("Expected 'host' to implement 'isAwsCdkFunction' method");
     }
 
-    addPolicyStatements(host.awscdkFunction, calculateSecretPermissions(this.arnForPolicies, ops));
+    addPolicyStatements(
+      host.awscdkFunction,
+      calculateSecretPermissions(this.arnForPolicies, ops)
+    );
 
     host.addEnvironment(this.envName(), this.secret.secretArn);
 
@@ -61,12 +65,9 @@ export class Secret extends cloud.Secret {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "SecretClient",
-      [`process.env["${this.envName()}"]`]
-    );
+    return core.InflightClient.for(__dirname, __filename, "SecretClient", [
+      `process.env["${this.envName()}"]`,
+    ]);
   }
 
   private envName(): string {

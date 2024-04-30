@@ -152,14 +152,14 @@ jobs:
 
       - name: Configure AWS credentials
         if: ${{ matrix.target == 'tf-aws' }}
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Configure azure credentials
         if: ${{ matrix.target == 'tf-azure' }}
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Execute wing test in matrix directory

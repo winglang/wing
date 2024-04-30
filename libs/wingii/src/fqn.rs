@@ -1,5 +1,7 @@
 use std::fmt::{Display, Formatter};
 
+const FQN_SEPARATOR: char = '.';
+
 /// Represents a fully-qualified name (FQN) of a type in a JSII library.
 /// For example, `@aws-cdk/aws-ec2.Vpc` is a FQN.
 /// The FQN uniquely identifies a type within the JSII ecosystem.
@@ -11,49 +13,59 @@ use std::fmt::{Display, Formatter};
 /// TODO: What if a jsii library an npm package that has a dot in its name?
 /// https://github.com/winglang/wing/issues/1515
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct FQN<'a>(&'a str);
+pub struct FQN<'a> {
+	pub raw: &'a str,
+	pub parts: Vec<&'a str>,
+}
 
 impl<'a> From<&'a str> for FQN<'a> {
 	fn from(fqn: &'a str) -> Self {
-		if fqn.split('.').count() < 2 {
-			panic!("Invalid FQN: {}", fqn);
-		}
-		FQN(fqn)
+		FQN::new(fqn)
 	}
 }
 
 impl<'a> FQN<'a> {
+	pub fn new(raw: &'a str) -> Self {
+		let parts: Vec<&str> = raw.split(FQN_SEPARATOR).collect();
+		if parts.len() < 2 {
+			panic!("Invalid FQN: {raw}");
+		}
+
+		FQN { raw, parts }
+	}
+
 	/// Returns the FQN as a string.
 	pub fn as_str(&self) -> &str {
-		self.0
+		self.raw
 	}
 
 	/// Returns the FQN as a string without the type name.
 	pub fn as_str_without_type_name(&self) -> &str {
-		let index = self.0.rfind('.').unwrap();
-		&self.0[..index]
+		let index = self.raw.rfind(FQN_SEPARATOR).unwrap();
+		&self.raw[..index]
 	}
 
 	/// Returns the "assembly" part of the FQN. This is the name of the
 	/// JSII library or Wing library the type is defined in.
 	pub fn assembly(&self) -> &str {
-		self.0.split('.').next().unwrap()
+		self.parts[0]
 	}
 
 	/// Returns the "type name" part of the FQN. This is the name of the
 	/// type itself.
 	pub fn type_name(&self) -> &str {
-		self.0.split('.').last().unwrap()
+		self.parts[self.parts.len() - 1]
 	}
 
 	/// Returns an iterator over the namespaces of the FQN. The namespaces
 	/// are the parts of the FQN between the assembly name and the type name
 	/// which are used to group types together.
-	pub fn namespaces(&self) -> impl Iterator<Item = &str> {
-		let mut parts = self.0.split('.');
-		parts.next();
-		parts.next_back().unwrap();
-		parts
+	pub fn namespaces(&self) -> &[&str] {
+		if self.parts.len() > 2 {
+			&self.parts[1..self.parts.len() - 1]
+		} else {
+			&[]
+		}
 	}
 
 	/// Returns true if the FQN belongs to a namespace that is a prefix of the given namespace filter.
@@ -66,17 +78,26 @@ impl<'a> FQN<'a> {
 	/// - `["ns1", "ns2", "ns3"]`
 	/// - `["ns2"]`
 	pub fn is_in_namespace<T: AsRef<str>>(&self, namespace_filter: &[T]) -> bool {
-		self.namespaces().count() >= namespace_filter.len()
+		self.namespaces().len() >= namespace_filter.len()
 			&& self
 				.namespaces()
+				.iter()
 				.zip(namespace_filter.iter())
-				.all(|(ns, filter)| ns == filter.as_ref())
+				.all(|(ns, filter)| *ns == filter.as_ref())
+	}
+
+	pub fn has_prefix(&self, prefix: &Option<String>) -> bool {
+		if let Some(prefix) = prefix {
+			self.raw.starts_with(prefix)
+		} else {
+			self.namespaces().len() == 0
+		}
 	}
 }
 
 impl Display for FQN<'_> {
 	fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{}", self.0)
+		self.raw.fmt(f)
 	}
 }
 
@@ -87,37 +108,37 @@ mod tests {
 
 	#[test]
 	fn test_fqn1() {
-		let fqn = FQN("@aws-cdk/aws-ec2.Vpc");
+		let fqn = FQN::new("@aws-cdk/aws-ec2.Vpc");
 		assert_eq!(fqn.assembly(), "@aws-cdk/aws-ec2");
-		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec![] as Vec<&str>);
+		assert_eq!(fqn.namespaces(), vec![] as Vec<&str>);
 		assert_eq!(fqn.type_name(), "Vpc");
 	}
 
 	#[test]
 	fn test_fqn2() {
-		let fqn = FQN("@winglang/sdk.cloud.Bucket");
+		let fqn = FQN::new("@winglang/sdk.cloud.Bucket");
 		assert_eq!(fqn.assembly(), "@winglang/sdk");
-		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec!["cloud"]);
+		assert_eq!(fqn.namespaces(), vec!["cloud"]);
 		assert_eq!(fqn.type_name(), "Bucket");
 	}
 
 	#[test]
 	fn test_fqn3() {
-		let fqn = FQN("my_lib.ns1.ns2.MyResource");
+		let fqn = FQN::new("my_lib.ns1.ns2.MyResource");
 		assert_eq!(fqn.assembly(), "my_lib");
-		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec!["ns1", "ns2"]);
+		assert_eq!(fqn.namespaces(), vec!["ns1", "ns2"]);
 		assert_eq!(fqn.type_name(), "MyResource");
 	}
 
 	#[test]
 	fn test_fqn_as_str_without_type_name() {
-		let fqn = FQN("my_lib.ns1.ns2.MyResource");
+		let fqn = FQN::new("my_lib.ns1.ns2.MyResource");
 		assert_eq!(fqn.as_str_without_type_name(), "my_lib.ns1.ns2");
 	}
 
 	#[test]
 	fn test_fqn_is_in_namespace() {
-		let fqn = FQN("my_lib.ns1.ns2.MyResource");
+		let fqn = FQN::new("my_lib.ns1.ns2.MyResource");
 
 		assert_eq!(fqn.is_in_namespace::<&str>(&vec![]), true);
 		assert_eq!(fqn.is_in_namespace(&vec!["ns1"]), true);

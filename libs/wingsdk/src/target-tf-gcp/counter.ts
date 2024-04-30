@@ -58,13 +58,13 @@ export class Counter extends cloud.Counter {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.CounterInflightMethods.PEEK,
-      cloud.CounterInflightMethods.INC,
-      cloud.CounterInflightMethods.DEC,
-      cloud.CounterInflightMethods.SET,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.CounterInflightMethods.PEEK]: [],
+      [cloud.CounterInflightMethods.INC]: [],
+      [cloud.CounterInflightMethods.DEC]: [],
+      [cloud.CounterInflightMethods.SET]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
