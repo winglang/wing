@@ -1,13 +1,22 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 import { expect, test } from "vitest";
 
-import type { Connection } from "./use-map-v2.bridge-connections.js";
+import type {
+  Connection,
+  GetNodeId,
+  IsNodeHidden,
+  GetConnectionId,
+} from "./use-map-v2.bridge-connections.js";
 import { bridgeConnections } from "./use-map-v2.bridge-connections.js";
 
-const isNodeHidden = (path: string) => path.startsWith("h");
+const isNodeHidden: IsNodeHidden<string> = (path: string) =>
+  path.startsWith("h");
+const getNodeId: GetNodeId<string> = (path: string) => path;
+const serializeConnection: GetConnectionId<string> = (connection) =>
+  `${connection.source}#${connection.target}`;
 
 test("happy path", () => {
-  const connections: Connection[] = [
+  const connections: Connection<string>[] = [
     {
       source: "1",
       target: "2",
@@ -18,6 +27,8 @@ test("happy path", () => {
     bridgeConnections({
       connections,
       isNodeHidden,
+      getNodeId,
+      getConnectionId: serializeConnection,
     }),
   ).toEqual([
     {
@@ -28,7 +39,7 @@ test("happy path", () => {
 });
 
 test("creates one-level bridges", () => {
-  const connections: Connection[] = [
+  const connections: Connection<string>[] = [
     {
       source: "1",
       target: "h2",
@@ -43,6 +54,8 @@ test("creates one-level bridges", () => {
     bridgeConnections({
       connections,
       isNodeHidden,
+      getNodeId,
+      getConnectionId: serializeConnection,
     }),
   ).toEqual([
     {
@@ -53,7 +66,7 @@ test("creates one-level bridges", () => {
 });
 
 test("creates multi-level bridges", () => {
-  const connections: Connection[] = [
+  const connections: Connection<string>[] = [
     {
       source: "1",
       target: "h2",
@@ -72,6 +85,8 @@ test("creates multi-level bridges", () => {
     bridgeConnections({
       connections,
       isNodeHidden,
+      getNodeId,
+      getConnectionId: serializeConnection,
     }),
   ).toEqual([
     {
@@ -82,7 +97,7 @@ test("creates multi-level bridges", () => {
 });
 
 test("creates graph bridges", () => {
-  const connections: Connection[] = [
+  const connections: Connection<string>[] = [
     {
       source: "1",
       target: "h1",
@@ -121,6 +136,8 @@ test("creates graph bridges", () => {
     bridgeConnections({
       connections,
       isNodeHidden,
+      getNodeId,
+      getConnectionId: serializeConnection,
     }),
   ).toEqual([
     {
@@ -163,7 +180,7 @@ test("creates graph bridges", () => {
 });
 
 test("handles cyclic graph correctly", () => {
-  const connections: Connection[] = [
+  const connections: Connection<string>[] = [
     {
       source: "1",
       target: "2",
@@ -182,6 +199,8 @@ test("handles cyclic graph correctly", () => {
     bridgeConnections({
       connections,
       isNodeHidden,
+      getNodeId,
+      getConnectionId: serializeConnection,
     }),
   ).toEqual([
     {
@@ -200,7 +219,7 @@ test("handles cyclic graph correctly", () => {
 });
 
 test("handles cyclic graph with hidden nodes correctly", () => {
-  const connections: Connection[] = [
+  const connections: Connection<string>[] = [
     {
       source: "1",
       target: "h2",
@@ -219,6 +238,8 @@ test("handles cyclic graph with hidden nodes correctly", () => {
     bridgeConnections({
       connections,
       isNodeHidden,
+      getNodeId,
+      getConnectionId: serializeConnection,
     }),
   ).toEqual([
     {
@@ -233,7 +254,7 @@ test("handles cyclic graph with hidden nodes correctly", () => {
 });
 
 test("handles hidden leafs correctly", () => {
-  const connections: Connection[] = [
+  const connections: Connection<string>[] = [
     {
       source: "h1",
       target: "2",
@@ -248,12 +269,14 @@ test("handles hidden leafs correctly", () => {
     bridgeConnections({
       connections,
       isNodeHidden,
+      getNodeId,
+      getConnectionId: serializeConnection,
     }),
   ).toEqual([]);
 });
 
 test("handles hidden leafs correctly 2", () => {
-  const connections: Connection[] = [
+  const connections: Connection<string>[] = [
     {
       source: "h1",
       target: "2",
@@ -272,11 +295,50 @@ test("handles hidden leafs correctly 2", () => {
     bridgeConnections({
       connections,
       isNodeHidden,
+      getNodeId,
+      getConnectionId: serializeConnection,
     }),
   ).toEqual([
     {
       source: "2",
       target: "4",
+    },
+  ]);
+});
+
+test("handles hidden leafs correctly 2", () => {
+  const connections: Connection<{ path: string }>[] = [
+    {
+      source: { path: "h1" },
+      target: { path: "2" },
+    },
+    {
+      source: { path: "2" },
+      target: { path: "h3" },
+    },
+    {
+      source: { path: "h3" },
+      target: { path: "4" },
+    },
+  ];
+
+  expect(
+    bridgeConnections({
+      connections,
+      isNodeHidden(node) {
+        return node.path.startsWith("h");
+      },
+      getNodeId(node) {
+        return node.path;
+      },
+      getConnectionId(connection) {
+        return `${connection.source.path}#${connection.target.path}`;
+      },
+    }),
+  ).toEqual([
+    {
+      source: { path: "2" },
+      target: { path: "4" },
     },
   ]);
 });

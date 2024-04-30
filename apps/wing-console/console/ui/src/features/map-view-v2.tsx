@@ -269,6 +269,28 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             </span>
           </div>
 
+          <Port
+            elk={{
+              id: `${props.id}#source`,
+              layoutOptions: {
+                "elk.port.side": "EAST",
+                // "elk.port.borderOffset": "100",
+                "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+              },
+            }}
+          />
+
+          <Port
+            elk={{
+              id: `${props.id}#target`,
+              layoutOptions: {
+                "elk.port.side": "WEST",
+                // "elk.port.borderOffset": "100",
+                "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+              },
+            }}
+          />
+
           <NodeChildren className="text-xs">
             {props.inflights.map((inflight) => (
               <Node
@@ -755,8 +777,39 @@ export const MapViewV2 = memo(
       [hiddenMap],
     );
 
+    const connectionsV3 = useMemo(() => {
+      if (!connections || !nodeInfo) {
+        return;
+      }
+
+      return bridgeConnections({
+        connections:
+          connections.map((connection) => {
+            return {
+              source: {
+                id: connection.source,
+                info: nodeInfo.get(connection.source),
+                operation: connection.sourceOp,
+              },
+              target: {
+                id: connection.target,
+                info: nodeInfo.get(connection.target),
+                operation: connection.targetOp,
+              },
+            };
+          }) ?? [],
+        isNodeHidden: (node) => isNodeHidden(node.id),
+        getNodeId: (node) => node.id,
+        getConnectionId: (connection) =>
+          `${connection.source.id}#${connection.target.id}`,
+      });
+    }, [connections, nodeInfo, isNodeHidden]);
+    useEffect(() => {
+      console.log({ connectionsV3 });
+    }, [connectionsV3]);
+
     const getConnectionId = useCallback(
-      (connection: ConnectionData, type: "source" | "target") => {
+      (connection: ConnectionDataV2, type: "source" | "target") => {
         const nodePath = connection[type];
         const info = nodeInfo?.get(nodePath);
 
@@ -773,7 +826,12 @@ export const MapViewV2 = memo(
           return nodePath;
         }
 
-        return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}`;
+        const operation = connection[`${type}Op`];
+        if (operation) {
+          return `${nodePath}#${operation}#${type}`;
+        }
+
+        return `${nodePath}#${type}`;
         // return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}#${
         //   1 + Math.floor(Math.random() * 3)
         // }`;
@@ -791,11 +849,15 @@ export const MapViewV2 = memo(
             target,
           };
         }) ?? [];
-      console.log(hiddenMap, x);
+      // console.log(hiddenMap, x);
 
       return bridgeConnections({
         connections: x,
         isNodeHidden,
+        getNodeId: (path) => path,
+        getConnectionId(connection) {
+          return `${connection.source}#${connection.target}`;
+        },
       });
     }, [connections, nodeInfo, isNodeHidden]);
     // useEffect(() => {

@@ -11,8 +11,8 @@ export type ConnectionDataV2 = {
   /** The path of the target construct. */
   readonly target: string;
 
-  readonly sourceOp: string;
-  readonly targetOp: string;
+  readonly sourceOp?: string;
+  readonly targetOp?: string;
 
   /** A name for the connection. */
   readonly name: string;
@@ -98,18 +98,24 @@ const getNodeType = (
 
 const getNodeInflights = (
   node: ConstructTreeNode,
-  connections: ConnectionData[],
+  connections: ConnectionDataV2[],
 ): NodeInflight[] => {
   const inflights = new Array<string>();
   for (const connection of connections.filter(
     (connection) => connection.target === node.path,
   )) {
-    inflights.push((connection as any).targetOp);
+    const targetOp = connection.targetOp;
+    if (targetOp) {
+      inflights.push(targetOp);
+    }
   }
   for (const connection of connections.filter(
     (connection) => connection.source === node.path,
   )) {
-    inflights.push((connection as any).sourceOp);
+    const sourceOp = connection.sourceOp;
+    if (sourceOp) {
+      inflights.push(sourceOp);
+    }
   }
   return uniqBy(inflights, (inflight) => inflight).map((connection) => ({
     id: `${node.path}#${connection}`,

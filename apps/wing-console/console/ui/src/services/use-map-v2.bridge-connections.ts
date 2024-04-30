@@ -1,64 +1,76 @@
 import uniqby from "lodash.uniqby";
 
-export type Connection = {
-  source: string;
-  target: string;
+export type Connection<T> = {
+  source: T;
+  target: T;
 };
 
-const filterUniqueConnections = (connections: Connection[]) =>
-  uniqby(connections, (connection) => {
-    return `${connection.source}#${connection.target}`;
-  });
+export type GetConnectionId<T> = (connection: Connection<T>) => string;
+export type IsNodeHidden<T> = (node: T) => boolean;
+export type GetNodeId<T> = (node: T) => string;
 
-const resolveConnections = (
-  path: string,
+const resolveConnections = <T>(
+  node: T,
   type: "source" | "target",
-  allConnections: Connection[],
-  isNodeHidden: (path: string) => boolean,
-): string[] => {
-  if (!isNodeHidden(path)) {
-    return [path];
+  allConnections: Connection<T>[],
+  isNodeHidden: IsNodeHidden<T>,
+  getNodeId: GetNodeId<T>,
+): T[] => {
+  if (!isNodeHidden(node)) {
+    return [node];
   }
 
-  const connections = allConnections.filter((c) => c[type] === path);
+  const connections = allConnections.filter(
+    (c) => getNodeId(c[type]) === getNodeId(node),
+  );
   const invertedType = type === "source" ? "target" : "source";
-  const paths = uniqby(
+  const nodes = uniqby(
     connections.map((connection) => connection[invertedType]),
-    (path) => path,
+    (node) => getNodeId(node),
   );
 
   return uniqby(
-    paths.flatMap((path) => {
-      if (isNodeHidden(path)) {
-        return resolveConnections(path, type, allConnections, isNodeHidden);
+    nodes.flatMap((node) => {
+      if (isNodeHidden(node)) {
+        return resolveConnections(
+          node,
+          type,
+          allConnections,
+          isNodeHidden,
+          getNodeId,
+        );
       }
-      return path;
+      return node;
     }),
-    (path) => path,
+    (node) => getNodeId(node),
   );
 };
 
-export interface BridgeConnectionsOptions {
-  connections: Connection[];
-  isNodeHidden: (path: string) => boolean;
+export interface BridgeConnectionsOptions<T> {
+  connections: Connection<T>[];
+  isNodeHidden: IsNodeHidden<T>;
+  getNodeId: GetNodeId<T>;
+  getConnectionId: GetConnectionId<T>;
 }
 
-export const bridgeConnections = (options: BridgeConnectionsOptions) => {
-  return filterUniqueConnections(
+export const bridgeConnections = <T>(options: BridgeConnectionsOptions<T>) => {
+  return uniqby(
     options.connections.flatMap((connection) => {
       const sources = resolveConnections(
         connection.source,
         "target",
         options.connections,
         options.isNodeHidden,
+        options.getNodeId,
       );
       const targets = resolveConnections(
         connection.target,
         "source",
         options.connections,
         options.isNodeHidden,
+        options.getNodeId,
       );
-      return filterUniqueConnections(
+      return uniqby(
         sources.flatMap((source) => {
           return targets.map((target) => {
             return {
@@ -67,7 +79,9 @@ export const bridgeConnections = (options: BridgeConnectionsOptions) => {
             };
           });
         }),
+        options.getConnectionId,
       );
     }),
+    options.getConnectionId,
   );
 };
