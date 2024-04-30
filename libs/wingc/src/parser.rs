@@ -1188,7 +1188,7 @@ impl<'s> Parser<'s> {
 		let mut initializer = None;
 		let mut inflight_initializer = None;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
-		let span = self.node_span(statement_node);
+
 		for class_element in statement_node
 			.child_by_field_name("implementation")
 			.unwrap()
@@ -1326,15 +1326,15 @@ impl<'s> Parser<'s> {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
-							span: span.clone(),
+							span: name.span(),
 						}),
-						span: span.clone(),
+						span: name.span(),
 					}),
 					phase: Phase::Preflight,
 				},
-				body: FunctionBody::Statements(Scope::new(vec![], span.clone())),
+				body: FunctionBody::Statements(Scope::new(vec![], name.span())),
 				is_static: false,
-				span: span.clone(),
+				span: name.span(),
 				access: AccessModifier::Public,
 			},
 		};
@@ -1351,15 +1351,15 @@ impl<'s> Parser<'s> {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
-							span: span.clone(),
+							span: name.span(),
 						}),
-						span: span.clone(),
+						span: name.span(),
 					}),
 					phase: Phase::Inflight,
 				},
-				body: FunctionBody::Statements(Scope::new(vec![], span.clone())),
+				body: FunctionBody::Statements(Scope::new(vec![], name.span())),
 				is_static: false,
-				span: span.clone(),
+				span: name.span(),
 				access: AccessModifier::Public,
 			},
 		};
@@ -1404,6 +1404,8 @@ impl<'s> Parser<'s> {
 				&class_modifiers.expect("access modifier node"),
 			)?;
 		}
+
+		let span = self.node_span(statement_node);
 
 		Ok(StmtKind::Class(Class {
 			name,
