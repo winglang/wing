@@ -306,7 +306,12 @@ export const DefaultLayout = ({
                           selectedEdgeId={selectedEdgeId}
                           onSelectedEdgeIdChange={setSelectedEdgeId}
                         /> */}
-                        <MapViewV2 />
+                        <MapViewV2
+                          selectedNodeId={selectedItems[0]}
+                          onSelectedNodeIdChange={(nodeId) =>
+                            setSelectedItems(nodeId ? [nodeId] : [])
+                          }
+                        />
                       </div>
                       {!layout.rightPanel?.hide && (
                         <LeftResizableWidget

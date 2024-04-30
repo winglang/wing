@@ -13,6 +13,7 @@ import type { ElkPoint, LayoutOptions } from "elkjs";
 import uniqby from "lodash.uniqby";
 import type { FunctionComponent, PropsWithChildren } from "react";
 import { memo, useCallback, useEffect, useMemo } from "react";
+import { useKeyPressEvent } from "react-use";
 
 import { bridgeConnections } from "../services/use-map-v2.bridge-connections.js";
 import type { ConnectionDataV2 } from "../services/use-map-v2.js";
@@ -199,6 +200,7 @@ interface ConstructNodeProps {
     targetOccupied?: boolean;
   }[];
   highlight?: boolean;
+  onSelectedNodeIdChange: (id: string | undefined) => void;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -221,6 +223,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           },
         }}
         className="inline-block group/construct z-20"
+        onClick={() => props.onSelectedNodeIdChange(props.id)}
       >
         <div
           className={clsx(
@@ -457,6 +460,7 @@ interface FunctionNodeProps {
   id: string;
   sourceOccupied?: boolean;
   targetOccupied?: boolean;
+  onSelectedNodeIdChange: (id: string | undefined) => void;
 }
 
 const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
@@ -470,6 +474,7 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
       }}
       className="inline-flex group/construct z-20"
       title={props.id}
+      onClick={() => props.onSelectedNodeIdChange(props.id)}
     >
       <div className="group relative">
         <div
@@ -707,320 +712,356 @@ const RoundedEdge: EdgeComponent = memo(
     );
   },
 );
-export interface MapViewV2Props {}
 
-export const MapViewV2 = memo(({}: MapViewV2Props) => {
-  const { tree, connections, nodeInfo } = useMapV2({});
-  // useEffect(() => {
-  //   console.log({ tree, connections, nodeInfo });
-  // }, [nodeInfo]);
+export interface MapViewV2Props {
+  selectedNodeId: string | undefined;
+  //   showTests?: boolean;
+  onSelectedNodeIdChange: (id: string | undefined) => void;
+  // selectedEdgeId?: string;
+  // onSelectedEdgeIdChange?: (id: string | undefined) => void;
+}
 
-  const hiddenMap = useMemo(() => {
-    const hiddenMap = new Map<string, boolean>();
-    const traverse = (node: ConstructTreeNode, forceHidden?: boolean) => {
-      const hidden = forceHidden || node.display?.hidden || false;
-      hiddenMap.set(node.path, hidden);
-      for (const child of Object.values(node.children ?? {})) {
-        traverse(child, hidden);
+export const MapViewV2 = memo(
+  ({ selectedNodeId, onSelectedNodeIdChange }: MapViewV2Props) => {
+    const { tree, connections, nodeInfo } = useMapV2({});
+    // useEffect(() => {
+    //   console.log({ tree, connections, nodeInfo });
+    // }, [nodeInfo]);
+
+    const hiddenMap = useMemo(() => {
+      const hiddenMap = new Map<string, boolean>();
+      const traverse = (node: ConstructTreeNode, forceHidden?: boolean) => {
+        const hidden = forceHidden || node.display?.hidden || false;
+        hiddenMap.set(node.path, hidden);
+        for (const child of Object.values(node.children ?? {})) {
+          traverse(child, hidden);
+        }
+      };
+      const pseudoRoot = tree?.children?.["Default"];
+      for (const child of Object.values(pseudoRoot?.children ?? {})) {
+        traverse(child!);
       }
-    };
-    const pseudoRoot = tree?.children?.["Default"];
-    for (const child of Object.values(pseudoRoot?.children ?? {})) {
-      traverse(child!);
-    }
-    return hiddenMap;
-  }, [tree]);
-  // useEffect(() => {
-  //   console.log({ hiddenMap });
-  // }, [hiddenMap]);
+      return hiddenMap;
+    }, [tree]);
+    // useEffect(() => {
+    //   console.log({ hiddenMap });
+    // }, [hiddenMap]);
 
-  const isNodeHidden = useCallback(
-    (path: string) => {
-      const nodePath = path.match(/^(.+?)#/)?.[1] ?? path;
-      return hiddenMap.get(nodePath) === true;
-    },
-    [hiddenMap],
-  );
+    const isNodeHidden = useCallback(
+      (path: string) => {
+        const nodePath = path.match(/^(.+?)#/)?.[1] ?? path;
+        return hiddenMap.get(nodePath) === true;
+      },
+      [hiddenMap],
+    );
 
-  const getConnectionId = useCallback(
-    (connection: ConnectionData, type: "source" | "target") => {
-      const nodePath = connection[type];
-      const info = nodeInfo?.get(nodePath);
+    const getConnectionId = useCallback(
+      (connection: ConnectionData, type: "source" | "target") => {
+        const nodePath = connection[type];
+        const info = nodeInfo?.get(nodePath);
 
-      if (isNodeHidden(nodePath)) {
-        return nodePath;
-      }
+        if (isNodeHidden(nodePath)) {
+          return nodePath;
+        }
 
-      if (info?.type === "function") {
-        // Ignore `invokeAsync`.
-        return `${nodePath}#invoke#${type}`;
-      }
+        if (info?.type === "function") {
+          // Ignore `invokeAsync`.
+          return `${nodePath}#invoke#${type}`;
+        }
 
-      if (info?.type === "autoId") {
-        return nodePath;
-      }
+        if (info?.type === "autoId") {
+          return nodePath;
+        }
 
-      return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}`;
-      // return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}#${
-      //   1 + Math.floor(Math.random() * 3)
-      // }`;
-    },
-    [nodeInfo, isNodeHidden],
-  );
+        return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}`;
+        // return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}#${
+        //   1 + Math.floor(Math.random() * 3)
+        // }`;
+      },
+      [nodeInfo, isNodeHidden],
+    );
 
-  const connectionsV2 = useMemo(() => {
-    const x =
-      connections?.map((connection) => {
-        const source = getConnectionId(connection, "source");
-        const target = getConnectionId(connection, "target");
-        return {
-          source,
-          target,
-        };
-      }) ?? [];
-    console.log(hiddenMap, x);
+    const connectionsV2 = useMemo(() => {
+      const x =
+        connections?.map((connection) => {
+          const source = getConnectionId(connection, "source");
+          const target = getConnectionId(connection, "target");
+          return {
+            source,
+            target,
+          };
+        }) ?? [];
+      console.log(hiddenMap, x);
 
-    return bridgeConnections({
-      connections: x,
-      isNodeHidden,
-    });
-  }, [connections, nodeInfo, isNodeHidden]);
-  useEffect(() => {
-    console.log({ connections, connectionsV2 });
-  }, [connections, connectionsV2]);
-  const RenderNode = useCallback<
-    FunctionComponent<{
-      constructTreeNode: ConstructTreeNode;
-    }>
-  >(
-    (props) => {
-      // if (props.constructTreeNode.display?.hidden) {
-      //   return <></>;
-      // }
-      if (hiddenMap.get(props.constructTreeNode.path)) {
-        return <></>;
-      }
+      return bridgeConnections({
+        connections: x,
+        isNodeHidden,
+      });
+    }, [connections, nodeInfo, isNodeHidden]);
+    // useEffect(() => {
+    //   console.log({ connections, connectionsV2 });
+    // }, [connections, connectionsV2]);
+    const RenderNode = useCallback<
+      FunctionComponent<{
+        constructTreeNode: ConstructTreeNode;
+        selectedNodeId: string | undefined;
+        onSelectedNodeIdChange: (id: string | undefined) => void;
+      }>
+    >(
+      (props) => {
+        // if (props.constructTreeNode.display?.hidden) {
+        //   return <></>;
+        // }
+        if (hiddenMap.get(props.constructTreeNode.path)) {
+          return <></>;
+        }
 
-      const info = nodeInfo?.get(props.constructTreeNode.path);
-      if (!info) {
-        return <></>;
-      }
+        const info = nodeInfo?.get(props.constructTreeNode.path);
+        if (!info) {
+          return <></>;
+        }
 
-      // if (info.type === "autoId") {
-      //   // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
-      //   return <></>;
-      // }
+        // if (info.type === "autoId") {
+        //   // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
+        //   return <></>;
+        // }
 
-      // if (info.type === "endpoint") {
-      //   // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
-      //   return <></>;
-      // }
+        // if (info.type === "endpoint") {
+        //   // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
+        //   return <></>;
+        // }
 
-      if (info.type === "construct") {
+        if (info.type === "construct") {
+          return (
+            <ConstructNode
+              id={props.constructTreeNode.path}
+              name={props.constructTreeNode.id}
+              fqn={props.constructTreeNode.constructInfo?.fqn ?? ""}
+              inflights={info.inflights}
+              onSelectedNodeIdChange={props.onSelectedNodeIdChange}
+              highlight={props.selectedNodeId === props.constructTreeNode.path}
+            >
+              {Object.values(props.constructTreeNode.children ?? {}).map(
+                (child) => (
+                  <RenderNode
+                    key={child.id}
+                    constructTreeNode={child}
+                    selectedNodeId={props.selectedNodeId}
+                    onSelectedNodeIdChange={props.onSelectedNodeIdChange}
+                  />
+                ),
+              )}
+            </ConstructNode>
+          );
+        }
+
+        if (info.type === "function") {
+          return (
+            <FunctionNode
+              id={props.constructTreeNode.path}
+              sourceOccupied={connections?.some(
+                (connection) =>
+                  connection.source === props.constructTreeNode.path,
+              )}
+              targetOccupied={connections?.some(
+                (connection) =>
+                  connection.target === props.constructTreeNode.path,
+              )}
+              onSelectedNodeIdChange={props.onSelectedNodeIdChange}
+            />
+          );
+        }
+
+        // if (info.type === "queue") {
+        //   return (
+        //     <ConstructNode
+        //       id={props.constructTreeNode.path}
+        //       name={props.constructTreeNode.id}
+        //       inflights={info.inflights}
+        //       // highlight={}
+        //     />
+        //   );
+        // }
+
+        // console.log({
+        //   path: props.constructTreeNode.path,
+        //   type: info.type,
+        // });
+
         return (
-          <ConstructNode
+          <ContainerNode
             id={props.constructTreeNode.path}
             name={props.constructTreeNode.id}
-            fqn={props.constructTreeNode.constructInfo?.fqn ?? ""}
-            inflights={info.inflights}
-            // highlight={}
           >
             {Object.values(props.constructTreeNode.children ?? {}).map(
               (child) => (
-                <RenderNode key={child.id} constructTreeNode={child} />
+                <RenderNode
+                  key={child.id}
+                  constructTreeNode={child}
+                  selectedNodeId={props.selectedNodeId}
+                  onSelectedNodeIdChange={props.onSelectedNodeIdChange}
+                />
               ),
             )}
-          </ConstructNode>
+          </ContainerNode>
         );
-      }
+      },
+      [nodeInfo, hiddenMap],
+    );
 
-      if (info.type === "function") {
-        return (
-          <FunctionNode
-            id={props.constructTreeNode.path}
-            sourceOccupied={connections?.some(
-              (connection) =>
-                connection.source === props.constructTreeNode.path,
-            )}
-            targetOccupied={connections?.some(
-              (connection) =>
-                connection.target === props.constructTreeNode.path,
-            )}
-          />
-        );
-      }
+    const pseudoRoot = useMemo(() => {
+      return Object.values(
+        tree?.children?.["Default"]?.children ?? {},
+      ) as ConstructTreeNode[];
+    }, [tree]);
 
-      // if (info.type === "queue") {
-      //   return (
-      //     <ConstructNode
-      //       id={props.constructTreeNode.path}
-      //       name={props.constructTreeNode.id}
-      //       inflights={info.inflights}
-      //       // highlight={}
-      //     />
-      //   );
-      // }
+    // return (
+    //   <div className="relative">
+    //     {tree && (
+    //       <Graph
+    //         elk={{
+    //           id: "root",
+    //           layoutOptions: {
+    //             // "elk.algorithm": "org.eclipse.elk.layered",
+    //             // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+    //             // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
+    //             // "elk.direction": "RIGHT",
+    //             ...baseLayoutOptions,
+    //             "elk.padding": "[top=24,left=20,bottom=20,right=20]",
+    //           },
+    //         }}
+    //         // edges={connections?.map((connection) => {
+    //         //   return {
+    //         //     id: `${connection.source}#${connection.target}#${connection.name}`,
+    //         //     sources: [
+    //         //       getConnectionId(connection.source, connection.name, "source"),
+    //         //     ],
+    //         //     targets: [
+    //         //       getConnectionId(connection.target, connection.name, "target"),
+    //         //     ],
+    //         //   };
+    //         // })}
+    //         edges={connectionsV2.map((connection) => {
+    //           return {
+    //             id: `${connection.source}#${connection.target}`,
+    //             sources: [connection.source],
+    //             targets: [connection.target],
+    //           };
+    //         })}
+    //         // edges={connections?.map((connection) => {
+    //         //   const source = `${connection.source}#${
+    //         //     (connection as any).sourceOp
+    //         //   }#source`;
+    //         //   const target = `${connection.target}#${
+    //         //     (connection as any).targetOp
+    //         //   }#target`;
+    //         //   return {
+    //         //     id: `${source}##${target}`,
+    //         //     sources: [source],
+    //         //     targets: [target],
+    //         //   };
+    //         // })}
+    //         edgeComponent={RoundedEdge}
+    //         className="bg-gray-50"
+    //       >
+    //         {pseudoRoot.map((node) => (
+    //           <RenderNode key={node.id} constructTreeNode={node} />
+    //         ))}
+    //       </Graph>
+    //     )}
+    //   </div>
+    // );
 
-      // console.log({
-      //   path: props.constructTreeNode.path,
-      //   type: info.type,
-      // });
+    const { theme } = useTheme();
 
-      return (
-        <ContainerNode
-          id={props.constructTreeNode.path}
-          name={props.constructTreeNode.id}
-        >
-          {Object.values(props.constructTreeNode.children ?? {}).map(
-            (child) => (
-              <RenderNode key={child.id} constructTreeNode={child} />
-            ),
-          )}
-        </ContainerNode>
-      );
-    },
-    [nodeInfo, hiddenMap],
-  );
+    useKeyPressEvent(
+      "Escape",
+      useCallback(() => {
+        onSelectedNodeIdChange?.(undefined);
+      }, [onSelectedNodeIdChange]),
+    );
 
-  const pseudoRoot = useMemo(() => {
-    return Object.values(
-      tree?.children?.["Default"]?.children ?? {},
-    ) as ConstructTreeNode[];
-  }, [tree]);
-
-  // return (
-  //   <div className="relative">
-  //     {tree && (
-  //       <Graph
-  //         elk={{
-  //           id: "root",
-  //           layoutOptions: {
-  //             // "elk.algorithm": "org.eclipse.elk.layered",
-  //             // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-  //             // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
-  //             // "elk.direction": "RIGHT",
-  //             ...baseLayoutOptions,
-  //             "elk.padding": "[top=24,left=20,bottom=20,right=20]",
-  //           },
-  //         }}
-  //         // edges={connections?.map((connection) => {
-  //         //   return {
-  //         //     id: `${connection.source}#${connection.target}#${connection.name}`,
-  //         //     sources: [
-  //         //       getConnectionId(connection.source, connection.name, "source"),
-  //         //     ],
-  //         //     targets: [
-  //         //       getConnectionId(connection.target, connection.name, "target"),
-  //         //     ],
-  //         //   };
-  //         // })}
-  //         edges={connectionsV2.map((connection) => {
-  //           return {
-  //             id: `${connection.source}#${connection.target}`,
-  //             sources: [connection.source],
-  //             targets: [connection.target],
-  //           };
-  //         })}
-  //         // edges={connections?.map((connection) => {
-  //         //   const source = `${connection.source}#${
-  //         //     (connection as any).sourceOp
-  //         //   }#source`;
-  //         //   const target = `${connection.target}#${
-  //         //     (connection as any).targetOp
-  //         //   }#target`;
-  //         //   return {
-  //         //     id: `${source}##${target}`,
-  //         //     sources: [source],
-  //         //     targets: [target],
-  //         //   };
-  //         // })}
-  //         edgeComponent={RoundedEdge}
-  //         className="bg-gray-50"
-  //       >
-  //         {pseudoRoot.map((node) => (
-  //           <RenderNode key={node.id} constructTreeNode={node} />
-  //         ))}
-  //       </Graph>
-  //     )}
-  //   </div>
-  // );
-
-  const { theme } = useTheme();
-
-  return (
-    <div className={clsx("h-full flex flex-col", theme.bg4)}>
-      <div className="grow relative bg-slate-50 dark:bg-slate-500">
-        {!tree && (
-          <div
-            className={clsx(
-              "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
-              "transition-all",
-              "z-10",
-            )}
-          >
-            <div className="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <SpinnerLoader data-testid="main-view-loader" />
-            </div>
-          </div>
-        )}
-        <div className="absolute inset-0">
-          {tree && (
-            <Graph
-              elk={{
-                id: "root",
-                layoutOptions: {
-                  // "elk.algorithm": "org.eclipse.elk.layered",
-                  // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-                  // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
-                  // "elk.direction": "RIGHT",
-                  ...baseLayoutOptions,
-                  "elk.padding": "[top=24,left=20,bottom=20,right=20]",
-                },
-              }}
-              // edges={connections?.map((connection) => {
-              //   return {
-              //     id: `${connection.source}#${connection.target}#${connection.name}`,
-              //     sources: [
-              //       getConnectionId(connection.source, connection.name, "source"),
-              //     ],
-              //     targets: [
-              //       getConnectionId(connection.target, connection.name, "target"),
-              //     ],
-              //   };
-              // })}
-              edges={connectionsV2.map((connection) => {
-                return {
-                  id: `${connection.source}#${connection.target}`,
-                  sources: [connection.source],
-                  targets: [connection.target],
-                };
-              })}
-              // edges={connections?.map((connection) => {
-              //   const source = `${connection.source}#${
-              //     (connection as any).sourceOp
-              //   }#source`;
-              //   const target = `${connection.target}#${
-              //     (connection as any).targetOp
-              //   }#target`;
-              //   return {
-              //     id: `${source}##${target}`,
-              //     sources: [source],
-              //     targets: [target],
-              //   };
-              // })}
-              edgeComponent={RoundedEdge}
-              // className="bg-gray-50"
+    return (
+      <div className={clsx("h-full flex flex-col", theme.bg4)}>
+        <div className="grow relative bg-slate-50 dark:bg-slate-500">
+          {!tree && (
+            <div
+              className={clsx(
+                "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
+                "transition-all",
+                "z-10",
+              )}
             >
-              {pseudoRoot.map((node) => (
-                <RenderNode key={node.id} constructTreeNode={node} />
-              ))}
-            </Graph>
+              <div className="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <SpinnerLoader data-testid="main-view-loader" />
+              </div>
+            </div>
           )}
+          <div className="absolute inset-0">
+            {tree && (
+              <Graph
+                elk={{
+                  id: "root",
+                  layoutOptions: {
+                    // "elk.algorithm": "org.eclipse.elk.layered",
+                    // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+                    // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
+                    // "elk.direction": "RIGHT",
+                    ...baseLayoutOptions,
+                    "elk.padding": "[top=24,left=20,bottom=20,right=20]",
+                  },
+                }}
+                // edges={connections?.map((connection) => {
+                //   return {
+                //     id: `${connection.source}#${connection.target}#${connection.name}`,
+                //     sources: [
+                //       getConnectionId(connection.source, connection.name, "source"),
+                //     ],
+                //     targets: [
+                //       getConnectionId(connection.target, connection.name, "target"),
+                //     ],
+                //   };
+                // })}
+                edges={connectionsV2.map((connection) => {
+                  return {
+                    id: `${connection.source}#${connection.target}`,
+                    sources: [connection.source],
+                    targets: [connection.target],
+                  };
+                })}
+                // edges={connections?.map((connection) => {
+                //   const source = `${connection.source}#${
+                //     (connection as any).sourceOp
+                //   }#source`;
+                //   const target = `${connection.target}#${
+                //     (connection as any).targetOp
+                //   }#target`;
+                //   return {
+                //     id: `${source}##${target}`,
+                //     sources: [source],
+                //     targets: [target],
+                //   };
+                // })}
+                edgeComponent={RoundedEdge}
+                // className="bg-gray-50"
+                // onClick={() => onSelectedNodeIdChange(undefined)}
+              >
+                {pseudoRoot.map((node) => (
+                  <RenderNode
+                    key={node.id}
+                    constructTreeNode={node}
+                    selectedNodeId={selectedNodeId}
+                    onSelectedNodeIdChange={onSelectedNodeIdChange}
+                  />
+                ))}
+              </Graph>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 // const AutoIdNode: FunctionComponent<{
 //   constructTreeNode: ConstructTreeNode;
