@@ -144,6 +144,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   // if none- it will be preformed in one batch
   const batchSize = Number(options.batch) || selectedEntrypoints.length;
   for (let i = 0; i < selectedEntrypoints.length; i += batchSize) {
+    log(`processing batch:`);
     const entrypointBatch = selectedEntrypoints.slice(i, i + batchSize);
     await Promise.all(entrypointBatch.map(testFile));
   }

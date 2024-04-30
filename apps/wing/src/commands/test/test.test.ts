@@ -295,7 +295,7 @@ describe("test-filter option", () => {
   });
 });
 
-describe("retry option", () => {
+describe("retry and batch options", () => {
   let logSpy: SpyInstance;
 
   beforeEach(() => {
@@ -357,6 +357,39 @@ describe("retry option", () => {
 
     const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
     expect(retryLogs.length).toBe(3);
+  });
+
+  test("wing test --batch [batch]", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
+
+    process.chdir(outDir);
+
+    fs.writeFileSync(
+      "t1.test.w",
+      `
+      bring cloud;
+      test "t1" {
+        assert(true);
+      }
+    `
+    );
+    fs.writeFileSync(
+      "r2.test.w",
+      `
+      bring cloud;
+      test "t2" {
+        assert(true);
+      }
+    `
+    );
+
+    await wingTest(["t1.test.w", "t2.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      batch: 1,
+    });
+    const batchLogs = logSpy.mock.calls.filter((args) => args[0].includes("Processing batch"));
+    expect(batchLogs.length).toBe(0);
   });
 });
 
