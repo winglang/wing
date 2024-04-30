@@ -1,5 +1,8 @@
 import type { ElkExtendedEdge, ElkNode } from "elkjs";
 import {
+  useEffect,
+  useMemo,
+  useRef,
   useState,
   type DetailedHTMLProps,
   type FunctionComponent,
@@ -7,6 +10,10 @@ import {
   type PropsWithChildren,
 } from "react";
 import { createPortal } from "react-dom";
+
+import { MapBackground } from "../map-background.js";
+import type { ZoomPaneRef } from "../zoom-pane.js";
+import { ZoomPane } from "../zoom-pane.js";
 
 import { GraphGenerator } from "./graph-generator.js";
 import { GraphRenderer } from "./graph-renderer.js";
@@ -26,6 +33,25 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = (
 
   const [graph, setGraph] = useState<ElkNode>();
 
+  const zoomPaneRef = useRef<ZoomPaneRef>(null);
+
+  const mapSize = useMemo(() => {
+    if (!graph) {
+      return;
+    }
+
+    return {
+      width: graph.width!,
+      height: graph.height!,
+    };
+  }, [graph]);
+
+  useEffect(() => {
+    zoomPaneRef.current?.zoomToFit();
+  }, [graph]);
+
+  const mapBackgroundRef = useRef<HTMLDivElement>(null);
+
   return (
     <>
       {createPortal(
@@ -37,13 +63,26 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = (
         document.body,
       )}
 
-      <div {...divProps}>
-        {graph && (
-          <GraphRenderer graph={graph} edgeComponent={edgeComponent}>
-            {props.children}
-          </GraphRenderer>
-        )}
-      </div>
+      <div ref={mapBackgroundRef}></div>
+
+      <ZoomPane
+        ref={zoomPaneRef}
+        boundingBox={mapSize}
+        className="w-full h-full"
+        data-testid="map-pane"
+        // onClick={() => onSelectedNodeIdChange?.(undefined)}
+      >
+        {mapBackgroundRef.current &&
+          createPortal(<MapBackground />, mapBackgroundRef.current)}
+
+        <div {...divProps}>
+          {graph && (
+            <GraphRenderer graph={graph} edgeComponent={edgeComponent}>
+              {props.children}
+            </GraphRenderer>
+          )}
+        </div>
+      </ZoomPane>
     </>
   );
 };

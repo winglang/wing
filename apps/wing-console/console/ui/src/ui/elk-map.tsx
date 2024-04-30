@@ -24,6 +24,7 @@ import type { Edge } from "../shared/Edge.js";
 import type { Node } from "../shared/Node.js";
 
 import { EdgeItem } from "./edge-item.js";
+import { MapBackground } from "./map-background.js";
 import { useNodeStaticData } from "./use-node-static-data.js";
 import type { ZoomPaneRef } from "./zoom-pane.js";
 import { ZoomPane, useZoomPane } from "./zoom-pane.js";
@@ -389,35 +390,6 @@ const NodesContainer = memo(
     );
   },
 );
-
-const MapBackground = (props: {}) => {
-  const { viewTransform } = useZoomPane();
-  const patternSize = 12 * viewTransform.z;
-  const dotSize = 1 * viewTransform.z;
-  const id = useId();
-  return (
-    // Reference: https://github.com/xyflow/xyflow/blob/13897512d3c57e72c2e27b14ffa129412289d948/packages/react/src/additional-components/Background/Background.tsx#L52-L86.
-    <svg className="absolute w-full h-full top-0 left-0 bg-white dark:bg-slate-500 text-slate-200 dark:text-slate-550">
-      <pattern
-        id={id}
-        x={(-viewTransform.x * viewTransform.z) % patternSize}
-        y={(-viewTransform.y * viewTransform.z) % patternSize}
-        width={patternSize}
-        height={patternSize}
-        patternUnits="userSpaceOnUse"
-        patternTransform={`translate(-${viewTransform.z},-${viewTransform.z})`}
-      >
-        <circle
-          cx={dotSize}
-          cy={dotSize}
-          r={dotSize}
-          fill="currentColor"
-        ></circle>
-      </pattern>
-      <rect x="0" y="0" width="100%" height="100%" fill={`url(#${id})`}></rect>
-    </svg>
-  );
-};
 
 const nodeExists = (nodes: Node<any>[], id: string): boolean => {
   let current = nodes;

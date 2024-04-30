@@ -1,7 +1,11 @@
 import { CubeTransparentIcon } from "@heroicons/react/20/solid";
 import { CubeIcon } from "@heroicons/react/24/outline";
 import { BoltIcon } from "@heroicons/react/24/solid";
-import { ResourceIcon } from "@wingconsole/design-system";
+import {
+  ResourceIcon,
+  SpinnerLoader,
+  useTheme,
+} from "@wingconsole/design-system";
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import type { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
 import clsx from "classnames";
@@ -19,6 +23,7 @@ import { NodeChildren } from "../ui/elk-flow/node-children.js";
 import { Node } from "../ui/elk-flow/node.js";
 import { Port } from "../ui/elk-flow/port.js";
 import type { EdgeComponent } from "../ui/elk-flow/types.js";
+import { useZoomPane } from "../ui/zoom-pane.js";
 
 interface InflightPortProps {
   occupied?: boolean;
@@ -36,7 +41,7 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
         "outline outline-0 group-hover/construct:outline-2 outline-sky-200",
         props.highlight && "outline-2 border-sky-300",
         "transition-all",
-        // "invisible",
+        "invisible",
       )}
     >
       <div className="w-full h-full relative group/inflight-port">
@@ -61,8 +66,8 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
 
 // const SPACING_BASE_VALUE = 64;
 // const SPACING_BASE_VALUE = 48;
-// const SPACING_BASE_VALUE = 30;
-const SPACING_BASE_VALUE = 10;
+const SPACING_BASE_VALUE = 32;
+// const SPACING_BASE_VALUE = 10;
 // const PORT_ANCHOR = SPACING_BASE_VALUE / 5;
 const PORT_ANCHOR = 0;
 // const EDGE_ROUNDED_RADIUS = 14;
@@ -76,7 +81,7 @@ const baseLayoutOptions: LayoutOptions = {
   "elk.layered.layering.strategy": "MIN_WIDTH",
   "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
   "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
-  // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
+  "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
   // "elk.layered.spacing.nodeNode": `${SPACING_BASE_VALUE}`, // default 20. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-nodeNode.html.
   // "elk.layered.spacing.edgeEdge": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-edgeEdge.html
   // "elk.layered.spacing.edgeNode": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-edgeNode.html
@@ -93,6 +98,7 @@ interface ContainerNodeProps {
 
 const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
   memo((props) => {
+    const { viewTransform } = useZoomPane();
     return (
       <Node
         elk={{
@@ -116,7 +122,17 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
         <div className="w-full h-full relative ">
           <div className="absolute inset-x-0 top-0">
             <div className="relative">
-              <div className="absolute bottom-0">
+              <div
+                className="absolute bottom-0"
+                // style={
+                //   props.pseudoContainer
+                //     ? {
+                //         transform: `scale(${1 / viewTransform.z})`,
+                //         transformOrigin: "left",
+                //       }
+                //     : {}
+                // }
+              >
                 <div
                   className={clsx(
                     "text-sm leading-tight tracking-wide whitespace-nowrap",
@@ -236,7 +252,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 <ArchiveBoxIcon className="size-5 text-white" />
               </div>
             )} */}
-            <ResourceIcon className="size-4 -ml-0.5" resourceType={props.fqn} />
+            <ResourceIcon className="size-4" resourceType={props.fqn} />
             {/* <ResourceIcon className="size-6" resourceType={props.fqn} /> */}
             {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow">
       <CubeIcon className="size-6 text-emerald-400" />
@@ -272,10 +288,16 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 <div className="border-t border-gray-300">
                   <div
                     // className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap"
-                    className="px-2.5 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap"
+                    className={clsx(
+                      "px-2.5 py-1.5 text-xs whitespace-nowrap",
+                      // "tracking-tighter",
+                      // "text-gray-700",
+                      "text-gray-600",
+                      // "font-mono"
+                    )}
                   >
-                    <span className="text-sky-600 italic">inflight</span>{" "}
-                    {inflight.name}
+                    {/* <span className="text-sky-600 italic">inflight</span>{" "} */}
+                    {inflight.name}()
                   </div>
                 </div>
                 {/* <div className="border-t border-gray-300">
@@ -283,6 +305,22 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             {inflight.name}
           </div>
         </div> */}
+
+                <Port
+                  elk={{
+                    id: `${inflight.id}#source`,
+                    layoutOptions: {
+                      "elk.port.side": "EAST",
+                      // "elk.port.borderOffset": "100",
+                      "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                    },
+                  }}
+                >
+                  <InflightPort
+                    occupied={inflight.sourceOccupied}
+                    highlight={props.highlight}
+                  />
+                </Port>
 
                 <Port
                   elk={{
@@ -299,9 +337,55 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                     highlight={props.highlight}
                   />
                 </Port>
+
+                {/* <Port
+                  elk={{
+                    id: `${inflight.id}#target#1`,
+                    layoutOptions: {
+                      "elk.port.side": "WEST",
+                      // "elk.port.borderOffset": "100",
+                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                    },
+                  }}
+                >
+                  <InflightPort
+                    occupied={inflight.targetOccupied}
+                    highlight={props.highlight}
+                  />
+                </Port>
                 <Port
                   elk={{
-                    id: `${inflight.id}#source`,
+                    id: `${inflight.id}#target#2`,
+                    layoutOptions: {
+                      "elk.port.side": "WEST",
+                      // "elk.port.borderOffset": "100",
+                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                    },
+                  }}
+                >
+                  <InflightPort
+                    occupied={inflight.targetOccupied}
+                    highlight={props.highlight}
+                  />
+                </Port>
+                <Port
+                  elk={{
+                    id: `${inflight.id}#target#3`,
+                    layoutOptions: {
+                      "elk.port.side": "WEST",
+                      // "elk.port.borderOffset": "100",
+                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                    },
+                  }}
+                >
+                  <InflightPort
+                    occupied={inflight.targetOccupied}
+                    highlight={props.highlight}
+                  />
+                </Port>
+                <Port
+                  elk={{
+                    id: `${inflight.id}#source#1`,
                     layoutOptions: {
                       "elk.port.side": "EAST",
                       // "elk.port.borderOffset": "100",
@@ -314,6 +398,36 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                     highlight={props.highlight}
                   />
                 </Port>
+                <Port
+                  elk={{
+                    id: `${inflight.id}#source#2`,
+                    layoutOptions: {
+                      "elk.port.side": "EAST",
+                      // "elk.port.borderOffset": "100",
+                      "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                    },
+                  }}
+                >
+                  <InflightPort
+                    occupied={inflight.sourceOccupied}
+                    highlight={props.highlight}
+                  />
+                </Port>
+                <Port
+                  elk={{
+                    id: `${inflight.id}#source#3`,
+                    layoutOptions: {
+                      "elk.port.side": "EAST",
+                      // "elk.port.borderOffset": "100",
+                      "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                    },
+                  }}
+                >
+                  <InflightPort
+                    occupied={inflight.sourceOccupied}
+                    highlight={props.highlight}
+                  />
+                </Port> */}
               </Node>
             ))}
           </NodeChildren>
@@ -395,7 +509,12 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
           <InflightPort occupied={props.sourceOccupied} />
         </Port>
 
-        <div className="absolute bottom-0 inset-x-0 invisible group-hover:visible">
+        <div
+          className={clsx(
+            "absolute bottom-0 inset-x-0",
+            // "invisible group-hover:visible"
+          )}
+        >
           <div className="relative">
             <div className="absolute top-0 inset-x-0">
               <div className="flex justify-around">
@@ -625,16 +744,28 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
 
   const getConnectionId = useCallback(
     (connection: ConnectionData, type: "source" | "target") => {
-      const info = nodeInfo?.get(connection[type]);
+      const nodePath = connection[type];
+      const info = nodeInfo?.get(nodePath);
+
+      if (isNodeHidden(nodePath)) {
+        return nodePath;
+      }
 
       if (info?.type === "function") {
         // Ignore `invokeAsync`.
-        return `${connection[type]}#invoke#${type}`;
+        return `${nodePath}#invoke#${type}`;
       }
 
-      return `${connection[type]}#${(connection as any)[`${type}Op`]}#${type}`;
+      if (info?.type === "autoId") {
+        return nodePath;
+      }
+
+      return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}`;
+      // return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}#${
+      //   1 + Math.floor(Math.random() * 3)
+      // }`;
     },
-    [nodeInfo],
+    [nodeInfo, isNodeHidden],
   );
 
   const connectionsV2 = useMemo(() => {
@@ -757,60 +888,136 @@ export const MapViewV2 = memo(({}: MapViewV2Props) => {
     ) as ConstructTreeNode[];
   }, [tree]);
 
+  // return (
+  //   <div className="relative">
+  //     {tree && (
+  //       <Graph
+  //         elk={{
+  //           id: "root",
+  //           layoutOptions: {
+  //             // "elk.algorithm": "org.eclipse.elk.layered",
+  //             // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+  //             // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
+  //             // "elk.direction": "RIGHT",
+  //             ...baseLayoutOptions,
+  //             "elk.padding": "[top=24,left=20,bottom=20,right=20]",
+  //           },
+  //         }}
+  //         // edges={connections?.map((connection) => {
+  //         //   return {
+  //         //     id: `${connection.source}#${connection.target}#${connection.name}`,
+  //         //     sources: [
+  //         //       getConnectionId(connection.source, connection.name, "source"),
+  //         //     ],
+  //         //     targets: [
+  //         //       getConnectionId(connection.target, connection.name, "target"),
+  //         //     ],
+  //         //   };
+  //         // })}
+  //         edges={connectionsV2.map((connection) => {
+  //           return {
+  //             id: `${connection.source}#${connection.target}`,
+  //             sources: [connection.source],
+  //             targets: [connection.target],
+  //           };
+  //         })}
+  //         // edges={connections?.map((connection) => {
+  //         //   const source = `${connection.source}#${
+  //         //     (connection as any).sourceOp
+  //         //   }#source`;
+  //         //   const target = `${connection.target}#${
+  //         //     (connection as any).targetOp
+  //         //   }#target`;
+  //         //   return {
+  //         //     id: `${source}##${target}`,
+  //         //     sources: [source],
+  //         //     targets: [target],
+  //         //   };
+  //         // })}
+  //         edgeComponent={RoundedEdge}
+  //         className="bg-gray-50"
+  //       >
+  //         {pseudoRoot.map((node) => (
+  //           <RenderNode key={node.id} constructTreeNode={node} />
+  //         ))}
+  //       </Graph>
+  //     )}
+  //   </div>
+  // );
+
+  const { theme } = useTheme();
+
   return (
-    <div className="relative">
-      {tree && (
-        <Graph
-          elk={{
-            id: "root",
-            layoutOptions: {
-              // "elk.algorithm": "org.eclipse.elk.layered",
-              // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-              // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
-              // "elk.direction": "RIGHT",
-              ...baseLayoutOptions,
-              "elk.padding": "[top=24,left=20,bottom=20,right=20]",
-            },
-          }}
-          // edges={connections?.map((connection) => {
-          //   return {
-          //     id: `${connection.source}#${connection.target}#${connection.name}`,
-          //     sources: [
-          //       getConnectionId(connection.source, connection.name, "source"),
-          //     ],
-          //     targets: [
-          //       getConnectionId(connection.target, connection.name, "target"),
-          //     ],
-          //   };
-          // })}
-          edges={connectionsV2.map((connection) => {
-            return {
-              id: `${connection.source}#${connection.target}`,
-              sources: [connection.source],
-              targets: [connection.target],
-            };
-          })}
-          // edges={connections?.map((connection) => {
-          //   const source = `${connection.source}#${
-          //     (connection as any).sourceOp
-          //   }#source`;
-          //   const target = `${connection.target}#${
-          //     (connection as any).targetOp
-          //   }#target`;
-          //   return {
-          //     id: `${source}##${target}`,
-          //     sources: [source],
-          //     targets: [target],
-          //   };
-          // })}
-          edgeComponent={RoundedEdge}
-          className="bg-gray-50"
-        >
-          {pseudoRoot.map((node) => (
-            <RenderNode key={node.id} constructTreeNode={node} />
-          ))}
-        </Graph>
-      )}
+    <div className={clsx("h-full flex flex-col", theme.bg4)}>
+      <div className="grow relative bg-slate-50 dark:bg-slate-500">
+        {!tree && (
+          <div
+            className={clsx(
+              "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
+              "transition-all",
+              "z-10",
+            )}
+          >
+            <div className="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <SpinnerLoader data-testid="main-view-loader" />
+            </div>
+          </div>
+        )}
+        <div className="absolute inset-0">
+          {tree && (
+            <Graph
+              elk={{
+                id: "root",
+                layoutOptions: {
+                  // "elk.algorithm": "org.eclipse.elk.layered",
+                  // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+                  // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
+                  // "elk.direction": "RIGHT",
+                  ...baseLayoutOptions,
+                  "elk.padding": "[top=24,left=20,bottom=20,right=20]",
+                },
+              }}
+              // edges={connections?.map((connection) => {
+              //   return {
+              //     id: `${connection.source}#${connection.target}#${connection.name}`,
+              //     sources: [
+              //       getConnectionId(connection.source, connection.name, "source"),
+              //     ],
+              //     targets: [
+              //       getConnectionId(connection.target, connection.name, "target"),
+              //     ],
+              //   };
+              // })}
+              edges={connectionsV2.map((connection) => {
+                return {
+                  id: `${connection.source}#${connection.target}`,
+                  sources: [connection.source],
+                  targets: [connection.target],
+                };
+              })}
+              // edges={connections?.map((connection) => {
+              //   const source = `${connection.source}#${
+              //     (connection as any).sourceOp
+              //   }#source`;
+              //   const target = `${connection.target}#${
+              //     (connection as any).targetOp
+              //   }#target`;
+              //   return {
+              //     id: `${source}##${target}`,
+              //     sources: [source],
+              //     targets: [target],
+              //   };
+              // })}
+              edgeComponent={RoundedEdge}
+              // className="bg-gray-50"
+            >
+              {pseudoRoot.map((node) => (
+                <RenderNode key={node.id} constructTreeNode={node} />
+              ))}
+            </Graph>
+          )}
+        </div>
+      </div>
     </div>
   );
 });

@@ -159,11 +159,16 @@ export const GraphGenerator: FunctionComponent<
     const nodeMap = new Map<string, ElkNode>();
     const processNode = (node: ElkNode) => {
       nodeMap.set(node.id, node);
+      for (const port of node.ports ?? []) {
+        nodeMap.set(port.id, port);
+      }
       for (const child of node.children ?? []) {
         processNode(child);
       }
     };
     processNode(root);
+
+    // console.log("nodeMap", nodeMap);
 
     const edges = (props.edges ?? []).filter((edge) => {
       return (
