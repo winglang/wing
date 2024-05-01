@@ -4384,15 +4384,57 @@ impl<'a> TypeChecker<'a> {
 			&ast_class.initializer,
 		);
 
-		// Verify if all fields of a class/resource are initialized in the initializer.
+		// Verify if all fields of a class/resource are initialized in the ctor.
 		let init_statements = match &ast_class.initializer.body {
 			FunctionBody::Statements(s) => s,
 			FunctionBody::External(_) => panic!("init cannot be extern"),
 		};
-
 		self.check_class_field_initialization(&init_statements, &ast_class.fields, Phase::Preflight);
 
-		// Type check the inflight initializer
+		// If our parent's ctor has any parameters make sure there's a call to it as the first statement of our ctor
+		// (otherwise the call can be implicit and we don't need to check for it)
+		if let (Some(parent_class_env), Some(parent_class_type)) = (parent_class_env, parent_class) {
+			let ctor_def = if ast_class.phase == Phase::Inflight {
+				&ast_class.inflight_initializer
+			} else {
+				&ast_class.initializer
+			};
+			let parent_ctor_symb = if parent_class_type.as_class().unwrap().phase == Phase::Inflight {
+				&inflight_init_symb
+			} else {
+				// note: In case of phase independent classes (brought from JSII) the init synbol is the same as preflight
+				&init_symb
+			};
+
+			let parent_ctor_sig = parent_class_env
+				.lookup(&parent_ctor_symb, None)
+				.expect("a ctor")
+				.as_variable()
+				.unwrap()
+				.type_
+				.as_function_sig()
+				.expect("ctor to be a function");
+			if let FunctionBody::Statements(ctor_body) = &ctor_def.body {
+				if parent_ctor_sig.min_parameters() > 0
+					&& !matches!(
+						ctor_body.statements.first(),
+						Some(Stmt {
+							kind: StmtKind::SuperConstructor { .. },
+							..
+						})
+					) {
+					self.spanned_error(
+						ctor_body,
+						format!(
+							"Missing super() call as first statement of {}'s constructor",
+							ast_class.name
+						),
+					);
+				}
+			}
+		}
+
+		// Type check the inflight ctor
 		self.type_check_method(
 			class_type,
 			&inflight_init_symb,
