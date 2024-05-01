@@ -82,7 +82,7 @@ export interface ITopicClient {
    * @param messages Payload to publish to Topic
    * @inflight
    */
-  publish(...messages: string[]): void;
+  publish(...messages: string[]): Promise<void>;
 }
 
 /**

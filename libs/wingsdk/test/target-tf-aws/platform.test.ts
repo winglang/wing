@@ -2,8 +2,8 @@ import fs from "fs";
 import path from "path";
 import { test, expect, describe, beforeEach } from "vitest";
 import { Function } from "../../src/cloud";
+import { inflight } from "../../src/core";
 import { PlatformManager } from "../../src/platform";
-import { Testing } from "../../src/simulator";
 import { mkdtemp } from "../util";
 import * as tfaws  from "../../src/target-tf-aws/platform";
 import { mockClient } from "aws-sdk-client-mock";
@@ -127,8 +127,14 @@ describe("tf-aws platform parameters", () => {
       outdir: tempdir,
       entrypointDir: tempdir,
     });
-    const inflight = Testing.makeHandler("");
-    new Function(app, "Function", inflight);
+
+    new Function(
+      app,
+      "Function",
+      inflight(async () => {
+        return undefined;
+      })
+    );
 
     // THEN
     const output = app.synth();

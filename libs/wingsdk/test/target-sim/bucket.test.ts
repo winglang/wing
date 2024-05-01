@@ -4,7 +4,7 @@ import { test, expect } from "vitest";
 import { listMessages, treeJsonOf, waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
 import { BucketEventType } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight, lift } from "../../src/core";
 import { Node } from "../../src/std";
 import { METADATA_FILENAME } from "../../src/target-sim/bucket.inflight";
 import { SimApp } from "../sim-app";
@@ -40,9 +40,7 @@ test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const testInflight = Testing.makeHandler(
-    "async handle() { console.log('I am done'); }"
-  );
+  const testInflight = inflight(async () => console.log("I am done"));
   bucket.onCreate(testInflight);
 
   const s = await app.startSimulator();
@@ -69,15 +67,12 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
   const logBucket = new cloud.Bucket(app, "log_bucket");
-  const testInflight = Testing.makeHandler(
-    `async handle(key, event) { await this.bucket.put(key, event); console.log("I am done"); }`,
-    {
-      bucket: {
-        obj: logBucket,
-        ops: [cloud.BucketInflightMethods.PUT],
-      },
-    }
-  );
+  const testInflight = lift({ bucket: logBucket })
+    .grant({ bucket: [cloud.BucketInflightMethods.PUT] })
+    .inflight(async (ctx, key, event) => {
+      await ctx.bucket.put(key, event);
+      console.log("I am done");
+    });
 
   bucket.onEvent(testInflight);
 
@@ -377,9 +372,9 @@ test("removing a key will call onDelete method", async () => {
   const app = new SimApp();
 
   const bucket = new cloud.Bucket(app, bucketName);
-  const testInflight = Testing.makeHandler(
-    `async handle(key) { console.log("Received " + key); }`
-  );
+  const testInflight = inflight(async (_, key) => {
+    console.log("Received " + key);
+  });
   bucket.onDelete(testInflight);
 
   const s = await app.startSimulator();

@@ -557,21 +557,21 @@ exports[`default counter behavior 1`] = `
 `;
 
 exports[`function with a counter binding 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) {
-    const val = await this.my_counter.inc(2);
+"(await (async () => {
+  const $func = async (ctx) => {
+    const val = await ctx.my_counter.inc(2);
     console.log(val);
   }
-};
-})())({
-my_counter: new (require("[REDACTED]/wingsdk/src/shared-gcp/counter.inflight")).CounterClient(process.env["FIRESTORE_DATABASE_NAME_6cb5a3a4"], 0)
-})"
+  const $ctx = {
+  my_counter: new (require("[REDACTED]/wingsdk/src/shared-gcp/counter.inflight")).CounterClient(process.env["FIRESTORE_DATABASE_NAME_6cb5a3a4"], 0)
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
 `;
 
 exports[`function with a counter binding 2`] = `

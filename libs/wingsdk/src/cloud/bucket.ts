@@ -455,9 +455,12 @@ export interface BucketOnEventOptions {}
  * A resource with an inflight "handle" method that can be passed to
  * the bucket events.
  *
- * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
+ * @inflight `@winglang/sdk.cloud.IBucketEventHandlerClient`
  */
-export interface IBucketEventHandler extends IInflight {}
+export interface IBucketEventHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IBucketEventHandlerClient["handle"];
+}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
