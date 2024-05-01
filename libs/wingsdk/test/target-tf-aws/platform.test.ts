@@ -15,8 +15,6 @@ import * as tfaws from "../../src/target-tf-aws/platform";
 import { mkdtemp } from "../util";
 import "aws-sdk-client-mock-jest";
 
-import exp from "constants";
-
 const secretsManagerClientMock = mockClient(SecretsManagerClient);
 
 describe("tf-aws platform parameters", () => {
