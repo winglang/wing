@@ -87,14 +87,16 @@ export class ApiEndpointHandler {
   ): cloud.IFunctionHandler {
     return lift({
       handler,
-      utilPath: require.resolve("./api-util"),
+      headers: headers ?? {},
     }).inflight(async (ctx, request) => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { apigwFunctionHandler } = require(ctx.utilPath);
+      const {
+        apigwFunctionHandler,
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+      } = require("@winglang/sdk/lib/shared-aws/api-util.js");
       return apigwFunctionHandler(
         request as unknown as APIGatewayProxyEvent,
         ctx.handler,
-        headers
+        ctx.headers
       ) as unknown as string;
     });
   }
