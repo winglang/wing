@@ -987,6 +987,51 @@ The response's status code.
 
 ---
 
+### CorsHeaders <a name="CorsHeaders" id="@winglang/sdk.cloud.CorsHeaders"></a>
+
+Type definition for CORS headers which includes default and options headers.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.CorsHeaders.Initializer"></a>
+
+```wing
+bring cloud;
+
+let CorsHeaders = cloud.CorsHeaders{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.CorsHeaders.property.defaultResponse">defaultResponse</a></code> | <code>MutMap&lt;str&gt;</code> | Default CORS response headers. |
+| <code><a href="#@winglang/sdk.cloud.CorsHeaders.property.optionsResponse">optionsResponse</a></code> | <code>MutMap&lt;str&gt;</code> | CORS options response headers. |
+
+---
+
+##### `defaultResponse`<sup>Required</sup> <a name="defaultResponse" id="@winglang/sdk.cloud.CorsHeaders.property.defaultResponse"></a>
+
+```wing
+defaultResponse: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+Default CORS response headers.
+
+---
+
+##### `optionsResponse`<sup>Required</sup> <a name="optionsResponse" id="@winglang/sdk.cloud.CorsHeaders.property.optionsResponse"></a>
+
+```wing
+optionsResponse: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+CORS options response headers.
+
+---
+
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### IApiEndpointHandler <a name="IApiEndpointHandler" id="@winglang/sdk.cloud.IApiEndpointHandler"></a>

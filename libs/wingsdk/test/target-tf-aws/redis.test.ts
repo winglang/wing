@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { Function } from "../../src/cloud";
+import { inflight } from "../../src/core";
 import * as ex from "../../src/ex";
-import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
 import {
   mkdtemp,
@@ -11,7 +11,9 @@ import {
   tfSanitize,
 } from "../util";
 
-const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
+const INFLIGHT_CODE = inflight(async (_, name) => {
+  console.log("Hello, " + name);
+});
 
 describe("When creating a Redis resource", () => {
   it("should create an elasticache cluster and required vpc networking resources", () => {
@@ -62,8 +64,7 @@ describe("When creating a Redis resource", () => {
         entrypointDir: __dirname,
       });
       const redisCluster = new ex.Redis(app, "Redis") as ex.Redis;
-      const inflight = Testing.makeHandler(INFLIGHT_CODE);
-      const func = new Function(app, "Function", inflight);
+      const func = new Function(app, "Function", INFLIGHT_CODE);
       redisCluster.onLift(func, ["set", "get"]);
 
       // WHEN
@@ -109,8 +110,7 @@ describe("When creating multiple Redis resources", () => {
       });
       const redisCluster = new ex.Redis(app, "Redis") as ex.Redis;
       const otherCluster = new ex.Redis(app, "OtherRedis") as ex.Redis;
-      const inflight = Testing.makeHandler(INFLIGHT_CODE);
-      const func = new Function(app, "Function", inflight);
+      const func = new Function(app, "Function", INFLIGHT_CODE);
       redisCluster.onLift(func, ["set", "get"]);
       otherCluster.onLift(func, ["set", "get"]);
 

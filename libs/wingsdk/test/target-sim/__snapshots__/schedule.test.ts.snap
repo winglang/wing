@@ -162,21 +162,34 @@ exports[`schedule with one task using rate of 3h 1`] = `
   ".wing/ontick0_c83eddbe.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-console.log("Hello from schedule!");
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+            await ctx.handler();
+            return undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
+  console.log("Hello from schedule!");
 }
-};
-})())({
-
-}), args: {} }));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -401,21 +414,34 @@ exports[`schedule with one task using rate of 10m 1`] = `
   ".wing/ontick0_c83eddbe.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-console.log("Hello from schedule!");
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+            await ctx.handler();
+            return undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
+  console.log("Hello from schedule!");
 }
-};
-})())({
-
-}), args: {} }));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -640,21 +666,34 @@ exports[`schedule with one task with cron 1`] = `
   ".wing/ontick0_c83eddbe.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-console.log("Hello from schedule!");
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+            await ctx.handler();
+            return undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
+  console.log("Hello from schedule!");
 }
-};
-})())({
-
-}), args: {} }));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {

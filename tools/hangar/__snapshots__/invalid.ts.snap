@@ -880,6 +880,18 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^ Unknown symbol \\"C11\\"
 
 
+error: Missing super() call as first statement of PaidStudent's constructor
+    --> ../../../examples/tests/invalid/class.test.w:96:45
+    |  
+ 96 |     new(name: str, major: str, hrlyWage: num) {
+    | /---------------------------------------------^
+ 97 | |     this.hrlyWage = hrlyWage;
+ 98 | |     super(name, major);
+ 99 | | //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
+100 | |   }
+    | \\\\---^ Missing super() call as first statement of PaidStudent's constructor
+
+
 error: Cannot instantiate abstract class \\"Resource\\"
     --> ../../../examples/tests/invalid/class.test.w:165:1
     |
@@ -1263,6 +1275,91 @@ error: Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
    |
 46 | let ss4 = ss3.copyMut();
    |               ^^^^^^^ Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`ctor_super.test.w 1`] = `
+"error: Missing super() call as first statement of PreflighChild1's constructor
+  --> ../../../examples/tests/invalid/ctor_super.test.w:9:7
+  |
+9 | class PreflighChild1 extends PreflightBaseWithCtorParam {}
+  |       ^^^^^^^^^^^^^^ Missing super() call as first statement of PreflighChild1's constructor
+
+
+error: Missing super() call as first statement of PreflighChild2's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:13:15
+   |
+13 |   new(a: num) {}
+   |               ^^ Missing super() call as first statement of PreflighChild2's constructor
+
+
+error: Missing super() call as first statement of InflightChild1's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:29:16
+   |
+29 | inflight class InflightChild1 extends InflightBaseWithCtorParam {}
+   |                ^^^^^^^^^^^^^^ Missing super() call as first statement of InflightChild1's constructor
+
+
+error: Missing super() call as first statement of InflightChild2's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:33:15
+   |
+33 |   new(a: num) {}
+   |               ^^ Missing super() call as first statement of InflightChild2's constructor
+
+
+error: Missing super() call as first statement of InflightChild4's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:45:9
+   |
+45 |   new() {}
+   |         ^^ Missing super() call as first statement of InflightChild4's constructor
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/ctor_super.test.w:19:5
+   |
+19 |     super();
+   |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/ctor_super.test.w:39:5
+   |
+39 |     super();
+   |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Missing super() call as first statement of InflightChild1's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:55:9
+   |
+55 |   class InflightChild1 extends InflightBaseWithCtorParam {}
+   |         ^^^^^^^^^^^^^^ Missing super() call as first statement of InflightChild1's constructor
+
+
+error: Missing super() call as first statement of InflightChild2's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:59:17
+   |
+59 |     new(a: num) {}
+   |                 ^^ Missing super() call as first statement of InflightChild2's constructor
+
+
+error: Missing super() call as first statement of InflightChild4's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:71:11
+   |
+71 |     new() {}
+   |           ^^ Missing super() call as first statement of InflightChild4's constructor
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/ctor_super.test.w:65:7
+   |
+65 |       super();
+   |       ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
 

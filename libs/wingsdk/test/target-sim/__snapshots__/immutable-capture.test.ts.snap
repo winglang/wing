@@ -5,23 +5,38 @@ exports[`array 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture.length === 2);
+    assert(ctx.my_capture[0] === "hello");
+    assert(ctx.my_capture[1] === "dude");
+    return void 0;
   }
-  async handle() {
-if (!(this.my_capture.length === 2)) { throw new Error(\`assertion failed: "this.my_capture.length === 2"\`); }
-if (!(this.my_capture[0] === "hello")) { throw new Error(\`assertion failed: "this.my_capture[0] === \\"hello\\""\`); }
-if (!(this.my_capture[1] === "dude")) { throw new Error(\`assertion failed: "this.my_capture[1] === \\"dude\\""\`); }
-
+  const $ctx = {
+  my_capture: ["hello","dude"]
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_capture: ["hello","dude"]
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -165,23 +180,38 @@ exports[`array of durations 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_array.length === 2);
+    assert(ctx.my_array[0].minutes === 10);
+    assert(ctx.my_array[1].minutes === 20);
+    return void 0;
   }
-  async handle() {
-if (!(this.my_array.length === 2)) { throw new Error(\`assertion failed: "this.my_array.length === 2"\`); }
-if (!(this.my_array[0].minutes === 10)) { throw new Error(\`assertion failed: "this.my_array[0].minutes === 10"\`); }
-if (!(this.my_array[1].minutes === 20)) { throw new Error(\`assertion failed: "this.my_array[1].minutes === 20"\`); }
-
+  const $ctx = {
+  my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))]
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_array: [(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))]
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -325,22 +355,37 @@ exports[`array of maps 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_array[0].get("foo") === 1);
+    assert(ctx.my_array[1].get("bar") === 4);
+    return void 0;
   }
-  async handle() {
-if (!(this.my_array[0].get('foo') === 1)) { throw new Error(\`assertion failed: "this.my_array[0].get('foo') === 1"\`); }
-if (!(this.my_array[1].get('bar') === 4)) { throw new Error(\`assertion failed: "this.my_array[1].get('bar') === 4"\`); }
-
+  const $ctx = {
+  my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_array: [new Map([["foo",1],["bar",2]]),new Map([["foo",3],["bar",4]])]
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -484,21 +529,36 @@ exports[`boolean 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture === false);
+    return void 0;
   }
-  async handle() {
-if (!(this.my_capture === false)) { throw new Error(\`assertion failed: "this.my_capture === false"\`); }
-
+  const $ctx = {
+  my_capture: false
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_capture: false
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -642,23 +702,38 @@ exports[`duration 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture.minutes === 120);
+    assert(ctx.my_capture.seconds === 7200);
+    assert(ctx.my_capture.hours === 2);
+    return void 0;
   }
-  async handle() {
-if (!(this.my_capture.minutes === 120)) { throw new Error(\`assertion failed: "this.my_capture.minutes === 120"\`); }
-if (!(this.my_capture.seconds === 7200)) { throw new Error(\`assertion failed: "this.my_capture.seconds === 7200"\`); }
-if (!(this.my_capture.hours === 2)) { throw new Error(\`assertion failed: "this.my_capture.hours === 2"\`); }
-
+  const $ctx = {
+  my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(7200))
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_capture: (new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(7200))
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -802,25 +877,40 @@ exports[`map 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture.has("foo"));
+    assert(ctx.my_capture.has("bar"));
+    assert(ctx.my_capture.size === 2);
+    assert(ctx.my_capture.get("foo") === 123);
+    assert(ctx.my_capture.get("bar") === 456);
+    return void 0;
   }
-  async handle() {
-if (!(this.my_capture.has("foo"))) { throw new Error(\`assertion failed: "this.my_capture.has(\\"foo\\")"\`); }
-if (!(this.my_capture.has("bar"))) { throw new Error(\`assertion failed: "this.my_capture.has(\\"bar\\")"\`); }
-if (!(this.my_capture.size === 2)) { throw new Error(\`assertion failed: "this.my_capture.size === 2"\`); }
-if (!(this.my_capture.get("foo") === 123)) { throw new Error(\`assertion failed: "this.my_capture.get(\\"foo\\") === 123"\`); }
-if (!(this.my_capture.get("bar") === 456)) { throw new Error(\`assertion failed: "this.my_capture.get(\\"bar\\") === 456"\`); }
-
+  const $ctx = {
+  my_capture: new Map([["foo",123],["bar",456]])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_capture: new Map([["foo",123],["bar",456]])
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -964,27 +1054,42 @@ exports[`map of arrays 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_map.has("foo"));
+    assert(ctx.my_map.has("bar"));
+    assert(ctx.my_map.size === 2);
+    assert(ctx.my_map.get("foo")?.[0] === 1);
+    assert(ctx.my_map.get("foo")?.[1] === 2);
+    assert(ctx.my_map.get("bar")?.[0] === 3);
+    assert(ctx.my_map.get("bar")?.[1] === 4);
+    return void 0;
   }
-  async handle() {
-if (!(this.my_map.has("foo"))) { throw new Error(\`assertion failed: "this.my_map.has(\\"foo\\")"\`); }
-if (!(this.my_map.has("bar"))) { throw new Error(\`assertion failed: "this.my_map.has(\\"bar\\")"\`); }
-if (!(this.my_map.size === 2)) { throw new Error(\`assertion failed: "this.my_map.size === 2"\`); }
-if (!(this.my_map.get("foo")[0] === 1)) { throw new Error(\`assertion failed: "this.my_map.get(\\"foo\\")[0] === 1"\`); }
-if (!(this.my_map.get("foo")[1] === 2)) { throw new Error(\`assertion failed: "this.my_map.get(\\"foo\\")[1] === 2"\`); }
-if (!(this.my_map.get("bar")[0] === 3)) { throw new Error(\`assertion failed: "this.my_map.get(\\"bar\\")[0] === 3"\`); }
-if (!(this.my_map.get("bar")[1] === 4)) { throw new Error(\`assertion failed: "this.my_map.get(\\"bar\\")[1] === 4"\`); }
-
+  const $ctx = {
+  my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_map: new Map([["foo",[1,2]],["bar",[3,4]]])
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1128,24 +1233,39 @@ exports[`map of arrays of durations 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_map.get("foo")?.[0].minutes === 10);
+    assert(ctx.my_map.get("foo")?.[1].seconds === 20 * 60);
+    assert(ctx.my_map.get("bar")?.[0].minutes === 30);
+    assert(ctx.my_map.get("bar")?.[1].seconds === 40 * 60);
+    return void 0;
   }
-  async handle() {
-if (!(this.my_map.get('foo')[0].minutes === 10)) { throw new Error(\`assertion failed: "this.my_map.get('foo')[0].minutes === 10"\`); }
-if (!(this.my_map.get('foo')[1].seconds === 20 * 60)) { throw new Error(\`assertion failed: "this.my_map.get('foo')[1].seconds === 20 * 60"\`); }
-if (!(this.my_map.get('bar')[0].minutes === 30)) { throw new Error(\`assertion failed: "this.my_map.get('bar')[0].minutes === 30"\`); }
-if (!(this.my_map.get('bar')[1].seconds === 40 * 60)) { throw new Error(\`assertion failed: "this.my_map.get('bar')[1].seconds === 40 * 60"\`); }
-
+  const $ctx = {
+  my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))]],["bar",[(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1800)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(2400))]]])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_map: new Map([["foo",[(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))]],["bar",[(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1800)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(2400))]]])
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1289,21 +1409,36 @@ exports[`number 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture + 20 === 143);
+    return void 0;
   }
-  async handle() {
-if (!(this.my_capture + 20 === 143)) { throw new Error(\`assertion failed: "this.my_capture + 20 === 143"\`); }
-
+  const $ctx = {
+  my_capture: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_capture: 123
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1447,24 +1582,39 @@ exports[`set 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+      assert(ctx.my_capture.has("boom"));
+      assert(ctx.my_capture.has("bam"));
+      assert(ctx.my_capture.has("bang"));
+      assert(ctx.my_capture.size === 3);
+      return void 0;
     }
-  }
-  async handle() {
-if (!(this.my_capture.has("boom"))) { throw new Error(\`assertion failed: "this.my_capture.has(\\"boom\\")"\`); }
-if (!(this.my_capture.has("bam"))) { throw new Error(\`assertion failed: "this.my_capture.has(\\"bam\\")"\`); }
-if (!(this.my_capture.has("bang"))) { throw new Error(\`assertion failed: "this.my_capture.has(\\"bang\\")"\`); }
-if (!(this.my_capture.size === 3)) { throw new Error(\`assertion failed: "this.my_capture.size === 3"\`); }
-
+  const $ctx = {
+  my_capture: new Set(["boom","bam","bang"])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_capture: new Set(["boom","bam","bang"])
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1608,23 +1758,38 @@ exports[`set of durations 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(Array.from(ctx.my_set)[0].minutes === 10);
+    assert(Array.from(ctx.my_set)[0].hours === 0.16666666666666666);
+    assert(Array.from(ctx.my_set)[1].seconds === 1200);
+    return void 0;
   }
-  async handle() {
-if (!(Array.from(this.my_set)[0].minutes === 10)) { throw new Error(\`assertion failed: "Array.from(this.my_set)[0].minutes === 10"\`); }
-if (!(Array.from(this.my_set)[0].hours === 0.16666666666666666)) { throw new Error(\`assertion failed: "Array.from(this.my_set)[0].hours === 0.16666666666666666"\`); }
-if (!(Array.from(this.my_set)[1].seconds === 1200)) { throw new Error(\`assertion failed: "Array.from(this.my_set)[1].seconds === 1200"\`); }
-
+  const $ctx = {
+  my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_set: new Set([(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(600)),(new (require("[REDACTED]/wingsdk/src/std/duration.js").Duration)(1200))])
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1768,22 +1933,37 @@ exports[`string 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture.length === 11);
+    assert(ctx.my_capture === "bam bam bam");
+    return void 0;
   }
-  async handle() {
-if (!(this.my_capture.length === 11)) { throw new Error(\`assertion failed: "this.my_capture.length === 11"\`); }
-if (!(this.my_capture === "bam bam bam")) { throw new Error(\`assertion failed: "this.my_capture === \\"bam bam bam\\""\`); }
-
+  const $ctx = {
+  my_capture: "bam bam bam"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_capture: "bam bam bam"
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1927,24 +2107,39 @@ exports[`struct 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_capture.hello === "dude");
+    assert(ctx.my_capture.world === "cup");
+    assert(ctx.my_capture.foo === "bar");
+    assert(Object.keys(ctx.my_capture).length === 3);
+    return void 0;
   }
-  async handle() {
-if (!(this.my_capture.hello === "dude")) { throw new Error(\`assertion failed: "this.my_capture.hello === \\"dude\\""\`); }
-if (!(this.my_capture.world === "cup")) { throw new Error(\`assertion failed: "this.my_capture.world === \\"cup\\""\`); }
-if (!(this.my_capture.foo === "bar")) { throw new Error(\`assertion failed: "this.my_capture.foo === \\"bar\\""\`); }
-if (!(Object.keys(this.my_capture).length === 3)) { throw new Error(\`assertion failed: "Object.keys(this.my_capture).length === 3"\`); }
-
+  const $ctx = {
+  my_capture: {"hello": "dude","world": "cup","foo": "bar",}
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_capture: {"hello": "dude","world": "cup","foo": "bar",}
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -2088,24 +2283,39 @@ exports[`struct of maps 1`] = `
   ".wing/function_c8e6b4af.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+        const baseAssert = require("assert");
+        await ctx.handler(baseAssert);
+        return void 0;
+      }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, assert) => {
+    assert(ctx.my_struct.foo.get("foo") === 1);
+    assert(ctx.my_struct.foo.get("bar") === 2);
+    assert(ctx.my_struct.bar.get("foo") === 3);
+    assert(ctx.my_struct.bar.get("bar") === 4);
+    return void 0;
   }
-  async handle() {
-if (!(this.my_struct.foo.get('foo') === 1)) { throw new Error(\`assertion failed: "this.my_struct.foo.get('foo') === 1"\`); }
-if (!(this.my_struct.foo.get('bar') === 2)) { throw new Error(\`assertion failed: "this.my_struct.foo.get('bar') === 2"\`); }
-if (!(this.my_struct.bar.get('foo') === 3)) { throw new Error(\`assertion failed: "this.my_struct.bar.get('foo') === 3"\`); }
-if (!(this.my_struct.bar.get('bar') === 4)) { throw new Error(\`assertion failed: "this.my_struct.bar.get('bar') === 4"\`); }
-
+  const $ctx = {
+  my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["bar",4]]),}
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-my_struct: {"foo": new Map([["foo",1],["bar",2]]),"bar": new Map([["foo",3],["bar",4]]),}
-}));
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {

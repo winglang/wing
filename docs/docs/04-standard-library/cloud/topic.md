@@ -56,7 +56,7 @@ topic.subscribeQueue(queue);
 
 ### Publishing to a topic
 
-The inflight method `publish` sends a message to all of the topic's subscribers.
+The inflight method `publish` sends messages to all of the topic's subscribers.
 
 ```js
 bring cloud;
@@ -64,7 +64,10 @@ bring cloud;
 let topic = new cloud.Topic();
 
 inflight () => {
-  topic.publish("Hello World!");
+  topic.publish(
+    "Topics can now publish",
+    "multiple messages at once"
+  );
 };
 ```
 
@@ -155,7 +158,7 @@ new cloud.Topic(props?: TopicProps);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish message to topic. |
+| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish messages to topic, if multiple messages are passed then they will be published as a batch if supported by the target platform. |
 
 ---
 
@@ -202,12 +205,12 @@ Subscribing queue to the topic.
 ##### `publish` <a name="publish" id="@winglang/sdk.cloud.ITopicClient.publish"></a>
 
 ```wing
-inflight publish(message: str): void
+inflight publish(...messages: Array<str>): void
 ```
 
-Publish message to topic.
+Publish messages to topic, if multiple messages are passed then they will be published as a batch if supported by the target platform.
 
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.message"></a>
+###### `messages`<sup>Required</sup> <a name="messages" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.messages"></a>
 
 - *Type:* str
 

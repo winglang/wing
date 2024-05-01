@@ -1,11 +1,14 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { test, expect, beforeEach, describe, vi } from "vitest";
 import { ApiResponse } from "../../src/cloud";
-import { ApiOnRequestHandlerClient } from "../../src/shared-aws/api.onrequest.inflight";
+import { apigwFunctionHandler } from "../../src/shared-aws/api-util";
 
 beforeEach(() => {
   vi.restoreAllMocks();
 });
+
+const makeRequest = async (event: APIGatewayProxyEvent): Promise<any> => {};
+
 describe("ApiResponseMapper", () => {
   test("map'cloud.ApiResponse' response to 'APIGatewayProxyResult", async () => {
     // GIVEN
@@ -15,23 +18,17 @@ describe("ApiResponseMapper", () => {
       path: "/",
       httpMethod: "GET",
     };
-
     const handlerResponse: ApiResponse = {
       status: 200,
       body: JSON.stringify({ key: "value" }),
       headers: { "header-1": "value-1" },
     };
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        handle: async () => {
-          return handlerResponse;
-        },
-      },
-    });
 
     // WHEN
-    const response = await requestHandlerClient.handle(
-      apiRequestEvent as APIGatewayProxyEvent
+    const response = await apigwFunctionHandler(
+      apiRequestEvent as APIGatewayProxyEvent,
+      async () => handlerResponse,
+      {}
     );
 
     // THEN
@@ -59,17 +56,11 @@ describe("ApiResponseMapper", () => {
       status: 200,
       body: JSON.stringify({ key: "value" }),
     };
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        handle: async () => {
-          return handlerResponse;
-        },
-      },
-    });
 
     // WHEN
-    const response = await requestHandlerClient.handle(
-      apiRequestEvent as APIGatewayProxyEvent
+    const response = await apigwFunctionHandler(
+      apiRequestEvent as APIGatewayProxyEvent,
+      async () => handlerResponse
     );
 
     // THEN
@@ -95,17 +86,11 @@ describe("ApiResponseMapper", () => {
     const handlerResponse = {
       status: 200,
     };
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        handle: async () => {
-          return handlerResponse;
-        },
-      },
-    });
 
     // WHEN
-    const response = await requestHandlerClient.handle(
-      apiRequestEvent as APIGatewayProxyEvent
+    const response = await apigwFunctionHandler(
+      apiRequestEvent as APIGatewayProxyEvent,
+      async () => handlerResponse
     );
 
     // THEN
@@ -135,17 +120,11 @@ describe("ApiResponseMapper", () => {
         "Content-Type": "application/octet-stream",
       },
     };
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        handle: async () => {
-          return handlerResponse;
-        },
-      },
-    });
 
     // WHEN
-    const response = await requestHandlerClient.handle(
-      apiRequestEvent as APIGatewayProxyEvent
+    const response = await apigwFunctionHandler(
+      apiRequestEvent as APIGatewayProxyEvent,
+      async () => handlerResponse
     );
 
     // THEN
@@ -171,22 +150,14 @@ describe("ApiResponseMapper", () => {
       status: 200,
       body: JSON.stringify({ key: "value" }),
     };
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        handle: async () => {
-          return handlerResponse;
-        },
-      },
-      args: {
-        corsHeaders: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      },
-    });
 
     // WHEN
-    const response = await requestHandlerClient.handle(
-      apiRequestEvent as APIGatewayProxyEvent
+    const response = await apigwFunctionHandler(
+      apiRequestEvent as APIGatewayProxyEvent,
+      async () => handlerResponse,
+      {
+        "Access-Control-Allow-Origin": "*",
+      }
     );
 
     // THEN
@@ -226,14 +197,12 @@ describe("ApiRequest", () => {
     const handlerMock = vi.fn().mockResolvedValue({
       status: 200,
     });
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        handle: handlerMock,
-      },
-    });
 
     // WHEN
-    await requestHandlerClient.handle(apiRequestEvent as APIGatewayProxyEvent);
+    await apigwFunctionHandler(
+      apiRequestEvent as APIGatewayProxyEvent,
+      handlerMock
+    );
 
     // THEN
     expect(handlerMock).toHaveBeenCalledWith({
@@ -257,14 +226,12 @@ describe("ApiRequest", () => {
     const handlerMock = vi.fn().mockResolvedValue({
       status: 200,
     });
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        handle: handlerMock,
-      },
-    });
 
     // WHEN
-    await requestHandlerClient.handle(apiRequestEvent as APIGatewayProxyEvent);
+    await apigwFunctionHandler(
+      apiRequestEvent as APIGatewayProxyEvent,
+      handlerMock
+    );
 
     // THEN
     expect(handlerMock).toHaveBeenCalledWith({
@@ -287,14 +254,12 @@ describe("ApiRequest", () => {
     const handlerMock = vi.fn().mockResolvedValue({
       status: 200,
     });
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        handle: handlerMock,
-      },
-    });
 
     // WHEN
-    await requestHandlerClient.handle(apiRequestEvent as APIGatewayProxyEvent);
+    await apigwFunctionHandler(
+      apiRequestEvent as APIGatewayProxyEvent,
+      handlerMock
+    );
 
     // THEN
     expect(handlerMock).toHaveBeenCalledWith({
@@ -321,14 +286,12 @@ describe("ApiRequest", () => {
     const handlerMock = vi.fn().mockResolvedValue({
       status: 200,
     });
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        handle: handlerMock,
-      },
-    });
 
     // WHEN
-    await requestHandlerClient.handle(apiRequestEvent as APIGatewayProxyEvent);
+    await apigwFunctionHandler(
+      apiRequestEvent as APIGatewayProxyEvent,
+      handlerMock
+    );
 
     // THEN
     expect(handlerMock).toHaveBeenCalledWith({

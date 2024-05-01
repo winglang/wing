@@ -5,15 +5,8 @@ exports[`create a function 1`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -26,10 +19,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -183,15 +182,8 @@ exports[`invoke function fails 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -204,10 +196,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -359,15 +357,8 @@ exports[`invoke function succeeds 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -380,10 +371,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -535,15 +532,8 @@ exports[`invoke function with environment variables 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -556,10 +546,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -713,21 +709,20 @@ exports[`invoke function with process.exit(1) 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle() {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
   process.exit(1);
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -871,89 +866,83 @@ exports[`runtime environment tests 1`] = `
   ".wing/function.0_c8d5fca2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const query = "q=URLUtils.searchParams&topic=api";
+      const p = new URLSearchParams(query);
+      const value = p.get("topic");
+      if (!value) {
+        throw new Error("URLSearchParams failed");
+      }
+      return value;
     }
-  }
-  async handle() {
-          
-    const query = "q=URLUtils.searchParams&topic=api";
-    const p = new URLSearchParams(query);
-    return p.get("topic");
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/function.1_c89ed254.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle() {
-          
-    return typeof fetch;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => typeof fetch
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/function.2_c8cd6c39.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const c = require("crypto");
+      return typeof c.createHash;
     }
-  }
-  async handle() {
-          
-    const c = require("crypto");
-    return typeof c.createHash;
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/function.3_c8badafa.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const { nanoid } = require("nanoid");
+      return nanoid();
     }
-  }
-  async handle() {
-          
-    const { nanoid } = await import("nanoid");
-    return nanoid();
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {

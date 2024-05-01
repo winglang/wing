@@ -145,8 +145,10 @@ impl<'a> JsiiImporter<'a> {
 			if let SymbolKind::Namespace(n) = sym {
 				// We are trying to import a namespace directly, so let's eagerly load all of its types
 				self.deep_import_submodule_to_env(Some(n.name.clone()));
+				None
+			} else {
+				sym.as_type()
 			}
-			None
 		} else if let Some(jsii_interface) = self.jsii_types.find_interface(type_fqn) {
 			Some(self.import_interface(jsii_interface))
 		} else if let Some(jsii_class) = self.jsii_types.find_class(type_fqn) {
@@ -428,35 +430,7 @@ impl<'a> JsiiImporter<'a> {
 			));
 
 			// Look for a client interface for this resource
-			let inflight_tag: Option<&str> = extract_docstring_tag(&jsii_interface.docs, "inflight");
-
-			let client_interface = inflight_tag
-				.map(|fqn| {
-					// Some fully qualified package names include "@" characters,
-					// so they have to be escaped in the original docstring.
-					if fqn.starts_with("`") && fqn.ends_with("`") {
-						&fqn[1..fqn.len() - 1]
-					} else {
-						fqn
-					}
-				})
-				.and_then(|fqn| self.jsii_types.find_interface(&FQN::from(fqn)));
-
-			if let Some(client_interface) = client_interface {
-				// Add client interface's methods to the class environment
-				self.add_members_to_class_env(
-					client_interface,
-					Phase::Inflight,
-					Phase::Inflight,
-					&mut iface_env,
-					wing_type,
-				);
-			} else {
-				debug!(
-					"Interface {} does not seem to have an inflight client",
-					type_name.green()
-				);
-			}
+			self.add_inflight_client(&mut wing_type, &mut iface_env, &jsii_interface.docs);
 		}
 
 		// Replace the dummy struct environment with the real one after adding all properties
@@ -465,6 +439,47 @@ impl<'a> JsiiImporter<'a> {
 			_ => panic!("Expected {} to be an interface or struct", type_name),
 		};
 		wing_type
+	}
+
+	fn add_inflight_client(
+		&mut self,
+		wing_type: &mut TypeRef,
+		original_env: &mut SymbolEnv,
+		docs: &Option<wingii::jsii::Docs>,
+	) {
+		// Look for a client interface for this resource
+		let inflight_tag: Option<&str> = extract_docstring_tag(docs, "inflight");
+
+		let client_interface = inflight_tag.map(|fqn| {
+			// Some fully qualified package names include "@" characters,
+			// so they have to be escaped in the original docstring.
+			FQN::from(if fqn.starts_with("`") && fqn.ends_with("`") {
+				&fqn[1..fqn.len() - 1]
+			} else {
+				fqn
+			})
+		});
+
+		if let Some(client_interface) = client_interface {
+			let client_interface = self.lookup_or_create_type(&client_interface);
+
+			// Manually add the client interface's methods to the class environment (because this type does not *actually* implement it)
+			for client_interface_data in client_interface.as_env().unwrap().iter(true) {
+				if let SymbolKind::Variable(vvv) = client_interface_data.1 {
+					let _ = original_env.define(
+						&Symbol {
+							name: client_interface_data.0.clone(),
+							span: client_interface_data.2.span.clone(),
+						},
+						SymbolKind::Variable(vvv.clone()),
+						AccessModifier::Public,
+						StatementIdx::Top,
+					);
+				}
+			}
+		} else {
+			debug!("{wing_type} does not seem to have an inflight client");
+		}
 	}
 
 	fn add_members_to_class_env<T: JsiiInterface>(
@@ -810,33 +825,9 @@ impl<'a> JsiiImporter<'a> {
 		self.add_members_to_class_env(jsii_class, class_phase, member_phase, &mut class_env, new_type);
 		if class_phase == Phase::Preflight {
 			// Look for a client interface for this resource
-			let inflight_tag: Option<&str> = extract_docstring_tag(&jsii_class.docs, "inflight");
-
-			let client_interface = inflight_tag
-				.map(|fqn| {
-					// Some fully qualified package names include "@" characters,
-					// so they have to be escaped in the original docstring.
-					if fqn.starts_with("`") && fqn.ends_with("`") {
-						&fqn[1..fqn.len() - 1]
-					} else {
-						fqn
-					}
-				})
-				.and_then(|fqn| self.jsii_types.find_interface(&FQN::from(fqn)));
-
-			if let Some(client_interface) = client_interface {
-				// Add client interface's methods to the class environment
-				self.add_members_to_class_env(
-					client_interface,
-					Phase::Inflight,
-					Phase::Inflight,
-					&mut class_env,
-					new_type,
-				);
-			} else {
-				debug!("Resource {} does not seem to have a client", type_name.green());
-			}
+			self.add_inflight_client(&mut new_type, &mut class_env, &jsii_class.docs);
 		}
+
 		// Replace the dummy class environment with the real one before type checking the methods
 		match *new_type {
 			Type::Class(ref mut class) => {

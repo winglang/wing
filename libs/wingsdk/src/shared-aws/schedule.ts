@@ -1,6 +1,5 @@
-import { join } from "path";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
+import { lift } from "../core";
 
 /**
  * Convert Unix cron to AWS cron
@@ -79,10 +78,9 @@ export class ScheduleOnTickHandler {
   public static toFunctionHandler(
     handler: cloud.IScheduleOnTickHandler
   ): cloud.IFunctionHandler {
-    return convertBetweenHandlers(
-      handler,
-      join(__dirname, "schedule.ontick.inflight.js"),
-      "ScheduleOnTickHandlerClient"
-    );
+    return lift({ handler }).inflight(async (ctx) => {
+      await ctx.handler();
+      return undefined;
+    });
   }
 }

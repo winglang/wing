@@ -130,9 +130,18 @@ type CorsOptionsResponseHeaders = { [key: string]: string };
 /**
  * Type definition for CORS headers which includes default and options headers.
  */
-export type CorsHeaders = {
-  [key: string]: CorsDefaultResponseHeaders | CorsOptionsResponseHeaders;
-};
+export interface CorsHeaders {
+  /**
+   * Default CORS response headers.
+   */
+  readonly defaultResponse: CorsDefaultResponseHeaders;
+
+  /**
+   * CORS options response headers.
+   */
+  readonly optionsResponse: CorsOptionsResponseHeaders;
+}
+
 /**
  * Functionality shared between all `Api` implementations.
  * @inflight `@winglang/sdk.cloud.IApiClient`
