@@ -73,13 +73,7 @@ export interface CompileOptions {
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
  */
-function resolveSynthDir(
-  targetDir: string | undefined,
-  entrypoint: string,
-  target: string,
-  testing: boolean
-) {
-  const outDir = targetDir ?? join(dirname(entrypoint), "target");
+function resolveSynthDir(outDir: string, entrypoint: string, target: string, testing: boolean) {
   const targetDirSuffix = defaultSynthDir(target);
 
   let entrypointName;
@@ -139,6 +133,7 @@ export function determineTargetFromPlatforms(platforms: string[]): string {
  */
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
   const { log } = options;
+  const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
   // create a unique temporary directory for the compilation
   const entrypointFile = resolve(entrypoint);
   log?.("wing file: %s", entrypointFile);
@@ -147,8 +142,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
   const target = determineTargetFromPlatforms(options.platform);
-  const synthDir =
-    options.output ?? resolveSynthDir(options.targetDir, entrypointFile, target, testing);
+  const synthDir = options.output ?? resolveSynthDir(targetdir, entrypointFile, target, testing);
   log?.("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, DOT_WING);
   log?.("work dir: %s", workDir);
