@@ -72,14 +72,9 @@ exports.handler = async function(event) {
   const $ctx = {
   handler: (await (async () => {
   const $func = async (ctx, event) => {
-            try {
-              let next = await ctx.counter.inc();
-              let key = "file-" + next + ".txt";
-              await ctx.bucket.put(key, event);
-            } catch (err) {
-              console.log(err);
-              throw err;
-            }
+            let next = await ctx.counter.inc();
+            let key = "file-" + next + ".txt";
+            await ctx.bucket.put(key, event);
           }
   const $ctx = {
   counter: (function() {
