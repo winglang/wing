@@ -52,7 +52,7 @@ module.exports = {
 //# sourceMappingURL=preflight.cjs.map
 ```
 
-## preflight.d.ts
+## preflight.d.cts
 
 ```js
 export * from "./preflight.lib-1.cjs"
@@ -100,7 +100,7 @@ module.exports = { ParentClass };
 //# sourceMappingURL=preflight.lib-1.cjs.map
 ```
 
-## preflight.lib-1.d.ts
+## preflight.lib-1.d.cts
 
 ```js
 import * as $internal from "@winglang/sdk/lib/core/types"
