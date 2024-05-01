@@ -1,5 +1,4 @@
 import type { APIGatewayProxyEvent } from "aws-lambda";
-import { apigwFunctionHandler } from "./api-util";
 import { cloud } from "..";
 import { lift } from "../core";
 
@@ -86,7 +85,12 @@ export class ApiEndpointHandler {
     handler: cloud.IApiEndpointHandler,
     headers?: Record<string, string>
   ): cloud.IFunctionHandler {
-    return lift({ handler }).inflight(async (ctx, request) => {
+    return lift({
+      handler,
+      utilPath: require.resolve("./api-util"),
+    }).inflight(async (ctx, request) => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { apigwFunctionHandler } = require(ctx.utilPath);
       return apigwFunctionHandler(
         request as unknown as APIGatewayProxyEvent,
         ctx.handler,

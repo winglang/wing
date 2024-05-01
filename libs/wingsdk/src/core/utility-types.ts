@@ -14,7 +14,7 @@ export type PickNonFunctions<T> = Pick<
 /**
  * Represents a map of liftable objects with string keys.
  */
-export type LiftableHash = { [key: string]: Liftable };
+export type LiftableRecord = { [key: string]: Liftable };
 
 /**
  * Represents a set of liftable objects.
@@ -45,7 +45,7 @@ export type Liftable =
   | LiftableArray
   | ILiftable
   | IHostedLiftable
-  | LiftableHash
+  | LiftableRecord
   | LiftableMap
   | LiftableSet;
 

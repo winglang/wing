@@ -59,23 +59,19 @@ test("publishing multiple messages to topic", async () => {
       super(scope, id);
 
       const topic = new cloud.Topic(this, "MyTopic");
-      const publisher = Testing.makeHandler(
-        `async handle(event) {
-            await this.topic.publish(...event.split(""));
-        }`,
-        {
-          topic: {
-            obj: topic,
-            ops: [cloud.TopicInflightMethods.PUBLISH],
-          },
-        }
-      );
+      const publisher = lift({ topic })
+        .grant({ topic: [cloud.TopicInflightMethods.PUBLISH] })
+        .inflight(async (ctx, event) => {
+          await ctx.topic.publish(...event.split(""));
+        });
+
       new cloud.Function(this, "Function", publisher);
 
-      const processor = Testing.makeHandler(`async handle(event) {
-          if (event.message === "") throw new Error("No message recieved");
-          console.log("event");
-      }`);
+      const processor = inflight(async (_, event) => {
+        if (event.message === "") throw new Error("No message recieved");
+        console.log("event");
+      });
+
       topic.onMessage(processor);
     }
   }
