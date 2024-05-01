@@ -1,59 +1,49 @@
+import * as fs from "fs";
+import { join } from "path";
 import { IResource, IResourceContext } from "./resource";
 import { CounterSchema } from "./schema-resources";
+import { exists } from "./util";
 import { ICounterClient } from "../cloud";
 
-// const VALUES_FILENAME = "values.json";
+const VALUES_FILENAME = "values.json";
 
 export class CounterBackend implements ICounterClient, IResource {
   private values: Map<string, number>;
   private initial: number;
-  // private _context: ISimulatorContext | undefined;
+  private _ctx: IResourceContext | undefined;
 
   public constructor(props: CounterSchema) {
     this.initial = props.initial ?? 0;
     this.values = new Map().set("default", this.initial);
   }
 
-  // private get context(): ISimulatorContext {
-  //   if (!this._context) {
-  //     throw new Error("Cannot access context during class construction");
-  //   }
-  //   return this._context;
-  // }
+  private get ctx(): IResourceContext {
+    if (!this._ctx) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._ctx;
+  }
 
-  public async onStart(context: IResourceContext): Promise<void> {
-    // TODO
-    context;
+  public async onStart(ctx: IResourceContext): Promise<void> {
+    this._ctx = ctx;
+
+    // Load the values from disk
+    const valuesFile = join(this.ctx.statedir, VALUES_FILENAME);
+    const valueFilesExists = await exists(valuesFile);
+    if (valueFilesExists) {
+      const valuesContents = await fs.promises.readFile(valuesFile, "utf-8");
+      const values = JSON.parse(valuesContents);
+      this.values = new Map(values);
+    }
   }
 
   public async onStop(): Promise<void> {
-    // TODO
+    // Save the values to disk
+    fs.writeFileSync(
+      join(this.ctx.statedir, VALUES_FILENAME),
+      JSON.stringify(Array.from(this.values.entries()))
+    );
   }
-
-  // public async init(context: ISimulatorContext): Promise<CounterAttributes> {
-  //   this._context = context;
-  //   const valuesFile = join(this.context.statedir, VALUES_FILENAME);
-  //   const valueFilesExists = await exists(valuesFile);
-  //   if (valueFilesExists) {
-  //     const valuesContents = await fs.promises.readFile(valuesFile, "utf-8");
-  //     const values = JSON.parse(valuesContents);
-  //     this.values = new Map(values);
-  //   }
-  //   return {};
-  // }
-
-  // public async cleanup(): Promise<void> {}
-
-  // public async plan() {
-  //   return UpdatePlan.AUTO;
-  // }
-
-  // public async save(): Promise<void> {
-  //   fs.writeFileSync(
-  //     join(this.context.statedir, VALUES_FILENAME),
-  //     JSON.stringify(Array.from(this.values.entries()))
-  //   );
-  // }
 
   public async inc(
     amount: number = 1,

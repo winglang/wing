@@ -39,10 +39,10 @@ export interface IResource {
  * Context for implementing a simulator resource.
  */
 export interface IResourceContext {
-  // /**
-  //  * The directory for the resource's state.
-  //  */
-  // readonly statedir: string;
+  /**
+   * The directory for the resource's state.
+   */
+  readonly statedir: string;
   // /**
   //  * Resolves a tokenized attribute value.
   //  * @param name The name of the attribute.
@@ -110,14 +110,14 @@ export class Resource
     const code = `\
         "use strict";
         let $klass;
-        exports.start = async function() {
+        exports.start = async function(ctx) {
           if ($klass) {
             throw Error('resource already started');
           }
           const client = ${inflightClient};
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
-          await klass.onStart(); // TODO: pass simulation context
+          await klass.onStart(ctx);
           $klass = klass;
         };
 

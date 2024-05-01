@@ -1,5 +1,9 @@
 import { resolve } from "path";
-import { IResourceClient, SIM_RESOURCE_FQN } from "./resource";
+import {
+  IResourceClient,
+  IResourceContext,
+  SIM_RESOURCE_FQN,
+} from "./resource";
 import { SimResourceAttributes, SimResourceSchema } from "./schema-resources";
 import { Bundle } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
@@ -52,7 +56,10 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
         this.addTrace(message, internal ? TraceType.SIMULATOR : TraceType.LOG);
       },
     });
-    await this.sandbox.call("start");
+    const ctx: IResourceContext = {
+      statedir: this.context.statedir,
+    };
+    await this.sandbox.call("start", ctx);
     return {};
   }
 

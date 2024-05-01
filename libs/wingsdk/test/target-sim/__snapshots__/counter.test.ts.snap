@@ -4,7 +4,7 @@ exports[`create a counter 1`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function() {
+        exports.start = async function(ctx) {
           if ($klass) {
             throw Error('resource already started');
           }
@@ -27,7 +27,7 @@ exports[`create a counter 1`] = `
 )());
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
-          await klass.onStart(); // TODO: pass simulation context
+          await klass.onStart(ctx);
           $klass = klass;
         };
 
@@ -209,7 +209,7 @@ exports[`dec 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function() {
+        exports.start = async function(ctx) {
           if ($klass) {
             throw Error('resource already started');
           }
@@ -232,7 +232,7 @@ exports[`dec 2`] = `
 )());
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
-          await klass.onStart(); // TODO: pass simulation context
+          await klass.onStart(ctx);
           $klass = klass;
         };
 
@@ -414,7 +414,7 @@ exports[`inc 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function() {
+        exports.start = async function(ctx) {
           if ($klass) {
             throw Error('resource already started');
           }
@@ -437,7 +437,7 @@ exports[`inc 2`] = `
 )());
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
-          await klass.onStart(); // TODO: pass simulation context
+          await klass.onStart(ctx);
           $klass = klass;
         };
 
@@ -619,7 +619,7 @@ exports[`key dec 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function() {
+        exports.start = async function(ctx) {
           if ($klass) {
             throw Error('resource already started');
           }
@@ -642,7 +642,7 @@ exports[`key dec 2`] = `
 )());
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
-          await klass.onStart(); // TODO: pass simulation context
+          await klass.onStart(ctx);
           $klass = klass;
         };
 
@@ -824,7 +824,7 @@ exports[`key inc 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function() {
+        exports.start = async function(ctx) {
           if ($klass) {
             throw Error('resource already started');
           }
@@ -847,7 +847,7 @@ exports[`key inc 2`] = `
 )());
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
-          await klass.onStart(); // TODO: pass simulation context
+          await klass.onStart(ctx);
           $klass = klass;
         };
 
@@ -1027,7 +1027,7 @@ exports[`key set to new value 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function() {
+        exports.start = async function(ctx) {
           if ($klass) {
             throw Error('resource already started');
           }
@@ -1050,7 +1050,7 @@ exports[`key set to new value 2`] = `
 )());
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
-          await klass.onStart(); // TODO: pass simulation context
+          await klass.onStart(ctx);
           $klass = klass;
         };
 
@@ -1230,7 +1230,7 @@ exports[`set to new value 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function() {
+        exports.start = async function(ctx) {
           if ($klass) {
             throw Error('resource already started');
           }
@@ -1253,7 +1253,7 @@ exports[`set to new value 2`] = `
 )());
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
-          await klass.onStart(); // TODO: pass simulation context
+          await klass.onStart(ctx);
           $klass = klass;
         };
 
