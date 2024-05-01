@@ -1,15 +1,20 @@
 import fs from "fs";
 import path from "path";
+import {
+  SecretsManagerClient,
+  GetSecretValueCommand,
+  CreateSecretCommand,
+  UpdateSecretCommand,
+} from "@aws-sdk/client-secrets-manager";
+import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, describe, beforeEach } from "vitest";
 import { Function } from "../../src/cloud";
 import { inflight } from "../../src/core";
 import { PlatformManager } from "../../src/platform";
+import * as tfaws from "../../src/target-tf-aws/platform";
 import { mkdtemp } from "../util";
-import * as tfaws  from "../../src/target-tf-aws/platform";
-import { mockClient } from "aws-sdk-client-mock";
 import "aws-sdk-client-mock-jest";
 
-import { SecretsManagerClient, GetSecretValueCommand, CreateSecretCommand, UpdateSecretCommand } from '@aws-sdk/client-secrets-manager';
 import exp from "constants";
 
 const secretsManagerClientMock = mockClient(SecretsManagerClient);
@@ -146,55 +151,47 @@ describe("tf-aws platform parameters", () => {
 describe("tf-aws platoform storeSecrets", async () => {
   beforeEach(() => {
     secretsManagerClientMock.reset();
-    secretsManagerClientMock
-      .on(CreateSecretCommand)
-      .callsFake((command) => {
-        return {};
-      })
-
-    secretsManagerClientMock
-    .on(UpdateSecretCommand)
-    .callsFake((command) => {
+    secretsManagerClientMock.on(CreateSecretCommand).callsFake((command) => {
       return {};
-    })
+    });
+
+    secretsManagerClientMock.on(UpdateSecretCommand).callsFake((command) => {
+      return {};
+    });
   });
 
   describe("when secret does not exist", () => {
     beforeEach(() => {
-      secretsManagerClientMock
-        .on(GetSecretValueCommand)
-        .rejects({
-          name: "ResourceNotFoundException",
-          message: "Secret does not exist",
+      secretsManagerClientMock.on(GetSecretValueCommand).rejects({
+        name: "ResourceNotFoundException",
+        message: "Secret does not exist",
       });
-    })
+    });
 
     test("stores secrets in plain text", async () => {
       // GIVEN
       const platform = new tfaws.Platform();
       const secrets = { secret1: "value1" };
-  
+
       // WHEN
       await platform.storeSecrets(secrets);
-  
+
       // THEN
       expect(secretsManagerClientMock).toHaveReceivedCommandTimes(
         CreateSecretCommand,
         1
-      )
+      );
       expect(secretsManagerClientMock).toHaveReceivedCommandWith(
         CreateSecretCommand,
         { SecretString: "value1" }
-      )
-    })
-  })
+      );
+    });
+  });
 
   describe("when secret exists", () => {
     beforeEach(() => {
-      secretsManagerClientMock
-        .on(GetSecretValueCommand)
-        .resolves({});
-    })
+      secretsManagerClientMock.on(GetSecretValueCommand).resolves({});
+    });
 
     test("updates existing secrets", async () => {
       // GIVEN
@@ -208,11 +205,11 @@ describe("tf-aws platoform storeSecrets", async () => {
       expect(secretsManagerClientMock).toHaveReceivedCommandTimes(
         UpdateSecretCommand,
         1
-      )
+      );
       expect(secretsManagerClientMock).toHaveReceivedCommandWith(
         UpdateSecretCommand,
         { SecretString: "value1" }
-      )
-    })
-  })
-})
+      );
+    });
+  });
+});
