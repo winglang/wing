@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { lift } from "../../src/core";
 import * as ex from "../../src/ex";
-import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
 import {
   mkdtemp,
@@ -31,18 +31,14 @@ test("function with a table binding", () => {
     primaryKey: "id",
     name: "my-wing-table",
   });
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-  await this.my_table.insert({ id: "test" });
-}`,
-    {
-      my_table: {
-        obj: table,
-        ops: [ex.TableInflightMethods.INSERT],
-      },
-    }
-  );
+  const inflight = lift({ my_table: table })
+    .grant({ my_table: ["insert"] })
+    .inflight(async (ctx) => {
+      await ctx.my_table.insert("test", { id: "test" } as any);
+    });
+
   new cloud.Function(app, "Function", inflight);
+
   const output = app.synth();
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
