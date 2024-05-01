@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { join } from "path";
+import { CounterBackendProps } from "./counter";
 import { IResource, IResourceContext } from "./resource";
-import { CounterSchema } from "./schema-resources";
 import { exists } from "./util";
 import { ICounterClient } from "../cloud";
 
@@ -12,7 +12,7 @@ export class CounterBackend implements ICounterClient, IResource {
   private initial: number;
   private _ctx: IResourceContext | undefined;
 
-  public constructor(props: CounterSchema) {
+  public constructor(props: CounterBackendProps) {
     this.initial = props.initial ?? 0;
     this.values = new Map().set("default", this.initial);
   }

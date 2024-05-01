@@ -4,7 +4,7 @@ import { Construct } from "constructs";
 import { SimResourceSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import { App, Lifting } from "../core";
+import { App, LiftMap, Lifting } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { PolicyStatement, ToSimulatorOutput } from "../simulator";
 import {
@@ -103,6 +103,13 @@ export class Resource
   }
 
   /** @internal */
+  public get _liftMap(): LiftMap {
+    return {
+      [ResourceInflightMethods.CALL]: [],
+    };
+  }
+
+  /** @internal */
   public _preSynthesize(): void {
     super._preSynthesize();
 
@@ -195,6 +202,14 @@ export interface IResourceClient {
    * Call a method on the resource.
    */
   call(method: string, args?: Array<Json>): Promise<Json>;
+}
+
+/**
+ * List of inflight operations available for `Resource`.
+ * @internal
+ */
+export enum ResourceInflightMethods {
+  CALL = "call",
 }
 
 /**

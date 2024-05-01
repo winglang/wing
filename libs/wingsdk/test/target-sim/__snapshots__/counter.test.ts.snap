@@ -10,9 +10,10 @@ exports[`create a counter 1`] = `
           }
           const client = (await (async () => {
   const $func = async (ctx) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
             return new CounterBackend({ initial: ctx.initial });
         }
   const $ctx = {
@@ -73,10 +74,6 @@ exports[`create a counter 1`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -215,9 +212,10 @@ exports[`dec 2`] = `
           }
           const client = (await (async () => {
   const $func = async (ctx) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
             return new CounterBackend({ initial: ctx.initial });
         }
   const $ctx = {
@@ -278,10 +276,6 @@ exports[`dec 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -420,9 +414,10 @@ exports[`inc 2`] = `
           }
           const client = (await (async () => {
   const $func = async (ctx) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
             return new CounterBackend({ initial: ctx.initial });
         }
   const $ctx = {
@@ -483,10 +478,6 @@ exports[`inc 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -625,9 +616,10 @@ exports[`key dec 2`] = `
           }
           const client = (await (async () => {
   const $func = async (ctx) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
             return new CounterBackend({ initial: ctx.initial });
         }
   const $ctx = {
@@ -688,10 +680,6 @@ exports[`key dec 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -830,9 +818,10 @@ exports[`key inc 2`] = `
           }
           const client = (await (async () => {
   const $func = async (ctx) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
             return new CounterBackend({ initial: ctx.initial });
         }
   const $ctx = {
@@ -893,10 +882,6 @@ exports[`key inc 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -1033,9 +1018,10 @@ exports[`key set to new value 2`] = `
           }
           const client = (await (async () => {
   const $func = async (ctx) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
             return new CounterBackend({ initial: ctx.initial });
         }
   const $ctx = {
@@ -1096,10 +1082,6 @@ exports[`key set to new value 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -1236,9 +1218,10 @@ exports[`set to new value 2`] = `
           }
           const client = (await (async () => {
   const $func = async (ctx) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
             return new CounterBackend({ initial: ctx.initial });
         }
   const $ctx = {
@@ -1299,10 +1282,6 @@ exports[`set to new value 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",

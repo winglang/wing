@@ -156,15 +156,6 @@ export interface BucketSchema {
 /** Runtime attributes for cloud.Bucket */
 export interface BucketAttributes {}
 
-/** Properties for cloud.Counter */
-export interface CounterSchema {
-  /** The initial value of the counter. */
-  readonly initial: number;
-}
-
-/** Runtime attributes for cloud.Counter */
-export interface CounterAttributes {}
-
 /** Properties for cloud.TestRunner */
 export interface TestRunnerSchema {
   /** A map from test functions to their handles. */

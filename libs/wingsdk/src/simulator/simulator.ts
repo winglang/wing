@@ -476,30 +476,27 @@ export class Simulator {
       return makeSimulatorClient(this.url, handle, ADMIN_PERMISSION);
     }
 
-    // backwards compatibility trick: if the user requests a resource with a path like "foo/bar"
+    // backwards compatibility trick: if a unit test requests a resource with a path like "foo/bar"
     // which is not found, but a resource "foo/bar/Resource" exists and its
     // type is @winglang/sdk.sim.Resource, then we will return that client instead
-    const altPath = `${path}/Resource`;
-    const altConfig = this.tryGetResourceConfig(altPath);
-    if (altConfig?.type === "@winglang/sdk.sim.Resource") {
-      const altHandle = this.tryGetResourceHandle(altPath);
-      if (altHandle) {
+    const childPath = `${path}/Resource`;
+    const childConfig = this.tryGetResourceConfig(childPath);
+    if (childConfig?.type === "@winglang/sdk.sim.Resource") {
+      const childHandle = this.tryGetResourceHandle(childPath);
+      if (childHandle) {
         const client = makeSimulatorClient(
           this.url,
-          altHandle,
+          childHandle,
           ADMIN_PERMISSION
         );
 
-        return new Proxy(
-          {},
-          {
-            get: (_, method) => {
-              return async (...args: any[]) => {
-                return client.call(method as string, args);
-              };
-            },
-          }
-        );
+        const get = (_target: any, method: string, _receiver: any) => {
+          return async function (...args: any[]) {
+            return client.call(method, args);
+          };
+        };
+
+        return new Proxy({}, { get });
       }
     }
 
@@ -720,11 +717,12 @@ export class Simulator {
 
         const methodExists = (resource as any)[method] !== undefined;
         if (!methodExists) {
+          const resourcePath = this._handles.tryFindPath(handle);
           res.writeHead(500, { "Content-Type": "application/json" });
           res.end(
             serialize({
               error: {
-                message: `Method ${method} not found on resource ${handle}.`,
+                message: `Method "${method}" not found on resource ${handle} (${resourcePath}).`,
               },
             }),
             "utf-8"

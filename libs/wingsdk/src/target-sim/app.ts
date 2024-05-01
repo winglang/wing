@@ -57,7 +57,6 @@ export const SIMULATOR_FILE_PATH = "simulator.json";
 const SIMULATOR_CLASS_DATA = {
   [API_FQN]: "Api",
   [BUCKET_FQN]: "Bucket",
-  [COUNTER_FQN]: "Counter",
   [DOMAIN_FQN]: "Domain",
   [ENDPOINT_FQN]: "Endpoint",
   [EVENT_MAPPING_FQN]: "EventMapping",
@@ -105,9 +104,6 @@ export class App extends core.App {
 
       case BUCKET_FQN:
         return require.resolve("./bucket.inflight");
-
-      case COUNTER_FQN:
-        return require.resolve("./counter.inflight");
 
       case DOMAIN_FQN:
         return require.resolve("./domain.inflight");

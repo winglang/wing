@@ -187,17 +187,11 @@ export class Queue
           continue;
         }
 
-        this.context.addTrace({
-          type: TraceType.RESOURCE,
-          data: {
-            message: `Sending messages (messages=${JSON.stringify(
-              messagesPayload
-            )}, subscriber=${subscriber.functionHandle}).`,
-          },
-          sourcePath: this.context.resourcePath,
-          sourceType: QUEUE_FQN,
-          timestamp: new Date().toISOString(),
-        });
+        this.addTrace(
+          `Sending messages (messages=${JSON.stringify(
+            messagesPayload
+          )}, subscriber=${subscriber.functionHandle}).`
+        );
 
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
@@ -218,15 +212,9 @@ export class Queue
                     this.dlq.dlqHandler
                   ) as IQueueClient;
                   void dlq.push(msg.payload).catch((err) => {
-                    this.context.addTrace({
-                      type: TraceType.RESOURCE,
-                      data: {
-                        message: `Pushing messages to the dead-letter queue generates an error -> ${err}`,
-                      },
-                      sourcePath: this.context.resourcePath,
-                      sourceType: QUEUE_FQN,
-                      timestamp: new Date().toISOString(),
-                    });
+                    this.addTrace(
+                      `Pushing messages to the dead-letter queue generates an error -> ${err}`
+                    );
                   });
                 }
               }
@@ -243,15 +231,9 @@ export class Queue
               return;
             }
             // If the function returns an error, put the message back on the queue after timeout period
-            this.context.addTrace({
-              data: {
-                message: `Subscriber error - returning ${messagesPayload.length} messages to queue: ${err.message}`,
-              },
-              sourcePath: this.context.resourcePath,
-              sourceType: QUEUE_FQN,
-              type: TraceType.RESOURCE,
-              timestamp: new Date().toISOString(),
-            });
+            this.addTrace(
+              `Subscriber error - returning ${messagesPayload.length} messages to queue: ${err.message}`
+            );
             this.pushMessagesBackToQueue(messages);
           });
         processedMessages = true;
@@ -266,16 +248,20 @@ export class Queue
         (message) => message.retentionTimeout > new Date()
       );
       this.messages.push(...retainedMessages);
-      this.context.addTrace({
-        data: {
-          message: `${retainedMessages.length} messages pushed back to queue after visibility timeout.`,
-        },
-        sourcePath: this.context.resourcePath,
-        sourceType: QUEUE_FQN,
-        type: TraceType.RESOURCE,
-        timestamp: new Date().toISOString(),
-      });
+      this.addTrace(
+        `${retainedMessages.length} messages pushed back to queue after visibility timeout.`
+      );
     }, this.timeoutSeconds * 1000);
+  }
+
+  private addTrace(message: string) {
+    this.context.addTrace({
+      data: { message },
+      type: TraceType.RESOURCE,
+      sourcePath: this.context.resourcePath,
+      sourceType: QUEUE_FQN,
+      timestamp: new Date().toISOString(),
+    });
   }
 }
 

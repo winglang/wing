@@ -75,16 +75,16 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
     return UpdatePlan.REPLACE;
   }
 
-  public async call(method: string, args?: Array<Json>): Promise<Json> {
+  public async call(method: string, args: Array<Json> = []): Promise<Json> {
     return this.context.withTrace({
       activity: async () => {
-        return this.sandbox!.call("call", method, ...(args ?? []));
+        return this.sandbox!.call("call", method, ...args);
       },
       message: this.formatCallMessage(method, args),
     });
   }
 
-  private formatCallMessage(method: string, args: Array<Json> = []): string {
+  private formatCallMessage(method: string, args: Array<Json>): string {
     let message = method.toString();
     message += "(";
     for (let i = 0; i < args.length; i++) {

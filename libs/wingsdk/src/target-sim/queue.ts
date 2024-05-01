@@ -167,6 +167,7 @@ export class QueueSetConsumerHandler {
         try {
           await ctx.handler($message.payload);
         } catch (error) {
+          // TODO: an error from user code is getting dropped - bad!
           batchItemFailures.push($message);
         }
       }
