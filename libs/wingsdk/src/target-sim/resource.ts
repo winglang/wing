@@ -200,6 +200,7 @@ export class Resource
 export interface IResourceClient {
   /**
    * Call a method on the resource.
+   * @inflight
    */
   call(method: string, args?: Array<Json>): Promise<Json>;
 }

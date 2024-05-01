@@ -25,11 +25,11 @@ type ProcessRequest = {
  */
 type ProcessResponse =
   | {
-      type: "resolve";
+      type: "ok";
       value: any;
     }
   | {
-      type: "reject";
+      type: "error";
       reason: Error;
     };
 
@@ -60,13 +60,13 @@ export class Sandbox {
     // we insert this shim before bundling to ensure source maps are generated correctly
     contents += `
 process.setUncaughtExceptionCaptureCallback((reason) => {
-  process.send({ type: "reject", reason });
+  process.send({ type: "error", reason });
 });
 
 process.on("message", async (message) => {${debugShim}
   const { fn, args } = message;
   const value = await exports[fn](...args);
-  process.send({ type: "resolve", value });
+  process.send({ type: "ok", value });
 });
 `;
 
@@ -210,9 +210,9 @@ process.on("message", async (message) => {${debugShim}
         if (this.timeout) {
           clearTimeout(this.timeout);
         }
-        if (message.type === "resolve") {
+        if (message.type === "ok") {
           resolve(message.value);
-        } else if (message.type === "reject") {
+        } else if (message.type === "error") {
           reject(message.reason);
         } else {
           reject(
