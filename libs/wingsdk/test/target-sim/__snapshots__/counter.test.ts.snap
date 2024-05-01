@@ -2,19 +2,66 @@
 
 exports[`create a counter 1`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function() {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const client = (await (async () => {
+  const $func = async (ctx) => {
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            return new CounterBackend({ initial: ctx.initial });
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle()) ?? noop;
+          await klass.onStart(); // TODO: pass simulation context
+          $klass = klass;
+        };
+
+        exports.call = async function(method, ...args) {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          return await $klass[method](...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
     "resources": {
-      "root/my_counter": {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "path": "root/my_counter",
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 123,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
     },
     "sdkVersion": "0.0.0",
@@ -109,6 +156,20 @@ exports[`create a counter 1`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud service",
+                "title": "Service",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -135,30 +196,77 @@ exports[`create a counter 1`] = `
 
 exports[`dec 1`] = `
 [
-  "root/my_counter started",
-  "Dec (amount=1).",
-  "Dec (amount=1).",
-  "Dec (amount=10).",
-  "Dec (amount=10).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "dec()",
+  "dec()",
+  "dec(10)",
+  "dec(10)",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`dec 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function() {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const client = (await (async () => {
+  const $func = async (ctx) => {
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            return new CounterBackend({ initial: ctx.initial });
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle()) ?? noop;
+          await klass.onStart(); // TODO: pass simulation context
+          $klass = klass;
+        };
+
+        exports.call = async function(method, ...args) {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          return await $klass[method](...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
     "resources": {
-      "root/my_counter": {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "path": "root/my_counter",
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 123,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
     },
     "sdkVersion": "0.0.0",
@@ -253,6 +361,20 @@ exports[`dec 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud service",
+                "title": "Service",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -279,30 +401,77 @@ exports[`dec 2`] = `
 
 exports[`inc 1`] = `
 [
-  "root/my_counter started",
-  "Inc (amount=1).",
-  "Inc (amount=1).",
-  "Inc (amount=10).",
-  "Inc (amount=10).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "inc()",
+  "inc()",
+  "inc(10)",
+  "inc(10)",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`inc 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function() {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const client = (await (async () => {
+  const $func = async (ctx) => {
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            return new CounterBackend({ initial: ctx.initial });
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle()) ?? noop;
+          await klass.onStart(); // TODO: pass simulation context
+          $klass = klass;
+        };
+
+        exports.call = async function(method, ...args) {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          return await $klass[method](...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
     "resources": {
-      "root/my_counter": {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "path": "root/my_counter",
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 123,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
     },
     "sdkVersion": "0.0.0",
@@ -397,6 +566,20 @@ exports[`inc 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud service",
+                "title": "Service",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -423,30 +606,77 @@ exports[`inc 2`] = `
 
 exports[`key dec 1`] = `
 [
-  "root/my_counter started",
-  "Dec (amount=1, key: my-key).",
-  "Dec (amount=1, key: my-key).",
-  "Dec (amount=10, key: my-key).",
-  "Dec (amount=10, key: my-key).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "dec(1, "my-key")",
+  "dec(nil, "my-key")",
+  "dec(10, "my-key")",
+  "dec(10, "my-key")",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`key dec 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function() {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const client = (await (async () => {
+  const $func = async (ctx) => {
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            return new CounterBackend({ initial: ctx.initial });
+        }
+  const $ctx = {
+  initial: 0
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle()) ?? noop;
+          await klass.onStart(); // TODO: pass simulation context
+          $klass = klass;
+        };
+
+        exports.call = async function(method, ...args) {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          return await $klass[method](...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
     "resources": {
-      "root/my_counter": {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "path": "root/my_counter",
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 0,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
     },
     "sdkVersion": "0.0.0",
@@ -541,6 +771,20 @@ exports[`key dec 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud service",
+                "title": "Service",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -567,30 +811,77 @@ exports[`key dec 2`] = `
 
 exports[`key inc 1`] = `
 [
-  "root/my_counter started",
-  "Inc (amount=1, key: my-key).",
-  "Inc (amount=1, key: my-key).",
-  "Inc (amount=10, key: my-key).",
-  "Inc (amount=10, key: my-key).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "inc(1, "my-key")",
+  "inc(nil, "my-key")",
+  "inc(10, "my-key")",
+  "inc(10, "my-key")",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`key inc 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function() {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const client = (await (async () => {
+  const $func = async (ctx) => {
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            return new CounterBackend({ initial: ctx.initial });
+        }
+  const $ctx = {
+  initial: 0
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle()) ?? noop;
+          await klass.onStart(); // TODO: pass simulation context
+          $klass = klass;
+        };
+
+        exports.call = async function(method, ...args) {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          return await $klass[method](...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
     "resources": {
-      "root/my_counter": {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "path": "root/my_counter",
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 0,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
     },
     "sdkVersion": "0.0.0",
@@ -685,6 +976,20 @@ exports[`key inc 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud service",
+                "title": "Service",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -711,28 +1016,75 @@ exports[`key inc 2`] = `
 
 exports[`key set to new value 1`] = `
 [
-  "root/my_counter started",
-  "Set (value=5, key: my-key).",
-  "Peek (value=5, key: my-key).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "set(5, "my-key")",
+  "peek("my-key")",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`key set to new value 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function() {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const client = (await (async () => {
+  const $func = async (ctx) => {
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            return new CounterBackend({ initial: ctx.initial });
+        }
+  const $ctx = {
+  initial: 0
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle()) ?? noop;
+          await klass.onStart(); // TODO: pass simulation context
+          $klass = klass;
+        };
+
+        exports.call = async function(method, ...args) {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          return await $klass[method](...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
     "resources": {
-      "root/my_counter": {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "path": "root/my_counter",
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 0,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
     },
     "sdkVersion": "0.0.0",
@@ -827,6 +1179,20 @@ exports[`key set to new value 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud service",
+                "title": "Service",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -853,28 +1219,75 @@ exports[`key set to new value 2`] = `
 
 exports[`set to new value 1`] = `
 [
-  "root/my_counter started",
-  "Set (value=5).",
-  "Peek (value=5).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "set(5)",
+  "peek()",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`set to new value 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function() {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const client = (await (async () => {
+  const $func = async (ctx) => {
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            return new CounterBackend({ initial: ctx.initial });
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle()) ?? noop;
+          await klass.onStart(); // TODO: pass simulation context
+          $klass = klass;
+        };
+
+        exports.call = async function(method, ...args) {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          return await $klass[method](...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('resource not started');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
     "resources": {
-      "root/my_counter": {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "path": "root/my_counter",
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 123,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
     },
     "sdkVersion": "0.0.0",
@@ -969,6 +1382,20 @@ exports[`set to new value 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud service",
+                "title": "Service",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",

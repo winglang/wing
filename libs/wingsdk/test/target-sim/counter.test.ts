@@ -16,18 +16,6 @@ test("create a counter", async () => {
   expect(c.initial).toBe(123);
 
   const s = await app.startSimulator();
-  expect(s.getResourceConfig("/my_counter")).toEqual({
-    attrs: {
-      handle: expect.any(String),
-    },
-    path: "root/my_counter",
-    addr: expect.any(String),
-    policy: [],
-    props: {
-      initial: 123,
-    },
-    type: cloud.COUNTER_FQN,
-  });
   await s.stop();
 
   expect(app.snapshot()).toMatchSnapshot();

@@ -2,10 +2,11 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join, relative } from "path";
 import { Construct } from "constructs";
 import { SimResourceSchema } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { App, Lifting } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { ToSimulatorOutput } from "../simulator";
+import { PolicyStatement, ToSimulatorOutput } from "../simulator";
 import {
   IInflight,
   IInflightHost,
@@ -62,8 +63,13 @@ export const SIM_RESOURCE_FQN = "@winglang/sdk.sim.Resource";
  */
 export class Resource
   extends StdResource
-  implements IStdResource, ISimulatorResource, IInflightHost
+  implements
+    IStdResource,
+    ISimulatorResource,
+    IInflightHost,
+    ISimulatorInflightHost
 {
+  private readonly permissions: Array<[IStdResource, string]> = [];
   private readonly _env: Record<string, string> = {};
   private readonly factory: IResourceFactory;
   private readonly entrypoint: string;
@@ -92,6 +98,10 @@ export class Resource
     this.factory = factory;
   }
 
+  public addPermission(resource: IStdResource, op: string): void {
+    this.permissions.push([resource, op]);
+  }
+
   /** @internal */
   public _preSynthesize(): void {
     super._preSynthesize();
@@ -104,18 +114,18 @@ export class Resource
           if ($klass) {
             throw Error('resource already started');
           }
-          const client = await ${inflightClient};
+          const client = ${inflightClient};
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(); // TODO: pass simulation context
           $klass = klass;
         };
 
-        exports.call = async function(method, args) {
+        exports.call = async function(method, ...args) {
           if (!$klass) {
             throw Error('resource not started');
           }
-          return await $klass[method](args);
+          return await $klass[method](...args);
         };
 
         exports.stop = async function() {
@@ -147,6 +157,13 @@ export class Resource
   }
 
   public toSimulator(): ToSimulatorOutput {
+    const policy: Array<PolicyStatement> = [];
+    for (const [resource, operation] of this.permissions) {
+      policy.push({
+        operation,
+        resourceHandle: simulatorHandleToken(resource),
+      });
+    }
     const props: SimResourceSchema = {
       environmentVariables: this._env,
       sourceCodeFile: relative(App.of(this).outdir, this.entrypoint),
@@ -155,6 +172,7 @@ export class Resource
     return {
       type: SIM_RESOURCE_FQN,
       props,
+      policy,
     };
   }
 

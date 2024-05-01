@@ -1,10 +1,8 @@
 import { Construct } from "constructs";
-import { ISimulatorResource } from "./resource";
-import { CounterSchema } from "./schema-resources";
+import { Resource } from "./resource";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { LiftMap } from "../core";
-import { ToSimulatorOutput } from "../simulator/simulator";
+import { LiftMap, lift } from "../core";
 import { IInflightHost } from "../std";
 
 /**
@@ -12,12 +10,24 @@ import { IInflightHost } from "../std";
  *
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
-export class Counter extends cloud.Counter implements ISimulatorResource {
+export class Counter extends cloud.Counter {
   public readonly initial: number;
+
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
 
     this.initial = props.initial ?? 0;
+
+    const factory = lift({
+      initial: this.initial,
+    }).inflight(async (ctx) => {
+      const CounterBackend =
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+      return new CounterBackend({ initial: ctx.initial });
+    });
+
+    new Resource(this, "Resource", factory);
   }
 
   /** @internal */
@@ -27,16 +37,6 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
       [cloud.CounterInflightMethods.DEC]: [],
       [cloud.CounterInflightMethods.PEEK]: [],
       [cloud.CounterInflightMethods.SET]: [],
-    };
-  }
-
-  public toSimulator(): ToSimulatorOutput {
-    const props: CounterSchema = {
-      initial: this.initial,
-    };
-    return {
-      type: cloud.COUNTER_FQN,
-      props,
     };
   }
 

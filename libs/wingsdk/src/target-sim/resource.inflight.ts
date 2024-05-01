@@ -73,8 +73,26 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
       activity: async () => {
         return this.sandbox!.call("call", method, ...(args ?? []));
       },
-      message: `${method}(${args?.join(", ")})`,
+      message: this.formatCallMessage(method, args),
     });
+  }
+
+  private formatCallMessage(method: string, args: Array<Json> = []): string {
+    let message = method.toString();
+    message += "(";
+    for (let i = 0; i < args.length; i++) {
+      let arg = args![i];
+      if (arg === null || arg === undefined) {
+        message += "nil";
+      } else {
+        message += JSON.stringify(args![i]);
+      }
+      if (i < args!.length - 1) {
+        message += ", ";
+      }
+    }
+    message += ")";
+    return message;
   }
 
   private addTrace(message: string, type: TraceType) {

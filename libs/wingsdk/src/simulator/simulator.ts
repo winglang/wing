@@ -472,10 +472,38 @@ export class Simulator {
    */
   public tryGetResource(path: string): any | undefined {
     const handle = this.tryGetResourceHandle(path);
-    if (!handle) {
-      return undefined;
+    if (handle) {
+      return makeSimulatorClient(this.url, handle, ADMIN_PERMISSION);
     }
-    return makeSimulatorClient(this.url, handle, ADMIN_PERMISSION);
+
+    // backwards compatibility trick: if the user requests a resource with a path like "foo/bar"
+    // which is not found, but a resource "foo/bar/Resource" exists and its
+    // type is @winglang/sdk.sim.Resource, then we will return that client instead
+    const altPath = `${path}/Resource`;
+    const altConfig = this.tryGetResourceConfig(altPath);
+    if (altConfig?.type === "@winglang/sdk.sim.Resource") {
+      const altHandle = this.tryGetResourceHandle(altPath);
+      if (altHandle) {
+        const client = makeSimulatorClient(
+          this.url,
+          altHandle,
+          ADMIN_PERMISSION
+        );
+
+        return new Proxy(
+          {},
+          {
+            get: (_, method) => {
+              return async (...args: any[]) => {
+                return client.call(method as string, args);
+              };
+            },
+          }
+        );
+      }
+    }
+
+    return undefined;
   }
 
   private tryGetResourceHandle(path: string): string | undefined {
