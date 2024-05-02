@@ -1,6 +1,6 @@
-import { join } from "path";
+import type { APIGatewayProxyEvent } from "aws-lambda";
 import { cloud } from "..";
-import { convertBetweenHandlers } from "../shared/convert";
+import { lift } from "../core";
 
 /**
  * The stage name for the API, used in its url.
@@ -78,20 +78,26 @@ export class ApiEndpointHandler {
   /**
    * Returns a `cloud.Function` handler for handling requests from a `cloud.Api`.
    * @param handler The `onRequest` handler.
-   * @param corsOptions The CORS options.
+   * @param headers HTTP response headers to add to all responses (used by CORS)
    * @returns The `cloud.Function` handler.
    */
   public static toFunctionHandler(
     handler: cloud.IApiEndpointHandler,
-    corsOptions?: cloud.ApiCorsOptions
+    headers?: Record<string, string>
   ): cloud.IFunctionHandler {
-    return convertBetweenHandlers(
+    return lift({
       handler,
-      join(__dirname, "api.onrequest.inflight.js"),
-      "ApiOnRequestHandlerClient",
-      {
-        corsHeaders: cloud.Api.renderCorsHeaders(corsOptions)?.defaultResponse,
-      }
-    );
+      headers: headers ?? {},
+    }).inflight(async (ctx, request) => {
+      const {
+        apigwFunctionHandler,
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+      } = require("@winglang/sdk/lib/shared-aws/api-util.js");
+      return apigwFunctionHandler(
+        request as unknown as APIGatewayProxyEvent,
+        ctx.handler,
+        ctx.headers
+      ) as unknown as string;
+    });
   }
 }

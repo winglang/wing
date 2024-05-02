@@ -1,7 +1,6 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
 import * as tfazure from "../../src/target-tf-azure";
 import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 // TODO: uncomment everything when fixing -https://github.com/winglang/wing/issues/5123
@@ -14,17 +13,9 @@ test("function with a bucket binding requiring read_write", () => {
   //     entrypointDir: __dirname,
   //   });
   //   const bucket = new cloud.Bucket(app, "Bucket");
-  //   const inflight = Testing.makeHandler(
-  //     `async handle(event) { await this.bucket.put("hello.txt", event); }`,
-  //     {
-  //       bucket: {
-  //         obj: bucket,
-  //         ops: [cloud.BucketInflightMethods.PUT],
-  //       },
-  //     }
-  //   );
+  //   const handler = lift({ bucket }).grant({ bucket: ["put"] }).inflight(async (ctx) => { await ctx.bucket.put("hello.txt", event); });
   //   // WHEN
-  //   new cloud.Function(app, "Function", inflight);
+  //   new cloud.Function(app, "Function", handler);
   //   const output = app.synth();
   //   // THEN
   //   expect(
@@ -36,7 +27,7 @@ test("function with a bucket binding requiring read_write", () => {
   //       }
   //     )
   //   ).toEqual(true);
-  //   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  //   expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   //   expect(tfResourcesOf(output)).toEqual([
   //     "azurerm_application_insights",
   //     "azurerm_linux_function_app",
@@ -59,17 +50,9 @@ test("function with a bucket binding requiring only read", () => {
   //     entrypointDir: __dirname,
   //   });
   //   const bucket = new cloud.Bucket(app, "Bucket");
-  //   const inflight = Testing.makeHandler(
-  //     `async handle(event) { await this.bucket.get("hello.txt"); }`,
-  //     {
-  //       bucket: {
-  //         obj: bucket,
-  //         ops: [cloud.BucketInflightMethods.GET],
-  //       },
-  //     }
-  //   );
+  //   const handler = lift({ bucket }).grant({ bucket: ["get"] }).inflight(async (ctx) => { await ctx.bucket.get("hello.txt"); });
   //   // WHEN
-  //   new cloud.Function(app, "Function", inflight);
+  //   new cloud.Function(app, "Function", handler);
   //   const output = app.synth();
   //   // THEN
   //   expect(
@@ -90,7 +73,7 @@ test("function with a bucket binding requiring only read", () => {
   //       }
   //     )
   //   ).toEqual(false);
-  //   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  //   expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   //   expect(tfResourcesOf(output)).toEqual([
   //     "azurerm_application_insights",
   //     "azurerm_linux_function_app",

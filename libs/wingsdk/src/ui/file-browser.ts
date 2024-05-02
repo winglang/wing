@@ -1,10 +1,9 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, UIComponent } from "../core";
-import { convertBetweenHandlers } from "../shared/convert";
+import { App, UIComponent, lift } from "../core";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { IInflight } from "../std";
 
 /**
@@ -73,28 +72,55 @@ export class FileBrowser extends VisualComponent {
     super(scope, id);
     this.label = label;
 
-    const getHandler = convertBetweenHandlers(
-      handlers.get,
-      join(__dirname, "file-browser.get.inflight.js"),
-      "FileBrowserGetHandlerClient"
+    const getHandler = lift({ handler: handlers.get }).inflight(
+      async (ctx, payload) => {
+        try {
+          const fileName = JSON.parse(payload).fileName;
+          return await ctx.handler(fileName);
+        } catch (e) {
+          throw new Error(
+            "Invalid payload for file browser get handler client"
+          );
+        }
+      }
     );
 
-    const putHandler = convertBetweenHandlers(
-      handlers.put,
-      join(__dirname, "file-browser.put.inflight.js"),
-      "FileBrowserPutHandlerClient"
+    const putHandler = lift({ handler: handlers.put }).inflight(
+      async (ctx, payload) => {
+        try {
+          const { fileName, fileContent } = JSON.parse(payload);
+          return await ctx.handler(fileName, fileContent);
+        } catch (e) {
+          throw new Error(
+            "Invalid payload for file browser put handler client"
+          );
+        }
+      }
     );
 
-    const deleteHandler = convertBetweenHandlers(
-      handlers.delete,
-      join(__dirname, "file-browser.delete.inflight.js"),
-      "FileBrowserDeleteHandlerClient"
+    const deleteHandler = lift({ handler: handlers.delete }).inflight(
+      async (ctx, payload) => {
+        try {
+          const fileName = JSON.parse(payload).fileName;
+          return await ctx.handler(fileName);
+        } catch (e) {
+          throw new Error(
+            "Invalid payload for file browser delete handler client"
+          );
+        }
+      }
     );
 
-    const listHandler = convertBetweenHandlers(
-      handlers.list,
-      join(__dirname, "file-browser.list.inflight.js"),
-      "FileBrowserListHandlerClient"
+    const listHandler = lift({ handler: handlers.list }).inflight(
+      async (ctx) => {
+        try {
+          return await ctx.handler();
+        } catch (e) {
+          throw new Error(
+            "Invalid payload for file browser list handler client"
+          );
+        }
+      }
     );
 
     this.getFn = new Function(this, "get", getHandler);
@@ -127,7 +153,10 @@ export class FileBrowser extends VisualComponent {
  *
  * @inflight `@winglang/sdk.ui.IFileBrowserPutHandlerClient`
  */
-export interface IFileBrowserPutHandler extends IInflight {}
+export interface IFileBrowserPutHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IFileBrowserPutHandlerClient["handle"];
+}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -135,7 +164,10 @@ export interface IFileBrowserPutHandler extends IInflight {}
  *
  * @inflight `@winglang/sdk.ui.IFileBrowserGetHandlerClient`
  */
-export interface IFileBrowserGetHandler extends IInflight {}
+export interface IFileBrowserGetHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IFileBrowserGetHandlerClient["handle"];
+}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -143,7 +175,10 @@ export interface IFileBrowserGetHandler extends IInflight {}
  *
  * @inflight `@winglang/sdk.ui.IFileBrowserListHandlerClient`
  */
-export interface IFileBrowserListHandler extends IInflight {}
+export interface IFileBrowserListHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IFileBrowserListHandlerClient["handle"];
+}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -151,7 +186,10 @@ export interface IFileBrowserListHandler extends IInflight {}
  *
  * @inflight `@winglang/sdk.ui.IFileBrowserDeleteHandlerClient`
  */
-export interface IFileBrowserDeleteHandler extends IInflight {}
+export interface IFileBrowserDeleteHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IFileBrowserDeleteHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IFileBrowserVoidHandler`.

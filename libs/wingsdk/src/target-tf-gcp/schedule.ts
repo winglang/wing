@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
@@ -6,7 +5,6 @@ import { CloudSchedulerJob } from "../.gen/providers/google/cloud-scheduler-job"
 import { ServiceAccount } from "../.gen/providers/google/service-account";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { convertBetweenHandlers } from "../shared/convert";
 import { Node } from "../std";
 
 /**
@@ -40,14 +38,9 @@ export class Schedule extends cloud.Schedule {
   ): cloud.Function {
     const uniqueId = this.node.addr.substring(0, 8);
 
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname.replace("target-tf-gcp", "shared-gcp"),
-        "schedule.ontick.inflight.js"
-      ),
-      "ScheduleOnTickHandlerClient"
-    );
+    const functionHandler = core.lift({ inflight }).inflight(async (ctx) => {
+      await ctx.inflight();
+    });
 
     let cronFunction = this.handlers[inflight._id];
     if (cronFunction) {

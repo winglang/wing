@@ -21,8 +21,8 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import mime from "mime-types";
+import { IAwsBucketClient } from "./bucket";
 import {
-  IBucketClient,
   ObjectMetadata,
   BucketPutOptions,
   BucketDeleteOptions,
@@ -33,18 +33,25 @@ import {
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
-export class BucketClient implements IBucketClient {
+export class BucketClient implements IAwsBucketClient {
   constructor(
     private readonly bucketName: string,
     private readonly s3Client: S3Client = new S3Client({})
   ) {}
 
-  public async bucketRegion(): Promise<string | undefined> {
+  public async bucketRegion(): Promise<string> {
     const res = await this.s3Client.send(
       new HeadBucketCommand({
         Bucket: this.bucketName,
       })
     );
+
+    if (!res.BucketRegion) {
+      throw new Error(
+        `Failed to get region of the bucket (bucket=${this.bucketName}).`
+      );
+    }
+
     return res.BucketRegion;
   }
 

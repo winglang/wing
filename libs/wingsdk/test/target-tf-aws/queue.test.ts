@@ -1,8 +1,8 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Function, IFunctionClient, Queue } from "../../src/cloud";
+import { inflight, lift } from "../../src/core";
 import { QueueRef } from "../../src/shared-aws";
-import { Testing } from "../../src/simulator";
 import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { SimApp } from "../sim-app";
@@ -60,10 +60,9 @@ test("queue with a consumer function", () => {
   const queue = new Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
-  const processor = Testing.makeHandler(`\
-async handle(event) {
-  console.log("Received " + event.name);
-}`);
+  const processor = inflight(async (_, event) => {
+    console.log("Received " + event.name);
+  });
   const processorFn = queue.setConsumer(processor);
   const output = app.synth();
 
@@ -138,20 +137,19 @@ test("QueueRef in a SimApp can be used to reference an existing queue within a s
   new Function(
     app,
     "Function",
-    Testing.makeHandler(
-      `async handle() {
-        if (!this.queue.client) {
+    lift({ queue: queueRef })
+      .grant({ queue: ["push"] })
+      .inflight(async (ctx) => {
+        const q = ctx.queue as any;
+
+        if (!q.client) {
           throw new Error("Queue AWS SDK client not found");
         }
-        if (this.queue.client.constructor.name !== "SQSClient") {
+        if (q.client.constructor.name !== "SQSClient") {
           throw new Error("Queue AWS SDK client is not an SQSClient");
         }
-        return this.queue._queueUrlOrArn; // yes, internal stuff
-      }`,
-      {
-        queue: { obj: queueRef, ops: ["push"] },
-      }
-    )
+        return q._queueUrlOrArn; // yes, internal stuff
+      })
   );
 
   expect(queueRef.queueArn).toStrictEqual(
@@ -175,9 +173,9 @@ test("QueueRef in an TFAWS app can be used to reference an existing queue", () =
     "arn:aws:sqs:us-west-2:123456789012:MyQueue1234"
   );
 
-  const handler = Testing.makeHandler(``, {
-    queue: { obj: queue, ops: ["push", "approxSize"] },
-  });
+  const handler = lift({ queue })
+    .grant({ queue: ["push", "approxSize"] })
+    .inflight(async () => {});
 
   new Function(app, "Function", handler);
 

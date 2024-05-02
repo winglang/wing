@@ -1,1 +1,0 @@
-export { QueueSetConsumerHandlerClient } from "@winglang/sdk/lib/shared-aws/queue.setconsumer.inflight";

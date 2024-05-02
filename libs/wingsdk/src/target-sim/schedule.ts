@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
@@ -12,7 +11,7 @@ import {
   convertDurationToCronExpression,
 } from "./util";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
+import { lift } from "../core";
 import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -96,10 +95,9 @@ export class ScheduleOnTickHandler {
   public static toFunctionHandler(
     handler: cloud.IScheduleOnTickHandler
   ): cloud.IFunctionHandler {
-    return convertBetweenHandlers(
-      handler,
-      join(__dirname, "schedule.ontick.inflight.js"),
-      "ScheduleOnTickHandlerClient"
-    );
+    return lift({ handler }).inflight(async (ctx) => {
+      await ctx.handler();
+      return undefined;
+    });
   }
 }
