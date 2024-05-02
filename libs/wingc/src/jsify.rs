@@ -337,7 +337,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_reference(&self, reference: &Reference, ctx: &mut JSifyContext) -> CodeMaker {
+	pub fn jsify_reference(&self, reference: &Reference, ctx: &mut JSifyContext) -> CodeMaker {
 		match reference {
 			Reference::Identifier(identifier) => new_code!(&identifier.span, &identifier.name),
 			Reference::InstanceMember {

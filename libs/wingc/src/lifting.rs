@@ -20,6 +20,7 @@ pub struct LiftVisitor<'a> {
 	ctx: VisitContext,
 	jsify: &'a JSifier<'a>,
 	lifts_stack: Vec<Lifts>,
+	disable_lift_qual_err: Vec<bool>,
 	in_inner_inflight_class: usize,
 }
 
@@ -30,6 +31,7 @@ impl<'a> LiftVisitor<'a> {
 			ctx: VisitContext::new(),
 			lifts_stack: vec![],
 			in_inner_inflight_class: 0,
+			disable_lift_qual_err: vec![],
 		}
 	}
 
@@ -128,6 +130,21 @@ impl<'a> LiftVisitor<'a> {
 		res.to_string()
 	}
 
+	fn jsify_reference(&mut self, node: &Reference) -> String {
+		// TODO: merge with jsify_expr or remove jsiy_expr??
+		self.ctx.push_phase(Phase::Preflight);
+		let res = self.jsify.jsify_reference(
+			&node,
+			&mut JSifyContext {
+				lifts: None,
+				visit_ctx: &mut self.ctx,
+				source_path: None,
+			},
+		);
+		self.ctx.pop_phase();
+		res.to_string()
+	}
+
 	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
 		let udt_js = self
 			.jsify
@@ -210,7 +227,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			}
 
 			// If the expression is a call to the `lift` builtin, use this opportunity to qualify the lift
-			v.check_explicit_lift(node);
+			v.check_explicit_lift(node); // TODO: remove
 
 			// Inflight expressions that evaluate to a preflight type are currently unsupported because
 			// we can't determine exactly which preflight object is being accessed and therefore can't
@@ -461,7 +478,33 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
 
 		self.ctx.push_stmt(node.idx);
+
+		// If this is an explicit lift statement then add the explicit lift
+		if let StmtKind::ExplicitLift(explicit_lift) = &node.kind {
+			// Mark that within this scope we should ignore unknown preflight objects
+			self.disable_lift_qual_err.push(true);
+
+			// Add the explicit lifts
+			let mut lifts = self.lifts_stack.pop().unwrap();
+			for qual in explicit_lift.qualifications.iter() {
+				// jsify the reference to the preflight object so we can get the preflight code
+				let preflight_code = self.jsify_reference(&qual.obj);
+
+				for op in qual.ops.iter() {
+					lifts.lift(
+						self.ctx.current_method().map(|(m, _)| m).expect("a method"),
+						Some(op.name.clone()),
+						&preflight_code,
+						false,
+					);
+				}
+			}
+			self.lifts_stack.push(lifts);
+		}
 		visit::visit_stmt(self, node);
+		if let StmtKind::ExplicitLift(_) = &node.kind {
+			self.disable_lift_qual_err.pop();
+		}
 		self.ctx.pop_stmt();
 	}
 }
@@ -471,10 +514,16 @@ impl LiftVisitor<'_> {
 	/// inflight expressions that reference unknown preflight objects assuming that the explicit lifts
 	/// qualify the capabilities of the preflight objects correctly.
 	fn ignore_unknown_preflight_object_error(&mut self) -> bool {
+		// TODO: remove this check and only keep the check from `disable_lift_qual_err`
 		let lifts = self.lifts_stack.pop().expect("lifts");
 		let current_method = self.ctx.current_method().map(|(m, _)| m).expect("a method");
-		let res = lifts.has_explicit_lifts(&current_method.name);
+		let mut res = lifts.has_explicit_lifts(&current_method.name);
 		self.lifts_stack.push(lifts);
+
+		if !self.disable_lift_qual_err.is_empty() {
+			res = true;
+		}
+
 		res
 	}
 
@@ -505,7 +554,7 @@ impl LiftVisitor<'_> {
 		let preflight_object_expr = &arg_list.pos_args[0];
 
 		// Make sure this really is a preflight expression
-		let obj_phase = self
+		let obj_phase: Phase = self
 			.jsify
 			.types
 			.get_expr_phase(preflight_object_expr)

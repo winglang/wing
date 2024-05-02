@@ -6322,7 +6322,6 @@ impl<'a> TypeChecker<'a> {
 			}
 			// Make sure all the ops are inflight instance members of the object
 			for op in qual.ops.iter() {
-				println!("op: {op}");
 				let obj_env = obj_type.as_env().expect("a preflight object to have an env");
 				match obj_env.lookup(op, None) {
 					Some(SymbolKind::Variable(v)) => {

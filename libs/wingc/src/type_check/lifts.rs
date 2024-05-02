@@ -34,7 +34,7 @@ pub struct LiftQualification {
 	/// The operations that qualify the lift (the property names)
 	pub ops: IndexSet<String>,
 	/// Whether this lift was explicitly defined via a `lift` statement.
-	pub explicit: bool,
+	pub explicit: bool, // TODO: remove
 }
 
 /// A record that describes a lift from a class.
