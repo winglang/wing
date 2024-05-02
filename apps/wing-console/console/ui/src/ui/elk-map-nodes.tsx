@@ -20,7 +20,7 @@ const colorSet: Record<Colors, string> = {
   slate: "bg-slate-400 dark:bg-slate-600",
 };
 
-const getResourceBackgroudColor = (
+export const getResourceBackgroudColor = (
   resourceType: BaseResourceSchema["type"] | undefined,
   color: Colors = "slate",
 ) => {

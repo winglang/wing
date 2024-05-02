@@ -258,7 +258,26 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               </div>
             )} */}
             {/* <ResourceIcon className="size-4" resourceType={props.fqn} /> */}
+
             <ResourceIcon className="size-4 -ml-0.5" resourceType={props.fqn} />
+
+            {/* <div
+              className={clsx(
+                "rounded flex items-center justify-around",
+                // "p-1",
+                "px-1.5 py-1",
+                "-ml-0.5",
+                getResourceBackgroudColor(props.fqn),
+              )}
+            >
+              <ResourceIcon
+                className="size-5 text-white dark:text-white"
+                // resourceType={props.fqn}
+                resourceType={props.fqn}
+                solid
+              />
+            </div> */}
+
             {/* <ResourceIcon className="size-6" resourceType={props.fqn} /> */}
             {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow">
       <CubeIcon className="size-6 text-emerald-400" />
