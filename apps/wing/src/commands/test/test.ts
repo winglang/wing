@@ -503,8 +503,8 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     traceProcessor = new TraceProcessor((event) => printEvent(event));
 
     // SpinnerStream is responsible for taking in lines of text and streaming
-    // them to a TTY with a spinner, making sure to clear the spinner before
-    // printing the next line.
+    // them to a TTY with a spinner, making sure to clear and re-print the
+    // spinner when new lines are added.
     outputStream = new SpinnerStream(process.stdout, "Running tests...");
 
     s.onTrace({
