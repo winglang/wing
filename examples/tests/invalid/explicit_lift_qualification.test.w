@@ -19,8 +19,6 @@ let preflight_class = new PreflightClass();
 // Lift statement in preflight global scope
 lift {bucket: [put]}{}
 
-
-
 class Foo {
   pub inflight mehtod1() {
     let b = bucket;
