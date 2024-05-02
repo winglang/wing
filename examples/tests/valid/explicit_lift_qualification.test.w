@@ -1,26 +1,40 @@
 bring cloud;
 
-let bucket = new cloud.Bucket();
-bucket.addObject("k", "value");
-
-let put_and_list = ["put", "list"];
+let bucket1 = new cloud.Bucket() as "b1";
+bucket1.addObject("k", "value");
+let bucket2 = new cloud.Bucket() as "b2";
+let bucket3 = new cloud.Bucket() as "b3";
 
 class Foo {
   pub inflight mehtod() {
-    lift(bucket, put_and_list); // Qualify `bucket` with a preflight expression
-    lift(bucket, ["delete"]); // Qualify `bucket` with `delete` via literal
-    let b = bucket; // Assign `bucket` to an inflight variable
-    
-    // `put` should work on `b` since we explicitly qualified `bucket` with `put`
-    // no error generated here because of use of `lift()` in this method
-    b.put("k2", "value2"); 
+    // Qualify `bucket` with `delete`, `put` and `list` (multiple methods)
+    // Qualify another preflight object (bucket2) with `put` (test multile qualifications in single statement)
+    lift { bucket1: [delete, put, list], bucket2: [put] } { 
+      let b1 = bucket1; // Assign `bucket` to an inflight variable
+      
+      // `put` should work on `b1` since we explicitly qualified `bucket1` with `put`
+      // no error generated here because of use of `lift` in this method
+      b1.put("k2", "value2"); 
 
-    // validate `put` worked and that we can also `list`
-    assert(b.list() == ["k", "k2"]);
+      // validate `put` worked and that we can also `list`
+      assert(b1.list() == ["k", "k2"]);
 
-    // Validate `delete` works
-    b.delete("k2");
-    assert(bucket.tryGet("k2") == nil);
+      // Validate `delete` works
+      b1.delete("k2");
+
+      // Try the other object
+      let b2 = bucket2;
+      b2.put("k2", "value2");
+
+      // Nest another `lift` block
+      lift { bucket3: [put] } {
+        let b3 = bucket3;
+        b3.put("k3", "value3");
+      }
+    }
+    assert(bucket1.tryGet("k2") == nil);
+    assert(bucket2.get("k2") == "value2");
+    assert(bucket3.get("k3") == "value3");
   }
 }
 
@@ -32,10 +46,11 @@ test "explicit method lift qualification" {
 
 // Similar to the above test, but using a closure
 let inflight_closure = inflight () => {
-  lift(bucket, ["put"]);
-  let b = bucket;
-  b.put("k3", "value3"); // Use inflight expression to access explicitly qualified `bucket`
-  assert(bucket.get("k3") == "value3");
+  let b = bucket1;
+  lift {bucket1: [put]} {
+    b.put("k3", "value3"); // Use inflight expression to access explicitly qualified `bucket`
+  }
+  assert(bucket1.get("k3") == "value3");
 };
 
 test "explicit closure lift qualification" {
@@ -56,7 +71,8 @@ class PreflightClass impl PreflightInterface {
 let bar = new PreflightClass();
 
 test "explicit interface lift qualification" {
-  lift(bar, ["method"]);
   let x: PreflightInterface = bar;
-  assert(x.method() == "ahoy there");
+  lift {bar: [method]} {
+    assert(x.method() == "ahoy there");
+  }
 }
