@@ -1283,7 +1283,11 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			StmtKind::CompilerDebugEnv => {}
-			StmtKind::ExplicitLift(_) => {}
+			StmtKind::ExplicitLift(explicit_lift_block) => {
+				code.open("{");
+				code.add_code(self.jsify_scope_body(&explicit_lift_block.statements, ctx));
+				code.close("}");
+			}
 		};
 		ctx.visit_ctx.pop_stmt();
 		code

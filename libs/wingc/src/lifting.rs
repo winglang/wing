@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::{
 	ast::{
 		ArgList, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt,
@@ -490,14 +492,16 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				// jsify the reference to the preflight object so we can get the preflight code
 				let preflight_code = self.jsify_reference(&qual.obj);
 
-				for op in qual.ops.iter() {
-					lifts.lift(
-						self.ctx.current_method().map(|(m, _)| m).expect("a method"),
-						Some(op.name.clone()),
-						&preflight_code,
-						false,
-					);
-				}
+				let ops_str = format!(
+					"[{}]",
+					qual.ops.iter().map(|op| format!("\"{op}\"")).collect_vec().join(", ")
+				);
+				lifts.lift(
+					self.ctx.current_method().map(|(m, _)| m).expect("a method"),
+					Some(ops_str),
+					&preflight_code,
+					false,
+				);
 			}
 			self.lifts_stack.push(lifts);
 		}
