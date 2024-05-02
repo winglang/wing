@@ -1712,7 +1712,6 @@ pub enum UtilityFunctions {
 	Assert,
 	UnsafeCast,
 	Nodeof,
-	Lift, // TODO: remove
 }
 
 impl Display for UtilityFunctions {
@@ -1722,7 +1721,6 @@ impl Display for UtilityFunctions {
 			UtilityFunctions::Assert => write!(f, "assert"),
 			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
 			UtilityFunctions::Nodeof => write!(f, "nodeof"),
-			UtilityFunctions::Lift => write!(f, "lift"),
 		}
 	}
 }
@@ -2006,42 +2004,6 @@ impl<'a> TypeChecker<'a> {
 			}),
 			scope,
 		);
-
-		let str_array_type = self.types.add_type(Type::Array(self.types.string()));
-		self.add_builtin(
-			&UtilityFunctions::Lift.to_string(),
-			Type::Function(FunctionSignature {
-				this_type: None,
-				parameters: vec![
-					FunctionParameter {
-						name: "preflightObject".into(),
-						typeref: self.types.resource_base_interface(),
-						docs: Docs::with_summary("The preflight object to qualify"),
-						variadic: false,
-					},
-					FunctionParameter {
-						name: "qualifications".into(),
-						typeref: str_array_type,
-						docs: Docs::with_summary("
-							The qualifications to apply to the preflight object.\n
-							This is an array of strings denoting members of the object that are accessed in the current method/function.\n
-							For example, if the method accesses the `push` and `pop` members of a `cloud.Queue` object, the qualifications should be `[\"push\", \"pop\"]`."
-						),
-						variadic: false,
-					},
-				],
-				return_type: self.types.void(),
-				phase: Phase::Inflight,
-				// This builtin actually compiles to nothing in JS, it's a marker that behaves like a function in the type checker
-				// and is used during the lifting phase to explicitly define lifts for an inflight method
-				js_override: Some("".to_string()),
-				docs: Docs::with_summary(
-					"Explicitly apply qualifications to a preflight object used in the current method/function",
-				),
-				implicit_scope_param: false,
-			}),
-			scope,
-		)
 	}
 
 	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
@@ -6301,6 +6263,15 @@ impl<'a> TypeChecker<'a> {
 
 		for qual in lift_quals.qualifications.iter() {
 			let (res, obj_phase) = self.resolve_reference(&qual.obj, env);
+			// Get the type of the object
+			let obj_type = match res {
+				ResolveReferenceResult::Variable(v) => v.type_,
+				ResolveReferenceResult::Location(_, t) => t,
+			};
+			// Skip unknown references (diagnotics already emitted in `resolve_reference`)
+			if obj_type.is_unresolved() {
+				continue;
+			}
 			// Make sure the object is a preflight object
 			if obj_phase != Phase::Preflight {
 				self.spanned_error(
@@ -6308,11 +6279,6 @@ impl<'a> TypeChecker<'a> {
 					format!("Expected a preflight object, but found {obj_phase} reference instead"),
 				);
 			}
-			// Get the type of the object
-			let obj_type = match res {
-				ResolveReferenceResult::Variable(v) => v.type_,
-				ResolveReferenceResult::Location(_, t) => t,
-			};
 			// Make sure the object type is a preflight type
 			if !obj_type.is_preflight_object_type() {
 				self.spanned_error(

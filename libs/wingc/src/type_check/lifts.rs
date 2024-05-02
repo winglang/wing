@@ -33,8 +33,6 @@ pub enum Liftable {
 pub struct LiftQualification {
 	/// The operations that qualify the lift (the property names)
 	pub ops: IndexSet<String>,
-	/// Whether this lift was explicitly defined via a `lift` statement.
-	pub explicit: bool, // TODO: remove
 }
 
 /// A record that describes a lift from a class.
@@ -61,41 +59,27 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, method: Symbol, qualification: Option<String>, code: &str, explicit: bool) {
-		self.add_lift(method.to_string(), code, qualification.clone(), explicit);
+	pub fn lift(&mut self, method: Symbol, qualification: Option<String>, code: &str) {
+		self.add_lift(method.to_string(), code, qualification.clone());
 
 		// Add a lift to the inflight initializer to signify this class requires access to that preflight object.
 		// "this" is a special case since it's already in scope and doesn't need to be lifted.
 		if code != "this" {
-			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), code, None, explicit);
+			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), code, None);
 		}
 	}
 
-	fn add_lift(&mut self, method: String, code: &str, qualification: Option<String>, explicit: bool) {
+	fn add_lift(&mut self, method: String, code: &str, qualification: Option<String>) {
 		let lift = self
 			.lifts_qualifications
 			.entry(method)
 			.or_default()
 			.entry(code.to_string())
-			.or_insert(LiftQualification {
-				ops: IndexSet::new(),
-				explicit,
-			});
+			.or_insert(LiftQualification { ops: IndexSet::new() });
 
 		if let Some(op) = qualification {
 			lift.ops.insert(op);
 		}
-
-		// If there are explicit lifts in the method, then the lift is explicit.
-		lift.explicit |= explicit;
-	}
-
-	pub fn has_explicit_lifts(&self, method: &str) -> bool {
-		self
-			.lifts_qualifications
-			.get(method)
-			.map(|lifts| lifts.values().any(|lift| lift.explicit))
-			.unwrap_or(false)
 	}
 
 	/// Returns the token for a liftable. Called by the jsifier when emitting inflight code.
