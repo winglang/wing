@@ -158,7 +158,7 @@ export class Resource
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = statedir;
+          ctx.statedir = () => statedir;
           ctx.resolveAttr = (name, value) => attrs[name] = value;
           const client = ${inflightClient};
           const noop = () => {};
