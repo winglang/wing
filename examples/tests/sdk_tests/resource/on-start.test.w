@@ -4,9 +4,7 @@ inflight class OnStartThrowerBackend impl sim.IResource {
   pub onStart(ctx: sim.IResourceContext) {
     throw "unexpected error!";
   }
-
   pub onStop() {}
-
   pub noop() {}
 }
 
@@ -14,11 +12,9 @@ class OnStartThrower {
   backend: sim.Resource;
 
   new() {
-    let factory = inflight (): sim.IResource => {
+    this.backend = new sim.Resource(inflight () => {
       return new OnStartThrowerBackend();
-    };
-
-    this.backend = new sim.Resource(factory);
+    });
   }
 
   pub inflight noop() {
@@ -28,7 +24,7 @@ class OnStartThrower {
 
 let r = new OnStartThrower();
 
-test "something happens if the onStart method fails" {
+test "method calls fail if the resource fails to start" {
   let var msg = "";
   try {
     r.noop();
