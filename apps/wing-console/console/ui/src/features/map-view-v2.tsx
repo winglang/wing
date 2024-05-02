@@ -9,7 +9,8 @@ import {
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import type { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
 import clsx from "classnames";
-import type { ElkPoint, LayoutOptions } from "elkjs";
+import type { ElkExtendedEdge } from "elkjs";
+import { type ElkPoint, type LayoutOptions } from "elkjs";
 import uniqby from "lodash.uniqby";
 import type { FunctionComponent, PropsWithChildren } from "react";
 import { memo, useCallback, useEffect, useMemo } from "react";
@@ -749,9 +750,6 @@ export interface MapViewV2Props {
 export const MapViewV2 = memo(
   ({ selectedNodeId, onSelectedNodeIdChange }: MapViewV2Props) => {
     const { tree, connections, nodeInfo } = useMapV2({});
-    // useEffect(() => {
-    //   console.log({ tree, connections, nodeInfo });
-    // }, [nodeInfo]);
 
     const hiddenMap = useMemo(() => {
       const hiddenMap = new Map<string, boolean>();
@@ -768,9 +766,6 @@ export const MapViewV2 = memo(
       }
       return hiddenMap;
     }, [tree]);
-    // useEffect(() => {
-    //   console.log({ hiddenMap });
-    // }, [hiddenMap]);
 
     const isNodeHidden = useCallback(
       (path: string) => {
@@ -786,7 +781,7 @@ export const MapViewV2 = memo(
       }
 
       return bridgeConnections({
-        connections:
+        connections: (
           connections.map((connection) => {
             return {
               source: {
@@ -800,36 +795,46 @@ export const MapViewV2 = memo(
                 operation: connection.targetOp,
               },
             };
-          }) ?? [],
+          }) ?? []
+        ).filter((connection) => {
+          return !(
+            connection.source.info?.type === "function" &&
+            connection.source.operation === "invokeAsync"
+          );
+        }),
         isNodeHidden: (node) => isNodeHidden(node.id),
         getNodeId: (node) => node.id,
         getConnectionId: (connection) =>
-          `${connection.source.id}#${connection.target.id}`,
+          `${connection.source.id}#${connection.source.operation}##${connection.target.id}#${connection.target.operation}`,
       });
     }, [connections, nodeInfo, isNodeHidden]);
     useEffect(() => {
       console.log({ connectionsV3 });
     }, [connectionsV3]);
 
-    const getConnectionId = useCallback(
-      (connection: ConnectionDataV2, type: "source" | "target") => {
-        const nodePath = connection[type];
+    const getConnectionIdV3 = useCallback(
+      (
+        nodePath: string,
+        nodeType: string | undefined,
+        operation: string | undefined,
+        type: "source" | "target",
+      ) => {
         const info = nodeInfo?.get(nodePath);
 
         if (isNodeHidden(nodePath)) {
           return nodePath;
         }
 
-        if (info?.type === "function") {
+        if (nodeType === "function") {
           // Ignore `invokeAsync`.
           return `${nodePath}#invoke#${type}`;
         }
 
-        if (info?.type === "autoId") {
-          return nodePath;
+        if (nodeType === "autoId") {
+          // return nodePath;
+          return `${nodePath}#${type}`;
         }
 
-        const operation = connection[`${type}Op`];
         if (operation) {
           return `${nodePath}#${operation}#${type}`;
         }
@@ -842,30 +847,6 @@ export const MapViewV2 = memo(
       [nodeInfo, isNodeHidden],
     );
 
-    const connectionsV2 = useMemo(() => {
-      const x =
-        connections?.map((connection) => {
-          const source = getConnectionId(connection, "source");
-          const target = getConnectionId(connection, "target");
-          return {
-            source,
-            target,
-          };
-        }) ?? [];
-      // console.log(hiddenMap, x);
-
-      return bridgeConnections({
-        connections: x,
-        isNodeHidden,
-        getNodeId: (path) => path,
-        getConnectionId(connection) {
-          return `${connection.source}#${connection.target}`;
-        },
-      });
-    }, [connections, nodeInfo, isNodeHidden]);
-    // useEffect(() => {
-    //   console.log({ connections, connectionsV2 });
-    // }, [connections, connectionsV2]);
     const RenderNode = useCallback<
       FunctionComponent<{
         constructTreeNode: ConstructTreeNode;
@@ -886,10 +867,10 @@ export const MapViewV2 = memo(
           return <></>;
         }
 
-        // if (info.type === "autoId") {
-        //   // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
-        //   return <></>;
-        // }
+        if (info.type === "autoId") {
+          return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
+          // return <></>;
+        }
 
         // if (info.type === "endpoint") {
         //   // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
@@ -980,63 +961,6 @@ export const MapViewV2 = memo(
       ) as ConstructTreeNode[];
     }, [tree]);
 
-    // return (
-    //   <div className="relative">
-    //     {tree && (
-    //       <Graph
-    //         elk={{
-    //           id: "root",
-    //           layoutOptions: {
-    //             // "elk.algorithm": "org.eclipse.elk.layered",
-    //             // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-    //             // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
-    //             // "elk.direction": "RIGHT",
-    //             ...baseLayoutOptions,
-    //             "elk.padding": "[top=24,left=20,bottom=20,right=20]",
-    //           },
-    //         }}
-    //         // edges={connections?.map((connection) => {
-    //         //   return {
-    //         //     id: `${connection.source}#${connection.target}#${connection.name}`,
-    //         //     sources: [
-    //         //       getConnectionId(connection.source, connection.name, "source"),
-    //         //     ],
-    //         //     targets: [
-    //         //       getConnectionId(connection.target, connection.name, "target"),
-    //         //     ],
-    //         //   };
-    //         // })}
-    //         edges={connectionsV2.map((connection) => {
-    //           return {
-    //             id: `${connection.source}#${connection.target}`,
-    //             sources: [connection.source],
-    //             targets: [connection.target],
-    //           };
-    //         })}
-    //         // edges={connections?.map((connection) => {
-    //         //   const source = `${connection.source}#${
-    //         //     (connection as any).sourceOp
-    //         //   }#source`;
-    //         //   const target = `${connection.target}#${
-    //         //     (connection as any).targetOp
-    //         //   }#target`;
-    //         //   return {
-    //         //     id: `${source}##${target}`,
-    //         //     sources: [source],
-    //         //     targets: [target],
-    //         //   };
-    //         // })}
-    //         edgeComponent={RoundedEdge}
-    //         className="bg-gray-50"
-    //       >
-    //         {pseudoRoot.map((node) => (
-    //           <RenderNode key={node.id} constructTreeNode={node} />
-    //         ))}
-    //       </Graph>
-    //     )}
-    //   </div>
-    // );
-
     const { theme } = useTheme();
 
     useKeyPressEvent(
@@ -1045,6 +969,33 @@ export const MapViewV2 = memo(
         onSelectedNodeIdChange?.(undefined);
       }, [onSelectedNodeIdChange]),
     );
+
+    const edges = useMemo<ElkExtendedEdge[]>(() => {
+      return (
+        connectionsV3?.map((connection) => {
+          const source = getConnectionIdV3(
+            connection.source.id,
+            connection.source.info?.type,
+            connection.source.operation,
+            "source",
+          );
+          const target = getConnectionIdV3(
+            connection.target.id,
+            connection.target.info?.type,
+            connection.target.operation,
+            "target",
+          );
+          return {
+            id: `${source}##${target}`,
+            sources: [source],
+            targets: [target],
+          };
+        }) ?? []
+      );
+    }, [connectionsV3, getConnectionIdV3]);
+    useEffect(() => {
+      console.log({ edges });
+    }, [edges]);
 
     return (
       <div className={clsx("h-full flex flex-col", theme.bg4)}>
@@ -1087,13 +1038,14 @@ export const MapViewV2 = memo(
                 //     ],
                 //   };
                 // })}
-                edges={connectionsV2.map((connection) => {
-                  return {
-                    id: `${connection.source}#${connection.target}`,
-                    sources: [connection.source],
-                    targets: [connection.target],
-                  };
-                })}
+                // edges={connectionsV2.map((connection) => {
+                //   return {
+                //     id: `${connection.source}#${connection.target}`,
+                //     sources: [connection.source],
+                //     targets: [connection.target],
+                //   };
+                // })}
+                edges={edges}
                 // edges={connections?.map((connection) => {
                 //   const source = `${connection.source}#${
                 //     (connection as any).sourceOp
@@ -1128,70 +1080,72 @@ export const MapViewV2 = memo(
   },
 );
 
-// const AutoIdNode: FunctionComponent<{
-//   constructTreeNode: ConstructTreeNode;
-// }> = (props) => {
-//   return (
-//     <Node
-//       elk={{
-//         id: props.constructTreeNode.path,
-//         layoutOptions: {
-//           "elk.portConstraints": "FIXED_SIDE",
-//         },
-//       }}
-//       className="inline-block"
-//     >
-//       <div
-//         className={clsx(
-//           "size-6",
-//           "border border-gray-300 border-dashed",
-//           "hover:border-sky-300 rounded-full outline-0 outline outline-sky-300 hover:outline-2",
-//           "transition-all",
-//           "shadow",
-//           "relative",
-//           "group",
-//           "bg-white",
-//         )}
-//       >
-//         <Port
-//           elk={{
-//             id: `${props.constructTreeNode.path}#handle#target`,
-//             layoutOptions: {
-//               "elk.port.side": "WEST",
-//               "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-//             },
-//           }}
-//         >
-//           <InflightPort />
-//         </Port>
+const AutoIdNode: FunctionComponent<{
+  constructTreeNode: ConstructTreeNode;
+}> = (props) => {
+  return (
+    <Node
+      elk={{
+        id: props.constructTreeNode.path,
+        layoutOptions: {
+          "elk.portConstraints": "FIXED_SIDE",
+        },
+      }}
+      className="inline-block"
+    >
+      <div
+        className={clsx(
+          "size-4",
+          "border border-gray-300",
+          "hover:border-sky-300 rounded-full outline-0 outline outline-sky-300 hover:outline-2",
+          "transition-all",
+          "shadow",
+          "relative",
+          "group",
+          "bg-white",
+        )}
+      >
+        <Port
+          elk={{
+            // id: `${props.constructTreeNode.path}#handle#target`,
+            id: `${props.constructTreeNode.path}#target`,
+            layoutOptions: {
+              "elk.port.side": "WEST",
+              "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+            },
+          }}
+        >
+          {/* <InflightPort /> */}
+        </Port>
 
-//         <Port
-//           elk={{
-//             id: `${props.constructTreeNode.path}#handle#source`,
-//             layoutOptions: {
-//               "elk.port.side": "EAST",
-//               "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-//             },
-//           }}
-//         >
-//           <InflightPort />
-//         </Port>
+        <Port
+          elk={{
+            // id: `${props.constructTreeNode.path}#handle#source`,
+            id: `${props.constructTreeNode.path}#source`,
+            layoutOptions: {
+              "elk.port.side": "EAST",
+              "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+            },
+          }}
+        >
+          {/* <InflightPort /> */}
+        </Port>
 
-//         <div className="absolute bottom-0 inset-x-0 invisible group-hover:visible">
-//           <div className="relative">
-//             <div className="absolute top-0 inset-x-0">
-//               <div className="flex justify-around">
-//                 {/* <div className="size-3 rounded-full bg-red-500"></div> */}
-//                 <div className="absolute text-center">
-//                   <div className="text-xs text-gray-500 backdrop-blur">
-//                     {props.constructTreeNode.id.split("/").slice(-1).join("")}
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </Node>
-//   );
-// };
+        <div className="absolute bottom-0 inset-x-0 invisible group-hover:visible">
+          <div className="relative">
+            <div className="absolute top-0 inset-x-0">
+              <div className="flex justify-around">
+                {/* <div className="size-3 rounded-full bg-red-500"></div> */}
+                <div className="absolute text-center">
+                  <div className="text-xs text-gray-500 backdrop-blur">
+                    {props.constructTreeNode.id.split("/").slice(-1).join("")}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Node>
+  );
+};
