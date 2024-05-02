@@ -6285,6 +6285,7 @@ impl<'a> TypeChecker<'a> {
 					&qual.obj,
 					format!("Expected a preflight object type, but found {obj_type} instead"),
 				);
+				continue;
 			}
 			// Make sure all the ops are inflight instance members of the object
 			for op in qual.ops.iter() {
@@ -6294,7 +6295,7 @@ impl<'a> TypeChecker<'a> {
 						if v.phase != Phase::Inflight {
 							self.spanned_error(
 								op,
-								format!("Only inflight memebers may be qualify the lift. {op} is {}.", v.phase),
+								format!("Only inflight memebers may qualify the lift. {op} is {}.", v.phase),
 							);
 						}
 						if v.kind != VariableKind::InstanceMember {

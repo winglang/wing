@@ -15,38 +15,24 @@ let preflight_class = new PreflightClass();
 class Foo {
   pub inflight mehtod1() {
     let b = bucket;
-    lift(b, ["put"]); // Explicit qualification with inflight object, lift call as non first statement
-      // ^ Expected a preflight object as first argument to `lift` builtin, found inflight expression instead
-    //^^^^^^^^^^^^^^^ lift() calls must be at the top of the method
-
-    lift(prelight_string, ["contains"]); // Explicit qualification on preflight non-class
-      // ^^^^^^^^^^^^^^^ Expected type to be "Resource", but got "str" instead
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ lift() calls must be at the top of the method
-
-    let inflight_qualifier = "delete";
-    lift(bucket, [inflight_qualifier]); // Explicit qualification with inflight qualifiers, lift call as non first statement
-              // ^^^^^^^^^^^^^^^^^^^^ Qualification list must not contain any inflight elements
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ lift() calls must be at the top of the method
-
-    let inner_closure = () => {
-      lift(bucket, ["get"]); // lift() call in inner closure
-      //^^^^^^^^^^^^^^^^^^^^ lift() calls are only allowed in inflight methods and closures defined in preflight
-    };
-    class Bar {
-      pub inflight method() {
-        lift(bucket, ["get"]); // lift() call in inner class
-        //^^^^^^^^^^^^^^^^^^^^ lift() calls are only allowed in inflight methods and closures defined in preflight
-    }
-    }
+    lift {b: [put]}{} // Explicit qualification with inflight object
+    lift {prelight_string: contains}{} // Explicit qualification on preflight non-class
+    lift {bucket: [shoot]}{} // Explicit qualification with unknown member
+    lift {bucket: shoot}{} // Explicit qualification with unknown, single method format
+    lift {not_bucket: put, not_bucket_again: get}{} // Explicit qualification with unknown objects
+    lift {bucket: addObject}{} // Explicit qualification with preflight method op
+    lift {bucket: "put"}{} // Explicit qualification non method type op
   }
 
   pub inflight method2() {
     let b = bucket;
     b.put("k", "v"); // With no explicit qualification this should be an error
-    //^ Expression of type "Bucket" references an unknown preflight object
+
+    let b2 = bucket;
+    lift {bucket: put}{}
+    b2.put("k", "v"); // With explicit qualification, but outside of lift block, this should be an error
 
     let i: IPreflightInterface = preflight_class;
     i.method(); // With no explicit qualification this should be an error
-    //^ Expression of type "IPreflightInterface" references an unknown preflight object
   }
 }

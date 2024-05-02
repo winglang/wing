@@ -26,9 +26,9 @@ class Foo {
       let b2 = bucket2;
       b2.put("k2", "value2");
 
-      // Nest another `lift` block
-      lift { bucket3: [put] } {
-        let b3 = bucket3;
+      // Nest another `lift` block, this time with the single method format (no square brackets)
+      let b3 = bucket3;
+      lift { bucket3: put } {
         b3.put("k3", "value3");
       }
     }
