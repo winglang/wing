@@ -474,8 +474,6 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
     const severity = inferSeverityOfEvent(event);
 
-    // console.error("severity:", severity);
-
     // Skip debug events if DEBUG isn't set
     if ((severity === "debug" || severity === "verbose") && !process.env.DEBUG) {
       return;
@@ -487,9 +485,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     }
 
     const formatStyle = process.env.DEBUG ? "full" : "short";
-    // console.error("raw event", event);
     const formatted = await formatTrace(event, testName, formatStyle);
-    // console.error("formatted", formatted);
     outputStream!.write(formatted);
   };
 
