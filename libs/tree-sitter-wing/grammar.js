@@ -164,7 +164,7 @@ module.exports = grammar({
     lift_statement: ($) =>
       seq("lift", field("lift_qualifications", $.lift_qualifications), field("block", $.block)),
 
-    lift_qualifications: ($) => seq("{", field("qualifications", commaSep1($.lift_qualification)), "}"),
+    lift_qualifications: ($) => seq("{", field("qualification", commaSep1($.lift_qualification)), "}"),
 
     lift_qualification: ($) => seq(field("obj", $.reference), ":", choice(field("ops", $.identifier), field("ops", seq("[", commaSep1($.identifier), "]")))),
 

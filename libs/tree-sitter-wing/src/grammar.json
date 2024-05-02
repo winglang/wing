@@ -750,7 +750,7 @@
         },
         {
           "type": "FIELD",
-          "name": "qualifications",
+          "name": "qualification",
           "content": {
             "type": "SEQ",
             "members": [

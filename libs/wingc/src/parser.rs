@@ -650,7 +650,7 @@ impl<'s> Parser<'s> {
 		let mut qualifications = vec![];
 
 		let mut qual_cursor = lift_qualifications_node
-			.child_by_field_name("qualifications")
+			.child_by_field_name("qualification")
 			.unwrap()
 			.walk();
 
