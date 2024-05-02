@@ -308,7 +308,7 @@ new cloud.Function(inflight () => {
 });
 ```
 
-To explicitly qualify lifts in an inflight closure or inflight method and supress the above compiler error use the `lift()` utility function:
+To explicitly qualify lifts in an inflight closure or inflight method and supress the above compiler error use the `lift` statement:
 
 ```js playground
 bring cloud;
@@ -316,13 +316,16 @@ let main_bucket = new cloud.Bucket() as "main";
 let secondary_bucket = new cloud.Bucket() as "backup";
 let use_main = true;
 new cloud.Function(inflight () => {
-  lift(main_bucket, ["put"]); // Explicitly sate the "put" may be used on `main_bucket`
-  lift(secondary_bucket, ["put"]); // Explicitly sate the "put" may be used on `secondary_bucket`
   let var b = main_bucket;
   if !use_main {
     b = secondary_bucket;
   }
-  b.put("key", "value"); // Error is supressed and all possible values of `b` were explicitly qualified with "put"
+  // Explicitly sate that `put` may be used on `main_bucket` and `secondary_bucket`
+  lift {main_bucket: [put], secondary_bucket: [put]} {
+    // Error is supressed in this block and all possible values of `b` are explicitly qualified with `put`
+    b.put("key1", "value"); 
+    b.put("key2", "value");
+  }
 });
 ```
 
