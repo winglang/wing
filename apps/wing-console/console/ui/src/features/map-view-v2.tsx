@@ -768,102 +768,8 @@ export interface MapViewV2Props {
 
 export const MapViewV2 = memo(
   ({ selectedNodeId, onSelectedNodeIdChange }: MapViewV2Props) => {
-    const { tree, connections, nodeInfo } = useMapV2({});
-
-    const hiddenMap = useMemo(() => {
-      const hiddenMap = new Map<string, boolean>();
-      const traverse = (node: ConstructTreeNode, forceHidden?: boolean) => {
-        const hidden = forceHidden || node.display?.hidden || false;
-        hiddenMap.set(node.path, hidden);
-        for (const child of Object.values(node.children ?? {})) {
-          traverse(child, hidden);
-        }
-      };
-      const pseudoRoot = tree?.children?.["Default"];
-      for (const child of Object.values(pseudoRoot?.children ?? {})) {
-        traverse(child!);
-      }
-      return hiddenMap;
-    }, [tree]);
-
-    const isNodeHidden = useCallback(
-      (path: string) => {
-        const nodePath = path.match(/^(.+?)#/)?.[1] ?? path;
-        return hiddenMap.get(nodePath) === true;
-      },
-      [hiddenMap],
-    );
-
-    const connectionsV3 = useMemo(() => {
-      if (!connections || !nodeInfo) {
-        return;
-      }
-
-      return bridgeConnections({
-        connections: (
-          connections.map((connection) => {
-            return {
-              source: {
-                id: connection.source,
-                info: nodeInfo.get(connection.source),
-                operation: connection.sourceOp,
-              },
-              target: {
-                id: connection.target,
-                info: nodeInfo.get(connection.target),
-                operation: connection.targetOp,
-              },
-            };
-          }) ?? []
-        ).filter((connection) => {
-          return !(
-            connection.source.info?.type === "function" &&
-            connection.source.operation === "invokeAsync"
-          );
-        }),
-        isNodeHidden: (node) => isNodeHidden(node.id),
-        getNodeId: (node) => node.id,
-        getConnectionId: (connection) =>
-          `${connection.source.id}#${connection.source.operation}##${connection.target.id}#${connection.target.operation}`,
-      });
-    }, [connections, nodeInfo, isNodeHidden]);
-    useEffect(() => {
-      console.log({ connectionsV3 });
-    }, [connectionsV3]);
-
-    const getConnectionIdV3 = useCallback(
-      (
-        nodePath: string,
-        nodeType: string | undefined,
-        operation: string | undefined,
-        type: "source" | "target",
-      ) => {
-        const info = nodeInfo?.get(nodePath);
-
-        if (isNodeHidden(nodePath)) {
-          return nodePath;
-        }
-
-        if (nodeType === "function") {
-          // Ignore `invokeAsync`.
-          return `${nodePath}#invoke#${type}`;
-        }
-
-        if (nodeType === "autoId") {
-          // return nodePath;
-          return `${nodePath}#${type}`;
-        }
-
-        if (operation) {
-          return `${nodePath}#${operation}#${type}`;
-        }
-
-        return `${nodePath}#${type}`;
-        // return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}#${
-        //   1 + Math.floor(Math.random() * 3)
-        // }`;
-      },
-      [nodeInfo, isNodeHidden],
+    const { connections, nodeInfo, isNodeHidden, rootNodes, edges } = useMapV2(
+      {},
     );
 
     const RenderNode = useCallback<
@@ -874,10 +780,7 @@ export const MapViewV2 = memo(
       }>
     >(
       (props) => {
-        // if (props.constructTreeNode.display?.hidden) {
-        //   return <></>;
-        // }
-        if (hiddenMap.get(props.constructTreeNode.path)) {
+        if (isNodeHidden(props.constructTreeNode.path)) {
           return <></>;
         }
 
@@ -926,11 +829,11 @@ export const MapViewV2 = memo(
               id={props.constructTreeNode.path}
               sourceOccupied={connections?.some(
                 (connection) =>
-                  connection.source === props.constructTreeNode.path,
+                  connection.source.id === props.constructTreeNode.path,
               )}
               targetOccupied={connections?.some(
                 (connection) =>
-                  connection.target === props.constructTreeNode.path,
+                  connection.target.id === props.constructTreeNode.path,
               )}
               onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             />
@@ -971,14 +874,8 @@ export const MapViewV2 = memo(
           </ContainerNode>
         );
       },
-      [nodeInfo, hiddenMap],
+      [nodeInfo, isNodeHidden],
     );
-
-    const pseudoRoot = useMemo(() => {
-      return Object.values(
-        tree?.children?.["Default"]?.children ?? {},
-      ) as ConstructTreeNode[];
-    }, [tree]);
 
     const { theme } = useTheme();
 
@@ -989,37 +886,10 @@ export const MapViewV2 = memo(
       }, [onSelectedNodeIdChange]),
     );
 
-    const edges = useMemo<ElkExtendedEdge[]>(() => {
-      return (
-        connectionsV3?.map((connection) => {
-          const source = getConnectionIdV3(
-            connection.source.id,
-            connection.source.info?.type,
-            connection.source.operation,
-            "source",
-          );
-          const target = getConnectionIdV3(
-            connection.target.id,
-            connection.target.info?.type,
-            connection.target.operation,
-            "target",
-          );
-          return {
-            id: `${source}##${target}`,
-            sources: [source],
-            targets: [target],
-          };
-        }) ?? []
-      );
-    }, [connectionsV3, getConnectionIdV3]);
-    useEffect(() => {
-      console.log({ edges });
-    }, [edges]);
-
     return (
       <div className={clsx("h-full flex flex-col", theme.bg4)}>
         <div className="grow relative bg-slate-50 dark:bg-slate-500">
-          {!tree && (
+          {!rootNodes && (
             <div
               className={clsx(
                 "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
@@ -1033,7 +903,7 @@ export const MapViewV2 = memo(
             </div>
           )}
           <div className="absolute inset-0">
-            {tree && (
+            {rootNodes && (
               <Graph
                 elk={{
                   id: "root",
@@ -1082,7 +952,7 @@ export const MapViewV2 = memo(
                 // className="bg-gray-50"
                 // onClick={() => onSelectedNodeIdChange(undefined)}
               >
-                {pseudoRoot.map((node) => (
+                {rootNodes.map((node) => (
                   <RenderNode
                     key={node.id}
                     constructTreeNode={node}

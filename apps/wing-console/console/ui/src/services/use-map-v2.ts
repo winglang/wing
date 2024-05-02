@@ -1,9 +1,11 @@
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/tree.js";
 import type { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
+import type { ElkExtendedEdge } from "elkjs";
 import uniqBy from "lodash.uniqby";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 import { trpc } from "./trpc.js";
+import { bridgeConnections } from "./use-map-v2.bridge-connections.js";
 
 export type ConnectionDataV2 = {
   /** The path of the source construct. */
@@ -139,19 +141,20 @@ export interface UseMapOptionsV2 {
 
 export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
   const query = trpc["app.map.v2"].useQuery();
-  const { tree, connections: incorrectlyTypedConnections } = query.data ?? {};
-  const connections = incorrectlyTypedConnections as
+  const { tree: rawTree, connections: incorrectlyTypedConnections } =
+    query.data ?? {};
+  const rawConnections = incorrectlyTypedConnections as
     | ConnectionDataV2[]
     | undefined;
   const nodeInfo = useMemo(() => {
-    if (!tree || !connections) {
+    if (!rawTree || !rawConnections) {
       return;
     }
 
     const nodeMap = new Map<string, NodeV2>();
     const processNode = (node: ConstructTreeNode) => {
-      const nodeType = getNodeType(node, connections);
-      const inflights = getNodeInflights(node, connections);
+      const nodeType = getNodeType(node, rawConnections);
+      const inflights = getNodeInflights(node, rawConnections);
       // console.log(node.path, nodeType, inflights);
       switch (nodeType) {
         case "container": {
@@ -204,13 +207,139 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
         processNode(child);
       }
     };
-    processNode(tree);
+    processNode(rawTree);
     return nodeMap;
-  }, [tree, connections]);
+  }, [rawTree, rawConnections]);
+
+  const hiddenMap = useMemo(() => {
+    const hiddenMap = new Map<string, boolean>();
+    const traverse = (node: ConstructTreeNode, forceHidden?: boolean) => {
+      const hidden = forceHidden || node.display?.hidden || false;
+      hiddenMap.set(node.path, hidden);
+      for (const child of Object.values(node.children ?? {})) {
+        traverse(child, hidden);
+      }
+    };
+    const pseudoRoot = rawTree?.children?.["Default"];
+    for (const child of Object.values(pseudoRoot?.children ?? {})) {
+      traverse(child!);
+    }
+    return hiddenMap;
+  }, [rawTree]);
+
+  const isNodeHidden = useCallback(
+    (path: string) => {
+      const nodePath = path.match(/^(.+?)#/)?.[1] ?? path;
+      return hiddenMap.get(nodePath) === true;
+    },
+    [hiddenMap],
+  );
+
+  const rootNodes = useMemo(() => {
+    const children = rawTree?.children?.["Default"]?.children;
+    return children
+      ? (Object.values(children) as ConstructTreeNode[])
+      : undefined;
+  }, [rawTree]);
+
+  const connections = useMemo(() => {
+    if (!rawConnections || !nodeInfo) {
+      return;
+    }
+
+    return bridgeConnections({
+      connections: (
+        rawConnections.map((connection) => {
+          return {
+            source: {
+              id: connection.source,
+              nodeType: nodeInfo.get(connection.source)?.type,
+              operation: connection.sourceOp,
+            },
+            target: {
+              id: connection.target,
+              nodeType: nodeInfo.get(connection.target)?.type,
+              operation: connection.targetOp,
+            },
+          };
+        }) ?? []
+      ).filter((connection) => {
+        return !(
+          connection.source.nodeType === "function" &&
+          connection.source.operation === "invokeAsync"
+        );
+      }),
+      isNodeHidden: (node) => isNodeHidden(node.id),
+      getNodeId: (node) => node.id,
+      getConnectionId: (connection) =>
+        `${connection.source.id}#${connection.source.operation}##${connection.target.id}#${connection.target.operation}`,
+    });
+  }, [rawConnections, nodeInfo, isNodeHidden]);
+
+  const getConnectionId = useCallback(
+    (
+      nodePath: string,
+      nodeType: string | undefined,
+      operation: string | undefined,
+      type: "source" | "target",
+    ) => {
+      if (isNodeHidden(nodePath)) {
+        return nodePath;
+      }
+
+      if (nodeType === "function") {
+        // Ignore `invokeAsync`.
+        return `${nodePath}#invoke#${type}`;
+      }
+
+      if (nodeType === "autoId") {
+        // return nodePath;
+        return `${nodePath}#${type}`;
+      }
+
+      if (operation) {
+        return `${nodePath}#${operation}#${type}`;
+      }
+
+      return `${nodePath}#${type}`;
+      // return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}#${
+      //   1 + Math.floor(Math.random() * 3)
+      // }`;
+    },
+    [isNodeHidden],
+  );
+
+  const edges = useMemo<ElkExtendedEdge[]>(() => {
+    return (
+      connections?.map((connection) => {
+        const source = getConnectionId(
+          connection.source.id,
+          connection.source.nodeType,
+          connection.source.operation,
+          "source",
+        );
+        const target = getConnectionId(
+          connection.target.id,
+          connection.target.nodeType,
+          connection.target.operation,
+          "target",
+        );
+        return {
+          id: `${source}##${target}`,
+          sources: [source],
+          targets: [target],
+        };
+      }) ?? []
+    );
+  }, [connections, getConnectionId]);
 
   return {
-    tree,
-    connections,
+    rawTree,
+    rawConnections,
     nodeInfo,
+    rootNodes,
+    connections,
+    isNodeHidden,
+    edges,
   };
 };

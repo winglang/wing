@@ -44,7 +44,8 @@ const NodeComponent = <K extends keyof IntrinsicElements = "div">({
     () => parent.children?.find((child) => child.id === elk.id),
     [],
   );
-  assert(node);
+  console.log(parent);
+  assert(node, `Node not found: ${elk.id}`);
 
   const portal = useContext(PortalContext);
   assert(portal);
