@@ -11,7 +11,6 @@ struct MyStructWithNonSerializableTypes {
 }
 
 inflight class ResourceBackend impl sim.IResource {
-  new() {}
   pub onStart(ctx: sim.IResourceContext) {}
   pub onStop() {}
 
