@@ -459,7 +459,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 	}
 }
 
-
 /// Check if an expression is a reference to an inflight field (`this.<field>`).
 /// in this case, we don't need to lift the field because it is already available
 fn is_inflight_field(expr: &Expr, expr_type: TypeRef, property: &Option<Symbol>) -> bool {
