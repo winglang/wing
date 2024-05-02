@@ -1196,9 +1196,6 @@ importers:
       node-addon-api:
         specifier: ^7.1.0
         version: 7.1.0
-      node-gyp-build:
-        specifier: ^4.8.0
-        version: 4.8.0
       tree-sitter:
         specifier: ^0.21.0
         version: 0.21.1
@@ -1206,9 +1203,6 @@ importers:
       nodemon:
         specifier: ^3.1.0
         version: 3.1.0
-      prebuildify:
-        specifier: ^6.0.0
-        version: 6.0.0
       tree-sitter-cli:
         specifier: 0.22.5
         version: 0.22.5
@@ -15412,12 +15406,6 @@ packages:
       signal-exit: 4.1.0
       strip-final-newline: 3.0.0
 
-  /execspawn@1.0.1:
-    resolution: {integrity: sha512-s2k06Jy9i8CUkYe0+DxRlvtkZoOkwwfhB+Xxo5HGUtrISVW2m98jO2tr67DGRFxZwkjQqloA3v/tNtjhBRBieg==}
-    dependencies:
-      util-extend: 1.0.3
-    dev: true
-
   /expand-template@2.0.3:
     resolution: {integrity: sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==}
     engines: {node: '>=6'}
@@ -19269,13 +19257,6 @@ packages:
       - supports-color
     dev: false
 
-  /npm-run-path@3.1.0:
-    resolution: {integrity: sha512-Dbl4A/VfiVGLgQv29URL9xshU8XDY1GeLy+fsaZ1AA8JDSfjvr5P5+pzRbWqRSBxk6/DW7MIh8lTM/PaGnP2kg==}
-    engines: {node: '>=8'}
-    dependencies:
-      path-key: 3.1.1
-    dev: true
-
   /npm-run-path@4.0.1:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
     engines: {node: '>=8'}
@@ -20131,19 +20112,6 @@ packages:
       simple-get: 4.0.1
       tar-fs: 2.1.1
       tunnel-agent: 0.6.0
-    dev: true
-
-  /prebuildify@6.0.0:
-    resolution: {integrity: sha512-DEvK4C3tcimIp7Pzqbs036n9i6CTKGp1XVEpMnr4wV3enKU5sBogPP+lP3KZw7993i42bXnsd5eIxAXQ566Cqw==}
-    hasBin: true
-    dependencies:
-      execspawn: 1.0.1
-      minimist: 1.2.8
-      mkdirp-classic: 0.5.3
-      node-abi: 3.47.0
-      npm-run-path: 3.1.0
-      pump: 3.0.0
-      tar-fs: 2.1.1
     dev: true
 
   /prelude-ls@1.2.1:
@@ -23092,10 +23060,6 @@ packages:
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
-
-  /util-extend@1.0.3:
-    resolution: {integrity: sha512-mLs5zAK+ctllYBj+iAQvlDCwoxU/WDOUaJkcFudeiAX6OajC6BKXJUa9a+tbtkC11dz2Ufb7h0lyvIOVn4LADA==}
-    dev: true
 
   /util@0.12.5:
     resolution: {integrity: sha512-kZf/K6hEIrWHI6XqOFUiiMa+79wE/D8Q+NCNAWclkyg3b4d2k7s0QGepNjiABc+aR3N1PAyHL7p6UcLY6LmrnA==}
