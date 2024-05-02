@@ -7,8 +7,8 @@ pub mod symbol_env;
 pub(crate) mod type_reference_transform;
 
 use crate::ast::{
-	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition,
-	IfLet, New, TypeAnnotationKind,
+	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExplicitLift, ExprId,
+	FunctionDefinition, IfLet, New, TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -3997,7 +3997,9 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::SuperConstructor { arg_list } => {
 				tc.type_check_super_constructor_against_parent_initializer(stmt, arg_list, env);
 			}
-			StmtKind::ExplicitLift(_) => todo!(),
+			StmtKind::ExplicitLift(lift_quals) => {
+				tc.type_check_lift_statement(lift_quals, env);
+			}
 		});
 	}
 
@@ -6288,6 +6290,77 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(parent, format!("Expected \"{}\" to be a class", parent));
 			(None, None)
 		}
+	}
+
+	fn type_check_lift_statement(&mut self, lift_quals: &ExplicitLift, env: &mut SymbolEnv) {
+		// TODO
+		// 1. Validate all obj are references to preflight objects
+		// 2. Validate all ops are inflight memebers of the objs
+		// 3. Disabled qual erros for inner block (in lifting.rs)
+		// 4. Type check the inner block
+
+		for qual in lift_quals.qualifications.iter() {
+			let (res, obj_phase) = self.resolve_reference(&qual.obj, env);
+			// Make sure the object is a preflight object
+			if obj_phase != Phase::Preflight {
+				self.spanned_error(
+					&qual.obj,
+					format!("Expected a preflight object, but found {obj_phase} reference instead"),
+				);
+			}
+			// Get the type of the object
+			let obj_type = match res {
+				ResolveReferenceResult::Variable(v) => v.type_,
+				ResolveReferenceResult::Location(_, t) => t,
+			};
+			// Make sure the object type is a preflight type
+			if !obj_type.is_preflight_object_type() {
+				self.spanned_error(
+					&qual.obj,
+					format!("Expected a preflight object type, but found {obj_type} instead"),
+				);
+			}
+			// Make sure all the ops are inflight instance members of the object
+			for op in qual.ops.iter() {
+				println!("op: {op}");
+				let obj_env = obj_type.as_env().expect("a preflight object to have an env");
+				match obj_env.lookup(op, None) {
+					Some(SymbolKind::Variable(v)) => {
+						if v.phase != Phase::Inflight {
+							self.spanned_error(
+								op,
+								format!("Only inflight memebers may be qualify the lift. {op} is {}.", v.phase),
+							);
+						}
+						if v.kind != VariableKind::InstanceMember {
+							self.spanned_error(
+								op,
+								"Only instance (non-static) members may qualify the lift".to_string(),
+							);
+						}
+					}
+					Some(_) => panic!("expected object envs to only have variables"),
+					None => self.spanned_error_with_annotations(
+						op,
+						format!("Object of type {obj_type} does not have an inflight member named {op}"),
+						vec![DiagnosticAnnotation::new(
+							"Operation does not exist in this object",
+							&qual.obj,
+						)],
+					),
+				}
+			}
+		}
+
+		// Type check the inner statements
+		let scope_env = self.types.add_symbol_env(SymbolEnv::new(
+			Some(env.get_ref()),
+			SymbolEnvKind::Scope,
+			env.phase,
+			self.ctx.current_stmt_idx(),
+		));
+		self.types.set_scope_env(&lift_quals.statements, scope_env);
+		self.inner_scopes.push((&lift_quals.statements, self.ctx.clone()));
 	}
 }
 
