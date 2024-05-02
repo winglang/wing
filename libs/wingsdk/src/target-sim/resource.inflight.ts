@@ -1,9 +1,5 @@
 import { resolve } from "path";
-import {
-  IResourceClient,
-  IResourceContext,
-  SIM_RESOURCE_FQN,
-} from "./resource";
+import { IResourceClient, SIM_RESOURCE_FQN } from "./resource";
 import { SimResourceAttributes, SimResourceSchema } from "./schema-resources";
 import { Bundle } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
@@ -56,16 +52,51 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
         this.addTrace(message, internal ? TraceType.SIMULATOR : TraceType.LOG);
       },
     });
-    const ctx: IResourceContext = {
-      statedir: this.context.statedir,
-    };
-    await this.sandbox.call("start", ctx);
-    return {};
+
+    // We're communicating with the sandbox via IPC. It's not possible to pass
+    // an IResourceContext object directly because methods like `resolveToken`
+    // are not serializable. So instead, a fake ctx object is created within the
+    // inflight wrapper code - see `resource.ts`.
+    try {
+      const attrs: Record<string, string> = await this.sandbox.call(
+        "start",
+        this.context.statedir
+      );
+      return attrs;
+    } catch (err) {
+      this.context.addTrace({
+        data: {
+          message: "Error calling onStart",
+          status: "failure",
+          error: err,
+        },
+        type: TraceType.LOG,
+        sourcePath: this.context.resourcePath,
+        sourceType: SIM_RESOURCE_FQN,
+        timestamp: new Date().toISOString(),
+      });
+      return {};
+    }
   }
 
   public async cleanup(): Promise<void> {
-    await this.sandbox!.call("stop");
-    await this.sandbox!.cleanup();
+    try {
+      await this.sandbox!.call("stop");
+    } catch (err) {
+      this.context.addTrace({
+        data: {
+          message: "Error calling onStop",
+          status: "failure",
+          error: err,
+        },
+        type: TraceType.LOG,
+        sourcePath: this.context.resourcePath,
+        sourceType: SIM_RESOURCE_FQN,
+        timestamp: new Date().toISOString(),
+      });
+    } finally {
+      await this.sandbox!.cleanup();
+    }
   }
 
   public async save(): Promise<void> {}

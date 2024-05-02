@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join, relative } from "path";
 import { Construct } from "constructs";
 import { SimResourceSchema } from "./schema-resources";
-import { simulatorHandleToken } from "./tokens";
+import { simulatorAttrToken, simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { App, LiftMap, Lifting } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
@@ -33,23 +33,43 @@ export interface IResource {
   onStop(): Promise<void>;
 }
 
-// TODO: fill out IResourceContext
+// TODO: make statedir a property once Wing supports properties on interfaces
 
 /**
  * Context for implementing a simulator resource.
+ * @inflightinterface
  */
 export interface IResourceContext {
   /**
    * The directory for the resource's state.
    */
-  readonly statedir: string;
+  statedir(): string;
+
+  /**
+   * Resolves an attribute value. All attributes must be resolved during the
+   * `onStart` method.
+   *
+   * @param name The name of the attribute.
+   * @param value The value of the attribute.
+   * @inflight
+   */
+  resolveAttr(name: string, value: string): void;
+
   // /**
-  //  * Resolves a tokenized attribute value.
-  //  * @param name The name of the attribute.
-  //  * @param value The value of the attribute.
-  //  * @inflight
+  //  * Log a message at the current point in time.
   //  */
-  // resolveAttribute(name: string, value: string): void;
+  // log(message: string, level: LogLevel): void;
+}
+
+/**
+ * The severity of a log message.
+ */
+export enum LogLevel {
+  TRACE = "trace",
+  DEBUG = "debug",
+  INFO = "info",
+  WARN = "warn",
+  ERROR = "error",
 }
 
 /**
@@ -109,6 +129,21 @@ export class Resource
     };
   }
 
+  /**
+   * Obtain a token that can be used to reference an attribute of this
+   * resource that is only resolved once the resource is started in the simulator.
+   *
+   * If the token is used in inflight code or in the configuration of a simulated
+   * resource (e.g. as an environment variable), the relevant resource will
+   * automatically take a dependency on the resource the attribute belongs to.
+   *
+   * @param name The name of the attribute.
+   * @returns An attribute token.
+   */
+  public attrToken(name: string): string {
+    return simulatorAttrToken(this, name);
+  }
+
   /** @internal */
   public _preSynthesize(): void {
     super._preSynthesize();
@@ -117,15 +152,23 @@ export class Resource
     const code = `\
         "use strict";
         let $klass;
-        exports.start = async function(ctx) {
+        exports.start = async function(statedir) {
           if ($klass) {
             throw Error('resource already started');
           }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = statedir;
+          ctx.resolveAttr = (name, value) => attrs[name] = value;
           const client = ${inflightClient};
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
+          ctx.resolveAttr = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
           $klass = klass;
+          return attrs;
         };
 
         exports.call = async function(method, ...args) {

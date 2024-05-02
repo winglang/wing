@@ -286,4 +286,6 @@ export interface SimResourceSchema {
 }
 
 /** Runtime attributes for sim.Resource */
-export interface SimResourceAttributes {}
+export interface SimResourceAttributes {
+  [key: string]: string;
+}

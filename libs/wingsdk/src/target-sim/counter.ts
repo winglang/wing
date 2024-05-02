@@ -12,7 +12,7 @@ import { IInflightHost } from "../std";
  */
 export class Counter extends cloud.Counter {
   public readonly initial: number;
-  private readonly resource: Resource;
+  private readonly backend: Resource;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
@@ -29,27 +29,27 @@ export class Counter extends cloud.Counter {
       return new CounterBackend({ initial: ctx.initial });
     });
 
-    this.resource = new Resource(this, "Resource", factory);
+    this.backend = new Resource(this, "Resource", factory);
   }
 
   /** @internal */
   public get _liftMap(): LiftMap {
     return {
-      [cloud.CounterInflightMethods.INC]: [[this.resource, ["call"]]],
-      [cloud.CounterInflightMethods.DEC]: [[this.resource, ["call"]]],
-      [cloud.CounterInflightMethods.PEEK]: [[this.resource, ["call"]]],
-      [cloud.CounterInflightMethods.SET]: [[this.resource, ["call"]]],
+      [cloud.CounterInflightMethods.INC]: [[this.backend, ["call"]]],
+      [cloud.CounterInflightMethods.DEC]: [[this.backend, ["call"]]],
+      [cloud.CounterInflightMethods.PEEK]: [[this.backend, ["call"]]],
+      [cloud.CounterInflightMethods.SET]: [[this.backend, ["call"]]],
     };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this.resource, host, ops);
+    bindSimulatorResource(__filename, this.backend, host, ops);
     super.onLift(host, ops);
   }
 
   /** @internal */
   public _toInflight(): string {
-    return makeSimulatorJsClientV2(__filename, this.resource);
+    return makeSimulatorJsClientV2(__filename, this.backend);
   }
 }
 

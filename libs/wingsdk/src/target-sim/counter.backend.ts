@@ -28,7 +28,7 @@ export class CounterBackend implements ICounterClient, IResource {
     this._ctx = ctx;
 
     // Load the values from disk
-    const valuesFile = join(this.ctx.statedir, VALUES_FILENAME);
+    const valuesFile = join(this.ctx.statedir(), VALUES_FILENAME);
     const valueFilesExists = await exists(valuesFile);
     if (valueFilesExists) {
       const valuesContents = await fs.promises.readFile(valuesFile, "utf-8");
@@ -40,7 +40,7 @@ export class CounterBackend implements ICounterClient, IResource {
   public async onStop(): Promise<void> {
     // Save the values to disk
     fs.writeFileSync(
-      join(this.ctx.statedir, VALUES_FILENAME),
+      join(this.ctx.statedir(), VALUES_FILENAME),
       JSON.stringify(Array.from(this.values.entries()))
     );
   }

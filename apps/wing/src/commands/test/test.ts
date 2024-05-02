@@ -14,6 +14,7 @@ import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
 import { SnapshotMode, SnapshotResult, captureSnapshot, determineSnapshotMode } from "./snapshots";
 import { SNAPSHOT_ERROR_PREFIX } from "./snapshots-help";
+import { TraceProcessor } from "./trace-processor";
 import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
@@ -452,48 +453,70 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
   const { clean, testFilter, retry } = options;
 
+  // As of this comment, each Wing test is associated with an isolated environment.
+  // (All resources for test #0 are in root/env0/..., etc.)
+  // This means we can use the environment number to map each environment # to a test name,
+  // so when we receive a trace from the simulator, we can infer which test it's associated with.
+  const testMappings = extractTestMappings(s.listResources());
+
+  const printEvent = async (event: std.Trace) => {
+    const env = extractTestEnvFromPath(event.sourcePath);
+
+    let testName = "(no test)";
+    if (env !== undefined) {
+      testName = testMappings[env] ?? testName;
+    }
+
+    if (testFilter && !testName.includes(testFilter) && testName !== "(no test)") {
+      // This test does not match the filter, so skip it.
+      return;
+    }
+
+    const severity = inferSeverityOfEvent(event);
+
+    // console.error("severity:", severity);
+
+    // Skip debug events if DEBUG isn't set
+    if ((severity === "debug" || severity === "verbose") && !process.env.DEBUG) {
+      return;
+    }
+
+    // Skip verbose events if DEBUG=verbose isn't set
+    if (severity === "verbose" && process.env.DEBUG !== "verbose") {
+      return;
+    }
+
+    const formatStyle = process.env.DEBUG ? "full" : "short";
+    // console.error("raw event", event);
+    const formatted = await formatTrace(event, testName, formatStyle);
+    // console.error("formatted", formatted);
+    outputStream!.write(formatted);
+  };
+
   let outputStream: SpinnerStream | undefined;
+  let traceProcessor: TraceProcessor | undefined;
+
   if (options.stream) {
+    // The simulator emits events synchronously, but formatting them needs to
+    // happen asynchronously since e.g. files have to be read to format stack
+    // traces. If we performed this async work inside of the `onTrace` callback,
+    // we might end up with out-of-order traces, or traces getting printed (or
+    // dropped) after the test has finished. TraceProcessor allows events to be
+    // added to a queue and processed serially, and provides a way to safely
+    // "await" the completion of the processing.
+    traceProcessor = new TraceProcessor((event) => printEvent(event));
+
+    // SpinnerStream is responsible for taking in lines of text and streaming
+    // them to a TTY with a spinner, making sure to clear the spinner before
+    // printing the next line.
     outputStream = new SpinnerStream(process.stdout, "Running tests...");
 
-    // As of this comment, each Wing test is associated with an isolated environment.
-    // (All resources for test #0 are in root/env0/..., etc.)
-    // This means we can use the environment number to map each environment # to a test name,
-    // so when we receive a trace from the simulator, we can infer which test it's associated with.
-    const testMappings = extractTestMappings(s.listResources());
-
-    const printEvent = async (event: std.Trace) => {
-      const env = extractTestEnvFromPath(event.sourcePath);
-
-      let testName = "(no test)";
-      if (env !== undefined) {
-        testName = testMappings[env] ?? testName;
-      }
-
-      if (testFilter && !testName.includes(testFilter) && testName !== "(no test)") {
-        // This test does not match the filter, so skip it.
-        return;
-      }
-
-      const severity = inferSeverityOfEvent(event);
-
-      // Skip debug events if DEBUG isn't set
-      if ((severity === "debug" || severity === "verbose") && !process.env.DEBUG) {
-        return;
-      }
-
-      // Skip verbose events if DEBUG=verbose isn't set
-      if (severity === "verbose" && process.env.DEBUG !== "verbose") {
-        return;
-      }
-
-      const formatStyle = process.env.DEBUG ? "full" : "short";
-      const formatted = await formatTrace(event, testName, formatStyle);
-      outputStream!.write(formatted);
-    };
-
     // TODO: support async callbacks with onTrace?
-    s.onTrace({ callback: (event) => void printEvent(event) });
+    s.onTrace({
+      callback: (event) => {
+        traceProcessor!.addEvent(event);
+      },
+    });
   }
 
   await s.start();
@@ -507,6 +530,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   await s.stop();
 
   if (options.stream) {
+    await traceProcessor!.finish();
     outputStream!.stopSpinner();
   }
 
