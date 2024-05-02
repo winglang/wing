@@ -662,18 +662,10 @@ impl<'s> Parser<'s> {
 			else {
 				panic!("expected obj in lift qualification to be a reference");
 			};
-			let ops = if let Some(op_node) = qual_node.child_by_field_name("op") {
-				vec![self.node_symbol(&op_node)?]
-			} else if let Some(ops_node) = qual_node.child_by_field_name("ops") {
-				let mut ops = vec![];
-				let mut ops_cursor = ops_node.walk();
-				for op_node in ops_node.named_children(&mut ops_cursor) {
-					ops.push(self.node_symbol(&op_node)?);
-				}
-				ops
-			} else {
-				panic!("expected ops in lift qualification");
-			};
+			let mut ops = vec![];
+			for op_node in get_actual_children_by_field_name(qual_node, "ops") {
+				ops.push(self.node_symbol(&op_node)?);
+			}
 			qualifications.push(LiftQualification { obj, ops });
 		}
 

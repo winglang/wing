@@ -815,7 +815,7 @@
           "members": [
             {
               "type": "FIELD",
-              "name": "op",
+              "name": "ops",
               "content": {
                 "type": "SYMBOL",
                 "name": "identifier"
