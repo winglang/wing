@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { TableSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { LiftMap } from "../core";
 import * as ex from "../ex";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { Json, IInflightHost } from "../std";
@@ -35,16 +36,16 @@ export class Table extends ex.Table implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      ex.TableInflightMethods.INSERT,
-      ex.TableInflightMethods.UPSERT,
-      ex.TableInflightMethods.UPDATE,
-      ex.TableInflightMethods.DELETE,
-      ex.TableInflightMethods.GET,
-      ex.TableInflightMethods.TRYGET,
-      ex.TableInflightMethods.LIST,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [ex.TableInflightMethods.INSERT]: [],
+      [ex.TableInflightMethods.UPSERT]: [],
+      [ex.TableInflightMethods.UPDATE]: [],
+      [ex.TableInflightMethods.DELETE]: [],
+      [ex.TableInflightMethods.GET]: [],
+      [ex.TableInflightMethods.TRYGET]: [],
+      [ex.TableInflightMethods.LIST]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

@@ -1,6 +1,5 @@
-import { join } from "path";
 import { cloud } from "..";
-import { convertBetweenHandlers } from "../shared/convert";
+import { lift } from "../core";
 
 /**
  * A shared interface for AWS topics.
@@ -52,10 +51,11 @@ export class TopicOnMessageHandler {
   public static toFunctionHandler(
     handler: cloud.ITopicOnMessageHandler
   ): cloud.IFunctionHandler {
-    return convertBetweenHandlers(
-      handler,
-      join(__dirname, "topic.onmessage.inflight.js"),
-      "TopicOnMessageHandlerClient"
-    );
+    return lift({ handler }).inflight(async (ctx, event) => {
+      for (const record of (event as any).Records ?? []) {
+        await ctx.handler(record.Sns.Message);
+        return undefined;
+      }
+    });
   }
 }

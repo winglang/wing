@@ -1,13 +1,12 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { Duration } from "../../src/std";
 import { SimApp } from "../sim-app";
 
-const INFLIGHT_CODE = `
-async handle(message) {
-console.log("Hello from schedule!");
-}`;
+const INFLIGHT_CODE = inflight(async (_, message) => {
+  console.log("Hello from schedule!");
+});
 
 test("create a schedule", async () => {
   // GIVEN
@@ -38,11 +37,10 @@ test("create a schedule", async () => {
 test("schedule with one task with cron", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
   const schedule = new cloud.Schedule(app, "my_schedule", {
     cron: "* * * * *",
   });
-  schedule.onTick(handler);
+  schedule.onTick(INFLIGHT_CODE);
 
   const s = await app.startSimulator();
   // WHEN
@@ -56,12 +54,11 @@ test("schedule with one task with cron", async () => {
 test("schedule with one task using rate of 10m", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
   const schedule = new cloud.Schedule(app, "my_schedule", {
     rate: Duration.fromMinutes(10),
   });
   const expectedCron = "*/10 * * * *"; // every 10 minutes cron expression
-  schedule.onTick(handler);
+  schedule.onTick(INFLIGHT_CODE);
   const s = await app.startSimulator();
 
   // THEN
@@ -85,12 +82,11 @@ test("schedule with one task using rate of 10m", async () => {
 test("schedule with one task using rate of 3h", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
   const schedule = new cloud.Schedule(app, "my_schedule", {
     rate: Duration.fromHours(3),
   });
   const expectedCron = "* */3 * * *"; // every 3 hours cron expression
-  schedule.onTick(handler);
+  schedule.onTick(INFLIGHT_CODE);
   const s = await app.startSimulator();
 
   // THEN

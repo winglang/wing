@@ -1,19 +1,17 @@
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
 test("inflight function uses a logger", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
-  const inflight = Testing.makeHandler(`async handle() {
-      console.log("hello world!");
-    }`);
+  const handler = inflight(async () => console.log("hello world!"));
 
-  new Function(app, "Function", inflight);
+  new Function(app, "Function", handler);
 
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
 
   const output = app.synth();
 

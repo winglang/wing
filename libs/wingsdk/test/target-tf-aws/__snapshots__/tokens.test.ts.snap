@@ -1,22 +1,23 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`captures tokens 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+"(await (async () => {
+  const $func = async (ctx) => {
+    console.log(ctx.str, ctx.num, ctx.list);
+    return void 0;
   }
-  async handle(event) {
-    console.log(this.str, this.num, this.list);
-  }
-};
-})())({
-str: JSON.parse(process.env["WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_0_AMAZONAWS_COM_TFTOKEN_TOKEN_9"]),
+  const $ctx = {
+  str: JSON.parse(process.env["WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_0_AMAZONAWS_COM_TFTOKEN_TOKEN_9"]),
 num: JSON.parse(process.env["WING_TOKEN_8_109562212591388E_298"]),
 list: JSON.parse(process.env["WING_TOKEN_TFTOKEN_TOKEN_11"])
-})"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
 `;
 
 exports[`captures tokens 2`] = `
@@ -154,20 +155,20 @@ exports[`captures tokens 2`] = `
 `;
 
 exports[`captures tokens inside plain objects 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+"(await (async () => {
+  const $func = async (ctx) => {
+    console.log(ctx.foo.str, ctx.foo.num);
   }
-  async handle(event) {
-    console.log(this.foo.str, this.foo.num);
-  }
-};
-})())({
-foo: {"str": JSON.parse(process.env["WING_TOKEN_HTTPS_TFTOKEN_TOKEN_38_EXECUTE_API_TFTOKEN_TOKEN_30_AMAZONAWS_COM_TFTOKEN_TOKEN_39"]),"num": JSON.parse(process.env["WING_TOKEN_8_109562212591416E_298"]),}
-})"
+  const $ctx = {
+  foo: {"str": JSON.parse(process.env["WING_TOKEN_HTTPS_TFTOKEN_TOKEN_38_EXECUTE_API_TFTOKEN_TOKEN_30_AMAZONAWS_COM_TFTOKEN_TOKEN_39"]),"num": JSON.parse(process.env["WING_TOKEN_8_109562212591416E_298"]),}
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
 `;
 
 exports[`captures tokens inside plain objects 2`] = `

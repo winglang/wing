@@ -23,7 +23,9 @@ export class SecretClient implements ISecretClient {
     });
     const getSecretValue = await this.client.send(command);
     if (!getSecretValue.SecretString) {
-      throw new Error("Secret has no secret string");
+      throw new Error(
+        `No value for secret found\n(hint: try running the 'wing secrets -t TARGET' to store secret)`
+      );
     }
 
     this.secretValue = getSecretValue.SecretString;

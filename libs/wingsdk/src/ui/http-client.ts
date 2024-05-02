@@ -12,6 +12,7 @@ export const API_FQN = fqnForType("ui.HttpClient");
 
 /**
  * An HttpClient can be used to make HTTP requests.
+ * @noinflight
  */
 export class HttpClient extends VisualComponent {
   /**
@@ -68,11 +69,6 @@ export class HttpClient extends VisualComponent {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [];
-  }
-
-  /** @internal */
   public _toInflight(): string {
     throw new Error("Method not implemented.");
   }
@@ -104,6 +100,7 @@ export interface IHttpClientGetUrlHandlerClient {
    */
   handle(): Promise<string>;
 }
+
 /**
  * Inflight client for `IHttpClientGetApiSpecHandler`.
  */

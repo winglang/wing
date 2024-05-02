@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
@@ -9,7 +8,7 @@ import { ApiRoute, ApiSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
+import { lift } from "../core";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -62,7 +61,20 @@ export class Api extends cloud.Api implements ISimulatorResource {
       return handler.func;
     }
 
-    const functionHandler = ApiEndpointHandler.toFunctionHandler(inflight);
+    const functionHandler = lift({ handler: inflight }).inflight(
+      async (ctx, event) => {
+        if (!event) {
+          throw new Error("invalid API request event");
+        }
+        let req = JSON.parse(event) as cloud.ApiRequest;
+        const response = await ctx.handler(req);
+        if (!response) {
+          return undefined;
+        } else {
+          return JSON.stringify(response);
+        }
+      }
+    );
 
     const fn = new Function(
       this,
@@ -249,27 +261,4 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
-}
-
-/**
- * Converts an API endpoint handler to a function handler.
- */
-export class ApiEndpointHandler {
-  /**
-   * Converts an API endpoint handler to a function handler.
-   * @param handler The API endpoint handler.
-   * @returns The function handler.
-   */
-  public static toFunctionHandler(
-    handler: cloud.IApiEndpointHandler
-  ): cloud.IFunctionHandler {
-    // wrap our api handler with a function handler (from (str->str) to (json->json)).
-    return convertBetweenHandlers(
-      handler,
-      join(__dirname, "api.onrequest.inflight.js"),
-      "ApiOnRequestHandlerClient"
-    );
-  }
-
-  private constructor() {}
 }

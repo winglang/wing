@@ -1,12 +1,12 @@
 import { basename } from "path";
-import { liftObject, LiftDepsMatrixRaw } from "./lifting";
+import { liftObject, LiftMap, INFLIGHT_INIT_METHOD_NAME } from "./lifting";
 import {
   AsyncFunction,
   INFLIGHT_SYMBOL,
   Inflight,
   OperationsOf,
 } from "./types";
-import { LiftableMap, LiftedMap, PickNonFunctions } from "./utility-types";
+import { LiftableRecord, LiftedMap, PickNonFunctions } from "./utility-types";
 import { normalPath } from "../shared/misc";
 import type { IHostedLiftable } from "../std/resource";
 
@@ -87,7 +87,7 @@ export class InflightClient {
  *   .inflight(({ bkt, sum, field }) => { ... }))
  * ```
  */
-export function lift<TToLift extends LiftableMap>(
+export function lift<TToLift extends LiftableRecord>(
   captures: TToLift
 ): Lifter<LiftedMap<TToLift>, {}> {
   return new Lifter().lift(captures);
@@ -115,7 +115,7 @@ class Lifter<
   TOperations extends Record<string, string[]>
 > {
   constructor(
-    private lifts: LiftableMap = {},
+    private lifts: LiftableRecord = {},
     private grants: Record<string, string[]> = {}
   ) {}
 
@@ -144,7 +144,7 @@ class Lifter<
    *   .inflight(({ bkt, sum, field }) => { ... }))
    * ```
    */
-  public lift<TWillLift extends LiftableMap>(captures: TWillLift) {
+  public lift<TWillLift extends LiftableRecord>(captures: TWillLift) {
     return new Lifter<
       Omit<TLifted, keyof TWillLift> & LiftedMap<TWillLift>,
       TOperations
@@ -218,16 +218,15 @@ class Lifter<
     // inflight methods are called on an object
     // The SDK models inflight functions as objects with a "handle" property,
     // so here we annotate that "handle" needs all of the required permissions
-    const _liftMap: LiftDepsMatrixRaw = { handle: [], $inflight_init: [] };
+    const _liftMap: LiftMap = { handle: [] };
     for (const [key, obj] of Object.entries(this.lifts)) {
-      let knownOps = this.grants[key];
-      if (
-        knownOps === undefined &&
-        typeof (obj as IHostedLiftable)?._supportedOps === "function"
-      ) {
-        knownOps = (obj as IHostedLiftable)._supportedOps();
-      }
-      _liftMap.handle.push([obj, knownOps ?? []]);
+      const knownOps =
+        this.grants[key] ??
+        Object.keys((obj as IHostedLiftable)._liftMap ?? {}).filter(
+          (x) => x !== INFLIGHT_INIT_METHOD_NAME // filter "$inflight_init"
+        );
+
+      _liftMap.handle.push([obj, knownOps]);
     }
 
     return {
@@ -253,7 +252,6 @@ class Lifter<
 )())`;
       },
       _liftMap,
-      _supportedOps: () => [],
       // @ts-expect-error This function's type doesn't actually match, but it will just throw anyways
       [INFLIGHT_SYMBOL]: () => {
         throw new Error(

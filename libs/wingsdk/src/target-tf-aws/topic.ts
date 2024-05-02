@@ -189,8 +189,10 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     );
   }
   /** @internal */
-  public _supportedOps(): string[] {
-    return [cloud.TopicInflightMethods.PUBLISH];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.TopicInflightMethods.PUBLISH]: [],
+    };
   }
 
   private envName(): string {

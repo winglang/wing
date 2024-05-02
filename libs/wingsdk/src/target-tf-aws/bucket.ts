@@ -48,7 +48,7 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
 /**
  * AWS implementation of `cloud.Bucket`.
  *
- * @inflight `@winglang/sdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.aws.IAwsBucketClient`
  */
 export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly bucket: S3Bucket;
@@ -73,24 +73,24 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.BucketInflightMethods.DELETE,
-      cloud.BucketInflightMethods.GET,
-      cloud.BucketInflightMethods.GET_JSON,
-      cloud.BucketInflightMethods.LIST,
-      cloud.BucketInflightMethods.PUT,
-      cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
-      cloud.BucketInflightMethods.EXISTS,
-      cloud.BucketInflightMethods.TRY_GET,
-      cloud.BucketInflightMethods.TRY_GET_JSON,
-      cloud.BucketInflightMethods.TRY_DELETE,
-      cloud.BucketInflightMethods.SIGNED_URL,
-      cloud.BucketInflightMethods.METADATA,
-      cloud.BucketInflightMethods.COPY,
-      cloud.BucketInflightMethods.RENAME,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.SIGNED_URL]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+    };
   }
 
   protected createTopicHandler(

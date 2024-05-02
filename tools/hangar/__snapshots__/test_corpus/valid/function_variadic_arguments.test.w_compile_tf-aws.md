@@ -127,7 +127,7 @@ class $Root extends $stdlib.std.Resource {
     }
     class B extends A {
       constructor($scope, $id, msg) {
-        super($scope, $id);
+        super($scope, $id, msg);
         this.message = msg;
       }
       static _toInflightType() {

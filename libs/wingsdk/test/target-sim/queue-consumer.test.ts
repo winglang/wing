@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { waitUntilTrace } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight, lift } from "../../src/core";
 import { TraceType } from "../../src/std";
 import { SimApp } from "../sim-app";
 
@@ -14,23 +14,19 @@ test("pushing messages through a queue", async () => {
       super(scope, id);
 
       const queue = new cloud.Queue(this, "Queue");
-      const pusher = Testing.makeHandler(
-        `async handle(event) {
+      const pusher = lift({ queue })
+        .grant({ queue: ["push"] })
+        .inflight(async (ctx, event) => {
           console.log("Hello, world!");
-          await this.queue.push(event);
-        }`,
-        {
-          queue: {
-            obj: queue,
-            ops: [cloud.QueueInflightMethods.PUSH],
-          },
-        }
-      );
+          await ctx.queue.push(event);
+        });
+
       new cloud.Function(this, "Function", pusher);
 
-      const processor = Testing.makeHandler(`async handle(event) {
-          console.log("Received " + event);
-        }`);
+      const processor = inflight(async (_, event) =>
+        console.log("Received " + event)
+      );
+
       const consumer = queue.setConsumer(processor);
       this.consumerPath = consumer.node.path;
     }

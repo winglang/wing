@@ -56,6 +56,7 @@ class A {
 
 class B extends A {
   new(msg: str) {
+    super(msg);
     this.message = msg;
   }
 }

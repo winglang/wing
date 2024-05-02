@@ -1,6 +1,6 @@
 import { test, expect, describe } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight, lift } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
@@ -32,21 +32,19 @@ describe("function with bucket binding", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = new cloud.Bucket(app, "Bucket");
-    const inflight = Testing.makeHandler(
-      `async handle(event) { await this.bucket.put("hello.txt", event); }`,
-      {
-        bucket: {
-          obj: bucket,
-          ops: [cloud.BucketInflightMethods.PUT],
-        },
-      }
+    new cloud.Function(
+      app,
+      "Function",
+      lift({ bucket })
+        .grant({ bucket: ["put"] })
+        .inflight(async (ctx, event) => {
+          await ctx.bucket.put("hello.txt", event ?? "none");
+          return undefined;
+        })
     );
-    new cloud.Function(app, "Function", inflight);
     const output = app.synth();
 
     // THEN
-    expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
-
     expect(tfResourcesOf(output)).toEqual([
       "aws_cloudwatch_log_group",
       "aws_iam_role",
@@ -63,16 +61,16 @@ describe("function with bucket binding", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = new cloud.Bucket(app, "Bucket");
-    const inflight = Testing.makeHandler(
-      `async handle(event) { await this.bucket.put("hello.txt", event); }`,
-      {
-        bucket: {
-          obj: bucket,
-          ops: [cloud.BucketInflightMethods.PUT_JSON],
-        },
-      }
+    new cloud.Function(
+      app,
+      "Function",
+      lift({ bucket })
+        .grant({ bucket: ["putJson"] })
+        .inflight(async (ctx, event) => {
+          await ctx.bucket.putJson("hello.json", event as any);
+          return undefined;
+        })
     );
-    new cloud.Function(app, "Function", inflight);
     const output = JSON.parse(app.synth());
     const hasActions = statementsContain(output, ["s3:PutObject*"], "Allow");
 
@@ -84,16 +82,17 @@ describe("function with bucket binding", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = new cloud.Bucket(app, "Bucket");
-    const inflight = Testing.makeHandler(
-      `async handle(event) { await this.bucket.put("hello.txt", event); }`,
-      {
-        bucket: {
-          obj: bucket,
-          ops: [cloud.BucketInflightMethods.GET_JSON],
-        },
-      }
+
+    new cloud.Function(
+      app,
+      "Function",
+      lift({ bucket })
+        .grant({ bucket: ["getJson"] })
+        .inflight(async (ctx) => {
+          await ctx.bucket.getJson("hello.txt");
+          return undefined;
+        })
     );
-    new cloud.Function(app, "Function", inflight);
     const output = JSON.parse(app.synth());
     const hasActions = statementsContain(
       output,
@@ -109,22 +108,16 @@ describe("function with bucket binding", () => {
 test("function with a function binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight1 = Testing.makeHandler(
-    `async handle(event) { console.log(event); }`
-  );
+  const inflight1 = inflight(async (_, event) => {
+    console.log(event);
+  });
   const fn1 = new cloud.Function(app, "Function1", inflight1);
-  const inflight2 = Testing.makeHandler(
-    `async handle(event) {
+  const inflight2 = lift({ fn1 })
+    .grant({ fn1: ["invoke"] })
+    .inflight(async (ctx, event) => {
       console.log("Event: " + event);
-      await this.function.invoke(JSON.stringify({ hello: "world" }));
-    }`,
-    {
-      function: {
-        obj: fn1,
-        ops: [cloud.FunctionInflightMethods.INVOKE],
-      },
-    }
-  );
+      await ctx.fn1.invoke(JSON.stringify({ hello: "world" }));
+    });
   new cloud.Function(app, "Function2", inflight2);
   const output = app.synth();
 
@@ -147,12 +140,12 @@ test("function with a function binding", () => {
 test("two functions reusing the same IFunctionHandler", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(
-    `async handle(event) { console.log(event); }`
-  );
+  const handler = inflight(async (_, event) => {
+    console.log(event);
+  });
 
-  new cloud.Function(app, "Function1", inflight);
-  new cloud.Function(app, "Function2", inflight);
+  new cloud.Function(app, "Function1", handler);
+  new cloud.Function(app, "Function2", handler);
 
   // THEN
   const output = app.synth();
@@ -173,21 +166,19 @@ test("function with a queue binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const queue = new cloud.Queue(app, "Queue");
-  const pusher = Testing.makeHandler(
-    `async handle(event) { await this.queue.push("info"); }`,
-    {
-      queue: {
-        obj: queue,
-        ops: [cloud.QueueInflightMethods.PUSH],
-      },
-    }
-  );
+  const pusher = lift({ queue })
+    .grant({ queue: ["push"] })
+    .inflight(async (ctx) => {
+      await ctx.queue.push("info");
+    });
+
   new cloud.Function(app, "Function", pusher);
 
-  const processor = Testing.makeHandler(
-    `async handle(event) { console.log("Received" + event); }`
-  );
+  const processor = inflight(async (_, event) => {
+    console.log("Received" + event);
+  });
   queue.setConsumer(processor);
+
   const output = app.synth();
 
   // THEN

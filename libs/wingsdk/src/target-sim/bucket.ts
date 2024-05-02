@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
@@ -6,7 +5,7 @@ import { BucketSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
+import { LiftMap, lift } from "../core";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost } from "../std";
 
@@ -28,23 +27,23 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.BucketInflightMethods.DELETE,
-      cloud.BucketInflightMethods.GET,
-      cloud.BucketInflightMethods.GET_JSON,
-      cloud.BucketInflightMethods.LIST,
-      cloud.BucketInflightMethods.PUT,
-      cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
-      cloud.BucketInflightMethods.EXISTS,
-      cloud.BucketInflightMethods.TRY_GET,
-      cloud.BucketInflightMethods.TRY_GET_JSON,
-      cloud.BucketInflightMethods.TRY_DELETE,
-      cloud.BucketInflightMethods.METADATA,
-      cloud.BucketInflightMethods.COPY,
-      cloud.BucketInflightMethods.RENAME,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+    };
   }
 
   /**
@@ -149,12 +148,8 @@ export class BucketEventHandler {
     handler: cloud.IBucketEventHandler,
     eventType: cloud.BucketEventType
   ): cloud.ITopicOnMessageHandler {
-    return convertBetweenHandlers(
-      handler,
-      // since uses __dirname should be specified under the target directory
-      join(__dirname, "bucket.onevent.inflight.js"),
-      "BucketEventHandlerClient",
-      { eventType }
-    );
+    return lift({ handler, eventType }).inflight(async (ctx, event) => {
+      return ctx.handler(event, ctx.eventType);
+    });
   }
 }
