@@ -500,6 +500,8 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     // dropped) after the test has finished. TraceProcessor allows events to be
     // added to a queue and processed serially, and provides a way to safely
     // "await" the completion of the processing.
+    //
+    // TODO: integrate this directly into the simulator
     traceProcessor = new TraceProcessor((event) => printEvent(event));
 
     // SpinnerStream is responsible for taking in lines of text and streaming
@@ -507,7 +509,6 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     // printing the next line.
     outputStream = new SpinnerStream(process.stdout, "Running tests...");
 
-    // TODO: support async callbacks with onTrace?
     s.onTrace({
       callback: (event) => {
         traceProcessor!.addEvent(event);
