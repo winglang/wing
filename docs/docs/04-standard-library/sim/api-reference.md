@@ -343,7 +343,7 @@ Convert this resource to a resource schema for the simulator.
 ##### `call` <a name="call" id="@winglang/sdk.sim.IResourceClient.call"></a>
 
 ```wing
-call(method: str, args?: MutArray<Json>): Json
+inflight call(method: str, args?: MutArray<Json>): Json
 ```
 
 Call a method on the resource.
