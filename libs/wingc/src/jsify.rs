@@ -1283,6 +1283,7 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			StmtKind::CompilerDebugEnv => {}
+			StmtKind::ExplicitLift(_) => {}
 		};
 		ctx.visit_ctx.pop_stmt();
 		code
@@ -2091,6 +2092,7 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			}
 			StmtKind::TryCatch { .. } => {}
 			StmtKind::CompilerDebugEnv => {}
+			StmtKind::ExplicitLift(_) => {}
 		}
 	}
 

@@ -1712,7 +1712,7 @@ pub enum UtilityFunctions {
 	Assert,
 	UnsafeCast,
 	Nodeof,
-	Lift,
+	Lift, // TODO: remove
 }
 
 impl Display for UtilityFunctions {
@@ -3997,6 +3997,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::SuperConstructor { arg_list } => {
 				tc.type_check_super_constructor_against_parent_initializer(stmt, arg_list, env);
 			}
+			StmtKind::ExplicitLift(_) => todo!(),
 		});
 	}
 

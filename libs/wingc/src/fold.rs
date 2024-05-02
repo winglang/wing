@@ -1,9 +1,9 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum, Expr,
-		ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface,
-		InterpolatedString, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind, Struct, StructField,
-		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum,
+		ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet,
+		Interface, InterpolatedString, InterpolatedStringPart, LiftQualification, Literal, New, Reference, Scope, Stmt,
+		StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -203,6 +203,17 @@ where
 		StmtKind::SuperConstructor { arg_list } => StmtKind::SuperConstructor {
 			arg_list: f.fold_args(arg_list),
 		},
+		StmtKind::ExplicitLift(explicit_lift) => StmtKind::ExplicitLift(ExplicitLift {
+			qualifications: explicit_lift
+				.qualifications
+				.into_iter()
+				.map(|q| LiftQualification {
+					obj: f.fold_reference(q.obj),
+					ops: q.ops.into_iter().map(|op| f.fold_symbol(op)).collect(),
+				})
+				.collect(),
+			statements: f.fold_scope(explicit_lift.statements),
+		}),
 	};
 	Stmt {
 		kind,

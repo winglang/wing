@@ -11,10 +11,10 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
-	Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
-	UserDefinedType,
+	ElifBlock, ElifLetBlock, Elifs, Enum, ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart,
+	LiftQualification, Literal, New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol,
+	TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{
@@ -626,6 +626,7 @@ impl<'s> Parser<'s> {
 			"test_statement" => self.build_test_statement(statement_node)?,
 			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
 			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase, idx)?,
+			"lift_statement" => self.build_lift_statement(statement_node, phase)?,
 			"ERROR" => return self.with_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -635,6 +636,51 @@ impl<'s> Parser<'s> {
 			span,
 			idx,
 		})
+	}
+
+	fn build_lift_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+		// Lift statements are only legal in inflight
+		if phase != Phase::Inflight {
+			return self.with_error("Lift statements are only legal in inflight phase", statement_node);
+		}
+
+		let lift_qualifications_node = statement_node.child_by_field_name("lift_qualifications").unwrap();
+		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+
+		let mut qualifications = vec![];
+
+		let mut qual_cursor = lift_qualifications_node
+			.child_by_field_name("qualifications")
+			.unwrap()
+			.walk();
+
+		for qual_node in lift_qualifications_node.named_children(&mut qual_cursor) {
+			let Expr {
+				kind: ExprKind::Reference(obj),
+				..
+			} = self.build_reference(&qual_node.child_by_field_name("obj").unwrap(), phase)?
+			else {
+				panic!("expected obj in lift qualification to be a reference");
+			};
+			let ops = if let Some(op_node) = qual_node.child_by_field_name("op") {
+				vec![self.node_symbol(&op_node)?]
+			} else if let Some(ops_node) = qual_node.child_by_field_name("ops") {
+				let mut ops = vec![];
+				let mut ops_cursor = ops_node.walk();
+				for op_node in ops_node.named_children(&mut ops_cursor) {
+					ops.push(self.node_symbol(&op_node)?);
+				}
+				ops
+			} else {
+				panic!("expected ops in lift qualification");
+			};
+			qualifications.push(LiftQualification { obj, ops });
+		}
+
+		Ok(StmtKind::ExplicitLift(ExplicitLift {
+			qualifications,
+			statements,
+		}))
 	}
 
 	fn build_try_catch_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -2704,6 +2750,7 @@ fn is_valid_module_statement(stmt: &Stmt) -> bool {
 		StmtKind::Assignment { .. } => false,
 		StmtKind::Scope(_) => false,
 		StmtKind::TryCatch { .. } => false,
+		StmtKind::ExplicitLift(_) => false,
 		// TODO: support constants https://github.com/winglang/wing/issues/3606
 		// TODO: support test statements https://github.com/winglang/wing/issues/3571
 		StmtKind::Let { .. } => false,
