@@ -6,8 +6,8 @@ import type {
   GetNodeId,
   IsNodeHidden,
   GetConnectionId,
-} from "./use-map-v2.bridge-connections.js";
-import { bridgeConnections } from "./use-map-v2.bridge-connections.js";
+} from "./use-map.bridge-connections.js";
+import { bridgeConnections } from "./use-map.bridge-connections.js";
 
 const isNodeHidden: IsNodeHidden<string> = (path: string) =>
   path.startsWith("h");
