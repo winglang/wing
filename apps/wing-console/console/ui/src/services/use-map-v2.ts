@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { trpc } from "./trpc.js";
 import { bridgeConnections } from "./use-map-v2.bridge-connections.js";
 
-export type ConnectionDataV2 = {
+export type RawConnectionData = {
   /** The path of the source construct. */
   readonly source: string;
   /** The path of the target construct. */
@@ -66,7 +66,7 @@ export type NodeV2 =
 
 const getNodeType = (
   node: ConstructTreeNode,
-  connections: ConnectionData[],
+  connections: { source: { id: string }; target: { id: string } }[],
 ): NodeV2["type"] => {
   if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Function") {
     return "function";
@@ -90,7 +90,8 @@ const getNodeType = (
     (node.children ?? []).length === 0 ||
     connections.some(
       (connection) =>
-        connection.source === node.path || connection.target === node.path,
+        connection.source.id === node.path ||
+        connection.target.id === node.path,
     )
   ) {
     return "construct";
@@ -100,21 +101,24 @@ const getNodeType = (
 
 const getNodeInflights = (
   node: ConstructTreeNode,
-  connections: ConnectionDataV2[],
+  connections: {
+    source: { id: string; operation: string | undefined };
+    target: { id: string; operation: string | undefined };
+  }[],
 ): NodeInflight[] => {
   const inflights = new Array<string>();
   for (const connection of connections.filter(
-    (connection) => connection.target === node.path,
+    (connection) => connection.target.id === node.path,
   )) {
-    const targetOp = connection.targetOp;
+    const targetOp = connection.target.operation;
     if (targetOp) {
       inflights.push(targetOp);
     }
   }
   for (const connection of connections.filter(
-    (connection) => connection.source === node.path,
+    (connection) => connection.source.id === node.path,
   )) {
-    const sourceOp = connection.sourceOp;
+    const sourceOp = connection.source.operation;
     if (sourceOp) {
       inflights.push(sourceOp);
     }
@@ -124,13 +128,13 @@ const getNodeInflights = (
     name: connection,
     sourceOccupied: connections.some(
       (otherConnection) =>
-        otherConnection.source === node.path &&
-        otherConnection.name === connection,
+        otherConnection.source.id === node.path &&
+        otherConnection.source.operation === connection,
     ),
     targetOccupied: connections.some(
       (otherConnection) =>
-        otherConnection.target === node.path &&
-        otherConnection.name === connection,
+        otherConnection.target.id === node.path &&
+        otherConnection.target.operation === connection,
     ),
   }));
 };
@@ -144,72 +148,24 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
   const { tree: rawTree, connections: incorrectlyTypedConnections } =
     query.data ?? {};
   const rawConnections = incorrectlyTypedConnections as
-    | ConnectionDataV2[]
+    | RawConnectionData[]
     | undefined;
-  const nodeInfo = useMemo(() => {
-    if (!rawTree || !rawConnections) {
+
+  const nodeTypes = useMemo(() => {
+    if (!rawTree) {
       return;
     }
 
-    const nodeMap = new Map<string, NodeV2>();
+    const nodeTypes = new Map<string, string | undefined>();
     const processNode = (node: ConstructTreeNode) => {
-      const nodeType = getNodeType(node, rawConnections);
-      const inflights = getNodeInflights(node, rawConnections);
-      // console.log(node.path, nodeType, inflights);
-      switch (nodeType) {
-        case "container": {
-          nodeMap.set(node.path, {
-            type: nodeType,
-            children: Object.values(node.children ?? {}).map((child) => {
-              return child.path;
-            }),
-          });
-          break;
-        }
-        case "autoId": {
-          nodeMap.set(node.path, {
-            type: nodeType,
-          });
-          break;
-        }
-        case "function": {
-          nodeMap.set(node.path, {
-            type: nodeType,
-          });
-          break;
-        }
-        // case "endpoint": {
-        //   nodeMap.set(node.path, {
-        //     type: nodeType,
-        //   });
-        //   break;
-        // }
-        // case "queue": {
-        //   nodeMap.set(node.path, {
-        //     type: nodeType,
-        //   });
-        //   break;
-        // }
-        // case "topic": {
-        //   nodeMap.set(node.path, {
-        //     type: nodeType,
-        //   });
-        //   break;
-        // }
-        default: {
-          nodeMap.set(node.path, {
-            type: "construct",
-            inflights,
-          });
-        }
-      }
+      nodeTypes.set(node.path, node.constructInfo?.fqn);
       for (const child of Object.values(node.children ?? {})) {
         processNode(child);
       }
     };
     processNode(rawTree);
-    return nodeMap;
-  }, [rawTree, rawConnections]);
+    return nodeTypes;
+  }, [rawTree]);
 
   const hiddenMap = useMemo(() => {
     const hiddenMap = new Map<string, boolean>();
@@ -243,7 +199,7 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
   }, [rawTree]);
 
   const connections = useMemo(() => {
-    if (!rawConnections || !nodeInfo) {
+    if (!rawConnections || !nodeTypes) {
       return;
     }
 
@@ -253,12 +209,12 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
           return {
             source: {
               id: connection.source,
-              nodeType: nodeInfo.get(connection.source)?.type,
+              nodeType: nodeTypes.get(connection.source),
               operation: connection.sourceOp,
             },
             target: {
               id: connection.target,
-              nodeType: nodeInfo.get(connection.target)?.type,
+              nodeType: nodeTypes.get(connection.target),
               operation: connection.targetOp,
             },
           };
@@ -274,7 +230,7 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
       getConnectionId: (connection) =>
         `${connection.source.id}#${connection.source.operation}##${connection.target.id}#${connection.target.operation}`,
     });
-  }, [rawConnections, nodeInfo, isNodeHidden]);
+  }, [rawConnections, nodeTypes, isNodeHidden]);
 
   const getConnectionId = useCallback(
     (
@@ -332,6 +288,71 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
       }) ?? []
     );
   }, [connections, getConnectionId]);
+
+  const nodeInfo = useMemo(() => {
+    if (!rawTree || !rawConnections) {
+      return;
+    }
+
+    const nodeMap = new Map<string, NodeV2>();
+    const processNode = (node: ConstructTreeNode) => {
+      const nodeType = getNodeType(node, connections ?? []);
+      const inflights = getNodeInflights(node, connections ?? []);
+      // console.log(node.path, nodeType, inflights);
+      switch (nodeType) {
+        case "container": {
+          nodeMap.set(node.path, {
+            type: nodeType,
+            children: Object.values(node.children ?? {}).map((child) => {
+              return child.path;
+            }),
+          });
+          break;
+        }
+        case "autoId": {
+          nodeMap.set(node.path, {
+            type: nodeType,
+          });
+          break;
+        }
+        case "function": {
+          nodeMap.set(node.path, {
+            type: nodeType,
+          });
+          break;
+        }
+        // case "endpoint": {
+        //   nodeMap.set(node.path, {
+        //     type: nodeType,
+        //   });
+        //   break;
+        // }
+        // case "queue": {
+        //   nodeMap.set(node.path, {
+        //     type: nodeType,
+        //   });
+        //   break;
+        // }
+        // case "topic": {
+        //   nodeMap.set(node.path, {
+        //     type: nodeType,
+        //   });
+        //   break;
+        // }
+        default: {
+          nodeMap.set(node.path, {
+            type: "construct",
+            inflights,
+          });
+        }
+      }
+      for (const child of Object.values(node.children ?? {})) {
+        processNode(child);
+      }
+    };
+    processNode(rawTree);
+    return nodeMap;
+  }, [rawTree, rawConnections]);
 
   return {
     rawTree,

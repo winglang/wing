@@ -17,7 +17,7 @@ import { memo, useCallback, useEffect, useMemo } from "react";
 import { useKeyPressEvent } from "react-use";
 
 import { bridgeConnections } from "../services/use-map-v2.bridge-connections.js";
-import type { ConnectionDataV2 } from "../services/use-map-v2.js";
+import type { RawConnectionData } from "../services/use-map-v2.js";
 import { useMapV2 } from "../services/use-map-v2.js";
 import { assert } from "../ui/elk-flow/assert.js";
 import { Graph } from "../ui/elk-flow/graph.js";
