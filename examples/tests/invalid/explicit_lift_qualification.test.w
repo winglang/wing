@@ -5,12 +5,21 @@ interface IPreflightInterface {
 }
 class PreflightClass impl IPreflightInterface {
   pub inflight method(): void {}
+
+  preflight_method() {
+    lift {bucket: [put]}{} // Lift statment in preflight method
+  }
 }
 
 let bucket = new cloud.Bucket();
 
 let prelight_string = "hi";
 let preflight_class = new PreflightClass();
+
+// Lift statement in preflight global scope
+lift {bucket: [put]}{}
+
+
 
 class Foo {
   pub inflight mehtod1() {
