@@ -1,6 +1,6 @@
 import { TerraformVariable } from "cdktf";
 import { test, expect } from "vitest";
-import { Testing } from "../../src/simulator";
+import { lift } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
 import { Api } from "../../src/target-tf-aws";
 import { mkdtemp, tfSanitize, sanitizeCode } from "../util";
@@ -17,33 +17,21 @@ test("captures tokens", () => {
     type: "List<Number>",
     default: [1, 2, 3],
   });
+  const handler = lift({
+    str: api.url,
+    num: numVar.numberValue,
+    list: listVar.listValue,
+  }).inflight(async (ctx) => {
+    console.log(ctx.str, ctx.num, ctx.list);
+    return undefined;
+  });
 
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-    console.log(this.str, this.num, this.list);
-  }`,
-    {
-      str: {
-        obj: api.url,
-        ops: [],
-      },
-      num: {
-        obj: numVar.numberValue,
-        ops: [],
-      },
-      list: {
-        obj: listVar.listValue,
-        ops: [],
-      },
-    }
-  );
-
-  api.get("/", inflight);
+  api.get("/", handler);
 
   const output = app.synth();
 
   // THEN
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   expect(tfSanitize(output)).toMatchSnapshot();
 });
 
@@ -56,23 +44,17 @@ test("captures tokens inside plain objects", () => {
     default: 123,
   });
 
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-    console.log(this.foo.str, this.foo.num);
-  }`,
-    {
-      foo: {
-        obj: { str: api.url, num: numVar.numberValue },
-        ops: [],
-      },
-    }
-  );
+  const handler = lift({
+    foo: { str: api.url, num: numVar.numberValue },
+  }).inflight(async (ctx) => {
+    console.log(ctx.foo.str, ctx.foo.num);
+  });
 
-  api.get("/", inflight);
+  api.get("/", handler);
 
   const output = app.synth();
 
   // THEN
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   expect(tfSanitize(output)).toMatchSnapshot();
 });

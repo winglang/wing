@@ -68,7 +68,7 @@ main((root) => {
 ```
 
 Normal functions and classes cannot be lifted.
-Unlike other variable, imports can be referenced as-is from within inflight closures. The imports will be bundled into the inflight's environment.
+Unlike other variables, imports can be referenced as-is from within inflight closures. The imports will be bundled into the inflight's environment.
 
 ```ts
 import { main, inflight } from "@wingcloud/framework";
@@ -93,7 +93,7 @@ import { main, cloud, lift } from "@wingcloud/framework";
 main((root) => {
   const bucket = new cloud.Bucket(root, "MyBucket");
 
-  cloud.Function(
+  new cloud.Function(
     root,
     "MyFn",
     lift({ bucket })

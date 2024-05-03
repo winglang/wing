@@ -4,14 +4,15 @@ import { cloud, simulator, std } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
 import { awscdkSanitize, CDK_APP_OPTS } from "./util";
+import { inflight } from "@winglang/sdk/lib/core";
 
-const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
+
+const INFLIGHT_CODE = inflight(async (_, name) => console.log("Hello, " + name));
 
 test("basic function", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "Function", inflight);
+  new cloud.Function(app, "Function", INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN
@@ -31,8 +32,7 @@ test("basic function", () => {
 test("basic function with environment variables", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  const f = new cloud.Function(app, "Function", inflight, {
+  const f = new cloud.Function(app, "Function", INFLIGHT_CODE, {
     env: {
       FOO: "BAR",
     },
@@ -62,8 +62,7 @@ test("basic function with environment variables", () => {
 test("basic function with timeout explicitly set", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "Function", inflight, {
+  new cloud.Function(app, "Function", INFLIGHT_CODE, {
     timeout: std.Duration.fromMinutes(5),
   });
   const output = app.synth();
@@ -84,8 +83,7 @@ test("basic function with timeout explicitly set", () => {
 test("basic function with memory size specified", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "Function", inflight, { memory: 512 });
+  new cloud.Function(app, "Function", INFLIGHT_CODE, { memory: 512 });
   const output = app.synth();
 
   // THEN
@@ -104,8 +102,7 @@ test("basic function with memory size specified", () => {
 test("basic function with standard log retention", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "Function", inflight);
+  new cloud.Function(app, "Function", INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN
@@ -123,8 +120,7 @@ test("basic function with standard log retention", () => {
 test("basic function with custom log retention", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "Function", inflight, { logRetentionDays: 7 });
+  new cloud.Function(app, "Function", INFLIGHT_CODE, { logRetentionDays: 7 });
   const output = app.synth();
 
   // THEN
@@ -142,8 +138,7 @@ test("basic function with custom log retention", () => {
 test("basic function with infinite log retention", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.Function(app, "Function", inflight, { logRetentionDays: -1 });
+  new cloud.Function(app, "Function", INFLIGHT_CODE, { logRetentionDays: -1 });
   const output = app.synth();
 
   // THEN
@@ -155,8 +150,7 @@ test("basic function with infinite log retention", () => {
 test("source map setting", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  const f = new cloud.Function(app, "Function", inflight);
+  const f = new cloud.Function(app, "Function", INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN

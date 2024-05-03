@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
@@ -8,12 +7,9 @@ import { ISimulatorResource } from "./resource";
 import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { LiftMap } from "../core";
-import { convertBetweenHandlers } from "../shared/convert";
-import { Testing, ToSimulatorOutput } from "../simulator";
+import { lift, LiftMap } from "../core";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
-
-const QUEUE_PUSH_METHOD = "push";
 
 /**
  * Simulator implementation of `cloud.Topic`
@@ -59,24 +55,15 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   }
 
   public subscribeQueue(queue: cloud.Queue): void {
-    const functionHandler = convertBetweenHandlers(
-      Testing.makeHandler(
-        "async handle(event) { return await this.queue.push(event); }",
-        {
-          queue: {
-            obj: queue,
-            ops: [QUEUE_PUSH_METHOD],
-          },
-        }
-      ),
-      join(__dirname, "topic.onmessage.inflight.js"),
-      "TopicOnMessageHandlerClient"
-    );
-
     const fn = new Function(
       this,
       App.of(this).makeId(this, "subscribeQueue"),
-      functionHandler,
+      lift({ queue })
+        .grant({ queue: ["push"] })
+        .inflight(async (ctx, event) => {
+          await ctx.queue.push(event as string);
+          return undefined;
+        }),
       {}
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
@@ -136,10 +123,9 @@ export class TopicOnMessageHandler {
   public static toFunctionHandler(
     handler: cloud.ITopicOnMessageHandler
   ): cloud.IFunctionHandler {
-    return convertBetweenHandlers(
-      handler,
-      join(__dirname, "topic.onmessage.inflight.js"),
-      "TopicOnMessageHandlerClient"
-    );
+    return lift({ handler }).inflight(async (ctx, event) => {
+      await ctx.handler(event as string);
+      return undefined;
+    });
   }
 }

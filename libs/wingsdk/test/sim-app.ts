@@ -2,8 +2,8 @@ import * as fs from "fs";
 import { join } from "path";
 import { onTestFailed } from "vitest";
 import { directorySnapshot, mkdtemp } from "./util";
-import { Function, IFunctionClient } from "../src/cloud";
-import { Simulator, Testing } from "../src/simulator";
+import { Function, IFunctionClient, IFunctionHandler } from "../src/cloud";
+import { Simulator } from "../src/simulator";
 import { App } from "../src/target-sim/app";
 
 /**
@@ -47,15 +47,10 @@ export class SimApp extends App {
    * @returns An "invoker" function which can be used to invoke the function after the simulator had
    * started.
    */
-  public newCloudFunction(code: string) {
+  public newCloudFunction(handler: IFunctionHandler) {
     const id = `Function.${this.functionIndex++}`;
-    new Function(
-      this,
-      id,
-      Testing.makeHandler(`async handle() {
-          ${code}
-        }`)
-    );
+
+    new Function(this, id, handler);
 
     // returns an "invoker" for this function
     return async (s: Simulator) => {

@@ -2,8 +2,7 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, UIComponent } from "../core";
-import { Testing } from "../simulator";
+import { App, UIComponent, lift } from "../core";
 import { Duration, IInflight } from "../std";
 
 /**
@@ -117,17 +116,9 @@ export interface IFieldHandlerClient {
  */
 export class ValueField extends Field {
   constructor(scope: Construct, id: string, label: string, value: string) {
-    const handler = Testing.makeHandler(
-      `async handle() { 
-        return this.value;
-      }`,
-      {
-        value: {
-          obj: value,
-          ops: [],
-        },
-      }
-    );
+    const handler = lift({ value }).inflight(async (ctx) => {
+      return ctx.value;
+    });
 
     super(scope, id, label, handler);
   }

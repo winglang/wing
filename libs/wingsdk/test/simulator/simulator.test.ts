@@ -8,15 +8,19 @@ import {
   Function,
   IBucketClient,
   IFunctionClient,
+  IFunctionHandler,
   OnDeploy,
   Service,
 } from "../../src/cloud";
-import { InflightBindings } from "../../src/core";
-import { Simulator, Testing } from "../../src/simulator";
+import { InflightBindings, inflight, lift } from "../../src/core";
+import { Simulator } from "../../src/simulator";
 import { ITestRunnerClient, Test, TestResult, TraceType } from "../../src/std";
 import { State } from "../../src/target-sim";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
+
+const NOOP = inflight(async () => {});
+const OK_200 = inflight(async () => ({ status: 200 }));
 
 describe("run single test", () => {
   test("test not found", async () => {
@@ -33,7 +37,11 @@ describe("run single test", () => {
 
   test("happy path", async () => {
     const app = new SimApp({ isTestEnvironment: true });
-    makeTest(app, "test", ["console.log('hi');"]);
+    makeTest(
+      app,
+      "test",
+      inflight(async () => console.log("hi"))
+    );
     app.synth();
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
@@ -46,10 +54,14 @@ describe("run single test", () => {
 
   test("test failure", async () => {
     const app = new SimApp({ isTestEnvironment: true });
-    makeTest(app, "test", [
-      "console.log('I am about to fail');",
-      "throw new Error('test failed');",
-    ]);
+    makeTest(
+      app,
+      "test",
+      inflight(async () => {
+        console.log("I am about to fail");
+        throw new Error("test failed");
+      })
+    );
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
@@ -89,7 +101,11 @@ describe("run all tests", () => {
 
   test("single test", async () => {
     const app = new SimApp({ isTestEnvironment: true });
-    makeTest(app, "test", ["console.log('hi');"]);
+    makeTest(
+      app,
+      "test",
+      inflight(async () => console.log("hi"))
+    );
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
@@ -104,9 +120,21 @@ describe("run all tests", () => {
     class Root extends Construct {
       constructor(scope: Construct, id: string) {
         super(scope, id);
-        makeTest(this, "test", ["console.log('hi');"]);
-        makeTest(this, "test:bla", ["console.log('hi');"]);
-        makeTest(this, "test:blue", ["console.log('hi');"]);
+        makeTest(
+          this,
+          "test",
+          inflight(async () => console.log("hi"))
+        );
+        makeTest(
+          this,
+          "test:bla",
+          inflight(async () => console.log("hi"))
+        );
+        makeTest(
+          this,
+          "test:blue",
+          inflight(async () => console.log("hi"))
+        );
       }
     }
     const app = new SimApp({ isTestEnvironment: true, rootConstruct: Root });
@@ -129,7 +157,11 @@ describe("run all tests", () => {
     class ConstructWithTest extends Construct {
       constructor(scope: Construct, id: string) {
         super(scope, id);
-        makeTest(this, "test", ["console.log('hi');"]);
+        makeTest(
+          this,
+          "test",
+          inflight(async () => console.log("hi"))
+        );
       }
     }
 
@@ -137,7 +169,11 @@ describe("run all tests", () => {
       constructor(scope: Construct, id: string) {
         super(scope, id);
 
-        makeTest(this, "test", ["console.log('hi');"]);
+        makeTest(
+          this,
+          "test",
+          inflight(async () => console.log("hi"))
+        );
         new ConstructWithTest(this, "scope1");
         new ConstructWithTest(this, "scope2");
       }
@@ -182,7 +218,11 @@ test("calling an invalid method returns an error to the client", async () => {
 
 test("provides raw tree data", async () => {
   const app = new SimApp();
-  makeTest(app, "test", ["console.log('hi');"]);
+  makeTest(
+    app,
+    "test",
+    inflight(async () => console.log("hi"))
+  );
   const sim = await app.startSimulator();
   const treeData = sim.tree().rawData();
   await sim.stop();
@@ -414,8 +454,8 @@ describe("in-place updates", () => {
     const api = new Api(app2, "Api");
     bucket1.addObject("url.txt", api.url);
 
-    const handler = `async handle() { return process.env.API_URL; }`;
-    new Function(app2, "Function", Testing.makeHandler(handler), {
+    const handler = inflight(async () => process.env.API_URL);
+    new Function(app2, "Function", handler, {
       env: { API_URL: api.url },
     });
 
@@ -563,17 +603,18 @@ describe("in-place updates", () => {
     new Service(
       app,
       "Service",
-      Testing.makeHandler(
-        `async handle() { await this.myState.set("${stateKey}", "bang"); }`,
-        { myState: { obj: myState, ops: ["set"] } }
-      ),
+      lift({ myState, stateKey })
+        .grant({ myState: ["set"] })
+        .inflight(async (ctx) => {
+          await ctx.myState.set(`${ctx.stateKey}`, "bang" as any);
+        }),
       { env: { VER: "1" } }
     );
 
     new Function(
       app,
       "Function",
-      Testing.makeHandler(`async handle() { return process.env.MY_VALUE; }`),
+      inflight(async (ctx) => process.env.MY_VALUE),
       {
         env: { MY_VALUE: myState.token(stateKey) },
       }
@@ -593,17 +634,18 @@ describe("in-place updates", () => {
     const myService2 = new Service(
       app2,
       "Service",
-      Testing.makeHandler(
-        `async handle() { await this.myState.set("${stateKey}", "bing"); }`,
-        { myState: { obj: myState2, ops: ["set"] } }
-      ),
+      lift({ myState: myState2, stateKey })
+        .grant({ myState: ["set"] })
+        .inflight(async (ctx) => {
+          await ctx.myState.set(`${ctx.stateKey}`, "bing" as any);
+        }),
       { env: { VER: "2" } }
     );
 
     new Function(
       app2,
       "Function",
-      Testing.makeHandler(`async handle() { return process.env.MY_VALUE; }`),
+      inflight(async (ctx) => process.env.MY_VALUE),
       {
         env: { MY_VALUE: myState.token(stateKey) },
       }
@@ -627,10 +669,10 @@ describe("in-place updates", () => {
 
   test("Construct dependencies are taken into account", async () => {
     const app = new SimApp();
-    const handler = Testing.makeHandler(`async handle() {}`);
+
     const bucket = new Bucket(app, "Bucket1");
 
-    new OnDeploy(app, "OnDeploy", handler, {
+    new OnDeploy(app, "OnDeploy", NOOP, {
       executeAfter: [bucket],
     });
 
@@ -638,7 +680,7 @@ describe("in-place updates", () => {
 
     const app2 = new SimApp();
     const bucket2 = new Bucket(app2, "Bucket1", { public: true });
-    new OnDeploy(app2, "OnDeploy", handler, {
+    new OnDeploy(app2, "OnDeploy", NOOP, {
       executeAfter: [bucket2],
     });
 
@@ -664,13 +706,12 @@ describe("in-place updates", () => {
 
   test("cloud.Function is always replaced", async () => {
     const app = new SimApp();
-    const handler = Testing.makeHandler(`async handle() {}`);
-    new Function(app, "Function", handler);
+    new Function(app, "Function", NOOP);
 
     const sim = await app.startSimulator();
 
     const app2 = new SimApp();
-    new Function(app2, "Function", handler);
+    new Function(app2, "Function", NOOP);
 
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
@@ -685,13 +726,12 @@ describe("in-place updates", () => {
 
   test("cloud.Service is always replaced", async () => {
     const app = new SimApp();
-    const handler = Testing.makeHandler(`async handle() {}`);
-    new Service(app, "Service", handler);
+    new Service(app, "Service", NOOP);
 
     const sim = await app.startSimulator();
 
     const app2 = new SimApp();
-    new Service(app2, "Service", handler);
+    new Service(app2, "Service", NOOP);
 
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
@@ -706,13 +746,12 @@ describe("in-place updates", () => {
 
   test("cloud.OnDeploy is always replaced", async () => {
     const app = new SimApp();
-    const handler = Testing.makeHandler(`async handle() {}`);
-    new OnDeploy(app, "OnDeploy", handler);
+    new OnDeploy(app, "OnDeploy", NOOP);
 
     const sim = await app.startSimulator();
 
     const app2 = new SimApp();
-    new OnDeploy(app2, "OnDeploy", handler);
+    new OnDeploy(app2, "OnDeploy", NOOP);
 
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
@@ -730,11 +769,8 @@ describe("in-place updates", () => {
 
   test("cloud.Api routes are updated", async () => {
     const app = new SimApp();
-    const handler = Testing.makeHandler(
-      `async handle(req) { return { status: 200 }; }`
-    );
     const api = new Api(app, "Api");
-    api.get("/hello", handler);
+    api.get("/hello", OK_200);
 
     const sim = await app.startSimulator();
     const apiUrl = sim.getResourceConfig("/Api").attrs.url as string;
@@ -743,7 +779,7 @@ describe("in-place updates", () => {
 
     const app2 = new SimApp();
     const api2 = new Api(app2, "Api");
-    api2.get("/world", handler);
+    api2.get("/world", OK_200);
 
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
@@ -779,9 +815,12 @@ describe("in-place updates", () => {
 
 test("debugging inspector inherited by sandbox", async () => {
   const app = new SimApp();
-  const handler = Testing.makeHandler(
-    `async handle() { if(require('inspector').url() === undefined) { throw new Error('inspector not available'); } }`
-  );
+  const handler = inflight(async () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    if (require("inspector").url() === undefined) {
+      throw new Error("inspector not available");
+    }
+  });
   new OnDeploy(app, "OnDeploy", handler);
 
   inspector.open(0);
@@ -802,17 +841,8 @@ test("tryGetResource returns undefined if the resource not found", async () => {
   expect(sim.tryGetResourceConfig("bing")).toBeUndefined();
 });
 
-function makeTest(
-  scope: Construct,
-  id: string,
-  code: string[],
-  bindings: InflightBindings = {}
-) {
-  const handler = Testing.makeHandler(
-    `async handle() { ${code.join("\n")} }`,
-    bindings
-  );
-  return new Test(scope, id, handler, bindings);
+function makeTest(scope: Construct, id: string, handler: IFunctionHandler) {
+  return new Test(scope, id, handler);
 }
 
 function sanitizeResult(result: TestResult): TestResult {

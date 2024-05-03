@@ -223,7 +223,7 @@ export class Api extends cloud.Api implements IAwsApi {
     if (!handler) {
       const newInflight = ApiEndpointHandler.toFunctionHandler(
         inflight,
-        this.corsOptions
+        cloud.Api.renderCorsHeaders(this.corsOptions)?.defaultResponse
       );
       const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}`;
       handler = new Function(
