@@ -1,12 +1,10 @@
 // TODO
 // test passing and returning values of different serializable Wing types
-// test throwing errors
-// test for an error when calling a method that doesn't exist
 
 bring expect;
 bring sim;
 
-inflight class ResourceWithPropertiesBackend impl sim.IResource {
+inflight class MyResourceBackend impl sim.IResource {
   var field1: str;
   var field2: (str): str;
   new() {
@@ -16,13 +14,17 @@ inflight class ResourceWithPropertiesBackend impl sim.IResource {
 
   pub onStart(ctx: sim.IResourceContext) {}
   pub onStop() {}
+
+  pub throwsError() {
+    throw "Look ma, an error!";
+  }
 }
 
-class ResourceWithProperties {
+class MyResource {
   backend: sim.Resource;
   new() {
     this.backend = new sim.Resource(inflight () => {
-      return new ResourceWithPropertiesBackend();
+      return new MyResourceBackend();
     });
   }
   pub inflight field1(): str {
@@ -45,9 +47,12 @@ class ResourceWithProperties {
   pub inflight onStop() {
     this.backend.call("onStop");
   }
+  pub inflight throwsError() {
+    this.backend.call("throwsError");
+  }
 }
 
-let r1 = new ResourceWithProperties();
+let r1 = new MyResource();
 
 test "resource.call with a field name returns the field value" {
   expect.equal(r1.field1(), "hello");
@@ -86,4 +91,14 @@ test "resource.call cannot be used to call onStart or onStop" {
     msg = err;
   }
   assert(msg.contains("Cannot call \"onStop\""));
+}
+
+test "exceptions thrown by the resource are caught and rethrown by the caller" {
+  let var msg = "";
+  try {
+    r1.throwsError();
+  } catch err {
+    msg = err;
+  }
+  assert(msg.contains("Look ma, an error!"));
 }
