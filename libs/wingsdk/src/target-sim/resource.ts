@@ -55,18 +55,22 @@ export interface IResourceContext {
    */
   resolveAttr(name: string, value: string): void;
 
-  // /**
-  //  * Log a message at the current point in time.
-  //  */
-  // log(message: string, level: LogLevel): void;
+  /**
+   * Log a message at the current point in time. Defaults to `info` level.
+   *
+   * @param message The message to log.
+   * @param level The severity of the message.
+   * @inflight
+   */
+  log(message: string, level: LogLevel | undefined): void;
 }
 
 /**
  * The severity of a log message.
  */
 export enum LogLevel {
-  /** Trace level */
-  TRACE = "trace",
+  /** Verbose level */
+  VERBOSE = "verbose",
   /** Debug level */
   DEBUG = "debug",
   /** Information level */
@@ -165,6 +169,10 @@ export class Resource
           const ctx = {};
           ctx.statedir = () => statedir;
           ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ': ' + message);
+          };
           const client = ${inflightClient};
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;

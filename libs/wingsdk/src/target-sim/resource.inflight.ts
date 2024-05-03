@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { IResourceClient, SIM_RESOURCE_FQN } from "./resource";
+import { IResourceClient, LogLevel, SIM_RESOURCE_FQN } from "./resource";
 import { SimResourceAttributes, SimResourceSchema } from "./schema-resources";
 import { Bundle } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
@@ -48,8 +48,12 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
         WING_SIMULATOR_URL: this.context.serverUrl,
         WING_SIMULATOR_CALLER: this.context.resourceHandle,
       },
-      log: (internal, _level, message) => {
-        this.addTrace(message, internal ? TraceType.SIMULATOR : TraceType.LOG);
+      log: (internal, level, message) => {
+        this.addTrace(
+          message,
+          internal ? TraceType.SIMULATOR : TraceType.LOG,
+          level
+        );
       },
     });
 
@@ -133,9 +137,9 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
     return message;
   }
 
-  private addTrace(message: string, type: TraceType) {
+  private addTrace(message: string, type: TraceType, level?: LogLevel) {
     this.context.addTrace({
-      data: { message },
+      data: { message, level },
       type,
       sourcePath: this.context.resourcePath,
       sourceType: SIM_RESOURCE_FQN,

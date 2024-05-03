@@ -5,6 +5,7 @@ import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import { TraceType } from "@winglang/sdk/lib/std";
+import { LogLevel } from "@winglang/sdk/lib/target-sim";
 import { Util } from "@winglang/sdk/lib/util";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
@@ -365,23 +366,24 @@ async function runTestsWithRetry(
   return results;
 }
 
-type TraceSeverity = "error" | "warn" | "info" | "debug" | "verbose";
-
 // TODO: can we share this logic with the Wing Console?
-function inferSeverityOfEvent(trace: std.Trace): TraceSeverity {
+function inferSeverityOfEvent(trace: std.Trace): LogLevel {
   if (trace.data.status === "failure") {
-    return "error";
+    return LogLevel.ERROR;
+  }
+  if (trace.data.level) {
+    return trace.data.level;
   }
   if (trace.type === TraceType.LOG) {
-    return "info";
+    return LogLevel.INFO;
   }
   if (trace.type === TraceType.RESOURCE) {
-    return "debug";
+    return LogLevel.DEBUG;
   }
   if (trace.type === TraceType.SIMULATOR) {
-    return "verbose";
+    return LogLevel.VERBOSE;
   }
-  return "verbose";
+  return LogLevel.VERBOSE;
 }
 
 const SEVERITY_STRING = {
@@ -420,7 +422,7 @@ async function formatTrace(
     msg += LOG_STREAM_COLORS[severity](` ${SEVERITY_STRING[severity]}`);
     msg += chalk.dim(` ${testName} » ${trace.sourcePath}`);
     msg += "\n";
-    if (severity === "error") {
+    if (severity === "error" && trace.data.error) {
       msg += chalk.dim(" │ ");
       msg += trace.data.message;
       msg += "\n";
@@ -435,7 +437,7 @@ async function formatTrace(
   } else if (mode === "short") {
     msg += LOG_STREAM_COLORS[severity](`${SEVERITY_STRING[severity]}`);
     msg += chalk.dim(` ${testName} | `);
-    if (severity === "error") {
+    if (severity === "error" && trace.data.error) {
       msg += trace.data.message;
       msg += " ";
       msg += await prettyPrintError(trace.data.error, { chalk });

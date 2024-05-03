@@ -18,16 +18,29 @@ struct MyStruct {
 inflight class MyResourceBackend impl sim.IResource {
   var field1: str;
   var field2: (str): str;
+  var ctx: sim.IResourceContext?;
   new() {
     this.field1 = "hello";
     this.field2 = (name: str) => { return "Hello, " + name; };
+    this.ctx = nil;
   }
 
-  pub onStart(ctx: sim.IResourceContext) {}
+  pub onStart(ctx: sim.IResourceContext) {
+    this.ctx = ctx;
+  }
   pub onStop() {}
 
   pub throwsError() {
     throw "Look ma, an error!";
+  }
+
+  pub printLogs() {
+    this.ctx!.log("an info log");
+    this.ctx!.log("another info log", sim.LogLevel.INFO);
+    this.ctx!.log("a debug log", sim.LogLevel.DEBUG);
+    this.ctx!.log("a verbose log", sim.LogLevel.VERBOSE);
+    this.ctx!.log("a warn log", sim.LogLevel.WARN);
+    this.ctx!.log("an error log", sim.LogLevel.ERROR);
   }
 
   pub methodNum(arg: num): num { return arg * 2; }
@@ -90,6 +103,9 @@ class MyResource {
   }
   pub inflight throwsError() {
     this.backend.call("throwsError");
+  }
+  pub inflight printLogs() {
+    this.backend.call("printLogs");
   }
 
   pub inflight methodNum(arg: num): num {
@@ -201,4 +217,8 @@ test "resource.call can accept and return various kinds of values" {
   expect.equal(r1.methodStruct({ field1: "hello", field2: 42 }), { field1: "hellohello", field2: 84 });
   expect.equal(r1.methodWithVariadics("1", 2, 3), 6);
   expect.equal(r1.methodWithComplexTypes1([{ field1: "hello", field2: 42 }]), { field1Length: 5 });
+}
+
+test "resource can log messages at different levels" {
+  r1.printLogs();
 }

@@ -4,12 +4,13 @@ import { readFile, stat } from "fs/promises";
 import { url as inspectorUrl } from "inspector";
 import { Bundle, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
+import { LogLevel } from "../target-sim";
 
 export interface SandboxOptions {
   readonly env?: { [key: string]: string };
   readonly context?: { [key: string]: any };
   readonly timeout?: number;
-  readonly log?: (internal: boolean, level: string, message: string) => void;
+  readonly log?: (internal: boolean, level: LogLevel, message: string) => void;
 }
 
 /**
@@ -160,9 +161,27 @@ process.on("message", async (message) => {${debugShim}
       serialization: "advanced",
     });
 
-    const log = (message: string) => this.options.log?.(false, "log", message);
+    const log = (message: string) => {
+      let level = LogLevel.INFO;
+      if (message.startsWith("info:")) {
+        message = message.slice(5);
+      } else if (message.startsWith("error:")) {
+        message = message.slice(6);
+        level = LogLevel.ERROR;
+      } else if (message.startsWith("warn:")) {
+        message = message.slice(5);
+        level = LogLevel.WARN;
+      } else if (message.startsWith("debug:")) {
+        message = message.slice(6);
+        level = LogLevel.DEBUG;
+      } else if (message.startsWith("verbose:")) {
+        message = message.slice(8);
+        level = LogLevel.VERBOSE;
+      }
+      this.options.log?.(false, level, message);
+    };
     const logError = (message: string) =>
-      this.options.log?.(false, "error", message);
+      this.options.log?.(false, LogLevel.ERROR, message);
 
     // pipe stdout and stderr from the child process
     if (this.child.stdout) {
@@ -281,7 +300,7 @@ process.on("message", async (message) => {${debugShim}
 
   private debugLog(message: string) {
     if (process.env.DEBUG) {
-      this.options.log?.(true, "log", message);
+      this.options.log?.(true, LogLevel.VERBOSE, message);
     }
   }
 }
