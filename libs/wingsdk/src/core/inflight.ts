@@ -100,6 +100,7 @@ export function lift<TToLift extends LiftableRecord>(
  * If needed, use `lift` to bind variables to the scope of the function.
  *
  * Built-in NodeJS globals are available, such as `console` and `process`.
+ * @wing inflight
  */
 export function inflight<TFunction extends AsyncFunction>(
   fn: (ctx: {}, ...args: Parameters<TFunction>) => ReturnType<TFunction>
@@ -198,6 +199,7 @@ class Lifter<
    * Bound variables will be available as properties on the `ctx` object passed as the first argument to the function.
    *
    * Built-in NodeJS globals are available, such as `console` and `process`.
+   * @wing inflight
    */
   public inflight<TFunction extends AsyncFunction>(
     fn: (
