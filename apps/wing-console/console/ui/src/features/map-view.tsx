@@ -139,7 +139,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
                 <div
                   className={clsx(
                     "text-sm leading-tight tracking-wide whitespace-nowrap",
-                    "text-gray-400",
+                    "text-slate-400 dark:text-slate-300",
                     // "group-hover:text-sky-600",
                     // "text-gray-500",
                     // "text-gray-600",
@@ -175,7 +175,8 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
               "transition-all",
               "flex flex-col",
               "overflow-hidden",
-              "border border-gray-200 border-dashed",
+              "border border-dashed",
+              "border-gray-200 dark:border-gray-700",
               // "hover:border-sky-300",
               // "outline outline-0 outline-sky-200 hover:outline-2",
             )}
@@ -229,13 +230,13 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       >
         <div
           className={clsx(
-            "w-full h-full rounded-lg  bg-white",
+            "w-full h-full rounded-lg",
+            "bg-white dark:bg-slate-700",
             // "outline outline-1 outline-gray-300",
-            "border border-gray-300",
-            "group-hover/construct:border-sky-300",
-            "outline outline-0 outline-sky-200",
-            "group-hover/construct:outline-2",
-            props.highlight && "outline-2 border-sky-300",
+            "border",
+            "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
+            !props.highlight && "border-slate-300 dark:border-slate-800",
+            props.highlight && "outline-2 border-sky-300 dark:border-sky-500",
             "shadow",
             "transition-all",
           )}
@@ -285,7 +286,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             <span
               // className="text-sm font-semibold leading-relaxed tracking-wide whitespace-nowrap"
               // className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-500"
-              className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-600"
+              className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-600 dark:text-slate-300"
             >
               {props.name}
               {/* ({props.fqn}) */}
@@ -333,14 +334,14 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             ): <span className="italic text-gray-400">unknown</span>
           </div>
         </div> */}
-                <div className="border-t border-gray-300">
+                <div className="border-t border-gray-300 dark:border-slate-800">
                   <div
                     // className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap"
                     className={clsx(
                       "px-2.5 py-1.5 text-xs whitespace-nowrap",
                       // "tracking-tighter",
                       // "text-gray-700",
-                      "text-gray-600",
+                      "text-gray-600 dark:text-slate-300",
                       // "font-mono",
                     )}
                   >
@@ -505,6 +506,7 @@ interface FunctionNodeProps {
   id: string;
   sourceOccupied?: boolean;
   targetOccupied?: boolean;
+  highlight?: boolean;
   onSelectedNodeIdChange: (id: string | undefined) => void;
 }
 
@@ -524,12 +526,14 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
       <div className="group relative">
         <div
           className={clsx(
-            "p-1.5 rounded-full bg-white shadow",
+            "p-1.5 rounded-full shadow",
+            "bg-white dark:bg-slate-700",
             "transition-all",
-            "border border-gray-300",
-            "group-hover:border-sky-300",
-            "outline outline-0 outline-sky-200",
-            "group-hover:outline-2",
+            "border",
+            "outline outline-sky-200/50 dark:outline-sky-500/50",
+            !props.highlight &&
+              "outline-0 border-slate-300 dark:border-slate-800",
+            props.highlight && "outline-2 border-sky-300 dark:border-sky-500",
           )}
         >
           <BoltIcon className="size-5 text-sky-500" />
@@ -570,7 +574,7 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
               <div className="flex justify-around">
                 {/* <div className="size-3 rounded-full bg-red-500"></div> */}
                 <div className="absolute text-center">
-                  <div className="text-xs text-gray-500 backdrop-blur">
+                  <div className="text-xs text-gray-500 dark:text-slate-300 backdrop-blur">
                     {props.id.split("/").slice(-1).join("")}
                   </div>
                 </div>
@@ -733,6 +737,7 @@ const RoundedEdge: EdgeComponent = memo(
             // "stroke-sky-200 hover:stroke-sky-500",
             // "stroke-gray-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
             "stroke-gray-300 hover:stroke-sky-500",
+            "dark:stroke-gray-700 dark:hover:stroke-sky-800",
           )}
           transform={`translate(${offsetX} ${offsetY})`}
         >
@@ -743,7 +748,7 @@ const RoundedEdge: EdgeComponent = memo(
             </title>
           </path>
           <path
-            className="stroke-[6] opacity-0 group-hover:opacity-100 stroke-sky-100"
+            className="stroke-[6] opacity-0 group-hover:opacity-100 stroke-sky-100 dark:stroke-sky-500/50"
             d={d}
           >
             <title>
@@ -835,6 +840,7 @@ export const MapView = memo(
                 (connection) =>
                   connection.target.id === props.constructTreeNode.path,
               )}
+              highlight={props.selectedNodeId === props.constructTreeNode.path}
               onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             />
           );
