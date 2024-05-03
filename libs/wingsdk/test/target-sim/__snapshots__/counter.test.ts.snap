@@ -12,6 +12,10 @@ exports[`create a counter 1`] = `
           const ctx = {};
           ctx.statedir = () => statedir;
           ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ': ' + message);
+          };
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -238,6 +242,10 @@ exports[`dec 2`] = `
           const ctx = {};
           ctx.statedir = () => statedir;
           ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ': ' + message);
+          };
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -464,6 +472,10 @@ exports[`inc 2`] = `
           const ctx = {};
           ctx.statedir = () => statedir;
           ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ': ' + message);
+          };
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -690,6 +702,10 @@ exports[`key dec 2`] = `
           const ctx = {};
           ctx.statedir = () => statedir;
           ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ': ' + message);
+          };
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -916,6 +932,10 @@ exports[`key inc 2`] = `
           const ctx = {};
           ctx.statedir = () => statedir;
           ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ': ' + message);
+          };
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -1140,6 +1160,10 @@ exports[`key set to new value 2`] = `
           const ctx = {};
           ctx.statedir = () => statedir;
           ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ': ' + message);
+          };
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -1364,6 +1388,10 @@ exports[`set to new value 2`] = `
           const ctx = {};
           ctx.statedir = () => statedir;
           ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ': ' + message);
+          };
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures

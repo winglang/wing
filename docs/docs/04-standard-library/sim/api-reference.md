@@ -853,8 +853,35 @@ Context for implementing a simulator resource.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.sim.IResourceContext.log">log</a></code> | Log a message at the current point in time. |
 | <code><a href="#@winglang/sdk.sim.IResourceContext.resolveAttr">resolveAttr</a></code> | Resolves an attribute value. |
 | <code><a href="#@winglang/sdk.sim.IResourceContext.statedir">statedir</a></code> | The directory for the resource's state. |
+
+---
+
+##### `log` <a name="log" id="@winglang/sdk.sim.IResourceContext.log"></a>
+
+```wing
+inflight log(message: str, level?: LogLevel): void
+```
+
+Log a message at the current point in time.
+
+Defaults to `info` level.
+
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.sim.IResourceContext.log.parameter.message"></a>
+
+- *Type:* str
+
+The message to log.
+
+---
+
+###### `level`<sup>Optional</sup> <a name="level" id="@winglang/sdk.sim.IResourceContext.log.parameter.level"></a>
+
+- *Type:* <a href="#@winglang/sdk.sim.LogLevel">LogLevel</a>
+
+The severity of the message.
 
 ---
 
@@ -1043,7 +1070,7 @@ The severity of a log message.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.sim.LogLevel.TRACE">TRACE</a></code> | Trace level. |
+| <code><a href="#@winglang/sdk.sim.LogLevel.VERBOSE">VERBOSE</a></code> | Verbose level. |
 | <code><a href="#@winglang/sdk.sim.LogLevel.DEBUG">DEBUG</a></code> | Debug level. |
 | <code><a href="#@winglang/sdk.sim.LogLevel.INFO">INFO</a></code> | Information level. |
 | <code><a href="#@winglang/sdk.sim.LogLevel.WARN">WARN</a></code> | Warning level. |
@@ -1051,9 +1078,9 @@ The severity of a log message.
 
 ---
 
-##### `TRACE` <a name="TRACE" id="@winglang/sdk.sim.LogLevel.TRACE"></a>
+##### `VERBOSE` <a name="VERBOSE" id="@winglang/sdk.sim.LogLevel.VERBOSE"></a>
 
-Trace level.
+Verbose level.
 
 ---
 

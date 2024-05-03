@@ -12,6 +12,10 @@ exports[`can create sequential files in a bucket 1`] = `
           const ctx = {};
           ctx.statedir = () => statedir;
           ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ': ' + message);
+          };
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
