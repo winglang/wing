@@ -282,6 +282,7 @@ new sim.Resource(factory: IResourceFactory);
 | --- | --- |
 | <code><a href="#@winglang/sdk.sim.Resource.addEnvironment">addEnvironment</a></code> | Add an environment variable to make available to the inflight code. |
 | <code><a href="#@winglang/sdk.sim.Resource.addPermission">addPermission</a></code> | Add a simulated permission to this inflight host. |
+| <code><a href="#@winglang/sdk.sim.Resource.attrToken">attrToken</a></code> | Obtain a token that can be used to reference an attribute of this resource that is only resolved once the resource is started in the simulator. |
 | <code><a href="#@winglang/sdk.sim.Resource.toSimulator">toSimulator</a></code> | Convert this resource to a resource schema for the simulator. |
 
 ##### Inflight Methods
@@ -329,6 +330,26 @@ Add a simulated permission to this inflight host.
 ###### `op`<sup>Required</sup> <a name="op" id="@winglang/sdk.sim.Resource.addPermission.parameter.op"></a>
 
 - *Type:* str
+
+---
+
+##### `attrToken` <a name="attrToken" id="@winglang/sdk.sim.Resource.attrToken"></a>
+
+```wing
+attrToken(name: str): str
+```
+
+Obtain a token that can be used to reference an attribute of this resource that is only resolved once the resource is started in the simulator.
+
+If the token is used in inflight code or in the configuration of a simulated
+resource (e.g. as an environment variable), the relevant resource will
+automatically take a dependency on the resource the attribute belongs to.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.Resource.attrToken.parameter.name"></a>
+
+- *Type:* str
+
+The name of the attribute.
 
 ---
 
@@ -828,26 +849,50 @@ Runs when the resource is stopped.
 
 Context for implementing a simulator resource.
 
+#### Methods <a name="Methods" id="Methods"></a>
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.sim.IResourceContext.property.statedir">statedir</a></code> | <code>str</code> | The directory for the resource's state. |
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.sim.IResourceContext.resolveAttr">resolveAttr</a></code> | Resolves an attribute value. |
+| <code><a href="#@winglang/sdk.sim.IResourceContext.statedir">statedir</a></code> | The directory for the resource's state. |
 
 ---
 
-##### `statedir`<sup>Required</sup> <a name="statedir" id="@winglang/sdk.sim.IResourceContext.property.statedir"></a>
+##### `resolveAttr` <a name="resolveAttr" id="@winglang/sdk.sim.IResourceContext.resolveAttr"></a>
 
 ```wing
-statedir: str;
+inflight resolveAttr(name: str, value: str): void
 ```
+
+Resolves an attribute value.
+
+All attributes must be resolved during the
+`onStart` method.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.IResourceContext.resolveAttr.parameter.name"></a>
 
 - *Type:* str
 
-The directory for the resource's state.
+The name of the attribute.
 
 ---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.sim.IResourceContext.resolveAttr.parameter.value"></a>
+
+- *Type:* str
+
+The value of the attribute.
+
+---
+
+##### `statedir` <a name="statedir" id="@winglang/sdk.sim.IResourceContext.statedir"></a>
+
+```wing
+statedir(): str
+```
+
+The directory for the resource's state.
+
 
 ### IResourceFactory <a name="IResourceFactory" id="@winglang/sdk.sim.IResourceFactory"></a>
 
@@ -985,6 +1030,58 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+## Enums <a name="Enums" id="Enums"></a>
+
+### LogLevel <a name="LogLevel" id="@winglang/sdk.sim.LogLevel"></a>
+
+The severity of a log message.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.sim.LogLevel.TRACE">TRACE</a></code> | Trace level. |
+| <code><a href="#@winglang/sdk.sim.LogLevel.DEBUG">DEBUG</a></code> | Debug level. |
+| <code><a href="#@winglang/sdk.sim.LogLevel.INFO">INFO</a></code> | Information level. |
+| <code><a href="#@winglang/sdk.sim.LogLevel.WARN">WARN</a></code> | Warning level. |
+| <code><a href="#@winglang/sdk.sim.LogLevel.ERROR">ERROR</a></code> | Error level. |
+
+---
+
+##### `TRACE` <a name="TRACE" id="@winglang/sdk.sim.LogLevel.TRACE"></a>
+
+Trace level.
+
+---
+
+
+##### `DEBUG` <a name="DEBUG" id="@winglang/sdk.sim.LogLevel.DEBUG"></a>
+
+Debug level.
+
+---
+
+
+##### `INFO` <a name="INFO" id="@winglang/sdk.sim.LogLevel.INFO"></a>
+
+Information level.
+
+---
+
+
+##### `WARN` <a name="WARN" id="@winglang/sdk.sim.LogLevel.WARN"></a>
+
+Warning level.
+
+---
+
+
+##### `ERROR` <a name="ERROR" id="@winglang/sdk.sim.LogLevel.ERROR"></a>
+
+Error level.
 
 ---
 
