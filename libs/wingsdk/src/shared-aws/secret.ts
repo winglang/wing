@@ -16,7 +16,7 @@ import { IInflightHost, Resource } from "../std";
 export class SecretRef extends Resource {
   /** @internal */
   public [INFLIGHT_SYMBOL]?: ISecretClient;
-
+  /** The ARN of the secret */
   public readonly secretArn: string;
 
   constructor(scope: Construct, id: string, secretArn: string) {
