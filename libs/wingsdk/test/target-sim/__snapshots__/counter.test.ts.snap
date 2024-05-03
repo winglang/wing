@@ -4,10 +4,14 @@ exports[`create a counter 1`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function(ctx) {
+        exports.start = async function(statedir) {
           if ($klass) {
             throw Error('resource already started');
           }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveAttr = (name, value) => attrs[name] = value;
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -29,14 +33,34 @@ exports[`create a counter 1`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
+          ctx.resolveAttr = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
           $klass = klass;
+          return attrs;
         };
 
-        exports.call = async function(method, ...args) {
+        exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('resource not started');
           }
-          return await $klass[method](...args);
+          if (propName === 'onStart') {
+            throw Error('Cannot call "onStart"');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
         };
 
         exports.stop = async function() {
@@ -206,10 +230,14 @@ exports[`dec 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function(ctx) {
+        exports.start = async function(statedir) {
           if ($klass) {
             throw Error('resource already started');
           }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveAttr = (name, value) => attrs[name] = value;
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -231,14 +259,34 @@ exports[`dec 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
+          ctx.resolveAttr = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
           $klass = klass;
+          return attrs;
         };
 
-        exports.call = async function(method, ...args) {
+        exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('resource not started');
           }
-          return await $klass[method](...args);
+          if (propName === 'onStart') {
+            throw Error('Cannot call "onStart"');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
         };
 
         exports.stop = async function() {
@@ -408,10 +456,14 @@ exports[`inc 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function(ctx) {
+        exports.start = async function(statedir) {
           if ($klass) {
             throw Error('resource already started');
           }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveAttr = (name, value) => attrs[name] = value;
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -433,14 +485,34 @@ exports[`inc 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
+          ctx.resolveAttr = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
           $klass = klass;
+          return attrs;
         };
 
-        exports.call = async function(method, ...args) {
+        exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('resource not started');
           }
-          return await $klass[method](...args);
+          if (propName === 'onStart') {
+            throw Error('Cannot call "onStart"');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
         };
 
         exports.stop = async function() {
@@ -610,10 +682,14 @@ exports[`key dec 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function(ctx) {
+        exports.start = async function(statedir) {
           if ($klass) {
             throw Error('resource already started');
           }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveAttr = (name, value) => attrs[name] = value;
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -635,14 +711,34 @@ exports[`key dec 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
+          ctx.resolveAttr = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
           $klass = klass;
+          return attrs;
         };
 
-        exports.call = async function(method, ...args) {
+        exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('resource not started');
           }
-          return await $klass[method](...args);
+          if (propName === 'onStart') {
+            throw Error('Cannot call "onStart"');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
         };
 
         exports.stop = async function() {
@@ -812,10 +908,14 @@ exports[`key inc 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function(ctx) {
+        exports.start = async function(statedir) {
           if ($klass) {
             throw Error('resource already started');
           }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveAttr = (name, value) => attrs[name] = value;
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -837,14 +937,34 @@ exports[`key inc 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
+          ctx.resolveAttr = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
           $klass = klass;
+          return attrs;
         };
 
-        exports.call = async function(method, ...args) {
+        exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('resource not started');
           }
-          return await $klass[method](...args);
+          if (propName === 'onStart') {
+            throw Error('Cannot call "onStart"');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
         };
 
         exports.stop = async function() {
@@ -1012,10 +1132,14 @@ exports[`key set to new value 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function(ctx) {
+        exports.start = async function(statedir) {
           if ($klass) {
             throw Error('resource already started');
           }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveAttr = (name, value) => attrs[name] = value;
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -1037,14 +1161,34 @@ exports[`key set to new value 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
+          ctx.resolveAttr = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
           $klass = klass;
+          return attrs;
         };
 
-        exports.call = async function(method, ...args) {
+        exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('resource not started');
           }
-          return await $klass[method](...args);
+          if (propName === 'onStart') {
+            throw Error('Cannot call "onStart"');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
         };
 
         exports.stop = async function() {
@@ -1212,10 +1356,14 @@ exports[`set to new value 2`] = `
 {
   ".wing/resource_c81f10c5.cjs": "        "use strict";
         let $klass;
-        exports.start = async function(ctx) {
+        exports.start = async function(statedir) {
           if ($klass) {
             throw Error('resource already started');
           }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveAttr = (name, value) => attrs[name] = value;
           const client = (await (async () => {
   const $func = async (ctx) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
@@ -1237,14 +1385,34 @@ exports[`set to new value 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
+          ctx.resolveAttr = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
           $klass = klass;
+          return attrs;
         };
 
-        exports.call = async function(method, ...args) {
+        exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('resource not started');
           }
-          return await $klass[method](...args);
+          if (propName === 'onStart') {
+            throw Error('Cannot call "onStart"');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
         };
 
         exports.stop = async function() {

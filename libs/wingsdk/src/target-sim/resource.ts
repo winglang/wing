@@ -196,7 +196,7 @@ export class Resource
             }
             return prop;
           }
-          return await prop(...args);
+          return await prop.call($klass, ...args);
         };
 
         exports.stop = async function() {
