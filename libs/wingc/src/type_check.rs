@@ -28,7 +28,8 @@ use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
 	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE,
-	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_SET, WINGSDK_SIM_IRESOURCECONTEXT_FQN, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -1179,6 +1180,36 @@ impl TypeRef {
 			Type::Set(v) => v.is_mutable(),
 			Type::Optional(v) => v.is_mutable(),
 			_ => false,
+		}
+	}
+
+	pub fn is_serializable(&self) -> bool {
+		match &**self {
+			// serializable
+			Type::Anything => true,
+			Type::Number => true,
+			Type::String => true,
+			Type::Boolean => true,
+			Type::Void => true,
+			Type::Json(_) => true,
+			Type::MutJson => true,
+			Type::Nil => true,
+			Type::Unresolved => true,
+			Type::Optional(t) => t.is_serializable(),
+			Type::Array(t) => t.is_serializable(),
+			Type::MutArray(t) => t.is_serializable(),
+			Type::Map(t) => t.is_serializable(),
+			Type::MutMap(t) => t.is_serializable(),
+			Type::Struct(s) => s.fields(true).map(|(_, t)| t).all(|t| t.is_serializable()),
+			Type::Enum(_) => true,
+			// not serializable
+			Type::Duration => false,
+			Type::Inferred(_) => false,
+			Type::Set(_) => false,
+			Type::MutSet(_) => false,
+			Type::Function(_) => false,
+			Type::Class(_) => false,
+			Type::Interface(_) => false,
 		}
 	}
 
@@ -4495,7 +4526,57 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 		}
+
+		// Check that if the class implements sim.IResource, then the
+		// types used in its methods are serializable and immutable
+		if impl_interfaces
+			.iter()
+			.any(|i| i.as_interface().unwrap().fqn.as_deref() == Some(WINGSDK_SIM_IRESOURCE_FQN))
+		{
+			for (method_name, method_def) in ast_class.methods.iter() {
+				let method_type = method_types.get(&method_name).unwrap();
+				self.check_method_is_resource_compatible(*method_type, method_def);
+			}
+		}
+
 		self.ctx.pop_class();
+	}
+
+	fn check_method_is_resource_compatible(&mut self, method_type: TypeRef, method_def: &FunctionDefinition) {
+		let sig = method_type
+			.as_function_sig()
+			.expect("Expected method type to be a function signature");
+
+		let check_type = |param_name: Option<&str>, t: TypeRef| {
+			// If the method name is onStart and the type is sim.IResourceContext, then we'll let it slide...
+			if method_def.name.as_ref().map(|sym| sym.name.as_str()) == Some("onStart")
+				&& t.as_interface().map(|i| i.fqn.as_deref()) == Some(Some(WINGSDK_SIM_IRESOURCECONTEXT_FQN))
+			{
+				return;
+			}
+
+			let prefix = match param_name {
+				Some(name) => format!("Parameter \"{}\"", name),
+				None => "Return value".to_string(),
+			};
+			if t.is_mutable() {
+				self.spanned_error(
+					method_def,
+					format!("{} cannot have a mutable type \"{}\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.", prefix, t),
+				);
+			}
+			if !t.is_serializable() {
+				self.spanned_error(
+					method_def,
+					format!("{} cannot have a non-serializable type \"{}\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.", prefix, t),
+				);
+			}
+		};
+
+		for param in sig.parameters.iter() {
+			check_type(Some(&param.name), param.typeref);
+		}
+		check_type(None, sig.return_type);
 	}
 
 	fn type_check_return(&mut self, stmt: &Stmt, exp: &Option<Expr>, env: &mut SymbolEnv) {

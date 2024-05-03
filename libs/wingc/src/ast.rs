@@ -871,6 +871,12 @@ impl Spanned for Scope {
 	}
 }
 
+impl Spanned for FunctionDefinition {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
 impl<T> Spanned for Box<T>
 where
 	T: Spanned,

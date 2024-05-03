@@ -176,11 +176,21 @@ export class Resource
           return attrs;
         };
 
-        exports.call = async function(method, ...args) {
+        exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('resource not started');
           }
-          return await $klass[method](...args);
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop(...args);
         };
 
         exports.stop = async function() {
