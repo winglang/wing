@@ -1,6 +1,3 @@
-// TODO
-// test passing and returning values of different serializable Wing types
-
 bring expect;
 bring sim;
 
