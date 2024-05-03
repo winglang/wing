@@ -180,6 +180,12 @@ export class Resource
           if (!$klass) {
             throw Error('resource not started');
           }
+          if (propName === 'onStart') {
+            throw Error('Cannot call "onStart"');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
           const prop = $klass[propName];
           if (!prop) {
             throw Error('Method or property "' + propName + '" not found');

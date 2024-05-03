@@ -1,7 +1,6 @@
 // TODO
 // test passing and returning values of different serializable Wing types
 // test throwing errors
-// test that you cannot call "onStart" or "onStop"
 // test for an error when calling a method that doesn't exist
 
 bring expect;
@@ -40,6 +39,12 @@ class ResourceWithProperties {
   pub inflight invalidField(): str {
     return str.fromJson(this.backend.call("invalidField"));
   }
+  pub inflight onStart() {
+    this.backend.call("onStart");
+  }
+  pub inflight onStop() {
+    this.backend.call("onStop");
+  }
 }
 
 let r1 = new ResourceWithProperties();
@@ -62,4 +67,23 @@ test "resource.call with a field name returns the field value" {
     msg = err;
   }
   assert(msg.contains("Method or property \"invalidField\" not found"));
+}
+
+test "resource.call cannot be used to call onStart or onStop" {
+  // These are reserved methods that are called by the simulator for
+  // managing the resource's lifecycle
+  let var msg = "";
+  try {
+    r1.onStart();
+  } catch err {
+    msg = err;
+  }
+  assert(msg.contains("Cannot call \"onStart\""));
+
+  try {
+    r1.onStop();
+  } catch err {
+    msg = err;
+  }
+  assert(msg.contains("Cannot call \"onStop\""));
 }
