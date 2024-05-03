@@ -65,10 +65,15 @@ export interface IResourceContext {
  * The severity of a log message.
  */
 export enum LogLevel {
+  /** Trace level */
   TRACE = "trace",
+  /** Debug level */
   DEBUG = "debug",
+  /** Information level */
   INFO = "info",
+  /** Warning level */
   WARN = "warn",
+  /** Error level */
   ERROR = "error",
 }
 
