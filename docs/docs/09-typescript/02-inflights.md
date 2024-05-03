@@ -116,7 +116,7 @@ import { main, cloud, inflight, lift } from "@wingcloud/framework";
 import assert from "node:assert";
 
 main((root, test) => {
-  const fn = cloud.Function(
+  const fn = new cloud.Function(
     root,
     "MyFn",
     inflight(async () => {
