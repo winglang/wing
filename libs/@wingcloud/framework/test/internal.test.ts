@@ -25,6 +25,11 @@ describe("compile", async () => {
       )) {
         test(
           file,
+          {
+            // The typescript compiler is quite slow, especially in CI
+            // See https://github.com/winglang/wing/issues/5676
+            timeout: 60000,
+          },
           async () => {
             const tmpDir = await mkdtemp(join(tmpdir(), `wingts.${file}`));
             const filePath = join(statusDir, file);
@@ -38,11 +43,6 @@ describe("compile", async () => {
             } else {
               await compilePromise;
             }
-          },
-          {
-            // The typescript compiler is quite slow, especially in CI
-            // See https://github.com/winglang/wing/issues/5676
-            timeout: 60000,
           }
         );
       }
