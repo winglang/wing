@@ -1,5 +1,6 @@
 import type { ElkExtendedEdge, ElkNode } from "elkjs";
 import {
+  memo,
   useEffect,
   useMemo,
   useRef,
@@ -24,65 +25,67 @@ export interface GraphProps
   elk: ElkOptions;
   edges?: ElkExtendedEdge[];
   edgeComponent?: EdgeComponent;
+  onZoomPaneClick?: () => void;
 }
 
-export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = (
-  props,
-) => {
-  const { elk, edges, edgeComponent, ...divProps } = props;
+export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
+  (props) => {
+    const { elk, edges, edgeComponent, ...divProps } = props;
 
-  const [graph, setGraph] = useState<ElkNode>();
+    const [graph, setGraph] = useState<ElkNode>();
 
-  const zoomPaneRef = useRef<ZoomPaneRef>(null);
+    const zoomPaneRef = useRef<ZoomPaneRef>(null);
 
-  const mapSize = useMemo(() => {
-    if (!graph) {
-      return;
-    }
+    const mapSize = useMemo(() => {
+      if (!graph) {
+        return;
+      }
 
-    return {
-      width: graph.width!,
-      height: graph.height!,
-    };
-  }, [graph]);
+      return {
+        width: graph.width!,
+        height: graph.height!,
+      };
+    }, [graph]);
 
-  // useEffect(() => {
-  //   zoomPaneRef.current?.zoomToFit();
-  // }, [graph]);
+    // useEffect(() => {
+    //   zoomPaneRef.current?.zoomToFit();
+    // }, [graph]);
 
-  const mapBackgroundRef = useRef<HTMLDivElement>(null);
+    const mapBackgroundRef = useRef<HTMLDivElement>(null);
 
-  return (
-    <>
-      {createPortal(
-        <div className="absolute pointer-events-none invisible size-0">
-          <GraphGenerator elk={elk} edges={edges} onGraph={setGraph}>
-            {props.children}
-          </GraphGenerator>
-        </div>,
-        document.body,
-      )}
-
-      <div ref={mapBackgroundRef}></div>
-
-      <ZoomPane
-        ref={zoomPaneRef}
-        boundingBox={mapSize}
-        className="w-full h-full"
-        data-testid="map-pane"
-        // onClick={() => onSelectedNodeIdChange?.(undefined)}
-      >
-        {mapBackgroundRef.current &&
-          createPortal(<MapBackground />, mapBackgroundRef.current)}
-
-        <div {...divProps}>
-          {graph && (
-            <GraphRenderer graph={graph} edgeComponent={edgeComponent}>
+    return (
+      <>
+        {createPortal(
+          <div className="absolute pointer-events-none invisible size-0">
+            <GraphGenerator elk={elk} edges={edges} onGraph={setGraph}>
               {props.children}
-            </GraphRenderer>
-          )}
-        </div>
-      </ZoomPane>
-    </>
-  );
-};
+            </GraphGenerator>
+          </div>,
+          document.body,
+        )}
+
+        <div ref={mapBackgroundRef}></div>
+
+        <ZoomPane
+          ref={zoomPaneRef}
+          boundingBox={mapSize}
+          className="w-full h-full"
+          data-testid="map-pane"
+          // onClick={() => onSelectedNodeIdChange?.(undefined)}
+          onClick={props.onZoomPaneClick}
+        >
+          {mapBackgroundRef.current &&
+            createPortal(<MapBackground />, mapBackgroundRef.current)}
+
+          <div {...divProps}>
+            {graph && (
+              <GraphRenderer graph={graph} edgeComponent={edgeComponent}>
+                {props.children}
+              </GraphRenderer>
+            )}
+          </div>
+        </ZoomPane>
+      </>
+    );
+  },
+);

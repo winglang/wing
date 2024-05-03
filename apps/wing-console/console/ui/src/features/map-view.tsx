@@ -7,17 +7,12 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
-import type { ConnectionData } from "@winglang/sdk/lib/simulator/index.js";
 import clsx from "classnames";
-import type { ElkExtendedEdge } from "elkjs";
 import { type ElkPoint, type LayoutOptions } from "elkjs";
-import uniqby from "lodash.uniqby";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { memo, useCallback, useEffect, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { useKeyPressEvent } from "react-use";
 
-import { bridgeConnections } from "../services/use-map.bridge-connections.js";
-import type { RawConnectionData } from "../services/use-map.js";
 import { useMapV2 } from "../services/use-map.js";
 import { assert } from "../ui/elk-flow/assert.js";
 import { Graph } from "../ui/elk-flow/graph.js";
@@ -232,7 +227,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           className={clsx(
             "w-full h-full rounded-lg",
             "bg-white dark:bg-slate-700",
-            // "outline outline-1 outline-gray-300",
             "border",
             "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
             !props.highlight && "border-slate-300 dark:border-slate-800",
@@ -241,55 +235,11 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             "transition-all",
           )}
         >
-          <div
-            // className="px-4 py-2.5 flex items-center gap-2"
-            // className="px-4 py-1 flex items-center gap-2"
-            className="px-2.5 py-1 flex items-center gap-1.5"
-          >
-            {/* <CubeIcon className="-ml-1.5 size-6 text-emerald-400" /> */}
-            {/* <div className="-ml-1 rounded px-1.5 py-1 bg-emerald-400">
-      <CubeIcon className="size-6 text-white" />
-    </div> */}
-            {/* <div className="rounded p-1.5 bg-gray-400">
-              <CubeIcon className="size-5 text-white" />
-            </div> */}
-            {/* {props.fqn === "@winglang/sdk.cloud.Bucket" && (
-              <div className="-ml-1 rounded p-1.5 bg-emerald-400">
-                <ArchiveBoxIcon className="size-5 text-white" />
-              </div>
-            )} */}
-            {/* <ResourceIcon className="size-4" resourceType={props.fqn} /> */}
-
+          <div className="px-2.5 py-1 flex items-center gap-1.5">
             <ResourceIcon className="size-4 -ml-0.5" resourceType={props.fqn} />
 
-            {/* <div
-              className={clsx(
-                "rounded flex items-center justify-around",
-                // "p-1",
-                "px-1.5 py-1",
-                "-ml-0.5",
-                getResourceBackgroudColor(props.fqn),
-              )}
-            >
-              <ResourceIcon
-                className="size-5 text-white dark:text-white"
-                // resourceType={props.fqn}
-                resourceType={props.fqn}
-                solid
-              />
-            </div> */}
-
-            {/* <ResourceIcon className="size-6" resourceType={props.fqn} /> */}
-            {/* <div className="-ml-1 border border-gray-300 rounded-lg px-1.5 py-1 shadow">
-      <CubeIcon className="size-6 text-emerald-400" />
-    </div> */}
-            <span
-              // className="text-sm font-semibold leading-relaxed tracking-wide whitespace-nowrap"
-              // className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-500"
-              className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-600 dark:text-slate-300"
-            >
+            <span className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-600 dark:text-slate-300">
               {props.name}
-              {/* ({props.fqn}) */}
             </span>
           </div>
 
@@ -510,7 +460,7 @@ interface FunctionNodeProps {
   onSelectedNodeIdChange: (id: string | undefined) => void;
 }
 
-const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
+const FunctionNode: FunctionComponent<FunctionNodeProps> = memo((props) => {
   return (
     <Node
       elk={{
@@ -585,64 +535,7 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = (props) => {
       </div>
     </Node>
   );
-};
-
-// interface APINodeProps {
-//   id: string;
-// }
-
-// const APINode: FunctionComponent<APINodeProps> = (props) => {
-//   return (
-//     <Node
-//       elk={{
-//         id: props.id,
-//         layoutOptions: {
-//           "elk.portConstraints": "FIXED_SIDE",
-//         },
-//       }}
-//       className="inline-flex"
-//     >
-//       <div className="group">
-//         <div
-//           className={clsx(
-//             "p-3 rounded-full bg-white shadow",
-//             "transition-all",
-//             "border border-gray-300",
-//             // "group-hover:border-sky-300",
-//             "outline outline-0 outline-sky-200",
-//             "group-hover:outline-2",
-//           )}
-//         >
-//           <BoltIcon className="size-6 text-yellow-500" />
-//         </div>
-
-//         <Port
-//           elk={{
-//             id: `${props.id}#target`,
-//             layoutOptions: {
-//               "elk.port.side": "WEST",
-//               "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-//             },
-//           }}
-//         >
-//           <InflightPort />
-//         </Port>
-
-//         <Port
-//           elk={{
-//             id: `${props.id}#source`,
-//             layoutOptions: {
-//               "elk.port.side": "EAST",
-//               "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-//             },
-//           }}
-//         >
-//           <InflightPort />
-//         </Port>
-//       </div>
-//     </Node>
-//   );
-// };
+});
 
 /**
  * Returns the middle point between two points with a given radius.
@@ -794,11 +687,6 @@ export const MapView = memo(
           return <></>;
         }
 
-        if (info.type === "autoId") {
-          return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
-          // return <></>;
-        }
-
         // if (info.type === "endpoint") {
         //   // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
         //   return <></>;
@@ -857,11 +745,6 @@ export const MapView = memo(
         //   );
         // }
 
-        // console.log({
-        //   path: props.constructTreeNode.path,
-        //   type: info.type,
-        // });
-
         return (
           <ContainerNode
             id={props.constructTreeNode.path}
@@ -914,49 +797,13 @@ export const MapView = memo(
                 elk={{
                   id: "root",
                   layoutOptions: {
-                    // "elk.algorithm": "org.eclipse.elk.layered",
-                    // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-                    // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
-                    // "elk.direction": "RIGHT",
                     ...baseLayoutOptions,
                     "elk.padding": "[top=24,left=20,bottom=20,right=20]",
                   },
                 }}
-                // edges={connections?.map((connection) => {
-                //   return {
-                //     id: `${connection.source}#${connection.target}#${connection.name}`,
-                //     sources: [
-                //       getConnectionId(connection.source, connection.name, "source"),
-                //     ],
-                //     targets: [
-                //       getConnectionId(connection.target, connection.name, "target"),
-                //     ],
-                //   };
-                // })}
-                // edges={connectionsV2.map((connection) => {
-                //   return {
-                //     id: `${connection.source}#${connection.target}`,
-                //     sources: [connection.source],
-                //     targets: [connection.target],
-                //   };
-                // })}
                 edges={edges}
-                // edges={connections?.map((connection) => {
-                //   const source = `${connection.source}#${
-                //     (connection as any).sourceOp
-                //   }#source`;
-                //   const target = `${connection.target}#${
-                //     (connection as any).targetOp
-                //   }#target`;
-                //   return {
-                //     id: `${source}##${target}`,
-                //     sources: [source],
-                //     targets: [target],
-                //   };
-                // })}
                 edgeComponent={RoundedEdge}
-                // className="bg-gray-50"
-                // onClick={() => onSelectedNodeIdChange(undefined)}
+                onZoomPaneClick={() => onSelectedNodeIdChange(undefined)}
               >
                 {rootNodes.map((node) => (
                   <RenderNode
@@ -974,73 +821,3 @@ export const MapView = memo(
     );
   },
 );
-
-const AutoIdNode: FunctionComponent<{
-  constructTreeNode: ConstructTreeNode;
-}> = (props) => {
-  return (
-    <Node
-      elk={{
-        id: props.constructTreeNode.path,
-        layoutOptions: {
-          "elk.portConstraints": "FIXED_SIDE",
-        },
-      }}
-      className="inline-block"
-    >
-      <div
-        className={clsx(
-          "size-4",
-          "border border-gray-300",
-          "hover:border-sky-300 rounded-full outline-0 outline outline-sky-300 hover:outline-2",
-          "transition-all",
-          "shadow",
-          "relative",
-          "group",
-          "bg-white",
-        )}
-      >
-        <Port
-          elk={{
-            // id: `${props.constructTreeNode.path}#handle#target`,
-            id: `${props.constructTreeNode.path}#target`,
-            layoutOptions: {
-              "elk.port.side": "WEST",
-              "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-            },
-          }}
-        >
-          {/* <InflightPort /> */}
-        </Port>
-
-        <Port
-          elk={{
-            // id: `${props.constructTreeNode.path}#handle#source`,
-            id: `${props.constructTreeNode.path}#source`,
-            layoutOptions: {
-              "elk.port.side": "EAST",
-              "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-            },
-          }}
-        >
-          {/* <InflightPort /> */}
-        </Port>
-
-        <div className="absolute bottom-0 inset-x-0 invisible group-hover:visible">
-          <div className="relative">
-            <div className="absolute top-0 inset-x-0">
-              <div className="flex justify-around">
-                {/* <div className="size-3 rounded-full bg-red-500"></div> */}
-                <div className="absolute text-center">
-                  <div className="text-xs text-gray-500 backdrop-blur">
-                    {props.constructTreeNode.id.split("/").slice(-1).join("")}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Node>
-  );
-};
