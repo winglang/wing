@@ -73,23 +73,28 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     if (!(await this.tryInspect(this.imageTag))) {
       // if this a reference to a local directory, build the image from a docker file
       if (isPath(this.props.image)) {
-        this.resourceLog(
-          `Image ${this.imageTag} not found, building from ${this.props.image}...`
+        this.addTrace(
+          `Image ${this.imageTag} not found, building from ${this.props.image}...`,
+          TraceType.RESOURCE
         );
         await this.docker("build", ["-t", this.imageTag, this.props.image], {
           stdout: true,
           stderr: true,
         });
       } else {
-        this.resourceLog(`Image ${this.imageTag} not found, pulling...`);
+        this.addTrace(
+          `Image ${this.imageTag} not found, pulling...`,
+          TraceType.RESOURCE
+        );
         await this.docker("pull", [this.imageTag], {
           stdout: true,
           stderr: true,
         });
       }
     } else {
-      this.resourceLog(
-        `Image ${this.imageTag} found, No need to build or pull.`
+      this.addTrace(
+        `Image ${this.imageTag} found, No need to build or pull.`,
+        TraceType.RESOURCE
       );
     }
 
@@ -133,13 +138,16 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       dockerRun.push(a);
     }
 
-    this.resourceLog(`Starting container from ${this.imageTag}...`);
+    this.addTrace(
+      `Starting container from ${this.imageTag}...`,
+      TraceType.RESOURCE
+    );
 
     this.child = this.dockerSpawn("run", dockerRun, {
       stdout: true,
       stderr: true,
       onError: (err) => {
-        this.userLog(err.stack ?? err.message, LogLevel.ERROR);
+        this.addTrace(err.stack ?? err.message, TraceType.LOG, LogLevel.ERROR);
       },
     });
 
@@ -165,7 +173,11 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       return container?.[0]?.State?.Running;
     });
 
-    this.userLog(`Container ${this.imageTag} started`, LogLevel.INFO);
+    this.addTrace(
+      `Container ${this.imageTag} started`,
+      TraceType.RESOURCE,
+      LogLevel.INFO
+    );
 
     return {
       [HOST_PORT_ATTR]: hostPort,
@@ -202,7 +214,10 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {
-    this.resourceLog(`Stopping container ${this.containerName}`);
+    this.addTrace(
+      `Stopping container ${this.containerName}`,
+      TraceType.RESOURCE
+    );
     await this.child?.kill("SIGKILL");
     await this.docker("rm", ["-f", this.containerName]);
   }
@@ -240,12 +255,18 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     args: string[],
     options: DockerSpawnOptions = {}
   ): DockerProcess {
-    const logStdout = options.stdout ?? false;
+    let logStdout = options.stdout ?? false;
     const logStderr = options.stderr ?? false;
     const onError = options.onError;
 
-    this.resourceLog(
+    // can be used to hide container logs (used in our end to end tests)
+    if (process.env.WING_HIDE_CONTAINER_LOGS) {
+      logStdout = false;
+    }
+
+    this.addTrace(
       `Running: docker ${command} ${args.join(" ")}`,
+      TraceType.RESOURCE,
       LogLevel.VERBOSE
     );
 
@@ -270,13 +291,13 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       output.push(data);
 
       if (logStdout) {
-        this.userLog(data.toString(), LogLevel.INFO);
+        this.addTrace(data.toString(), TraceType.LOG, LogLevel.INFO);
       }
     });
 
     if (logStderr) {
       child.stderr.on("data", (data) => {
-        this.userLog(data.toString(), LogLevel.INFO);
+        this.addTrace(data.toString(), TraceType.LOG, LogLevel.INFO);
       });
     }
 
@@ -284,7 +305,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       started = false;
 
       if (logStderr) {
-        this.userLog(err.stack ?? err.message, LogLevel.ERROR);
+        this.addTrace(err.stack ?? err.message, TraceType.LOG, LogLevel.ERROR);
       }
 
       if (onError) {
@@ -339,24 +360,17 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     return UpdatePlan.AUTO;
   }
 
-  private resourceLog(message: string, level: LogLevel = LogLevel.VERBOSE) {
+  private addTrace(
+    message: string,
+    type: TraceType,
+    level: LogLevel = LogLevel.VERBOSE
+  ) {
     this.context.addTrace({
       data: { message: message.trim() },
       sourcePath: this.context.resourcePath,
       sourceType: "container",
       timestamp: new Date().toISOString(),
-      type: TraceType.RESOURCE,
-      level,
-    });
-  }
-
-  private userLog(message: string, level: LogLevel) {
-    this.context.addTrace({
-      data: { message: message.trim() },
-      sourcePath: this.context.resourcePath,
-      sourceType: "container",
-      timestamp: new Date().toISOString(),
-      type: TraceType.LOG,
+      type,
       level,
     });
   }
