@@ -29,29 +29,31 @@ b3a42a5269c3: Waiting
 5fc19b802589: Waiting
 fe401a45083b: Waiting
 [INFO] my test | b311dac095c3: Verifying Checksum
-b311dac095c3: Download complete
+[INFO] my test | b311dac095c3: Download complete
 [INFO] my test | 36163cea98c3: Verifying Checksum
 36163cea98c3: Download complete
 [INFO] my test | fe401a45083b: Verifying Checksum
 fe401a45083b: Download complete
+[INFO] my test | 9a8245430c33:
+[INFO] my test | Verifying Checksum
+9a8245430c33: Download complete
 [INFO] my test | b0a0cf830b12: Verifying Checksum
 b0a0cf830b12: Download complete
-[INFO] my test | 9a8245430c33: Download complete
-[INFO] my test | 74c893d239e5: Verifying Checksum
+[INFO] my test | b4f63e66f657: Verifying Checksum
+b4f63e66f657: Download complete
+74c893d239e5: Verifying Checksum
 74c893d239e5: Download complete
 [INFO] my test | 789ed9a95b21: Verifying Checksum
 789ed9a95b21: Download complete
 [INFO] my test | e502d5360f88: Verifying Checksum
-e502d5360f88: Download complete
+[INFO] my test | e502d5360f88: Download complete
 [INFO] my test | 0292671f3c2d: Verifying Checksum
 0292671f3c2d: Download complete
 [INFO] my test | 5247a27db111: Verifying Checksum
 5247a27db111: Download complete
-[INFO] my test | b4f63e66f657: Verifying Checksum
-b4f63e66f657: Download complete
 [INFO] my test | b3a42a5269c3: Verifying Checksum
 b3a42a5269c3: Download complete
-[INFO] my test | 5fc19b802589: Verifying Checksum
+5fc19b802589: Verifying Checksum
 5fc19b802589: Download complete
 [INFO] my test | 5b691e4e12b4: Verifying Checksum
 5b691e4e12b4: Download complete
@@ -73,32 +75,19 @@ b3a42a5269c3: Download complete
 [INFO] my test | Status: Downloaded newer image for postgres:15
 [INFO] my test | docker.io/library/postgres:15
 [INFO] my test | Container postgres:15 started
-[INFO] my test | dummy test
 [INFO] my test | The files belonging to this database system will be owned by user "postgres".
 This user must also own the server process.
-
-The database cluster will be initialized with locale "en_US.utf8".
+[INFO] my test | The database cluster will be initialized with locale "en_US.utf8".
 The default database encoding has accordingly been set to "UTF8".
 The default text search configuration will be set to "english".
 
 Data page checksums are disabled.
-
-fixing permissions on existing directory <ABSOLUTE>/data ... ok
-creating subdirectories ...
+[INFO] my test | fixing permissions on existing directory <ABSOLUTE>/data ... ok
+[INFO] my test | creating subdirectories ...
 [INFO] my test | ok
-selecting dynamic shared memory implementation ... posix
+[INFO] my test | selecting dynamic shared memory implementation ... posix
 selecting default max_connections ...
-[INFO] my test | 100
-selecting default shared_buffers ...
-[INFO] my test | 128MB
-selecting default time zone ...
-[INFO] my test | Etc/UTC
-creating configuration files ... ok
-running bootstrap script ...
-[INFO] my test | Container postgres:15 started
 [INFO] my test | dummy test
-[INFO] my test | ok
-performing post-bootstrap initialization ...
 pass ─ mount.test.wsim » root/env0/test:my test
 
 Tests 1 passed (1)
