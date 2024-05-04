@@ -259,7 +259,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     child.once("exit", (code) => {
       started = false;
 
-      if (onError && code !== 0) {
+      if (onError && code !== 0 && code != null) {
         onError(new Error(`non-zero exit code: ${code}`));
       }
     });
