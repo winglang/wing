@@ -1,15 +1,17 @@
+import { spawn } from "child_process";
 import * as fs from "fs";
 import { join } from "path";
 import { IContainerClient, HOST_PORT_ATTR } from "./container";
 import { ContainerAttributes, ContainerSchema } from "./schema-resources";
 import { exists } from "./util";
-import { isPath, runCommand, shell } from "../shared/misc";
+import { Util as Fs } from "../fs";
+import { isPath } from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { Duration, TraceType } from "../std";
+import { Duration, LogLevel, TraceType } from "../std";
 import { Util } from "../util";
 
 const STATE_FILENAME = "state.json";
@@ -25,11 +27,24 @@ interface StateFileContents {
   readonly managedVolumes?: Record<string, string>;
 }
 
+interface DockerProcess {
+  readonly started: boolean;
+  join: () => Promise<string>;
+  kill: (code: any) => Promise<void>;
+}
+
+interface DockerSpawnOptions {
+  stderr?: boolean;
+  stdout?: boolean;
+  onError?: (err: Error) => void;
+}
+
 export class Container implements IContainerClient, ISimulatorResourceInstance {
   private readonly imageTag: string;
   private readonly containerName: string;
   private _context: ISimulatorContext | undefined;
   private managedVolumes: Record<string, string>;
+  private child: DockerProcess | undefined;
 
   public constructor(private readonly props: ContainerSchema) {
     this.imageTag = props.imageTag;
@@ -55,50 +70,42 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       this.managedVolumes = state.managedVolumes;
     }
 
-    // if this a reference to a local directory, build the image from a docker file
-    if (isPath(this.props.image)) {
-      // check if the image is already built
-      try {
-        await runCommand("docker", ["inspect", this.imageTag]);
-        this.log(`image ${this.imageTag} already exists`);
-      } catch {
-        this.log(
-          `building locally from ${this.props.image} and tagging ${this.imageTag}...`
+    if (!(await this.tryInspect(this.imageTag))) {
+      // if this a reference to a local directory, build the image from a docker file
+      if (isPath(this.props.image)) {
+        this.resourceLog(
+          `Image ${this.imageTag} not found, building from ${this.props.image}...`
         );
-        await runCommand(
-          "docker",
-          ["build", "-t", this.imageTag, this.props.image],
-          { cwd: this.props.cwd }
-        );
+        await this.docker("build", ["-t", this.imageTag, this.props.image], {
+          stdout: true,
+          stderr: true,
+        });
+      } else {
+        this.resourceLog(`Image ${this.imageTag} not found, pulling...`);
+        await this.docker("pull", [this.imageTag], {
+          stdout: true,
+          stderr: true,
+        });
       }
     } else {
-      try {
-        await runCommand("docker", ["inspect", this.imageTag]);
-        this.log(`image ${this.imageTag} already exists`);
-      } catch {
-        this.log(`pulling ${this.imageTag}`);
-        await runCommand("docker", ["pull", this.imageTag]);
-      }
+      this.resourceLog(
+        `Image ${this.imageTag} found, No need to build or pull.`
+      );
     }
 
     // start the new container
     const dockerRun: string[] = [];
-    dockerRun.push("run");
-    dockerRun.push("--detach");
+    dockerRun.push("-i");
     dockerRun.push("--rm");
-
     dockerRun.push("--name", this.containerName);
 
     if (this.props.containerPort) {
-      dockerRun.push("-p");
-      dockerRun.push(this.props.containerPort.toString());
+      dockerRun.push("-p", this.props.containerPort.toString());
     }
 
-    if (this.props.env && Object.keys(this.props.env).length > 0) {
-      dockerRun.push("-e");
-      for (const k of Object.keys(this.props.env)) {
-        dockerRun.push(`${k}=${this.props.env[k]}`);
-      }
+    const envFile = this.createEnvFile();
+    if (envFile) {
+      dockerRun.push("--env-file", envFile);
     }
 
     for (const volume of this.props.volumes ?? []) {
@@ -126,53 +133,78 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       dockerRun.push(a);
     }
 
-    this.log(`starting container from image ${this.imageTag}`);
-    this.log(`docker ${dockerRun.join(" ")}`);
+    this.resourceLog(`Starting container from ${this.imageTag}...`);
 
-    await shell("docker", dockerRun);
-
-    this.log(`containerName=${this.containerName}`);
-
-    // wait until the container is running
-    await waitUntil(async () => {
-      const container = JSON.parse(
-        await runCommand("docker", ["inspect", this.containerName])
-      );
-      return container?.[0]?.State?.Running;
+    this.child = this.dockerSpawn("run", dockerRun, {
+      stdout: true,
+      stderr: true,
+      onError: (err) => {
+        this.userLog(err.stack ?? err.message, LogLevel.ERROR);
+      },
     });
-
-    if (!this.props.containerPort) {
-      return {};
-    }
 
     let hostPort: number | undefined;
     await waitUntil(async () => {
-      const container = JSON.parse(
-        await runCommand("docker", ["inspect", this.containerName])
-      );
+      if (!this.child?.started) {
+        throw new Error(`container ${this.imageTag} stopped unexpectedly`);
+      }
 
-      hostPort =
-        container?.[0]?.NetworkSettings?.Ports?.[
-          `${this.props.containerPort}/tcp`
-        ]?.[0]?.HostPort;
+      const container = await this.tryInspect(this.containerName);
 
-      return hostPort !== undefined;
+      // if we are waiting for a port, check if the container is listening to it
+      if (this.props.containerPort) {
+        hostPort =
+          container?.[0]?.NetworkSettings?.Ports?.[
+            `${this.props.containerPort}/tcp`
+          ]?.[0]?.HostPort;
+
+        return hostPort !== undefined;
+      }
+
+      // if we are not waiting for a port, just check if the container is running
+      return container?.[0]?.State?.Running;
     });
 
-    if (!hostPort) {
-      throw new Error(
-        `Container does not listen to port ${this.props.containerPort}`
-      );
-    }
+    this.userLog(`Container ${this.imageTag} started`, LogLevel.INFO);
 
     return {
       [HOST_PORT_ATTR]: hostPort,
     };
   }
 
+  private createEnvFile() {
+    const env = this.props.env ?? {};
+    if (Object.keys(env).length === 0) {
+      return undefined;
+    }
+
+    const envFile = join(Fs.mkdtemp(), "env.json");
+    const envLines = [];
+    for (const k of Object.keys(env)) {
+      envLines.push(`${k}=${env[k]}`);
+    }
+
+    Fs.writeFile(envFile, envLines.join("\n"));
+    return envFile;
+  }
+
+  private async tryInspect(name: string): Promise<any | undefined> {
+    try {
+      return JSON.parse(
+        await this.docker("inspect", [name], {
+          stderr: false,
+          stdout: false,
+        })
+      );
+    } catch {
+      return undefined;
+    }
+  }
+
   public async cleanup(): Promise<void> {
-    this.log(`Stopping container ${this.containerName}`);
-    await runCommand("docker", ["rm", "-f", this.containerName]);
+    this.resourceLog(`Stopping container ${this.containerName}`);
+    await this.child?.kill("SIGKILL");
+    await this.docker("rm", ["-f", this.containerName]);
   }
 
   public async save(): Promise<void> {
@@ -194,6 +226,108 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     }
   }
 
+  private async docker(
+    command: string,
+    args: string[],
+    options: DockerSpawnOptions = {}
+  ): Promise<string> {
+    const child = this.dockerSpawn(command, args, options);
+    return child.join();
+  }
+
+  private dockerSpawn(
+    command: string,
+    args: string[],
+    options: DockerSpawnOptions = {}
+  ): DockerProcess {
+    const logStdout = options.stdout ?? false;
+    const logStderr = options.stderr ?? false;
+    const onError = options.onError;
+
+    this.resourceLog(
+      `Running: docker ${command} ${args.join(" ")}`,
+      LogLevel.VERBOSE
+    );
+
+    const child = spawn("docker", [command, ...args], {
+      cwd: this.props.cwd,
+      stdio: "pipe",
+    });
+
+    let started = true;
+
+    child.once("exit", (code) => {
+      started = false;
+
+      if (onError && code !== 0) {
+        onError(new Error(`non-zero exit code: ${code}`));
+      }
+    });
+
+    const output: Buffer[] = [];
+
+    child.stdout.on("data", (data) => {
+      output.push(data);
+
+      if (logStdout) {
+        this.userLog(data.toString(), LogLevel.INFO);
+      }
+    });
+
+    if (logStderr) {
+      child.stderr.on("data", (data) => {
+        this.userLog(data.toString(), LogLevel.INFO);
+      });
+    }
+
+    child.on("error", (err) => {
+      started = false;
+
+      if (logStderr) {
+        this.userLog(err.stack ?? err.message, LogLevel.ERROR);
+      }
+
+      if (onError) {
+        onError(err);
+      }
+    });
+
+    return {
+      get started() {
+        return started;
+      },
+      async kill() {
+        return new Promise((ok, ko) => {
+          if (!started) {
+            return ok();
+          }
+
+          child.kill("SIGKILL");
+          child.once("error", ko);
+          child.once("exit", ok);
+        });
+      },
+      async join() {
+        return new Promise((ok, ko) => {
+          if (!started) {
+            return ok(output.join(""));
+          }
+
+          child.once("error", ko);
+          child.once("exit", (code) => {
+            if (code === 0) {
+              return ok(output.join(""));
+            } else {
+              return ko(
+                new Error(`non-zero exit code ${code}: ${output.join("")}`)
+              );
+            }
+          });
+        });
+      },
+    };
+  }
+
   private async saveState(state: StateFileContents): Promise<void> {
     fs.writeFileSync(
       join(this.context.statedir, STATE_FILENAME),
@@ -205,13 +339,25 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     return UpdatePlan.AUTO;
   }
 
-  private log(message: string) {
+  private resourceLog(message: string, level: LogLevel = LogLevel.VERBOSE) {
     this.context.addTrace({
-      data: { message },
+      data: { message: message.trim() },
       sourcePath: this.context.resourcePath,
       sourceType: "container",
       timestamp: new Date().toISOString(),
       type: TraceType.RESOURCE,
+      level,
+    });
+  }
+
+  private userLog(message: string, level: LogLevel) {
+    this.context.addTrace({
+      data: { message: message.trim() },
+      sourcePath: this.context.resourcePath,
+      sourceType: "container",
+      timestamp: new Date().toISOString(),
+      type: TraceType.LOG,
+      level,
     });
   }
 }

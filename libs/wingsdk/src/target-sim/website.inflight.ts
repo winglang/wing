@@ -9,7 +9,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -98,6 +98,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
       sourcePath: this.context.resourcePath,
       sourceType: WEBSITE_FQN,
       timestamp: new Date().toISOString(),
+      level: LogLevel.INFO,
     });
   }
 }
