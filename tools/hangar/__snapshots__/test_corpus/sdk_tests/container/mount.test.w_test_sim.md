@@ -88,11 +88,17 @@ creating subdirectories ...
 [INFO] my test | ok
 selecting dynamic shared memory implementation ... posix
 selecting default max_connections ...
-[INFO] my test | Error: non-zero exit code: null
-    at ChildProcess.<anonymous> (<ABSOLUTE>:LINE:COL)
-    at Object.onceWrapper (node:events:633:26)
-    at ChildProcess.emit (node:events:530:35)
-    at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+[INFO] my test | 100
+selecting default shared_buffers ...
+[INFO] my test | 128MB
+selecting default time zone ...
+[INFO] my test | Etc/UTC
+creating configuration files ... ok
+running bootstrap script ...
+[INFO] my test | Container postgres:15 started
+[INFO] my test | dummy test
+[INFO] my test | ok
+performing post-bootstrap initialization ...
 pass ─ mount.test.wsim » root/env0/test:my test
 
 Tests 1 passed (1)
