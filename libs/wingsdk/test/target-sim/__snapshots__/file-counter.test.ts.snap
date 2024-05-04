@@ -5,21 +5,33 @@ exports[`can create sequential files in a bucket 1`] = `
   ".wing/setconsumer0_c8e82e9f.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) {
-          let next = await this.counter.inc();
-          let key = "file-" + next + ".txt";
-          await this.bucket.put(key, event);
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            const batchItemFailures = [];
+            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
+            if (!parsed.messages)
+                throw new Error('No "messages" field in event.');
+            for (const $message of parsed.messages) {
+                try {
+                    await ctx.handler($message.payload);
+                }
+                catch (error) {
+                    batchItemFailures.push($message);
+                }
+            }
+            return batchItemFailures.length > 0
+                ? JSON.stringify(batchItemFailures)
+                : undefined;
         }
-};
-})())({
-counter: (function() {
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, event) => {
+            let next = await ctx.counter.inc();
+            let key = "file-" + next + ".txt";
+            await ctx.bucket.put(key, event);
+          }
+  const $ctx = {
+  counter: (function() {
   let handle = process.env.COUNTER_HANDLE_4ecd8d46;
   if (!handle) {
     throw new Error("Missing environment variable: COUNTER_HANDLE_4ecd8d46");
@@ -49,7 +61,22 @@ bucket: (function() {
   }
   return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
 })()
-}), args: {} }));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {

@@ -1,12 +1,12 @@
 import { basename } from "path";
-import { liftObject, LiftMap } from "./lifting";
+import { liftObject, LiftMap, INFLIGHT_INIT_METHOD_NAME } from "./lifting";
 import {
   AsyncFunction,
   INFLIGHT_SYMBOL,
   Inflight,
   OperationsOf,
 } from "./types";
-import { LiftableMap, LiftedMap, PickNonFunctions } from "./utility-types";
+import { LiftableRecord, LiftedMap, PickNonFunctions } from "./utility-types";
 import { normalPath } from "../shared/misc";
 import type { IHostedLiftable } from "../std/resource";
 
@@ -87,7 +87,7 @@ export class InflightClient {
  *   .inflight(({ bkt, sum, field }) => { ... }))
  * ```
  */
-export function lift<TToLift extends LiftableMap>(
+export function lift<TToLift extends LiftableRecord>(
   captures: TToLift
 ): Lifter<LiftedMap<TToLift>, {}> {
   return new Lifter().lift(captures);
@@ -100,6 +100,7 @@ export function lift<TToLift extends LiftableMap>(
  * If needed, use `lift` to bind variables to the scope of the function.
  *
  * Built-in NodeJS globals are available, such as `console` and `process`.
+ * @wing inflight
  */
 export function inflight<TFunction extends AsyncFunction>(
   fn: (ctx: {}, ...args: Parameters<TFunction>) => ReturnType<TFunction>
@@ -115,7 +116,7 @@ class Lifter<
   TOperations extends Record<string, string[]>
 > {
   constructor(
-    private lifts: LiftableMap = {},
+    private lifts: LiftableRecord = {},
     private grants: Record<string, string[]> = {}
   ) {}
 
@@ -144,7 +145,7 @@ class Lifter<
    *   .inflight(({ bkt, sum, field }) => { ... }))
    * ```
    */
-  public lift<TWillLift extends LiftableMap>(captures: TWillLift) {
+  public lift<TWillLift extends LiftableRecord>(captures: TWillLift) {
     return new Lifter<
       Omit<TLifted, keyof TWillLift> & LiftedMap<TWillLift>,
       TOperations
@@ -198,6 +199,7 @@ class Lifter<
    * Bound variables will be available as properties on the `ctx` object passed as the first argument to the function.
    *
    * Built-in NodeJS globals are available, such as `console` and `process`.
+   * @wing inflight
    */
   public inflight<TFunction extends AsyncFunction>(
     fn: (
@@ -220,9 +222,12 @@ class Lifter<
     // so here we annotate that "handle" needs all of the required permissions
     const _liftMap: LiftMap = { handle: [] };
     for (const [key, obj] of Object.entries(this.lifts)) {
-      let knownOps = this.grants[key];
-      knownOps =
-        knownOps ?? Object.keys((obj as IHostedLiftable)._liftMap ?? {});
+      const knownOps =
+        this.grants[key] ??
+        Object.keys((obj as IHostedLiftable)._liftMap ?? {}).filter(
+          (x) => x !== INFLIGHT_INIT_METHOD_NAME // filter "$inflight_init"
+        );
+
       _liftMap.handle.push([obj, knownOps]);
     }
 

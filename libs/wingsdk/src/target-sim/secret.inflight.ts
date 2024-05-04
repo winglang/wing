@@ -49,7 +49,9 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
     const secretValue = process.env[this.name];
 
     if (!secretValue) {
-      throw new Error(`No secret value for secret ${this.name}`);
+      throw new Error(
+        `No value for secret ${this.name}\n(hint: try running the "wing secrets -t TARGET" to store secret)`
+      );
     }
 
     return secretValue;

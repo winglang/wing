@@ -1,36 +1,38 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`function with a function binding 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+"(await (async () => {
+  const $func = async (_, event) => {
+    console.log(event);
   }
-  async handle(event) { console.log(event); }
-};
-})())({
-
-})"
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
 `;
 
 exports[`function with a function binding 2`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+"(await (async () => {
+  const $func = async (ctx, event) => {
+    console.log("Event: " + event);
+    await ctx.fn1.invoke(JSON.stringify({ hello: "world" }));
   }
-  async handle(event) {
-      console.log("Event: " + event);
-      await this.function.invoke(JSON.stringify({ hello: "world" }));
-    }
-};
-})())({
-function: new (require("[REDACTED]/wingsdk/src/shared-aws/function.inflight")).FunctionClient(process.env["FUNCTION_NAME_50735b21"], "root/Default/Function1")
-})"
+  const $ctx = {
+  fn1: new (require("[REDACTED]/wingsdk/src/shared-aws/function.inflight")).FunctionClient(process.env["FUNCTION_NAME_50735b21"], "root/Default/Function1")
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
 `;
 
 exports[`function with a function binding 3`] = `
@@ -147,33 +149,37 @@ exports[`function with a function binding 3`] = `
 `;
 
 exports[`function with a queue binding 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+"(await (async () => {
+  const $func = async (ctx) => {
+    await ctx.queue.push("info");
   }
-  async handle(event) { await this.queue.push("info"); }
-};
-})())({
-queue: new (require("[REDACTED]/wingsdk/src/shared-aws/queue.inflight")).QueueClient(process.env["QUEUE_URL_1cfcc997"])
-})"
+  const $ctx = {
+  queue: new (require("[REDACTED]/wingsdk/src/shared-aws/queue.inflight")).QueueClient(process.env["QUEUE_URL_1cfcc997"])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
 `;
 
 exports[`function with a queue binding 2`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+"(await (async () => {
+  const $func = async (_, event) => {
+    console.log("Received" + event);
   }
-  async handle(event) { console.log("Received" + event); }
-};
-})())({
-
-})"
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
 `;
 
 exports[`function with a queue binding 3`] = `
@@ -307,21 +313,6 @@ exports[`function with a queue binding 3`] = `
 `;
 
 exports[`function with bucket binding > put operation 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) { await this.bucket.put("hello.txt", event); }
-};
-})())({
-bucket: new (require("[REDACTED]/wingsdk/src/shared-aws/bucket.inflight")).BucketClient(process.env["BUCKET_NAME_1357ca3a"])
-})"
-`;
-
-exports[`function with bucket binding > put operation 2`] = `
 {
   "resource": {
     "aws_cloudwatch_log_group": {

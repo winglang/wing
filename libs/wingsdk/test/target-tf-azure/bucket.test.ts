@@ -1,7 +1,7 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import * as tfazure from "../../src/target-tf-azure";
 import {
   mkdtemp,
@@ -154,8 +154,7 @@ test("bucket onEvent is not implemented yet", () => {
   try {
     const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
     const bucket = new Bucket(app, "my_bucket", { public: true });
-    const testInflight = Testing.makeHandler("null");
-    bucket.onEvent(testInflight);
+    bucket.onEvent(inflight(async () => {}));
     app.synth();
   } catch (err) {
     error = err.message;

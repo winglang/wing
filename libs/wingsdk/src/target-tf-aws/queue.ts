@@ -26,7 +26,7 @@ const NAME_OPTS: NameOptions = {
 /**
  * AWS implementation of `cloud.Queue`.
  *
- * @inflight `@winglang/sdk.cloud.IQueueClient`
+ * @inflight `@winglang/sdk.aws.IAwsQueueClient`
  */
 export class Queue extends cloud.Queue implements IAwsQueue {
   private readonly queue: SqsQueue;

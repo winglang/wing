@@ -61,7 +61,7 @@ export class Sandbox {
     // wrap contents with a shim that handles the communication with the parent process
     // we insert this shim before bundling to ensure source maps are generated correctly
     contents += `
-process.setUncaughtExceptionCaptureCallback((reason) => {
+process.on("uncaughtException", (reason) => {
   process.send({ type: "reject", reason });
 });
 

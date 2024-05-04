@@ -1,11 +1,13 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import * as tfazure from "../../src/target-tf-azure";
 import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
-const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
+const INFLIGHT_CODE = inflight(async (_, name) => {
+  console.log("Hello, " + name);
+});
 
 test("basic function", () => {
   // GIVEN
@@ -14,10 +16,9 @@ test("basic function", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  new Function(app, "Function", inflight);
+  new Function(app, "Function", INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN
@@ -43,10 +44,9 @@ test("basic function with environment variables", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  new Function(app, "Function", inflight, {
+  new Function(app, "Function", INFLIGHT_CODE, {
     env: {
       FOO: "BAR",
       BOOM: "BAM",
@@ -78,8 +78,8 @@ test("permissions resources are added to function after constructor has been ini
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(INFLIGHT_CODE);
-  const func = new tfazure.Function(app, "Function", inflight, {});
+
+  const func = new tfazure.Function(app, "Function", INFLIGHT_CODE, {});
 
   // WHEN
   func.addPermission(func, {
@@ -107,10 +107,9 @@ test("replace invalid character from function name", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  const func = new Function(app, "someFunction01", inflight);
+  const func = new Function(app, "someFunction01", INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN

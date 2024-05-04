@@ -31,7 +31,7 @@ export interface AppProps extends CdktfAppProps {
    * The Google Cloud zone, used for all resources.
    * @see https://cloud.google.com/functions/docs/locations
    */
-  readonly zone: string;
+  readonly zone?: string;
 }
 
 /**

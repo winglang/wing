@@ -322,7 +322,7 @@ Convert this resource to a resource schema for the simulator.
 ##### `get` <a name="get" id="@winglang/sdk.sim.IStateClient.get"></a>
 
 ```wing
-get(key: str): Json
+inflight get(key: str): Json
 ```
 
 Gets the runtime state of this object.
@@ -340,7 +340,7 @@ The object's key.
 ##### `set` <a name="set" id="@winglang/sdk.sim.IStateClient.set"></a>
 
 ```wing
-set(key: str, value: Json): void
+inflight set(key: str, value: Json): void
 ```
 
 Sets the state of runtime a runtime object.
@@ -364,7 +364,7 @@ The object's value.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.sim.IStateClient.tryGet"></a>
 
 ```wing
-tryGet(key: str): Json?
+inflight tryGet(key: str): Json?
 ```
 
 Checks if runtime state exists for this object and returns it's value.

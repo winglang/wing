@@ -942,24 +942,17 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
   ".wing/function_c8ab799f.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx) => {
+    await ctx.queue.push("A");
+    await ctx.queue.push("B");
+    await ctx.queue.push("C");
+    await ctx.queue.push("D");
+    await ctx.queue.push("E");
+    await ctx.queue.push("F");
   }
-  async handle() {
-  await this.queue.push("A");
-  await this.queue.push("B");
-  await this.queue.push("C");
-  await this.queue.push("D");
-  await this.queue.push("E");
-  await this.queue.push("F");
-}
-};
-})())({
-queue: (function() {
+  const $ctx = {
+  queue: (function() {
   let handle = process.env.QUEUE_HANDLE_54fcf4cd;
   if (!handle) {
     throw new Error("Missing environment variable: QUEUE_HANDLE_54fcf4cd");
@@ -974,29 +967,62 @@ queue: (function() {
   }
   return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
 })()
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/setconsumer0_c8e33b9b.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            const batchItemFailures = [];
+            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
+            if (!parsed.messages)
+                throw new Error('No "messages" field in event.');
+            for (const $message of parsed.messages) {
+                try {
+                    await ctx.handler($message.payload);
+                }
+                catch (error) {
+                    batchItemFailures.push($message);
+                }
+            }
+            return batchItemFailures.length > 0
+                ? JSON.stringify(batchItemFailures)
+                : undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
   if (message === "BAD MESSAGE") {
     throw new Error("ERROR");
   }
 }
-};
-})())({
-
-}), args: {} }));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1291,23 +1317,49 @@ exports[`queue with one subscriber, default batch size of 1 1`] = `
   ".wing/setconsumer0_c8e33b9b.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            const batchItemFailures = [];
+            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
+            if (!parsed.messages)
+                throw new Error('No "messages" field in event.');
+            for (const $message of parsed.messages) {
+                try {
+                    await ctx.handler($message.payload);
+                }
+                catch (error) {
+                    batchItemFailures.push($message);
+                }
+            }
+            return batchItemFailures.length > 0
+                ? JSON.stringify(batchItemFailures)
+                : undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
   if (message === "BAD MESSAGE") {
     throw new Error("ERROR");
   }
 }
-};
-})())({
-
-}), args: {} }));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {

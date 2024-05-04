@@ -1,13 +1,12 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Counter, CounterInflightMethods, Function } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { lift } from "../../src/core";
 import { App } from "../../src/target-tf-gcp";
 import {
   mkdtemp,
   sanitizeCode,
   tfResourcesOf,
-  tfResourcesOfCount,
   tfSanitize,
   treeJsonOf,
 } from "../util";
@@ -122,23 +121,18 @@ test("function with a counter binding", () => {
   // GIVEN
   const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   const counter = new Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-    const val = await this.my_counter.inc(2);
-    console.log(val);
-  }`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [CounterInflightMethods.INC],
-      },
-    }
-  );
-  new Function(app, "Function", inflight);
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [CounterInflightMethods.INC] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.inc(2);
+      console.log(val);
+    });
+
+  new Function(app, "Function", handler);
   const output = app.synth();
 
   // THEN
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(handler._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
     "google_cloudfunctions_function",
     "google_firestore_database",
@@ -158,19 +152,14 @@ test("inc() IAM permissions", () => {
   // GIVEN
   const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   const counter = new Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-    const val = await this.my_counter.inc(2);
-    console.log(val);
-  }`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [CounterInflightMethods.INC],
-      },
-    }
-  );
-  new Function(app, "Function", inflight);
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [CounterInflightMethods.INC] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.inc(2);
+      console.log(val);
+    });
+
+  new Function(app, "Function", handler);
   const output = app.synth();
 
   // THEN
@@ -187,19 +176,14 @@ test("dec() IAM permissions", () => {
   // GIVEN
   const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   const counter = new Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-  const val = await this.my_counter.dec(2);
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [CounterInflightMethods.DEC],
-      },
-    }
-  );
-  new Function(app, "Function", inflight);
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [CounterInflightMethods.DEC] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.dec(2);
+      console.log(val);
+    });
+
+  new Function(app, "Function", handler);
   const output = app.synth();
 
   // THEN
@@ -216,19 +200,15 @@ test("peek() IAM permissions", () => {
   // GIVEN
   const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   const counter = new Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-  const val = await this.my_counter.peek();
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [CounterInflightMethods.PEEK],
-      },
-    }
-  );
-  new Function(app, "Function", inflight);
+
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [CounterInflightMethods.PEEK] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.peek();
+      console.log(val);
+    });
+
+  new Function(app, "Function", handler);
   const output = app.synth();
 
   // THEN
@@ -244,19 +224,14 @@ test("set() IAM permissions", () => {
   // GIVEN
   const app = new App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   const counter = new Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-  const val = await this.my_counter.set();
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [CounterInflightMethods.SET],
-      },
-    }
-  );
-  new Function(app, "Function", inflight);
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [CounterInflightMethods.SET] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.set(1);
+      console.log(val);
+    });
+
+  new Function(app, "Function", handler);
   const output = app.synth();
 
   // THEN
