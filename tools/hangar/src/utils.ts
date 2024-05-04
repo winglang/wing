@@ -73,6 +73,7 @@ export function sanitizeOutput(output: string) {
       .replace(/port \d+/g, "port <PORT>")
       // Remove timestamps
       .replace(/\d{2}:\d{2}:\d{2}.\d{3}/g, "<TIMESTAMP>")
+      .replace(/\d{4}-\d{2}-\d{2}/g, "<TIMESTAMP>")
       .replace(/\b(?:(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept|Oct|Nov|Dec)\w* )?(\d{1,2})(?:st|nd|th)?[,]? (?:(?:(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept|Oct|Nov|Dec)\w*)?[,]? )?(\d{2,4})\b/g, "<TIMESTAMP>")
   );
 }
