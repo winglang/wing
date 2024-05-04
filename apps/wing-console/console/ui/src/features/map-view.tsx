@@ -10,7 +10,7 @@ import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import clsx from "classnames";
 import { type ElkPoint, type LayoutOptions } from "elkjs";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useEffect, useMemo } from "react";
 import { useKeyPressEvent } from "react-use";
 
 import { useMapV2 } from "../services/use-map.js";
@@ -803,7 +803,6 @@ export const MapView = memo(
                 }}
                 edges={edges}
                 edgeComponent={RoundedEdge}
-                onZoomPaneClick={() => onSelectedNodeIdChange(undefined)}
               >
                 {rootNodes.map((node) => (
                   <RenderNode

@@ -25,7 +25,6 @@ export interface GraphProps
   elk: ElkOptions;
   edges?: ElkExtendedEdge[];
   edgeComponent?: EdgeComponent;
-  onZoomPaneClick?: () => void;
 }
 
 export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
@@ -71,8 +70,6 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
           boundingBox={mapSize}
           className="w-full h-full"
           data-testid="map-pane"
-          // onClick={() => onSelectedNodeIdChange?.(undefined)}
-          onClick={props.onZoomPaneClick}
         >
           {mapBackgroundRef.current &&
             createPortal(<MapBackground />, mapBackgroundRef.current)}
