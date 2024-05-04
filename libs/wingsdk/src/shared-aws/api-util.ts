@@ -14,7 +14,7 @@ export async function apigwFunctionHandler(
     request: cloud.ApiRequest
   ) => Promise<void | cloud.ApiResponse>,
   headers?: Record<string, string>
-) {
+): Promise<APIGatewayProxyResult> {
   const apiRequest = mapApigatewayEventToCloudApiRequest(request);
   const apiResponse = (await handlerFunction(apiRequest)) ?? {};
   return mapCloudApiResponseToApigatewayResponse(apiResponse, headers);
