@@ -11,13 +11,9 @@ Internally Wing uses JavaScript to execute preflight and inflight code, so stand
 
 ### Local/Simulator Debugging
 
-To start, open your .w file in VS Code and set a breakpoint by clicking in the gutter to the left of the line number. Breakpoints can also be set in extern files. There are several ways to start the debugger, but let's use the "JavaScript Debug Terminal".
-Open the command palette and type "Debug: Open JavaScript Debug Terminal". This works for any wing commands like `wing test` and `wing it`, although keep in mind that `wing compile` will only debug preflight code.
-
-### Limitations
-
-- ([Issue](https://github.com/winglang/wing/issues/5988)) When using the Wing Console (`wing it`) and attempting to debug inflight code in a `test` or Function, the first execution of the test will not hit a breakpoint and will need to be run again
-- ([Issue](https://github.com/winglang/wing/issues/5986)) inflight code by default has a timeout that continues during debugging, so if execution is paused for too long the program is terminate
+To start, open your .w file in VS Code and set breakpoints by clicking in the gutter to the left of the line number. Breakpoints can also be set in extern files.
+Once set, press F5 or use the "Run and Debug" button in the sidebar to start the debugger. This will use the current file if it's an entrypoint or it will prompt you to select one. Different CLI arguments can be provided as well.
+By default, `wing test` will be run with an attached debugger.
 
 #### Non-VSCode Support
 

@@ -160,7 +160,7 @@ the ending index of the slice, exclusive.
 ##### `tryAt` <a name="tryAt" id="@winglang/sdk.std.Array.tryAt"></a>
 
 ```wing
-tryAt(index: num): <T>
+tryAt(index: num): <T>?
 ```
 
 Get the value at the given index, returning nil if the index is out of bounds.

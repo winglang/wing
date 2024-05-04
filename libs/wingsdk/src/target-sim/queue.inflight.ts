@@ -5,9 +5,15 @@ import {
   QueueSchema,
   QueueSubscriber,
   EventSubscription,
+  DeadLetterQueueSchema,
   ResourceHandle,
 } from "./schema-resources";
-import { IFunctionClient, IQueueClient, QUEUE_FQN } from "../cloud";
+import {
+  DEFAULT_DELIVERY_ATTEMPTS,
+  IFunctionClient,
+  IQueueClient,
+  QUEUE_FQN,
+} from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -24,10 +30,12 @@ export class Queue
   private _context: ISimulatorContext | undefined;
   private readonly timeoutSeconds: number;
   private readonly retentionPeriod: number;
+  private readonly dlq?: DeadLetterQueueSchema;
 
   constructor(props: QueueSchema) {
     this.timeoutSeconds = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
+    this.dlq = props.dlq;
     this.processLoop = runEvery(100, async () => this.processMessages()); // every 0.1 seconds
   }
 
@@ -85,7 +93,13 @@ export class Queue
           throw new Error("Empty messages are not allowed");
         }
         for (const message of messages) {
-          this.messages.push(new QueueMessage(this.retentionPeriod, message));
+          this.messages.push(
+            new QueueMessage(
+              this.retentionPeriod,
+              DEFAULT_DELIVERY_ATTEMPTS,
+              message
+            )
+          );
         }
       },
     });
@@ -238,12 +252,18 @@ export class Queue
 class QueueMessage {
   public readonly retentionTimeout: Date;
   public readonly payload: string;
+  public remainingDeliveryAttempts: number;
 
-  constructor(retentionPeriod: number, message: string) {
+  constructor(
+    retentionPeriod: number,
+    remainingDeliveryAttempts: number,
+    message: string
+  ) {
     const currentTime = new Date();
     currentTime.setSeconds(retentionPeriod + currentTime.getSeconds());
     this.retentionTimeout = currentTime;
     this.payload = message;
+    this.remainingDeliveryAttempts = remainingDeliveryAttempts;
   }
 }
 

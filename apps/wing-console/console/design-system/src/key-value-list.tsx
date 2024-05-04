@@ -14,7 +14,10 @@ import { useTheme } from "./theme-provider.js";
 
 export interface KeyValueItem {
   key: string;
-  value: string;
+  value?: string;
+  type?: string;
+  required?: boolean;
+  description?: string;
 }
 
 export interface UseKeyValueListOptions {
@@ -70,6 +73,8 @@ export interface KeyValueListProps {
   readonly?: boolean;
   className?: string;
   placeholder?: string;
+  filter?: boolean;
+  autoComplete?: boolean;
 }
 
 export const KeyValueList = ({
@@ -88,6 +93,8 @@ export const KeyValueList = ({
   valueDisabled = false,
   readonly = false,
   placeholder = "No items",
+  filter = true,
+  autoComplete = true,
 }: KeyValueListProps) => {
   const { theme } = useTheme();
 
@@ -133,6 +140,7 @@ export const KeyValueList = ({
       {editItems.map((item, index) => (
         <div key={index} className="gap-1 flex">
           <Combobox
+            autoComplete={autoComplete}
             placeholder={keyPlaceholder}
             items={comboboxItems}
             value={item.key}
@@ -154,14 +162,17 @@ export const KeyValueList = ({
             )}
             disabled={disabled}
             readonly={readonly || keyDisabled}
-            filter={false}
+            filter={filter}
             showSelected={false}
           />
 
           <Combobox
-            placeholder={valuePlaceholder}
+            autoComplete={autoComplete}
+            placeholder={`${item.type ?? valuePlaceholder} ${
+              item.required === true ? " (required)" : ""
+            }${item.description ? ` - ${item.description}` : ""}`}
             items={comboboxValues}
-            value={item.value}
+            value={item.value ?? ""}
             onChange={(value) => {
               onItemChange(index, {
                 key: item.key,

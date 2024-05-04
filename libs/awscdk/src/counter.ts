@@ -6,6 +6,7 @@ import { COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/commons";
 import { calculateCounterPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsCounter } from "@winglang/sdk/lib/shared-aws/counter";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
+import { LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS implementation of `cloud.Counter`.
@@ -26,13 +27,13 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.CounterInflightMethods.INC,
-      cloud.CounterInflightMethods.DEC,
-      cloud.CounterInflightMethods.PEEK,
-      cloud.CounterInflightMethods.SET,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.CounterInflightMethods.INC]: [],
+      [cloud.CounterInflightMethods.DEC]: [],
+      [cloud.CounterInflightMethods.PEEK]: [],
+      [cloud.CounterInflightMethods.SET]: [],
+    };
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
@@ -40,7 +41,10 @@ export class Counter extends cloud.Counter implements IAwsCounter {
       throw new Error("Expected 'host' to implement 'isAwsCdkFunction' method");
     }
 
-    addPolicyStatements(host.awscdkFunction, calculateCounterPermissions(this.table.tableArn, ops));
+    addPolicyStatements(
+      host.awscdkFunction,
+      calculateCounterPermissions(this.table.tableArn, ops)
+    );
 
     host.addEnvironment(this.envName(), this.table.tableName);
 
@@ -49,12 +53,10 @@ export class Counter extends cloud.Counter implements IAwsCounter {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "CounterClient",
-      [`process.env["${this.envName()}"]`, `${this.initial}`]
-    );
+    return core.InflightClient.for(__dirname, __filename, "CounterClient", [
+      `process.env["${this.envName()}"]`,
+      `${this.initial}`,
+    ]);
   }
 
   private envName(): string {

@@ -1,0 +1,27 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: node
+  kind: 5
+  detail: Node
+  documentation:
+    kind: markdown
+    value: "```wing\npreflight node: Node\nclass Node\n```\n---\nRepresents the construct node in the scope tree.\n\n### Initializer\n- `host` — `Construct`\n- `scope` — `IConstruct`\n- `id` — `str`\n### Fields\n- `PATH_SEP` — `str` — Separator used to delimit construct path components.\n- `addr` — `str` — Returns an opaque tree-unique address for this construct.\n- `children` — `Array<IConstruct>` — All direct children of this construct.\n- `dependencies` — `Array<IConstruct>` — Return all dependencies registered on this node (non-recursive).\n- `id` — `str` — The id of this construct within the current scope.\n- `locked` — `bool` — Returns true if this construct or the scopes in which it is defined are locked.\n- `metadata` — `Array<MetadataEntry>` — An immutable array of metadata objects associated with this construct.\n- `path` — `str` — The full, absolute path of this construct in the tree.\n- `root` — `IConstruct` — Returns the root of the construct tree.\n- `scopes` — `Array<IConstruct>` — All parent scopes of this construct.\n- `defaultChild?` — `IConstruct?` — Returns the child construct that has the id `Default` or `Resource\"`.\n- `scope?` — `IConstruct?` — Returns the scope in which this construct is defined.\n### Methods\n- `addDependency` — `(...deps: Array<IDependable>?): void` — Add an ordering dependency on another construct.\n- `addMetadata` — `(type: str, data: any, options: MetadataOptions?): void` — Adds a metadata entry to this construct.\n- `addValidation` — `(validation: IValidation): void` — Adds a validation to this construct.\n- `findAll` — `(order: ConstructOrder?): Array<IConstruct>` — Return this construct and all of its children in the given order.\n- `findChild` — `(id: str): IConstruct` — Return a direct child by id.\n- `getAllContext` — `(defaults: Json?): any` — Retrieves the all context of a node from tree context.\n- `getContext` — `(key: str): any` — Retrieves a value from tree context if present. Otherwise, would throw an error.\n- `lock` — `(): void` — Locks this construct from allowing more children to be added.\n- `of` — `(construct: IConstruct): Node` — Returns the node associated with a construct.\n- `setContext` — `(key: str, value: any): void` — This can be used to set contextual values.\n- `tryFindChild` — `(id: str): IConstruct?` — Return a direct child by id, or undefined.\n- `tryGetContext` — `(key: str): any` — Retrieves a value from tree context.\n- `tryRemoveChild` — `(childName: str): bool` — Remove the child with the given name, if present.\n- `validate` — `(): Array<str>` — Validates this construct."
+  sortText: ab|node
+- label: otherInflight
+  kind: 2
+  detail: "inflight (): void"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight otherInflight: inflight (): void\n```"
+  sortText: ff|otherInflight
+  insertText: otherInflight()
+- label: status
+  kind: 2
+  detail: "inflight (): num"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight status: inflight (): num\n```"
+  sortText: ff|status
+  insertText: status()
+

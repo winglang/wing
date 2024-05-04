@@ -4,22 +4,22 @@ import { simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
 import { awscdkSanitize } from "./util";
+import { inflight } from "@winglang/sdk/lib/core";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
   entrypointDir: __dirname,
 };
 
-const INFLIGHT_CODE = `async handle(name) { return "Hello, World"; }`;
+const INFLIGHT_CODE = inflight(async () => "Hello, World");
+const INFLIGHT_CODE_2 = inflight(async () => "Hello, Wing");
 
 test("api with GET route at root", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.get("/", inflight);
+  api.get("/", INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN
@@ -46,10 +46,8 @@ test("api with multiple methods on same route", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.get("/", inflight);
-  api.put("/", inflight);
+  api.get("/", INFLIGHT_CODE);
+  api.put("/", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -80,11 +78,8 @@ test("api with GET routes with common prefix", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  const inflight2 = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.get("/hello/foo", inflight);
-  api.get("/hello/bat", inflight2);
+  api.get("/hello/foo", INFLIGHT_CODE);
+  api.get("/hello/bat", INFLIGHT_CODE_2);
 
   const output = app.synth();
 
@@ -100,11 +95,8 @@ test("api with GET routes with different prefix", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  const inflight2 = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.get("/hello/foo", inflight);
-  api.get("/foo/bar", inflight2);
+  api.get("/hello/foo", INFLIGHT_CODE);
+  api.get("/foo/bar", INFLIGHT_CODE_2);
 
   const output = app.synth();
 
@@ -120,10 +112,8 @@ test("api with multiple GET route and one lambda", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.get("/hello/foo", inflight);
-  api.get("/hello/bat", inflight);
+  api.get("/hello/foo", INFLIGHT_CODE);
+  api.get("/hello/bat", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -139,11 +129,8 @@ test("api with multiple methods and multiple lambda", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  const inflight2 = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.get("/hello/foo", inflight);
-  api.post("/hello/bat", inflight2);
+  api.get("/hello/foo", INFLIGHT_CODE);
+  api.post("/hello/bat", INFLIGHT_CODE_2);
 
   const output = app.synth();
 
@@ -159,10 +146,8 @@ test("api with multiple methods and one lambda", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.get("/hello/foo", inflight);
-  api.post("/hello/bat", inflight);
+  api.get("/hello/foo", INFLIGHT_CODE);
+  api.post("/hello/bat", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -178,9 +163,7 @@ test("api with path parameter", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.get("/hello/:world", inflight);
+  api.get("/hello/:world", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -196,9 +179,7 @@ test("api with 'name' parameter", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.get("/:name", inflight);
+  api.get("/:name", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -214,9 +195,7 @@ test("api with 'name' & 'age' parameter", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.get("/:name/:age", inflight);
+  api.get("/:name/:age", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -232,9 +211,7 @@ test("api with POST route", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.post("/", inflight);
+  api.post("/", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -264,9 +241,7 @@ test("api with PUT route", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.put("/", inflight);
+  api.put("/", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -296,9 +271,7 @@ test("api with PATCH route", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.patch("/", inflight);
+  api.patch("/", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -328,9 +301,7 @@ test("api with DELETE route", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.delete("/", inflight);
+  api.delete("/", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -360,9 +331,7 @@ test("api with OPTIONS route", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.options("/", inflight);
+  api.options("/", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -392,9 +361,7 @@ test("api with HEAD route", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.head("/", inflight);
+  api.head("/", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -424,9 +391,7 @@ test("api with CONNECT route", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
 
-  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
-
-  api.connect("/", inflight);
+  api.connect("/", INFLIGHT_CODE);
 
   const output = app.synth();
 
@@ -455,8 +420,7 @@ test("api url can be used as environment variable", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api");
-  const handler = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  new awscdk.Function(app, "Fn", handler, {
+  new awscdk.Function(app, "Fn", INFLIGHT_CODE, {
     env: {
       API_URL: api.url,
     },
@@ -485,8 +449,7 @@ test("api configured for cors", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const api = new awscdk.Api(app, "Api", { cors: true });
-  const handler = simulator.Testing.makeHandler(INFLIGHT_CODE);
-  api.get("/", handler);
+  api.get("/", INFLIGHT_CODE);
 
   const output = app.synth();
 

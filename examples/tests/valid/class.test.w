@@ -1,10 +1,21 @@
 bring cloud;
 
-// class without init
+// class without new
 class C1 {}
 new C1();
 
-// class with init and no arguments
+// extend class without new
+class C1Ext1 extends C1 {}
+class C1Ext2 extends C1Ext1 {
+  new() {
+    super(); // Can call super
+  }
+}
+class C1Ext3 extends C1Ext2 {
+  new() {} // No need to call super
+}
+
+// class with new and no arguments
 class C2 {
   pub x: num;
   new() {
@@ -13,6 +24,67 @@ class C2 {
 }
 let c2 = new C2();
 assert(c2.x == 1);
+
+// extend class with new and no args
+class C2Ext1 extends C2 {} // Implicit call to super
+let c2Ext1 = new C2Ext1();
+assert(c2Ext1.x == 1);
+class C2Ext2 extends C2 {
+  new() {} // Implicit call to super
+}
+let c2Ext2 = new C2Ext2();
+assert(c2Ext2.x == 1);
+class C2Ext3 extends C2 {
+  new() {
+    super(); // Explicit call to super
+  }
+}
+let c2Ext3 = new C2Ext3();
+assert(c2Ext3.x == 1);
+
+test "inflight classes with no ctor or ctor args" {
+  // class without new
+  class C1 {}
+  new C1();
+
+  // extend class without new
+  class C1Ext1 extends C1 {}
+  class C1Ext2 extends C1Ext1 {
+    new() {
+      super(); // Can call super
+    }
+  }
+  class C1Ext3 extends C1Ext2 {
+    new() {} // No need to call super
+  }
+
+  // class with new and no arguments
+  class C2 {
+    pub x: num;
+    new() {
+      this.x = 1;
+    }
+  }
+  let c2 = new C2();
+  assert(c2.x == 1);
+
+  // extend class with new and no args
+  class C2Ext1 extends C2 {} // Implicit call to super
+  let c2Ext1 = new C2Ext1();
+  assert(c2Ext1.x == 1);
+  class C2Ext2 extends C2 {
+    new() {} // Implicit call to super
+  }
+  let c2Ext2 = new C2Ext2();
+  assert(c2Ext2.x == 1);
+  class C2Ext3 extends C2 {
+    new() {
+      super(); // Explicit call to super
+    }
+  }
+  let c2Ext3 = new C2Ext3();
+  assert(c2Ext3.x == 1);
+}
 
 // class with init and arguments
 class C3 {

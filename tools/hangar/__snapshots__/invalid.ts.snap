@@ -747,11 +747,11 @@ error: Call to super constructor can only be done from within a class constructo
     |    ^^^^^^^^ Call to super constructor can only be done from within a class constructor
 
 
-error: Reserved method name. Initializers are declared with \\"init\\"
+error: Reserved method name. Constructors are declared with a method named \\"new\\"
     --> ../../../examples/tests/invalid/class.test.w:160:3
     |
 160 |   constructor() {
-    |   ^^^^^^^^^^^ Reserved method name. Initializers are declared with \\"init\\"
+    |   ^^^^^^^^^^^ Reserved method name. Constructors are declared with a method named \\"new\\"
 
 
 error: Expected block
@@ -838,18 +838,18 @@ error: Inflight field \\"x\\" is not initialized
    |            ^ Inflight field \\"x\\" is not initialized
 
 
-error: \\"y\\" cannot be initialized in the inflight initializer
+error: \\"y\\" cannot be initialized in the inflight constructor
    --> ../../../examples/tests/invalid/class.test.w:61:10
    |
 61 |     this.y = 1;
-   |          ^ \\"y\\" cannot be initialized in the inflight initializer
+   |          ^ \\"y\\" cannot be initialized in the inflight constructor
 
 
-error: \\"x\\" cannot be initialized in the preflight initializer
+error: \\"x\\" cannot be initialized in the preflight constructor
    --> ../../../examples/tests/invalid/class.test.w:56:10
    |
 56 |     this.x = 1;
-   |          ^ \\"x\\" cannot be initialized in the preflight initializer
+   |          ^ \\"x\\" cannot be initialized in the preflight constructor
 
 
 error: Preflight field \\"y\\" is not initialized
@@ -878,6 +878,18 @@ error: Unknown symbol \\"C11\\"
    |
 78 | class C11 extends C11 {
    |                   ^^^ Unknown symbol \\"C11\\"
+
+
+error: Missing super() call as first statement of PaidStudent's constructor
+    --> ../../../examples/tests/invalid/class.test.w:96:45
+    |  
+ 96 |     new(name: str, major: str, hrlyWage: num) {
+    | /---------------------------------------------^
+ 97 | |     this.hrlyWage = hrlyWage;
+ 98 | |     super(name, major);
+ 99 | | //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
+100 | |   }
+    | \\\\---^ Missing super() call as first statement of PaidStudent's constructor
 
 
 error: Cannot instantiate abstract class \\"Resource\\"
@@ -1272,6 +1284,91 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`ctor_super.test.w 1`] = `
+"error: Missing super() call as first statement of PreflighChild1's constructor
+  --> ../../../examples/tests/invalid/ctor_super.test.w:9:7
+  |
+9 | class PreflighChild1 extends PreflightBaseWithCtorParam {}
+  |       ^^^^^^^^^^^^^^ Missing super() call as first statement of PreflighChild1's constructor
+
+
+error: Missing super() call as first statement of PreflighChild2's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:13:15
+   |
+13 |   new(a: num) {}
+   |               ^^ Missing super() call as first statement of PreflighChild2's constructor
+
+
+error: Missing super() call as first statement of InflightChild1's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:29:16
+   |
+29 | inflight class InflightChild1 extends InflightBaseWithCtorParam {}
+   |                ^^^^^^^^^^^^^^ Missing super() call as first statement of InflightChild1's constructor
+
+
+error: Missing super() call as first statement of InflightChild2's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:33:15
+   |
+33 |   new(a: num) {}
+   |               ^^ Missing super() call as first statement of InflightChild2's constructor
+
+
+error: Missing super() call as first statement of InflightChild4's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:45:9
+   |
+45 |   new() {}
+   |         ^^ Missing super() call as first statement of InflightChild4's constructor
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/ctor_super.test.w:19:5
+   |
+19 |     super();
+   |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/ctor_super.test.w:39:5
+   |
+39 |     super();
+   |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Missing super() call as first statement of InflightChild1's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:55:9
+   |
+55 |   class InflightChild1 extends InflightBaseWithCtorParam {}
+   |         ^^^^^^^^^^^^^^ Missing super() call as first statement of InflightChild1's constructor
+
+
+error: Missing super() call as first statement of InflightChild2's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:59:17
+   |
+59 |     new(a: num) {}
+   |                 ^^ Missing super() call as first statement of InflightChild2's constructor
+
+
+error: Missing super() call as first statement of InflightChild4's constructor
+   --> ../../../examples/tests/invalid/ctor_super.test.w:71:11
+   |
+71 |     new() {}
+   |           ^^ Missing super() call as first statement of InflightChild4's constructor
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/ctor_super.test.w:65:7
+   |
+65 |       super();
+   |       ^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`cyclic_bring1.w 1`] = `
 "error: Could not compile \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements:
 - <ABSOLUTE>/cyclic_bring3.w
@@ -1560,18 +1657,18 @@ Duration <DURATION>"
 `;
 
 exports[`function_call_arity.test.w 1`] = `
-"error: Unexpected 'identifier'
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:62
+"error: Positional arguments must come before named arguments
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:61
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
-   |                                                              ^^^^^ Unexpected 'identifier'
+   |                                                             ^^^^^^^ Positional arguments must come before named arguments
 
 
-error: Unexpected 'identifier'
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:71
+error: Positional arguments must come before named arguments
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:70
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
-   |                                                                       ^^^^^ Unexpected 'identifier'
+   |                                                                      ^^^^^^^ Positional arguments must come before named arguments
 
 
 error: Expected 2 positional argument(s) but got 0
@@ -1642,6 +1739,13 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
    |                            ^ Expected type to be \\"bool\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"Options\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:61
+   |
+31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
+   |                                                             ^^^^^^^ Expected type to be \\"Options\\", but got \\"str\\" instead
 
 
 
@@ -1717,11 +1821,11 @@ Duration <DURATION>"
 `;
 
 exports[`function_variadic_definition.test.w 1`] = `
-"error: Unknown parser error
+"error: Positional arguments must come before named arguments
    --> ../../../examples/tests/invalid/function_variadic_definition.test.w:15:13
    |
 15 | f5(args: 1, 2);
-   |             ^ Unknown parser error
+   |             ^ Positional arguments must come before named arguments
 
 
 error: Variadic parameters must always be the last parameter in a function.
@@ -2014,6 +2118,97 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`indexing.test.w 1`] = `
+"error: Cannot update elements of an immutable Array
+  --> ../../../examples/tests/invalid/indexing.test.w:6:1
+  |
+6 | arr[0] = 5;
+  | ^^^^^^ Cannot update elements of an immutable Array
+  |
+  = hint: Consider using MutArray instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/indexing.test.w:9:5
+  |
+9 | arr[\\"key\\"];
+  |     ^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Type \\"Bucket\\" is not indexable
+   --> ../../../examples/tests/invalid/indexing.test.w:13:1
+   |
+13 | b[0] = 5;
+   | ^ Type \\"Bucket\\" is not indexable
+
+
+error: Type \\"Array<num>?\\" is not indexable
+   --> ../../../examples/tests/invalid/indexing.test.w:17:1
+   |
+17 | optarr[0] = 5;
+   | ^^^^^^ Type \\"Array<num>?\\" is not indexable
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/indexing.test.w:21:5
+   |
+21 | map[0];
+   |     ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Cannot update elements of an immutable Map
+   --> ../../../examples/tests/invalid/indexing.test.w:25:1
+   |
+25 | mutmap[\\"a\\"] = false;
+   | ^^^^^^^^^^^ Cannot update elements of an immutable Map
+   |
+   = hint: Consider using MutMap instead
+
+
+error: Cannot update elements of an immutable Json
+   --> ../../../examples/tests/invalid/indexing.test.w:29:1
+   |
+29 | json[0] = 5;
+   | ^^^^^^^ Cannot update elements of an immutable Json
+   |
+   = hint: Consider using MutJson instead
+
+
+error: Strings are immutable
+   --> ../../../examples/tests/invalid/indexing.test.w:33:1
+   |
+33 | s[0] = \\"H\\";
+   | ^^^^ Strings are immutable
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+   --> ../../../examples/tests/invalid/indexing.test.w:36:13
+   |
+36 | let var x = 3 + \\"hello\\";
+   |             ^^^^^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Unsupported reassignment of element of type unresolved
+   --> ../../../examples/tests/invalid/indexing.test.w:37:1
+   |
+37 | x[\\"hi\\"] = 4;
+   | ^^^^^^^ Unsupported reassignment of element of type unresolved
+
+
+error: Indexing into an inferred type is not supported
+   --> ../../../examples/tests/invalid/indexing.test.w:41:7
+   |
+41 |   log(x[0]);
+   |       ^ Indexing into an inferred type is not supported
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`inference.test.w 1`] = `
 "error: Missing required type annotation for method signature
    --> ../../../examples/tests/invalid/inference.test.w:78:8
@@ -2252,13 +2447,13 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_dup_init.test.w 1`] = `
-"error: Multiple inflight initializers defined in class Foo
+"error: Multiple inflight constructors defined in class Foo
   --> ../../../examples/tests/invalid/inflight_class_dup_init.test.w:6:3
   |  
 6 | /   inflight new() {
 7 | | 
 8 | |   }
-  | \\\\---^ Multiple inflight initializers defined in class Foo
+  | \\\\---^ Multiple inflight constructors defined in class Foo
 
 
 
@@ -2818,10 +3013,10 @@ exports[`missing_semicolon.test.w 1`] = `
 
 
 error: Expected ';'
-   --> ../../../examples/tests/invalid/missing_semicolon.test.w:16:9
+   --> ../../../examples/tests/invalid/missing_semicolon.test.w:16:10
    |
 16 | let x = 5 //
-   |         ^ Expected ';'
+   |          ^ Expected ';'
 
 
 error: Expected '}'
@@ -3213,32 +3408,40 @@ Duration <DURATION>"
 `;
 
 exports[`primitives.test.w 1`] = `
-"error: Unexpected reference \\"structured_access_expression\\"
-  --> ../../../examples/tests/invalid/primitives.test.w:5:5
+"error: Member \\"blabla\\" doesn't exist in \\"Array\\"
+  --> ../../../examples/tests/invalid/primitives.test.w:6:16
   |
-5 | log(y[0]);
-  |     ^^^^ Unexpected reference \\"structured_access_expression\\"
-
-
-error: Member \\"blabla\\" doesn't exist in \\"Array\\"
-  --> ../../../examples/tests/invalid/primitives.test.w:9:16
-  |
-9 | let join = arr.blabla(\\",\\");
+6 | let join = arr.blabla(\\",\\");
   |                ^^^^^^ Member \\"blabla\\" doesn't exist in \\"Array\\"
 
 
 error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/primitives.test.w:11:5
-   |
-11 | arr.push(4);
-   |     ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+  --> ../../../examples/tests/invalid/primitives.test.w:8:5
+  |
+8 | arr.push(4);
+  |     ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/primitives.test.w:13:14
+   --> ../../../examples/tests/invalid/primitives.test.w:10:14
    |
-13 | let n: str = arr.at(0);
+10 | let n: str = arr.at(0);
    |              ^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`private_constructor.test.w 1`] = `
+"error: Constructor for class \\"JsiiClassWithPrivateConstructor\\" is private
+  --> ../../../examples/tests/invalid/private_constructor.test.w:3:1
+  |
+3 | new jsii_fixture.JsiiClassWithPrivateConstructor();
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Constructor for class \\"JsiiClassWithPrivateConstructor\\" is private
 
 
 
@@ -3492,6 +3695,13 @@ exports[`resource_captures.test.w 1`] = `
    |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+   --> ../../../examples/tests/invalid/resource_captures.test.w:17:5
+   |
+17 |     this.collectionOfResources.at(0).put(\\"hello\\", \\"world\\");
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+
+
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -3522,32 +3732,32 @@ Duration <DURATION>"
 `;
 
 exports[`resource_init.test.w 1`] = `
-"error: Multiple initializers defined in class R
+"error: Multiple constructors defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:3:3
   |
 3 |   new() {}
-  |   ^^^^^^^^ Multiple initializers defined in class R
+  |   ^^^^^^^^ Multiple constructors defined in class R
 
 
-error: Multiple inflight initializers defined in class R
+error: Multiple inflight constructors defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:6:3
   |
 6 |   inflight new() {}
-  |   ^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+  |   ^^^^^^^^^^^^^^^^^ Multiple inflight constructors defined in class R
 
 
-error: Multiple inflight initializers defined in class R
+error: Multiple inflight constructors defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:9:3
   |
 9 |   inflight new(x: num) {}
-  |   ^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+  |   ^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight constructors defined in class R
 
 
-error: Inflight initializers cannot have parameters
+error: Inflight constructors cannot have parameters
   --> ../../../examples/tests/invalid/resource_init.test.w:9:15
   |
 9 |   inflight new(x: num) {}
-  |               ^^^^^^^^ Inflight initializers cannot have parameters
+  |               ^^^^^^^^ Inflight constructors cannot have parameters
 
 
 
@@ -3637,42 +3847,36 @@ Duration <DURATION>"
 `;
 
 exports[`simulator_permissions.test.w 1`] = `
-"[ERROR] incorrect resource permission | Invoke (payload=undefined). Error: Resource \\"root/env0/test:incorrect resource permission/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env0/b1\\".
-   --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
-   | while i > 0 {
-   |   i -= 1;
-   | }
-15 | buckets.at(i).put(\\"key\\", \\"value\\");
-   | ^
-at <ABSOLUTE>/simulator_permissions.test.w:15:3
-[ERROR] incorrect permission operation | Invoke (payload=undefined). Error: Resource \\"root/env1/test:incorrect permission operation/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env1/b1\\".
-   --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
-   | while i > 0 {
-   |   i -= 1;
-   | }
-25 | buckets.at(i).put(\\"key\\", \\"value\\");
-   | ^
-at <ABSOLUTE>/simulator_permissions.test.w:25:3
-fail ┌ simulator_permissions.test.wsim » root/env0/test:incorrect resource permission 
-     │ Error: Resource \\"root/env0/test:incorrect resource permission/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env0/b1\\".
-     │    --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
-     │    | while i > 0 {
-     │    |   i -= 1;
-     │    | }
-     │ 15 | buckets.at(i).put(\\"key\\", \\"value\\");
-     │    | ^
-     └ at <ABSOLUTE>/simulator_permissions.test.w:15:3
-fail ┌ simulator_permissions.test.wsim » root/env1/test:incorrect permission operation
-     │ Error: Resource \\"root/env1/test:incorrect permission operation/Handler\\" does not have permission to perform operation \\"put\\" on resource \\"root/env1/b1\\".
-     │    --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
-     │    | while i > 0 {
-     │    |   i -= 1;
-     │    | }
-     │ 25 | buckets.at(i).put(\\"key\\", \\"value\\");
-     │    | ^
-     └ at <ABSOLUTE>/simulator_permissions.test.w:25:3
+"error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:10:8
+   |
+10 |   lift(buckets.at(1), [\\"put\\"]);
+   |        ^^^^^^^^^^^^^ Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
 
-Tests 2 failed (2)
+
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
+   |
+15 |   buckets.at(i).put(\\"key\\", \\"value\\");
+   |   ^^^^^^^^^^^^^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+
+
+error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:20:8
+   |
+20 |   lift(buckets.at(0), [\\"list\\"]);
+   |        ^^^^^^^^^^^^^ Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
+
+
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
+   |
+25 |   buckets.at(i).put(\\"key\\", \\"value\\");
+   |   ^^^^^^^^^^^^^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+
+
+
+Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"
@@ -3821,11 +4025,11 @@ Duration <DURATION>"
 `;
 
 exports[`struct_expansion.test.w 1`] = `
-"error: Unexpected 'keyword_argument'
-   --> ../../../examples/tests/invalid/struct_expansion.test.w:11:15
+"error: Positional arguments must come before named arguments
+   --> ../../../examples/tests/invalid/struct_expansion.test.w:11:33
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |               ^^^^^^^^^^^^^^^^ Unexpected 'keyword_argument'
+   |                                 ^^^^^^ Positional arguments must come before named arguments
 
 
 error: \\"bublic\\" is not a field of \\"BucketProps\\"
@@ -3868,11 +4072,18 @@ error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflig
    |   ^^^^^^^ Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (event: str): unknown\\" instead
 
 
-error: Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
+error: \\"file\\" is not a field of \\"BucketPutOptions\\"
    --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \\"file\\" is not a field of \\"BucketPutOptions\\"
+
+
+error: Missing required field \\"contentType\\" from \\"BucketPutOptions\\"
+   --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
+   |
+11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Missing required field \\"contentType\\" from \\"BucketPutOptions\\"
 
 
 
@@ -4139,6 +4350,72 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |
 15 | a += b;
    |      ^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`un_mut_lifted_objects.test.w 1`] = `
+"error: Member \\"push\\" doesn't exist in \\"Array\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:22:6
+   |
+22 |   ar.push(2); // Error: push doesn't exist in Array
+   |      ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+
+
+error: Cannot update elements of an immutable Array
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:23:3
+   |
+23 |   ar[0] = 1; // Error: Cannot update elements of an immutable Array
+   |   ^^^^^ Cannot update elements of an immutable Array
+   |
+   = hint: Consider using MutArray instead
+
+
+error: Member \\"set\\" doesn't exist in \\"Json\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:24:5
+   |
+24 |   j.set(\\"a\\", 3); // Error: set doesn't exist in Json
+   |     ^^^ Member \\"set\\" doesn't exist in \\"Json\\"
+
+
+error: Member \\"add\\" doesn't exist in \\"Set\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:25:6
+   |
+25 |   st.add(4); // Error: add doesn't exist in Set
+   |      ^^^ Member \\"add\\" doesn't exist in \\"Set\\"
+
+
+error: Member \\"set\\" doesn't exist in \\"Map\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:26:6
+   |
+26 |   mp.set(\\"a\\", 3); // Error: set doesn't exist in Map
+   |      ^^^ Member \\"set\\" doesn't exist in \\"Map\\"
+
+
+error: Member \\"push\\" doesn't exist in \\"Array\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:27:11
+   |
+27 |   opt_ar?.push(2); // Error: push doesn't exist in Array
+   |           ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+
+
+error: Member \\"push\\" doesn't exist in \\"Array\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:28:16
+   |
+28 |   recursive_ar.push(MutArray<num>[2]); // Error: push doesn't exist in Array
+   |                ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
+
+
+error: Member \\"push\\" doesn't exist in \\"Array\\"
+   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:29:22
+   |
+29 |   recursive_ar.at(0).push(3); // Error: push doesn't exist in Array
+   |                      ^^^^ Member \\"push\\" doesn't exist in \\"Array\\"
 
 
 

@@ -14,7 +14,6 @@ import type {
 import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
 import type { FileLink } from "../utils/createRouter.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { isTermsAccepted, getLicense } from "../utils/terms-and-conditions.js";
 import type { IFunctionClient, Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -469,37 +468,8 @@ export const createAppRouter = () => {
         return ui as Array<{
           kind: string;
           label: string;
-          handler: string;
+          handler: string | Record<string, string>;
         }>;
-      }),
-    "app.getResourceUiField": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string(),
-        }),
-      )
-      .query(async ({ input, ctx }) => {
-        const simulator = await ctx.simulator();
-        const client = simulator.getResource(
-          input.resourcePath,
-        ) as IFunctionClient;
-        return {
-          value: await client.invoke(undefined),
-        };
-      }),
-
-    "app.invokeResourceUiButton": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string(),
-        }),
-      )
-      .mutation(async ({ input, ctx }) => {
-        const simulator = await ctx.simulator();
-        const client = simulator.getResource(
-          input.resourcePath,
-        ) as IFunctionClient;
-        await client.invoke(undefined);
       }),
 
     "app.analytics": createProcedure.query(async ({ ctx }) => {

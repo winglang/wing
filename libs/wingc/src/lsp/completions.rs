@@ -24,7 +24,7 @@ use crate::{UTIL_CLASS_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE};
 
 use super::sync::check_utf8;
 
-const BUILTIN_TYPES: [&str; 6] = ["bool", "duration", "Json", "MutJson", "num", "str"];
+const BUILTIN_TYPES: [&str; 8] = ["bool", "duration", "Json", "MutJson", "num", "str", "datetime", "regex"];
 const BUILTIN_GENERICS: [&str; 6] = ["Array", "Map", "MutArray", "MutMap", "MutSet", "Set"];
 
 #[no_mangle]
@@ -346,21 +346,19 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								get_completions_from_type(&v.type_, &types, Some(found_env.phase), &ObjectAccessContext::Static)
 							}
 							SymbolKind::Namespace(n) => {
-								// If the types in this namespace aren't loaded yet, load them now to get completions
-								if !n.loaded {
-									JSII_TYPES.with(|jsii_types| {
-										let jsii_types = jsii_types.borrow();
-										let parts = reference_text.split(".").collect::<Vec<_>>();
-										// Dummy type representing the namespace to be loaded
-										let udt = UserDefinedType {
-											root: Symbol::global(parts[0].to_string()),
-											fields: parts[1..].iter().map(|s| Symbol::global(s.to_string())).collect(),
-											span: WingSpan::default(),
-										};
-										// Import all types in the namespace by trying to load the "dummy type"
-										import_udt_from_jsii(&mut types, &jsii_types, &udt, &project_data.jsii_imports);
-									});
-								}
+								// In case the types in this namespace aren't loaded yet, load them now to get completions
+								JSII_TYPES.with(|jsii_types| {
+									let jsii_types = jsii_types.borrow();
+									let parts = reference_text.split(".").collect::<Vec<_>>();
+									// Dummy type representing the namespace to be loaded
+									let udt = UserDefinedType {
+										root: Symbol::global(parts[0].to_string()),
+										fields: parts[1..].iter().map(|s| Symbol::global(s.to_string())).collect(),
+										span: WingSpan::default(),
+									};
+									// Import all types in the namespace by trying to load the "dummy type"
+									import_udt_from_jsii(&mut types, &jsii_types, &udt, &project_data.jsii_imports);
+								});
 								get_completions_from_namespace(&n, Some(found_env.phase))
 							}
 						};
@@ -407,6 +405,12 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								return vec![];
 							};
 							let Some(structy) = types.get_type_from_json_cast(element.id) else {
+								return vec![];
+							};
+
+							(fields, *structy)
+						} else if let ExprKind::JsonMapLiteral { fields } = &expr.kind {
+							let Some(structy) = types.get_type_from_json_cast(expr.id) else {
 								return vec![];
 							};
 
@@ -983,10 +987,7 @@ fn get_completions_from_class(
 			if symbol_data.0 == CLASS_INIT_NAME || symbol_data.0 == CLASS_INFLIGHT_INIT_NAME {
 				return None;
 			}
-			let variable = symbol_data
-				.1
-				.as_variable()
-				.expect("Symbols in classes are always variables");
+			let variable = symbol_data.1.as_variable()?;
 
 			match access_context {
 				// hide private and protected members when accessing from outside the class
@@ -1019,17 +1020,13 @@ fn get_completions_from_class(
 				}
 			}
 
-			let completion_item = format_symbol_kind_as_completion(&symbol_data.0, &symbol_data.1);
-			if let Some(mut completion_item) = completion_item {
-				completion_item.kind = match completion_item.kind {
-					Some(CompletionItemKind::FUNCTION) => Some(CompletionItemKind::METHOD),
-					Some(CompletionItemKind::VARIABLE) => Some(CompletionItemKind::FIELD),
-					_ => completion_item.kind,
-				};
-				Some(completion_item)
-			} else {
-				None
-			}
+			let mut completion_item = format_symbol_kind_as_completion(&symbol_data.0, &symbol_data.1)?;
+			completion_item.kind = match completion_item.kind {
+				Some(CompletionItemKind::FUNCTION) => Some(CompletionItemKind::METHOD),
+				Some(CompletionItemKind::VARIABLE) => Some(CompletionItemKind::FIELD),
+				_ => completion_item.kind,
+			};
+			Some(completion_item)
 		})
 		.collect()
 }
@@ -1621,6 +1618,18 @@ Foo { x: "hi", }
 	);
 
 	test_completion_list!(
+		struct_literal_empty_nospace,
+		r#"
+struct Foo {
+	x: str;
+}
+
+let x: Foo = {}
+            //^
+"#
+	);
+
+	test_completion_list!(
 		struct_literal_all,
 		r#"
 struct Foo {
@@ -1923,7 +1932,7 @@ let s: S = { a: 1, b:  };
 		partial_type_reference,
 		r#"
 class C {
-	pub static func() {}
+  pub static func() {}
 }
 C.fu
   //^
@@ -1969,10 +1978,44 @@ let s1 = S { s: "" };
 
 let x: (): S = () => {
   s1.
-	 //^
+   //^
   return { s: "" };
 };
 "#,
 		assert!(dot_before_returning_struct.get(0).unwrap().label == "s")
 	);
+
+	test_completion_list!(
+			if_before_return_type_ref,
+			r#"
+class C {
+static inflight staticMethod(): num { return 0; }
+inflight otherInflight(){}
+inflight status(): num {
+  if this.
+        //^
+  return C.staticMethod();
+} 
+}
+"#,
+	assert!(if_before_return_type_ref.iter().any(|c| c.label == "otherInflight"))
+	assert!(!if_before_return_type_ref.iter().any(|c| c.label == "staticMethod"))
+		);
+
+	test_completion_list!(
+			forin_before_return_type_ref,
+			r#"
+class C {
+static inflight staticMethod(): num { return 0; }
+inflight otherInflight(){}
+inflight status(): num {
+  for x in this.
+              //^
+  return C.staticMethod();
+} 
+}
+"#,
+	assert!(forin_before_return_type_ref.iter().any(|c| c.label == "otherInflight"))
+	assert!(!forin_before_return_type_ref.iter().any(|c| c.label == "staticMethod"))
+		);
 }

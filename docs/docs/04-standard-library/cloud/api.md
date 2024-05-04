@@ -421,6 +421,8 @@ Options for the route.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Api.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.cloud.Api.renderCorsHeaders">renderCorsHeaders</a></code> | Generates an object containing default CORS response headers and OPTIONS response headers. |
+| <code><a href="#@winglang/sdk.cloud.Api.renderOpenApiPath">renderOpenApiPath</a></code> | Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`). |
 
 ---
 
@@ -449,6 +451,42 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Api.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `renderCorsHeaders` <a name="renderCorsHeaders" id="@winglang/sdk.cloud.Api.renderCorsHeaders"></a>
+
+```wing
+bring cloud;
+
+cloud.Api.renderCorsHeaders(corsOptions?: ApiCorsOptions);
+```
+
+Generates an object containing default CORS response headers and OPTIONS response headers.
+
+###### `corsOptions`<sup>Optional</sup> <a name="corsOptions" id="@winglang/sdk.cloud.Api.renderCorsHeaders.parameter.corsOptions"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a>
+
+The CORS options to generate the headers from.
+
+---
+
+##### `renderOpenApiPath` <a name="renderOpenApiPath" id="@winglang/sdk.cloud.Api.renderOpenApiPath"></a>
+
+```wing
+bring cloud;
+
+cloud.Api.renderOpenApiPath(path: str);
+```
+
+Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`).
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.renderOpenApiPath.parameter.path"></a>
+
+- *Type:* str
+
+The path to convert (assumes path is valid).
 
 ---
 
@@ -949,6 +987,51 @@ The response's status code.
 
 ---
 
+### CorsHeaders <a name="CorsHeaders" id="@winglang/sdk.cloud.CorsHeaders"></a>
+
+Type definition for CORS headers which includes default and options headers.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.CorsHeaders.Initializer"></a>
+
+```wing
+bring cloud;
+
+let CorsHeaders = cloud.CorsHeaders{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.CorsHeaders.property.defaultResponse">defaultResponse</a></code> | <code>MutMap&lt;str&gt;</code> | Default CORS response headers. |
+| <code><a href="#@winglang/sdk.cloud.CorsHeaders.property.optionsResponse">optionsResponse</a></code> | <code>MutMap&lt;str&gt;</code> | CORS options response headers. |
+
+---
+
+##### `defaultResponse`<sup>Required</sup> <a name="defaultResponse" id="@winglang/sdk.cloud.CorsHeaders.property.defaultResponse"></a>
+
+```wing
+defaultResponse: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+Default CORS response headers.
+
+---
+
+##### `optionsResponse`<sup>Required</sup> <a name="optionsResponse" id="@winglang/sdk.cloud.CorsHeaders.property.optionsResponse"></a>
+
+```wing
+optionsResponse: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+CORS options response headers.
+
+---
+
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### IApiEndpointHandler <a name="IApiEndpointHandler" id="@winglang/sdk.cloud.IApiEndpointHandler"></a>
@@ -980,7 +1063,7 @@ Inflight client for `IApiEndpointHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IApiEndpointHandlerClient.handle"></a>
 
 ```wing
-inflight handle(request: ApiRequest): ApiResponse
+inflight handle(request: ApiRequest): ApiResponse?
 ```
 
 Inflight that will be called when a request is made to the endpoint.

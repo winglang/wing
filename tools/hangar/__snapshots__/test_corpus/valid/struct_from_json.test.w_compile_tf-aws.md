@@ -93,7 +93,7 @@ module.exports = function({ $Student, $jStudent1 }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyStruct, $std_Json }) {
+module.exports = function({ $MyStruct, $expectedSchema, $jMyStruct, $schema, $std_Json }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -103,7 +103,7 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
     async handle() {
       const s = $MyStruct;
       (await s.validate($jMyStruct));
-      $helpers.assert($helpers.eq($_schema_asStr___, ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
+      $helpers.assert($helpers.eq((await $schema.asStr()), ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
     }
   }
   return $Closure4;
@@ -306,9 +306,9 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-2.cjs")({
             $MyStruct: ${$stdlib.core.liftObject(MyStruct)},
-            $_schema_asStr___: ${$stdlib.core.liftObject((schema.asStr()))},
             $expectedSchema: ${$stdlib.core.liftObject(expectedSchema)},
             $jMyStruct: ${$stdlib.core.liftObject(jMyStruct)},
+            $schema: ${$stdlib.core.liftObject(schema)},
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
@@ -327,14 +327,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [(schema.asStr()), []],
             [expectedSchema, []],
             [jMyStruct, []],
+            [schema, ["asStr"]],
           ],
           "$inflight_init": [
-            [(schema.asStr()), []],
             [expectedSchema, []],
             [jMyStruct, []],
+            [schema, []],
           ],
         });
       }

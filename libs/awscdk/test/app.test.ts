@@ -1,10 +1,11 @@
 import { test, expect } from "vitest";
 import * as awscdk from "../src";
 import { CDK_APP_OPTS } from "./util";
-import { Duration, Stack } from "aws-cdk-lib";
+import { Stack } from "aws-cdk-lib";
 import { mkdtemp } from "@winglang/sdk/test/util";
 import { cloud, simulator } from "@winglang/sdk";
 import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
+import { inflight } from "@winglang/sdk/lib/core";
 
 test("custom stack", async () => {
   const app = new awscdk.App({
@@ -40,7 +41,10 @@ test("custom Functions", async () => {
     }
   }
 
-  new CustomFunction(app, "MyFunction", simulator.Testing.makeHandler("async handle(name) { console.log('hello'); }"));
+  new CustomFunction(app, "MyFunction", inflight(async () => {
+    console.log("hello");
+    return undefined;
+  }));
 
   const cfn = JSON.parse(app.synth());
 

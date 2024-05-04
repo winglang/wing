@@ -544,6 +544,33 @@ log("Timezone is GMT{d.timezone() / 60}"); // output: Timezone is GMT-2
 log("UTC: {t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 ```
 
+####  1.1.7 Indexing
+
+The `obj[index]` syntax can be used to index into arrays and objects. For example:
+
+```TS
+let arr = MutArray<num>[3, 5];
+assert(arr[0] == 3);
+assert(arr[1] == 5);
+assert(arr[-1] == 5);
+assert(arr[-2] == 3);
+
+arr[42]; // throws an index out of bounds error
+
+arr[0] = 42;
+arr[1] += 3.5;
+```
+
+Negative indices are supported and are counted from the end of the array.
+
+The following is a list of supported indexable types:
+
+* `Array` and `MutArray` - accepts a `num` index
+* `Map` and `MutMap` - accepts a `str` index
+* `Json` and `MutJson` - accepts `num` and `str` index values
+* `str` - accepts a `num` index
+
+[`▲ top`][top]
 
 ### 1.2 Utility Functions
 
@@ -642,7 +669,7 @@ let handler2 = inflight() => {
 Bridge between preflight and inflight is crossed with the help of immutable data
 structures, "structs" (user definable and `Struct`), and the capture mechanism.
 
-Preflight class methods and initializers can receive an inflight function as an argument. This
+Preflight class methods and constructors can receive an inflight function as an argument. This
 enables preflight classes to define code that will be executed on a cloud compute platform such as
 lambda functions, docker, virtual machines etc.
 
@@ -923,6 +950,20 @@ let f = (opts: Options) => { };
 
 f(myRequired: "hello");
 f(myOptional: 12, myRequired: "dang");
+```
+
+A method implementation can omit any number of arguments from the end of an argument list when implementing an interface method. This is useful when you want to implement an interface method but don't need all of its arguments.
+
+```TS
+interface MyInterface {
+  myMethod(a: num, b: str, c: bool): void;
+}
+
+class MyClass impl MyInterface {
+  myMethod(a: num, b: str): void {
+    // This is a valid implementation of MyInterface.myMethod
+  }
+}
 ```
 
 ##### 1.7.1.5 Function return types
@@ -1736,7 +1777,7 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 > let arr1 = [1, 2, 3];
 > let arr2 = ["a", "b", "c"];
 > let arr3 = MutArray<str>["a1", "b2", "c3"];
-> let l = arr1.length + arr2.length + arr3.length + arr1.at(0);
+> let l = arr1.length + arr2.length + arr3.length + arr1[0];
 > ```
 
 [`▲ top`][top]

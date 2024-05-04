@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
@@ -9,7 +8,7 @@ import { ApiRoute, ApiSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
+import { lift } from "../core";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -62,11 +61,19 @@ export class Api extends cloud.Api implements ISimulatorResource {
       return handler.func;
     }
 
-    // wrap our api handler with a function handler (from (str->str) to (json->json)).
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "api.onrequest.inflight.js"),
-      "ApiOnRequestHandlerClient"
+    const functionHandler = lift({ handler: inflight }).inflight(
+      async (ctx, event) => {
+        if (!event) {
+          throw new Error("invalid API request event");
+        }
+        let req = JSON.parse(event) as cloud.ApiRequest;
+        const response = await ctx.handler(req);
+        if (!response) {
+          return undefined;
+        } else {
+          return JSON.stringify(response);
+        }
+      }
     );
 
     const fn = new Function(
@@ -237,7 +244,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public toSimulator(): ToSimulatorOutput {
     const props: ApiSchema = {
       openApiSpec: this._getOpenApiSpec(),
-      corsHeaders: this._generateCorsHeaders(this.corsOptions),
+      corsHeaders: cloud.Api.renderCorsHeaders(this.corsOptions),
     };
     return {
       type: cloud.API_FQN,

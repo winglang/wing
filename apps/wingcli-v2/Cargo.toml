@@ -8,8 +8,6 @@ edition = "2021"
 [dependencies]
 # Customizing CLI colored output
 anstyle = "1.0.6"
-# Check for tty
-atty = "0.2.14"
 # Drop in replacement for std::path but with only utf-8
 camino = "1.1.6"
 # Command line argument parsing

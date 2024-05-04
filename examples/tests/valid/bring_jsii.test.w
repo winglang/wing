@@ -14,8 +14,7 @@ test "sayHello" {
 let jsiiClass = new jsii_fixture.JsiiClass(10);
 assert(jsiiClass.applyClosure(5, (x) => { return x * 2; }) == 10);
 
-let jsiiStruct = jsii_fixture.SomeStruct { field: "struct field" };
-assert(jsiiClass.methodWithStructParam(jsiiStruct) == "struct field");
+assert(jsiiClass.methodWithStructParam({ field: "struct field" }) == "struct field");
 
 // Use a JSII interface
 class X impl jsii_fixture.ISomeInterface {

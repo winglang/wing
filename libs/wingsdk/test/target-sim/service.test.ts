@@ -1,23 +1,21 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { SimApp } from "../sim-app";
 
-const HANDLER_WITH_START = `\
-async handle() {
+const HANDLER_WITH_START = inflight(async () => {
   console.log("start!");
-}`;
+});
 
-const HANDLER_WITH_START_AND_STOP = `\
-async handle() {
+const HANDLER_WITH_START_AND_STOP = inflight(async () => {
   console.log("start!");
   return () => console.log("stop!");
-}`;
+});
 
 test("create a service with on start method", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Service(app, "my_service", Testing.makeHandler(HANDLER_WITH_START));
+  new cloud.Service(app, "my_service", HANDLER_WITH_START);
 
   // WHEN
   const s = await app.startSimulator();
@@ -45,11 +43,7 @@ test("create a service with on start method", async () => {
 test("create a service with a on stop method", async () => {
   // Given
   const app = new SimApp();
-  new cloud.Service(
-    app,
-    "my_service",
-    Testing.makeHandler(HANDLER_WITH_START_AND_STOP)
-  );
+  new cloud.Service(app, "my_service", HANDLER_WITH_START_AND_STOP);
 
   // WHEN
   const s = await app.startSimulator();
@@ -88,12 +82,9 @@ test("create a service with a on stop method", async () => {
 test("create a service without autostart", async () => {
   // Given
   const app = new SimApp();
-  new cloud.Service(
-    app,
-    "my_service",
-    Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
-    { autoStart: false }
-  );
+  new cloud.Service(app, "my_service", HANDLER_WITH_START_AND_STOP, {
+    autoStart: false,
+  });
 
   // WHEN
   const s = await app.startSimulator();
@@ -128,14 +119,9 @@ test("start and stop service", async () => {
   // Given
   const app = new SimApp();
 
-  new cloud.Service(
-    app,
-    "my_service",
-    Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
-    {
-      autoStart: false,
-    }
-  );
+  new cloud.Service(app, "my_service", HANDLER_WITH_START_AND_STOP, {
+    autoStart: false,
+  });
   const s = await app.startSimulator();
   const service = s.getResource("/my_service") as cloud.IServiceClient;
 
@@ -157,14 +143,9 @@ test("start and stop service", async () => {
 test("consecutive start and stop service", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Service(
-    app,
-    "my_service",
-    Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
-    {
-      autoStart: false,
-    }
-  );
+  new cloud.Service(app, "my_service", HANDLER_WITH_START_AND_STOP, {
+    autoStart: false,
+  });
   const s = await app.startSimulator();
   const service = s.getResource("/my_service") as cloud.IServiceClient;
 
@@ -191,11 +172,9 @@ test("throws during service start", async () => {
   new cloud.Service(
     app,
     "my_service",
-    Testing.makeHandler(`\
-    async handle() {
+    inflight(async () => {
       throw new Error("ThisIsAnError");
-      return () => console.log("stop!");
-    }`)
+    })
   );
 
   const s = await app.startSimulator();

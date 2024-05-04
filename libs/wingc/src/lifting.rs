@@ -179,6 +179,9 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				self.verify_defined_in_current_env(symb);
 				visit::visit_reference(self, &node);
 			}
+			Reference::ElementAccess { .. } => {
+				visit::visit_reference(self, &node);
+			}
 		}
 	}
 

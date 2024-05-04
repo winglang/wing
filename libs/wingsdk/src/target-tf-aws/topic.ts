@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
@@ -9,10 +8,9 @@ import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscripti
 import { SqsQueuePolicy } from "../.gen/providers/aws/sqs-queue-policy";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IAwsTopic } from "../shared-aws/topic";
+import { IAwsTopic, TopicOnMessageHandler } from "../shared-aws/topic";
 import { IInflightHost, Node, Resource } from "../std";
 
 /**
@@ -50,15 +48,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname.replace("target-tf-aws", "shared-aws"),
-        "topic.onmessage.inflight.js"
-      ),
-      "TopicOnMessageHandlerClient"
-    );
-
+    const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
     let fn = this.handlers[inflight._id];
     if (fn) {
       return fn;
@@ -199,8 +189,10 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     );
   }
   /** @internal */
-  public _supportedOps(): string[] {
-    return [cloud.TopicInflightMethods.PUBLISH];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.TopicInflightMethods.PUBLISH]: [],
+    };
   }
 
   private envName(): string {

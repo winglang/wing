@@ -5,18 +5,44 @@ exports[`api allows duplicates routes with different methods 1`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.body, headers: req.headers }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.body,
+  headers: req.headers
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -322,18 +348,44 @@ exports[`api handler can read the request params 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: JSON.stringify(req.query), headers: { "Content-Type": "application/json" } }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: JSON.stringify(req.query),
+  headers: { "Content-Type": "application/json" }
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -620,18 +672,43 @@ exports[`api handler can read the request path 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.path }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.path
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -918,18 +995,44 @@ exports[`api handler can set response headers 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.headers,
+  headers: { "x-wingnuts": "cloudy" }
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1216,18 +1319,44 @@ exports[`api response returns Content-Type header from inflight 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.headers, headers: { "Content-Type": "application/octet-stream; charset=utf-8" } }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+    body: req.headers,
+    headers: { "Content-Type": "application/octet-stream; charset=utf-8" }
+  })
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1514,18 +1643,44 @@ exports[`api response returns default Content-Type header 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.body, headers: req.headers }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.body,
+  headers: req.headers
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1830,18 +1985,43 @@ exports[`api supports every method type 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.method }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.method
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -2242,18 +2422,43 @@ exports[`api with 'name' & 'age' parameter 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.vars ?? {} }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.vars ?? {}
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -2557,18 +2762,43 @@ exports[`api with 'name' parameter 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.vars ?? {} }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.vars ?? {}
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -2844,18 +3074,44 @@ exports[`api with multiple GET routes and one lambda 1`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.body, headers: req.headers }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.body,
+  headers: req.headers
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -3165,35 +3421,85 @@ exports[`api with multiple methods on same route 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: "boom" }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx) => ({
+  body: ctx.body
+})
+  const $ctx = {
+  body: "boom"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/onrequesthandler1_c84819d7.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: "bang" }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx) => ({
+  body: ctx.body
+})
+  const $ctx = {
+  body: "bang"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -3565,35 +3871,85 @@ exports[`api with multiple routes 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: "boom" }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx) => ({
+  body: ctx.body
+})
+  const $ctx = {
+  body: "boom"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/onrequesthandler1_c84819d7.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: "bang" }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx) => ({
+  body: ctx.body
+})
+  const $ctx = {
+  body: "bang"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -3960,18 +4316,43 @@ exports[`api with one GET route 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: "boom" }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx) => ({
+  body: ctx.body
+})
+  const $ctx = {
+  body: "boom"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -4258,18 +4639,43 @@ exports[`api with one GET route with request params 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.vars ?? {} }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.vars ?? {}
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -4565,18 +4971,44 @@ exports[`api with one POST route, with body 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.body, headers: req.headers }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.body,
+  headers: req.headers
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {

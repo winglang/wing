@@ -12,6 +12,7 @@ use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
+static ARGLIST_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -633,6 +634,8 @@ impl Expr {
 	}
 }
 
+pub type ArgListId = usize;
+
 #[derive(Debug)]
 pub struct New {
 	pub class: UserDefinedType,
@@ -645,21 +648,28 @@ pub struct New {
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
 	pub named_args: IndexMap<Symbol, Expr>,
+	pub id: ArgListId,
 	pub span: WingSpan,
 }
 
 impl ArgList {
-	pub fn new(span: WingSpan) -> Self {
+	pub fn new(pos_args: Vec<Expr>, named_args: IndexMap<Symbol, Expr>, span: WingSpan) -> Self {
 		ArgList {
-			pos_args: vec![],
-			named_args: IndexMap::new(),
+			pos_args,
+			named_args,
 			span,
+			id: ARGLIST_COUNTER.fetch_add(1, Ordering::Relaxed),
 		}
+	}
+
+	pub fn new_empty(span: WingSpan) -> Self {
+		Self::new(vec![], IndexMap::new(), span)
 	}
 }
 
 #[derive(Debug)]
 pub enum Literal {
+	NonInterpolatedString(String),
 	String(String),
 	InterpolatedString(InterpolatedString),
 	Number(f64),
@@ -742,6 +752,10 @@ pub enum Reference {
 		property: Symbol,
 		optional_accessor: bool,
 	},
+	/// A reference to an accessed member of an object `expression[x]`
+	///
+	/// TODO: should this be a separate type of Expr? (this would require changing how `Assignment` statements are modeled)
+	ElementAccess { object: Box<Expr>, index: Box<Expr> },
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember {
 		type_name: UserDefinedType,
@@ -758,6 +772,7 @@ impl Clone for Reference {
 				type_name: type_name.clone(),
 				property: property.clone(),
 			},
+			Reference::ElementAccess { .. } => panic!("Unable to clone reference to element access"),
 		}
 	}
 }
@@ -772,6 +787,14 @@ impl Spanned for Reference {
 				optional_accessor: _,
 			} => object.span().merge(&property.span()),
 			Reference::TypeMember { type_name, property } => type_name.span().merge(&property.span()),
+			Reference::ElementAccess { object, index } => {
+				let mut span = object.span().merge(&index.span());
+				// Add one to include the closing bracket.
+				// TODO: store a dedicated span field?
+				span.end.col += 1;
+				span.end_offset += 1;
+				span
+			}
 		}
 	}
 }
@@ -793,6 +816,9 @@ impl Display for Reference {
 			}
 			Reference::TypeMember { type_name, property } => {
 				write!(f, "{}.{}", type_name, property.name)
+			}
+			Reference::ElementAccess { .. } => {
+				write!(f, "element access") // TODO!
 			}
 		}
 	}

@@ -1,14 +1,13 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Connections } from "../../src/core";
-import { Testing } from "../../src/simulator";
+import { Connections, inflight } from "../../src/core";
 import { SimApp } from "../sim-app";
 
 test("create a bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const handler = Testing.makeHandler("async handle() { return 'hello'; }");
+  const handler = inflight(async () => "hello");
   const fn = new cloud.Function(app, "my_function", handler);
 
   // WHEN

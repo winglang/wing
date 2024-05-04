@@ -33,6 +33,7 @@
   },
   "scripts": {
     "compile": "tsc",
+    "watch": "tsc --watch",
     "package": "bump-pack -b",
     "test": "vitest run --passWithNoTests --update"
   },

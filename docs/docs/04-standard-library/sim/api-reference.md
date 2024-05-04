@@ -154,6 +154,8 @@ new sim.Policy(props: PolicyProps);
 
 #### Methods <a name="Methods" id="Methods"></a>
 
+##### Preflight Methods
+
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.sim.Policy.addStatement">addStatement</a></code> | Adds a statement to the policy. |
@@ -320,7 +322,7 @@ Convert this resource to a resource schema for the simulator.
 ##### `get` <a name="get" id="@winglang/sdk.sim.IStateClient.get"></a>
 
 ```wing
-get(key: str): Json
+inflight get(key: str): Json
 ```
 
 Gets the runtime state of this object.
@@ -338,7 +340,7 @@ The object's key.
 ##### `set` <a name="set" id="@winglang/sdk.sim.IStateClient.set"></a>
 
 ```wing
-set(key: str, value: Json): void
+inflight set(key: str, value: Json): void
 ```
 
 Sets the state of runtime a runtime object.
@@ -362,7 +364,7 @@ The object's value.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.sim.IStateClient.tryGet"></a>
 
 ```wing
-tryGet(key: str): Json
+inflight tryGet(key: str): Json?
 ```
 
 Checks if runtime state exists for this object and returns it's value.
@@ -461,6 +463,7 @@ let ContainerProps = sim.ContainerProps{ ... };
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to set in the container. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.sourceHash">sourceHash</a></code> | <code>str</code> | An explicit source hash that represents the container source. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.sourcePattern">sourcePattern</a></code> | <code>str</code> | A glob of local files to consider as input sources for the container, relative to the build context directory. |
+| <code><a href="#@winglang/sdk.sim.ContainerProps.property.volumes">volumes</a></code> | <code>MutArray&lt;str&gt;</code> | Volume mount points. |
 
 ---
 
@@ -556,6 +559,26 @@ A glob of local files to consider as input sources for the container, relative t
 
 ---
 
+##### `volumes`<sup>Optional</sup> <a name="volumes" id="@winglang/sdk.sim.ContainerProps.property.volumes"></a>
+
+```wing
+volumes: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* []
+
+Volume mount points.
+
+---
+
+*Example*
+
+```wing
+['/host:/container']
+```
+
+
 ### PolicyProps <a name="PolicyProps" id="@winglang/sdk.sim.PolicyProps"></a>
 
 Options for `sim.Policy`.
@@ -589,14 +612,6 @@ The resource to which the policy is attached.
 ---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IPolicyClient <a name="IPolicyClient" id="@winglang/sdk.sim.IPolicyClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.sim.IPolicyClient">IPolicyClient</a>
-
-Inflight interface for `Policy`.
-
-
 
 ### ISimulatorInflightHost <a name="ISimulatorInflightHost" id="@winglang/sdk.sim.ISimulatorInflightHost"></a>
 

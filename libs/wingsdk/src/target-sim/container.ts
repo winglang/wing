@@ -4,7 +4,7 @@ import { ContainerSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Util as fs } from "../fs";
 import { isPath } from "../shared/misc";
@@ -39,6 +39,13 @@ export interface ContainerProps {
    * @default {}
    */
   readonly env?: Record<string, string>;
+
+  /**
+   * Volume mount points.
+   * @default []
+   * @example ['/host:/container']
+   */
+  readonly volumes?: string[];
 
   /**
    * Container arguments
@@ -105,6 +112,7 @@ export class Container extends Resource implements ISimulatorResource {
       imageTag: this.imageTag,
       containerPort: this.props.containerPort,
       env: this.props.env,
+      volumes: this.props.volumes,
       args: this.props.args,
       cwd: App.of(this).entrypointDir,
     };
@@ -120,8 +128,8 @@ export class Container extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [];
+  public get _liftMap(): LiftMap {
+    return {};
   }
 
   /** @internal */

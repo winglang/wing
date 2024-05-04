@@ -77,11 +77,12 @@ export interface TopicSubscribeQueueOptions extends QueueProps {}
  */
 export interface ITopicClient {
   /**
-   * Publish message to topic
-   * @param message Payload to publish to Topic
+   * Publish messages to topic, if multiple messages are passed then they
+   * will be published as a batch if supported by the target platform
+   * @param messages Payload to publish to Topic
    * @inflight
    */
-  publish(message: string): Promise<void>;
+  publish(...messages: string[]): Promise<void>;
 }
 
 /**

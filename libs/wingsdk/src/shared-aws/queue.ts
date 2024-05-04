@@ -2,13 +2,10 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import { calculateQueuePermissions } from "./permissions";
 import { isValidArn } from "./util";
-import { cloud } from "..";
-import { IQueueClient } from "../cloud";
-import { InflightClient } from "../core";
+import { cloud, ui } from "..";
+import { InflightClient, lift, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
-import { Testing } from "../simulator";
 import { IInflightHost, Node, Resource } from "../std";
-import * as ui from "../ui";
 
 /**
  * A shared interface for AWS queues.
@@ -29,8 +26,6 @@ export interface IAwsQueue {
    */
   readonly queueUrl: string;
 }
-
-const QUEUE_URL_METHOD = "queueUrl";
 
 /**
  * A helper class for working with AWS queues.
@@ -58,13 +53,24 @@ export class Queue {
 }
 
 /**
+ * The inflight API for AWS queues.
+ */
+export interface IAwsQueueClient extends cloud.IQueueClient {
+  /**
+   * Get the queue URL.
+   * @inflight
+   */
+  queueUrl(): Promise<string>;
+}
+
+/**
  * A reference to an external SQS queue.
  *
- * @inflight `@winglang/sdk.cloud.IQueueClient`
+ * @inflight `@winglang/sdk.aws.IAwsQueueClient`
  */
 export class QueueRef extends Resource {
   /** @internal */
-  public [INFLIGHT_SYMBOL]?: IQueueClient;
+  public [INFLIGHT_SYMBOL]?: IAwsQueueClient;
 
   /**
    * The ARN of this queue.
@@ -106,76 +112,81 @@ export class QueueRef extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      QUEUE_URL_METHOD, // AWS-specific
-      cloud.QueueInflightMethods.PUSH,
-      cloud.QueueInflightMethods.PURGE,
-      cloud.QueueInflightMethods.APPROX_SIZE,
-      cloud.QueueInflightMethods.POP,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      ["queueUrl"]: [], // AWS-specific
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.QueueInflightMethods.PURGE]: [],
+      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
+      [cloud.QueueInflightMethods.POP]: [],
+    };
   }
 
   private addUserInterface() {
     Node.of(this).color = "pink";
 
-    const queueUrlHandler = Testing.makeHandler(
-      `
-      async handle() {
-        try {
-          return await this.queue.queueUrl();
-        } catch (e) {
-          return e.message;
-        }
+    const queueUrlHandler = lift({ queue: this }).inflight(async (ctx) => {
+      try {
+        return await ctx.queue.queueUrl();
+      } catch (e: any) {
+        return e.message;
       }
-      `,
-      {
-        queue: {
-          obj: this,
-          ops: [QUEUE_URL_METHOD],
-        },
-      }
-    );
+    });
 
     new ui.Field(this, "QueueUrlField", "SQS Queue URL", queueUrlHandler, {
       link: true,
     });
 
-    const awsConsoleHandler = Testing.makeHandler(
-      `async handle() { 
-        try {
-          const url = await this.queue.queueUrl();
-          const x = new URL(url);
-          const region = x.hostname.split(".")[1];
-          return "https://" + region + ".console.aws.amazon.com/sqs/v3/home?region=" + region + "#/queues/" + encodeURIComponent(url);
-        } catch (e) {
-          return e.message;
-        }
-      }`,
-      {
-        queue: {
-          obj: this,
-          ops: [QUEUE_URL_METHOD],
-        },
+    const awsConsoleHandler = lift({ queue: this }).inflight(async (ctx) => {
+      try {
+        const url = await ctx.queue.queueUrl();
+        const x = new URL(url);
+        const region = x.hostname.split(".")[1];
+        return (
+          "https://" +
+          region +
+          ".console.aws.amazon.com/sqs/v3/home?region=" +
+          region +
+          "#/queues/" +
+          encodeURIComponent(url)
+        );
+      } catch (e: any) {
+        return e.message;
       }
-    );
+    });
 
     new ui.Field(this, "AwsConsoleField", "AWS Console", awsConsoleHandler, {
       link: true,
     });
 
-    const queueArnHandler = Testing.makeHandler(
-      `async handle() { 
-        return this.queueArn;
-      }`,
-      {
-        queueArn: {
-          obj: this.queueArn,
-          ops: [],
-        },
-      }
-    );
+    new ui.ValueField(this, "QueueArnField", "SQS Queue ARN", this.queueArn);
+  }
+}
 
-    new ui.Field(this, "QueueArnField", "SQS Queue ARN", queueArnHandler);
+/**
+ * Utility class for working with the queue consumer handler.
+ */
+export class QueueSetConsumerHandler {
+  /**
+   * Converts a queue consumer handler to a function handler.
+   * @param handler The queue consumer handler.
+   * @returns The function handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.IQueueSetConsumerHandler
+  ): cloud.IFunctionHandler {
+    return lift({ handler }).inflight(async (ctx, event) => {
+      const batchItemFailures = [];
+      for (const record of (event as any).Records ?? []) {
+        try {
+          await ctx.handler(record.body);
+        } catch (error) {
+          batchItemFailures.push({
+            itemIdentifier: record.messageId,
+          });
+        }
+      }
+      return { batchItemFailures } as any;
+    });
   }
 }

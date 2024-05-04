@@ -12,6 +12,131 @@ sidebar_position: 100
 
 ## Resources <a name="Resources" id="Resources"></a>
 
+### BucketRef <a name="BucketRef" id="@winglang/sdk.aws.BucketRef"></a>
+
+A reference to an external S3 bucket.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.BucketRef.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.BucketRef(bucketName: str);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.BucketRef.Initializer.parameter.bucketName">bucketName</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `bucketName`<sup>Required</sup> <a name="bucketName" id="@winglang/sdk.aws.BucketRef.Initializer.parameter.bucketName"></a>
+
+- *Type:* str
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsBucketClient.bucketRegion">bucketRegion</a></code> | Get the region of the bucket. |
+
+---
+
+##### `bucketRegion` <a name="bucketRegion" id="@winglang/sdk.aws.IAwsBucketClient.bucketRegion"></a>
+
+```wing
+inflight bucketRegion(): str
+```
+
+Get the region of the bucket.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.BucketRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.BucketRef.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.BucketRef.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.BucketRef.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.BucketRef.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.BucketRef.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.BucketRef.property.bucketArn">bucketArn</a></code> | <code>str</code> | The ARN of this bucket. |
+| <code><a href="#@winglang/sdk.aws.BucketRef.property.bucketName">bucketName</a></code> | <code>str</code> | The Name of this bucket. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.BucketRef.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `bucketArn`<sup>Required</sup> <a name="bucketArn" id="@winglang/sdk.aws.BucketRef.property.bucketArn"></a>
+
+```wing
+bucketArn: str;
+```
+
+- *Type:* str
+
+The ARN of this bucket.
+
+---
+
+##### `bucketName`<sup>Required</sup> <a name="bucketName" id="@winglang/sdk.aws.BucketRef.property.bucketName"></a>
+
+```wing
+bucketName: str;
+```
+
+- *Type:* str
+
+The Name of this bucket.
+
+---
+
+
 ### Domain <a name="Domain" id="@winglang/sdk.aws.Domain"></a>
 
 AWS implementation of `cloud.Domain`.
@@ -184,7 +309,7 @@ new aws.FunctionRef(functionArn: str);
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-inflight invoke(payload?: str): str
+inflight invoke(payload?: str): str?
 ```
 
 Invokes the function with a payload and waits for the result.
@@ -317,54 +442,17 @@ new aws.QueueRef(queueArn: str);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push one or more messages to the queue. |
+| <code><a href="#@winglang/sdk.aws.IAwsQueueClient.queueUrl">queueUrl</a></code> | Get the queue URL. |
 
 ---
 
-##### `approxSize` <a name="approxSize" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
+##### `queueUrl` <a name="queueUrl" id="@winglang/sdk.aws.IAwsQueueClient.queueUrl"></a>
 
 ```wing
-inflight approxSize(): num
+inflight queueUrl(): str
 ```
 
-Retrieve the approximate number of messages in the queue.
-
-##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
-
-```wing
-inflight pop(): str
-```
-
-Pop a message from the queue.
-
-##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
-
-```wing
-inflight purge(): void
-```
-
-Purge all of the messages in the queue.
-
-##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
-
-```wing
-inflight push(...messages: Array<str>): void
-```
-
-Push one or more messages to the queue.
-
-###### `messages`<sup>Required</sup> <a name="messages" id="@winglang/sdk.cloud.IQueueClient.push.parameter.messages"></a>
-
-- *Type:* str
-
-Payload to send to the queue.
-
-Each message must be non-empty.
-
----
+Get the queue URL.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -484,6 +572,60 @@ The cloud.Api.
 
 
 
+### ApiEndpointHandler <a name="ApiEndpointHandler" id="@winglang/sdk.aws.ApiEndpointHandler"></a>
+
+A helper class for working with AWS api endpoint handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.ApiEndpointHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.ApiEndpointHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler">toFunctionHandler</a></code> | Returns a `cloud.Function` handler for handling requests from a `cloud.Api`. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.ApiEndpointHandler.toFunctionHandler(handler: IApiEndpointHandler, headers?: MutMap<str>);
+```
+
+Returns a `cloud.Function` handler for handling requests from a `cloud.Api`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+The `onRequest` handler.
+
+---
+
+###### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler.parameter.headers"></a>
+
+- *Type:* MutMap&lt;str&gt;
+
+HTTP response headers to add to all responses (used by CORS).
+
+---
+
+
+
 ### Bucket <a name="Bucket" id="@winglang/sdk.aws.Bucket"></a>
 
 A helper class for working with AWS buckets.
@@ -525,6 +667,60 @@ If the bucket is an AWS Bucket, return a helper interface for working with it.
 - *Type:* <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>
 
 The cloud.Bucket.
+
+---
+
+
+
+### BucketEventHandler <a name="BucketEventHandler" id="@winglang/sdk.aws.BucketEventHandler"></a>
+
+Utility class to work with bucket event handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.BucketEventHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.BucketEventHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler">toTopicOnMessageHandler</a></code> | Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`. |
+
+---
+
+##### `toTopicOnMessageHandler` <a name="toTopicOnMessageHandler" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler"></a>
+
+```wing
+bring aws;
+
+aws.BucketEventHandler.toTopicOnMessageHandler(handler: IBucketEventHandler, eventType: BucketEventType);
+```
+
+Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+
+the handler to convert.
+
+---
+
+###### `eventType`<sup>Required</sup> <a name="eventType" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler.parameter.eventType"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
+
+the event type.
 
 ---
 
@@ -668,6 +864,52 @@ The cloud.Queue.
 
 
 
+### QueueSetConsumerHandler <a name="QueueSetConsumerHandler" id="@winglang/sdk.aws.QueueSetConsumerHandler"></a>
+
+Utility class for working with the queue consumer handler.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.QueueSetConsumerHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.QueueSetConsumerHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler">toFunctionHandler</a></code> | Converts a queue consumer handler to a function handler. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.QueueSetConsumerHandler.toFunctionHandler(handler: IQueueSetConsumerHandler);
+```
+
+Converts a queue consumer handler to a function handler.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
+
+The queue consumer handler.
+
+---
+
+
+
 ### Table <a name="Table" id="@winglang/sdk.aws.Table"></a>
 
 A helper class for working with AWS tables.
@@ -755,6 +997,52 @@ If the topic is an AWS SNS, return a helper interface for working with it.
 - *Type:* <a href="#@winglang/sdk.cloud.Topic">Topic</a>
 
 The cloud.Topic.
+
+---
+
+
+
+### TopicOnMessageHandler <a name="TopicOnMessageHandler" id="@winglang/sdk.aws.TopicOnMessageHandler"></a>
+
+A helper class for working with AWS topic on message handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.TopicOnMessageHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.TopicOnMessageHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler">toFunctionHandler</a></code> | Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.TopicOnMessageHandler.toFunctionHandler(handler: ITopicOnMessageHandler);
+```
+
+Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
+
+The `onMessage` handler.
 
 ---
 

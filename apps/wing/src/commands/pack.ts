@@ -8,6 +8,7 @@ import { BuiltinPlatform } from "@winglang/compiler";
 import packlist from "npm-packlist";
 import * as tar from "tar";
 import { compile } from "./compile";
+import { loadEnvVariables } from "../env";
 
 // TODO: add --dry-run option?
 // TODO: let the user specify library's supported targets in package.json, and compile to each before packaging
@@ -79,6 +80,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
   const outfile = options.outFile ? resolve(options.outFile) : undefined;
   const outdir = outfile ? path.dirname(outfile) : userDir;
 
+  loadEnvVariables({ cwd: userDir });
   // check package.json exists
   const originalPkgJsonPath = path.join(userDir, "package.json");
   if (!(await exists(originalPkgJsonPath))) {

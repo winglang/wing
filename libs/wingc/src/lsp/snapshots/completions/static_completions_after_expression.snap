@@ -49,18 +49,6 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: has
-  kind: 2
-  detail: "(json: Json, key: str): bool"
-  documentation:
-    kind: markdown
-    value: "```wing\nstatic has: (json: Json, key: str): bool\n```\n---\nChecks if a Json object has a given key.\n### Parameters\n- `json` — `Json` — The json object to inspect.\n- `key` — `str` — The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
-  sortText: ff|has
-  insertText: has($1)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
 - label: keys
   kind: 2
   detail: "(json: any): Array<str>"
