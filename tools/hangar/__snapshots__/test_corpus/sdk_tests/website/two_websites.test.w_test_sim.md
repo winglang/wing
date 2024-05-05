@@ -2,6 +2,10 @@
 
 ## stdout.log
 ```log
+[INFO] deploying two websites | Website Server listening on http://127.0.0.1:59072
+[INFO] deploying two websites | Website Server listening on http://127.0.0.1:59073
+[INFO] deploying two websites | Closing server on http://127.0.0.1:59072
+[INFO] deploying two websites | Closing server on http://127.0.0.1:59073
 pass ─ two_websites.test.wsim » root/env0/test:deploying two websites
 
 Tests 1 passed (1)

@@ -378,8 +378,12 @@ const LOG_STREAM_COLORS = {
   [LogLevel.VERBOSE]: chalk.gray,
 };
 
-function inferLevelFromType(type: std.TraceType): LogLevel {
-  switch (type) {
+function inferLevelFromTrace(event: std.Trace): LogLevel {
+  if (event.level) {
+    return event.level;
+  }
+
+  switch (event.type) {
     case TraceType.LOG:
       return LogLevel.INFO;
     case TraceType.RESOURCE:
@@ -394,7 +398,7 @@ async function formatTrace(
   testName: string,
   mode: "short" | "full"
 ): Promise<string> {
-  const level = trace.level ?? inferLevelFromType(trace.type);
+  const level = inferLevelFromTrace(trace);
   const date = new Date(trace.timestamp);
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -437,23 +441,23 @@ async function formatTrace(
   }
 }
 
-function shouldSkipTrace(level: LogLevel): boolean {
-  if (process.env.DEBUG) {
-    return false; // don't skip any traces in DEBUG mode
-  }
+// function shouldSkipTrace(level: LogLevel): boolean {
+//   if (process.env.DEBUG) {
+//     return false; // don't skip any traces in DEBUG mode
+//   }
 
-  // in normal mode, show INFO, WARN and ERROR (skip VERBOSE)
-  switch (level) {
-    case LogLevel.ERROR:
-      return false;
-    case LogLevel.WARNING:
-      return false;
-    case LogLevel.INFO:
-      return false;
-  }
+//   // in normal mode, show INFO, WARN and ERROR (skip VERBOSE)
+//   switch (level) {
+//     case LogLevel.ERROR:
+//       return false;
+//     case LogLevel.WARNING:
+//       return false;
+//     case LogLevel.INFO:
+//       return false;
+//   }
 
-  return true;
-}
+//   return true;
+// }
 
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
@@ -482,10 +486,10 @@ async function testSimulator(synthDir: string, options: TestOptions) {
         return;
       }
 
-      const level = event.level ?? inferLevelFromType(event.type);
-      if (shouldSkipTrace(level)) {
-        return;
-      }
+      // const level = inferLevelFromTrace(event);
+      // if (shouldSkipTrace(level)) {
+      //   return;
+      // }
 
       const formatStyle = process.env.DEBUG ? "full" : "short";
       const formatted = await formatTrace(event, testName, formatStyle);
