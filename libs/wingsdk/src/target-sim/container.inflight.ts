@@ -49,6 +49,23 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   }
 
   public async init(context: ISimulatorContext): Promise<ContainerAttributes> {
+    try {
+      return await this.start(context);
+    } catch (e: any) {
+      this.addTrace(
+        `Failed to start container: ${e.message}`,
+        TraceType.RESOURCE,
+        LogLevel.ERROR
+      );
+
+      // resolve the token or otherwise the resource will be stuck in an error state
+      return {
+        [HOST_PORT_ATTR]: "-1",
+      };
+    }
+  }
+
+  public async start(context: ISimulatorContext): Promise<ContainerAttributes> {
     this._context = context;
 
     // Check for a previous state file to see if there was a port that was previously being used
@@ -58,34 +75,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       this.managedVolumes = state.managedVolumes;
     }
 
-    if (!(await this.tryInspect(this.imageTag))) {
-      // if this a reference to a local directory, build the image from a docker file
-      if (isPath(this.props.image)) {
-        this.addTrace(
-          `Image ${this.imageTag} not found, building from ${this.props.image}...`,
-          TraceType.RESOURCE,
-          LogLevel.INFO
-        );
-        await this.docker("build", ["-t", this.imageTag, this.props.image], {
-          logLevel: LogLevel.VERBOSE,
-        });
-      } else {
-        this.addTrace(
-          `Image ${this.imageTag} not found, pulling...`,
-          TraceType.RESOURCE,
-          LogLevel.INFO
-        );
-        await this.docker("pull", [this.imageTag], {
-          logLevel: LogLevel.VERBOSE,
-        });
-      }
-    } else {
-      this.addTrace(
-        `Image ${this.imageTag} found, No need to build or pull.`,
-        TraceType.RESOURCE,
-        LogLevel.VERBOSE
-      );
-    }
+    await this.prepareImage();
 
     // start the new container
     const dockerRun: string[] = [];
@@ -128,7 +118,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     }
 
     this.addTrace(
-      `Starting container from ${this.imageTag}...`,
+      `Starting container from ${this.imageTag}`,
       TraceType.RESOURCE,
       LogLevel.VERBOSE
     );
@@ -168,6 +158,43 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     return {
       [HOST_PORT_ATTR]: hostPort,
     };
+  }
+
+  /**
+   * Builds or pulls the docker image used by this container.
+   */
+  private async prepareImage() {
+    // if this image is already here, we don't need to do anything
+    if (await this.tryInspect(this.imageTag)) {
+      this.addTrace(
+        `Image ${this.imageTag} found, No need to build or pull.`,
+        TraceType.RESOURCE,
+        LogLevel.VERBOSE
+      );
+
+      return;
+    }
+
+    // if this a reference to a local directory, build the image from a docker file
+    if (isPath(this.props.image)) {
+      this.addTrace(
+        `Building ${this.imageTag} from ${this.props.image}...`,
+        TraceType.RESOURCE,
+        LogLevel.INFO
+      );
+      await this.docker("build", ["-t", this.imageTag, this.props.image], {
+        logLevel: LogLevel.VERBOSE,
+      });
+    } else {
+      this.addTrace(
+        `Pulling ${this.imageTag}...`,
+        TraceType.RESOURCE,
+        LogLevel.INFO
+      );
+      await this.docker("pull", [this.imageTag], {
+        logLevel: LogLevel.VERBOSE,
+      });
+    }
   }
 
   private async createEnvFile() {
@@ -264,34 +291,30 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     });
 
     let started = true;
-    let terminating = false;
 
-    child.once("exit", (code) => {
+    child.once("exit", () => {
       started = false;
-
-      if (logErrors && code !== 0 && code != null && !terminating) {
-        this.addTrace(
-          `non-zero exit code: ${code}`,
-          TraceType.LOG,
-          LogLevel.ERROR
-        );
-      }
     });
 
-    const output: Buffer[] = [];
-
+    const stdout: Buffer[] = [];
+    const allOutput: Buffer[] = [];
     child.stdout.on("data", (data) => {
-      output.push(data);
+      stdout.push(data);
+      allOutput.push(data);
+    });
 
-      if (!quiet) {
-        this.addTrace(data.toString(), TraceType.LOG, level);
-      }
+    child.stderr.on("data", (data) => {
+      allOutput.push(data);
     });
 
     if (!quiet) {
-      child.stderr.on("data", (data) => {
-        this.addTrace(data.toString(), TraceType.LOG, level);
-      });
+      child.stdout.on("data", (data) =>
+        this.addTrace(data.toString(), TraceType.LOG, level)
+      );
+
+      child.stderr.on("data", (data) =>
+        this.addTrace(data.toString(), TraceType.LOG, level)
+      );
     }
 
     child.once("error", (err) => {
@@ -314,8 +337,6 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
             return resolve();
           }
 
-          terminating = true;
-
           self.addTrace(
             "Sending SIGTERM to container",
             TraceType.RESOURCE,
@@ -327,7 +348,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
           // if the process doesn't exit in 2 seconds, kill it
           const timeout = setTimeout(() => {
             self.addTrace(
-              `Time out waiting for container to shutdown, removing forcefully`,
+              `Timeout waiting for container ${self._context?.resourcePath} to shutdown, removing forcefully`,
               TraceType.RESOURCE,
               LogLevel.ERROR
             );
@@ -362,16 +383,16 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       async join() {
         return new Promise((ok, ko) => {
           if (!started) {
-            return ok(output.join(""));
+            return ok(stdout.join(""));
           }
 
           child.once("error", ko);
           child.once("exit", (code) => {
             if (code === 0) {
-              return ok(output.join(""));
+              return ok(stdout.join(""));
             } else {
               return ko(
-                new Error(`non-zero exit code ${code}: ${output.join("")}`)
+                new Error(`non-zero exit code ${code}: ${allOutput.join("")}`)
               );
             }
           });
@@ -404,7 +425,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
 }
 
 async function waitUntil(predicate: () => Promise<boolean>) {
-  const timeout = Duration.fromMinutes(1);
+  const timeout = Duration.fromSeconds(30);
   const interval = Duration.fromSeconds(0.1);
   let elapsed = 0;
   while (elapsed < timeout.seconds) {
