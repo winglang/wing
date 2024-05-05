@@ -81,6 +81,7 @@ export interface CreateConsoleServerOptions {
   analytics?: Analytics;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
+  watchGlobs?: string[];
 }
 
 export const createConsoleServer = async ({
@@ -101,6 +102,7 @@ export const createConsoleServer = async ({
   analytics,
   requireSignIn,
   notifySignedIn,
+  watchGlobs,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -134,6 +136,7 @@ export const createConsoleServer = async ({
     platform,
     testing: false,
     stateDir,
+    watchGlobs,
   });
   let isStarting = false;
   let isStopping = false;
@@ -156,6 +159,7 @@ export const createConsoleServer = async ({
     wingfile,
     platform,
     testing: true,
+    watchGlobs,
   });
   const testSimulator = createSimulator({ enableSimUpdates });
   testCompiler.on("compiled", ({ simfile }) => {
