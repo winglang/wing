@@ -293,7 +293,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       });
     }
 
-    child.on("error", (err) => {
+    child.once("error", (err) => {
       started = false;
 
       if (logErrors) {
@@ -306,14 +306,25 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
         return started;
       },
       async kill() {
-        return new Promise((ok, ko) => {
+        return new Promise((resolve, reject) => {
           if (!started) {
-            return ok();
+            return resolve();
           }
 
           child.kill("SIGTERM");
-          child.once("error", ko);
-          child.once("exit", ok);
+
+          // if the process doesn't exit in 2 seconds, kill it
+          const timeout = setTimeout(() => child.kill("SIGKILL"), 2000);
+
+          child.once("error", (err) => {
+            clearTimeout(timeout);
+            reject(err);
+          });
+
+          child.once("exit", () => {
+            clearTimeout(timeout);
+            resolve();
+          });
         });
       },
       async join() {

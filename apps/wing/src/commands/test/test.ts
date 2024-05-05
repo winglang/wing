@@ -417,7 +417,9 @@ async function formatTrace(
       msg += trace.data.message;
       msg += "\n";
       msg += chalk.dim(" └ ");
-      msg += await prettyPrintError(trace.data.error, { chalk });
+      msg += await prettyPrintError(trace.data.error ?? trace.data.message ?? trace.data, {
+        chalk,
+      });
     } else {
       msg += chalk.dim(" └ ");
       msg += trace.data.message;
@@ -430,7 +432,9 @@ async function formatTrace(
     if (level === LogLevel.ERROR) {
       msg += trace.data.message;
       msg += " ";
-      msg += await prettyPrintError(trace.data.error, { chalk });
+      msg += await prettyPrintError(trace.data.error ?? trace.data.message ?? trace.data, {
+        chalk,
+      });
     } else {
       msg += trace.data.message;
     }
