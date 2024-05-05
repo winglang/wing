@@ -293,18 +293,26 @@ export class Simulator {
       const top = queue.shift()!;
       try {
         await this.startResource(top);
-      } catch (e) {
+      } catch (e: any) {
         if (e instanceof UnresolvedTokenError) {
           retries[top] = (retries[top] ?? 0) + 1;
-          if (retries[top] > 10) {
-            throw new Error(
-              `Could not start resource after 10 attempts: ${e.message}`
-            );
+          if (retries[top] < 10) {
+            queue.push(top);
+            continue;
           }
-          queue.push(top);
-        } else {
-          throw e;
         }
+
+        this.addTrace({
+          data: {
+            message: e.message,
+            error: e,
+          },
+          level: LogLevel.ERROR,
+          sourcePath: top,
+          sourceType: "Simulator",
+          timestamp: new Date().toISOString(),
+          type: TraceType.SIMULATOR,
+        });
       }
     }
   }
@@ -774,9 +782,9 @@ export class Simulator {
 
     const resourceConfig = this.getResourceConfig(path);
 
-    const resolvedProps = this.resolveTokens(resourceConfig.props);
+    const resolvedProps = this.resolveTokens(path, resourceConfig.props);
     const resolvedPolicy: PolicyStatement[] =
-      this.resolveTokens(resourceConfig.policy) ?? [];
+      this.resolveTokens(path, resourceConfig.policy) ?? [];
 
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
@@ -924,7 +932,7 @@ export class Simulator {
    * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
    * the resolved value.
    */
-  private resolveTokens(obj: any): any {
+  private resolveTokens(resolver: string, obj: any): any {
     return resolveTokens(obj, (token) => {
       const target = this._model.graph.tryFind(token.path);
       if (!target) {
@@ -939,7 +947,7 @@ export class Simulator {
         const value = r.attrs[token.attr];
         if (value === undefined) {
           throw new UnresolvedTokenError(
-            `Unable to resolve attribute '${token.attr}' for resource: ${target.path}`
+            `Unable to resolve attribute '${token.attr}' for resource ${target.path} referenced by ${resolver}`
           );
         }
         return value;

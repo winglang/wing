@@ -58,10 +58,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
         LogLevel.ERROR
       );
 
-      // resolve the token or otherwise the resource will be stuck in an error state
-      return {
-        [HOST_PORT_ATTR]: "-1",
-      };
+      return {};
     }
   }
 
@@ -350,7 +347,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
             self.addTrace(
               `Timeout waiting for container ${self._context?.resourcePath} to shutdown, removing forcefully`,
               TraceType.RESOURCE,
-              LogLevel.ERROR
+              LogLevel.WARNING
             );
 
             self
