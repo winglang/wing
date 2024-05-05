@@ -524,6 +524,139 @@ The ARN of this queue.
 ---
 
 
+### SecretRef <a name="SecretRef" id="@winglang/sdk.aws.SecretRef"></a>
+
+A reference to an existing secret.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.SecretRef.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.SecretRef(secretArn: str);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.Initializer.parameter.secretArn">secretArn</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="@winglang/sdk.aws.SecretRef.Initializer.parameter.secretArn"></a>
+
+- *Type:* str
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ISecretClient.value">value</a></code> | Retrieve the value of the secret. |
+| <code><a href="#@winglang/sdk.cloud.ISecretClient.valueJson">valueJson</a></code> | Retrieve the Json value of the secret. |
+
+---
+
+##### `value` <a name="value" id="@winglang/sdk.cloud.ISecretClient.value"></a>
+
+```wing
+inflight value(options?: GetSecretValueOptions): str
+```
+
+Retrieve the value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.value.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
+
+##### `valueJson` <a name="valueJson" id="@winglang/sdk.cloud.ISecretClient.valueJson"></a>
+
+```wing
+inflight valueJson(options?: GetSecretValueOptions): Json
+```
+
+Retrieve the Json value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.valueJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.SecretRef.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.SecretRef.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.SecretRef.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.SecretRef.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.SecretRef.property.secretArn">secretArn</a></code> | <code>str</code> | The ARN of the secret. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.SecretRef.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="@winglang/sdk.aws.SecretRef.property.secretArn"></a>
+
+```wing
+secretArn: str;
+```
+
+- *Type:* str
+
+The ARN of the secret.
+
+---
+
+
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### Api <a name="Api" id="@winglang/sdk.aws.Api"></a>
