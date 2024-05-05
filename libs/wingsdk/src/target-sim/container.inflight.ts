@@ -1,5 +1,5 @@
 import { spawn } from "child_process";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 import { join } from "path";
 import { IContainerClient, HOST_PORT_ATTR } from "./container";
 import { ContainerAttributes, ContainerSchema } from "./schema-resources";
@@ -25,18 +25,6 @@ interface StateFileContents {
    * across simulator runs.
    */
   readonly managedVolumes?: Record<string, string>;
-}
-
-interface DockerProcess {
-  readonly started: boolean;
-  join: () => Promise<string>;
-  kill: (code: any) => Promise<void>;
-}
-
-interface DockerSpawnOptions {
-  stderr?: boolean;
-  stdout?: boolean;
-  onError?: (err: Error) => void;
 }
 
 export class Container implements IContainerClient, ISimulatorResourceInstance {
@@ -75,26 +63,27 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       if (isPath(this.props.image)) {
         this.addTrace(
           `Image ${this.imageTag} not found, building from ${this.props.image}...`,
-          TraceType.RESOURCE
+          TraceType.RESOURCE,
+          LogLevel.INFO
         );
         await this.docker("build", ["-t", this.imageTag, this.props.image], {
-          stdout: true,
-          stderr: true,
+          logLevel: LogLevel.VERBOSE,
         });
       } else {
         this.addTrace(
           `Image ${this.imageTag} not found, pulling...`,
-          TraceType.RESOURCE
+          TraceType.RESOURCE,
+          LogLevel.INFO
         );
         await this.docker("pull", [this.imageTag], {
-          stdout: true,
-          stderr: true,
+          logLevel: LogLevel.VERBOSE,
         });
       }
     } else {
       this.addTrace(
         `Image ${this.imageTag} found, No need to build or pull.`,
-        TraceType.RESOURCE
+        TraceType.RESOURCE,
+        LogLevel.VERBOSE
       );
     }
 
@@ -108,7 +97,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       dockerRun.push("-p", this.props.containerPort.toString());
     }
 
-    const envFile = this.createEnvFile();
+    const envFile = await this.createEnvFile();
     if (envFile) {
       dockerRun.push("--env-file", envFile);
     }
@@ -140,20 +129,17 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
 
     this.addTrace(
       `Starting container from ${this.imageTag}...`,
-      TraceType.RESOURCE
+      TraceType.RESOURCE,
+      LogLevel.VERBOSE
     );
 
     this.child = this.dockerSpawn("run", dockerRun, {
-      stdout: true,
-      stderr: true,
-      onError: (err) => {
-        this.addTrace(err.stack ?? err.message, TraceType.LOG, LogLevel.ERROR);
-      },
+      logLevel: LogLevel.INFO,
     });
 
     let hostPort: number | undefined;
     await waitUntil(async () => {
-      if (!this.child?.started) {
+      if (!this.child?.running) {
         throw new Error(`container ${this.imageTag} stopped unexpectedly`);
       }
 
@@ -184,7 +170,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     };
   }
 
-  private createEnvFile() {
+  private async createEnvFile() {
     const env = this.props.env ?? {};
     if (Object.keys(env).length === 0) {
       return undefined;
@@ -196,7 +182,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       envLines.push(`${k}=${env[k]}`);
     }
 
-    Fs.writeFile(envFile, envLines.join("\n"));
+    await fs.writeFile(envFile, envLines.join("\n"));
     return envFile;
   }
 
@@ -204,8 +190,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     try {
       return JSON.parse(
         await this.docker("inspect", [name], {
-          stderr: false,
-          stdout: false,
+          quiet: true,
         })
       );
     } catch {
@@ -216,10 +201,11 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {
     this.addTrace(
       `Stopping container ${this.containerName}`,
-      TraceType.RESOURCE
+      TraceType.RESOURCE,
+      LogLevel.VERBOSE
     );
-    await this.child?.kill("SIGKILL");
-    await this.docker("rm", ["-f", this.containerName]);
+    await this.child?.kill();
+    await this.docker("rm", ["-f", this.containerName], { quiet: true });
   }
 
   public async save(): Promise<void> {
@@ -231,7 +217,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       join(this.context.statedir, STATE_FILENAME)
     );
     if (stateFileExists) {
-      const stateFileContents = await fs.promises.readFile(
+      const stateFileContents = await fs.readFile(
         join(this.context.statedir, STATE_FILENAME),
         "utf-8"
       );
@@ -244,7 +230,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   private async docker(
     command: string,
     args: string[],
-    options: DockerSpawnOptions = {}
+    options: DockerOptions = {}
   ): Promise<string> {
     const child = this.dockerSpawn(command, args, options);
     return child.join();
@@ -253,15 +239,17 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   private dockerSpawn(
     command: string,
     args: string[],
-    options: DockerSpawnOptions = {}
+    options: DockerOptions = {}
   ): DockerProcess {
-    let logStdout = options.stdout ?? false;
-    const logStderr = options.stderr ?? false;
-    const onError = options.onError;
+    let quiet = options.quiet ?? false;
+    const level = options.logLevel ?? LogLevel.INFO;
+    const logErrors = !quiet;
 
-    // can be used to hide container logs (used in our end to end tests)
+    // can be used to hide container logs (used in our end to end tests). yes, ugly bit pragmatic.
+    // otherwise, test output will include lots of non deterministic stuff and that's really hard to
+    // snapshot.
     if (process.env.WING_HIDE_CONTAINER_LOGS) {
-      logStdout = false;
+      quiet = true;
     }
 
     this.addTrace(
@@ -280,8 +268,12 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     child.once("exit", (code) => {
       started = false;
 
-      if (onError && code !== 0 && code != null) {
-        onError(new Error(`non-zero exit code: ${code}`));
+      if (logErrors && code !== 0 && code != null) {
+        this.addTrace(
+          `non-zero exit code: ${code}`,
+          TraceType.LOG,
+          LogLevel.ERROR
+        );
       }
     });
 
@@ -290,31 +282,27 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     child.stdout.on("data", (data) => {
       output.push(data);
 
-      if (logStdout) {
-        this.addTrace(data.toString(), TraceType.LOG, LogLevel.INFO);
+      if (!quiet) {
+        this.addTrace(data.toString(), TraceType.LOG, level);
       }
     });
 
-    if (logStderr) {
+    if (!quiet) {
       child.stderr.on("data", (data) => {
-        this.addTrace(data.toString(), TraceType.LOG, LogLevel.INFO);
+        this.addTrace(data.toString(), TraceType.LOG, level);
       });
     }
 
     child.on("error", (err) => {
       started = false;
 
-      if (logStderr) {
+      if (logErrors) {
         this.addTrace(err.stack ?? err.message, TraceType.LOG, LogLevel.ERROR);
-      }
-
-      if (onError) {
-        onError(err);
       }
     });
 
     return {
-      get started() {
+      get running() {
         return started;
       },
       async kill() {
@@ -350,7 +338,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
   }
 
   private async saveState(state: StateFileContents): Promise<void> {
-    fs.writeFileSync(
+    await fs.writeFile(
       join(this.context.statedir, STATE_FILENAME),
       JSON.stringify(state)
     );
@@ -360,11 +348,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     return UpdatePlan.AUTO;
   }
 
-  private addTrace(
-    message: string,
-    type: TraceType,
-    level: LogLevel = LogLevel.VERBOSE
-  ) {
+  private addTrace(message: string, type: TraceType, level: LogLevel) {
     this.context.addTrace({
       data: { message: message.trim() },
       sourcePath: this.context.resourcePath,
@@ -389,4 +373,39 @@ async function waitUntil(predicate: () => Promise<boolean>) {
   }
 
   throw new Error("Timeout elapsed");
+}
+
+/**
+ * Represents the docker child process.
+ */
+interface DockerProcess {
+  /**
+   * Whether the process is running or not.
+   */
+  readonly running: boolean;
+
+  /**
+   * Waits for the process to exit and returns the output.
+   * @returns The output of the process.
+   */
+  join: () => Promise<string>;
+
+  /**
+   * Kills the process.
+   */
+  kill: () => Promise<void>;
+}
+
+interface DockerOptions {
+  /**
+   * Can be used to surpress all logging from the command.
+   * @default false
+   */
+  readonly quiet?: boolean;
+
+  /**
+   * The log level to use for container output (both STDOUT and STDERR will use the same log level).
+   * @default LogLevel.INFO
+   */
+  readonly logLevel?: LogLevel;
 }
