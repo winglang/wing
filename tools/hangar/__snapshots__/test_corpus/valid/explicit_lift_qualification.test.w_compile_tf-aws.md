@@ -24,7 +24,7 @@ module.exports = function({ $foo }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $bucket }) {
+module.exports = function({ $bucket1 }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -32,10 +32,11 @@ module.exports = function({ $bucket }) {
       return $obj;
     }
     async handle() {
-      ;
-      const b = $bucket;
-      (await b.put("k3", "value3"));
-      $helpers.assert($helpers.eq((await $bucket.get("k3")), "value3"), "bucket.get(\"k3\") == \"value3\"");
+      const b = $bucket1;
+      {
+        (await b.put("k3", "value3"));
+      }
+      $helpers.assert($helpers.eq((await $bucket1.get("k3")), "value3"), "bucket1.get(\"k3\") == \"value3\"");
     }
   }
   return $Closure2;
@@ -75,9 +76,10 @@ module.exports = function({ $bar }) {
       return $obj;
     }
     async handle() {
-      ;
       const x = $bar;
-      $helpers.assert($helpers.eq((await x.method()), "ahoy there"), "x.method() == \"ahoy there\"");
+      {
+        $helpers.assert($helpers.eq((await x.method()), "ahoy there"), "x.method() == \"ahoy there\"");
+      }
     }
   }
   return $Closure4;
@@ -89,18 +91,26 @@ module.exports = function({ $bar }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $bucket, $put_and_list }) {
+module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
   class Foo {
     constructor({  }) {
     }
     async mehtod() {
-      ;
-      ;
-      const b = $bucket;
-      (await b.put("k2", "value2"));
-      $helpers.assert($helpers.eq((await b.list()), ["k", "k2"]), "b.list() == [\"k\", \"k2\"]");
-      (await b.delete("k2"));
-      $helpers.assert($helpers.eq((await $bucket.tryGet("k2")), undefined), "bucket.tryGet(\"k2\") == nil");
+      {
+        const b1 = $bucket1;
+        (await b1.put("k2", "value2"));
+        $helpers.assert($helpers.eq((await b1.list()), ["k", "k2"]), "b1.list() == [\"k\", \"k2\"]");
+        (await b1.delete("k2"));
+        const b2 = $bucket2;
+        (await b2.put("k2", "value2"));
+        const b3 = $bucket3;
+        {
+          (await b3.put("k3", "value3"));
+        }
+      }
+      $helpers.assert($helpers.eq((await $bucket1.tryGet("k2")), undefined), "bucket1.tryGet(\"k2\") == nil");
+      $helpers.assert($helpers.eq((await $bucket2.get("k2")), "value2"), "bucket2.get(\"k2\") == \"value2\"");
+      $helpers.assert($helpers.eq((await $bucket3.get("k3")), "value3"), "bucket3.get(\"k3\") == \"value3\"");
     }
   }
   return Foo;
@@ -143,26 +153,46 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "Bucket": {
+      "b1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/Default",
-            "uniqueId": "Bucket"
+            "path": "root/Default/Default/b1/Default",
+            "uniqueId": "b1"
           }
         },
-        "bucket_prefix": "bucket-c88fdc5f-",
+        "bucket_prefix": "b1-c88fb896-",
+        "force_destroy": false
+      },
+      "b2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b2/Default",
+            "uniqueId": "b2"
+          }
+        },
+        "bucket_prefix": "b2-c844cd88-",
+        "force_destroy": false
+      },
+      "b3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b3/Default",
+            "uniqueId": "b3"
+          }
+        },
+        "bucket_prefix": "b3-c8a40138-",
         "force_destroy": false
       }
     },
     "aws_s3_object": {
-      "Bucket_S3Object-k_D126CC53": {
+      "b1_S3Object-k_80FB6BEF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket/S3Object-k",
-            "uniqueId": "Bucket_S3Object-k_D126CC53"
+            "path": "root/Default/Default/b1/S3Object-k",
+            "uniqueId": "b1_S3Object-k_80FB6BEF"
           }
         },
-        "bucket": "${aws_s3_bucket.Bucket.bucket}",
+        "bucket": "${aws_s3_bucket.b1.bucket}",
         "content": "value",
         "key": "k"
       }
@@ -192,8 +222,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
-            $bucket: ${$stdlib.core.liftObject(bucket)},
-            $put_and_list: ${$stdlib.core.liftObject(put_and_list)},
+            $bucket1: ${$stdlib.core.liftObject(bucket1)},
+            $bucket2: ${$stdlib.core.liftObject(bucket2)},
+            $bucket3: ${$stdlib.core.liftObject(bucket3)},
           })
         `;
       }
@@ -211,12 +242,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "mehtod": [
-            [bucket, [].concat(put_and_list, ["delete"], ["tryGet"])],
-            [put_and_list, []],
+            [bucket1, [].concat(["delete", "put", "list"], ["tryGet"])],
+            [bucket2, [].concat(["put"], ["get"])],
+            [bucket3, [].concat(["put"], ["get"])],
           ],
           "$inflight_init": [
-            [bucket, []],
-            [put_and_list, []],
+            [bucket1, []],
+            [bucket2, []],
+            [bucket3, []],
           ],
         });
       }
@@ -265,7 +298,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
-            $bucket: ${$stdlib.core.liftObject(bucket)},
+            $bucket1: ${$stdlib.core.liftObject(bucket1)},
           })
         `;
       }
@@ -283,10 +316,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [bucket, [].concat(["put"], ["get"])],
+            [bucket1, [].concat(["put"], ["get"])],
           ],
           "$inflight_init": [
-            [bucket, []],
+            [bucket1, []],
           ],
         });
       }
@@ -391,9 +424,10 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
-    (bucket.addObject("k", "value"));
-    const put_and_list = ["put", "list"];
+    const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
+    (bucket1.addObject("k", "value"));
+    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
+    const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b3");
     const foo = new Foo(this, "Foo");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit method lift qualification", new $Closure1(this, "$Closure1"));
     const inflight_closure = new $Closure2(this, "$Closure2");

@@ -63,6 +63,9 @@ export interface CompileOptions {
 
   // target directory for the output files
   readonly targetDir?: string;
+
+  // overrides the target directory for the output files
+  readonly output?: string;
 }
 
 /**
@@ -139,7 +142,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
   const target = determineTargetFromPlatforms(options.platform);
-  const synthDir = resolveSynthDir(targetdir, entrypointFile, target, testing);
+  const synthDir = options.output ?? resolveSynthDir(targetdir, entrypointFile, target, testing);
   log?.("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, DOT_WING);
   log?.("work dir: %s", workDir);
