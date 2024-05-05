@@ -71,6 +71,8 @@ export function sanitizeOutput(output: string) {
       .replace(/Duration \d+m[\d.]+s/g, "Duration <DURATION>")
       // Remove changing ports
       .replace(/port \d+/g, "port <PORT>")
+      // Remove IP addresses with a port
+      .replace(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+/g, "<IP>:<PORT>")
       // Remove timestamps
       .replace(/\b\d{2}:\d{2}:\d{2}.\d{3}\b/g, "<TIMESTAMP>")
       .replace(/\b\d{4}-\d{2}-\d{2}\b/g, "<TIMESTAMP>")
