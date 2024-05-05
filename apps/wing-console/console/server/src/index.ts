@@ -215,7 +215,7 @@ export const createConsoleServer = async ({
   });
   simulator.on("trace", async (trace) => {
     // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
-    const message = `XXXX ${
+    const message = `${
       trace.data.message ?? JSON.stringify(trace.data, undefined, 2)
     }`;
     if (trace.type === "log") {
