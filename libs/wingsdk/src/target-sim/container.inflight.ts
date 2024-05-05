@@ -204,8 +204,8 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       TraceType.RESOURCE,
       LogLevel.VERBOSE
     );
+
     await this.child?.kill();
-    await this.docker("rm", ["-f", this.containerName], { quiet: true });
   }
 
   public async save(): Promise<void> {
@@ -264,11 +264,12 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     });
 
     let started = true;
+    let terminating = false;
 
     child.once("exit", (code) => {
       started = false;
 
-      if (logErrors && code !== 0 && code != null) {
+      if (logErrors && code !== 0 && code != null && !terminating) {
         this.addTrace(
           `non-zero exit code: ${code}`,
           TraceType.LOG,
@@ -301,6 +302,8 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       }
     });
 
+    const self = this;
+
     return {
       get running() {
         return started;
@@ -311,17 +314,46 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
             return resolve();
           }
 
+          terminating = true;
+
+          self.addTrace(
+            "Sending SIGTERM to container",
+            TraceType.RESOURCE,
+            LogLevel.VERBOSE
+          );
+
           child.kill("SIGTERM");
 
           // if the process doesn't exit in 2 seconds, kill it
-          const timeout = setTimeout(() => child.kill("SIGKILL"), 2000);
+          const timeout = setTimeout(() => {
+            self.addTrace(
+              `Time out waiting for container to shutdown, removing forcefully`,
+              TraceType.RESOURCE,
+              LogLevel.ERROR
+            );
+
+            self
+              .docker("rm", ["-f", self.containerName], { quiet: true })
+              .catch(() => {});
+          }, 2000);
 
           child.once("error", (err) => {
+            self.addTrace(
+              `Error when shutting down container: ${err.stack ?? err.message}`,
+              TraceType.RESOURCE,
+              LogLevel.ERROR
+            );
+
             clearTimeout(timeout);
             reject(err);
           });
 
           child.once("exit", () => {
+            self.addTrace(
+              "Container shutdown successfully",
+              TraceType.RESOURCE,
+              LogLevel.VERBOSE
+            );
             clearTimeout(timeout);
             resolve();
           });
