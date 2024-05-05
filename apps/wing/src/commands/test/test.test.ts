@@ -23,14 +23,14 @@ describe("printing test reports", () => {
     process.chdir(cwd);
   });
 
-  test("resource traces are not shown if debug mode is disabled", async () => {
+  test("verbose traces are not shown if debug mode is disabled", async () => {
     const testReport = await renderTestReport("hello.w", EXAMPLE_TEST_RESULTS);
 
     expect(testReport).toMatchSnapshot();
     expect(testReport).not.toContain("Push (message=cool)");
   });
 
-  test("resource traces are shown if debug mode is enabled", async () => {
+  test("verbose traces are shown if debug mode is enabled", async () => {
     const oldDebug = process.env.DEBUG;
     process.env.DEBUG = "1";
 
@@ -377,7 +377,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: "sleeping for 500 ms" },
         type: TraceType.LOG,
-        level: LogLevel.VERBOSE,
+        level: LogLevel.INFO,
         sourcePath: "root/env0/test:test/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:46.887Z",

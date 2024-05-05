@@ -424,21 +424,17 @@ async function formatTrace(
 }
 
 function shouldSkipTrace(trace: std.Trace): boolean {
-  if (process.env.DEBUG) {
-    return false; // don't skip any traces in DEBUG mode
-  }
-
-  // in normal mode, show INFO, WARN and ERROR (skip VERBOSE)
   switch (trace.level) {
+    // show VERBOSE only in debug mode
+    case LogLevel.VERBOSE:
+      return !process.env.DEBUG;
+
+    // show INFO, WARNING, ERROR in all cases
+    case LogLevel.INFO:
+    case LogLevel.WARNING:
     case LogLevel.ERROR:
       return false;
-    case LogLevel.WARNING:
-      return false;
-    case LogLevel.INFO:
-      return false;
   }
-
-  return true;
 }
 
 async function testSimulator(synthDir: string, options: TestOptions) {
