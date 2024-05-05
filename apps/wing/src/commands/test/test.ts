@@ -441,23 +441,23 @@ async function formatTrace(
   }
 }
 
-// function shouldSkipTrace(level: LogLevel): boolean {
-//   if (process.env.DEBUG) {
-//     return false; // don't skip any traces in DEBUG mode
-//   }
+function shouldSkipTrace(level: LogLevel): boolean {
+  if (process.env.DEBUG) {
+    return false; // don't skip any traces in DEBUG mode
+  }
 
-//   // in normal mode, show INFO, WARN and ERROR (skip VERBOSE)
-//   switch (level) {
-//     case LogLevel.ERROR:
-//       return false;
-//     case LogLevel.WARNING:
-//       return false;
-//     case LogLevel.INFO:
-//       return false;
-//   }
+  // in normal mode, show INFO, WARN and ERROR (skip VERBOSE)
+  switch (level) {
+    case LogLevel.ERROR:
+      return false;
+    case LogLevel.WARNING:
+      return false;
+    case LogLevel.INFO:
+      return false;
+  }
 
-//   return true;
-// }
+  return true;
+}
 
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
@@ -486,10 +486,10 @@ async function testSimulator(synthDir: string, options: TestOptions) {
         return;
       }
 
-      // const level = inferLevelFromTrace(event);
-      // if (shouldSkipTrace(level)) {
-      //   return;
-      // }
+      const level = inferLevelFromTrace(event);
+      if (shouldSkipTrace(level)) {
+        return;
+      }
 
       const formatStyle = process.env.DEBUG ? "full" : "short";
       const formatted = await formatTrace(event, testName, formatStyle);
