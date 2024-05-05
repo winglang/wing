@@ -1505,11 +1505,11 @@ error: Lift statements are only allowed in inflight phase
    | ^^^^^^^^^^^^^^^^^^^^^^ Lift statements are only allowed in inflight phase
 
 
-error: Expected a preflight object, but found inflight reference instead
+error: Expected a preflight object, but found inflight expression instead
    --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:26:11
    |
 26 |     lift {b: [put]}{} // Explicit qualification with inflight object
-   |           ^ Expected a preflight object, but found inflight reference instead
+   |           ^ Expected a preflight object, but found inflight expression instead
 
 
 error: Expected a preflight object type, but found str instead
@@ -1563,6 +1563,13 @@ error: Only instance (non-static) members may qualify the lift
    |
 32 |     lift {preflight_class: static_method}{} // Explicit qualification with static method
    |                            ^^^^^^^^^^^^^ Only instance (non-static) members may qualify the lift
+
+
+error: Cannot reference an inflight value from within a preflight expression
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:26:11
+   |
+26 |     lift {b: [put]}{} // Explicit qualification with inflight object
+   |           ^ Cannot reference an inflight value from within a preflight expression
 
 
 error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.

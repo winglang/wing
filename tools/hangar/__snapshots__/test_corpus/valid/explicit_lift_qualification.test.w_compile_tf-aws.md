@@ -91,7 +91,7 @@ module.exports = function({ $bar }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
+module.exports = function({ $bucket1, $bucket2, $bucket3, $maybe_bucket }) {
   class Foo {
     constructor({  }) {
     }
@@ -106,6 +106,9 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
         const b3 = $bucket3;
         {
           (await b3.put("k3", "value3"));
+        }
+        {
+          (await b3.list());
         }
       }
       $helpers.assert($helpers.eq((await $bucket1.tryGet("k2")), undefined), "bucket1.tryGet(\"k2\") == nil");
@@ -225,6 +228,7 @@ class $Root extends $stdlib.std.Resource {
             $bucket1: ${$stdlib.core.liftObject(bucket1)},
             $bucket2: ${$stdlib.core.liftObject(bucket2)},
             $bucket3: ${$stdlib.core.liftObject(bucket3)},
+            $maybe_bucket: ${$stdlib.core.liftObject(maybe_bucket)},
           })
         `;
       }
@@ -242,14 +246,18 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "mehtod": [
+            [(maybe_bucket ?? bucket3), ["list"]],
             [bucket1, [].concat(["delete", "put", "list"], ["tryGet"])],
             [bucket2, [].concat(["put"], ["get"])],
             [bucket3, [].concat(["put"], ["get"])],
+            [maybe_bucket, []],
           ],
           "$inflight_init": [
+            [(maybe_bucket ?? bucket3), []],
             [bucket1, []],
             [bucket2, []],
             [bucket3, []],
+            [maybe_bucket, []],
           ],
         });
       }
@@ -428,6 +436,7 @@ class $Root extends $stdlib.std.Resource {
     (bucket1.addObject("k", "value"));
     const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
     const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b3");
+    const maybe_bucket = undefined;
     const foo = new Foo(this, "Foo");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:explicit method lift qualification", new $Closure1(this, "$Closure1"));
     const inflight_closure = new $Closure2(this, "$Closure2");
