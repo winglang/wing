@@ -2,8 +2,8 @@
 
 ## stdout.log
 ```log
-[INFO] validates the AWS bucket name | Website Server listening on http://127.0.0.1:45811
-[INFO] validates the AWS bucket name | Closing server on http://127.0.0.1:45811
+[INFO] validates the AWS bucket name | Website Server listening on http://<IP>:<PORT>
+[INFO] validates the AWS bucket name | Closing server on http://<IP>:<PORT>
 pass ─ aws-website.test.wsim » root/env0/test:validates the AWS bucket name
 
 Tests 1 passed (1)

@@ -2,10 +2,10 @@
 
 ## stdout.log
 ```log
-[INFO] GET --users | Website Server listening on http://127.0.0.1:44049
-[INFO] OPTIONS --users | Website Server listening on http://127.0.0.1:44445
-[INFO] GET --users | Closing server on http://127.0.0.1:44049
-[INFO] OPTIONS --users | Closing server on http://127.0.0.1:44445
+[INFO] GET --users | Website Server listening on http://<IP>:<PORT>
+[INFO] OPTIONS --users | Website Server listening on http://<IP>:<PORT>
+[INFO] GET --users | Closing server on http://<IP>:<PORT>
+[INFO] OPTIONS --users | Closing server on http://<IP>:<PORT>
 pass ─ website_with_api.test.wsim » root/env0/test:GET --users    
 pass ─ website_with_api.test.wsim » root/env1/test:OPTIONS --users
 
