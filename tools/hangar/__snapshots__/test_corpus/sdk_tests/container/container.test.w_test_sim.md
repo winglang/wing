@@ -11,8 +11,8 @@
 [INFO] get echo | bang
 [INFO] get echo | 
 [INFO] get app | Hello, Wingnuts!
-[ERROR] get echo | non-zero exit code: 2 Error: non-zero exit code: 2
-[ERROR] get app | non-zero exit code: 2 Error: non-zero exit code: 2
+[ERROR] get echo | Error: Time out waiting for container to shutdown, removing forcefully
+[ERROR] get app | Error: Time out waiting for container to shutdown, removing forcefully
 pass ─ container.test.wsim » root/env0/test:get echo
 pass ─ container.test.wsim » root/env1/test:get app 
 
