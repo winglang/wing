@@ -477,7 +477,12 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     s.onTrace({ callback: (event) => void printEvent(event) });
   }
 
-  await s.start();
+  try {
+    await s.start();
+  } catch (e) {
+    outputStream?.stopSpinner();
+    throw e;
+  }
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();

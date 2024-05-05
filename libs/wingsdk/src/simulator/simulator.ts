@@ -279,7 +279,7 @@ export class Simulator {
     try {
       await this.startResources();
       this._running = "running";
-    } catch (err) {
+    } catch (err: any) {
       this.stopServer();
       this._running = "stopped";
       throw err;
@@ -289,6 +289,7 @@ export class Simulator {
   private async startResources() {
     const retries: Record<string, number> = {};
     const queue = this._model.graph.nodes.map((n) => n.path);
+    const failed = [];
     while (queue.length > 0) {
       const top = queue.shift()!;
       try {
@@ -296,24 +297,23 @@ export class Simulator {
       } catch (e: any) {
         if (e instanceof UnresolvedTokenError) {
           retries[top] = (retries[top] ?? 0) + 1;
+
           if (retries[top] < 10) {
             queue.push(top);
             continue;
+          } else {
+            failed.push(top);
           }
         }
 
-        this.addTrace({
-          data: {
-            message: e.message,
-            error: e,
-          },
-          level: LogLevel.ERROR,
-          sourcePath: top,
-          sourceType: "Simulator",
-          timestamp: new Date().toISOString(),
-          type: TraceType.SIMULATOR,
-        });
+        this.addSimulatorTrace(top, { message: e.message }, LogLevel.ERROR);
       }
+    }
+
+    if (failed.length > 0) {
+      throw new Error(
+        `Failed to start resources: ${failed.map((r) => `"${r}"`).join(", ")}`
+      );
     }
   }
 
@@ -417,15 +417,20 @@ export class Simulator {
     // remove the resource's policy from the policy registry
     this._policyRegistry.deregister(path);
 
-    this.addSimulatorTrace(path, { message: `${path} stopped` });
+    this.addSimulatorTrace(
+      path,
+      { message: `${path} stopped` },
+      LogLevel.VERBOSE
+    );
+
     delete this.state[path]; // delete the state of the resource
   }
 
-  private addSimulatorTrace(path: string, data: any) {
+  private addSimulatorTrace(path: string, data: any, level: LogLevel) {
     const resourceConfig = this.getResourceConfig(path);
     this.addTrace({
       type: TraceType.SIMULATOR,
-      level: LogLevel.VERBOSE,
+      level,
       data: data,
       sourcePath: resourceConfig.path,
       sourceType: resourceConfig.type,
@@ -837,9 +842,13 @@ export class Simulator {
     };
 
     // trace the resource creation
-    this.addSimulatorTrace(path, {
-      message: `${resourceConfig.path} started`,
-    });
+    this.addSimulatorTrace(
+      path,
+      {
+        message: `${resourceConfig.path} started`,
+      },
+      LogLevel.VERBOSE
+    );
   }
 
   private createContext(
@@ -897,9 +906,13 @@ export class Simulator {
       },
       setResourceAttributes: (path: string, attrs: Record<string, any>) => {
         for (const [key, value] of Object.entries(attrs)) {
-          this.addSimulatorTrace(path, {
-            message: `${path}.${key} = ${value}`,
-          });
+          this.addSimulatorTrace(
+            path,
+            {
+              message: `${path}.${key} = ${value}`,
+            },
+            LogLevel.VERBOSE
+          );
         }
 
         this.state[path].attrs = { ...this.state[path].attrs, ...attrs };

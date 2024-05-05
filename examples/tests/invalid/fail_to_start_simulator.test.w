@@ -6,3 +6,8 @@ let x = new sim.Container(
   image: "foo://do-not-pull-me",
   containerPort: 1234,
 );
+
+test "dep_on_failing_resource" {
+   log(x.hostPort!);
+}
+
