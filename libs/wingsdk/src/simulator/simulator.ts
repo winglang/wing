@@ -278,7 +278,6 @@ export class Simulator {
 
     try {
       await this.startResources();
-      this._running = "running";
     } catch (err: any) {
       this.stopServer();
       this._running = "stopped";
@@ -310,7 +309,13 @@ export class Simulator {
       }
     }
 
+    // mark as "running" so that we can stop the simulation if needed
+    this._running = "running";
+
+    // since some resources failed to start, we are going to stop all resources that were started
     if (failed.length > 0) {
+      await this.stop();
+
       throw new Error(
         `Failed to start resources: ${failed.map((r) => `"${r}"`).join(", ")}`
       );
@@ -960,7 +965,7 @@ export class Simulator {
         const value = r.attrs[token.attr];
         if (value === undefined) {
           throw new UnresolvedTokenError(
-            `Unable to resolve attribute '${token.attr}' for resource ${target.path} referenced by ${resolver}`
+            `Unable to resolve attribute '${token.attr}' for resource "${target.path}" referenced by "${resolver}"`
           );
         }
         return value;
