@@ -1492,104 +1492,97 @@ Duration <DURATION>"
 
 exports[`explicit_lift_qualification.test.w 1`] = `
 "error: Lift statements are only allowed in inflight phase
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:10:5
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:11:5
    |
-10 |     lift {bucket: [put]}{} // Lift statment in preflight method
+11 |     lift {bucket: [put]}{} // Lift statment in preflight method
    |     ^^^^^^^^^^^^^^^^^^^^^^ Lift statements are only allowed in inflight phase
 
 
 error: Lift statements are only allowed in inflight phase
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:20:1
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:21:1
    |
-20 | lift {bucket: [put]}{}
+21 | lift {bucket: [put]}{}
    | ^^^^^^^^^^^^^^^^^^^^^^ Lift statements are only allowed in inflight phase
 
 
-error: Unexpected 'ERROR'
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:31:11
-   |
-31 |     lift {bucket: \\"put\\"}{} // Explicit qualification non method type op
-   |           ^^^^^^^^^^^^^^ Unexpected 'ERROR'
-
-
-error: Unexpected 'json_literal'
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:31:25
-   |
-31 |     lift {bucket: \\"put\\"}{} // Explicit qualification non method type op
-   |                         ^^ Unexpected 'json_literal'
-
-
 error: Expected a preflight object, but found inflight reference instead
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:25:11
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:26:11
    |
-25 |     lift {b: [put]}{} // Explicit qualification with inflight object
+26 |     lift {b: [put]}{} // Explicit qualification with inflight object
    |           ^ Expected a preflight object, but found inflight reference instead
 
 
 error: Expected a preflight object type, but found str instead
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:26:11
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:27:11
    |
-26 |     lift {prelight_string: contains}{} // Explicit qualification on preflight non-class
+27 |     lift {prelight_string: contains}{} // Explicit qualification on preflight non-class
    |           ^^^^^^^^^^^^^^^ Expected a preflight object type, but found str instead
 
 
 error: Object of type Bucket does not have an inflight member named shoot
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:27:20
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:28:20
    |
-27 |     lift {bucket: [shoot]}{} // Explicit qualification with unknown member
+28 |     lift {bucket: [shoot]}{} // Explicit qualification with unknown member
    |           ------   ^^^^^ Object of type Bucket does not have an inflight member named shoot
    |           |         
    |           Operation does not exist in this object
 
 
 error: Object of type Bucket does not have an inflight member named shoot
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:28:19
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:29:19
    |
-28 |     lift {bucket: shoot}{} // Explicit qualification with unknown, single method format
+29 |     lift {bucket: shoot}{} // Explicit qualification with unknown, single method format
    |           ------  ^^^^^ Object of type Bucket does not have an inflight member named shoot
    |           |        
    |           Operation does not exist in this object
 
 
 error: Unknown symbol \\"not_bucket\\"
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:29:11
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:30:11
    |
-29 |     lift {not_bucket: put, not_bucket_again: get}{} // Explicit qualification with unknown objects
+30 |     lift {not_bucket: put, not_bucket_again: get}{} // Explicit qualification with unknown objects
    |           ^^^^^^^^^^ Unknown symbol \\"not_bucket\\"
 
 
 error: Unknown symbol \\"not_bucket_again\\"
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:29:28
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:30:28
    |
-29 |     lift {not_bucket: put, not_bucket_again: get}{} // Explicit qualification with unknown objects
+30 |     lift {not_bucket: put, not_bucket_again: get}{} // Explicit qualification with unknown objects
    |                            ^^^^^^^^^^^^^^^^ Unknown symbol \\"not_bucket_again\\"
 
 
 error: Only inflight memebers may qualify the lift. addObject is preflight.
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:30:19
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:31:19
    |
-30 |     lift {bucket: addObject}{} // Explicit qualification with preflight method op
+31 |     lift {bucket: addObject}{} // Explicit qualification with preflight method op
    |                   ^^^^^^^^^ Only inflight memebers may qualify the lift. addObject is preflight.
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:36:5
+error: Only instance (non-static) members may qualify the lift
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:32:28
    |
-36 |     b.put(\\"k\\", \\"v\\"); // With no explicit qualification this should be an error
+32 |     lift {preflight_class: static_method}{} // Explicit qualification with static method
+   |                            ^^^^^^^^^^^^^ Only instance (non-static) members may qualify the lift
+
+
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:37:5
+   |
+37 |     b.put(\\"k\\", \\"v\\"); // With no explicit qualification this should be an error
    |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
 error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:40:5
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:41:5
    |
-40 |     b2.put(\\"k\\", \\"v\\"); // With explicit qualification, but outside of lift block, this should be an error
+41 |     b2.put(\\"k\\", \\"v\\"); // With explicit qualification, but outside of lift block, this should be an error
    |     ^^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
 error: Expression of type \\"IPreflightInterface\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:43:5
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:44:5
    |
-43 |     i.method(); // With no explicit qualification this should be an error
+44 |     i.method(); // With no explicit qualification this should be an error
    |     ^ Expression of type \\"IPreflightInterface\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
 
 
