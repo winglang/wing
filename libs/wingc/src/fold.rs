@@ -208,7 +208,7 @@ where
 				.qualifications
 				.into_iter()
 				.map(|q| LiftQualification {
-					obj: f.fold_reference(q.obj),
+					obj: f.fold_expr(q.obj),
 					ops: q.ops.into_iter().map(|op| f.fold_symbol(op)).collect(),
 				})
 				.collect(),

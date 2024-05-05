@@ -512,7 +512,7 @@ pub struct ExplicitLift {
 
 #[derive(Debug)]
 pub struct LiftQualification {
-	pub obj: Reference,
+	pub obj: Expr,
 	pub ops: Vec<Symbol>,
 }
 

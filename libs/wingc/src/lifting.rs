@@ -132,21 +132,6 @@ impl<'a> LiftVisitor<'a> {
 		res.to_string()
 	}
 
-	fn jsify_reference(&mut self, node: &Reference) -> String {
-		// TODO: merge with jsify_expr or remove jsiy_expr??
-		self.ctx.push_phase(Phase::Preflight);
-		let res = self.jsify.jsify_reference(
-			&node,
-			&mut JSifyContext {
-				lifts: None,
-				visit_ctx: &mut self.ctx,
-				source_path: None,
-			},
-		);
-		self.ctx.pop_phase();
-		res.to_string()
-	}
-
 	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
 		let udt_js = self
 			.jsify
@@ -437,7 +422,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			for qual in explicit_lift.qualifications.iter() {
 				// jsify the reference to the preflight object so we can get the preflight code
-				let preflight_code = self.jsify_reference(&qual.obj);
+				let preflight_code = self.jsify_expr(&qual.obj);
 
 				let ops_str = format!(
 					"[{}]",

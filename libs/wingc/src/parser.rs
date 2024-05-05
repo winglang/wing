@@ -655,13 +655,7 @@ impl<'s> Parser<'s> {
 			.walk();
 
 		for qual_node in lift_qualifications_node.named_children(&mut qual_cursor) {
-			let Expr {
-				kind: ExprKind::Reference(obj),
-				..
-			} = self.build_reference(&qual_node.child_by_field_name("obj").unwrap(), phase)?
-			else {
-				panic!("expected obj in lift qualification to be a reference");
-			};
+			let obj = self.build_expression(&qual_node.child_by_field_name("obj").unwrap(), phase)?;
 			let mut ops = vec![];
 			for op_node in get_actual_children_by_field_name(qual_node, "ops") {
 				ops.push(self.node_symbol(&op_node)?);

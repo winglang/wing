@@ -803,7 +803,7 @@
           "name": "obj",
           "content": {
             "type": "SYMBOL",
-            "name": "reference"
+            "name": "expression"
           }
         },
         {

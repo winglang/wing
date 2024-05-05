@@ -6262,21 +6262,16 @@ impl<'a> TypeChecker<'a> {
 		// 4. Type check the inner block
 
 		for qual in lift_quals.qualifications.iter() {
-			let (res, obj_phase) = self.resolve_reference(&qual.obj, env);
-			// Get the type of the object
-			let obj_type = match res {
-				ResolveReferenceResult::Variable(v) => v.type_,
-				ResolveReferenceResult::Location(_, t) => t,
-			};
+			let (obj_type, obj_phase) = self.type_check_exp(&qual.obj, env);
 			// Skip unknown references (diagnotics already emitted in `resolve_reference`)
 			if obj_type.is_unresolved() {
 				continue;
 			}
-			// Make sure the object is a preflight object
-			if obj_phase != Phase::Preflight {
+			// Make sure the object isn't inflight
+			if obj_phase == Phase::Inflight {
 				self.spanned_error(
 					&qual.obj,
-					format!("Expected a preflight object, but found {obj_phase} reference instead"),
+					format!("Expected a preflight object, but found {obj_phase} expression instead"),
 				);
 			}
 			// Make sure the object type is a preflight type

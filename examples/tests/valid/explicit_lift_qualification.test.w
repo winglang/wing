@@ -4,6 +4,7 @@ let bucket1 = new cloud.Bucket() as "b1";
 bucket1.addObject("k", "value");
 let bucket2 = new cloud.Bucket() as "b2";
 let bucket3 = new cloud.Bucket() as "b3";
+let maybe_bucket: cloud.Bucket? = nil;
 
 class Foo {
   pub inflight mehtod() {
@@ -31,7 +32,12 @@ class Foo {
       lift { bucket3: put } {
         b3.put("k3", "value3");
       }
+      // use expression (unwrap or) to specify the object to lift
+      lift { maybe_bucket ?? bucket3: [list] } {
+        b3.list();
+      }
     }
+
     assert(bucket1.tryGet("k2") == nil);
     assert(bucket2.get("k2") == "value2");
     assert(bucket3.get("k3") == "value3");
