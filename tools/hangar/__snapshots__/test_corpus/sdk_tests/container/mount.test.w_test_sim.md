@@ -2,10 +2,10 @@
 
 ## stdout.log
 ```log
-[INFO] my test | Image postgres:15 not found, pulling...
+[INFO] my test | Pulling postgres:15...
 [INFO] my test | Container postgres:15 started
 [INFO] my test | dummy test
-[ERROR] my test | Error: Time out waiting for container to shutdown, removing forcefully
+[ERROR] my test | Error: Timeout waiting for container root/env0/Container to shutdown, removing forcefully
 pass ─ mount.test.wsim » root/env0/test:my test
 
 Tests 1 passed (1)
