@@ -11,7 +11,7 @@ import { exists } from "./util";
 import { SDK_VERSION } from "../constants";
 import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
-import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
+import { CONNECTIONS_FILE_PATH, LogLevel, Trace, TraceType } from "../std";
 import { POLICY_FQN } from "../target-sim";
 import { PolicySchema } from "../target-sim/schema-resources";
 
@@ -860,15 +860,20 @@ export class Simulator {
               result: JSON.stringify(result),
             },
             type: TraceType.RESOURCE,
+            level: LogLevel.VERBOSE,
             sourcePath: resourceConfig.path,
             sourceType: resourceConfig.type,
             timestamp: new Date().toISOString(),
           });
           return result;
-        } catch (err) {
+        } catch (err: any) {
           this.addTrace({
-            data: { message: props.message, status: "failure", error: err },
+            data: {
+              message: `${props.message}\n   ${err.stack}`,
+              status: "failure",
+            },
             type: TraceType.RESOURCE,
+            level: LogLevel.VERBOSE,
             sourcePath: resourceConfig.path,
             sourceType: resourceConfig.type,
             timestamp: new Date().toISOString(),

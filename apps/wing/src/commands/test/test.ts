@@ -253,13 +253,11 @@ export async function renderTestReport(
 
     if (includeLogs) {
       for (const trace of result.traces) {
-        // only show detailed traces if we are in debug mode
-        if (trace.type === TraceType.RESOURCE && process.env.DEBUG) {
-          details.push(chalk.gray("[trace] " + trace.data.message));
+        if (shouldSkipTrace(trace)) {
+          continue;
         }
-        if (trace.type === TraceType.LOG) {
-          details.push(chalk.gray(trace.data.message));
-        }
+
+        details.push(chalk.gray(trace.data.message));
       }
     }
 
@@ -445,10 +443,12 @@ async function formatTrace(
   }
 }
 
-function shouldSkipTrace(level: LogLevel): boolean {
+function shouldSkipTrace(trace: std.Trace): boolean {
   if (process.env.DEBUG) {
     return false; // don't skip any traces in DEBUG mode
   }
+
+  const level = inferLevelFromTrace(trace);
 
   // in normal mode, show INFO, WARN and ERROR (skip VERBOSE)
   switch (level) {
@@ -490,8 +490,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
         return;
       }
 
-      const level = inferLevelFromTrace(event);
-      if (shouldSkipTrace(level)) {
+      if (shouldSkipTrace(event)) {
         return;
       }
 
