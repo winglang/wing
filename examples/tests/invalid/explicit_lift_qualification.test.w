@@ -5,6 +5,7 @@ interface IPreflightInterface {
 }
 class PreflightClass impl IPreflightInterface {
   pub inflight method(): void {}
+  pub static inflight static_method() {}
 
   preflight_method() {
     lift {bucket: [put]}{} // Lift statment in preflight method
@@ -28,7 +29,7 @@ class Foo {
     lift {bucket: shoot}{} // Explicit qualification with unknown, single method format
     lift {not_bucket: put, not_bucket_again: get}{} // Explicit qualification with unknown objects
     lift {bucket: addObject}{} // Explicit qualification with preflight method op
-    lift {bucket: "put"}{} // Explicit qualification non method type op
+    lift {preflight_class: static_method}{} // Explicit qualification with static method
   }
 
   pub inflight method2() {
