@@ -2,6 +2,8 @@
 
 ## stdout.log
 ```log
+[INFO] my test | Image postgres:15 not found, pulling...
+[INFO] my test | Container postgres:15 started
 [INFO] my test | dummy test
 pass ─ mount.test.wsim » root/env0/test:my test
 
