@@ -311,7 +311,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
             return ok();
           }
 
-          child.kill("SIGKILL");
+          child.kill("SIGTERM");
           child.once("error", ko);
           child.once("exit", ok);
         });
