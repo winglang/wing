@@ -5,7 +5,7 @@
 [INFO] my test | Pulling postgres:15...
 [INFO] my test | Container postgres:15 started
 [INFO] my test | dummy test
-[ERROR] my test | Error: Timeout waiting for container root/env0/Container to shutdown, removing forcefully
+[WARNING] my test | Timeout waiting for container root/env0/Container to shutdown, removing forcefully
 pass ─ mount.test.wsim » root/env0/test:my test
 
 Tests 1 passed (1)
