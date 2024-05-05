@@ -248,6 +248,9 @@ importers:
       '@segment/analytics-node':
         specifier: ^1.1.0
         version: 1.1.1
+      '@supercharge/promise-pool':
+        specifier: ^3.2.0
+        version: 3.2.0
       '@wingconsole/app':
         specifier: workspace:^
         version: link:../wing-console/console/app
@@ -302,6 +305,9 @@ importers:
       ora:
         specifier: ^5.4.1
         version: 5.4.1
+      p-limit:
+        specifier: ^5.0.0
+        version: 5.0.0
       tar:
         specifier: ^6.2.0
         version: 6.2.0
@@ -9970,6 +9976,11 @@ packages:
       file-system-cache: 2.3.0
     dev: true
 
+  /@supercharge/promise-pool@3.2.0:
+    resolution: {integrity: sha512-pj0cAALblTZBPtMltWOlZTQSLT07jIaFNeM8TWoJD1cQMgDB9mcMlVMoetiB35OzNJpqQ2b+QEtwiR9f20mADg==}
+    engines: {node: '>=8'}
+    dev: false
+
   /@swc/core-darwin-arm64@1.4.2:
     resolution: {integrity: sha512-1uSdAn1MRK5C1m/TvLZ2RDvr0zLvochgrZ2xL+lRzugLlCTlSA+Q4TWtrZaOz+vnnFVliCpw7c7qu0JouhgQIw==}
     engines: {node: '>=10'}
@@ -14157,7 +14168,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240422
+      typescript: 5.5.0-dev.20240505
     dev: true
 
   /dset@3.1.2:
@@ -19633,7 +19644,6 @@ packages:
     engines: {node: '>=18'}
     dependencies:
       yocto-queue: 1.0.0
-    dev: true
 
   /p-locate@2.0.0:
     resolution: {integrity: sha512-nQja7m7gSKuewoVRen45CtVfODR3crN3goVQ0DDZ9N3yHxgpkuBhZqsaiotSQRrADUrne346peY7kT3TSACykg==}
@@ -22782,8 +22792,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240422:
-    resolution: {integrity: sha512-GKfP7cqp5Rq/z6xNYZ6u6XfS4I0K3h8tw3MRKkttEkLyEWBxYS141wOr1WBcUYfvB1F5Luo/cTd7iZnySH3bIg==}
+  /typescript@5.5.0-dev.20240505:
+    resolution: {integrity: sha512-pS7FxfKdWwZcCywfyjwwVAIV/Tb6YBAcVv63WJFhSf7RclqKUTwkGbvtii/VvHtfaW50/1LdYvHU0z+Xs3xTiQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -23950,7 +23960,6 @@ packages:
   /yocto-queue@1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
-    dev: true
 
   /yoga-layout-prebuilt@1.10.0:
     resolution: {integrity: sha512-YnOmtSbv4MTf7RGJMK0FvZ+KD8OEe/J5BNnR0GHhD8J/XcG/Qvxgszm0Un6FTHWW4uHlTgP0IztiXQnGyIR45g==}

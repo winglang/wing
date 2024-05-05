@@ -359,7 +359,7 @@ describe("retry and batch options", () => {
     expect(retryLogs.length).toBe(3);
   });
 
-  test("wing test --batch [batch]", async () => {
+  test("wing test --parallel [batch]", async () => {
     const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
 
     process.chdir(outDir);
@@ -386,7 +386,7 @@ describe("retry and batch options", () => {
     await wingTest(["t1.test.w", "t2.test.w"], {
       clean: true,
       platform: [BuiltinPlatform.SIM],
-      batch: 1,
+      parallel: 1,
     });
     const batchLogs = logSpy.mock.calls.filter((args) => args[0].includes("Processing batch"));
     expect(batchLogs.length).toBe(0);

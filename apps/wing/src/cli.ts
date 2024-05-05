@@ -229,9 +229,9 @@ async function main() {
     )
     .addOption(
       new Option(
-        "-b, --batch [batch]",
-        "Number of tests to be executed on parallel- if not specified will execute all at the same time"
-      )
+        "-p, --parallel [batch]",
+        "Number of tests to be executed on parallel- if not specified will start executing all at the same time"
+      ).argParser(parseInt)
     )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)

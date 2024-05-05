@@ -2,6 +2,7 @@ import * as cp from "child_process";
 import { existsSync, readFile, readFileSync, realpathSync, rm, rmSync, statSync } from "fs";
 import { basename, join, relative, resolve } from "path";
 import { promisify } from "util";
+import { PromisePool } from "@supercharge/promise-pool";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import { TraceType } from "@winglang/sdk/lib/std";
@@ -55,9 +56,9 @@ export interface TestOptions extends CompileOptions {
   readonly snapshots?: SnapshotMode;
 
   /**
-   * Number of tests to be run in parallel, if zero or none- it will run all in parallel
+   * Number of tests to be run in parallel, if zero or none- it will run all in once
    */
-  readonly batch?: number;
+  readonly parallel?: number;
 }
 
 const TEST_FILE_PATTERNS = ["**/*.test.w", "**/{main,*.main}.{w,ts}"];
@@ -142,12 +143,17 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 
   // split the entrypoints to smaller batches according to the command options-
   // if none- it will be preformed in one batch
-  const batchSize = Number(options.batch) || selectedEntrypoints.length;
-  for (let i = 0; i < selectedEntrypoints.length; i += batchSize) {
-    log(`processing batch:`);
-    const entrypointBatch = selectedEntrypoints.slice(i, i + batchSize);
-    await Promise.all(entrypointBatch.map(testFile));
-  }
+  const batchSize = Number(options.parallel) || selectedEntrypoints.length;
+  const totalBatches = Math.ceil(selectedEntrypoints.length / batchSize);
+  await PromisePool.withConcurrency(batchSize)
+    .for(selectedEntrypoints)
+    .onTaskFinished((_, pool) => {
+      const processed = pool.processedCount();
+      if (processed % batchSize == 0 || processed === selectedEntrypoints.length) {
+        log(`Done processing batch ${Math.ceil(processed / batchSize)}/${totalBatches}`);
+      }
+    })
+    .process(testFile);
   const testDuration = Date.now() - startTime;
   printResults(results, testDuration);
   if (options.outputFile) {
