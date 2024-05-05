@@ -223,7 +223,7 @@ export interface Trace {
   /**
    * The log level of the event.
    */
-  readonly level?: LogLevel;
+  readonly level: LogLevel;
 
   /**
    * The timestamp of the event, in ISO 8601 format.

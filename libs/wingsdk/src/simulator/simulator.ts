@@ -330,6 +330,7 @@ export class Simulator {
       },
       sourcePath: "root",
       sourceType: "Simulator",
+      level: LogLevel.VERBOSE,
       timestamp: new Date().toISOString(),
     });
 
@@ -416,6 +417,7 @@ export class Simulator {
     const resourceConfig = this.getResourceConfig(path);
     this.addTrace({
       type: TraceType.SIMULATOR,
+      level: LogLevel.VERBOSE,
       data: data,
       sourcePath: resourceConfig.path,
       sourceType: resourceConfig.type,
@@ -869,7 +871,8 @@ export class Simulator {
         } catch (err: any) {
           this.addTrace({
             data: {
-              message: `${props.message}\n   ${err.stack}`,
+              message: `Error: ${err.message} (${props.message})`,
+              error: err,
               status: "failure",
             },
             type: TraceType.RESOURCE,

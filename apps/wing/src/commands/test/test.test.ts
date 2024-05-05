@@ -3,7 +3,7 @@ import fsPromises from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
-import { TestResult, TraceType } from "@winglang/sdk/lib/std";
+import { LogLevel, TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
 import { describe, test, expect, beforeEach, afterEach, vi, SpyInstance } from "vitest";
 import { filterTests, renderTestReport, collectTestFiles, test as wingTest } from ".";
@@ -369,6 +369,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: "Push (message=cool).", status: "success" },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         timestamp: "2023-05-15T16:20:46.886Z",
@@ -376,6 +377,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: "sleeping for 500 ms" },
         type: TraceType.LOG,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/test:test/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:46.887Z",
@@ -383,6 +385,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         type: TraceType.RESOURCE,
         data: { message: 'Sending messages (messages=["cool"], subscriber=sim-4).' },
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         timestamp: "2023-05-15T16:20:46.961Z",
@@ -394,6 +397,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
           error: {},
         },
         type: TraceType.RESOURCE,
+        level: LogLevel.ERROR,
         sourcePath: "root/env0/MyProcessor/cloud.Queue-AddConsumer-0088483a",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:46.966Z",
@@ -406,11 +410,13 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         type: TraceType.RESOURCE,
+        level: LogLevel.ERROR,
         timestamp: "2023-05-15T16:20:46.966Z",
       },
       {
         data: { message: "Get (key=file.txt).", status: "failure", error: {} },
         type: TraceType.RESOURCE,
+        level: LogLevel.ERROR,
         sourcePath: "root/env0/MyProcessor/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
         timestamp: "2023-05-15T16:20:47.388Z",
@@ -418,6 +424,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: 'Invoke (payload="").', status: "failure", error: {} },
         type: TraceType.RESOURCE,
+        level: LogLevel.ERROR,
         sourcePath: "root/env0/test:test/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:47.388Z",

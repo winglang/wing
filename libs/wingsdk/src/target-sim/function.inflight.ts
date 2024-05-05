@@ -8,7 +8,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly sourceCodeFile: string;
@@ -100,6 +100,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
                 error: e,
               },
               type: TraceType.RESOURCE,
+              level: LogLevel.VERBOSE,
               sourcePath: this.context.resourcePath,
               sourceType: FUNCTION_FQN,
               timestamp: new Date().toISOString(),
@@ -111,9 +112,12 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 
   private async createBundle(): Promise<void> {
-    this.bundle = await Sandbox.createBundle(this.originalFile, (msg) => {
-      this.addTrace(msg, TraceType.SIMULATOR);
-    });
+    this.bundle = await Sandbox.createBundle(
+      this.originalFile,
+      (msg, level) => {
+        this.addTrace(msg, TraceType.RESOURCE, level);
+      }
+    );
   }
 
   // Used internally by cloud.Queue to apply backpressure
@@ -154,16 +158,21 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         WING_SIMULATOR_URL: this.context.serverUrl,
       },
       timeout: this.timeout,
-      log: (internal, _level, message) => {
-        this.addTrace(message, internal ? TraceType.SIMULATOR : TraceType.LOG);
+      log: (internal, level, message) => {
+        this.addTrace(
+          message,
+          internal ? TraceType.SIMULATOR : TraceType.LOG,
+          level
+        );
       },
     });
   }
 
-  private addTrace(message: string, type: TraceType) {
+  private addTrace(message: string, type: TraceType, level: LogLevel) {
     this.context.addTrace({
       data: { message },
       type,
+      level,
       sourcePath: this.context.resourcePath,
       sourceType: FUNCTION_FQN,
       timestamp: new Date().toISOString(),

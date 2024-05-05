@@ -4,7 +4,7 @@ import { basename, join, relative, resolve } from "path";
 import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
-import { LogLevel, TraceType } from "@winglang/sdk/lib/std";
+import { LogLevel } from "@winglang/sdk/lib/std";
 import { Util } from "@winglang/sdk/lib/util";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
@@ -376,27 +376,12 @@ const LOG_STREAM_COLORS = {
   [LogLevel.VERBOSE]: chalk.gray,
 };
 
-function inferLevelFromTrace(event: std.Trace): LogLevel {
-  if (event.level) {
-    return event.level;
-  }
-
-  switch (event.type) {
-    case TraceType.LOG:
-      return LogLevel.INFO;
-    case TraceType.RESOURCE:
-      return LogLevel.VERBOSE;
-    case TraceType.SIMULATOR:
-      return LogLevel.VERBOSE;
-  }
-}
-
 async function formatTrace(
   trace: std.Trace,
   testName: string,
   mode: "short" | "full"
 ): Promise<string> {
-  const level = inferLevelFromTrace(trace);
+  const level = trace.level;
   const date = new Date(trace.timestamp);
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -443,10 +428,8 @@ function shouldSkipTrace(trace: std.Trace): boolean {
     return false; // don't skip any traces in DEBUG mode
   }
 
-  const level = inferLevelFromTrace(trace);
-
   // in normal mode, show INFO, WARN and ERROR (skip VERBOSE)
-  switch (level) {
+  switch (trace.level) {
     case LogLevel.ERROR:
       return false;
     case LogLevel.WARNING:

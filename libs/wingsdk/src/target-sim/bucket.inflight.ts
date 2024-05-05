@@ -23,7 +23,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { Datetime, Json, TraceType } from "../std";
+import { Datetime, Json, LogLevel, TraceType } from "../std";
 
 export const METADATA_FILENAME = "metadata.json";
 
@@ -70,7 +70,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         const metadata = deserialize(metadataContents);
         this._metadata = new Map(metadata);
       } catch (e) {
-        this.addTrace(`Failed to deserialize metadata: ${(e as Error).stack}`);
+        this.addTrace(
+          `Failed to deserialize metadata: ${(e as Error).stack}`,
+          LogLevel.ERROR
+        );
       }
     }
 
@@ -372,9 +375,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return crypto.createHash("sha512").update(key).digest("hex").slice(-32);
   }
 
-  private addTrace(message: string): void {
+  private addTrace(message: string, level: LogLevel): void {
     this.context.addTrace({
       data: { message },
+      level,
       type: TraceType.RESOURCE,
       sourcePath: this.context.resourcePath,
       sourceType: BUCKET_FQN,
