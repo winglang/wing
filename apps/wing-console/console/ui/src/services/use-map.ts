@@ -7,19 +7,6 @@ import { useCallback, useEffect, useMemo } from "react";
 import { trpc } from "./trpc.js";
 import { bridgeConnections } from "./use-map.bridge-connections.js";
 
-export type RawConnectionData = {
-  /** The path of the source construct. */
-  readonly source: string;
-  /** The path of the target construct. */
-  readonly target: string;
-
-  readonly sourceOp?: string;
-  readonly targetOp?: string;
-
-  /** A name for the connection. */
-  readonly name: string;
-};
-
 export type NodeInflight = {
   id: string;
   name: string;
@@ -39,20 +26,6 @@ export type NodeV2 =
   | {
       type: "function";
     }
-  // | {
-  //     type: "queue";
-  //     inflights: {
-  //       id: string;
-  //       name: string;
-  //     }[];
-  //   }
-  // | {
-  //     type: "topic";
-  //     inflights: {
-  //       id: string;
-  //       name: string;
-  //     }[];
-  //   }
   | {
       type: "scheduler";
     }
@@ -143,11 +116,7 @@ export interface UseMapOptions {}
 
 export const useMap = ({}: UseMapOptions = {}) => {
   const query = trpc["app.map"].useQuery();
-  const { tree: rawTree, connections: incorrectlyTypedConnections } =
-    query.data ?? {};
-  const rawConnections = incorrectlyTypedConnections as
-    | RawConnectionData[]
-    | undefined;
+  const { tree: rawTree, connections: rawConnections } = query.data ?? {};
 
   const nodeFqns = useMemo(() => {
     if (!rawTree) {
