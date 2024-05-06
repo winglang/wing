@@ -102,7 +102,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
         }}
         className={clsx("inline-block", "group", "p-2", "z-0")}
       >
-        <div className="w-full h-full relative ">
+        <div className="w-full h-full relative">
           <div className="absolute inset-x-0 top-0">
             <div className="relative">
               <div className="absolute bottom-0">
@@ -131,7 +131,8 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
               "transition-all",
               "flex flex-col",
               "overflow-hidden",
-              "border border-dashed",
+              "border",
+              props.pseudoContainer && "border-dashed",
               "border-slate-200 dark:border-slate-600",
             )}
           >
