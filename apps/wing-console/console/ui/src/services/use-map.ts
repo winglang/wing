@@ -165,7 +165,7 @@ export const useMap = ({}: UseMapOptions = {}) => {
     };
     processNode(rawTree);
     return nodeTypes;
-  }, [rawTree, rawConnections]);
+  }, [rawTree]);
 
   const nodeTypes = useMemo(() => {
     if (!rawTree) {
@@ -381,7 +381,7 @@ export const useMap = ({}: UseMapOptions = {}) => {
     };
     processNode(rawTree);
     return nodeMap;
-  }, [rawTree, rawConnections]);
+  }, [rawTree, rawConnections, connections]);
 
   return {
     rawTree,
