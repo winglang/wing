@@ -42,6 +42,7 @@ export const CustomResourceUiItem = ({ item }: { item: UIComponent }) => {
         <CustomResourceUiFieldItem
           label={uiComponent.label}
           handlerPath={uiComponent.handler}
+          link={uiComponent.link}
         />
       )}
       {uiComponent.kind === "button" && (
