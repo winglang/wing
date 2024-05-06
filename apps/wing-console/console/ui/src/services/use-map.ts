@@ -139,9 +139,7 @@ const getNodeInflights = (
   }));
 };
 
-export interface UseMapOptions {
-  // showTests: boolean;
-}
+export interface UseMapOptions {}
 
 export const useMap = ({}: UseMapOptions = {}) => {
   const query = trpc["app.map"].useQuery();
@@ -281,9 +279,6 @@ export const useMap = ({}: UseMapOptions = {}) => {
       }
 
       return `${nodePath}#${type}`;
-      // return `${nodePath}#${(connection as any)[`${type}Op`]}#${type}#${
-      //   1 + Math.floor(Math.random() * 3)
-      // }`;
     },
     [isNodeHidden],
   );
@@ -350,24 +345,6 @@ export const useMap = ({}: UseMapOptions = {}) => {
           });
           break;
         }
-        // case "endpoint": {
-        //   nodeMap.set(node.path, {
-        //     type: nodeType,
-        //   });
-        //   break;
-        // }
-        // case "queue": {
-        //   nodeMap.set(node.path, {
-        //     type: nodeType,
-        //   });
-        //   break;
-        // }
-        // case "topic": {
-        //   nodeMap.set(node.path, {
-        //     type: nodeType,
-        //   });
-        //   break;
-        // }
         default: {
           nodeMap.set(node.path, {
             type: "construct",
