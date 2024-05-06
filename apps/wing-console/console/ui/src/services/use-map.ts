@@ -17,7 +17,6 @@ export type NodeInflight = {
 export type NodeV2 =
   | {
       type: "container";
-      // children: ConsoleNode[];
       children: string[];
     }
   | {
