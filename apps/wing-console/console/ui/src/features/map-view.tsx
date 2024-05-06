@@ -639,13 +639,8 @@ const RoundedEdge: FunctionComponent<
       >
         <g
           className={clsx(
-            // "fill-none stroke-2 group transition-all pointer-events-auto",
             "fill-none stroke-1 group pointer-events-auto",
             "transition-colors",
-            // "stroke-sky-500",
-            // "stroke-sky-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
-            // "stroke-sky-200 hover:stroke-sky-500",
-            // "stroke-gray-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
             !highlighted && "stroke-gray-300 dark:stroke-gray-700",
             highlighted && "stroke-sky-500 dark:stroke-sky-900",
             "hover:stroke-sky-500",
@@ -678,7 +673,6 @@ const RoundedEdge: FunctionComponent<
 
 export interface MapViewV2Props {
   selectedNodeId: string | undefined;
-  //   showTests?: boolean;
   onSelectedNodeIdChange: (id: string | undefined) => void;
   selectedEdgeId?: string;
   onSelectedEdgeIdChange?: (id: string | undefined) => void;
@@ -724,11 +718,6 @@ export const MapView = memo(
           return <></>;
         }
 
-        // if (info.type === "endpoint") {
-        //   // return <AutoIdNode constructTreeNode={props.constructTreeNode} />;
-        //   return <></>;
-        // }
-
         if (info.type === "construct") {
           return (
             <ConstructNode
@@ -770,17 +759,6 @@ export const MapView = memo(
             />
           );
         }
-
-        // if (info.type === "queue") {
-        //   return (
-        //     <ConstructNode
-        //       id={props.constructTreeNode.path}
-        //       name={props.constructTreeNode.id}
-        //       inflights={info.inflights}
-        //       // highlight={}
-        //     />
-        //   );
-        // }
 
         return (
           <ContainerNode
