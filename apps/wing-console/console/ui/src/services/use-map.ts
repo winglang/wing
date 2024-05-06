@@ -74,21 +74,28 @@ const getNodeType = (
   if (node.constructInfo?.fqn === "@winglang/sdk.std.AutoIdResource") {
     return "autoId";
   }
-  // if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Queue") {
-  //   return "queue";
-  // }
-  // if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Topic") {
-  //   return "topic";
-  // }
   if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Schedule") {
     return "scheduler";
   }
   if (node.constructInfo?.fqn === "@winglang/sdk.cloud.Endpoint") {
     return "endpoint";
   }
-  if (hasInflightConnections || (node.children ?? []).length === 0) {
+
+  const hasVisibleChildren = Object.values(node.children ?? {}).some(
+    (child) => !child.display?.hidden,
+  );
+
+  if (
+    node.constructInfo?.fqn === "@winglang/sdk.cloud.Api" ||
+    // node.constructInfo?.fqn === "@winglang/sdk.cloud.Bucket" ||
+    // node.constructInfo?.fqn === "@winglang/sdk.cloud.Queue" ||
+    // node.constructInfo?.fqn === "@winglang/sdk.cloud.Topic" ||
+    hasInflightConnections ||
+    !hasVisibleChildren
+  ) {
     return "construct";
   }
+
   return "container";
 };
 
@@ -132,11 +139,11 @@ const getNodeInflights = (
   }));
 };
 
-export interface UseMapOptionsV2 {
+export interface UseMapOptions {
   // showTests: boolean;
 }
 
-export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
+export const useMap = ({}: UseMapOptions = {}) => {
   const query = trpc["app.map.v2"].useQuery();
   const { tree: rawTree, connections: incorrectlyTypedConnections } =
     query.data ?? {};
@@ -251,9 +258,6 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
         `${connection.source.id}#${connection.source.operation}##${connection.target.id}#${connection.target.operation}`,
     });
   }, [rawConnections, nodeFqns, isNodeHidden]);
-  // useEffect(() => {
-  //   console.log("connections", connections);
-  // }, [connections]);
 
   const getConnectionId = useCallback(
     (
@@ -307,9 +311,6 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
       }) ?? []
     );
   }, [connections, getConnectionId]);
-  // useEffect(() => {
-  //   console.log("edges", edges);
-  // }, [edges]);
 
   const nodeInfo = useMemo(() => {
     if (!rawTree || !rawConnections) {
@@ -327,7 +328,6 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
         ) ?? false,
       );
       const inflights = getNodeInflights(node, connections ?? []);
-      // console.log(node.path, nodeType, inflights);
       switch (nodeType) {
         case "container": {
           nodeMap.set(node.path, {
@@ -382,10 +382,6 @@ export const useMapV2 = ({}: UseMapOptionsV2 = {}) => {
     processNode(rawTree);
     return nodeMap;
   }, [rawTree, rawConnections]);
-
-  useEffect(() => {
-    console.log("nodeInfo", nodeInfo);
-  }, [nodeInfo]);
 
   return {
     rawTree,

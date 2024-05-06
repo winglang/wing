@@ -11,10 +11,12 @@ export interface ElkOptions {
   layoutOptions?: Record<string, string>;
 }
 
-export type EdgeComponent = FunctionComponent<{
+export interface EdgeComponentProps {
   edge: ElkExtendedEdge;
   offsetX?: number;
   offsetY?: number;
   graphWidth: number;
   graphHeight: number;
-}>;
+}
+
+export type EdgeComponent = FunctionComponent<EdgeComponentProps>;

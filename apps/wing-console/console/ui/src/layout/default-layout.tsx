@@ -313,6 +313,8 @@ export const DefaultLayout = ({
                         <MapView
                           selectedNodeId={selectedItems[0]}
                           onSelectedNodeIdChange={setSelectedItemSingle}
+                          selectedEdgeId={selectedEdgeId}
+                          onSelectedEdgeIdChange={setSelectedEdgeId}
                         />
                       </div>
                       {!layout.rightPanel?.hide && (

@@ -46,9 +46,9 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
       };
     }, [graph]);
 
-    // useEffect(() => {
-    //   zoomPaneRef.current?.zoomToFit();
-    // }, [graph]);
+    useEffect(() => {
+      zoomPaneRef.current?.zoomToFit();
+    }, [graph]);
 
     const mapBackgroundRef = useRef<HTMLDivElement>(null);
 

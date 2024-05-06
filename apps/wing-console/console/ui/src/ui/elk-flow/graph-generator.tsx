@@ -153,9 +153,9 @@ export const GraphGenerator: FunctionComponent<
   const [root] = useState<ElkNode>(() => ({
     ...props.elk,
   }));
-  useEffect(() => {
-    const elk = new ELK();
 
+  const [jsonGraph, setJsonGraph] = useState<string>();
+  useEffect(() => {
     const nodeMap = new Map<string, ElkNode>();
     const processNode = (node: ElkNode) => {
       nodeMap.set(node.id, node);
@@ -167,9 +167,6 @@ export const GraphGenerator: FunctionComponent<
       }
     };
     processNode(root);
-
-    // console.log("nodeMap", nodeMap);
-
     const edges = (props.edges ?? []).filter((edge) => {
       return (
         edge.sources.every((source) => {
@@ -189,13 +186,47 @@ export const GraphGenerator: FunctionComponent<
       );
     });
 
+    setJsonGraph(() => {
+      // Remove $H properties from JSON and sort children by id.
+      const processNode = (node: ElkNode) => {
+        delete (node as any).$H;
+        const children = node.children ?? [];
+        node.children = children.sort((a, b) => a.id.localeCompare(b.id));
+        for (const child of node.children) {
+          processNode(child);
+        }
+      };
+
+      processNode(root);
+
+      return JSON.stringify({ ...root, edges });
+    });
+  });
+
+  useEffect(() => {
+    if (!jsonGraph) {
+      return;
+    }
+
+    let abort = false;
+
+    const elk = new ELK();
+
     void elk
-      .layout({ ...root, edges })
+      .layout(JSON.parse(jsonGraph))
       .then((graph) => {
-        props.onGraph?.({ ...graph });
+        if (abort) {
+          return;
+        }
+
+        props.onGraph?.(graph);
       })
       .catch((error) => console.error("elk layout error:", error));
-  });
+    return () => {
+      abort = true;
+    };
+  }, [jsonGraph]);
+
   return (
     <ElkNodeContext.Provider value={root}>
       <NodeContext.Provider value={NodeComponent}>

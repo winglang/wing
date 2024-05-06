@@ -13,13 +13,16 @@ import type { FunctionComponent, PropsWithChildren } from "react";
 import { memo, useCallback, useEffect, useMemo } from "react";
 import { useKeyPressEvent } from "react-use";
 
-import { useMapV2 } from "../services/use-map.js";
+import { useMap } from "../services/use-map.js";
 import { assert } from "../ui/elk-flow/assert.js";
 import { Graph } from "../ui/elk-flow/graph.js";
 import { NodeChildren } from "../ui/elk-flow/node-children.js";
 import { Node } from "../ui/elk-flow/node.js";
 import { Port } from "../ui/elk-flow/port.js";
-import type { EdgeComponent } from "../ui/elk-flow/types.js";
+import type {
+  EdgeComponent,
+  EdgeComponentProps,
+} from "../ui/elk-flow/types.js";
 import { useZoomPane } from "../ui/zoom-pane.js";
 
 interface InflightPortProps {
@@ -76,7 +79,7 @@ const baseLayoutOptions: LayoutOptions = {
   // "elk.direction": "RIGHT",
   // "elk.alignment": "CENTER",
   "elk.algorithm": "org.eclipse.elk.layered",
-  "elk.layered.layering.strategy": "MIN_WIDTH",
+  // "elk.layered.layering.strategy": "MIN_WIDTH",
   "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
   "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
@@ -548,8 +551,21 @@ const midPoint = (pt1: ElkPoint, pt2: ElkPoint, radius: number) => {
   return { x: pt2.x - radiusCapped * diffX, y: pt2.y - radiusCapped * diffY };
 };
 
-const RoundedEdge: EdgeComponent = memo(
-  ({ edge, offsetX = 0, offsetY = 0, graphWidth, graphHeight }) => {
+const RoundedEdge: FunctionComponent<
+  EdgeComponentProps & {
+    highlighted?: boolean;
+    onClick?: () => void;
+  }
+> = memo(
+  ({
+    edge,
+    offsetX = 0,
+    offsetY = 0,
+    graphWidth,
+    graphHeight,
+    highlighted,
+    onClick,
+  }) => {
     const points = useMemo(
       () =>
         edge.sections?.flatMap((section) => [
@@ -624,15 +640,19 @@ const RoundedEdge: EdgeComponent = memo(
         <g
           className={clsx(
             // "fill-none stroke-2 group transition-all pointer-events-auto",
-            "fill-none stroke-1 group transition-all pointer-events-auto",
+            "fill-none stroke-1 group pointer-events-auto",
+            "transition-colors",
             // "stroke-sky-500",
             // "stroke-sky-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
             // "stroke-sky-200 hover:stroke-sky-500",
             // "stroke-gray-500 opacity-30 hover:opacity-100 hover:stroke-sky-400",
-            "stroke-gray-300 hover:stroke-sky-500",
-            "dark:stroke-gray-700 dark:hover:stroke-sky-800",
+            !highlighted && "stroke-gray-300 dark:stroke-gray-700",
+            highlighted && "stroke-sky-500 dark:stroke-sky-900",
+            "hover:stroke-sky-500",
+            "dark:hover:stroke-sky-900",
           )}
           transform={`translate(${offsetX} ${offsetY})`}
+          onClick={onClick}
         >
           <path className="stroke-[8] opacity-0" d={d}>
             <title>
@@ -660,14 +680,31 @@ export interface MapViewV2Props {
   selectedNodeId: string | undefined;
   //   showTests?: boolean;
   onSelectedNodeIdChange: (id: string | undefined) => void;
-  // selectedEdgeId?: string;
-  // onSelectedEdgeIdChange?: (id: string | undefined) => void;
+  selectedEdgeId?: string;
+  onSelectedEdgeIdChange?: (id: string | undefined) => void;
 }
 
 export const MapView = memo(
-  ({ selectedNodeId, onSelectedNodeIdChange }: MapViewV2Props) => {
-    const { connections, nodeInfo, isNodeHidden, rootNodes, edges } = useMapV2(
+  ({
+    selectedNodeId,
+    onSelectedNodeIdChange,
+    selectedEdgeId,
+    onSelectedEdgeIdChange,
+  }: MapViewV2Props) => {
+    const { connections, nodeInfo, isNodeHidden, rootNodes, edges } = useMap(
       {},
+    );
+
+    const RenderEdge = useCallback<EdgeComponent>(
+      (props) => {
+        return (
+          <RoundedEdge
+            {...props}
+            onClick={() => console.debug("edge clicked")}
+          />
+        );
+      },
+      [RoundedEdge, selectedEdgeId, onSelectedEdgeIdChange],
     );
 
     const RenderNode = useCallback<
@@ -802,7 +839,7 @@ export const MapView = memo(
                   },
                 }}
                 edges={edges}
-                edgeComponent={RoundedEdge}
+                edgeComponent={RenderEdge}
               >
                 {rootNodes.map((node) => (
                   <RenderNode
