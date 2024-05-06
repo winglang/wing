@@ -40,7 +40,7 @@ test "validates the AWS Function" {
 
 if target == "tf-aws" {
   test "can access lambda context" {
-    let ctx = unsafeCast(aws.context());
+    let ctx = aws.context();
     expect.equal(ctx.functionVersion, "$LATEST");
 
     let remainingTime = ctx.remainingTimeInMillis();
