@@ -18,7 +18,7 @@ import {
 
 /**
  * Contract that a resource backend must implement.
- * @inflightinterface
+ * @inflight
  */
 export interface IResource {
   /**
@@ -37,7 +37,7 @@ export interface IResource {
 
 /**
  * Context for implementing a simulator resource.
- * @inflightinterface
+ * @inflight
  */
 export interface IResourceContext {
   /**

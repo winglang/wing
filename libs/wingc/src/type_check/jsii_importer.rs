@@ -343,7 +343,7 @@ impl<'a> JsiiImporter<'a> {
 		let phase = if is_struct {
 			Phase::Independent
 		} else {
-			if extract_docstring_tag(&jsii_interface.docs, "inflightinterface").is_some() {
+			if extract_docstring_tag(&jsii_interface.docs, "inflight") == Some("true") {
 				Phase::Inflight
 			} else {
 				Phase::Preflight
@@ -449,6 +449,11 @@ impl<'a> JsiiImporter<'a> {
 	) {
 		// Look for a client interface for this resource
 		let inflight_tag: Option<&str> = extract_docstring_tag(docs, "inflight");
+
+		if inflight_tag == Some("true") {
+			debug!("{wing_type} does not seem to have an inflight client");
+			return;
+		}
 
 		let client_interface = inflight_tag.map(|fqn| {
 			// Some fully qualified package names include "@" characters,
