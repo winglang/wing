@@ -571,30 +571,6 @@ export const MapView = memo(
           return <></>;
         }
 
-        if (info.type === "construct") {
-          return (
-            <ConstructNode
-              id={props.constructTreeNode.path}
-              name={props.constructTreeNode.id}
-              fqn={props.constructTreeNode.constructInfo?.fqn ?? ""}
-              inflights={info.inflights}
-              onSelectedNodeIdChange={props.onSelectedNodeIdChange}
-              highlight={props.selectedNodeId === props.constructTreeNode.path}
-            >
-              {Object.values(props.constructTreeNode.children ?? {}).map(
-                (child) => (
-                  <RenderNode
-                    key={child.id}
-                    constructTreeNode={child}
-                    selectedNodeId={props.selectedNodeId}
-                    onSelectedNodeIdChange={props.onSelectedNodeIdChange}
-                  />
-                ),
-              )}
-            </ConstructNode>
-          );
-        }
-
         if (info.type === "function") {
           return (
             <FunctionNode
@@ -614,9 +590,13 @@ export const MapView = memo(
         }
 
         return (
-          <ContainerNode
+          <ConstructNode
             id={props.constructTreeNode.path}
             name={props.constructTreeNode.id}
+            fqn={props.constructTreeNode.constructInfo?.fqn ?? ""}
+            inflights={info.type === "construct" ? info.inflights : []}
+            onSelectedNodeIdChange={props.onSelectedNodeIdChange}
+            highlight={props.selectedNodeId === props.constructTreeNode.path}
           >
             {Object.values(props.constructTreeNode.children ?? {}).map(
               (child) => (
@@ -628,7 +608,7 @@ export const MapView = memo(
                 />
               ),
             )}
-          </ContainerNode>
+          </ConstructNode>
         );
       },
       [nodeInfo, isNodeHidden],
