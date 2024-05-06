@@ -297,6 +297,15 @@ export class Util {
   }
 
   /**
+   * Sets the given name and value as an environment variable.
+   * @param name The name of the environment variable.
+   * @param value The value of the environment variable.
+   */
+  public static setEnv(name: string, value: string) {
+    process.env[name] = value;
+  }
+
+  /**
    * Converts a string from UTF-8 to base64.
    * @param stringToEncode The name of the UTF-8 string to encode.
    * @param url If `true`, a URL-safe base64 string is returned.
