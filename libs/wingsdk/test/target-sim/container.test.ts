@@ -146,7 +146,10 @@ test("anonymous volume can be reused across restarts", async () => {
   new Function(app, "Function", httpGet(c));
 
   const sim = await app.startSimulator();
-  sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
+  sim.onTrace({
+    callback: (trace) =>
+      console.log(">", trace.data?.error?.stack ?? trace.data.message),
+  });
 
   const fn = sim.getResource("root/Function") as IFunctionClient;
   const response = await fn.invoke();

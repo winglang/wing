@@ -124,6 +124,16 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       logLevel: LogLevel.INFO,
     });
 
+    this.addTrace(
+      `Waiting for container to ${
+        this.props.containerPort
+          ? `listen to ${this.props.containerPort}`
+          : "start"
+      }`,
+      TraceType.RESOURCE,
+      LogLevel.VERBOSE
+    );
+
     let hostPort: number | undefined;
     await waitUntil(async () => {
       if (!this.child?.running) {
