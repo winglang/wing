@@ -2,7 +2,9 @@
 
 ## stdout.log
 ```log
+[INFO] get echo | Pulling hashicorp/http-echo...
 [INFO] get echo | Container hashicorp/http-echo started
+[INFO] get app | Building my-app:a9ae83b54b1ec21faa1a3255f05c095c from ./my-docker-image...
 [INFO] get app | Container my-app:a9ae83b54b1ec21faa1a3255f05c095c started
 [INFO] get echo | Container my-app:a9ae83b54b1ec21faa1a3255f05c095c started
 [INFO] get app | Container hashicorp/http-echo started

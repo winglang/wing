@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+[INFO] testing Redis | Pulling redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0...
 [INFO] testing Redis | Container redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0 started
 [INFO] testing Redis | Container redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0 started
 pass ─ redis.test.wsim » root/env0/test:testing Redis
