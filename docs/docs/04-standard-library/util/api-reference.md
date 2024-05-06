@@ -123,6 +123,7 @@ Utility functions.
 | <code><a href="#@winglang/sdk.util.Util.exec">exec</a></code> | Execute a program with the given arguments, wait for it to finish, and return its outputs. |
 | <code><a href="#@winglang/sdk.util.Util.nanoid">nanoid</a></code> | Generates a unique ID using the nanoid library. |
 | <code><a href="#@winglang/sdk.util.Util.os">os</a></code> | Returns a string identifying the operating system platform. |
+| <code><a href="#@winglang/sdk.util.Util.setEnv">setEnv</a></code> | Sets the given name and value as an environment variable. |
 | <code><a href="#@winglang/sdk.util.Util.sha256">sha256</a></code> | Computes the SHA256 hash of the given data. |
 | <code><a href="#@winglang/sdk.util.Util.shell">shell</a></code> | Executes a command in the shell and returns its standard output. |
 | <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
@@ -278,6 +279,32 @@ Returns a string identifying the operating system platform.
 "linux", "darwin", "win32"
 ```
 
+
+##### `setEnv` <a name="setEnv" id="@winglang/sdk.util.Util.setEnv"></a>
+
+```wing
+bring util;
+
+util.setEnv(name: str, value: str);
+```
+
+Sets the given name and value as an environment variable.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.util.Util.setEnv.parameter.name"></a>
+
+- *Type:* str
+
+The name of the environment variable.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.util.Util.setEnv.parameter.value"></a>
+
+- *Type:* str
+
+The value of the environment variable.
+
+---
 
 ##### `sha256` <a name="sha256" id="@winglang/sdk.util.Util.sha256"></a>
 
