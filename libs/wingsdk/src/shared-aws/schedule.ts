@@ -1,3 +1,6 @@
+import * as cloud from "../cloud";
+import { lift } from "../core";
+
 /**
  * Convert Unix cron to AWS cron
  */
@@ -62,3 +65,22 @@ const convertDayOfWeekFromUnixToAWS = (dayOfWeek: string): string => {
 
   return dayOfWeek;
 };
+
+/**
+ * Utility class for working with the schedule tick handler.
+ */
+export class ScheduleOnTickHandler {
+  /**
+   * Converts a schedule tick handler to a function handler.
+   * @param handler The schedule tick handler.
+   * @returns The function handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.IScheduleOnTickHandler
+  ): cloud.IFunctionHandler {
+    return lift({ handler }).inflight(async (ctx) => {
+      await ctx.handler();
+      return undefined;
+    });
+  }
+}

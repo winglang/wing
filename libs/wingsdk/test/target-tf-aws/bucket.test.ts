@@ -1,7 +1,7 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
 import {
   mkdtemp,
@@ -154,8 +154,7 @@ test("bucket with onCreate method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
-  const inflightTest = Testing.makeHandler("null");
-  bucket.onCreate(inflightTest);
+  bucket.onCreate(inflight(async () => {}));
   const output = app.synth();
 
   // THEN
@@ -193,8 +192,7 @@ test("bucket with onDelete method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
-  const inflightTest = Testing.makeHandler("null");
-  bucket.onDelete(inflightTest);
+  bucket.onDelete(inflight(async () => {}));
   const output = app.synth();
 
   // THEN
@@ -232,8 +230,7 @@ test("bucket with onUpdate method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
-  const inflightTest = Testing.makeHandler("null");
-  bucket.onUpdate(inflightTest);
+  bucket.onUpdate(inflight(async () => {}));
   const output = app.synth();
 
   // THEN
@@ -271,8 +268,7 @@ test("bucket with onEvent method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
-  const inflightTest = Testing.makeHandler("null");
-  bucket.onEvent(inflightTest);
+  bucket.onEvent(inflight(async () => {}));
   const output = app.synth();
 
   // THEN

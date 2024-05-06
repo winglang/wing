@@ -1,5 +1,3 @@
-import * as fs from "fs";
-import * as path from "path";
 import { SecretAttributes, SecretSchema } from "./schema-resources";
 import { ISecretClient, SECRET_FQN } from "../cloud";
 import {
@@ -11,18 +9,9 @@ import { Json, TraceType } from "../std";
 
 export class Secret implements ISecretClient, ISimulatorResourceInstance {
   private _context: ISimulatorContext | undefined;
-  private readonly secretsFile: string;
   private readonly name: string;
 
   constructor(props: SecretSchema) {
-    this.secretsFile = path.join(process.cwd(), ".env");
-
-    if (!fs.existsSync(this.secretsFile)) {
-      throw new Error(
-        `No secrets file found at ${this.secretsFile} while looking for secret ${props.name}`
-      );
-    }
-
     this.name = props.name;
   }
 
@@ -60,7 +49,9 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
     const secretValue = process.env[this.name];
 
     if (!secretValue) {
-      throw new Error(`No secret value for secret ${this.name}`);
+      throw new Error(
+        `No value for secret ${this.name}\n(hint: try running the "wing secrets -t TARGET" to store secret)`
+      );
     }
 
     return secretValue;

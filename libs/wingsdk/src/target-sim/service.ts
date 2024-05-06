@@ -5,7 +5,7 @@ import { ServiceSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { App, LiftDepsMatrixRaw } from "../core";
+import { App, LiftMap } from "../core";
 import { PolicyStatement, ToSimulatorOutput } from "../simulator";
 import { IInflightHost, IResource } from "../std";
 
@@ -51,9 +51,9 @@ export class Service
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
-      [cloud.ServiceInflightMethods.START]: [[this.handler, ["handle"]]],
+      [cloud.ServiceInflightMethods.START]: [],
       [cloud.ServiceInflightMethods.STOP]: [],
       [cloud.ServiceInflightMethods.STARTED]: [],
     };

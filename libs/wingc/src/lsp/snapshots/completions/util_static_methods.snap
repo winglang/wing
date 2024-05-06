@@ -69,6 +69,18 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nstatic os: (): str\n```\n---\nReturns a string identifying the operating system platform.\n\n### Returns\nThe operating system platform\n\n### Example\n```ts\n\"linux\", \"darwin\", \"win32\"\n```"
   sortText: ff|os
   insertText: os()
+- label: setEnv
+  kind: 2
+  detail: "(name: str, value: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic setEnv: (name: str, value: str): void\n```\n---\nSets the given name and value as an environment variable.\n### Parameters\n- `name` — `str` — The name of the environment variable.\n- `value` — `str` — The value of the environment variable."
+  sortText: ff|setEnv
+  insertText: setEnv($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: sha256
   kind: 2
   detail: "(data: str): str"
@@ -125,11 +137,17 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nstatic uuidv4: (): str\n```\n---\nGenerates a version 4 UUID."
   sortText: ff|uuidv4
   insertText: uuidv4()
+- label: ChildProcess
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass ChildProcess\n```\n---\nHandle to a running child process.\n\n### Initializer\n- `program` — `str`\n- `args` — `Array<str>`\n- `...opts` — `SpawnOptions?`\n  \n  - `cwd?` — `str?`\n  - `env?` — `Map<str>?`\n  - `inheritEnv?` — `bool?`\n  - `stderr?` — `Stdio?` — Configuration for the process's standard error stream.\n  - `stdin?` — `Stdio?` — Configuration for the process's standard input stream.\n  - `stdout?` — `Stdio?` — Configuration for the process's standard output stream.\n### Fields\n- `pid?` — `num?` — The child's OS-assigned process ID.\n### Methods\n- `kill` — `(signal: num?): void` — Kill the process.\n- `wait` — `(): Output` — Wait for the process to finish and return its output."
+  sortText: gg|ChildProcess
 - label: Util
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Util\n```\n---\nUtility functions.\n\n### Methods\n- `base64Decode` — `(stringToDecode: str, url: bool?): str` — Converts a string from base64 to UTF-8.\n- `base64Encode` — `(stringToEncode: str, url: bool?): str` — Converts a string from UTF-8 to base64.\n- `env` — `(name: str): str` — Returns the value of an environment variable.\n- `exec` — `(program: str, args: Array<str>, opts: ExecOptions?): Output` — Execute a program with the given arguments, wait for it to finish, and return its outputs.\n- `nanoid` — `(options: NanoidOptions?): str` — Generates a unique ID using the nanoid library.\n- `os` — `(): str` — Returns a string identifying the operating system platform.\n- `sha256` — `(data: str): str` — Computes the SHA256 hash of the given data.\n- `shell` — `(command: str, opts: ShellOptions?): str` — Executes a command in the shell and returns its standard output.\n- `sleep` — `inflight (delay: duration): void` — Suspends execution for a given duration.\n- `tryEnv` — `(name: str): str?` — Returns the value of an environment variable.\n- `ulid` — `(options: UlidOptions?): str` — Generates universally unique lexicographically sortable identifier.\n- `uuidv4` — `(): str` — Generates a version 4 UUID.\n- `waitUntil` — `inflight (predicate: inflight (): bool, props: WaitUntilProps?): bool` — Run a predicate repeatedly, waiting until it returns true or until the timeout elapses."
+    value: "```wing\nclass Util\n```\n---\nUtility functions.\n\n### Methods\n- `base64Decode` — `(stringToDecode: str, url: bool?): str` — Converts a string from base64 to UTF-8.\n- `base64Encode` — `(stringToEncode: str, url: bool?): str` — Converts a string from UTF-8 to base64.\n- `env` — `(name: str): str` — Returns the value of an environment variable.\n- `exec` — `(program: str, args: Array<str>, opts: ExecOptions?): Output` — Execute a program with the given arguments, wait for it to finish, and return its outputs.\n- `nanoid` — `(options: NanoidOptions?): str` — Generates a unique ID using the nanoid library.\n- `os` — `(): str` — Returns a string identifying the operating system platform.\n- `setEnv` — `(name: str, value: str): void` — Sets the given name and value as an environment variable.\n- `sha256` — `(data: str): str` — Computes the SHA256 hash of the given data.\n- `shell` — `(command: str, opts: ShellOptions?): str` — Executes a command in the shell and returns its standard output.\n- `sleep` — `inflight (delay: duration): void` — Suspends execution for a given duration.\n- `spawn` — `inflight (program: str, args: Array<str>, opts: SpawnOptions?): ChildProcess` — Execute a program with the given arguments, and return a `ChildProcess` object that can be used to interact with the process while it is running.\n- `tryEnv` — `(name: str): str?` — Returns the value of an environment variable.\n- `ulid` — `(options: UlidOptions?): str` — Generates universally unique lexicographically sortable identifier.\n- `uuidv4` — `(): str` — Generates a version 4 UUID.\n- `waitUntil` — `inflight (predicate: inflight (): bool, props: WaitUntilProps?): bool` — Run a predicate repeatedly, waiting until it returns true or until the timeout elapses."
   sortText: gg|Util
 - label: CommandOptions
   kind: 22
@@ -161,6 +179,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct ShellOptions extends CommandOptions\n```\n---\nAdditional options for `util.shell()`.\n### Fields\n- `cwd?` — `str?`\n- `env?` — `Map<str>?`\n- `inheritEnv?` — `bool?`\n- `throw?` — `bool?` — Whether to throw an error on command execution failure."
   sortText: hh|ShellOptions
+- label: SpawnOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct SpawnOptions extends CommandOptions\n```\n---\nAdditional options for `util.spawn()`.\n### Fields\n- `cwd?` — `str?`\n- `env?` — `Map<str>?`\n- `inheritEnv?` — `bool?`\n- `stderr?` — `Stdio?` — Configuration for the process's standard error stream.\n- `stdin?` — `Stdio?` — Configuration for the process's standard input stream.\n- `stdout?` — `Stdio?` — Configuration for the process's standard output stream."
+  sortText: hh|SpawnOptions
 - label: UlidOptions
   kind: 22
   documentation:
@@ -185,4 +209,10 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface IPredicateHandlerClient\n```\n---\nInflight client for `IPredicateHandler`.\n### Methods\n- `handle` — `inflight (): bool` — The Predicate function that is called."
   sortText: ii|IPredicateHandlerClient
+- label: Stdio
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum Stdio\n```\n---\nDescribes what to do with a standard I/O stream for a child process.\n- `INHERIT`\n- `PIPED`\n- `NULL`"
+  sortText: jj|Stdio
 

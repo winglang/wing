@@ -13,7 +13,8 @@ pub mod extern_dtsify;
 pub const TYPE_INFLIGHT_POSTFIX: &str = "$Inflight";
 const TYPE_INTERNAL_NAMESPACE: &str = "$internal";
 const TYPE_STD: &str = "std";
-const EMIT_FILE_EXTENSION: &str = ".cjs";
+const EMIT_FILE_EXTENSION: &str = "cjs";
+const EMIT_TYPE_FILE_EXTENSION: &str = "d.cts";
 
 pub struct DTSifier<'a> {
 	preflight_file_map: &'a IndexMap<Utf8PathBuf, String>,
@@ -62,11 +63,11 @@ impl<'a> DTSifier<'a> {
 			dts.add_code(self.dtsify_statement(statement));
 		}
 
-		let mut dts_file_name = self.preflight_file_map.get(source_path).unwrap().clone();
+		let mut dts_file_name = Utf8PathBuf::from(self.preflight_file_map.get(source_path).unwrap());
 
-		assert!(dts_file_name.ends_with(EMIT_FILE_EXTENSION));
+		assert!(matches!(dts_file_name.extension(), Some(EMIT_FILE_EXTENSION)));
 
-		dts_file_name.replace_range((dts_file_name.len() - EMIT_FILE_EXTENSION.len()).., ".d.ts");
+		dts_file_name = dts_file_name.with_extension(EMIT_TYPE_FILE_EXTENSION);
 
 		match self.output_files.borrow_mut().add_file(dts_file_name, dts.to_string()) {
 			Ok(()) => {}
@@ -207,9 +208,6 @@ impl<'a> DTSifier<'a> {
 			code.line(format!(
 				"[{TYPE_INTERNAL_NAMESPACE}.INFLIGHT_SYMBOL]?: {inflight_class_name};"
 			));
-			code.line(format!(
-				"_supportedOps(): {TYPE_INTERNAL_NAMESPACE}.OperationsOf<{inflight_class_name}>;"
-			));
 		}
 
 		for field in class
@@ -292,20 +290,20 @@ impl<'a> DTSifier<'a> {
 				match source {
 					BringSource::BuiltinModule(sym) => code.line(format!("import {{ {sym} }} from \"{WINGSDK_ASSEMBLY_NAME}\"")),
 					BringSource::TrustedModule(sym, path) => {
-						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".cjs", "");
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap();
 						code.line(format!("import * as {sym} from \"./{preflight_file_name}\";"))
 					}
 					BringSource::WingLibrary(sym, path) => {
-						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".cjs", "");
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap();
 						code.line(format!("import * as {sym} from \"./{preflight_file_name}\";"))
 					}
 					BringSource::JsiiModule(sym) => code.line(format!("import * as {identifier} from \"{sym}\"")),
 					BringSource::WingFile(path) => {
-						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".cjs", "");
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap();
 						code.line(format!("import * as {identifier} from \"./{preflight_file_name}\";"))
 					}
 					BringSource::Directory(path) => {
-						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".cjs", "");
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap();
 						code.line(format!("import * as {identifier} from \"./{preflight_file_name}\";"))
 					}
 				}

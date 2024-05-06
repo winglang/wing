@@ -206,10 +206,10 @@
         ],
         "environment": {
           "variables": {
-            "FUNCTION_NAME_24dc8580": "${aws_lambda_function.Function.arn}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Handler-c89bc30b",
-            "WING_TARGET": "tf-aws"
+            "WING_TARGET": "tf-aws",
+            "WING_TOKEN_TFTOKEN_TOKEN_15": "${jsonencode(aws_lambda_function.Function.arn)}"
           }
         },
         "function_name": "Handler-c89bc30b",

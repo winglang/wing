@@ -288,12 +288,6 @@ pub struct Namespace {
 	#[derivative(Debug = "ignore")]
 	pub envs: Vec<SymbolEnvRef>,
 
-	// Indicate whether all the types in this namespace have been loaded, this is part of our
-	// lazy loading mechanism and is used by the lsp's autocomplete in case we need to load
-	// the types after initial compilation.
-	#[derivative(Debug = "ignore")]
-	pub loaded: bool,
-
 	/// Where we can resolve this namespace from
 	pub module_path: ResolveSource,
 }
@@ -384,18 +378,18 @@ pub trait ClassLike: Display {
 
 	fn methods(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
-			t.as_variable()
-				.unwrap()
-				.type_
-				.as_function_sig()
-				.map(|_| (s.clone(), t.as_variable().unwrap().type_))
+			if t.as_variable()?.type_.as_function_sig().is_some() {
+				Some((s, t.as_variable()?.type_))
+			} else {
+				None
+			}
 		})
 	}
 
 	fn fields(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
-			if t.as_variable().unwrap().type_.as_function_sig().is_none() {
-				Some((s, t.as_variable().unwrap().type_))
+			if t.as_variable()?.type_.as_function_sig().is_none() {
+				Some((s, t.as_variable()?.type_))
 			} else {
 				None
 			}
@@ -403,13 +397,7 @@ pub trait ClassLike: Display {
 	}
 
 	fn get_method(&self, name: &Symbol) -> Option<&VariableInfo> {
-		let v = self
-			.get_env()
-			.lookup_ext(name, None)
-			.ok()?
-			.0
-			.as_variable()
-			.expect("class env should only contain variables");
+		let v = self.get_env().lookup_ext(name, None).ok()?.0.as_variable()?;
 		if v.type_.is_closure() {
 			Some(v)
 		} else {
@@ -418,13 +406,7 @@ pub trait ClassLike: Display {
 	}
 
 	fn get_field(&self, name: &Symbol) -> Option<&VariableInfo> {
-		let v = self
-			.get_env()
-			.lookup_ext(name, None)
-			.ok()?
-			.0
-			.as_variable()
-			.expect("class env should only contain variables");
+		let v = self.get_env().lookup_ext(name, None).ok()?.0.as_variable()?;
 		if !v.type_.is_closure() {
 			Some(v)
 		} else {
@@ -565,7 +547,9 @@ impl Subtype for Type {
 
 				// Next, compare the function to a method on the interface named "handle" if it exists
 				if let Some((method, _)) = r0.get_env().lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None).ok() {
-					let method = method.as_variable().unwrap();
+					let Some(method) = method.as_variable() else {
+						return false;
+					};
 					if !method.phase.is_subtype_of(&Phase::Inflight) {
 						return false;
 					}
@@ -1027,7 +1011,7 @@ impl TypeRef {
 
 		if let Some(class) = self.as_class() {
 			if let LookupResult::Found(method, _) = class.get_env().lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None) {
-				return method.as_variable().unwrap().type_.as_function_sig();
+				return method.as_variable()?.type_.as_function_sig();
 			}
 		}
 
@@ -1036,7 +1020,7 @@ impl TypeRef {
 				.get_env()
 				.lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None)
 			{
-				return method.as_variable().unwrap().type_.as_function_sig();
+				return method.as_variable()?.type_.as_function_sig();
 			}
 		}
 
@@ -2727,28 +2711,6 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error(exp, format!("Cannot instantiate abstract class \"{}\"", class.name));
 				}
 
-				// error if we are trying to instantiate a preflight in a static method
-				// without an explicit scope (there is no "this" to use as the scope)
-				if class.phase == Phase::Preflight && obj_scope.is_none() {
-					// check if there is a "this" symbol in the current environment
-					let has_this = env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_some();
-					// if we have a "this", it means we can use it as a default scope, so we are fine
-					if !has_this {
-						// we don't have a "this", so we need to check if we are in a static method
-						// because the entrypoint scope doesn't have a "this" but it is not static
-						let is_static = self.ctx().current_function().map(|f| f.is_static);
-						if let Some(true) = is_static {
-							self.spanned_error(
-								exp,
-								format!(
-									"Cannot instantiate preflight class \"{}\" in a static method without an explicit scope",
-									class.name
-								),
-							);
-						}
-					}
-				}
-
 				if class.phase == Phase::Independent || env.phase == class.phase {
 					(&class.env, &class.name)
 				} else {
@@ -3456,7 +3418,6 @@ impl<'a> TypeChecker<'a> {
 		let ns = self.types.add_namespace(Namespace {
 			name: source_path.file_stem().unwrap().to_string(),
 			envs: child_envs,
-			loaded: true,
 			module_path: ResolveSource::WingFile,
 		});
 		self
@@ -3599,7 +3560,6 @@ impl<'a> TypeChecker<'a> {
 				let ns = self.types.add_namespace(Namespace {
 					name: path.to_string(),
 					envs: vec![brought_env],
-					loaded: true,
 					module_path: ResolveSource::WingFile,
 				});
 				if let Err(e) = env.define(
@@ -4424,15 +4384,57 @@ impl<'a> TypeChecker<'a> {
 			&ast_class.initializer,
 		);
 
-		// Verify if all fields of a class/resource are initialized in the initializer.
+		// Verify if all fields of a class/resource are initialized in the ctor.
 		let init_statements = match &ast_class.initializer.body {
 			FunctionBody::Statements(s) => s,
 			FunctionBody::External(_) => panic!("init cannot be extern"),
 		};
-
 		self.check_class_field_initialization(&init_statements, &ast_class.fields, Phase::Preflight);
 
-		// Type check the inflight initializer
+		// If our parent's ctor has any parameters make sure there's a call to it as the first statement of our ctor
+		// (otherwise the call can be implicit and we don't need to check for it)
+		if let (Some(parent_class_env), Some(parent_class_type)) = (parent_class_env, parent_class) {
+			let ctor_def = if ast_class.phase == Phase::Inflight {
+				&ast_class.inflight_initializer
+			} else {
+				&ast_class.initializer
+			};
+			let parent_ctor_symb = if parent_class_type.as_class().unwrap().phase == Phase::Inflight {
+				&inflight_init_symb
+			} else {
+				// note: In case of phase independent classes (brought from JSII) the init synbol is the same as preflight
+				&init_symb
+			};
+
+			let parent_ctor_sig = parent_class_env
+				.lookup(&parent_ctor_symb, None)
+				.expect("a ctor")
+				.as_variable()
+				.unwrap()
+				.type_
+				.as_function_sig()
+				.expect("ctor to be a function");
+			if let FunctionBody::Statements(ctor_body) = &ctor_def.body {
+				if parent_ctor_sig.min_parameters() > 0
+					&& !matches!(
+						ctor_body.statements.first(),
+						Some(Stmt {
+							kind: StmtKind::SuperConstructor { .. },
+							..
+						})
+					) {
+					self.spanned_error(
+						ctor_body,
+						format!(
+							"Missing super() call as first statement of {}'s constructor",
+							ast_class.name
+						),
+					);
+				}
+			}
+		}
+
+		// Type check the inflight ctor
 		self.type_check_method(
 			class_type,
 			&inflight_init_symb,
@@ -5316,6 +5318,9 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
 
+			importer.import_root_types();
+			importer.import_submodules_to_env(env);
+
 			// If we're importing from the the wing sdk, eagerly import all the types within it
 			// The wing sdk is special because it's currently the only jsii module we import with a specific target namespace
 			if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
@@ -5325,9 +5330,6 @@ impl<'a> TypeChecker<'a> {
 					Some(jsii.namespace_filter.join("."))
 				});
 			}
-
-			importer.import_root_types();
-			importer.import_submodules_to_env(env);
 		}
 	}
 
@@ -6228,12 +6230,8 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// If the type is not found, attempt to import it from a jsii library
-		if import_udt_from_jsii(self.types, self.jsii_types, user_defined_type, &self.jsii_imports) {
-			return resolve_user_defined_type(user_defined_type, env, statement_idx);
-		}
-
-		// If the type is still not found, return the original error
-		res
+		import_udt_from_jsii(self.types, self.jsii_types, user_defined_type, &self.jsii_imports);
+		resolve_user_defined_type(user_defined_type, env, statement_idx)
 	}
 
 	fn extract_parent_class(
@@ -6623,23 +6621,29 @@ pub fn import_udt_from_jsii(
 	jsii_types: &TypeSystem,
 	user_defined_type: &UserDefinedType,
 	jsii_imports: &[JsiiImportSpec],
-) -> bool {
+) {
 	for jsii in jsii_imports {
 		if jsii.alias.name == user_defined_type.root.name {
 			let mut importer = JsiiImporter::new(&jsii, wing_types, jsii_types);
 
 			let mut udt_string = if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
 				// when importing from the std lib, the "alias" is the submodule
-				format!("{}.{}.", jsii.assembly_name, jsii.alias.name)
+				format!("{}.{}", jsii.assembly_name, jsii.alias.name)
 			} else {
-				format!("{}.", jsii.assembly_name)
+				if user_defined_type.fields.is_empty() {
+					return;
+				}
+				jsii.assembly_name.to_string()
 			};
-			udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
 
-			return importer.import_type(&FQN::from(udt_string.as_str()));
+			for field in &user_defined_type.fields {
+				udt_string.push('.');
+				udt_string.push_str(&field.name);
+			}
+
+			importer.import_type(&FQN::from(udt_string.as_str()));
 		}
 	}
-	false
 }
 
 /// *Hacky* If the given type is from the std namespace, add the implicit `std.` to it.

@@ -41,7 +41,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 1`]
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
       "QueueRef_AwsConsoleField_Handler_IamRolePolicy_184A5238": {
-        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:GetQueueUrl"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:GetQueueUrl"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:SendMessage"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:PurgeQueue"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:GetQueueAttributes"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:ReceiveMessage","sqs:DeleteMessage"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.QueueRef_AwsConsoleField_Handler_IamRole_0DD0004C.name}",
       },
       "QueueRef_QueueArnField_Handler_IamRolePolicy_64EE3F4B": {
@@ -49,7 +49,7 @@ exports[`QueueRef in an TFAWS app can be used to reference an existing queue 1`]
         "role": "\${aws_iam_role.QueueRef_QueueArnField_Handler_IamRole_C121BD5E.name}",
       },
       "QueueRef_QueueUrlField_Handler_IamRolePolicy_A9F2F773": {
-        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:GetQueueUrl"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:GetQueueUrl"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:SendMessage"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:PurgeQueue"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:GetQueueAttributes"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:ReceiveMessage","sqs:DeleteMessage"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.QueueRef_QueueUrlField_Handler_IamRole_709A15CB.name}",
       },
     },

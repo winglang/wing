@@ -1,38 +1,23 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import { cloud } from "..";
 import {
   ApiRequest,
   ApiResponse,
   DEFAULT_RESPONSE_STATUS,
-  IApiEndpointHandlerClient,
   parseHttpMethod,
   sanitizeParamLikeObject,
-} from "../cloud/api";
+} from "../cloud";
 
-export class ApiOnRequestHandlerClient {
-  private readonly handler: IApiEndpointHandlerClient;
-  private readonly corsHeaders?: Record<string, string>;
-  constructor({
-    handler,
-    args,
-  }: {
-    handler: IApiEndpointHandlerClient;
-    args?: {
-      corsHeaders?: Record<string, string>;
-    };
-  }) {
-    this.handler = handler;
-    this.corsHeaders = args?.corsHeaders;
-  }
-  public async handle(
-    request: APIGatewayProxyEvent
-  ): Promise<APIGatewayProxyResult> {
-    const apiRequest: ApiRequest = mapApigatewayEventToCloudApiRequest(request);
-    const apiResponse: ApiResponse =
-      (await this.handler.handle(apiRequest)) ?? {};
-    const apiGatewayResponse: APIGatewayProxyResult =
-      mapCloudApiResponseToApigatewayResponse(apiResponse, this.corsHeaders);
-    return apiGatewayResponse;
-  }
+export async function apigwFunctionHandler(
+  request: APIGatewayProxyEvent,
+  handlerFunction: (
+    request: cloud.ApiRequest
+  ) => Promise<void | cloud.ApiResponse>,
+  headers?: Record<string, string>
+) {
+  const apiRequest = mapApigatewayEventToCloudApiRequest(request);
+  const apiResponse = (await handlerFunction(apiRequest)) ?? {};
+  return mapCloudApiResponseToApigatewayResponse(apiResponse, headers);
 }
 
 /**

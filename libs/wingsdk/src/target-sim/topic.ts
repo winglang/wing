@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
@@ -8,11 +7,9 @@ import { ISimulatorResource } from "./resource";
 import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
-import { Testing, ToSimulatorOutput } from "../simulator";
+import { lift, LiftMap } from "../core";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
-
-const QUEUE_PUSH_METHOD = "push";
 
 /**
  * Simulator implementation of `cloud.Topic`
@@ -30,12 +27,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "topic.onmessage.inflight.js"),
-      "TopicOnMessageHandlerClient"
-    );
-
+    const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnMessage"),
@@ -65,24 +57,15 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   }
 
   public subscribeQueue(queue: cloud.Queue): void {
-    const functionHandler = convertBetweenHandlers(
-      Testing.makeHandler(
-        "async handle(event) { return await this.queue.push(event); }",
-        {
-          queue: {
-            obj: queue,
-            ops: [QUEUE_PUSH_METHOD],
-          },
-        }
-      ),
-      join(__dirname, "topic.onmessage.inflight.js"),
-      "TopicOnMessageHandlerClient"
-    );
-
     const fn = new Function(
       this,
       App.of(this).makeId(this, "subscribeQueue"),
-      functionHandler,
+      lift({ queue })
+        .grant({ queue: ["push"] })
+        .inflight(async (ctx, event) => {
+          await ctx.queue.push(event as string);
+          return undefined;
+        }),
       {}
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
@@ -114,11 +97,11 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.QueueInflightMethods.PUSH,
-      cloud.TopicInflightMethods.PUBLISH,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.TopicInflightMethods.PUBLISH]: [],
+    };
   }
 
   public toSimulator(): ToSimulatorOutput {
@@ -127,5 +110,24 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       type: cloud.TOPIC_FQN,
       props,
     };
+  }
+}
+
+/**
+ * Utility class to work with topic message handlers.
+ */
+export class TopicOnMessageHandler {
+  /**
+   * Converts a `cloud.ITopicOnMessageHandler` to a `cloud.IFunctionHandler`
+   * @param handler the handler to convert
+   * @returns the function handler
+   */
+  public static toFunctionHandler(
+    handler: cloud.ITopicOnMessageHandler
+  ): cloud.IFunctionHandler {
+    return lift({ handler }).inflight(async (ctx, event) => {
+      await ctx.handler(event as string);
+      return undefined;
+    });
   }
 }

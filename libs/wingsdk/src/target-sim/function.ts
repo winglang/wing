@@ -5,7 +5,7 @@ import { FunctionSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { App, LiftDepsMatrixRaw } from "../core";
+import { App, LiftMap } from "../core";
 import { PolicyStatement, ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost, IResource } from "../std";
 import { Duration } from "../std/duration";
@@ -71,12 +71,10 @@ export class Function
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
-      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
-      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
-        [this.handler, ["handle"]],
-      ],
+      [cloud.FunctionInflightMethods.INVOKE]: [],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [],
     };
   }
 

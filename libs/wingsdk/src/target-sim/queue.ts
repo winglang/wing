@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
@@ -12,9 +11,8 @@ import { QueueSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { LiftDepsMatrixRaw } from "../core";
+import { lift, LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
-import { convertBetweenHandlers } from "../shared/convert";
 import { ToSimulatorOutput } from "../simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -68,7 +66,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.QueueInflightMethods.PUSH]: [],
       [cloud.QueueInflightMethods.PURGE]: [],
@@ -81,34 +79,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    /**
-     * The inflight function the user provided (via the `inflight` parameter) needs
-     * to be wrapped in some extra logic to handle batching.
-     * `convertBetweenHandlers` creates a dummy resource that provides the
-     * wrapper code. In Wing psuedocode, this looks like:
-     *
-     * resource Handler impl cloud.IFunctionHandler {
-     *   init(handler: cloud.IQueueSetConsumerHandler) {
-     *     this.handler = handler;
-     *   }
-     *   inflight handle(event: string) {
-     *     for (const message of JSON.parse(event).messages) {
-     *       this.handler.handle(message);
-     *     }
-     *   }
-     * }
-     *
-     * TODO: can we optimize this and create one less construct in the
-     * user's tree by creating a single `Handler` resource that subclasses from
-     * `cloud.Function` and overrides the `invoke` inflight method with the
-     * wrapper code directly?
-     */
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "queue.setconsumer.inflight.js"),
-      "QueueSetConsumerHandlerClient"
-    );
-
+    const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
       App.of(this).makeId(this, "SetConsumer"),
@@ -175,5 +146,35 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   /** @internal */
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
+  }
+}
+
+/**
+ * Utility class to work with queue set consumer handlers.
+ */
+export class QueueSetConsumerHandler {
+  /**
+   * Converts from a `cloud.IQueueSetConsumerHandler` to a `cloud.IFunctionHandler`.
+   * @param handler The handler to convert.
+   * @returns The function handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.IQueueSetConsumerHandler
+  ): cloud.IFunctionHandler {
+    return lift({ handler }).inflight(async (ctx, event) => {
+      const batchItemFailures = [];
+      let parsed = JSON.parse(event ?? "{}");
+      if (!parsed.messages) throw new Error('No "messages" field in event.');
+      for (const $message of parsed.messages) {
+        try {
+          await ctx.handler($message.payload);
+        } catch (error) {
+          batchItemFailures.push($message);
+        }
+      }
+      return batchItemFailures.length > 0
+        ? JSON.stringify(batchItemFailures)
+        : undefined;
+    });
   }
 }

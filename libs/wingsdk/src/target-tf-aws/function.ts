@@ -282,11 +282,11 @@ export class Function extends cloud.Function implements IAwsFunction {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.FunctionInflightMethods.INVOKE,
-      cloud.FunctionInflightMethods.INVOKE_ASYNC,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

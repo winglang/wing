@@ -1,4 +1,3 @@
-import { join } from "path";
 import { RemovalPolicy } from "aws-cdk-lib";
 import {
   BlockPublicAccess,
@@ -11,10 +10,14 @@ import { LambdaDestination } from "aws-cdk-lib/aws-s3-notifications";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
-import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateBucketPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsBucket } from "@winglang/sdk/lib/shared-aws/bucket";
-import { IAwsCdkFunction, addPolicyStatements, isAwsCdkFunction } from "./function";
+import {
+  IAwsCdkFunction,
+  addPolicyStatements,
+  isAwsCdkFunction,
+} from "./function";
+import { LiftMap, lift } from "@winglang/sdk/lib/core";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -51,20 +54,24 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     }
   }
 
-  protected eventHandlerLocation(): string {
-    return join(__dirname, "bucket.onevent.inflight.js");
-  }
-
   private onEventFunction(
-    event: string,
+    event: cloud.BucketEventType,
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions
   ): IAwsCdkFunction {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      this.eventHandlerLocation(),
-      `BucketEventHandlerClient`
-    );
+    const functionHandler = lift({ handler: inflight, eventType: event }).inflight(async (ctx, event) => {
+      const record = event.Records[0];
+      if (!record) {
+        throw new Error("No record found in the S3 event");
+      }
+      try {
+        await ctx.handler(record.s3.object.key, ctx.eventType);
+      } catch (error) {
+        //TODO: change to some sort of warning- console.warn doesn't seems to work
+        console.log("Error parsing the notification event message: ", error);
+        console.log("Event: ", event);
+      }
+    });
 
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
@@ -81,31 +88,31 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.BucketInflightMethods.DELETE,
-      cloud.BucketInflightMethods.GET,
-      cloud.BucketInflightMethods.GET_JSON,
-      cloud.BucketInflightMethods.LIST,
-      cloud.BucketInflightMethods.PUT,
-      cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
-      cloud.BucketInflightMethods.EXISTS,
-      cloud.BucketInflightMethods.TRY_GET,
-      cloud.BucketInflightMethods.TRY_GET_JSON,
-      cloud.BucketInflightMethods.TRY_DELETE,
-      cloud.BucketInflightMethods.SIGNED_URL,
-      cloud.BucketInflightMethods.METADATA,
-      cloud.BucketInflightMethods.COPY,
-      cloud.BucketInflightMethods.RENAME,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.SIGNED_URL]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+    };
   }
 
   public onCreate(
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions
   ): void {
-    const fn = this.onEventFunction("OnCreate", inflight, opts);
+    const fn = this.onEventFunction(cloud.BucketEventType.CREATE, inflight, opts);
 
     std.Node.of(this).addConnection({
       source: this,
@@ -123,7 +130,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnDeleteOptions
   ): void {
-    const fn = this.onEventFunction("OnDelete", inflight, opts);
+    const fn = this.onEventFunction(cloud.BucketEventType.DELETE, inflight, opts);
 
     std.Node.of(this).addConnection({
       source: this,
@@ -141,7 +148,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnUpdateOptions
   ): void {
-    const fn = this.onEventFunction("OnUpdate", inflight, opts);
+    const fn = this.onEventFunction(cloud.BucketEventType.UPDATE, inflight, opts);
 
     std.Node.of(this).addConnection({
       source: this,
@@ -159,37 +166,9 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnEventOptions
   ) {
-    const fn = this.onEventFunction("OnEvent", inflight, opts);
-
-    std.Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "onCreate()",
-    });
-    this.bucket.addEventNotification(
-      EVENTS[cloud.BucketEventType.CREATE],
-      new LambdaDestination(fn.awscdkFunction)
-    );
-
-    std.Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "onDelete()",
-    });
-    this.bucket.addEventNotification(
-      EVENTS[cloud.BucketEventType.DELETE],
-      new LambdaDestination(fn.awscdkFunction)
-    );
-
-    std.Node.of(this).addConnection({
-      source: this,
-      target: fn,
-      name: "onUpdate()",
-    });
-    this.bucket.addEventNotification(
-      EVENTS[cloud.BucketEventType.UPDATE],
-      new LambdaDestination(fn.awscdkFunction)
-    );
+    this.onCreate(inflight, opts);
+    this.onDelete(inflight, opts);
+    this.onUpdate(inflight, opts);
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
@@ -197,7 +176,10 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
       throw new Error("Expected 'host' to implement IAwsCdkFunction");
     }
 
-    addPolicyStatements(host.awscdkFunction, calculateBucketPermissions(this.bucket.bucketArn, ops));
+    addPolicyStatements(
+      host.awscdkFunction,
+      calculateBucketPermissions(this.bucket.bucketArn, ops)
+    );
 
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.

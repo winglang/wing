@@ -1,8 +1,8 @@
 import { cpSync, writeFileSync, readdirSync } from "fs";
 import { join, basename } from "path";
 import { test, expect } from "vitest";
-import { Function, IFunctionClient } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { Function, IFunctionClient, IFunctionHandler } from "../../src/cloud";
+import { lift } from "../../src/core";
 import { Container } from "../../src/target-sim/container";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
@@ -17,20 +17,7 @@ test("simple container from registry", async () => {
     args: ["-text=bang"],
   });
 
-  new Function(
-    app,
-    "Function",
-    Testing.makeHandler(
-      `
-      async handle() {
-        const url = "http://localhost:" + this.hostPort;
-        const res = await fetch(url);
-        return res.text();
-      }
-      `,
-      { hostPort: { obj: c.hostPort, ops: [] } }
-    )
-  );
+  new Function(app, "Function", httpGet(c));
 
   const sim = await app.startSimulator();
   sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
@@ -51,20 +38,7 @@ test("simple container from a dockerfile", async () => {
     containerPort: 3000,
   });
 
-  new Function(
-    app,
-    "Function",
-    Testing.makeHandler(
-      `
-      async handle() {
-        const url = "http://localhost:" + this.hostPort;
-        const res = await fetch(url);
-        return res.text();
-      }
-      `,
-      { hostPort: { obj: c.hostPort, ops: [] } }
-    )
-  );
+  new Function(app, "Function", httpGet(c));
 
   const sim = await app.startSimulator();
   sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
@@ -148,20 +122,7 @@ test("simple container with a volume", async () => {
     volumes: [`${__dirname}:/tmp`],
   });
 
-  new Function(
-    app,
-    "Function",
-    Testing.makeHandler(
-      `
-      async handle() {
-        const url = "http://localhost:" + this.hostPort;
-        const res = await fetch(url);
-        return res.text();
-      }
-      `,
-      { hostPort: { obj: c.hostPort, ops: [] } }
-    )
-  );
+  new Function(app, "Function", httpGet(c));
 
   const sim = await app.startSimulator();
   sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
@@ -173,41 +134,42 @@ test("simple container with a volume", async () => {
   await sim.stop();
 });
 
-test("container can mount a volume to the state directory", async () => {
+test("anonymous volume can be reused across restarts", async () => {
   const app = new SimApp();
 
   const c = new Container(app, "Container", {
     name: "my-app",
     image: join(__dirname, "my-docker-image.mounted-volume"),
     containerPort: 3000,
-    volumes: ["$WING_STATE_DIR:/tmp"],
+    volumes: ["/tmp"],
   });
 
-  new Function(
-    app,
-    "Function",
-    Testing.makeHandler(
-      `
-      async handle() {
-        const url = "http://localhost:" + this.hostPort;
-        const res = await fetch(url);
-        return res.text();
-      }
-      `,
-      { hostPort: { obj: c.hostPort, ops: [] } }
-    )
-  );
+  new Function(app, "Function", httpGet(c));
 
   const sim = await app.startSimulator();
   sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
 
   const fn = sim.getResource("root/Function") as IFunctionClient;
   const response = await fn.invoke();
-  expect(response).contains("hello.txt");
-
-  const statedir = sim.getResourceStateDir("root/Container");
-  const files = readdirSync(statedir);
-  expect(files).toEqual(["hello.txt"]);
+  expect(response?.split("\n").filter((s) => s.endsWith(".txt"))).toEqual([
+    "hello.txt",
+  ]);
 
   await sim.stop();
+  await sim.start();
+
+  const fn2 = sim.getResource("root/Function") as IFunctionClient;
+  const response2 = await fn2.invoke();
+  expect(response2?.split("\n").filter((s) => s.endsWith(".txt"))).toEqual([
+    "hello.txt",
+    "world.txt",
+  ]);
 });
+
+function httpGet(c: Container): IFunctionHandler {
+  return lift({ hostPort: c.hostPort }).inflight(async (ctx) => {
+    const url = "http://localhost:" + ctx.hostPort;
+    const res = await fetch(url);
+    return res.text();
+  });
+}

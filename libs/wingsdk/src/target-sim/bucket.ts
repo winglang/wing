@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
@@ -6,7 +5,7 @@ import { BucketSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap, lift } from "../core";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost } from "../std";
 
@@ -28,7 +27,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [cloud.BucketInflightMethods.DELETE]: [],
       [cloud.BucketInflightMethods.GET]: [],
@@ -63,6 +62,13 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   public addObject(key: string, body: string): void {
     this.initialObjects[key] = body;
+  }
+
+  protected createTopicHandler(
+    eventType: cloud.BucketEventType,
+    inflight: cloud.IBucketEventHandler
+  ): cloud.ITopicOnMessageHandler {
+    return BucketEventHandler.toTopicOnMessageHandler(inflight, eventType);
   }
 
   public onCreate(
@@ -105,10 +111,6 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     this.policy.addStatement(updateTopic, cloud.TopicInflightMethods.PUBLISH);
   }
 
-  protected eventHandlerLocation(): string {
-    return join(__dirname, "bucket.onevent.inflight.js");
-  }
-
   public toSimulator(): ToSimulatorOutput {
     const props: BucketSchema = {
       public: this.public,
@@ -129,5 +131,25 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
   /** @internal */
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
+  }
+}
+
+/**
+ * Utility class to work with bucket event handlers.
+ */
+export class BucketEventHandler {
+  /**
+   * Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`.
+   * @param handler the handler to convert
+   * @param eventType the event type
+   * @returns the on message handler.
+   */
+  public static toTopicOnMessageHandler(
+    handler: cloud.IBucketEventHandler,
+    eventType: cloud.BucketEventType
+  ): cloud.ITopicOnMessageHandler {
+    return lift({ handler, eventType }).inflight(async (ctx, event) => {
+      return ctx.handler(event, ctx.eventType);
+    });
   }
 }

@@ -29,3 +29,14 @@ test "use util from inflight" {
   let noValue = util.Util.tryEnv(NOT_ACTUAL_ENV);
   assert(noValue == nil);
 }
+
+/**
+ * setEnv()
+ */
+util.setEnv("FOO", "bar");
+assert(util.env("FOO") == "bar");
+ 
+test "set env from inflight" {
+  util.setEnv("FOO", "baz");
+  assert(util.env("FOO") == "baz");
+}

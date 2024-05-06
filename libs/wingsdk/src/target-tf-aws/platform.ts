@@ -87,7 +87,7 @@ export class Platform implements IPlatform {
         await client.send(
           new UpdateSecretCommand({
             SecretId: name,
-            SecretString: JSON.stringify({ [name]: value }),
+            SecretString: value,
           })
         );
       } catch (error: any) {
@@ -97,7 +97,7 @@ export class Platform implements IPlatform {
           await client.send(
             new CreateSecretCommand({
               Name: name,
-              SecretString: JSON.stringify({ [name]: value }),
+              SecretString: value,
             })
           );
         } else {

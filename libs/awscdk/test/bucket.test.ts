@@ -4,6 +4,11 @@ import { cloud, simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
 import { awscdkSanitize, CDK_APP_OPTS } from "./util";
+import { inflight } from "@winglang/sdk/lib/core";
+
+const EVENT_HANDLER = inflight(async (_, event) => {
+  console.log("Received: ", event.name);
+});
 
 test("create a bucket", async () => {
   // GIVEN
@@ -89,12 +94,7 @@ test("bucket with onCreate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(`\
-async handle(event) {
-  console.log("Received " + event.name);
-}`
-  );
-  bucket.onCreate(processor);
+  bucket.onCreate(EVENT_HANDLER);
   const output = app.synth();
 
   // THEN
@@ -118,12 +118,7 @@ test("bucket with onDelete method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(`\
-async handle(event) {
-  console.log("Received " + event.name);
-}`
-  );
-  bucket.onDelete(processor);
+  bucket.onDelete(EVENT_HANDLER);
   const output = app.synth();
 
   // THEN
@@ -147,12 +142,7 @@ test("bucket with onUpdate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(`\
-async handle(event) {
-  console.log("Received " + event.name);
-}`
-  );
-  bucket.onUpdate(processor);
+  bucket.onUpdate(EVENT_HANDLER);
   const output = app.synth();
 
   // THEN
@@ -176,12 +166,7 @@ test("bucket with onEvent method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(`\
-async handle(event) {
-  console.log("Received " + event.name);
-}`
-  );
-  bucket.onEvent(processor);
+  bucket.onEvent(EVENT_HANDLER);
   const output = app.synth();
 
   // THEN

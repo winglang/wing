@@ -3,7 +3,7 @@ import { StateSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { LiftDepsMatrixRaw } from "../core";
+import { LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Json, Resource } from "../std";
@@ -41,7 +41,7 @@ export class State extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public get _liftMap(): LiftDepsMatrixRaw {
+  public get _liftMap(): LiftMap {
     return {
       [StateInflightMethods.GET]: [],
       [StateInflightMethods.SET]: [],
@@ -76,12 +76,14 @@ export interface IStateClient {
    * Sets the state of runtime a runtime object.
    * @param key The object's key
    * @param value The object's value
+   * @inflight
    */
   set(key: string, value: Json): Promise<void>;
 
   /**
    * Gets the runtime state of this object. Throws if there is no value for the given key.
    * @param key The object's key
+   * @inflight
    */
   get(key: string): Promise<Json>;
 
@@ -90,6 +92,7 @@ export interface IStateClient {
    * returns `nil`.
    *
    * @param key The object's key
+   * @inflight
    */
   tryGet(key: string): Promise<Json | undefined>;
 }

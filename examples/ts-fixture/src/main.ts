@@ -1,6 +1,6 @@
 import { inflight, lift, main, cloud } from "@wingcloud/framework";
 import * as winglib from "@winglibs/testfixture";
-import assert from "node:assert";
+import * as assert from "node:assert";
 import { deepStrictEqual } from "node:assert";
 import { addOne } from "./other";
 
