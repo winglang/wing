@@ -84,7 +84,6 @@ export const getResourceIconComponent = (
     }
     default: {
       return CubeIcon;
-      // return () => [];
     }
   }
 };
