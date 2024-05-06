@@ -1,5 +1,6 @@
-bring cloud;
 bring aws;
+bring cloud;
+bring expect;
 bring util;
 
 let target = util.env("WING_TARGET");
@@ -34,5 +35,15 @@ test "validates the AWS Function" {
   } else {
     // If the test is not on AWS, it should not fail, so I am returning true.
     assert(true);
+  }
+}
+
+if target == "tf-aws" {
+  test "can access lambda context" {
+    let ctx = unsafeCast(aws.context());
+    expect.equal(ctx.functionVersion, "$LATEST");
+
+    let remainingTime = ctx.remainingTimeInMillis();
+    assert(remainingTime > 0);
   }
 }
