@@ -176,7 +176,14 @@ class WidgetService {
       "Total widgets",
       inflight () => { return this.countWidgets(); },
       refreshRate: 5s,
-    );
+    ) as "TotalWidgets";
+
+    // a link field displays a clickable link
+    new ui.Field(
+      "Widgets Link",
+      inflight () => { return "https://winglang.io"; },
+      link: true,
+    ) as "WidgetsLink";
 
     // a button lets you invoke any inflight function
     new ui.Button("Add widget", inflight () => { this.addWidget(); });
