@@ -301,15 +301,6 @@ export const DefaultLayout = ({
                         )}
                         data-testid="map-view"
                       >
-                        {/* <MapView
-                          showTests={showTests}
-                          selectedNodeId={selectedItems[0]}
-                          onSelectedNodeIdChange={(nodeId) =>
-                            setSelectedItems(nodeId ? [nodeId] : [])
-                          }
-                          selectedEdgeId={selectedEdgeId}
-                          onSelectedEdgeIdChange={setSelectedEdgeId}
-                        /> */}
                         <MapView
                           selectedNodeId={selectedItems[0]}
                           onSelectedNodeIdChange={setSelectedItemSingle}
