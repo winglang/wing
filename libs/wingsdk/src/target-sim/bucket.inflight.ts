@@ -160,6 +160,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const hash = this.hashKey(key);
         const filename = join(this._fileDir, hash);
+        let buffer;
         try {
           const file = await fs.promises.open(filename, "r");
           const stat = await file.stat();
@@ -174,12 +175,25 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
             length = options.endByte + 1;
           }
 
-          const buffer = Buffer.alloc(length - start);
+          buffer = Buffer.alloc(length - start);
           await file.read(buffer, 0, length - start, start);
           await file.close();
-          return new TextDecoder("utf8", { fatal: true }).decode(buffer);
         } catch (e) {
+          buffer = undefined;
+        }
+
+        if (!buffer) {
           throw new Error(`Object does not exist (key=${key}).`);
+        }
+
+        try {
+          return new TextDecoder("utf8", { fatal: true }).decode(buffer);
+        } catch {
+          const start = options?.startByte ?? -1;
+          const end = options?.endByte ?? -1;
+          throw new Error(
+            `Unable to read object (key=${key} range=[${start},${end}]).`
+          );
         }
       },
     });
