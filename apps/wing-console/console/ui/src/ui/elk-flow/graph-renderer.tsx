@@ -39,19 +39,17 @@ const NodeComponent = <K extends keyof IntrinsicElements = "div">({
   children,
   ...props
 }: NodeProps<K>) => {
-  const parent = useContext(ElkNodeContext);
-  const node = useMemo(
-    () => parent.children?.find((child) => child.id === elk.id),
-    [],
-  );
-  assert(node, `Node not found: ${elk.id}`);
-
   const portal = useContext(PortalContext);
   assert(portal);
 
+  const parent = useContext(ElkNodeContext);
+  const node = useMemo(
+    () => parent.children?.find((child) => child.id === elk.id),
+    [parent.children],
+  );
+
   const origins = useContext(OriginsContext);
-  const origin = origins.get(node.id);
-  assert(origin);
+  const origin = origins.get(elk.id);
 
   return createPrependPortal(
     createElement(
@@ -63,16 +61,20 @@ const NodeComponent = <K extends keyof IntrinsicElements = "div">({
           position: "absolute",
           // top: `${node.y ?? 0}px`,
           // left: `${node.x ?? 0}px`,
-          top: `${origin.y}px`,
-          left: `${origin.x}px`,
-          width: `${node.width ?? 0}px`,
-          height: `${node.height ?? 0}px`,
+          top: `${origin?.y ?? 0}px`,
+          left: `${origin?.x ?? 0}px`,
+          width: `${node?.width ?? 0}px`,
+          height: `${node?.height ?? 0}px`,
           // transform: `translate(${origin?.x ?? 0}px, ${origin?.y ?? 0}px)`,
         },
       },
-      <ElkNodeContext.Provider key="children" value={node}>
-        {children}
-      </ElkNodeContext.Provider>,
+      node ? (
+        <ElkNodeContext.Provider key="children" value={node}>
+          {children}
+        </ElkNodeContext.Provider>
+      ) : (
+        <></>
+      ),
     ),
     portal,
   );
