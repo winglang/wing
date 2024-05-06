@@ -382,6 +382,7 @@ exports[`default website behavior 2`] = `
                     },
                     "display": {
                       "description": "Website root/Default/Website",
+                      "hidden": true,
                       "title": "Endpoint",
                     },
                     "id": "Endpoint",
@@ -701,6 +702,7 @@ exports[`website with addFile 2`] = `
                     },
                     "display": {
                       "description": "Website root/Default/Website",
+                      "hidden": true,
                       "title": "Endpoint",
                     },
                     "id": "Endpoint",
@@ -1028,6 +1030,7 @@ exports[`website with addJson 2`] = `
                     },
                     "display": {
                       "description": "Website root/Default/Website",
+                      "hidden": true,
                       "title": "Endpoint",
                     },
                     "id": "Endpoint",
