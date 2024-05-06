@@ -133,7 +133,7 @@ export class Bucket extends Resource {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
       const topic = this.getTopic(BucketEventType.CREATE).onMessage(
-        this.createInflightHandler(BucketEventType.CREATE, inflight)
+        this.createTopicHandler(BucketEventType.CREATE, inflight)
       );
       for (const op of [
         BucketInflightMethods.PUT,
@@ -149,7 +149,7 @@ export class Bucket extends Resource {
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
       const topic = this.getTopic(BucketEventType.UPDATE).onMessage(
-        this.createInflightHandler(BucketEventType.UPDATE, inflight)
+        this.createTopicHandler(BucketEventType.UPDATE, inflight)
       );
       for (const op of [
         BucketInflightMethods.PUT,
@@ -165,7 +165,7 @@ export class Bucket extends Resource {
     }
     if (eventNames.includes(BucketEventType.DELETE)) {
       const topic = this.getTopic(BucketEventType.DELETE).onMessage(
-        this.createInflightHandler(BucketEventType.DELETE, inflight)
+        this.createTopicHandler(BucketEventType.DELETE, inflight)
       );
       for (const op of [
         BucketInflightMethods.DELETE,
