@@ -472,7 +472,7 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = memo((props) => {
           "elk.portConstraints": "FIXED_SIDE",
         },
       }}
-      className="inline-flex group/construct z-20"
+      className="inline-flex group/construct z-20 cursor-pointer"
       title={props.id}
       onClick={() => props.onSelectedNodeIdChange(props.id)}
     >
