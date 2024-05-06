@@ -396,15 +396,13 @@ async function formatTrace(
     msg += chalk.dim(` ${testName} » ${trace.sourcePath}`);
     msg += "\n";
     if (level === LogLevel.ERROR) {
-      msg += chalk.dim(" │ ");
       msg += await prettyPrintError(trace.data.error ?? trace.data.message ?? trace.data, {
         chalk,
       });
     } else {
-      msg += chalk.dim(" └ ");
       msg += trace.data.message;
     }
-    msg += "\n";
+    msg += "\n\n";
     return msg;
   } else if (mode === "short") {
     msg += LOG_STREAM_COLORS[level](`${SEVERITY_STRING[level]}`);
