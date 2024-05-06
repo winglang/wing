@@ -179,9 +179,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           await file.close();
           return new TextDecoder("utf8", { fatal: true }).decode(buffer);
         } catch (e) {
-          throw new Error(
-            `Object does not exist (key=${key}): ${(e as Error).stack}`
-          );
+          throw new Error(`Object does not exist (key=${key}).`);
         }
       },
     });
