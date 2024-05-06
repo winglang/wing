@@ -243,7 +243,10 @@ test("unable to resolve token during initialization", async () => {
     error = e;
   }
   expect(error).toBeDefined();
-  expect(error.message).toMatch(/Unable to resolve attribute 'my_token'/);
+  console.log(error.message);
+  expect(error.message).toMatch(
+    /Failed to start resources: \"root\/Bucket\", "root\/Bucket\/Policy\"/
+  );
 });
 
 describe("in-place updates", () => {

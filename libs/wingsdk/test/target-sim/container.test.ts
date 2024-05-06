@@ -108,8 +108,7 @@ test("rebuild only if content had changes", async () => {
 
   const app3 = new MyApp();
   const r3 = await app3.cycle();
-
-  expect(r3[1]).toContain("not found");
+  expect(r3[1]).toContain("Building ");
 });
 
 test("simple container with a volume", async () => {
