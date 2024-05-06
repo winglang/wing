@@ -137,7 +137,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     let hostPort: number | undefined;
     await waitUntil(async () => {
       if (!this.child?.running) {
-        throw new Error(`container ${this.imageTag} stopped unexpectedly`);
+        throw new Error(`Container ${this.imageTag} stopped unexpectedly`);
       }
 
       const container = await this.tryInspect(this.containerName);
@@ -286,8 +286,10 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       quiet = true;
     }
 
+    const commandDesc = `docker ${command}`;
+
     this.addTrace(
-      `Running: docker ${command} ${args.join(" ")}`,
+      `$ ${commandDesc} ${args.join(" ")}`,
       TraceType.RESOURCE,
       LogLevel.VERBOSE
     );
@@ -398,9 +400,16 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
             if (code === 0) {
               return ok(stdout.join(""));
             } else {
-              return ko(
-                new Error(`non-zero exit code ${code}: ${allOutput.join("")}`)
-              );
+              const message = `Command "${commandDesc}" exited with non-zero code ${code}`;
+              if (logErrors) {
+                self.addTrace(
+                  `${message}}\n${allOutput.join("")}`,
+                  TraceType.RESOURCE,
+                  LogLevel.VERBOSE
+                );
+              }
+
+              return ko(new Error(`${message} (see verbose logs)`));
             }
           });
         });
