@@ -295,18 +295,21 @@ export const createAppRouter = () => {
       .input(
         z.object({
           edgeId: z.string(),
-          showTests: z.boolean().optional(),
         }),
       )
       .query(async ({ ctx, input }) => {
-        const { edgeId, showTests } = input;
+        const { edgeId } = input;
         const simulator = await ctx.simulator();
 
         const { tree } = simulator.tree().rawData();
         const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
 
-        const sourcePath = edgeId.split("->")[0]?.trim();
-        const targetPath = edgeId.split("->")[1]?.trim();
+        let [, sourcePath, _sourceInflight, , targetPath, targetInflight] =
+          edgeId.match(/^(.+?)#(.*?)#(.*?)#(.+?)#(.*?)#(.*?)$/i) ?? [];
+
+        targetPath = targetPath?.startsWith("#")
+          ? targetPath.slice(1)
+          : targetPath;
 
         const sourceNode = nodeMap.get(sourcePath);
         if (!sourceNode) {
@@ -324,39 +327,6 @@ export const createAppRouter = () => {
           });
         }
 
-        const connections = simulator.connections();
-
-        const inflights = sourceNode.display?.hidden
-          ? []
-          : connections
-              ?.filter(({ source, target, name }) => {
-                if (!isFoundInPath(sourceNode, nodeMap, source, true)) {
-                  return false;
-                }
-
-                if (!isFoundInPath(targetNode, nodeMap, target, true)) {
-                  return false;
-                }
-
-                if (name === "$inflight_init()") {
-                  return false;
-                }
-
-                if (
-                  !showTests &&
-                  (matchTest(sourceNode.path) || matchTest(targetNode.path))
-                ) {
-                  return false;
-                }
-
-                return true;
-              })
-              .map((connection) => {
-                return {
-                  name: connection.name,
-                };
-              }) ?? [];
-
         return {
           source: {
             id: sourceNode.id,
@@ -368,7 +338,13 @@ export const createAppRouter = () => {
             path: targetNode?.path ?? "",
             type: (targetNode && getResourceType(targetNode, simulator)) ?? "",
           },
-          inflights,
+          inflights: targetInflight
+            ? [
+                {
+                  name: targetInflight,
+                },
+              ]
+            : [],
         };
       }),
     "app.invalidateQuery": createProcedure.subscription(({ ctx }) => {

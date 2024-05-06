@@ -223,7 +223,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             // "elk.edgeRouting": "SPLINES",
           },
         }}
-        className="inline-block group/construct z-20"
+        className="inline-block group/construct z-20 cursor-pointer"
         onClick={() => props.onSelectedNodeIdChange(props.id)}
       >
         <div
@@ -635,7 +635,13 @@ const RoundedEdge: FunctionComponent<
       <svg
         width={graphWidth}
         height={graphHeight}
-        className="absolute inset-0 pointer-events-none z-[1] hover:z-[2]"
+        className={clsx(
+          "absolute inset-0 pointer-events-none",
+          !highlighted && "z-[1]",
+          highlighted && "z-[2]",
+          "hover:z-[2]",
+          "cursor-pointer",
+        )}
       >
         <g
           className={clsx(
@@ -656,7 +662,13 @@ const RoundedEdge: FunctionComponent<
             </title>
           </path>
           <path
-            className="stroke-[6] opacity-0 group-hover:opacity-100 stroke-sky-100 dark:stroke-sky-500/50"
+            className={clsx(
+              "stroke-[6] stroke-sky-100 dark:stroke-sky-500/50",
+              !highlighted && "opacity-0",
+              highlighted && "opacity-100",
+              "group-hover:opacity-100",
+              "transition-opacity",
+            )}
             d={d}
           >
             <title>
@@ -692,10 +704,13 @@ export const MapView = memo(
     const RenderEdge = useCallback<EdgeComponent>(
       (props) => {
         return (
-          <RoundedEdge
-            {...props}
-            onClick={() => console.debug("edge clicked")}
-          />
+          <>
+            <RoundedEdge
+              {...props}
+              highlighted={selectedEdgeId === props.edge.id}
+              onClick={() => onSelectedEdgeIdChange?.(props.edge.id)}
+            />
+          </>
         );
       },
       [RoundedEdge, selectedEdgeId, onSelectedEdgeIdChange],
