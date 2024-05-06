@@ -392,12 +392,10 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       },
       {
         data: {
-          message: 'Invoke (payload="{\\"messages\\":[\\"cool\\"]}").',
-          status: "failure",
-          error: {},
+          message: 'Invoke (payload="{\\"messages\\":[\\"cool\\"]}").'
         },
         type: TraceType.RESOURCE,
-        level: LogLevel.ERROR,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue-AddConsumer-0088483a",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:46.966Z",
@@ -414,17 +412,17 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
         timestamp: "2023-05-15T16:20:46.966Z",
       },
       {
-        data: { message: "Get (key=file.txt).", status: "failure", error: {} },
+        data: { message: "Get (key=file.txt)." },
         type: TraceType.RESOURCE,
-        level: LogLevel.ERROR,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
         timestamp: "2023-05-15T16:20:47.388Z",
       },
       {
-        data: { message: 'Invoke (payload="").', status: "failure", error: {} },
+        data: { message: 'Invoke (payload="").' },
         type: TraceType.RESOURCE,
-        level: LogLevel.ERROR,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/test:test/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:47.388Z",
