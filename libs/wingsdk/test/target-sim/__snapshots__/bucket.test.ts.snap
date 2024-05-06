@@ -557,7 +557,7 @@ exports[`get invalid object throws an error 1`] = `
 [
   "root/my_bucket started",
   "root/my_bucket/Policy started",
-  "Error: Object does not exist (key=unknown.txt): Error: ENOENT: no such file or directory, open '/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wingsdk.VXNf4l/.state/c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc/files/6d84a08927a2a04829019b0d3cbe292b' (Get (key=unknown.txt).)",
+  "Error: Object does not exist (key=unknown.txt): Error: ENOENT: no such file or directory, open '/tmp/wingsdk.zUIump/.state/c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc/files/6d84a08927a2a04829019b0d3cbe292b' (Get (key=unknown.txt).)",
   "root/my_bucket/Policy stopped",
   "root/my_bucket stopped",
 ]

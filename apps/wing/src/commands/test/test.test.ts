@@ -392,7 +392,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       },
       {
         data: {
-          message: 'Invoke (payload="{\\"messages\\":[\\"cool\\"]}").'
+          message: 'Invoke (payload="{\\"messages\\":[\\"cool\\"]}").',
         },
         type: TraceType.RESOURCE,
         level: LogLevel.VERBOSE,
