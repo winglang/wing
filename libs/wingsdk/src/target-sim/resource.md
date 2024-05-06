@@ -106,7 +106,7 @@ new cloud.Function(inflight () => {
 
 TODO
 
-### Lazy tokens
+### Late-bound Tokens
 
 Consider a use case where there is an attribute of a simulated service that only gets resolved during initialization (e.g. the exposed port of a container).
 In order to create such resources, we need a way to obtain a lazy token that gets resolved during simulator initialization.
