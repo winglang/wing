@@ -36,8 +36,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
 
   public constructor(private readonly props: ContainerSchema) {
     this.imageTag = props.imageTag;
-
-    this.containerName = `wing-container-${Util.ulid()}`;
+    this.containerName = `wing-${Util.ulid()}`.toLocaleLowerCase();
     this.managedVolumes = {};
   }
 

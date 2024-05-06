@@ -70,7 +70,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
     });
     this.url = `http://${addrInfo.address}:${addrInfo.port}`;
 
-    this.addTrace(`Website Server listening on ${this.url}`);
+    this.addTrace(`Website server listening on ${this.url}`, LogLevel.INFO);
 
     return {
       url: this.url,
@@ -78,7 +78,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {
-    this.addTrace(`Closing server on ${this.url}`);
+    this.addTrace(`Closing server on ${this.url}`, LogLevel.VERBOSE);
     this.server?.close();
     this.server?.closeAllConnections();
   }
@@ -89,7 +89,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
     return UpdatePlan.AUTO;
   }
 
-  private addTrace(message: string): void {
+  private addTrace(message: string, level: LogLevel): void {
     this.context.addTrace({
       type: TraceType.RESOURCE,
       data: {
@@ -98,7 +98,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
       sourcePath: this.context.resourcePath,
       sourceType: WEBSITE_FQN,
       timestamp: new Date().toISOString(),
-      level: LogLevel.INFO,
+      level,
     });
   }
 }
