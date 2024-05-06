@@ -363,43 +363,7 @@ export const createAppRouter = () => {
         };
       });
     }),
-    "app.map": createProcedure
-      .input(
-        z
-          .object({
-            showTests: z.boolean().optional(),
-          })
-          .optional(),
-      )
-      .query(async ({ ctx, input }) => {
-        const simulator = await ctx.simulator();
-
-        const { tree } = simulator.tree().rawData();
-        const connections = simulator.connections();
-        const shakedTree = shakeTree(tree);
-        const nodeMap = buildConstructTreeNodeMap(shakedTree);
-        const nodes = [
-          createMapNodeFromConstructTreeNode(
-            shakedTree,
-            simulator,
-            input?.showTests,
-          ),
-        ];
-        const edges = uniqby(
-          createMapEdgesFromConnectionData(
-            nodeMap,
-            connections,
-            input?.showTests,
-          ),
-          (edge) => edge.id,
-        );
-
-        return {
-          nodes,
-          edges,
-        };
-      }),
-    "app.map.v2": createProcedure.query(async ({ ctx }) => {
+    "app.map": createProcedure.query(async ({ ctx }) => {
       const simulator = await ctx.simulator();
 
       const { tree } = simulator.tree().rawData();

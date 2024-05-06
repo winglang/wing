@@ -4,6 +4,7 @@ import { BoltIcon } from "@heroicons/react/24/solid";
 import {
   ResourceIcon,
   SpinnerLoader,
+  getResourceIconComponent,
   useTheme,
 } from "@wingconsole/design-system";
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
@@ -34,7 +35,7 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
   <>
     <div
       className={clsx(
-        "size-2.5 rounded-full bg-white border border-gray-300",
+        "size-2.5 rounded-full bg-white border border-slate-300",
         // "opacity-0",
         // props.occupied && "opacity-100",
         "group-hover/construct:opacity-100 group-hover/construct:border-sky-300",
@@ -53,7 +54,7 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
               // "group-hover/inflight-port:size-1.5",
               // "rounded-full bg-sky-400 transition-all",
               "rounded-full transition-all",
-              "bg-gray-400",
+              "bg-slate-400",
               "group-hover/construct:bg-sky-400",
               props.highlight && "bg-sky-400",
             )}
@@ -64,97 +65,59 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
   </>
 );
 
-// const SPACING_BASE_VALUE = 64;
-// const SPACING_BASE_VALUE = 48;
 const SPACING_BASE_VALUE = 32;
-// const SPACING_BASE_VALUE = 10;
-// const PORT_ANCHOR = SPACING_BASE_VALUE / 5;
 const PORT_ANCHOR = 0;
-// const PORT_ANCHOR = 24;
-// const EDGE_ROUNDED_RADIUS = 14;
 const EDGE_ROUNDED_RADIUS = 10;
 // For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
 const baseLayoutOptions: LayoutOptions = {
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-  // "elk.direction": "RIGHT",
-  // "elk.alignment": "CENTER",
   "elk.algorithm": "org.eclipse.elk.layered",
-  // "elk.layered.layering.strategy": "MIN_WIDTH",
+  "elk.layered.layering.strategy": "MIN_WIDTH",
   "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
   "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
-  // "elk.layered.spacing.nodeNode": `${SPACING_BASE_VALUE}`, // default 20. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-nodeNode.html.
-  // "elk.layered.spacing.edgeEdge": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-edgeEdge.html
-  // "elk.layered.spacing.edgeNode": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-spacing-edgeNode.html
-  // "elk.layered.spacing.nodeNodeBetweenLayers": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-nodeNodeBetweenLayers.html.
-  // "elk.layered.spacing.edgeEdgeBetweenLayers": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-edgeEdgeBetweenLayers.html.
-  // "elk.layered.spacing.edgeNodeBetweenLayers": `${SPACING_BASE_VALUE}`, // default 10. See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-edgeNodeBetweenLayers.html.
 };
 
 interface ContainerNodeProps {
   id: string;
   name: string;
   pseudoContainer?: boolean;
+  resourceType?: string;
 }
 
 const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
   memo((props) => {
-    const { viewTransform } = useZoomPane();
+    const IconComponent = getResourceIconComponent(props.resourceType, {
+      solid: true,
+      resourceId: props.id,
+    });
+
     return (
       <Node
         elk={{
           id: props.id,
           layoutOptions: {
-            // "elk.algorithm": "org.eclipse.elk.layered",
-            // "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-            // "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`,
-            // "elk.direction": "RIGHT",
             ...baseLayoutOptions,
           },
         }}
-        className={clsx(
-          "inline-block",
-          "group",
-          "p-2",
-          "z-0",
-          // "pointer-events-none"
-        )}
+        className={clsx("inline-block", "group", "p-2", "z-0")}
       >
         <div className="w-full h-full relative ">
           <div className="absolute inset-x-0 top-0">
             <div className="relative">
-              <div
-                className="absolute bottom-0"
-                // style={
-                //   props.pseudoContainer
-                //     ? {
-                //         transform: `scale(${1 / viewTransform.z})`,
-                //         transformOrigin: "left",
-                //       }
-                //     : {}
-                // }
-              >
+              <div className="absolute bottom-0">
                 <div
                   className={clsx(
-                    "text-sm leading-tight tracking-wide whitespace-nowrap",
-                    "text-slate-400 dark:text-slate-300",
-                    // "group-hover:text-sky-600",
-                    // "text-gray-500",
-                    // "text-gray-600",
-                    "font-extralight",
-                    // "italic",
-                    // "invisible",
-                    props.pseudoContainer &&
-                      "opacity-0 group-hover:opacity-100",
+                    "whitespace-nowrap",
+                    "text-xs font-medium leading-relaxed tracking-wide",
+                    "text-slate-400 dark:text-slate-800",
+                    "font-normal",
                     "transition-opacity",
+                    "backdrop-blur",
                   )}
                 >
-                  <div className="flex gap-1">
-                    {props.pseudoContainer ? (
-                      <CubeTransparentIcon className="size-4" />
-                    ) : (
-                      <CubeIcon className="size-4" />
-                    )}
+                  <div className="flex items-center gap-1">
+                    <IconComponent className="size-4" />
                     {props.name}
                   </div>
                 </div>
@@ -162,21 +125,14 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             </div>
           </div>
 
-          <div className="text-xs whitespace-nowrap h-0 invisible">
-            {props.name}
-          </div>
-
           <div
             className={clsx(
               "w-full h-full rounded-lg",
-              // "shadow",
               "transition-all",
               "flex flex-col",
               "overflow-hidden",
               "border border-dashed",
-              "border-gray-200 dark:border-gray-700",
-              // "hover:border-sky-300",
-              // "outline outline-0 outline-sky-200 hover:outline-2",
+              "border-slate-200 dark:border-slate-600",
             )}
           >
             <div className={clsx("grow shadow-inner", "px-6 py-6")}>
@@ -217,10 +173,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           layoutOptions: {
             "elk.direction": "DOWN",
             "elk.layered.spacing.baseValue": "1",
-            // "elk.edgeRouting": "UNDEFINED",
-            // "elk.edgeRouting": "ORTHOGONAL",
-            // "elk.edgeRouting": "POLYLINE",
-            // "elk.edgeRouting": "SPLINES",
           },
         }}
         className="inline-block group/construct z-20 cursor-pointer"
@@ -241,7 +193,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           <div className="px-2.5 py-1 flex items-center gap-1.5">
             <ResourceIcon className="size-4 -ml-0.5" resourceType={props.fqn} />
 
-            <span className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-gray-600 dark:text-slate-300">
+            <span className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-slate-600 dark:text-slate-300">
               {props.name}
             </span>
           </div>
@@ -251,7 +203,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               id: `${props.id}#source`,
               layoutOptions: {
                 "elk.port.side": "EAST",
-                // "elk.port.borderOffset": "100",
                 "elk.port.anchor": `[${PORT_ANCHOR},0]`,
               },
             }}
@@ -262,7 +213,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               id: `${props.id}#target`,
               layoutOptions: {
                 "elk.port.side": "WEST",
-                // "elk.port.borderOffset": "100",
                 "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
               },
             }}
@@ -280,40 +230,22 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 }}
                 className="pointer-events-none z-20"
               >
-                {/* <div className="border-t border-gray-300">
-          <div className="px-3 py-1.5 text-gray-600 font-mono text-xs tracking-tighter whitespace-nowrap">
-            <span className="text-sky-600 italic">inflight</span>{" "}
-            {inflight.name}(<span className="text-gray-400">…</span>
-            ): <span className="italic text-gray-400">unknown</span>
-          </div>
-        </div> */}
-                <div className="border-t border-gray-300 dark:border-slate-800">
+                <div className="border-t border-slate-300 dark:border-slate-800">
                   <div
-                    // className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap"
                     className={clsx(
                       "px-2.5 py-1.5 text-xs whitespace-nowrap",
-                      // "tracking-tighter",
-                      // "text-gray-700",
-                      "text-gray-600 dark:text-slate-300",
-                      // "font-mono",
+                      "text-slate-600 dark:text-slate-300",
                     )}
                   >
-                    {/* <span className="text-sky-600 italic">inflight</span>{" "} */}
                     {inflight.name}()
                   </div>
                 </div>
-                {/* <div className="border-t border-gray-300">
-          <div className="px-4 py-1.5 text-gray-700 font-mono text-xs tracking-tighter whitespace-nowrap">
-            {inflight.name}
-          </div>
-        </div> */}
 
                 <Port
                   elk={{
                     id: `${inflight.id}#source`,
                     layoutOptions: {
                       "elk.port.side": "EAST",
-                      // "elk.port.borderOffset": "100",
                       "elk.port.anchor": `[${PORT_ANCHOR},0]`,
                     },
                   }}
@@ -329,7 +261,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                     id: `${inflight.id}#target`,
                     layoutOptions: {
                       "elk.port.side": "WEST",
-                      // "elk.port.borderOffset": "100",
                       "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
                     },
                   }}
@@ -339,97 +270,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                     highlight={props.highlight}
                   />
                 </Port>
-
-                {/* <Port
-                  elk={{
-                    id: `${inflight.id}#target#1`,
-                    layoutOptions: {
-                      "elk.port.side": "WEST",
-                      // "elk.port.borderOffset": "100",
-                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                    },
-                  }}
-                >
-                  <InflightPort
-                    occupied={inflight.targetOccupied}
-                    highlight={props.highlight}
-                  />
-                </Port>
-                <Port
-                  elk={{
-                    id: `${inflight.id}#target#2`,
-                    layoutOptions: {
-                      "elk.port.side": "WEST",
-                      // "elk.port.borderOffset": "100",
-                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                    },
-                  }}
-                >
-                  <InflightPort
-                    occupied={inflight.targetOccupied}
-                    highlight={props.highlight}
-                  />
-                </Port>
-                <Port
-                  elk={{
-                    id: `${inflight.id}#target#3`,
-                    layoutOptions: {
-                      "elk.port.side": "WEST",
-                      // "elk.port.borderOffset": "100",
-                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                    },
-                  }}
-                >
-                  <InflightPort
-                    occupied={inflight.targetOccupied}
-                    highlight={props.highlight}
-                  />
-                </Port>
-                <Port
-                  elk={{
-                    id: `${inflight.id}#source#1`,
-                    layoutOptions: {
-                      "elk.port.side": "EAST",
-                      // "elk.port.borderOffset": "100",
-                      "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                    },
-                  }}
-                >
-                  <InflightPort
-                    occupied={inflight.sourceOccupied}
-                    highlight={props.highlight}
-                  />
-                </Port>
-                <Port
-                  elk={{
-                    id: `${inflight.id}#source#2`,
-                    layoutOptions: {
-                      "elk.port.side": "EAST",
-                      // "elk.port.borderOffset": "100",
-                      "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                    },
-                  }}
-                >
-                  <InflightPort
-                    occupied={inflight.sourceOccupied}
-                    highlight={props.highlight}
-                  />
-                </Port>
-                <Port
-                  elk={{
-                    id: `${inflight.id}#source#3`,
-                    layoutOptions: {
-                      "elk.port.side": "EAST",
-                      // "elk.port.borderOffset": "100",
-                      "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                    },
-                  }}
-                >
-                  <InflightPort
-                    occupied={inflight.sourceOccupied}
-                    highlight={props.highlight}
-                  />
-                </Port> */}
               </Node>
             ))}
           </NodeChildren>
@@ -443,7 +283,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           id={`${props.id}#container`}
           name={props.name}
           pseudoContainer
-          // name={""}
+          resourceType={props.fqn}
         >
           {renderedNode}
 
@@ -516,18 +356,15 @@ const FunctionNode: FunctionComponent<FunctionNodeProps> = memo((props) => {
           <InflightPort occupied={props.sourceOccupied} />
         </Port>
 
-        <div
-          className={clsx(
-            "absolute bottom-0 inset-x-0",
-            // "invisible group-hover:visible"
-          )}
-        >
+        <div className={clsx("absolute bottom-0 inset-x-0")}>
           <div className="relative">
             <div className="absolute top-0 inset-x-0">
               <div className="flex justify-around">
-                {/* <div className="size-3 rounded-full bg-red-500"></div> */}
                 <div className="absolute text-center">
-                  <div className="text-xs text-gray-500 dark:text-slate-300 backdrop-blur">
+                  <div
+                    // className="text-xs font-medium leading-relaxed tracking-wide text-slate-500 dark:text-slate-800 backdrop-blur"
+                    className="text-xs font-medium leading-relaxed tracking-wide text-slate-600 dark:text-slate-300 backdrop-blur"
+                  >
                     {props.id.split("/").slice(-1).join("")}
                   </div>
                 </div>
@@ -647,7 +484,7 @@ const RoundedEdge: FunctionComponent<
           className={clsx(
             "fill-none stroke-1 group pointer-events-auto",
             "transition-colors",
-            !highlighted && "stroke-gray-300 dark:stroke-gray-700",
+            !highlighted && "stroke-slate-300 dark:stroke-slate-700",
             highlighted && "stroke-sky-500 dark:stroke-sky-900",
             "hover:stroke-sky-500",
             "dark:hover:stroke-sky-900",

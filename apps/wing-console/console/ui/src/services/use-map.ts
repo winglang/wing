@@ -144,7 +144,7 @@ export interface UseMapOptions {
 }
 
 export const useMap = ({}: UseMapOptions = {}) => {
-  const query = trpc["app.map.v2"].useQuery();
+  const query = trpc["app.map"].useQuery();
   const { tree: rawTree, connections: incorrectlyTypedConnections } =
     query.data ?? {};
   const rawConnections = incorrectlyTypedConnections as
