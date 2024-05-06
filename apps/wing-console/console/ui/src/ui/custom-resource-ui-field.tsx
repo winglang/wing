@@ -25,8 +25,8 @@ export const CustomResourceUiFieldItem = ({
   return (
     <Attribute name={label} value={link ? undefined : fieldValue}>
       {link && (
-        <Link id={label} href={fieldValue}>
-          <ShareIcon title={fieldValue} className="w-4 h-4 text-blue-500" />
+        <Link id={label} href={fieldValue} target="_blank">
+          {fieldValue}
         </Link>
       )}
     </Attribute>
