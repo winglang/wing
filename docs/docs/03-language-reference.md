@@ -572,20 +572,26 @@ The following is a list of supported indexable types:
 
 [`▲ top`][top]
 
-### 1.2 Utility Functions
+### 1.2 Intrinsic Functions
 
-| Name         | Extra information                                     |
-| ------------ | ----------------------------------------------------- |
-| `log`        | logs str                                              |
-| `assert`     | checks a condition and _throws_ if evaluated to false |
-| `unsafeCast` | cast a value into a different type                    |
-| `nodeof`     | obtain the [tree node](./02-concepts/02-application-tree.md) of a preflight object |
-| `lift`       | explicitly qualify a [lift](./02-concepts/01-preflight-and-inflight.md#explicit-lift-qualification) of a preflight object |
+Intrinsic functions are a special call-like syntax that are built into the Wing compiler.
+They are available anywhere, but may have restrictions on their usage.
+These restrictions depend on each individual intrinsic function.
+
+Intrinsics are always of the form `@name()`.
+
+| Name            | Extra information                                                                                                         |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `@log()`        | logs str                                                                                                                  |
+| `@assert()`     | checks a condition and _throws_ if evaluated to false                                                                     |
+| `@unsafeCast()` | cast a value into a different type                                                                                        |
+| `@nodeof()`     | obtain the [tree node](./02-concepts/02-application-tree.md) of a preflight object                                        |
+| `@lift()`       | explicitly qualify a [lift](./02-concepts/01-preflight-and-inflight.md#explicit-lift-qualification) of a preflight object |
 
 > ```TS
-> log("Hello {name}");
-> assert(x > 0);
-> assert(x > 0, "x should be positive");
+> @log("Hello {name}");
+> @assert(x > 0);
+> @assert(x > 0, "x should be positive");
 > ```
 
 [`▲ top`][top]
