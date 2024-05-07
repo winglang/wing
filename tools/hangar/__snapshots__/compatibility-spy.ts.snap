@@ -68,14 +68,9 @@ exports[`dec.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -85,14 +80,9 @@ exports[`dec.test.w 1`] = `
               "result": "-1",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -102,14 +92,9 @@ exports[`dec.test.w 1`] = `
               "result": "-1",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -119,14 +104,9 @@ exports[`dec.test.w 1`] = `
               "result": "-6",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -136,14 +116,9 @@ exports[`dec.test.w 1`] = `
               "result": "-6",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -153,14 +128,9 @@ exports[`dec.test.w 1`] = `
               "result": "-2",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -170,14 +140,9 @@ exports[`dec.test.w 1`] = `
               "result": "-2",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -187,14 +152,9 @@ exports[`dec.test.w 1`] = `
               "result": "-2",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -232,14 +192,9 @@ exports[`dec.test.w 1`] = `
               "result": "-1",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -249,14 +204,9 @@ exports[`dec.test.w 1`] = `
               "result": "-6",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -266,14 +216,9 @@ exports[`dec.test.w 1`] = `
               "result": "-6",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -283,14 +228,9 @@ exports[`dec.test.w 1`] = `
               "result": "-2",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -300,14 +240,9 @@ exports[`dec.test.w 1`] = `
               "result": "-2",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -317,14 +252,9 @@ exports[`dec.test.w 1`] = `
               "result": "-2",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -376,14 +306,9 @@ exports[`inc.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -393,14 +318,9 @@ exports[`inc.test.w 1`] = `
               "result": "1",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -410,14 +330,9 @@ exports[`inc.test.w 1`] = `
               "result": "1",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -427,14 +342,9 @@ exports[`inc.test.w 1`] = `
               "result": "6",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -444,14 +354,9 @@ exports[`inc.test.w 1`] = `
               "result": "6",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -461,14 +366,9 @@ exports[`inc.test.w 1`] = `
               "result": "2",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -478,14 +378,9 @@ exports[`inc.test.w 1`] = `
               "result": "2",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -495,14 +390,9 @@ exports[`inc.test.w 1`] = `
               "result": "2",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -540,14 +430,9 @@ exports[`inc.test.w 1`] = `
               "result": "-1",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -557,14 +442,9 @@ exports[`inc.test.w 1`] = `
               "result": "4",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -574,14 +454,9 @@ exports[`inc.test.w 1`] = `
               "result": "4",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -591,14 +466,9 @@ exports[`inc.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -608,14 +478,9 @@ exports[`inc.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -625,14 +490,9 @@ exports[`inc.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -684,14 +544,9 @@ exports[`initial.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counterA/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counterA",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -729,14 +584,9 @@ exports[`initial.test.w 1`] = `
               "result": "-198",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env2/counterC/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env2/counterC",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -774,14 +624,9 @@ exports[`initial.test.w 1`] = `
               "result": "500",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counterB/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counterB",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -833,14 +678,9 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/Counter/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/Counter",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -850,14 +690,9 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/Counter/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/Counter",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -867,14 +702,9 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/Counter/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/Counter",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -884,14 +714,9 @@ exports[`peek.test.w 1`] = `
               "result": "1",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/Counter/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/Counter",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -929,14 +754,9 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/Counter/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/Counter",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -946,14 +766,9 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/Counter/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/Counter",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -963,14 +778,9 @@ exports[`peek.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/Counter/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/Counter",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -980,14 +790,9 @@ exports[`peek.test.w 1`] = `
               "result": "1",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/Counter/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/Counter",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1038,14 +843,9 @@ exports[`set.test.w 1`] = `
               "message": "set(42)",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1055,14 +855,9 @@ exports[`set.test.w 1`] = `
               "result": "42",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1071,14 +866,9 @@ exports[`set.test.w 1`] = `
               "message": "set(-100)",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1088,14 +878,9 @@ exports[`set.test.w 1`] = `
               "result": "-100",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1104,14 +889,9 @@ exports[`set.test.w 1`] = `
               "message": "set(0)",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1121,14 +901,9 @@ exports[`set.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env0/counter1/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env0/counter1",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1165,14 +940,9 @@ exports[`set.test.w 1`] = `
               "message": "set(42, \\"custom-key\\")",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1182,14 +952,9 @@ exports[`set.test.w 1`] = `
               "result": "42",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1198,14 +963,9 @@ exports[`set.test.w 1`] = `
               "message": "set(-100, \\"custom-key\\")",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1215,14 +975,9 @@ exports[`set.test.w 1`] = `
               "result": "-100",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1231,14 +986,9 @@ exports[`set.test.w 1`] = `
               "message": "set(0, \\"custom-key\\")",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },
@@ -1248,14 +998,9 @@ exports[`set.test.w 1`] = `
               "result": "0",
               "status": "success",
             },
-<<<<<<< HEAD
+            "level": "verbose",
             "sourcePath": "root/env1/counter2/Resource",
             "sourceType": "@winglang/sdk.sim.Resource",
-=======
-            "level": "verbose",
-            "sourcePath": "root/env1/counter2",
-            "sourceType": "@winglang/sdk.cloud.Counter",
->>>>>>> main
             "timestamp": "<TIMESTAMP>",
             "type": "resource",
           },

@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-[ERROR] if a resource throws an error on stopping, it doesn't crash the simulation | Error calling onStop Error: unexpected error!
+[ERROR] if a resource throws an error on stopping, it doesn't crash the simulation | Error: unexpected error!
   --> on-stop.test.w:6:5
   | inflight class OnStopThrowerBackend impl sim.IResource {
   |   pub onStart(ctx: sim.IResourceContext) {}
