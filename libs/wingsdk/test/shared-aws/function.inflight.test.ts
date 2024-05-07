@@ -78,6 +78,7 @@ test("parse logs", () => {
       timestamp: "2023-08-04T16:40:47.309Z",
       sourceType: "@winglang/sdk.cloud.Function",
       sourcePath: "fake-source",
+      level: "info",
       type: "log",
     },
     {
@@ -85,6 +86,7 @@ test("parse logs", () => {
       timestamp: "2023-08-04T16:40:50.691Z",
       sourceType: "@winglang/sdk.cloud.Function",
       sourcePath: "fake-source",
+      level: "info",
       type: "log",
     },
   ]);

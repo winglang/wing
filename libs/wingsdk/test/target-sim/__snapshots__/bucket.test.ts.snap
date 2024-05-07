@@ -557,7 +557,7 @@ exports[`get invalid object throws an error 1`] = `
 [
   "root/my_bucket started",
   "root/my_bucket/Policy started",
-  "Get (key=unknown.txt).",
+  "Error: Object does not exist (key=unknown.txt). (Get (key=unknown.txt).)",
   "root/my_bucket/Policy stopped",
   "root/my_bucket stopped",
 ]

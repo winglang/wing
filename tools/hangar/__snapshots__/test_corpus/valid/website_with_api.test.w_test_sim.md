@@ -2,6 +2,8 @@
 
 ## stdout.log
 ```log
+[INFO] GET --users | Website server listening on http://<IP>:<PORT>
+[INFO] OPTIONS --users | Website server listening on http://<IP>:<PORT>
 pass ─ website_with_api.test.wsim » root/env0/test:GET --users    
 pass ─ website_with_api.test.wsim » root/env1/test:OPTIONS --users
 
