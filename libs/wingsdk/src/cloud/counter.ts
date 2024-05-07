@@ -49,6 +49,7 @@ export class Counter extends Resource {
 
 /**
  * Inflight interface for `Counter`.
+ * @liftedfields ["$tableName", "$initial"]
  */
 export interface ICounterClient {
   /**

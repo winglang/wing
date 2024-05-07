@@ -142,13 +142,32 @@ impl<'a> LiftVisitor<'a> {
 			.to_string();
 
 		let current_env = self.ctx.current_env().expect("an env");
+		let result = current_env.lookup_nested_str(&node.full_path_str(), Some(self.ctx.current_stmt_idx()));
+		let type_ = match result {
+			LookupResult::Found(SymbolKind::Type(t), _) => *t,
+			_ => todo!(),
+		};
+
+		// We don't have the FQN for any non-JSII classes (e.g. winglib classes)
+		let fqn = if let Some(class) = type_.as_class() {
+			class.fqn.clone()
+		} else if let Some(iface) = type_.as_interface() {
+			iface.fqn.clone()
+		} else {
+			None
+		};
 		if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {
 			let type_path = node.field_path_str();
 			let module_path = match &root_namespace.module_path {
 				ResolveSource::WingFile => "",
 				ResolveSource::ExternalModule(p) => p,
 			};
-			format!("$stdlib.core.toLiftableModuleType({udt_js}, \"{module_path}\", \"{type_path}\")")
+			if let Some(fqn) = fqn {
+				format!("$stdlib.core.toLiftableModuleType(this?.node?.root?.typeForFqn(\"{fqn}\") ?? {udt_js}, \"{module_path}\", \"{type_path}\")")
+			} else {
+				format!("$stdlib.core.toLiftableModuleType({udt_js}, \"{module_path}\", \"{type_path}\")")
+			}
+		// format!("$stdlib.core.toLiftableModuleType({udt_js}, \"{module_path}\", \"{type_path}\")")
 		} else {
 			// Non-namespaced reference, should be a wing type with a helper to lift it
 			udt_js

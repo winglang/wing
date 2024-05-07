@@ -68,8 +68,16 @@ export class Counter extends cloud.Counter implements IAwsCounter {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "CounterClient",
-      [`process.env["${this.envName()}"]`, `${this.initial}`]
+      undefined,
+      this._liftedFields()
     );
+  }
+
+  public _liftedFields(): Record<string, string> {
+    return {
+      $tableName: `process.env["${this.envName()}"]`,
+      $initial: `${this.initial}`,
+    };
   }
 
   private envName(): string {

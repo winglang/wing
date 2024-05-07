@@ -44,13 +44,24 @@ export class InflightClient {
     dirname: string,
     filename: string,
     clientClass: string,
-    args: string[]
+    args: string[] | undefined,
+    liftedFields?: Record<string, string>
   ): string {
     const inflightDir = dirname;
     const inflightFile = basename(filename).split(".")[0] + ".inflight";
+    let argsStr = "";
+    if (args !== undefined) {
+      argsStr = args.join(", ");
+    } else {
+      argsStr += "{";
+      for (const [key, value] of Object.entries(liftedFields ?? {})) {
+        argsStr += `${key}: ${value},`;
+      }
+      argsStr += "}";
+    }
     return `new (require("${normalPath(
       `${inflightDir}/${inflightFile}`
-    )}")).${clientClass}(${args.join(", ")})`;
+    )}")).${clientClass}(${argsStr})`;
   }
 
   /**

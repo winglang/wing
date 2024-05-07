@@ -13,11 +13,19 @@ const VALUE_ATTRIBUTE = "counter_value";
 const SET_VALUE = "set_value";
 
 export class CounterClient implements ICounterClient {
-  constructor(
-    private readonly tableName: string,
-    private readonly initial: number = 0,
-    private readonly client = new DynamoDBClient({})
-  ) {}
+  private readonly client = new DynamoDBClient({});
+  private readonly tableName: string;
+  private readonly initial: number;
+  constructor({
+    $tableName,
+    $initial,
+  }: {
+    $tableName: string;
+    $initial: number;
+  }) {
+    this.tableName = $tableName;
+    this.initial = $initial ?? 0;
+  }
 
   public async inc(amount = 1, key = COUNTER_ID): Promise<number> {
     const command = new UpdateItemCommand({
