@@ -25,9 +25,9 @@ test "get range of an object" {
 
   expect.equal(b.get("test2.txt", startByte: 0, endByte: 3), "𠮷");
 
-  assertThrows("Unable to read object (key=test2.txt range=[0,2])", () => {
+  assertThrows("The encoded data was not valid for encoding utf-8", () => {
     b.get("test2.txt", startByte: 0, endByte: 2);
-  });  
+  });
 }
 
 test "get empty object" {
