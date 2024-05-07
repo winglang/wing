@@ -3498,9 +3498,9 @@ impl<'a> TypeChecker<'a> {
 		for statement in scope.statements.iter() {
 			match &statement.kind {
 				StmtKind::Bring { source, identifier } => self.hoist_bring_statement(source, identifier, statement, env),
-				StmtKind::Struct(st) => self.hoist_struct_definition(st, env),
-				StmtKind::Interface(iface) => self.hoist_interface_definition(iface, env),
-				StmtKind::Enum(enu) => self.hoist_enum_definition(enu, env),
+				StmtKind::Struct(st) => self.hoist_struct_definition(st, env, &statement.doc),
+				StmtKind::Interface(iface) => self.hoist_interface_definition(iface, env, &statement.doc),
+				StmtKind::Enum(enu) => self.hoist_enum_definition(enu, env, &statement.doc),
 				_ => {}
 			}
 		}
@@ -3643,7 +3643,7 @@ impl<'a> TypeChecker<'a> {
 		// alias is the symbol we are giving to the imported library or namespace
 	}
 
-	fn hoist_struct_definition(&mut self, st: &AstStruct, env: &mut SymbolEnv) {
+	fn hoist_struct_definition(&mut self, st: &AstStruct, env: &mut SymbolEnv, doc: &Option<String>) {
 		let AstStruct {
 			name, extends, access, ..
 		} = st;
@@ -3681,7 +3681,7 @@ impl<'a> TypeChecker<'a> {
 			fqn: None,
 			extends: extends_types.clone(),
 			env: dummy_env,
-			docs: Docs::default(),
+			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 		}));
 
 		match env.define(name, SymbolKind::Type(struct_type), *access, StatementIdx::Top) {
@@ -3692,7 +3692,7 @@ impl<'a> TypeChecker<'a> {
 		};
 	}
 
-	fn hoist_interface_definition(&mut self, iface: &AstInterface, env: &mut SymbolEnv) {
+	fn hoist_interface_definition(&mut self, iface: &AstInterface, env: &mut SymbolEnv, doc: &Option<String>) {
 		// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves
 		// from the interface definition or by other type definitions that come before the interface statement.
 		let dummy_env = SymbolEnv::new(
@@ -3726,7 +3726,7 @@ impl<'a> TypeChecker<'a> {
 		let interface_spec = Interface {
 			name: iface.name.clone(),
 			fqn: None,
-			docs: Docs::default(),
+			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 			env: dummy_env,
 			extends: extend_interfaces.clone(),
 			phase: iface.phase,
@@ -3746,11 +3746,11 @@ impl<'a> TypeChecker<'a> {
 		};
 	}
 
-	fn hoist_enum_definition(&mut self, enu: &AstEnum, env: &mut SymbolEnv) {
+	fn hoist_enum_definition(&mut self, enu: &AstEnum, env: &mut SymbolEnv, doc: &Option<String>) {
 		let enum_type_ref = self.types.add_type(Type::Enum(Enum {
 			name: enu.name.clone(),
 			values: enu.values.clone(),
-			docs: Default::default(),
+			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 		}));
 
 		match env.define(
