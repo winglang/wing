@@ -34,6 +34,8 @@ With this, we can convert our existing globals to intrinsics instead and go forw
 - `@file` - https://github.com/winglang/wing/issues/5449
 - `@inflight` - https://github.com/winglang/wing/issues/6045
 
+For certain widely used globals (e.g. `log` and `assert`), we should soft-deprecate the old syntax and only provide a warning when they are used. 
+
 ### Other thoughts
 
 I think it would be reasonable to expose the ability to create these in user-space via some sort of compiler API. This would be amazing but the design and implementation that would be a pretty huge task. Even if we did, we could still use the same syntax for invoke them even though we probably shouldn't call them "intrinsic" anymore.
