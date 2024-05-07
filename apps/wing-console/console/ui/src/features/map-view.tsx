@@ -551,7 +551,7 @@ export const MapView = memo(
           </>
         );
       },
-      [RoundedEdge, selectedEdgeId, onSelectedEdgeIdChange],
+      [selectedEdgeId, onSelectedEdgeIdChange],
     );
 
     const RenderNode = useCallback<
@@ -611,7 +611,7 @@ export const MapView = memo(
           </ConstructNode>
         );
       },
-      [nodeInfo, isNodeHidden],
+      [isNodeHidden, nodeInfo, connections],
     );
 
     const { theme } = useTheme();
