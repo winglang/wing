@@ -124,9 +124,11 @@ export class BucketClient implements IBucketClient {
         .file(key)
         .download({ start: options?.startByte, end: options?.endByte });
       return new TextDecoder("utf8", { fatal: true }).decode(body[0]);
-    } catch (error) {
+    } catch (e) {
       throw new Error(
-        `Failed to get object. (key=${key}) ${(error as Error).stack}`
+        `Object content could not be read as text (key=${key}): ${
+          (e as Error).stack
+        })}`
       );
     }
   }
