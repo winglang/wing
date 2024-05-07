@@ -597,8 +597,10 @@ impl<'s> Parser<'s> {
 				} else {
 					Some(curr_stmt_docs.join("\n"))
 				};
-				statements.push(self.build_statement(&child, statements.len(), phase, doc).unwrap());
 				curr_stmt_docs.clear();
+				if let Ok(stmt) = self.build_statement(&child, statements.len(), phase, doc) {
+					statements.push(stmt);
+				}
 			}
 		}
 		Scope::new(statements, span)
