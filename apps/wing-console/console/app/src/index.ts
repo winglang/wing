@@ -134,6 +134,7 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     log: options.log ?? {
       info() {},
       error: console.error,
+      warning() {},
       verbose() {},
     },
     config: options.config ?? {

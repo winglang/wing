@@ -57,6 +57,7 @@ test("pushing messages through a queue", async () => {
       sourcePath: "root/HelloWorld/Function",
       sourceType: "@winglang/sdk.cloud.Function",
       timestamp: expect.any(String),
+      level: "info",
       type: "log",
     },
     {
@@ -64,6 +65,7 @@ test("pushing messages through a queue", async () => {
       sourcePath: helloWorld.consumerPath,
       sourceType: "@winglang/sdk.cloud.Function",
       timestamp: expect.any(String),
+      level: "info",
       type: "log",
     },
   ]);

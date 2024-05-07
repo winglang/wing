@@ -11,7 +11,7 @@ import { exists } from "./util";
 import { SDK_VERSION } from "../constants";
 import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
-import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
+import { CONNECTIONS_FILE_PATH, LogLevel, Trace, TraceType } from "../std";
 import { POLICY_FQN } from "../target-sim";
 import { PolicySchema } from "../target-sim/schema-resources";
 
@@ -278,8 +278,7 @@ export class Simulator {
 
     try {
       await this.startResources();
-      this._running = "running";
-    } catch (err) {
+    } catch (err: any) {
       this.stopServer();
       this._running = "stopped";
       throw err;
@@ -289,23 +288,37 @@ export class Simulator {
   private async startResources() {
     const retries: Record<string, number> = {};
     const queue = this._model.graph.nodes.map((n) => n.path);
+    const failed = [];
     while (queue.length > 0) {
       const top = queue.shift()!;
       try {
         await this.startResource(top);
-      } catch (e) {
+      } catch (e: any) {
         if (e instanceof UnresolvedTokenError) {
           retries[top] = (retries[top] ?? 0) + 1;
-          if (retries[top] > 10) {
-            throw new Error(
-              `Could not start resource after 10 attempts: ${e.message}`
-            );
+
+          if (retries[top] < 10) {
+            queue.push(top);
+            continue;
+          } else {
+            failed.push(top);
           }
-          queue.push(top);
-        } else {
-          throw e;
         }
+
+        this.addSimulatorTrace(top, { message: e.message }, LogLevel.ERROR);
       }
+    }
+
+    // mark as "running" so that we can stop the simulation if needed
+    this._running = "running";
+
+    // since some resources failed to start, we are going to stop all resources that were started
+    if (failed.length > 0) {
+      await this.stop();
+
+      throw new Error(
+        `Failed to start resources: ${failed.map((r) => `"${r}"`).join(", ")}`
+      );
     }
   }
 
@@ -330,6 +343,7 @@ export class Simulator {
       },
       sourcePath: "root",
       sourceType: "Simulator",
+      level: LogLevel.VERBOSE,
       timestamp: new Date().toISOString(),
     });
 
@@ -408,14 +422,20 @@ export class Simulator {
     // remove the resource's policy from the policy registry
     this._policyRegistry.deregister(path);
 
-    this.addSimulatorTrace(path, { message: `${path} stopped` });
+    this.addSimulatorTrace(
+      path,
+      { message: `${path} stopped` },
+      LogLevel.VERBOSE
+    );
+
     delete this.state[path]; // delete the state of the resource
   }
 
-  private addSimulatorTrace(path: string, data: any) {
+  private addSimulatorTrace(path: string, data: any, level: LogLevel) {
     const resourceConfig = this.getResourceConfig(path);
     this.addTrace({
       type: TraceType.SIMULATOR,
+      level,
       data: data,
       sourcePath: resourceConfig.path,
       sourceType: resourceConfig.type,
@@ -772,9 +792,9 @@ export class Simulator {
 
     const resourceConfig = this.getResourceConfig(path);
 
-    const resolvedProps = this.resolveTokens(resourceConfig.props);
+    const resolvedProps = this.resolveTokens(path, resourceConfig.props);
     const resolvedPolicy: PolicyStatement[] =
-      this.resolveTokens(resourceConfig.policy) ?? [];
+      this.resolveTokens(path, resourceConfig.policy) ?? [];
 
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
@@ -827,9 +847,13 @@ export class Simulator {
     };
 
     // trace the resource creation
-    this.addSimulatorTrace(path, {
-      message: `${resourceConfig.path} started`,
-    });
+    this.addSimulatorTrace(
+      path,
+      {
+        message: `${resourceConfig.path} started`,
+      },
+      LogLevel.VERBOSE
+    );
   }
 
   private createContext(
@@ -860,15 +884,21 @@ export class Simulator {
               result: JSON.stringify(result),
             },
             type: TraceType.RESOURCE,
+            level: LogLevel.VERBOSE,
             sourcePath: resourceConfig.path,
             sourceType: resourceConfig.type,
             timestamp: new Date().toISOString(),
           });
           return result;
-        } catch (err) {
+        } catch (err: any) {
           this.addTrace({
-            data: { message: props.message, status: "failure", error: err },
+            data: {
+              message: `Error: ${err.message} (${props.message})`,
+              error: err,
+              status: "failure",
+            },
             type: TraceType.RESOURCE,
+            level: LogLevel.VERBOSE,
             sourcePath: resourceConfig.path,
             sourceType: resourceConfig.type,
             timestamp: new Date().toISOString(),
@@ -881,9 +911,13 @@ export class Simulator {
       },
       setResourceAttributes: (path: string, attrs: Record<string, any>) => {
         for (const [key, value] of Object.entries(attrs)) {
-          this.addSimulatorTrace(path, {
-            message: `${path}.${key} = ${value}`,
-          });
+          this.addSimulatorTrace(
+            path,
+            {
+              message: `${path}.${key} = ${value}`,
+            },
+            LogLevel.VERBOSE
+          );
         }
 
         this.state[path].attrs = { ...this.state[path].attrs, ...attrs };
@@ -916,7 +950,7 @@ export class Simulator {
    * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
    * the resolved value.
    */
-  private resolveTokens(obj: any): any {
+  private resolveTokens(resolver: string, obj: any): any {
     return resolveTokens(obj, (token) => {
       const target = this._model.graph.tryFind(token.path);
       if (!target) {
@@ -931,7 +965,7 @@ export class Simulator {
         const value = r.attrs[token.attr];
         if (value === undefined) {
           throw new UnresolvedTokenError(
-            `Unable to resolve attribute '${token.attr}' for resource: ${target.path}`
+            `Unable to resolve attribute '${token.attr}' for resource "${target.path}" referenced by "${resolver}"`
           );
         }
         return value;
