@@ -40,6 +40,7 @@ export interface CreateConsoleAppOptions {
   platform?: string[];
   stateDir?: string;
   open?: boolean;
+  watchGlobs?: string[];
 }
 
 const staticDir = `${__dirname}/vite`;
