@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { IResourceClient, LogLevel, SIM_RESOURCE_FQN } from "./resource";
+import { IResourceClient, SIM_RESOURCE_FQN } from "./resource";
 import { SimResourceAttributes, SimResourceSchema } from "./schema-resources";
 import { Bundle } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
@@ -8,7 +8,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator";
-import { Json, TraceType } from "../std";
+import { Json, LogLevel, TraceType } from "../std";
 
 export class Resource implements IResourceClient, ISimulatorResourceInstance {
   private _context: ISimulatorContext | undefined;
@@ -75,6 +75,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
           error: err,
         },
         type: TraceType.LOG,
+        level: LogLevel.ERROR,
         sourcePath: this.context.resourcePath,
         sourceType: SIM_RESOURCE_FQN,
         timestamp: new Date().toISOString(),
@@ -94,6 +95,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
           error: err,
         },
         type: TraceType.LOG,
+        level: LogLevel.ERROR,
         sourcePath: this.context.resourcePath,
         sourceType: SIM_RESOURCE_FQN,
         timestamp: new Date().toISOString(),
@@ -141,6 +143,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
     this.context.addTrace({
       data: { message, level },
       type,
+      level: level ?? LogLevel.INFO,
       sourcePath: this.context.resourcePath,
       sourceType: SIM_RESOURCE_FQN,
       timestamp: new Date().toISOString(),

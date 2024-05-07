@@ -4,7 +4,7 @@ import { readFile, stat } from "fs/promises";
 import { url as inspectorUrl } from "inspector";
 import { Bundle, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
-import { LogLevel } from "../target-sim";
+import { LogLevel } from "../std";
 
 export interface SandboxOptions {
   readonly env?: { [key: string]: string };
@@ -37,14 +37,15 @@ type ProcessResponse =
 export class Sandbox {
   public static async createBundle(
     entrypoint: string,
-    log?: (message: string) => void
+    log?: (message: string, level: LogLevel) => void
   ): Promise<Bundle> {
     let contents = await readFile(entrypoint, "utf-8");
 
     // log a warning if contents includes __dirname or __filename
     if (contents.includes("__dirname") || contents.includes("__filename")) {
       log?.(
-        `Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.`
+        `Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.`,
+        LogLevel.WARNING
       );
     }
 
@@ -77,7 +78,7 @@ process.on("message", async (message) => {${debugShim}
 
     if (process.env.DEBUG) {
       const fileStats = await stat(entrypoint);
-      log?.(`Bundled code (${fileStats.size} bytes).`);
+      log?.(`Bundled code (${fileStats.size} bytes).`, LogLevel.VERBOSE);
     }
 
     return bundle;
@@ -168,12 +169,9 @@ process.on("message", async (message) => {${debugShim}
       } else if (message.startsWith("error:")) {
         message = message.slice(6);
         level = LogLevel.ERROR;
-      } else if (message.startsWith("warn:")) {
-        message = message.slice(5);
-        level = LogLevel.WARN;
-      } else if (message.startsWith("debug:")) {
-        message = message.slice(6);
-        level = LogLevel.DEBUG;
+      } else if (message.startsWith("warning:")) {
+        message = message.slice(8);
+        level = LogLevel.WARNING;
       } else if (message.startsWith("verbose:")) {
         message = message.slice(8);
         level = LogLevel.VERBOSE;

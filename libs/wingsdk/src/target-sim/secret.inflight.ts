@@ -5,7 +5,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { Json, TraceType } from "../std";
+import { Json, LogLevel, TraceType } from "../std";
 
 export class Secret implements ISecretClient, ISimulatorResourceInstance {
   private _context: ISimulatorContext | undefined;
@@ -40,6 +40,7 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
       data: {
         message: "Get value",
       },
+      level: LogLevel.VERBOSE,
       sourcePath: this.context.resourcePath,
       sourceType: SECRET_FQN,
       type: TraceType.RESOURCE,

@@ -31,7 +31,7 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
             fileId: filePath,
             rangeStart: start,
             rangeEnd: end,
-            message,
+            message: "",
             style: "primary",
           });
         }

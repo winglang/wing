@@ -290,7 +290,7 @@ exports[`get row 1`] = `
   "root/my_table started",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
-  "get row NON_EXISTENT_KEY from table my_get_table.",
+  "Error: Row does not exist (key=NON_EXISTENT_KEY) (get row NON_EXISTENT_KEY from table my_get_table.)",
   "root/my_table stopped",
 ]
 `;

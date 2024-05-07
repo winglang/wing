@@ -14,6 +14,7 @@ import {
   Resource as StdResource,
   Node,
   Json,
+  LogLevel,
 } from "../std";
 
 /**
@@ -63,22 +64,6 @@ export interface IResourceContext {
    * @inflight
    */
   log(message: string, level: LogLevel | undefined): void;
-}
-
-/**
- * The severity of a log message.
- */
-export enum LogLevel {
-  /** Verbose level */
-  VERBOSE = "verbose",
-  /** Debug level */
-  DEBUG = "debug",
-  /** Information level */
-  INFO = "info",
-  /** Warning level */
-  WARN = "warn",
-  /** Error level */
-  ERROR = "error",
 }
 
 /**

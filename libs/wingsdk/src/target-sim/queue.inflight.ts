@@ -19,7 +19,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 export class Queue
   implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
@@ -187,11 +187,18 @@ export class Queue
           continue;
         }
 
-        this.addTrace(
-          `Sending messages (messages=${JSON.stringify(
-            messagesPayload
-          )}, subscriber=${subscriber.functionHandle}).`
-        );
+        this.context.addTrace({
+          type: TraceType.RESOURCE,
+          level: LogLevel.VERBOSE,
+          data: {
+            message: `Sending messages (messages=${JSON.stringify(
+              messagesPayload
+            )}, subscriber=${subscriber.functionHandle}).`,
+          },
+          sourcePath: this.context.resourcePath,
+          sourceType: QUEUE_FQN,
+          timestamp: new Date().toISOString(),
+        });
 
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
@@ -211,10 +218,18 @@ export class Queue
                   let dlq = this.context.getClient(
                     this.dlq.dlqHandler
                   ) as IQueueClient;
+
                   void dlq.push(msg.payload).catch((err) => {
-                    this.addTrace(
-                      `Pushing messages to the dead-letter queue generates an error -> ${err}`
-                    );
+                    this.context.addTrace({
+                      type: TraceType.RESOURCE,
+                      level: LogLevel.ERROR,
+                      data: {
+                        message: `Pushing messages to the dead-letter queue generates an error -> ${err}`,
+                      },
+                      sourcePath: this.context.resourcePath,
+                      sourceType: QUEUE_FQN,
+                      timestamp: new Date().toISOString(),
+                    });
                   });
                 }
               }
@@ -231,9 +246,16 @@ export class Queue
               return;
             }
             // If the function returns an error, put the message back on the queue after timeout period
-            this.addTrace(
-              `Subscriber error - returning ${messagesPayload.length} messages to queue: ${err.message}`
-            );
+            this.context.addTrace({
+              data: {
+                message: `Subscriber error - returning ${messagesPayload.length} messages to queue: ${err.message}`,
+              },
+              sourcePath: this.context.resourcePath,
+              sourceType: QUEUE_FQN,
+              type: TraceType.RESOURCE,
+              level: LogLevel.ERROR,
+              timestamp: new Date().toISOString(),
+            });
             this.pushMessagesBackToQueue(messages);
           });
         processedMessages = true;
@@ -248,20 +270,17 @@ export class Queue
         (message) => message.retentionTimeout > new Date()
       );
       this.messages.push(...retainedMessages);
-      this.addTrace(
-        `${retainedMessages.length} messages pushed back to queue after visibility timeout.`
-      );
+      this.context.addTrace({
+        data: {
+          message: `${retainedMessages.length} messages pushed back to queue after visibility timeout.`,
+        },
+        sourcePath: this.context.resourcePath,
+        sourceType: QUEUE_FQN,
+        type: TraceType.RESOURCE,
+        level: LogLevel.WARNING,
+        timestamp: new Date().toISOString(),
+      });
     }, this.timeoutSeconds * 1000);
-  }
-
-  private addTrace(message: string) {
-    this.context.addTrace({
-      data: { message },
-      type: TraceType.RESOURCE,
-      sourcePath: this.context.resourcePath,
-      sourceType: QUEUE_FQN,
-      timestamp: new Date().toISOString(),
-    });
   }
 }
 
