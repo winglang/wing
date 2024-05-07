@@ -7,6 +7,7 @@ import Emittery from "emittery";
 import type { Express } from "express";
 
 import type { Config } from "./config.js";
+import type { LogSource } from "./consoleLogger.js";
 import { type ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
 import type { HostUtils } from "./hostUtils.js";
@@ -218,23 +219,44 @@ export const createConsoleServer = async ({
     const message = `${
       trace.data.message ?? JSON.stringify(trace.data, undefined, 2)
     }`;
-    if (trace.type === "log") {
-      consoleLogger.log(message, "simulator", {
-        sourceType: trace.sourceType,
-        sourcePath: trace.sourcePath,
-      });
-    } else {
-      consoleLogger.verbose(message, "simulator", {
-        sourceType: trace.sourceType,
-        sourcePath: trace.sourcePath,
-      });
-    }
-    if (trace.data.status === "failure") {
-      let output = await formatTraceError(trace.data.error);
-      consoleLogger.error(output, "user", {
-        sourceType: trace.sourceType,
-        sourcePath: trace.sourcePath,
-      });
+
+    const source = logSourceFromTraceType(trace);
+
+    switch (trace.level) {
+      case "verbose": {
+        consoleLogger.verbose(message, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+        break;
+      }
+
+      case "info": {
+        consoleLogger.log(message, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+        break;
+      }
+
+      case "warning": {
+        consoleLogger.warning(message, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+        break;
+      }
+
+      case "error": {
+        const output = trace.data.error
+          ? await formatTraceError(trace.data.error)
+          : message;
+
+        consoleLogger.error(output, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+      }
     }
 
     if (
@@ -322,3 +344,17 @@ export const createConsoleServer = async ({
     close,
   };
 };
+
+function logSourceFromTraceType(trace: Trace): LogSource {
+  switch (trace.type) {
+    case "simulator": {
+      return "simulator";
+    }
+
+    case "resource": {
+      return "compiler";
+    }
+  }
+
+  return "user";
+}
