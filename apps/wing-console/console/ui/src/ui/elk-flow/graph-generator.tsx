@@ -1,5 +1,6 @@
 import type { ElkExtendedEdge, ElkNode, ElkPort } from "elkjs";
 import ELK from "elkjs/lib/elk.bundled.js";
+import { getDiff } from "json-difference";
 import {
   type FunctionComponent,
   type PropsWithChildren,
@@ -150,8 +151,9 @@ export interface GraphGeneratorProps {
 export const GraphGenerator: FunctionComponent<
   PropsWithChildren<GraphGeneratorProps>
 > = memo((props) => {
+  const { elk, edges, onGraph, children } = props;
   const [root] = useState<ElkNode>(() => ({
-    ...props.elk,
+    ...elk,
   }));
 
   const [jsonGraph, setJsonGraph] = useState<string>();
@@ -167,7 +169,7 @@ export const GraphGenerator: FunctionComponent<
       }
     };
     processNode(root);
-    const edges = (props.edges ?? []).filter((edge) => {
+    const cleansedEdges = (edges ?? []).filter((edge) => {
       return (
         edge.sources.every((source) => {
           const exists = nodeMap.has(source);
@@ -186,7 +188,7 @@ export const GraphGenerator: FunctionComponent<
       );
     });
 
-    setJsonGraph(() => {
+    setJsonGraph((oldJsonGraph) => {
       // Remove $H properties from JSON and sort children by id.
       const processNode = (node: ElkNode) => {
         delete (node as any).$H;
@@ -197,11 +199,21 @@ export const GraphGenerator: FunctionComponent<
         }
       };
 
-      processNode(root);
+      const rootClone = structuredClone(root);
+      processNode(rootClone);
+      const newGraph = {
+        ...rootClone,
+        edges: cleansedEdges,
+      };
 
-      return JSON.stringify({ ...root, edges });
+      console.debug(
+        "Graph diff",
+        getDiff(JSON.parse(oldJsonGraph ?? "{}"), newGraph),
+      );
+
+      return JSON.stringify(newGraph);
     });
-  });
+  }, [root, edges]);
 
   useEffect(() => {
     if (!jsonGraph) {
@@ -219,20 +231,20 @@ export const GraphGenerator: FunctionComponent<
           return;
         }
 
-        props.onGraph?.(graph);
+        onGraph?.(graph);
       })
       .catch((error) => console.error("elk layout error:", error));
     return () => {
       abort = true;
     };
-  }, [jsonGraph]);
+  }, [jsonGraph, onGraph]);
 
   return (
     <ElkNodeContext.Provider value={root}>
       <NodeContext.Provider value={NodeComponent}>
         <NodeChildrenContext.Provider value={NodeChildrenComponent}>
           <PortContext.Provider value={PortComponent}>
-            {props.children}
+            {children}
           </PortContext.Provider>
         </NodeChildrenContext.Provider>
       </NodeContext.Provider>

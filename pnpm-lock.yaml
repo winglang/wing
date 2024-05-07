@@ -772,6 +772,9 @@ importers:
       framer-motion:
         specifier: ^10.16.2
         version: 10.16.4(react-dom@18.2.0)(react@18.2.0)
+      json-difference:
+        specifier: ^1.16.1
+        version: 1.16.1
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
@@ -14192,7 +14195,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240422
+      typescript: 5.5.0-dev.20240507
     dev: true
 
   /dset@3.1.2:
@@ -17814,6 +17817,11 @@ packages:
 
   /json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
+
+  /json-difference@1.16.1:
+    resolution: {integrity: sha512-tNVUzBKn2I4BB4Cjn+j+Kq/BfLNwqtEvxhnlyuX5XJmKn9VlfV5MvaTbB/ure/toFgLaD6XglOUt+dd4iMQ3dA==}
+    engines: {node: '>=18.17.x'}
+    dev: false
 
   /json-parse-better-errors@1.0.2:
     resolution: {integrity: sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==}
@@ -22856,8 +22864,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240422:
-    resolution: {integrity: sha512-GKfP7cqp5Rq/z6xNYZ6u6XfS4I0K3h8tw3MRKkttEkLyEWBxYS141wOr1WBcUYfvB1F5Luo/cTd7iZnySH3bIg==}
+  /typescript@5.5.0-dev.20240507:
+    resolution: {integrity: sha512-5LtqwNqq8gx+AD5pTThWksRzORSFBNdUGmndlPmQ/fa34MY/1vsE5A/sFM6JD29X8uFiATeIJQepsO+l+tRJ0A==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
