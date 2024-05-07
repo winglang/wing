@@ -188,11 +188,11 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
         try {
           return new TextDecoder("utf8", { fatal: true }).decode(buffer);
-        } catch {
-          const start = options?.startByte ?? -1;
-          const end = options?.endByte ?? -1;
+        } catch (e) {
           throw new Error(
-            `Unable to read object (key=${key} range=[${start},${end}]).`
+            `Object content could not be read as text (key=${key}): ${
+              (e as Error).stack
+            })}`
           );
         }
       },
