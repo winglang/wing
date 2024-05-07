@@ -574,11 +574,12 @@ The following is a list of supported indexable types:
 
 ### 1.2 Intrinsic Functions
 
-Intrinsic functions are a special call-like syntax that are built into the Wing compiler.
-They are available anywhere, but may have restrictions on their usage.
-These restrictions depend on each individual intrinsic function.
-
-Intrinsics are always of the form `@name()`.
+Intrinsic functions are a special call-like expressions built into the Wing compiler with
+the following properties (given an example intrinsic `@x()`):
+- It is not possble to write `let variable = @x;` or otherwise use `@x` as an expression on its own
+- `x` is not automatically a symbol that can be referenced
+- The arguments/return types must be representable Wing types, but can be more dynamic than user-defined functions
+  - For example, the return type may change between inflight and preflight
 
 | Name            | Extra information                                                                                                         |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------- |
