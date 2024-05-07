@@ -2,10 +2,6 @@
 
 ## stdout.log
 ```log
-[INFO] get echo | Container hashicorp/http-echo started
-[INFO] get app | Container my-app:a9ae83b54b1ec21faa1a3255f05c095c started
-[INFO] get echo | Container my-app:a9ae83b54b1ec21faa1a3255f05c095c started
-[INFO] get app | Container hashicorp/http-echo started
 [INFO] get echo | bang
 [INFO] get echo | 
 [INFO] get app | Hello, Wingnuts!

@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-[INFO] (no test) | Pulling foo://do-not-pull-me...
 [ERROR] (no test) | Error: Failed to start container: Command "docker pull" exited with non-zero code 1 (see verbose logs)
 pass ─ pull-failure.test.wsim (no tests)
 
