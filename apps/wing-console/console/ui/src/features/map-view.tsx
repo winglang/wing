@@ -296,88 +296,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
     return renderedNode;
   });
 
-interface FunctionNodeProps {
-  id: string;
-  sourceOccupied?: boolean;
-  targetOccupied?: boolean;
-  highlight?: boolean;
-  onSelectedNodeIdChange: (id: string | undefined) => void;
-}
-
-const FunctionNode: FunctionComponent<FunctionNodeProps> = memo((props) => {
-  return (
-    <Node
-      elk={{
-        id: props.id,
-        layoutOptions: {
-          "elk.portConstraints": "FIXED_SIDE",
-        },
-      }}
-      className="inline-flex group/construct z-20 cursor-pointer"
-      title={props.id}
-      onClick={() => props.onSelectedNodeIdChange(props.id)}
-    >
-      <div className="group relative">
-        <div
-          className={clsx(
-            "p-1.5 rounded-full shadow",
-            "bg-white dark:bg-slate-700",
-            "transition-all",
-            "border",
-            "outline outline-sky-200/50 dark:outline-sky-500/50",
-            !props.highlight &&
-              "outline-0 border-slate-300 dark:border-slate-800",
-            props.highlight && "outline-2 border-sky-300 dark:border-sky-500",
-          )}
-        >
-          <BoltIcon className="size-5 text-sky-500" />
-        </div>
-
-        <Port
-          elk={{
-            id: `${props.id}#invoke#target`,
-            layoutOptions: {
-              "elk.port.side": "WEST",
-              "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-            },
-          }}
-        >
-          <InflightPort occupied={props.targetOccupied} />
-        </Port>
-
-        <Port
-          elk={{
-            id: `${props.id}#invoke#source`,
-            layoutOptions: {
-              "elk.port.side": "EAST",
-              "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-            },
-          }}
-        >
-          <InflightPort occupied={props.sourceOccupied} />
-        </Port>
-
-        <div className={clsx("absolute bottom-0 inset-x-0")}>
-          <div className="relative">
-            <div className="absolute top-0 inset-x-0">
-              <div className="flex justify-around">
-                <div className="absolute text-center">
-                  <div
-                    // className="text-xs font-medium leading-relaxed tracking-wide text-slate-500 dark:text-slate-800 backdrop-blur"
-                    className="text-xs font-medium leading-relaxed tracking-wide text-slate-600 dark:text-slate-300 backdrop-blur"
-                  >
-                    {props.id.split("/").slice(-1).join("")}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Node>
-  );
-});
-
 /**
  * Returns the middle point between two points with a given radius.
  */
@@ -569,24 +487,6 @@ export const MapView = memo(
         const info = nodeInfo?.get(props.constructTreeNode.path);
         if (!info) {
           return <></>;
-        }
-
-        if (info.type === "function") {
-          return (
-            <FunctionNode
-              id={props.constructTreeNode.path}
-              sourceOccupied={connections?.some(
-                (connection) =>
-                  connection.source.id === props.constructTreeNode.path,
-              )}
-              targetOccupied={connections?.some(
-                (connection) =>
-                  connection.target.id === props.constructTreeNode.path,
-              )}
-              highlight={props.selectedNodeId === props.constructTreeNode.path}
-              onSelectedNodeIdChange={props.onSelectedNodeIdChange}
-            />
-          );
         }
 
         return (

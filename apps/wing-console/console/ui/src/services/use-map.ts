@@ -237,9 +237,7 @@ export const useMap = ({}: UseMapOptions = {}) => {
       }
 
       if (nodeFqn === "@winglang/sdk.cloud.Function") {
-        // Cloud Functions will use both `invoke`and `invokeAsync`.
-        // We ignore `invokeAsync` and show `invoke` only.
-        return `${nodePath}#invoke#${type}`;
+        return `${nodePath}#${type}`;
       }
 
       if (operation) {
