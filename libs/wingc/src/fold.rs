@@ -208,6 +208,7 @@ where
 		kind,
 		span: node.span,
 		idx: node.idx,
+		doc: node.doc, // TODO: maybe `fold_doc`?
 	}
 }
 
@@ -249,6 +250,7 @@ where
 		phase: node.phase,
 		is_static: node.is_static,
 		access: node.access,
+		doc: node.doc, // TODO: maybe `fold_doc`?
 	}
 }
 
@@ -467,6 +469,7 @@ where
 		is_static: node.is_static,
 		span: node.span,
 		access: node.access,
+		doc: node.doc, // TODO: maybe `fold_doc`?
 	}
 }
 

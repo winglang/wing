@@ -580,16 +580,37 @@ impl<'s> Parser<'s> {
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let mut cursor = scope_node.walk();
 
-		let statements = scope_node
-			.named_children(&mut cursor)
-			.filter(|child| !child.is_extra() && child.kind() != "AUTOMATIC_BLOCK")
-			.enumerate()
-			.filter_map(|(i, st_node)| self.build_statement(&st_node, i, phase).ok())
-			.collect();
+		let mut statements = vec![];
+		let mut curr_stmt_docs = vec![];
+
+		for child in scope_node.named_children(&mut cursor) {
+			if child.kind() == "doc" {
+				curr_stmt_docs.push(
+					self
+						.get_child_field(&child, "content")
+						.map_or("", |n| self.node_text(&n)),
+				);
+				continue;
+			} else if !child.is_extra() && child.kind() != "AUTOMATIC_BLOCK" {
+				let doc = if curr_stmt_docs.is_empty() {
+					None
+				} else {
+					Some(curr_stmt_docs.join("\n"))
+				};
+				statements.push(self.build_statement(&child, statements.len(), phase, doc).unwrap());
+				curr_stmt_docs.clear();
+			}
+		}
 		Scope::new(statements, span)
 	}
 
-	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase) -> DiagnosticResult<Stmt> {
+	fn build_statement(
+		&self,
+		statement_node: &Node,
+		idx: usize,
+		phase: Phase,
+		doc: Option<String>,
+	) -> DiagnosticResult<Stmt> {
 		let span = self.node_span(statement_node);
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let stmt_kind = match statement_node.kind() {
@@ -634,6 +655,7 @@ impl<'s> Parser<'s> {
 			kind: stmt_kind,
 			span,
 			idx,
+			doc,
 		})
 	}
 
@@ -1189,14 +1211,31 @@ impl<'s> Parser<'s> {
 		let mut inflight_initializer = None;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 
+		let mut curr_member_docs = vec![];
+
 		for class_element in statement_node
 			.child_by_field_name("implementation")
 			.unwrap()
 			.named_children(&mut cursor)
 		{
-			if class_element.is_extra() {
+			if class_element.kind() == "doc" {
+				curr_member_docs.push(
+					self
+						.get_child_field(&class_element, "content")
+						.map_or("", |n| self.node_text(&n)),
+				);
+				continue;
+			} else if class_element.is_extra() {
 				continue;
 			}
+
+			let doc = if curr_member_docs.is_empty() {
+				None
+			} else {
+				Some(curr_member_docs.join("\n"))
+			};
+			curr_member_docs.clear();
+
 			match class_element.kind() {
 				"method_definition" => {
 					let Ok(method_name) = self.node_symbol(&class_element.child_by_field_name("name").unwrap()) else {
@@ -1204,7 +1243,7 @@ impl<'s> Parser<'s> {
 					};
 
 					let Ok(func_def) =
-						self.build_function_definition(Some(method_name.clone()), &class_element, class_phase, false)
+						self.build_function_definition(Some(method_name.clone()), &class_element, class_phase, false, doc)
 					else {
 						continue;
 					};
@@ -1219,7 +1258,7 @@ impl<'s> Parser<'s> {
 					methods.push((method_name, func_def))
 				}
 				"class_field" => {
-					let Ok(class_field) = self.build_class_field(class_element, class_phase) else {
+					let Ok(class_field) = self.build_class_field(class_element, class_phase, doc) else {
 						continue;
 					};
 
@@ -1276,6 +1315,7 @@ impl<'s> Parser<'s> {
 							is_static: false,
 							span: self.node_span(&class_element),
 							access: AccessModifier::Public,
+							doc,
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
@@ -1291,6 +1331,7 @@ impl<'s> Parser<'s> {
 							},
 							span: self.node_span(&class_element),
 							access: AccessModifier::Public,
+							doc,
 						})
 					}
 				}
@@ -1336,6 +1377,7 @@ impl<'s> Parser<'s> {
 				is_static: false,
 				span: name.span(),
 				access: AccessModifier::Public,
+				doc: None,
 			},
 		};
 
@@ -1361,6 +1403,7 @@ impl<'s> Parser<'s> {
 				is_static: false,
 				span: name.span(),
 				access: AccessModifier::Public,
+				doc: None,
 			},
 		};
 
@@ -1422,7 +1465,12 @@ impl<'s> Parser<'s> {
 		}))
 	}
 
-	fn build_class_field(&self, class_element: Node<'_>, class_phase: Phase) -> Result<ClassField, ()> {
+	fn build_class_field(
+		&self,
+		class_element: Node<'_>,
+		class_phase: Phase,
+		doc: Option<String>,
+	) -> Result<ClassField, ()> {
 		let modifiers = class_element.child_by_field_name("modifiers");
 		let is_static = self.get_modifier("static", &modifiers)?.is_some();
 		if is_static {
@@ -1444,6 +1492,7 @@ impl<'s> Parser<'s> {
 			is_static,
 			phase,
 			access: self.get_access_modifier(&class_element.child_by_field_name("modifiers"))?,
+			doc,
 		})
 	}
 
@@ -1595,7 +1644,7 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(None, anon_closure_node, phase, false)
+		self.build_function_definition(None, anon_closure_node, phase, false, None)
 	}
 
 	fn build_function_definition(
@@ -1604,6 +1653,7 @@ impl<'s> Parser<'s> {
 		func_def_node: &Node,
 		phase: Phase,
 		require_annotations: bool,
+		doc: Option<String>,
 	) -> DiagnosticResult<FunctionDefinition> {
 		let modifiers = func_def_node.child_by_field_name("modifiers");
 
@@ -1643,6 +1693,7 @@ impl<'s> Parser<'s> {
 			is_static,
 			span: self.node_span(func_def_node),
 			access: self.get_access_modifier(&modifiers)?,
+			doc,
 		})
 	}
 
@@ -2604,6 +2655,7 @@ impl<'s> Parser<'s> {
 				is_static: true,
 				span: statements_span.clone(),
 				access: AccessModifier::Public,
+				doc: None,
 			}),
 			statements_span.clone(),
 		);

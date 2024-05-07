@@ -295,6 +295,8 @@ pub struct FunctionDefinition {
 	pub is_static: bool,
 	/// Function's access modifier. In case of a closure, this is always public.
 	pub access: AccessModifier,
+	/// Function's documentation
+	pub doc: Option<String>,
 	pub span: WingSpan,
 }
 
@@ -303,6 +305,7 @@ pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
 	pub idx: usize,
+	pub doc: Option<String>,
 }
 
 #[derive(Debug)]
@@ -517,6 +520,7 @@ pub struct ClassField {
 	pub phase: Phase,
 	pub is_static: bool,
 	pub access: AccessModifier,
+	pub doc: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
