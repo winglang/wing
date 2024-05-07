@@ -18,8 +18,7 @@ Duration <DURATION>"
 `;
 
 exports[`fail_to_start_simulator.test.w 1`] = `
-"[INFO] dep_on_failing_resource | Pulling foo://do-not-pull-me...
-[ERROR] dep_on_failing_resource | Error: Failed to start container: Command \\"docker pull\\" exited with non-zero code 1 (see verbose logs)
+"[ERROR] dep_on_failing_resource | Error: Failed to start container: Command \\"docker pull\\" exited with non-zero code 1 (see verbose logs)
 [ERROR] dep_on_failing_resource | Error: Unable to resolve attribute 'host_port' for resource \\"root/env0/Container\\" referenced by \\"root/env0/test:dep_on_failing_resource/Handler\\"
 [ERROR] (no test) | Error: Unable to resolve attribute 'host_port' for resource \\"root/env0/Container\\" referenced by \\"root/env0/test:dep_on_failing_resource/Handler\\"
 Failed to start resources: \\"root/env0/test:dep_on_failing_resource/Handler\\", \\"root/cloud.TestRunner\\"
