@@ -2,10 +2,10 @@
   "name": "@winglang/monorepo",
   "private": true,
   "devDependencies": {
+    "@winglang/compatibility-spy": "workspace:^",
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
-    "@winglang/compatibility-spy": "workspace:^",
-    "turbo": "^1.12.5"
+    "turbo": "^1.13.3"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",
