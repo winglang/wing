@@ -7,7 +7,7 @@ slug: /
 
 ## Getting Started
 
-As you prepare to start taking flight with Wing, there are a few things you need to do to get set up. This guide will walk you through the steps to install the Wing CLI, create a new project, and run it using the Wing Console, and then deploy it to AWS!
+As you prepare to start taking flight with Wing, there are a few things you need to do to get set up. This guide will walk you through the steps to install the Wing CLI, create a new project, and run it using the Wing Console, then finally deploying it to AWS!
 
 > Want to skip the installation and get started right away? Check out the [Wing playground](https://www.winglang.io/play/)!
 
