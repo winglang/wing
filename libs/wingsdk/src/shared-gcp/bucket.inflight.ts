@@ -119,10 +119,16 @@ export class BucketClient implements IBucketClient {
   }
 
   public async get(key: string, options?: BucketGetOptions): Promise<string> {
+    const body = await this.bucket
+      .file(key)
+      .download({ start: options?.startByte, end: options?.endByte })
+      .catch((e) => {
+        throw new Error(
+          `Failed to get object (key=${key}): ${(e as Error).stack})}`
+        );
+      });
+
     try {
-      const body = await this.bucket
-        .file(key)
-        .download({ start: options?.startByte, end: options?.endByte });
       return new TextDecoder("utf8", { fatal: true }).decode(body[0]);
     } catch (e) {
       throw new Error(
