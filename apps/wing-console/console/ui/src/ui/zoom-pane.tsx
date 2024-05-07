@@ -146,7 +146,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       }
     });
   }, []);
-  useEvent("wheel", onWheel as (event: Event) => void, containerRef.current);
+  useEvent("wheel", onWheel as (event: Event) => void, containerRef.current, {
+    // Use passive: false to prevent the default behavior of scrolling the page.
+    passive: false,
+  });
 
   const [isDragging, setDragging] = useState(false);
 
