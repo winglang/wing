@@ -1598,6 +1598,19 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`fail_to_start_simulator.test.w 1`] = `
+"[INFO] dep_on_failing_resource | Pulling foo://do-not-pull-me...
+[ERROR] dep_on_failing_resource | Error: Failed to start container: Command \\"docker pull\\" exited with non-zero code 1 (see verbose logs)
+[ERROR] dep_on_failing_resource | Error: Unable to resolve attribute 'host_port' for resource \\"root/env0/Container\\" referenced by \\"root/env0/test:dep_on_failing_resource/Handler\\"
+[ERROR] (no test) | Error: Unable to resolve attribute 'host_port' for resource \\"root/env0/Container\\" referenced by \\"root/env0/test:dep_on_failing_resource/Handler\\"
+Failed to start resources: \\"root/env0/test:dep_on_failing_resource/Handler\\", \\"root/cloud.TestRunner\\"
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`file_with_variables.w 1`] = `
 "error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
   --> ../../../examples/tests/invalid/file_with_variables.w:5:1
@@ -4565,7 +4578,8 @@ Duration <DURATION>"
 `;
 
 exports[`unresolved_state.test.w 1`] = `
-"Could not start resource after 10 attempts: Unable to resolve attribute 'my_unresolved_token' for resource: root/env0/State
+"[ERROR] (no test) | Error: Unable to resolve attribute 'my_unresolved_token' for resource \\"root/env0/State\\" referenced by \\"root/env0/Function\\"
+Failed to start resources: \\"root/env0/Function\\"
 
 Tests 1 failed (1)
 Snapshots 1 skipped

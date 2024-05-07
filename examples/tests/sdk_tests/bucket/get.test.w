@@ -9,7 +9,7 @@ test "get range of an object" {
     try {
       block();
     } catch actual {
-      assert(actual.contains(expected));
+      assert(actual.contains(expected), "Expected error to contain: \"{expected}\" but got: \"{actual}");
       error = true;
     }
     assert(error);
@@ -24,11 +24,10 @@ test "get range of an object" {
   b.put("test2.txt", "𠮷");
 
   expect.equal(b.get("test2.txt", startByte: 0, endByte: 3), "𠮷");
-  assertThrows("The encoded data was not valid for encoding utf-8", () => {
-    b.get("test2.txt", startByte: 0, endByte: 2);
-  });
 
-  
+  assertThrows("Unable to read object (key=test2.txt range=[0,2])", () => {
+    b.get("test2.txt", startByte: 0, endByte: 2);
+  });  
 }
 
 test "get empty object" {
