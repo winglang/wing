@@ -879,7 +879,7 @@ The message to log.
 
 ###### `level`<sup>Optional</sup> <a name="level" id="@winglang/sdk.sim.IResourceContext.log.parameter.level"></a>
 
-- *Type:* <a href="#@winglang/sdk.sim.LogLevel">LogLevel</a>
+- *Type:* <a href="#@winglang/sdk.std.LogLevel">LogLevel</a>
 
 The severity of the message.
 
@@ -1057,58 +1057,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-## Enums <a name="Enums" id="Enums"></a>
-
-### LogLevel <a name="LogLevel" id="@winglang/sdk.sim.LogLevel"></a>
-
-The severity of a log message.
-
-#### Members <a name="Members" id="Members"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.sim.LogLevel.VERBOSE">VERBOSE</a></code> | Verbose level. |
-| <code><a href="#@winglang/sdk.sim.LogLevel.DEBUG">DEBUG</a></code> | Debug level. |
-| <code><a href="#@winglang/sdk.sim.LogLevel.INFO">INFO</a></code> | Information level. |
-| <code><a href="#@winglang/sdk.sim.LogLevel.WARN">WARN</a></code> | Warning level. |
-| <code><a href="#@winglang/sdk.sim.LogLevel.ERROR">ERROR</a></code> | Error level. |
-
----
-
-##### `VERBOSE` <a name="VERBOSE" id="@winglang/sdk.sim.LogLevel.VERBOSE"></a>
-
-Verbose level.
-
----
-
-
-##### `DEBUG` <a name="DEBUG" id="@winglang/sdk.sim.LogLevel.DEBUG"></a>
-
-Debug level.
-
----
-
-
-##### `INFO` <a name="INFO" id="@winglang/sdk.sim.LogLevel.INFO"></a>
-
-Information level.
-
----
-
-
-##### `WARN` <a name="WARN" id="@winglang/sdk.sim.LogLevel.WARN"></a>
-
-Warning level.
-
----
-
-
-##### `ERROR` <a name="ERROR" id="@winglang/sdk.sim.LogLevel.ERROR"></a>
-
-Error level.
 
 ---
 
