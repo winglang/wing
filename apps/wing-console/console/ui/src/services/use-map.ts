@@ -184,11 +184,16 @@ export const useMap = ({}: UseMapOptions = {}) => {
   );
 
   const rootNodes = useMemo(() => {
+    if (!rawTree) {
+      return;
+    }
+
     const children = rawTree?.children?.["Default"]?.children;
-    return children
-      ? (Object.values(children) as ConstructTreeNode[])
-      : undefined;
+    return children ? (Object.values(children) as ConstructTreeNode[]) : [];
   }, [rawTree]);
+  useEffect(() => {
+    console.log("rootNodes", rootNodes);
+  }, [rootNodes]);
 
   const connections = useMemo(() => {
     if (!rawConnections || !nodeFqns) {
