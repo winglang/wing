@@ -33,11 +33,10 @@ inflight class MyResourceBackend impl sim.IResource {
 
   pub printLogs() {
     this.ctx!.log("an info log");
-    this.ctx!.log("another info log", sim.LogLevel.INFO);
-    this.ctx!.log("a debug log", sim.LogLevel.DEBUG);
-    this.ctx!.log("a verbose log", sim.LogLevel.VERBOSE);
-    this.ctx!.log("a warn log", sim.LogLevel.WARN);
-    this.ctx!.log("an error log", sim.LogLevel.ERROR);
+    this.ctx!.log("another info log", std.LogLevel.INFO);
+    this.ctx!.log("a verbose log", std.LogLevel.VERBOSE);
+    this.ctx!.log("a warn log", std.LogLevel.WARNING);
+    this.ctx!.log("an error log", std.LogLevel.ERROR);
   }
 
   pub methodNum(arg: num): num { return arg * 2; }
