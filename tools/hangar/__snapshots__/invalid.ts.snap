@@ -880,21 +880,11 @@ error: Expected \\"S1\\" to be a class
    |                  ^^
 
 
-error: Class cannot extend itself
+error: Unknown symbol \\"C11\\"
    --> ../../../examples/tests/invalid/class.test.w:89:19
    |
 89 | class C11 extends C11 {
    |                   ^^^
-
-
-error: Symbol \\"C11\\" already defined in this scope
-   --> ../../../examples/tests/invalid/class.test.w:89:7
-   |
- 8 | class C11 {
-   |       --- previous definition
-   .
-89 | class C11 extends C11 {
-   |       ^^^
 
 
 error: Missing super() call as first statement of PaidStudent's constructor
