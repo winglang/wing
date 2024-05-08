@@ -1,8 +1,8 @@
-import { resolve } from "path";
+import * as path from "path";
 import { IResourceClient, SIM_RESOURCE_FQN } from "./resource";
 import { SimResourceAttributes, SimResourceSchema } from "./schema-resources";
 import { Bundle } from "../shared/bundling";
-import { Sandbox } from "../shared/sandbox";
+import { MultipleConcurrentCallsError, Sandbox } from "../shared/sandbox";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -41,7 +41,10 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
     context: ISimulatorContext
   ): Promise<SimResourceAttributes> {
     this._context = context;
-    this.resolvedSourceCodeFile = resolve(context.simdir, this.sourceCodeFile);
+    this.resolvedSourceCodeFile = path.resolve(
+      context.simdir,
+      this.sourceCodeFile
+    );
     await this.createBundle();
     this.sandbox = new Sandbox(this.bundle!.outfilePath, {
       env: {
@@ -55,6 +58,10 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
           level
         );
       },
+      // A resource needs to respond to method calls in a timely manner since
+      // the simulator server will wait for a response before responding to
+      // the caller. The default timeout is 30 seconds.
+      timeout: 30_000,
     });
 
     // We're communicating with the sandbox via IPC. It's not possible to pass
@@ -115,7 +122,27 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
   public async call(method: string, args: Array<Json> = []): Promise<Json> {
     return this.context.withTrace({
       activity: async () => {
-        return this.sandbox!.call("call", method, ...args);
+        // TODO: If requests take a long time for a resource to process,
+        // we may end up passing requests to the sandbox after they have
+        // timed out. We should consider adding a timeout to the call method
+        // here or track the request's response deadline in some way.
+        while (true) {
+          try {
+            return await this.sandbox!.call("call", method, ...args);
+          } catch (err) {
+            if (err instanceof MultipleConcurrentCallsError) {
+              // If the sandbox is busy, wait and try again
+              this.addTrace(
+                "Sandbox is busy, waiting and retrying...",
+                TraceType.SIMULATOR,
+                LogLevel.VERBOSE
+              );
+              await new Promise((resolve) => setTimeout(resolve, 100));
+            } else {
+              throw err;
+            }
+          }
+        }
       },
       message: this.formatCallMessage(method, args),
     });

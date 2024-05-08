@@ -733,7 +733,7 @@ function sortTests(a: std.TestResult, b: std.TestResult) {
  */
 function extractTestEnvFromPath(path: string): number | undefined {
   const parts = path.split("/");
-  const envPart = parts[1];
+  const envPart = parts[1] ?? parts[0];
   if (!envPart.startsWith("env")) {
     return undefined;
   }
