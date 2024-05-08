@@ -93,7 +93,24 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
 
   public async cleanup(): Promise<void> {
     try {
-      await this.sandbox!.call("stop");
+      // TODO: set a timeout for the stop call
+      while (true) {
+        try {
+          return await this.sandbox!.call("stop");
+        } catch (err) {
+          if (err instanceof MultipleConcurrentCallsError) {
+            // If the sandbox is busy, wait and try again
+            this.addTrace(
+              "Sandbox is busy, waiting and retrying...",
+              TraceType.SIMULATOR,
+              LogLevel.VERBOSE
+            );
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          } else {
+            throw err;
+          }
+        }
+      }
     } catch (err) {
       this.context.addTrace({
         data: {
