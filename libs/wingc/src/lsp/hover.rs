@@ -427,4 +427,133 @@ Json.stringify({});
       //^
   "#,
 	);
+
+	test_hover_list!(
+		class_doc,
+		r#"
+  /// Class doc
+  class Foo {
+      //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		enum_doc,
+		r#"
+  /// Enum doc
+  enum Foo {
+     //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		struct_doc,
+		r#"
+  /// Struct doc
+  struct Foo {
+       //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		interface_doc,
+		r#"
+  /// Interface doc
+  interface Foo {
+          //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		class_field_doc,
+		r#"
+  class Foo {
+    /// Class field doc
+    field: num;
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		class_method_doc,
+		r#"
+  class Foo {
+    /// Class method doc
+    do() { }
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		interface_method_doc,
+		r#"
+  interface Foo {
+    /// Interface method doc
+    do(): void;
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		enum_variant_doc,
+		r#"
+  enum Foo {
+    /// Enum variant doc
+    A
+  }
+	Foo.A;
+    //^		
+  "#,
+	);
+
+	test_hover_list!(
+		struct_field_doc,
+		r#"
+  struct Foo {
+    /// Struct field doc
+    field: num;
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		inherited_struct_field_doc,
+		r#"
+  struct Foo {
+    /// Parent struct field doc
+    field: num;
+  }
+  struct ChildFoo extends Foo {
+	    child_field: num;
+  }
+  let child = ChildFoo { field: 1, child_field: 2 };
+  child.field;
+      //^
+ 	"#,
+	);
+
+	test_hover_list!(
+		inherited_interface_method_doc,
+		r#"
+  interface Foo {
+    /// Parent interface method doc
+    do(): void;
+  }
+  interface ChildFoo extends Foo {
+    child_do(): void;
+  }		
+  (x: ChildFoo) => {
+    x.do();
+    //^
+  };
+ 	"#,
+	);
 }

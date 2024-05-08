@@ -394,7 +394,8 @@ impl Class {
 #[derive(Debug)]
 pub struct Interface {
 	pub name: Symbol,
-	pub methods: Vec<(Symbol, FunctionSignature)>,
+	// Each method has a symbol, a signature, and an optional documentation string
+	pub methods: Vec<(Symbol, FunctionSignature, Option<String>)>,
 	pub extends: Vec<UserDefinedType>,
 	pub access: AccessModifier,
 	pub phase: Phase,

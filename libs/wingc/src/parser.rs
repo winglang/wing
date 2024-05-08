@@ -856,10 +856,13 @@ impl<'s> Parser<'s> {
 
 		let mut doc_builder = DocBuilder::new(self);
 
-		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
+		for field_node in statement_node.named_children(&mut cursor) {
 			let DocBuilderResult::Done(doc) = doc_builder.process_node(&field_node) else {
 				continue;
 			};
+			if field_node.kind() != "struct_field" {
+				continue;
+			}
 			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
 			let type_ = self.get_child_field(&field_node, "type").ok();
 			let f = StructField {
@@ -1499,24 +1502,25 @@ impl<'s> Parser<'s> {
 		};
 
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+		let mut doc_builder = DocBuilder::new(self);
 
 		for interface_element in statement_node
 			.child_by_field_name("implementation")
 			.unwrap()
 			.named_children(&mut cursor)
 		{
-			if interface_element.is_extra() {
+			let DocBuilderResult::Done(doc) = doc_builder.process_node(&interface_element) else {
 				continue;
-			}
+			};
 			match interface_element.kind() {
 				"method_signature" => {
 					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, phase) {
-						methods.push((method_name, func_sig))
+						methods.push((method_name, func_sig, doc))
 					}
 				}
 				"inflight_method_signature" => {
 					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, Phase::Inflight) {
-						methods.push((method_name, func_sig))
+						methods.push((method_name, func_sig, doc))
 					}
 				}
 				"class_field" => {

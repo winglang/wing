@@ -274,7 +274,13 @@ where
 		methods: node
 			.methods
 			.into_iter()
-			.map(|(name, sig)| (f.fold_symbol(name), f.fold_function_signature(sig)))
+			.map(|(name, sig, doc)| {
+				(
+					f.fold_symbol(name),
+					f.fold_function_signature(sig),
+					doc, // TODO: maybe `fold_doc`?
+				)
+			})
 			.collect(),
 		extends: node
 			.extends

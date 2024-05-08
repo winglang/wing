@@ -42,7 +42,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(program: str, args: Array<str>, opts: ExecOptions?): Output"
   documentation:
     kind: markdown
-    value: "```wing\nstatic exec: (program: str, args: Array<str>, opts: ExecOptions?): Output\n```\n---\nExecute a program with the given arguments, wait for it to finish, and return its outputs.\n### Parameters\n- `program` — `str` — The program to execute.\n- `args` — `Array<str>` — An array of arguments to pass to the program.\n- `...opts` — `ExecOptions?` — `ExecOptions`, such as the working directory and environment variables.\n  \n  - `cwd?` — `str?`\n  - `env?` — `Map<str>?`\n  - `inheritEnv?` — `bool?`\n\n### Returns\nA struct containing `stdout`, `stderr` and exit `status` of the executed program."
+    value: "```wing\nstatic exec: (program: str, args: Array<str>, opts: ExecOptions?): Output\n```\n---\nExecute a program with the given arguments, wait for it to finish, and return its outputs.\n### Parameters\n- `program` — `str` — The program to execute.\n- `args` — `Array<str>` — An array of arguments to pass to the program.\n- `...opts` — `ExecOptions?` — `ExecOptions`, such as the working directory and environment variables.\n  \n  - `cwd?` — `str?` — Path to a directory to run the command in.\n  - `env?` — `Map<str>?` — Environment variables.\n  - `inheritEnv?` — `bool?` — Whether to inherit environment variables from the host's environment.\n\n### Returns\nA struct containing `stdout`, `stderr` and exit `status` of the executed program."
   sortText: ff|exec
   insertText: exec($1)
   insertTextFormat: 2
@@ -86,7 +86,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(command: str, opts: ShellOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic shell: (command: str, opts: ShellOptions?): str\n```\n---\nExecutes a command in the shell and returns its standard output.\n### Parameters\n- `command` — `str` — The command string to execute in the shell.\n- `...opts` — `ShellOptions?` — `ShellOptions`, such as the working directory and environment variables.\n  \n  - `cwd?` — `str?`\n  - `env?` — `Map<str>?`\n  - `inheritEnv?` — `bool?`\n  - `throw?` — `bool?` — Whether to throw an error on command execution failure.\n\n### Returns\nThe standard output of the shell command.\n\n*@throws* *An error if the shell command execution fails or returns a non-zero exit code.*"
+    value: "```wing\nstatic shell: (command: str, opts: ShellOptions?): str\n```\n---\nExecutes a command in the shell and returns its standard output.\n### Parameters\n- `command` — `str` — The command string to execute in the shell.\n- `...opts` — `ShellOptions?` — `ShellOptions`, such as the working directory and environment variables.\n  \n  - `cwd?` — `str?` — Path to a directory to run the command in.\n  - `env?` — `Map<str>?` — Environment variables.\n  - `inheritEnv?` — `bool?` — Whether to inherit environment variables from the host's environment.\n  - `throw?` — `bool?` — Whether to throw an error on command execution failure.\n\n### Returns\nThe standard output of the shell command.\n\n*@throws* *An error if the shell command execution fails or returns a non-zero exit code.*"
   sortText: ff|shell
   insertText: shell($1)
   insertTextFormat: 2
@@ -129,7 +129,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass ChildProcess\n```\n---\nHandle to a running child process.\n\n### Initializer\n- `program` — `str`\n- `args` — `Array<str>`\n- `...opts` — `SpawnOptions?`\n  \n  - `cwd?` — `str?`\n  - `env?` — `Map<str>?`\n  - `inheritEnv?` — `bool?`\n  - `stderr?` — `Stdio?` — Configuration for the process's standard error stream.\n  - `stdin?` — `Stdio?` — Configuration for the process's standard input stream.\n  - `stdout?` — `Stdio?` — Configuration for the process's standard output stream.\n### Fields\n- `pid?` — `num?` — The child's OS-assigned process ID.\n### Methods\n- `kill` — `(signal: num?): void` — Kill the process.\n- `wait` — `(): Output` — Wait for the process to finish and return its output."
+    value: "```wing\nclass ChildProcess\n```\n---\nHandle to a running child process.\n\n### Initializer\n- `program` — `str`\n- `args` — `Array<str>`\n- `...opts` — `SpawnOptions?`\n  \n  - `cwd?` — `str?` — Path to a directory to run the command in.\n  - `env?` — `Map<str>?` — Environment variables.\n  - `inheritEnv?` — `bool?` — Whether to inherit environment variables from the host's environment.\n  - `stderr?` — `Stdio?` — Configuration for the process's standard error stream.\n  - `stdin?` — `Stdio?` — Configuration for the process's standard input stream.\n  - `stdout?` — `Stdio?` — Configuration for the process's standard output stream.\n### Fields\n- `pid?` — `num?` — The child's OS-assigned process ID.\n### Methods\n- `kill` — `(signal: num?): void` — Kill the process.\n- `wait` — `(): Output` — Wait for the process to finish and return its output."
   sortText: gg|ChildProcess
 - label: Util
   kind: 7
@@ -147,7 +147,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ExecOptions extends CommandOptions\n```\n---\nAdditional options for `util.exec()`.\n### Fields\n- `cwd?` — `str?`\n- `env?` — `Map<str>?`\n- `inheritEnv?` — `bool?`"
+    value: "```wing\nstruct ExecOptions extends CommandOptions\n```\n---\nAdditional options for `util.exec()`.\n### Fields\n- `cwd?` — `str?` — Path to a directory to run the command in.\n- `env?` — `Map<str>?` — Environment variables.\n- `inheritEnv?` — `bool?` — Whether to inherit environment variables from the host's environment."
   sortText: hh|ExecOptions
 - label: NanoidOptions
   kind: 22
@@ -165,13 +165,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ShellOptions extends CommandOptions\n```\n---\nAdditional options for `util.shell()`.\n### Fields\n- `cwd?` — `str?`\n- `env?` — `Map<str>?`\n- `inheritEnv?` — `bool?`\n- `throw?` — `bool?` — Whether to throw an error on command execution failure."
+    value: "```wing\nstruct ShellOptions extends CommandOptions\n```\n---\nAdditional options for `util.shell()`.\n### Fields\n- `cwd?` — `str?` — Path to a directory to run the command in.\n- `env?` — `Map<str>?` — Environment variables.\n- `inheritEnv?` — `bool?` — Whether to inherit environment variables from the host's environment.\n- `throw?` — `bool?` — Whether to throw an error on command execution failure."
   sortText: hh|ShellOptions
 - label: SpawnOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct SpawnOptions extends CommandOptions\n```\n---\nAdditional options for `util.spawn()`.\n### Fields\n- `cwd?` — `str?`\n- `env?` — `Map<str>?`\n- `inheritEnv?` — `bool?`\n- `stderr?` — `Stdio?` — Configuration for the process's standard error stream.\n- `stdin?` — `Stdio?` — Configuration for the process's standard input stream.\n- `stdout?` — `Stdio?` — Configuration for the process's standard output stream."
+    value: "```wing\nstruct SpawnOptions extends CommandOptions\n```\n---\nAdditional options for `util.spawn()`.\n### Fields\n- `cwd?` — `str?` — Path to a directory to run the command in.\n- `env?` — `Map<str>?` — Environment variables.\n- `inheritEnv?` — `bool?` — Whether to inherit environment variables from the host's environment.\n- `stderr?` — `Stdio?` — Configuration for the process's standard error stream.\n- `stdin?` — `Stdio?` — Configuration for the process's standard input stream.\n- `stdout?` — `Stdio?` — Configuration for the process's standard output stream."
   sortText: hh|SpawnOptions
 - label: UlidOptions
   kind: 22
@@ -189,7 +189,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IPredicateHandler extends IInflight\n```\n---\nA predicate with an inflight \"handle\" method that can be passed to `util.busyWait`.\n### Methods\n- `handle` — `inflight (): bool` — The Predicate function that is called.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IPredicateHandler extends IInflight\n```\n---\nA predicate with an inflight \"handle\" method that can be passed to `util.busyWait`.\n### Methods\n- `handle` — `inflight (): bool` — The Predicate function that is called.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this object inflight."
   sortText: ii|IPredicateHandler
 - label: IPredicateHandlerClient
   kind: 8
@@ -201,6 +201,6 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum Stdio\n```\n---\nDescribes what to do with a standard I/O stream for a child process.\n- `INHERIT`\n- `PIPED`\n- `NULL`"
+    value: "```wing\nenum Stdio\n```\n---\nDescribes what to do with a standard I/O stream for a child process.\n- `INHERIT — The child inherits from the corresponding parent descriptor.`\n- `PIPED — A new pipe should be arranged to connect the parent and child processes.`\n- `NULL — This stream will be ignored.`"
   sortText: jj|Stdio
 

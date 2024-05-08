@@ -4104,7 +4104,7 @@ impl<'a> TypeChecker<'a> {
 					false,
 					Phase::Independent,
 					AccessModifier::Public,
-					None, // TODO: add docs to struct field
+					field.doc.as_ref().map(|s| Docs::with_summary(s)),
 				),
 				AccessModifier::Public,
 				StatementIdx::Top,
@@ -4146,7 +4146,7 @@ impl<'a> TypeChecker<'a> {
 		);
 
 		// Add methods to the interface env
-		for (method_name, sig) in ast_iface.methods.iter() {
+		for (method_name, sig, doc) in ast_iface.methods.iter() {
 			let mut method_type = self.resolve_type_annotation(&sig.to_type_annotation(), env);
 			// use the interface type as the function's "this" type
 			if let Type::Function(ref mut f) = *method_type {
@@ -4164,7 +4164,7 @@ impl<'a> TypeChecker<'a> {
 					false,
 					sig.phase,
 					AccessModifier::Public,
-					None, // TODO: add docs to method
+					doc.as_ref().map(|s| Docs::with_summary(s)),
 				),
 				AccessModifier::Public,
 				StatementIdx::Top,
@@ -6369,7 +6369,7 @@ fn add_parent_members_to_struct_env(
 						false,
 						struct_env.phase,
 						AccessModifier::Public,
-						None, // TOOD: add docs to struct members
+						parent_member_var.docs.clone(),
 					),
 					AccessModifier::Public,
 					StatementIdx::Top,
@@ -6434,7 +6434,7 @@ fn add_parent_members_to_iface_env(
 						member_var.kind == VariableKind::StaticMember,
 						member_var.phase,
 						AccessModifier::Public,
-						None, // TODO: add docs to interface members
+						member_var.docs.clone(),
 					),
 					AccessModifier::Public,
 					StatementIdx::Top,
