@@ -9,12 +9,6 @@ level 1: { A => A [type], assert => (condition: bool, message: str?): void, clou
 
 ## stdout.log
 ```log
-[<TIMESTAMP>] [VERBOSE] (no test) » root/cloud.TestRunner
-root/cloud.TestRunner started
-
-[<TIMESTAMP>] [VERBOSE] (no test) » root/cloud.TestRunner
-root/cloud.TestRunner stopped
-
 pass ─ debug_env.test.wsim (no tests)
 
 Tests 1 passed (1)

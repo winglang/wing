@@ -2,12 +2,6 @@
 
 ## stdout.log
 ```log
-[<TIMESTAMP>] [VERBOSE] (no test) » root/cloud.TestRunner
-root/cloud.TestRunner started
-
-[<TIMESTAMP>] [VERBOSE] (no test) » root/cloud.TestRunner
-root/cloud.TestRunner stopped
-
 pass ─ inflight_class_capture_preflight_object.test.wsim (no tests)
 
 Tests 1 passed (1)
