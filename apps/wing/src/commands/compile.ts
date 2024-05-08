@@ -117,7 +117,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
             fileId: filePath,
             rangeStart: start,
             rangeEnd: end,
-            message,
+            message: "",
             style: "primary",
           });
         }

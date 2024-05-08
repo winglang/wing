@@ -18,6 +18,7 @@ import * as cloud from "../cloud";
 import { normalPath } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import * as aws from "../shared-aws";
+import { Node } from "../std";
 
 const INDEX_FILE = "index.html";
 
@@ -176,6 +177,8 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
       label: `Website ${this.node.path}`,
       browserSupport: true,
     });
+
+    Node.of(this.endpoint).hidden = true;
   }
 
   protected get _endpoint(): cloud.Endpoint {

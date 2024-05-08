@@ -145,6 +145,10 @@ async function main() {
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
     .option(
+      "-w, --watch <globs...>",
+      "Watch additional paths for changes. Supports globs and '!' for negations."
+    )
+    .option(
       "-t, --platform <platform> --platform <platform>",
       "Target platform provider (builtin: sim)",
       collectPlatformVariadic,
