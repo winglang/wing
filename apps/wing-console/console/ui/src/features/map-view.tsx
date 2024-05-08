@@ -72,9 +72,10 @@ const EDGE_ROUNDED_RADIUS = 10;
 const baseLayoutOptions: LayoutOptions = {
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
   "elk.algorithm": "org.eclipse.elk.layered",
-  "elk.layered.layering.strategy": "MIN_WIDTH",
+  // "elk.layered.layering.strategy": "MIN_WIDTH",
+  "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
   "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
-  "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
+  // "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
 };
 
