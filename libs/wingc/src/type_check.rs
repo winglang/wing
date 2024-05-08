@@ -33,7 +33,7 @@ use crate::{
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
 use duplicate::duplicate_item;
-use indexmap::{IndexMap, IndexSet};
+use indexmap::IndexMap;
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 
@@ -463,7 +463,8 @@ impl Display for Struct {
 pub struct Enum {
 	pub name: Symbol,
 	pub docs: Docs,
-	pub values: IndexSet<Symbol>,
+	/// Variant name and optional documentation
+	pub values: IndexMap<Symbol, Option<String>>,
 }
 
 #[derive(Debug)]
@@ -4103,7 +4104,7 @@ impl<'a> TypeChecker<'a> {
 					false,
 					Phase::Independent,
 					AccessModifier::Public,
-					None,
+					None, // TODO: add docs to struct field
 				),
 				AccessModifier::Public,
 				StatementIdx::Top,
@@ -4163,7 +4164,7 @@ impl<'a> TypeChecker<'a> {
 					false,
 					sig.phase,
 					AccessModifier::Public,
-					None,
+					None, // TODO: add docs to method
 				),
 				AccessModifier::Public,
 				StatementIdx::Top,
@@ -5911,7 +5912,7 @@ impl<'a> TypeChecker<'a> {
 					.unwrap_or_else(|e| self.type_error(e));
 				match *type_ {
 					Type::Enum(ref e) => {
-						if e.values.contains(property) {
+						if e.values.contains_key(property) {
 							(
 								ResolveReferenceResult::Variable(VariableInfo {
 									name: property.clone(),
@@ -6368,7 +6369,7 @@ fn add_parent_members_to_struct_env(
 						false,
 						struct_env.phase,
 						AccessModifier::Public,
-						None,
+						None, // TOOD: add docs to struct members
 					),
 					AccessModifier::Public,
 					StatementIdx::Top,
@@ -6433,7 +6434,7 @@ fn add_parent_members_to_iface_env(
 						member_var.kind == VariableKind::StaticMember,
 						member_var.phase,
 						AccessModifier::Public,
-						None,
+						None, // TODO: add docs to interface members
 					),
 					AccessModifier::Public,
 					StatementIdx::Top,

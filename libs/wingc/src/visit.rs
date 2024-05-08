@@ -286,8 +286,9 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	v.visit_symbol(&node.name);
-	for value in &node.values {
+	for (value, _doc) in &node.values {
 		v.visit_symbol(value);
+		// TODO: Visit _doc
 	}
 }
 

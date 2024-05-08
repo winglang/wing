@@ -1,5 +1,5 @@
 use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
-use indexmap::{IndexMap, IndexSet};
+use indexmap::IndexMap;
 use itertools::Itertools;
 use phf::{phf_map, phf_set};
 use regex::Regex;
@@ -581,26 +581,18 @@ impl<'s> Parser<'s> {
 		let mut cursor = scope_node.walk();
 
 		let mut statements = vec![];
-		let mut curr_stmt_docs = vec![];
+		let mut doc_builder = DocBuilder::new(self);
 
 		for child in scope_node.named_children(&mut cursor) {
-			if child.kind() == "doc" {
-				curr_stmt_docs.push(
-					self
-						.get_child_field(&child, "content")
-						.map_or("", |n| self.node_text(&n)),
-				);
+			let DocBuilderResult::Done(doc) = doc_builder.process_node(&child) else {
 				continue;
-			} else if !child.is_extra() && child.kind() != "AUTOMATIC_BLOCK" {
-				let doc = if curr_stmt_docs.is_empty() {
-					None
-				} else {
-					Some(curr_stmt_docs.join("\n"))
-				};
-				curr_stmt_docs.clear();
-				if let Ok(stmt) = self.build_statement(&child, statements.len(), phase, doc) {
-					statements.push(stmt);
-				}
+			};
+			if child.kind() == "AUTOMATIC_BLOCK" {
+				continue;
+			}
+
+			if let Ok(stmt) = self.build_statement(&child, statements.len(), phase, doc) {
+				statements.push(stmt);
 			}
 		}
 		Scope::new(statements, span)
@@ -862,12 +854,18 @@ impl<'s> Parser<'s> {
 		let mut cursor = statement_node.walk();
 		let mut members = vec![];
 
+		let mut doc_builder = DocBuilder::new(self);
+
 		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
+			let DocBuilderResult::Done(doc) = doc_builder.process_node(&field_node) else {
+				continue;
+			};
 			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
 			let type_ = self.get_child_field(&field_node, "type").ok();
 			let f = StructField {
 				name: identifier,
 				member_type: self.build_type_annotation(type_, phase)?,
+				doc,
 			};
 			members.push(f);
 		}
@@ -1138,8 +1136,13 @@ impl<'s> Parser<'s> {
 		}
 
 		let mut cursor = statement_node.walk();
-		let mut values = IndexSet::<Symbol>::new();
+		let mut values = IndexMap::<Symbol, Option<String>>::new();
+		let mut doc_builder = DocBuilder::new(self);
+
 		for node in statement_node.named_children(&mut cursor) {
+			let DocBuilderResult::Done(value_doc) = doc_builder.process_node(&node) else {
+				continue;
+			};
 			if node.kind() != "enum_field" {
 				continue;
 			}
@@ -1151,8 +1154,7 @@ impl<'s> Parser<'s> {
 			}
 
 			let symbol = diagnostic.unwrap();
-			let success = values.insert(symbol.clone());
-			if !success {
+			if values.insert(symbol.clone(), value_doc).is_some() {
 				self
 					.with_error::<Node>(format!("Duplicated enum value {}", symbol.name), &node)
 					.err();
@@ -1213,30 +1215,16 @@ impl<'s> Parser<'s> {
 		let mut inflight_initializer = None;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 
-		let mut curr_member_docs = vec![];
+		let mut doc_builder = DocBuilder::new(self);
 
 		for class_element in statement_node
 			.child_by_field_name("implementation")
 			.unwrap()
 			.named_children(&mut cursor)
 		{
-			if class_element.kind() == "doc" {
-				curr_member_docs.push(
-					self
-						.get_child_field(&class_element, "content")
-						.map_or("", |n| self.node_text(&n)),
-				);
+			let DocBuilderResult::Done(doc) = doc_builder.process_node(&class_element) else {
 				continue;
-			} else if class_element.is_extra() {
-				continue;
-			}
-
-			let doc = if curr_member_docs.is_empty() {
-				None
-			} else {
-				Some(curr_member_docs.join("\n"))
 			};
-			curr_member_docs.clear();
 
 			match class_element.kind() {
 				"method_definition" => {
@@ -2676,6 +2664,48 @@ impl<'s> Parser<'s> {
 			}),
 			span,
 		)))
+	}
+}
+
+struct DocBuilder<'a> {
+	doc_lines: Vec<&'a str>,
+	parser: &'a Parser<'a>,
+}
+
+enum DocBuilderResult {
+	Done(Option<String>),
+	Continue,
+	Skip,
+}
+
+impl<'a> DocBuilder<'a> {
+	fn new(parser: &'a Parser) -> Self {
+		Self {
+			doc_lines: Vec::new(),
+			parser,
+		}
+	}
+
+	fn process_node(&mut self, node: &Node) -> DocBuilderResult {
+		if node.kind() == "doc" {
+			self.doc_lines.push(
+				self
+					.parser
+					.get_child_field(&node, "content")
+					.map_or("", |n| self.parser.node_text(&n)),
+			);
+			DocBuilderResult::Continue
+		} else if node.is_extra() {
+			DocBuilderResult::Skip
+		} else {
+			let doc = if self.doc_lines.is_empty() {
+				DocBuilderResult::Done(None)
+			} else {
+				DocBuilderResult::Done(Some(self.doc_lines.join("\n")))
+			};
+			self.doc_lines.clear();
+			doc
+		}
 	}
 }
 

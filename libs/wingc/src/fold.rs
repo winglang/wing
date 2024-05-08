@@ -261,6 +261,7 @@ where
 	StructField {
 		name: f.fold_symbol(node.name),
 		member_type: f.fold_type_annotation(node.member_type),
+		doc: node.doc, // TODO: maybe `fold_doc`?
 	}
 }
 
@@ -307,7 +308,16 @@ where
 {
 	Enum {
 		name: f.fold_symbol(node.name),
-		values: node.values.into_iter().map(|v| f.fold_symbol(v)).collect(),
+		values: node
+			.values
+			.into_iter()
+			.map(|v| {
+				(
+					f.fold_symbol(v.0),
+					v.1, // TODO: maybe `fold_doc`?
+				)
+			})
+			.collect(),
 		access: node.access,
 	}
 }

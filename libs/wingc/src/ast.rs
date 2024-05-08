@@ -3,7 +3,7 @@ use std::hash::{Hash, Hasher};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use camino::Utf8PathBuf;
-use indexmap::{Equivalent, IndexMap, IndexSet};
+use indexmap::{Equivalent, IndexMap};
 use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
@@ -411,7 +411,8 @@ pub struct Struct {
 #[derive(Debug)]
 pub struct Enum {
 	pub name: Symbol,
-	pub values: IndexSet<Symbol>,
+	// Each value has a symbol and an optional documenation string
+	pub values: IndexMap<Symbol, Option<String>>,
 	pub access: AccessModifier,
 }
 
@@ -544,6 +545,7 @@ impl Display for AccessModifier {
 pub struct StructField {
 	pub name: Symbol,
 	pub member_type: TypeAnnotation,
+	pub doc: Option<String>,
 }
 
 #[derive(Debug)]
