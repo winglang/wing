@@ -240,7 +240,7 @@ export const DefaultLayout = ({
                 )}
 
                 <div className="flex-1 flex relative gap-0.5">
-                  {!layout.leftPanel?.hide &&
+                  {/* {!layout.leftPanel?.hide &&
                     layout.leftPanel?.components?.length && (
                       <RightResizableWidget
                         className={classNames(
@@ -288,7 +288,7 @@ export const DefaultLayout = ({
                           },
                         )}
                       </RightResizableWidget>
-                    )}
+                    )} */}
 
                   <div className="flex-1 flex flex-col">
                     <div className="flex-1 flex gap-0.5">
@@ -308,7 +308,7 @@ export const DefaultLayout = ({
                           onSelectedEdgeIdChange={setSelectedEdgeId}
                         />
                       </div>
-                      {!layout.rightPanel?.hide && (
+                      {/* {!layout.rightPanel?.hide && (
                         <LeftResizableWidget
                           className={classNames(
                             theme.border4,
@@ -356,13 +356,13 @@ export const DefaultLayout = ({
                             )}
                           </div>
                         </LeftResizableWidget>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>
               </>
             )}
-            {!layout.bottomPanel?.hide && (
+            {/* {!layout.bottomPanel?.hide && (
               <TopResizableWidget
                 className={classNames(
                   USE_EXTERNAL_THEME_COLOR,
@@ -409,7 +409,7 @@ export const DefaultLayout = ({
                   },
                 )}
               </TopResizableWidget>
-            )}
+            )} */}
 
             {cloudAppState === "error" &&
               layout.errorScreen?.position === "bottom" && (
@@ -437,7 +437,7 @@ export const DefaultLayout = ({
                 </>
               )}
 
-            {!layout.statusBar?.hide && (
+            {/* {!layout.statusBar?.hide && (
               <div className={classNames(USE_EXTERNAL_THEME_COLOR)}>
                 <StatusBar
                   wingVersion={wingVersion}
@@ -446,7 +446,7 @@ export const DefaultLayout = ({
                   showThemeToggle={layout.statusBar?.showThemeToggle}
                 />
               </div>
-            )}
+            )} */}
           </PersistentStateProvider>
         </div>
       </div>

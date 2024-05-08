@@ -229,19 +229,27 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               "transition-all",
             )}
           >
-            <div className="px-2.5 py-1 flex items-center gap-1.5">
-              <ResourceIcon className="size-4 -ml-0.5" resourceType={fqn} />
-
-              <span
+            {!hasChildNodes && (
+              <div
                 className={clsx(
-                  "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
-                  !highlight && " text-slate-600 dark:text-slate-300",
-                  highlight && "text-sky-600 dark:text-sky-300",
+                  "px-2.5 py-1 flex items-center gap-1.5",
+                  inflights.length > 0 &&
+                    "border-b border-slate-300 dark:border-slate-800",
                 )}
               >
-                {name}
-              </span>
-            </div>
+                <ResourceIcon className="size-4 -ml-0.5" resourceType={fqn} />
+
+                <span
+                  className={clsx(
+                    "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
+                    !highlight && " text-slate-600 dark:text-slate-300",
+                    highlight && "text-sky-600 dark:text-sky-300",
+                  )}
+                >
+                  {name}
+                </span>
+              </div>
+            )}
 
             <Port
               elk={{
@@ -275,14 +283,19 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                   }}
                   className="pointer-events-none z-20"
                 >
-                  <div className="border-t border-slate-300 dark:border-slate-800">
+                  <div
+                  // className="border-t border-slate-300 dark:border-slate-800"
+                  >
                     <div
                       className={clsx(
                         "px-2.5 py-1.5 text-xs whitespace-nowrap",
                         "text-slate-600 dark:text-slate-300",
                       )}
                     >
-                      {inflight.name}()
+                      <span className="italic text-indigo-500 dark:text-indigo-400">
+                        inflight{" "}
+                      </span>
+                      <span>{inflight.name}()</span>
                     </div>
                   </div>
 
@@ -357,44 +370,80 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       //   );
       // }
 
+      // if (hasChildNodes) {
+      //   return (
+      //     <Node
+      //       elk={{
+      //         id: `${id}#container`,
+      //         layoutOptions: {
+      //           // "elk.algorithm": "org.eclipse.elk.fixed",
+      //           "elk.direction": "LEFT",
+      //           // "elk.layered.spacing.baseValue": "1",
+      //           "elk.layered.layering.strategy": "MIN_WIDTH",
+      //           // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
+      //           // "elk.layered.layering.strategy": "STRETCH_WIDTH",
+      //         },
+      //       }}
+      //       className="inline-block"
+      //     >
+      //       <div className="bg-white w-full h-full rounded-lg border border-slate-200">
+      //         <div className="px-4 py-6">
+      //           <NodeChildren>
+      //             {renderedNode}
+
+      //             <ContainerNode
+      //               id={`${id}#children`}
+      //               // name={`${name} Children`}
+      //               name={name}
+      //               pseudoContainer
+      //               resourceType={fqn}
+      //               highlight={highlight}
+      //               onClick={select}
+      //             >
+      //               <Port
+      //                 elk={{
+      //                   id: `${id}#children-target`,
+      //                   layoutOptions: {
+      //                     "elk.port.side": "WEST",
+      //                     "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+      //                   },
+      //                 }}
+      //               />
+      //               {children}
+      //             </ContainerNode>
+      //           </NodeChildren>
+      //         </div>
+      //       </div>
+      //     </Node>
+      //   );
+      // }
       if (hasChildNodes) {
         return (
-          <Node
-            elk={{
-              id: `${id}#container`,
-              layoutOptions: {
-                // "elk.algorithm": "org.eclipse.elk.fixed",
-                "elk.direction": "LEFT",
-                // "elk.layered.spacing.baseValue": "1",
-                "elk.layered.layering.strategy": "MIN_WIDTH",
-                // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
-                // "elk.layered.layering.strategy": "STRETCH_WIDTH",
-              },
-            }}
+          <ContainerNode
+            id={`${id}#container`}
+            name={name}
+            pseudoContainer
+            resourceType={fqn}
+            highlight={highlight}
+            onClick={select}
           >
-            {renderedNode}
+            <NodeChildren>
+              {renderedNode}
 
-            <ContainerNode
-              id={`${id}#children`}
-              // name={`${name} Children`}
-              name={name}
-              pseudoContainer
-              resourceType={fqn}
-              highlight={highlight}
-              onClick={select}
-            >
-              <Port
-                elk={{
-                  id: `${id}#children-target`,
-                  layoutOptions: {
-                    "elk.port.side": "WEST",
-                    "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                  },
-                }}
-              />
-              {children}
-            </ContainerNode>
-          </Node>
+              <Node elk={{ id: `${id}#children` }}>
+                <Port
+                  elk={{
+                    id: `${id}#children-target`,
+                    layoutOptions: {
+                      "elk.port.side": "WEST",
+                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                    },
+                  }}
+                />
+                {children}
+              </Node>
+            </NodeChildren>
+          </ContainerNode>
         );
       }
 
