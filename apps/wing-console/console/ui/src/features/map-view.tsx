@@ -159,15 +159,12 @@ interface ConstructNodeProps {
     targetOccupied?: boolean;
   }[];
   highlight?: boolean;
+  hasChildNodes?: boolean;
   onSelectedNodeIdChange: (id: string | undefined) => void;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
   memo((props) => {
-    const hasChildren = Array.isArray(props.children)
-      ? props.children.length > 1
-      : false;
-
     const renderedNode = (
       <Node
         elk={{
@@ -279,7 +276,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       </Node>
     );
 
-    if (hasChildren) {
+    if (props.hasChildNodes) {
       return (
         <ContainerNode
           id={`${props.id}#container`}
@@ -490,6 +487,10 @@ export const MapView = memo(
           return <></>;
         }
 
+        const childNodes = Object.values(
+          props.constructTreeNode.children ?? {},
+        ).filter((node) => !isNodeHidden(node.path));
+
         return (
           <ConstructNode
             id={props.constructTreeNode.path}
@@ -498,21 +499,20 @@ export const MapView = memo(
             inflights={info.type === "construct" ? info.inflights : []}
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             highlight={props.selectedNodeId === props.constructTreeNode.path}
+            hasChildNodes={childNodes.length > 0}
           >
-            {Object.values(props.constructTreeNode.children ?? {}).map(
-              (child) => (
-                <RenderNode
-                  key={child.id}
-                  constructTreeNode={child}
-                  selectedNodeId={props.selectedNodeId}
-                  onSelectedNodeIdChange={props.onSelectedNodeIdChange}
-                />
-              ),
-            )}
+            {childNodes.map((child) => (
+              <RenderNode
+                key={child.id}
+                constructTreeNode={child}
+                selectedNodeId={props.selectedNodeId}
+                onSelectedNodeIdChange={props.onSelectedNodeIdChange}
+              />
+            ))}
           </ConstructNode>
         );
       },
-      [isNodeHidden, nodeInfo, connections],
+      [isNodeHidden, nodeInfo],
     );
 
     const { theme } = useTheme();
