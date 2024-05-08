@@ -582,7 +582,10 @@ impl IntrinsicKind {
 				this_type: None,
 				phase: Phase::Preflight,
 				docs: Docs::with_summary(
-					"Get the normalized absolute path given the a relative path, relative to the current wing file's directory.",
+					r#"Get the normalized absolute path given a path relative to the current source file's directory.
+
+The resolved path represent a path during preflight only and is not guaranteed to be valid while inflight.
+This path should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."#,
 				),
 				js_override: None,
 				implicit_scope_param: false,
@@ -590,7 +593,7 @@ impl IntrinsicKind {
 					name: "relativePath".to_string(),
 					typeref: types.string(),
 					variadic: false,
-					docs: Docs::default(),
+					docs: Docs::with_summary("Path relative to the current file's directory."),
 				}],
 				return_type: types.string(),
 			}),

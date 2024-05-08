@@ -157,25 +157,6 @@ export function createExternRequire(dirname: string) {
   };
 }
 
-export function createPath(
-  outdir: string,
-  relativeSourcePath: string
-): (target: string) => string {
-  const sourcePath = nodePath.join(outdir, relativeSourcePath);
-  const sourceDir = nodePath.dirname(sourcePath);
-
-  return (target) => {
-    if (nodePath.isAbsolute(target)) {
-      throw new Error(
-        `Provided path must be relative but received an absolute path: ${target}`
-      );
-    } else if (target === "") {
-      return sourcePath;
-    }
-    return normalPath(nodePath.join(sourceDir, target));
-  };
-}
-
 export function path(
   outdir: string,
   relativeSourceDir: string,

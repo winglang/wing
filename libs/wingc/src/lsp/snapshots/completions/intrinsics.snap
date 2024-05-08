@@ -5,7 +5,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 3
   documentation:
     kind: markdown
-    value: "Get the normalized absolute path given the a relative path, relative to the current wing file's directory.\n### Parameters\n- `relativePath` — `str`"
+    value: "Get the normalized absolute path given a path relative to the current source file's directory.\n\nThe resolved path represent a path during preflight only and is not guaranteed to be valid while inflight.\nThis path should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed.\n### Parameters\n- `relativePath` — `str` — Path relative to the current file's directory."
   sortText: cc|@path
   insertText: "@path($1)"
   insertTextFormat: 2
