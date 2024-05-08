@@ -213,6 +213,6 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum Stdio\n```\n---\nDescribes what to do with a standard I/O stream for a child process.\n- `INHERIT`\n- `PIPED`\n- `NULL`"
+    value: "```wing\nenum Stdio\n```\n---\nDescribes what to do with a standard I/O stream for a child process.\n- `INHERIT — The child inherits from the corresponding parent descriptor.`\n- `PIPED — A new pipe should be arranged to connect the parent and child processes.`\n- `NULL — This stream will be ignored.`"
   sortText: jj|Stdio
 

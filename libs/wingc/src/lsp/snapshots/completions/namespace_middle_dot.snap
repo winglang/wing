@@ -551,18 +551,18 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum BucketEventType\n```\n---\nBucket events to subscribe to.\n- `CREATE`\n- `DELETE`\n- `UPDATE`"
+    value: "```wing\nenum BucketEventType\n```\n---\nBucket events to subscribe to.\n- `CREATE — Create.`\n- `DELETE — Delete.`\n- `UPDATE — Update.`"
   sortText: jj|BucketEventType
 - label: BucketSignedUrlAction
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum BucketSignedUrlAction\n```\n---\nSpecifies the action permitted by a presigned URL for a bucket.\n- `DOWNLOAD`\n- `UPLOAD`"
+    value: "```wing\nenum BucketSignedUrlAction\n```\n---\nSpecifies the action permitted by a presigned URL for a bucket.\n- `DOWNLOAD — Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket.`\n- `UPLOAD — Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket.`"
   sortText: jj|BucketSignedUrlAction
 - label: HttpMethod
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum HttpMethod\n```\n---\nAllowed HTTP methods for a endpoint.\n- `GET`\n- `HEAD`\n- `POST`\n- `PUT`\n- `DELETE`\n- `CONNECT`\n- `OPTIONS`\n- `PATCH`"
+    value: "```wing\nenum HttpMethod\n```\n---\nAllowed HTTP methods for a endpoint.\n- `GET — Get.`\n- `HEAD — Head.`\n- `POST — Post.`\n- `PUT — Put.`\n- `DELETE — Delete.`\n- `CONNECT — Connect.`\n- `OPTIONS — Options.`\n- `PATCH — Patch.`"
   sortText: jj|HttpMethod
 
