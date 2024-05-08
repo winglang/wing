@@ -39,8 +39,8 @@ const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
         // "opacity-0",
         // props.occupied && "opacity-100",
         "group-hover/construct:opacity-100 group-hover/construct:border-sky-300",
-        "outline outline-0 group-hover/construct:outline-2 outline-sky-200",
-        props.highlight && "outline-2 border-sky-300",
+        "outline outline-0 group-hover/construct:outline-4 outline-sky-200",
+        props.highlight && "outline-4 border-sky-300",
         "transition-all",
         "invisible",
       )}
@@ -72,8 +72,8 @@ const EDGE_ROUNDED_RADIUS = 10;
 const baseLayoutOptions: LayoutOptions = {
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
   "elk.algorithm": "org.eclipse.elk.layered",
-  // "elk.layered.layering.strategy": "MIN_WIDTH",
-  "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
+  "elk.layered.layering.strategy": "MIN_WIDTH",
+  // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
   "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
   // "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
@@ -84,6 +84,8 @@ interface ContainerNodeProps {
   name: string;
   pseudoContainer?: boolean;
   resourceType?: string;
+  highlight?: boolean;
+  onClick?: () => void;
 }
 
 const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
@@ -107,15 +109,19 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
           <div className="absolute inset-x-0 top-0">
             <div className="relative">
               <div className="absolute bottom-0">
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
                 <div
                   className={clsx(
                     "whitespace-nowrap",
                     "text-xs font-medium leading-relaxed tracking-wide",
-                    "text-slate-400 dark:text-slate-800",
+                    !props.highlight && "text-slate-400 dark:text-slate-800",
+                    props.highlight && "text-sky-500 dark:text-sky-100",
                     "font-normal",
                     "transition-opacity",
                     "backdrop-blur",
+                    "cursor-pointer",
                   )}
+                  onClick={() => props.onClick?.()}
                 >
                   <div className="flex items-center gap-1">
                     <IconComponent className="size-4" />
@@ -134,7 +140,9 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
               "overflow-hidden",
               "border",
               props.pseudoContainer && "border-dashed",
-              "border-slate-200 dark:border-slate-600",
+              "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
+              !props.highlight && "border-slate-300 dark:border-slate-700",
+              props.highlight && "outline-4 border-sky-400 dark:border-sky-500",
             )}
           >
             <div className={clsx("grow shadow-inner", "px-6 py-6")}>
@@ -164,135 +172,154 @@ interface ConstructNodeProps {
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
-  memo((props) => {
-    const renderedNode = (
-      <Node
-        elk={{
-          id: props.id,
-          layoutOptions: {
-            "elk.direction": "DOWN",
-            "elk.layered.spacing.baseValue": "1",
-          },
-        }}
-        className="inline-block group/construct z-20 cursor-pointer"
-        onClick={() => props.onSelectedNodeIdChange(props.id)}
-      >
-        <div
-          className={clsx(
-            "w-full h-full rounded-lg",
-            "bg-white dark:bg-slate-700",
-            "border",
-            "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
-            !props.highlight && "border-slate-300 dark:border-slate-800",
-            props.highlight && "outline-2 border-sky-300 dark:border-sky-500",
-            "shadow",
-            "transition-all",
-          )}
-        >
-          <div className="px-2.5 py-1 flex items-center gap-1.5">
-            <ResourceIcon className="size-4 -ml-0.5" resourceType={props.fqn} />
-
-            <span className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-slate-600 dark:text-slate-300">
-              {props.name}
-            </span>
-          </div>
-
-          <Port
-            elk={{
-              id: `${props.id}##source`,
-              layoutOptions: {
-                "elk.port.side": "EAST",
-                "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-              },
-            }}
-          />
-
-          <Port
-            elk={{
-              id: `${props.id}##target`,
-              layoutOptions: {
-                "elk.port.side": "WEST",
-                "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-              },
-            }}
-          />
-
-          <NodeChildren className="text-xs">
-            {props.inflights.map((inflight) => (
-              <Node
-                key={inflight.id}
-                elk={{
-                  id: inflight.id,
-                  layoutOptions: {
-                    "elk.portConstraints": "FIXED_SIDE",
-                  },
-                }}
-                className="pointer-events-none z-20"
-              >
-                <div className="border-t border-slate-300 dark:border-slate-800">
-                  <div
-                    className={clsx(
-                      "px-2.5 py-1.5 text-xs whitespace-nowrap",
-                      "text-slate-600 dark:text-slate-300",
-                    )}
-                  >
-                    {inflight.name}()
-                  </div>
-                </div>
-
-                <Port
-                  elk={{
-                    id: `${inflight.id}#source`,
-                    layoutOptions: {
-                      "elk.port.side": "EAST",
-                      "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                    },
-                  }}
-                >
-                  <InflightPort
-                    occupied={inflight.sourceOccupied}
-                    highlight={props.highlight}
-                  />
-                </Port>
-
-                <Port
-                  elk={{
-                    id: `${inflight.id}#target`,
-                    layoutOptions: {
-                      "elk.port.side": "WEST",
-                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                    },
-                  }}
-                >
-                  <InflightPort
-                    occupied={inflight.targetOccupied}
-                    highlight={props.highlight}
-                  />
-                </Port>
-              </Node>
-            ))}
-          </NodeChildren>
-        </div>
-      </Node>
-    );
-
-    if (props.hasChildNodes) {
-      return (
-        <ContainerNode
-          id={`${props.id}#container`}
-          name={props.name}
-          pseudoContainer
-          resourceType={props.fqn}
-        >
-          {renderedNode}
-
-          {props.children}
-        </ContainerNode>
+  memo(
+    ({
+      id,
+      name,
+      onSelectedNodeIdChange,
+      highlight,
+      fqn,
+      inflights,
+      children,
+      hasChildNodes,
+    }) => {
+      const select = useCallback(
+        () => onSelectedNodeIdChange(id),
+        [onSelectedNodeIdChange, id],
       );
-    }
 
-    return renderedNode;
-  });
+      const renderedNode = (
+        <Node
+          elk={{
+            id,
+            layoutOptions: {
+              "elk.direction": "DOWN",
+              "elk.layered.spacing.baseValue": "1",
+            },
+          }}
+          className="inline-block group/construct z-20 cursor-pointer"
+          onClick={select}
+        >
+          <div
+            className={clsx(
+              "w-full h-full rounded-lg",
+              "bg-white dark:bg-slate-700",
+              highlight && "bg-sky-50 dark:bg-sky-900",
+              "border",
+              "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
+              !highlight && "border-slate-300 dark:border-slate-800",
+              highlight && "outline-4 border-sky-400 dark:border-sky-500",
+              "shadow",
+              "transition-all",
+            )}
+          >
+            <div className="px-2.5 py-1 flex items-center gap-1.5">
+              <ResourceIcon className="size-4 -ml-0.5" resourceType={fqn} />
+
+              <span className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-slate-600 dark:text-slate-300">
+                {name}
+              </span>
+            </div>
+
+            <Port
+              elk={{
+                id: `${id}##source`,
+                layoutOptions: {
+                  "elk.port.side": "EAST",
+                  "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                },
+              }}
+            />
+
+            <Port
+              elk={{
+                id: `${id}##target`,
+                layoutOptions: {
+                  "elk.port.side": "WEST",
+                  "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                },
+              }}
+            />
+
+            <NodeChildren className="text-xs">
+              {inflights.map((inflight) => (
+                <Node
+                  key={inflight.id}
+                  elk={{
+                    id: inflight.id,
+                    layoutOptions: {
+                      "elk.portConstraints": "FIXED_SIDE",
+                    },
+                  }}
+                  className="pointer-events-none z-20"
+                >
+                  <div className="border-t border-slate-300 dark:border-slate-800">
+                    <div
+                      className={clsx(
+                        "px-2.5 py-1.5 text-xs whitespace-nowrap",
+                        "text-slate-600 dark:text-slate-300",
+                      )}
+                    >
+                      {inflight.name}()
+                    </div>
+                  </div>
+
+                  <Port
+                    elk={{
+                      id: `${inflight.id}#source`,
+                      layoutOptions: {
+                        "elk.port.side": "EAST",
+                        "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                      },
+                    }}
+                  >
+                    <InflightPort
+                      occupied={inflight.sourceOccupied}
+                      highlight={highlight}
+                    />
+                  </Port>
+
+                  <Port
+                    elk={{
+                      id: `${inflight.id}#target`,
+                      layoutOptions: {
+                        "elk.port.side": "WEST",
+                        "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                      },
+                    }}
+                  >
+                    <InflightPort
+                      occupied={inflight.targetOccupied}
+                      highlight={highlight}
+                    />
+                  </Port>
+                </Node>
+              ))}
+            </NodeChildren>
+          </div>
+        </Node>
+      );
+
+      if (hasChildNodes) {
+        return (
+          <ContainerNode
+            id={`${id}#container`}
+            name={name}
+            pseudoContainer
+            resourceType={fqn}
+            highlight={highlight}
+            onClick={select}
+          >
+            {renderedNode}
+
+            {children}
+          </ContainerNode>
+        );
+      }
+
+      return renderedNode;
+    },
+  );
 
 /**
  * Returns the middle point between two points with a given radius.
