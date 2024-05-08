@@ -129,18 +129,6 @@ export const createAppRouter = () => {
         getNodeIds(node);
         return list;
       }),
-    "app.selectNode": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string().optional(),
-        }),
-      )
-      .mutation(async ({ ctx, input }) => {
-        ctx.setSelectedNode(input.resourcePath ?? "");
-      }),
-    "app.selectedNode": createProcedure.query(async ({ ctx }) => {
-      return ctx.getSelectedNode();
-    }),
     "app.nodeBreadcrumbs": createProcedure
       .input(
         z.object({
