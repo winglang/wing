@@ -72,7 +72,7 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
           data-testid="map-pane"
         >
           {mapBackgroundRef.current &&
-            createPortal(<MapBackground />, mapBackgroundRef.current)}
+            createPortal(<MapBackground hideDots />, mapBackgroundRef.current)}
 
           <div {...divProps}>
             {graph && (

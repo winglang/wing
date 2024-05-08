@@ -96,6 +96,28 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
       resourceId: props.id,
     });
 
+    const nameNode = (
+      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+      <div
+        className={clsx(
+          "whitespace-nowrap",
+          "text-xs font-medium leading-relaxed tracking-wide",
+          !props.highlight && "text-slate-400 dark:text-slate-800",
+          props.highlight && "text-sky-500 dark:text-sky-100",
+          "font-normal",
+          "transition-opacity",
+          "backdrop-blur",
+          "cursor-pointer",
+        )}
+        onClick={() => props.onClick?.()}
+      >
+        <div className="flex items-center gap-1">
+          <IconComponent className="size-4" />
+          {props.name}
+        </div>
+      </div>
+    );
+
     return (
       <Node
         elk={{
@@ -105,39 +127,21 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             "elk.layered.layering.strategy": "MIN_WIDTH",
           },
         }}
-        className={clsx("inline-block", "group", "p-2", "z-0")}
+        className={clsx(
+          "inline-block",
+          "group",
+          // "p-2",
+          "z-0",
+        )}
       >
-        <div
-          className={clsx(
-            "w-full h-full relative",
-            props.highlight && "bg-sky-300/20",
-          )}
-        >
+        <div className={clsx("w-full h-full relative")}>
           <div className="absolute inset-x-0 top-0">
             <div className="relative">
-              <div className="absolute bottom-0">
-                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                <div
-                  className={clsx(
-                    "whitespace-nowrap",
-                    "text-xs font-medium leading-relaxed tracking-wide",
-                    !props.highlight && "text-slate-400 dark:text-slate-800",
-                    props.highlight && "text-sky-500 dark:text-sky-100",
-                    "font-normal",
-                    "transition-opacity",
-                    "backdrop-blur",
-                    "cursor-pointer",
-                  )}
-                  onClick={() => props.onClick?.()}
-                >
-                  <div className="flex items-center gap-1">
-                    <IconComponent className="size-4" />
-                    {props.name}
-                  </div>
-                </div>
-              </div>
+              <div className="absolute bottom-0">{nameNode}</div>
             </div>
           </div>
+
+          <div className="h-0 invisible">{nameNode}</div>
 
           <div
             className={clsx(
@@ -148,11 +152,12 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
               "border",
               props.pseudoContainer && "border-dashed",
               "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
+              // props.highlight && "outline-4",
               !props.highlight && "border-slate-300 dark:border-slate-700",
-              props.highlight && "outline-4 border-sky-400 dark:border-sky-500",
+              props.highlight && "border-sky-400 dark:border-sky-500",
             )}
           >
-            <div className={clsx("grow shadow-inner", "px-6 py-6")}>
+            <div className={clsx("grow", "shadow-inner", "px-6 py-6")}>
               <NodeChildren>
                 <div className="absolute">{props.children}</div>
               </NodeChildren>
@@ -200,8 +205,12 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           elk={{
             id,
             layoutOptions: {
+              "elk.algorithm": "org.eclipse.elk.layered",
               "elk.direction": "DOWN",
               "elk.layered.spacing.baseValue": "1",
+              // "elk.layered.layering.strategy": "MIN_WIDTH",
+              // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
+              // "elk.layered.layering.strategy": "STRETCH_WIDTH",
             },
           }}
           className="inline-block group/construct z-20 cursor-pointer"
@@ -211,7 +220,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             className={clsx(
               "w-full h-full rounded-lg",
               "bg-white dark:bg-slate-700",
-              highlight && "bg-sky-50 dark:bg-sky-900",
+              // highlight && "bg-sky-50 dark:bg-sky-900",
               "border",
               "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
               !highlight && "border-slate-300 dark:border-slate-800",
@@ -223,7 +232,13 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             <div className="px-2.5 py-1 flex items-center gap-1.5">
               <ResourceIcon className="size-4 -ml-0.5" resourceType={fqn} />
 
-              <span className="text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap text-slate-600 dark:text-slate-300">
+              <span
+                className={clsx(
+                  "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
+                  !highlight && " text-slate-600 dark:text-slate-300",
+                  highlight && "text-sky-600 dark:text-sky-300",
+                )}
+              >
                 {name}
               </span>
             </div>
@@ -307,22 +322,107 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
         </Node>
       );
 
+      // if (hasChildNodes) {
+      //   return (
+      //     <ContainerNode
+      //       id={`${id}#container`}
+      //       name={name}
+      //       pseudoContainer
+      //       resourceType={fqn}
+      //       highlight={highlight}
+      //       onClick={select}
+      //     >
+      //       {renderedNode}
+
+      //       {children}
+      //     </ContainerNode>
+      //   );
+      // }
+
+      // if (hasChildNodes) {
+      //   return (
+      //     <>
+      //       {renderedNode}
+      //       <ContainerNode
+      //         id={`${id}#children`}
+      //         name={`${name} Children`}
+      //         pseudoContainer
+      //         resourceType={fqn}
+      //         highlight={highlight}
+      //         onClick={select}
+      //       >
+      //         {children}
+      //       </ContainerNode>
+      //     </>
+      //   );
+      // }
+
       if (hasChildNodes) {
         return (
-          <ContainerNode
-            id={`${id}#container`}
-            name={name}
-            pseudoContainer
-            resourceType={fqn}
-            highlight={highlight}
-            onClick={select}
+          <Node
+            elk={{
+              id: `${id}#container`,
+              layoutOptions: {
+                // "elk.algorithm": "org.eclipse.elk.fixed",
+                "elk.direction": "LEFT",
+                // "elk.layered.spacing.baseValue": "1",
+                "elk.layered.layering.strategy": "MIN_WIDTH",
+                // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
+                // "elk.layered.layering.strategy": "STRETCH_WIDTH",
+              },
+            }}
           >
             {renderedNode}
 
-            {children}
-          </ContainerNode>
+            <ContainerNode
+              id={`${id}#children`}
+              // name={`${name} Children`}
+              name={name}
+              pseudoContainer
+              resourceType={fqn}
+              highlight={highlight}
+              onClick={select}
+            >
+              <Port
+                elk={{
+                  id: `${id}#children-target`,
+                  layoutOptions: {
+                    "elk.port.side": "WEST",
+                    "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                  },
+                }}
+              />
+              {children}
+            </ContainerNode>
+          </Node>
         );
       }
+
+      // if (hasChildNodes) {
+      //   return (
+      //     <ContainerNode
+      //       id={`${id}#container`}
+      //       name={`${name}`}
+      //       pseudoContainer
+      //       resourceType={fqn}
+      //       highlight={highlight}
+      //       onClick={select}
+      //     >
+      //       {renderedNode}
+      //       <ContainerNode
+      //         id={`${id}#children`}
+      //         // name={`${name} Children`}
+      //         name="Children"
+      //         pseudoContainer
+      //         resourceType={fqn}
+      //         highlight={highlight}
+      //         // onClick={select}
+      //       >
+      //         {children}
+      //       </ContainerNode>
+      //     </ContainerNode>
+      //   );
+      // }
 
       return renderedNode;
     },
@@ -436,7 +536,7 @@ const RoundedEdge: FunctionComponent<
             "fill-none stroke-1 group pointer-events-auto",
             "transition-colors",
             !highlighted && "stroke-slate-300 dark:stroke-slate-700",
-            highlighted && "stroke-sky-500 dark:stroke-sky-900",
+            highlighted && "stroke-sky-500 dark:stroke-sky-400",
             "hover:stroke-sky-500",
             "dark:hover:stroke-sky-900",
           )}
@@ -471,6 +571,11 @@ const RoundedEdge: FunctionComponent<
   },
 );
 
+const getNodePathFromEdge = (edge: string) => {
+  const [, path] = edge.match(/^(.+?)#/i) ?? [];
+  return path;
+};
+
 export interface MapViewV2Props {
   selectedNodeId: string | undefined;
   onSelectedNodeIdChange: (id: string | undefined) => void;
@@ -485,23 +590,27 @@ export const MapView = memo(
     selectedEdgeId,
     onSelectedEdgeIdChange,
   }: MapViewV2Props) => {
-    const { connections, nodeInfo, isNodeHidden, rootNodes, edges } = useMap(
-      {},
-    );
+    const { nodeInfo, isNodeHidden, rootNodes, edges } = useMap({});
 
     const RenderEdge = useCallback<EdgeComponent>(
       (props) => {
         return (
-          <>
-            <RoundedEdge
-              {...props}
-              highlighted={selectedEdgeId === props.edge.id}
-              onClick={() => onSelectedEdgeIdChange?.(props.edge.id)}
-            />
-          </>
+          <RoundedEdge
+            {...props}
+            highlighted={
+              selectedEdgeId === props.edge.id ||
+              props.edge.sources.some(
+                (path) => getNodePathFromEdge(path) === selectedNodeId,
+              ) ||
+              props.edge.targets.some(
+                (path) => getNodePathFromEdge(path) === selectedNodeId,
+              )
+            }
+            onClick={() => onSelectedEdgeIdChange?.(props.edge.id)}
+          />
         );
       },
-      [selectedEdgeId, onSelectedEdgeIdChange],
+      [selectedEdgeId, selectedNodeId, onSelectedEdgeIdChange],
     );
 
     const RenderNode = useCallback<

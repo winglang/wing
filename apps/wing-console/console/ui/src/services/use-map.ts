@@ -191,9 +191,6 @@ export const useMap = ({}: UseMapOptions = {}) => {
     const children = rawTree?.children?.["Default"]?.children;
     return children ? (Object.values(children) as ConstructTreeNode[]) : [];
   }, [rawTree]);
-  useEffect(() => {
-    console.log("rootNodes", rootNodes);
-  }, [rootNodes]);
 
   const connections = useMemo(() => {
     if (!rawConnections || !nodeFqns) {
@@ -331,6 +328,19 @@ export const useMap = ({}: UseMapOptions = {}) => {
     return nodeMap;
   }, [rawTree, rawConnections, connections]);
 
+  // We can use pseudo edges to enforce alignment between a construct and their children.
+  // const additionalEdges = useMemo<ElkExtendedEdge[]>(() => {
+  //   const additionalEdges = new Array<ElkExtendedEdge>();
+  //   for (const [nodePath, node] of nodeInfo?.entries() ?? []) {
+  //     additionalEdges.push({
+  //       id: `${nodePath}#children-edge`,
+  //       sources: [`${nodePath}##source`],
+  //       targets: [`${nodePath}#children-target`],
+  //     });
+  //   }
+  //   return [...edges, ...additionalEdges];
+  // }, [edges, nodeInfo]);
+
   return {
     rawTree,
     rawConnections,
@@ -340,5 +350,6 @@ export const useMap = ({}: UseMapOptions = {}) => {
     connections,
     isNodeHidden,
     edges,
+    // edges: additionalEdges,
   };
 };
