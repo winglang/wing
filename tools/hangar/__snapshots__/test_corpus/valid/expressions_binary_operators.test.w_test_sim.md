@@ -2,6 +2,12 @@
 
 ## stdout.log
 ```log
+[<TIMESTAMP>] [VERBOSE] (no test) » root/cloud.TestRunner
+root/cloud.TestRunner started
+
+[<TIMESTAMP>] [VERBOSE] (no test) » root/cloud.TestRunner
+root/cloud.TestRunner stopped
+
 pass ─ expressions_binary_operators.test.wsim (no tests)
 
 Tests 1 passed (1)

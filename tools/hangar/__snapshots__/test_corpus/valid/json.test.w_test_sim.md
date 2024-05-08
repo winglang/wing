@@ -2,6 +2,24 @@
 
 ## stdout.log
 ```log
+[<TIMESTAMP>] [VERBOSE] (no test) » root/cloud.TestRunner
+root/cloud.TestRunner started
+
+[<TIMESTAMP>] [VERBOSE] (no test) » root/env0/Bucket
+root/env0/Bucket started
+
+[<TIMESTAMP>] [VERBOSE] (no test) » root/env0/Bucket/Policy
+root/env0/Bucket/Policy started
+
+[<TIMESTAMP>] [VERBOSE] (no test) » root/cloud.TestRunner
+root/cloud.TestRunner stopped
+
+[<TIMESTAMP>] [VERBOSE] (no test) » root/env0/Bucket/Policy
+root/env0/Bucket/Policy stopped
+
+[<TIMESTAMP>] [VERBOSE] (no test) » root/env0/Bucket
+root/env0/Bucket stopped
+
 pass ─ json.test.wsim (no tests)
 
 Tests 1 passed (1)
