@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+[ERROR] test | Error: Cannot access context during class construction
 pass ─ capture_resource_with_no_inflight.test.wsim » root/env0/test:test
 
 Tests 1 passed (1)

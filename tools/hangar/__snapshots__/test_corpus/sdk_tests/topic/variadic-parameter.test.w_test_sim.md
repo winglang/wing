@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+[ERROR] publish message array to topic | Error: Cannot access context during class construction
 pass ─ variadic-parameter.test.wsim » root/env0/test:publish message array to topic
 
 Tests 1 passed (1)
