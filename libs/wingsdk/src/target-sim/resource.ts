@@ -156,7 +156,7 @@ export class Resource
           ctx.resolveAttr = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
-            console.log(level + ': ' + message);
+            console.log(level + ':' + message);
           };
           const client = ${inflightClient};
           const noop = () => {};
@@ -171,7 +171,7 @@ export class Resource
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           if (propName === 'onStart') {
             throw Error('Cannot call "onStart"');
@@ -194,7 +194,7 @@ export class Resource
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           await $klass.onStop();
           $klass = undefined;

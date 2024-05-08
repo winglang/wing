@@ -95,11 +95,16 @@ function parseCommandOutput(
     } catch (_) {}
 
     if (errorData && "errorMessage" in errorData) {
-      const newError = new Error(
-        `Invoke failed with message: "${
-          errorData.errorMessage
-        }"\nLogs: ${cloudwatchLogsPath(functionArn)}`
+      let errorMessage = `Invoke failed with message: "${
+        errorData.errorMessage
+      }"\nLogs: ${cloudwatchLogsPath(functionArn)}`;
+      errorMessage = errorMessage.replace(
+        "Task timed out after",
+        "Function timed out after"
       );
+
+      const newError = new Error();
+      newError.message = errorMessage;
       newError.name = errorData.errorType;
       newError.stack = errorData.trace?.join("\n");
       throw newError;

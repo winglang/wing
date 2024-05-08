@@ -2,7 +2,11 @@ import * as path from "path";
 import { IResourceClient, SIM_RESOURCE_FQN } from "./resource";
 import { SimResourceAttributes, SimResourceSchema } from "./schema-resources";
 import { Bundle } from "../shared/bundling";
-import { MultipleConcurrentCallsError, Sandbox } from "../shared/sandbox";
+import {
+  SandboxMultipleConcurrentCallsError,
+  Sandbox,
+  SandboxTimeoutError,
+} from "../shared/sandbox";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -16,6 +20,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
   private resolvedSourceCodeFile!: string;
   private sandbox: Sandbox | undefined;
   private bundle: Bundle | undefined;
+  private readonly timeout = 30_000;
 
   constructor(props: SimResourceSchema) {
     this.sourceCodeFile = props.sourceCodeFile;
@@ -61,7 +66,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
       // A resource needs to respond to method calls in a timely manner since
       // the simulator server will wait for a response before responding to
       // the caller. The default timeout is 30 seconds.
-      timeout: 30_000,
+      timeout: this.timeout,
     });
 
     // We're communicating with the sandbox via IPC. It's not possible to pass
@@ -98,7 +103,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
         try {
           return await this.sandbox!.call("stop");
         } catch (err) {
-          if (err instanceof MultipleConcurrentCallsError) {
+          if (err instanceof SandboxMultipleConcurrentCallsError) {
             // If the sandbox is busy, wait and try again
             this.addTrace(
               "Sandbox is busy, waiting and retrying...",
@@ -147,7 +152,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
           try {
             return await this.sandbox!.call("call", method, ...args);
           } catch (err) {
-            if (err instanceof MultipleConcurrentCallsError) {
+            if (err instanceof SandboxMultipleConcurrentCallsError) {
               // If the sandbox is busy, wait and try again
               this.addTrace(
                 "Sandbox is busy, waiting and retrying...",
@@ -155,6 +160,10 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
                 LogLevel.VERBOSE
               );
               await new Promise((resolve) => setTimeout(resolve, 100));
+            } else if (err instanceof SandboxTimeoutError) {
+              throw new Error(
+                `Call to resource "${this.context.resourcePath}" timed out after ${this.timeout}ms`
+              );
             } else {
               throw err;
             }

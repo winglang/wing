@@ -2,7 +2,7 @@ import * as path from "path";
 import { FunctionAttributes, FunctionSchema } from "./schema-resources";
 import { FUNCTION_FQN, IFunctionClient } from "../cloud";
 import { Bundle } from "../shared/bundling";
-import { Sandbox } from "../shared/sandbox";
+import { Sandbox, SandboxTimeoutError } from "../shared/sandbox";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -72,7 +72,17 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
             "Too many requests, the function has reached its concurrency limit."
           );
         }
-        return worker.call("handler", payload);
+        try {
+          return await worker.call("handler", payload);
+        } catch (err) {
+          if (err instanceof SandboxTimeoutError) {
+            throw new Error(
+              `Function timed out (it was configured with a timeout of ${this.timeout}ms).`
+            );
+          } else {
+            throw err;
+          }
+        }
       },
     });
   }

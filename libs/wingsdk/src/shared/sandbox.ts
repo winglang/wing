@@ -216,7 +216,7 @@ process.on("message", async (message) => {${debugShim}
 
   public async call(fn: string, ...args: any[]): Promise<any> {
     if (!this.available) {
-      throw new MultipleConcurrentCallsError();
+      throw new SandboxMultipleConcurrentCallsError();
     }
 
     // Prevent multiple calls to the same sandbox running concurrently.
@@ -314,11 +314,7 @@ process.on("message", async (message) => {${debugShim}
           if (this.cleaningUp) {
             resolve(undefined);
           } else {
-            reject(
-              new Error(
-                `Function timed out (it was configured to only run for ${this.options.timeout}ms)`
-              )
-            );
+            reject(new SandboxTimeoutError(this.options.timeout ?? 0));
           }
         }, this.options.timeout);
       }
@@ -332,8 +328,14 @@ process.on("message", async (message) => {${debugShim}
   }
 }
 
-export class MultipleConcurrentCallsError extends Error {
+export class SandboxTimeoutError extends Error {
+  constructor(public readonly timeout: number) {
+    super("Timed out after " + timeout + "ms.");
+  }
+}
+
+export class SandboxMultipleConcurrentCallsError extends Error {
   constructor() {
-    super("Cannot process multiple sandbox requests.");
+    super("Cannot process multiple requests in parallel.");
   }
 }

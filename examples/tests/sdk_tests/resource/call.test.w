@@ -1,4 +1,5 @@
 bring expect;
+bring util;
 bring sim;
 
 enum MyEnum {
@@ -32,11 +33,16 @@ inflight class MyResourceBackend impl sim.IResource {
   }
 
   pub printLogs() {
+    log("a regular (info) log");
     this.ctx!.log("an info log");
     this.ctx!.log("another info log", std.LogLevel.INFO);
     this.ctx!.log("a verbose log", std.LogLevel.VERBOSE);
     this.ctx!.log("a warn log", std.LogLevel.WARNING);
     this.ctx!.log("an error log", std.LogLevel.ERROR);
+  }
+
+  pub methodTakesLongTime() {
+    util.sleep(40s);
   }
 
   pub methodNum(arg: num): num { return arg * 2; }
@@ -102,6 +108,9 @@ class MyResource {
   }
   pub inflight printLogs() {
     this.backend.call("printLogs");
+  }
+  pub inflight methodTakesLongTime() {
+    this.backend.call("methodTakesLongTime");
   }
 
   pub inflight methodNum(arg: num): num {
@@ -217,4 +226,13 @@ test "resource.call can accept and return various kinds of values" {
 
 test "resource can log messages at different levels" {
   r1.printLogs();
+}
+
+test "resource.call times out if the method takes too long" {
+  let var msg = "";
+  try {
+  } catch err {
+    msg = err;
+  }
+  assert(msg.contains("timed out"));
 }
