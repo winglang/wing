@@ -1,6 +1,6 @@
 import { ResourceIcon } from "@wingconsole/design-system";
 import type { ExplorerItem } from "@wingconsole/server";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { TreeMenuItem } from "../ui/use-tree-menu-items.js";
 import { useTreeMenuItems } from "../ui/use-tree-menu-items.js";
@@ -44,16 +44,14 @@ export const useExplorer = () => {
 
   const tree = trpc["app.explorerTree"].useQuery();
 
-  const { mutate: setSelectedNode } = trpc["app.selectNode"].useMutation();
-  const selectedNode = trpc["app.selectedNode"].useQuery();
+  const [selectedNode, setSelectedNode] = useState<string>("");
+
   const nodeIds = trpc["app.nodeIds"].useQuery();
 
   const onSelectedItemsChange = useCallback(
     (selectedItems: string[]) => {
       setSelectedItems(selectedItems);
-      setSelectedNode({
-        resourcePath: selectedItems[0] ?? "",
-      });
+      setSelectedNode(selectedItems[0] ?? "");
     },
     [setSelectedNode, setSelectedItems],
   );
@@ -72,19 +70,17 @@ export const useExplorer = () => {
       return;
     }
 
-    if (!selectedNode.data || !nodeIds.data?.includes(selectedNode.data)) {
-      setSelectedNode({
-        resourcePath: "root",
-      });
+    if (!selectedNode || !nodeIds.data?.includes(selectedNode)) {
+      setSelectedNode("");
     }
-  }, [selectedNode.data, nodeIds.data, setSelectedNode]);
+  }, [selectedNode, nodeIds.data, setSelectedNode]);
 
   useEffect(() => {
-    if (!selectedNode.data) {
+    if (!selectedNode) {
       return;
     }
-    setSelectedItems([selectedNode.data]);
-  }, [selectedNode.data, setSelectedItems]);
+    setSelectedItems([selectedNode]);
+  }, [selectedNode, setSelectedItems]);
 
   useEffect(() => {
     expandAll();
