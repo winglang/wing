@@ -65,9 +65,8 @@ test("get a non-existent object from the bucket", async () => {
   const storage = new MockStorage();
 
   const client = new BucketClient(BUCKET_NAME, storage as any);
-
   await expect(() => client.get(NON_EXISTENT_KEY)).rejects.toThrowError(
-    `Failed to get object. (key=${NON_EXISTENT_KEY})`
+    /Failed to get object \(key=NON_EXISTENT_KEY\)/
   );
 });
 

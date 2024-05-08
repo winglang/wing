@@ -5,7 +5,7 @@ import { promisify } from "util";
 import { PromisePool } from "@supercharge/promise-pool";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
-import { TraceType } from "@winglang/sdk/lib/std";
+import { LogLevel } from "@winglang/sdk/lib/std";
 import { Util } from "@winglang/sdk/lib/util";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
@@ -272,13 +272,11 @@ export async function renderTestReport(
 
     if (includeLogs) {
       for (const trace of result.traces) {
-        // only show detailed traces if we are in debug mode
-        if (trace.type === TraceType.RESOURCE && process.env.DEBUG) {
-          details.push(chalk.gray("[trace] " + trace.data.message));
+        if (shouldSkipTrace(trace)) {
+          continue;
         }
-        if (trace.type === TraceType.LOG) {
-          details.push(chalk.gray(trace.data.message));
-        }
+
+        details.push(chalk.gray(trace.data.message));
       }
     }
 
@@ -383,39 +381,18 @@ async function runTestsWithRetry(
   return results;
 }
 
-type TraceSeverity = "error" | "warn" | "info" | "debug" | "verbose";
-
-// TODO: can we share this logic with the Wing Console?
-function inferSeverityOfEvent(trace: std.Trace): TraceSeverity {
-  if (trace.data.status === "failure") {
-    return "error";
-  }
-  if (trace.type === TraceType.LOG) {
-    return "info";
-  }
-  if (trace.type === TraceType.RESOURCE) {
-    return "debug";
-  }
-  if (trace.type === TraceType.SIMULATOR) {
-    return "verbose";
-  }
-  return "verbose";
-}
-
 const SEVERITY_STRING = {
-  error: "[ERROR]",
-  warn: "[WARNING]",
-  info: "[INFO]",
-  debug: "[DEBUG]",
-  verbose: "[VERBOSE]",
+  [LogLevel.ERROR]: "[ERROR]",
+  [LogLevel.WARNING]: "[WARNING]",
+  [LogLevel.INFO]: "[INFO]",
+  [LogLevel.VERBOSE]: "[VERBOSE]",
 };
 
 const LOG_STREAM_COLORS = {
-  error: chalk.red,
-  warn: chalk.yellow,
-  info: chalk.green,
-  debug: chalk.blue,
-  verbose: chalk.gray,
+  [LogLevel.ERROR]: chalk.red,
+  [LogLevel.WARNING]: chalk.yellow,
+  [LogLevel.INFO]: chalk.green,
+  [LogLevel.VERBOSE]: chalk.gray,
 };
 
 async function formatTrace(
@@ -423,8 +400,7 @@ async function formatTrace(
   testName: string,
   mode: "short" | "full"
 ): Promise<string> {
-  const severity = inferSeverityOfEvent(trace);
-  // const pathSuffix = trace.sourcePath.split("/").slice(2).join("/");
+  const level = trace.level;
   const date = new Date(trace.timestamp);
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -435,28 +411,25 @@ async function formatTrace(
   let msg = "";
   if (mode === "full") {
     msg += chalk.dim(`[${timestamp}]`);
-    msg += LOG_STREAM_COLORS[severity](` ${SEVERITY_STRING[severity]}`);
+    msg += LOG_STREAM_COLORS[level](` ${SEVERITY_STRING[level]}`);
     msg += chalk.dim(` ${testName} » ${trace.sourcePath}`);
     msg += "\n";
-    if (severity === "error") {
-      msg += chalk.dim(" │ ");
-      msg += trace.data.message;
-      msg += "\n";
-      msg += chalk.dim(" └ ");
-      msg += await prettyPrintError(trace.data.error, { chalk });
+    if (level === LogLevel.ERROR) {
+      msg += await prettyPrintError(trace.data.error ?? trace.data.message ?? trace.data, {
+        chalk,
+      });
     } else {
-      msg += chalk.dim(" └ ");
       msg += trace.data.message;
     }
-    msg += "\n";
+    msg += "\n\n";
     return msg;
   } else if (mode === "short") {
-    msg += LOG_STREAM_COLORS[severity](`${SEVERITY_STRING[severity]}`);
+    msg += LOG_STREAM_COLORS[level](`${SEVERITY_STRING[level]}`);
     msg += chalk.dim(` ${testName} | `);
-    if (severity === "error") {
-      msg += trace.data.message;
-      msg += " ";
-      msg += await prettyPrintError(trace.data.error, { chalk });
+    if (level === LogLevel.ERROR) {
+      msg += await prettyPrintError(trace.data.error ?? trace.data.message ?? trace.data, {
+        chalk,
+      });
     } else {
       msg += trace.data.message;
     }
@@ -464,6 +437,20 @@ async function formatTrace(
     return msg;
   } else {
     throw new Error(`Unknown mode: ${mode}`);
+  }
+}
+
+function shouldSkipTrace(trace: std.Trace): boolean {
+  switch (trace.level) {
+    // show VERBOSE only in debug mode
+    case LogLevel.VERBOSE:
+      return !process.env.DEBUG;
+
+    // show INFO, WARNING, ERROR in all cases
+    case LogLevel.INFO:
+    case LogLevel.WARNING:
+    case LogLevel.ERROR:
+      return false;
   }
 }
 
@@ -494,15 +481,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
         return;
       }
 
-      const severity = inferSeverityOfEvent(event);
-
-      // Skip debug events if DEBUG isn't set
-      if ((severity === "debug" || severity === "verbose") && !process.env.DEBUG) {
-        return;
-      }
-
-      // Skip verbose events if DEBUG=verbose isn't set
-      if (severity === "verbose" && process.env.DEBUG !== "verbose") {
+      if (shouldSkipTrace(event)) {
         return;
       }
 
@@ -515,7 +494,12 @@ async function testSimulator(synthDir: string, options: TestOptions) {
     s.onTrace({ callback: (event) => void printEvent(event) });
   }
 
-  await s.start();
+  try {
+    await s.start();
+  } catch (e) {
+    outputStream?.stopSpinner();
+    throw e;
+  }
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();

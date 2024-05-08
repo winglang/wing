@@ -145,6 +145,10 @@ async function main() {
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
     .option(
+      "-w, --watch <globs...>",
+      "Watch additional paths for changes. Supports globs and '!' for negations."
+    )
+    .option(
       "-t, --platform <platform> --platform <platform>",
       "Target platform provider (builtin: sim)",
       collectPlatformVariadic,
@@ -170,6 +174,10 @@ async function main() {
       DEFAULT_PLATFORM
     )
     .option("-r, --rootId <rootId>", "App root id")
+    .option(
+      "-o, --output <output>",
+      'path to the output directory- default is "./target/<entrypoint>.<target>"'
+    )
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
     .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
     .hook("preAction", progressHook)
