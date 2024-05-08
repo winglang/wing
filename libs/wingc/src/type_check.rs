@@ -8,7 +8,7 @@ pub(crate) mod type_reference_transform;
 
 use crate::ast::{
 	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition,
-	IfLet, New, TypeAnnotationKind,
+	IfLet, Intrinsic, New, TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -2067,6 +2067,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::Unary { op, exp: unary_exp } => self.type_check_unary_op(unary_exp, env, op),
 			ExprKind::Range { start, end, .. } => self.type_check_range(start, env, end),
 			ExprKind::Reference(_ref) => self.type_check_reference(_ref, env),
+			ExprKind::Intrinsic(intrinsic) => self.type_check_intrinsic(intrinsic, env, exp),
 			ExprKind::New(new_expr) => self.type_check_new(new_expr, env, exp),
 			ExprKind::Call { callee, arg_list } => self.type_check_call(arg_list, env, callee, exp),
 			ExprKind::ArrayLiteral { type_, items } => self.type_check_array_lit(type_, env, exp, items),
@@ -2678,6 +2679,21 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			(func_sig.return_type, func_phase)
 		}
+	}
+
+	fn type_check_intrinsic(&mut self, intrinsic: &Intrinsic, env: &mut SymbolEnv, exp: &Expr) -> (TypeRef, Phase) {
+		let arg_list_types = self.type_check_arg_list(&intrinsic.arg_list, env);
+		let Ok(intrinsic_sig) = intrinsic.kind.get_signature(&self.types) else {
+			return self.resolved_error();
+		};
+
+		if !env.phase.can_call_to(&intrinsic_sig.phase) {
+			self.spanned_error(exp, format!("{} cannot be used while {}", intrinsic.kind, env.phase));
+		}
+
+		self.type_check_arg_list_against_function_sig(&intrinsic.arg_list, &intrinsic_sig, exp, arg_list_types);
+
+		(intrinsic_sig.return_type, intrinsic_sig.phase)
 	}
 
 	fn type_check_range(&mut self, start: &Expr, env: &mut SymbolEnv, end: &Expr) -> (TypeRef, Phase) {

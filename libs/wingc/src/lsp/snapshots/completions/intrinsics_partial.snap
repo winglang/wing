@@ -1,0 +1,15 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: "@path"
+  kind: 3
+  documentation:
+    kind: markdown
+    value: "Get the normalized absolute path given the a relative path, relative to the current wing file's directory.\n### Parameters\n- `relativePath` — `str`"
+  sortText: cc|@path
+  insertText: "@path($1)"
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+

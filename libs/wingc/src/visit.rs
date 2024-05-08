@@ -327,6 +327,10 @@ where
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
 		}
+		ExprKind::Intrinsic(instrinsic) => {
+			v.visit_symbol(&instrinsic.name);
+			v.visit_args(&instrinsic.arg_list);
+		}
 		ExprKind::Call { callee, arg_list } => {
 			match callee {
 				CalleeKind::Expr(expr) => v.visit_expr(expr),

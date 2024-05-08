@@ -13,8 +13,8 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 use crate::{
 	ast::{
 		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Enum,
-		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference,
-		Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, IntrinsicKind, Literal, New,
+		Phase, Reference, Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -54,6 +54,7 @@ const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 const NODE_MODULES_DIR: &str = "node_modules";
 const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
+const __DIRNAME: &str = "__dirname";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
@@ -189,7 +190,7 @@ impl<'a> JSifier<'a> {
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.line(format!("const {HELPERS_VAR} = {STDLIB}.helpers;"));
 		output.line(format!(
-			"const {EXTERN_VAR} = {HELPERS_VAR}.createExternRequire(__dirname);"
+			"const {EXTERN_VAR} = {HELPERS_VAR}.createExternRequire({__DIRNAME});"
 		));
 		output.add_code(imports);
 
@@ -669,6 +670,33 @@ impl<'a> JSifier<'a> {
 				")"
 			),
 			ExprKind::Reference(_ref) => new_code!(expr_span, self.jsify_reference(&_ref, ctx)),
+			ExprKind::Intrinsic(intrinsic) => match intrinsic.kind {
+				IntrinsicKind::Path => {
+					let Some(source_path) = ctx.source_path else {
+						// Only happens inflight, so we can assume an error was caught earlier
+						return new_code!(expr_span, "");
+					};
+					let relative_source_path = make_relative_path(
+						self.out_dir.as_str(),
+						source_path
+							.parent()
+							.expect("source path is file in a directory")
+							.as_str(),
+					);
+					new_code!(
+						expr_span,
+						HELPERS_VAR,
+						".path(",
+						__DIRNAME,
+						", \"",
+						relative_source_path,
+						"\", ",
+						self.jsify_arg_list(&intrinsic.arg_list, None, None, ctx),
+						")"
+					)
+				}
+				_ => new_code!(expr_span, ""),
+			},
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = match callee {
 					CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
@@ -1688,7 +1716,7 @@ impl<'a> JSifier<'a> {
 		code.open("return `");
 
 		code.open(format!(
-			"require(\"${{{HELPERS_VAR}.normalPath(__dirname)}}/{client_path}\")({{"
+			"require(\"${{{HELPERS_VAR}.normalPath({__DIRNAME})}}/{client_path}\")({{"
 		));
 
 		if let Some(lifts) = &ctx.lifts {

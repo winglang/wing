@@ -4,4 +4,7 @@ pub class Bar {
   pub static bar(): str {
     return "bar";
   }
+  pub static getSubdir(): str {
+    return @path(".");
+  }
 }

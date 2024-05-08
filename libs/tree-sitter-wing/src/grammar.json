@@ -1842,8 +1842,49 @@
         {
           "type": "SYMBOL",
           "name": "optional_unwrap"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "intrinsic"
         }
       ]
+    },
+    "intrinsic": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "name",
+            "content": {
+              "type": "SYMBOL",
+              "name": "intrinsic_identifier"
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "args",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "argument_list"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "intrinsic_identifier": {
+      "type": "PATTERN",
+      "value": "@[a-zA-Z]*"
     },
     "_literal": {
       "type": "CHOICE",
@@ -4475,6 +4516,16 @@
       {
         "type": "SYMBOL",
         "name": "structured_access_expression"
+      }
+    ],
+    [
+      {
+        "type": "SYMBOL",
+        "name": "intrinsic"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "call"
       }
     ]
   ],

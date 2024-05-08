@@ -1,6 +1,7 @@
 // Code in this file will be automatically included in all inflight code bundles,
 // so avoid importing anything heavy here.
 import { deepStrictEqual, notDeepStrictEqual } from "node:assert";
+import { posix as nodePath } from "node:path";
 import type { Construct } from "constructs";
 import type { Node } from "./std/node";
 
@@ -44,8 +45,8 @@ export function nodeof(construct: Construct): Node {
   return Node.of(construct);
 }
 
-export function normalPath(path: string): string {
-  return path.replace(/\\+/g, "/");
+export function normalPath(p: string): string {
+  return p.replace(/\\+/g, "/");
 }
 
 export function unwrap<T>(value: T): T | never {
@@ -154,4 +155,42 @@ export function createExternRequire(dirname: string) {
     });
     return newRequire(externPath);
   };
+}
+
+export function createPath(
+  outdir: string,
+  relativeSourcePath: string
+): (target: string) => string {
+  const sourcePath = nodePath.join(outdir, relativeSourcePath);
+  const sourceDir = nodePath.dirname(sourcePath);
+
+  return (target) => {
+    if (nodePath.isAbsolute(target)) {
+      throw new Error(
+        `Provided path must be relative but received an absolute path: ${target}`
+      );
+    } else if (target === "") {
+      return sourcePath;
+    }
+    return normalPath(nodePath.join(sourceDir, target));
+  };
+}
+
+export function path(
+  outdir: string,
+  relativeSourceDir: string,
+  target: string
+): string {
+  const sourceDir = nodePath.join(outdir, relativeSourceDir);
+
+  if (nodePath.isAbsolute(target)) {
+    throw new Error(
+      `Provided path must be relative but received an absolute path: ${target}`
+    );
+  } else {
+    const returnPath = normalPath(nodePath.join(sourceDir, target));
+
+    if (returnPath === "/") return returnPath;
+    return returnPath.replace(/\/$/, "");
+  }
 }

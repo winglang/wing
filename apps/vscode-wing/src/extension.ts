@@ -1,4 +1,6 @@
 import { FSWatcher, watch } from "fs";
+import { readFile } from "fs/promises";
+import { join } from "path";
 import {
   commands,
   ExtensionContext,
@@ -24,8 +26,20 @@ export async function deactivate() {
 export async function activate(context: ExtensionContext) {
   // For some reason, the word pattern is not set correctly by the language config file
   // https://github.com/microsoft/vscode/issues/42649
+  const languageConfig = JSON.parse(
+    await readFile(join(__dirname, "..", "language-configuration.json"), "utf8")
+  );
   languages.setLanguageConfiguration("wing", {
-    wordPattern: /([a-zA-Z_$][A-Za-z_$0-9]*)/,
+    ...languageConfig,
+    wordPattern: new RegExp(languageConfig.wordPattern, "g"),
+    indentationRules: {
+      increaseIndentPattern: new RegExp(
+        languageConfig.indentationRules.increaseIndentPattern
+      ),
+      decreaseIndentPattern: new RegExp(
+        languageConfig.indentationRules.decreaseIndentPattern
+      ),
+    },
   });
 
   languageServerManager = new LanguageServerManager();

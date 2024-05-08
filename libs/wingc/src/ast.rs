@@ -8,6 +8,7 @@ use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 
+use crate::docs::Docs;
 use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
@@ -543,6 +544,62 @@ pub struct StructField {
 }
 
 #[derive(Debug)]
+pub struct Intrinsic {
+	pub name: Symbol,
+	pub arg_list: ArgList,
+	pub kind: IntrinsicKind,
+}
+
+#[derive(Debug)]
+pub enum IntrinsicKind {
+	/// Error state
+	Unknown,
+	Path,
+}
+
+impl Display for IntrinsicKind {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			IntrinsicKind::Unknown => write!(f, "@"),
+			IntrinsicKind::Path => write!(f, "@path"),
+		}
+	}
+}
+
+impl IntrinsicKind {
+	pub const VALUES: [IntrinsicKind; 2] = [IntrinsicKind::Unknown, IntrinsicKind::Path];
+
+	pub fn from_str(s: &str) -> Self {
+		match s {
+			"@path" => IntrinsicKind::Path,
+			_ => IntrinsicKind::Unknown,
+		}
+	}
+
+	pub fn get_signature(&self, types: &crate::type_check::Types) -> Result<crate::type_check::FunctionSignature, ()> {
+		match self {
+			&IntrinsicKind::Path => Ok(crate::type_check::FunctionSignature {
+				this_type: None,
+				phase: Phase::Preflight,
+				docs: Docs::with_summary(
+					"Get the normalized absolute path given the a relative path, relative to the current wing file's directory.",
+				),
+				js_override: None,
+				implicit_scope_param: false,
+				parameters: vec![crate::type_check::FunctionParameter {
+					name: "relativePath".to_string(),
+					typeref: types.string(),
+					variadic: false,
+					docs: Docs::default(),
+				}],
+				return_type: types.string(),
+			}),
+			_ => Err(()),
+		}
+	}
+}
+
+#[derive(Debug)]
 pub enum ExprKind {
 	New(New),
 	Literal(Literal),
@@ -552,6 +609,7 @@ pub enum ExprKind {
 		end: Box<Expr>,
 	},
 	Reference(Reference),
+	Intrinsic(Intrinsic),
 	Call {
 		callee: CalleeKind,
 		arg_list: ArgList,
