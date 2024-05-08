@@ -1884,7 +1884,7 @@
     },
     "intrinsic_identifier": {
       "type": "PATTERN",
-      "value": "@[a-zA-Z]*"
+      "value": "@[A-Za-z_$0-9]*"
     },
     "_literal": {
       "type": "CHOICE",

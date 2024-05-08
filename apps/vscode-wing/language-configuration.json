@@ -3,7 +3,7 @@
         "lineComment": "//",
         "blockComment": [ "/*", "*/" ]
     },
-    "wordPattern": "([a-zA-Z_$@][\\w_]*)",
+    "wordPattern": "([a-zA-Z_$@][A-Za-z_$0-9]*)",
     "brackets": [
         ["{", "}"],
         ["[", "]"],

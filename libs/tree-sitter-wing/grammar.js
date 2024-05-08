@@ -361,7 +361,7 @@ module.exports = grammar({
           optional(field("args", $.argument_list))
         )
       ),
-    intrinsic_identifier: ($) => /@[a-zA-Z]*/,
+    intrinsic_identifier: ($) => /@[A-Za-z_$0-9]*/,
 
     // Primitives
     _literal: ($) =>
