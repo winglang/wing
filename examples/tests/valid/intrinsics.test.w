@@ -17,7 +17,7 @@ let upDir = @path("..");
 expect.equal(fs.dirname(currentDir), upDir);
 
 let packageJson = @path("package.json");
-fs.join(currentDir, "package.json");
+expect.equal(fs.join(currentDir, "package.json"), packageJson);
 
 let subdirPath = @path("subdir");
 expect.equal(subdirPath, bar.Bar.getSubdir());
