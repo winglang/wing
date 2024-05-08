@@ -14,7 +14,7 @@ exports[`create a counter 1`] = `
           ctx.resolveAttr = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
-            console.log(level + ': ' + message);
+            console.log(level + ':' + message);
           };
           const client = (await (async () => {
   const $func = async (ctx) => {
@@ -46,7 +46,7 @@ exports[`create a counter 1`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           if (propName === 'onStart') {
             throw Error('Cannot call "onStart"');
@@ -69,7 +69,7 @@ exports[`create a counter 1`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -244,7 +244,7 @@ exports[`dec 2`] = `
           ctx.resolveAttr = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
-            console.log(level + ': ' + message);
+            console.log(level + ':' + message);
           };
           const client = (await (async () => {
   const $func = async (ctx) => {
@@ -276,7 +276,7 @@ exports[`dec 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           if (propName === 'onStart') {
             throw Error('Cannot call "onStart"');
@@ -299,7 +299,7 @@ exports[`dec 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -474,7 +474,7 @@ exports[`inc 2`] = `
           ctx.resolveAttr = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
-            console.log(level + ': ' + message);
+            console.log(level + ':' + message);
           };
           const client = (await (async () => {
   const $func = async (ctx) => {
@@ -506,7 +506,7 @@ exports[`inc 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           if (propName === 'onStart') {
             throw Error('Cannot call "onStart"');
@@ -529,7 +529,7 @@ exports[`inc 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -704,7 +704,7 @@ exports[`key dec 2`] = `
           ctx.resolveAttr = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
-            console.log(level + ': ' + message);
+            console.log(level + ':' + message);
           };
           const client = (await (async () => {
   const $func = async (ctx) => {
@@ -736,7 +736,7 @@ exports[`key dec 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           if (propName === 'onStart') {
             throw Error('Cannot call "onStart"');
@@ -759,7 +759,7 @@ exports[`key dec 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -934,7 +934,7 @@ exports[`key inc 2`] = `
           ctx.resolveAttr = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
-            console.log(level + ': ' + message);
+            console.log(level + ':' + message);
           };
           const client = (await (async () => {
   const $func = async (ctx) => {
@@ -966,7 +966,7 @@ exports[`key inc 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           if (propName === 'onStart') {
             throw Error('Cannot call "onStart"');
@@ -989,7 +989,7 @@ exports[`key inc 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -1162,7 +1162,7 @@ exports[`key set to new value 2`] = `
           ctx.resolveAttr = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
-            console.log(level + ': ' + message);
+            console.log(level + ':' + message);
           };
           const client = (await (async () => {
   const $func = async (ctx) => {
@@ -1194,7 +1194,7 @@ exports[`key set to new value 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           if (propName === 'onStart') {
             throw Error('Cannot call "onStart"');
@@ -1217,7 +1217,7 @@ exports[`key set to new value 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -1390,7 +1390,7 @@ exports[`set to new value 2`] = `
           ctx.resolveAttr = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
-            console.log(level + ': ' + message);
+            console.log(level + ':' + message);
           };
           const client = (await (async () => {
   const $func = async (ctx) => {
@@ -1422,7 +1422,7 @@ exports[`set to new value 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           if (propName === 'onStart') {
             throw Error('Cannot call "onStart"');
@@ -1445,7 +1445,7 @@ exports[`set to new value 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           await $klass.onStop();
           $klass = undefined;

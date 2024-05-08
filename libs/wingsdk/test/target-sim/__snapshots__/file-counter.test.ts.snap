@@ -14,7 +14,7 @@ exports[`can create sequential files in a bucket 1`] = `
           ctx.resolveAttr = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
-            console.log(level + ': ' + message);
+            console.log(level + ':' + message);
           };
           const client = (await (async () => {
   const $func = async (ctx) => {
@@ -46,7 +46,7 @@ exports[`can create sequential files in a bucket 1`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           if (propName === 'onStart') {
             throw Error('Cannot call "onStart"');
@@ -69,7 +69,7 @@ exports[`can create sequential files in a bucket 1`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('resource not started');
+            throw Error('Resource is not running (it may have crashed or been stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
