@@ -99,15 +99,15 @@ enum DocumentationFilter {
 
 async function generateResourceApiDocs(
   folder: string,
-  jsiiModule: string,
   options: {
     docsPath: string;
     excludedFiles?: string[];
+    jsiiModule?: string;
     filter: DocumentationFilter;
   }
 ) {
   const pathToFolder = join(rootDir, "src", folder);
-  const { docsPath, excludedFiles = [], filter } = options;
+  const { docsPath, excludedFiles = [], filter, jsiiModule = folder } = options;
 
   const cloudFiles = await readdir(pathToFolder);
 
@@ -169,27 +169,28 @@ for (const mod of publicModules) {
   );
 }
 
-await generateResourceApiDocs("cloud", "cloud", {
+await generateResourceApiDocs("cloud", {
   docsPath: getStdlibDocsDir("cloud"),
   excludedFiles: UNDOCUMENTED_CLOUD_FILES,
   filter: DocumentationFilter.ALL_REQUIRE_MD,
 });
 
-await generateResourceApiDocs("ex", "ex", {
+await generateResourceApiDocs("ex", {
   docsPath: getStdlibDocsDir("ex"),
   excludedFiles: UNDOCUMENTED_EX_FILES,
   filter: DocumentationFilter.ALL_REQUIRE_MD,
 });
 
-await generateResourceApiDocs("std", "std", {
+await generateResourceApiDocs("std", {
   docsPath: getStdlibDocsDir("std"),
   excludedFiles: UNDOCUMENTED_STD_FILES,
   filter: DocumentationFilter.ALL_ALLOW_NO_MD,
 });
 
-await generateResourceApiDocs("target-sim", "sim", {
+await generateResourceApiDocs("target-sim", {
   docsPath: getStdlibDocsDir("sim"),
   filter: DocumentationFilter.ONLY_WITH_MD,
+  jsiiModule: "sim",
 });
 
 console.log(
