@@ -1,11 +1,8 @@
 bring sim;
 
 inflight class BadTokenResolverBackend impl sim.IResource {
-  var ctx: sim.IResourceContext?;
-
-  new() { this.ctx = nil; }
-
-  pub onStart(ctx: sim.IResourceContext) { this.ctx = ctx; }
+  ctx: sim.IResourceContext;
+  new(ctx: sim.IResourceContext) { this.ctx = ctx; }
   pub onStop() {}
 
   pub foo() {
@@ -17,8 +14,8 @@ class BadTokenResolver {
   backend: sim.Resource;
 
   new() {
-    this.backend = new sim.Resource(inflight () => {
-      return new BadTokenResolverBackend();
+    this.backend = new sim.Resource(inflight (ctx) => {
+      return new BadTokenResolverBackend(ctx);
     });
   }
 

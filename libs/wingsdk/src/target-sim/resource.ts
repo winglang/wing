@@ -23,12 +23,6 @@ import {
  */
 export interface IResource {
   /**
-   * Runs when the resource is started.
-   * @param context Simulator context.
-   */
-  onStart(context: IResourceContext): Promise<void>;
-
-  /**
    * Runs when the resource is stopped.
    */
   onStop(): Promise<void>;
@@ -47,11 +41,11 @@ export interface IResourceContext {
   statedir(): string;
 
   /**
-   * Resolves an attribute value. All attributes must be resolved during the
+   * Resolves a token value. All tokens must be resolved during the
    * `onStart` method.
    *
-   * @param name The name of the attribute.
-   * @param value The value of the attribute.
+   * @param name The name of the token.
+   * @param value The value of the token.
    * @inflight
    */
   resolveToken(name: string, value: string): void;
@@ -129,10 +123,10 @@ export class Resource
    *
    * If the token is used in inflight code or in the configuration of a simulated
    * resource (e.g. as an environment variable), the relevant resource will
-   * automatically take a dependency on the resource the attribute belongs to.
+   * automatically take a dependency on the resource the token belongs to.
    *
-   * @param name The name of the attribute.
-   * @returns An attribute token.
+   * @param name The name of the token.
+   * @returns A string token.
    */
   public createToken(name: string): string {
     return simulatorcreateToken(this, name);
@@ -160,8 +154,7 @@ export class Resource
           };
           const client = ${inflightClient};
           const noop = () => {};
-          const klass = (await client.handle()) ?? noop;
-          await klass.onStart(ctx);
+          const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
@@ -286,7 +279,7 @@ export interface IResourceFactoryClient {
    * Function that will be called to create the resource.
    * @inflight
    */
-  handle(): Promise<IResource>;
+  handle(context: IResourceContext): Promise<IResource>;
 }
 
 /**

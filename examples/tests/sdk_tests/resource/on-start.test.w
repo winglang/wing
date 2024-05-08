@@ -1,7 +1,7 @@
 bring sim;
 
 inflight class OnStartThrowerBackend impl sim.IResource {
-  pub onStart(ctx: sim.IResourceContext) {
+  new() {
     throw "unexpected error!";
   }
   pub onStop() {}
@@ -31,5 +31,5 @@ test "method calls fail if the resource fails to start" {
   } catch err {
     msg = err;
   }
-  assert(msg.contains("resource not started"));
+  assert(msg.contains("Resource is not running"));
 }

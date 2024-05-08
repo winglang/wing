@@ -3,12 +3,9 @@ bring sim;
 inflight class CounterBackend impl sim.IResource {
   var counter: num;
 
-  new() {
-    this.counter = 0;
-  }
-
-  pub onStart(ctx: sim.IResourceContext) {
+  new(ctx: sim.IResourceContext) {
     // startup code
+    this.counter = 0;
     ctx.resolveToken("startTime", "2023-10-16T20:47:39.511Z");
   }
 
@@ -34,8 +31,8 @@ class Counter {
   new() {
     // this is a "backend factory". it returns an inflight class that implements the
     // resource.
-    let factory = inflight (): sim.IResource => {
-      return new CounterBackend();
+    let factory = inflight (ctx: sim.IResourceContext): sim.IResource => {
+      return new CounterBackend(ctx);
     };
 
     this.backend = new sim.Resource(factory);

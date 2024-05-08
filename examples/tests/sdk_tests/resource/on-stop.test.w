@@ -1,7 +1,6 @@
 bring sim;
 
 inflight class OnStopThrowerBackend impl sim.IResource {
-  pub onStart(ctx: sim.IResourceContext) {}
   pub onStop() {
     throw "unexpected error!";
   }

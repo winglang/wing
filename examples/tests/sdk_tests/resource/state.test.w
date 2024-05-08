@@ -4,20 +4,17 @@ bring fs;
 bring sim;
 
 inflight class ResourceWithStateBackend impl sim.IResource {
-  var ctx: sim.IResourceContext?;
-
-  new() { this.ctx = nil; }
-
-  pub onStart(ctx: sim.IResourceContext) { this.ctx = ctx; }
+  ctx: sim.IResourceContext;
+  new(ctx: sim.IResourceContext) { this.ctx = ctx; }
   pub onStop() {}
 
   pub writeState() {
-    let file = fs.join(this.ctx?.statedir()!, "state.txt");
+    let file = fs.join(this.ctx.statedir(), "state.txt");
     fs.writeFile(file, "my state");
   }
 
   pub readState(): str {
-    let file = fs.join(this.ctx?.statedir()!, "state.txt");
+    let file = fs.join(this.ctx.statedir(), "state.txt");
     return fs.readFile(file);
   }
 }
@@ -26,8 +23,8 @@ class ResourceWithState {
   backend: sim.Resource;
 
   new() {
-    this.backend = new sim.Resource(inflight () => {
-      return new ResourceWithStateBackend();
+    this.backend = new sim.Resource(inflight (ctx) => {
+      return new ResourceWithStateBackend(ctx);
     });
   }
 

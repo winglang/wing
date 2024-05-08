@@ -14,18 +14,16 @@ struct MyStruct {
 }
 
 inflight class MyResourceBackend impl sim.IResource {
+  ctx: sim.IResourceContext;
   var field1: str;
   var field2: (str): str;
-  var ctx: sim.IResourceContext?;
-  new() {
+
+  new(ctx: sim.IResourceContext) {
+    this.ctx = ctx;
     this.field1 = "hello";
     this.field2 = (name: str) => { return "Hello, " + name; };
-    this.ctx = nil;
   }
 
-  pub onStart(ctx: sim.IResourceContext) {
-    this.ctx = ctx;
-  }
   pub onStop() {}
 
   pub throwsError() {
@@ -34,11 +32,11 @@ inflight class MyResourceBackend impl sim.IResource {
 
   pub printLogs() {
     log("a regular (info) log");
-    this.ctx!.log("an info log");
-    this.ctx!.log("another info log", std.LogLevel.INFO);
-    this.ctx!.log("a verbose log", std.LogLevel.VERBOSE);
-    this.ctx!.log("a warn log", std.LogLevel.WARNING);
-    this.ctx!.log("an error log", std.LogLevel.ERROR);
+    this.ctx.log("an info log");
+    this.ctx.log("another info log", std.LogLevel.INFO);
+    this.ctx.log("a verbose log", std.LogLevel.VERBOSE);
+    this.ctx.log("a warn log", std.LogLevel.WARNING);
+    this.ctx.log("an error log", std.LogLevel.ERROR);
   }
 
   pub methodTakesLongTime() {
@@ -78,8 +76,8 @@ inflight class MyResourceBackend impl sim.IResource {
 class MyResource {
   backend: sim.Resource;
   new() {
-    this.backend = new sim.Resource(inflight () => {
-      return new MyResourceBackend();
+    this.backend = new sim.Resource(inflight (ctx) => {
+      return new MyResourceBackend(ctx);
     });
   }
   pub inflight field1(): str {
@@ -231,6 +229,7 @@ test "resource can log messages at different levels" {
 test "resource.call times out if the method takes too long" {
   let var msg = "";
   try {
+    r1.methodTakesLongTime();
   } catch err {
     msg = err;
   }
