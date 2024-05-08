@@ -549,45 +549,6 @@ export interface MapEdge {
   target: string;
 }
 
-function createMapEdgesFromConnectionData(
-  nodeMap: ConstructTreeNodeMap,
-  connections: NodeConnection[],
-  showTests = false,
-): MapEdge[] {
-  return [
-    ...connections
-      .filter((connection) => {
-        return connectionsBasicFilter(connection, nodeMap, showTests);
-      })
-      ?.map((connection: NodeConnection) => {
-        const source = getVisualNodePath(connection.source, nodeMap);
-        const target = getVisualNodePath(connection.target, nodeMap);
-        return {
-          id: `${source} -> ${target}`,
-          source,
-          target,
-        };
-      })
-      ?.filter(({ source, target }) => {
-        // Remove redundant connections to a parent resource if there's already a connection to a child resource.
-        if (
-          connections.some((connection) => {
-            if (
-              connection.source === source &&
-              connection.target.startsWith(`${target}/`)
-            ) {
-              return true;
-            }
-          })
-        ) {
-          return false;
-        }
-
-        return true;
-      }),
-  ].flat();
-}
-
 function getResourceType(
   node: Node | ConstructTreeNode,
   simulator: Simulator,

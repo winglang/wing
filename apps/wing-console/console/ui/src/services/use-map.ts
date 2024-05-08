@@ -242,14 +242,14 @@ export const useMap = ({}: UseMapOptions = {}) => {
       }
 
       if (nodeFqn === "@winglang/sdk.cloud.Function") {
-        return `${nodePath}#${type}`;
+        return `${nodePath}##${type}`;
       }
 
       if (operation) {
         return `${nodePath}#${operation}#${type}`;
       }
 
-      return `${nodePath}#${type}`;
+      return `${nodePath}##${type}`;
     },
     [isNodeHidden],
   );
@@ -270,7 +270,7 @@ export const useMap = ({}: UseMapOptions = {}) => {
           "target",
         );
         return {
-          id: `${source}##${target}`,
+          id: `${source}#${target}`,
           sources: [source],
           targets: [target],
         };

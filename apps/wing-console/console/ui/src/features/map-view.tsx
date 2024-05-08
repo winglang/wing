@@ -201,7 +201,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
 
           <Port
             elk={{
-              id: `${props.id}#source`,
+              id: `${props.id}##source`,
               layoutOptions: {
                 "elk.port.side": "EAST",
                 "elk.port.anchor": `[${PORT_ANCHOR},0]`,
@@ -211,7 +211,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
 
           <Port
             elk={{
-              id: `${props.id}#target`,
+              id: `${props.id}##target`,
               layoutOptions: {
                 "elk.port.side": "WEST",
                 "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
