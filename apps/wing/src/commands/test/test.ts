@@ -141,18 +141,9 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
     }
   };
 
-  // split the entrypoints to smaller batches according to the command options-
-  // if none- it will be preformed in one batch
-  const batchSize = Number(options.parallel) || selectedEntrypoints.length;
-  const totalBatches = Math.ceil(selectedEntrypoints.length / batchSize);
-  await PromisePool.withConcurrency(batchSize)
+  await PromisePool
+    .withConcurrency(options.parallel ?? selectedEntrypoints.length)
     .for(selectedEntrypoints)
-    .onTaskFinished((_, pool) => {
-      const processed = pool.processedCount();
-      if (processed % batchSize == 0 || processed === selectedEntrypoints.length) {
-        log(`Done processing batch ${Math.ceil(processed / batchSize)}/${totalBatches}`);
-      }
-    })
     .process(testFile);
   const testDuration = Date.now() - startTime;
   printResults(results, testDuration);
