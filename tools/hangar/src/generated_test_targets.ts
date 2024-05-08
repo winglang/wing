@@ -100,7 +100,6 @@ export async function testTest(
     expectFailure: false,
     env: {
       WING_HIDE_CONTAINER_LOGS: "1",
-      DEBUG: "1",
       ...env,
     },
   });
