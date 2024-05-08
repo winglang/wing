@@ -56,7 +56,7 @@ export interface TestOptions extends CompileOptions {
   readonly snapshots?: SnapshotMode;
 
   /**
-   * Number of tests to be run in parallel, if zero or none- it will run all in once
+   * Number of tests to be run in parallel. 0 or undefined will run all at once.
    */
   readonly parallel?: number;
 }
