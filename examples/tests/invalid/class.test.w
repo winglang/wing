@@ -5,7 +5,7 @@ class C1 {
 // ^ Preflight field "x" is not initialized
 }
 
-class C11 {
+class C1_1 {
   x:num;
   new() {
     () => {
