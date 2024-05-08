@@ -72,9 +72,10 @@ const EDGE_ROUNDED_RADIUS = 10;
 const baseLayoutOptions: LayoutOptions = {
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
   "elk.algorithm": "org.eclipse.elk.layered",
-  "elk.layered.layering.strategy": "MIN_WIDTH",
+  // "elk.layered.layering.strategy": "MIN_WIDTH",
   // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
-  "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
+  // "elk.layered.layering.strategy": "STRETCH_WIDTH",
+  // "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
   // "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
 };
@@ -101,6 +102,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
           id: props.id,
           layoutOptions: {
             ...baseLayoutOptions,
+            "elk.layered.layering.strategy": "MIN_WIDTH",
           },
         }}
         className={clsx("inline-block", "group", "p-2", "z-0")}
