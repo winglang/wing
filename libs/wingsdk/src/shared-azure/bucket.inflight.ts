@@ -101,9 +101,7 @@ export class BucketClient implements IBucketClient {
         options?.endByte !== undefined ? options.endByte - start : undefined;
       downloadResponse = await blobClient.download(start, length);
     } catch (e) {
-      throw new Error(
-        `Object does not exist (key=${key}): ${(e as Error).stack}`
-      );
+      throw new Error(`Object does not exist (key=${key}).`);
     }
     if (downloadResponse.readableStreamBody === undefined) {
       return "";

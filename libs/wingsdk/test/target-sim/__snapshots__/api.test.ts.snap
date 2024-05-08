@@ -266,6 +266,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -590,6 +591,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -913,6 +915,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1237,6 +1240,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1561,6 +1565,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1885,6 +1890,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2340,6 +2346,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2680,6 +2687,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3012,6 +3020,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3332,6 +3341,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3768,6 +3778,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4220,6 +4231,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4557,6 +4569,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4889,6 +4902,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -5213,6 +5227,7 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -5405,6 +5420,7 @@ exports[`create an api 1`] = `
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",

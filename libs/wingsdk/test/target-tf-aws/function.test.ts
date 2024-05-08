@@ -63,7 +63,7 @@ test("function will be behind a vpc when vpc_lambda is set to true", () => {
   expect(tfResourcesOfCount(output, "aws_vpc")).toEqual(1);
   expect(tfFunction.vpc_config).toBeDefined();
   expect(tfFunction.vpc_config.security_group_ids.length).toEqual(1);
-  expect(tfFunction.vpc_config.subnet_ids.length).toEqual(1);
+  expect(tfFunction.vpc_config.subnet_ids.length).toEqual(2);
   expect(tfSanitize(output)).toMatchSnapshot();
 });
 

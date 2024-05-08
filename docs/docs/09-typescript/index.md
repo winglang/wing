@@ -5,7 +5,7 @@ id: typescript
 
 Wing's CLI has experimental support for TypeScript.
 
-We see winglang as the ideal language to create Wing apps, but using TypeScript allows you to use many powerful features of wing without fully diving into a new language.
+We see Winglang as the ideal language to create Wing apps, but using TypeScript allows you to use many powerful features of Wing without fully diving into a new language.
 
 ## Getting Started
 
@@ -15,12 +15,12 @@ Follow the [installation guide](../01-start-here/02-installation.md) to install 
 wing new empty --language ts
 ```
 
-## Exploring the entrypoint
+## Exploring the entry point
 
-Wing apps start with an entrypoint file, commonly named `main.ts`. This file can be anywhere, the important part is that it calls `main` from `@wingcloud/framework`:
+Wing apps start with an entry point file, commonly named `main.ts`. This file can be anywhere, the important part is that it calls `main` from `@wingcloud/framework`:
 
 ```ts
-import { main } from "@wingcloud/framework";
+import { main, cloud } from "@wingcloud/framework";
 
 main((root) => {
   // your app goes here!
