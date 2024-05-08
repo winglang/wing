@@ -105,7 +105,7 @@ class $Root extends $stdlib.std.Resource {
     const upDir = $helpers.path(__dirname, "../../..", "..");
     (expect.Util.equal((fs.Util.dirname(currentDir)), upDir));
     const packageJson = $helpers.path(__dirname, "../../..", "package.json");
-    (fs.Util.join(currentDir, "package.json"));
+    (expect.Util.equal((fs.Util.join(currentDir, "package.json")), packageJson));
     const subdirPath = $helpers.path(__dirname, "../../..", "subdir");
     (expect.Util.equal(subdirPath, (bar.Bar.getSubdir(this))));
   }
