@@ -9,7 +9,7 @@ inflight class BadTokenResolverBackend impl sim.IResource {
   pub onStop() {}
 
   pub foo() {
-    this.ctx?.resolveAttr("my-attr", "value");
+    this.ctx?.resolveToken("my-attr", "value");
   }
 }
 
@@ -29,7 +29,7 @@ class BadTokenResolver {
 
 let r = new BadTokenResolver();
 
-test "calling resolveAttr during a method call emits an error" {
+test "calling resolveToken during a method call emits an error" {
   let var msg = "";
   try {
     r.foo();

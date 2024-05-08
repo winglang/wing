@@ -11,7 +11,7 @@ exports[`can create sequential files in a bucket 1`] = `
           const attrs = {};
           const ctx = {};
           ctx.statedir = () => statedir;
-          ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
@@ -37,7 +37,7 @@ exports[`can create sequential files in a bucket 1`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
-          ctx.resolveAttr = () => {
+          ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
           $klass = klass;

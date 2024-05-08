@@ -11,7 +11,7 @@ exports[`create a counter 1`] = `
           const attrs = {};
           const ctx = {};
           ctx.statedir = () => statedir;
-          ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
@@ -37,7 +37,7 @@ exports[`create a counter 1`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
-          ctx.resolveAttr = () => {
+          ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
           $klass = klass;
@@ -241,7 +241,7 @@ exports[`dec 2`] = `
           const attrs = {};
           const ctx = {};
           ctx.statedir = () => statedir;
-          ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
@@ -267,7 +267,7 @@ exports[`dec 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
-          ctx.resolveAttr = () => {
+          ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
           $klass = klass;
@@ -471,7 +471,7 @@ exports[`inc 2`] = `
           const attrs = {};
           const ctx = {};
           ctx.statedir = () => statedir;
-          ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
@@ -497,7 +497,7 @@ exports[`inc 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
-          ctx.resolveAttr = () => {
+          ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
           $klass = klass;
@@ -701,7 +701,7 @@ exports[`key dec 2`] = `
           const attrs = {};
           const ctx = {};
           ctx.statedir = () => statedir;
-          ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
@@ -727,7 +727,7 @@ exports[`key dec 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
-          ctx.resolveAttr = () => {
+          ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
           $klass = klass;
@@ -931,7 +931,7 @@ exports[`key inc 2`] = `
           const attrs = {};
           const ctx = {};
           ctx.statedir = () => statedir;
-          ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
@@ -957,7 +957,7 @@ exports[`key inc 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
-          ctx.resolveAttr = () => {
+          ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
           $klass = klass;
@@ -1159,7 +1159,7 @@ exports[`key set to new value 2`] = `
           const attrs = {};
           const ctx = {};
           ctx.statedir = () => statedir;
-          ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
@@ -1185,7 +1185,7 @@ exports[`key set to new value 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
-          ctx.resolveAttr = () => {
+          ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
           $klass = klass;
@@ -1387,7 +1387,7 @@ exports[`set to new value 2`] = `
           const attrs = {};
           const ctx = {};
           ctx.statedir = () => statedir;
-          ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
@@ -1413,7 +1413,7 @@ exports[`set to new value 2`] = `
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
-          ctx.resolveAttr = () => {
+          ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
           $klass = klass;

@@ -111,14 +111,14 @@ TODO
 Consider a use case where there is an attribute of a simulated service that only gets resolved during initialization (e.g. the exposed port of a container).
 In order to create such resources, we need a way to obtain a lazy token that gets resolved during simulator initialization.
 
-Use the preflight method `resource.attrToken(key)` to obtain a token that can be used to reference the value of the attribute at runtime.
+Use the preflight method `resource.createToken(key)` to obtain a token that can be used to reference the value of the attribute at runtime.
 
-During resource simulation, you must call `ctx.resolveAttribute(key, value)` during a resource's `onStart` method to set the runtime value.
+During resource simulation, you must call `ctx.resolveTokenibute(key, value)` during a resource's `onStart` method to set the runtime value.
 
 ```js playground
 inflight class MyResourceBackend impl sim.IResource {
   pub onStart(ctx: sim.IResourceContext) {
-    ctx.resolveAttr("startTime", "2023-10-16T20:47:39.511Z");
+    ctx.resolveToken("startTime", "2023-10-16T20:47:39.511Z");
   }
 
   pub onStop() {}
@@ -132,7 +132,7 @@ class MyResource {
     this.backend = new sim.Resource(inflight () => {
       return new MyResourceBackend();
     });
-    this.startTime = this.backend.attrToken("startTime");
+    this.startTime = this.backend.createToken("startTime");
   }
 }
 

@@ -282,7 +282,7 @@ new sim.Resource(factory: IResourceFactory);
 | --- | --- |
 | <code><a href="#@winglang/sdk.sim.Resource.addEnvironment">addEnvironment</a></code> | Add an environment variable to make available to the inflight code. |
 | <code><a href="#@winglang/sdk.sim.Resource.addPermission">addPermission</a></code> | Add a simulated permission to this inflight host. |
-| <code><a href="#@winglang/sdk.sim.Resource.attrToken">attrToken</a></code> | Obtain a token that can be used to reference an attribute of this resource that is only resolved once the resource is started in the simulator. |
+| <code><a href="#@winglang/sdk.sim.Resource.createToken">createToken</a></code> | Obtain a token that can be used to reference an attribute of this resource that is only resolved once the resource is started in the simulator. |
 | <code><a href="#@winglang/sdk.sim.Resource.toSimulator">toSimulator</a></code> | Convert this resource to a resource schema for the simulator. |
 
 ##### Inflight Methods
@@ -333,10 +333,10 @@ Add a simulated permission to this inflight host.
 
 ---
 
-##### `attrToken` <a name="attrToken" id="@winglang/sdk.sim.Resource.attrToken"></a>
+##### `createToken` <a name="createToken" id="@winglang/sdk.sim.Resource.createToken"></a>
 
 ```wing
-attrToken(name: str): str
+createToken(name: str): str
 ```
 
 Obtain a token that can be used to reference an attribute of this resource that is only resolved once the resource is started in the simulator.
@@ -345,7 +345,7 @@ If the token is used in inflight code or in the configuration of a simulated
 resource (e.g. as an environment variable), the relevant resource will
 automatically take a dependency on the resource the attribute belongs to.
 
-###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.Resource.attrToken.parameter.name"></a>
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.Resource.createToken.parameter.name"></a>
 
 - *Type:* str
 
@@ -854,7 +854,7 @@ Context for implementing a simulator resource.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.sim.IResourceContext.log">log</a></code> | Log a message at the current point in time. |
-| <code><a href="#@winglang/sdk.sim.IResourceContext.resolveAttr">resolveAttr</a></code> | Resolves an attribute value. |
+| <code><a href="#@winglang/sdk.sim.IResourceContext.resolveToken">resolveToken</a></code> | Resolves an attribute value. |
 | <code><a href="#@winglang/sdk.sim.IResourceContext.statedir">statedir</a></code> | The directory for the resource's state. |
 
 ---
@@ -885,10 +885,10 @@ The severity of the message.
 
 ---
 
-##### `resolveAttr` <a name="resolveAttr" id="@winglang/sdk.sim.IResourceContext.resolveAttr"></a>
+##### `resolveToken` <a name="resolveToken" id="@winglang/sdk.sim.IResourceContext.resolveToken"></a>
 
 ```wing
-inflight resolveAttr(name: str, value: str): void
+inflight resolveToken(name: str, value: str): void
 ```
 
 Resolves an attribute value.
@@ -896,7 +896,7 @@ Resolves an attribute value.
 All attributes must be resolved during the
 `onStart` method.
 
-###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.IResourceContext.resolveAttr.parameter.name"></a>
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.IResourceContext.resolveToken.parameter.name"></a>
 
 - *Type:* str
 
@@ -904,7 +904,7 @@ The name of the attribute.
 
 ---
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.sim.IResourceContext.resolveAttr.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.sim.IResourceContext.resolveToken.parameter.value"></a>
 
 - *Type:* str
 

@@ -1,6 +1,6 @@
 import { ISimulatorResource } from "./resource";
 import { StateSchema } from "./schema-resources";
-import { simulatorAttrToken } from "./tokens";
+import { simulatorcreateToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
 import { LiftMap } from "../core";
@@ -37,7 +37,7 @@ export class State extends Resource implements ISimulatorResource {
    * @param key The object key retrieved through the inflight `state.get()`.
    */
   public token(key: string): string {
-    return simulatorAttrToken(this, key);
+    return simulatorcreateToken(this, key);
   }
 
   /** @internal */

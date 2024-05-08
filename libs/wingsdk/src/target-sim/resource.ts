@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join, relative } from "path";
 import { Construct } from "constructs";
 import { SimResourceSchema } from "./schema-resources";
-import { simulatorAttrToken, simulatorHandleToken } from "./tokens";
+import { simulatorcreateToken, simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { App, LiftMap, Lifting } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
@@ -54,7 +54,7 @@ export interface IResourceContext {
    * @param value The value of the attribute.
    * @inflight
    */
-  resolveAttr(name: string, value: string): void;
+  resolveToken(name: string, value: string): void;
 
   /**
    * Log a message at the current point in time. Defaults to `info` level.
@@ -134,8 +134,8 @@ export class Resource
    * @param name The name of the attribute.
    * @returns An attribute token.
    */
-  public attrToken(name: string): string {
-    return simulatorAttrToken(this, name);
+  public createToken(name: string): string {
+    return simulatorcreateToken(this, name);
   }
 
   /** @internal */
@@ -153,7 +153,7 @@ export class Resource
           const attrs = {};
           const ctx = {};
           ctx.statedir = () => statedir;
-          ctx.resolveAttr = (name, value) => attrs[name] = value;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
           ctx.log = (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
@@ -162,7 +162,7 @@ export class Resource
           const noop = () => {};
           const klass = (await client.handle()) ?? noop;
           await klass.onStart(ctx);
-          ctx.resolveAttr = () => {
+          ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
           $klass = klass;

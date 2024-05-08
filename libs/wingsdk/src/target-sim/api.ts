@@ -5,7 +5,7 @@ import { Function } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { ApiRoute, ApiSchema } from "./schema-resources";
-import { simulatorAttrToken } from "./tokens";
+import { simulatorcreateToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { lift } from "../core";
@@ -32,7 +32,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     this.endpoint = new cloud.Endpoint(
       this,
       "Endpoint",
-      simulatorAttrToken(this, "url"),
+      simulatorcreateToken(this, "url"),
       { label: `Api ${this.node.path}` }
     );
 

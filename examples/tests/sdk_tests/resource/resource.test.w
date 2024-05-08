@@ -9,7 +9,7 @@ inflight class CounterBackend impl sim.IResource {
 
   pub onStart(ctx: sim.IResourceContext) {
     // startup code
-    ctx.resolveAttr("startTime", "2023-10-16T20:47:39.511Z");
+    ctx.resolveToken("startTime", "2023-10-16T20:47:39.511Z");
   }
 
   pub onStop() {
@@ -39,7 +39,7 @@ class Counter {
     };
 
     this.backend = new sim.Resource(factory);
-    this.startTime = this.backend.attrToken("startTime");
+    this.startTime = this.backend.createToken("startTime");
   }
 
   pub inflight inc(n: num?): num {
