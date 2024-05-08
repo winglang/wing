@@ -88,9 +88,9 @@ enum DocumentationFilter {
    */
   ALL_REQUIRE_MD,
   /**
-   * Generate docs for all modules, but them to not have .md files
+   * Generate docs for all modules (even if they don't have .md files)
    */
-  ALL_ALLOW_NO_MD,
+  ALL,
   /**
    * Generate docs only for modules with .md files
    */
@@ -184,7 +184,7 @@ await generateResourceApiDocs("ex", {
 await generateResourceApiDocs("std", {
   docsPath: getStdlibDocsDir("std"),
   excludedFiles: UNDOCUMENTED_STD_FILES,
-  filter: DocumentationFilter.ALL_ALLOW_NO_MD,
+  filter: DocumentationFilter.ALL,
 });
 
 await generateResourceApiDocs("target-sim", {
