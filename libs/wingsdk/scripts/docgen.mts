@@ -99,7 +99,7 @@ enum DocumentationFilter {
 
 async function generateResourceApiDocs(
   folder: string,
-  module: string,
+  jsiiModule: string,
   options: {
     docsPath: string;
     excludedFiles?: string[];
@@ -153,7 +153,7 @@ id: ${toCamelCase(subResource)}
 `;
     }
     await runDocgen(
-      `${module}/${subResource}`,
+      `${jsiiModule}/${subResource}`,
       header,
       join(docsPath, `${subResource}.md`)
     );
