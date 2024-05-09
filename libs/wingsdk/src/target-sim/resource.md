@@ -52,7 +52,10 @@ inflight class CounterBackend impl sim.IResource {
 }
 ```
 
-The class will be initialized by the simulator with its constructor (the `new()` method), and shut down using the `onStop` method.
+Each `CounterBackend` object that's created will have its own state.
+It will be initialized by the simulator with its constructor (the `new()` method), and shut down using its `onStop` method.
+
+From the perspective of `CounterBackend`, its `inc` and `peek` methods are always called serially, even if requests are made concurrently from other resources.
 
 Next, we have to define a preflight class which represents the service's frontend:
 

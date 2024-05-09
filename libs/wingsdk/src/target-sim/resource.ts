@@ -165,7 +165,7 @@ export class Resource
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -185,7 +185,7 @@ export class Resource
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
