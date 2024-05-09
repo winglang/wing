@@ -2738,6 +2738,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`intrinsics.test.w 1`] = `
+"error: @dirname does not require arguments
+  --> ../../../examples/tests/invalid/intrinsics.test.w:6:20
+  |
+6 | let path = @dirname();
+  |                    ^^
+
+
+error: @dirname cannot be used while inflight
+  --> ../../../examples/tests/invalid/intrinsics.test.w:2:11
+  |
+2 |   let x = @dirname;
+  |           ^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`invalid compile directory 1`] = `
 "error: <ABSOLUTE>/external_ts.ts must be a sub directory of <ABSOLUTE>/lib
   --> ../../../examples/tests/invalid/lib/extern_above.w:2:3

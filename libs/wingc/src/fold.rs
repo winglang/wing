@@ -2,8 +2,8 @@ use crate::{
 	ast::{
 		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum, Expr,
 		ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface,
-		InterpolatedString, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind, Struct, StructField,
-		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		InterpolatedString, InterpolatedStringPart, Intrinsic, Literal, New, Reference, Scope, Stmt, StmtKind, Struct,
+		StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -326,6 +326,11 @@ where
 			end: Box::new(f.fold_expr(*end)),
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
+		ExprKind::Intrinsic(intrinsic) => ExprKind::Intrinsic(Intrinsic {
+			arg_list: intrinsic.arg_list.map(|arg_list| f.fold_args(arg_list)),
+			name: f.fold_symbol(intrinsic.name),
+			kind: intrinsic.kind,
+		}),
 		ExprKind::Call { callee, arg_list } => ExprKind::Call {
 			callee: match callee {
 				CalleeKind::Expr(expr) => CalleeKind::Expr(Box::new(f.fold_expr(*expr))),

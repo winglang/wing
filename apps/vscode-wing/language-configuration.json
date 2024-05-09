@@ -1,51 +1,55 @@
 {
-    "comments": {
-        "lineComment": "//",
-        "blockComment": [ "/*", "*/" ]
+  "comments": {
+    "lineComment": "//",
+    "blockComment": ["/*", "*/"]
+  },
+  "wordPattern": "([a-zA-Z_$@][A-Za-z_$0-9]*)",
+  "brackets": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"]
+  ],
+  "autoClosingPairs": [
+    {
+      "open": "{",
+      "close": "}"
     },
-    "wordPattern": "/([a-zA-Z_$][A-Za-z_$0-9]*)/",
-    "brackets": [
-        ["{", "}"],
-        ["[", "]"],
-        ["(", ")"]
-    ],
-    "autoClosingPairs": [
-        ["{", "}"],
-        ["[", "]"],
-        ["(", ")"],
-        ["\"", "\""],
-        ["'", "'"],
-        ["/*", "*/"]
-    ],
-    "surroundingPairs": [
-        ["{", "}"],
-        ["[", "]"],
-        ["(", ")"],
-        ["\"", "\""],
-        ["'", "'"]
-    ],
-    "folding": {
-        "markers": {
-            "start": "^\\s*//\\s*#?region\\b",
-            "end": "^\\s*//\\s*#?endregion\\b"
-        }
+    {
+      "open": "[",
+      "close": "]"
     },
-    "indentationRules": {
-        "increaseIndentPattern": "^\\s*(\\b(if|function|class|proc)\\b.*\\{[^}\"'`]*|\\{[^}\"'`]*|\\([^)\"'`]*|\\[[^\\]\"'`]*)$",
-        "decreaseIndentPattern": "^\\s*(\\b(else)\\b.*\\}|\\})$"
+    {
+      "open": "(",
+      "close": ")"
     },
-    "colorizedBracketPairs": [
-        [
-            "(",
-            ")"
-        ],
-        [
-            "[",
-            "]"
-        ],
-        [
-            "{",
-            "}"
-        ]
-    ],
+    {
+      "open": "\"",
+      "close": "\""
+    },
+    {
+      "open": "/*",
+      "close": "*/"
+    }
+  ],
+  "surroundingPairs": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"],
+    ["\"", "\""]
+  ],
+  "folding": {
+    "markers": {
+      "start": "^\\s*//\\s*#?region\\b",
+      "end": "^\\s*//\\s*#?endregion\\b"
+    }
+  },
+  "indentationRules": {
+    "increaseIndentPattern": "^\\s*(\\b(if|function|class|proc)\\b.*\\{[^}\"'`]*|\\{[^}\"'`]*|\\([^)\"'`]*|\\[[^\\]\"'`]*)$",
+    "decreaseIndentPattern": "^\\s*(\\b(else)\\b.*\\}|\\})$"
+  },
+  "colorizedBracketPairs": [
+    ["(", ")"],
+    ["[", "]"],
+    ["{", "}"]
+  ]
 }

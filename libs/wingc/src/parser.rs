@@ -12,9 +12,9 @@ use tree_sitter::Node;
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
 	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
-	Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
-	UserDefinedType,
+	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic, IntrinsicKind, Literal,
+	New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation,
+	TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{
@@ -2240,6 +2240,24 @@ impl<'s> Parser<'s> {
 				})),
 				expression_span,
 			)),
+			"intrinsic" => {
+				let name = self.node_symbol(&self.get_child_field(expression_node, "name")?)?;
+				let kind = IntrinsicKind::from_str(&name.name);
+				let arg_list = if let Some(arg_node) = expression_node.child_by_field_name("args") {
+					Some(self.build_arg_list(&arg_node, phase)?)
+				} else {
+					None
+				};
+
+				if matches!(kind, IntrinsicKind::Unknown) {
+					self.add_error("Invalid intrinsic", &expression_node);
+				}
+
+				Ok(Expr::new(
+					ExprKind::Intrinsic(Intrinsic { name, arg_list, kind }),
+					expression_span,
+				))
+			}
 			"duration" => self.build_duration(&expression_node),
 			"reference" => self.build_reference(&expression_node, phase),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),

@@ -37,18 +37,28 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 					});
 				}
 			} else {
-				if let SymbolLocatorResult::LooseField { field_type, field, .. } = &symbol_finder.result {
-					let span = symbol_finder.located_span().unwrap();
-					let value = format!("```wing\n{}: {field_type}\n```", field.name);
+				return match &symbol_finder.result {
+					SymbolLocatorResult::LooseField { field_type, field, .. } => {
+						let span = symbol_finder.located_span().unwrap();
+						let value = format!("```wing\n{}: {field_type}\n```", field.name);
 
-					return Some(Hover {
+						Some(Hover {
+							contents: HoverContents::Markup(MarkupContent {
+								kind: MarkupKind::Markdown,
+								value,
+							}),
+							range: Some(span.into()),
+						})
+					}
+					SymbolLocatorResult::Intrinsic { name, kind } => Some(Hover {
 						contents: HoverContents::Markup(MarkupContent {
 							kind: MarkupKind::Markdown,
-							value,
+							value: kind.render_docs(),
 						}),
-						range: Some(span.into()),
-					});
-				}
+						range: Some((&name.span).into()),
+					}),
+					_ => None,
+				};
 			}
 
 			None
@@ -635,5 +645,13 @@ Json.stringify({});
   inflight () => { new Bob(); };
                      //^
 	"#
+	);
+
+	test_hover_list!(
+		intrinsics,
+		r#"
+@dirname
+  //^
+  "#,
 	);
 }

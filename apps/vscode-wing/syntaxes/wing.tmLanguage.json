@@ -31,6 +31,9 @@
       "include": "#constants"
     },
     {
+      "include": "#intrinsics"
+    },
+    {
       "include": "#identifiers"
     }
   ],
@@ -190,6 +193,14 @@
         {
           "name": "variable.wing",
           "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "intrinsics": {
+      "patterns": [
+        {
+          "name": "meta.preprocessor.wing",
+          "match": "(@[a-zA-Z_]*)"
         }
       ]
     },

@@ -33,6 +33,7 @@ module.exports = grammar({
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
     [$.json_map_literal, $.map_literal, $.array_literal],
     [$.json_literal, $.structured_access_expression],
+    [$.intrinsic, $.call],
   ],
 
   conflicts: ($) => [
@@ -350,8 +351,18 @@ module.exports = grammar({
         $.struct_literal,
         $.optional_test,
         $.compiler_dbg_panic,
-        $.optional_unwrap
+        $.optional_unwrap,
+        $.intrinsic
       ),
+
+    intrinsic: ($) =>
+      prec.right(
+        seq(
+          field("name", $.intrinsic_identifier),
+          optional(field("args", $.argument_list))
+        )
+      ),
+    intrinsic_identifier: ($) => /@[A-Za-z_$0-9]*/,
 
     // Primitives
     _literal: ($) =>
@@ -691,7 +702,10 @@ module.exports = grammar({
     map_literal_member: ($) => seq($.expression, "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
-      prec.right(PREC.STRUCTURED_ACCESS, seq($.expression, "[", $.expression, "]")),
+      prec.right(
+        PREC.STRUCTURED_ACCESS,
+        seq($.expression, "[", $.expression, "]")
+      ),
 
     json_literal: ($) =>
       choice(
