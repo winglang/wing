@@ -11,7 +11,7 @@
   |     ^
 at $inflight_init <ABSOLUTE>/on-start.test.w:5:5
 at <ABSOLUTE>/on-start.test.w:16:18
-[ERROR] method calls fail if the resource fails to start | Error: Resource is not running (it may have crashed or been stopped)
+[ERROR] method calls fail if the resource fails to start | Error: Resource is not running (it may have crashed or stopped)
 pass ─ on-start.test.wsim » root/env0/test:method calls fail if the resource fails to start
 
 Tests 1 passed (1)
