@@ -33,7 +33,7 @@ use crate::{
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
 use duplicate::duplicate_item;
-use indexmap::{IndexMap, IndexSet};
+use indexmap::IndexMap;
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 
@@ -463,7 +463,8 @@ impl Display for Struct {
 pub struct Enum {
 	pub name: Symbol,
 	pub docs: Docs,
-	pub values: IndexSet<Symbol>,
+	/// Variant name and optional documentation
+	pub values: IndexMap<Symbol, Option<String>>,
 }
 
 #[derive(Debug)]
@@ -3524,9 +3525,9 @@ impl<'a> TypeChecker<'a> {
 		for statement in scope.statements.iter() {
 			match &statement.kind {
 				StmtKind::Bring { source, identifier } => self.hoist_bring_statement(source, identifier, statement, env),
-				StmtKind::Struct(st) => self.hoist_struct_definition(st, env),
-				StmtKind::Interface(iface) => self.hoist_interface_definition(iface, env),
-				StmtKind::Enum(enu) => self.hoist_enum_definition(enu, env),
+				StmtKind::Struct(st) => self.hoist_struct_definition(st, env, &statement.doc),
+				StmtKind::Interface(iface) => self.hoist_interface_definition(iface, env, &statement.doc),
+				StmtKind::Enum(enu) => self.hoist_enum_definition(enu, env, &statement.doc),
 				_ => {}
 			}
 		}
@@ -3669,7 +3670,7 @@ impl<'a> TypeChecker<'a> {
 		// alias is the symbol we are giving to the imported library or namespace
 	}
 
-	fn hoist_struct_definition(&mut self, st: &AstStruct, env: &mut SymbolEnv) {
+	fn hoist_struct_definition(&mut self, st: &AstStruct, env: &mut SymbolEnv, doc: &Option<String>) {
 		let AstStruct {
 			name, extends, access, ..
 		} = st;
@@ -3707,7 +3708,7 @@ impl<'a> TypeChecker<'a> {
 			fqn: None,
 			extends: extends_types.clone(),
 			env: dummy_env,
-			docs: Docs::default(),
+			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 		}));
 
 		match env.define(name, SymbolKind::Type(struct_type), *access, StatementIdx::Top) {
@@ -3718,7 +3719,7 @@ impl<'a> TypeChecker<'a> {
 		};
 	}
 
-	fn hoist_interface_definition(&mut self, iface: &AstInterface, env: &mut SymbolEnv) {
+	fn hoist_interface_definition(&mut self, iface: &AstInterface, env: &mut SymbolEnv, doc: &Option<String>) {
 		// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves
 		// from the interface definition or by other type definitions that come before the interface statement.
 		let dummy_env = SymbolEnv::new(
@@ -3752,7 +3753,7 @@ impl<'a> TypeChecker<'a> {
 		let interface_spec = Interface {
 			name: iface.name.clone(),
 			fqn: None,
-			docs: Docs::default(),
+			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 			env: dummy_env,
 			extends: extend_interfaces.clone(),
 			phase: iface.phase,
@@ -3772,11 +3773,11 @@ impl<'a> TypeChecker<'a> {
 		};
 	}
 
-	fn hoist_enum_definition(&mut self, enu: &AstEnum, env: &mut SymbolEnv) {
+	fn hoist_enum_definition(&mut self, enu: &AstEnum, env: &mut SymbolEnv, doc: &Option<String>) {
 		let enum_type_ref = self.types.add_type(Type::Enum(Enum {
 			name: enu.name.clone(),
 			values: enu.values.clone(),
-			docs: Default::default(),
+			docs: doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 		}));
 
 		match env.define(
@@ -4129,7 +4130,7 @@ impl<'a> TypeChecker<'a> {
 					false,
 					Phase::Independent,
 					AccessModifier::Public,
-					None,
+					field.doc.as_ref().map(|s| Docs::with_summary(s)),
 				),
 				AccessModifier::Public,
 				StatementIdx::Top,
@@ -4171,7 +4172,7 @@ impl<'a> TypeChecker<'a> {
 		);
 
 		// Add methods to the interface env
-		for (method_name, sig) in ast_iface.methods.iter() {
+		for (method_name, sig, doc) in ast_iface.methods.iter() {
 			let mut method_type = self.resolve_type_annotation(&sig.to_type_annotation(), env);
 			// use the interface type as the function's "this" type
 			if let Type::Function(ref mut f) = *method_type {
@@ -4189,7 +4190,7 @@ impl<'a> TypeChecker<'a> {
 					false,
 					sig.phase,
 					AccessModifier::Public,
-					None,
+					doc.as_ref().map(|s| Docs::with_summary(s)),
 				),
 				AccessModifier::Public,
 				StatementIdx::Top,
@@ -4295,7 +4296,7 @@ impl<'a> TypeChecker<'a> {
 			implements: impl_interfaces.clone(),
 			is_abstract: false,
 			phase: ast_class.phase,
-			docs: Docs::default(),
+			docs: stmt.doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 			std_construct_args: ast_class.phase == Phase::Preflight,
 			lifts: None,
 		};
@@ -4327,7 +4328,7 @@ impl<'a> TypeChecker<'a> {
 					field.is_static,
 					field.phase,
 					field.access,
-					None,
+					field.doc.as_ref().map(|s| Docs::with_summary(s)),
 				),
 				field.access,
 				StatementIdx::Top,
@@ -5256,7 +5257,7 @@ impl<'a> TypeChecker<'a> {
 				instance_type.is_none(),
 				method_phase,
 				access,
-				None,
+				method_def.doc.as_ref().map(|s| Docs::with_summary(s)),
 			),
 			access,
 			StatementIdx::Top,
@@ -5937,7 +5938,7 @@ impl<'a> TypeChecker<'a> {
 					.unwrap_or_else(|e| self.type_error(e));
 				match *type_ {
 					Type::Enum(ref e) => {
-						if e.values.contains(property) {
+						if e.values.contains_key(property) {
 							(
 								ResolveReferenceResult::Variable(VariableInfo {
 									name: property.clone(),
@@ -6394,7 +6395,7 @@ fn add_parent_members_to_struct_env(
 						false,
 						struct_env.phase,
 						AccessModifier::Public,
-						None,
+						parent_member_var.docs.clone(),
 					),
 					AccessModifier::Public,
 					StatementIdx::Top,
@@ -6459,7 +6460,7 @@ fn add_parent_members_to_iface_env(
 						member_var.kind == VariableKind::StaticMember,
 						member_var.phase,
 						AccessModifier::Public,
-						None,
+						member_var.docs.clone(),
 					),
 					AccessModifier::Public,
 					StatementIdx::Top,

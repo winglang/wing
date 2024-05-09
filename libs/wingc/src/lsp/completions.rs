@@ -923,7 +923,7 @@ fn get_completions_from_type(
 			let variants = &enum_.values;
 			variants
 				.iter()
-				.map(|item| CompletionItem {
+				.map(|(item, _)| CompletionItem {
 					label: item.name.clone(),
 					detail: Some(enum_.name.name.clone()),
 					kind: Some(CompletionItemKind::ENUM_MEMBER),

@@ -1,3 +1,4 @@
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import classNames from "classnames";
 import type { PropsWithChildren } from "react";
 import { useId } from "react";
@@ -42,9 +43,31 @@ export const Attribute = ({
         {name}
       </label>
       {value !== undefined && type === "url" && (
-        <div className="truncate">
-          <Link id={id} href={url} dataTestid={dataTestId}>
+        <div
+          className={
+            (classNames(
+              theme.bgInput,
+              theme.textInput,
+              theme.focusInput,
+              theme.borderInput,
+            ),
+            "truncate")
+          }
+        >
+          <Link
+            className={"flex focus:ring-opacity-0"}
+            id={id}
+            href={url}
+            dataTestid={dataTestId}
+            target={"_blank"}
+          >
             {value}
+            <ArrowTopRightOnSquareIcon
+              className={classNames(
+                theme.text2,
+                "text-sm flex ml-2 h-4 w-4 cursor-pointer",
+              )}
+            />
           </Link>
         </div>
       )}
