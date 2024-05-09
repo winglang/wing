@@ -246,7 +246,7 @@ process.on("message", async (message) => {${debugShim}
         this.debugLog(
           `Received a message from the sandbox (PID ${
             this.childPid
-          }): ${JSON.stringify(message)} (in response to ${fn}(${args}))`
+          }): ${JSON.stringify(message)}`
         );
         this.available = true;
         if (this.timeout) {
