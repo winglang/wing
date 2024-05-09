@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] (no test) | Error: Cannot access context during class construction
-[ERROR] (no test) | Error: Cannot access context during class construction
 pass ─ on_tick.test.wsim » root/env0/onTick()
 
 Tests 1 passed (1)

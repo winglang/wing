@@ -6,8 +6,6 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $MyEnum }) {
   class ResourceBackend {
-    async onStart(ctx) {
-    }
     async onStop() {
     }
     async emptyMethod() {
@@ -114,8 +112,6 @@ class $Root extends $stdlib.std.Resource {
       }
       get _liftMap() {
         return ({
-          "onStart": [
-          ],
           "onStop": [
           ],
           "emptyMethod": [

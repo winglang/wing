@@ -2,10 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] set() | Error: Cannot access context during class construction
-[ERROR] set() with custom key | Error: Cannot access context during class construction
-[ERROR] set() | Error: Cannot access context during class construction
-[ERROR] set() with custom key | Error: Cannot access context during class construction
 pass ─ set.test.wsim » root/env0/test:set()                
 pass ─ set.test.wsim » root/env1/test:set() with custom key
 

@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] (no test) | Error: Cannot access context during class construction
 pass ─ file_counter.test.wsim (no tests)
 
 Tests 1 passed (1)

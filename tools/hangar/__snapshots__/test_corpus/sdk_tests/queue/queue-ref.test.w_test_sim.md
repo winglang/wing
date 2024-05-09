@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] queueArn returns the arn | Error: Cannot access context during class construction
-[ERROR] push() sends a request to aws, fails because we are using a dummy queue | Error: Cannot access context during class construction
 pass ─ queue-ref.test.wsim » root/env0/test:queueArn returns the arn                                               
 pass ─ queue-ref.test.wsim » root/env1/test:push() sends a request to aws, fails because we are using a dummy queue
 

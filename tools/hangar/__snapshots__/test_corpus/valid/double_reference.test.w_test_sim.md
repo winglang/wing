@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] hello | Error: Cannot access context during class construction
 pass ─ double_reference.test.wsim » root/env0/test:hello
 
 Tests 1 passed (1)

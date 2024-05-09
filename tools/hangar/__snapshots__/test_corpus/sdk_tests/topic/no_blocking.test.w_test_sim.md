@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] topic subscribers are invoked without blocking | Error: Cannot access context during class construction
 pass ─ no_blocking.test.wsim » root/env0/test:topic subscribers are invoked without blocking
 
 Tests 1 passed (1)

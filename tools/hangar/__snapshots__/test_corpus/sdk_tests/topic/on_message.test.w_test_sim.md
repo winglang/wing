@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] onMessage | Error: Cannot access context during class construction
 pass ─ on_message.test.wsim » root/env0/test:onMessage
 
 Tests 1 passed (1)

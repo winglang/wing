@@ -3,8 +3,6 @@
 ## stdout.log
 ```log
 [INFO] test | counter is: 201
-[ERROR] test | Error: Cannot access context during class construction
-[ERROR] dependency cycles | Error: Cannot access context during class construction
 pass ─ resource.test.wsim » root/env0/test:test             
 pass ─ resource.test.wsim » root/env1/test:dependency cycles
 

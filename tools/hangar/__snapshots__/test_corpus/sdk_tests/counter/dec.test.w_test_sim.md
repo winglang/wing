@@ -2,10 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] dec() | Error: Cannot access context during class construction
-[ERROR] dec() with custom key | Error: Cannot access context during class construction
-[ERROR] dec() | Error: Cannot access context during class construction
-[ERROR] dec() with custom key | Error: Cannot access context during class construction
 pass ─ dec.test.wsim » root/env0/test:dec()                
 pass ─ dec.test.wsim » root/env1/test:dec() with custom key
 

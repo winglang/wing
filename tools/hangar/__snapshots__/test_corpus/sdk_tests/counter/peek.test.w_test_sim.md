@@ -2,8 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] peek | Error: Cannot access context during class construction
-[ERROR] key peek | Error: Cannot access context during class construction
 pass ─ peek.test.wsim » root/env0/test:peek    
 pass ─ peek.test.wsim » root/env1/test:key peek
 

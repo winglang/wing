@@ -15,6 +15,27 @@
     "aws": [
       {}
     ]
+  },
+  "resource": {
+    "aws_dynamodb_table": {
+      "CloudCounter": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/CloudCounter/Default",
+            "uniqueId": "CloudCounter"
+          }
+        },
+        "attribute": [
+          {
+            "name": "id",
+            "type": "S"
+          }
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "hash_key": "id",
+        "name": "wing-counter-CloudCounter-c82449bc"
+      }
+    }
   }
 }
 ```
