@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { ContainerSchema } from "./schema-resources";
-import { simulatorcreateToken } from "./tokens";
+import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
 import { App, LiftMap } from "../core";
@@ -102,7 +102,7 @@ export class Container extends Resource implements ISimulatorResource {
     }
 
     if (props.containerPort) {
-      this.hostPort = simulatorcreateToken(this, HOST_PORT_ATTR);
+      this.hostPort = simulatorAttrToken(this, HOST_PORT_ATTR);
     }
   }
 

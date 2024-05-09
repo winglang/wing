@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join, relative } from "path";
 import { Construct } from "constructs";
 import { SimResourceSchema } from "./schema-resources";
-import { simulatorcreateToken, simulatorHandleToken } from "./tokens";
+import { simulatorAttrToken, simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { App, LiftMap, Lifting } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
@@ -130,7 +130,7 @@ export class Resource
    * @returns A string token.
    */
   public createToken(name: string): string {
-    return simulatorcreateToken(this, name);
+    return simulatorAttrToken(this, name);
   }
 
   /** @internal */

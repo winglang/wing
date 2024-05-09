@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { WebsiteSchema, FileRoutes } from "./schema-resources";
-import { simulatorcreateToken } from "./tokens";
+import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { ToSimulatorOutput } from "../simulator";
@@ -21,7 +21,7 @@ export class Website extends cloud.Website implements ISimulatorResource {
     this.endpoint = new cloud.Endpoint(
       this,
       "Endpoint",
-      simulatorcreateToken(this, "url"),
+      simulatorAttrToken(this, "url"),
       { label: `Website ${this.node.path}`, browserSupport: true }
     );
 

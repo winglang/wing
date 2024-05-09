@@ -7,14 +7,14 @@ import { IInflightHost, IResource } from "../std";
  * so that the real value can be used by an inflight function.
  */
 export function simulatorHandleToken(resource: IResource): string {
-  return simulatorcreateToken(resource, "handle");
+  return simulatorAttrToken(resource, "handle");
 }
 
 /**
  * Produce a token that will be replaced with a deploy-time resource attribute
  * when the simulator is started.
  */
-export function simulatorcreateToken(
+export function simulatorAttrToken(
   resource: IResource,
   attrName: string
 ): string {
