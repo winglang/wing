@@ -7,7 +7,7 @@
 [INFO] resource can log messages at different levels | another info log
 [WARNING] resource can log messages at different levels | a warn log
 [ERROR] resource can log messages at different levels | Error: an error log
-[ERROR] resource.call times out if the method takes too long | Error: Resource is not running (it may have crashed or been stopped)
+[ERROR] resource.call times out if the method takes too long | Error: Resource is not running (it may have crashed or stopped)
 pass ─ call.test.wsim » root/env0/test:resource.call with a field name returns the field value                
 pass ─ call.test.wsim » root/env1/test:resource.call cannot be used to call onStop                            
 pass ─ call.test.wsim » root/env2/test:exceptions thrown by the resource are caught and rethrown by the caller
