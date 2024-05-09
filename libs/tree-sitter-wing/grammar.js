@@ -22,7 +22,7 @@ const PREC = {
 module.exports = grammar({
   name: "wing",
 
-  extras: ($) => [$.comment, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
+  extras: ($) => [$.comment, $.doc, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
 
   word: ($) => $.identifier,
 
@@ -54,9 +54,10 @@ module.exports = grammar({
       choice(braced(optional(repeat($._statement))), $.AUTOMATIC_BLOCK),
     _semicolon: ($) => choice(";", $.AUTOMATIC_SEMICOLON),
     comment: ($) =>
-      token(
-        choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))
-      ),
+      token(choice(seq(/\/\/[^\/]/, /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))),
+
+    doc: ($) => seq("///", field("content", $.doc_content)),
+    doc_content: ($) => /.*/,
 
     // Identifiers
     reference: ($) =>
@@ -504,7 +505,7 @@ module.exports = grammar({
     initializer: ($) =>
       seq(
         optional(field("inflight", $.inflight_specifier)),
-        "new",
+        field("ctor_name", "new"),
         field("parameter_list", $.parameter_list),
         field("block", $.block)
       ),

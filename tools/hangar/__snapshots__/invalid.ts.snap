@@ -720,44 +720,44 @@ Duration <DURATION>"
 
 exports[`class.test.w 1`] = `
 "error: Call to super constructor can only be made from derived classes
-   --> ../../../examples/tests/invalid/class.test.w:86:5
+   --> ../../../examples/tests/invalid/class.test.w:97:5
    |
-86 |     super();
+97 |     super();
    |     ^^^^^^^^
 
 
 error: Call to super constructor must be first statement in constructor
-   --> ../../../examples/tests/invalid/class.test.w:98:5
-   |
-98 |     super(name, major);
-   |     ^^^^^^^^^^^^^^^^^^^
+    --> ../../../examples/tests/invalid/class.test.w:109:5
+    |
+109 |     super(name, major);
+    |     ^^^^^^^^^^^^^^^^^^^
 
 
 error: Call to super constructor can only be done from within class constructor
-    --> ../../../examples/tests/invalid/class.test.w:103:5
+    --> ../../../examples/tests/invalid/class.test.w:114:5
     |
-103 |     super(\\"cool\\", \\"blue\\");
+114 |     super(\\"cool\\", \\"blue\\");
     |     ^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Call to super constructor can only be done from within a class constructor
-    --> ../../../examples/tests/invalid/class.test.w:108:4
+    --> ../../../examples/tests/invalid/class.test.w:119:4
     |
-108 |    super();
+119 |    super();
     |    ^^^^^^^^
 
 
 error: Reserved method name. Constructors are declared with a method named \\"new\\"
-    --> ../../../examples/tests/invalid/class.test.w:160:3
+    --> ../../../examples/tests/invalid/class.test.w:171:3
     |
-160 |   constructor() {
+171 |   constructor() {
     |   ^^^^^^^^^^^
 
 
 error: Expected block
-   --> ../../../examples/tests/invalid/class.test.w:17:16
+   --> ../../../examples/tests/invalid/class.test.w:28:16
    |
-17 |   new(foo: str)
+28 |   new(foo: str)
    |                ^
 
 
@@ -768,278 +768,271 @@ error: Preflight field \\"x\\" is not initialized
   |    ^
 
 
-error: Expected 0 positional argument(s) but got 1
-  --> ../../../examples/tests/invalid/class.test.w:9:1
+error: Preflight field \\"x\\" is not initialized
+  --> ../../../examples/tests/invalid/class.test.w:9:3
   |
-9 | new C2(1);
-  | ^^^^^^^^^
+9 |   x:num;
+  |   ^
 
 
-error: No named arguments expected
-   --> ../../../examples/tests/invalid/class.test.w:13:1
+error: Expected 0 positional argument(s) but got 1
+   --> ../../../examples/tests/invalid/class.test.w:20:1
    |
-13 | new C9(token: \\"1\\");
-   | ^^^^^^^^^^^^^^^^^^
-
-
-error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/class.test.w:19:1
-   |
-19 | new C10(); 
+20 | new C2(1);
    | ^^^^^^^^^
 
 
 error: No named arguments expected
-   --> ../../../examples/tests/invalid/class.test.w:22:1
+   --> ../../../examples/tests/invalid/class.test.w:24:1
    |
-22 | new C10(foo: \\"bar\\"); 
+24 | new C9(token: \\"1\\");
+   | ^^^^^^^^^^^^^^^^^^
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/class.test.w:30:1
+   |
+30 | new C10(); 
+   | ^^^^^^^^^
+
+
+error: No named arguments expected
+   --> ../../../examples/tests/invalid/class.test.w:33:1
+   |
+33 | new C10(foo: \\"bar\\"); 
    | ^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/class.test.w:22:1
+   --> ../../../examples/tests/invalid/class.test.w:33:1
    |
-22 | new C10(foo: \\"bar\\"); 
+33 | new C10(foo: \\"bar\\"); 
    | ^^^^^^^^^^^^^^^^^^^
 
 
 error: No named arguments expected
-   --> ../../../examples/tests/invalid/class.test.w:25:1
+   --> ../../../examples/tests/invalid/class.test.w:36:1
    |
-25 | new C10(\\"hello\\", foo: \\"bar\\"); 
+36 | new C10(\\"hello\\", foo: \\"bar\\"); 
    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:37:16
+   --> ../../../examples/tests/invalid/class.test.w:48:16
    |
-37 |   inflight var x: num;
+48 |   inflight var x: num;
    |                ^
 
 
 error: Inflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:39:12
-   |
-39 |   inflight y: str;
-   |            ^
-
-
-error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:44:12
-   |
-44 |   inflight x: num;
-   |            ^
-
-
-error: Inflight field \\"x\\" is not initialized
    --> ../../../examples/tests/invalid/class.test.w:50:12
    |
-50 |   inflight x: num;
+50 |   inflight y: str;
+   |            ^
+
+
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.test.w:55:12
+   |
+55 |   inflight x: num;
+   |            ^
+
+
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.test.w:61:12
+   |
+61 |   inflight x: num;
    |            ^
 
 
 error: \\"y\\" cannot be initialized in the inflight constructor
-   --> ../../../examples/tests/invalid/class.test.w:61:10
+   --> ../../../examples/tests/invalid/class.test.w:72:10
    |
-61 |     this.y = 1;
+72 |     this.y = 1;
    |          ^
 
 
 error: \\"x\\" cannot be initialized in the preflight constructor
-   --> ../../../examples/tests/invalid/class.test.w:56:10
+   --> ../../../examples/tests/invalid/class.test.w:67:10
    |
-56 |     this.x = 1;
+67 |     this.x = 1;
    |          ^
 
 
 error: Preflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:52:3
+   --> ../../../examples/tests/invalid/class.test.w:63:3
    |
-52 |   y: num;
+63 |   y: num;
    |   ^
 
 
 error: Expected \\"x\\" to be a type but it's a variable
-   --> ../../../examples/tests/invalid/class.test.w:68:18
+   --> ../../../examples/tests/invalid/class.test.w:79:18
    |
-68 | class C7 extends x {
+79 | class C7 extends x {
    |                  ^
 
 
 error: Expected \\"S1\\" to be a class
-   --> ../../../examples/tests/invalid/class.test.w:74:18
+   --> ../../../examples/tests/invalid/class.test.w:85:18
    |
-74 | class C8 extends S1 {
+85 | class C8 extends S1 {
    |                  ^^
 
 
 error: Unknown symbol \\"C11\\"
-   --> ../../../examples/tests/invalid/class.test.w:78:19
+   --> ../../../examples/tests/invalid/class.test.w:89:19
    |
-78 | class C11 extends C11 {
+89 | class C11 extends C11 {
    |                   ^^^
 
 
 error: Missing super() call as first statement of PaidStudent's constructor
-    --> ../../../examples/tests/invalid/class.test.w:96:45
+    --> ../../../examples/tests/invalid/class.test.w:107:45
     |  
- 96 |     new(name: str, major: str, hrlyWage: num) {
+107 |     new(name: str, major: str, hrlyWage: num) {
     | /---------------------------------------------^
- 97 | |     this.hrlyWage = hrlyWage;
- 98 | |     super(name, major);
- 99 | | //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
-100 | |   }
+108 | |     this.hrlyWage = hrlyWage;
+109 | |     super(name, major);
+110 | | //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
+111 | |   }
     | \\\\---^
 
 
 error: Cannot instantiate abstract class \\"Resource\\"
-    --> ../../../examples/tests/invalid/class.test.w:165:1
+    --> ../../../examples/tests/invalid/class.test.w:176:1
     |
-165 | new std.Resource();
+176 | new std.Resource();
     | ^^^^^^^^^^^^^^^^^^
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:183:3
+    --> ../../../examples/tests/invalid/class.test.w:194:3
     |
-170 |   z: num;
+181 |   z: num;
     |   - previous definition
     .
-183 |   z: str;
+194 |   z: str;
     |   ^
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:171:3
+    --> ../../../examples/tests/invalid/class.test.w:182:3
     |
-170 |   z: num;
+181 |   z: num;
     |   - previous definition
-171 |   z(): num {
-    |   ^
-
-
-error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:185:3
-    |
-170 |   z: num;
-    |   - previous definition
-    .
-185 |   z(): str {
-    |   ^
-
-
-error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:215:3
-    |
-204 |   z: num;
-    |   - previous definition
-    .
-215 |   z: str;
+182 |   z(): num {
     |   ^
 
 
 error: Symbol \\"z\\" already defined in this scope
     --> ../../../examples/tests/invalid/class.test.w:196:3
     |
-196 |   z(): num {
+181 |   z: num;
+    |   - previous definition
+    .
+196 |   z(): str {
+    |   ^
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:226:3
+    |
+215 |   z: num;
+    |   - previous definition
+    .
+226 |   z: str;
+    |   ^
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:207:3
+    |
+207 |   z(): num {
     |   ^
     .
-204 |   z: num;
+215 |   z: num;
     |   - previous definition
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:208:3
+    --> ../../../examples/tests/invalid/class.test.w:219:3
     |
-204 |   z: num;
+215 |   z: num;
     |   - previous definition
     .
-208 |   z(): str {
+219 |   z(): str {
     |   ^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.test.w:31:14
+   --> ../../../examples/tests/invalid/class.test.w:42:14
    |
-31 |     this.x = \\"Hi\\";
+42 |     this.x = \\"Hi\\";
    |              ^^^^
 
 
 error: Variable cannot be reassigned from inflight
-   --> ../../../examples/tests/invalid/class.test.w:61:5
+   --> ../../../examples/tests/invalid/class.test.w:72:5
    |
-61 |     this.y = 1;
+72 |     this.y = 1;
    |     ^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:123:11
+    --> ../../../examples/tests/invalid/class.test.w:134:11
     |
-123 |     super(someStr);
+134 |     super(someStr);
     |           ^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.test.w:132:5
+    --> ../../../examples/tests/invalid/class.test.w:143:5
     |
-132 |     super();
+143 |     super();
     |     ^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 2
-    --> ../../../examples/tests/invalid/class.test.w:141:5
+    --> ../../../examples/tests/invalid/class.test.w:152:5
     |
-141 |     super(someNum, someStr);
+152 |     super(someNum, someStr);
     |     ^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.test.w:157:5
+    --> ../../../examples/tests/invalid/class.test.w:168:5
     |
-157 |     super();
+168 |     super();
     |     ^^^^^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:174:5
+    --> ../../../examples/tests/invalid/class.test.w:185:5
     |
-174 |     2 + \\"2\\";
+185 |     2 + \\"2\\";
     |     ^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:177:12
+    --> ../../../examples/tests/invalid/class.test.w:188:12
     |
-177 |     return \\"hello\\";
+188 |     return \\"hello\\";
     |            ^^^^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:187:5
+    --> ../../../examples/tests/invalid/class.test.w:198:5
     |
-187 |     2 + \\"2\\";
+198 |     2 + \\"2\\";
     |     ^^^^^^^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:189:12
+    --> ../../../examples/tests/invalid/class.test.w:200:12
     |
-189 |     return 5;
+200 |     return 5;
     |            ^
-
-
-error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:199:5
-    |
-199 |     2 + \\"2\\";
-    |     ^^^^^^^
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:201:12
-    |
-201 |     return \\"hello\\";
-    |            ^^^^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
@@ -1049,10 +1042,24 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
     |     ^^^^^^^
 
 
-error: Expected type to be \\"str\\", but got \\"num\\" instead
+error: Expected type to be \\"num\\", but got \\"str\\" instead
     --> ../../../examples/tests/invalid/class.test.w:212:12
     |
-212 |     return 5;
+212 |     return \\"hello\\";
+    |            ^^^^^^^
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:221:5
+    |
+221 |     2 + \\"2\\";
+    |     ^^^^^^^
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:223:12
+    |
+223 |     return 5;
     |            ^
 
 
@@ -1591,19 +1598,6 @@ exports[`extern_static.test.w 1`] = `
   |                                             ^^^^^^^^^^^
 
 
-
-Tests 1 failed (1)
-Snapshots 1 skipped
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`fail_to_start_simulator.test.w 1`] = `
-"[INFO] dep_on_failing_resource | Pulling foo://do-not-pull-me...
-[ERROR] dep_on_failing_resource | Error: Failed to start container: Command \\"docker pull\\" exited with non-zero code 1 (see verbose logs)
-[ERROR] dep_on_failing_resource | Error: Unable to resolve attribute 'host_port' for resource \\"root/env0/Container\\" referenced by \\"root/env0/test:dep_on_failing_resource/Handler\\"
-[ERROR] (no test) | Error: Unable to resolve attribute 'host_port' for resource \\"root/env0/Container\\" referenced by \\"root/env0/test:dep_on_failing_resource/Handler\\"
-Failed to start resources: \\"root/env0/test:dep_on_failing_resource/Handler\\", \\"root/cloud.TestRunner\\"
 
 Tests 1 failed (1)
 Snapshots 1 skipped

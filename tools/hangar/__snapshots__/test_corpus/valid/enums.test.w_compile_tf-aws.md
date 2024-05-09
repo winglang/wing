@@ -83,6 +83,12 @@ class $Root extends $stdlib.std.Resource {
         return tmp;
       })({})
     ;
+    const DocumentedEnum =
+      (function (tmp) {
+        tmp["VARIANT"] = "VARIANT";
+        return tmp;
+      })({})
+    ;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {

@@ -382,7 +382,12 @@ fn render_enum(e: &Enum) -> String {
 	}
 
 	for prop in e.values.iter() {
-		markdown.line(&format!("- `{}`\n", prop));
+		let value_doc = if let Some(doc) = prop.1.as_ref() {
+			format!(" — {}", doc)
+		} else {
+			String::default()
+		};
+		markdown.line(&format!("- `{}{}`\n", prop.0, value_doc));
 	}
 
 	markdown.empty_line();
