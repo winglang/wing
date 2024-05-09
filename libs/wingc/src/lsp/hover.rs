@@ -556,4 +556,38 @@ Json.stringify({});
   };
  	"#,
 	);
+
+	test_hover_list!(
+		ignoe_empty_lines_in_doc,
+		r#"
+  /// Class doc with empty lines after it
+
+  class Foo {
+      //^
+  
+	"#,
+	);
+
+	test_hover_list!(
+		class_doc_with_multiline_and_markdown,
+		r#"
+  /// Class doc
+  /// With multiline
+  /// ## And markdown
+  class Foo {
+      //^
+    pub a: num;
+  }
+	"#,
+	);
+
+	test_hover_list!(
+		member_doc_on_same_line_as_something_else,
+		r#"
+  class Foo { /// Member doc in unexpected place
+    field: num;
+  //^
+  }
+	"#,
+	);
 }
