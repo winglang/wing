@@ -85,10 +85,10 @@ class Counter {
 The `Counter` class is a simple wrapper around the `CounterBackend` class. It provides a way to interact with the resource using the `inc` and `peek` methods.
 
 `sim.Resource` has an inflight method named `call` that takes the name of a method to call and an array of arguments, and returns the serialized response from the resource.
-The arguments are serialized and sent to the resource (usually over HTTP), which will process the request and returns a serialized response.
+The arguments are serialized and sent to the resource over HTTP, which will process the request and returns a serialized response.
 
-> Note: Since the `call` method is making a networked request, it's important that the resource implementation provided by the inflight class responds in a timely manner.
-> If the resource takes over 30 seconds to respond, an error will be thrown and the simulator will terminate the resource.
+> Note: Since the `call` method makes networked requests, it's important that the resource implementation provided by the inflight class responds in a timely manner.
+> If the resource takes over 30 seconds to respond, `call` will throw an error, and the simulator will terminate the resource.
 
 The `Counter` class can be used like this:
 

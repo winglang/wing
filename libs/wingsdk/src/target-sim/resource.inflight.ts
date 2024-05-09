@@ -36,8 +36,8 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
   private async createBundle(): Promise<void> {
     this.bundle = await Sandbox.createBundle(
       this.resolvedSourceCodeFile,
-      (msg) => {
-        this.addTrace(msg, TraceType.SIMULATOR);
+      (msg, level) => {
+        this.addTrace(msg, TraceType.RESOURCE, level);
       }
     );
   }
