@@ -182,3 +182,161 @@ describe("is not nil", () => {
     }).not.toThrow();
   });
 });
+
+describe("match", () => {
+  test("is match", () => {
+    expect(() => {
+      Assert.match("abc", /abc/);
+    }).not.toThrow();
+  });
+
+  test("is not match", () => {
+    expect(() => {
+      Assert.match("abc", /def/);
+    }).toThrow();
+  });
+});
+
+describe("does not match", () => {
+  test("is match", () => {
+    expect(() => {
+      Assert.doesNotMatch("abc", /abc/);
+    }).toThrow();
+  });
+
+  test("is not match", () => {
+    expect(() => {
+      Assert.doesNotMatch("abc", /def/);
+    }).not.toThrow();
+  });
+});
+
+describe("throws", () => {
+  test("throws", () => {
+    expect(() => {
+      Assert.throws(() => {
+        throw new Error("error");
+      });
+    }).not.toThrow();
+  });
+
+  test("does not throw", () => {
+    expect(() => {
+      Assert.throws(() => {});
+    }).toThrow();
+  });
+});
+
+describe("does Not Throw", () => {
+  test("throws", () => {
+    expect(() => {
+      Assert.doesNotThrow(() => {
+        throw new Error("error");
+      });
+    }).toThrow();
+  });
+
+  test("does not throw", () => {
+    expect(() => {
+      Assert.doesNotThrow(() => {});
+    }).not.toThrow();
+  });
+});
+
+describe("fail", () => {
+  test("fail", () => {
+    expect(() => {
+      Assert.fail("fail");
+    }).toThrow();
+  });
+});
+
+describe("ok", () => {
+  test("is true", () => {
+    expect(() => {
+      Assert.ok(true);
+    }).not.toThrow();
+  });
+
+  test("is false", () => {
+    expect(() => {
+      Assert.ok(false);
+    }).toThrow();
+  });
+});
+
+describe("contains", () => {
+  test("is contains string", () => {
+    expect(() => {
+      Assert.contains("abc", "a");
+    }).not.toThrow();
+  });
+
+  test("is not contains string", () => {
+    expect(() => {
+      Assert.contains("abc", "d");
+    }).toThrow();
+  });
+
+  test("is contains list", () => {
+    expect(() => {
+      Assert.contains([1, 2, 3], 2);
+    }).not.toThrow();
+  });
+
+  test("is not contains list", () => {
+    expect(() => {
+      Assert.contains([1, 2, 3], 4);
+    }).toThrow();
+  });
+
+  test("is contains set", () => {
+    expect(() => {
+      Assert.contains(new Set([1, 2, 3]), 2);
+    }).not.toThrow();
+  });
+
+  test("is not contains set", () => {
+    expect(() => {
+      Assert.contains(new Set([1, 2, 3]), 4);
+    }).toThrow();
+  });
+});
+
+describe("doesNotContain", () => {
+  test("is contains string", () => {
+    expect(() => {
+      Assert.doesNotContain("abc", "a");
+    }).toThrow();
+  });
+
+  test("is not contains string", () => {
+    expect(() => {
+      Assert.doesNotContain("abc", "d");
+    }).not.toThrow();
+  });
+
+  test("is contains list", () => {
+    expect(() => {
+      Assert.doesNotContain([1, 2, 3], 2);
+    }).toThrow();
+  });
+
+  test("is not contains list", () => {
+    expect(() => {
+      Assert.doesNotContain([1, 2, 3], 4);
+    }).not.toThrow();
+  });
+
+  test("is contains set", () => {
+    expect(() => {
+      Assert.doesNotContain(new Set([1, 2, 3]), 2);
+    }).toThrow();
+  });
+
+  test("is not contains set", () => {
+    expect(() => {
+      Assert.doesNotContain(new Set([1, 2, 3]), 4);
+    }).not.toThrow();
+  });
+});
