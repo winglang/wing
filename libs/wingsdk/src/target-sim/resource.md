@@ -84,8 +84,11 @@ class Counter {
 
 The `Counter` class is a simple wrapper around the `CounterBackend` class. It provides a way to interact with the resource using the `inc` and `peek` methods.
 
-`sim.Resource` has a `call` method that takes the name of a method to call and an array of arguments.
+`sim.Resource` has an inflight method named `call` that takes the name of a method to call and an array of arguments, and returns the serialized response from the resource.
 The arguments are serialized and sent to the resource (usually over HTTP), which will process the request and returns a serialized response.
+
+> Note: Since the `call` method is making a networked request, it's important that the resource implementation provided by the inflight class responds in a timely manner.
+> If the resource takes over 30 seconds to respond, an error will be thrown and the simulator will terminate the resource.
 
 The `Counter` class can be used like this:
 
@@ -101,7 +104,43 @@ new cloud.Function(inflight () => {
 
 ### Serializability
 
-TODO
+Methods that are called on a `sim.Resource` instance must be serializable, meaning
+all of their arguments and return values must be serializable.
+
+The following types are serializable:
+
+- `num`
+- `str`
+- `bool`
+- `Json`
+- `Array`
+- `Map`
+- `T?` where `T` is a serializable type
+- enums
+- structs that contain only serializable types
+
+The `call` function on `sim.Resource` only supports arguments that are valid `Json` values.
+To convert a value to `Json`, use the `Json` constructor:
+
+```js
+let x: num = 5;
+let y: str = "a";
+this.backend.call("myMethod", [Json x, Json y]);
+```
+
+Return values can be converted back from `Json` using an appropriate `fromJson` method.
+
+```js
+let response = this.backend.call("myMethod");
+let result: num = num.fromJson(response);
+```
+
+> Note: some types are missing `fromJson` methods. To work around this, you may use `unsafeCast()` to cast the value into the desired type.
+>
+> ```js
+> let response = this.backend.call("myOtherMethod");
+> let result: MyEnum = unsafeCast(response);
+> ```
 
 ### Late-bound Tokens
 
