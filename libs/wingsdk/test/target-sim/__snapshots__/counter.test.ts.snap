@@ -47,7 +47,7 @@ exports[`create a counter 1`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -67,7 +67,7 @@ exports[`create a counter 1`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -277,7 +277,7 @@ exports[`dec 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -297,7 +297,7 @@ exports[`dec 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -507,7 +507,7 @@ exports[`inc 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -527,7 +527,7 @@ exports[`inc 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -737,7 +737,7 @@ exports[`key dec 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -757,7 +757,7 @@ exports[`key dec 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -967,7 +967,7 @@ exports[`key inc 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -987,7 +987,7 @@ exports[`key inc 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -1195,7 +1195,7 @@ exports[`key set to new value 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -1215,7 +1215,7 @@ exports[`key set to new value 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
@@ -1423,7 +1423,7 @@ exports[`set to new value 2`] = `
 
         exports.call = async function(propName, ...args) {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -1443,7 +1443,7 @@ exports[`set to new value 2`] = `
 
         exports.stop = async function() {
           if (!$klass) {
-            throw Error('Resource is not running (it may have crashed or been stopped)');
+            throw Error('Resource is not running (it may have crashed or stopped)');
           }
           await $klass.onStop();
           $klass = undefined;
