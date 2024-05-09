@@ -295,7 +295,7 @@ describe("test-filter option", () => {
   });
 });
 
-describe("retry and batch options", () => {
+describe("retry and parallel options", () => {
   let logSpy: SpyInstance;
 
   beforeEach(() => {
@@ -367,29 +367,33 @@ describe("retry and batch options", () => {
     fs.writeFileSync(
       "t1.test.w",
       `
-      bring cloud;
-      test "t1" {
-        assert(true);
-      }
+bring util;
+
+test "t1" {
+  util.sleep(2s);
+  assert(true);
+}
     `
     );
     fs.writeFileSync(
-      "r2.test.w",
+      "t2.test.w",
       `
-      bring cloud;
-      test "t2" {
-        assert(true);
-      }
+bring util;
+
+test "t2" {
+  util.sleep(1s);
+  assert(true);
+}
     `
     );
 
+    const startingTime = Date.now();
     await wingTest(["t1.test.w", "t2.test.w"], {
       clean: true,
       platform: [BuiltinPlatform.SIM],
       parallel: 1,
     });
-    const batchLogs = logSpy.mock.calls.filter((args) => args[0].includes("Processing batch"));
-    expect(batchLogs.length).toBe(0);
+    expect(Date.now() - startingTime).toBeGreaterThanOrEqual(3 * 1000);
   });
 });
 
