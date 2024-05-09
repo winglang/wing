@@ -178,6 +178,7 @@ test "resource.call with a field name returns the field value" {
 test "resource.call cannot be used to call onStop" {
   // These are reserved methods that are called by the simulator for
   // managing the resource's lifecycle.
+  let var msg = "";
   try {
     r1.onStop();
   } catch err {
