@@ -10,8 +10,8 @@ export interface SandboxOptions {
   readonly env?: { [key: string]: string };
   readonly context?: { [key: string]: any };
   /**
-   * How long "call" invocations are allowed to run before the child process
-   * should be stopped (killed), in milliseconds.
+   * How long the sandbox is allowed to run code when `sandbox.call()` is called
+   * before the child process should be stopped (killed), in milliseconds.
    *
    * If an invocation returns successfully, the child process continues running
    * and can be reused for subsequent invocations.
