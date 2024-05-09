@@ -324,7 +324,7 @@ where
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
 		ExprKind::Intrinsic(intrinsic) => ExprKind::Intrinsic(Intrinsic {
-			arg_list: f.fold_args(intrinsic.arg_list),
+			arg_list: intrinsic.arg_list.map(|arg_list| f.fold_args(arg_list)),
 			name: f.fold_symbol(intrinsic.name),
 			kind: intrinsic.kind,
 		}),

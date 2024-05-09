@@ -329,7 +329,9 @@ where
 		}
 		ExprKind::Intrinsic(instrinsic) => {
 			v.visit_symbol(&instrinsic.name);
-			v.visit_args(&instrinsic.arg_list);
+			if let Some(arg_list) = &instrinsic.arg_list {
+				v.visit_args(arg_list);
+			}
 		}
 		ExprKind::Call { callee, arg_list } => {
 			match callee {

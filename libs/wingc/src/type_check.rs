@@ -2682,18 +2682,28 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_intrinsic(&mut self, intrinsic: &Intrinsic, env: &mut SymbolEnv, exp: &Expr) -> (TypeRef, Phase) {
-		let arg_list_types = self.type_check_arg_list(&intrinsic.arg_list, env);
-		let Ok(intrinsic_sig) = intrinsic.kind.get_signature(&self.types) else {
-			return self.resolved_error();
-		};
-
-		if !env.phase.can_call_to(&intrinsic_sig.phase) {
+		if !intrinsic.kind.is_valid_phase(&env.phase) {
 			self.spanned_error(exp, format!("{} cannot be used while {}", intrinsic.kind, env.phase));
 		}
+		if let Some(intrinsic_type) = intrinsic.kind.get_type(&self.types) {
+			if let Some(sig) = intrinsic_type.as_function_sig() {
+				if let Some(arg_list) = &intrinsic.arg_list {
+					let arg_list_types = self.type_check_arg_list(arg_list, env);
+					self.type_check_arg_list_against_function_sig(arg_list, &sig, exp, arg_list_types);
+				} else {
+					self.spanned_error(exp, format!("{} requires arguments", intrinsic.kind));
+				}
 
-		self.type_check_arg_list_against_function_sig(&intrinsic.arg_list, &intrinsic_sig, exp, arg_list_types);
+				return (sig.return_type, sig.phase);
+			} else {
+				if let Some(arg_list) = &intrinsic.arg_list {
+					self.spanned_error(&arg_list.span, format!("{} does not require arguments", intrinsic.kind));
+				}
+				return (intrinsic_type, Phase::Independent);
+			}
+		};
 
-		(intrinsic_sig.return_type, intrinsic_sig.phase)
+		(self.types.error(), Phase::Independent)
 	}
 
 	fn type_check_range(&mut self, start: &Expr, env: &mut SymbolEnv, end: &Expr) -> (TypeRef, Phase) {

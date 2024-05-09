@@ -5,6 +5,6 @@ pub class Bar {
     return "bar";
   }
   pub static getSubdir(): str {
-    return @path(".");
+    return @dirname;
   }
 }

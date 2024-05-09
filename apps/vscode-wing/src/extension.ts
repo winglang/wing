@@ -30,7 +30,9 @@ export async function activate(context: ExtensionContext) {
     await readFile(join(__dirname, "..", "language-configuration.json"), "utf8")
   );
   languages.setLanguageConfiguration("wing", {
-    ...languageConfig,
+    brackets: languageConfig.brackets,
+    comments: languageConfig.comments,
+    autoClosingPairs: languageConfig.autoClosingPairs,
     wordPattern: new RegExp(languageConfig.wordPattern, "g"),
     indentationRules: {
       increaseIndentPattern: new RegExp(

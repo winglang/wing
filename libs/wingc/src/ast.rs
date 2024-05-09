@@ -8,7 +8,7 @@ use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 
-use crate::docs::Docs;
+use crate::docs::Documented;
 use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
@@ -546,58 +546,62 @@ pub struct StructField {
 #[derive(Debug)]
 pub struct Intrinsic {
 	pub name: Symbol,
-	pub arg_list: ArgList,
+	pub arg_list: Option<ArgList>,
 	pub kind: IntrinsicKind,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum IntrinsicKind {
 	/// Error state
 	Unknown,
-	Path,
+	Dirname,
 }
 
 impl Display for IntrinsicKind {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			IntrinsicKind::Unknown => write!(f, "@"),
-			IntrinsicKind::Path => write!(f, "@path"),
+			IntrinsicKind::Dirname => write!(f, "@dirname"),
+		}
+	}
+}
+
+impl Documented for IntrinsicKind {
+	fn render_docs(&self) -> String {
+		match self {
+			IntrinsicKind::Dirname => r#"Get the normalized absolute path of the current source file's directory.
+
+The resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.
+It should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."#.to_string(),
+			IntrinsicKind::Unknown => "".to_string(),
 		}
 	}
 }
 
 impl IntrinsicKind {
-	pub const VALUES: [IntrinsicKind; 2] = [IntrinsicKind::Unknown, IntrinsicKind::Path];
+	pub const VALUES: [IntrinsicKind; 2] = [IntrinsicKind::Unknown, IntrinsicKind::Dirname];
 
 	pub fn from_str(s: &str) -> Self {
 		match s {
-			"@path" => IntrinsicKind::Path,
+			"@dirname" => IntrinsicKind::Dirname,
 			_ => IntrinsicKind::Unknown,
 		}
 	}
 
-	pub fn get_signature(&self, types: &crate::type_check::Types) -> Result<crate::type_check::FunctionSignature, ()> {
+	pub fn get_type(&self, types: &crate::type_check::Types) -> Option<crate::type_check::TypeRef> {
 		match self {
-			&IntrinsicKind::Path => Ok(crate::type_check::FunctionSignature {
-				this_type: None,
-				phase: Phase::Preflight,
-				docs: Docs::with_summary(
-					r#"Get the normalized absolute path given a path relative to the current source file's directory.
+			&IntrinsicKind::Dirname => Some(types.string()),
+			_ => None,
+		}
+	}
 
-The resolved path represent a path during preflight only and is not guaranteed to be valid while inflight.
-This path should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."#,
-				),
-				js_override: None,
-				implicit_scope_param: false,
-				parameters: vec![crate::type_check::FunctionParameter {
-					name: "relativePath".to_string(),
-					typeref: types.string(),
-					variadic: false,
-					docs: Docs::with_summary("Path relative to the current file's directory."),
-				}],
-				return_type: types.string(),
-			}),
-			_ => Err(()),
+	pub fn is_valid_phase(&self, phase: &Phase) -> bool {
+		match self {
+			IntrinsicKind::Dirname => match phase {
+				Phase::Preflight => true,
+				_ => false,
+			},
+			IntrinsicKind::Unknown => true,
 		}
 	}
 }

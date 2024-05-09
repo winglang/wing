@@ -76,7 +76,7 @@ class Bar extends $stdlib.std.Resource {
     return "bar";
   }
   static getSubdir($scope) {
-    return $helpers.path(__dirname, "../../../subdir", ".");
+    return $helpers.resolveDirname(__dirname, "../../../subdir");
   }
   static _toInflightType() {
     return `

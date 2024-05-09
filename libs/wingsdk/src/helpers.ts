@@ -1,7 +1,7 @@
 // Code in this file will be automatically included in all inflight code bundles,
 // so avoid importing anything heavy here.
 import { deepStrictEqual, notDeepStrictEqual } from "node:assert";
-import * as nodePath from "node:path";
+import * as path from "node:path";
 import type { Construct } from "constructs";
 import type { Node } from "./std/node";
 
@@ -157,21 +157,9 @@ export function createExternRequire(dirname: string) {
   };
 }
 
-export function path(
+export function resolveDirname(
   outdir: string,
-  relativeSourceDir: string,
-  target: string
+  relativeSourceDir: string
 ): string {
-  if (nodePath.isAbsolute(target)) {
-    throw new Error(
-      `Provided path must be relative but received an absolute path: ${target}`
-    );
-  } else {
-    const returnPath = normalPath(
-      nodePath.join(outdir, relativeSourceDir, target)
-    );
-
-    if (returnPath === "/") return returnPath;
-    return returnPath.replace(/\/$/, "");
-  }
+  return normalPath(path.resolve(outdir, relativeSourceDir));
 }

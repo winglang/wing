@@ -199,7 +199,7 @@
     "intrinsics": {
       "patterns": [
         {
-          "name": "support.function.wing",
+          "name": "meta.preprocessor.wing",
           "match": "(@[a-zA-Z_]*)"
         }
       ]

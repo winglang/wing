@@ -48,7 +48,7 @@ class Bar extends $stdlib.std.Resource {
     return "bar";
   }
   static getSubdir($scope) {
-    return $helpers.path(__dirname, "../../../subdir", ".");
+    return $helpers.resolveDirname(__dirname, "../../../subdir");
   }
   static _toInflightType() {
     return `
@@ -96,18 +96,10 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     const path = "SHOULD_IGNORE";
     const filename = "intrinsics.test.w";
-    const currentFile = $helpers.path(__dirname, "../../..", filename);
-    (expect.Util.equal((fs.Util.basename(currentFile)), filename));
-    const currentDir = $helpers.path(__dirname, "../../..", ".");
-    (expect.Util.equal((fs.Util.dirname(currentFile)), currentDir));
-    const currentDirAlt = $helpers.path(__dirname, "../../..", "./");
-    (expect.Util.equal(currentDir, currentDirAlt));
-    const upDir = $helpers.path(__dirname, "../../..", "..");
-    (expect.Util.equal((fs.Util.dirname(currentDir)), upDir));
-    const packageJson = $helpers.path(__dirname, "../../..", "package.json");
-    (expect.Util.equal((fs.Util.join(currentDir, "package.json")), packageJson));
-    const subdirPath = $helpers.path(__dirname, "../../..", "subdir");
-    (expect.Util.equal(subdirPath, (bar.Bar.getSubdir(this))));
+    const currentFile = (fs.Util.join($helpers.resolveDirname(__dirname, "../../.."), filename));
+    (expect.Util.equal(filename, (fs.Util.basename(currentFile))));
+    (expect.Util.equal($helpers.resolveDirname(__dirname, "../../.."), (fs.Util.dirname(currentFile))));
+    (expect.Util.equal((bar.Bar.getSubdir(this)), (fs.Util.join($helpers.resolveDirname(__dirname, "../../.."), "subdir"))));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

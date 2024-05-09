@@ -43,6 +43,11 @@ pub enum SymbolLocatorResult {
 		field_type: TypeRef,
 		field: Symbol,
 	},
+	/// Intrinsic
+	Intrinsic {
+		name: Symbol,
+		kind: IntrinsicKind,
+	},
 }
 
 pub struct SymbolLocator<'a> {
@@ -184,6 +189,7 @@ impl<'a> SymbolLocator<'a> {
 			}
 			SymbolLocatorResult::StructField { struct_type, field } => self.lookup_property_on_type(&struct_type, field),
 			SymbolLocatorResult::LooseField { .. } => None,
+			SymbolLocatorResult::Intrinsic { .. } => None,
 		}
 	}
 
@@ -197,6 +203,7 @@ impl<'a> SymbolLocator<'a> {
 			SymbolLocatorResult::TypePropertyReference { property, .. }
 			| SymbolLocatorResult::ObjectPropertyReference { property, .. } => Some(&property.span),
 			SymbolLocatorResult::TypeReference { span, .. } => Some(&span),
+			SymbolLocatorResult::Intrinsic { name, .. } => Some(&name.span),
 		}
 	}
 }
@@ -329,6 +336,14 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 							}
 						}
 					}
+				}
+			}
+			ExprKind::Intrinsic(intrinsic) => {
+				if intrinsic.name.span.contains_location(&self.location) {
+					self.set_result(SymbolLocatorResult::Intrinsic {
+						kind: intrinsic.kind.clone(),
+						name: intrinsic.name.clone(),
+					});
 				}
 			}
 			ExprKind::Call { arg_list, callee } => {

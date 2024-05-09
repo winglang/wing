@@ -671,7 +671,7 @@ impl<'a> JSifier<'a> {
 			),
 			ExprKind::Reference(_ref) => new_code!(expr_span, self.jsify_reference(&_ref, ctx)),
 			ExprKind::Intrinsic(intrinsic) => match intrinsic.kind {
-				IntrinsicKind::Path => {
+				IntrinsicKind::Dirname => {
 					let Some(source_path) = ctx.source_path else {
 						// Only happens inflight, so we can assume an error was caught earlier
 						return new_code!(expr_span, "");
@@ -686,13 +686,11 @@ impl<'a> JSifier<'a> {
 					new_code!(
 						expr_span,
 						HELPERS_VAR,
-						".path(",
+						".resolveDirname(",
 						__DIRNAME,
 						", \"",
 						relative_source_path,
-						"\", ",
-						self.jsify_arg_list(&intrinsic.arg_list, None, None, ctx),
-						")"
+						"\")"
 					)
 				}
 				_ => new_code!(expr_span, ""),

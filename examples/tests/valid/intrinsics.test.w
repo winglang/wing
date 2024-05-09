@@ -4,20 +4,10 @@ bring "./subdir/bar.w" as bar;
 
 let path = "SHOULD_IGNORE";
 let filename = "intrinsics.test.w";
-let currentFile = @path(filename);
-expect.equal(fs.basename(currentFile), filename);
 
-let currentDir = @path(".");
-expect.equal(fs.dirname(currentFile), currentDir);
+let currentFile = fs.join(@dirname, filename);
+expect.equal(filename, fs.basename(currentFile));
 
-let currentDirAlt = @path("./");
-expect.equal(currentDir, currentDirAlt);
+expect.equal(@dirname, fs.dirname(currentFile));
 
-let upDir = @path("..");
-expect.equal(fs.dirname(currentDir), upDir);
-
-let packageJson = @path("package.json");
-expect.equal(fs.join(currentDir, "package.json"), packageJson);
-
-let subdirPath = @path("subdir");
-expect.equal(subdirPath, bar.Bar.getSubdir());
+expect.equal(bar.Bar.getSubdir(), fs.join(@dirname, "subdir"));

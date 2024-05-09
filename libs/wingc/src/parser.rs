@@ -2197,10 +2197,14 @@ impl<'s> Parser<'s> {
 				let name = self.node_symbol(&self.get_child_field(expression_node, "name")?)?;
 				let kind = IntrinsicKind::from_str(&name.name);
 				let arg_list = if let Some(arg_node) = expression_node.child_by_field_name("args") {
-					self.build_arg_list(&arg_node, phase)?
+					Some(self.build_arg_list(&arg_node, phase)?)
 				} else {
-					self.with_error::<ArgList>("Intrinsics must be called with arguments", expression_node)?
+					None
 				};
+
+				if matches!(kind, IntrinsicKind::Unknown) {
+					self.add_error("Invalid intrinsic", &expression_node);
+				}
 
 				Ok(Expr::new(
 					ExprKind::Intrinsic(Intrinsic { name, arg_list, kind }),

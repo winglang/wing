@@ -1038,20 +1038,24 @@ fn get_intrinsic_list(types: &Types) -> Vec<CompletionItem> {
 	let mut completions = vec![];
 
 	for intrinsic in IntrinsicKind::VALUES {
-		let Ok(sig) = intrinsic.get_signature(types) else {
+		let Some(t) = intrinsic.get_type(types) else {
 			continue;
 		};
+
 		let documentation = Some(Documentation::MarkupContent(MarkupContent {
 			kind: MarkupKind::Markdown,
-			value: sig.render_docs(),
+			value: intrinsic.render_docs(),
 		}));
+
 		let mut item = CompletionItem {
 			label: intrinsic.to_string(),
 			documentation,
 			kind: Some(CompletionItemKind::FUNCTION),
 			..Default::default()
 		};
-		convert_to_call_completion(&mut item);
+		if t.is_function_sig() {
+			convert_to_call_completion(&mut item);
+		}
 		completions.push(item);
 	}
 	completions
@@ -2056,7 +2060,7 @@ let x = @
 	test_completion_list!(
 		intrinsics_partial,
 		r#"
-let x = @pa
+let x = @dir
          //^
 		"#,
 	);

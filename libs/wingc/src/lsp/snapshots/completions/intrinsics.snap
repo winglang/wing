@@ -1,15 +1,10 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
-- label: "@path"
+- label: "@dirname"
   kind: 3
   documentation:
     kind: markdown
-    value: "Get the normalized absolute path given a path relative to the current source file's directory.\n\nThe resolved path represent a path during preflight only and is not guaranteed to be valid while inflight.\nThis path should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed.\n### Parameters\n- `relativePath` — `str` — Path relative to the current file's directory."
-  sortText: cc|@path
-  insertText: "@path($1)"
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
+    value: "Get the normalized absolute path of the current source file's directory.\n\nThe resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.\nIt should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."
+  sortText: cc|@dirname
 

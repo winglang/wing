@@ -1,7 +1,7 @@
 inflight () => {
-  let x = @path("package.json");
-//        ^^^^^ @path cannot be used inflight
+  let x = @dirname;
+//        ^^^^^^^^ @dirname cannot be used inflight
 };
 
-let path = @path;
-//         ^^^^^ Expected arguments
+let path = @dirname();
+//                 ^^ Unexpected arguments

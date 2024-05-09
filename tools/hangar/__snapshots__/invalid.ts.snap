@@ -2732,18 +2732,18 @@ Duration <DURATION>"
 `;
 
 exports[`intrinsics.test.w 1`] = `
-"error: Intrinsics must be called with arguments
-  --> ../../../examples/tests/invalid/intrinsics.test.w:6:12
+"error: @dirname does not require arguments
+  --> ../../../examples/tests/invalid/intrinsics.test.w:6:20
   |
-6 | let path = @path;
-  |            ^^^^^
+6 | let path = @dirname();
+  |                    ^^
 
 
-error: @path cannot be used while inflight
+error: @dirname cannot be used while inflight
   --> ../../../examples/tests/invalid/intrinsics.test.w:2:11
   |
-2 |   let x = @path(\\"package.json\\");
-  |           ^^^^^^^^^^^^^^^^^^^^^
+2 |   let x = @dirname;
+  |           ^^^^^^^^
 
 
 
