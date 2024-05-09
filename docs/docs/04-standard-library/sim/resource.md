@@ -20,23 +20,20 @@ to interact with the service at runtime.
 
 ## Usage
 
-As an example, consider a simulated service that represents an atomic counter, like the one in `cloud.Counter`.
+As an example, suppose we want to simulate a service that stores a number, like the one in `cloud.Counter`, which has two methods: `inc` and `peek`.
 
-First, an inflight class is defined that represents the stateful service:
+First, we'll define an inflight class that represents the service's backend:
 
 ```js
 bring sim;
 
-// a resource backend must implement the IResource interface
+// a resource backend must implement IResource
 inflight class CounterBackend impl sim.IResource {
   var counter: num;
 
-  new() {
-    this.counter = 0;
-  }
-
-  pub onStart(ctx: sim.IResourceContext) {
+  new(ctx: sim.IResourceContext) {
     // startup code
+    this.counter = 0;
   }
 
   pub onStop() {
@@ -55,9 +52,9 @@ inflight class CounterBackend impl sim.IResource {
 }
 ```
 
-Every resource backend needs an `onStart` and `onStop` method, which are called when the resource is started and stopped, respectively.
+The class will be initialized by the simulator with its constructor (the `new()` method), and shut down using the `onStop` method.
 
-Next, a preflight class is defined that represents the service itself:
+Next, we have to define a preflight class which represents the service's frontend:
 
 ```js
 class Counter {
@@ -66,8 +63,8 @@ class Counter {
   new() {
     // this is a "backend factory". it returns an inflight class that implements the
     // resource.
-    let factory = inflight (): sim.IResource => {
-      return new CounterBackend();
+    let factory = inflight (ctx): sim.IResource => {
+      return new CounterBackend(ctx);
     };
 
     this.backend = new sim.Resource(factory);
@@ -87,8 +84,11 @@ class Counter {
 
 The `Counter` class is a simple wrapper around the `CounterBackend` class. It provides a way to interact with the resource using the `inc` and `peek` methods.
 
-`sim.Resource` has a `call` method that takes the name of a method to call and an array of arguments.
-The arguments are serialized and sent to the resource (possibly over the network), which then processes the request and returns a response.
+`sim.Resource` has an inflight method named `call` that takes the name of a method to call and an array of arguments, and returns the serialized response from the resource.
+The arguments are serialized and sent to the resource over HTTP, which will process the request and returns a serialized response.
+
+> Note: Since the `call` method makes networked requests, it's important that the resource implementation provided by the inflight class responds in a timely manner.
+> If the resource takes over 30 seconds to respond, `call` will throw an error, and the simulator will terminate the resource.
 
 The `Counter` class can be used like this:
 
@@ -104,21 +104,57 @@ new cloud.Function(inflight () => {
 
 ### Serializability
 
-TODO
+Methods that are called on a `sim.Resource` instance must be serializable, meaning
+all of their arguments and return values must be serializable.
+
+The following types are serializable:
+
+- `num`
+- `str`
+- `bool`
+- `Json`
+- `Array`
+- `Map`
+- `T?` where `T` is a serializable type
+- enums
+- structs that contain only serializable types
+
+The `call` function on `sim.Resource` only supports arguments that are valid `Json` values.
+To convert a value to `Json`, use the `Json` constructor:
+
+```js
+let x: num = 5;
+let y: str = "a";
+this.backend.call("myMethod", [Json x, Json y]);
+```
+
+Return values can be converted back from `Json` using an appropriate `fromJson` method.
+
+```js
+let response = this.backend.call("myMethod");
+let result: num = num.fromJson(response);
+```
+
+> Note: some types are missing `fromJson` methods. To work around this, you may use `unsafeCast()` to cast the value into the desired type.
+>
+> ```js
+> let response = this.backend.call("myOtherMethod");
+> let result: MyEnum = unsafeCast(response);
+> ```
 
 ### Late-bound Tokens
 
 Consider a use case where there is an attribute of a simulated service that only gets resolved during initialization (e.g. the exposed port of a container).
 In order to create such resources, we need a way to obtain a lazy token that gets resolved during simulator initialization.
 
-Use the preflight method `resource.attrToken(key)` to obtain a token that can be used to reference the value of the attribute at runtime.
+Use the preflight method `resource.createToken(key)` to obtain a token that can be used to reference the value of the attribute at runtime.
 
-During resource simulation, you must call `ctx.resolveAttribute(key, value)` during a resource's `onStart` method to set the runtime value.
+During resource simulation, you must call `ctx.resolveToken(key, value)` during a resource's constructor method to set the runtime value.
 
 ```js playground
 inflight class MyResourceBackend impl sim.IResource {
-  pub onStart(ctx: sim.IResourceContext) {
-    ctx.resolveAttr("startTime", "2023-10-16T20:47:39.511Z");
+  new(ctx: sim.IResourceContext) {
+    ctx.resolveToken("startTime", "2023-10-16T20:47:39.511Z");
   }
 
   pub onStop() {}
@@ -132,7 +168,7 @@ class MyResource {
     this.backend = new sim.Resource(inflight () => {
       return new MyResourceBackend();
     });
-    this.startTime = this.backend.attrToken("startTime");
+    this.startTime = this.backend.createToken("startTime");
   }
 }
 
@@ -189,7 +225,7 @@ new sim.Resource(factory: IResourceFactory);
 | --- | --- |
 | <code><a href="#@winglang/sdk.sim.Resource.addEnvironment">addEnvironment</a></code> | Add an environment variable to make available to the inflight code. |
 | <code><a href="#@winglang/sdk.sim.Resource.addPermission">addPermission</a></code> | Add a simulated permission to this inflight host. |
-| <code><a href="#@winglang/sdk.sim.Resource.attrToken">attrToken</a></code> | Obtain a token that can be used to reference an attribute of this resource that is only resolved once the resource is started in the simulator. |
+| <code><a href="#@winglang/sdk.sim.Resource.createToken">createToken</a></code> | Obtain a token that can be used to reference an attribute of this resource that is only resolved once the resource is started in the simulator. |
 | <code><a href="#@winglang/sdk.sim.Resource.toSimulator">toSimulator</a></code> | Convert this resource to a resource schema for the simulator. |
 
 ##### Inflight Methods
@@ -240,23 +276,23 @@ Add a simulated permission to this inflight host.
 
 ---
 
-##### `attrToken` <a name="attrToken" id="@winglang/sdk.sim.Resource.attrToken"></a>
+##### `createToken` <a name="createToken" id="@winglang/sdk.sim.Resource.createToken"></a>
 
 ```wing
-attrToken(name: str): str
+createToken(name: str): str
 ```
 
 Obtain a token that can be used to reference an attribute of this resource that is only resolved once the resource is started in the simulator.
 
 If the token is used in inflight code or in the configuration of a simulated
 resource (e.g. as an environment variable), the relevant resource will
-automatically take a dependency on the resource the attribute belongs to.
+automatically take a dependency on the resource the token belongs to.
 
-###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.Resource.attrToken.parameter.name"></a>
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.Resource.createToken.parameter.name"></a>
 
 - *Type:* str
 
-The name of the attribute.
+The name of the token.
 
 ---
 
@@ -359,24 +395,7 @@ Contract that a resource backend must implement.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.sim.IResource.onStart">onStart</a></code> | Runs when the resource is started. |
 | <code><a href="#@winglang/sdk.sim.IResource.onStop">onStop</a></code> | Runs when the resource is stopped. |
-
----
-
-##### `onStart` <a name="onStart" id="@winglang/sdk.sim.IResource.onStart"></a>
-
-```wing
-onStart(context: IResourceContext): void
-```
-
-Runs when the resource is started.
-
-###### `context`<sup>Required</sup> <a name="context" id="@winglang/sdk.sim.IResource.onStart.parameter.context"></a>
-
-- *Type:* <a href="#@winglang/sdk.sim.IResourceContext">IResourceContext</a>
-
-Simulator context.
 
 ---
 
@@ -400,7 +419,7 @@ Context for implementing a simulator resource.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.sim.IResourceContext.log">log</a></code> | Log a message at the current point in time. |
-| <code><a href="#@winglang/sdk.sim.IResourceContext.resolveAttr">resolveAttr</a></code> | Resolves an attribute value. |
+| <code><a href="#@winglang/sdk.sim.IResourceContext.resolveToken">resolveToken</a></code> | Resolves a token value. |
 | <code><a href="#@winglang/sdk.sim.IResourceContext.statedir">statedir</a></code> | The directory for the resource's state. |
 
 ---
@@ -431,30 +450,30 @@ The severity of the message.
 
 ---
 
-##### `resolveAttr` <a name="resolveAttr" id="@winglang/sdk.sim.IResourceContext.resolveAttr"></a>
+##### `resolveToken` <a name="resolveToken" id="@winglang/sdk.sim.IResourceContext.resolveToken"></a>
 
 ```wing
-inflight resolveAttr(name: str, value: str): void
+inflight resolveToken(name: str, value: str): void
 ```
 
-Resolves an attribute value.
+Resolves a token value.
 
-All attributes must be resolved during the
-`onStart` method.
+All tokens must be resolved during the
+constructor of the resource.
 
-###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.IResourceContext.resolveAttr.parameter.name"></a>
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.IResourceContext.resolveToken.parameter.name"></a>
 
 - *Type:* str
 
-The name of the attribute.
+The name of the token.
 
 ---
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.sim.IResourceContext.resolveAttr.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.sim.IResourceContext.resolveToken.parameter.value"></a>
 
 - *Type:* str
 
-The value of the attribute.
+The value of the token.
 
 ---
 
@@ -496,10 +515,16 @@ A resource with an inflight "handle" method that can be passed to the `sim.Resou
 ##### `handle` <a name="handle" id="@winglang/sdk.sim.IResourceFactoryClient.handle"></a>
 
 ```wing
-inflight handle(): IResource
+inflight handle(context: IResourceContext): IResource
 ```
 
 Function that will be called to create the resource.
+
+###### `context`<sup>Required</sup> <a name="context" id="@winglang/sdk.sim.IResourceFactoryClient.handle.parameter.context"></a>
+
+- *Type:* <a href="#@winglang/sdk.sim.IResourceContext">IResourceContext</a>
+
+---
 
 
 ### ISimulatorInflightHost <a name="ISimulatorInflightHost" id="@winglang/sdk.sim.ISimulatorInflightHost"></a>

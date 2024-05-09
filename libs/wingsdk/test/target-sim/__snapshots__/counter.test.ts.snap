@@ -17,12 +17,14 @@ exports[`create a counter 1`] = `
             console.log(level + ':' + message);
           };
           const client = (await (async () => {
-  const $func = async (ctx) => {
+  const $func = async (ctx, simContext) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
             require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
-            return new CounterBackend({ initial: ctx.initial });
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
         }
   const $ctx = {
   initial: 123
@@ -35,8 +37,7 @@ exports[`create a counter 1`] = `
 }
 )());
           const noop = () => {};
-          const klass = (await client.handle()) ?? noop;
-          await klass.onStart(ctx);
+          const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
@@ -47,9 +48,6 @@ exports[`create a counter 1`] = `
         exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('Resource is not running (it may have crashed or been stopped)');
-          }
-          if (propName === 'onStart') {
-            throw Error('Cannot call "onStart"');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -188,8 +186,10 @@ exports[`create a counter 1`] = `
                 "version": "10.3.0",
               },
               "display": {
-                "description": "A cloud service",
-                "title": "Service",
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
               },
               "id": "Resource",
               "path": "root/my_counter/Resource",
@@ -247,12 +247,14 @@ exports[`dec 2`] = `
             console.log(level + ':' + message);
           };
           const client = (await (async () => {
-  const $func = async (ctx) => {
+  const $func = async (ctx, simContext) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
             require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
-            return new CounterBackend({ initial: ctx.initial });
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
         }
   const $ctx = {
   initial: 123
@@ -265,8 +267,7 @@ exports[`dec 2`] = `
 }
 )());
           const noop = () => {};
-          const klass = (await client.handle()) ?? noop;
-          await klass.onStart(ctx);
+          const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
@@ -277,9 +278,6 @@ exports[`dec 2`] = `
         exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('Resource is not running (it may have crashed or been stopped)');
-          }
-          if (propName === 'onStart') {
-            throw Error('Cannot call "onStart"');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -418,8 +416,10 @@ exports[`dec 2`] = `
                 "version": "10.3.0",
               },
               "display": {
-                "description": "A cloud service",
-                "title": "Service",
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
               },
               "id": "Resource",
               "path": "root/my_counter/Resource",
@@ -477,12 +477,14 @@ exports[`inc 2`] = `
             console.log(level + ':' + message);
           };
           const client = (await (async () => {
-  const $func = async (ctx) => {
+  const $func = async (ctx, simContext) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
             require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
-            return new CounterBackend({ initial: ctx.initial });
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
         }
   const $ctx = {
   initial: 123
@@ -495,8 +497,7 @@ exports[`inc 2`] = `
 }
 )());
           const noop = () => {};
-          const klass = (await client.handle()) ?? noop;
-          await klass.onStart(ctx);
+          const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
@@ -507,9 +508,6 @@ exports[`inc 2`] = `
         exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('Resource is not running (it may have crashed or been stopped)');
-          }
-          if (propName === 'onStart') {
-            throw Error('Cannot call "onStart"');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -648,8 +646,10 @@ exports[`inc 2`] = `
                 "version": "10.3.0",
               },
               "display": {
-                "description": "A cloud service",
-                "title": "Service",
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
               },
               "id": "Resource",
               "path": "root/my_counter/Resource",
@@ -707,12 +707,14 @@ exports[`key dec 2`] = `
             console.log(level + ':' + message);
           };
           const client = (await (async () => {
-  const $func = async (ctx) => {
+  const $func = async (ctx, simContext) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
             require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
-            return new CounterBackend({ initial: ctx.initial });
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
         }
   const $ctx = {
   initial: 0
@@ -725,8 +727,7 @@ exports[`key dec 2`] = `
 }
 )());
           const noop = () => {};
-          const klass = (await client.handle()) ?? noop;
-          await klass.onStart(ctx);
+          const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
@@ -737,9 +738,6 @@ exports[`key dec 2`] = `
         exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('Resource is not running (it may have crashed or been stopped)');
-          }
-          if (propName === 'onStart') {
-            throw Error('Cannot call "onStart"');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -878,8 +876,10 @@ exports[`key dec 2`] = `
                 "version": "10.3.0",
               },
               "display": {
-                "description": "A cloud service",
-                "title": "Service",
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
               },
               "id": "Resource",
               "path": "root/my_counter/Resource",
@@ -937,12 +937,14 @@ exports[`key inc 2`] = `
             console.log(level + ':' + message);
           };
           const client = (await (async () => {
-  const $func = async (ctx) => {
+  const $func = async (ctx, simContext) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
             require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
-            return new CounterBackend({ initial: ctx.initial });
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
         }
   const $ctx = {
   initial: 0
@@ -955,8 +957,7 @@ exports[`key inc 2`] = `
 }
 )());
           const noop = () => {};
-          const klass = (await client.handle()) ?? noop;
-          await klass.onStart(ctx);
+          const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
@@ -967,9 +968,6 @@ exports[`key inc 2`] = `
         exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('Resource is not running (it may have crashed or been stopped)');
-          }
-          if (propName === 'onStart') {
-            throw Error('Cannot call "onStart"');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -1108,8 +1106,10 @@ exports[`key inc 2`] = `
                 "version": "10.3.0",
               },
               "display": {
-                "description": "A cloud service",
-                "title": "Service",
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
               },
               "id": "Resource",
               "path": "root/my_counter/Resource",
@@ -1165,12 +1165,14 @@ exports[`key set to new value 2`] = `
             console.log(level + ':' + message);
           };
           const client = (await (async () => {
-  const $func = async (ctx) => {
+  const $func = async (ctx, simContext) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
             require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
-            return new CounterBackend({ initial: ctx.initial });
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
         }
   const $ctx = {
   initial: 0
@@ -1183,8 +1185,7 @@ exports[`key set to new value 2`] = `
 }
 )());
           const noop = () => {};
-          const klass = (await client.handle()) ?? noop;
-          await klass.onStart(ctx);
+          const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
@@ -1195,9 +1196,6 @@ exports[`key set to new value 2`] = `
         exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('Resource is not running (it may have crashed or been stopped)');
-          }
-          if (propName === 'onStart') {
-            throw Error('Cannot call "onStart"');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -1336,8 +1334,10 @@ exports[`key set to new value 2`] = `
                 "version": "10.3.0",
               },
               "display": {
-                "description": "A cloud service",
-                "title": "Service",
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
               },
               "id": "Resource",
               "path": "root/my_counter/Resource",
@@ -1393,12 +1393,14 @@ exports[`set to new value 2`] = `
             console.log(level + ':' + message);
           };
           const client = (await (async () => {
-  const $func = async (ctx) => {
+  const $func = async (ctx, simContext) => {
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
             require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
-            return new CounterBackend({ initial: ctx.initial });
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
         }
   const $ctx = {
   initial: 123
@@ -1411,8 +1413,7 @@ exports[`set to new value 2`] = `
 }
 )());
           const noop = () => {};
-          const klass = (await client.handle()) ?? noop;
-          await klass.onStart(ctx);
+          const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
           };
@@ -1423,9 +1424,6 @@ exports[`set to new value 2`] = `
         exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('Resource is not running (it may have crashed or been stopped)');
-          }
-          if (propName === 'onStart') {
-            throw Error('Cannot call "onStart"');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');
@@ -1564,8 +1562,10 @@ exports[`set to new value 2`] = `
                 "version": "10.3.0",
               },
               "display": {
-                "description": "A cloud service",
-                "title": "Service",
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
               },
               "id": "Resource",
               "path": "root/my_counter/Resource",
