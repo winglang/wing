@@ -3,6 +3,7 @@ import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
+import { DEFAULT_PARALLEL_SIZE } from "./commands";
 import { SNAPSHOTS_HELP } from "./commands/test/snapshots-help";
 import { currentPackage, projectTemplateNames } from "./util";
 
@@ -238,7 +239,7 @@ async function main() {
     .addOption(
       new Option(
         "-p, --parallel [batch]",
-        "Number of tests to be executed on parallel- if not specified will start executing all at the same time"
+        `Number of tests to be executed on parallel- if zero not specified- ${DEFAULT_PARALLEL_SIZE} will run on parallel`
       ).argParser(parseInt)
     )
     .hook("preAction", progressHook)

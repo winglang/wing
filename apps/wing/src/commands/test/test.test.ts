@@ -395,6 +395,43 @@ test "t2" {
     });
     expect(Date.now() - startingTime).toBeGreaterThanOrEqual(3 * 1000);
   });
+
+  test("wing test --parallel 2", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
+
+    process.chdir(outDir);
+
+    fs.writeFileSync(
+      "t1.test.w",
+      `
+bring util;
+
+test "t1" {
+util.sleep(1s);
+assert(true);
+}
+  `
+    );
+    fs.writeFileSync(
+      "t2.test.w",
+      `
+bring util;
+
+test "t2" {
+util.sleep(1s);
+assert(true);
+}
+  `
+    );
+
+    const startingTime = Date.now();
+    await wingTest(["t1.test.w", "t2.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      parallel: 2,
+    });
+    expect(Date.now() - startingTime).toBeLessThan(2 * 1000);
+  });
 });
 
 const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
