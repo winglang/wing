@@ -11,7 +11,6 @@ struct MyStructWithNonSerializableTypes {
 }
 
 inflight class ResourceBackend impl sim.IResource {
-  pub onStart(ctx: sim.IResourceContext) {}
   pub onStop() {}
 
   pub methodWithMutJsons(a: MutJson): MutJson { return {}; }

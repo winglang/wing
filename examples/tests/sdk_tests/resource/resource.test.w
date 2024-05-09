@@ -1,4 +1,9 @@
+bring cloud;
 bring sim;
+
+new cloud.Counter(
+  initial: 5
+) as "CloudCounter";
 
 inflight class CounterBackend impl sim.IResource {
   var counter: num;

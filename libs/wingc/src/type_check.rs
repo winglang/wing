@@ -28,8 +28,7 @@ use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
 	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE,
-	WINGSDK_SET, WINGSDK_SIM_IRESOURCECONTEXT_FQN, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING,
-	WINGSDK_STRUCT,
+	WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -4548,13 +4547,6 @@ impl<'a> TypeChecker<'a> {
 			.expect("Expected method type to be a function signature");
 
 		let check_type = |param_name: Option<&str>, t: TypeRef| {
-			// If the method name is onStart and the type is sim.IResourceContext, then we'll let it slide...
-			if method_def.name.as_ref().map(|sym| sym.name.as_str()) == Some("onStart")
-				&& t.as_interface().map(|i| i.fqn.as_deref()) == Some(Some(WINGSDK_SIM_IRESOURCECONTEXT_FQN))
-			{
-				return;
-			}
-
 			let prefix = match param_name {
 				Some(name) => format!("Parameter \"{}\"", name),
 				None => "Return value".to_string(),

@@ -10,23 +10,15 @@ const VALUES_FILENAME = "values.json";
 export class CounterBackend implements ICounterClient, IResource {
   private values: Map<string, number>;
   private initial: number;
-  private _ctx: IResourceContext | undefined;
+  private ctx: IResourceContext;
 
-  public constructor(props: CounterBackendProps) {
+  public constructor(ctx: IResourceContext, props: CounterBackendProps) {
+    this.ctx = ctx;
     this.initial = props.initial ?? 0;
     this.values = new Map().set("default", this.initial);
   }
 
-  private get ctx(): IResourceContext {
-    if (!this._ctx) {
-      throw new Error("Cannot access context during class construction");
-    }
-    return this._ctx;
-  }
-
-  public async onStart(ctx: IResourceContext): Promise<void> {
-    this._ctx = ctx;
-
+  public async onStart(): Promise<void> {
     // Load the values from disk
     const valuesFile = join(this.ctx.statedir(), VALUES_FILENAME);
     const valueFilesExists = await exists(valuesFile);

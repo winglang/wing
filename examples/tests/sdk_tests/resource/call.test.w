@@ -95,9 +95,6 @@ class MyResource {
   pub inflight invalidField(): str {
     return str.fromJson(this.backend.call("invalidField"));
   }
-  pub inflight onStart() {
-    this.backend.call("onStart");
-  }
   pub inflight onStop() {
     this.backend.call("onStop");
   }
@@ -178,17 +175,9 @@ test "resource.call with a field name returns the field value" {
   assert(msg.contains("Method or property \"invalidField\" not found"));
 }
 
-test "resource.call cannot be used to call onStart or onStop" {
+test "resource.call cannot be used to call onStop" {
   // These are reserved methods that are called by the simulator for
   // managing the resource's lifecycle.
-  let var msg = "";
-  try {
-    r1.onStart();
-  } catch err {
-    msg = err;
-  }
-  assert(msg.contains("Cannot call \"onStart\""));
-
   try {
     r1.onStop();
   } catch err {

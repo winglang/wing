@@ -42,7 +42,7 @@ export interface IResourceContext {
 
   /**
    * Resolves a token value. All tokens must be resolved during the
-   * `onStart` method.
+   * constructor of the resource.
    *
    * @param name The name of the token.
    * @param value The value of the token.
@@ -85,8 +85,9 @@ export class Resource
   constructor(scope: Construct, id: string, factory: IResourceFactory) {
     super(scope, id);
 
-    Node.of(this).title = "Service";
-    Node.of(this).description = "A cloud service";
+    Node.of(this).title = "Resource";
+    Node.of(this).description = "A simulated resource";
+    Node.of(this).color = "emerald";
 
     const assetName = ResourceNames.generateName(this, {
       disallowedRegex: /[><:"/\\|?*\s]/g, // avoid characters that may cause path issues
@@ -165,9 +166,6 @@ export class Resource
         exports.call = async function(propName, ...args) {
           if (!$klass) {
             throw Error('Resource is not running (it may have crashed or been stopped)');
-          }
-          if (propName === 'onStart') {
-            throw Error('Cannot call "onStart"');
           }
           if (propName === 'onStop') {
             throw Error('Cannot call "onStop"');

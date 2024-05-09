@@ -20,23 +20,20 @@ to interact with the service at runtime.
 
 ## Usage
 
-As an example, consider a simulated service that represents an atomic counter, like the one in `cloud.Counter`.
+As an example, suppose we want to simulate a service that stores a number, like the one in `cloud.Counter`, which has two methods: `inc` and `peek`.
 
-First, an inflight class is defined that represents the stateful service:
+First, we'll define an inflight class that represents the service's backend:
 
 ```js
 bring sim;
 
-// a resource backend must implement the IResource interface
+// a resource backend must implement IResource
 inflight class CounterBackend impl sim.IResource {
   var counter: num;
 
-  new() {
-    this.counter = 0;
-  }
-
-  pub onStart(ctx: sim.IResourceContext) {
+  new(ctx: sim.IResourceContext) {
     // startup code
+    this.counter = 0;
   }
 
   pub onStop() {
@@ -55,9 +52,9 @@ inflight class CounterBackend impl sim.IResource {
 }
 ```
 
-Every resource backend needs an `onStart` and `onStop` method, which are called when the resource is started and stopped, respectively.
+The class will be initialized by the simulator with its constructor (the `new()` method), and shut down using the `onStop` method.
 
-Next, a preflight class is defined that represents the service itself:
+Next, we have to define a preflight class which represents the service's frontend:
 
 ```js
 class Counter {
@@ -66,8 +63,8 @@ class Counter {
   new() {
     // this is a "backend factory". it returns an inflight class that implements the
     // resource.
-    let factory = inflight (): sim.IResource => {
-      return new CounterBackend();
+    let factory = inflight (ctx): sim.IResource => {
+      return new CounterBackend(ctx);
     };
 
     this.backend = new sim.Resource(factory);
@@ -88,7 +85,7 @@ class Counter {
 The `Counter` class is a simple wrapper around the `CounterBackend` class. It provides a way to interact with the resource using the `inc` and `peek` methods.
 
 `sim.Resource` has a `call` method that takes the name of a method to call and an array of arguments.
-The arguments are serialized and sent to the resource (possibly over the network), which then processes the request and returns a response.
+The arguments are serialized and sent to the resource (usually over HTTP), which will process the request and returns a serialized response.
 
 The `Counter` class can be used like this:
 
@@ -113,11 +110,11 @@ In order to create such resources, we need a way to obtain a lazy token that get
 
 Use the preflight method `resource.createToken(key)` to obtain a token that can be used to reference the value of the attribute at runtime.
 
-During resource simulation, you must call `ctx.resolveTokenibute(key, value)` during a resource's `onStart` method to set the runtime value.
+During resource simulation, you must call `ctx.resolveToken(key, value)` during a resource's constructor method to set the runtime value.
 
 ```js playground
 inflight class MyResourceBackend impl sim.IResource {
-  pub onStart(ctx: sim.IResourceContext) {
+  new(ctx: sim.IResourceContext) {
     ctx.resolveToken("startTime", "2023-10-16T20:47:39.511Z");
   }
 

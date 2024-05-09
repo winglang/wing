@@ -82,7 +82,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
     } catch (err) {
       this.context.addTrace({
         data: {
-          message: "Error calling onStart",
+          message: "Error initializing resource",
           status: "failure",
           error: err,
         },

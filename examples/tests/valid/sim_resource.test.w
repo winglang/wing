@@ -12,7 +12,6 @@ struct MyStruct {
 }
 
 inflight class ResourceBackend impl sim.IResource {
-  pub onStart(ctx: sim.IResourceContext) {}
   pub onStop() {}
 
   pub emptyMethod() {}

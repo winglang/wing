@@ -122,9 +122,6 @@ const WINGSDK_NODE: &'static str = "std.Node";
 
 const WINGSDK_SIM_IRESOURCE: &'static str = "sim.IResource";
 const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_SIM_IRESOURCE);
-const WINGSDK_SIM_IRESOURCECONTEXT: &'static str = "sim.IResourceContext";
-const WINGSDK_SIM_IRESOURCECONTEXT_FQN: &'static str =
-	formatcp!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_SIM_IRESOURCECONTEXT);
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";

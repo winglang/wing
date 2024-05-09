@@ -3,7 +3,7 @@ import { Resource } from "./resource";
 import { bindSimulatorResource, makeSimulatorJsClientV2 } from "./util";
 import * as cloud from "../cloud";
 import { LiftMap, lift } from "../core";
-import { IInflightHost } from "../std";
+import { Node, IInflightHost } from "../std";
 
 /**
  * Simulator implementation of `cloud.Counter`.
@@ -21,15 +21,18 @@ export class Counter extends cloud.Counter {
 
     const factory = lift({
       initial: this.initial,
-    }).inflight(async (ctx) => {
+    }).inflight(async (ctx, simContext) => {
       // TODO: make CounterBackend liftable so we can add it to the list of captures
       const CounterBackend =
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
-      return new CounterBackend({ initial: ctx.initial });
+      const backend = new CounterBackend(simContext, { initial: ctx.initial });
+      await backend.onStart();
+      return backend;
     });
 
     this.backend = new Resource(this, "Resource", factory);
+    Node.of(this.backend).hidden = true;
   }
 
   /** @internal */
