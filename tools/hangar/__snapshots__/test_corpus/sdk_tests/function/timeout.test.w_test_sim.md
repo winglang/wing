@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] (no test) | Error: Cannot access context during class construction
 pass ─ timeout.test.wsim » root/env0/function invoke throws on timeout
 
 Tests 1 passed (1)

@@ -2,15 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] setConsumer | Error: Cannot access context during class construction
-[ERROR] function can push back to the queue | Error: Cannot access context during class construction
-[ERROR] messages pushed to queue can be processed concurrently | Error: Cannot access context during class construction
-[ERROR] setConsumer | Error: Cannot access context during class construction
-[ERROR] setConsumer | Error: Cannot access context during class construction
-[ERROR] function can push back to the queue | Error: Cannot access context during class construction
-[ERROR] function can push back to the queue | Error: Cannot access context during class construction
-[ERROR] messages pushed to queue can be processed concurrently | Error: Cannot access context during class construction
-[ERROR] messages pushed to queue can be processed concurrently | Error: Cannot access context during class construction
 pass ─ set_consumer.test.wsim » root/env0/test:setConsumer                                           
 pass ─ set_consumer.test.wsim » root/env1/test:function can push back to the queue                   
 pass ─ set_consumer.test.wsim » root/env2/test:messages pushed to queue can be processed concurrently

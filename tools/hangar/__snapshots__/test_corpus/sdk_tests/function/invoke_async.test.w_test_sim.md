@@ -4,8 +4,6 @@
 ```log
 [INFO] invoke() waits for function to finish | log inside fn
 [INFO] invokeAsync() returns without waiting for the function finishes | log inside fn
-[ERROR] invoke() waits for function to finish | Error: Cannot access context during class construction
-[ERROR] invokeAsync() returns without waiting for the function finishes | Error: Cannot access context during class construction
 pass ─ invoke_async.test.wsim » root/env0/test:invoke() waits for function to finish                          
 pass ─ invoke_async.test.wsim » root/env1/test:invokeAsync() returns without waiting for the function finishes
 

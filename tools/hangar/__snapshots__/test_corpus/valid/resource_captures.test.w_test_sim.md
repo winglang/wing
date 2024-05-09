@@ -5,7 +5,6 @@
 [INFO] test | array.len=3
 [INFO] test | field=hello!
 [INFO] test | this.another.first.myResource:myString
-[ERROR] test | Error: Cannot access context during class construction
 pass ─ resource_captures.test.wsim » root/env0/test:test
 
 Tests 1 passed (1)

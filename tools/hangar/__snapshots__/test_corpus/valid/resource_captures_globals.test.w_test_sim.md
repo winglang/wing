@@ -2,10 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] test | Error: Cannot access context during class construction
-[ERROR] test | Error: Cannot access context during class construction
-[ERROR] access cloud resource through static methods only | Error: Cannot access context during class construction
-[ERROR] access cloud resource through static methods only | Error: Cannot access context during class construction
 pass ─ resource_captures_globals.test.wsim » root/env0/test:test                                             
 pass ─ resource_captures_globals.test.wsim » root/env1/test:access cloud resource through static methods only
 

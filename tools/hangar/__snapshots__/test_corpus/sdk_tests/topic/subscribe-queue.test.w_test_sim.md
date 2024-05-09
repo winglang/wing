@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] functions and queues receiving messages from the topic | Error: Cannot access context during class construction
 pass ─ subscribe-queue.test.wsim » root/env0/test:functions and queues receiving messages from the topic
 
 Tests 1 passed (1)

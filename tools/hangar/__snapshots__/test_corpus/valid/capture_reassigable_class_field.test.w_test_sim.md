@@ -2,7 +2,6 @@
 
 ## stdout.log
 ```log
-[ERROR] main | Error: Cannot access context during class construction
 pass ─ capture_reassigable_class_field.test.wsim » root/env0/test:main
 
 Tests 1 passed (1)
