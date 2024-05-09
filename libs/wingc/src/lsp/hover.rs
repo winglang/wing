@@ -117,7 +117,7 @@ mod tests {
 		r#"
 bring cloud;
 new cloud. 
-		//^
+    //^
 "#,
 	);
 
@@ -589,5 +589,51 @@ Json.stringify({});
   //^
   }
 	"#,
+	);
+
+	test_hover_list!(
+		ctor_doc,
+		r#"
+  class Bob {
+    /// I'm bob the constructor
+    new() {}
+  //^
+  }
+	"#
+	);
+
+	test_hover_list!(
+		inflight_ctor_doc,
+		r#"
+  class Bob {
+    /// I'm bob the constructor (inflight)
+    inflight new() {}
+           //^
+  }
+	"#
+	);
+
+	test_hover_list!(
+		ctor_doc_from_new_expr,
+		r#"
+  class Bob {
+    /// I'm bob the constructor
+    new() {}
+  }
+  new Bob();
+    //^	
+	"#
+	);
+
+	test_hover_list!(
+		inflight_ctor_doc_from_new_expr,
+		r#"
+  inflight class Bob {
+    /// I'm bob the constructor (inflight)
+    new() {}
+  }
+  inflight () => { new Bob(); };
+                     //^
+	"#
 	);
 }

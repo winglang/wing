@@ -2751,8 +2751,12 @@
           ]
         },
         {
-          "type": "STRING",
-          "value": "new"
+          "type": "FIELD",
+          "name": "ctor_name",
+          "content": {
+            "type": "STRING",
+            "value": "new"
+          }
         },
         {
           "type": "FIELD",

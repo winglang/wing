@@ -1294,9 +1294,11 @@ impl<'s> Parser<'s> {
 						span: self.node_span(&class_element),
 					});
 
+					let ctor_symb_span = self.node_span(&class_element.child_by_field_name("ctor_name").unwrap());
+
 					if is_inflight {
 						inflight_initializer = Some(FunctionDefinition {
-							name: Some(CLASS_INFLIGHT_INIT_NAME.into()),
+							name: Some(Symbol::new(CLASS_INFLIGHT_INIT_NAME, ctor_symb_span)),
 							body: FunctionBody::Statements(
 								self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Inflight),
 							),
@@ -1312,7 +1314,7 @@ impl<'s> Parser<'s> {
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
-							name: Some(CLASS_INIT_NAME.into()),
+							name: Some(Symbol::new(CLASS_INIT_NAME, ctor_symb_span)),
 							body: FunctionBody::Statements(
 								self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Preflight),
 							),
