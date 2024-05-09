@@ -5,6 +5,17 @@ class C1 {
 // ^ Preflight field "x" is not initialized
 }
 
+class C1_1 {
+  x:num;
+  new() {
+    () => {
+      // This doesn't count as an initialization because it's in a closure that might not be called
+      // and should produce an error.
+      this.x = 1;
+    };
+  }
+}
+
 class C2 {}
 new C2(1);
 //^^^^^^^ Expected 0 argument(s) but got 1
