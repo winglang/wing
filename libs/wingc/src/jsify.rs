@@ -1288,13 +1288,13 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_enum(&self, name: &Symbol, values: &IndexSet<Symbol>) -> CodeMaker {
+	fn jsify_enum(&self, name: &Symbol, values: &IndexMap<Symbol, Option<String>>) -> CodeMaker {
 		let mut code = CodeMaker::with_source(&name.span);
 		let mut value_index = 0;
 
 		code.open("(function (tmp) {");
 
-		for value in values {
+		for value in values.keys() {
 			code.line(new_code!(
 				&value.span,
 				"tmp[\"",

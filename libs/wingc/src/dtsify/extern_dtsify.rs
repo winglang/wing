@@ -198,7 +198,7 @@ impl<'a> ExternDTSifier<'a> {
 		code.open(format!("export enum {} {{", enum_.name.name));
 
 		for (i, variant) in enum_.values.iter().enumerate() {
-			code.line(format!("{variant} = {i},"));
+			code.line(format!("{} = {i},", variant.0));
 		}
 
 		code.close("}");

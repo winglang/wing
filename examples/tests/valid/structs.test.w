@@ -101,3 +101,12 @@ let aNode = Node {val: "someval"};
 let bNode = Node {val: "otherval", next: aNode};
 
 expect.equal(Json.stringify(bNode), "\{\"val\":\"otherval\",\"next\":\{\"val\":\"someval\"\}\}");
+
+// A documented struct (should be parsed without errors)
+/// Struct documentation
+/// blah blah blah
+struct DocumentedStruct {
+    /// Field documentation
+    /// blah blah blah
+    field: str;
+}

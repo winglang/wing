@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\ninflight $inflight_init: inflight (): Bob\n```\n---\n I'm bob the constructor (inflight)"
+range:
+  start:
+    line: 3
+    character: 13
+  end:
+    line: 3
+    character: 16
+

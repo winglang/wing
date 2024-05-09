@@ -410,6 +410,20 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.C5-1.cjs.map
 ```
 
+## inflight.DocClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class DocClass {
+    constructor({  }) {
+    }
+  }
+  return DocClass;
+}
+//# sourceMappingURL=inflight.DocClass-1.cjs.map
+```
+
 ## inflight.Foo-1.cjs
 ```cjs
 "use strict";
@@ -1342,6 +1356,37 @@ class $Root extends $stdlib.std.Resource {
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class DocClass extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.docField = 0;
+      }
+      docMethod() {
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.DocClass-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const DocClassClient = ${DocClass._toInflightType()};
+            const client = new DocClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
           "$inflight_init": [
           ],
         });
