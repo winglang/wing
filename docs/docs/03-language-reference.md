@@ -575,8 +575,7 @@ The following is a list of supported indexable types:
 ### 1.2 Intrinsic Functions
 
 Intrinsic functions are a special call-like expressions built into the Wing compiler with
-the following properties (given an example intrinsic `@x()`):
-- It is not possble to write `let variable = @x;` or otherwise use `@x` as an expression on its own
+the following properties (given an example intrinsic `@x`):
 - `x` is not automatically a symbol that can be referenced
 - The arguments/return types must be representable Wing types, but can be more dynamic than user-defined functions
   - For example, the return type may change between inflight and preflight
@@ -585,6 +584,7 @@ the following properties (given an example intrinsic `@x()`):
 | --------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `@log()`        | logs str                                                                                                                  |
 | `@assert()`     | checks a condition and _throws_ if evaluated to false                                                                     |
+| `@dirname`      | current source directory                                                                                                  |
 | `@unsafeCast()` | cast a value into a different type                                                                                        |
 | `@nodeof()`     | obtain the [tree node](./02-concepts/02-application-tree.md) of a preflight object                                        |
 | `@lift()`       | explicitly qualify a [lift](./02-concepts/01-preflight-and-inflight.md#explicit-lift-qualification) of a preflight object |

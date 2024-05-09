@@ -18,9 +18,8 @@ These are incredibly useful, but their behavior is surprising when to the user t
 
 Introduce a new syntax to reflect these special behaviors.
 
-I propose `@x()` as a "compiler intrinsic", with the following notes:
+I propose `@x` and `@x()` as a "compiler intrinsic", with the following notes:
 - Having an intrinsic called `@x` does not mean that there is a symbol called `x`. Intrinsics are their own separate concept.
-- It will not be possible to write `let variable = @x;` or otherwise use `@x` as an expression on its own, to prevent the impression that this a singular value being referenced
 - While the arguments/return types must be representable wing types, the kind of expressions that can be passed as arguments may have certain restrictions. For example, it would be common to only allow non-interpolated string for certain cases to ensure all information is available statically.
 
 - Why `@`?
