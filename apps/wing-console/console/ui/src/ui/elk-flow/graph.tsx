@@ -55,7 +55,7 @@ export const Graph: FunctionComponent<PropsWithChildren<GraphProps>> = memo(
     return (
       <>
         {createPortal(
-          <div className="absolute pointer-events-none invisible size-0">
+          <div className="fixed pointer-events-none invisible size-0">
             <GraphGenerator elk={elk} edges={edges} onGraph={setGraph}>
               {props.children}
             </GraphGenerator>
