@@ -11,7 +11,7 @@ import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import clsx from "classnames";
 import { type ElkPoint, type LayoutOptions } from "elkjs";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { memo, useCallback, useEffect, useMemo } from "react";
+import { memo, useCallback, useEffect, useId, useMemo } from "react";
 import { useKeyPressEvent } from "react-use";
 
 import { useMap } from "../services/use-map.js";
@@ -536,6 +536,11 @@ const RoundedEdge: FunctionComponent<
       return path;
     }, [additionalPoints]);
 
+    const arrowHeadId = useId();
+    const arrowHeadMarker = useMemo(() => {
+      return `url(#${arrowHeadId})`;
+    }, [arrowHeadId]);
+
     return (
       <svg
         width={graphWidth}
@@ -553,6 +558,19 @@ const RoundedEdge: FunctionComponent<
           "cursor-pointer",
         )}
       >
+        <defs>
+          <marker
+            className="stroke-none fill-slate-500 dark:fill-slate-800"
+            markerWidth="6"
+            markerHeight="4"
+            orient="auto"
+            id={arrowHeadId}
+            refX="4"
+            refY="2"
+          >
+            <path d="M0 0 v4 l5 -2 z" />
+          </marker>
+        </defs>
         <g
           className={clsx(
             "fill-none stroke-1 group pointer-events-auto",
@@ -567,7 +585,11 @@ const RoundedEdge: FunctionComponent<
           transform={`translate(${offsetX} ${offsetY})`}
           onClick={onClick}
         >
-          <path className="stroke-[8] opacity-0" d={d}>
+          <path
+            className="stroke-[8] opacity-0"
+            d={d}
+            markerEnd={arrowHeadMarker}
+          >
             <title>
               {edge.id} (from {edge.sources.join(",")} to{" "}
               {edge.targets.join(",")})
@@ -588,7 +610,7 @@ const RoundedEdge: FunctionComponent<
               {edge.targets.join(",")})
             </title>
           </path>
-          <path d={d} />
+          <path d={d} markerEnd={arrowHeadMarker} />
         </g>
       </svg>
     );
