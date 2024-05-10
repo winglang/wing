@@ -1,4 +1,4 @@
-# [on_message.test.w](../../../../../../examples/tests/sdk_tests/topic/on_message.test.w) | compile | tf-aws
+# [on_message.test.w](../../../../../../tests/sdk_tests/topic/on_message.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

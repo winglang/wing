@@ -1,4 +1,4 @@
-# [pop.test.w](../../../../../../examples/tests/sdk_tests/queue/pop.test.w) | compile | tf-aws
+# [pop.test.w](../../../../../../tests/sdk_tests/queue/pop.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

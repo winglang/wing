@@ -1,4 +1,4 @@
-# [hypot.test.w](../../../../../../examples/tests/sdk_tests/math/hypot.test.w) | compile | tf-aws
+# [hypot.test.w](../../../../../../tests/sdk_tests/math/hypot.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

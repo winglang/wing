@@ -1,4 +1,4 @@
-# [resource_as_inflight_literal.test.w](../../../../../examples/tests/valid/resource_as_inflight_literal.test.w) | test | sim
+# [resource_as_inflight_literal.test.w](../../../../../tests/valid/resource_as_inflight_literal.test.w) | test | sim
 
 ## stdout.log
 ```log

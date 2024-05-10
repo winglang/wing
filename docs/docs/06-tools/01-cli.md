@@ -95,7 +95,7 @@ Tests are written in `test` blocks that contain *inflight code*. In Wing, each t
 against a separate copy of the application being tested.
 
 In the following example
-([test_bucket.test.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.test.w)),
+([test_bucket.test.w](https://github.com/winglang/wing/tree/main/tests/valid/test_bucket.test.w)),
 the application consists of a single `cloud.Bucket` and two tests `"put"` and `"get"`.
 
 ```js

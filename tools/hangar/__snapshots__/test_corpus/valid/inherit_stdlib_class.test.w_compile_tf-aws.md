@@ -1,4 +1,4 @@
-# [inherit_stdlib_class.test.w](../../../../../examples/tests/valid/inherit_stdlib_class.test.w) | compile | tf-aws
+# [inherit_stdlib_class.test.w](../../../../../tests/valid/inherit_stdlib_class.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

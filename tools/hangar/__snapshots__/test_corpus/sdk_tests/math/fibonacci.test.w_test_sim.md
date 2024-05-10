@@ -1,4 +1,4 @@
-# [fibonacci.test.w](../../../../../../examples/tests/sdk_tests/math/fibonacci.test.w) | test | sim
+# [fibonacci.test.w](../../../../../../tests/sdk_tests/math/fibonacci.test.w) | test | sim
 
 ## stdout.log
 ```log

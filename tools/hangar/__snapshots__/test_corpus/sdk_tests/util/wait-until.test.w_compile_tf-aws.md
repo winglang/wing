@@ -1,4 +1,4 @@
-# [wait-until.test.w](../../../../../../examples/tests/sdk_tests/util/wait-until.test.w) | compile | tf-aws
+# [wait-until.test.w](../../../../../../tests/sdk_tests/util/wait-until.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

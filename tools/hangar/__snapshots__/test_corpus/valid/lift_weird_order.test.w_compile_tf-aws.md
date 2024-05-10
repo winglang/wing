@@ -1,4 +1,4 @@
-# [lift_weird_order.test.w](../../../../../examples/tests/valid/lift_weird_order.test.w) | compile | tf-aws
+# [lift_weird_order.test.w](../../../../../tests/valid/lift_weird_order.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

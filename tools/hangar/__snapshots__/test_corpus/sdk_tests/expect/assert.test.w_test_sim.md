@@ -1,4 +1,4 @@
-# [assert.test.w](../../../../../../examples/tests/sdk_tests/expect/assert.test.w) | test | sim
+# [assert.test.w](../../../../../../tests/sdk_tests/expect/assert.test.w) | test | sim
 
 ## stdout.log
 ```log

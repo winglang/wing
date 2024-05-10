@@ -1,4 +1,4 @@
-# [enums.test.w](../../../../../examples/tests/valid/enums.test.w) | compile | tf-aws
+# [enums.test.w](../../../../../tests/valid/enums.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

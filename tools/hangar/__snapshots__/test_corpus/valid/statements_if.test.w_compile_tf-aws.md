@@ -1,4 +1,4 @@
-# [statements_if.test.w](../../../../../examples/tests/valid/statements_if.test.w) | compile | tf-aws
+# [statements_if.test.w](../../../../../tests/valid/statements_if.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

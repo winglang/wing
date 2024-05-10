@@ -5,7 +5,7 @@ import { tmpdir } from "os";
 import { BuiltinPlatform } from "./constants";
 import { compile } from "./compile";
 
-const exampleDir = resolve("../../examples/tests/valid");
+const exampleDir = resolve("../../tests/valid");
 const exampleFilePath = join(exampleDir, "enums.test.w");
 
 export async function generateTmpDir() {

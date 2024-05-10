@@ -1,4 +1,4 @@
-# [bring_local_dir.test.w](../../../../../examples/tests/valid/bring_local_dir.test.w) | compile | tf-aws
+# [bring_local_dir.test.w](../../../../../tests/valid/bring_local_dir.test.w) | compile | tf-aws
 
 ## inflight.Bar-3.cjs
 ```cjs

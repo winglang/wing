@@ -69,7 +69,7 @@ jobs:
         id: setdirs
         shell: bash
         run: | # TODO: skipping std and external folders, when https://github.com/winglang/wing/issues/3168 is resolve- we'll skip only the external folder.
-          dirs=$(ls -d examples/tests/sdk_tests/*/ | sed 's/\/$//' | grep -v "external\|std" | jq -R -s -c 'split("\n")[:-1]')
+          dirs=$(ls -d tests/sdk_tests/*/ | sed 's/\/$//' | grep -v "external\|std" | jq -R -s -c 'split("\n")[:-1]')
           processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
           wrapped_dirs=$(echo $processed_dirs | jq -c .)
           echo "dirs=$wrapped_dirs" >> $GITHUB_OUTPUT
@@ -147,7 +147,7 @@ jobs:
       ########################################################################
       - name: Installing external js modules
         run: |
-          cd examples/tests/sdk_tests
+          cd tests/sdk_tests
           npm install
 
       - name: Configure AWS credentials

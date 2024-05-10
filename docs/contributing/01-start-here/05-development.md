@@ -112,7 +112,7 @@ Now, you can edit a source file anywhere across the stack and run the compiler w
 For example:
 
 ```sh
-pnpm wing -- test examples/tests/valid/captures.test.w
+pnpm wing -- test tests/valid/captures.test.w
 ```
 
 This command runs the full Wing CLI with the given arguments. Turbo will ensure the CLI build is updated.
@@ -156,7 +156,7 @@ pnpm turbo wing:e2e
 
 ### Test Meta-Comments
 
-In your wing files in `examples/tests/valid`, you can add a specially formatted comment to add additional information for hangar.
+In your wing files in `tests/valid`, you can add a specially formatted comment to add additional information for hangar.
 Inside this comment, a yaml block will be read and used for several purposes.
 
 Example:
@@ -175,7 +175,7 @@ This is useful if, for example, the test requires docker. In our CI only linux s
 
 ### Benchmarks
 
-Benchmark files are located in `examples/tests/valid/benchmarks`. To run the benchmarks, run the following command from anywhere in the monorepo:
+Benchmark files are located in `tests/valid/benchmarks`. To run the benchmarks, run the following command from anywhere in the monorepo:
 
 ```sh
 pnpm turbo wing:bench
@@ -220,7 +220,7 @@ The [insta](https://marketplace.visualstudio.com/items?itemName=mitsuhiko.insta)
 To debug the Rust compiler on VSCode, first you need to install the [CodeLLDB extension](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb).<br/>
 Next, you can use the `Debug Wing Compiler` launch configuration available on our [launch.json](https://github.com/winglang/wing/blob/main/.vscode/launch.json).
 
-Open the `.w` file you wish to debug compilation for (e.g. `${workspaceFolder}/examples/tests/valid/hello.w`) and hit F5 to start debugging.
+Open the `.w` file you wish to debug compilation for (e.g. `${workspaceFolder}/tests/valid/hello.w`) and hit F5 to start debugging.
 
 ## How do I make changes to the Wing grammar?
 

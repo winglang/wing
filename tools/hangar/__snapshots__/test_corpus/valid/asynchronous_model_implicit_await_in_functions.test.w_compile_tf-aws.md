@@ -1,4 +1,4 @@
-# [asynchronous_model_implicit_await_in_functions.test.w](../../../../../examples/tests/valid/asynchronous_model_implicit_await_in_functions.test.w) | compile | tf-aws
+# [asynchronous_model_implicit_await_in_functions.test.w](../../../../../tests/valid/asynchronous_model_implicit_await_in_functions.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

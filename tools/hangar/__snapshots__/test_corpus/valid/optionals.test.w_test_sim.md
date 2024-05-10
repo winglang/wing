@@ -1,4 +1,4 @@
-# [optionals.test.w](../../../../../examples/tests/valid/optionals.test.w) | test | sim
+# [optionals.test.w](../../../../../tests/valid/optionals.test.w) | test | sim
 
 ## stdout.log
 ```log

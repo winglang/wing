@@ -1,4 +1,4 @@
-# [fibonacci.test.w](../../../../../../examples/tests/sdk_tests/math/fibonacci.test.w) | compile | tf-aws
+# [fibonacci.test.w](../../../../../../tests/sdk_tests/math/fibonacci.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

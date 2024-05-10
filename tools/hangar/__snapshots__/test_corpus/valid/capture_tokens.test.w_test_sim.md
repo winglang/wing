@@ -1,4 +1,4 @@
-# [capture_tokens.test.w](../../../../../examples/tests/valid/capture_tokens.test.w) | test | sim
+# [capture_tokens.test.w](../../../../../tests/valid/capture_tokens.test.w) | test | sim
 
 ## stdout.log
 ```log

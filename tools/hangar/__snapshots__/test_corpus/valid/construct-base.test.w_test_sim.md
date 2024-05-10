@@ -1,4 +1,4 @@
-# [construct-base.test.w](../../../../../examples/tests/valid/construct-base.test.w) | test | sim
+# [construct-base.test.w](../../../../../tests/valid/construct-base.test.w) | test | sim
 
 ## stdout.log
 ```log

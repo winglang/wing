@@ -1,4 +1,4 @@
-# [enums.test.w](../../../../../examples/tests/valid/enums.test.w) | test | sim
+# [enums.test.w](../../../../../tests/valid/enums.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [capture_mutables.test.w](../../../../../examples/tests/valid/capture_mutables.test.w) | compile | tf-aws
+# [capture_mutables.test.w](../../../../../tests/valid/capture_mutables.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

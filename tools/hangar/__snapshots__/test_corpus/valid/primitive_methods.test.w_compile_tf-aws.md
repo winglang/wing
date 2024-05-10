@@ -1,4 +1,4 @@
-# [primitive_methods.test.w](../../../../../examples/tests/valid/primitive_methods.test.w) | compile | tf-aws
+# [primitive_methods.test.w](../../../../../tests/valid/primitive_methods.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

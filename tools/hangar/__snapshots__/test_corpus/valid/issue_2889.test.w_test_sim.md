@@ -1,4 +1,4 @@
-# [issue_2889.test.w](../../../../../examples/tests/valid/issue_2889.test.w) | test | sim
+# [issue_2889.test.w](../../../../../tests/valid/issue_2889.test.w) | test | sim
 
 ## stdout.log
 ```log

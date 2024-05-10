@@ -1,4 +1,4 @@
-# [debug_env.test.w](../../../../../examples/tests/valid/debug_env.test.w) | compile | tf-aws
+# [debug_env.test.w](../../../../../tests/valid/debug_env.test.w) | compile | tf-aws
 
 ## inflight.A-1.cjs
 ```cjs

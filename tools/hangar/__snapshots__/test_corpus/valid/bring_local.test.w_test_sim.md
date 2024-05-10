@@ -1,4 +1,4 @@
-# [bring_local.test.w](../../../../../examples/tests/valid/bring_local.test.w) | test | sim
+# [bring_local.test.w](../../../../../tests/valid/bring_local.test.w) | test | sim
 
 ## stdout.log
 ```log

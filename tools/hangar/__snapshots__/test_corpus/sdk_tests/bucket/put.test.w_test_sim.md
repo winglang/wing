@@ -1,4 +1,4 @@
-# [put.test.w](../../../../../../examples/tests/sdk_tests/bucket/put.test.w) | test | sim
+# [put.test.w](../../../../../../tests/sdk_tests/bucket/put.test.w) | test | sim
 
 ## stdout.log
 ```log

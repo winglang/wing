@@ -1,4 +1,4 @@
-# [sqrt.test.w](../../../../../../examples/tests/sdk_tests/math/sqrt.test.w) | test | sim
+# [sqrt.test.w](../../../../../../tests/sdk_tests/math/sqrt.test.w) | test | sim
 
 ## stdout.log
 ```log

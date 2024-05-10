@@ -1,4 +1,4 @@
-# [json_bucket.test.w](../../../../../examples/tests/valid/json_bucket.test.w) | compile | tf-aws
+# [json_bucket.test.w](../../../../../tests/valid/json_bucket.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

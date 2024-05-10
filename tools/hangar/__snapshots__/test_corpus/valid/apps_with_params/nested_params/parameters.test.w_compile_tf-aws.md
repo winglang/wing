@@ -1,4 +1,4 @@
-# [parameters.test.w](../../../../../../../examples/tests/valid/apps_with_params/nested_params/parameters.test.w) | compile | tf-aws
+# [parameters.test.w](../../../../../../../tests/valid/apps_with_params/nested_params/parameters.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

@@ -1,4 +1,4 @@
-# [inflight_class_outside_inflight_closure.test.w](../../../../../examples/tests/valid/inflight_class_outside_inflight_closure.test.w) | test | sim
+# [inflight_class_outside_inflight_closure.test.w](../../../../../tests/valid/inflight_class_outside_inflight_closure.test.w) | test | sim
 
 ## stdout.log
 ```log

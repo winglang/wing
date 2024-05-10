@@ -1,4 +1,4 @@
-# [inflight_class_capture_preflight_object.test.w](../../../../../examples/tests/valid/inflight_class_capture_preflight_object.test.w) | compile | tf-aws
+# [inflight_class_capture_preflight_object.test.w](../../../../../tests/valid/inflight_class_capture_preflight_object.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

@@ -1,4 +1,4 @@
-# [yaml.test.w](../../../../../../examples/tests/sdk_tests/fs/yaml.test.w) | test | sim
+# [yaml.test.w](../../../../../../tests/sdk_tests/fs/yaml.test.w) | test | sim
 
 ## stdout.log
 ```log

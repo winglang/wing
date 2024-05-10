@@ -1,4 +1,4 @@
-# [debug_env.test.w](../../../../../examples/tests/valid/debug_env.test.w) | test | sim
+# [debug_env.test.w](../../../../../tests/valid/debug_env.test.w) | test | sim
 
 ## stderr.log
 ```log

@@ -1,4 +1,4 @@
-# [bool.test.w](../../../../../../examples/tests/sdk_tests/std/bool.test.w) | compile | tf-aws
+# [bool.test.w](../../../../../../tests/sdk_tests/std/bool.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

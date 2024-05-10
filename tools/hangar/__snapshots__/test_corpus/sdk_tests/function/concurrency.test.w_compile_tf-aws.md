@@ -1,4 +1,4 @@
-# [concurrency.test.w](../../../../../../examples/tests/sdk_tests/function/concurrency.test.w) | compile | tf-aws
+# [concurrency.test.w](../../../../../../tests/sdk_tests/function/concurrency.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

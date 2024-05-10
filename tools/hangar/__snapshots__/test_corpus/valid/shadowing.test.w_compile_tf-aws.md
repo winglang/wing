@@ -1,4 +1,4 @@
-# [shadowing.test.w](../../../../../examples/tests/valid/shadowing.test.w) | compile | tf-aws
+# [shadowing.test.w](../../../../../tests/valid/shadowing.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

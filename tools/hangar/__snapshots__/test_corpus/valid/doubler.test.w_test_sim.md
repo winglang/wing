@@ -1,4 +1,4 @@
-# [doubler.test.w](../../../../../examples/tests/valid/doubler.test.w) | test | sim
+# [doubler.test.w](../../../../../tests/valid/doubler.test.w) | test | sim
 
 ## stdout.log
 ```log

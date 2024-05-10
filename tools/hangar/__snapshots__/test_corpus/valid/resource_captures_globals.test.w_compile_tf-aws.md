@@ -1,4 +1,4 @@
-# [resource_captures_globals.test.w](../../../../../examples/tests/valid/resource_captures_globals.test.w) | compile | tf-aws
+# [resource_captures_globals.test.w](../../../../../tests/valid/resource_captures_globals.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

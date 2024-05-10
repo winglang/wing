@@ -1,4 +1,4 @@
-# [retention_period.main.w](../../../../../../examples/tests/sdk_tests/queue/retention_period.main.w) | compile | tf-aws
+# [retention_period.main.w](../../../../../../tests/sdk_tests/queue/retention_period.main.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

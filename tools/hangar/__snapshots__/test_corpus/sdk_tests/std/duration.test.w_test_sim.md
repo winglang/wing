@@ -1,4 +1,4 @@
-# [duration.test.w](../../../../../../examples/tests/sdk_tests/std/duration.test.w) | test | sim
+# [duration.test.w](../../../../../../tests/sdk_tests/std/duration.test.w) | test | sim
 
 ## stdout.log
 ```log

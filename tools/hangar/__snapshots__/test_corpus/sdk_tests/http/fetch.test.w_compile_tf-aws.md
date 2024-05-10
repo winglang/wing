@@ -1,4 +1,4 @@
-# [fetch.test.w](../../../../../../examples/tests/sdk_tests/http/fetch.test.w) | compile | tf-aws
+# [fetch.test.w](../../../../../../tests/sdk_tests/http/fetch.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

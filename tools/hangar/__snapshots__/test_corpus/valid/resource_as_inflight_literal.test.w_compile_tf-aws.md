@@ -1,4 +1,4 @@
-# [resource_as_inflight_literal.test.w](../../../../../examples/tests/valid/resource_as_inflight_literal.test.w) | compile | tf-aws
+# [resource_as_inflight_literal.test.w](../../../../../tests/valid/resource_as_inflight_literal.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

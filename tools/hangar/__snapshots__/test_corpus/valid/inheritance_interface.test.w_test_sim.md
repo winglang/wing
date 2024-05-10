@@ -1,4 +1,4 @@
-# [inheritance_interface.test.w](../../../../../examples/tests/valid/inheritance_interface.test.w) | test | sim
+# [inheritance_interface.test.w](../../../../../tests/valid/inheritance_interface.test.w) | test | sim
 
 ## stdout.log
 ```log

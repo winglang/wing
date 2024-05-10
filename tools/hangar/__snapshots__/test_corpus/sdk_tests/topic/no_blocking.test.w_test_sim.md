@@ -1,4 +1,4 @@
-# [no_blocking.test.w](../../../../../../examples/tests/sdk_tests/topic/no_blocking.test.w) | test | sim
+# [no_blocking.test.w](../../../../../../tests/sdk_tests/topic/no_blocking.test.w) | test | sim
 
 ## stdout.log
 ```log

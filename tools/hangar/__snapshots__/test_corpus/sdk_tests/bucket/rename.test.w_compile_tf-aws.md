@@ -1,4 +1,4 @@
-# [rename.test.w](../../../../../../examples/tests/sdk_tests/bucket/rename.test.w) | compile | tf-aws
+# [rename.test.w](../../../../../../tests/sdk_tests/bucket/rename.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

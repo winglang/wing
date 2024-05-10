@@ -1,4 +1,4 @@
-# [cot.test.w](../../../../../../examples/tests/sdk_tests/math/cot.test.w) | test | sim
+# [cot.test.w](../../../../../../tests/sdk_tests/math/cot.test.w) | test | sim
 
 ## stdout.log
 ```log

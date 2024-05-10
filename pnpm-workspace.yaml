@@ -7,6 +7,6 @@ packages:
   - "apps/wing-console/packages/*"
   - "apps/wing-console/console/*"
   - "apps/wing-console/tools/*"
-  - "examples/tests/*"
+  - "tests/*"
   - "examples/*"
   - "apps/jsii-docgen/test/__fixtures__/**"

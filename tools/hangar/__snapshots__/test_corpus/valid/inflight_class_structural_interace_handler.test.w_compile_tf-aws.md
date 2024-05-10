@@ -1,4 +1,4 @@
-# [inflight_class_structural_interace_handler.test.w](../../../../../examples/tests/valid/inflight_class_structural_interace_handler.test.w) | compile | tf-aws
+# [inflight_class_structural_interace_handler.test.w](../../../../../tests/valid/inflight_class_structural_interace_handler.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

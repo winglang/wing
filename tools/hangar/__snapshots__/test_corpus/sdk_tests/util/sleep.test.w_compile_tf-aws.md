@@ -1,4 +1,4 @@
-# [sleep.test.w](../../../../../../examples/tests/sdk_tests/util/sleep.test.w) | compile | tf-aws
+# [sleep.test.w](../../../../../../tests/sdk_tests/util/sleep.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

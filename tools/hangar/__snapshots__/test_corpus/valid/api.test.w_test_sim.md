@@ -1,4 +1,4 @@
-# [api.test.w](../../../../../examples/tests/valid/api.test.w) | test | sim
+# [api.test.w](../../../../../tests/valid/api.test.w) | test | sim
 
 ## stdout.log
 ```log

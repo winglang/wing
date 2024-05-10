@@ -1,4 +1,4 @@
-# [stateful.test.w](../../../../../../examples/tests/sdk_tests/service/stateful.test.w) | test | sim
+# [stateful.test.w](../../../../../../tests/sdk_tests/service/stateful.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [parameters.test.w](../../../../../../examples/tests/valid/wing_parameters/parameters.test.w) | compile | tf-aws
+# [parameters.test.w](../../../../../../tests/valid/wing_parameters/parameters.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

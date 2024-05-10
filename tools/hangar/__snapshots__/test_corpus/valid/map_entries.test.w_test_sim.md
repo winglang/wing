@@ -1,4 +1,4 @@
-# [map_entries.test.w](../../../../../examples/tests/valid/map_entries.test.w) | test | sim
+# [map_entries.test.w](../../../../../tests/valid/map_entries.test.w) | test | sim
 
 ## stdout.log
 ```log

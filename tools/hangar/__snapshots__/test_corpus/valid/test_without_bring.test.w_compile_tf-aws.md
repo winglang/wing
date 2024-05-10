@@ -1,4 +1,4 @@
-# [test_without_bring.test.w](../../../../../examples/tests/valid/test_without_bring.test.w) | compile | tf-aws
+# [test_without_bring.test.w](../../../../../tests/valid/test_without_bring.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

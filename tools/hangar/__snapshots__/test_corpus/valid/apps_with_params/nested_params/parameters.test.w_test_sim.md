@@ -1,4 +1,4 @@
-# [parameters.test.w](../../../../../../../examples/tests/valid/apps_with_params/nested_params/parameters.test.w) | test | sim
+# [parameters.test.w](../../../../../../../tests/valid/apps_with_params/nested_params/parameters.test.w) | test | sim
 
 ## stdout.log
 ```log

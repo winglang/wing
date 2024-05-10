@@ -1,4 +1,4 @@
-# [call_static_of_myself.test.w](../../../../../examples/tests/valid/call_static_of_myself.test.w) | test | sim
+# [call_static_of_myself.test.w](../../../../../tests/valid/call_static_of_myself.test.w) | test | sim
 
 ## stdout.log
 ```log

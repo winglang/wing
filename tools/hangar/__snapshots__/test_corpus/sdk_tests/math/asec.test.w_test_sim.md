@@ -1,4 +1,4 @@
-# [asec.test.w](../../../../../../examples/tests/sdk_tests/math/asec.test.w) | test | sim
+# [asec.test.w](../../../../../../tests/sdk_tests/math/asec.test.w) | test | sim
 
 ## stdout.log
 ```log

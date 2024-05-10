@@ -1,4 +1,4 @@
-# [struct_from_json.test.w](../../../../../examples/tests/valid/struct_from_json.test.w) | compile | tf-aws
+# [struct_from_json.test.w](../../../../../tests/valid/struct_from_json.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-2.cjs
 ```cjs

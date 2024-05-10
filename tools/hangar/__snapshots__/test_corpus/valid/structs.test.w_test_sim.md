@@ -1,4 +1,4 @@
-# [structs.test.w](../../../../../examples/tests/valid/structs.test.w) | test | sim
+# [structs.test.w](../../../../../tests/valid/structs.test.w) | test | sim
 
 ## stdout.log
 ```log

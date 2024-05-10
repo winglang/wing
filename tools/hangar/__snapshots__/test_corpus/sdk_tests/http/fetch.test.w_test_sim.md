@@ -1,4 +1,4 @@
-# [fetch.test.w](../../../../../../examples/tests/sdk_tests/http/fetch.test.w) | test | sim
+# [fetch.test.w](../../../../../../tests/sdk_tests/http/fetch.test.w) | test | sim
 
 ## stdout.log
 ```log

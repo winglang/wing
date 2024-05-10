@@ -1,4 +1,4 @@
-# [map_entries.test.w](../../../../../examples/tests/valid/map_entries.test.w) | compile | tf-aws
+# [map_entries.test.w](../../../../../tests/valid/map_entries.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

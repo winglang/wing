@@ -1,4 +1,4 @@
-# [execute_after.test.w](../../../../../../examples/tests/sdk_tests/on_deploy/execute_after.test.w) | compile | tf-aws
+# [execute_after.test.w](../../../../../../tests/sdk_tests/on_deploy/execute_after.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

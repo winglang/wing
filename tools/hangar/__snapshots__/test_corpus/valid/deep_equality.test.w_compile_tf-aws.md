@@ -1,4 +1,4 @@
-# [deep_equality.test.w](../../../../../examples/tests/valid/deep_equality.test.w) | compile | tf-aws
+# [deep_equality.test.w](../../../../../tests/valid/deep_equality.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

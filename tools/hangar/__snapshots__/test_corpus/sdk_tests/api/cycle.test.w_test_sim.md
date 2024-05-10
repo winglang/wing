@@ -1,4 +1,4 @@
-# [cycle.test.w](../../../../../../examples/tests/sdk_tests/api/cycle.test.w) | test | sim
+# [cycle.test.w](../../../../../../tests/sdk_tests/api/cycle.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [anon_function.test.w](../../../../../examples/tests/valid/anon_function.test.w) | test | sim
+# [anon_function.test.w](../../../../../tests/valid/anon_function.test.w) | test | sim
 
 ## stdout.log
 ```log

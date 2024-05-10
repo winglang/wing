@@ -1,4 +1,4 @@
-# [implicit_std.test.w](../../../../../examples/tests/valid/implicit_std.test.w) | test | sim
+# [implicit_std.test.w](../../../../../tests/valid/implicit_std.test.w) | test | sim
 
 ## stdout.log
 ```log

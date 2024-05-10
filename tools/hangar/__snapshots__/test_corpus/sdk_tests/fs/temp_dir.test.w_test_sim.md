@@ -1,4 +1,4 @@
-# [temp_dir.test.w](../../../../../../examples/tests/sdk_tests/fs/temp_dir.test.w) | test | sim
+# [temp_dir.test.w](../../../../../../tests/sdk_tests/fs/temp_dir.test.w) | test | sim
 
 ## stdout.log
 ```log

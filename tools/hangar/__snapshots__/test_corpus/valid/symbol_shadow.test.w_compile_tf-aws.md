@@ -1,4 +1,4 @@
-# [symbol_shadow.test.w](../../../../../examples/tests/valid/symbol_shadow.test.w) | compile | tf-aws
+# [symbol_shadow.test.w](../../../../../tests/valid/symbol_shadow.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

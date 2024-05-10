@@ -1,4 +1,4 @@
-# [euler.test.w](../../../../../../examples/tests/sdk_tests/math/euler.test.w) | test | sim
+# [euler.test.w](../../../../../../tests/sdk_tests/math/euler.test.w) | test | sim
 
 ## stdout.log
 ```log

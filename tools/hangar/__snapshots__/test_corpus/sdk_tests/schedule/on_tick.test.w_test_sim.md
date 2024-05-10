@@ -1,4 +1,4 @@
-# [on_tick.test.w](../../../../../../examples/tests/sdk_tests/schedule/on_tick.test.w) | test | sim
+# [on_tick.test.w](../../../../../../tests/sdk_tests/schedule/on_tick.test.w) | test | sim
 
 ## stdout.log
 ```log

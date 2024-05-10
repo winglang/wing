@@ -1,4 +1,4 @@
-# [symbol_shadow.test.w](../../../../../examples/tests/valid/symbol_shadow.test.w) | test | sim
+# [symbol_shadow.test.w](../../../../../tests/valid/symbol_shadow.test.w) | test | sim
 
 ## stdout.log
 ```log

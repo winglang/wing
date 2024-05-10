@@ -1,4 +1,4 @@
-# [lift_shared_resource.test.w](../../../../../examples/tests/valid/lift_shared_resource.test.w) | compile | tf-aws
+# [lift_shared_resource.test.w](../../../../../tests/valid/lift_shared_resource.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

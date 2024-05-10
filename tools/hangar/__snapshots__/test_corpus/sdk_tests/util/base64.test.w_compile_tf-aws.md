@@ -1,4 +1,4 @@
-# [base64.test.w](../../../../../../examples/tests/sdk_tests/util/base64.test.w) | compile | tf-aws
+# [base64.test.w](../../../../../../tests/sdk_tests/util/base64.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

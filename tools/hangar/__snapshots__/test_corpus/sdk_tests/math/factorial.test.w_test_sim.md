@@ -1,4 +1,4 @@
-# [factorial.test.w](../../../../../../examples/tests/sdk_tests/math/factorial.test.w) | test | sim
+# [factorial.test.w](../../../../../../tests/sdk_tests/math/factorial.test.w) | test | sim
 
 ## stdout.log
 ```log

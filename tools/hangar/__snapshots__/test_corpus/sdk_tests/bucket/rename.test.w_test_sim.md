@@ -1,4 +1,4 @@
-# [rename.test.w](../../../../../../examples/tests/sdk_tests/bucket/rename.test.w) | test | sim
+# [rename.test.w](../../../../../../tests/sdk_tests/bucket/rename.test.w) | test | sim
 
 ## stdout.log
 ```log

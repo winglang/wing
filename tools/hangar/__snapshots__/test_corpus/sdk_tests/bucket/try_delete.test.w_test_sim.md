@@ -1,4 +1,4 @@
-# [try_delete.test.w](../../../../../../examples/tests/sdk_tests/bucket/try_delete.test.w) | test | sim
+# [try_delete.test.w](../../../../../../tests/sdk_tests/bucket/try_delete.test.w) | test | sim
 
 ## stdout.log
 ```log

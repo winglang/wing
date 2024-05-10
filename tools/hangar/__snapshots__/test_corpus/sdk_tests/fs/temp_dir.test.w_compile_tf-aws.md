@@ -1,4 +1,4 @@
-# [temp_dir.test.w](../../../../../../examples/tests/sdk_tests/fs/temp_dir.test.w) | compile | tf-aws
+# [temp_dir.test.w](../../../../../../tests/sdk_tests/fs/temp_dir.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

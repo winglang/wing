@@ -1,4 +1,4 @@
-# [minimal.test.w](../../../../../../examples/tests/sdk_tests/service/minimal.test.w) | test | sim
+# [minimal.test.w](../../../../../../tests/sdk_tests/service/minimal.test.w) | test | sim
 
 ## stdout.log
 ```log

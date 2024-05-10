@@ -1,4 +1,4 @@
-# [struct.test.w](../../../../../../examples/tests/sdk_tests/std/struct.test.w) | compile | tf-aws
+# [struct.test.w](../../../../../../tests/sdk_tests/std/struct.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

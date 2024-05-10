@@ -1,4 +1,4 @@
-# [spawn.test.w](../../../../../../examples/tests/sdk_tests/util/spawn.test.w) | test | sim
+# [spawn.test.w](../../../../../../tests/sdk_tests/util/spawn.test.w) | test | sim
 
 ## stdout.log
 ```log

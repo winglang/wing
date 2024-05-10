@@ -1,4 +1,4 @@
-# [tau.test.w](../../../../../../examples/tests/sdk_tests/math/tau.test.w) | test | sim
+# [tau.test.w](../../../../../../tests/sdk_tests/math/tau.test.w) | test | sim
 
 ## stdout.log
 ```log

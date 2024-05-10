@@ -1,4 +1,4 @@
-# [shadowing.test.w](../../../../../examples/tests/valid/shadowing.test.w) | test | sim
+# [shadowing.test.w](../../../../../tests/valid/shadowing.test.w) | test | sim
 
 ## stdout.log
 ```log

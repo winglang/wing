@@ -1,4 +1,4 @@
-# [patch.test.w](../../../../../../examples/tests/sdk_tests/api/patch.test.w) | compile | tf-aws
+# [patch.test.w](../../../../../../tests/sdk_tests/api/patch.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

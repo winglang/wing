@@ -1,4 +1,4 @@
-# [store.w](../../../../../examples/tests/valid/store.w) | compile | tf-aws
+# [store.w](../../../../../tests/valid/store.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

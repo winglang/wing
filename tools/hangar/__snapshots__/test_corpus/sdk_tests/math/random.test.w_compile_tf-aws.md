@@ -1,4 +1,4 @@
-# [random.test.w](../../../../../../examples/tests/sdk_tests/math/random.test.w) | compile | tf-aws
+# [random.test.w](../../../../../../tests/sdk_tests/math/random.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

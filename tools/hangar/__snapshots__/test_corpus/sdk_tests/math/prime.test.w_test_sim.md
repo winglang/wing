@@ -1,4 +1,4 @@
-# [prime.test.w](../../../../../../examples/tests/sdk_tests/math/prime.test.w) | test | sim
+# [prime.test.w](../../../../../../tests/sdk_tests/math/prime.test.w) | test | sim
 
 ## stdout.log
 ```log

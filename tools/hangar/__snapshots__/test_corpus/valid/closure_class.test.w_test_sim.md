@@ -1,4 +1,4 @@
-# [closure_class.test.w](../../../../../examples/tests/valid/closure_class.test.w) | test | sim
+# [closure_class.test.w](../../../../../tests/valid/closure_class.test.w) | test | sim
 
 ## stdout.log
 ```log

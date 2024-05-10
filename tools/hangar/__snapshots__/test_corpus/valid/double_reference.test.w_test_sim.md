@@ -1,4 +1,4 @@
-# [double_reference.test.w](../../../../../examples/tests/valid/double_reference.test.w) | test | sim
+# [double_reference.test.w](../../../../../tests/valid/double_reference.test.w) | test | sim
 
 ## stdout.log
 ```log

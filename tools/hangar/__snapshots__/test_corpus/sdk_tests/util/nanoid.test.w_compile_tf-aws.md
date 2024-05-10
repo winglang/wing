@@ -1,4 +1,4 @@
-# [nanoid.test.w](../../../../../../examples/tests/sdk_tests/util/nanoid.test.w) | compile | tf-aws
+# [nanoid.test.w](../../../../../../tests/sdk_tests/util/nanoid.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

@@ -1,4 +1,4 @@
-# [std_containers.test.w](../../../../../examples/tests/valid/std_containers.test.w) | compile | tf-aws
+# [std_containers.test.w](../../../../../tests/valid/std_containers.test.w) | compile | tf-aws
 
 ## inflight.Animal-1.cjs
 ```cjs

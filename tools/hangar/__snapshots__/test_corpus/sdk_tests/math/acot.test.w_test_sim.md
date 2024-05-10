@@ -1,4 +1,4 @@
-# [acot.test.w](../../../../../../examples/tests/sdk_tests/math/acot.test.w) | test | sim
+# [acot.test.w](../../../../../../tests/sdk_tests/math/acot.test.w) | test | sim
 
 ## stdout.log
 ```log

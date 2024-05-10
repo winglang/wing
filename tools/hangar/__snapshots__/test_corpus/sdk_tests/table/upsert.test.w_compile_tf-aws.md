@@ -1,4 +1,4 @@
-# [upsert.test.w](../../../../../../examples/tests/sdk_tests/table/upsert.test.w) | compile | tf-aws
+# [upsert.test.w](../../../../../../tests/sdk_tests/table/upsert.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

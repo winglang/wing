@@ -1,4 +1,4 @@
-# [redis.test.w](../../../../../examples/tests/valid/redis.test.w) | test | sim
+# [redis.test.w](../../../../../tests/valid/redis.test.w) | test | sim
 
 ## stdout.log
 ```log

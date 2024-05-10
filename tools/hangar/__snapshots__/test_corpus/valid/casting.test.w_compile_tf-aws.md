@@ -1,4 +1,4 @@
-# [casting.test.w](../../../../../examples/tests/valid/casting.test.w) | compile | tf-aws
+# [casting.test.w](../../../../../tests/valid/casting.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

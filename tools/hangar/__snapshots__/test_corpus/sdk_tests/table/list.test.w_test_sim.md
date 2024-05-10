@@ -1,4 +1,4 @@
-# [list.test.w](../../../../../../examples/tests/sdk_tests/table/list.test.w) | test | sim
+# [list.test.w](../../../../../../tests/sdk_tests/table/list.test.w) | test | sim
 
 ## stdout.log
 ```log

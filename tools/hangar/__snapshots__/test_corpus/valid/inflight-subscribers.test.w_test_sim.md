@@ -1,4 +1,4 @@
-# [inflight-subscribers.test.w](../../../../../examples/tests/valid/inflight-subscribers.test.w) | test | sim
+# [inflight-subscribers.test.w](../../../../../tests/valid/inflight-subscribers.test.w) | test | sim
 
 ## stdout.log
 ```log

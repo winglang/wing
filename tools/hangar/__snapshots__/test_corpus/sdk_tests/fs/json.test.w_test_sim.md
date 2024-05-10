@@ -1,4 +1,4 @@
-# [json.test.w](../../../../../../examples/tests/sdk_tests/fs/json.test.w) | test | sim
+# [json.test.w](../../../../../../tests/sdk_tests/fs/json.test.w) | test | sim
 
 ## stdout.log
 ```log

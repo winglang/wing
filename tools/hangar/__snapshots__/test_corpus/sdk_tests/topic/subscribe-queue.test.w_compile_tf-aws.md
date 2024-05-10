@@ -1,4 +1,4 @@
-# [subscribe-queue.test.w](../../../../../../examples/tests/sdk_tests/topic/subscribe-queue.test.w) | compile | tf-aws
+# [subscribe-queue.test.w](../../../../../../tests/sdk_tests/topic/subscribe-queue.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

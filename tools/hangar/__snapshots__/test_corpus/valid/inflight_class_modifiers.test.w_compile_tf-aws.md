@@ -1,4 +1,4 @@
-# [inflight_class_modifiers.test.w](../../../../../examples/tests/valid/inflight_class_modifiers.test.w) | compile | tf-aws
+# [inflight_class_modifiers.test.w](../../../../../tests/valid/inflight_class_modifiers.test.w) | compile | tf-aws
 
 ## inflight.C-1.cjs
 ```cjs

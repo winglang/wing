@@ -1,4 +1,4 @@
-# [phase_independent_method_on_string.test.w](../../../../../examples/tests/valid/phase_independent_method_on_string.test.w) | compile | tf-aws
+# [phase_independent_method_on_string.test.w](../../../../../tests/valid/phase_independent_method_on_string.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

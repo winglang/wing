@@ -1,4 +1,4 @@
-# [struct_from_json.test.w](../../../../../examples/tests/valid/struct_from_json.test.w) | test | sim
+# [struct_from_json.test.w](../../../../../tests/valid/struct_from_json.test.w) | test | sim
 
 ## stdout.log
 ```log

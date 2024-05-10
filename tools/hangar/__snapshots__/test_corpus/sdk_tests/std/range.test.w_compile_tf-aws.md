@@ -1,4 +1,4 @@
-# [range.test.w](../../../../../../examples/tests/sdk_tests/std/range.test.w) | compile | tf-aws
+# [range.test.w](../../../../../../tests/sdk_tests/std/range.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

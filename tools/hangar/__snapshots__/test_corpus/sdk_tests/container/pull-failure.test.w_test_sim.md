@@ -1,4 +1,4 @@
-# [pull-failure.test.w](../../../../../../examples/tests/sdk_tests/container/pull-failure.test.w) | test | sim
+# [pull-failure.test.w](../../../../../../tests/sdk_tests/container/pull-failure.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [react-app.test.w](../../../../../../examples/tests/sdk_tests/website/react-app.test.w) | test | sim
+# [react-app.test.w](../../../../../../tests/sdk_tests/website/react-app.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [extern_implementation.test.w](../../../../../examples/tests/valid/extern_implementation.test.w) | compile | tf-aws
+# [extern_implementation.test.w](../../../../../tests/valid/extern_implementation.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

@@ -1,4 +1,4 @@
-# [empty-actions.test.w](../../../../../../examples/tests/sdk_tests/misc/empty-actions.test.w) | compile | tf-aws
+# [empty-actions.test.w](../../../../../../tests/sdk_tests/misc/empty-actions.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

@@ -1,4 +1,4 @@
-# [statements_if.test.w](../../../../../examples/tests/valid/statements_if.test.w) | test | sim
+# [statements_if.test.w](../../../../../tests/valid/statements_if.test.w) | test | sim
 
 ## stdout.log
 ```log

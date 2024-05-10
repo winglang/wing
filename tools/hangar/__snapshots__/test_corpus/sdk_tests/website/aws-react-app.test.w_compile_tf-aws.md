@@ -1,4 +1,4 @@
-# [aws-react-app.test.w](../../../../../../examples/tests/sdk_tests/website/aws-react-app.test.w) | compile | tf-aws
+# [aws-react-app.test.w](../../../../../../tests/sdk_tests/website/aws-react-app.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

@@ -1,4 +1,4 @@
-# [explicit_lift_qualification.test.w](../../../../../examples/tests/valid/explicit_lift_qualification.test.w) | test | sim
+# [explicit_lift_qualification.test.w](../../../../../tests/valid/explicit_lift_qualification.test.w) | test | sim
 
 ## stdout.log
 ```log

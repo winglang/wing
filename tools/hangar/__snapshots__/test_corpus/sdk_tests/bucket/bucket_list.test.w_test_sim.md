@@ -1,4 +1,4 @@
-# [bucket_list.test.w](../../../../../../examples/tests/sdk_tests/bucket/bucket_list.test.w) | test | sim
+# [bucket_list.test.w](../../../../../../tests/sdk_tests/bucket/bucket_list.test.w) | test | sim
 
 ## stdout.log
 ```log

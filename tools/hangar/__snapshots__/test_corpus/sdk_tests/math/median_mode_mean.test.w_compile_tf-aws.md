@@ -1,4 +1,4 @@
-# [median_mode_mean.test.w](../../../../../../examples/tests/sdk_tests/math/median_mode_mean.test.w) | compile | tf-aws
+# [median_mode_mean.test.w](../../../../../../tests/sdk_tests/math/median_mode_mean.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

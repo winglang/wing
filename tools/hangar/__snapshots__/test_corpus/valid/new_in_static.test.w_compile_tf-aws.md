@@ -1,4 +1,4 @@
-# [new_in_static.test.w](../../../../../examples/tests/valid/new_in_static.test.w) | compile | tf-aws
+# [new_in_static.test.w](../../../../../tests/valid/new_in_static.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-2.cjs
 ```cjs

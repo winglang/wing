@@ -1,4 +1,4 @@
-# [purge.test.w](../../../../../../examples/tests/sdk_tests/queue/purge.test.w) | compile | tf-aws
+# [purge.test.w](../../../../../../tests/sdk_tests/queue/purge.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

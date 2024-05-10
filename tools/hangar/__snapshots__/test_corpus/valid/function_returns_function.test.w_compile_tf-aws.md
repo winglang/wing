@@ -1,4 +1,4 @@
-# [function_returns_function.test.w](../../../../../examples/tests/valid/function_returns_function.test.w) | compile | tf-aws
+# [function_returns_function.test.w](../../../../../tests/valid/function_returns_function.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

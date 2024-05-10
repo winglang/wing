@@ -1,4 +1,4 @@
-# [nil.test.w](../../../../../examples/tests/valid/nil.test.w) | test | sim
+# [nil.test.w](../../../../../tests/valid/nil.test.w) | test | sim
 
 ## stdout.log
 ```log

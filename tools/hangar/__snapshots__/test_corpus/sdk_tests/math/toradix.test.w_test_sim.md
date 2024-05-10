@@ -1,4 +1,4 @@
-# [toradix.test.w](../../../../../../examples/tests/sdk_tests/math/toradix.test.w) | test | sim
+# [toradix.test.w](../../../../../../tests/sdk_tests/math/toradix.test.w) | test | sim
 
 ## stdout.log
 ```log

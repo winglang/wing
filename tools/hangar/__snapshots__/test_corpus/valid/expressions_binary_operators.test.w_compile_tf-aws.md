@@ -1,4 +1,4 @@
-# [expressions_binary_operators.test.w](../../../../../examples/tests/valid/expressions_binary_operators.test.w) | compile | tf-aws
+# [expressions_binary_operators.test.w](../../../../../tests/valid/expressions_binary_operators.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

@@ -76,7 +76,7 @@ A resource in the SDK has several parts:
   * A class that implements the polycon API and creates all of the required terraform resources. For example, [`src/shared-aws/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/shared-aws/bucket.ts).
   * A class that implements the inflight API that interacts with the cloud resource. For example, [`src/shared-aws/bucket.inflight.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/shared-aws/bucket.inflight.ts).
   * Unit tests for the cloud infrastructure. For example, [`test/target-tf-aws/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/target-tf-aws/bucket.test.ts).
-  * End-to-end tests. These are added to the "examples" directory at the root of the repository. For example, [`examples/tests/sdk_tests/bucket/bucket_list.test.w`](https://github.com/winglang/wing/blob/main/examples/tests/sdk_tests/bucket/bucket_list.test.w).
+  * End-to-end tests. These are added to the "examples" directory at the root of the repository. For example, [`tests/sdk_tests/bucket/bucket_list.test.w`](https://github.com/winglang/wing/blob/main/tests/sdk_tests/bucket/bucket_list.test.w).
 
 If you are implementing a new resource, or implementing an existing resource for a new cloud provider, try to take a look at code for existing resources (`Bucket`, `Function`, `Queue`) to see how to structure your code.
 

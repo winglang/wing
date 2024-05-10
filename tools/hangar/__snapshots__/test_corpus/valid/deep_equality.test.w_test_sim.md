@@ -1,4 +1,4 @@
-# [deep_equality.test.w](../../../../../examples/tests/valid/deep_equality.test.w) | test | sim
+# [deep_equality.test.w](../../../../../tests/valid/deep_equality.test.w) | test | sim
 
 ## stdout.log
 ```log

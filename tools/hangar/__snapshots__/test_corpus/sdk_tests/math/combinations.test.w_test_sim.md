@@ -1,4 +1,4 @@
-# [combinations.test.w](../../../../../../examples/tests/sdk_tests/math/combinations.test.w) | test | sim
+# [combinations.test.w](../../../../../../tests/sdk_tests/math/combinations.test.w) | test | sim
 
 ## stdout.log
 ```log

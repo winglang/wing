@@ -1,4 +1,4 @@
-# [lift_shared_resource.test.w](../../../../../examples/tests/valid/lift_shared_resource.test.w) | test | sim
+# [lift_shared_resource.test.w](../../../../../tests/valid/lift_shared_resource.test.w) | test | sim
 
 ## stdout.log
 ```log

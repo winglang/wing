@@ -1020,9 +1020,9 @@ importers:
         specifier: ~5.3.11
         version: 5.3.11(patch_hash=ckgthkljzwfnfbd5qz6x7vtvme)
 
-  examples/tests/error: {}
+  tests/error: {}
 
-  examples/tests/invalid:
+  tests/invalid:
     dependencies:
       cdktf:
         specifier: 0.20.3
@@ -1037,7 +1037,7 @@ importers:
         specifier: workspace:^
         version: link:../../jsii-fixture
 
-  examples/tests/sdk_tests:
+  tests/sdk_tests:
     dependencies:
       nanoid:
         specifier: ^3.3.6
@@ -1046,7 +1046,7 @@ importers:
         specifier: ^9.0.0
         version: 9.0.1
 
-  examples/tests/valid:
+  tests/valid:
     dependencies:
       '@aws-cdk/asset-awscli-v1':
         specifier: ^2.2.202

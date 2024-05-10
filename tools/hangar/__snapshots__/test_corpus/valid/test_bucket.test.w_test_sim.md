@@ -1,4 +1,4 @@
-# [test_bucket.test.w](../../../../../examples/tests/valid/test_bucket.test.w) | test | sim
+# [test_bucket.test.w](../../../../../tests/valid/test_bucket.test.w) | test | sim
 
 ## stdout.log
 ```log

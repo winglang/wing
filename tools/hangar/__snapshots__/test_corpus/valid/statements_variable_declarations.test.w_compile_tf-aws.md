@@ -1,4 +1,4 @@
-# [statements_variable_declarations.test.w](../../../../../examples/tests/valid/statements_variable_declarations.test.w) | compile | tf-aws
+# [statements_variable_declarations.test.w](../../../../../tests/valid/statements_variable_declarations.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

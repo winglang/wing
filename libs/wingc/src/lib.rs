@@ -483,16 +483,16 @@ mod sanity {
 
 	#[test]
 	fn can_compile_valid_files() {
-		compile_test("../../examples/tests/valid", false);
+		compile_test("../../tests/valid", false);
 	}
 
 	#[test]
 	fn can_compile_error_files() {
-		compile_test("../../examples/tests/error", false);
+		compile_test("../../tests/error", false);
 	}
 
 	#[test]
 	fn cannot_compile_invalid_files() {
-		compile_test("../../examples/tests/invalid", true);
+		compile_test("../../tests/invalid", true);
 	}
 }

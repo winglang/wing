@@ -1,4 +1,4 @@
-# [lift_with_phase_ind.test.w](../../../../../examples/tests/valid/lift_with_phase_ind.test.w) | compile | tf-aws
+# [lift_with_phase_ind.test.w](../../../../../tests/valid/lift_with_phase_ind.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

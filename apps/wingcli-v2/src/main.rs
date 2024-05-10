@@ -212,14 +212,14 @@ mod test {
 	#[test]
 	fn test_compile_sim() {
 		initialize();
-		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::Sim));
+		let res = command_build("../../tests/valid/hello.test.w".into(), Some(Target::Sim));
 		assert!(res.is_ok());
 	}
 
 	#[test]
 	fn test_compile_tfaws() {
 		initialize();
-		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::TfAws));
+		let res = command_build("../../tests/valid/hello.test.w".into(), Some(Target::TfAws));
 		assert!(res.is_ok());
 	}
 }

@@ -1,4 +1,4 @@
-# [aws-topic.test.w](../../../../../../examples/tests/sdk_tests/topic/aws-topic.test.w) | test | sim
+# [aws-topic.test.w](../../../../../../tests/sdk_tests/topic/aws-topic.test.w) | test | sim
 
 ## stdout.log
 ```log

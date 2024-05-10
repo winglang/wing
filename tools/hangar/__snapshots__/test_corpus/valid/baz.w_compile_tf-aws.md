@@ -1,4 +1,4 @@
-# [baz.w](../../../../../examples/tests/valid/baz.w) | compile | tf-aws
+# [baz.w](../../../../../tests/valid/baz.w) | compile | tf-aws
 
 ## inflight.Baz-1.cjs
 ```cjs

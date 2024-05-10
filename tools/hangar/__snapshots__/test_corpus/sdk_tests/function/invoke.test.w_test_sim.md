@@ -1,4 +1,4 @@
-# [invoke.test.w](../../../../../../examples/tests/sdk_tests/function/invoke.test.w) | test | sim
+# [invoke.test.w](../../../../../../tests/sdk_tests/function/invoke.test.w) | test | sim
 
 ## stdout.log
 ```log

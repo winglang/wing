@@ -1,4 +1,4 @@
-# [min_max.test.w](../../../../../../examples/tests/sdk_tests/math/min_max.test.w) | test | sim
+# [min_max.test.w](../../../../../../tests/sdk_tests/math/min_max.test.w) | test | sim
 
 ## stdout.log
 ```log

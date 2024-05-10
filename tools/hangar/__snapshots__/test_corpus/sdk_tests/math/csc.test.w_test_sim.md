@@ -1,4 +1,4 @@
-# [csc.test.w](../../../../../../examples/tests/sdk_tests/math/csc.test.w) | test | sim
+# [csc.test.w](../../../../../../tests/sdk_tests/math/csc.test.w) | test | sim
 
 ## stdout.log
 ```log

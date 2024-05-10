@@ -1,4 +1,4 @@
-# [double_reference.test.w](../../../../../examples/tests/valid/double_reference.test.w) | compile | tf-aws
+# [double_reference.test.w](../../../../../tests/valid/double_reference.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

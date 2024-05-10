@@ -1,4 +1,4 @@
-# [retention_period.main.w](../../../../../../examples/tests/sdk_tests/queue/retention_period.main.w) | test | sim
+# [retention_period.main.w](../../../../../../tests/sdk_tests/queue/retention_period.main.w) | test | sim
 
 ## stdout.log
 ```log

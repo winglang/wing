@@ -1,4 +1,4 @@
-# [patch.test.w](../../../../../../examples/tests/sdk_tests/api/patch.test.w) | test | sim
+# [patch.test.w](../../../../../../tests/sdk_tests/api/patch.test.w) | test | sim
 
 ## stdout.log
 ```log

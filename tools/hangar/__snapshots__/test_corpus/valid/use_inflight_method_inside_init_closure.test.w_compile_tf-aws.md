@@ -1,4 +1,4 @@
-# [use_inflight_method_inside_init_closure.test.w](../../../../../examples/tests/valid/use_inflight_method_inside_init_closure.test.w) | compile | tf-aws
+# [use_inflight_method_inside_init_closure.test.w](../../../../../tests/valid/use_inflight_method_inside_init_closure.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

@@ -1,4 +1,4 @@
-# [variadic-parameter.test.w](../../../../../../examples/tests/sdk_tests/topic/variadic-parameter.test.w) | test | sim
+# [variadic-parameter.test.w](../../../../../../tests/sdk_tests/topic/variadic-parameter.test.w) | test | sim
 
 ## stdout.log
 ```log

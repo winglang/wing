@@ -1,4 +1,4 @@
-# [acos.test.w](../../../../../../examples/tests/sdk_tests/math/acos.test.w) | compile | tf-aws
+# [acos.test.w](../../../../../../tests/sdk_tests/math/acos.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

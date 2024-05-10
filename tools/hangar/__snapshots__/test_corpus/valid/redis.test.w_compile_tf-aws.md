@@ -1,4 +1,4 @@
-# [redis.test.w](../../../../../examples/tests/valid/redis.test.w) | compile | tf-aws
+# [redis.test.w](../../../../../tests/valid/redis.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

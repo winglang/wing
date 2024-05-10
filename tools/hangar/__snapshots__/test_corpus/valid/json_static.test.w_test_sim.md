@@ -1,4 +1,4 @@
-# [json_static.test.w](../../../../../examples/tests/valid/json_static.test.w) | test | sim
+# [json_static.test.w](../../../../../tests/valid/json_static.test.w) | test | sim
 
 ## stdout.log
 ```log

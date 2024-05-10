@@ -1,4 +1,4 @@
-# [in_scope_construct.test.w](../../../../../examples/tests/valid/in_scope_construct.test.w) | compile | tf-aws
+# [in_scope_construct.test.w](../../../../../tests/valid/in_scope_construct.test.w) | compile | tf-aws
 
 ## inflight.MyClass-1.cjs
 ```cjs

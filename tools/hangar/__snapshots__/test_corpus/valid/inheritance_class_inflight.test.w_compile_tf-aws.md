@@ -1,4 +1,4 @@
-# [inheritance_class_inflight.test.w](../../../../../examples/tests/valid/inheritance_class_inflight.test.w) | compile | tf-aws
+# [inheritance_class_inflight.test.w](../../../../../tests/valid/inheritance_class_inflight.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

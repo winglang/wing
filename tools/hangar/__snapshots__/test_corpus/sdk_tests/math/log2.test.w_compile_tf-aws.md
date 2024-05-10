@@ -1,4 +1,4 @@
-# [log2.test.w](../../../../../../examples/tests/sdk_tests/math/log2.test.w) | compile | tf-aws
+# [log2.test.w](../../../../../../tests/sdk_tests/math/log2.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

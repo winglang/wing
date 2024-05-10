@@ -1,4 +1,4 @@
-# [lift_parent_fields.test.w](../../../../../examples/tests/valid/lift_parent_fields.test.w) | compile | tf-aws
+# [lift_parent_fields.test.w](../../../../../tests/valid/lift_parent_fields.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

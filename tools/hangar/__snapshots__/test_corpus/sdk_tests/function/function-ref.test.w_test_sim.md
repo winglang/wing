@@ -1,4 +1,4 @@
-# [function-ref.test.w](../../../../../../examples/tests/sdk_tests/function/function-ref.test.w) | test | sim
+# [function-ref.test.w](../../../../../../tests/sdk_tests/function/function-ref.test.w) | test | sim
 
 ## stdout.log
 ```log

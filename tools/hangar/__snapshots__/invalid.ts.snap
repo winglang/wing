@@ -2,7 +2,7 @@
 
 exports[`access_hidden_namespace.test.w 1`] = `
 "error: Unknown symbol \\"core\\"
-  --> ../../../examples/tests/invalid/access_hidden_namespace.test.w:7:5
+  --> ../../../tests/invalid/access_hidden_namespace.test.w:7:5
   |
 7 | new core.NodeJsCode(\\"<ABSOLUTE>/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
   |     ^^^^
@@ -17,35 +17,35 @@ Duration <DURATION>"
 
 exports[`access_modifiers.test.w 1`] = `
 "error: Method \\"private_method\\" is private in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:49:3
+   --> ../../../tests/invalid/access_modifiers.test.w:49:3
    |
 49 |   private_method() {}
    |   ^^^^^^^^^^^^^^
 
 
 error: Method \\"protected_method\\" is protected in \\"Foo\\" but it's an implementation of \\"SomeInterface\\". Interface members must be public.
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:47:13
+   --> ../../../tests/invalid/access_modifiers.test.w:47:13
    |
 47 |   protected protected_method() {}
    |             ^^^^^^^^^^^^^^^^
 
 
 error: Cannot override private method \\"method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:58:3
+   --> ../../../tests/invalid/access_modifiers.test.w:58:3
    |
 58 |   method() {
    |   ^^^^^^
 
 
 error: Cannot override private method \\"method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:81:3
+   --> ../../../tests/invalid/access_modifiers.test.w:81:3
    |
 81 |   method() {
    |   ^^^^^^
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:109:9
+    --> ../../../tests/invalid/access_modifiers.test.w:109:9
     |
   8 |   protected protected_field: str;
     |             --------------- defined here
@@ -57,7 +57,7 @@ error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:111:9
+    --> ../../../tests/invalid/access_modifiers.test.w:111:9
     |
   9 |   private_field: str;
     |   ------------- defined here
@@ -69,7 +69,7 @@ error: Cannot access private member \\"private_field\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:115:5
+    --> ../../../tests/invalid/access_modifiers.test.w:115:5
     |
  53 |   protected static protected_static_method() {}
     |                    ----------------------- defined here
@@ -81,7 +81,7 @@ error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:117:5
+    --> ../../../tests/invalid/access_modifiers.test.w:117:5
     |
  54 |   static private_static_method() {}
     |          --------------------- defined here
@@ -93,49 +93,49 @@ error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:157:3
+    --> ../../../tests/invalid/access_modifiers.test.w:157:3
     |
 157 |   public_method() {}
     |   ^^^^^^^^^^^^^
 
 
 error: Cannot override protected method \\"protected_method\\" of \\"Foo\\" with a private method
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:159:3
+    --> ../../../tests/invalid/access_modifiers.test.w:159:3
     |
 159 |   protected_method() {}
     |   ^^^^^^^^^^^^^^^^
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:161:3
+    --> ../../../tests/invalid/access_modifiers.test.w:161:3
     |
 161 |   private_method() {}
     |   ^^^^^^^^^^^^^^
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a protected method
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:166:13
+    --> ../../../tests/invalid/access_modifiers.test.w:166:13
     |
 166 |   protected public_method() {}
     |             ^^^^^^^^^^^^^
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:169:13
+    --> ../../../tests/invalid/access_modifiers.test.w:169:13
     |
 169 |   protected private_method() {}
     |             ^^^^^^^^^^^^^^
 
 
 error: Cannot override private method \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:176:7
+    --> ../../../tests/invalid/access_modifiers.test.w:176:7
     |
 176 |   pub private_method() {}
     |       ^^^^^^^^^^^^^^
 
 
 error: Cannot access private member \\"private_field\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:61:14
+   --> ../../../tests/invalid/access_modifiers.test.w:61:14
    |
  9 |   private_field: str;
    |   ------------- defined here
@@ -147,7 +147,7 @@ error: Cannot access private member \\"private_field\\" of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Bar\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:66:10
+   --> ../../../tests/invalid/access_modifiers.test.w:66:10
    |
 49 |   private_method() {}
    |   -------------- defined here
@@ -159,7 +159,7 @@ error: Cannot access private member \\"private_method\\" of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:74:9
+   --> ../../../tests/invalid/access_modifiers.test.w:74:9
    |
 54 |   static private_static_method() {}
    |          --------------------- defined here
@@ -171,7 +171,7 @@ error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:84:14
+   --> ../../../tests/invalid/access_modifiers.test.w:84:14
    |
  9 |   private_field: str;
    |   ------------- defined here
@@ -183,7 +183,7 @@ error: Cannot access private member \\"private_field\\" of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Baz\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:89:10
+   --> ../../../tests/invalid/access_modifiers.test.w:89:10
    |
 49 |   private_method() {}
    |   -------------- defined here
@@ -195,7 +195,7 @@ error: Cannot access private member \\"private_method\\" of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-   --> ../../../examples/tests/invalid/access_modifiers.test.w:97:9
+   --> ../../../tests/invalid/access_modifiers.test.w:97:9
    |
 54 |   static private_static_method() {}
    |          --------------------- defined here
@@ -207,7 +207,7 @@ error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:102:9
+    --> ../../../tests/invalid/access_modifiers.test.w:102:9
     |
  54 |   static private_static_method() {}
     |          --------------------- defined here
@@ -219,7 +219,7 @@ error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:123:13
+    --> ../../../tests/invalid/access_modifiers.test.w:123:13
     |
   8 |   protected protected_field: str;
     |             --------------- defined here
@@ -231,7 +231,7 @@ error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:125:13
+    --> ../../../tests/invalid/access_modifiers.test.w:125:13
     |
   9 |   private_field: str;
     |   ------------- defined here
@@ -243,7 +243,7 @@ error: Cannot access private member \\"private_field\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:129:9
+    --> ../../../tests/invalid/access_modifiers.test.w:129:9
     |
  47 |   protected protected_method() {}
     |             ---------------- defined here
@@ -255,7 +255,7 @@ error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:131:9
+    --> ../../../tests/invalid/access_modifiers.test.w:131:9
     |
  49 |   private_method() {}
     |   -------------- defined here
@@ -267,7 +267,7 @@ error: Cannot access private member \\"private_method\\" of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:137:9
+    --> ../../../tests/invalid/access_modifiers.test.w:137:9
     |
  53 |   protected static protected_static_method() {}
     |                    ----------------------- defined here
@@ -279,7 +279,7 @@ error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:139:9
+    --> ../../../tests/invalid/access_modifiers.test.w:139:9
     |
  54 |   static private_static_method() {}
     |          --------------------- defined here
@@ -299,62 +299,62 @@ Duration <DURATION>"
 
 exports[`access_private_apis.test.w 1`] = `
 "error: Class \\"subdir2.MyPrivateClass\\" is private
-  --> ../../../examples/tests/invalid/access_private_apis.test.w:3:5
+  --> ../../../tests/invalid/access_private_apis.test.w:3:5
   |
 3 | new subdir2.MyPrivateClass();
   |     ^^^^^^^^^^^^^^^^^^^^^^
   |
-  --> ../../../examples/tests/invalid/subdir2/file.w:1:7
+  --> ../../../tests/invalid/subdir2/file.w:1:7
   |
 1 | class MyPrivateClass {}
   |       -------------- defined here
 
 
 error: Class \\"subdir2.inner.MyOtherPrivateClass\\" is private
-  --> ../../../examples/tests/invalid/access_private_apis.test.w:6:5
+  --> ../../../tests/invalid/access_private_apis.test.w:6:5
   |
 6 | new subdir2.inner.MyOtherPrivateClass();
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   |
-  --> ../../../examples/tests/invalid/subdir2/inner/blah.w:1:7
+  --> ../../../tests/invalid/subdir2/inner/blah.w:1:7
   |
 1 | class MyOtherPrivateClass {}
   |       ------------------- defined here
 
 
 error: Interface \\"subdir2.MyPrivateInterface\\" is private
-   --> ../../../examples/tests/invalid/access_private_apis.test.w:11:14
+   --> ../../../tests/invalid/access_private_apis.test.w:11:14
    |
 11 | class A impl subdir2.MyPrivateInterface {}
    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
-   --> ../../../examples/tests/invalid/subdir2/file.w:7:11
+   --> ../../../tests/invalid/subdir2/file.w:7:11
    |
  7 | interface MyPrivateInterface {}
    |           ------------------ defined here
 
 
 error: Expected an interface, instead found type \\"unresolved\\"
-   --> ../../../examples/tests/invalid/access_private_apis.test.w:11:14
+   --> ../../../tests/invalid/access_private_apis.test.w:11:14
    |
 11 | class A impl subdir2.MyPrivateInterface {}
    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Struct \\"subdir2.MyPrivateStruct\\" is private
-   --> ../../../examples/tests/invalid/access_private_apis.test.w:14:9
+   --> ../../../tests/invalid/access_private_apis.test.w:14:9
    |
 14 | let s = subdir2.MyPrivateStruct {};
    |         ^^^^^^^^^^^^^^^^^^^^^^^
    |
-   --> ../../../examples/tests/invalid/subdir2/file.w:3:8
+   --> ../../../tests/invalid/subdir2/file.w:3:8
    |
  3 | struct MyPrivateStruct {}
    |        --------------- defined here
 
 
 error: Expected identifier \\"subdir2\\" to be a variable, but it's a namespace
-   --> ../../../examples/tests/invalid/access_private_apis.test.w:17:9
+   --> ../../../tests/invalid/access_private_apis.test.w:17:9
    |
 17 | let e = subdir2.MyPrivateEnum.A;
    |         ^^^^^^^
@@ -369,35 +369,35 @@ Duration <DURATION>"
 
 exports[`access_static_from_instance.test.w 1`] = `
 "error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
-  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:4:3
+  --> ../../../tests/invalid/access_static_from_instance.test.w:4:3
   |
 4 |   pub static f: num;
   |   ^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot access static property \\"f\\" from instance
-   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:19:5
+   --> ../../../tests/invalid/access_static_from_instance.test.w:19:5
    |
 19 | foo.f; // Can't access static fields through instances
    |     ^
 
 
 error: Cannot access static property \\"m\\" from instance
-   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:20:5
+   --> ../../../tests/invalid/access_static_from_instance.test.w:20:5
    |
 20 | foo.m(); // Can't access static methods through instances
    |     ^
 
 
 error: Member \\"instanceField\\" doesn't exist in \\"Construct\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:10
+  --> ../../../tests/invalid/access_static_from_instance.test.w:7:10
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
   |          ^^^^^^^^^^^^^
 
 
 error: Member \\"f\\" doesn't exist in \\"Construct\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:10
+  --> ../../../tests/invalid/access_static_from_instance.test.w:8:10
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
   |          ^
@@ -412,7 +412,7 @@ Duration <DURATION>"
 
 exports[`ambiguous_api_paths.test.w 1`] = `
 "Error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
-   --> ../../../examples/tests/invalid/ambiguous_api_paths.test.w:12:1
+   --> ../../../tests/invalid/ambiguous_api_paths.test.w:12:1
    | };
    | 
    | api.get(\\"<ABSOLUTE>/path\\", handler);
@@ -428,28 +428,28 @@ Duration <DURATION>"
 
 exports[`bring.test.w 1`] = `
 "error: Expected module specification (see https://www.winglang.io/docs/libraries)
-  --> ../../../examples/tests/invalid/bring.test.w:6:7
+  --> ../../../tests/invalid/bring.test.w:6:7
   |
 6 | bring ;
   |       ^
 
 
 error: Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c\`?
-  --> ../../../examples/tests/invalid/bring.test.w:8:1
+  --> ../../../tests/invalid/bring.test.w:8:1
   |
 8 | bring c;
   | ^^^^^^^^
 
 
 error: Redundant bring of \\"std\\"
-  --> ../../../examples/tests/invalid/bring.test.w:1:1
+  --> ../../../tests/invalid/bring.test.w:1:1
   |
 1 | bring std;
   | ^^^^^^^^^^
 
 
 error: \\"cloud\\" is already defined
-  --> ../../../examples/tests/invalid/bring.test.w:4:7
+  --> ../../../tests/invalid/bring.test.w:4:7
   |
 4 | bring cloud;
   |       ^^^^^
@@ -481,14 +481,14 @@ Duration <DURATION>"
 
 exports[`bring_jsii.test.w 1`] = `
 "error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
-  --> ../../../examples/tests/invalid/bring_jsii.test.w:1:1
+  --> ../../../tests/invalid/bring_jsii.test.w:1:1
   |
 1 | bring \\"jsii-code-samples\\";
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE>/bring_jsii.test.w\\"
-  --> ../../../examples/tests/invalid/bring_jsii.test.w:4:1
+  --> ../../../tests/invalid/bring_jsii.test.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
   | ^^^^^^^^^^^^^^^^^^^^^^
@@ -503,21 +503,21 @@ Duration <DURATION>"
 
 exports[`bring_local_dir.test.w 1`] = `
 "error: Cannot bring \\"/subdir\\" since it is not a relative path
-  --> ../../../examples/tests/invalid/bring_local_dir.test.w:4:7
+  --> ../../../tests/invalid/bring_local_dir.test.w:4:7
   |
 4 | bring \\"/subdir\\" as baz;
   |       ^^^^^^^^^
 
 
 error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
-  --> ../../../examples/tests/invalid/subdir/other.w:1:1
+  --> ../../../tests/invalid/subdir/other.w:1:1
   |
 1 | bring \\"./inner\\" as inner;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
-  --> ../../../examples/tests/invalid/bring_local_dir.test.w:1:1
+  --> ../../../tests/invalid/bring_local_dir.test.w:1:1
   |
 1 | bring \\"./subdir\\" as subdir;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -532,28 +532,28 @@ Duration <DURATION>"
 
 exports[`bring_local_self.test.w 1`] = `
 "error: Cannot find module \\"./bring_local_self.main.w\\"
-  --> ../../../examples/tests/invalid/bring_local_self.test.w:1:7
+  --> ../../../tests/invalid/bring_local_self.test.w:1:7
   |
 1 | bring \\"./bring_local_self.main.w\\" as foo;
   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot find module \\"./non-existent.w\\"
-  --> ../../../examples/tests/invalid/bring_local_self.test.w:4:7
+  --> ../../../tests/invalid/bring_local_self.test.w:4:7
   |
 4 | bring \\"./non-existent.w\\" as bar;
   |       ^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot bring \\"/hello.w\\" since it is not a relative path
-  --> ../../../examples/tests/invalid/bring_local_self.test.w:7:7
+  --> ../../../tests/invalid/bring_local_self.test.w:7:7
   |
 7 | bring \\"/hello.w\\" as baz;
   |       ^^^^^^^^^^
 
 
 error: Cannot bring module \\"./bring_local_dir.test.w\\" since it is an entrypoint file
-   --> ../../../examples/tests/invalid/bring_local_self.test.w:10:7
+   --> ../../../tests/invalid/bring_local_self.test.w:10:7
    |
 10 | bring \\"./bring_local_dir.test.w\\" as qux;
    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -568,28 +568,28 @@ Duration <DURATION>"
 
 exports[`bring_local_variables.test.w 1`] = `
 "error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
-  --> ../../../examples/tests/invalid/file_with_variables.w:5:1
+  --> ../../../tests/invalid/file_with_variables.w:5:1
   |
 5 | let x = 5;
   | ^^^^^^^^^^
 
 
 error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
-  --> ../../../examples/tests/invalid/file_with_variables.w:6:1
+  --> ../../../tests/invalid/file_with_variables.w:6:1
   |
 6 | let y = [\\"hello\\", \\"world\\"];
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
-  --> ../../../examples/tests/invalid/file_with_variables.w:7:1
+  --> ../../../tests/invalid/file_with_variables.w:7:1
   |
 7 | let z = new cloud.Bucket();
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Preflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/file_with_variables.w:10:3
+   --> ../../../tests/invalid/file_with_variables.w:10:3
    |
 10 |   x: num;
    |   ^
@@ -604,21 +604,21 @@ Duration <DURATION>"
 
 exports[`bring_non_std_construct.test.w 1`] = `
 "error: Expected 2 positional argument(s) or named arguments for the last parameter but got 0
-  --> ../../../examples/tests/invalid/bring_non_std_construct.test.w:8:1
+  --> ../../../tests/invalid/bring_non_std_construct.test.w:8:1
   |
 8 | new cdktf.S3Backend();
   | ^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot set id of non-standard preflight class \\"S3Backend\\" using \`as\`
-   --> ../../../examples/tests/invalid/bring_non_std_construct.test.w:13:85
+   --> ../../../tests/invalid/bring_non_std_construct.test.w:13:85
    |
 13 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: \\"foo\\", key: \\"bar\\"}) as \\"s3_backend\\";
    |                                                                                     ^^^^^^^^^^^^
 
 
 error: Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`in\`
-   --> ../../../examples/tests/invalid/bring_non_std_construct.test.w:15:85
+   --> ../../../tests/invalid/bring_non_std_construct.test.w:15:85
    |
 15 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: \\"foo\\", key: \\"bar\\"}) in this;
    |                                                                                     ^^^^
@@ -633,28 +633,28 @@ Duration <DURATION>"
 
 exports[`bypass_return.test.w 1`] = `
 "error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/bypass_return.test.w:2:12
+  --> ../../../tests/invalid/bypass_return.test.w:2:12
   |
 2 |     return \\"a\\";
   |            ^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/bypass_return.test.w:8:12
+  --> ../../../tests/invalid/bypass_return.test.w:8:12
   |
 8 |     return \\"a\\";
   |            ^^^
 
 
 error: A function whose return type is \\"num\\" must return a value.
-   --> ../../../examples/tests/invalid/bypass_return.test.w:15:28
+   --> ../../../tests/invalid/bypass_return.test.w:15:28
    |
 15 | let emptyBody = (): num => {};
    |                            ^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/bypass_return.test.w:20:12
+   --> ../../../tests/invalid/bypass_return.test.w:20:12
    |
 20 |     return \\"a\\";
    |            ^^^
@@ -669,14 +669,14 @@ Duration <DURATION>"
 
 exports[`call_inflight_from_preflight.test.w 1`] = `
 "error: Cannot call into inflight phase while preflight
-  --> ../../../examples/tests/invalid/call_inflight_from_preflight.test.w:4:1
+  --> ../../../tests/invalid/call_inflight_from_preflight.test.w:4:1
   |
 4 | util.sleep(1s);
   | ^^^^^^^^^^^^^^
 
 
 error: Cannot call into inflight phase while preflight
-   --> ../../../examples/tests/invalid/call_inflight_from_preflight.test.w:12:1
+   --> ../../../tests/invalid/call_inflight_from_preflight.test.w:12:1
    |
 12 | foo.do();
    | ^^^^^^^^
@@ -691,21 +691,21 @@ Duration <DURATION>"
 
 exports[`capture_redefinition.test.w 1`] = `
 "error: Cannot access \\"y\\" because it is shadowed by another symbol with the same name
-  --> ../../../examples/tests/invalid/capture_redefinition.test.w:5:7
+  --> ../../../tests/invalid/capture_redefinition.test.w:5:7
   |
 5 |   log(y);
   |       ^
 
 
 error: Cannot access \\"y\\" because it is shadowed by another symbol with the same name
-   --> ../../../examples/tests/invalid/capture_redefinition.test.w:14:9
+   --> ../../../tests/invalid/capture_redefinition.test.w:14:9
    |
 14 |     log(y);
    |         ^
 
 
 error: Cannot access \\"x\\" because it is shadowed by another symbol with the same name
-   --> ../../../examples/tests/invalid/capture_redefinition.test.w:22:7
+   --> ../../../tests/invalid/capture_redefinition.test.w:22:7
    |
 22 |   log(x);
    |       ^
@@ -720,168 +720,168 @@ Duration <DURATION>"
 
 exports[`class.test.w 1`] = `
 "error: Call to super constructor can only be made from derived classes
-   --> ../../../examples/tests/invalid/class.test.w:86:5
+   --> ../../../tests/invalid/class.test.w:86:5
    |
 86 |     super();
    |     ^^^^^^^^
 
 
 error: Call to super constructor must be first statement in constructor
-   --> ../../../examples/tests/invalid/class.test.w:98:5
+   --> ../../../tests/invalid/class.test.w:98:5
    |
 98 |     super(name, major);
    |     ^^^^^^^^^^^^^^^^^^^
 
 
 error: Call to super constructor can only be done from within class constructor
-    --> ../../../examples/tests/invalid/class.test.w:103:5
+    --> ../../../tests/invalid/class.test.w:103:5
     |
 103 |     super(\\"cool\\", \\"blue\\");
     |     ^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Call to super constructor can only be done from within a class constructor
-    --> ../../../examples/tests/invalid/class.test.w:108:4
+    --> ../../../tests/invalid/class.test.w:108:4
     |
 108 |    super();
     |    ^^^^^^^^
 
 
 error: Reserved method name. Constructors are declared with a method named \\"new\\"
-    --> ../../../examples/tests/invalid/class.test.w:160:3
+    --> ../../../tests/invalid/class.test.w:160:3
     |
 160 |   constructor() {
     |   ^^^^^^^^^^^
 
 
 error: Expected block
-   --> ../../../examples/tests/invalid/class.test.w:17:16
+   --> ../../../tests/invalid/class.test.w:17:16
    |
 17 |   new(foo: str)
    |                ^
 
 
 error: Preflight field \\"x\\" is not initialized
-  --> ../../../examples/tests/invalid/class.test.w:4:4
+  --> ../../../tests/invalid/class.test.w:4:4
   |
 4 |    x:num;
   |    ^
 
 
 error: Expected 0 positional argument(s) but got 1
-  --> ../../../examples/tests/invalid/class.test.w:9:1
+  --> ../../../tests/invalid/class.test.w:9:1
   |
 9 | new C2(1);
   | ^^^^^^^^^
 
 
 error: No named arguments expected
-   --> ../../../examples/tests/invalid/class.test.w:13:1
+   --> ../../../tests/invalid/class.test.w:13:1
    |
 13 | new C9(token: \\"1\\");
    | ^^^^^^^^^^^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/class.test.w:19:1
+   --> ../../../tests/invalid/class.test.w:19:1
    |
 19 | new C10(); 
    | ^^^^^^^^^
 
 
 error: No named arguments expected
-   --> ../../../examples/tests/invalid/class.test.w:22:1
+   --> ../../../tests/invalid/class.test.w:22:1
    |
 22 | new C10(foo: \\"bar\\"); 
    | ^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/class.test.w:22:1
+   --> ../../../tests/invalid/class.test.w:22:1
    |
 22 | new C10(foo: \\"bar\\"); 
    | ^^^^^^^^^^^^^^^^^^^
 
 
 error: No named arguments expected
-   --> ../../../examples/tests/invalid/class.test.w:25:1
+   --> ../../../tests/invalid/class.test.w:25:1
    |
 25 | new C10(\\"hello\\", foo: \\"bar\\"); 
    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:37:16
+   --> ../../../tests/invalid/class.test.w:37:16
    |
 37 |   inflight var x: num;
    |                ^
 
 
 error: Inflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:39:12
+   --> ../../../tests/invalid/class.test.w:39:12
    |
 39 |   inflight y: str;
    |            ^
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:44:12
+   --> ../../../tests/invalid/class.test.w:44:12
    |
 44 |   inflight x: num;
    |            ^
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:50:12
+   --> ../../../tests/invalid/class.test.w:50:12
    |
 50 |   inflight x: num;
    |            ^
 
 
 error: \\"y\\" cannot be initialized in the inflight constructor
-   --> ../../../examples/tests/invalid/class.test.w:61:10
+   --> ../../../tests/invalid/class.test.w:61:10
    |
 61 |     this.y = 1;
    |          ^
 
 
 error: \\"x\\" cannot be initialized in the preflight constructor
-   --> ../../../examples/tests/invalid/class.test.w:56:10
+   --> ../../../tests/invalid/class.test.w:56:10
    |
 56 |     this.x = 1;
    |          ^
 
 
 error: Preflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:52:3
+   --> ../../../tests/invalid/class.test.w:52:3
    |
 52 |   y: num;
    |   ^
 
 
 error: Expected \\"x\\" to be a type but it's a variable
-   --> ../../../examples/tests/invalid/class.test.w:68:18
+   --> ../../../tests/invalid/class.test.w:68:18
    |
 68 | class C7 extends x {
    |                  ^
 
 
 error: Expected \\"S1\\" to be a class
-   --> ../../../examples/tests/invalid/class.test.w:74:18
+   --> ../../../tests/invalid/class.test.w:74:18
    |
 74 | class C8 extends S1 {
    |                  ^^
 
 
 error: Unknown symbol \\"C11\\"
-   --> ../../../examples/tests/invalid/class.test.w:78:19
+   --> ../../../tests/invalid/class.test.w:78:19
    |
 78 | class C11 extends C11 {
    |                   ^^^
 
 
 error: Missing super() call as first statement of PaidStudent's constructor
-    --> ../../../examples/tests/invalid/class.test.w:96:45
+    --> ../../../tests/invalid/class.test.w:96:45
     |  
  96 |     new(name: str, major: str, hrlyWage: num) {
     | /---------------------------------------------^
@@ -893,14 +893,14 @@ error: Missing super() call as first statement of PaidStudent's constructor
 
 
 error: Cannot instantiate abstract class \\"Resource\\"
-    --> ../../../examples/tests/invalid/class.test.w:165:1
+    --> ../../../tests/invalid/class.test.w:165:1
     |
 165 | new std.Resource();
     | ^^^^^^^^^^^^^^^^^^
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:183:3
+    --> ../../../tests/invalid/class.test.w:183:3
     |
 170 |   z: num;
     |   - previous definition
@@ -910,7 +910,7 @@ error: Symbol \\"z\\" already defined in this scope
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:171:3
+    --> ../../../tests/invalid/class.test.w:171:3
     |
 170 |   z: num;
     |   - previous definition
@@ -919,7 +919,7 @@ error: Symbol \\"z\\" already defined in this scope
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:185:3
+    --> ../../../tests/invalid/class.test.w:185:3
     |
 170 |   z: num;
     |   - previous definition
@@ -929,7 +929,7 @@ error: Symbol \\"z\\" already defined in this scope
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:215:3
+    --> ../../../tests/invalid/class.test.w:215:3
     |
 204 |   z: num;
     |   - previous definition
@@ -939,7 +939,7 @@ error: Symbol \\"z\\" already defined in this scope
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:196:3
+    --> ../../../tests/invalid/class.test.w:196:3
     |
 196 |   z(): num {
     |   ^
@@ -949,7 +949,7 @@ error: Symbol \\"z\\" already defined in this scope
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:208:3
+    --> ../../../tests/invalid/class.test.w:208:3
     |
 204 |   z: num;
     |   - previous definition
@@ -959,98 +959,98 @@ error: Symbol \\"z\\" already defined in this scope
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.test.w:31:14
+   --> ../../../tests/invalid/class.test.w:31:14
    |
 31 |     this.x = \\"Hi\\";
    |              ^^^^
 
 
 error: Variable cannot be reassigned from inflight
-   --> ../../../examples/tests/invalid/class.test.w:61:5
+   --> ../../../tests/invalid/class.test.w:61:5
    |
 61 |     this.y = 1;
    |     ^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:123:11
+    --> ../../../tests/invalid/class.test.w:123:11
     |
 123 |     super(someStr);
     |           ^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.test.w:132:5
+    --> ../../../tests/invalid/class.test.w:132:5
     |
 132 |     super();
     |     ^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 2
-    --> ../../../examples/tests/invalid/class.test.w:141:5
+    --> ../../../tests/invalid/class.test.w:141:5
     |
 141 |     super(someNum, someStr);
     |     ^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.test.w:157:5
+    --> ../../../tests/invalid/class.test.w:157:5
     |
 157 |     super();
     |     ^^^^^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:174:5
+    --> ../../../tests/invalid/class.test.w:174:5
     |
 174 |     2 + \\"2\\";
     |     ^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:177:12
+    --> ../../../tests/invalid/class.test.w:177:12
     |
 177 |     return \\"hello\\";
     |            ^^^^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:187:5
+    --> ../../../tests/invalid/class.test.w:187:5
     |
 187 |     2 + \\"2\\";
     |     ^^^^^^^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:189:12
+    --> ../../../tests/invalid/class.test.w:189:12
     |
 189 |     return 5;
     |            ^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:199:5
+    --> ../../../tests/invalid/class.test.w:199:5
     |
 199 |     2 + \\"2\\";
     |     ^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:201:12
+    --> ../../../tests/invalid/class.test.w:201:12
     |
 201 |     return \\"hello\\";
     |            ^^^^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:210:5
+    --> ../../../tests/invalid/class.test.w:210:5
     |
 210 |     2 + \\"2\\";
     |     ^^^^^^^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:212:12
+    --> ../../../tests/invalid/class.test.w:212:12
     |
 212 |     return 5;
     |            ^
@@ -1065,7 +1065,7 @@ Duration <DURATION>"
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
 "error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"preflight (name: str): str\\" instead
-  --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
+  --> ../../../tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
@@ -1077,7 +1077,7 @@ exports[`cloud_function_expects_inflight.test.w 1`] = `
 
 
 error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
-   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:9:15
+   --> ../../../tests/invalid/cloud_function_expects_inflight.test.w:9:15
    |  
  9 |   q.setConsumer(inflight (x: num) => {
    | /---------------^
@@ -1096,182 +1096,182 @@ Duration <DURATION>"
 
 exports[`container_types.test.w 1`] = `
 "error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.test.w:14:25
+   --> ../../../tests/invalid/container_types.test.w:14:25
    |
 14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
    |                         ^^^^
 
 
 error: Unexpected 'string'
-   --> ../../../examples/tests/invalid/container_types.test.w:14:31
+   --> ../../../tests/invalid/container_types.test.w:14:31
    |
 14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
    |                               ^^^
 
 
 error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.test.w:14:47
+   --> ../../../tests/invalid/container_types.test.w:14:47
    |
 14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
    |                                               ^^^^
 
 
 error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.test.w:41:24
+   --> ../../../tests/invalid/container_types.test.w:41:24
    |
 41 | let ss1: MutSet<str> = Set[\\"c\\"];
    |                        ^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/container_types.test.w:2:28
+  --> ../../../tests/invalid/container_types.test.w:2:28
   |
 2 | let arr1: Array<num> = [1, \\"2\\", 3];
   |                            ^^^
 
 
 error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
-  --> ../../../examples/tests/invalid/container_types.test.w:5:24
+  --> ../../../tests/invalid/container_types.test.w:5:24
   |
 5 | let arr4: Array<num> = arr3;
   |                        ^^^^
 
 
 error: Member \\"someRandomMethod\\" doesn't exist in \\"Array\\"
-  --> ../../../examples/tests/invalid/container_types.test.w:6:6
+  --> ../../../tests/invalid/container_types.test.w:6:6
   |
 6 | arr1.someRandomMethod();
   |      ^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"num?\\" instead
-  --> ../../../examples/tests/invalid/container_types.test.w:9:16
+  --> ../../../tests/invalid/container_types.test.w:9:16
   |
 9 | let val: num = arr5.tryAt(0);
   |                ^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:13:38
+   --> ../../../tests/invalid/container_types.test.w:13:38
    |
 13 | let m1: Map<num> = {\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3};
    |                                      ^^^
 
 
 error: Expected type to be \\"Map<num>\\", but got \\"Array<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:14:20
+   --> ../../../tests/invalid/container_types.test.w:14:20
    |
 14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:16:20
+   --> ../../../tests/invalid/container_types.test.w:16:20
    |
 16 | let m4: Map<num> = m3;
    |                    ^^
 
 
 error: Member \\"someRandomMethod\\" doesn't exist in \\"Map\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:17:4
+   --> ../../../tests/invalid/container_types.test.w:17:4
    |
 17 | m1.someRandomMethod();
    |    ^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:20:35
+   --> ../../../tests/invalid/container_types.test.w:20:35
    |
 20 | let m5 = {\\"a\\" => 1, \\"{1+1}\\" => 2, 1+1 => 3};
    |                                   ^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:24:24
+   --> ../../../tests/invalid/container_types.test.w:24:24
    |
 24 | let s1: Set<num> = [1, \\"2\\", 3];
    |                        ^^^
 
 
 error: Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:24:20
+   --> ../../../tests/invalid/container_types.test.w:24:20
    |
 24 | let s1: Set<num> = [1, \\"2\\", 3];
    |                    ^^^^^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:25:23
+   --> ../../../tests/invalid/container_types.test.w:25:23
    |
 25 | let s2 = Set<num> [1, \\"2\\", 3];
    |                       ^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:26:24
+   --> ../../../tests/invalid/container_types.test.w:26:24
    |
 26 | let s3: Set<num> = [1, \\"2\\", 3];
    |                        ^^^
 
 
 error: Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:26:20
+   --> ../../../tests/invalid/container_types.test.w:26:20
    |
 26 | let s3: Set<num> = [1, \\"2\\", 3];
    |                    ^^^^^^^^^^^
 
 
 error: Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:28:20
+   --> ../../../tests/invalid/container_types.test.w:28:20
    |
 28 | let s5: Set<str> = s4;
    |                    ^^
 
 
 error: Member \\"someRandomMethod\\" doesn't exist in \\"Set\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:29:4
+   --> ../../../tests/invalid/container_types.test.w:29:4
    |
 29 | s1.someRandomMethod();
    |    ^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:31:21
+   --> ../../../tests/invalid/container_types.test.w:31:21
    |
 31 | let a: Array<str> = MutArray<str>[];
    |                     ^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:34:24
+   --> ../../../tests/invalid/container_types.test.w:34:24
    |
 34 | let mm1: MutMap<num> = { \\"a\\" => 1, \\"b\\" => 2, \\"c\\" => 3 };
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Member \\"copyMut\\" doesn't exist in \\"MutMap\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:37:15
+   --> ../../../tests/invalid/container_types.test.w:37:15
    |
 37 | let mm3 = mm2.copyMut();
    |               ^^^^^^^
 
 
 error: Expected type to be \\"MutSet<str>\\", but got \\"Array<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:41:27
+   --> ../../../tests/invalid/container_types.test.w:41:27
    |
 41 | let ss1: MutSet<str> = Set[\\"c\\"];
    |                           ^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"bool\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:43:36
+   --> ../../../tests/invalid/container_types.test.w:43:36
    |
 43 | let ss2: MutSet<num> = MutSet<num>[true];
    |                                    ^^^^
 
 
 error: Member \\"copyMut\\" doesn't exist in \\"MutSet\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:46:15
+   --> ../../../tests/invalid/container_types.test.w:46:15
    |
 46 | let ss4 = ss3.copyMut();
    |               ^^^^^^^
@@ -1286,77 +1286,77 @@ Duration <DURATION>"
 
 exports[`ctor_super.test.w 1`] = `
 "error: Missing super() call as first statement of PreflighChild1's constructor
-  --> ../../../examples/tests/invalid/ctor_super.test.w:9:7
+  --> ../../../tests/invalid/ctor_super.test.w:9:7
   |
 9 | class PreflighChild1 extends PreflightBaseWithCtorParam {}
   |       ^^^^^^^^^^^^^^
 
 
 error: Missing super() call as first statement of PreflighChild2's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:13:15
+   --> ../../../tests/invalid/ctor_super.test.w:13:15
    |
 13 |   new(a: num) {}
    |               ^^
 
 
 error: Missing super() call as first statement of InflightChild1's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:29:16
+   --> ../../../tests/invalid/ctor_super.test.w:29:16
    |
 29 | inflight class InflightChild1 extends InflightBaseWithCtorParam {}
    |                ^^^^^^^^^^^^^^
 
 
 error: Missing super() call as first statement of InflightChild2's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:33:15
+   --> ../../../tests/invalid/ctor_super.test.w:33:15
    |
 33 |   new(a: num) {}
    |               ^^
 
 
 error: Missing super() call as first statement of InflightChild4's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:45:9
+   --> ../../../tests/invalid/ctor_super.test.w:45:9
    |
 45 |   new() {}
    |         ^^
 
 
 error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/ctor_super.test.w:19:5
+   --> ../../../tests/invalid/ctor_super.test.w:19:5
    |
 19 |     super();
    |     ^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/ctor_super.test.w:39:5
+   --> ../../../tests/invalid/ctor_super.test.w:39:5
    |
 39 |     super();
    |     ^^^^^^^^
 
 
 error: Missing super() call as first statement of InflightChild1's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:55:9
+   --> ../../../tests/invalid/ctor_super.test.w:55:9
    |
 55 |   class InflightChild1 extends InflightBaseWithCtorParam {}
    |         ^^^^^^^^^^^^^^
 
 
 error: Missing super() call as first statement of InflightChild2's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:59:17
+   --> ../../../tests/invalid/ctor_super.test.w:59:17
    |
 59 |     new(a: num) {}
    |                 ^^
 
 
 error: Missing super() call as first statement of InflightChild4's constructor
-   --> ../../../examples/tests/invalid/ctor_super.test.w:71:11
+   --> ../../../tests/invalid/ctor_super.test.w:71:11
    |
 71 |     new() {}
    |           ^^
 
 
 error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/ctor_super.test.w:65:7
+   --> ../../../tests/invalid/ctor_super.test.w:65:7
    |
 65 |       super();
    |       ^^^^^^^^
@@ -1377,14 +1377,14 @@ exports[`cyclic_bring1.w 1`] = `
 
 
 error: Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
-  --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
+  --> ../../../tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
-  --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
+  --> ../../../tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1405,14 +1405,14 @@ exports[`cyclic_bring2.w 1`] = `
 
 
 error: Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
-  --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
+  --> ../../../tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
-  --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
+  --> ../../../tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1433,14 +1433,14 @@ exports[`cyclic_bring3.w 1`] = `
 
 
 error: Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
-  --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
+  --> ../../../tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
-  --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
+  --> ../../../tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1455,7 +1455,7 @@ Duration <DURATION>"
 
 exports[`diags_with_multibyte_chars.test.w 1`] = `
 "error: Unknown symbol \\"asdf\\"
-  --> ../../../examples/tests/invalid/diags_with_multibyte_chars.test.w:4:1
+  --> ../../../tests/invalid/diags_with_multibyte_chars.test.w:4:1
   |
 4 | asdf;
   | ^^^^
@@ -1470,14 +1470,14 @@ Duration <DURATION>"
 
 exports[`enums.test.w 1`] = `
 "error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
-  --> ../../../examples/tests/invalid/enums.test.w:5:21
+  --> ../../../tests/invalid/enums.test.w:5:21
   |
 5 | let four = SomeEnum.FOUR;
   |                     ^^^^
 
 
 error: Property not found
-  --> ../../../examples/tests/invalid/enums.test.w:8:24
+  --> ../../../tests/invalid/enums.test.w:8:24
   |
 8 | let two = SomeEnum.TWO.TWO;
   |                        ^^^
@@ -1492,70 +1492,70 @@ Duration <DURATION>"
 
 exports[`explicit_lift_qualification.test.w 1`] = `
 "error: Expected type to be \\"IResource\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:22:10
+   --> ../../../tests/invalid/explicit_lift_qualification.test.w:22:10
    |
 22 |     lift(prelight_string, [\\"contains\\"]); // Explicit qualification on preflight non-class
    |          ^^^^^^^^^^^^^^^
 
 
 error: lift() calls must be at the top of the method
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:18:5
+   --> ../../../tests/invalid/explicit_lift_qualification.test.w:18:5
    |
 18 |     lift(b, [\\"put\\"]); // Explicit qualification with inflight object, lift call as non first statement
    |     ^^^^^^^^^^^^^^^^^
 
 
 error: lift() calls must be at the top of the method
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:22:5
+   --> ../../../tests/invalid/explicit_lift_qualification.test.w:22:5
    |
 22 |     lift(prelight_string, [\\"contains\\"]); // Explicit qualification on preflight non-class
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: lift() calls must be at the top of the method
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:27:5
+   --> ../../../tests/invalid/explicit_lift_qualification.test.w:27:5
    |
 27 |     lift(bucket, [inflight_qualifier]); // Explicit qualification with inflight qualifiers, lift call as non first statement
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:18:10
+   --> ../../../tests/invalid/explicit_lift_qualification.test.w:18:10
    |
 18 |     lift(b, [\\"put\\"]); // Explicit qualification with inflight object, lift call as non first statement
    |          ^
 
 
 error: Qualification list must not contain any inflight elements
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:27:18
+   --> ../../../tests/invalid/explicit_lift_qualification.test.w:27:18
    |
 27 |     lift(bucket, [inflight_qualifier]); // Explicit qualification with inflight qualifiers, lift call as non first statement
    |                  ^^^^^^^^^^^^^^^^^^^^
 
 
 error: lift() calls are only allowed in inflight methods and closures defined in preflight
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:32:7
+   --> ../../../tests/invalid/explicit_lift_qualification.test.w:32:7
    |
 32 |       lift(bucket, [\\"get\\"]); // lift() call in inner closure
    |       ^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: lift() calls are only allowed in inflight methods and closures defined in preflight
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:37:9
+   --> ../../../tests/invalid/explicit_lift_qualification.test.w:37:9
    |
 37 |         lift(bucket, [\\"get\\"]); // lift() call in inner class
    |         ^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:45:5
+   --> ../../../tests/invalid/explicit_lift_qualification.test.w:45:5
    |
 45 |     b.put(\\"k\\", \\"v\\"); // With no explicit qualification this should be an error
    |     ^
 
 
 error: Expression of type \\"IPreflightInterface\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:49:5
+   --> ../../../tests/invalid/explicit_lift_qualification.test.w:49:5
    |
 49 |     i.method(); // With no explicit qualification this should be an error
    |     ^
@@ -1570,7 +1570,7 @@ Duration <DURATION>"
 
 exports[`extern.test.w 1`] = `
 "error: File not found: \\"./sad.js\\"
-  --> ../../../examples/tests/invalid/extern.test.w:2:3
+  --> ../../../tests/invalid/extern.test.w:2:3
   |
 2 |   extern \\"./sad.js\\" static getNum(): num;
   |   ^^^^^^^^^^^^^^^^^
@@ -1585,7 +1585,7 @@ Duration <DURATION>"
 
 exports[`extern_static.test.w 1`] = `
 "error: Extern methods must be declared \\"static\\" (they cannot access instance members)
-  --> ../../../examples/tests/invalid/extern_static.test.w:2:45
+  --> ../../../tests/invalid/extern_static.test.w:2:45
   |
 2 |   extern \\"../valid/external_ts.ts\\" inflight getGreeting(name: str): str;
   |                                             ^^^^^^^^^^^
@@ -1613,28 +1613,28 @@ Duration <DURATION>"
 
 exports[`file_with_variables.w 1`] = `
 "error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
-  --> ../../../examples/tests/invalid/file_with_variables.w:5:1
+  --> ../../../tests/invalid/file_with_variables.w:5:1
   |
 5 | let x = 5;
   | ^^^^^^^^^^
 
 
 error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
-  --> ../../../examples/tests/invalid/file_with_variables.w:6:1
+  --> ../../../tests/invalid/file_with_variables.w:6:1
   |
 6 | let y = [\\"hello\\", \\"world\\"];
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with \`.main.w\` or \`.test.w\` to make this an entrypoint file.
-  --> ../../../examples/tests/invalid/file_with_variables.w:7:1
+  --> ../../../tests/invalid/file_with_variables.w:7:1
   |
 7 | let z = new cloud.Bucket();
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Preflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/file_with_variables.w:10:3
+   --> ../../../tests/invalid/file_with_variables.w:10:3
    |
 10 |   x: num;
    |   ^
@@ -1649,14 +1649,14 @@ Duration <DURATION>"
 
 exports[`for_loop.test.w 1`] = `
 "error: Reserved word
-  --> ../../../examples/tests/invalid/for_loop.test.w:5:5
+  --> ../../../tests/invalid/for_loop.test.w:5:5
   |
 5 | for test in bucket {
   |     ^^^^
 
 
 error: Unable to iterate over \\"Bucket\\"
-  --> ../../../examples/tests/invalid/for_loop.test.w:5:13
+  --> ../../../tests/invalid/for_loop.test.w:5:13
   |
 5 | for test in bucket {
   |             ^^^^^^
@@ -1671,91 +1671,91 @@ Duration <DURATION>"
 
 exports[`function_call_arity.test.w 1`] = `
 "error: Positional arguments must come before named arguments
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:61
+   --> ../../../tests/invalid/function_call_arity.test.w:31:61
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
    |                                                             ^^^^^^^
 
 
 error: Positional arguments must come before named arguments
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:70
+   --> ../../../tests/invalid/function_call_arity.test.w:31:70
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
    |                                                                      ^^^^^^^
 
 
 error: Expected 2 positional argument(s) but got 0
-  --> ../../../examples/tests/invalid/function_call_arity.test.w:2:1
+  --> ../../../tests/invalid/function_call_arity.test.w:2:1
   |
 2 | func(); // Expected {} positional arguments but got {}
   | ^^^^^^
 
 
 error: Expected between 2 and 3 positional arguments but got 1
-  --> ../../../examples/tests/invalid/function_call_arity.test.w:5:1
+  --> ../../../tests/invalid/function_call_arity.test.w:5:1
   |
 5 | optionalParamsFunc(1); // Expected between {} and {} positional arguments but got {}
   | ^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected 2 positional argument(s) + variadic args but got 0
-  --> ../../../examples/tests/invalid/function_call_arity.test.w:8:1
+  --> ../../../tests/invalid/function_call_arity.test.w:8:1
   |
 8 | variadicFunc(); // Expected {} positional arguments + variadic args but got {}
   | ^^^^^^^^^^^^^^
 
 
 error: Expected between 2 and 3 positional arguments + variadic args but got 1
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:12:1
+   --> ../../../tests/invalid/function_call_arity.test.w:12:1
    |
 12 | variadicOptionalParamsFunc(2); // Expected between {} and {} positional arguments + variadic args but got {}
    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected 3 positional argument(s) or named arguments for the last parameter but got 0
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:20:1
+   --> ../../../tests/invalid/function_call_arity.test.w:20:1
    |
 20 | namedFunc(); // Expected {} positional arguments or named arguments for the last parameter but got {}
    | ^^^^^^^^^^^
 
 
 error: Optional parameters must always be after all non-optional parameters.
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:22:49
+   --> ../../../tests/invalid/function_call_arity.test.w:22:49
    |
 22 | let namedOptionalParamsFunc = (n: num, b: bool, s: str?, opts: Options) => {};
    |                                                 ^
 
 
 error: Expected between 3 and 4 positional arguments or named arguments for the last parameter but got 1
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:23:1
+   --> ../../../tests/invalid/function_call_arity.test.w:23:1
    |
 23 | namedOptionalParamsFunc(3); // Expected between {} and {} positional arguments or named arguments for the last parameter but got {}
    | ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Variadic parameters must always be the last parameter in a function.
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:27:51
+   --> ../../../tests/invalid/function_call_arity.test.w:27:51
    |
 27 | let invalidCombinationFunc = (n: num, b: bool, ...variadic: Array<str>, opts: Options) => {};
    |                                                   ^^^^^^^^
 
 
 error: No named arguments expected
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:1
+   --> ../../../tests/invalid/function_call_arity.test.w:31:1
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"bool\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:28
+   --> ../../../tests/invalid/function_call_arity.test.w:31:28
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
    |                            ^
 
 
 error: Expected type to be \\"Options\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/function_call_arity.test.w:31:61
+   --> ../../../tests/invalid/function_call_arity.test.w:31:61
    |
 31 | invalidCombinationFunc2(1, 2, prefix: \\"debug\\", priority: 0, \\"hello\\", \\"world\\");
    |                                                             ^^^^^^^
@@ -1770,28 +1770,28 @@ Duration <DURATION>"
 
 exports[`function_call_variadic.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/function_call_variadic.test.w:3:6
+  --> ../../../tests/invalid/function_call_variadic.test.w:3:6
   |
 3 | func(1, 2, 3); // should fail due to wrong type for variadic
   |      ^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/function_call_variadic.test.w:3:9
+  --> ../../../tests/invalid/function_call_variadic.test.w:3:9
   |
 3 | func(1, 2, 3); // should fail due to wrong type for variadic
   |         ^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/function_call_variadic.test.w:3:12
+  --> ../../../tests/invalid/function_call_variadic.test.w:3:12
   |
 3 | func(1, 2, 3); // should fail due to wrong type for variadic
   |            ^
 
 
 error: Expected type to be \\"str\\", but got \\"Array<str>\\" instead
-  --> ../../../examples/tests/invalid/function_call_variadic.test.w:4:6
+  --> ../../../tests/invalid/function_call_variadic.test.w:4:6
   |
 4 | func([\\"a\\", \\"b\\", \\"c\\"]); // should fail as the parameter is variadic
   |      ^^^^^^^^^^^^^^^
@@ -1806,21 +1806,21 @@ Duration <DURATION>"
 
 exports[`function_type.test.w 1`] = `
 "error: Expected function return type
-  --> ../../../examples/tests/invalid/function_type.test.w:3:3
+  --> ../../../tests/invalid/function_type.test.w:3:3
   |
 3 |   my_method(x: num);
   |   ^^^^^^^^^^^^^^^^^^
 
 
 error: Expected function return type
-  --> ../../../examples/tests/invalid/function_type.test.w:5:3
+  --> ../../../tests/invalid/function_type.test.w:5:3
   |
 5 |   inflight my_method2(x: num);
   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Optional parameters must always be after all non-optional parameters.
-  --> ../../../examples/tests/invalid/function_type.test.w:9:25
+  --> ../../../tests/invalid/function_type.test.w:9:25
   |
 9 | let my_func3 = (a: num, b: str?, c: bool) => {};
   |                         ^
@@ -1835,49 +1835,49 @@ Duration <DURATION>"
 
 exports[`function_variadic_definition.test.w 1`] = `
 "error: Positional arguments must come before named arguments
-   --> ../../../examples/tests/invalid/function_variadic_definition.test.w:15:13
+   --> ../../../tests/invalid/function_variadic_definition.test.w:15:13
    |
 15 | f5(args: 1, 2);
    |             ^
 
 
 error: Variadic parameters must always be the last parameter in a function.
-  --> ../../../examples/tests/invalid/function_variadic_definition.test.w:1:14
+  --> ../../../tests/invalid/function_variadic_definition.test.w:1:14
   |
 1 | let f1 = (...args: Array<num>, x:num) => {};
   |              ^^^^
 
 
 error: Variadic parameters must always be the last parameter in a function.
-  --> ../../../examples/tests/invalid/function_variadic_definition.test.w:4:14
+  --> ../../../tests/invalid/function_variadic_definition.test.w:4:14
   |
 4 | let f2 = (...nums: Array<num>, ...strs: Array<str>) => {};
   |              ^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"bool\\" instead
-  --> ../../../examples/tests/invalid/function_variadic_definition.test.w:8:7
+  --> ../../../tests/invalid/function_variadic_definition.test.w:8:7
   |
 8 | f3(1, true, 2);
   |       ^^^^
 
 
 error: Variadic parameters must be type Array or MutArray.
-   --> ../../../examples/tests/invalid/function_variadic_definition.test.w:11:14
+   --> ../../../tests/invalid/function_variadic_definition.test.w:11:14
    |
 11 | let f4 = (...args: Set<num>) => {};
    |              ^^^^
 
 
 error: No named arguments expected
-   --> ../../../examples/tests/invalid/function_variadic_definition.test.w:15:1
+   --> ../../../tests/invalid/function_variadic_definition.test.w:15:1
    |
 15 | f5(args: 1, 2);
    | ^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"Bucket\\", but got \\"bool\\" instead
-   --> ../../../examples/tests/invalid/function_variadic_definition.test.w:24:21
+   --> ../../../tests/invalid/function_variadic_definition.test.w:24:21
    |
 24 | funcBucket(bucket1, true, bucket2);
    |                     ^^^^
@@ -1892,84 +1892,84 @@ Duration <DURATION>"
 
 exports[`global_symbols.test.w 1`] = `
 "error: Symbol \\"log\\" already defined in this scope
-  --> ../../../examples/tests/invalid/global_symbols.test.w:1:5
+  --> ../../../tests/invalid/global_symbols.test.w:1:5
   |
 1 | let log = \\"hi\\";
   |     ^^^
 
 
 error: Symbol \\"assert\\" already defined in this scope
-  --> ../../../examples/tests/invalid/global_symbols.test.w:3:5
+  --> ../../../tests/invalid/global_symbols.test.w:3:5
   |
 3 | let assert = \\"there\\";
   |     ^^^^^^
 
 
 error: Symbol \\"unsafeCast\\" already defined in this scope
-  --> ../../../examples/tests/invalid/global_symbols.test.w:5:5
+  --> ../../../tests/invalid/global_symbols.test.w:5:5
   |
 5 | let unsafeCast = \\"wingnuts\\";
   |     ^^^^^^^^^^
 
 
 error: Symbol \\"nodeof\\" already defined in this scope
-  --> ../../../examples/tests/invalid/global_symbols.test.w:7:5
+  --> ../../../tests/invalid/global_symbols.test.w:7:5
   |
 7 | let nodeof = \\"!\\";
   |     ^^^^^^
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/global_symbols.test.w:10:1
+   --> ../../../tests/invalid/global_symbols.test.w:10:1
    |
 10 | log = \\"hi\\";
    | ^^^
 
 
 error: Expected type to be \\"(message: str): void\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/global_symbols.test.w:10:7
+   --> ../../../tests/invalid/global_symbols.test.w:10:7
    |
 10 | log = \\"hi\\";
    |       ^^^^
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/global_symbols.test.w:12:1
+   --> ../../../tests/invalid/global_symbols.test.w:12:1
    |
 12 | assert = \\"there\\";
    | ^^^^^^
 
 
 error: Expected type to be \\"(condition: bool, message: str?): void\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/global_symbols.test.w:12:10
+   --> ../../../tests/invalid/global_symbols.test.w:12:10
    |
 12 | assert = \\"there\\";
    |          ^^^^^^^
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/global_symbols.test.w:14:1
+   --> ../../../tests/invalid/global_symbols.test.w:14:1
    |
 14 | unsafeCast = \\"wingnuts\\";
    | ^^^^^^^^^^
 
 
 error: Expected type to be \\"(value: any): any\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/global_symbols.test.w:14:14
+   --> ../../../tests/invalid/global_symbols.test.w:14:14
    |
 14 | unsafeCast = \\"wingnuts\\";
    |              ^^^^^^^^^^
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/global_symbols.test.w:16:1
+   --> ../../../tests/invalid/global_symbols.test.w:16:1
    |
 16 | nodeof = \\"!\\";
    | ^^^^^^
 
 
 error: Expected type to be \\"preflight (construct: IConstruct): Node\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/global_symbols.test.w:16:10
+   --> ../../../tests/invalid/global_symbols.test.w:16:10
    |
 16 | nodeof = \\"!\\";
    |          ^^^
@@ -1984,91 +1984,91 @@ Duration <DURATION>"
 
 exports[`immutable_container_types.test.w 1`] = `
 "error: Member \\"set\\" doesn't exist in \\"Map\\"
-  --> ../../../examples/tests/invalid/immutable_container_types.test.w:3:4
+  --> ../../../tests/invalid/immutable_container_types.test.w:3:4
   |
 3 | m1.set(\\"a\\", \\"bye\\");
   |    ^^^
 
 
 error: Expected type to be \\"Map<str>\\", but got \\"MutMap<str>\\" instead
-  --> ../../../examples/tests/invalid/immutable_container_types.test.w:6:20
+  --> ../../../tests/invalid/immutable_container_types.test.w:6:20
   |
 6 | let m2: Map<str> = MutMap<str> {};
   |                    ^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"bool\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/immutable_container_types.test.w:8:29
+  --> ../../../tests/invalid/immutable_container_types.test.w:8:29
   |
 8 | let m3 = Map<bool> { \\"a\\" => \\"A\\" };
   |                             ^^^
 
 
 error: Member \\"set\\" doesn't exist in \\"Map\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
+   --> ../../../tests/invalid/immutable_container_types.test.w:11:4
    |
 11 | m4.set(\\"2\\", 3);
    |    ^^^
 
 
 error: Member \\"copy\\" doesn't exist in \\"Map\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:13:13
+   --> ../../../tests/invalid/immutable_container_types.test.w:13:13
    |
 13 | let m5 = m4.copy();
    |             ^^^^
 
 
 error: Member \\"delete\\" doesn't exist in \\"Map\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:15:4
+   --> ../../../tests/invalid/immutable_container_types.test.w:15:4
    |
 15 | m4.delete(\\"1\\");
    |    ^^^^^^
 
 
 error: Member \\"clear\\" doesn't exist in \\"Map\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:17:4
+   --> ../../../tests/invalid/immutable_container_types.test.w:17:4
    |
 17 | m4.clear();
    |    ^^^^^
 
 
 error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:21:27
+   --> ../../../tests/invalid/immutable_container_types.test.w:21:27
    |
 21 | let s1: Set<Array<num>> = MutSet<Array<num>>[[1]];
    |                           ^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Member \\"delete\\" doesn't exist in \\"Set\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:24:4
+   --> ../../../tests/invalid/immutable_container_types.test.w:24:4
    |
 24 | s2.delete(\\"a\\");
    |    ^^^^^^
 
 
 error: Member \\"add\\" doesn't exist in \\"Set\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:26:4
+   --> ../../../tests/invalid/immutable_container_types.test.w:26:4
    |
 26 | s2.add(\\"d\\");
    |    ^^^
 
 
 error: Member \\"copy\\" doesn't exist in \\"Set\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:28:13
+   --> ../../../tests/invalid/immutable_container_types.test.w:28:13
    |
 28 | let s3 = s2.copy();
    |             ^^^^
 
 
 error: Member \\"clear\\" doesn't exist in \\"Set\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:30:4
+   --> ../../../tests/invalid/immutable_container_types.test.w:30:4
    |
 30 | s2.clear();
    |    ^^^^^
 
 
 error: Expected type to be \\"bool\\", but got \\"Array<num>\\" instead
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:32:31
+   --> ../../../tests/invalid/immutable_container_types.test.w:32:31
    |
 32 | let s4: Set<bool> = Set<bool>[[3]];
    |                               ^^^
@@ -2083,42 +2083,42 @@ Duration <DURATION>"
 
 exports[`impl_interface.test.w 1`] = `
 "error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
-  --> ../../../examples/tests/invalid/impl_interface.test.w:3:7
+  --> ../../../tests/invalid/impl_interface.test.w:3:7
   |
 3 | class A impl cloud.IQueueSetConsumerHandler {
   |       ^
 
 
 error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
-  --> ../../../examples/tests/invalid/impl_interface.test.w:8:16
+  --> ../../../tests/invalid/impl_interface.test.w:8:16
   |
 8 |   pub inflight handle(x: num) {
   |                ^^^^^^
 
 
 error: Expected an interface, instead found type \\"Bucket\\"
-   --> ../../../examples/tests/invalid/impl_interface.test.w:14:14
+   --> ../../../tests/invalid/impl_interface.test.w:14:14
    |
 14 | class C impl cloud.Bucket {
    |              ^^^^^^^^^^^^
 
 
 error: Class \\"r\\" does not implement method \\"method1\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.test.w:30:7
+   --> ../../../tests/invalid/impl_interface.test.w:30:7
    |
 30 | class r impl I3 {
    |       ^
 
 
 error: Class \\"r\\" does not implement method \\"method2\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.test.w:30:7
+   --> ../../../tests/invalid/impl_interface.test.w:30:7
    |
 30 | class r impl I3 {
    |       ^
 
 
 error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\\"
-   --> ../../../examples/tests/invalid/impl_interface.test.w:30:7
+   --> ../../../tests/invalid/impl_interface.test.w:30:7
    |
 30 | class r impl I3 {
    |       ^
@@ -2133,7 +2133,7 @@ Duration <DURATION>"
 
 exports[`indexing.test.w 1`] = `
 "error: Cannot update elements of an immutable Array
-  --> ../../../examples/tests/invalid/indexing.test.w:6:1
+  --> ../../../tests/invalid/indexing.test.w:6:1
   |
 6 | arr[0] = 5;
   | ^^^^^^
@@ -2142,35 +2142,35 @@ exports[`indexing.test.w 1`] = `
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/indexing.test.w:9:5
+  --> ../../../tests/invalid/indexing.test.w:9:5
   |
 9 | arr[\\"key\\"];
   |     ^^^^^
 
 
 error: Type \\"Bucket\\" is not indexable
-   --> ../../../examples/tests/invalid/indexing.test.w:13:1
+   --> ../../../tests/invalid/indexing.test.w:13:1
    |
 13 | b[0] = 5;
    | ^
 
 
 error: Type \\"Array<num>?\\" is not indexable
-   --> ../../../examples/tests/invalid/indexing.test.w:17:1
+   --> ../../../tests/invalid/indexing.test.w:17:1
    |
 17 | optarr[0] = 5;
    | ^^^^^^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/indexing.test.w:21:5
+   --> ../../../tests/invalid/indexing.test.w:21:5
    |
 21 | map[0];
    |     ^
 
 
 error: Cannot update elements of an immutable Map
-   --> ../../../examples/tests/invalid/indexing.test.w:25:1
+   --> ../../../tests/invalid/indexing.test.w:25:1
    |
 25 | mutmap[\\"a\\"] = false;
    | ^^^^^^^^^^^
@@ -2179,7 +2179,7 @@ error: Cannot update elements of an immutable Map
 
 
 error: Cannot update elements of an immutable Json
-   --> ../../../examples/tests/invalid/indexing.test.w:29:1
+   --> ../../../tests/invalid/indexing.test.w:29:1
    |
 29 | json[0] = 5;
    | ^^^^^^^
@@ -2188,28 +2188,28 @@ error: Cannot update elements of an immutable Json
 
 
 error: Strings are immutable
-   --> ../../../examples/tests/invalid/indexing.test.w:33:1
+   --> ../../../tests/invalid/indexing.test.w:33:1
    |
 33 | s[0] = \\"H\\";
    | ^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-   --> ../../../examples/tests/invalid/indexing.test.w:36:13
+   --> ../../../tests/invalid/indexing.test.w:36:13
    |
 36 | let var x = 3 + \\"hello\\";
    |             ^^^^^^^^^^^
 
 
 error: Unsupported reassignment of element of type unresolved
-   --> ../../../examples/tests/invalid/indexing.test.w:37:1
+   --> ../../../tests/invalid/indexing.test.w:37:1
    |
 37 | x[\\"hi\\"] = 4;
    | ^^^^^^^
 
 
 error: Indexing into an inferred type is not supported
-   --> ../../../examples/tests/invalid/indexing.test.w:41:7
+   --> ../../../tests/invalid/indexing.test.w:41:7
    |
 41 |   log(x[0]);
    |       ^
@@ -2224,98 +2224,98 @@ Duration <DURATION>"
 
 exports[`inference.test.w 1`] = `
 "error: Missing required type annotation for method signature
-   --> ../../../examples/tests/invalid/inference.test.w:78:8
+   --> ../../../tests/invalid/inference.test.w:78:8
    |
 78 |   args(nice) {
    |        ^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/inference.test.w:13:18
+   --> ../../../tests/invalid/inference.test.w:13:18
    |
 13 | recursiveClosure(\\"\\");
    |                  ^^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/inference.test.w:32:19
+   --> ../../../tests/invalid/inference.test.w:32:19
    |
 32 | stringArray2.push(2);
    |                   ^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/inference.test.w:38:16
+   --> ../../../tests/invalid/inference.test.w:38:16
    |
 38 | numArray2.push(\\"2\\");
    |                ^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/inference.test.w:42:40
+   --> ../../../tests/invalid/inference.test.w:42:40
    |
 42 | let dependentArray = [numArray2.at(0), stringArray2.at(1)];
    |                                        ^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/inference.test.w:45:60
+   --> ../../../tests/invalid/inference.test.w:45:60
    |
 45 | let dependentMap = { \\"cool\\" => numArray2.at(0), \\"cool2\\" => stringArray2.at(1) };
    |                                                            ^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse?\\" instead
-   --> ../../../examples/tests/invalid/inference.test.w:57:31
+   --> ../../../tests/invalid/inference.test.w:57:31
    |
 57 | (new cloud.Bucket()).onCreate(func);
    |                               ^^^^
 
 
 error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
-   --> ../../../examples/tests/invalid/inference.test.w:84:37
+   --> ../../../tests/invalid/inference.test.w:84:37
    |
 84 | let badFunc: inflight (str): void = inflight (arg1: num) => {};
    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Unable to infer type
-  --> ../../../examples/tests/invalid/inference.test.w:4:29
+  --> ../../../tests/invalid/inference.test.w:4:29
   |
 4 | let preflightClosureArgs = (nice) => { return true; };
   |                             ^^^^
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:25:44
+   --> ../../../tests/invalid/inference.test.w:25:44
    |
 25 | let stringInterpolationCannotBeInferred = (nice) => {
    |                                            ^^^^
 
 
 error: Property not found
-   --> ../../../examples/tests/invalid/inference.test.w:63:19
+   --> ../../../tests/invalid/inference.test.w:63:19
    |
 63 |     body: request.body,
    |                   ^^^^
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:60:23
+   --> ../../../tests/invalid/inference.test.w:60:23
    |
 60 | let func2 = inflight (request) => {
    |                       ^^^^^^^
 
 
 error: Unexpected return value from void function. Return type annotations are required for methods.
-   --> ../../../examples/tests/invalid/inference.test.w:75:5
+   --> ../../../tests/invalid/inference.test.w:75:5
    |
 75 |     return true;
    |     ^^^^^^^^^^^^
 
 
 error: Inferred type Array<str> conflicts with already inferred type Array<num>
-   --> ../../../examples/tests/invalid/inference.test.w:92:33
+   --> ../../../tests/invalid/inference.test.w:92:33
    |  
 92 |     let jsonDoubleInference: SS = {
    | /---------------------------------^
@@ -2326,84 +2326,84 @@ error: Inferred type Array<str> conflicts with already inferred type Array<num>
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-    --> ../../../examples/tests/invalid/inference.test.w:102:16
+    --> ../../../tests/invalid/inference.test.w:102:16
     |
 102 |   let x: str = returnsNumber();
     |                ^^^^^^^^^^^^^^^
 
 
 error: Property not found
-    --> ../../../examples/tests/invalid/inference.test.w:109:14
+    --> ../../../tests/invalid/inference.test.w:109:14
     |
 109 |   return arg.get(\\"a\\");
     |              ^^^
 
 
 error: Unable to infer type
-    --> ../../../examples/tests/invalid/inference.test.w:107:19
+    --> ../../../tests/invalid/inference.test.w:107:19
     |
 107 | let unknownArg = (arg) => {
     |                   ^^^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-    --> ../../../examples/tests/invalid/inference.test.w:118:16
+    --> ../../../tests/invalid/inference.test.w:118:16
     |
 118 |   let s: str = a;
     |                ^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/inference.test.w:120:10
+    --> ../../../tests/invalid/inference.test.w:120:10
     |
 120 |   return \\"\\";
     |          ^^
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:69:5
+   --> ../../../tests/invalid/inference.test.w:69:5
    |
 69 | let anotherEmptyArray = [];
    |     ^^^^^^^^^^^^^^^^^
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:21:5
+   --> ../../../tests/invalid/inference.test.w:21:5
    |
 21 | let clonedArray = emptyArray.copyMut();
    |     ^^^^^^^^^^^
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:16:5
+   --> ../../../tests/invalid/inference.test.w:16:5
    |
 16 | let emptyArray = [];
    |     ^^^^^^^^^^
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:60:5
+   --> ../../../tests/invalid/inference.test.w:60:5
    |
 60 | let func2 = inflight (request) => {
    |     ^^^^^
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:18:5
+   --> ../../../tests/invalid/inference.test.w:18:5
    |
 18 | let numArray = emptyArray;
    |     ^^^^^^^^
 
 
 error: Unable to infer type
-  --> ../../../examples/tests/invalid/inference.test.w:4:5
+  --> ../../../tests/invalid/inference.test.w:4:5
   |
 4 | let preflightClosureArgs = (nice) => { return true; };
   |     ^^^^^^^^^^^^^^^^^^^^
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:25:5
+   --> ../../../tests/invalid/inference.test.w:25:5
    |
 25 | let stringInterpolationCannotBeInferred = (nice) => {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2418,35 +2418,35 @@ Duration <DURATION>"
 
 exports[`inflight_class_created_in_preflight.test.w 1`] = `
 "error: Cannot create inflight class \\"Foo\\" in preflight phase
-  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:3:1
+  --> ../../../tests/invalid/inflight_class_created_in_preflight.test.w:3:1
   |
 3 | new Foo();
   | ^^^^^^^^^
 
 
 error: Cannot create inflight class \\"Foo\\" in preflight phase
-  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:8:5
+  --> ../../../tests/invalid/inflight_class_created_in_preflight.test.w:8:5
   |
 8 |     new Foo();
   |     ^^^^^^^^^
 
 
 error: Cannot create inflight class \\"Foo\\" in preflight phase
-   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:13:5
+   --> ../../../tests/invalid/inflight_class_created_in_preflight.test.w:13:5
    |
 13 |     new Foo();
    |     ^^^^^^^^^
 
 
 error: Cannot create preflight class \\"PreflightClass\\" in inflight phase
-   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:19:3
+   --> ../../../tests/invalid/inflight_class_created_in_preflight.test.w:19:3
    |
 19 |   new PreflightClass();
    |   ^^^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:19:7
+   --> ../../../tests/invalid/inflight_class_created_in_preflight.test.w:19:7
    |
 19 |   new PreflightClass();
    |       ^^^^^^^^^^^^^^
@@ -2461,7 +2461,7 @@ Duration <DURATION>"
 
 exports[`inflight_class_dup_init.test.w 1`] = `
 "error: Multiple inflight constructors defined in class Foo
-  --> ../../../examples/tests/invalid/inflight_class_dup_init.test.w:6:3
+  --> ../../../tests/invalid/inflight_class_dup_init.test.w:6:3
   |  
 6 | /   inflight new() {
 7 | | 
@@ -2478,7 +2478,7 @@ Duration <DURATION>"
 
 exports[`inflight_class_in_preflight.test.w 1`] = `
 "error: Cannot create inflight class \\"Foo\\" in preflight phase
-  --> ../../../examples/tests/invalid/inflight_class_in_preflight.test.w:5:1
+  --> ../../../tests/invalid/inflight_class_in_preflight.test.w:5:1
   |
 5 | new Foo();
   | ^^^^^^^^^
@@ -2493,7 +2493,7 @@ Duration <DURATION>"
 
 exports[`inflight_class_interface_structural_typing.test.w 1`] = `
 "error: Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
-   --> ../../../examples/tests/invalid/inflight_class_interface_structural_typing.test.w:26:17
+   --> ../../../tests/invalid/inflight_class_interface_structural_typing.test.w:26:17
    |
 26 |   let x: IGoo = new NotGoo();
    |                 ^^^^^^^^^^^^
@@ -2508,14 +2508,14 @@ Duration <DURATION>"
 
 exports[`inflight_reassign.test.w 1`] = `
 "error: Variable cannot be reassigned from inflight
-  --> ../../../examples/tests/invalid/inflight_reassign.test.w:5:3
+  --> ../../../tests/invalid/inflight_reassign.test.w:5:3
   |
 5 |   xvar = \\"hi\\";
   |   ^^^^
 
 
 error: Variable is not reassignable
-  --> ../../../examples/tests/invalid/inflight_reassign.test.w:8:3
+  --> ../../../tests/invalid/inflight_reassign.test.w:8:3
   |
 2 | let ylet = 123;
   |     ---- defined here (try adding \\"var\\" in front)
@@ -2533,21 +2533,21 @@ Duration <DURATION>"
 
 exports[`inflight_ref_explicit_ops.test.w 1`] = `
 "error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:36:5
+   --> ../../../tests/invalid/inflight_ref_explicit_ops.test.w:36:5
    |
 36 |     x.put(\\"hello\\", \\"world\\");
    |     ^
 
 
 error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:43:5
+   --> ../../../tests/invalid/inflight_ref_explicit_ops.test.w:43:5
    |
 43 |     q.push(\\"push!\\");
    |     ^
 
 
 error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:48:12
+   --> ../../../tests/invalid/inflight_ref_explicit_ops.test.w:48:12
    |
 48 |     assert(b.list().length == 0);
    |            ^
@@ -2562,14 +2562,14 @@ Duration <DURATION>"
 
 exports[`inflight_ref_resource_sub_method.test.w 1`] = `
 "error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:32:5
+   --> ../../../tests/invalid/inflight_ref_resource_sub_method.test.w:32:5
    |
 32 |     q.push(\\"push!\\");
    |     ^
 
 
 error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:35:5
+   --> ../../../tests/invalid/inflight_ref_resource_sub_method.test.w:35:5
    |
 35 |     q2.push(\\"push!\\");
    |     ^^
@@ -2584,14 +2584,14 @@ Duration <DURATION>"
 
 exports[`inflight_ref_unknown_op.test.w 1`] = `
 "error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:15:5
+   --> ../../../tests/invalid/inflight_ref_unknown_op.test.w:15:5
    |
 15 |     x.put(\\"hello\\", \\"world\\");
    |     ^
 
 
 error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:19:5
+   --> ../../../tests/invalid/inflight_ref_unknown_op.test.w:19:5
    |
 19 |     y.put(\\"boom\\", \\"shakalaka\\");
    |     ^
@@ -2606,63 +2606,63 @@ Duration <DURATION>"
 
 exports[`interface.test.w 1`] = `
 "error: Properties are not supported in interfaces
-   --> ../../../examples/tests/invalid/interface.test.w:32:3
+   --> ../../../tests/invalid/interface.test.w:32:3
    |
 32 |   bar: str;
    |   ^^^^^^^^^
 
 
 error: Access modifiers are not allowed in interfaces
-   --> ../../../examples/tests/invalid/interface.test.w:38:3
+   --> ../../../tests/invalid/interface.test.w:38:3
    |
 38 |   pub method2(): str;  
    |   ^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type annotation
-   --> ../../../examples/tests/invalid/interface.test.w:44:11
+   --> ../../../tests/invalid/interface.test.w:44:11
    |
 44 |   method1(a, b): void;
    |           ^
 
 
 error: Expected type annotation
-   --> ../../../examples/tests/invalid/interface.test.w:44:14
+   --> ../../../tests/invalid/interface.test.w:44:14
    |
 44 |   method1(a, b): void;
    |              ^
 
 
 error: Unknown parser error
-   --> ../../../examples/tests/invalid/interface.test.w:38:14
+   --> ../../../tests/invalid/interface.test.w:38:14
    |
 38 |   pub method2(): str;  
    |              ^^
 
 
 error: Unknown symbol \\"IB\\"
-  --> ../../../examples/tests/invalid/interface.test.w:4:22
+  --> ../../../tests/invalid/interface.test.w:4:22
   |
 4 | interface IA extends IB {
   |                      ^^
 
 
 error: Unknown symbol \\"IDontExist\\"
-   --> ../../../examples/tests/invalid/interface.test.w:12:26
+   --> ../../../tests/invalid/interface.test.w:12:26
    |
 12 | interface IExist extends IDontExist {
    |                          ^^^^^^^^^^
 
 
 error: Unknown symbol \\"ISomeClass\\"
-   --> ../../../examples/tests/invalid/interface.test.w:18:34
+   --> ../../../tests/invalid/interface.test.w:18:34
    |
 18 | interface ISomeInterface extends ISomeClass {
    |                                  ^^^^^^^^^^
 
 
 error: Symbol \\"foo\\" already defined in this scope
-   --> ../../../examples/tests/invalid/interface.test.w:25:5
+   --> ../../../tests/invalid/interface.test.w:25:5
    |
 24 |     foo(): void;
    |     --- previous definition
@@ -2671,7 +2671,7 @@ error: Symbol \\"foo\\" already defined in this scope
 
 
 error: Symbol \\"foo\\" already defined in this scope
-   --> ../../../examples/tests/invalid/interface.test.w:27:5
+   --> ../../../tests/invalid/interface.test.w:27:5
    |
 24 |     foo(): void;
    |     --- previous definition
@@ -2681,7 +2681,7 @@ error: Symbol \\"foo\\" already defined in this scope
 
 
 error: Inflight class CImplPreflightIface cannot implement a preflight interface IPreflight
-   --> ../../../examples/tests/invalid/interface.test.w:52:1
+   --> ../../../tests/invalid/interface.test.w:52:1
    |  
 52 | / inflight class CImplPreflightIface impl IPreflight {
 53 | |   pub method1(): void {}
@@ -2690,7 +2690,7 @@ error: Inflight class CImplPreflightIface cannot implement a preflight interface
 
 
 error: Expected type to be \\"preflight (): void\\", but got \\"inflight (): void\\" instead
-   --> ../../../examples/tests/invalid/interface.test.w:53:7
+   --> ../../../tests/invalid/interface.test.w:53:7
    |
 53 |   pub method1(): void {}
    |       ^^^^^^^
@@ -2699,28 +2699,28 @@ error: Expected type to be \\"preflight (): void\\", but got \\"inflight (): voi
 
 
 error: Inflight interface IInflightExtendsPreflight cannot extend a preflight interface IPreflight
-   --> ../../../examples/tests/invalid/interface.test.w:57:20
+   --> ../../../tests/invalid/interface.test.w:57:20
    |
 57 | inflight interface IInflightExtendsPreflight extends IPreflight {
    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Inflight interface IInflightExtendsJsii cannot extend a preflight interface ISomeInterface
-   --> ../../../examples/tests/invalid/interface.test.w:62:20
+   --> ../../../tests/invalid/interface.test.w:62:20
    |
 62 | inflight interface IInflightExtendsJsii extends jsii_fixture.ISomeInterface {
    |                    ^^^^^^^^^^^^^^^^^^^^
 
 
 error: Interface \\"IInflightExtendsJsii\\" extends \\"ISomeInterface\\" but has a conflicting member \\"method\\" (preflight (): void != inflight (): void)
-   --> ../../../examples/tests/invalid/interface.test.w:62:20
+   --> ../../../tests/invalid/interface.test.w:62:20
    |
 62 | inflight interface IInflightExtendsJsii extends jsii_fixture.ISomeInterface {
    |                    ^^^^^^^^^^^^^^^^^^^^
 
 
 error: Inflight class CInflightImplJsii cannot implement a preflight interface ISomeInterface
-   --> ../../../examples/tests/invalid/interface.test.w:67:1
+   --> ../../../tests/invalid/interface.test.w:67:1
    |  
 67 | / inflight class CInflightImplJsii impl jsii_fixture.ISomeInterface {
 68 | |   pub method(): void {}
@@ -2729,7 +2729,7 @@ error: Inflight class CInflightImplJsii cannot implement a preflight interface I
 
 
 error: Expected type to be \\"preflight (): void\\", but got \\"inflight (): void\\" instead
-   --> ../../../examples/tests/invalid/interface.test.w:68:7
+   --> ../../../tests/invalid/interface.test.w:68:7
    |
 68 |   pub method(): void {}
    |       ^^^^^^
@@ -2746,7 +2746,7 @@ Duration <DURATION>"
 
 exports[`invalid compile directory 1`] = `
 "error: <ABSOLUTE>/external_ts.ts must be a sub directory of <ABSOLUTE>/lib
-  --> ../../../examples/tests/invalid/lib/extern_above.w:2:3
+  --> ../../../tests/invalid/lib/extern_above.w:2:3
   |
 2 |   extern \\"../../valid/external_ts.ts\\" static getGreeting(name: str): str;
   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2756,7 +2756,7 @@ exports[`invalid compile directory 1`] = `
 
 exports[`issue_2767.test.w 1`] = `
 "error: Expected type to be \\"MutJson\\", but got \\"Bucket\\" instead
-  --> ../../../examples/tests/invalid/issue_2767.test.w:4:16
+  --> ../../../tests/invalid/issue_2767.test.w:4:16
   |
 4 | x.set(\\"hello\\", new cloud.Bucket());
   |                ^^^^^^^^^^^^^^^^^^
@@ -2771,7 +2771,7 @@ Duration <DURATION>"
 
 exports[`jsii_access_modifiers.test.w 1`] = `
 "error: Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
-   --> ../../../examples/tests/invalid/jsii_access_modifiers.test.w:13:3
+   --> ../../../tests/invalid/jsii_access_modifiers.test.w:13:3
    |
 13 | b.createTopic(cloud.BucketEventType.CREATE);
    |   ^^^^^^^^^^^
@@ -2788,77 +2788,77 @@ Duration <DURATION>"
 
 exports[`json.test.w 1`] = `
 "error: Json literal must have an element
-   --> ../../../examples/tests/invalid/json.test.w:29:26
+   --> ../../../tests/invalid/json.test.w:29:26
    |
 29 | let jsonIncomplete = Json;
    |                          ^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/json.test.w:6:14
+  --> ../../../tests/invalid/json.test.w:6:14
   |
 6 | let n: num = j;
   |              ^
 
 
 error: Expected type to be \\"bool\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/json.test.w:8:15
+  --> ../../../tests/invalid/json.test.w:8:15
   |
 8 | let b: bool = j;
   |               ^
 
 
 error: Expected type to be \\"Map<str>\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.test.w:10:19
+   --> ../../../tests/invalid/json.test.w:10:19
    |
 10 | let m: Map<str> = j;
    |                   ^
 
 
 error: Expected type to be \\"Set<str>\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.test.w:12:20
+   --> ../../../tests/invalid/json.test.w:12:20
    |
 12 | let s2: Set<str> = j;
    |                    ^
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.test.w:14:21
+   --> ../../../tests/invalid/json.test.w:14:21
    |
 14 | let a: Array<str> = j;
    |                     ^
 
 
 error: Member \\"set\\" doesn't exist in \\"Json\\"
-   --> ../../../examples/tests/invalid/json.test.w:19:13
+   --> ../../../tests/invalid/json.test.w:19:13
    |
 19 | foreverJson.set(\\"a\\", \\"world!\\");
    |             ^^^
 
 
 error: Expected type to be \\"num?\\", but got \\"str?\\" instead
-   --> ../../../examples/tests/invalid/json.test.w:32:20
+   --> ../../../tests/invalid/json.test.w:32:20
    |
 32 | let tryNum: num? = j.tryAsStr();
    |                    ^^^^^^^^^^^^
 
 
 error: Expected type to be \\"str?\\", but got \\"bool?\\" instead
-   --> ../../../examples/tests/invalid/json.test.w:35:20
+   --> ../../../tests/invalid/json.test.w:35:20
    |
 35 | let tryStr: str? = j.tryAsBool();
    |                    ^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"bool?\\", but got \\"num?\\" instead
-   --> ../../../examples/tests/invalid/json.test.w:38:22
+   --> ../../../tests/invalid/json.test.w:38:22
    |
 38 | let tryBool: bool? = j.tryAsNum();
    |                      ^^^^^^^^^^^^
 
 
 error: Missing required field \\"maybe\\" from \\"StructyJson\\"
-   --> ../../../examples/tests/invalid/json.test.w:55:40
+   --> ../../../tests/invalid/json.test.w:55:40
    |  
 55 |   let notJsonMissingField: StructyJson = {
    | /----------------------------------------^
@@ -2869,7 +2869,7 @@ error: Missing required field \\"maybe\\" from \\"StructyJson\\"
 
 
 error: Missing required field \\"maybe\\" from \\"StructyJson\\"
-   --> ../../../examples/tests/invalid/json.test.w:63:5
+   --> ../../../tests/invalid/json.test.w:63:5
    |  
 63 | /     {
 64 | |       foo: \\"bar\\",
@@ -2879,28 +2879,28 @@ error: Missing required field \\"maybe\\" from \\"StructyJson\\"
 
 
 error: Expected type to be \\"bool\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/json.test.w:76:11
+   --> ../../../tests/invalid/json.test.w:76:11
    |
 76 |     good: 2,
    |           ^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.test.w:83:14
+   --> ../../../tests/invalid/json.test.w:83:14
    |
 83 |   stuff: [1, \\"hi\\", 3],
    |              ^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.test.w:94:8
+   --> ../../../tests/invalid/json.test.w:94:8
    |
 94 |     b: \\"\\",
    |        ^^
 
 
 error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
-    --> ../../../examples/tests/invalid/json.test.w:107:38
+    --> ../../../tests/invalid/json.test.w:107:38
     |
 107 | let mutableJsonStruct: StructyJson = mutableJson;
     |                                      ^^^^^^^^^^^
@@ -2909,28 +2909,28 @@ error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
 
 
 error: \\"Array<Json>\\" is not a legal JSON value
-   --> ../../../examples/tests/invalid/json.test.w:23:17
+   --> ../../../tests/invalid/json.test.w:23:17
    |
 23 | let jArr = Json [bkt];
    |                 ^^^^^
 
 
 error: \\"Bucket\\" is not a legal JSON value
-   --> ../../../examples/tests/invalid/json.test.w:26:28
+   --> ../../../tests/invalid/json.test.w:26:28
    |
 26 | let jsonObj = Json { boom: bkt };
    |                            ^^^
 
 
 error: \\"Bucket\\" is not a legal JSON value
-    --> ../../../examples/tests/invalid/json.test.w:111:6
+    --> ../../../tests/invalid/json.test.w:111:6
     |
 111 |   b: new cloud.Bucket()
     |      ^^^^^^^^^^^^^^^^^^
 
 
 error: \\"Bucket\\" is not a legal JSON value
-    --> ../../../examples/tests/invalid/json.test.w:115:21
+    --> ../../../tests/invalid/json.test.w:115:21
     |
 115 | let isBucket = Json new cloud.Bucket();
     |                     ^^^^^^^^^^^^^^^^^^
@@ -2945,7 +2945,7 @@ Duration <DURATION>"
 
 exports[`json_static.test.w 1`] = `
 "error: Member \\"set\\" doesn't exist in \\"Json\\"
-  --> ../../../examples/tests/invalid/json_static.test.w:4:10
+  --> ../../../tests/invalid/json_static.test.w:4:10
   |
 4 | immutObj.set(\\"a\\", \\"foo\\");
   |          ^^^
@@ -2960,7 +2960,7 @@ Duration <DURATION>"
 
 exports[`map_entries.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/map_entries.test.w:2:20
+  --> ../../../tests/invalid/map_entries.test.w:2:20
   |
 2 | let someStr: str = mapToNumber.entries().at(0).value;
   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2975,7 +2975,7 @@ Duration <DURATION>"
 
 exports[`missing_return.test.w 1`] = `
 "error: A function whose return type is \\"str\\" must return a value.
-  --> ../../../examples/tests/invalid/missing_return.test.w:1:40
+  --> ../../../tests/invalid/missing_return.test.w:1:40
   |  
 1 |   let returnString = inflight (): str => {
   | /----------------------------------------^
@@ -2985,7 +2985,7 @@ exports[`missing_return.test.w 1`] = `
 
 
 error: A function whose return type is \\"str\\" must return a value.
-   --> ../../../examples/tests/invalid/missing_return.test.w:28:32
+   --> ../../../tests/invalid/missing_return.test.w:28:32
    |  
 28 |   let returnString3 = (): str => {
    | /--------------------------------^
@@ -2997,7 +2997,7 @@ error: A function whose return type is \\"str\\" must return a value.
 
 
 error: A function whose return type is \\"str\\" must return a value.
-   --> ../../../examples/tests/invalid/missing_return.test.w:36:32
+   --> ../../../tests/invalid/missing_return.test.w:36:32
    |  
 36 |   let returnString4 = (): str => {
    | /--------------------------------^
@@ -3019,21 +3019,21 @@ Duration <DURATION>"
 
 exports[`missing_semicolon.test.w 1`] = `
 "error: Expected ';'
-  --> ../../../examples/tests/invalid/missing_semicolon.test.w:9:3
+  --> ../../../tests/invalid/missing_semicolon.test.w:9:3
   |
 9 | })
   |   ^
 
 
 error: Expected ';'
-   --> ../../../examples/tests/invalid/missing_semicolon.test.w:16:10
+   --> ../../../tests/invalid/missing_semicolon.test.w:16:10
    |
 16 | let x = 5 //
    |          ^
 
 
 error: Expected '}'
-   --> ../../../examples/tests/invalid/missing_semicolon.test.w:19:13
+   --> ../../../tests/invalid/missing_semicolon.test.w:19:13
    |
 19 | if (x > 10) {
    |             ^
@@ -3048,84 +3048,84 @@ Duration <DURATION>"
 
 exports[`mut_container_types.test.w 1`] = `
 "error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/mut_container_types.test.w:2:29
+  --> ../../../tests/invalid/mut_container_types.test.w:2:29
   |
 2 | let arr1 = MutArray<num>[1, \\"2\\", 3];
   |                             ^^^
 
 
 error: Expected type to be \\"MutArray<num>\\", but got \\"Array<num>\\" instead
-  --> ../../../examples/tests/invalid/mut_container_types.test.w:3:27
+  --> ../../../tests/invalid/mut_container_types.test.w:3:27
   |
 3 | let arr3: MutArray<num> = [1, 2, 3]; // https://github.com/winglang/wing/issues/1117
   |                           ^^^^^^^^^
 
 
 error: Expected type to be \\"MutArray<num>\\", but got \\"MutArray<str>\\" instead
-  --> ../../../examples/tests/invalid/mut_container_types.test.w:5:27
+  --> ../../../tests/invalid/mut_container_types.test.w:5:27
   |
 5 | let arr5: MutArray<num> = arr4;
   |                           ^^^^
 
 
 error: Member \\"someMethod\\" doesn't exist in \\"MutArray\\"
-  --> ../../../examples/tests/invalid/mut_container_types.test.w:6:6
+  --> ../../../tests/invalid/mut_container_types.test.w:6:6
   |
 6 | arr1.someMethod();
   |      ^^^^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/mut_container_types.test.w:9:25
+  --> ../../../tests/invalid/mut_container_types.test.w:9:25
   |
 9 | let s1 = MutSet<num>[1, \\"2\\", 3];
   |                         ^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/mut_container_types.test.w:10:25
+   --> ../../../tests/invalid/mut_container_types.test.w:10:25
    |
 10 | let s2 = MutSet<num>[1, \\"2\\", 3];
    |                         ^^^
 
 
 error: Expected type to be \\"MutSet<num>\\", but got \\"MutSet<str>\\" instead
-   --> ../../../examples/tests/invalid/mut_container_types.test.w:13:23
+   --> ../../../tests/invalid/mut_container_types.test.w:13:23
    |
 13 | let s5: MutSet<num> = s4;
    |                       ^^
 
 
 error: Member \\"someMethod\\" doesn't exist in \\"MutSet\\"
-   --> ../../../examples/tests/invalid/mut_container_types.test.w:14:4
+   --> ../../../tests/invalid/mut_container_types.test.w:14:4
    |
 14 | s3.someMethod();
    |    ^^^^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/mut_container_types.test.w:17:33
+   --> ../../../tests/invalid/mut_container_types.test.w:17:33
    |
 17 | let m1 = MutMap<num>{\\"hello\\" => \\"world\\"};
    |                                 ^^^^^^^
 
 
 error: Expected \\"Array\\" or \\"MutArray\\", found \\"MutMap<str>\\"
-   --> ../../../examples/tests/invalid/mut_container_types.test.w:19:10
+   --> ../../../tests/invalid/mut_container_types.test.w:19:10
    |
 19 | let m2 = MutMap<str>[\\"hello\\", \\"world\\"];
    |          ^^^^^^^^^^^
 
 
 error: Expected type to be \\"MutMap<num>\\", but got \\"Map<str>\\" instead
-   --> ../../../examples/tests/invalid/mut_container_types.test.w:21:23
+   --> ../../../tests/invalid/mut_container_types.test.w:21:23
    |
 21 | let m3: MutMap<num> = {\\"hello\\" => \\"world\\"};
    |                       ^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
-   --> ../../../examples/tests/invalid/mut_container_types.test.w:24:23
+   --> ../../../tests/invalid/mut_container_types.test.w:24:23
    |
 24 | let m5: MutMap<str> = m4;
    |                       ^^
@@ -3140,7 +3140,7 @@ Duration <DURATION>"
 
 exports[`nil.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"nil\\" instead
-  --> ../../../examples/tests/invalid/nil.test.w:3:14
+  --> ../../../tests/invalid/nil.test.w:3:14
   |
 3 | let x: str = nil;
   |              ^^^
@@ -3149,28 +3149,28 @@ exports[`nil.test.w 1`] = `
 
 
 error: Expected optional type, found \\"nil\\"
-   --> ../../../examples/tests/invalid/nil.test.w:24:4
+   --> ../../../tests/invalid/nil.test.w:24:4
    |
 24 | if nil? {
    |    ^^^
 
 
 error: Cannot assign nil value to variables without explicit optional type
-   --> ../../../examples/tests/invalid/nil.test.w:28:18
+   --> ../../../tests/invalid/nil.test.w:28:18
    |
 28 | let nilWannabe = nil;
    |                  ^^^
 
 
 error: Cannot assign nil value to variables without explicit optional type
-   --> ../../../examples/tests/invalid/nil.test.w:31:17
+   --> ../../../tests/invalid/nil.test.w:31:17
    |
 31 | let nilGaggle = [nil, nil, nil];
    |                 ^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"nil\\" instead
-   --> ../../../examples/tests/invalid/nil.test.w:20:14
+   --> ../../../tests/invalid/nil.test.w:20:14
    |
 20 |   foo.setBar(nil);
    |              ^^^
@@ -3187,126 +3187,126 @@ Duration <DURATION>"
 
 exports[`optionals.test.w 1`] = `
 "error: Unexpected 'parameter_type_list'
-   --> ../../../examples/tests/invalid/optionals.test.w:98:36
+   --> ../../../tests/invalid/optionals.test.w:98:36
    |
 98 | let optionalFunctionWithNoRetType: ()? = () => {};
    |                                    ^^
 
 
 error: Expected type to be \\"num\\", but got \\"num?\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:11:3
+   --> ../../../tests/invalid/optionals.test.w:11:3
    |
 11 | f(x);
    |   ^
 
 
 error: Expected type to be \\"num?\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:14:11
+   --> ../../../tests/invalid/optionals.test.w:14:11
    |
 14 | fOptional(\\"\\");
    |           ^^
 
 
 error: Expected optional type, found \\"bool\\"
-   --> ../../../examples/tests/invalid/optionals.test.w:18:4
+   --> ../../../tests/invalid/optionals.test.w:18:4
    |
 18 | if y? {
    |    ^
 
 
 error: Expected optional type, found \\"bool\\"
-   --> ../../../examples/tests/invalid/optionals.test.w:22:9
+   --> ../../../tests/invalid/optionals.test.w:22:9
    |
 22 | let z = y ?? 1;
    |         ^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:25:14
+   --> ../../../tests/invalid/optionals.test.w:25:14
    |
 25 | let w: str = x ?? 3;
    |              ^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:28:6
+   --> ../../../tests/invalid/optionals.test.w:28:6
    |
 28 | x ?? \\"hello\\";
    |      ^^^^^^^
 
 
 error: Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:39:17
+   --> ../../../tests/invalid/optionals.test.w:39:17
    |
 39 | optionalSub1 ?? new Sub2();
    |                 ^^^^^^^^^^
 
 
 error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:41:17
+   --> ../../../tests/invalid/optionals.test.w:41:17
    |
 41 | optionalSub1 ?? new Super();
    |                 ^^^^^^^^^^^
 
 
 error: Expected type to be optional, but got \\"bool\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:45:12
+   --> ../../../tests/invalid/optionals.test.w:45:12
    |
 45 | if let x = true {
    |            ^^^^
 
 
 error: Property access on optional type \\"A?\\" requires optional accessor: \\"?.\\"
-   --> ../../../examples/tests/invalid/optionals.test.w:68:9
+   --> ../../../tests/invalid/optionals.test.w:68:9
    |
 68 | let c = b.a.val;
    |         ^^^
 
 
 error: Expected type to be \\"str\\", but got \\"str?\\" instead
-   --> ../../../examples/tests/invalid/optionals.test.w:91:16
+   --> ../../../tests/invalid/optionals.test.w:91:16
    |
 91 | let val: str = baz?.bar?.foo?.val;
    |                ^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot call an optional function
-   --> ../../../examples/tests/invalid/optionals.test.w:95:1
+   --> ../../../tests/invalid/optionals.test.w:95:1
    |
 95 | optionalFunction();
    | ^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"(preflight (num): void)?\\", but got \\"preflight (x: str): void\\" instead
-    --> ../../../examples/tests/invalid/optionals.test.w:102:53
+    --> ../../../tests/invalid/optionals.test.w:102:53
     |
 102 | let functionWithOptionalFuncParam1: ((num):void)? = (x: str):void => {};
     |                                                     ^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
-    --> ../../../examples/tests/invalid/optionals.test.w:104:49
+    --> ../../../tests/invalid/optionals.test.w:104:49
     |
 104 | let functionWithOptionalFuncParam2: (():num)? = ():str => { return \\"s\\"; };
     |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: '!' expects an optional type, found \\"num\\"
-    --> ../../../examples/tests/invalid/optionals.test.w:110:19
+    --> ../../../tests/invalid/optionals.test.w:110:19
     |
 110 | let unwrapValue = nonOptional!;
     |                   ^^^^^^^^^^^
 
 
 error: '!' expects an optional type, found \\"num\\"
-    --> ../../../examples/tests/invalid/optionals.test.w:116:21
+    --> ../../../tests/invalid/optionals.test.w:116:21
     |
 116 | let unwrapValueFn = nonOptionalFn()!;
     |                     ^^^^^^^^^^^^^^^
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/optionals.test.w:53:3
+   --> ../../../tests/invalid/optionals.test.w:53:3
    |
 50 | if let hi = hi {
    |        -- defined here (try adding \\"var\\" in front)
@@ -3325,7 +3325,7 @@ Duration <DURATION>"
 exports[`panic.test.w 1`] = `
 "error: Compiler bug during type-checking ('panicked at libs/wingc/src/type_check.rs:LINE:COL:
 User invoked panic'), please report at https://www.winglang.io/contributing/start-here/bugs
-  --> ../../../examples/tests/invalid/panic.test.w:6:1
+  --> ../../../tests/invalid/panic.test.w:6:1
   |
 6 | 😱;
   | ^^
@@ -3355,7 +3355,7 @@ Duration <DURATION>"
 
 exports[`phase_mismatch.test.w 1`] = `
 "error: Expected type to be \\"inflight (num): num\\", but got \\"preflight (n: num): num\\" instead
-  --> ../../../examples/tests/invalid/phase_mismatch.test.w:2:10
+  --> ../../../tests/invalid/phase_mismatch.test.w:2:10
   |
 2 | my_func1((n: num): num => { return n * 2; });
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3364,7 +3364,7 @@ exports[`phase_mismatch.test.w 1`] = `
 
 
 error: Expected type to be \\"preflight (num): num\\", but got \\"inflight (n: num): num\\" instead
-  --> ../../../examples/tests/invalid/phase_mismatch.test.w:5:10
+  --> ../../../tests/invalid/phase_mismatch.test.w:5:10
   |
 5 | my_func2(inflight (n: num): num => { return n * 2; });
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3373,7 +3373,7 @@ error: Expected type to be \\"preflight (num): num\\", but got \\"inflight (n: n
 
 
 error: Expected type to be \\"inflight (n: num): num\\", but got \\"preflight (n: num): num\\" instead
-   --> ../../../examples/tests/invalid/phase_mismatch.test.w:12:10
+   --> ../../../tests/invalid/phase_mismatch.test.w:12:10
    |
 12 | my_func3((n: num): num => { return n * 2; });
    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3382,7 +3382,7 @@ error: Expected type to be \\"inflight (n: num): num\\", but got \\"preflight (n
 
 
 error: Expected type to be \\"preflight (num): num\\", but got \\"inflight (s: str): str\\" instead
-   --> ../../../examples/tests/invalid/phase_mismatch.test.w:15:10
+   --> ../../../tests/invalid/phase_mismatch.test.w:15:10
    |
 15 | my_func4(inflight (s: str): str => { return s.uppercase(); });
    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3391,7 +3391,7 @@ error: Expected type to be \\"preflight (num): num\\", but got \\"inflight (s: s
 
 
 error: Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
-   --> ../../../examples/tests/invalid/phase_mismatch.test.w:25:18
+   --> ../../../tests/invalid/phase_mismatch.test.w:25:18
    |
 25 | accepts_callback(callback); // error
    |                  ^^^^^^^^
@@ -3406,7 +3406,7 @@ Duration <DURATION>"
 
 exports[`preflight_from_inflight.test.w 1`] = `
 "error: Cannot call into preflight phase while inflight
-   --> ../../../examples/tests/invalid/preflight_from_inflight.test.w:15:5
+   --> ../../../tests/invalid/preflight_from_inflight.test.w:15:5
    |
 15 |     this.r.myPreflight();
    |     ^^^^^^^^^^^^^^^^^^^^
@@ -3421,21 +3421,21 @@ Duration <DURATION>"
 
 exports[`primitives.test.w 1`] = `
 "error: Member \\"blabla\\" doesn't exist in \\"Array\\"
-  --> ../../../examples/tests/invalid/primitives.test.w:6:16
+  --> ../../../tests/invalid/primitives.test.w:6:16
   |
 6 | let join = arr.blabla(\\",\\");
   |                ^^^^^^
 
 
 error: Member \\"push\\" doesn't exist in \\"Array\\"
-  --> ../../../examples/tests/invalid/primitives.test.w:8:5
+  --> ../../../tests/invalid/primitives.test.w:8:5
   |
 8 | arr.push(4);
   |     ^^^^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/primitives.test.w:10:14
+   --> ../../../tests/invalid/primitives.test.w:10:14
    |
 10 | let n: str = arr.at(0);
    |              ^^^^^^^^^
@@ -3450,7 +3450,7 @@ Duration <DURATION>"
 
 exports[`private_constructor.test.w 1`] = `
 "error: Constructor for class \\"JsiiClassWithPrivateConstructor\\" is private
-  --> ../../../examples/tests/invalid/private_constructor.test.w:3:1
+  --> ../../../tests/invalid/private_constructor.test.w:3:1
   |
 3 | new jsii_fixture.JsiiClassWithPrivateConstructor();
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3465,28 +3465,28 @@ Duration <DURATION>"
 
 exports[`protected_access_modifiers.test.w 1`] = `
 "error: Structs must be public (\\"pub\\") or private
-  --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:1:1
+  --> ../../../tests/invalid/protected_access_modifiers.test.w:1:1
   |
 1 | protected struct MyStruct {}
   | ^^^^^^^^^
 
 
 error: Classes must be public (\\"pub\\") or private
-  --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:4:1
+  --> ../../../tests/invalid/protected_access_modifiers.test.w:4:1
   |
 4 | protected class MyClass {}
   | ^^^^^^^^^
 
 
 error: Interfaces must be public (\\"pub\\") or private
-  --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:7:1
+  --> ../../../tests/invalid/protected_access_modifiers.test.w:7:1
   |
 7 | protected interface MyInterface {}
   | ^^^^^^^^^
 
 
 error: Enums must be public (\\"pub\\") or private
-   --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:10:1
+   --> ../../../tests/invalid/protected_access_modifiers.test.w:10:1
    |
 10 | protected enum MyEnum {}
    | ^^^^^^^^^
@@ -3501,7 +3501,7 @@ Duration <DURATION>"
 
 exports[`reassign_to_nonreassignable.test.w 1`] = `
 "error: Variable is not reassignable
-  --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:3:1
+  --> ../../../tests/invalid/reassign_to_nonreassignable.test.w:3:1
   |
 2 | let x = 5;
   |     - defined here (try adding \\"var\\" in front)
@@ -3510,7 +3510,7 @@ exports[`reassign_to_nonreassignable.test.w 1`] = `
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:28:5
+   --> ../../../tests/invalid/reassign_to_nonreassignable.test.w:28:5
    |
 14 |   f: num;
    |   - defined here (try adding \\"var\\" in front)
@@ -3520,7 +3520,7 @@ error: Variable is not reassignable
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:30:5
+   --> ../../../tests/invalid/reassign_to_nonreassignable.test.w:30:5
    |
  6 |   pub inflight inner: num;
    |                ----- defined here (try adding \\"var\\" in front)
@@ -3530,7 +3530,7 @@ error: Variable is not reassignable
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:35:5
+   --> ../../../tests/invalid/reassign_to_nonreassignable.test.w:35:5
    |
 16 |   inflight inflightF: num;
    |            --------- defined here (try adding \\"var\\" in front)
@@ -3540,7 +3540,7 @@ error: Variable is not reassignable
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.test.w:42:3
+   --> ../../../tests/invalid/reassign_to_nonreassignable.test.w:42:3
    |
 41 | let f = (arg: num):num => {
    |          --- defined here (try adding \\"var\\" in front)
@@ -3557,7 +3557,7 @@ Duration <DURATION>"
 
 exports[`redundant_modifiers.w 1`] = `
 "error: Multiple or ambiguous modifiers found
-  --> ../../../examples/tests/invalid/redundant_modifiers.w:3:3
+  --> ../../../tests/invalid/redundant_modifiers.w:3:3
   |
 3 |   pub pub m1() {}
   |   ^^^^^^^
@@ -3567,7 +3567,7 @@ exports[`redundant_modifiers.w 1`] = `
 
 
 error: Multiple or ambiguous modifiers found
-  --> ../../../examples/tests/invalid/redundant_modifiers.w:7:3
+  --> ../../../tests/invalid/redundant_modifiers.w:7:3
   |
 7 |   pub protected m2() {}
   |   ^^^^^^^^^^^^^
@@ -3577,7 +3577,7 @@ error: Multiple or ambiguous modifiers found
 
 
 error: Multiple or ambiguous modifiers found
-   --> ../../../examples/tests/invalid/redundant_modifiers.w:11:3
+   --> ../../../tests/invalid/redundant_modifiers.w:11:3
    |
 11 |   static pub static m3() {}
    |   ^^^^^^^^^^^^^^^^^
@@ -3587,7 +3587,7 @@ error: Multiple or ambiguous modifiers found
 
 
 error: Multiple or ambiguous modifiers found
-   --> ../../../examples/tests/invalid/redundant_modifiers.w:15:3
+   --> ../../../tests/invalid/redundant_modifiers.w:15:3
    |
 15 |   pub inflight static inflight m4() {}
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3597,7 +3597,7 @@ error: Multiple or ambiguous modifiers found
 
 
 error: Multiple or ambiguous modifiers found
-   --> ../../../examples/tests/invalid/redundant_modifiers.w:19:3
+   --> ../../../tests/invalid/redundant_modifiers.w:19:3
    |
 19 |   static extern \\"x.js\\" pub extern \\"y.js\\" m5();
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3607,7 +3607,7 @@ error: Multiple or ambiguous modifiers found
 
 
 error: Multiple or ambiguous modifiers found
-   --> ../../../examples/tests/invalid/redundant_modifiers.w:23:3
+   --> ../../../tests/invalid/redundant_modifiers.w:23:3
    |
 23 |   protected protected f1: str;
    |   ^^^^^^^^^^^^^^^^^^^
@@ -3617,7 +3617,7 @@ error: Multiple or ambiguous modifiers found
 
 
 error: Multiple or ambiguous modifiers found
-   --> ../../../examples/tests/invalid/redundant_modifiers.w:27:3
+   --> ../../../tests/invalid/redundant_modifiers.w:27:3
    |
 27 |   protected inflight inflight f2: str;
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3627,7 +3627,7 @@ error: Multiple or ambiguous modifiers found
 
 
 error: Multiple or ambiguous modifiers found
-   --> ../../../examples/tests/invalid/redundant_modifiers.w:31:3
+   --> ../../../tests/invalid/redundant_modifiers.w:31:3
    |
 31 |   static pub static f3: str;
    |   ^^^^^^^^^^^^^^^^^
@@ -3637,7 +3637,7 @@ error: Multiple or ambiguous modifiers found
 
 
 error: Multiple or ambiguous modifiers found
-   --> ../../../examples/tests/invalid/redundant_modifiers.w:35:3
+   --> ../../../tests/invalid/redundant_modifiers.w:35:3
    |
 35 |   var pub var f4: str;
    |   ^^^^^^^^^^^
@@ -3647,7 +3647,7 @@ error: Multiple or ambiguous modifiers found
 
 
 error: Multiple or ambiguous modifiers found
-   --> ../../../examples/tests/invalid/redundant_modifiers.w:40:1
+   --> ../../../tests/invalid/redundant_modifiers.w:40:1
    |
 40 | inflight inflight class Foo {}
    | ^^^^^^^^^^^^^^^^^
@@ -3657,7 +3657,7 @@ error: Multiple or ambiguous modifiers found
 
 
 error: Multiple or ambiguous modifiers found
-   --> ../../../examples/tests/invalid/redundant_modifiers.w:43:1
+   --> ../../../tests/invalid/redundant_modifiers.w:43:1
    |
 43 | pub inflight pub class Foo {}
    | ^^^^^^^^^^^^^^^^
@@ -3675,7 +3675,7 @@ Duration <DURATION>"
 
 exports[`resource_access_field_as_method.test.w 1`] = `
 "error: Expected a function or method, found \\"str\\"
-  --> ../../../examples/tests/invalid/resource_access_field_as_method.test.w:9:1
+  --> ../../../tests/invalid/resource_access_field_as_method.test.w:9:1
   |
 9 | x.name();
   | ^^^^^^
@@ -3690,14 +3690,14 @@ Duration <DURATION>"
 
 exports[`resource_captures.test.w 1`] = `
 "error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/resource_captures.test.w:14:5
+   --> ../../../tests/invalid/resource_captures.test.w:14:5
    |
 14 |     b.put(\\"hello\\", \\"world\\");
    |     ^
 
 
 error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/resource_captures.test.w:17:5
+   --> ../../../tests/invalid/resource_captures.test.w:17:5
    |
 17 |     this.collectionOfResources.at(0).put(\\"hello\\", \\"world\\");
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3712,14 +3712,14 @@ Duration <DURATION>"
 
 exports[`resource_inflight.test.w 1`] = `
 "error: Cannot create preflight class \\"Bucket\\" in inflight phase
-  --> ../../../examples/tests/invalid/resource_inflight.test.w:4:3
+  --> ../../../tests/invalid/resource_inflight.test.w:4:3
   |
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
   |   ^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-  --> ../../../examples/tests/invalid/resource_inflight.test.w:4:7
+  --> ../../../tests/invalid/resource_inflight.test.w:4:7
   |
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
   |       ^^^^^^^^^^^^
@@ -3734,28 +3734,28 @@ Duration <DURATION>"
 
 exports[`resource_init.test.w 1`] = `
 "error: Multiple constructors defined in class R
-  --> ../../../examples/tests/invalid/resource_init.test.w:3:3
+  --> ../../../tests/invalid/resource_init.test.w:3:3
   |
 3 |   new() {}
   |   ^^^^^^^^
 
 
 error: Multiple inflight constructors defined in class R
-  --> ../../../examples/tests/invalid/resource_init.test.w:6:3
+  --> ../../../tests/invalid/resource_init.test.w:6:3
   |
 6 |   inflight new() {}
   |   ^^^^^^^^^^^^^^^^^
 
 
 error: Multiple inflight constructors defined in class R
-  --> ../../../examples/tests/invalid/resource_init.test.w:9:3
+  --> ../../../tests/invalid/resource_init.test.w:9:3
   |
 9 |   inflight new(x: num) {}
   |   ^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Inflight constructors cannot have parameters
-  --> ../../../examples/tests/invalid/resource_init.test.w:9:15
+  --> ../../../tests/invalid/resource_init.test.w:9:15
   |
 9 |   inflight new(x: num) {}
   |               ^^^^^^^^
@@ -3770,35 +3770,35 @@ Duration <DURATION>"
 
 exports[`return_types.test.w 1`] = `
 "error: Return statement outside of function cannot return a value
-  --> ../../../examples/tests/invalid/return_types.test.w:1:5
+  --> ../../../tests/invalid/return_types.test.w:1:5
   |
 1 |     return 9;
   |     ^^^^^^^^^
 
 
 error: Return statement outside of function cannot return a value
-  --> ../../../examples/tests/invalid/return_types.test.w:4:5
+  --> ../../../tests/invalid/return_types.test.w:4:5
   |
 4 |     return 9;
   |     ^^^^^^^^^
 
 
 error: Unexpected return value from void function. Return type annotations are required for methods.
-  --> ../../../examples/tests/invalid/return_types.test.w:9:3
+  --> ../../../tests/invalid/return_types.test.w:9:3
   |
 9 |   return 9;
   |   ^^^^^^^^^
 
 
 error: Unexpected return value from void function. Return type annotations are required for methods.
-   --> ../../../examples/tests/invalid/return_types.test.w:12:5
+   --> ../../../tests/invalid/return_types.test.w:12:5
    |
 12 |     return 9;
    |     ^^^^^^^^^
 
 
 error: Unexpected return value from void function. Return type annotations are required for methods.
-   --> ../../../examples/tests/invalid/return_types.test.w:19:5
+   --> ../../../tests/invalid/return_types.test.w:19:5
    |
 19 |     return 9;
    |     ^^^^^^^^^
@@ -3813,28 +3813,28 @@ Duration <DURATION>"
 
 exports[`scope_and_id.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/scope_and_id.test.w:6:25
+  --> ../../../tests/invalid/scope_and_id.test.w:6:25
   |
 6 | new PreflightClass() as x;
   |                         ^
 
 
 error: Expected scope to be a preflight object, instead found \\"num\\"
-  --> ../../../examples/tests/invalid/scope_and_id.test.w:8:1
+  --> ../../../tests/invalid/scope_and_id.test.w:8:1
   |
 8 | new PreflightClass() in x;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Inflight classes cannot have an id
-   --> ../../../examples/tests/invalid/scope_and_id.test.w:15:26
+   --> ../../../tests/invalid/scope_and_id.test.w:15:26
    |
 15 |   new InflightClass() as \\"hi\\";
    |                          ^^^^
 
 
 error: Inflight classes cannot have a scope
-   --> ../../../examples/tests/invalid/scope_and_id.test.w:17:26
+   --> ../../../tests/invalid/scope_and_id.test.w:17:26
    |
 17 |   new InflightClass() in pc;
    |                          ^^
@@ -3849,28 +3849,28 @@ Duration <DURATION>"
 
 exports[`simulator_permissions.test.w 1`] = `
 "error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
-   --> ../../../examples/tests/invalid/simulator_permissions.test.w:10:8
+   --> ../../../tests/invalid/simulator_permissions.test.w:10:8
    |
 10 |   lift(buckets.at(1), [\\"put\\"]);
    |        ^^^^^^^^^^^^^
 
 
 error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
+   --> ../../../tests/invalid/simulator_permissions.test.w:15:3
    |
 15 |   buckets.at(i).put(\\"key\\", \\"value\\");
    |   ^^^^^^^^^^^^^
 
 
 error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
-   --> ../../../examples/tests/invalid/simulator_permissions.test.w:20:8
+   --> ../../../tests/invalid/simulator_permissions.test.w:20:8
    |
 20 |   lift(buckets.at(0), [\\"list\\"]);
    |        ^^^^^^^^^^^^^
 
 
 error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
+   --> ../../../tests/invalid/simulator_permissions.test.w:25:3
    |
 25 |   buckets.at(i).put(\\"key\\", \\"value\\");
    |   ^^^^^^^^^^^^^
@@ -3885,28 +3885,28 @@ Duration <DURATION>"
 
 exports[`sorted_errors_no_span.test.w 1`] = `
 "error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:1:14
+  --> ../../../tests/invalid/sorted_errors_no_span.test.w:1:14
   |
 1 | let a: num = \\"s\\";
   |              ^^^
 
 
 error: Expected \\"b\\" to be a type but it's a variable
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:3:26
+  --> ../../../tests/invalid/sorted_errors_no_span.test.w:3:26
   |
 3 | inflight class c extends b {}
   |                          ^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:4:14
+  --> ../../../tests/invalid/sorted_errors_no_span.test.w:4:14
   |
 4 | let d: num = \\"s\\";
   |              ^^^
 
 
 error: Expected \\"b\\" to be a type but it's a variable
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.test.w:5:26
+  --> ../../../tests/invalid/sorted_errors_no_span.test.w:5:26
   |
 5 | inflight class e extends b {}
   |                          ^
@@ -3921,28 +3921,28 @@ Duration <DURATION>"
 
 exports[`statement_invalid_scope.test.w 1`] = `
 "error: Expected break statement to be inside of a loop (while/for)
-  --> ../../../examples/tests/invalid/statement_invalid_scope.test.w:3:5
+  --> ../../../tests/invalid/statement_invalid_scope.test.w:3:5
   |
 3 |     break;
   |     ^^^^^^
 
 
 error: Expected break statement to be inside of a loop (while/for)
-  --> ../../../examples/tests/invalid/statement_invalid_scope.test.w:7:5
+  --> ../../../tests/invalid/statement_invalid_scope.test.w:7:5
   |
 7 |     break;
   |     ^^^^^^
 
 
 error: Expected continue statement to be inside of a loop (while/for)
-   --> ../../../examples/tests/invalid/statement_invalid_scope.test.w:11:5
+   --> ../../../tests/invalid/statement_invalid_scope.test.w:11:5
    |
 11 |     continue;
    |     ^^^^^^^^^
 
 
 error: Expected continue statement to be inside of a loop (while/for)
-   --> ../../../examples/tests/invalid/statement_invalid_scope.test.w:15:5
+   --> ../../../tests/invalid/statement_invalid_scope.test.w:15:5
    |
 15 |     continue;
    |     ^^^^^^^^^
@@ -3957,21 +3957,21 @@ Duration <DURATION>"
 
 exports[`statements_if.test.w 1`] = `
 "error: Unexpected unary operator \\"--\\"
-  --> ../../../examples/tests/invalid/statements_if.test.w:2:1
+  --> ../../../tests/invalid/statements_if.test.w:2:1
   |
 2 | --n;
   | ^^^
 
 
 error: Expected type to be \\"bool\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/statements_if.test.w:5:5
+  --> ../../../tests/invalid/statements_if.test.w:5:5
   |
 5 | if !n {}
   |     ^
 
 
 error: Expected type to be \\"bool\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/statements_if.test.w:8:5
+  --> ../../../tests/invalid/statements_if.test.w:8:5
   |
 8 | if !n || true {}
   |     ^
@@ -3986,7 +3986,7 @@ Duration <DURATION>"
 
 exports[`std_containers.test.w 1`] = `
 "error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
-  --> ../../../examples/tests/invalid/std_containers.test.w:3:18
+  --> ../../../tests/invalid/std_containers.test.w:3:18
   |
 3 | let c = a.concat(b); 
   |                  ^
@@ -4001,7 +4001,7 @@ Duration <DURATION>"
 
 exports[`stringify.test.w 1`] = `
 "error: Expected type to be stringable, but got \\"B\\" instead
-  --> ../../../examples/tests/invalid/stringify.test.w:3:13
+  --> ../../../tests/invalid/stringify.test.w:3:13
   |
 3 | log(\\"hello {b}\\");
   |             ^
@@ -4010,7 +4010,7 @@ exports[`stringify.test.w 1`] = `
 
 
 error: Expected type to be stringable, but got \\"str?\\" instead
-  --> ../../../examples/tests/invalid/stringify.test.w:7:7
+  --> ../../../tests/invalid/stringify.test.w:7:7
   |
 7 | log(\\"{x}\\");
   |       ^
@@ -4027,35 +4027,35 @@ Duration <DURATION>"
 
 exports[`struct_expansion.test.w 1`] = `
 "error: Positional arguments must come before named arguments
-   --> ../../../examples/tests/invalid/struct_expansion.test.w:11:33
+   --> ../../../tests/invalid/struct_expansion.test.w:11:33
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
    |                                 ^^^^^^
 
 
 error: \\"bublic\\" is not a field of \\"BucketProps\\"
-  --> ../../../examples/tests/invalid/struct_expansion.test.w:3:15
+  --> ../../../tests/invalid/struct_expansion.test.w:3:15
   |
 3 | let bucket1 = new cloud.Bucket(bublic: false, public: true);
   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected either a positional argument or named arguments for the last parameter, but got both
-  --> ../../../examples/tests/invalid/struct_expansion.test.w:7:15
+  --> ../../../tests/invalid/struct_expansion.test.w:7:15
   |
 7 | let bucket2 = new cloud.Bucket(2, public: true);
   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/struct_expansion.test.w:7:32
+  --> ../../../tests/invalid/struct_expansion.test.w:7:32
   |
 7 | let bucket2 = new cloud.Bucket(2, public: true);
   |                                ^
 
 
 error: \\"notAField\\" is not a field of \\"ApiResponse\\"
-   --> ../../../examples/tests/invalid/struct_expansion.test.w:20:9
+   --> ../../../tests/invalid/struct_expansion.test.w:20:9
    |  
 20 |   let y = cloud.ApiResponse {
    | /---------^
@@ -4067,21 +4067,21 @@ error: \\"notAField\\" is not a field of \\"ApiResponse\\"
 
 
 error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (event: str): unknown\\" instead
-   --> ../../../examples/tests/invalid/struct_expansion.test.w:27:3
+   --> ../../../tests/invalid/struct_expansion.test.w:27:3
    |
 27 |   handler, 
    |   ^^^^^^^
 
 
 error: \\"file\\" is not a field of \\"BucketPutOptions\\"
-   --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
+   --> ../../../tests/invalid/struct_expansion.test.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Missing required field \\"contentType\\" from \\"BucketPutOptions\\"
-   --> ../../../examples/tests/invalid/struct_expansion.test.w:11:3
+   --> ../../../tests/invalid/struct_expansion.test.w:11:3
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -4099,7 +4099,7 @@ exports[`struct_from_parameter.test.w 1`] = `
 - MyParams must have required property 'bar'
 - MyParams must have required property 'baz'
 - MyParams must have required property 'foo'
-   --> ../../../examples/tests/invalid/struct_from_parameter.test.w:14:1
+   --> ../../../tests/invalid/struct_from_parameter.test.w:14:1
    | // technically we never enforced the parameters must have been
    | // provided
    | 
@@ -4115,21 +4115,21 @@ Duration <DURATION>"
 
 exports[`struct_json_conversion.test.w 1`] = `
 "error: Struct \\"A\\" contains field \\"b\\" which cannot be represented in Json
-  --> ../../../examples/tests/invalid/struct_json_conversion.test.w:8:3
+  --> ../../../tests/invalid/struct_json_conversion.test.w:8:3
   |
 8 | A.fromJson({});
   |   ^^^^^^^^
 
 
 error: Struct \\"B\\" contains field \\"a\\" which cannot be represented in Json
-   --> ../../../examples/tests/invalid/struct_json_conversion.test.w:15:3
+   --> ../../../tests/invalid/struct_json_conversion.test.w:15:3
    |
 15 | B.fromJson({});
    |   ^^^^^^^^
 
 
 error: Struct \\"C\\" contains field \\"b\\" which cannot be represented in Json
-   --> ../../../examples/tests/invalid/struct_json_conversion.test.w:22:3
+   --> ../../../tests/invalid/struct_json_conversion.test.w:22:3
    |
 22 | C.fromJson({});
    |   ^^^^^^^^
@@ -4144,63 +4144,63 @@ Duration <DURATION>"
 
 exports[`structs.test.w 1`] = `
 "error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != num)
-   --> ../../../examples/tests/invalid/structs.test.w:13:3
+   --> ../../../tests/invalid/structs.test.w:13:3
    |
 13 |   x: num;
    |   ^
 
 
 error: \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/structs.test.w:16:18
+   --> ../../../tests/invalid/structs.test.w:16:18
    |
 16 | let someStruct = B { y: 5 };
    |                  ^^^^^^^^^^
 
 
 error: Struct fields must have immutable types
-   --> ../../../examples/tests/invalid/structs.test.w:20:3
+   --> ../../../tests/invalid/structs.test.w:20:3
    |
 20 |   f: MutArray<str>;
    |   ^
 
 
 error: Struct fields must have immutable types
-   --> ../../../examples/tests/invalid/structs.test.w:25:3
+   --> ../../../tests/invalid/structs.test.w:25:3
    |
 25 |   f: Map<Array<MutArray<str>>>;
    |   ^
 
 
 error: Member \\"badField\\" doesn't exist in \\"A\\"
-   --> ../../../examples/tests/invalid/structs.test.w:32:7
+   --> ../../../tests/invalid/structs.test.w:32:7
    |
 32 | log(a.badField);
    |       ^^^^^^^^
 
 
 error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != str)
-   --> ../../../examples/tests/invalid/structs.test.w:37:3
+   --> ../../../tests/invalid/structs.test.w:37:3
    |
 37 |   a: str;
    |   ^
 
 
 error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
-   --> ../../../examples/tests/invalid/structs.test.w:47:13
+   --> ../../../tests/invalid/structs.test.w:47:13
    |
 47 | let x = new cloud.BucketProps(1);
    |             ^^^^^^^^^^^^^^^^^
 
 
 error: struct \\"PreflightStruct\\" must be declared at the top-level of a file
-   --> ../../../examples/tests/invalid/structs.test.w:51:10
+   --> ../../../tests/invalid/structs.test.w:51:10
    |
 51 |   struct PreflightStruct {
    |          ^^^^^^^^^^^^^^^
 
 
 error: struct \\"InflightStruct\\" must be declared at the top-level of a file
-   --> ../../../examples/tests/invalid/structs.test.w:58:10
+   --> ../../../tests/invalid/structs.test.w:58:10
    |
 58 |   struct InflightStruct {
    |          ^^^^^^^^^^^^^^
@@ -4215,56 +4215,56 @@ Duration <DURATION>"
 
 exports[`super_call.test.w 1`] = `
 "error: Cannot call super method because class Construct has no parent
-   --> ../../../examples/tests/invalid/super_call.test.w:32:7
+   --> ../../../tests/invalid/super_call.test.w:32:7
    |
 32 | super.do();
    |       ^^
 
 
 error: Cannot override private method \\"m1\\" of \\"BaseClass\\"
-   --> ../../../examples/tests/invalid/super_call.test.w:47:12
+   --> ../../../tests/invalid/super_call.test.w:47:12
    |
 47 |   inflight m1(): str {
    |            ^^
 
 
 error: Cannot call super method because class A has no parent
-  --> ../../../examples/tests/invalid/super_call.test.w:4:11
+  --> ../../../tests/invalid/super_call.test.w:4:11
   |
 4 |     super.method();
   |           ^^^^^^
 
 
 error: Cannot call super method because class InflightA has no parent
-   --> ../../../examples/tests/invalid/super_call.test.w:12:11
+   --> ../../../tests/invalid/super_call.test.w:12:11
    |
 12 |     super.method();
    |           ^^^^^^
 
 
 error: super class \\"A\\" does not have a method named \\"child_method\\"
-   --> ../../../examples/tests/invalid/super_call.test.w:20:11
+   --> ../../../tests/invalid/super_call.test.w:20:11
    |
 20 |     super.child_method();
    |           ^^^^^^^^^^^^
 
 
 error: Cannot call super method because class Construct has no parent
-   --> ../../../examples/tests/invalid/super_call.test.w:26:11
+   --> ../../../tests/invalid/super_call.test.w:26:11
    |
 26 |     super.method();
    |           ^^^^^^
 
 
 error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (s: str): str\\" instead
-   --> ../../../examples/tests/invalid/super_call.test.w:55:31
+   --> ../../../tests/invalid/super_call.test.w:55:31
    |
 55 |     return new cloud.Function(inflight_closure);
    |                               ^^^^^^^^^^^^^^^^
 
 
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
-   --> ../../../examples/tests/invalid/super_call.test.w:52:48
+   --> ../../../tests/invalid/super_call.test.w:52:48
    |
 52 |       return \\"this: {this.m1()}, super: {super.m1()}\\";
    |                                                ^^
@@ -4279,7 +4279,7 @@ Duration <DURATION>"
 
 exports[`this.w 1`] = `
 "error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/this.w:3:9
+  --> ../../../tests/invalid/this.w:3:9
   |
 3 |     log(this.node.id);
   |         ^^^^
@@ -4294,7 +4294,7 @@ Duration <DURATION>"
 
 exports[`throw_non_string.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/throw_non_string.test.w:1:7
+  --> ../../../tests/invalid/throw_non_string.test.w:1:7
   |
 1 | throw 42;
   |       ^^
@@ -4309,7 +4309,7 @@ Duration <DURATION>"
 
 exports[`try_no_catch_or_finally.test.w 1`] = `
 "error: Missing \`catch\` or \`finally\` blocks for this try statement
-  --> ../../../examples/tests/invalid/try_no_catch_or_finally.test.w:1:1
+  --> ../../../tests/invalid/try_no_catch_or_finally.test.w:1:1
   |  
 1 | / try {
 2 | |   log(\\"Hello World\\");
@@ -4326,28 +4326,28 @@ Duration <DURATION>"
 
 exports[`types_strings_arithmetic.test.w 1`] = `
 "error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-  --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:1:10
+  --> ../../../tests/invalid/types_strings_arithmetic.test.w:1:10
   |
 1 | let e1 = 2 + \\"2\\";
   |          ^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:4:10
+  --> ../../../tests/invalid/types_strings_arithmetic.test.w:4:10
   |
 4 | let e2 = 2 == \\"2\\";
   |          ^^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:10:10
+   --> ../../../tests/invalid/types_strings_arithmetic.test.w:10:10
    |
 10 | let e3 = \\"{strExample}!\\" * numExample;
    |          ^^^^^^^^^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:15:6
+   --> ../../../tests/invalid/types_strings_arithmetic.test.w:15:6
    |
 15 | a += b;
    |      ^
@@ -4362,14 +4362,14 @@ Duration <DURATION>"
 
 exports[`un_mut_lifted_objects.test.w 1`] = `
 "error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:22:6
+   --> ../../../tests/invalid/un_mut_lifted_objects.test.w:22:6
    |
 22 |   ar.push(2); // Error: push doesn't exist in Array
    |      ^^^^
 
 
 error: Cannot update elements of an immutable Array
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:23:3
+   --> ../../../tests/invalid/un_mut_lifted_objects.test.w:23:3
    |
 23 |   ar[0] = 1; // Error: Cannot update elements of an immutable Array
    |   ^^^^^
@@ -4378,42 +4378,42 @@ error: Cannot update elements of an immutable Array
 
 
 error: Member \\"set\\" doesn't exist in \\"Json\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:24:5
+   --> ../../../tests/invalid/un_mut_lifted_objects.test.w:24:5
    |
 24 |   j.set(\\"a\\", 3); // Error: set doesn't exist in Json
    |     ^^^
 
 
 error: Member \\"add\\" doesn't exist in \\"Set\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:25:6
+   --> ../../../tests/invalid/un_mut_lifted_objects.test.w:25:6
    |
 25 |   st.add(4); // Error: add doesn't exist in Set
    |      ^^^
 
 
 error: Member \\"set\\" doesn't exist in \\"Map\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:26:6
+   --> ../../../tests/invalid/un_mut_lifted_objects.test.w:26:6
    |
 26 |   mp.set(\\"a\\", 3); // Error: set doesn't exist in Map
    |      ^^^
 
 
 error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:27:11
+   --> ../../../tests/invalid/un_mut_lifted_objects.test.w:27:11
    |
 27 |   opt_ar?.push(2); // Error: push doesn't exist in Array
    |           ^^^^
 
 
 error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:28:16
+   --> ../../../tests/invalid/un_mut_lifted_objects.test.w:28:16
    |
 28 |   recursive_ar.push(MutArray<num>[2]); // Error: push doesn't exist in Array
    |                ^^^^
 
 
 error: Member \\"push\\" doesn't exist in \\"Array\\"
-   --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:29:22
+   --> ../../../tests/invalid/un_mut_lifted_objects.test.w:29:22
    |
 29 |   recursive_ar.at(0).push(3); // Error: push doesn't exist in Array
    |                      ^^^^
@@ -4428,35 +4428,35 @@ Duration <DURATION>"
 
 exports[`unimplemented_grammar.test.w 1`] = `
 "error: builtin \\"any\\" is not supported yet - see https://github.com/winglang/wing/issues/434
-  --> ../../../examples/tests/invalid/unimplemented_grammar.test.w:1:8
+  --> ../../../tests/invalid/unimplemented_grammar.test.w:1:8
   |
 1 | let b: any = 0;
   |        ^^^
 
 
 error: builtin container type \\"Promise\\" is not supported yet - see https://github.com/winglang/wing/issues/529
-  --> ../../../examples/tests/invalid/unimplemented_grammar.test.w:2:19
+  --> ../../../tests/invalid/unimplemented_grammar.test.w:2:19
   |
 2 | let somePromise = Promise<str>{};
   |                   ^^^^^^^^^^^^
 
 
 error: expression \\"defer_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
-  --> ../../../examples/tests/invalid/unimplemented_grammar.test.w:3:9
+  --> ../../../tests/invalid/unimplemented_grammar.test.w:3:9
   |
 3 | let c = defer somePromise();
   |         ^^^^^^^^^^^^^^^^^^^
 
 
 error: expression \\"await_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
-  --> ../../../examples/tests/invalid/unimplemented_grammar.test.w:4:9
+  --> ../../../tests/invalid/unimplemented_grammar.test.w:4:9
   |
 4 | let d = await c;
   |         ^^^^^^^
 
 
 error: Unable to infer type
-  --> ../../../examples/tests/invalid/unimplemented_grammar.test.w:2:5
+  --> ../../../tests/invalid/unimplemented_grammar.test.w:2:5
   |
 2 | let somePromise = Promise<str>{};
   |     ^^^^^^^^^^^
@@ -4471,7 +4471,7 @@ Duration <DURATION>"
 
 exports[`unknown_field.test.w 1`] = `
 "error: Member \\"a\\" doesn't exist in \\"String\\"
-  --> ../../../examples/tests/invalid/unknown_field.test.w:1:12
+  --> ../../../tests/invalid/unknown_field.test.w:1:12
   |
 1 | std.String.a.b.c.fromJson();
   |            ^
@@ -4486,7 +4486,7 @@ Duration <DURATION>"
 
 exports[`unknown_submodule.test.w 1`] = `
 "error: Expected identifier \\"std\\" to be a variable, but it's a namespace
-  --> ../../../examples/tests/invalid/unknown_submodule.test.w:1:1
+  --> ../../../tests/invalid/unknown_submodule.test.w:1:1
   |
 1 | std.random.String.fromJson(\\"hello\\");
   | ^^^
@@ -4501,70 +4501,70 @@ Duration <DURATION>"
 
 exports[`unknown_symbol.test.w 1`] = `
 "error: Reserved word
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:43:5
+   --> ../../../tests/invalid/unknown_symbol.test.w:43:5
    |
 43 | let let = 2;
    |     ^^^
 
 
 error: Unknown symbol \\"clod\\"
-  --> ../../../examples/tests/invalid/unknown_symbol.test.w:3:18
+  --> ../../../tests/invalid/unknown_symbol.test.w:3:18
   |
 3 | let bucket = new clod.Bucket();
   |                  ^^^^
 
 
 error: Unknown symbol \\"cloudy\\"
-  --> ../../../examples/tests/invalid/unknown_symbol.test.w:6:17
+  --> ../../../tests/invalid/unknown_symbol.test.w:6:17
   |
 6 | let funky = new cloudy.Funktion(inflight () => { });
   |                 ^^^^^^
 
 
 error: Unknown symbol \\"y\\"
-  --> ../../../examples/tests/invalid/unknown_symbol.test.w:9:13
+  --> ../../../tests/invalid/unknown_symbol.test.w:9:13
   |
 9 | let x = 2 + y;
   |             ^
 
 
 error: Unknown symbol \\"B\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:28:17
+   --> ../../../tests/invalid/unknown_symbol.test.w:28:17
    |
 28 | class A extends B {
    |                 ^
 
 
 error: Member \\"dodo\\" doesn't exist in \\"SomeResourceChild\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:37:5
+   --> ../../../tests/invalid/unknown_symbol.test.w:37:5
    |
 37 | src.dodo();
    |     ^^^^
 
 
 error: Unknown symbol \\"unknown\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:40:1
+   --> ../../../tests/invalid/unknown_symbol.test.w:40:1
    |
 40 | unknown = 1;
    | ^^^^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:24
+   --> ../../../tests/invalid/unknown_symbol.test.w:20:24
    |
 20 |     this.bucket.assert(2 + \\"2\\");
    |                        ^^^^^^^
 
 
 error: Member \\"assert\\" doesn't exist in \\"Bucket\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
+   --> ../../../tests/invalid/unknown_symbol.test.w:20:17
    |
 20 |     this.bucket.assert(2 + \\"2\\");
    |                 ^^^^^^
 
 
 error: Member \\"methodWhichIsNotPartOfBucketApi\\" doesn't exist in \\"Bucket\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:23:24
+   --> ../../../tests/invalid/unknown_symbol.test.w:23:24
    |
 23 |     return this.bucket.methodWhichIsNotPartOfBucketApi(id);
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -4589,14 +4589,14 @@ Duration <DURATION>"
 
 exports[`use_before_defined.test.w 1`] = `
 "error: Unknown symbol \\"y\\"
-  --> ../../../examples/tests/invalid/use_before_defined.test.w:1:7
+  --> ../../../tests/invalid/use_before_defined.test.w:1:7
   |
 1 | log(\\"{y}\\"); // Access y before it's defined
   |       ^
 
 
 error: Symbol \\"x\\" used before being defined
-  --> ../../../examples/tests/invalid/use_before_defined.test.w:5:9
+  --> ../../../tests/invalid/use_before_defined.test.w:5:9
   |
 5 |   log(\\"{x}\\");
   |         ^
@@ -4614,7 +4614,7 @@ Duration <DURATION>"
 
 exports[`variable_scoping.test.w 1`] = `
 "error: Unknown symbol \\"x\\"
-  --> ../../../examples/tests/invalid/variable_scoping.test.w:6:11
+  --> ../../../tests/invalid/variable_scoping.test.w:6:11
   |
 6 |   let z = x;
   |           ^
@@ -4629,14 +4629,14 @@ Duration <DURATION>"
 
 exports[`void_in_expression_position.test.w 1`] = `
 "error: Property not found
-  --> ../../../examples/tests/invalid/void_in_expression_position.test.w:1:12
+  --> ../../../tests/invalid/void_in_expression_position.test.w:1:12
   |
 1 | log(\\"hey\\").get(\\"x\\");
   |            ^^^
 
 
 error: Expected type to be stringable, but got \\"void\\" instead
-  --> ../../../examples/tests/invalid/void_in_expression_position.test.w:4:22
+  --> ../../../tests/invalid/void_in_expression_position.test.w:4:22
   |
 4 | let x = \\"my name is {log(\\"mister cloud\\")}\\";
   |                      ^^^^^^^^^^^^^^^^^^^
@@ -4645,28 +4645,28 @@ error: Expected type to be stringable, but got \\"void\\" instead
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
-  --> ../../../examples/tests/invalid/void_in_expression_position.test.w:7:9
+  --> ../../../tests/invalid/void_in_expression_position.test.w:7:9
   |
 7 | let y = 5 + log(\\"hello\\");
   |         ^^^^^^^^^^^^^^^^
 
 
 error: Cannot assign expression of type \\"void\\" to a variable
-   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:11:5
+   --> ../../../tests/invalid/void_in_expression_position.test.w:11:5
    |
 11 | let z = returnsNothing();
    |     ^
 
 
 error: Cannot assign expression of type \\"void\\" to a variable
-   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:15:5
+   --> ../../../tests/invalid/void_in_expression_position.test.w:15:5
    |
 15 | let w: str? = returnsNothing2();
    |     ^
 
 
 error: Expected type to be \\"str?\\", but got \\"void\\" instead
-   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:15:15
+   --> ../../../tests/invalid/void_in_expression_position.test.w:15:15
    |
 15 | let w: str? = returnsNothing2();
    |               ^^^^^^^^^^^^^^^^^

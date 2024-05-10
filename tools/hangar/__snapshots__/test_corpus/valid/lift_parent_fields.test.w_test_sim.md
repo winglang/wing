@@ -1,4 +1,4 @@
-# [lift_parent_fields.test.w](../../../../../examples/tests/valid/lift_parent_fields.test.w) | test | sim
+# [lift_parent_fields.test.w](../../../../../tests/valid/lift_parent_fields.test.w) | test | sim
 
 ## stdout.log
 ```log

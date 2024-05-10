@@ -1,4 +1,4 @@
-# [forward_decl.test.w](../../../../../examples/tests/valid/forward_decl.test.w) | test | sim
+# [forward_decl.test.w](../../../../../tests/valid/forward_decl.test.w) | test | sim
 
 ## stdout.log
 ```log

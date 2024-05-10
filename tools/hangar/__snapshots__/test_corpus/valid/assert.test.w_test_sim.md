@@ -1,4 +1,4 @@
-# [assert.test.w](../../../../../examples/tests/valid/assert.test.w) | test | sim
+# [assert.test.w](../../../../../tests/valid/assert.test.w) | test | sim
 
 ## stdout.log
 ```log

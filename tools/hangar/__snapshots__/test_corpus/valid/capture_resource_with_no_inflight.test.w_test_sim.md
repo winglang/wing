@@ -1,4 +1,4 @@
-# [capture_resource_with_no_inflight.test.w](../../../../../examples/tests/valid/capture_resource_with_no_inflight.test.w) | test | sim
+# [capture_resource_with_no_inflight.test.w](../../../../../tests/valid/capture_resource_with_no_inflight.test.w) | test | sim
 
 ## stdout.log
 ```log

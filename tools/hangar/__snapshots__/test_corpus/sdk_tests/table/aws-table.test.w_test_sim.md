@@ -1,4 +1,4 @@
-# [aws-table.test.w](../../../../../../examples/tests/sdk_tests/table/aws-table.test.w) | test | sim
+# [aws-table.test.w](../../../../../../tests/sdk_tests/table/aws-table.test.w) | test | sim
 
 ## stdout.log
 ```log

@@ -1,4 +1,4 @@
-# [peek.test.w](../../../../../../examples/tests/sdk_tests/counter/peek.test.w) | test | sim
+# [peek.test.w](../../../../../../tests/sdk_tests/counter/peek.test.w) | test | sim
 
 ## stdout.log
 ```log

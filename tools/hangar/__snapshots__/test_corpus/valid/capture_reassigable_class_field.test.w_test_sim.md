@@ -1,4 +1,4 @@
-# [capture_reassigable_class_field.test.w](../../../../../examples/tests/valid/capture_reassigable_class_field.test.w) | test | sim
+# [capture_reassigable_class_field.test.w](../../../../../tests/valid/capture_reassigable_class_field.test.w) | test | sim
 
 ## stdout.log
 ```log

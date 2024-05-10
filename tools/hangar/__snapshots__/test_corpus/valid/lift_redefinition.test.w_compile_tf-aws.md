@@ -1,4 +1,4 @@
-# [lift_redefinition.test.w](../../../../../examples/tests/valid/lift_redefinition.test.w) | compile | tf-aws
+# [lift_redefinition.test.w](../../../../../tests/valid/lift_redefinition.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
 ```cjs

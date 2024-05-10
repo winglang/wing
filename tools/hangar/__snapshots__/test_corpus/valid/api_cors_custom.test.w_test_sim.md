@@ -1,4 +1,4 @@
-# [api_cors_custom.test.w](../../../../../examples/tests/valid/api_cors_custom.test.w) | test | sim
+# [api_cors_custom.test.w](../../../../../tests/valid/api_cors_custom.test.w) | test | sim
 
 ## stdout.log
 ```log

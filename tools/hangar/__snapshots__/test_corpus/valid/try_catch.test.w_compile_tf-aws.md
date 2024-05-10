@@ -1,4 +1,4 @@
-# [try_catch.test.w](../../../../../examples/tests/valid/try_catch.test.w) | compile | tf-aws
+# [try_catch.test.w](../../../../../tests/valid/try_catch.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
