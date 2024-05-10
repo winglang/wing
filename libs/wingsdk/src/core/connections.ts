@@ -32,18 +32,16 @@ export class Connections {
    * metadata describing how one construct is related to another construct.
    */
   public add(props: AddConnectionProps) {
-    const connection = {
-      source: props.source,
-      target: props.target,
-      name: props.name,
-    };
+    const connection = props;
 
     // avoid duplicate connections
     if (
       this._connections.some(
         (c) =>
           c.source === connection.source &&
+          c.sourceOp === connection.sourceOp &&
           c.target === connection.target &&
+          c.targetOp === connection.targetOp &&
           c.name === connection.name
       )
     ) {
@@ -59,7 +57,9 @@ export class Connections {
   public synth(outdir: string) {
     const connections = this._connections.map((c) => ({
       source: c.source.node.path,
+      sourceOp: c.sourceOp,
       target: c.target.node.path,
+      targetOp: c.targetOp,
       name: c.name,
     }));
 
@@ -86,9 +86,21 @@ export interface AddConnectionProps {
   readonly source: IConstruct;
 
   /**
+   * An operation that the source object supports.
+   * @default - no operation
+   */
+  readonly sourceOp?: string;
+
+  /**
    * The target of the connection.
    */
   readonly target: IConstruct;
+
+  /**
+   * An operation that the target object supports.
+   * @default - no operation
+   */
+  readonly targetOp?: string;
 
   /**
    * A name for the connection.
@@ -106,9 +118,21 @@ export interface Connection {
   readonly source: IConstruct;
 
   /**
+   * An operation that the source object supports.
+   * @default - no operation
+   */
+  readonly sourceOp?: string;
+
+  /**
    * The target of the connection.
    */
   readonly target: IConstruct;
+
+  /**
+   * An operation that the target object supports.
+   * @default - no operation
+   */
+  readonly targetOp?: string;
 
   /**
    * A name for the connection.
