@@ -206,6 +206,9 @@ export const useMap = ({}: UseMapOptions = {}) => {
               connection.targetOp !== "invokeAsync"
             );
           })
+          .filter((connection) => {
+            return connection.source !== connection.target;
+          })
           .map((connection) => {
             return {
               source: {
@@ -341,6 +344,25 @@ export const useMap = ({}: UseMapOptions = {}) => {
   //   }
   //   return [...edges, ...additionalEdges];
   // }, [edges, nodeInfo]);
+
+  // // We can use pseudo edges to enforce alignment between a construct and their inflights.
+  // const additionalEdges = useMemo<ElkExtendedEdge[]>(() => {
+  //   const additionalEdges = new Array<ElkExtendedEdge>();
+  //   for (const [nodePath, node] of nodeInfo?.entries() ?? []) {
+  //     if (!isNodeHidden(nodePath)) {
+  //       additionalEdges.push({
+  //         id: `${nodePath}#inflights-edge`,
+  //         sources: [`${nodePath}#container`],
+  //         targets: [`${nodePath}##target`],
+  //       });
+  //     }
+  //   }
+  //   return [...edges, ...additionalEdges];
+  // }, [edges, isNodeHidden, nodeInfo]);
+
+  // useEffect(() => {
+  //   console.log("additionalEdges", additionalEdges);
+  // }, [additionalEdges]);
 
   return {
     rawTree,

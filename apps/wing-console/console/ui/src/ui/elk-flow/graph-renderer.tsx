@@ -45,7 +45,7 @@ const NodeComponent = <K extends keyof IntrinsicElements = "div">({
   const parent = useContext(ElkNodeContext);
   const node = useMemo(
     () => parent.children?.find((child) => child.id === elk.id),
-    [parent.children],
+    [elk.id, parent.children],
   );
 
   const origins = useContext(OriginsContext);
