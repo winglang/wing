@@ -59,9 +59,6 @@ const getNodeType = (
 
   if (
     node.constructInfo?.fqn === "@winglang/sdk.cloud.Api" ||
-    // node.constructInfo?.fqn === "@winglang/sdk.cloud.Bucket" ||
-    // node.constructInfo?.fqn === "@winglang/sdk.cloud.Queue" ||
-    // node.constructInfo?.fqn === "@winglang/sdk.cloud.Topic" ||
     hasInflightConnections ||
     !hasVisibleChildren
   ) {
@@ -332,38 +329,6 @@ export const useMap = ({}: UseMapOptions = {}) => {
     return nodeMap;
   }, [rawTree, rawConnections, connections]);
 
-  // We can use pseudo edges to enforce alignment between a construct and their children.
-  // const additionalEdges = useMemo<ElkExtendedEdge[]>(() => {
-  //   const additionalEdges = new Array<ElkExtendedEdge>();
-  //   for (const [nodePath, node] of nodeInfo?.entries() ?? []) {
-  //     additionalEdges.push({
-  //       id: `${nodePath}#children-edge`,
-  //       sources: [`${nodePath}##source`],
-  //       targets: [`${nodePath}#children-target`],
-  //     });
-  //   }
-  //   return [...edges, ...additionalEdges];
-  // }, [edges, nodeInfo]);
-
-  // // We can use pseudo edges to enforce alignment between a construct and their inflights.
-  // const additionalEdges = useMemo<ElkExtendedEdge[]>(() => {
-  //   const additionalEdges = new Array<ElkExtendedEdge>();
-  //   for (const [nodePath, node] of nodeInfo?.entries() ?? []) {
-  //     if (!isNodeHidden(nodePath)) {
-  //       additionalEdges.push({
-  //         id: `${nodePath}#inflights-edge`,
-  //         sources: [`${nodePath}#container`],
-  //         targets: [`${nodePath}##target`],
-  //       });
-  //     }
-  //   }
-  //   return [...edges, ...additionalEdges];
-  // }, [edges, isNodeHidden, nodeInfo]);
-
-  // useEffect(() => {
-  //   console.log("additionalEdges", additionalEdges);
-  // }, [additionalEdges]);
-
   return {
     rawTree,
     rawConnections,
@@ -373,6 +338,5 @@ export const useMap = ({}: UseMapOptions = {}) => {
     connections,
     isNodeHidden,
     edges,
-    // edges: additionalEdges,
   };
 };

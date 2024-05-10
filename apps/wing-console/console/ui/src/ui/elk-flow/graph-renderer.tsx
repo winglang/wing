@@ -59,13 +59,10 @@ const NodeComponent = <K extends keyof IntrinsicElements = "div">({
         style: {
           ...props.style,
           position: "absolute",
-          // top: `${node.y ?? 0}px`,
-          // left: `${node.x ?? 0}px`,
           top: `${origin?.y ?? 0}px`,
           left: `${origin?.x ?? 0}px`,
           width: `${node?.width ?? 0}px`,
           height: `${node?.height ?? 0}px`,
-          // transform: `translate(${origin?.x ?? 0}px, ${origin?.y ?? 0}px)`,
         },
       },
       node ? (
@@ -185,29 +182,6 @@ export const GraphRenderer: FunctionComponent<
         height: `${props.graph.height ?? 0}px`,
       }}
     >
-      {/* <svg
-        width={props.graph.width}
-        height={props.graph.height}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
-        }}
-      >
-        {props.graph.edges?.map((edge) => (
-          <Edge
-            key={edge.id}
-            edge={edge}
-            offsetX={origins.get((edge as any).container)?.x}
-            offsetY={origins.get((edge as any).container)?.y}
-            graphWidth={props.graph.width!}
-            graphHeight={props.graph.height!}
-          />
-        ))}
-      </svg> */}
       {props.graph.edges?.map((edge) => (
         <Edge
           key={edge.id}
