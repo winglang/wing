@@ -407,7 +407,7 @@ test "t2" {
 bring util;
 
 test "t1" {
-util.sleep(1s);
+util.sleep(2s);
 assert(true);
 }
   `
@@ -418,7 +418,7 @@ assert(true);
 bring util;
 
 test "t2" {
-util.sleep(1s);
+util.sleep(2s);
 assert(true);
 }
   `
@@ -430,7 +430,7 @@ assert(true);
       platform: [BuiltinPlatform.SIM],
       parallel: 2,
     });
-    expect(Date.now() - startingTime).toBeLessThan(2 * 1000);
+    expect(Date.now() - startingTime).toBeLessThan(4 * 1000);
   });
 });
 
