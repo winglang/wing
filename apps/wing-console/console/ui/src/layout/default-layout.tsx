@@ -197,6 +197,11 @@ export const DefaultLayout = ({
     [expand, setSelectedItems],
   );
 
+  const setSelectedItemSingle = useCallback(
+    (nodeId: string | undefined) => setSelectedItems(nodeId ? [nodeId] : []),
+    [setSelectedItems],
+  );
+
   return (
     <>
       <SignInModal />
@@ -297,11 +302,8 @@ export const DefaultLayout = ({
                         data-testid="map-view"
                       >
                         <MapView
-                          showTests={showTests}
                           selectedNodeId={selectedItems[0]}
-                          onSelectedNodeIdChange={(nodeId) =>
-                            setSelectedItems(nodeId ? [nodeId] : [])
-                          }
+                          onSelectedNodeIdChange={setSelectedItemSingle}
                           selectedEdgeId={selectedEdgeId}
                           onSelectedEdgeIdChange={setSelectedEdgeId}
                         />

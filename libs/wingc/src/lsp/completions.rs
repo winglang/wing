@@ -7,7 +7,8 @@ use std::cmp::max;
 use tree_sitter::{Node, Point};
 
 use crate::ast::{
-	AccessModifier, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, UserDefinedType,
+	AccessModifier, CalleeKind, Expr, ExprKind, IntrinsicKind, Phase, Reference, Scope, Symbol, TypeAnnotation,
+	UserDefinedType,
 };
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
@@ -490,6 +491,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 					return completions;
 				}
+			} else if nearest_non_reference.kind() == "intrinsic_identifier" {
+				return get_intrinsic_list(&types);
 			}
 
 			// fallback: no special completions, just get stuff from the current scope
@@ -920,7 +923,7 @@ fn get_completions_from_type(
 			let variants = &enum_.values;
 			variants
 				.iter()
-				.map(|item| CompletionItem {
+				.map(|(item, _)| CompletionItem {
 					label: item.name.clone(),
 					detail: Some(enum_.name.name.clone()),
 					kind: Some(CompletionItemKind::ENUM_MEMBER),
@@ -1029,6 +1032,33 @@ fn get_completions_from_class(
 			Some(completion_item)
 		})
 		.collect()
+}
+
+fn get_intrinsic_list(types: &Types) -> Vec<CompletionItem> {
+	let mut completions = vec![];
+
+	for intrinsic in IntrinsicKind::VALUES {
+		let Some(t) = intrinsic.get_type(types) else {
+			continue;
+		};
+
+		let documentation = Some(Documentation::MarkupContent(MarkupContent {
+			kind: MarkupKind::Markdown,
+			value: intrinsic.render_docs(),
+		}));
+
+		let mut item = CompletionItem {
+			label: intrinsic.to_string(),
+			documentation,
+			kind: Some(CompletionItemKind::FUNCTION),
+			..Default::default()
+		};
+		if t.is_function_sig() {
+			convert_to_call_completion(&mut item);
+		}
+		completions.push(item);
+	}
+	completions
 }
 
 /// Formats a SymbolKind from a SymbolEnv as a CompletionItem
@@ -2018,4 +2048,20 @@ inflight status(): num {
 	assert!(forin_before_return_type_ref.iter().any(|c| c.label == "otherInflight"))
 	assert!(!forin_before_return_type_ref.iter().any(|c| c.label == "staticMethod"))
 		);
+
+	test_completion_list!(
+		intrinsics,
+		r#"
+let x = @
+       //^
+		"#,
+	);
+
+	test_completion_list!(
+		intrinsics_partial,
+		r#"
+let x = @dir
+         //^
+		"#,
+	);
 }

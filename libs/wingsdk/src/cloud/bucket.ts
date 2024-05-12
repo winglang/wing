@@ -90,15 +90,7 @@ export class Bucket extends Resource {
    */
   protected createTopic(actionType: BucketEventType): Topic {
     const topic = new Topic(this, actionType.toLowerCase());
-
     this.node.addDependency(topic);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: topic,
-      name: `${actionType}()`,
-    });
-
     return topic;
   }
 
@@ -140,19 +132,52 @@ export class Bucket extends Resource {
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
-      this.getTopic(BucketEventType.CREATE).onMessage(
+      const topic = this.getTopic(BucketEventType.CREATE).onMessage(
         this.createTopicHandler(BucketEventType.CREATE, inflight)
       );
+      for (const op of [
+        BucketInflightMethods.PUT,
+        BucketInflightMethods.PUT_JSON,
+      ]) {
+        Node.of(this).addConnection({
+          source: this,
+          sourceOp: op,
+          target: topic,
+          name: BucketEventType.CREATE,
+        });
+      }
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
-      this.getTopic(BucketEventType.UPDATE).onMessage(
+      const topic = this.getTopic(BucketEventType.UPDATE).onMessage(
         this.createTopicHandler(BucketEventType.UPDATE, inflight)
       );
+      for (const op of [
+        BucketInflightMethods.PUT,
+        BucketInflightMethods.PUT_JSON,
+      ]) {
+        Node.of(this).addConnection({
+          source: this,
+          sourceOp: op,
+          target: topic,
+          name: BucketEventType.UPDATE,
+        });
+      }
     }
     if (eventNames.includes(BucketEventType.DELETE)) {
-      this.getTopic(BucketEventType.DELETE).onMessage(
+      const topic = this.getTopic(BucketEventType.DELETE).onMessage(
         this.createTopicHandler(BucketEventType.DELETE, inflight)
       );
+      for (const op of [
+        BucketInflightMethods.DELETE,
+        BucketInflightMethods.TRY_DELETE,
+      ]) {
+        Node.of(this).addConnection({
+          source: this,
+          sourceOp: op,
+          target: topic,
+          name: BucketEventType.DELETE,
+        });
+      }
     }
   }
 
