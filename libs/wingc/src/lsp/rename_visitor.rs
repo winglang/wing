@@ -32,8 +32,7 @@ impl<'a> RenameVisitor<'a> {
 		self
 			.linked_symbols
 			.iter()
-			.find(|s: &&LinkedSymbol<'a>| symbol.same(&s.symbol))
-			.is_some()
+			.any(|s: &LinkedSymbol<'a>| symbol.same(&s.symbol))
 	}
 
 	fn add_reference_symbol(&mut self, symbol: &'a Symbol) {
