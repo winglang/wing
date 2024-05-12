@@ -24,7 +24,6 @@ const log = debug("wing:test");
 
 const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS";
 const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
-export const DEFAULT_PARALLEL_SIZE = 10;
 
 /**
  * Options for the `test` command.
@@ -142,7 +141,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
     }
   };
 
-  await PromisePool.withConcurrency(options.parallel || DEFAULT_PARALLEL_SIZE)
+  await PromisePool.withConcurrency(options.parallel || selectedEntrypoints.length)
     .for(selectedEntrypoints)
     .process(testFile);
 
