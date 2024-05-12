@@ -82,16 +82,32 @@ async function runDocgen(
   docCounter++;
 }
 
+enum DocumentationFilter {
+  /**
+   * Generate docs for all modules, and require they all have .md files
+   */
+  ALL_REQUIRE_MD,
+  /**
+   * Generate docs for all modules (even if they don't have .md files)
+   */
+  ALL,
+  /**
+   * Generate docs only for modules with .md files
+   */
+  ONLY_WITH_MD,
+}
+
 async function generateResourceApiDocs(
-  module: string,
+  folder: string,
   options: {
     docsPath: string;
     excludedFiles?: string[];
-    allowUndocumented?: boolean;
+    jsiiModule?: string;
+    filter: DocumentationFilter;
   }
 ) {
-  const pathToFolder = join(rootDir, "src", module);
-  const { docsPath, excludedFiles = [], allowUndocumented = false } = options;
+  const pathToFolder = join(rootDir, "src", folder);
+  const { docsPath, excludedFiles = [], filter, jsiiModule = folder } = options;
 
   const cloudFiles = await readdir(pathToFolder);
 
@@ -105,7 +121,10 @@ async function generateResourceApiDocs(
     (file) => !cloudFiles.includes(`${file}.md`)
   );
 
-  if (undocumentedResources.length && !allowUndocumented) {
+  if (
+    undocumentedResources.length &&
+    filter === DocumentationFilter.ALL_REQUIRE_MD
+  ) {
     throw new Error(
       `Detected undocumented resources: ${undocumentedResources.join(
         ", "
@@ -116,7 +135,15 @@ async function generateResourceApiDocs(
   // generate api reference for each cloud/submodule and append it to the doc file
   for (const subResource of cloudResources) {
     let header = "";
-    if (undocumentedResources.includes(subResource)) {
+
+    const hasMd = !undocumentedResources.includes(subResource);
+    if (!hasMd && filter === DocumentationFilter.ONLY_WITH_MD) {
+      continue;
+    }
+
+    if (hasMd) {
+      header = await readFile(join(pathToFolder, `${subResource}.md`), "utf-8");
+    } else {
       header = `\
 ---
 title: ${toCamelCase(subResource)}
@@ -124,11 +151,9 @@ id: ${toCamelCase(subResource)}
 ---
 
 `;
-    } else {
-      header = await readFile(join(pathToFolder, `${subResource}.md`), "utf-8");
     }
     await runDocgen(
-      `${module}/${subResource}`,
+      `${jsiiModule}/${subResource}`,
       header,
       join(docsPath, `${subResource}.md`)
     );
@@ -147,16 +172,25 @@ for (const mod of publicModules) {
 await generateResourceApiDocs("cloud", {
   docsPath: getStdlibDocsDir("cloud"),
   excludedFiles: UNDOCUMENTED_CLOUD_FILES,
+  filter: DocumentationFilter.ALL_REQUIRE_MD,
 });
+
 await generateResourceApiDocs("ex", {
   docsPath: getStdlibDocsDir("ex"),
   excludedFiles: UNDOCUMENTED_EX_FILES,
+  filter: DocumentationFilter.ALL_REQUIRE_MD,
 });
 
 await generateResourceApiDocs("std", {
   docsPath: getStdlibDocsDir("std"),
   excludedFiles: UNDOCUMENTED_STD_FILES,
-  allowUndocumented: true,
+  filter: DocumentationFilter.ALL,
+});
+
+await generateResourceApiDocs("target-sim", {
+  docsPath: getStdlibDocsDir("sim"),
+  filter: DocumentationFilter.ONLY_WITH_MD,
+  jsiiModule: "sim",
 });
 
 console.log(

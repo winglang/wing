@@ -96,8 +96,8 @@ test("rebuild only if content had changes", async () => {
   const app2 = new MyApp();
   const r2 = await app2.cycle();
 
-  expect(r2[0]).toBe(
-    "image my-app:a9ae83b54b1ec21faa1a3255f05c095c already exists"
+  expect(r2[1]).toBe(
+    "Image my-app:a9ae83b54b1ec21faa1a3255f05c095c found, No need to build or pull."
   );
 
   // add a file to the workdir and see that we are rebuilding
@@ -108,8 +108,7 @@ test("rebuild only if content had changes", async () => {
 
   const app3 = new MyApp();
   const r3 = await app3.cycle();
-
-  expect(r3[0].startsWith(`building locally from ${workdir}`)).toBeTruthy();
+  expect(r3[1]).toContain("Building ");
 });
 
 test("simple container with a volume", async () => {
@@ -147,7 +146,10 @@ test("anonymous volume can be reused across restarts", async () => {
   new Function(app, "Function", httpGet(c));
 
   const sim = await app.startSimulator();
-  sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
+  sim.onTrace({
+    callback: (trace) =>
+      console.log(">", trace.data?.error?.stack ?? trace.data.message),
+  });
 
   const fn = sim.getResource("root/Function") as IFunctionClient;
   const response = await fn.invoke();

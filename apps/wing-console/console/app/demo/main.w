@@ -162,7 +162,6 @@ test "Add fixtures" {
   counter.inc(100);
 }
 
-
 class WidgetService {
   data: cloud.Bucket;
   counter: cloud.Counter;
@@ -176,13 +175,20 @@ class WidgetService {
       "Total widgets",
       inflight () => { return this.countWidgets(); },
       refreshRate: 5s,
-    );
+    ) as "TotalWidgets";
+
+    // a link field displays a clickable link
+    new ui.Field(
+      "Widgets Link",
+      inflight () => { return "https://winglang.io"; },
+      link: true,
+    ) as "WidgetsLink";
 
     // a button lets you invoke any inflight function
     new ui.Button("Add widget", inflight () => { this.addWidget(); });
   }
 
-  inflight addWidget() {
+  pub inflight addWidget() {
     let id = this.counter.inc();
     this.data.put("widget-{id}", "my data");
   }
@@ -192,7 +198,11 @@ class WidgetService {
   }
 }
 
-new WidgetService();
+let widget = new WidgetService();
+
+new cloud.Function(inflight () => {
+  widget.addWidget();
+}) as "AddWidget";
 
 class ApiUsersService {
   api: cloud.Api; 

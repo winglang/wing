@@ -4,12 +4,13 @@ import { readFile, stat } from "fs/promises";
 import { url as inspectorUrl } from "inspector";
 import { Bundle, createBundle } from "./bundling";
 import { processStream } from "./stream-processor";
+import { LogLevel } from "../std";
 
 export interface SandboxOptions {
   readonly env?: { [key: string]: string };
   readonly context?: { [key: string]: any };
   readonly timeout?: number;
-  readonly log?: (internal: boolean, level: string, message: string) => void;
+  readonly log?: (internal: boolean, level: LogLevel, message: string) => void;
 }
 
 /**
@@ -36,14 +37,15 @@ type ProcessResponse =
 export class Sandbox {
   public static async createBundle(
     entrypoint: string,
-    log?: (message: string) => void
+    log?: (message: string, level: LogLevel) => void
   ): Promise<Bundle> {
     let contents = await readFile(entrypoint, "utf-8");
 
     // log a warning if contents includes __dirname or __filename
     if (contents.includes("__dirname") || contents.includes("__filename")) {
       log?.(
-        `Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.`
+        `Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.`,
+        LogLevel.WARNING
       );
     }
 
@@ -76,7 +78,7 @@ process.on("message", async (message) => {${debugShim}
 
     if (process.env.DEBUG) {
       const fileStats = await stat(entrypoint);
-      log?.(`Bundled code (${fileStats.size} bytes).`);
+      log?.(`Bundled code (${fileStats.size} bytes).`, LogLevel.VERBOSE);
     }
 
     return bundle;
@@ -160,9 +162,10 @@ process.on("message", async (message) => {${debugShim}
       serialization: "advanced",
     });
 
-    const log = (message: string) => this.options.log?.(false, "log", message);
+    const log = (message: string) =>
+      this.options.log?.(false, LogLevel.INFO, message);
     const logError = (message: string) =>
-      this.options.log?.(false, "error", message);
+      this.options.log?.(false, LogLevel.ERROR, message);
 
     // pipe stdout and stderr from the child process
     if (this.child.stdout) {
@@ -276,7 +279,7 @@ process.on("message", async (message) => {${debugShim}
 
   private debugLog(message: string) {
     if (process.env.DEBUG) {
-      this.options.log?.(true, "log", message);
+      this.options.log?.(true, LogLevel.VERBOSE, message);
     }
   }
 }

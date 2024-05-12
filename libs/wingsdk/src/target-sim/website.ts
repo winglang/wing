@@ -5,7 +5,7 @@ import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { ToSimulatorOutput } from "../simulator";
-import { IInflightHost } from "../std";
+import { IInflightHost, Node } from "../std";
 
 /**
  * A static website.
@@ -24,6 +24,8 @@ export class Website extends cloud.Website implements ISimulatorResource {
       simulatorAttrToken(this, "url"),
       { label: `Website ${this.node.path}`, browserSupport: true }
     );
+
+    Node.of(this.endpoint).hidden = true;
 
     this.errorDocument = props.errorDocument;
   }

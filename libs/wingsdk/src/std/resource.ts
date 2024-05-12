@@ -180,14 +180,8 @@ export abstract class Resource extends Construct implements IResource {
    * actually bound.
    */
   public onLift(host: IInflightHost, ops: string[]): void {
-    for (const op of ops) {
-      // Add connection metadata
-      Node.of(this).addConnection({
-        source: host,
-        target: this,
-        name: op.endsWith("()") ? op : `${op}()`,
-      });
-    }
+    host;
+    ops;
   }
 
   /**
@@ -199,7 +193,28 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _preSynthesize(): void {
-    // do nothing by default
+    if ((this as IHostedLiftable)._liftMap === undefined) {
+      return;
+    }
+
+    const data = (this as IHostedLiftable)._liftMap!;
+    for (const [op, liftEntries] of Object.entries(data)) {
+      for (const [dep, depOps] of liftEntries) {
+        if (!Construct.isConstruct(dep)) {
+          continue;
+        }
+
+        for (const depOp of depOps) {
+          Node.of(this).addConnection({
+            source: this,
+            sourceOp: op,
+            target: dep,
+            targetOp: depOp,
+            name: depOp,
+          });
+        }
+      }
+    }
   }
 }
 

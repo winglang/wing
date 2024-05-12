@@ -22,7 +22,7 @@ const PREC = {
 module.exports = grammar({
   name: "wing",
 
-  extras: ($) => [$.comment, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
+  extras: ($) => [$.comment, $.doc, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
 
   word: ($) => $.identifier,
 
@@ -33,6 +33,7 @@ module.exports = grammar({
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
     [$.json_map_literal, $.map_literal, $.array_literal],
     [$.json_literal, $.structured_access_expression],
+    [$.intrinsic, $.call],
   ],
 
   conflicts: ($) => [
@@ -54,9 +55,10 @@ module.exports = grammar({
       choice(braced(optional(repeat($._statement))), $.AUTOMATIC_BLOCK),
     _semicolon: ($) => choice(";", $.AUTOMATIC_SEMICOLON),
     comment: ($) =>
-      token(
-        choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))
-      ),
+      token(choice(seq(/\/\/[^\/]/, /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))),
+
+    doc: ($) => seq("///", field("content", $.doc_content)),
+    doc_content: ($) => /.*/,
 
     // Identifiers
     reference: ($) =>
@@ -349,8 +351,18 @@ module.exports = grammar({
         $.struct_literal,
         $.optional_test,
         $.compiler_dbg_panic,
-        $.optional_unwrap
+        $.optional_unwrap,
+        $.intrinsic
       ),
+
+    intrinsic: ($) =>
+      prec.right(
+        seq(
+          field("name", $.intrinsic_identifier),
+          optional(field("args", $.argument_list))
+        )
+      ),
+    intrinsic_identifier: ($) => /@[A-Za-z_$0-9]*/,
 
     // Primitives
     _literal: ($) =>
@@ -504,7 +516,7 @@ module.exports = grammar({
     initializer: ($) =>
       seq(
         optional(field("inflight", $.inflight_specifier)),
-        "new",
+        field("ctor_name", "new"),
         field("parameter_list", $.parameter_list),
         field("block", $.block)
       ),
@@ -690,7 +702,10 @@ module.exports = grammar({
     map_literal_member: ($) => seq($.expression, "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
-      prec.right(PREC.STRUCTURED_ACCESS, seq($.expression, "[", $.expression, "]")),
+      prec.right(
+        PREC.STRUCTURED_ACCESS,
+        seq($.expression, "[", $.expression, "]")
+      ),
 
     json_literal: ($) =>
       choice(
