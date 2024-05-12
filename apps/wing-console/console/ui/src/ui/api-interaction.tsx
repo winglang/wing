@@ -319,6 +319,10 @@ export const ApiInteraction = memo(
     const loadRoutesFromOpenApi = useCallback(() => {
       const routes = getRoutesFromOpenApi(openApiSpec);
       setRoutes(routes);
+      const currentRouteExists = routes.some(
+        (value) => value.route === currentRoute,
+      );
+      setCurrentRoute(currentRouteExists ? currentRoute : "");
 
       if (!currentMethod) {
         const methods = routes
@@ -328,18 +332,12 @@ export const ApiInteraction = memo(
           .map((route) => route.method);
         handleMethodChange(currentRoute, methods[0] ?? "GET");
       }
-    }, [
-      openApiSpec,
-      currentMethod,
-      currentRoute,
-      setRoutes,
-      handleMethodChange,
-    ]);
+    }, [openApiSpec, currentMethod, currentRoute, handleMethodChange]);
 
     // load the routes from the open api spec on mount
     useEffect(() => {
       loadRoutesFromOpenApi();
-    }, []);
+    }, [openApiSpec, loadRoutesFromOpenApi]);
 
     // Load the possible values for the current header key
     useEffect(() => {

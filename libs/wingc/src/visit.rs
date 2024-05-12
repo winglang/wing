@@ -286,8 +286,9 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	v.visit_symbol(&node.name);
-	for value in &node.values {
+	for (value, _doc) in &node.values {
 		v.visit_symbol(value);
+		// TODO: Visit _doc
 	}
 }
 
@@ -326,6 +327,12 @@ where
 		}
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
+		}
+		ExprKind::Intrinsic(instrinsic) => {
+			v.visit_symbol(&instrinsic.name);
+			if let Some(arg_list) = &instrinsic.arg_list {
+				v.visit_args(arg_list);
+			}
 		}
 		ExprKind::Call { callee, arg_list } => {
 			match callee {

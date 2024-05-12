@@ -12,7 +12,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 export class Topic
   implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
@@ -49,6 +49,7 @@ export class Topic
       ) as IFunctionClient;
       this.context.addTrace({
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         data: {
           message: `Sending message (message=${message}, subscriber=${subscriber.functionHandle}).`,
         },

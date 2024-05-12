@@ -3,7 +3,7 @@ import fsPromises from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
-import { TestResult, TraceType } from "@winglang/sdk/lib/std";
+import { LogLevel, TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
 import { describe, test, expect, beforeEach, afterEach, vi, SpyInstance } from "vitest";
 import { filterTests, renderTestReport, collectTestFiles, test as wingTest } from ".";
@@ -23,14 +23,14 @@ describe("printing test reports", () => {
     process.chdir(cwd);
   });
 
-  test("resource traces are not shown if debug mode is disabled", async () => {
+  test("verbose traces are not shown if debug mode is disabled", async () => {
     const testReport = await renderTestReport("hello.w", EXAMPLE_TEST_RESULTS);
 
     expect(testReport).toMatchSnapshot();
     expect(testReport).not.toContain("Push (message=cool)");
   });
 
-  test("resource traces are shown if debug mode is enabled", async () => {
+  test("verbose traces are shown if debug mode is enabled", async () => {
     const oldDebug = process.env.DEBUG;
     process.env.DEBUG = "1";
 
@@ -369,6 +369,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: "Push (message=cool).", status: "success" },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         timestamp: "2023-05-15T16:20:46.886Z",
@@ -376,6 +377,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: "sleeping for 500 ms" },
         type: TraceType.LOG,
+        level: LogLevel.INFO,
         sourcePath: "root/env0/test:test/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:46.887Z",
@@ -383,6 +385,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         type: TraceType.RESOURCE,
         data: { message: 'Sending messages (messages=["cool"], subscriber=sim-4).' },
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         timestamp: "2023-05-15T16:20:46.961Z",
@@ -390,10 +393,9 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: {
           message: 'Invoke (payload="{\\"messages\\":[\\"cool\\"]}").',
-          status: "failure",
-          error: {},
         },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue-AddConsumer-0088483a",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:46.966Z",
@@ -406,18 +408,21 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         type: TraceType.RESOURCE,
+        level: LogLevel.ERROR,
         timestamp: "2023-05-15T16:20:46.966Z",
       },
       {
-        data: { message: "Get (key=file.txt).", status: "failure", error: {} },
+        data: { message: "Get (key=file.txt)." },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
         timestamp: "2023-05-15T16:20:47.388Z",
       },
       {
-        data: { message: 'Invoke (payload="").', status: "failure", error: {} },
+        data: { message: 'Invoke (payload="").' },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/test:test/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:47.388Z",
