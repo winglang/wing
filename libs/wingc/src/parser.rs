@@ -40,7 +40,7 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"defer_expression" => "https://github.com/winglang/wing/issues/116",
 };
 
-static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
+pub static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	// JS Reserved Words
 	"abstract",
 	"arguments",

@@ -10,7 +10,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-/// Result of using the [SymbolLocato]
+/// Result of using the [SymbolLocator]
 pub enum SymbolLocatorResult {
 	NotFound,
 	/// Simple symbol reference
