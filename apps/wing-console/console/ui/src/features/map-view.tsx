@@ -682,7 +682,10 @@ export const MapView = memo(
         return (
           <ConstructNode
             id={props.constructTreeNode.path}
-            name={props.constructTreeNode.id}
+            name={
+              props.constructTreeNode.display?.title ??
+              props.constructTreeNode.id
+            }
             fqn={props.constructTreeNode.constructInfo?.fqn ?? ""}
             inflights={info.type === "construct" ? info.inflights : []}
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
