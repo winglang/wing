@@ -1,5 +1,3 @@
-use std::sync::Mutex;
-
 use lsp_types::{Position, Range, TextEdit};
 
 use crate::diagnostic::WingLocation;
@@ -11,7 +9,7 @@ use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::{ast::*, visit_context};
 pub struct LinkedSymbol<'a> {
 	symbol: Symbol,
-	references: Mutex<Vec<&'a Symbol>>,
+	references: Vec<&'a Symbol>,
 }
 pub struct RenameVisitor<'a> {
 	types: &'a Types,
@@ -50,8 +48,12 @@ impl<'a> RenameVisitor<'a> {
 						// as their rename include " as ___"
 						return;
 					}
-					if let Some(linked) = self.linked_symbols.iter().find(|s| lookup_info.span.eq(&s.symbol.span)) {
-						linked.references.lock().unwrap().push(symbol);
+					if let Some(linked) = self
+						.linked_symbols
+						.iter_mut()
+						.find(|s| lookup_info.span.eq(&s.symbol.span))
+					{
+						linked.references.push(symbol);
 					} else {
 						self.linked_symbols.push(LinkedSymbol {
 							symbol: Symbol {
@@ -59,9 +61,9 @@ impl<'a> RenameVisitor<'a> {
 								span: lookup_info.span.clone(),
 							},
 							references: if lookup_info.span.eq(&symbol.span) {
-								Mutex::new(vec![])
+								vec![]
 							} else {
-								Mutex::new(vec![symbol])
+								vec![symbol]
 							},
 						});
 					}
@@ -76,14 +78,14 @@ impl<'a> RenameVisitor<'a> {
 			line: position.line,
 			col: position.character,
 		};
-		for symbol in &self.linked_symbols {
+		for symbol in &mut self.linked_symbols {
 			if symbol.symbol.span.contains_location(&location) {
 				return format_references_to_edit(symbol, new_text);
 			}
 
 			let mut is_found = false;
 			// to remove the lock we must get out of the for loop
-			for child in symbol.references.lock().unwrap().iter() {
+			for child in symbol.references.iter_mut() {
 				if child.span.contains_location(&location) {
 					is_found = true;
 					break;
@@ -119,11 +121,11 @@ impl<'a> Visit<'a> for RenameVisitor<'a> {
 		match &stmt.kind {
 			StmtKind::IfLet(IfLet { var_name, .. }) => self.linked_symbols.push(LinkedSymbol {
 				symbol: var_name.clone(),
-				references: Mutex::new(vec![]),
+				references: vec![],
 			}),
 			StmtKind::Let { var_name, .. } => self.linked_symbols.push(LinkedSymbol {
 				symbol: var_name.clone(),
-				references: Mutex::new(vec![]),
+				references: vec![],
 			}),
 			_ => {}
 		}
@@ -131,7 +133,7 @@ impl<'a> Visit<'a> for RenameVisitor<'a> {
 	}
 }
 
-fn format_references_to_edit(linked: &LinkedSymbol, new_text: String) -> Vec<TextEdit> {
+fn format_references_to_edit(linked: &mut LinkedSymbol, new_text: String) -> Vec<TextEdit> {
 	let mut edits = vec![];
 	edits.push(TextEdit {
 		new_text: String::from(&new_text),
@@ -147,7 +149,7 @@ fn format_references_to_edit(linked: &LinkedSymbol, new_text: String) -> Vec<Tex
 		},
 	});
 
-	for child in linked.references.lock().unwrap().iter() {
+	for child in linked.references.iter_mut() {
 		edits.push(TextEdit {
 			new_text: String::from(&new_text),
 			range: Range {
