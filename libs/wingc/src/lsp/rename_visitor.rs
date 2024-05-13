@@ -1,7 +1,6 @@
 use lsp_types::{Position, Range, TextEdit};
 
 use crate::diagnostic::WingLocation;
-use crate::parser::RESERVED_WORDS;
 use crate::type_check::symbol_env::LookupResult;
 use crate::type_check::{SymbolKind, Types};
 use crate::visit::{visit_scope, Visit};
@@ -37,7 +36,7 @@ impl<'a> RenameVisitor<'a> {
 		// symbols that appear in let/if lef statements will point to a prev declaration of a variable of the same name if exists
 		// this is why we add them in advance during visit_statement
 		// the other condition is for "this" that points to the "new" keyword for some reason
-		if self.is_symbol_linked(symbol) || RESERVED_WORDS.contains(&symbol.name) {
+		if self.is_symbol_linked(symbol) {
 			return;
 		}
 		if let Some(env) = self.ctx.current_env() {
@@ -46,6 +45,10 @@ impl<'a> RenameVisitor<'a> {
 					// TODO: remove to support rename-refactor of namespaces - after adjusting the edit
 					if matches!(symbol_kind, &SymbolKind::Namespace(_)) {
 						// as their rename include " as ___"
+						return;
+					}
+					// Default spans are either generated or global, so we don't want to rename them
+					if lookup_info.span.is_default() {
 						return;
 					}
 					if let Some(linked) = self
