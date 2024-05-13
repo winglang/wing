@@ -2,7 +2,7 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/setconsumer0_c8e82e9f.cjs": ""use strict";
+  ".wing/consumer0_c8a319bc.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
@@ -85,7 +85,7 @@ bucket: (function() {
         "name": "setConsumer()",
         "source": "root/HelloWorld/Queue",
         "sourceOp": "push",
-        "target": "root/HelloWorld/Queue/SetConsumer0",
+        "target": "root/HelloWorld/Queue/Consumer0",
         "targetOp": "invoke",
       },
     ],
@@ -129,48 +129,13 @@ bucket: (function() {
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
-      "root/HelloWorld/Queue/Policy": {
-        "addr": "c86b009930462795eeb90e647a56dbfc5356d9ea80",
-        "path": "root/HelloWorld/Queue/Policy",
-        "props": {
-          "principal": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
-          "statements": [
-            {
-              "operation": "invoke",
-              "resourceHandle": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
-            },
-            {
-              "operation": "hasAvailableWorkers",
-              "resourceHandle": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
-            },
-          ],
-        },
-        "type": "@winglang/sdk.sim.Policy",
-      },
-      "root/HelloWorld/Queue/QueueEventMapping0": {
-        "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
-        "deps": [
-          "root/HelloWorld/Queue/SetConsumer0",
-          "root/HelloWorld/Queue",
-          "root/HelloWorld/Queue/Policy",
-        ],
-        "path": "root/HelloWorld/Queue/QueueEventMapping0",
-        "props": {
-          "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
-          "subscriber": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
-          "subscriptionProps": {
-            "batchSize": 1,
-          },
-        },
-        "type": "@winglang/sdk.sim.EventMapping",
-      },
-      "root/HelloWorld/Queue/SetConsumer0": {
-        "addr": "c8e82e9fd83d9e59c5af169a3042b9ed0b40e91185",
+      "root/HelloWorld/Queue/Consumer0": {
+        "addr": "c8a319bcb354a5e6d231ddfa543d3b95df95586b71",
         "deps": [
           "root/HelloWorld/Counter",
           "root/HelloWorld/Bucket",
         ],
-        "path": "root/HelloWorld/Queue/SetConsumer0",
+        "path": "root/HelloWorld/Queue/Consumer0",
         "policy": [
           {
             "operation": "inc",
@@ -187,11 +152,46 @@ bucket: (function() {
             "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${wsim#root/HelloWorld/Counter#attrs.handle}",
           },
-          "sourceCodeFile": ".wing/setconsumer0_c8e82e9f.cjs",
+          "sourceCodeFile": ".wing/consumer0_c8a319bc.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/HelloWorld/Queue/Policy": {
+        "addr": "c86b009930462795eeb90e647a56dbfc5356d9ea80",
+        "path": "root/HelloWorld/Queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/HelloWorld/Queue/Consumer0#attrs.handle}",
+            },
+            {
+              "operation": "hasAvailableWorkers",
+              "resourceHandle": "\${wsim#root/HelloWorld/Queue/Consumer0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+      "root/HelloWorld/Queue/QueueEventMapping0": {
+        "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
+        "deps": [
+          "root/HelloWorld/Queue/Consumer0",
+          "root/HelloWorld/Queue",
+          "root/HelloWorld/Queue/Policy",
+        ],
+        "path": "root/HelloWorld/Queue/QueueEventMapping0",
+        "props": {
+          "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
+          "subscriber": "\${wsim#root/HelloWorld/Queue/Consumer0#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
+        },
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     },
     "sdkVersion": "0.0.0",
@@ -324,6 +324,19 @@ bucket: (function() {
             },
             "Queue": {
               "children": {
+                "Consumer0": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A cloud function (FaaS)",
+                    "sourceModule": "@winglang/sdk",
+                    "title": "setConsumer()",
+                  },
+                  "id": "Consumer0",
+                  "path": "root/HelloWorld/Queue/Consumer0",
+                },
                 "Policy": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
@@ -347,19 +360,6 @@ bucket: (function() {
                   },
                   "id": "QueueEventMapping0",
                   "path": "root/HelloWorld/Queue/QueueEventMapping0",
-                },
-                "SetConsumer0": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A cloud function (FaaS)",
-                    "sourceModule": "@winglang/sdk",
-                    "title": "setConsumer()",
-                  },
-                  "id": "SetConsumer0",
-                  "path": "root/HelloWorld/Queue/SetConsumer0",
                 },
               },
               "constructInfo": {
