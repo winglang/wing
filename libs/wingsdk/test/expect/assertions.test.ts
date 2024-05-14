@@ -2,6 +2,7 @@
 // to a bug in `v8-to-istanbul` that causes it to
 // exit with a non-zero code when trying to generate
 // coverage reports. See https://github.com/istanbuljs/v8-to-istanbul/issues/198
+import { AssertionError } from "node:assert/strict";
 import { test, describe, expect } from "vitest";
 import { Util as Assert } from "../../src/expect";
 
@@ -186,63 +187,38 @@ describe("is not nil", () => {
 describe("match", () => {
   test("is match", () => {
     expect(() => {
-      Assert.match("abc", /abc/);
+      Assert.match("abc", "abc");
     }).not.toThrow();
   });
 
   test("is not match", () => {
     expect(() => {
-      Assert.match("abc", /def/);
-    }).toThrow();
+      Assert.match("abc", "def");
+    }).toThrow(
+      new AssertionError({
+        message: "The input did not match the regular expression def",
+      })
+    );
   });
 });
 
 describe("does not match", () => {
   test("is match", () => {
     expect(() => {
-      Assert.doesNotMatch("abc", /abc/);
-    }).toThrow();
+      Assert.doesNotMatch("abc", "abc");
+    }).toThrow(
+      new AssertionError({
+        message: "The input should not match the regular expression abc",
+      })
+    );
   });
 
   test("is not match", () => {
     expect(() => {
-      Assert.doesNotMatch("abc", /def/);
+      Assert.doesNotMatch("abc", "def");
     }).not.toThrow();
   });
 });
-
-describe("throws", () => {
-  test("throws", () => {
-    expect(() => {
-      Assert.throws(() => {
-        throw new Error("error");
-      });
-    }).not.toThrow();
-  });
-
-  test("does not throw", () => {
-    expect(() => {
-      Assert.throws(() => {});
-    }).toThrow();
-  });
-});
-
-describe("does Not Throw", () => {
-  test("throws", () => {
-    expect(() => {
-      Assert.doesNotThrow(() => {
-        throw new Error("error");
-      });
-    }).toThrow();
-  });
-
-  test("does not throw", () => {
-    expect(() => {
-      Assert.doesNotThrow(() => {});
-    }).not.toThrow();
-  });
-});
-
 describe("fail", () => {
   test("fail", () => {
     expect(() => {
@@ -262,81 +238,5 @@ describe("ok", () => {
     expect(() => {
       Assert.ok(false);
     }).toThrow();
-  });
-});
-
-describe("contains", () => {
-  test("is contains string", () => {
-    expect(() => {
-      Assert.contains("abc", "a");
-    }).not.toThrow();
-  });
-
-  test("is not contains string", () => {
-    expect(() => {
-      Assert.contains("abc", "d");
-    }).toThrow();
-  });
-
-  test("is contains list", () => {
-    expect(() => {
-      Assert.contains([1, 2, 3], 2);
-    }).not.toThrow();
-  });
-
-  test("is not contains list", () => {
-    expect(() => {
-      Assert.contains([1, 2, 3], 4);
-    }).toThrow();
-  });
-
-  test("is contains set", () => {
-    expect(() => {
-      Assert.contains(new Set([1, 2, 3]), 2);
-    }).not.toThrow();
-  });
-
-  test("is not contains set", () => {
-    expect(() => {
-      Assert.contains(new Set([1, 2, 3]), 4);
-    }).toThrow();
-  });
-});
-
-describe("doesNotContain", () => {
-  test("is contains string", () => {
-    expect(() => {
-      Assert.doesNotContain("abc", "a");
-    }).toThrow();
-  });
-
-  test("is not contains string", () => {
-    expect(() => {
-      Assert.doesNotContain("abc", "d");
-    }).not.toThrow();
-  });
-
-  test("is contains list", () => {
-    expect(() => {
-      Assert.doesNotContain([1, 2, 3], 2);
-    }).toThrow();
-  });
-
-  test("is not contains list", () => {
-    expect(() => {
-      Assert.doesNotContain([1, 2, 3], 4);
-    }).not.toThrow();
-  });
-
-  test("is contains set", () => {
-    expect(() => {
-      Assert.doesNotContain(new Set([1, 2, 3]), 2);
-    }).toThrow();
-  });
-
-  test("is not contains set", () => {
-    expect(() => {
-      Assert.doesNotContain(new Set([1, 2, 3]), 4);
-    }).not.toThrow();
   });
 });

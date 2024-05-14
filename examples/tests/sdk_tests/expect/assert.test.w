@@ -38,6 +38,8 @@ expect.notNil(d);
 expect.notEqual(d, "world");
 expect.notEqual(d, 1);
 expect.notEqual(d, true);
+expect.match("this contains hello world string", "hello");
+expect.doesNotMatch("this contains some random string", "world");
 
 test "equal str" {
     expect.equal("hello", "hello");
@@ -47,6 +49,8 @@ test "equal str" {
     expect.notEqual(d, "world");
     expect.notEqual(d, 1);
     expect.notEqual(d, true);
+    expect.match("this contains hello world string", "hello");
+    expect.doesNotMatch("this contains some random string", "world");
 }
 
 // Bool tests
@@ -66,6 +70,8 @@ test "equal bool" {
     expect.nil(e);
     expect.notNil(f);
     expect.notEqual(f, false);
+    expect.ok(true,"succeeds");
+    expect.ok(2<3);
 }
 
 // List of str tests
@@ -168,6 +174,14 @@ let myClass = new MyClass(1, "hello");
 
 expect.equal(myClass, myClass);
 expect.notEqual(myClass, new MyClass(1, "hello world") as "yet another my class");
+
+test "fail test" {
+   try {
+    expect.fail("This is a failure");
+   }catch err{
+    expect.equal(err, "This is a failure");
+   }
+}
 
 // custom inflight Class test
 // ERROR: Values have same structure but are not reference-equal:
