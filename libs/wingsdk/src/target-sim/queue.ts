@@ -82,7 +82,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
-      App.of(this).makeId(this, "SetConsumer"),
+      App.of(this).makeId(this, "Consumer"),
       functionHandler,
       props
     );
