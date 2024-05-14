@@ -24,7 +24,7 @@ I propose `@x` and `@x()` as a "compiler intrinsic", with the following notes:
 
 - Why `@`?
   - It's not a valid identifier character, so there is no ambiguity that this is a special thing
-  - A reasonable-looking alternative is x!(...) a la rust. Unfortunately ! is already used as the postfix unwrap. I think having a construct that is <identifier><!> mean 2 different things is ambiguous for both users and the compiler.
+  - A reasonable-looking alternative is x!(...) a la rust. Unfortunately ! is already used as the postfix unwrap. I think having a construct that is `<identifier><!>` mean 2 different things is ambiguous for both users and the compiler.
   - Having a special character as a prefix is useful for IDE completions because all you have to do is type `@` and you see all the available options.
   - It looks nice in [zig for builtins](https://ziglang.org/documentation/master/#Builtin-Functions) so there is at least some precedent
   - `@` is used in js for decorators which has a similar vibe of being special in the eyes of the compiler. It would not be unreasonable to use @ for decorators of some kind in wing as well.
