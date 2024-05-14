@@ -1,5 +1,6 @@
-import nodeAssert from "node:assert/strict";
+import nodeAssert, { AssertionError } from "node:assert/strict";
 import { InflightClient } from "../core";
+import { Regex } from "../std";
 
 /**
  * The Util class provides methods for making assertions in tests,
@@ -60,6 +61,61 @@ export class Util {
       actual !== null && actual !== undefined,
       `Expected "${actual}" to be not nil`
     );
+  }
+
+  /**
+   * Checks if a string matches a regular expression pattern.
+   * @param actual The string to test.
+   * @param expected The regular expression pattern to match against.
+   * @throws Will throw an error if the actual value does not match the expected regular expression pattern.
+   * @returns void
+   */
+  public static match(actual: string, expected: string): void {
+    const regex = Regex.compile(expected);
+    const matches = regex.test(actual);
+    if (!matches) {
+      throw new AssertionError({
+        message: `The input did not match the regular expression ${expected}`,
+      });
+    }
+  }
+
+  /**
+   * Checks if a string does not match a regular expression pattern.
+   * @param actual The string to test.
+   * @param expected The regular expression pattern to check against.
+   * @throws Will throw an error if the actual value matches the expected regular expression pattern.
+   * @returns void
+   */
+  public static doesNotMatch(actual: string, expected: string): void {
+    const regex = Regex.compile(expected);
+    const matches = regex.test(actual);
+    if (matches) {
+      throw new AssertionError({
+        message: `The input should not match the regular expression ${expected}`,
+      });
+    }
+  }
+
+  /**
+   * Marks a test as failed.
+   * @param message An optional message to include with the failure.
+   * @throws Always throws an error with the provided message.
+   * @returns void
+   */
+  public static fail(message?: string): void {
+    nodeAssert.fail(message);
+  }
+
+  /**
+   * Asserts that a condition is truthy.
+   * @param condition The condition to test.
+   * @param message An optional message to include if the condition is falsy.
+   * @throws Will throw an error if the condition is falsy.
+   * @returns void
+   */
+  public static ok(condition: boolean, message?: string): void {
+    nodeAssert.ok(condition, message);
   }
 
   private constructor() {}

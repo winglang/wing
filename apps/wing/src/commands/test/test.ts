@@ -14,6 +14,7 @@ import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
 import { SnapshotMode, SnapshotResult, captureSnapshot, determineSnapshotMode } from "./snapshots";
 import { SNAPSHOT_ERROR_PREFIX } from "./snapshots-help";
+import { TraceProcessor } from "./trace-processor";
 import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
@@ -440,9 +441,9 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   const { clean, testFilter, retry } = options;
 
   let outputStream: SpinnerStream | undefined;
-  if (options.stream) {
-    outputStream = new SpinnerStream(process.stdout, "Running tests...");
+  let traceProcessor: TraceProcessor | undefined;
 
+  if (options.stream) {
     // As of this comment, each Wing test is associated with an isolated environment.
     // (All resources for test #0 are in root/env0/..., etc.)
     // This means we can use the environment number to map each environment # to a test name,
@@ -471,8 +472,25 @@ async function testSimulator(synthDir: string, options: TestOptions) {
       outputStream!.write(formatted);
     };
 
-    // TODO: support async callbacks with onTrace?
-    s.onTrace({ callback: (event) => void printEvent(event) });
+    // The simulator emits events synchronously, but formatting them needs to
+    // happen asynchronously since e.g. files have to be read to format stack
+    // traces. If we performed this async work inside of the `onTrace` callback,
+    // we might end up with out-of-order traces, or traces getting printed (or
+    // dropped) after the test has finished. TraceProcessor allows events to be
+    // added to a queue and processed serially, and provides a way to safely
+    // "await" the completion of the processing.
+    traceProcessor = new TraceProcessor((event) => printEvent(event));
+
+    // SpinnerStream is responsible for taking in lines of text and streaming
+    // them to a TTY with a spinner, making sure to clear and re-print the
+    // spinner when new lines are added.
+    outputStream = new SpinnerStream(process.stdout, "Running tests...");
+
+    s.onTrace({
+      callback: (event) => {
+        traceProcessor!.addEvent(event);
+      },
+    });
   }
 
   try {
@@ -491,6 +509,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   await s.stop();
 
   if (options.stream) {
+    await traceProcessor!.finish();
     outputStream!.stopSpinner();
   }
 
@@ -714,7 +733,7 @@ function sortTests(a: std.TestResult, b: std.TestResult) {
  */
 function extractTestEnvFromPath(path: string): number | undefined {
   const parts = path.split("/");
-  const envPart = parts[1];
+  const envPart = parts[1] ?? parts[0];
   if (!envPart.startsWith("env")) {
     return undefined;
   }

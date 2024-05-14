@@ -16,4 +16,3 @@ let x = new sim.Container(
 test "dep_on_failing_resource" {
    log(x.hostPort!);
 }
-
