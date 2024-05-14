@@ -162,7 +162,6 @@ test "Add fixtures" {
   counter.inc(100);
 }
 
-
 class WidgetService {
   data: cloud.Bucket;
   counter: cloud.Counter;
@@ -189,7 +188,7 @@ class WidgetService {
     new ui.Button("Add widget", inflight () => { this.addWidget(); });
   }
 
-  inflight addWidget() {
+  pub inflight addWidget() {
     let id = this.counter.inc();
     this.data.put("widget-{id}", "my data");
   }
@@ -199,7 +198,11 @@ class WidgetService {
   }
 }
 
-new WidgetService();
+let widget = new WidgetService();
+
+new cloud.Function(inflight () => {
+  widget.addWidget();
+}) as "AddWidget";
 
 class ApiUsersService {
   api: cloud.Api; 

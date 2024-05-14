@@ -384,7 +384,8 @@ export const ResourceMetadata = memo(
               </div>
             </InspectorSection>
 
-            {connectionsGroups && connectionsGroups.length > 0 && (
+            {/* Need to fix the relationships data. */}
+            {/* {connectionsGroups && connectionsGroups.length > 0 && (
               <InspectorSection
                 text="Relationships"
                 open={openInspectorSections.includes("relationships")}
@@ -462,7 +463,7 @@ export const ResourceMetadata = memo(
                   ))}
                 </div>
               </InspectorSection>
-            )}
+            )} */}
 
             <div className={classNames(theme.border3, "border-t")}></div>
           </>
