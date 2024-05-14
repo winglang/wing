@@ -97,5 +97,5 @@ test("publishing multiple messages to topic", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toMatchSnapshot();
+  expect(s.listTraces()).toMatchSnapshot();
 });
