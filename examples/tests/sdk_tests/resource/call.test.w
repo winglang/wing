@@ -153,75 +153,78 @@ class MyResource {
   }
 }
 
-let r1 = new MyResource();
+// Only run these tests in the simulator
+if util.env("WING_TARGET") == "sim" {
+  let r1 = new MyResource();
 
-test "resource.call with a field name returns the field value" {
-  expect.equal(r1.field1(), "hello");
-  expect.equal(r1.field2("world"), "Hello, world");
+  test "resource.call with a field name returns the field value" {
+    expect.equal(r1.field1(), "hello");
+    expect.equal(r1.field2("world"), "Hello, world");
 
-  let var msg = "";
-  try {
-    r1.field1WithArgs();
-  } catch err {
-    msg = err;
+    let var msg = "";
+    try {
+      r1.field1WithArgs();
+    } catch err {
+      msg = err;
+    }
+    assert(msg.contains("Property \"field1\" is not a function"));
+
+    try {
+      r1.invalidField();
+    } catch err {
+      msg = err;
+    }
+    assert(msg.contains("Method or property \"invalidField\" not found"));
   }
-  assert(msg.contains("Property \"field1\" is not a function"));
 
-  try {
-    r1.invalidField();
-  } catch err {
-    msg = err;
+  test "resource.call cannot be used to call onStop" {
+    // These are reserved methods that are called by the simulator for
+    // managing the resource's lifecycle.
+    let var msg = "";
+    try {
+      r1.onStop();
+    } catch err {
+      msg = err;
+    }
+    assert(msg.contains("Cannot call \"onStop\""));
   }
-  assert(msg.contains("Method or property \"invalidField\" not found"));
-}
 
-test "resource.call cannot be used to call onStop" {
-  // These are reserved methods that are called by the simulator for
-  // managing the resource's lifecycle.
-  let var msg = "";
-  try {
-    r1.onStop();
-  } catch err {
-    msg = err;
+  test "exceptions thrown by the resource are caught and rethrown by the caller" {
+    let var msg = "";
+    try {
+      r1.throwsError();
+    } catch err {
+      msg = err;
+    }
+    assert(msg.contains("Look ma, an error!"));
   }
-  assert(msg.contains("Cannot call \"onStop\""));
-}
 
-test "exceptions thrown by the resource are caught and rethrown by the caller" {
-  let var msg = "";
-  try {
-    r1.throwsError();
-  } catch err {
-    msg = err;
+  test "resource.call can accept and return various kinds of values" {
+    expect.equal(r1.methodNum(42), 84);
+    expect.equal(r1.methodStr("hello"), "hellohello");
+    expect.equal(r1.methodBool(true), false);
+    expect.equal(r1.methodOptNum1(42), 42);
+    expect.equal(r1.methodOptNum2(42), nil);
+    expect.equal(r1.methodJson({ value: 42 }), { value: { value: 42 } });
+    expect.equal(r1.methodEnum(MyEnum.A), MyEnum.B);
+    expect.equal(r1.methodArray([1, 2, 3]), [2]);
+    expect.equal(r1.methodMap({ a: 1, b: 2 }), { a: 2, b: 4 });
+    expect.equal(r1.methodStruct({ field1: "hello", field2: 42 }), { field1: "hellohello", field2: 84 });
+    expect.equal(r1.methodWithVariadics("1", 2, 3), 6);
+    expect.equal(r1.methodWithComplexTypes1([{ field1: "hello", field2: 42 }]), { field1Length: 5 });
   }
-  assert(msg.contains("Look ma, an error!"));
-}
 
-test "resource.call can accept and return various kinds of values" {
-  expect.equal(r1.methodNum(42), 84);
-  expect.equal(r1.methodStr("hello"), "hellohello");
-  expect.equal(r1.methodBool(true), false);
-  expect.equal(r1.methodOptNum1(42), 42);
-  expect.equal(r1.methodOptNum2(42), nil);
-  expect.equal(r1.methodJson({ value: 42 }), { value: { value: 42 } });
-  expect.equal(r1.methodEnum(MyEnum.A), MyEnum.B);
-  expect.equal(r1.methodArray([1, 2, 3]), [2]);
-  expect.equal(r1.methodMap({ a: 1, b: 2 }), { a: 2, b: 4 });
-  expect.equal(r1.methodStruct({ field1: "hello", field2: 42 }), { field1: "hellohello", field2: 84 });
-  expect.equal(r1.methodWithVariadics("1", 2, 3), 6);
-  expect.equal(r1.methodWithComplexTypes1([{ field1: "hello", field2: 42 }]), { field1Length: 5 });
-}
-
-test "resource can log messages at different levels" {
-  r1.printLogs();
-}
-
-test "resource.call times out if the method takes too long" {
-  let var msg = "";
-  try {
-    r1.methodTakesLongTime();
-  } catch err {
-    msg = err;
+  test "resource can log messages at different levels" {
+    r1.printLogs();
   }
-  assert(msg.contains("timed out"));
+
+  test "resource.call times out if the method takes too long" {
+    let var msg = "";
+    try {
+      r1.methodTakesLongTime();
+    } catch err {
+      msg = err;
+    }
+    assert(msg.contains("timed out"));
+  }
 }

@@ -1,4 +1,5 @@
 bring sim;
+bring util;
 
 inflight class OnStopThrowerBackend impl sim.IResource {
   pub onStop() {
@@ -21,8 +22,11 @@ class OnStopThrower {
   }
 }
 
-let r = new OnStopThrower();
+// Only run these tests in the simulator
+if util.env("WING_TARGET") == "sim" {
+  let r = new OnStopThrower();
 
-test "if a resource throws an error on stopping, it doesn't crash the simulation" {
-  r.noop();
+  test "if a resource throws an error on stopping, it doesn't crash the simulation" {
+    r.noop();
+  }
 }

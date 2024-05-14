@@ -1,5 +1,6 @@
 bring cloud;
 bring sim;
+bring util;
 
 inflight class CounterBackend impl sim.IResource {
   var counter: num;
@@ -57,13 +58,16 @@ class Counter {
 
 let c = new Counter();
 
-test "Counter" {
-  assert(c.inc() == 0);
-  assert(c.inc() == 1);
-  assert(c.inc(5) == 2);
-  assert(c.peek() == 7);
-  assert(c.getStartTime() == "2023-10-16T20:47:39.511Z");
-  assert(c.startTime == "2023-10-16T20:47:39.511Z");
+// Only run these tests in the simulator
+if util.env("WING_TARGET") == "sim" {
+  test "Counter" {
+    assert(c.inc() == 0);
+    assert(c.inc() == 1);
+    assert(c.inc(5) == 2);
+    assert(c.peek() == 7);
+    assert(c.getStartTime() == "2023-10-16T20:47:39.511Z");
+    assert(c.startTime == "2023-10-16T20:47:39.511Z");
+  }
 }
 
 // check that resources can be extended
@@ -76,9 +80,11 @@ class DoubleCounter extends Counter {
 
 let dc = new DoubleCounter();
 
-test "DoubleCounter" {
-  assert(dc.inc() == 0);
-  assert(dc.inc() == 2);
-  assert(dc.inc(5) == 4);
-  assert(dc.peek() == 14);
+if util.env("WING_TARGET") == "sim" {
+  test "DoubleCounter" {
+    assert(dc.inc() == 0);
+    assert(dc.inc() == 2);
+    assert(dc.inc(5) == 4);
+    assert(dc.peek() == 14);
+  }
 }

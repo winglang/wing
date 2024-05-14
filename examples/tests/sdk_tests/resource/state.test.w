@@ -1,5 +1,6 @@
 bring fs;
 bring sim;
+bring util;
 
 inflight class ResourceWithStateBackend impl sim.IResource {
   ctx: sim.IResourceContext;
@@ -35,9 +36,12 @@ class ResourceWithState {
   }
 }
 
-let r = new ResourceWithState();
+// Only run these tests in the simulator
+if util.env("WING_TARGET") == "sim" {
+  let r = new ResourceWithState();
 
-test "sim.Resource can read and write state" {
-  r.writeState();
-  assert(r.readState() == "my state");
+  test "sim.Resource can read and write state" {
+    r.writeState();
+    assert(r.readState() == "my state");
+  }
 }

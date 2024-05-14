@@ -1,4 +1,5 @@
 bring sim;
+bring util;
 
 inflight class BadTokenResolverBackend impl sim.IResource {
   ctx: sim.IResourceContext;
@@ -24,14 +25,17 @@ class BadTokenResolver {
   }
 }
 
-let r = new BadTokenResolver();
+// Only run these tests in the simulator
+if util.env("WING_TARGET") == "sim" {
+  let r = new BadTokenResolver();
 
-test "calling resolveToken during a method call emits an error" {
-  let var msg = "";
-  try {
-    r.foo();
-  } catch err {
-    msg = err;
+  test "calling resolveToken during a method call emits an error" {
+    let var msg = "";
+    try {
+      r.foo();
+    } catch err {
+      msg = err;
+    }
+    assert(msg.contains("cannot resolve attributes outside of onStop method"));
   }
-  assert(msg.contains("cannot resolve attributes outside of onStop method"));
 }

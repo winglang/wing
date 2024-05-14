@@ -1,4 +1,5 @@
 bring sim;
+bring util;
 
 inflight class MyResourceBackend impl sim.IResource {
   ctx: sim.IResourceContext;
@@ -20,9 +21,12 @@ class MyResource {
   }
 }
 
-let r = new MyResource();
-let fakeAttr = r.fakeAttr();
+// Only run these tests in the simulator
+if util.env("WING_TARGET") == "sim" {
+  let r = new MyResource();
+  let fakeAttr = r.fakeAttr();
 
-test "test cannot access unresolved token" {
-  log(fakeAttr);
+  test "test cannot access unresolved token" {
+    log(fakeAttr);
+  }
 }
