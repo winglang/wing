@@ -25,7 +25,7 @@ export class Counter extends cloud.Counter {
       // TODO: make CounterBackend liftable so we can add it to the list of captures
       const CounterBackend =
         // eslint-disable-next-line @typescript-eslint/no-require-imports
-        require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
+        require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
       const backend = new CounterBackend(simContext, { initial: ctx.initial });
       await backend.onStart();
       return backend;
