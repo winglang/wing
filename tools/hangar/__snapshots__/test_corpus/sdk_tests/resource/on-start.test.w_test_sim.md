@@ -3,14 +3,14 @@
 ## stdout.log
 ```log
 [ERROR] method calls fail if the resource fails to start | Error: unexpected error!
-  --> on-start.test.w:5:5
+  --> on-start.test.w:6:5
   | 
   | inflight class OnStartThrowerBackend impl sim.IResource {
   |   new() {
-5 |     throw "unexpected error!";
+6 |     throw "unexpected error!";
   |     ^
-at $inflight_init <ABSOLUTE>/on-start.test.w:5:5
-at <ABSOLUTE>/on-start.test.w:16:18
+at $inflight_init <ABSOLUTE>/on-start.test.w:6:5
+at <ABSOLUTE>/on-start.test.w:17:18
 [ERROR] method calls fail if the resource fails to start | Error: Resource is not running (it may have crashed or stopped)
 pass ─ on-start.test.wsim » root/env0/test:method calls fail if the resource fails to start
 
