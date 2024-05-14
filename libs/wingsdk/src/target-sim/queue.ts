@@ -169,7 +169,7 @@ export class QueueSetConsumerHandler {
         try {
           await ctx.handler($message.payload);
         } catch (error) {
-          // TODO: an error from user code is getting dropped - bad!
+          // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
           batchItemFailures.push($message);
         }
       }
