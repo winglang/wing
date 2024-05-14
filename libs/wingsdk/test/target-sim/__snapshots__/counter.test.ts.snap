@@ -21,7 +21,7 @@ exports[`create a counter 1`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -74,7 +74,36 @@ exports[`create a counter 1`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -251,7 +280,7 @@ exports[`dec 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -304,7 +333,36 @@ exports[`dec 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -481,7 +539,7 @@ exports[`inc 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -534,7 +592,36 @@ exports[`inc 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -711,7 +798,7 @@ exports[`key dec 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -764,7 +851,36 @@ exports[`key dec 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -941,7 +1057,7 @@ exports[`key inc 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -994,7 +1110,36 @@ exports[`key inc 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1169,7 +1314,7 @@ exports[`key set to new value 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -1222,7 +1367,36 @@ exports[`key set to new value 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1397,7 +1571,7 @@ exports[`set to new value 2`] = `
             // TODO: make CounterBackend liftable so we can add it to the list of captures
             const CounterBackend = 
             // eslint-disable-next-line @typescript-eslint/no-require-imports
-            require("@winglang/sdk/lib/target-sim/counter.backend").CounterBackend;
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
             const backend = new CounterBackend(simContext, { initial: ctx.initial });
             await backend.onStart();
             return backend;
@@ -1450,7 +1624,36 @@ exports[`set to new value 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
