@@ -1,0 +1,10 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: "@dirname"
+  kind: 3
+  documentation:
+    kind: markdown
+    value: "Get the normalized absolute path of the current source file's directory.\n\nThe resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.\nIt should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."
+  sortText: cc|@dirname
+

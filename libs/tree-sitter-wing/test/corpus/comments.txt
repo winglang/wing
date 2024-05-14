@@ -1,0 +1,22 @@
+================================================================================
+Docstrings & comments
+================================================================================
+
+// This is a plain comment
+/// This is a doc string
+/// This is another one
+// This too is a plain comment
+
+/// This is a doc after an empty line
+
+--------------------------------------------------------------------------------
+
+(source
+  (comment)
+  (doc
+    content: (doc_content))
+  (doc
+    content: (doc_content))
+  (comment)
+  (doc
+    content: (doc_content)))

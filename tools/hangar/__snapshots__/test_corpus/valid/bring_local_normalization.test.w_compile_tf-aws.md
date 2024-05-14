@@ -75,6 +75,9 @@ class Bar extends $stdlib.std.Resource {
   static bar($scope) {
     return "bar";
   }
+  static getSubdir($scope) {
+    return $helpers.resolveDirname(__dirname, "../../../subdir");
+  }
   static _toInflightType() {
     return `
       require("${$helpers.normalPath(__dirname)}/inflight.Bar-1.cjs")({
