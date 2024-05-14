@@ -629,6 +629,10 @@ export interface ApiConnectOptions {}
  */
 export interface IApiClient {}
 
+export enum ApiInflightMethods {
+  REQUEST = "request", // TODO: implement api.request() as an inflight method
+}
+
 /**
  * Allowed HTTP methods for a endpoint.
  */

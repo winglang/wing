@@ -143,6 +143,7 @@ export class Bucket extends Resource {
           source: this,
           sourceOp: op,
           target: topic,
+          targetOp: "publish",
           name: BucketEventType.CREATE,
         });
       }
@@ -159,6 +160,7 @@ export class Bucket extends Resource {
           source: this,
           sourceOp: op,
           target: topic,
+          targetOp: "publish",
           name: BucketEventType.UPDATE,
         });
       }
@@ -175,6 +177,7 @@ export class Bucket extends Resource {
           source: this,
           sourceOp: op,
           target: topic,
+          targetOp: "publish",
           name: BucketEventType.DELETE,
         });
       }
