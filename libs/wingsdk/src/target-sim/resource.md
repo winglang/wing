@@ -175,7 +175,7 @@ class MyResource {
   }
 }
 
-let r = new ResourceWithState();
+let r = new MyResource();
 
 new cloud.Function(inflight () => {
   let time = util.env("START_TIME");
