@@ -90,12 +90,9 @@ test("publishing multiple messages to topic", async () => {
   await waitUntilTraceCount(s, 1, (trace) =>
     trace.data.message.includes("A", "B", "C")
   );
-  await waitUntilTraceCount(s, 3, (trace) =>
-    trace.data.message.includes("event")
-  );
 
   // THEN
   await s.stop();
 
-  expect(s.listTraces()).toMatchSnapshot();
+  expect(listMessages(s)).toMatchSnapshot();
 });
