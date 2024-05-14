@@ -128,7 +128,7 @@ To convert a value to `Json`, use the `Json` constructor:
 ```js
 let x: num = 5;
 let y: str = "a";
-this.backend.call("myMethod", [Json x, Json y]);
+this.backend.call("myMethod", Json [x, y]);
 ```
 
 Return values can be converted back from `Json` using an appropriate `fromJson` method.

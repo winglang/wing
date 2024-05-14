@@ -85,12 +85,12 @@ class MyResource {
   }
   pub inflight field2(name: str): str {
     // calling a function-typed property works as expected
-    return str.fromJson(this.backend.call("field2", [Json name]));
+    return str.fromJson(this.backend.call("field2", Json [name]));
   }
   pub inflight field1WithArgs(): str {
     // if you are passing arguments to call(), we assume you're trying to call a function.
     // since field1 is a property, this will throw an error
-    return str.fromJson(this.backend.call("field1", [Json "arg1", Json "arg2"]));
+    return str.fromJson(this.backend.call("field1", Json ["arg1", "arg2"]));
   }
   pub inflight invalidField(): str {
     return str.fromJson(this.backend.call("invalidField"));
@@ -109,47 +109,47 @@ class MyResource {
   }
 
   pub inflight methodNum(arg: num): num {
-    return num.fromJson(this.backend.call("methodNum", [Json arg]));
+    return num.fromJson(this.backend.call("methodNum", Json [arg]));
   }
   pub inflight methodStr(arg: str): str {
-    return str.fromJson(this.backend.call("methodStr", [Json arg]));
+    return str.fromJson(this.backend.call("methodStr", Json [arg]));
   }
   pub inflight methodBool(arg: bool): bool {
-    return bool.fromJson(this.backend.call("methodBool", [Json arg]));
+    return bool.fromJson(this.backend.call("methodBool", Json [arg]));
   }
   pub inflight methodOptNum1(arg: num?): num? {
     // TODO: need a way to convert from Json to num?
-    return unsafeCast(this.backend.call("methodOptNum1", [Json arg]));
+    return unsafeCast(this.backend.call("methodOptNum1", Json [arg]));
   }
   pub inflight methodOptNum2(arg: num?): num? {
     // TODO: need a way to convert from Json to num?
-    return unsafeCast(this.backend.call("methodOptNum2", [Json arg]));
+    return unsafeCast(this.backend.call("methodOptNum2", Json [arg]));
   }
   pub inflight methodJson(arg: Json): Json {
     return this.backend.call("methodJson", [arg]);
   }
   pub inflight methodEnum(arg: MyEnum): MyEnum {
     // TODO: safer way to convert to and from enums
-    return unsafeCast(this.backend.call("methodEnum", [Json "{arg}"]));
+    return unsafeCast(this.backend.call("methodEnum", Json ["{arg}"]));
   }
   pub inflight methodArray(arg: Array<num>): Array<num> {
     // TODO: Array.fromJson - https://github.com/winglang/wing/issues/1796
-    return unsafeCast(this.backend.call("methodArray", [Json arg]));
+    return unsafeCast(this.backend.call("methodArray", Json [arg]));
   }
   pub inflight methodMap(arg: Map<num>): Map<num> {
     // TODO: Map.fromJson - https://github.com/winglang/wing/issues/1796
-    return unsafeCast(this.backend.call("methodMap", [Json arg]));
+    return unsafeCast(this.backend.call("methodMap", Json [arg]));
   }
   pub inflight methodStruct(arg: MyStruct): MyStruct {
-    return MyStruct.fromJson(this.backend.call("methodStruct", [Json arg]));
+    return MyStruct.fromJson(this.backend.call("methodStruct", Json [arg]));
   }
   pub inflight methodWithVariadics(arg1: str, arg2: num, arg3: num): num {
     // TODO: spreading variadic arguments?
-    return num.fromJson(this.backend.call("methodWithVariadics", [Json arg1, Json arg2, Json arg3]));
+    return num.fromJson(this.backend.call("methodWithVariadics", Json [arg1, arg2, arg3]));
   }
   pub inflight methodWithComplexTypes1(arg1: Array<MyStruct>): Map<num> {
     // TODO: Map.fromJson - https://github.com/winglang/wing/issues/1796
-    return unsafeCast(this.backend.call("methodWithComplexTypes1", [Json arg1]));
+    return unsafeCast(this.backend.call("methodWithComplexTypes1", Json [arg1]));
   }
 }
 
