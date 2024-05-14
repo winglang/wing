@@ -43,7 +43,6 @@ test(
     const helloWorld = new HelloWorld(app, "HelloWorld");
 
     const s = await app.startSimulator();
-    s.onTrace({ callback: (trace) => console.log(trace) });
 
     const pusher = s.getResource("/HelloWorld/Queue") as cloud.IQueueClient;
 

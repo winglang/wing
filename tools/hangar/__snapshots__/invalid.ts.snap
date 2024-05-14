@@ -3863,6 +3863,298 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`sim_resource.test.w 1`] = `
+"error: Parameter \\"a\\" cannot have a mutable type \\"MutJson\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:16:3
+   |
+16 |   pub methodWithMutJsons(a: MutJson): MutJson { return {}; }
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Return value cannot have a mutable type \\"MutJson\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:16:3
+   |
+16 |   pub methodWithMutJsons(a: MutJson): MutJson { return {}; }
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Parameter \\"a\\" cannot have a mutable type \\"MutArray<str>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:18:3
+   |  
+18 | /   pub methodWithMuArrays(a: MutArray<str>, b: MutArray<num>): MutArray<bool> {
+19 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutArray<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+20 | |     return MutArray<bool>[];
+21 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a mutable type \\"MutArray<num>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:18:3
+   |  
+18 | /   pub methodWithMuArrays(a: MutArray<str>, b: MutArray<num>): MutArray<bool> {
+19 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutArray<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+20 | |     return MutArray<bool>[];
+21 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a mutable type \\"MutArray<bool>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:18:3
+   |  
+18 | /   pub methodWithMuArrays(a: MutArray<str>, b: MutArray<num>): MutArray<bool> {
+19 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutArray<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+20 | |     return MutArray<bool>[];
+21 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"Set<str>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:22:3
+   |  
+22 | /   pub methodWithSets(a: Set<str>, b: Set<num>): Set<bool> {
+23 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"Set<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+24 | |     return Set<bool>[];
+25 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a non-serializable type \\"Set<num>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:22:3
+   |  
+22 | /   pub methodWithSets(a: Set<str>, b: Set<num>): Set<bool> {
+23 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"Set<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+24 | |     return Set<bool>[];
+25 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"Set<bool>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:22:3
+   |  
+22 | /   pub methodWithSets(a: Set<str>, b: Set<num>): Set<bool> {
+23 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"Set<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+24 | |     return Set<bool>[];
+25 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a mutable type \\"MutSet<str>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"MutSet<str>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a mutable type \\"MutSet<num>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a non-serializable type \\"MutSet<num>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a mutable type \\"MutSet<bool>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"MutSet<bool>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a mutable type \\"MutMap<num>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:30:3
+   |  
+30 | /   pub methodWithMutMaps(a: MutMap<num>, b: MutMap<str>): MutMap<bool> {
+31 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutMap<num>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+32 | |     return MutMap<bool>{};
+33 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a mutable type \\"MutMap<str>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:30:3
+   |  
+30 | /   pub methodWithMutMaps(a: MutMap<num>, b: MutMap<str>): MutMap<bool> {
+31 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutMap<num>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+32 | |     return MutMap<bool>{};
+33 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a mutable type \\"MutMap<bool>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:30:3
+   |  
+30 | /   pub methodWithMutMaps(a: MutMap<num>, b: MutMap<str>): MutMap<bool> {
+31 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutMap<num>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+32 | |     return MutMap<bool>{};
+33 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"duration\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:34:3
+   |  
+34 | /   pub methodWithDurations(a: duration): duration {
+35 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"duration\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+36 | |     return 0s;
+37 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"duration\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:34:3
+   |  
+34 | /   pub methodWithDurations(a: duration): duration {
+35 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"duration\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+36 | |     return 0s;
+37 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"Bucket\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:38:3
+   |  
+38 | /   pub methodWithClasses(a: cloud.Bucket): cloud.Queue? {
+39 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"cloud.Bucket\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+40 | |     return nil;
+41 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"Queue?\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:38:3
+   |  
+38 | /   pub methodWithClasses(a: cloud.Bucket): cloud.Queue? {
+39 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"cloud.Bucket\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+40 | |     return nil;
+41 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"IPreflightInterface\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:42:3
+   |  
+42 | /   pub methodWithInterfaces(a: IPreflightInterface, b: IInflightInterface): IPreflightInterface {
+43 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"IPreflightInterface\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+44 | |     return a;
+45 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a non-serializable type \\"IInflightInterface\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:42:3
+   |  
+42 | /   pub methodWithInterfaces(a: IPreflightInterface, b: IInflightInterface): IPreflightInterface {
+43 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"IPreflightInterface\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+44 | |     return a;
+45 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"IPreflightInterface\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:42:3
+   |  
+42 | /   pub methodWithInterfaces(a: IPreflightInterface, b: IInflightInterface): IPreflightInterface {
+43 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"IPreflightInterface\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+44 | |     return a;
+45 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"inflight (str): str\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:46:3
+   |  
+46 | /   pub methodWithFunctions(a: (str): str, b: inflight (num): bool): (inflight (): bool)? {
+47 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"(str): str\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+48 | |     return nil;
+49 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a non-serializable type \\"inflight (num): bool\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:46:3
+   |  
+46 | /   pub methodWithFunctions(a: (str): str, b: inflight (num): bool): (inflight (): bool)? {
+47 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"(str): str\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+48 | |     return nil;
+49 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"(inflight (): bool)?\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:46:3
+   |  
+46 | /   pub methodWithFunctions(a: (str): str, b: inflight (num): bool): (inflight (): bool)? {
+47 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"(str): str\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+48 | |     return nil;
+49 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"MyStructWithNonSerializableTypes\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:50:3
+   |  
+50 | /   pub methodWithBadStructs(a: MyStructWithNonSerializableTypes): MyStructWithNonSerializableTypes {
+51 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"MyStructWithNonSerializableTypes\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+52 | |     return a;
+53 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"MyStructWithNonSerializableTypes\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:50:3
+   |  
+50 | /   pub methodWithBadStructs(a: MyStructWithNonSerializableTypes): MyStructWithNonSerializableTypes {
+51 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"MyStructWithNonSerializableTypes\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+52 | |     return a;
+53 | |   }
+   | \\\\---^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`simulator_permissions.test.w 1`] = `
 "error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
    --> ../../../examples/tests/invalid/simulator_permissions.test.w:10:8
