@@ -1,5 +1,3 @@
-// TODO: add a test for accessing uninitialized state
-
 bring fs;
 bring sim;
 

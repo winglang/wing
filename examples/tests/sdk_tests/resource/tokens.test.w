@@ -6,7 +6,7 @@ inflight class BadTokenResolverBackend impl sim.IResource {
   pub onStop() {}
 
   pub foo() {
-    this.ctx?.resolveToken("my-attr", "value");
+    this.ctx.resolveToken("my-attr", "value");
   }
 }
 
