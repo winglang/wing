@@ -295,7 +295,7 @@ describe("test-filter option", () => {
   });
 });
 
-describe("retry option", () => {
+describe("retry and parallel options", () => {
   let logSpy: SpyInstance;
 
   beforeEach(() => {
@@ -357,6 +357,80 @@ describe("retry option", () => {
 
     const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
     expect(retryLogs.length).toBe(3);
+  });
+
+  test("wing test --parallel [batch]", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
+
+    process.chdir(outDir);
+
+    fs.writeFileSync(
+      "t1.test.w",
+      `
+bring util;
+
+test "t1" {
+  util.sleep(2s);
+  assert(true);
+}
+    `
+    );
+    fs.writeFileSync(
+      "t2.test.w",
+      `
+bring util;
+
+test "t2" {
+  util.sleep(1s);
+  assert(true);
+}
+    `
+    );
+
+    const startingTime = Date.now();
+    await wingTest(["t1.test.w", "t2.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      parallel: 1,
+    });
+    expect(Date.now() - startingTime).toBeGreaterThanOrEqual(3 * 1000);
+  });
+
+  test("wing test --parallel 2", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
+
+    process.chdir(outDir);
+
+    fs.writeFileSync(
+      "t1.test.w",
+      `
+bring util;
+
+test "t1" {
+util.sleep(2s);
+assert(true);
+}
+  `
+    );
+    fs.writeFileSync(
+      "t2.test.w",
+      `
+bring util;
+
+test "t2" {
+util.sleep(2s);
+assert(true);
+}
+  `
+    );
+
+    const startingTime = Date.now();
+    await wingTest(["t1.test.w", "t2.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      parallel: 2,
+    });
+    expect(Date.now() - startingTime).toBeLessThan(4 * 1000);
   });
 });
 

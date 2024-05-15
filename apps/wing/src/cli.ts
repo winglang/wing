@@ -4,7 +4,7 @@ import { satisfies } from "compare-versions";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
 import { SNAPSHOTS_HELP } from "./commands/test/snapshots-help";
-import { currentPackage, projectTemplateNames } from "./util";
+import { currentPackage, projectTemplateNames, DEFAULT_PARALLEL_SIZE } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
 if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
@@ -233,6 +233,14 @@ async function main() {
     .addOption(
       new Option("-R, --retry [retries]", "Number of times to retry failed tests")
         .preset(3)
+        .argParser(parseInt)
+    )
+    .addOption(
+      new Option(
+        "-p, --parallel [batch]",
+        `Number of tests to be executed on parallel- if not specified- ${DEFAULT_PARALLEL_SIZE} will run on parallel, 0 to run all at once`
+      )
+        .preset(DEFAULT_PARALLEL_SIZE)
         .argParser(parseInt)
     )
     .hook("preAction", progressHook)
