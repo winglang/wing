@@ -1,0 +1,6 @@
+---
+source: libs/wingc/src/lsp/rename_request.rs
+---
+changes:
+  "file:///main.w": []
+
