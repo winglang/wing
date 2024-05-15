@@ -203,7 +203,7 @@ guidelines for contributing to the project.
 
 ## Community
 
-We all hang out at the [Wing Slack](https://t.winglang.io/slack). Come as you are, say hi, ask
+We all hang out at the [Wing Discord](https://t.winglang.io/discord). Come as you are, say hi, ask
 questions, help friends, geek out!
 
 ## License

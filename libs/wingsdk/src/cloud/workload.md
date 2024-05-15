@@ -36,7 +36,7 @@ orchestration system such as [Amazon ECS](https://aws.amazon.com/ecs/), [fly.io]
 [ControlPlane](https://controlplane.com/).
 
 > :warning: This resource is still experimental. Please ping the team on [Wing
-> Slack](https://t.winglang.io/slack) if you encounter any issues or have any questions and let us
+> Discord](https://t.winglang.io/discord) if you encounter any issues or have any questions and let us
 > know what you think. See [roadmap](#roadmap) below for more details about our plans.
 
 ## Installation
