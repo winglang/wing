@@ -141,7 +141,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
     }
   };
 
-  await PromisePool.withConcurrency(options.parallel ?? selectedEntrypoints.length)
+  await PromisePool.withConcurrency(options.parallel || selectedEntrypoints.length)
     .for(selectedEntrypoints)
     .process(testFile);
 
