@@ -23,7 +23,7 @@ export async function exists(filePath: string): Promise<boolean> {
   }
 }
 
-function makeEnvVarName(type: string, resource: IConstruct): string {
+export function makeEnvVarName(type: string, resource: IConstruct): string {
   return `${type
     .toUpperCase()
     .replace(/[^A-Z]+/g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
@@ -68,6 +68,33 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
     throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
   }
   return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
+})()`;
+}
+
+export function makeSimulatorJsClientType(type: string, methods: string[]) {
+  const methodLines = [];
+  for (const method of methods) {
+    methodLines.push(
+      `async ${method}(...args) { return this.backend.call("${method}", args); }`
+    );
+  }
+  return `(function() {
+  class ${type}Client {
+    constructor({ $handle }) {
+      const simulatorUrl = process.env.WING_SIMULATOR_URL;
+      if (!simulatorUrl) {
+        throw new Error("Missing environment variable: WING_SIMULATOR_URL");
+      }
+      const caller = process.env.WING_SIMULATOR_CALLER;
+      if (!caller) {
+        throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+      }
+      this.backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, $handle, caller);
+    }
+    async $inflight_init() {}
+    ${methodLines.join("\n")}
+  }
+  return ${type}Client;
 })()`;
 }
 

@@ -1,6 +1,11 @@
 import { Construct } from "constructs";
 import { Resource } from "./resource";
-import { bindSimulatorResource, makeSimulatorJsClientV2 } from "./util";
+import {
+  bindSimulatorResource,
+  makeEnvVarName,
+  makeSimulatorJsClientType,
+  makeSimulatorJsClientV2,
+} from "./util";
 import * as cloud from "../cloud";
 import { LiftMap, lift } from "../core";
 import { Node, IInflightHost } from "../std";
@@ -11,6 +16,16 @@ import { Node, IInflightHost } from "../std";
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.Counter {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Counter", [
+      cloud.CounterInflightMethods.INC,
+      cloud.CounterInflightMethods.DEC,
+      cloud.CounterInflightMethods.PEEK,
+      cloud.CounterInflightMethods.SET,
+    ]);
+  }
+
   public readonly initial: number;
   private readonly backend: Resource;
 
@@ -42,6 +57,13 @@ export class Counter extends cloud.Counter {
       [cloud.CounterInflightMethods.DEC]: [[this.backend, ["call"]]],
       [cloud.CounterInflightMethods.PEEK]: [[this.backend, ["call"]]],
       [cloud.CounterInflightMethods.SET]: [[this.backend, ["call"]]],
+    };
+  }
+
+  public _liftedFields(): Record<string, string> {
+    const env = makeEnvVarName("resource", this.backend);
+    return {
+      $handle: `process.env["${env}"]`,
     };
   }
 

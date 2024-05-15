@@ -25,6 +25,17 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.Counter implements IAwsCounter {
+  /** @internal */
+  public static _toInflightType(): string {
+    console.error("_toInflightType called on tf-aws Counter");
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("counter", "counter.inflight"),
+      "CounterClient"
+    );
+  }
+
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {

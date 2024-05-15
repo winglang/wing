@@ -5,7 +5,7 @@ use crate::{
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic},
-	jsify::{JSifier, JSifyContext},
+	jsify::{JSifier, JSifyContext, SCOPE_PARAM},
 	type_check::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
@@ -163,7 +163,8 @@ impl<'a> LiftVisitor<'a> {
 				ResolveSource::ExternalModule(p) => p,
 			};
 			if let Some(fqn) = fqn {
-				format!("$stdlib.core.toLiftableModuleType(this?.node?.root?.typeForFqn(\"{fqn}\") ?? {udt_js}, \"{module_path}\", \"{type_path}\")")
+				// TODO: fall back to "this"?
+				format!("$stdlib.core.toLiftableModuleType({SCOPE_PARAM}.node.root.typeForFqn(\"{fqn}\") ?? {udt_js}, \"{module_path}\", \"{type_path}\")")
 			} else {
 				format!("$stdlib.core.toLiftableModuleType({udt_js}, \"{module_path}\", \"{type_path}\")")
 			}

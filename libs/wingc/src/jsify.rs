@@ -58,7 +58,7 @@ const __DIRNAME: &str = "__dirname";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
-const SCOPE_PARAM: &str = "$scope";
+pub const SCOPE_PARAM: &str = "$scope";
 
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
@@ -1649,7 +1649,8 @@ impl<'a> JSifier<'a> {
 			// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
 			// `_liftType`).
 			code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
-			code.add_code(self.jsify_to_inflight_method(&class.name, class_type));
+			code.add_code(self.jsify_to_inflight_method(&class.name));
+			code.add_code(self.jsify_lifted_fields(&class.name, class_type));
 
 			// emit `onLift` and `onLiftType` to bind permissions and environment variables to inflight hosts
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
@@ -1748,11 +1749,33 @@ impl<'a> JSifier<'a> {
 		res
 	}
 
-	fn jsify_to_inflight_method(&self, class_name: &Symbol, class_type: TypeRef) -> CodeMaker {
+	fn jsify_lifted_fields(&self, class_name: &Symbol, class_type: TypeRef) -> CodeMaker {
+		let mut code = CodeMaker::with_source(&class_name.span);
+		code.open("_liftedFields() {");
+		code.open("return {");
+		code.line("...(super._liftedFields?.() ?? {}),");
+
+		// Get lifted fields from entire class ancestry
+		let lifts = Self::class_lifted_fields(class_type);
+
+		for (token, obj) in lifts {
+			code.line(format!("{token}: {STDLIB_CORE}.liftObject({obj}),"));
+		}
+
+		code.close("};");
+		code.close("}");
+		code
+	}
+
+	fn jsify_to_inflight_method(&self, class_name: &Symbol) -> CodeMaker {
 		let mut code = CodeMaker::with_source(&class_name.span);
 
 		code.open("_toInflight() {");
 
+		code.line("const liftedFields = this._liftedFields();");
+		code.line(
+			"const liftedFieldsStr = Object.keys(liftedFields).map(key => `${key}: ${liftedFields[key]}`).join(\", \");",
+		);
 		code.open("return `");
 
 		code.open("(await (async () => {");
@@ -1762,16 +1785,10 @@ impl<'a> JSifier<'a> {
 			class_name.name, class_name.name,
 		));
 
-		code.open(format!("const client = new {}Client({{", class_name.name));
-
-		// Get lifted fields from entire class ancestry
-		let lifts = Self::class_lifted_fields(class_type);
-
-		for (token, obj) in lifts {
-			code.line(format!("{token}: ${{{STDLIB_CORE}.liftObject({obj})}},"));
-		}
-
-		code.close("});");
+		code.line(format!(
+			"const client = new {}Client({{${{liftedFieldsStr}}}});",
+			class_name.name
+		));
 
 		code.line(format!(
 			"if (client.{CLASS_INFLIGHT_INIT_NAME}) {{ await client.{CLASS_INFLIGHT_INIT_NAME}(); }}"
@@ -1893,8 +1910,9 @@ impl<'a> JSifier<'a> {
 			IndexSet::new()
 		};
 
-		class_code.open(format!(
-			"{JS_CONSTRUCTOR}({{ {} }}) {{",
+		class_code.open(format!("{JS_CONSTRUCTOR}($args) {{",));
+		class_code.line(format!(
+			"const {{ {} }} = $args;",
 			lifted_fields
 				.union(&parent_fields)
 				.map(|token| { token.clone() })
@@ -1903,7 +1921,7 @@ impl<'a> JSifier<'a> {
 		));
 
 		if class.parent.is_some() {
-			class_code.line(format!("super({{ {} }});", parent_fields.iter().join(", ")));
+			class_code.line("super($args);");
 		}
 
 		for token in &lifted_fields {
