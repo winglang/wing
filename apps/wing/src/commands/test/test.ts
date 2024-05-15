@@ -2,6 +2,7 @@ import * as cp from "child_process";
 import { existsSync, readFile, readFileSync, realpathSync, rm, rmSync, statSync } from "fs";
 import { basename, join, relative, resolve } from "path";
 import { promisify } from "util";
+import { PromisePool } from "@supercharge/promise-pool";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import { LogLevel } from "@winglang/sdk/lib/std";
@@ -54,6 +55,11 @@ export interface TestOptions extends CompileOptions {
    * Determine snapshot behavior.
    */
   readonly snapshots?: SnapshotMode;
+
+  /**
+   * Number of tests to be run in parallel. 0 or undefined will run all at once.
+   */
+  readonly parallel?: number;
 }
 
 const TEST_FILE_PATTERNS = ["**/*.test.w", "**/{main,*.main}.{w,ts}"];
@@ -135,7 +141,11 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       });
     }
   };
-  await Promise.all(selectedEntrypoints.map(testFile));
+
+  await PromisePool.withConcurrency(options.parallel || selectedEntrypoints.length)
+    .for(selectedEntrypoints)
+    .process(testFile);
+
   const testDuration = Date.now() - startTime;
   printResults(results, testDuration);
   if (options.outputFile) {
