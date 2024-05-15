@@ -60,6 +60,7 @@ export class Counter extends cloud.Counter {
     };
   }
 
+  /** @internal */
   public _liftedFields(): Record<string, string> {
     const env = makeEnvVarName("resource", this.backend);
     return {

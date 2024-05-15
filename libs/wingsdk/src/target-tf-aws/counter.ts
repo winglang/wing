@@ -74,13 +74,7 @@ export class Counter extends cloud.Counter implements IAwsCounter {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "CounterClient",
-      undefined,
-      this._liftedFields()
-    );
+    return core.InflightClient.forV2(Counter, this._liftedFields());
   }
 
   /** @internal */

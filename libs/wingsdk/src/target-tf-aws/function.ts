@@ -315,13 +315,7 @@ export class Function extends cloud.Function implements IAwsFunction {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "FunctionClient",
-      undefined,
-      this._liftedFields()
-    );
+    return core.InflightClient.forV2(Function, this._liftedFields());
   }
 
   /** @internal */
