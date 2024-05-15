@@ -71,6 +71,32 @@ export class InflightClient {
     return `require("${normalPath(filename)}").${clientClass}`;
   }
 
+  /**
+   * Returns code for instantiating an inflight client from a class.
+   */
+  public static forV2(
+    klass: any,
+    liftedFields: Record<string, string>
+  ): string {
+    if (typeof klass !== "function") {
+      throw new Error("Invalid inflight class");
+    }
+    if (typeof klass._toInflightType !== "function") {
+      throw new Error("Class is missing _toInflightType static method");
+    }
+    const liftedFieldsStr = Object.keys(liftedFields)
+      .map((key) => `${key}: ${liftedFields[key]}`)
+      .join(", ");
+    return `
+(await (async () => {
+  const klass = ${klass._toInflightType()};
+  const client = new klass({${liftedFieldsStr}});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+`;
+  }
+
   private constructor() {}
 }
 

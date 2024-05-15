@@ -319,8 +319,17 @@ export class Function extends cloud.Function implements IAwsFunction {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "FunctionClient",
-      [`process.env["${this.envName()}"], "${this.node.path}"`]
+      undefined,
+      this._liftedFields()
     );
+  }
+
+  /** @internal */
+  public _liftedFields(): Record<string, string> {
+    return {
+      $functionArn: `process.env["${this.envName()}"]`,
+      $constructPath: `${this.node.path}`,
+    };
   }
 
   /**

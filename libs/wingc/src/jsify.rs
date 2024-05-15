@@ -1772,32 +1772,9 @@ impl<'a> JSifier<'a> {
 
 		code.open("_toInflight() {");
 
-		code.line("const liftedFields = this._liftedFields();");
-		code.line(
-			"const liftedFieldsStr = Object.keys(liftedFields).map(key => `${key}: ${liftedFields[key]}`).join(\", \");",
-		);
-		code.open("return `");
-
-		code.open("(await (async () => {");
-
 		code.line(format!(
-			"const {}Client = ${{{}._toInflightType()}};",
-			class_name.name, class_name.name,
+			"return {STDLIB_CORE}.InflightClient.forV2({class_name}, this._liftedFields());"
 		));
-
-		code.line(format!(
-			"const client = new {}Client({{${{liftedFieldsStr}}}});",
-			class_name.name
-		));
-
-		code.line(format!(
-			"if (client.{CLASS_INFLIGHT_INIT_NAME}) {{ await client.{CLASS_INFLIGHT_INIT_NAME}(); }}"
-		));
-		code.line("return client;");
-
-		code.close("})())");
-
-		code.close("`;");
 
 		code.close("}");
 		code

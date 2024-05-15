@@ -3,7 +3,12 @@ import { Construct } from "constructs";
 import { ISimulatorInflightHost, ISimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeEnvVarName,
+  makeSimulatorJsClient,
+  makeSimulatorJsClientType,
+} from "./util";
 import * as cloud from "../cloud";
 import { App, LiftMap } from "../core";
 import { PolicyStatement, ToSimulatorOutput } from "../simulator/simulator";
@@ -24,6 +29,14 @@ export class Function
   extends cloud.Function
   implements ISimulatorResource, ISimulatorInflightHost
 {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Function", [
+      cloud.FunctionInflightMethods.INVOKE,
+      cloud.FunctionInflightMethods.INVOKE_ASYNC,
+    ]);
+  }
+
   private readonly timeout: Duration;
   private readonly concurrency: number;
   private readonly permissions: Array<[IResource, string]> = [];
@@ -80,9 +93,18 @@ export class Function
     };
   }
 
+  /** @internal */
   public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
+  }
+
+  /** @internal */
+  public _liftedFields(): Record<string, string> {
+    const env = makeEnvVarName("function", this);
+    return {
+      $handle: `process.env["${env}"]`,
+    };
   }
 
   /** @internal */

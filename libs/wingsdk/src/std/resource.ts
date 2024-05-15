@@ -70,6 +70,14 @@ export interface ILiftable {
    * @internal
    */
   _toInflight(): string;
+
+  /**
+   * Return the fields that need to be passed to the inflight constructor as arguments.
+   * Each value should be a JavaScript code string.
+   *
+   * @internal
+   */
+  _liftedFields?(): Record<string, string>;
 }
 
 /**
@@ -171,6 +179,14 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
+   * @internal
+   * @abstract
+   */
+  public _liftedFields(): Record<string, string> {
+    throw new AbstractMemberError();
+  }
+
+  /**
    * A hook called by the Wing compiler once for each inflight host that needs to
    * use this resource inflight.
    *
@@ -228,6 +244,11 @@ export abstract class AutoIdResource extends Resource {
   constructor(scope: Construct, idPrefix: string = "") {
     const id = App.of(scope).makeId(scope, idPrefix ? `${idPrefix}_` : "");
     super(scope, id);
+  }
+
+  /** @internal */
+  public _liftedFields(): Record<string, string> {
+    return {};
   }
 }
 

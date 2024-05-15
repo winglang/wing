@@ -51,6 +51,7 @@ export class Datetime implements ILiftable {
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
+
   /**
    * Create a Datetime from UTC timezone
    *
