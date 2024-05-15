@@ -109,7 +109,7 @@ impl Documented for Namespace {
 impl Documented for TypeRef {
 	fn render_docs(&self) -> String {
 		match &**self {
-			Type::Function(f) => render_function(f),
+			Type::Function(f) => f.render_docs(),
 			Type::Class(c) => render_class(c),
 			Type::Interface(i) => render_interface(i),
 			Type::Struct(s) => render_struct(s),
@@ -292,21 +292,23 @@ fn render_signature_help(f: &FunctionSignature) -> String {
 	markdown.to_string().trim().to_string()
 }
 
-fn render_function(f: &FunctionSignature) -> String {
-	let mut markdown = CodeMaker::default();
+impl Documented for FunctionSignature {
+	fn render_docs(&self) -> String {
+		let mut markdown = CodeMaker::default();
 
-	if let Some(s) = &f.docs.summary {
-		markdown.line(s);
+		if let Some(s) = &self.docs.summary {
+			markdown.line(s);
+		}
+
+		if self.parameters.len() > 0 {
+			markdown.line(PARAMETER_HEADER);
+			markdown.line(render_signature_help(self));
+		}
+
+		render_docs(&mut markdown, &self.docs);
+
+		markdown.to_string().trim().to_string()
 	}
-
-	if f.parameters.len() > 0 {
-		markdown.line(PARAMETER_HEADER);
-		markdown.line(render_signature_help(f));
-	}
-
-	render_docs(&mut markdown, &f.docs);
-
-	markdown.to_string().trim().to_string()
 }
 
 fn render_struct(s: &Struct) -> String {
@@ -382,7 +384,12 @@ fn render_enum(e: &Enum) -> String {
 	}
 
 	for prop in e.values.iter() {
-		markdown.line(&format!("- `{}`\n", prop));
+		let value_doc = if let Some(doc) = prop.1.as_ref() {
+			format!(" — {}", doc)
+		} else {
+			String::default()
+		};
+		markdown.line(&format!("- `{}{}`\n", prop.0, value_doc));
 	}
 
 	markdown.empty_line();

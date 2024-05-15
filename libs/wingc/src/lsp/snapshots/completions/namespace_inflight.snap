@@ -131,18 +131,18 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum HttpMethod\n```\n---\nThe request's method.\n- `GET`\n- `PUT`\n- `DELETE`\n- `PATCH`\n- `POST`\n- `OPTIONS`\n- `HEAD`"
+    value: "```wing\nenum HttpMethod\n```\n---\nThe request's method.\n- `GET — GET.`\n- `PUT — PUT.`\n- `DELETE — DELETE.`\n- `PATCH — PATCH.`\n- `POST — POST.`\n- `OPTIONS — OPTIONS.`\n- `HEAD — HEAD.`"
   sortText: jj|HttpMethod
 - label: RequestCache
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum RequestCache\n```\n---\nThe cache mode of the request.\n- `DEFAULT`\n- `NO_STORE`\n- `RELOAD`\n- `NO_CACHE`\n- `FORCE_CACHE`\n\n\n### Remarks\nIt controls how a request will interact with the system's HTTP cache."
+    value: "```wing\nenum RequestCache\n```\n---\nThe cache mode of the request.\n- `DEFAULT — The runtime environment looks for a matching request in its HTTP cache.`\n- `NO_STORE — The runtime environment fetches the resource from the remote server without first looking in the cache, and will not update the cache with the downloaded resource.`\n- `RELOAD — The runtime environment fetches the resource from the remote server without first looking in the cache, but then will update the cache with the downloaded resource.`\n- `NO_CACHE — The runtime environment looks for a matching request in its HTTP cache.`\n- `FORCE_CACHE — The runtime environment looks for a matching request in its HTTP cache.`\n\n\n### Remarks\nIt controls how a request will interact with the system's HTTP cache."
   sortText: jj|RequestCache
 - label: RequestRedirect
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum RequestRedirect\n```\n---\nThe redirect read-only property that contains the mode for how redirects are handled.\n- `MANUAL`\n- `FOLLOW`\n- `ERROR`"
+    value: "```wing\nenum RequestRedirect\n```\n---\nThe redirect read-only property that contains the mode for how redirects are handled.\n- `MANUAL — Do not follow redirects automatically.`\n- `FOLLOW — Follow all redirects incurred when fetching a resource.`\n- `ERROR — Return a network error when a request is met with a redirect.`"
   sortText: jj|RequestRedirect
 

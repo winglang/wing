@@ -158,7 +158,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     this.addTrace(
       `Container ${this.imageTag} started`,
       TraceType.RESOURCE,
-      LogLevel.INFO
+      LogLevel.VERBOSE
     );
 
     return {
@@ -186,7 +186,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       this.addTrace(
         `Building ${this.imageTag} from ${this.props.image}...`,
         TraceType.RESOURCE,
-        LogLevel.INFO
+        LogLevel.VERBOSE
       );
       await this.docker("build", ["-t", this.imageTag, this.props.image], {
         logLevel: LogLevel.VERBOSE,
@@ -195,7 +195,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       this.addTrace(
         `Pulling ${this.imageTag}...`,
         TraceType.RESOURCE,
-        LogLevel.INFO
+        LogLevel.VERBOSE
       );
       await this.docker("pull", [this.imageTag], {
         logLevel: LogLevel.VERBOSE,

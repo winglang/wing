@@ -42,4 +42,4 @@ Put your skills to the test using the [playground](https://docs.winglang.io/gett
 ### Community
 We also have a [YouTube channel](https://www.youtube.com/@winglangio) where we share clips of demos and guest interviews on our [Twitch show](https://www.twitch.tv/winglangio), and a [blog](https://www.winglang.io/blog).
 
-Finally, we encourage you to join our [Wing Slack](http://t.winglang.io/slack) where we help each other, answer questions, and share our cloud adventures.
+Finally, we encourage you to join our [Wing Discord](http://t.winglang.io/discord) where we help each other, answer questions, and share our cloud adventures.

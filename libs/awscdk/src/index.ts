@@ -2,7 +2,6 @@ export * from "./platform";
 export * from "./app";
 export * from "./bucket";
 export * from "./counter";
-export * from "./counter.inflight";
 export * from "./endpoint";
 export * from "./function";
 export * from "./queue";

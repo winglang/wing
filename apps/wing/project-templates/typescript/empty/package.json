@@ -5,6 +5,7 @@
   "author": "Your Name",
   "license": "MIT",
   "scripts": {
+    "dev": "wing run main.ts",
     "compile": "wing compile main.ts",
     "test": "wing test main.ts"
   },

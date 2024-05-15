@@ -213,3 +213,18 @@ class Boom {
   new() { }
 }
 class Bam extends Boom {}
+
+// A documented class (should be parssed without errors)
+/// Class documentation
+/// blah blah blah
+class DocClass {
+  /// Method documentation
+  /// blah blah blah
+  docMethod() {}
+  /// Field documentation
+  /// blah blah blah
+  docField: num;
+  /// Ctor documentation
+  /// blah blah blah
+  new() { this.docField = 0; }
+}

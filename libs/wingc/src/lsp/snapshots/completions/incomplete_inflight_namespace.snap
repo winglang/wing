@@ -41,7 +41,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass OnDeploy\n```\n---\nRun code every time the app is deployed.\n\n### Initializer\n- `handler` — `inflight (): void`\n- `...props` — `OnDeployProps?`\n  \n  - `concurrency?` — `num?`\n  - `env?` — `Map<str>?`\n  - `executeAfter?` — `Array<Construct>?` — Execute this trigger only after these resources have been provisioned.\n  - `executeBefore?` — `Array<Construct>?` — Adds this trigger as a dependency on other constructs.\n  - `logRetentionDays?` — `num?`\n  - `memory?` — `num?`\n  - `timeout?` — `duration?`\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+    value: "```wing\nclass OnDeploy\n```\n---\nRun code every time the app is deployed.\n\n### Initializer\n- `handler` — `inflight (): void`\n- `...props` — `OnDeployProps?`\n  \n  - `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n  - `env?` — `Map<str>?` — Environment variables to pass to the function.\n  - `executeAfter?` — `Array<Construct>?` — Execute this trigger only after these resources have been provisioned.\n  - `executeBefore?` — `Array<Construct>?` — Adds this trigger as a dependency on other constructs.\n  - `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n  - `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n  - `timeout?` — `duration?` — The maximum amount of time the function can run.\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
   sortText: gg|OnDeploy
 - label: Queue
   kind: 7
@@ -77,7 +77,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Website impl IWebsite\n```\n---\nA cloud static website.\n\n### Initializer\n- `...props` — `WebsiteProps`\n  \n  - `path` — `str`\n  - `domain?` — `Domain?`\n  - `errorDocument?` — `str?`\n### Fields\n- `node` — `Node` — The tree node.\n- `path` — `str` — Absolute local path to the website's static files.\n- `url` — `str` — The website's url.\n### Methods\n- `addFile` — `preflight (path: str, data: str, options: AddFileOptions?): str` — Add a file to the website during deployment.\n- `addJson` — `preflight (path: str, data: Json): str` — Add a JSON file with custom values during the website's deployment.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+    value: "```wing\nclass Website impl IWebsite\n```\n---\nA cloud static website.\n\n### Initializer\n- `...props` — `WebsiteProps`\n  \n  - `path` — `str` — Local path to the website's static files, relative to the Wing source file or absolute.\n  - `domain?` — `Domain?` — The website's custom domain object.\n  - `errorDocument?` — `str?` — Name of the error document for the website.\n### Fields\n- `node` — `Node` — The tree node.\n- `path` — `str` — Absolute local path to the website's static files.\n- `url` — `str` — The website's url.\n### Methods\n- `addFile` — `preflight (path: str, data: str, options: AddFileOptions?): str` — Add a file to the website during deployment.\n- `addJson` — `preflight (path: str, data: Json): str` — Add a JSON file with custom values during the website's deployment.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
   sortText: gg|Website
 - label: AddFileOptions
   kind: 22
@@ -221,7 +221,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketTryGetOptions extends BucketGetOptions\n```\n---\nOptions for `Bucket.tryGet()`.\n### Fields\n- `endByte?` — `num?`\n- `startByte?` — `num?`"
+    value: "```wing\nstruct BucketTryGetOptions extends BucketGetOptions\n```\n---\nOptions for `Bucket.tryGet()`.\n### Fields\n- `endByte?` — `num?` — The ending byte to read up to (including).\n- `startByte?` — `num?` — The starting byte to read from."
   sortText: hh|BucketTryGetOptions
 - label: CorsHeaders
   kind: 22
@@ -275,7 +275,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `concurrency?` — `num?`\n- `env?` — `Map<str>?`\n- `executeAfter?` — `Array<Construct>?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — `Array<Construct>?` — Adds this trigger as a dependency on other constructs.\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `executeAfter?` — `Array<Construct>?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — `Array<Construct>?` — Adds this trigger as a dependency on other constructs.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|OnDeployProps
 - label: QueueProps
   kind: 22
@@ -287,13 +287,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct QueueSetConsumerOptions extends FunctionProps\n```\n---\nOptions for Queue.setConsumer.\n### Fields\n- `batchSize?` — `num?` — The maximum number of messages to send to subscribers at once.\n- `concurrency?` — `num?`\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct QueueSetConsumerOptions extends FunctionProps\n```\n---\nOptions for Queue.setConsumer.\n### Fields\n- `batchSize?` — `num?` — The maximum number of messages to send to subscribers at once.\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|QueueSetConsumerOptions
 - label: ScheduleOnTickOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ScheduleOnTickOptions extends FunctionProps\n```\n---\nOptions for Schedule.onTick.\n### Fields\n- `concurrency?` — `num?`\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct ScheduleOnTickOptions extends FunctionProps\n```\n---\nOptions for Schedule.onTick.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|ScheduleOnTickOptions
 - label: ScheduleProps
   kind: 22
@@ -311,7 +311,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ServiceOnStartOptions extends FunctionProps\n```\n---\nOptions for Service.onStart.\n### Fields\n- `concurrency?` — `num?`\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct ServiceOnStartOptions extends FunctionProps\n```\n---\nOptions for Service.onStart.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|ServiceOnStartOptions
 - label: ServiceProps
   kind: 22
@@ -323,7 +323,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct TopicOnMessageOptions extends FunctionProps\n```\n---\nOptions for `Topic.onMessage`.\n### Fields\n- `concurrency?` — `num?`\n- `env?` — `Map<str>?`\n- `logRetentionDays?` — `num?`\n- `memory?` — `num?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct TopicOnMessageOptions extends FunctionProps\n```\n---\nOptions for `Topic.onMessage`.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|TopicOnMessageOptions
 - label: TopicProps
   kind: 22
@@ -335,7 +335,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct TopicSubscribeQueueOptions extends QueueProps\n```\n---\nOptions for `Topic.subscribeQueue`.\n### Fields\n- `dlq?` — `DeadLetterQueueProps?`\n- `retentionPeriod?` — `duration?`\n- `timeout?` — `duration?`"
+    value: "```wing\nstruct TopicSubscribeQueueOptions extends QueueProps\n```\n---\nOptions for `Topic.subscribeQueue`.\n### Fields\n- `dlq?` — `DeadLetterQueueProps?` — A dead-letter queue.\n- `retentionPeriod?` — `duration?` — How long a queue retains a message.\n- `timeout?` — `duration?` — How long a queue's consumers have to process a message."
   sortText: hh|TopicSubscribeQueueOptions
 - label: WebsiteDomainOptions
   kind: 22
@@ -353,7 +353,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WebsiteProps extends WebsiteOptions, WebsiteDomainOptions\n```\n---\nOptions for `Website`.\n### Fields\n- `path` — `str`\n- `domain?` — `Domain?`\n- `errorDocument?` — `str?`"
+    value: "```wing\nstruct WebsiteProps extends WebsiteOptions, WebsiteDomainOptions\n```\n---\nOptions for `Website`.\n### Fields\n- `path` — `str` — Local path to the website's static files, relative to the Wing source file or absolute.\n- `domain?` — `Domain?` — The website's custom domain object.\n- `errorDocument?` — `str?` — Name of the error document for the website."
   sortText: hh|WebsiteProps
 - label: IApiClient
   kind: 8
@@ -365,7 +365,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IApiEndpointHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods.\n### Methods\n- `handle` — `inflight (request: ApiRequest): ApiResponse?` — Inflight that will be called when a request is made to the endpoint.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IApiEndpointHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods.\n### Methods\n- `handle` — `inflight (request: ApiRequest): ApiResponse?` — Inflight that will be called when a request is made to the endpoint.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this object inflight."
   sortText: ii|IApiEndpointHandler
 - label: IApiEndpointHandlerClient
   kind: 8
@@ -383,7 +383,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IBucketEventHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events.\n### Methods\n- `handle` — `inflight (key: str, type: BucketEventType): void` — Function that will be called when an event notification is fired.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IBucketEventHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events.\n### Methods\n- `handle` — `inflight (key: str, type: BucketEventType): void` — Function that will be called when an event notification is fired.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this object inflight."
   sortText: ii|IBucketEventHandler
 - label: IBucketEventHandlerClient
   kind: 8
@@ -419,7 +419,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IFunctionHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`.\n### Methods\n- `handle` — `inflight (event: str?): str?` — Entrypoint function that will be called when the cloud function is invoked.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IFunctionHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`.\n### Methods\n- `handle` — `inflight (event: str?): str?` — Entrypoint function that will be called when the cloud function is invoked.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this object inflight."
   sortText: ii|IFunctionHandler
 - label: IFunctionHandlerClient
   kind: 8
@@ -437,7 +437,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IOnDeployHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be used by `cloud.OnDeploy`.\n### Methods\n- `handle` — `inflight (): void` — Entrypoint function that will be called when the app is deployed.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IOnDeployHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be used by `cloud.OnDeploy`.\n### Methods\n- `handle` — `inflight (): void` — Entrypoint function that will be called when the app is deployed.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this object inflight."
   sortText: ii|IOnDeployHandler
 - label: IOnDeployHandlerClient
   kind: 8
@@ -455,7 +455,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IQueueSetConsumerHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`.\n### Methods\n- `handle` — `inflight (message: str): void` — Function that will be called when a message is received from the queue.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IQueueSetConsumerHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`.\n### Methods\n- `handle` — `inflight (message: str): void` — Function that will be called when a message is received from the queue.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this object inflight."
   sortText: ii|IQueueSetConsumerHandler
 - label: IQueueSetConsumerHandlerClient
   kind: 8
@@ -473,7 +473,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IScheduleOnTickHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`.\n### Methods\n- `handle` — `inflight (): void` — Function that will be called when a message is received from the schedule.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IScheduleOnTickHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`.\n### Methods\n- `handle` — `inflight (): void` — Function that will be called when a message is received from the schedule.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this object inflight."
   sortText: ii|IScheduleOnTickHandler
 - label: IScheduleOnTickHandlerClient
   kind: 8
@@ -497,7 +497,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceHandler extends IInflight\n```\n---\nExecuted when a `cloud.Service` is started.\n### Methods\n- `handle` — `inflight (): inflight (): void?` — Handler to run when the service starts.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IServiceHandler extends IInflight\n```\n---\nExecuted when a `cloud.Service` is started.\n### Methods\n- `handle` — `inflight (): inflight (): void?` — Handler to run when the service starts.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this object inflight."
   sortText: ii|IServiceHandler
 - label: IServiceHandlerClient
   kind: 8
@@ -509,7 +509,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceStopHandler extends IInflight\n```\n---\nExecuted when a `cloud.Service` is stopped.\n### Methods\n- `handle` — `inflight (): void` — Handler to run when the service stops.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IServiceStopHandler extends IInflight\n```\n---\nExecuted when a `cloud.Service` is stopped.\n### Methods\n- `handle` — `inflight (): void` — Handler to run when the service stops.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this object inflight."
   sortText: ii|IServiceStopHandler
 - label: IServiceStopHandlerClient
   kind: 8
@@ -527,7 +527,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface ITopicOnMessageHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`.\n### Methods\n- `handle` — `inflight (event: str): void` — Function that will be called when a message is received from the topic.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface ITopicOnMessageHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`.\n### Methods\n- `handle` — `inflight (event: str): void` — Function that will be called when a message is received from the topic.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this object inflight."
   sortText: ii|ITopicOnMessageHandler
 - label: ITopicOnMessageHandlerClient
   kind: 8
@@ -551,18 +551,18 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum BucketEventType\n```\n---\nBucket events to subscribe to.\n- `CREATE`\n- `DELETE`\n- `UPDATE`"
+    value: "```wing\nenum BucketEventType\n```\n---\nBucket events to subscribe to.\n- `CREATE — Create.`\n- `DELETE — Delete.`\n- `UPDATE — Update.`"
   sortText: jj|BucketEventType
 - label: BucketSignedUrlAction
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum BucketSignedUrlAction\n```\n---\nSpecifies the action permitted by a presigned URL for a bucket.\n- `DOWNLOAD`\n- `UPLOAD`"
+    value: "```wing\nenum BucketSignedUrlAction\n```\n---\nSpecifies the action permitted by a presigned URL for a bucket.\n- `DOWNLOAD — Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket.`\n- `UPLOAD — Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket.`"
   sortText: jj|BucketSignedUrlAction
 - label: HttpMethod
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum HttpMethod\n```\n---\nAllowed HTTP methods for a endpoint.\n- `GET`\n- `HEAD`\n- `POST`\n- `PUT`\n- `DELETE`\n- `CONNECT`\n- `OPTIONS`\n- `PATCH`"
+    value: "```wing\nenum HttpMethod\n```\n---\nAllowed HTTP methods for a endpoint.\n- `GET — Get.`\n- `HEAD — Head.`\n- `POST — Post.`\n- `PUT — Put.`\n- `DELETE — Delete.`\n- `CONNECT — Connect.`\n- `OPTIONS — Options.`\n- `PATCH — Patch.`"
   sortText: jj|HttpMethod
 

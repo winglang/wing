@@ -17,6 +17,18 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`fail_to_start_simulator.test.w 1`] = `
+"[ERROR] dep_on_failing_resource | Error: Failed to start container: Command \\"docker pull\\" exited with non-zero code 1 (see verbose logs)
+[ERROR] dep_on_failing_resource | Error: Unable to resolve attribute 'host_port' for resource \\"root/env0/Container\\" referenced by \\"root/env0/test:dep_on_failing_resource/Handler\\"
+[ERROR] (no test) | Error: Unable to resolve attribute 'host_port' for resource \\"root/env0/Container\\" referenced by \\"root/env0/test:dep_on_failing_resource/Handler\\"
+Failed to start resources: \\"root/env0/test:dep_on_failing_resource/Handler\\", \\"root/cloud.TestRunner\\"
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`inflight_stacktraces.test.w 1`] = `
 "fail ┌ inflight_stacktraces.test.wsim » root/env0/test:assert              
      │ Error: assertion failed: false
@@ -69,6 +81,17 @@ fail ┌ inflight_stacktraces.test.wsim » root/env4/test:assert with message
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:27:3
 
 Tests 5 failed (5)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`invalid-token.test.w 1`] = `
+"[ERROR] test cannot access unresolved token | Error: Unable to resolve attribute 'fake-attr' for resource \\"root/env0/MyResource/Resource\\" referenced by \\"root/env0/test:test cannot access unresolved token/Handler\\"
+[ERROR] (no test) | Error: Unable to resolve attribute 'fake-attr' for resource \\"root/env0/MyResource/Resource\\" referenced by \\"root/env0/test:test cannot access unresolved token/Handler\\"
+Failed to start resources: \\"root/env0/test:test cannot access unresolved token/Handler\\", \\"root/cloud.TestRunner\\"
+
+Tests 1 failed (1)
 Snapshots 1 skipped
 Test Files 1 failed (1)
 Duration <DURATION>"

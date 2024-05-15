@@ -211,7 +211,7 @@ test("calling an invalid method returns an error to the client", async () => {
   const sim = await app.startSimulator();
   const bucketClient = sim.getResource("/test");
   await expect(bucketClient.invalidMethod()).rejects.toThrowError(
-    /Method invalidMethod not found on resource/
+    /Method "invalidMethod" not found on resource/
   );
   await sim.stop();
 });

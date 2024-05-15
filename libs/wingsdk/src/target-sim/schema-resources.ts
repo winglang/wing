@@ -156,15 +156,6 @@ export interface BucketSchema {
 /** Runtime attributes for cloud.Bucket */
 export interface BucketAttributes {}
 
-/** Properties for cloud.Counter */
-export interface CounterSchema {
-  /** The initial value of the counter. */
-  readonly initial: number;
-}
-
-/** Runtime attributes for cloud.Counter */
-export interface CounterAttributes {}
-
 /** Properties for cloud.TestRunner */
 export interface TestRunnerSchema {
   /** A map from test functions to their handles. */
@@ -283,3 +274,18 @@ export interface PolicySchema {
 
 /** Runtime attributes for sim.Policy */
 export interface PolicyAttributes {}
+
+/** Properties for sim.Resource */
+export interface SimResourceSchema {
+  /** The environment variables available to the resource. */
+  readonly environmentVariables: Record<string, string>;
+  /** The path to a file containing the resource's source code. */
+  readonly sourceCodeFile: string;
+  /** The language of the resource's source code. */
+  readonly sourceCodeLanguage: string;
+}
+
+/** Runtime attributes for sim.Resource */
+export interface SimResourceAttributes {
+  [key: string]: string;
+}
