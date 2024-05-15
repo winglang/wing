@@ -1,0 +1,22 @@
+---
+source: libs/wingc/src/lsp/rename_request.rs
+---
+changes:
+  "file:///main.w":
+    - range:
+        start:
+          line: 3
+          character: 8
+        end:
+          line: 3
+          character: 15
+      newText: t1
+    - range:
+        start:
+          line: 5
+          character: 18
+        end:
+          line: 5
+          character: 25
+      newText: t1
+
