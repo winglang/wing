@@ -2,7 +2,7 @@
 <p align="center">
   <a href="https://www.winglang.io/docs/">Docs</a>
   ▪︎
-  <a href="http://t.winglang.io/slack">Community</a>
+  <a href="http://t.winglang.io/discord">Community</a>
   ▪︎
   <a href="https://www.winglang.io/docs/category/faq">FAQ</a>
   ▪︎
