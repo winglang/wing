@@ -10,7 +10,7 @@ any kind.
 The [Wing Contributor's Handbook] has tons of relevant information. If you can't find what you need
 here, please let us know by [submitting an issue].
 
-The best way to get started is by asking for help in the #Help channel on
+The best way to get started is by asking for help in the #help channel on
 the [Wing Discord].
 
 ## Quick Links
