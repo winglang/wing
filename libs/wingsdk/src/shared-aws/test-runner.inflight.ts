@@ -24,7 +24,10 @@ export class TestRunnerClient implements ITestRunnerClient {
     if (!functionArn) {
       throw new Error(`No test found with path "${path}"`);
     }
-    const client = new FunctionClient(functionArn, path);
+    const client = new FunctionClient({
+      $functionArn: functionArn,
+      $constructPath: path,
+    });
     let traces: Trace[] = [];
     let pass = false;
     let error: string | undefined;
