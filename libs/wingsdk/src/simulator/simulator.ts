@@ -634,6 +634,13 @@ export class Simulator {
       return { granted: true };
     }
 
+    if (method === "then") {
+      // Always grant permissions for the "then" method so that an error isn't thrown
+      // if `await client` is called on a Proxy object. In JavaScript, `await x` will
+      // implicitly call `x.then()`.
+      return { granted: true };
+    }
+
     const callerPath = this._handles.tryFindPath(callerHandle);
     if (!callerPath) {
       return {

@@ -205,6 +205,7 @@ interface ConstructNodeProps {
   highlight?: boolean;
   hasChildNodes?: boolean;
   onSelectedNodeIdChange: (id: string | undefined) => void;
+  color?: string;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -218,6 +219,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       inflights,
       children,
       hasChildNodes,
+      color,
     }) => {
       const select = useCallback(
         () => onSelectedNodeIdChange(id),
@@ -236,6 +238,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               // "elk.layered.layering.strategy": "MIN_WIDTH",
               // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
               // "elk.layered.layering.strategy": "STRETCH_WIDTH",
+              "elk.portConstraints": "FIXED_SIDE",
             },
           }}
           className={clsx(
@@ -275,7 +278,11 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                     "border-b border-slate-200 dark:border-slate-800",
                 )}
               >
-                <ResourceIcon className="size-4 -ml-0.5" resourceType={fqn} />
+                <ResourceIcon
+                  className="size-4 -ml-0.5"
+                  resourceType={fqn}
+                  color={color}
+                />
 
                 <span
                   className={clsx(
@@ -679,11 +686,22 @@ export const MapView = memo(
           props.constructTreeNode.children ?? {},
         ).filter((node) => !isNodeHidden(node.path));
 
+        const fqn = props.constructTreeNode.constructInfo?.fqn;
+
+        const cloudResourceType = fqn?.split(".").at(-1);
+
+        const name =
+          props.constructTreeNode.display?.title === cloudResourceType
+            ? props.constructTreeNode.id
+            : props.constructTreeNode.display?.title ??
+              props.constructTreeNode.id;
+
         return (
           <ConstructNode
             id={props.constructTreeNode.path}
-            name={props.constructTreeNode.id}
-            fqn={props.constructTreeNode.constructInfo?.fqn ?? ""}
+            name={name ?? ""}
+            fqn={fqn ?? ""}
+            color={props.constructTreeNode.display?.color}
             inflights={info.type === "construct" ? info.inflights : []}
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             highlight={props.selectedNodeId === props.constructTreeNode.path}
