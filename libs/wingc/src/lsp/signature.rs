@@ -34,7 +34,6 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 
 			let mut scope_visitor = ScopeVisitor::new(&types, params.text_document_position_params.position);
 			scope_visitor.visit_scope(root_scope);
-			let env = scope_visitor.call_env?;
 
 			let sig_data: (
 				crate::type_check::UnsafeRef<crate::type_check::Type>,
@@ -68,6 +67,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				}
 			} else {
 				let expr = scope_visitor.call_expr?;
+				let env = scope_visitor.call_env?;
 				match &expr.kind {
 					ExprKind::New(new_expr) => {
 						let New { class, arg_list, .. } = new_expr;
@@ -262,7 +262,6 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 			match &node.kind {
 				StmtKind::SuperConstructor { .. } => {
 					self.call_stmt = Some(node);
-					self.call_env = Some(*self.curr_env.last().unwrap());
 				}
 				StmtKind::Class(c) => {
 					self.class = Some(c);
