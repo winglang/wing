@@ -30,9 +30,8 @@ export class SecretRef extends Resource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    const fn = AwsInflightHost.from(host);
-    if (fn) {
-      fn.addPolicyStatements(
+    if (AwsInflightHost.isAwsInflightHost(host)) {
+      host.addPolicyStatements(
         ...calculateSecretPermissions(this.secretArn, ops)
       );
     }

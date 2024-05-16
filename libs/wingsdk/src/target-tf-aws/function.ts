@@ -286,11 +286,15 @@ export class Function extends cloud.Function implements IAwsFunction {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
     if (
       ops.includes(cloud.FunctionInflightMethods.INVOKE) ||
       ops.includes(cloud.FunctionInflightMethods.INVOKE_ASYNC)
     ) {
-      AwsInflightHost.from(host)?.addPolicyStatements({
+      host.addPolicyStatements({
         actions: ["lambda:InvokeFunction"],
         resources: [`${this.function.arn}`],
       });

@@ -91,12 +91,12 @@ export class QueueRef extends Resource {
 
   public onLift(host: IInflightHost, ops: string[]): void {
     // if this is an AWS function, add the necessary IAM permissions
-    const fn = AwsInflightHost.from(host);
-    if (fn) {
-      fn.addPolicyStatements(...calculateQueuePermissions(this.queueArn, ops));
+    if (AwsInflightHost.isAwsInflightHost(host)) {
+      host.addPolicyStatements(...calculateQueuePermissions(this.queueArn, ops));
     }
 
     host.addEnvironment(this.envName(), this.queueArn);
+    
     super.onLift(host, ops);
   }
 

@@ -49,7 +49,11 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    AwsInflightHost.from(host)?.addPolicyStatements(
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
+    host.addPolicyStatements(
       ...calculateCounterPermissions(this.table.arn, ops)
     );
 

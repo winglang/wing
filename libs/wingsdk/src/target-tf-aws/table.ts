@@ -57,48 +57,50 @@ export class Table extends ex.Table implements IAwsTable {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    const awsHost = AwsInflightHost.from(host);
-    if (awsHost) {
-      if (
-        ops.includes(ex.TableInflightMethods.INSERT) ||
-        ops.includes(ex.TableInflightMethods.UPSERT)
-      ) {
-        awsHost.addPolicyStatements({
-          actions: ["dynamodb:PutItem"],
-          resources: [this.table.arn],
-        });
-      }
-      if (ops.includes(ex.TableInflightMethods.UPDATE)) {
-        awsHost.addPolicyStatements({
-          actions: ["dynamodb:UpdateItem"],
-          resources: [this.table.arn],
-        });
-      }
-
-      if (ops.includes(ex.TableInflightMethods.DELETE)) {
-        awsHost.addPolicyStatements({
-          actions: ["dynamodb:DeleteItem"],
-          resources: [this.table.arn],
-        });
-      }
-
-      if (
-        ops.includes(ex.TableInflightMethods.GET) ||
-        ops.includes(ex.TableInflightMethods.TRYGET)
-      ) {
-        awsHost.addPolicyStatements({
-          actions: ["dynamodb:GetItem"],
-          resources: [this.table.arn],
-        });
-      }
-
-      if (ops.includes(ex.TableInflightMethods.LIST)) {
-        awsHost.addPolicyStatements({
-          actions: ["dynamodb:Scan"],
-          resources: [this.table.arn],
-        });
-      }
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
+
+    if (
+      ops.includes(ex.TableInflightMethods.INSERT) ||
+      ops.includes(ex.TableInflightMethods.UPSERT)
+    ) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:PutItem"],
+        resources: [this.table.arn],
+      });
+    }
+    if (ops.includes(ex.TableInflightMethods.UPDATE)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:UpdateItem"],
+        resources: [this.table.arn],
+      });
+    }
+
+    if (ops.includes(ex.TableInflightMethods.DELETE)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:DeleteItem"],
+        resources: [this.table.arn],
+      });
+    }
+
+    if (
+      ops.includes(ex.TableInflightMethods.GET) ||
+      ops.includes(ex.TableInflightMethods.TRYGET)
+    ) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:GetItem"],
+        resources: [this.table.arn],
+      });
+    }
+
+    if (ops.includes(ex.TableInflightMethods.LIST)) {
+      host.addPolicyStatements({
+        actions: ["dynamodb:Scan"],
+        resources: [this.table.arn],
+      });
+    }
+  
 
     host.addEnvironment(this.envName(), this.table.name);
     host.addEnvironment(this.primaryKeyEnvName(), this.primaryKey);

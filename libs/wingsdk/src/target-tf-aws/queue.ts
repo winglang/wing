@@ -90,7 +90,12 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       }
     );
 
-    AwsInflightHost.from(fn)?.addPolicyStatements({
+    if (!AwsInflightHost.isAwsInflightHost(fn)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
+
+    fn.addPolicyStatements({
       actions: [
         "sqs:ReceiveMessage",
         "sqs:ChangeMessageVisibility",
@@ -120,7 +125,11 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   public onLift(host: IInflightHost, ops: string[]): void {
     const env = this.envName();
 
-    AwsInflightHost.from(host)?.addPolicyStatements(
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
+    host.addPolicyStatements(
       ...calculateQueuePermissions(this.queue.arn, ops)
     );
 

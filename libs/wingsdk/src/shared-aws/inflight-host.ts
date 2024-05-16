@@ -6,17 +6,6 @@ import { IInflightHost } from "../std";
  */
 export class AwsInflightHost {
   /**
-   * Casts an object to `IAwsInflighHost` or returns `undefined` if it's not one.
-   */
-  public static from(obj: any): IAwsInflightHost | undefined {
-    if (this.isAwsInflightHost(obj)) {
-      return obj;
-    } else {
-      return undefined;
-    }
-  }
-
-  /**
    * Returns `true` if `obj` implements `IAwsInflightHost`.
    */
   public static isAwsInflightHost(obj: any): obj is IAwsInflightHost {

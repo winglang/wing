@@ -133,7 +133,11 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    AwsInflightHost.from(host)?.addPolicyStatements(
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
+    host.addPolicyStatements(
       ...calculateBucketPermissions(this.bucket.arn, ops)
     );
 

@@ -83,11 +83,8 @@ export class BucketRef extends Resource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    // if this is an AWS function, add the necessary IAM permissions
-    const fn = AwsInflightHost.from(host);
-
-    if (fn) {
-      fn.addPolicyStatements(
+    if (AwsInflightHost.isAwsInflightHost(host)) {
+      host.addPolicyStatements(
         ...calculateBucketPermissions(this.bucketArn, ops)
       );
     }

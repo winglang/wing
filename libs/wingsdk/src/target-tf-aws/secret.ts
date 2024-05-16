@@ -52,7 +52,11 @@ export class Secret extends cloud.Secret {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    AwsInflightHost.from(host)?.addPolicyStatements(
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
+    host.addPolicyStatements(
       ...calculateSecretPermissions(this.secret.arn, ops)
     );
 

@@ -114,17 +114,22 @@ export class Redis extends ex.Redis {
 
   public onLift(host: IInflightHost, ops: string[]): void {
     const env = this.envName();
+
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
     // Ops do not matter here since the client connects directly to the cluster.
     // The only thing that we need to use AWS API for is to get the cluster endpoint
     // from the cluster ID.
-    AwsInflightHost.from(host)?.addPolicyStatements({
+    host.addPolicyStatements({
       actions: ["elasticache:Describe*"],
       resources: [this.clusterArn],
     });
 
     host.addEnvironment(env, this.clusterId);
 
-    AwsInflightHost.from(host)?.addNetwork({
+    host.addNetwork({
       securityGroupIds: [...this.securityGroups.map((s) => s.id)],
       subnetIds: [...this.subnets.map((s) => s.id)],
     });

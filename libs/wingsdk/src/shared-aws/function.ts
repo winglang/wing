@@ -73,15 +73,12 @@ export class FunctionRef extends Resource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    // if this is an AWS function, add the necessary IAM permissions
-    const fn = AwsInflightHost.from(host);
-
-    if (fn) {
+    if (AwsInflightHost.isAwsInflightHost(host)) {
       if (
         ops.includes(FunctionInflightMethods.INVOKE) ||
         ops.includes(FunctionInflightMethods.INVOKE_ASYNC)
       ) {
-        fn.addPolicyStatements({
+        host.addPolicyStatements({
           actions: ["lambda:InvokeFunction"],
           resources: [this.functionArn],
         });

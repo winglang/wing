@@ -169,7 +169,11 @@ export class Topic extends cloud.Topic implements IAwsTopic {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    AwsInflightHost.from(host)?.addPolicyStatements(
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
+
+    host.addPolicyStatements(
       ...calculateTopicPermissions(this.topic.arn, ops)
     );
 
