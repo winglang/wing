@@ -1093,7 +1093,7 @@ impl TypeRef {
 	}
 
 	pub fn is_map(&self) -> bool {
-		matches!(**self, Type::Map(_))
+		matches!(**self, Type::Map(_) | Type::MutMap(_))
 	}
 
 	pub fn is_void(&self) -> bool {
@@ -3227,7 +3227,7 @@ impl<'a> TypeChecker<'a> {
 				if expected_type_unwrapped.is_struct() {
 					self.validate_structural_type(fields, expected_type_unwrapped, span);
 					true
-				} else if let Some(inner_expected) = inner_expected {
+				} else if let (Some(inner_expected), true) = (inner_expected, expected_type_unwrapped.is_map()) {
 					// The expected type is a Map
 					for field_info in fields.values() {
 						self.validate_type(field_info.type_, inner_expected, &field_info.span);
@@ -3329,7 +3329,8 @@ impl<'a> TypeChecker<'a> {
 				"to allow \"nil\" assignment use optional type: \"{first_expected_type}?\""
 			));
 		}
-		if return_type.maybe_unwrap_option().is_json() {
+
+		if matches!(**return_type.maybe_unwrap_option(), Type::Json(None) | Type::MutJson) {
 			// known json data is statically known
 			hints.push(format!(
 				"use {first_expected_type}.fromJson() to convert dynamic Json\""
