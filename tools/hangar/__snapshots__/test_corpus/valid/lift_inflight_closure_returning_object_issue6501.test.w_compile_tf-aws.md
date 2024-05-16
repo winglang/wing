@@ -64,7 +64,7 @@ module.exports = function({ $b }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $b }) {
+module.exports = function({ $b, $bar }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -73,6 +73,8 @@ module.exports = function({ $b }) {
     }
     async handle() {
       ;
+      (await (await $bar()).put("a", "value"));
+      $helpers.assert($helpers.eq((await $b.get("a")), "value"), "b.get(\"a\") == \"value\"");
     }
   }
   return $Closure4;
@@ -285,6 +287,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
             $b: ${$stdlib.core.liftObject(b)},
+            $bar: ${$stdlib.core.liftObject(bar)},
           })
         `;
       }
@@ -302,10 +305,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [b, ["put"]],
+            [b, [].concat(["put"], ["get"])],
+            [bar, ["handle"]],
           ],
           "$inflight_init": [
             [b, []],
+            [bar, []],
           ],
         });
       }
