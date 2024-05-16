@@ -82,7 +82,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
-      App.of(this).makeId(this, "SetConsumer"),
+      App.of(this).makeId(this, "Consumer"),
       functionHandler,
       props
     );
@@ -169,6 +169,7 @@ export class QueueSetConsumerHandler {
         try {
           await ctx.handler($message.payload);
         } catch (error) {
+          // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
           batchItemFailures.push($message);
         }
       }

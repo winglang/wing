@@ -1,14 +1,14 @@
 ---
 title: Get Help
 id: help
-keywords: [help, slack, community, questions]
+keywords: [help, discord, community, questions]
 ---
 
 ## 🙋 Where can I go to ask questions about Wing?
 
-Come on down and hang out in the [Wing Slack]! We're a friendly bunch and we'd love to help you out.
+Come on down and hang out in the [Wing Discord]! We're a friendly bunch and we'd love to help you out.
 There are no stupid questions, so don't be afraid to ask! Don't forget to introduce yourself in the
-[#intro](https://winglang.slack.com/archives/C048QDSMC7L) channel.
+[#intro](https://t.winglang.io/discord) channel.
 
-[Wing Slack]: https://t.winglang.io/slack
+[Wing Discord]: https://t.winglang.io/discord
 

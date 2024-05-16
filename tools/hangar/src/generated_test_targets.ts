@@ -101,7 +101,7 @@ export async function testTest(
     env: {
       WING_HIDE_CONTAINER_LOGS: "1",
       ...env,
-    }
+    },
   });
 
   if (out.stderr) fileMap["stderr.log"] = out.stderr;

@@ -71,6 +71,34 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
 })()`;
 }
 
+export function makeSimulatorJsClientV2(filename: string, resource: Resource) {
+  const type = basename(filename).split(".")[0];
+  const env = makeEnvVarName(type, resource);
+  return `(function() {
+  let handle = process.env.${env};
+  if (!handle) {
+    throw new Error("Missing environment variable: ${env}");
+  }
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
+  }
+  const caller = process.env.WING_SIMULATOR_CALLER;
+  if (!caller) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+  }
+  const backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
+  const client = new Proxy(backend, {
+    get: function(target, prop, receiver) {
+      return async function(...args) {
+        return backend.call(prop, args);
+      };
+    },
+  });
+  return client;
+})()`;
+}
+
 // helper function to convert duration to a cron string
 // maybe this belongs in a util library but for now it's here
 export function convertDurationToCronExpression(dur: Duration): string {

@@ -86,6 +86,17 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`invalid-token.test.w 1`] = `
+"[ERROR] test cannot access unresolved token | Error: Unable to resolve attribute 'fake-attr' for resource \\"root/env0/MyResource/Resource\\" referenced by \\"root/env0/test:test cannot access unresolved token/Handler\\"
+[ERROR] (no test) | Error: Unable to resolve attribute 'fake-attr' for resource \\"root/env0/MyResource/Resource\\" referenced by \\"root/env0/test:test cannot access unresolved token/Handler\\"
+Failed to start resources: \\"root/env0/test:test cannot access unresolved token/Handler\\", \\"root/cloud.TestRunner\\"
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`num_from_str.test.w 1`] = `
 "Error: unable to parse \\"123a\\" as a number
   --> ../../../examples/tests/error/num_from_str.test.w:3:14

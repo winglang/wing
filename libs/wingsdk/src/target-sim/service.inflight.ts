@@ -38,7 +38,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     this.bundle = await Sandbox.createBundle(
       this.resolvedSourceCodeFile,
       (msg, level) => {
-        this.addTrace(msg, TraceType.SIMULATOR, level);
+        this.addTrace(msg, TraceType.RESOURCE, level);
       }
     );
   }
