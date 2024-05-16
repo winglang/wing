@@ -460,7 +460,12 @@ function createExplorerItemFromConstructTreeNode(
   showTests = false,
   includeHiddens = false,
 ): ExplorerItem {
-  const label = node.display?.title ?? node.id;
+  const cloudResourceType = node.constructInfo?.fqn?.split(".").at(-1);
+
+  const label =
+    node.display?.title === cloudResourceType
+      ? node.id
+      : node.display?.title ?? node.id;
 
   return {
     id: node.path,
