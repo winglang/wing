@@ -236,6 +236,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               // "elk.layered.layering.strategy": "MIN_WIDTH",
               // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
               // "elk.layered.layering.strategy": "STRETCH_WIDTH",
+              "elk.portConstraints": "FIXED_SIDE",
             },
           }}
           className={clsx(
