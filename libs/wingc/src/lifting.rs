@@ -165,10 +165,16 @@ impl<'a> LiftVisitor<'a> {
 impl<'a> Visit<'a> for LiftVisitor<'a> {
 	fn visit_reference(&mut self, node: &'a Reference) {
 		match node {
-			Reference::InstanceMember { property, .. } => {
-				self.ctx.push_property(property);
+			Reference::InstanceMember { property, object, .. } => {
+				// We need to store the property for lift qualification if it's a property access on a preflight expression
+				let should_push_property = self.jsify.types.get_expr_phase(object).unwrap() == Phase::Preflight;
+				if should_push_property {
+					self.ctx.push_property(property)
+				};
 				visit::visit_reference(self, &node);
-				self.ctx.pop_property();
+				if should_push_property {
+					self.ctx.pop_property()
+				};
 			}
 			Reference::TypeMember { property, .. } => {
 				self.ctx.push_property(property);
