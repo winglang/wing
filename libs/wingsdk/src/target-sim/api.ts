@@ -140,7 +140,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       sourceOp: cloud.ApiInflightMethods.REQUEST,
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
-      name: cloud.FunctionInflightMethods.INVOKE,
+      name: `${method.toLowerCase()} ${path}`,
     });
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
   }

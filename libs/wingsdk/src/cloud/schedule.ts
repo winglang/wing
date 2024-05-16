@@ -122,6 +122,15 @@ export interface IScheduleOnTickHandler extends IInflight {
 export interface IScheduleClient {}
 
 /**
+ * List of inflight operations available for `Schedule`.
+ * @internal
+ */
+export enum ScheduleInflightMethods {
+  /** When the schedule runs its scheduled actions. */
+  TICK = "tick",
+}
+
+/**
  * Inflight client for `IScheduleOnTickHandler`.
  */
 export interface IScheduleOnTickHandlerClient {

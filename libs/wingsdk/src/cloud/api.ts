@@ -634,7 +634,8 @@ export interface IApiClient {}
  * @internal
  */
 export enum ApiInflightMethods {
-  REQUEST = "request", // TODO: implement api.request() as an inflight method
+  /** When the API endpoint receives a request. */
+  REQUEST = "request",
 }
 
 /**
