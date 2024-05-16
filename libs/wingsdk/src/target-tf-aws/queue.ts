@@ -6,7 +6,7 @@ import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { IAwsQueue } from "../shared-aws";
+import { AwsInflightHost, IAwsQueue } from "../shared-aws";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import {
   Queue as AwsQueue,
@@ -90,12 +90,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       }
     );
 
-    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
-    if (!(fn instanceof Function)) {
-      throw new Error("Queue only supports creating tfaws.Function right now");
-    }
-
-    fn.addPolicyStatements({
+    AwsInflightHost.from(fn)?.addPolicyStatements({
       actions: [
         "sqs:ReceiveMessage",
         "sqs:ChangeMessageVisibility",
@@ -123,13 +118,11 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("queues can only be bound by tfaws.Function for now");
-    }
-
     const env = this.envName();
 
-    host.addPolicyStatements(...calculateQueuePermissions(this.queue.arn, ops));
+    AwsInflightHost.from(host)?.addPolicyStatements(
+      ...calculateQueuePermissions(this.queue.arn, ops)
+    );
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.

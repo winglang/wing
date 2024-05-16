@@ -31,10 +31,6 @@ export class TestRunner extends std.TestRunner {
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
-    if (!(host instanceof AwsFunction)) {
-      throw new Error("TestRunner can only be bound by tfaws.Function for now");
-    }
-
     // Collect all of the test functions and their ARNs, and pass them to the
     // test engine so they can be invoked inflight.
     // TODO: are we going to run into AWS's 4KB environment variable limit here?

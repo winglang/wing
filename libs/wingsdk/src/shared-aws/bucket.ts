@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { AwsInflightHost } from "./inflight-host";
 import { calculateBucketPermissions } from "./permissions";
 import { cloud, ui } from "..";
 import { InflightClient, LiftMap, lift } from "../core";
@@ -84,7 +84,7 @@ export class BucketRef extends Resource {
 
   public onLift(host: IInflightHost, ops: string[]): void {
     // if this is an AWS function, add the necessary IAM permissions
-    const fn = Function.from(host);
+    const fn = AwsInflightHost.from(host);
 
     if (fn) {
       fn.addPolicyStatements(

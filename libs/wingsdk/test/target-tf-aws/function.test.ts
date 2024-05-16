@@ -204,7 +204,7 @@ test("vpc permissions are added even if there is no policy", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const f = new tfaws.Function(app, "Function", INFLIGHT_CODE);
 
-  f.addNetworkConfig({
+  f.addNetwork({
     securityGroupIds: ["sg-1234567890"],
     subnetIds: ["subnet-1234567890"],
   });
