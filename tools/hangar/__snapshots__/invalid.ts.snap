@@ -2924,6 +2924,13 @@ error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
     = hint: use StructyJson.fromJson() to convert dynamic Json\\"
 
 
+error: Expected type to be \\"Array<num>\\", but got \\"Json\\" instead
+    --> ../../../examples/tests/invalid/json.test.w:119:10
+    |
+119 |   stuff: {a: 1}, // Error: expeced an array but got a JSON object
+    |          ^^^^^^
+
+
 error: \\"Array<Json>\\" is not a legal JSON value
    --> ../../../examples/tests/invalid/json.test.w:23:17
    |
