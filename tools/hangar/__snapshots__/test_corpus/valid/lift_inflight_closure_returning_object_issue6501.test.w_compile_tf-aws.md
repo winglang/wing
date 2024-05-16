@@ -40,6 +40,46 @@ module.exports = function({ $foo }) {
 //# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
+## inflight.$Closure3-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $b }) {
+  class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      return $b;
+    }
+  }
+  return $Closure3;
+}
+//# sourceMappingURL=inflight.$Closure3-1.cjs.map
+```
+
+## inflight.$Closure4-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $b }) {
+  class $Closure4 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      ;
+    }
+  }
+  return $Closure4;
+}
+//# sourceMappingURL=inflight.$Closure4-1.cjs.map
+```
+
 ## inflight.Foo-1.cjs
 ```cjs
 "use strict";
@@ -70,6 +110,20 @@ module.exports = function({  }) {
     "aws": [
       {}
     ]
+  },
+  "resource": {
+    "aws_s3_bucket": {
+      "Bucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
+          }
+        },
+        "bucket_prefix": "bucket-c88fdc5f-",
+        "force_destroy": false
+      }
+    }
   }
 }
 ```
@@ -84,6 +138,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -185,8 +240,81 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class $Closure3 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.cjs")({
+            $b: ${$stdlib.core.liftObject(b)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure3Client = ${$Closure3._toInflightType()};
+            const client = new $Closure3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [b, []],
+          ],
+          "$inflight_init": [
+            [b, []],
+          ],
+        });
+      }
+    }
+    class $Closure4 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
+            $b: ${$stdlib.core.liftObject(b)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure4Client = ${$Closure4._toInflightType()};
+            const client = new $Closure4Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [b, ["put"]],
+          ],
+          "$inflight_init": [
+            [b, []],
+          ],
+        });
+      }
+    }
     const foo = new $Closure1(this, "$Closure1");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test qualify closure returning an inflight object", new $Closure2(this, "$Closure2"));
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const bar = new $Closure3(this, "$Closure3");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test qualify closure returning a preflight object", new $Closure4(this, "$Closure4"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
