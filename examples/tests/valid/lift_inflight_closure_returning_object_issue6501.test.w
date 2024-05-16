@@ -6,12 +6,12 @@ inflight class Foo {
 }
 
 let foo = inflight (): Foo => {
-  // Return and object with a method
+  // Return an object with a method
   return new Foo();
 };
 
 test "test" {
-  // Call the inflight handler and then call a method on the result in a single satatement
+  // Call the inflight handler and then call a method on the result in a single satatement.
   // Here we expect the `handle` method to qualify `foo`'s lift and no other qualfications.
   assert(foo().do() == 1337);
 }
