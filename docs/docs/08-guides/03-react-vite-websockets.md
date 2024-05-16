@@ -13,7 +13,7 @@ Our application will have a counter that can be incremented by clicking on it. T
 synchronized in real-time across all users via a distributed cloud counter and WebSockets.
 
 > 🚧 Wing is still under active development, so don't be (too) surprised if you run into issues or bugs
-> along the way. You are invited to [join the Wing Slack](https://t.winglang.io/slack) to say hi, ask questions
+> along the way. You are invited to [join the Wing Discord](https://t.winglang.io/discord) to say hi, ask questions
 > and help your fellow Wingnuts.
 
 ## How to use this guide?

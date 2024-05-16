@@ -295,7 +295,7 @@ describe("test-filter option", () => {
   });
 });
 
-describe("retry option", () => {
+describe("retry and parallel options", () => {
   let logSpy: SpyInstance;
 
   beforeEach(() => {
@@ -357,6 +357,88 @@ describe("retry option", () => {
 
     const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
     expect(retryLogs.length).toBe(3);
+  });
+
+  test("wing test --parallel [batch]", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
+
+    process.chdir(outDir);
+
+    fs.writeFileSync(
+      "t1.test.w",
+      `
+bring util;
+
+test "t1" {
+  util.sleep(1s);
+  log("t1 ends");
+  assert(true);
+}
+  `
+    );
+    fs.writeFileSync(
+      "t2.test.w",
+      `
+bring util;
+
+test "t2" {
+  log("t2 ends");
+  assert(true);
+}
+  `
+    );
+
+    await wingTest(["t1.test.w", "t2.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      parallel: 1,
+    });
+    // we are running the tests one by one so first t1 should log and then t2
+    const t1Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t1 ends"));
+    const t2Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t2 ends"));
+
+    expect(t2Ends).toBeGreaterThan(t1Ends);
+  });
+
+  test("wing test --parallel 2", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
+
+    process.chdir(outDir);
+
+    fs.writeFileSync(
+      "t1.test.w",
+      `
+bring util;
+
+test "t1" {
+util.sleep(1s);
+log("t1 ends");
+assert(true);
+}
+  `
+    );
+    fs.writeFileSync(
+      "t2.test.w",
+      `
+bring util;
+
+test "t2" {
+  log("t2 ends");
+  assert(true);
+}
+  `
+    );
+
+    await wingTest(["t1.test.w", "t2.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      parallel: 2,
+    });
+    // we are running the tests in parallel so first t2 should log and then t1
+    const t2Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t2 ends"));
+    const t1Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t1 ends"));
+
+    expect(t2Ends).toBeLessThan(t1Ends);
   });
 });
 
