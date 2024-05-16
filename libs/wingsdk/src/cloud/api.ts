@@ -630,6 +630,14 @@ export interface ApiConnectOptions {}
 export interface IApiClient {}
 
 /**
+ * List of inflight operations available for `Api`.
+ * @internal
+ */
+export enum ApiInflightMethods {
+  REQUEST = "request", // TODO: implement api.request() as an inflight method
+}
+
+/**
  * Allowed HTTP methods for a endpoint.
  */
 export enum HttpMethod {
