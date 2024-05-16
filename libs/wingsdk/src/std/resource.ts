@@ -98,7 +98,7 @@ export interface IHostedLiftable extends ILiftable {
   onLift(host: IInflightHost, ops: string[]): void;
 }
 
-export function hasLiftMap(x: any): x is { _liftMap: LiftMap } {
+function hasLiftMap(x: any): x is { _liftMap: LiftMap } {
   return typeof x._liftMap === "object";
 }
 
