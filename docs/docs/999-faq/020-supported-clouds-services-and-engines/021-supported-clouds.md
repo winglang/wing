@@ -13,7 +13,7 @@ Since Wing is in early stages of development, the Wing SDK supports each cloud w
 * GCP - Partial support. Not all Wing code that compiles for the simulator will compile for GCP. 
 * Azure - Partial support. Not all Wing code that compiles for the simulator will compile for Azure. 
 
-We are working hard on filling the support gap between the different clouds -- check out our [roadmap](https://www.winglang.io/contributing/status) for more details. If there are other clouds you would like supported, please let us know through our GitHub or Slack!
+We are working hard on filling the support gap between the different clouds -- check out our [roadmap](https://www.winglang.io/contributing/status) for more details. If there are other clouds you would like supported, please let us know through our GitHub or Discord!
 
 Beyond the common set of cloud resources in the SDK, you can create resources for any other possible cloud by importing a [CDKTF](https://github.com/hashicorp/terraform-cdk) library corresponding to any given Terraform provider.
 

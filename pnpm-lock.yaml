@@ -248,6 +248,9 @@ importers:
       '@segment/analytics-node':
         specifier: ^1.1.0
         version: 1.1.1
+      '@supercharge/promise-pool':
+        specifier: ^3.2.0
+        version: 3.2.0
       '@wingconsole/app':
         specifier: workspace:^
         version: link:../wing-console/console/app
@@ -9991,6 +9994,11 @@ packages:
       file-system-cache: 2.3.0
     dev: true
 
+  /@supercharge/promise-pool@3.2.0:
+    resolution: {integrity: sha512-pj0cAALblTZBPtMltWOlZTQSLT07jIaFNeM8TWoJD1cQMgDB9mcMlVMoetiB35OzNJpqQ2b+QEtwiR9f20mADg==}
+    engines: {node: '>=8'}
+    dev: false
+
   /@swc/core-darwin-arm64@1.4.2:
     resolution: {integrity: sha512-1uSdAn1MRK5C1m/TvLZ2RDvr0zLvochgrZ2xL+lRzugLlCTlSA+Q4TWtrZaOz+vnnFVliCpw7c7qu0JouhgQIw==}
     engines: {node: '>=10'}
@@ -14192,7 +14200,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.5.0-dev.20240507
+      typescript: 5.5.0-dev.20240508
     dev: true
 
   /dset@3.1.2:
@@ -22856,8 +22864,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.5.0-dev.20240507:
-    resolution: {integrity: sha512-5LtqwNqq8gx+AD5pTThWksRzORSFBNdUGmndlPmQ/fa34MY/1vsE5A/sFM6JD29X8uFiATeIJQepsO+l+tRJ0A==}
+  /typescript@5.5.0-dev.20240508:
+    resolution: {integrity: sha512-5hkQ+5UaeQFyG4Z4UiupCIQo2pcUZ+e8OZlIxeiljeqei989RyA99QnF+hS0pxZpxvOt/yJCTN9zIdT2m/O1WA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
