@@ -8,5 +8,4 @@ export * from "./secret";
 export * from "./table";
 export * from "./topic";
 export * from "./types";
-export * from "./util";
 export * from "./website";
