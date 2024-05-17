@@ -223,7 +223,7 @@ function addConnectionsFromLiftMap(
         }
       } else if (hasLiftMap(dep)) {
         // case 2: dep is an inflight
-        addConnectionsFromLiftMap(construct, dep._liftMap!, baseOp ?? op);
+        addConnectionsFromLiftMap(construct, dep._liftMap, baseOp ?? op);
       }
     }
   }
