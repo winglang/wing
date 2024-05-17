@@ -581,7 +581,9 @@ test("Given a bucket when reaching to a non-existent key, signed url it should t
   );
 });
 
-test("Given a bucket, when giving one of its keys, we should get its signed url", async () => {
+// Skipped due to issue with mocking getSignedUrl:
+// https://github.com/m-radzikowski/aws-sdk-client-mock/issues/62
+test.skip("Given a bucket, when giving one of its keys, we should get its signed url", async () => {
   // GIVEN
 
   const BUCKET_NAME = "BUCKET_NAME";
