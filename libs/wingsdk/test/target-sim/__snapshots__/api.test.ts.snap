@@ -48,7 +48,14 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello",
+        "source": "root/my_api",
+        "sourceOp": "request",
+        "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
+      },
+      {
+        "name": "post /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -389,7 +396,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -715,7 +722,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -1042,7 +1049,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -1369,7 +1376,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -1696,7 +1703,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -2040,7 +2047,49 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello",
+        "source": "root/my_api",
+        "sourceOp": "request",
+        "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
+      },
+      {
+        "name": "post /hello",
+        "source": "root/my_api",
+        "sourceOp": "request",
+        "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
+      },
+      {
+        "name": "put /hello",
+        "source": "root/my_api",
+        "sourceOp": "request",
+        "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
+      },
+      {
+        "name": "delete /hello",
+        "source": "root/my_api",
+        "sourceOp": "request",
+        "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
+      },
+      {
+        "name": "head /hello",
+        "source": "root/my_api",
+        "sourceOp": "request",
+        "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
+      },
+      {
+        "name": "options /hello",
+        "source": "root/my_api",
+        "sourceOp": "request",
+        "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
+      },
+      {
+        "name": "patch /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -2450,7 +2499,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /:name/:age",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -2793,7 +2842,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /:name",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -3109,7 +3158,14 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello/foo",
+        "source": "root/my_api",
+        "sourceOp": "request",
+        "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
+      },
+      {
+        "name": "get /hello/bat",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -3500,14 +3556,14 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
       },
       {
-        "name": "invoke",
+        "name": "post /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler1",
@@ -3955,14 +4011,14 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello/world",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
       },
       {
-        "name": "invoke",
+        "name": "get /hello/wingnuts",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler1",
@@ -4363,7 +4419,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -4689,7 +4745,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "get /users/:name",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
@@ -5025,7 +5081,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "invoke",
+        "name": "post /hello",
         "source": "root/my_api",
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
