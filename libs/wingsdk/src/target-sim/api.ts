@@ -8,9 +8,9 @@ import { ApiRoute, ApiSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { LiftMap, lift } from "../core";
+import { lift } from "../core";
 import { ToSimulatorOutput } from "../simulator/simulator";
-import { IInflightHost, IResource, Node, SDK_SOURCE_MODULE } from "../std";
+import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
  * Simulator implementation of `cloud.Api`.
@@ -39,17 +39,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
     Node.of(this.endpoint).hidden = true;
 
     this.policy = new Policy(this, "Policy", { principal: this });
-  }
-
-  /** @internal */
-  public get _liftMap(): LiftMap {
-    const lifts: Array<[IResource, Array<string>]> = [];
-    for (const handler of Object.values(this.handlers)) {
-      lifts.push([handler.func, [cloud.FunctionInflightMethods.INVOKE]]);
-    }
-    return {
-      [cloud.ApiInflightMethods.REQUEST]: lifts,
-    };
   }
 
   protected get _endpoint(): cloud.Endpoint {
