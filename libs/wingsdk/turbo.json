@@ -19,7 +19,7 @@
       "dependsOn": ["pre-compile"]
     },
     "test": {
-      "dependsOn": ["pre-compile"]
+      "dependsOn": ["compile"]
     },
     "package": {
       "outputs": ["../../dist/winglang-sdk-*.tgz"]
