@@ -99,7 +99,7 @@ export interface IHostedLiftable extends ILiftable {
 }
 
 function hasLiftMap(x: any): x is { _liftMap: LiftMap } {
-  return typeof x._liftMap === "object";
+  return x != null && typeof x._liftMap === "object";
 }
 
 /**
