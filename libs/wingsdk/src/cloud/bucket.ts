@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
-import { ITopicOnMessageHandler, Topic } from "./topic";
+import { ITopicOnMessageHandler, Topic, TopicInflightMethods } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
@@ -143,6 +143,7 @@ export class Bucket extends Resource {
           source: this,
           sourceOp: op,
           target: topic,
+          targetOp: TopicInflightMethods.PUBLISH,
           name: BucketEventType.CREATE,
         });
       }
@@ -159,6 +160,7 @@ export class Bucket extends Resource {
           source: this,
           sourceOp: op,
           target: topic,
+          targetOp: TopicInflightMethods.PUBLISH,
           name: BucketEventType.UPDATE,
         });
       }
@@ -175,6 +177,7 @@ export class Bucket extends Resource {
           source: this,
           sourceOp: op,
           target: topic,
+          targetOp: TopicInflightMethods.PUBLISH,
           name: BucketEventType.DELETE,
         });
       }
