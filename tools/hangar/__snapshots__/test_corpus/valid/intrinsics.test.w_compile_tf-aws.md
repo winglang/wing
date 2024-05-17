@@ -1,5 +1,28 @@
 # [intrinsics.test.w](../../../../../examples/tests/valid/intrinsics.test.w) | compile | tf-aws
 
+## inflight.$Closure1-2.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $counter, $queue, $util_Util }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $queue.push("message"));
+      (await $util_Util.waitUntil((async () => {
+        return ((await $counter.peek()) > 0);
+      })));
+    }
+  }
+  return $Closure1;
+}
+//# sourceMappingURL=inflight.$Closure1-2.cjs.map
+```
+
 ## inflight.Bar-1.cjs
 ```cjs
 "use strict";
@@ -12,6 +35,26 @@ module.exports = function({  }) {
   return Bar;
 }
 //# sourceMappingURL=inflight.Bar-1.cjs.map
+```
+
+## inflight.Example-2.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $counter }) {
+  class Example {
+    constructor({  }) {
+    }
+    async getMessage() {
+      return "message";
+    }
+    async done() {
+      (await $counter.inc());
+    }
+  }
+  return Example;
+}
+//# sourceMappingURL=inflight.Example-2.cjs.map
 ```
 
 ## main.tf.json
@@ -29,6 +72,161 @@ module.exports = function({  }) {
     "aws": [
       {}
     ]
+  },
+  "resource": {
+    "aws_cloudwatch_log_group": {
+      "Queue-SetConsumer0_CloudwatchLogGroup_56C2891C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Queue-SetConsumer0/CloudwatchLogGroup",
+            "uniqueId": "Queue-SetConsumer0_CloudwatchLogGroup_56C2891C"
+          }
+        },
+        "name": "/aws/lambda/Queue-SetConsumer0-c83c303c",
+        "retention_in_days": 30
+      }
+    },
+    "aws_dynamodb_table": {
+      "Counter": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Counter/Default",
+            "uniqueId": "Counter"
+          }
+        },
+        "attribute": [
+          {
+            "name": "id",
+            "type": "S"
+          }
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "hash_key": "id",
+        "name": "wing-counter-Counter-c824ef62"
+      }
+    },
+    "aws_iam_role": {
+      "Queue-SetConsumer0_IamRole_7F9ED9ED": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Queue-SetConsumer0/IamRole",
+            "uniqueId": "Queue-SetConsumer0_IamRole_7F9ED9ED"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      }
+    },
+    "aws_iam_role_policy": {
+      "Queue-SetConsumer0_IamRolePolicy_0299B5AB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Queue-SetConsumer0/IamRolePolicy",
+            "uniqueId": "Queue-SetConsumer0_IamRolePolicy_0299B5AB"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.Queue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}"
+      }
+    },
+    "aws_iam_role_policy_attachment": {
+      "Queue-SetConsumer0_IamRolePolicyAttachment_4A4C5C5D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Queue-SetConsumer0/IamRolePolicyAttachment",
+            "uniqueId": "Queue-SetConsumer0_IamRolePolicyAttachment_4A4C5C5D"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}"
+      }
+    },
+    "aws_lambda_event_source_mapping": {
+      "Queue_EventSourceMapping_8332F7DC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Queue/EventSourceMapping",
+            "uniqueId": "Queue_EventSourceMapping_8332F7DC"
+          }
+        },
+        "batch_size": 1,
+        "event_source_arn": "${aws_sqs_queue.Queue.arn}",
+        "function_name": "${aws_lambda_function.Queue-SetConsumer0.function_name}",
+        "function_response_types": [
+          "ReportBatchItemFailures"
+        ]
+      }
+    },
+    "aws_lambda_function": {
+      "Queue-SetConsumer0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Queue-SetConsumer0/Default",
+            "uniqueId": "Queue-SetConsumer0"
+          }
+        },
+        "architectures": [
+          "arm64"
+        ],
+        "environment": {
+          "variables": {
+            "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "Queue-SetConsumer0-c83c303c",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Queue-SetConsumer0-c83c303c",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.Queue-SetConsumer0_S3Object_2AD0A795.key}",
+        "timeout": "${aws_sqs_queue.Queue.visibility_timeout_seconds}",
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      }
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Code",
+            "uniqueId": "Code"
+          }
+        },
+        "bucket_prefix": "code-c84a50b1-"
+      }
+    },
+    "aws_s3_object": {
+      "Queue-SetConsumer0_S3Object_2AD0A795": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Queue-SetConsumer0/S3Object",
+            "uniqueId": "Queue-SetConsumer0_S3Object_2AD0A795"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      }
+    },
+    "aws_sqs_queue": {
+      "Queue": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Queue/Default",
+            "uniqueId": "Queue"
+          }
+        },
+        "message_retention_seconds": 3600,
+        "name": "Queue-c822c726",
+        "visibility_timeout_seconds": 30
+      }
+    }
   }
 }
 ```
@@ -90,16 +288,97 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const fs = $stdlib.fs;
 const expect = $stdlib.expect;
+const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 const bar = require("./preflight.bar-1.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    class Example extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.Example-2.cjs")({
+            $counter: ${$stdlib.core.liftObject(counter)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const ExampleClient = ${Example._toInflightType()};
+            const client = new ExampleClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "getMessage": [
+          ],
+          "done": [
+            [counter, ["inc"]],
+          ],
+          "$inflight_init": [
+            [counter, []],
+          ],
+        });
+      }
+    }
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-2.cjs")({
+            $counter: ${$stdlib.core.liftObject(counter)},
+            $queue: ${$stdlib.core.liftObject(queue)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure1Client = ${$Closure1._toInflightType()};
+            const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [counter, ["peek"]],
+            [queue, ["push"]],
+          ],
+          "$inflight_init": [
+            [counter, []],
+            [queue, []],
+          ],
+        });
+      }
+    }
     const path = "SHOULD_IGNORE";
     const filename = "intrinsics.test.w";
     const currentFile = (fs.Util.join($helpers.resolveDirname(__dirname, "../../.."), filename));
     (expect.Util.equal(filename, (fs.Util.basename(currentFile))));
     (expect.Util.equal($helpers.resolveDirname(__dirname, "../../.."), (fs.Util.dirname(currentFile))));
     (expect.Util.equal((bar.Bar.getSubdir(this)), (fs.Util.join($helpers.resolveDirname(__dirname, "../../.."), "subdir"))));
+    const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+    const example = new Example(this, "Example");
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
+    (queue.setConsumer($stdlib.core.importInflight("async (ctx, ...args) => require('../../../inline_typescript.ts')['default'](ctx, ...args)", ({"example": ({"lift": example, "ops": ["getMessage", "done"]})}))));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:x", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

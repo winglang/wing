@@ -8,7 +8,7 @@ import {
 } from "./types";
 import { LiftableRecord, LiftedMap, PickNonFunctions } from "./utility-types";
 import { normalPath } from "../shared/misc";
-import type { IHostedLiftable } from "../std/resource";
+import type { IHostedLiftable, ImportInflightOptions } from "../std/resource";
 
 let closureCount = 0;
 
@@ -106,6 +106,39 @@ export function inflight<TFunction extends AsyncFunction>(
   fn: (ctx: {}, ...args: Parameters<TFunction>) => ReturnType<TFunction>
 ) {
   return new Lifter().inflight(fn);
+}
+
+/**
+ * Create an inflight function from a string.
+ */
+export function importInflight(
+  /**
+   * Raw JavaScript to use as the inflight function.
+   */
+  inflightText: string,
+
+  /**
+   * The lifts the JS needs to be able to access.
+   */
+  lifts: ImportInflightOptions["lifts"]
+) {
+  const newLifts: Record<string, any> = {};
+  const newGrants: Record<string, string[]> = {};
+
+  // convert the lifts to the correct format for the Lifter
+  for (const [name, value] of Object.entries(lifts ?? {})) {
+    newLifts[name] = value.lift;
+    if (value.ops) {
+      newGrants[name] = value.ops;
+    }
+  }
+
+  return (
+    lift(newLifts)
+      .grant(newGrants)
+      // cast as any because the inflight has already been pre-serialized
+      .inflight(inflightText as any)
+  );
 }
 
 /**

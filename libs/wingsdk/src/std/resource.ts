@@ -258,3 +258,27 @@ export interface OperationAnnotation {
     ops: string[];
   };
 }
+
+/**
+ * A value and its associated operations to lift
+ */
+export interface LiftDeclaration {
+  /** A liftable value */
+  readonly lift: any;
+  /** Operations on the given value to make available inflight  */
+  readonly ops?: string[];
+}
+
+/** Options for the importInflight built-in */
+export interface ImportInflightOptions {
+  /**
+   * Name of exported function
+   * @default "default"
+   * */
+  readonly export?: string;
+  /**
+   * Mapping of available symbols to a lift declaration
+   * @default * All possible operations will be available
+   */
+  readonly lifts?: Record<string, LiftDeclaration>;
+}

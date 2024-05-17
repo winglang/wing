@@ -111,6 +111,11 @@ pub fn update_file(path: &Utf8Path, content: &str) -> Result<(), FilesError> {
 	}
 }
 
+/// Remove file from the filesystem
+pub fn remove_file(path: &Utf8Path) -> Result<(), FilesError> {
+	fs::remove_file(path).map_err(FilesError::IoError)
+}
+
 #[cfg(test)]
 mod tests {
 	use super::*;

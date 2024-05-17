@@ -4,7 +4,73 @@ id: using-javascript
 keywords: [example, javascript, extern, typescript, js, ts]
 ---
 
-Calling a Javascript function from Wing requires two steps.
+## Creating inflight function from JavaScript/TypeScript file
+
+Inflight closures are an extremely important Wing functionality. Consider the following simple wing program:
+
+```wing
+// main.w
+bring cloud;
+let bucket = new cloud.Bucket();
+
+bucket.onCreate(inflight (file) => {
+  log(file);
+});
+```
+
+Being able to write inflight wing alongside the preflight code is beautiful, but you may want to write the inflight function in a separate file and *language*. The `@inflight` intrinsic function can be used to create an inflight closure from a JavaScript/TypeScript:
+
+```wing
+// main.w
+bring cloud;
+let bucket = new cloud.Bucket();
+
+bucket.onCreate(@inflight("./bucket_create.ts"));
+//              ^ onCreate expects an `inflight (str): void` function, so the file must export a function with a typescript signature that matches
+//                        ^ Relative (to current file) path to javascript or typescript file
+//                          Note: This must be a static string and the file must exist at compile time
+```
+
+```ts
+// bucket_create.ts
+import inflight from "./bucket_create.inflight";
+
+export default inflight(async ({}, file) => {
+//                                 ^ This is known to be a string, the first positional argument needed for `onCreate`
+  console.log(file);
+});
+```
+
+`wing compile` will generate `bucket_create.inflight.ts` while will which will contain all of the information needed for TypeScript type checking and IDE support.
+Something missing here is the ability to reference preflight resources inside an inflight function. Let's create a Queue and pass it to the inflight function:
+
+```wing
+// main.w
+bring cloud;
+let bucket = new cloud.Bucket();
+let queue = new cloud.Queue();
+
+bucket.onCreate(@inflight("./bucket_create.ts", lifts: { 
+  myQueue: { lift: queue, ops: ["push"] }
+//^ name, does not need to match the variable being lifted
+//               ^ object to lift, can be any preflight expression
+//                           ^ methods to lift, if not provided then all methods will be granted
+}));
+``` 
+
+```ts
+// bucket_create.ts
+import inflight from "./bucket_create.inflight";
+
+export default inflight(async ({ myQueue }, file) => {
+//                               ^ inflight interface to your preflight queue
+  await myQueue.push(file);
+});
+```
+
+## Using `extern` to expose JavaScript/TypeScript functions in preflight and inflight
+
+When you want to use a JavaScript/TypeScript file anywhere in Wing, you can use the `extern` keyword to expose functions from that file.
 
 1. Create a .js/.ts file that exports some functions
 

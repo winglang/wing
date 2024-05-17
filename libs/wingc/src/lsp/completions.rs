@@ -1038,7 +1038,7 @@ fn get_intrinsic_list(types: &Types) -> Vec<CompletionItem> {
 	let mut completions = vec![];
 
 	for intrinsic in IntrinsicKind::VALUES {
-		let Some(t) = intrinsic.get_type(types) else {
+		let Some(t) = types.intrinsics.get(&intrinsic) else {
 			continue;
 		};
 

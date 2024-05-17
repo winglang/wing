@@ -8,7 +8,7 @@ pub(crate) mod type_reference_transform;
 
 use crate::ast::{
 	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition,
-	IfLet, Intrinsic, New, TypeAnnotationKind,
+	IfLet, Intrinsic, IntrinsicKind, New, TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -1366,6 +1366,7 @@ pub struct Types {
 	/// Expressions used in references that actually refer to a type.
 	/// Key is the ExprId of the object of a InstanceMember, and the value is a TypeMember representing the whole reference.
 	type_expressions: IndexMap<ExprId, Reference>,
+	pub intrinsics: HashMap<IntrinsicKind, TypeRef>,
 	/// Append empty struct to end of arg list
 	pub append_empty_struct_to_arglist: HashSet<ArgListId>,
 }
@@ -1418,6 +1419,7 @@ impl Types {
 			inferences: Vec::new(),
 			type_expressions: IndexMap::new(),
 			append_empty_struct_to_arglist: HashSet::new(),
+			intrinsics: HashMap::new(),
 		}
 	}
 
@@ -2072,7 +2074,55 @@ impl<'a> TypeChecker<'a> {
 				implicit_scope_param: false,
 			}),
 			scope,
-		)
+		);
+
+		// Intrinsics
+		self
+			.types
+			.intrinsics
+			.insert(IntrinsicKind::Dirname, self.types.string());
+
+		let import_inflight_options_fqn = format!("{}.std.ImportInflightOptions", WINGSDK_ASSEMBLY_NAME);
+		let import_inflight_options = self
+			.types
+			.libraries
+			.lookup_nested_str(&import_inflight_options_fqn, None)
+			.expect("std.ImportInflightOptions not found in type system")
+			.0
+			.as_type()
+			.expect("std.ImportInflightOptions was found but it's not a type");
+		let inflight_t = Type::Function(FunctionSignature {
+			this_type: None,
+			parameters: vec![
+				FunctionParameter {
+					name: "file".into(),
+					typeref: self.types.string(),
+					docs: Docs::with_summary("Path to extern file to create inflight. Relative to the current wing file."),
+					variadic: false,
+				},
+				FunctionParameter {
+					name: "options".into(),
+					typeref: import_inflight_options,
+					docs: Docs::with_summary(
+						"
+							TODO
+							",
+					),
+					variadic: false,
+				},
+			],
+			// In practice, this function returns an inferred type upon each use
+			return_type: self.types.anything(),
+			phase: Phase::Preflight,
+			// The emitted JS is dynamic
+			js_override: Some("throw 'TODO'".to_string()),
+			docs: Docs::with_summary(
+				"Explicitly apply qualifications to a preflight object used in the current method/function",
+			),
+			implicit_scope_param: false,
+		});
+		let inflight_t = self.types.add_type(inflight_t);
+		self.types.intrinsics.insert(IntrinsicKind::Inflight, inflight_t);
 	}
 
 	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
@@ -2716,16 +2766,28 @@ impl<'a> TypeChecker<'a> {
 		if !intrinsic.kind.is_valid_phase(&env.phase) {
 			self.spanned_error(exp, format!("{} cannot be used while {}", intrinsic.kind, env.phase));
 		}
-		if let Some(intrinsic_type) = intrinsic.kind.get_type(&self.types) {
+		let arg_list = intrinsic
+			.arg_list
+			.as_ref()
+			.map(|arg_list| (arg_list, self.type_check_arg_list(arg_list, env)));
+
+		let xxx = self.types.intrinsics.get(&intrinsic.kind).map(|x| *x);
+		if let Some(intrinsic_type) = xxx {
 			if let Some(sig) = intrinsic_type.as_function_sig() {
-				if let Some(arg_list) = &intrinsic.arg_list {
-					let arg_list_types = self.type_check_arg_list(arg_list, env);
+				if let Some((arg_list, arg_list_types)) = arg_list {
 					self.type_check_arg_list_against_function_sig(arg_list, &sig, exp, arg_list_types);
 				} else {
 					self.spanned_error(exp, format!("{} requires arguments", intrinsic.kind));
 				}
 
-				return (sig.return_type, sig.phase);
+				match intrinsic.kind {
+					IntrinsicKind::Inflight => {
+						return (self.types.make_inference(), Phase::Preflight);
+					}
+					IntrinsicKind::Dirname | IntrinsicKind::Unknown => {
+						return (sig.return_type, sig.phase);
+					}
+				}
 			} else {
 				if let Some(arg_list) = &intrinsic.arg_list {
 					self.spanned_error(&arg_list.span, format!("{} does not require arguments", intrinsic.kind));
