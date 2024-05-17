@@ -38,12 +38,16 @@ test "validates the AWS Function" {
   }
 }
 
-if target == "tf-aws" {
-  test "can access lambda context" {
-    let ctx = aws.context();
+test "can access lambda context" {
+  if let ctx = aws.Function.context() {
+    log(Json.stringify(ctx));
     expect.equal(ctx.functionVersion, "$LATEST");
 
     let remainingTime = ctx.remainingTimeInMillis();
     assert(remainingTime > 0);
+  } else {
+    if target == "tf-aws" || target == "awscdk" {
+      expect.fail("Expected to have a context object");
+    }
   }
 }

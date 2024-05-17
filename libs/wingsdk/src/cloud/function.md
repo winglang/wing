@@ -127,6 +127,25 @@ if let lambdaFn = aws.Function.from(f) {
 }
 ```
 
+To access the AWS Lambda context object, you can use the `aws.Function` class as shown below.
+
+```ts playground
+bring aws;
+bring cloud;
+
+let f = new cloud.Function(inflight () => {
+  if let ctx = aws.Function.context() {
+    log(ctx.logGroupName); // prints the log group name
+    log(ctx.logStreamName); // prints the log stream name
+
+    let remainingTime = ctx.remainingTimeInMillis();
+    assert(remainingTime > 0);
+  }
+});
+```
+
+The `context()` method returns `nil` when ran on non-AWS targets.
+
 ### Azure (`tf-azure`)
 
 The Azure implementation of `cloud.Function` uses [Azure Functions](https://azure.microsoft.com/en-us/products/functions).

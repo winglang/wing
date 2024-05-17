@@ -226,7 +226,7 @@ export class Function
     lines.push('"use strict";');
     lines.push(`var ${client} = undefined;`);
     lines.push("exports.handler = async function(event, context) {");
-    lines.push("  globalThis.$context = context;");
+    lines.push("  globalThis.$awsLambdaContext = context;");
     lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
     lines.push(
       `  return await ${client}.handle(event === null ? undefined : event);`

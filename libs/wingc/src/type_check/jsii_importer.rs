@@ -583,9 +583,6 @@ impl<'a> JsiiImporter<'a> {
 		if let Some(properties) = jsii_interface.properties() {
 			for p in properties {
 				debug!("Found property {} with type {:?}", p.name.green(), p.type_);
-				if member_phase == Phase::Inflight {
-					todo!("No support for inflight properties yet");
-				}
 				let base_wing_type = self.type_ref_to_wing_type(&p.type_);
 				let is_optional = if let Some(true) = p.optional { true } else { false };
 				let is_static = if let Some(true) = p.static_ { true } else { false };
