@@ -68,8 +68,8 @@
             "type": "SEQ",
             "members": [
               {
-                "type": "STRING",
-                "value": "//"
+                "type": "PATTERN",
+                "value": "\\/\\/[^\\/]"
               },
               {
                 "type": "PATTERN",
@@ -96,6 +96,27 @@
           }
         ]
       }
+    },
+    "doc": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "///"
+        },
+        {
+          "type": "FIELD",
+          "name": "content",
+          "content": {
+            "type": "SYMBOL",
+            "name": "doc_content"
+          }
+        }
+      ]
+    },
+    "doc_content": {
+      "type": "PATTERN",
+      "value": ".*"
     },
     "reference": {
       "type": "CHOICE",
@@ -1842,8 +1863,49 @@
         {
           "type": "SYMBOL",
           "name": "optional_unwrap"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "intrinsic"
         }
       ]
+    },
+    "intrinsic": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "name",
+            "content": {
+              "type": "SYMBOL",
+              "name": "intrinsic_identifier"
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "args",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "argument_list"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "intrinsic_identifier": {
+      "type": "PATTERN",
+      "value": "@[A-Za-z_$0-9]*"
     },
     "_literal": {
       "type": "CHOICE",
@@ -2730,8 +2792,12 @@
           ]
         },
         {
-          "type": "STRING",
-          "value": "new"
+          "type": "FIELD",
+          "name": "ctor_name",
+          "content": {
+            "type": "STRING",
+            "value": "new"
+          }
         },
         {
           "type": "FIELD",
@@ -4425,6 +4491,10 @@
       "name": "comment"
     },
     {
+      "type": "SYMBOL",
+      "name": "doc"
+    },
+    {
       "type": "PATTERN",
       "value": "[\\s\\p{Zs}\\uFEFF\\u2060\\u200B]"
     }
@@ -4475,6 +4545,16 @@
       {
         "type": "SYMBOL",
         "name": "structured_access_expression"
+      }
+    ],
+    [
+      {
+        "type": "SYMBOL",
+        "name": "intrinsic"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "call"
       }
     ]
   ],

@@ -1,7 +1,6 @@
 import { createPersistentState } from "@wingconsole/use-persistent-state";
 import { memo, useCallback } from "react";
 
-import { useOpenExternal } from "../services/use-open-external.js";
 import { useRedis } from "../services/use-redis.js";
 import { useTerminalHistory } from "../shared/use-terminal-history.js";
 import { RedisInteraction } from "../ui/redis-interaction.js";
@@ -28,7 +27,6 @@ export const RedisInteractionView = memo(({ resourcePath }: RedisViewProps) => {
     useState: usePersistentState,
   });
 
-  const { open } = useOpenExternal();
   const { isLoading, redisUrl, execCommand } = useRedis({ resourcePath });
 
   const executeCommand = useCallback(
@@ -41,7 +39,7 @@ export const RedisInteractionView = memo(({ resourcePath }: RedisViewProps) => {
 
       switch (command.toLowerCase()) {
         case "help": {
-          open(REDIS_HELP_URL);
+          window.open(REDIS_HELP_URL, "_blank");
           updateTerminalHistory([
             { type: "message", message: command },
             {

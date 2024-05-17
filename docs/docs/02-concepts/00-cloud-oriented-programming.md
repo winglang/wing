@@ -93,7 +93,7 @@ We are working hard to make this a great tool, but there's still a pretty good
 chance you'll encounter missing pieces, rough edges, performance issues and even,
 god forbid, bugs 🐞. 
 
-Please don't hesitate to ping us on [Slack](https://t.winglang.io/slack) or 
+Please don't hesitate to ping us on [Discord](https://t.winglang.io/discord) or 
 [file an issue](https://github.com/winglang/wing). We promise to do our best to
 respond quickly and help out.
 

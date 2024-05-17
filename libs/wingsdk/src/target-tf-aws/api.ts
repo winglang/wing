@@ -43,9 +43,12 @@ export class Api extends cloud.Api implements IAwsApi {
       getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
+
     this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
       label: `Api ${this.node.path}`,
     });
+
+    Node.of(this.endpoint).hidden = true;
   }
 
   protected get _endpoint(): cloud.Endpoint {
@@ -80,7 +83,9 @@ export class Api extends cloud.Api implements IAwsApi {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ApiInflightMethods.REQUEST,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: `${lowerMethod}()`,
     });
   }

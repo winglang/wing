@@ -8,7 +8,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {
   private _context: ISimulatorContext | undefined;
@@ -37,8 +37,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   private async createBundle(): Promise<void> {
     this.bundle = await Sandbox.createBundle(
       this.resolvedSourceCodeFile,
-      (msg) => {
-        this.addTrace(msg, TraceType.SIMULATOR);
+      (msg, level) => {
+        this.addTrace(msg, TraceType.RESOURCE, level);
       }
     );
   }
@@ -77,7 +77,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     if (!this.bundle) {
       this.addTrace(
         "Failed to start service: bundle is not created",
-        TraceType.RESOURCE
+        TraceType.RESOURCE,
+        LogLevel.ERROR
       );
       return;
     }
@@ -88,8 +89,12 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
         WING_SIMULATOR_URL: this.context.serverUrl,
         WING_SIMULATOR_CALLER: this.context.resourceHandle,
       },
-      log: (internal, _level, message) => {
-        this.addTrace(message, internal ? TraceType.SIMULATOR : TraceType.LOG);
+      log: (internal, level, message) => {
+        this.addTrace(
+          message,
+          internal ? TraceType.SIMULATOR : TraceType.LOG,
+          level
+        );
       },
     });
 
@@ -99,7 +104,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     } catch (e: any) {
       this.addTrace(
         `Failed to start service: ${e.message}`,
-        TraceType.RESOURCE
+        TraceType.RESOURCE,
+        LogLevel.ERROR
       );
     }
   }
@@ -118,7 +124,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     } catch (e: any) {
       this.addTrace(
         `Failed to stop service: ${e.message} ${e.stack}`,
-        TraceType.RESOURCE
+        TraceType.RESOURCE,
+        LogLevel.ERROR
       );
     }
   }
@@ -127,13 +134,14 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     return this.running;
   }
 
-  private addTrace(message: string, type: TraceType) {
+  private addTrace(message: string, type: TraceType, level: LogLevel) {
     this.context.addTrace({
       data: { message },
       type,
       sourcePath: this.context.resourcePath,
       sourceType: SERVICE_FQN,
       timestamp: new Date().toISOString(),
+      level,
     });
   }
 }

@@ -720,44 +720,44 @@ Duration <DURATION>"
 
 exports[`class.test.w 1`] = `
 "error: Call to super constructor can only be made from derived classes
-   --> ../../../examples/tests/invalid/class.test.w:86:5
+   --> ../../../examples/tests/invalid/class.test.w:97:5
    |
-86 |     super();
+97 |     super();
    |     ^^^^^^^^
 
 
 error: Call to super constructor must be first statement in constructor
-   --> ../../../examples/tests/invalid/class.test.w:98:5
-   |
-98 |     super(name, major);
-   |     ^^^^^^^^^^^^^^^^^^^
+    --> ../../../examples/tests/invalid/class.test.w:109:5
+    |
+109 |     super(name, major);
+    |     ^^^^^^^^^^^^^^^^^^^
 
 
 error: Call to super constructor can only be done from within class constructor
-    --> ../../../examples/tests/invalid/class.test.w:103:5
+    --> ../../../examples/tests/invalid/class.test.w:114:5
     |
-103 |     super(\\"cool\\", \\"blue\\");
+114 |     super(\\"cool\\", \\"blue\\");
     |     ^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Call to super constructor can only be done from within a class constructor
-    --> ../../../examples/tests/invalid/class.test.w:108:4
+    --> ../../../examples/tests/invalid/class.test.w:119:4
     |
-108 |    super();
+119 |    super();
     |    ^^^^^^^^
 
 
 error: Reserved method name. Constructors are declared with a method named \\"new\\"
-    --> ../../../examples/tests/invalid/class.test.w:160:3
+    --> ../../../examples/tests/invalid/class.test.w:171:3
     |
-160 |   constructor() {
+171 |   constructor() {
     |   ^^^^^^^^^^^
 
 
 error: Expected block
-   --> ../../../examples/tests/invalid/class.test.w:17:16
+   --> ../../../examples/tests/invalid/class.test.w:28:16
    |
-17 |   new(foo: str)
+28 |   new(foo: str)
    |                ^
 
 
@@ -768,278 +768,271 @@ error: Preflight field \\"x\\" is not initialized
   |    ^
 
 
-error: Expected 0 positional argument(s) but got 1
-  --> ../../../examples/tests/invalid/class.test.w:9:1
+error: Preflight field \\"x\\" is not initialized
+  --> ../../../examples/tests/invalid/class.test.w:9:3
   |
-9 | new C2(1);
-  | ^^^^^^^^^
+9 |   x:num;
+  |   ^
 
 
-error: No named arguments expected
-   --> ../../../examples/tests/invalid/class.test.w:13:1
+error: Expected 0 positional argument(s) but got 1
+   --> ../../../examples/tests/invalid/class.test.w:20:1
    |
-13 | new C9(token: \\"1\\");
-   | ^^^^^^^^^^^^^^^^^^
-
-
-error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/class.test.w:19:1
-   |
-19 | new C10(); 
+20 | new C2(1);
    | ^^^^^^^^^
 
 
 error: No named arguments expected
-   --> ../../../examples/tests/invalid/class.test.w:22:1
+   --> ../../../examples/tests/invalid/class.test.w:24:1
    |
-22 | new C10(foo: \\"bar\\"); 
+24 | new C9(token: \\"1\\");
+   | ^^^^^^^^^^^^^^^^^^
+
+
+error: Expected 1 positional argument(s) but got 0
+   --> ../../../examples/tests/invalid/class.test.w:30:1
+   |
+30 | new C10(); 
+   | ^^^^^^^^^
+
+
+error: No named arguments expected
+   --> ../../../examples/tests/invalid/class.test.w:33:1
+   |
+33 | new C10(foo: \\"bar\\"); 
    | ^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-   --> ../../../examples/tests/invalid/class.test.w:22:1
+   --> ../../../examples/tests/invalid/class.test.w:33:1
    |
-22 | new C10(foo: \\"bar\\"); 
+33 | new C10(foo: \\"bar\\"); 
    | ^^^^^^^^^^^^^^^^^^^
 
 
 error: No named arguments expected
-   --> ../../../examples/tests/invalid/class.test.w:25:1
+   --> ../../../examples/tests/invalid/class.test.w:36:1
    |
-25 | new C10(\\"hello\\", foo: \\"bar\\"); 
+36 | new C10(\\"hello\\", foo: \\"bar\\"); 
    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:37:16
+   --> ../../../examples/tests/invalid/class.test.w:48:16
    |
-37 |   inflight var x: num;
+48 |   inflight var x: num;
    |                ^
 
 
 error: Inflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:39:12
-   |
-39 |   inflight y: str;
-   |            ^
-
-
-error: Inflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:44:12
-   |
-44 |   inflight x: num;
-   |            ^
-
-
-error: Inflight field \\"x\\" is not initialized
    --> ../../../examples/tests/invalid/class.test.w:50:12
    |
-50 |   inflight x: num;
+50 |   inflight y: str;
+   |            ^
+
+
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.test.w:55:12
+   |
+55 |   inflight x: num;
+   |            ^
+
+
+error: Inflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/class.test.w:61:12
+   |
+61 |   inflight x: num;
    |            ^
 
 
 error: \\"y\\" cannot be initialized in the inflight constructor
-   --> ../../../examples/tests/invalid/class.test.w:61:10
+   --> ../../../examples/tests/invalid/class.test.w:72:10
    |
-61 |     this.y = 1;
+72 |     this.y = 1;
    |          ^
 
 
 error: \\"x\\" cannot be initialized in the preflight constructor
-   --> ../../../examples/tests/invalid/class.test.w:56:10
+   --> ../../../examples/tests/invalid/class.test.w:67:10
    |
-56 |     this.x = 1;
+67 |     this.x = 1;
    |          ^
 
 
 error: Preflight field \\"y\\" is not initialized
-   --> ../../../examples/tests/invalid/class.test.w:52:3
+   --> ../../../examples/tests/invalid/class.test.w:63:3
    |
-52 |   y: num;
+63 |   y: num;
    |   ^
 
 
 error: Expected \\"x\\" to be a type but it's a variable
-   --> ../../../examples/tests/invalid/class.test.w:68:18
+   --> ../../../examples/tests/invalid/class.test.w:79:18
    |
-68 | class C7 extends x {
+79 | class C7 extends x {
    |                  ^
 
 
 error: Expected \\"S1\\" to be a class
-   --> ../../../examples/tests/invalid/class.test.w:74:18
+   --> ../../../examples/tests/invalid/class.test.w:85:18
    |
-74 | class C8 extends S1 {
+85 | class C8 extends S1 {
    |                  ^^
 
 
 error: Unknown symbol \\"C11\\"
-   --> ../../../examples/tests/invalid/class.test.w:78:19
+   --> ../../../examples/tests/invalid/class.test.w:89:19
    |
-78 | class C11 extends C11 {
+89 | class C11 extends C11 {
    |                   ^^^
 
 
 error: Missing super() call as first statement of PaidStudent's constructor
-    --> ../../../examples/tests/invalid/class.test.w:96:45
+    --> ../../../examples/tests/invalid/class.test.w:107:45
     |  
- 96 |     new(name: str, major: str, hrlyWage: num) {
+107 |     new(name: str, major: str, hrlyWage: num) {
     | /---------------------------------------------^
- 97 | |     this.hrlyWage = hrlyWage;
- 98 | |     super(name, major);
- 99 | | //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
-100 | |   }
+108 | |     this.hrlyWage = hrlyWage;
+109 | |     super(name, major);
+110 | | //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
+111 | |   }
     | \\\\---^
 
 
 error: Cannot instantiate abstract class \\"Resource\\"
-    --> ../../../examples/tests/invalid/class.test.w:165:1
+    --> ../../../examples/tests/invalid/class.test.w:176:1
     |
-165 | new std.Resource();
+176 | new std.Resource();
     | ^^^^^^^^^^^^^^^^^^
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:183:3
+    --> ../../../examples/tests/invalid/class.test.w:194:3
     |
-170 |   z: num;
+181 |   z: num;
     |   - previous definition
     .
-183 |   z: str;
+194 |   z: str;
     |   ^
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:171:3
+    --> ../../../examples/tests/invalid/class.test.w:182:3
     |
-170 |   z: num;
+181 |   z: num;
     |   - previous definition
-171 |   z(): num {
-    |   ^
-
-
-error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:185:3
-    |
-170 |   z: num;
-    |   - previous definition
-    .
-185 |   z(): str {
-    |   ^
-
-
-error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:215:3
-    |
-204 |   z: num;
-    |   - previous definition
-    .
-215 |   z: str;
+182 |   z(): num {
     |   ^
 
 
 error: Symbol \\"z\\" already defined in this scope
     --> ../../../examples/tests/invalid/class.test.w:196:3
     |
-196 |   z(): num {
+181 |   z: num;
+    |   - previous definition
+    .
+196 |   z(): str {
+    |   ^
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:226:3
+    |
+215 |   z: num;
+    |   - previous definition
+    .
+226 |   z: str;
+    |   ^
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:207:3
+    |
+207 |   z(): num {
     |   ^
     .
-204 |   z: num;
+215 |   z: num;
     |   - previous definition
 
 
 error: Symbol \\"z\\" already defined in this scope
-    --> ../../../examples/tests/invalid/class.test.w:208:3
+    --> ../../../examples/tests/invalid/class.test.w:219:3
     |
-204 |   z: num;
+215 |   z: num;
     |   - previous definition
     .
-208 |   z(): str {
+219 |   z(): str {
     |   ^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.test.w:31:14
+   --> ../../../examples/tests/invalid/class.test.w:42:14
    |
-31 |     this.x = \\"Hi\\";
+42 |     this.x = \\"Hi\\";
    |              ^^^^
 
 
 error: Variable cannot be reassigned from inflight
-   --> ../../../examples/tests/invalid/class.test.w:61:5
+   --> ../../../examples/tests/invalid/class.test.w:72:5
    |
-61 |     this.y = 1;
+72 |     this.y = 1;
    |     ^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:123:11
+    --> ../../../examples/tests/invalid/class.test.w:134:11
     |
-123 |     super(someStr);
+134 |     super(someStr);
     |           ^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.test.w:132:5
+    --> ../../../examples/tests/invalid/class.test.w:143:5
     |
-132 |     super();
+143 |     super();
     |     ^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 2
-    --> ../../../examples/tests/invalid/class.test.w:141:5
+    --> ../../../examples/tests/invalid/class.test.w:152:5
     |
-141 |     super(someNum, someStr);
+152 |     super(someNum, someStr);
     |     ^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.test.w:157:5
+    --> ../../../examples/tests/invalid/class.test.w:168:5
     |
-157 |     super();
+168 |     super();
     |     ^^^^^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:174:5
+    --> ../../../examples/tests/invalid/class.test.w:185:5
     |
-174 |     2 + \\"2\\";
+185 |     2 + \\"2\\";
     |     ^^^^^^^
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:177:12
+    --> ../../../examples/tests/invalid/class.test.w:188:12
     |
-177 |     return \\"hello\\";
+188 |     return \\"hello\\";
     |            ^^^^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:187:5
+    --> ../../../examples/tests/invalid/class.test.w:198:5
     |
-187 |     2 + \\"2\\";
+198 |     2 + \\"2\\";
     |     ^^^^^^^
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:189:12
+    --> ../../../examples/tests/invalid/class.test.w:200:12
     |
-189 |     return 5;
+200 |     return 5;
     |            ^
-
-
-error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:199:5
-    |
-199 |     2 + \\"2\\";
-    |     ^^^^^^^
-
-
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-    --> ../../../examples/tests/invalid/class.test.w:201:12
-    |
-201 |     return \\"hello\\";
-    |            ^^^^^^^
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
@@ -1049,10 +1042,24 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
     |     ^^^^^^^
 
 
-error: Expected type to be \\"str\\", but got \\"num\\" instead
+error: Expected type to be \\"num\\", but got \\"str\\" instead
     --> ../../../examples/tests/invalid/class.test.w:212:12
     |
-212 |     return 5;
+212 |     return \\"hello\\";
+    |            ^^^^^^^
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:221:5
+    |
+221 |     2 + \\"2\\";
+    |     ^^^^^^^
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:223:12
+    |
+223 |     return 5;
     |            ^
 
 
@@ -2731,6 +2738,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`intrinsics.test.w 1`] = `
+"error: @dirname does not require arguments
+  --> ../../../examples/tests/invalid/intrinsics.test.w:6:20
+  |
+6 | let path = @dirname();
+  |                    ^^
+
+
+error: @dirname cannot be used while inflight
+  --> ../../../examples/tests/invalid/intrinsics.test.w:2:11
+  |
+2 |   let x = @dirname;
+  |           ^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`invalid compile directory 1`] = `
 "error: <ABSOLUTE>/external_ts.ts must be a sub directory of <ABSOLUTE>/lib
   --> ../../../examples/tests/invalid/lib/extern_above.w:2:3
@@ -2893,6 +2922,13 @@ error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
     |                                      ^^^^^^^^^^^
     |
     = hint: use StructyJson.fromJson() to convert dynamic Json\\"
+
+
+error: Expected type to be \\"Array<num>\\", but got \\"Json\\" instead
+    --> ../../../examples/tests/invalid/json.test.w:119:10
+    |
+119 |   stuff: {a: 1}, // Error: expeced an array but got a JSON object
+    |          ^^^^^^
 
 
 error: \\"Array<Json>\\" is not a legal JSON value
@@ -3834,6 +3870,298 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`sim_resource.test.w 1`] = `
+"error: Parameter \\"a\\" cannot have a mutable type \\"MutJson\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:16:3
+   |
+16 |   pub methodWithMutJsons(a: MutJson): MutJson { return {}; }
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Return value cannot have a mutable type \\"MutJson\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:16:3
+   |
+16 |   pub methodWithMutJsons(a: MutJson): MutJson { return {}; }
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Parameter \\"a\\" cannot have a mutable type \\"MutArray<str>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:18:3
+   |  
+18 | /   pub methodWithMuArrays(a: MutArray<str>, b: MutArray<num>): MutArray<bool> {
+19 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutArray<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+20 | |     return MutArray<bool>[];
+21 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a mutable type \\"MutArray<num>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:18:3
+   |  
+18 | /   pub methodWithMuArrays(a: MutArray<str>, b: MutArray<num>): MutArray<bool> {
+19 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutArray<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+20 | |     return MutArray<bool>[];
+21 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a mutable type \\"MutArray<bool>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:18:3
+   |  
+18 | /   pub methodWithMuArrays(a: MutArray<str>, b: MutArray<num>): MutArray<bool> {
+19 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutArray<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+20 | |     return MutArray<bool>[];
+21 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"Set<str>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:22:3
+   |  
+22 | /   pub methodWithSets(a: Set<str>, b: Set<num>): Set<bool> {
+23 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"Set<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+24 | |     return Set<bool>[];
+25 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a non-serializable type \\"Set<num>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:22:3
+   |  
+22 | /   pub methodWithSets(a: Set<str>, b: Set<num>): Set<bool> {
+23 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"Set<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+24 | |     return Set<bool>[];
+25 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"Set<bool>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:22:3
+   |  
+22 | /   pub methodWithSets(a: Set<str>, b: Set<num>): Set<bool> {
+23 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"Set<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+24 | |     return Set<bool>[];
+25 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a mutable type \\"MutSet<str>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"MutSet<str>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a mutable type \\"MutSet<num>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a non-serializable type \\"MutSet<num>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a mutable type \\"MutSet<bool>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"MutSet<bool>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:26:3
+   |  
+26 | /   pub methodWithMutSets(a: MutSet<str>, b: MutSet<num>): MutSet<bool> {
+27 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutSet<str>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+28 | |     return MutSet<bool>[];
+29 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a mutable type \\"MutMap<num>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:30:3
+   |  
+30 | /   pub methodWithMutMaps(a: MutMap<num>, b: MutMap<str>): MutMap<bool> {
+31 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutMap<num>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+32 | |     return MutMap<bool>{};
+33 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a mutable type \\"MutMap<str>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:30:3
+   |  
+30 | /   pub methodWithMutMaps(a: MutMap<num>, b: MutMap<str>): MutMap<bool> {
+31 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutMap<num>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+32 | |     return MutMap<bool>{};
+33 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a mutable type \\"MutMap<bool>\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:30:3
+   |  
+30 | /   pub methodWithMutMaps(a: MutMap<num>, b: MutMap<str>): MutMap<bool> {
+31 | |     // ^ error: Parameter \\"a\\" cannot have mutable type \\"MutMap<num>\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+32 | |     return MutMap<bool>{};
+33 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"duration\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:34:3
+   |  
+34 | /   pub methodWithDurations(a: duration): duration {
+35 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"duration\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+36 | |     return 0s;
+37 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"duration\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:34:3
+   |  
+34 | /   pub methodWithDurations(a: duration): duration {
+35 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"duration\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+36 | |     return 0s;
+37 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"Bucket\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:38:3
+   |  
+38 | /   pub methodWithClasses(a: cloud.Bucket): cloud.Queue? {
+39 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"cloud.Bucket\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+40 | |     return nil;
+41 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"Queue?\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:38:3
+   |  
+38 | /   pub methodWithClasses(a: cloud.Bucket): cloud.Queue? {
+39 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"cloud.Bucket\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+40 | |     return nil;
+41 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"IPreflightInterface\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:42:3
+   |  
+42 | /   pub methodWithInterfaces(a: IPreflightInterface, b: IInflightInterface): IPreflightInterface {
+43 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"IPreflightInterface\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+44 | |     return a;
+45 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a non-serializable type \\"IInflightInterface\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:42:3
+   |  
+42 | /   pub methodWithInterfaces(a: IPreflightInterface, b: IInflightInterface): IPreflightInterface {
+43 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"IPreflightInterface\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+44 | |     return a;
+45 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"IPreflightInterface\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:42:3
+   |  
+42 | /   pub methodWithInterfaces(a: IPreflightInterface, b: IInflightInterface): IPreflightInterface {
+43 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"IPreflightInterface\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+44 | |     return a;
+45 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"inflight (str): str\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:46:3
+   |  
+46 | /   pub methodWithFunctions(a: (str): str, b: inflight (num): bool): (inflight (): bool)? {
+47 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"(str): str\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+48 | |     return nil;
+49 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"b\\" cannot have a non-serializable type \\"inflight (num): bool\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:46:3
+   |  
+46 | /   pub methodWithFunctions(a: (str): str, b: inflight (num): bool): (inflight (): bool)? {
+47 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"(str): str\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+48 | |     return nil;
+49 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"(inflight (): bool)?\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:46:3
+   |  
+46 | /   pub methodWithFunctions(a: (str): str, b: inflight (num): bool): (inflight (): bool)? {
+47 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"(str): str\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+48 | |     return nil;
+49 | |   }
+   | \\\\---^
+
+
+error: Parameter \\"a\\" cannot have a non-serializable type \\"MyStructWithNonSerializableTypes\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:50:3
+   |  
+50 | /   pub methodWithBadStructs(a: MyStructWithNonSerializableTypes): MyStructWithNonSerializableTypes {
+51 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"MyStructWithNonSerializableTypes\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+52 | |     return a;
+53 | |   }
+   | \\\\---^
+
+
+error: Return value cannot have a non-serializable type \\"MyStructWithNonSerializableTypes\\" because the method's class implements sim.IResource. Only serializable, immutable types can be used in methods of simulator resources.
+   --> ../../../examples/tests/invalid/sim_resource.test.w:50:3
+   |  
+50 | /   pub methodWithBadStructs(a: MyStructWithNonSerializableTypes): MyStructWithNonSerializableTypes {
+51 | |     // ^ error: Parameter \\"a\\" cannot have non-serializable type \\"MyStructWithNonSerializableTypes\\" because the class implements sim.IResource. Only serializable, non-mutable types can be used as arguments or return types on simulator resources.
+52 | |     return a;
+53 | |   }
+   | \\\\---^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`simulator_permissions.test.w 1`] = `
 "error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
    --> ../../../examples/tests/invalid/simulator_permissions.test.w:10:8
@@ -4565,7 +4893,8 @@ Duration <DURATION>"
 `;
 
 exports[`unresolved_state.test.w 1`] = `
-"Could not start resource after 10 attempts: Unable to resolve attribute 'my_unresolved_token' for resource: root/env0/State
+"[ERROR] (no test) | Error: Unable to resolve attribute 'my_unresolved_token' for resource \\"root/env0/State\\" referenced by \\"root/env0/Function\\"
+Failed to start resources: \\"root/env0/Function\\"
 
 Tests 1 failed (1)
 Snapshots 1 skipped

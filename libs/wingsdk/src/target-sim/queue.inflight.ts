@@ -19,7 +19,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 export class Queue
   implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
@@ -189,6 +189,7 @@ export class Queue
 
         this.context.addTrace({
           type: TraceType.RESOURCE,
+          level: LogLevel.VERBOSE,
           data: {
             message: `Sending messages (messages=${JSON.stringify(
               messagesPayload
@@ -217,9 +218,11 @@ export class Queue
                   let dlq = this.context.getClient(
                     this.dlq.dlqHandler
                   ) as IQueueClient;
+
                   void dlq.push(msg.payload).catch((err) => {
                     this.context.addTrace({
                       type: TraceType.RESOURCE,
+                      level: LogLevel.ERROR,
                       data: {
                         message: `Pushing messages to the dead-letter queue generates an error -> ${err}`,
                       },
@@ -250,6 +253,7 @@ export class Queue
               sourcePath: this.context.resourcePath,
               sourceType: QUEUE_FQN,
               type: TraceType.RESOURCE,
+              level: LogLevel.ERROR,
               timestamp: new Date().toISOString(),
             });
             this.pushMessagesBackToQueue(messages);
@@ -273,6 +277,7 @@ export class Queue
         sourcePath: this.context.resourcePath,
         sourceType: QUEUE_FQN,
         type: TraceType.RESOURCE,
+        level: LogLevel.WARNING,
         timestamp: new Date().toISOString(),
       });
     }, this.timeoutSeconds * 1000);

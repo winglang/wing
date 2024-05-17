@@ -157,7 +157,7 @@ export const getResourceIconColors = (options: {
   resourceType: string | undefined;
   darkenOnGroupHover?: boolean;
   forceDarken?: boolean;
-  color?: Colors;
+  color?: Colors | string;
 }) => {
   switch (options.resourceType) {
     case "@winglang/sdk.cloud.Bucket": {
@@ -232,7 +232,9 @@ export const getResourceIconColors = (options: {
     }
     default: {
       let color: Colors =
-        options.color && colors[options.color] ? options.color : "slate";
+        options.color && Object.keys(colors).includes(options.color)
+          ? (options.color as Colors)
+          : "slate";
       return [
         colors[color].default,
         options.darkenOnGroupHover && colors[color].groupHover,

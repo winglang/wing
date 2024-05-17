@@ -211,7 +211,7 @@ test("calling an invalid method returns an error to the client", async () => {
   const sim = await app.startSimulator();
   const bucketClient = sim.getResource("/test");
   await expect(bucketClient.invalidMethod()).rejects.toThrowError(
-    /Method invalidMethod not found on resource/
+    /Method "invalidMethod" not found on resource/
   );
   await sim.stop();
 });
@@ -243,7 +243,9 @@ test("unable to resolve token during initialization", async () => {
     error = e;
   }
   expect(error).toBeDefined();
-  expect(error.message).toMatch(/Unable to resolve attribute 'my_token'/);
+  expect(error.message).toMatch(
+    /Failed to start resources: \"root\/Bucket\", "root\/Bucket\/Policy\"/
+  );
 });
 
 describe("in-place updates", () => {

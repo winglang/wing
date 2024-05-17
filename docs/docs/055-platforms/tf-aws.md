@@ -36,6 +36,15 @@ private_subnet_ids = ["subnet-123xyz"]
 public_subnet_ids = ["subnet-123xyz"]
 ```
 
+### Implicit VPC
+
+The `tf-aws` platform can create a new VPC for you if needed. The VPC is pretty standard and includes:
+
+- A VPC with CIDR block `10.0.0.0/16`
+- An Internet Gateway
+- A NAT Gateway
+- A single public subnet with CIDR block `10.0.0.0/24`
+- Two private subnets with CIDR blocks `10.0.4.0/22` and `10.0.8.0/22` (both have Egress via NAT Gateway)
 
 ## Output
 

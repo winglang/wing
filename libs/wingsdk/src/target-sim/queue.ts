@@ -59,7 +59,9 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
       Node.of(this).addConnection({
         source: this,
+        sourceOp: cloud.QueueInflightMethods.POP,
         target: this.dlq.queue,
+        targetOp: cloud.QueueInflightMethods.PUSH,
         name: "dead-letter queue",
       });
     }
@@ -82,7 +84,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
-      App.of(this).makeId(this, "SetConsumer"),
+      App.of(this).makeId(this, "Consumer"),
       functionHandler,
       props
     );
@@ -111,7 +113,9 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.QueueInflightMethods.PUSH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "setConsumer()",
     });
 
@@ -167,6 +171,7 @@ export class QueueSetConsumerHandler {
         try {
           await ctx.handler($message.payload);
         } catch (error) {
+          // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
           batchItemFailures.push($message);
         }
       }

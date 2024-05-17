@@ -98,7 +98,10 @@ export async function testTest(
     wingFile,
     args,
     expectFailure: false,
-    env,
+    env: {
+      WING_HIDE_CONTAINER_LOGS: "1",
+      ...env,
+    },
   });
 
   if (out.stderr) fileMap["stderr.log"] = out.stderr;

@@ -34,6 +34,7 @@
   "dependencies": {
     "@npmcli/arborist": "^7.2.0",
     "@segment/analytics-node": "^1.1.0",
+    "@supercharge/promise-pool": "^3.2.0",
     "@wingconsole/app": "workspace:^",
     "@wingconsole/server": "workspace:^",
     "@winglang/compiler": "workspace:^",

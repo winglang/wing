@@ -11,6 +11,7 @@ use ast::{Scope, Symbol};
 use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
+use const_format::formatcp;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
 use dtsify::extern_dtsify::{is_extern_file, ExternDTSifier};
 use file_graph::FileGraph;
@@ -118,6 +119,9 @@ const WINGSDK_AUTOID_RESOURCE: &'static str = "std.AutoIdResource";
 const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 const WINGSDK_NODE: &'static str = "std.Node";
+
+const WINGSDK_SIM_IRESOURCE: &'static str = "sim.IResource";
+const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_SIM_IRESOURCE);
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
