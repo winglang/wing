@@ -162,47 +162,47 @@
     },
     {
       "name": "@aws-sdk/client-cloudwatch-logs",
-      "version": "3.535.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-dynamodb",
-      "version": "3.535.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-elasticache",
-      "version": "3.535.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-lambda",
-      "version": "3.535.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-s3",
-      "version": "3.535.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-secrets-manager",
-      "version": "3.535.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sns",
-      "version": "3.535.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sqs",
-      "version": "3.535.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/s3-request-presigner",
-      "version": "3.535.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
@@ -211,7 +211,7 @@
     },
     {
       "name": "@aws-sdk/util-dynamodb",
-      "version": "3.535.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
