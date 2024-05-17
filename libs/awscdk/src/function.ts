@@ -16,6 +16,7 @@ import { IAwsFunction, PolicyStatement, externalLibraries } from "@winglang/sdk/
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
+import { LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * Implementation of `awscdk.Function` are expected to implement this
@@ -104,11 +105,11 @@ export class Function
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.FunctionInflightMethods.INVOKE,
-      cloud.FunctionInflightMethods.INVOKE_ASYNC,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [],
+    };
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {

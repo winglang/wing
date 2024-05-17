@@ -181,6 +181,7 @@ impl Fold for ClosureTransformer {
 					// we need to set this to false.
 					is_static: false,
 					access: AccessModifier::Public,
+					doc: None,
 				};
 
 				// class_init_body :=
@@ -196,14 +197,14 @@ impl Fold for ClosureTransformer {
 							))),
 							WingSpan::for_file(file_id),
 						))),
-						arg_list: ArgList {
-							named_args: IndexMap::new(),
-							pos_args: vec![Expr::new(
+						arg_list: ArgList::new(
+							vec![Expr::new(
 								ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::for_file(file_id)))),
 								WingSpan::for_file(file_id),
 							)],
-							span: WingSpan::for_file(file_id),
-						},
+							IndexMap::new(),
+							WingSpan::for_file(file_id),
+						),
 					},
 					WingSpan::for_file(file_id),
 				);
@@ -220,6 +221,7 @@ impl Fold for ClosureTransformer {
 						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::for_file(file_id)),
 					},
 					span: WingSpan::for_file(file_id),
+					doc: None,
 				}];
 
 				// If we are inside a scope with "this", add define `let __parent_this_${CLOSURE_COUNT} = this` which can be
@@ -242,6 +244,7 @@ impl Fold for ClosureTransformer {
 						},
 						span: WingSpan::for_file(file_id),
 						idx: 0,
+						doc: None,
 					};
 					self.class_statements.push(parent_this_def);
 				}
@@ -271,6 +274,7 @@ impl Fold for ClosureTransformer {
 							body: FunctionBody::Statements(Scope::new(class_init_body, WingSpan::for_file(file_id))),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
+							doc: None,
 						},
 						fields: class_fields,
 						implements: vec![],
@@ -290,12 +294,14 @@ impl Fold for ClosureTransformer {
 							body: FunctionBody::Statements(Scope::new(vec![], WingSpan::for_file(file_id))),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
+							doc: None,
 						},
 						access: AccessModifier::Private,
 						auto_id: true,
 					}),
 					idx: self.nearest_stmt_idx,
 					span: WingSpan::for_file(file_id),
+					doc: None,
 				};
 
 				// new_class_instance :=
@@ -305,11 +311,7 @@ impl Fold for ClosureTransformer {
 				let new_class_instance = Expr::new(
 					ExprKind::New(New {
 						class: class_udt,
-						arg_list: ArgList {
-							named_args: IndexMap::new(),
-							pos_args: vec![],
-							span: WingSpan::for_file(file_id),
-						},
+						arg_list: ArgList::new_empty(WingSpan::for_file(file_id)),
 						obj_id: None,
 						obj_scope: None,
 					}),

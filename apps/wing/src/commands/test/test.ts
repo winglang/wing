@@ -2,9 +2,10 @@ import * as cp from "child_process";
 import { existsSync, readFile, readFileSync, realpathSync, rm, rmSync, statSync } from "fs";
 import { basename, join, relative, resolve } from "path";
 import { promisify } from "util";
+import { PromisePool } from "@supercharge/promise-pool";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
-import { TraceType } from "@winglang/sdk/lib/std";
+import { LogLevel } from "@winglang/sdk/lib/std";
 import { Util } from "@winglang/sdk/lib/util";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
@@ -14,6 +15,7 @@ import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
 import { SnapshotMode, SnapshotResult, captureSnapshot, determineSnapshotMode } from "./snapshots";
 import { SNAPSHOT_ERROR_PREFIX } from "./snapshots-help";
+import { TraceProcessor } from "./trace-processor";
 import { renderTestName } from "./util";
 import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
@@ -53,6 +55,11 @@ export interface TestOptions extends CompileOptions {
    * Determine snapshot behavior.
    */
   readonly snapshots?: SnapshotMode;
+
+  /**
+   * Number of tests to be run in parallel. 0 or undefined will run all at once.
+   */
+  readonly parallel?: number;
 }
 
 const TEST_FILE_PATTERNS = ["**/*.test.w", "**/{main,*.main}.{w,ts}"];
@@ -134,7 +141,11 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       });
     }
   };
-  await Promise.all(selectedEntrypoints.map(testFile));
+
+  await PromisePool.withConcurrency(options.parallel || selectedEntrypoints.length)
+    .for(selectedEntrypoints)
+    .process(testFile);
+
   const testDuration = Date.now() - startTime;
   printResults(results, testDuration);
   if (options.outputFile) {
@@ -253,13 +264,11 @@ export async function renderTestReport(
 
     if (includeLogs) {
       for (const trace of result.traces) {
-        // only show detailed traces if we are in debug mode
-        if (trace.type === TraceType.RESOURCE && process.env.DEBUG) {
-          details.push(chalk.gray("[trace] " + trace.data.message));
+        if (shouldSkipTrace(trace)) {
+          continue;
         }
-        if (trace.type === TraceType.LOG) {
-          details.push(chalk.gray(trace.data.message));
-        }
+
+        details.push(chalk.gray(trace.data.message));
       }
     }
 
@@ -364,39 +373,18 @@ async function runTestsWithRetry(
   return results;
 }
 
-type TraceSeverity = "error" | "warn" | "info" | "debug" | "verbose";
-
-// TODO: can we share this logic with the Wing Console?
-function inferSeverityOfEvent(trace: std.Trace): TraceSeverity {
-  if (trace.data.status === "failure") {
-    return "error";
-  }
-  if (trace.type === TraceType.LOG) {
-    return "info";
-  }
-  if (trace.type === TraceType.RESOURCE) {
-    return "debug";
-  }
-  if (trace.type === TraceType.SIMULATOR) {
-    return "verbose";
-  }
-  return "verbose";
-}
-
 const SEVERITY_STRING = {
-  error: "[ERROR]",
-  warn: "[WARNING]",
-  info: "[INFO]",
-  debug: "[DEBUG]",
-  verbose: "[VERBOSE]",
+  [LogLevel.ERROR]: "[ERROR]",
+  [LogLevel.WARNING]: "[WARNING]",
+  [LogLevel.INFO]: "[INFO]",
+  [LogLevel.VERBOSE]: "[VERBOSE]",
 };
 
 const LOG_STREAM_COLORS = {
-  error: chalk.red,
-  warn: chalk.yellow,
-  info: chalk.green,
-  debug: chalk.blue,
-  verbose: chalk.gray,
+  [LogLevel.ERROR]: chalk.red,
+  [LogLevel.WARNING]: chalk.yellow,
+  [LogLevel.INFO]: chalk.green,
+  [LogLevel.VERBOSE]: chalk.gray,
 };
 
 async function formatTrace(
@@ -404,8 +392,7 @@ async function formatTrace(
   testName: string,
   mode: "short" | "full"
 ): Promise<string> {
-  const severity = inferSeverityOfEvent(trace);
-  // const pathSuffix = trace.sourcePath.split("/").slice(2).join("/");
+  const level = trace.level;
   const date = new Date(trace.timestamp);
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -416,28 +403,25 @@ async function formatTrace(
   let msg = "";
   if (mode === "full") {
     msg += chalk.dim(`[${timestamp}]`);
-    msg += LOG_STREAM_COLORS[severity](` ${SEVERITY_STRING[severity]}`);
+    msg += LOG_STREAM_COLORS[level](` ${SEVERITY_STRING[level]}`);
     msg += chalk.dim(` ${testName} » ${trace.sourcePath}`);
     msg += "\n";
-    if (severity === "error") {
-      msg += chalk.dim(" │ ");
-      msg += trace.data.message;
-      msg += "\n";
-      msg += chalk.dim(" └ ");
-      msg += await prettyPrintError(trace.data.error, { chalk });
+    if (level === LogLevel.ERROR) {
+      msg += await prettyPrintError(trace.data.error ?? trace.data.message ?? trace.data, {
+        chalk,
+      });
     } else {
-      msg += chalk.dim(" └ ");
       msg += trace.data.message;
     }
-    msg += "\n";
+    msg += "\n\n";
     return msg;
   } else if (mode === "short") {
-    msg += LOG_STREAM_COLORS[severity](`${SEVERITY_STRING[severity]}`);
+    msg += LOG_STREAM_COLORS[level](`${SEVERITY_STRING[level]}`);
     msg += chalk.dim(` ${testName} | `);
-    if (severity === "error") {
-      msg += trace.data.message;
-      msg += " ";
-      msg += await prettyPrintError(trace.data.error, { chalk });
+    if (level === LogLevel.ERROR) {
+      msg += await prettyPrintError(trace.data.error ?? trace.data.message ?? trace.data, {
+        chalk,
+      });
     } else {
       msg += trace.data.message;
     }
@@ -448,14 +432,28 @@ async function formatTrace(
   }
 }
 
+function shouldSkipTrace(trace: std.Trace): boolean {
+  switch (trace.level) {
+    // show VERBOSE only in debug mode
+    case LogLevel.VERBOSE:
+      return !process.env.DEBUG;
+
+    // show INFO, WARNING, ERROR in all cases
+    case LogLevel.INFO:
+    case LogLevel.WARNING:
+    case LogLevel.ERROR:
+      return false;
+  }
+}
+
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
   const { clean, testFilter, retry } = options;
 
   let outputStream: SpinnerStream | undefined;
-  if (options.stream) {
-    outputStream = new SpinnerStream(process.stdout, "Running tests...");
+  let traceProcessor: TraceProcessor | undefined;
 
+  if (options.stream) {
     // As of this comment, each Wing test is associated with an isolated environment.
     // (All resources for test #0 are in root/env0/..., etc.)
     // This means we can use the environment number to map each environment # to a test name,
@@ -475,15 +473,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
         return;
       }
 
-      const severity = inferSeverityOfEvent(event);
-
-      // Skip debug events if DEBUG isn't set
-      if ((severity === "debug" || severity === "verbose") && !process.env.DEBUG) {
-        return;
-      }
-
-      // Skip verbose events if DEBUG=verbose isn't set
-      if (severity === "verbose" && process.env.DEBUG !== "verbose") {
+      if (shouldSkipTrace(event)) {
         return;
       }
 
@@ -492,11 +482,33 @@ async function testSimulator(synthDir: string, options: TestOptions) {
       outputStream!.write(formatted);
     };
 
-    // TODO: support async callbacks with onTrace?
-    s.onTrace({ callback: (event) => void printEvent(event) });
+    // The simulator emits events synchronously, but formatting them needs to
+    // happen asynchronously since e.g. files have to be read to format stack
+    // traces. If we performed this async work inside of the `onTrace` callback,
+    // we might end up with out-of-order traces, or traces getting printed (or
+    // dropped) after the test has finished. TraceProcessor allows events to be
+    // added to a queue and processed serially, and provides a way to safely
+    // "await" the completion of the processing.
+    traceProcessor = new TraceProcessor((event) => printEvent(event));
+
+    // SpinnerStream is responsible for taking in lines of text and streaming
+    // them to a TTY with a spinner, making sure to clear and re-print the
+    // spinner when new lines are added.
+    outputStream = new SpinnerStream(process.stdout, "Running tests...");
+
+    s.onTrace({
+      callback: (event) => {
+        traceProcessor!.addEvent(event);
+      },
+    });
   }
 
-  await s.start();
+  try {
+    await s.start();
+  } catch (e) {
+    outputStream?.stopSpinner();
+    throw e;
+  }
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
@@ -507,6 +519,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   await s.stop();
 
   if (options.stream) {
+    await traceProcessor!.finish();
     outputStream!.stopSpinner();
   }
 
@@ -521,7 +534,11 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   }
 
   if (clean) {
-    rmSync(synthDir, { recursive: true, force: true });
+    try {
+      rmSync(synthDir, { recursive: true, force: true });
+    } catch (err) {
+      console.warn(`Warning: unable to clean up test directory: ${err}`);
+    }
   } else {
     noCleanUp(synthDir);
   }
@@ -726,7 +743,7 @@ function sortTests(a: std.TestResult, b: std.TestResult) {
  */
 function extractTestEnvFromPath(path: string): number | undefined {
   const parts = path.split("/");
-  const envPart = parts[1];
+  const envPart = parts[1] ?? parts[0];
   if (!envPart.startsWith("env")) {
     return undefined;
   }

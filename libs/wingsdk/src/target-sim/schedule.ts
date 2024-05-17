@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
@@ -12,7 +11,7 @@ import {
   convertDurationToCronExpression,
 } from "./util";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
+import { lift } from "../core";
 import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -37,12 +36,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     inflight: cloud.IScheduleOnTickHandler,
     props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "schedule.ontick.inflight.js"),
-      "ScheduleOnTickHandlerClient"
-    );
-
+    const functionHandler = ScheduleOnTickHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnTick"),
@@ -60,7 +54,9 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ScheduleInflightMethods.TICK,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "onTick()",
     });
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
@@ -86,5 +82,24 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
+  }
+}
+
+/**
+ * Utility class to work with schedule on tick handlers.
+ */
+export class ScheduleOnTickHandler {
+  /**
+   * Converts a `cloud.IScheduleOnTickHandler` to a `cloud.IFunctionHandler`.
+   * @param handler the handler to convert
+   * @returns the function handler
+   */
+  public static toFunctionHandler(
+    handler: cloud.IScheduleOnTickHandler
+  ): cloud.IFunctionHandler {
+    return lift({ handler }).inflight(async (ctx) => {
+      await ctx.handler();
+      return undefined;
+    });
   }
 }

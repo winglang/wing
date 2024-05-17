@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { mkdir, rm } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
-import { join } from "path";
+import { join, resolve } from "path";
 import { makeSimulatorClient } from "./client";
 import { Graph } from "./graph";
 import { deserialize, serialize } from "./serialization";
@@ -11,7 +11,7 @@ import { exists } from "./util";
 import { SDK_VERSION } from "../constants";
 import { TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
-import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
+import { CONNECTIONS_FILE_PATH, LogLevel, Trace, TraceType } from "../std";
 import { POLICY_FQN } from "../target-sim";
 import { PolicySchema } from "../target-sim/schema-resources";
 
@@ -208,7 +208,7 @@ export class Simulator {
   private state: Record<string, ResourceState> = {};
 
   constructor(props: SimulatorProps) {
-    const simdir = props.simfile;
+    const simdir = resolve(props.simfile);
     this.statedir = props.stateDir ?? join(simdir, ".state");
     this._model = this._loadApp(simdir);
 
@@ -278,8 +278,7 @@ export class Simulator {
 
     try {
       await this.startResources();
-      this._running = "running";
-    } catch (err) {
+    } catch (err: any) {
       this.stopServer();
       this._running = "stopped";
       throw err;
@@ -289,23 +288,37 @@ export class Simulator {
   private async startResources() {
     const retries: Record<string, number> = {};
     const queue = this._model.graph.nodes.map((n) => n.path);
+    const failed = [];
     while (queue.length > 0) {
       const top = queue.shift()!;
       try {
         await this.startResource(top);
-      } catch (e) {
+      } catch (e: any) {
         if (e instanceof UnresolvedTokenError) {
           retries[top] = (retries[top] ?? 0) + 1;
-          if (retries[top] > 10) {
-            throw new Error(
-              `Could not start resource after 10 attempts: ${e.message}`
-            );
+
+          if (retries[top] < 10) {
+            queue.push(top);
+            continue;
+          } else {
+            failed.push(top);
           }
-          queue.push(top);
-        } else {
-          throw e;
         }
+
+        this.addSimulatorTrace(top, { message: e.message }, LogLevel.ERROR);
       }
+    }
+
+    // mark as "running" so that we can stop the simulation if needed
+    this._running = "running";
+
+    // since some resources failed to start, we are going to stop all resources that were started
+    if (failed.length > 0) {
+      await this.stop();
+
+      throw new Error(
+        `Failed to start resources: ${failed.map((r) => `"${r}"`).join(", ")}`
+      );
     }
   }
 
@@ -330,6 +343,7 @@ export class Simulator {
       },
       sourcePath: "root",
       sourceType: "Simulator",
+      level: LogLevel.VERBOSE,
       timestamp: new Date().toISOString(),
     });
 
@@ -408,14 +422,20 @@ export class Simulator {
     // remove the resource's policy from the policy registry
     this._policyRegistry.deregister(path);
 
-    this.addSimulatorTrace(path, { message: `${path} stopped` });
+    this.addSimulatorTrace(
+      path,
+      { message: `${path} stopped` },
+      LogLevel.VERBOSE
+    );
+
     delete this.state[path]; // delete the state of the resource
   }
 
-  private addSimulatorTrace(path: string, data: any) {
+  private addSimulatorTrace(path: string, data: any, level: LogLevel) {
     const resourceConfig = this.getResourceConfig(path);
     this.addTrace({
       type: TraceType.SIMULATOR,
+      level,
       data: data,
       sourcePath: resourceConfig.path,
       sourceType: resourceConfig.type,
@@ -472,10 +492,35 @@ export class Simulator {
    */
   public tryGetResource(path: string): any | undefined {
     const handle = this.tryGetResourceHandle(path);
-    if (!handle) {
-      return undefined;
+    if (handle) {
+      return makeSimulatorClient(this.url, handle, ADMIN_PERMISSION);
     }
-    return makeSimulatorClient(this.url, handle, ADMIN_PERMISSION);
+
+    // backwards compatibility trick: if a unit test requests a resource with a path like "foo/bar"
+    // which is not found, but a resource "foo/bar/Resource" exists and its
+    // type is @winglang/sdk.sim.Resource, then we will return that client instead
+    const childPath = `${path}/Resource`;
+    const childConfig = this.tryGetResourceConfig(childPath);
+    if (childConfig?.type === "@winglang/sdk.sim.Resource") {
+      const childHandle = this.tryGetResourceHandle(childPath);
+      if (childHandle) {
+        const client = makeSimulatorClient(
+          this.url,
+          childHandle,
+          ADMIN_PERMISSION
+        );
+
+        const get = (_target: any, method: string, _receiver: any) => {
+          return async function (...args: any[]) {
+            return client.call(method, args);
+          };
+        };
+
+        return new Proxy({}, { get });
+      }
+    }
+
+    return undefined;
   }
 
   private tryGetResourceHandle(path: string): string | undefined {
@@ -589,6 +634,13 @@ export class Simulator {
       return { granted: true };
     }
 
+    if (method === "then") {
+      // Always grant permissions for the "then" method so that an error isn't thrown
+      // if `await client` is called on a Proxy object. In JavaScript, `await x` will
+      // implicitly call `x.then()`.
+      return { granted: true };
+    }
+
     const callerPath = this._handles.tryFindPath(callerHandle);
     if (!callerPath) {
       return {
@@ -692,11 +744,12 @@ export class Simulator {
 
         const methodExists = (resource as any)[method] !== undefined;
         if (!methodExists) {
+          const resourcePath = this._handles.tryFindPath(handle);
           res.writeHead(500, { "Content-Type": "application/json" });
           res.end(
             serialize({
               error: {
-                message: `Method ${method} not found on resource ${handle}.`,
+                message: `Method "${method}" not found on resource ${handle} (${resourcePath}).`,
               },
             }),
             "utf-8"
@@ -731,14 +784,14 @@ export class Simulator {
 
     // start the server, and wait for it to be listening
     const server = http.createServer(requestListener);
-    await new Promise<void>((resolve) => {
+    await new Promise<void>((ok) => {
       server.listen(0, LOCALHOST_ADDRESS, () => {
         const addr = server.address();
         if (addr && typeof addr === "object" && (addr as any).port) {
           this._serverUrl = `http://${addr.address}:${addr.port}`;
         }
         this._server = server;
-        resolve();
+        ok();
       });
     });
   }
@@ -772,9 +825,9 @@ export class Simulator {
 
     const resourceConfig = this.getResourceConfig(path);
 
-    const resolvedProps = this.resolveTokens(resourceConfig.props);
+    const resolvedProps = this.resolveTokens(path, resourceConfig.props);
     const resolvedPolicy: PolicyStatement[] =
-      this.resolveTokens(resourceConfig.policy) ?? [];
+      this.resolveTokens(path, resourceConfig.policy) ?? [];
 
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
@@ -827,9 +880,13 @@ export class Simulator {
     };
 
     // trace the resource creation
-    this.addSimulatorTrace(path, {
-      message: `${resourceConfig.path} started`,
-    });
+    this.addSimulatorTrace(
+      path,
+      {
+        message: `${resourceConfig.path} started`,
+      },
+      LogLevel.VERBOSE
+    );
   }
 
   private createContext(
@@ -860,15 +917,21 @@ export class Simulator {
               result: JSON.stringify(result),
             },
             type: TraceType.RESOURCE,
+            level: LogLevel.VERBOSE,
             sourcePath: resourceConfig.path,
             sourceType: resourceConfig.type,
             timestamp: new Date().toISOString(),
           });
           return result;
-        } catch (err) {
+        } catch (err: any) {
           this.addTrace({
-            data: { message: props.message, status: "failure", error: err },
+            data: {
+              message: `Error: ${err.message} (${props.message})`,
+              error: err,
+              status: "failure",
+            },
             type: TraceType.RESOURCE,
+            level: LogLevel.VERBOSE,
             sourcePath: resourceConfig.path,
             sourceType: resourceConfig.type,
             timestamp: new Date().toISOString(),
@@ -881,9 +944,13 @@ export class Simulator {
       },
       setResourceAttributes: (path: string, attrs: Record<string, any>) => {
         for (const [key, value] of Object.entries(attrs)) {
-          this.addSimulatorTrace(path, {
-            message: `${path}.${key} = ${value}`,
-          });
+          this.addSimulatorTrace(
+            path,
+            {
+              message: `${path}.${key} = ${value}`,
+            },
+            LogLevel.VERBOSE
+          );
         }
 
         this.state[path].attrs = { ...this.state[path].attrs, ...attrs };
@@ -916,7 +983,7 @@ export class Simulator {
    * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
    * the resolved value.
    */
-  private resolveTokens(obj: any): any {
+  private resolveTokens(resolver: string, obj: any): any {
     return resolveTokens(obj, (token) => {
       const target = this._model.graph.tryFind(token.path);
       if (!target) {
@@ -931,7 +998,7 @@ export class Simulator {
         const value = r.attrs[token.attr];
         if (value === undefined) {
           throw new UnresolvedTokenError(
-            `Unable to resolve attribute '${token.attr}' for resource: ${target.path}`
+            `Unable to resolve attribute '${token.attr}' for resource "${target.path}" referenced by "${resolver}"`
           );
         }
         return value;
@@ -1199,8 +1266,18 @@ export interface PolicyStatement {
 export interface ConnectionData {
   /** The path of the source construct. */
   readonly source: string;
+  /**
+   * An operation that the source object supports.
+   * @default - no operation
+   */
+  readonly sourceOp?: string;
   /** The path of the target construct. */
   readonly target: string;
+  /**
+   * An operation that the target object supports.
+   * @default - no operation
+   */
+  readonly targetOp?: string;
   /** A name for the connection. */
   readonly name: string;
 }

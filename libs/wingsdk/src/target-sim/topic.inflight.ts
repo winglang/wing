@@ -12,7 +12,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 export class Topic
   implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
@@ -49,6 +49,7 @@ export class Topic
       ) as IFunctionClient;
       this.context.addTrace({
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         data: {
           message: `Sending message (message=${message}, subscriber=${subscriber.functionHandle}).`,
         },
@@ -81,17 +82,20 @@ export class Topic
     }
   }
 
-  public async publish(message: string): Promise<void> {
-    this.context.addTrace({
-      data: {
-        message: `Publish (message=${message}).`,
-      },
-      sourcePath: this.context.resourcePath,
-      sourceType: TOPIC_FQN,
-      type: TraceType.RESOURCE,
-      timestamp: new Date().toISOString(),
-    });
+  public publish(...messages: string[]): Promise<void> {
+    return this.context.withTrace({
+      message: `Publish (messages=${messages}).`,
+      activity: async () => {
+        if (messages.includes("")) {
+          throw new Error("Empty messages are not allowed");
+        }
+        let publishAll: Array<Promise<void>> = [];
+        for (const message of messages) {
+          publishAll.push(this.publishMessage(message));
+        }
 
-    return this.publishMessage(message);
+        return Promise.all(publishAll);
+      },
+    });
   }
 }

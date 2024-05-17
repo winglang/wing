@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
@@ -6,11 +5,13 @@ import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-sou
 import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { IAwsQueue } from "../shared-aws";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { Queue as AwsQueue } from "../shared-aws/queue";
+import {
+  Queue as AwsQueue,
+  QueueSetConsumerHandler,
+} from "../shared-aws/queue";
 import { Duration, IInflightHost, Node } from "../std";
 
 /**
@@ -25,7 +26,7 @@ const NAME_OPTS: NameOptions = {
 /**
  * AWS implementation of `cloud.Queue`.
  *
- * @inflight `@winglang/sdk.cloud.IQueueClient`
+ * @inflight `@winglang/sdk.aws.IAwsQueueClient`
  */
 export class Queue extends cloud.Queue implements IAwsQueue {
   private readonly queue: SqsQueue;
@@ -62,28 +63,20 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.QueueInflightMethods.PUSH,
-      cloud.QueueInflightMethods.PURGE,
-      cloud.QueueInflightMethods.APPROX_SIZE,
-      cloud.QueueInflightMethods.POP,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.QueueInflightMethods.PURGE]: [],
+      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
+      [cloud.QueueInflightMethods.POP]: [],
+    };
   }
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname.replace("target-tf-aws", "shared-aws"),
-        "queue.setconsumer.inflight.js"
-      ),
-      "QueueSetConsumerHandlerClient"
-    );
-
+    const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
     const fn = new Function(
       // ok since we're not a tree root
       this.node.scope!,
@@ -122,7 +115,9 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.QueueInflightMethods.PUSH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "setConsumer()",
     });
 

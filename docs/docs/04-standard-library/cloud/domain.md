@@ -201,13 +201,4 @@ The website's custom domain name.
 ```
 
 
-## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IDomainClient <a name="IDomainClient" id="@winglang/sdk.cloud.IDomainClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IDomainClient">IDomainClient</a>
-
-Inflight interface for `Domain`.
-
-
 

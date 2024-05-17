@@ -54,7 +54,7 @@ export interface CdkAppProps extends core.AppProps {
    *
    * @default - creates a standard `cdk.Stack`
    */
-  readonly stackFactory?: (app: cdk.App, stackName: string) => cdk.Stack;
+  readonly stackFactory?: (app: cdk.App, stackName: string, props?: cdk.StackProps) => cdk.Stack;
 }
 
 /**
@@ -76,6 +76,9 @@ export class App extends core.App {
   private synthedOutput: string | undefined;
 
   constructor(props: CdkAppProps) {
+    const account = process.env.CDK_AWS_ACCOUNT ?? process.env.CDK_DEFAULT_ACCOUNT;
+    const region = process.env.CDK_AWS_REGION ?? process.env.CDK_DEFAULT_REGION;
+
     let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
       throw new Error(
@@ -95,11 +98,14 @@ export class App extends core.App {
     const cdkApp = new cdk.App({ outdir: cdkOutdir });
 
     const createStack =
-      props.stackFactory ?? ((app, stackName) => new cdk.Stack(app, stackName));
-    const cdkStack = createStack(cdkApp, stackName);
+      props.stackFactory ?? ((app, stackName, props) => new cdk.Stack(app, stackName, props));
+
+    const cdkStack = createStack(cdkApp, stackName, {
+      env: { account, region }
+    });
 
     super(cdkStack, props.rootId ?? "Default", props);
-
+    
     // HACK: monkey patch the `new` method on the cdk app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.
     (cdkApp as any).new = (

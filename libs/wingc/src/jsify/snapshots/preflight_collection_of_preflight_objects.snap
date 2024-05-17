@@ -12,7 +12,7 @@ source: libs/wingc/src/jsify/tests.rs
     ];
     test "test" {
       assert(arr.length == 2);
-      arr.at(0).put("hello", "world");
+      arr[0].put("hello", "world");
     }
     
 ```
@@ -22,7 +22,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_, $arr_length }) {
+module.exports = function({ $_helpers_lookup_arr__0_, $arr }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -30,8 +30,8 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($arr_length, 2), "arr.length == 2");
-      (await $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_.put("hello", "world"));
+      $helpers.assert($helpers.eq($arr.length, 2), "arr.length == 2");
+      (await $_helpers_lookup_arr__0_.put("hello", "world"));
     }
   }
   return $Closure1;
@@ -63,8 +63,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 0))},
-            $arr_length: ${$stdlib.core.liftObject(arr.length)},
+            $_helpers_lookup_arr__0_: ${$stdlib.core.liftObject($helpers.lookup(arr, 0))},
+            $arr: ${$stdlib.core.liftObject(arr)},
           })
         `;
       }
@@ -82,12 +82,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 0), ["put"]],
-            [arr.length, []],
+            [$helpers.lookup(arr, 0), ["put"]],
+            [arr, ["length"]],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 0), []],
-            [arr.length, []],
+            [$helpers.lookup(arr, 0), []],
+            [arr, []],
           ],
         });
       }

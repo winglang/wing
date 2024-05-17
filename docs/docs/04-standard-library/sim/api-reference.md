@@ -154,6 +154,8 @@ new sim.Policy(props: PolicyProps);
 
 #### Methods <a name="Methods" id="Methods"></a>
 
+##### Preflight Methods
+
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.sim.Policy.addStatement">addStatement</a></code> | Adds a statement to the policy. |
@@ -246,6 +248,196 @@ The tree node.
 ---
 
 
+### Resource <a name="Resource" id="@winglang/sdk.sim.Resource"></a>
+
+- *Implements:* <a href="#@winglang/sdk.std.IResource">IResource</a>, <a href="#@winglang/sdk.sim.ISimulatorResource">ISimulatorResource</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.sim.ISimulatorInflightHost">ISimulatorInflightHost</a>
+
+A backend for a simulated resource.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.sim.Resource.Initializer"></a>
+
+```wing
+bring sim;
+
+new sim.Resource(factory: IResourceFactory);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.sim.Resource.Initializer.parameter.factory">factory</a></code> | <code><a href="#@winglang/sdk.sim.IResourceFactory">IResourceFactory</a></code> | *No description.* |
+
+---
+
+##### `factory`<sup>Required</sup> <a name="factory" id="@winglang/sdk.sim.Resource.Initializer.parameter.factory"></a>
+
+- *Type:* <a href="#@winglang/sdk.sim.IResourceFactory">IResourceFactory</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Preflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.sim.Resource.addEnvironment">addEnvironment</a></code> | Add an environment variable to make available to the inflight code. |
+| <code><a href="#@winglang/sdk.sim.Resource.addPermission">addPermission</a></code> | Add a simulated permission to this inflight host. |
+| <code><a href="#@winglang/sdk.sim.Resource.createToken">createToken</a></code> | Obtain a token that can be used to reference an attribute of this resource that is only resolved once the resource is started in the simulator. |
+| <code><a href="#@winglang/sdk.sim.Resource.toSimulator">toSimulator</a></code> | Convert this resource to a resource schema for the simulator. |
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.sim.IResourceClient.call">call</a></code> | Call a method on the resource. |
+
+---
+
+##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.sim.Resource.addEnvironment"></a>
+
+```wing
+addEnvironment(name: str, value: str): void
+```
+
+Add an environment variable to make available to the inflight code.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.Resource.addEnvironment.parameter.name"></a>
+
+- *Type:* str
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.sim.Resource.addEnvironment.parameter.value"></a>
+
+- *Type:* str
+
+---
+
+##### `addPermission` <a name="addPermission" id="@winglang/sdk.sim.Resource.addPermission"></a>
+
+```wing
+addPermission(resource: IResource, op: str): void
+```
+
+Add a simulated permission to this inflight host.
+
+###### `resource`<sup>Required</sup> <a name="resource" id="@winglang/sdk.sim.Resource.addPermission.parameter.resource"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+###### `op`<sup>Required</sup> <a name="op" id="@winglang/sdk.sim.Resource.addPermission.parameter.op"></a>
+
+- *Type:* str
+
+---
+
+##### `createToken` <a name="createToken" id="@winglang/sdk.sim.Resource.createToken"></a>
+
+```wing
+createToken(name: str): str
+```
+
+Obtain a token that can be used to reference an attribute of this resource that is only resolved once the resource is started in the simulator.
+
+If the token is used in inflight code or in the configuration of a simulated
+resource (e.g. as an environment variable), the relevant resource will
+automatically take a dependency on the resource the token belongs to.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.Resource.createToken.parameter.name"></a>
+
+- *Type:* str
+
+The name of the token.
+
+---
+
+##### `toSimulator` <a name="toSimulator" id="@winglang/sdk.sim.Resource.toSimulator"></a>
+
+```wing
+toSimulator(): ToSimulatorOutput
+```
+
+Convert this resource to a resource schema for the simulator.
+
+##### `call` <a name="call" id="@winglang/sdk.sim.IResourceClient.call"></a>
+
+```wing
+inflight call(method: str, args?: MutArray<Json>): Json
+```
+
+Call a method on the resource.
+
+###### `method`<sup>Required</sup> <a name="method" id="@winglang/sdk.sim.IResourceClient.call.parameter.method"></a>
+
+- *Type:* str
+
+---
+
+###### `args`<sup>Optional</sup> <a name="args" id="@winglang/sdk.sim.IResourceClient.call.parameter.args"></a>
+
+- *Type:* MutArray&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.sim.Resource.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.sim.Resource.onLiftType"></a>
+
+```wing
+bring sim;
+
+sim.Resource.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.sim.Resource.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.sim.Resource.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.sim.Resource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.sim.Resource.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+
 ### State <a name="State" id="@winglang/sdk.sim.State"></a>
 
 - *Implements:* <a href="#@winglang/sdk.sim.ISimulatorResource">ISimulatorResource</a>
@@ -320,7 +512,7 @@ Convert this resource to a resource schema for the simulator.
 ##### `get` <a name="get" id="@winglang/sdk.sim.IStateClient.get"></a>
 
 ```wing
-get(key: str): Json
+inflight get(key: str): Json
 ```
 
 Gets the runtime state of this object.
@@ -338,7 +530,7 @@ The object's key.
 ##### `set` <a name="set" id="@winglang/sdk.sim.IStateClient.set"></a>
 
 ```wing
-set(key: str, value: Json): void
+inflight set(key: str, value: Json): void
 ```
 
 Sets the state of runtime a runtime object.
@@ -362,7 +554,7 @@ The object's value.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.sim.IStateClient.tryGet"></a>
 
 ```wing
-tryGet(key: str): Json?
+inflight tryGet(key: str): Json?
 ```
 
 Checks if runtime state exists for this object and returns it's value.
@@ -611,19 +803,153 @@ The resource to which the policy is attached.
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
-### IPolicyClient <a name="IPolicyClient" id="@winglang/sdk.sim.IPolicyClient"></a>
+### IResource <a name="IResource" id="@winglang/sdk.sim.IResource"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.sim.IPolicyClient">IPolicyClient</a>
+- *Implemented By:* <a href="#@winglang/sdk.sim.IResource">IResource</a>
 
-Inflight interface for `Policy`.
+Contract that a resource backend must implement.
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.sim.IResource.onStop">onStop</a></code> | Runs when the resource is stopped. |
+
+---
+
+##### `onStop` <a name="onStop" id="@winglang/sdk.sim.IResource.onStop"></a>
+
+```wing
+onStop(): void
+```
+
+Runs when the resource is stopped.
+
+
+### IResourceContext <a name="IResourceContext" id="@winglang/sdk.sim.IResourceContext"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.sim.IResourceContext">IResourceContext</a>
+
+Context for implementing a simulator resource.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.sim.IResourceContext.log">log</a></code> | Log a message at the current point in time. |
+| <code><a href="#@winglang/sdk.sim.IResourceContext.resolveToken">resolveToken</a></code> | Resolves a token value. |
+| <code><a href="#@winglang/sdk.sim.IResourceContext.statedir">statedir</a></code> | The directory for the resource's state. |
+
+---
+
+##### `log` <a name="log" id="@winglang/sdk.sim.IResourceContext.log"></a>
+
+```wing
+inflight log(message: str, level?: LogLevel): void
+```
+
+Log a message at the current point in time.
+
+Defaults to `info` level.
+
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.sim.IResourceContext.log.parameter.message"></a>
+
+- *Type:* str
+
+The message to log.
+
+---
+
+###### `level`<sup>Optional</sup> <a name="level" id="@winglang/sdk.sim.IResourceContext.log.parameter.level"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.LogLevel">LogLevel</a>
+
+The severity of the message.
+
+---
+
+##### `resolveToken` <a name="resolveToken" id="@winglang/sdk.sim.IResourceContext.resolveToken"></a>
+
+```wing
+inflight resolveToken(name: str, value: str): void
+```
+
+Resolves a token value.
+
+All tokens must be resolved during the
+constructor of the resource.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.sim.IResourceContext.resolveToken.parameter.name"></a>
+
+- *Type:* str
+
+The name of the token.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.sim.IResourceContext.resolveToken.parameter.value"></a>
+
+- *Type:* str
+
+The value of the token.
+
+---
+
+##### `statedir` <a name="statedir" id="@winglang/sdk.sim.IResourceContext.statedir"></a>
+
+```wing
+statedir(): str
+```
+
+The directory for the resource's state.
+
+
+### IResourceFactory <a name="IResourceFactory" id="@winglang/sdk.sim.IResourceFactory"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.sim.IResourceFactory">IResourceFactory</a>
+
+**Inflight client:** [@winglang/sdk.sim.IResourceFactoryClient](#@winglang/sdk.sim.IResourceFactoryClient)
+
+A resource with an inflight "handle" method that can be passed to the `sim.Resource` constructor.
+
+
+
+### IResourceFactoryClient <a name="IResourceFactoryClient" id="@winglang/sdk.sim.IResourceFactoryClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.sim.IResourceFactoryClient">IResourceFactoryClient</a>
+
+A resource with an inflight "handle" method that can be passed to the `sim.Resource` constructor.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.sim.IResourceFactoryClient.handle">handle</a></code> | Function that will be called to create the resource. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.sim.IResourceFactoryClient.handle"></a>
+
+```wing
+inflight handle(context: IResourceContext): IResource
+```
+
+Function that will be called to create the resource.
+
+###### `context`<sup>Required</sup> <a name="context" id="@winglang/sdk.sim.IResourceFactoryClient.handle.parameter.context"></a>
+
+- *Type:* <a href="#@winglang/sdk.sim.IResourceContext">IResourceContext</a>
+
+---
 
 
 ### ISimulatorInflightHost <a name="ISimulatorInflightHost" id="@winglang/sdk.sim.ISimulatorInflightHost"></a>
 
 - *Extends:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
 
-- *Implemented By:* <a href="#@winglang/sdk.sim.ISimulatorInflightHost">ISimulatorInflightHost</a>
+- *Implemented By:* <a href="#@winglang/sdk.sim.Resource">Resource</a>, <a href="#@winglang/sdk.sim.ISimulatorInflightHost">ISimulatorInflightHost</a>
 
 Interfaces shared by all preflight classes that host inflight code.
 
@@ -683,7 +1009,7 @@ The tree node.
 
 - *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
-- *Implemented By:* <a href="#@winglang/sdk.sim.Container">Container</a>, <a href="#@winglang/sdk.sim.Policy">Policy</a>, <a href="#@winglang/sdk.sim.State">State</a>, <a href="#@winglang/sdk.sim.ISimulatorResource">ISimulatorResource</a>
+- *Implemented By:* <a href="#@winglang/sdk.sim.Container">Container</a>, <a href="#@winglang/sdk.sim.Policy">Policy</a>, <a href="#@winglang/sdk.sim.Resource">Resource</a>, <a href="#@winglang/sdk.sim.State">State</a>, <a href="#@winglang/sdk.sim.ISimulatorResource">ISimulatorResource</a>
 
 Interfaces shared by all preflight classes targeting the simulator.
 

@@ -470,7 +470,7 @@ Inflight client for `IServiceHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IServiceHandlerClient.handle"></a>
 
 ```wing
-handle(): IServiceStopHandler?
+inflight handle(): IServiceStopHandler?
 ```
 
 Handler to run when the service starts.

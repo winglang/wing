@@ -1,16 +1,16 @@
 import { existsSync, readdirSync } from "fs";
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../util";
 
 test("artifacts are located in app root level outdir", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler("async handle() {}");
-  new Function(app, "Function", inflight);
-  new Function(app, "Function2", inflight);
+  const handler = inflight(async () => {});
+  new Function(app, "Function", handler);
+  new Function(app, "Function2", handler);
   const expectedCdktfJson = `${app.outdir}/main.tf.json`;
   const expectedAssetsDir = `${app.outdir}/assets`;
   const expectedAssetCount = 2; // 2 functions = 2 assets

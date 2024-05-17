@@ -3,15 +3,17 @@ use std::hash::{Hash, Hasher};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use camino::Utf8PathBuf;
-use indexmap::{Equivalent, IndexMap, IndexSet};
+use indexmap::{Equivalent, IndexMap};
 use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 
+use crate::docs::Documented;
 use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
+static ARGLIST_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -294,6 +296,8 @@ pub struct FunctionDefinition {
 	pub is_static: bool,
 	/// Function's access modifier. In case of a closure, this is always public.
 	pub access: AccessModifier,
+	/// Function's documentation
+	pub doc: Option<String>,
 	pub span: WingSpan,
 }
 
@@ -302,6 +306,7 @@ pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
 	pub idx: usize,
+	pub doc: Option<String>,
 }
 
 #[derive(Debug)]
@@ -390,7 +395,8 @@ impl Class {
 #[derive(Debug)]
 pub struct Interface {
 	pub name: Symbol,
-	pub methods: Vec<(Symbol, FunctionSignature)>,
+	// Each method has a symbol, a signature, and an optional documentation string
+	pub methods: Vec<(Symbol, FunctionSignature, Option<String>)>,
 	pub extends: Vec<UserDefinedType>,
 	pub access: AccessModifier,
 	pub phase: Phase,
@@ -407,7 +413,8 @@ pub struct Struct {
 #[derive(Debug)]
 pub struct Enum {
 	pub name: Symbol,
-	pub values: IndexSet<Symbol>,
+	// Each value has a symbol and an optional documenation string
+	pub values: IndexMap<Symbol, Option<String>>,
 	pub access: AccessModifier,
 }
 
@@ -516,6 +523,7 @@ pub struct ClassField {
 	pub phase: Phase,
 	pub is_static: bool,
 	pub access: AccessModifier,
+	pub doc: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -539,6 +547,70 @@ impl Display for AccessModifier {
 pub struct StructField {
 	pub name: Symbol,
 	pub member_type: TypeAnnotation,
+	pub doc: Option<String>,
+}
+
+#[derive(Debug)]
+pub struct Intrinsic {
+	pub name: Symbol,
+	pub arg_list: Option<ArgList>,
+	pub kind: IntrinsicKind,
+}
+
+#[derive(Clone, Debug)]
+pub enum IntrinsicKind {
+	/// Error state
+	Unknown,
+	Dirname,
+}
+
+impl Display for IntrinsicKind {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			IntrinsicKind::Unknown => write!(f, "@"),
+			IntrinsicKind::Dirname => write!(f, "@dirname"),
+		}
+	}
+}
+
+impl Documented for IntrinsicKind {
+	fn render_docs(&self) -> String {
+		match self {
+			IntrinsicKind::Dirname => r#"Get the normalized absolute path of the current source file's directory.
+
+The resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.
+It should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."#.to_string(),
+			IntrinsicKind::Unknown => "".to_string(),
+		}
+	}
+}
+
+impl IntrinsicKind {
+	pub const VALUES: [IntrinsicKind; 2] = [IntrinsicKind::Unknown, IntrinsicKind::Dirname];
+
+	pub fn from_str(s: &str) -> Self {
+		match s {
+			"@dirname" => IntrinsicKind::Dirname,
+			_ => IntrinsicKind::Unknown,
+		}
+	}
+
+	pub fn get_type(&self, types: &crate::type_check::Types) -> Option<crate::type_check::TypeRef> {
+		match self {
+			&IntrinsicKind::Dirname => Some(types.string()),
+			_ => None,
+		}
+	}
+
+	pub fn is_valid_phase(&self, phase: &Phase) -> bool {
+		match self {
+			IntrinsicKind::Dirname => match phase {
+				Phase::Preflight => true,
+				_ => false,
+			},
+			IntrinsicKind::Unknown => true,
+		}
+	}
 }
 
 #[derive(Debug)]
@@ -551,6 +623,7 @@ pub enum ExprKind {
 		end: Box<Expr>,
 	},
 	Reference(Reference),
+	Intrinsic(Intrinsic),
 	Call {
 		callee: CalleeKind,
 		arg_list: ArgList,
@@ -633,6 +706,8 @@ impl Expr {
 	}
 }
 
+pub type ArgListId = usize;
+
 #[derive(Debug)]
 pub struct New {
 	pub class: UserDefinedType,
@@ -645,21 +720,28 @@ pub struct New {
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
 	pub named_args: IndexMap<Symbol, Expr>,
+	pub id: ArgListId,
 	pub span: WingSpan,
 }
 
 impl ArgList {
-	pub fn new(span: WingSpan) -> Self {
+	pub fn new(pos_args: Vec<Expr>, named_args: IndexMap<Symbol, Expr>, span: WingSpan) -> Self {
 		ArgList {
-			pos_args: vec![],
-			named_args: IndexMap::new(),
+			pos_args,
+			named_args,
 			span,
+			id: ARGLIST_COUNTER.fetch_add(1, Ordering::Relaxed),
 		}
+	}
+
+	pub fn new_empty(span: WingSpan) -> Self {
+		Self::new(vec![], IndexMap::new(), span)
 	}
 }
 
 #[derive(Debug)]
 pub enum Literal {
+	NonInterpolatedString(String),
 	String(String),
 	InterpolatedString(InterpolatedString),
 	Number(f64),
@@ -856,6 +938,12 @@ impl Spanned for UserDefinedType {
 }
 
 impl Spanned for Scope {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl Spanned for FunctionDefinition {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}

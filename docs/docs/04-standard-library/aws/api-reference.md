@@ -42,341 +42,17 @@ new aws.BucketRef(bucketName: str);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.copy">copy</a></code> | Copy an object to a new location in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.metadata">metadata</a></code> | Get the metadata of an object in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.rename">rename</a></code> | Move an object to a new location in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.signedUrl">signedUrl</a></code> | Returns a signed url to the given file. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists If the bytes returned are not a valid UTF-8 string, an error is thrown. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
+| <code><a href="#@winglang/sdk.aws.IAwsBucketClient.bucketRegion">bucketRegion</a></code> | Get the region of the bucket. |
 
 ---
 
-##### `copy` <a name="copy" id="@winglang/sdk.cloud.IBucketClient.copy"></a>
+##### `bucketRegion` <a name="bucketRegion" id="@winglang/sdk.aws.IAwsBucketClient.bucketRegion"></a>
 
 ```wing
-inflight copy(srcKey: str, dstKey: str): void
+inflight bucketRegion(): str
 ```
 
-Copy an object to a new location in the bucket.
-
-If the destination object
-already exists, it will be overwritten.
-
-###### `srcKey`<sup>Required</sup> <a name="srcKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.srcKey"></a>
-
-- *Type:* str
-
-The key of the source object you wish to copy.
-
----
-
-###### `dstKey`<sup>Required</sup> <a name="dstKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.dstKey"></a>
-
-- *Type:* str
-
-The key of the destination object after copying.
-
----
-
-##### `delete` <a name="delete" id="@winglang/sdk.cloud.IBucketClient.delete"></a>
-
-```wing
-inflight delete(key: str, opts?: BucketDeleteOptions): void
-```
-
-Delete an existing object using a key from the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.opts"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketDeleteOptions">BucketDeleteOptions</a>
-
-Options available for delete an item from a bucket.
-
----
-
-##### `exists` <a name="exists" id="@winglang/sdk.cloud.IBucketClient.exists"></a>
-
-```wing
-inflight exists(key: str): bool
-```
-
-Check if an object exists in the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.exists.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.cloud.IBucketClient.get"></a>
-
-```wing
-inflight get(key: str, options?: BucketGetOptions): str
-```
-
-Retrieve an object from the bucket.
-
-If the bytes returned are not a valid UTF-8 string, an error is thrown.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.get.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.get.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketGetOptions">BucketGetOptions</a>
-
-Additional get options.
-
----
-
-##### `getJson` <a name="getJson" id="@winglang/sdk.cloud.IBucketClient.getJson"></a>
-
-```wing
-inflight getJson(key: str): Json
-```
-
-Retrieve a Json object from the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.getJson.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `list` <a name="list" id="@winglang/sdk.cloud.IBucketClient.list"></a>
-
-```wing
-inflight list(prefix?: str): MutArray<str>
-```
-
-Retrieve existing objects keys from the bucket.
-
-###### `prefix`<sup>Optional</sup> <a name="prefix" id="@winglang/sdk.cloud.IBucketClient.list.parameter.prefix"></a>
-
-- *Type:* str
-
-Limits the response to keys that begin with the specified prefix.
-
----
-
-##### `metadata` <a name="metadata" id="@winglang/sdk.cloud.IBucketClient.metadata"></a>
-
-```wing
-inflight metadata(key: str): ObjectMetadata
-```
-
-Get the metadata of an object in the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.metadata.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `publicUrl` <a name="publicUrl" id="@winglang/sdk.cloud.IBucketClient.publicUrl"></a>
-
-```wing
-inflight publicUrl(key: str): str
-```
-
-Returns a url to the given file.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.publicUrl.parameter.key"></a>
-
-- *Type:* str
-
----
-
-##### `put` <a name="put" id="@winglang/sdk.cloud.IBucketClient.put"></a>
-
-```wing
-inflight put(key: str, body: str, options?: BucketPutOptions): void
-```
-
-Put an object in the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.put.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.put.parameter.body"></a>
-
-- *Type:* str
-
-Content of the object we want to store into the bucket.
-
----
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.put.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketPutOptions">BucketPutOptions</a>
-
-Additional options.
-
----
-
-##### `putJson` <a name="putJson" id="@winglang/sdk.cloud.IBucketClient.putJson"></a>
-
-```wing
-inflight putJson(key: str, body: Json): void
-```
-
-Put a Json object in the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.putJson.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.putJson.parameter.body"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-Json object that we want to store into the bucket.
-
----
-
-##### `rename` <a name="rename" id="@winglang/sdk.cloud.IBucketClient.rename"></a>
-
-```wing
-inflight rename(srcKey: str, dstKey: str): void
-```
-
-Move an object to a new location in the bucket.
-
-If the destination object
-already exists, it will be overwritten. Returns once the renaming is finished.
-
-###### `srcKey`<sup>Required</sup> <a name="srcKey" id="@winglang/sdk.cloud.IBucketClient.rename.parameter.srcKey"></a>
-
-- *Type:* str
-
-The key of the source object you wish to rename.
-
----
-
-###### `dstKey`<sup>Required</sup> <a name="dstKey" id="@winglang/sdk.cloud.IBucketClient.rename.parameter.dstKey"></a>
-
-- *Type:* str
-
-The key of the destination object after renaming.
-
----
-
-##### `signedUrl` <a name="signedUrl" id="@winglang/sdk.cloud.IBucketClient.signedUrl"></a>
-
-```wing
-inflight signedUrl(key: str, options?: BucketSignedUrlOptions): str
-```
-
-Returns a signed url to the given file.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.signedUrl.parameter.key"></a>
-
-- *Type:* str
-
-The key to access the cloud object.
-
----
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.signedUrl.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketSignedUrlOptions">BucketSignedUrlOptions</a>
-
-The signedUrlOptions where you can provide the configurations of the signed url.
-
----
-
-##### `tryDelete` <a name="tryDelete" id="@winglang/sdk.cloud.IBucketClient.tryDelete"></a>
-
-```wing
-inflight tryDelete(key: str): bool
-```
-
-Delete an object from the bucket if it exists.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryDelete.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
-
-```wing
-inflight tryGet(key: str, options?: BucketTryGetOptions): str?
-```
-
-Get an object from the bucket if it exists If the bytes returned are not a valid UTF-8 string, an error is thrown.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketTryGetOptions">BucketTryGetOptions</a>
-
-Additional get options.
-
----
-
-##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
-
-```wing
-inflight tryGetJson(key: str): Json?
-```
-
-Gets an object from the bucket if it exists, parsing it as Json.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGetJson.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
+Get the region of the bucket.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -766,54 +442,17 @@ new aws.QueueRef(queueArn: str);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push one or more messages to the queue. |
+| <code><a href="#@winglang/sdk.aws.IAwsQueueClient.queueUrl">queueUrl</a></code> | Get the queue URL. |
 
 ---
 
-##### `approxSize` <a name="approxSize" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
+##### `queueUrl` <a name="queueUrl" id="@winglang/sdk.aws.IAwsQueueClient.queueUrl"></a>
 
 ```wing
-inflight approxSize(): num
+inflight queueUrl(): str
 ```
 
-Retrieve the approximate number of messages in the queue.
-
-##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
-
-```wing
-inflight pop(): str?
-```
-
-Pop a message from the queue.
-
-##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
-
-```wing
-inflight purge(): void
-```
-
-Purge all of the messages in the queue.
-
-##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
-
-```wing
-inflight push(...messages: Array<str>): void
-```
-
-Push one or more messages to the queue.
-
-###### `messages`<sup>Required</sup> <a name="messages" id="@winglang/sdk.cloud.IQueueClient.push.parameter.messages"></a>
-
-- *Type:* str
-
-Payload to send to the queue.
-
-Each message must be non-empty.
-
----
+Get the queue URL.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -885,6 +524,139 @@ The ARN of this queue.
 ---
 
 
+### SecretRef <a name="SecretRef" id="@winglang/sdk.aws.SecretRef"></a>
+
+A reference to an existing secret.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.SecretRef.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.SecretRef(secretArn: str);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.Initializer.parameter.secretArn">secretArn</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="@winglang/sdk.aws.SecretRef.Initializer.parameter.secretArn"></a>
+
+- *Type:* str
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ISecretClient.value">value</a></code> | Retrieve the value of the secret. |
+| <code><a href="#@winglang/sdk.cloud.ISecretClient.valueJson">valueJson</a></code> | Retrieve the Json value of the secret. |
+
+---
+
+##### `value` <a name="value" id="@winglang/sdk.cloud.ISecretClient.value"></a>
+
+```wing
+inflight value(options?: GetSecretValueOptions): str
+```
+
+Retrieve the value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.value.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
+
+##### `valueJson` <a name="valueJson" id="@winglang/sdk.cloud.ISecretClient.valueJson"></a>
+
+```wing
+inflight valueJson(options?: GetSecretValueOptions): Json
+```
+
+Retrieve the Json value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.valueJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.SecretRef.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.SecretRef.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.SecretRef.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.SecretRef.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.SecretRef.property.secretArn">secretArn</a></code> | <code>str</code> | The ARN of the secret. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.SecretRef.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="@winglang/sdk.aws.SecretRef.property.secretArn"></a>
+
+```wing
+secretArn: str;
+```
+
+- *Type:* str
+
+The ARN of the secret.
+
+---
+
+
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### Api <a name="Api" id="@winglang/sdk.aws.Api"></a>
@@ -933,6 +705,60 @@ The cloud.Api.
 
 
 
+### ApiEndpointHandler <a name="ApiEndpointHandler" id="@winglang/sdk.aws.ApiEndpointHandler"></a>
+
+A helper class for working with AWS api endpoint handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.ApiEndpointHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.ApiEndpointHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler">toFunctionHandler</a></code> | Returns a `cloud.Function` handler for handling requests from a `cloud.Api`. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.ApiEndpointHandler.toFunctionHandler(handler: IApiEndpointHandler, headers?: MutMap<str>);
+```
+
+Returns a `cloud.Function` handler for handling requests from a `cloud.Api`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+The `onRequest` handler.
+
+---
+
+###### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler.parameter.headers"></a>
+
+- *Type:* MutMap&lt;str&gt;
+
+HTTP response headers to add to all responses (used by CORS).
+
+---
+
+
+
 ### Bucket <a name="Bucket" id="@winglang/sdk.aws.Bucket"></a>
 
 A helper class for working with AWS buckets.
@@ -974,6 +800,60 @@ If the bucket is an AWS Bucket, return a helper interface for working with it.
 - *Type:* <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>
 
 The cloud.Bucket.
+
+---
+
+
+
+### BucketEventHandler <a name="BucketEventHandler" id="@winglang/sdk.aws.BucketEventHandler"></a>
+
+Utility class to work with bucket event handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.BucketEventHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.BucketEventHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler">toTopicOnMessageHandler</a></code> | Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`. |
+
+---
+
+##### `toTopicOnMessageHandler` <a name="toTopicOnMessageHandler" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler"></a>
+
+```wing
+bring aws;
+
+aws.BucketEventHandler.toTopicOnMessageHandler(handler: IBucketEventHandler, eventType: BucketEventType);
+```
+
+Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+
+the handler to convert.
+
+---
+
+###### `eventType`<sup>Required</sup> <a name="eventType" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler.parameter.eventType"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
+
+the event type.
 
 ---
 
@@ -1117,6 +997,52 @@ The cloud.Queue.
 
 
 
+### QueueSetConsumerHandler <a name="QueueSetConsumerHandler" id="@winglang/sdk.aws.QueueSetConsumerHandler"></a>
+
+Utility class for working with the queue consumer handler.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.QueueSetConsumerHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.QueueSetConsumerHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler">toFunctionHandler</a></code> | Converts a queue consumer handler to a function handler. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.QueueSetConsumerHandler.toFunctionHandler(handler: IQueueSetConsumerHandler);
+```
+
+Converts a queue consumer handler to a function handler.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
+
+The queue consumer handler.
+
+---
+
+
+
 ### Table <a name="Table" id="@winglang/sdk.aws.Table"></a>
 
 A helper class for working with AWS tables.
@@ -1204,6 +1130,52 @@ If the topic is an AWS SNS, return a helper interface for working with it.
 - *Type:* <a href="#@winglang/sdk.cloud.Topic">Topic</a>
 
 The cloud.Topic.
+
+---
+
+
+
+### TopicOnMessageHandler <a name="TopicOnMessageHandler" id="@winglang/sdk.aws.TopicOnMessageHandler"></a>
+
+A helper class for working with AWS topic on message handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.TopicOnMessageHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.TopicOnMessageHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler">toFunctionHandler</a></code> | Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.TopicOnMessageHandler.toFunctionHandler(handler: ITopicOnMessageHandler);
+```
+
+Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
+
+The `onMessage` handler.
 
 ---
 

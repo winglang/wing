@@ -4,17 +4,19 @@ import { simulator, cloud, std } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
 import { awscdkSanitize, CDK_APP_OPTS } from "./util";
+import { inflight } from "@winglang/sdk/lib/core";
+
+const INFLIGHT_CODE = inflight(async (_, event) => {
+  console.log("Received: ", event);
+});
 
 test("schedule behavior with rate", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = simulator.Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
   const schedule = new cloud.Schedule(app, "Schedule", {
     rate: std.Duration.fromMinutes(2),
   });
-  schedule.onTick(fn);
+  schedule.onTick(INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN
@@ -29,13 +31,10 @@ test("schedule behavior with rate", () => {
 test("schedule behavior with cron", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = simulator.Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * * * *",
   });
-  schedule.onTick(fn);
+  schedule.onTick(INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN
@@ -50,13 +49,10 @@ test("schedule behavior with cron", () => {
 test("convert single dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = simulator.Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1",
   });
-  schedule.onTick(fn);
+  schedule.onTick(INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN
@@ -71,13 +67,10 @@ test("convert single dayOfWeek from Unix to AWS", () => {
 test("convert the range of dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = simulator.Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1-7",
   });
-  schedule.onTick(fn);
+  schedule.onTick(INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN
@@ -92,13 +85,10 @@ test("convert the range of dayOfWeek from Unix to AWS", () => {
 test("convert the list of dayOfWeek from Unix to AWS", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = simulator.Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "* * * * 1,3,5,7",
   });
-  schedule.onTick(fn);
+  schedule.onTick(INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN
@@ -113,13 +103,10 @@ test("convert the list of dayOfWeek from Unix to AWS", () => {
 test("schedule with two functions", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = simulator.Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * * * *",
   });
-  schedule.onTick(fn);
+  schedule.onTick(INFLIGHT_CODE);
   const output = app.synth();
 
   // THEN

@@ -7,7 +7,8 @@ use std::cmp::max;
 use tree_sitter::{Node, Point};
 
 use crate::ast::{
-	AccessModifier, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, UserDefinedType,
+	AccessModifier, CalleeKind, Expr, ExprKind, IntrinsicKind, Phase, Reference, Scope, Symbol, TypeAnnotation,
+	UserDefinedType,
 };
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
@@ -24,7 +25,7 @@ use crate::{UTIL_CLASS_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE};
 
 use super::sync::check_utf8;
 
-const BUILTIN_TYPES: [&str; 6] = ["bool", "duration", "Json", "MutJson", "num", "str"];
+const BUILTIN_TYPES: [&str; 8] = ["bool", "duration", "Json", "MutJson", "num", "str", "datetime", "regex"];
 const BUILTIN_GENERICS: [&str; 6] = ["Array", "Map", "MutArray", "MutMap", "MutSet", "Set"];
 
 #[no_mangle]
@@ -346,21 +347,19 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								get_completions_from_type(&v.type_, &types, Some(found_env.phase), &ObjectAccessContext::Static)
 							}
 							SymbolKind::Namespace(n) => {
-								// If the types in this namespace aren't loaded yet, load them now to get completions
-								if !n.loaded {
-									JSII_TYPES.with(|jsii_types| {
-										let jsii_types = jsii_types.borrow();
-										let parts = reference_text.split(".").collect::<Vec<_>>();
-										// Dummy type representing the namespace to be loaded
-										let udt = UserDefinedType {
-											root: Symbol::global(parts[0].to_string()),
-											fields: parts[1..].iter().map(|s| Symbol::global(s.to_string())).collect(),
-											span: WingSpan::default(),
-										};
-										// Import all types in the namespace by trying to load the "dummy type"
-										import_udt_from_jsii(&mut types, &jsii_types, &udt, &project_data.jsii_imports);
-									});
-								}
+								// In case the types in this namespace aren't loaded yet, load them now to get completions
+								JSII_TYPES.with(|jsii_types| {
+									let jsii_types = jsii_types.borrow();
+									let parts = reference_text.split(".").collect::<Vec<_>>();
+									// Dummy type representing the namespace to be loaded
+									let udt = UserDefinedType {
+										root: Symbol::global(parts[0].to_string()),
+										fields: parts[1..].iter().map(|s| Symbol::global(s.to_string())).collect(),
+										span: WingSpan::default(),
+									};
+									// Import all types in the namespace by trying to load the "dummy type"
+									import_udt_from_jsii(&mut types, &jsii_types, &udt, &project_data.jsii_imports);
+								});
 								get_completions_from_namespace(&n, Some(found_env.phase))
 							}
 						};
@@ -492,6 +491,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 					return completions;
 				}
+			} else if nearest_non_reference.kind() == "intrinsic_identifier" {
+				return get_intrinsic_list(&types);
 			}
 
 			// fallback: no special completions, just get stuff from the current scope
@@ -922,7 +923,7 @@ fn get_completions_from_type(
 			let variants = &enum_.values;
 			variants
 				.iter()
-				.map(|item| CompletionItem {
+				.map(|(item, _)| CompletionItem {
 					label: item.name.clone(),
 					detail: Some(enum_.name.name.clone()),
 					kind: Some(CompletionItemKind::ENUM_MEMBER),
@@ -989,10 +990,7 @@ fn get_completions_from_class(
 			if symbol_data.0 == CLASS_INIT_NAME || symbol_data.0 == CLASS_INFLIGHT_INIT_NAME {
 				return None;
 			}
-			let variable = symbol_data
-				.1
-				.as_variable()
-				.expect("Symbols in classes are always variables");
+			let variable = symbol_data.1.as_variable()?;
 
 			match access_context {
 				// hide private and protected members when accessing from outside the class
@@ -1025,19 +1023,42 @@ fn get_completions_from_class(
 				}
 			}
 
-			let completion_item = format_symbol_kind_as_completion(&symbol_data.0, &symbol_data.1);
-			if let Some(mut completion_item) = completion_item {
-				completion_item.kind = match completion_item.kind {
-					Some(CompletionItemKind::FUNCTION) => Some(CompletionItemKind::METHOD),
-					Some(CompletionItemKind::VARIABLE) => Some(CompletionItemKind::FIELD),
-					_ => completion_item.kind,
-				};
-				Some(completion_item)
-			} else {
-				None
-			}
+			let mut completion_item = format_symbol_kind_as_completion(&symbol_data.0, &symbol_data.1)?;
+			completion_item.kind = match completion_item.kind {
+				Some(CompletionItemKind::FUNCTION) => Some(CompletionItemKind::METHOD),
+				Some(CompletionItemKind::VARIABLE) => Some(CompletionItemKind::FIELD),
+				_ => completion_item.kind,
+			};
+			Some(completion_item)
 		})
 		.collect()
+}
+
+fn get_intrinsic_list(types: &Types) -> Vec<CompletionItem> {
+	let mut completions = vec![];
+
+	for intrinsic in IntrinsicKind::VALUES {
+		let Some(t) = intrinsic.get_type(types) else {
+			continue;
+		};
+
+		let documentation = Some(Documentation::MarkupContent(MarkupContent {
+			kind: MarkupKind::Markdown,
+			value: intrinsic.render_docs(),
+		}));
+
+		let mut item = CompletionItem {
+			label: intrinsic.to_string(),
+			documentation,
+			kind: Some(CompletionItemKind::FUNCTION),
+			..Default::default()
+		};
+		if t.is_function_sig() {
+			convert_to_call_completion(&mut item);
+		}
+		completions.push(item);
+	}
+	completions
 }
 
 /// Formats a SymbolKind from a SymbolEnv as a CompletionItem
@@ -2027,4 +2048,20 @@ inflight status(): num {
 	assert!(forin_before_return_type_ref.iter().any(|c| c.label == "otherInflight"))
 	assert!(!forin_before_return_type_ref.iter().any(|c| c.label == "staticMethod"))
 		);
+
+	test_completion_list!(
+		intrinsics,
+		r#"
+let x = @
+       //^
+		"#,
+	);
+
+	test_completion_list!(
+		intrinsics_partial,
+		r#"
+let x = @dir
+         //^
+		"#,
+	);
 }

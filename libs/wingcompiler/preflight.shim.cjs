@@ -6,7 +6,7 @@
 /// 1. The environment variable WING_PREFLIGHT_ENTRYPOINT is a JSON string of the entrypoint to load
 /// 2. Runs in a child process with an IPC channel to the parent process
 
-process.setUncaughtExceptionCaptureCallback((reason) => {
+process.on("uncaughtException", (reason) => {
   if (reason instanceof Error) {
     // The Error object does not serialize well over IPC (even with 'advanced' serialization)
     // So we extract the properties we need to recreate most error objects

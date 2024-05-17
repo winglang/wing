@@ -11,7 +11,7 @@
       ]
     },
     "test": {
-      "dependsOn": ["compile", "@winglang/sdk#compile", "examples-valid#topo", "examples-invalid#topo"]
+      "dependsOn": ["@winglang/tree-sitter-wing#compile", "@winglang/sdk#compile", "examples-valid#topo", "examples-invalid#topo"]
     },
     "dev": {
       "dependsOn": ["@winglang/sdk#compile"]

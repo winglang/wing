@@ -5,6 +5,8 @@ import { tmpdir } from "os";
 import { join } from "path";
 import { promisify } from "util";
 
+export const DEFAULT_PARALLEL_SIZE = 10;
+
 /**
  * Normalize windows paths to be posix-like.
  */

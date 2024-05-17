@@ -82,7 +82,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $Another, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr, $util_Util }) {
+module.exports = function({ $Another, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalArrayOfStr, $globalBool, $globalBucket, $globalMapOfNum, $globalNum, $globalSetOfStr, $globalStr, $util_Util }) {
   class MyResource {
     constructor({ $this_localCounter, $this_localTopic }) {
       this.$this_localCounter = $this_localCounter;
@@ -94,9 +94,9 @@ module.exports = function({ $Another, $__arr__index_______if__index___0____index
       $helpers.assert($helpers.eq($globalStr, "hello"), "globalStr == \"hello\"");
       $helpers.assert($helpers.eq($globalBool, true), "globalBool == true");
       $helpers.assert($helpers.eq($globalNum, 42), "globalNum == 42");
-      $helpers.assert($helpers.eq($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_, "hello"), "globalArrayOfStr.at(0) == \"hello\"");
-      $helpers.assert($helpers.eq($__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, (-5)), "globalMapOfNum.get(\"a\") == -5");
-      $helpers.assert($_globalSetOfStr_has__a___, "globalSetOfStr.has(\"a\")");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($globalArrayOfStr, 0), "hello"), "globalArrayOfStr.at(0) == \"hello\"");
+      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })($globalMapOfNum, "a"), (-5)), "globalMapOfNum.get(\"a\") == -5");
+      $helpers.assert((await $globalSetOfStr.has("a")), "globalSetOfStr.has(\"a\")");
       $helpers.assert($helpers.eq($globalAnother_myField, "hello!"), "globalAnother.myField == \"hello!\"");
       (await $globalAnother_first_myResource.put("key", "value"));
       $helpers.assert(((await $globalAnother.myMethod()) > 0), "globalAnother.myMethod() > 0");
@@ -488,15 +488,15 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.cjs")({
             $Another: ${$stdlib.core.liftObject(Another)},
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0))},
-            $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"))},
-            $_globalSetOfStr_has__a___: ${$stdlib.core.liftObject((globalSetOfStr.has("a")))},
             $globalAnother: ${$stdlib.core.liftObject(globalAnother)},
             $globalAnother_first_myResource: ${$stdlib.core.liftObject(globalAnother.first.myResource)},
             $globalAnother_myField: ${$stdlib.core.liftObject(globalAnother.myField)},
+            $globalArrayOfStr: ${$stdlib.core.liftObject(globalArrayOfStr)},
             $globalBool: ${$stdlib.core.liftObject(globalBool)},
             $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
+            $globalMapOfNum: ${$stdlib.core.liftObject(globalMapOfNum)},
             $globalNum: ${$stdlib.core.liftObject(globalNum)},
+            $globalSetOfStr: ${$stdlib.core.liftObject(globalSetOfStr)},
             $globalStr: ${$stdlib.core.liftObject(globalStr)},
             $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
@@ -518,31 +518,31 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "myPut": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0), []],
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), []],
-            [(globalSetOfStr.has("a")), []],
             [Another, ["myStaticMethod"]],
             [globalAnother, ["myMethod"]],
             [globalAnother.first.myResource, ["put"]],
             [globalAnother.myField, []],
+            [globalArrayOfStr, ["at"]],
             [globalBool, []],
             [globalBucket, ["put"]],
+            [globalMapOfNum, ["get"]],
             [globalNum, []],
+            [globalSetOfStr, ["has"]],
             [globalStr, []],
             [this.localCounter, ["peek"]],
             [this.localTopic, ["publish"]],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0), []],
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), []],
-            [(globalSetOfStr.has("a")), []],
             [Another, []],
             [globalAnother, []],
             [globalAnother.first.myResource, []],
             [globalAnother.myField, []],
+            [globalArrayOfStr, []],
             [globalBool, []],
             [globalBucket, []],
+            [globalMapOfNum, []],
             [globalNum, []],
+            [globalSetOfStr, []],
             [globalStr, []],
             [this.localCounter, []],
             [this.localTopic, []],

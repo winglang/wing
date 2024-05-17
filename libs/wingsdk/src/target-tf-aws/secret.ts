@@ -32,9 +32,10 @@ export class Secret extends cloud.Secret {
         name: props.name,
       });
     } else {
-      this.secret = new SecretsmanagerSecret(this, "Default", {
-        name: ResourceNames.generateName(this, NAME_OPTS),
-      });
+      (this._name = ResourceNames.generateName(this, NAME_OPTS)),
+        (this.secret = new SecretsmanagerSecret(this, "Default", {
+          name: this._name,
+        }));
 
       new TerraformOutput(this, "SecretArn", {
         value: this.secret.arn,
@@ -43,11 +44,11 @@ export class Secret extends cloud.Secret {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.SecretInflightMethods.VALUE,
-      cloud.SecretInflightMethods.VALUE_JSON,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.SecretInflightMethods.VALUE]: [],
+      [cloud.SecretInflightMethods.VALUE_JSON]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

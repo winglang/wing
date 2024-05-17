@@ -1,6 +1,6 @@
 # [new_in_static.test.w](../../../../../examples/tests/valid/new_in_static.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.cjs
+## inflight.$Closure1-2.cjs
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
@@ -18,10 +18,24 @@ module.exports = function({ $bucket, $bucket3 }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.cjs.map
+//# sourceMappingURL=inflight.$Closure1-2.cjs.map
 ```
 
 ## inflight.Foo-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class Foo {
+    constructor({  }) {
+    }
+  }
+  return Foo;
+}
+//# sourceMappingURL=inflight.Foo-1.cjs.map
+```
+
+## inflight.Foo-2.cjs
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
@@ -33,10 +47,10 @@ module.exports = function({ $FooParent }) {
   }
   return Foo;
 }
-//# sourceMappingURL=inflight.Foo-1.cjs.map
+//# sourceMappingURL=inflight.Foo-2.cjs.map
 ```
 
-## inflight.FooParent-1.cjs
+## inflight.FooParent-2.cjs
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
@@ -47,10 +61,24 @@ module.exports = function({  }) {
   }
   return FooParent;
 }
-//# sourceMappingURL=inflight.FooParent-1.cjs.map
+//# sourceMappingURL=inflight.FooParent-2.cjs.map
 ```
 
-## inflight.MyClass-1.cjs
+## inflight.LibClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class LibClass {
+    constructor({  }) {
+    }
+  }
+  return LibClass;
+}
+//# sourceMappingURL=inflight.LibClass-1.cjs.map
+```
+
+## inflight.MyClass-2.cjs
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
@@ -61,7 +89,7 @@ module.exports = function({  }) {
   }
   return MyClass;
 }
-//# sourceMappingURL=inflight.MyClass-1.cjs.map
+//# sourceMappingURL=inflight.MyClass-2.cjs.map
 ```
 
 ## main.tf.json
@@ -150,6 +178,7 @@ const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 const c = require("constructs");
 const jsii_fixture = require("jsii-fixture");
+const new_in_static_lib = require("./preflight.newinstaticlib-1.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -178,7 +207,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.MyClass-1.cjs")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyClass-2.cjs")({
           })
         `;
       }
@@ -208,7 +237,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-2.cjs")({
             $bucket: ${$stdlib.core.liftObject(bucket)},
             $bucket3: ${$stdlib.core.liftObject(bucket3)},
           })
@@ -245,7 +274,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.FooParent-1.cjs")({
+          require("${$helpers.normalPath(__dirname)}/inflight.FooParent-2.cjs")({
           })
         `;
       }
@@ -274,7 +303,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-2.cjs")({
             $FooParent: ${$stdlib.core.liftObject(FooParent)},
           })
         `;
@@ -314,11 +343,82 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq((jsii_fixture.JsiiClass.staticMethod("foo")), "Got foo"), "jsii_fixture.JsiiClass.staticMethod(\"foo\") == \"Got foo\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:play with buckets", new $Closure1(this, "$Closure1"));
     const f = new Foo(this, "Foo");
+    const lib_f = (new_in_static_lib.LibClass.createFoo(this, "lib-foo"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "new_in_static.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
+```
+
+## preflight.newinstaticlib-1.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
+class Foo extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const FooClient = ${Foo._toInflightType()};
+        const client = new FooClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+class LibClass extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  static createFoo($scope, id) {
+    return new Foo($scope, id);
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.LibClass-1.cjs")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const LibClassClient = ${LibClass._toInflightType()};
+        const client = new LibClassClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+module.exports = { Foo, LibClass };
+//# sourceMappingURL=preflight.newinstaticlib-1.cjs.map
 ```
 

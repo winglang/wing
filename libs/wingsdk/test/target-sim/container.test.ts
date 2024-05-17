@@ -1,8 +1,8 @@
-import { cpSync, writeFileSync } from "fs";
+import { cpSync, writeFileSync, readdirSync } from "fs";
 import { join, basename } from "path";
 import { test, expect } from "vitest";
-import { Function, IFunctionClient } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { Function, IFunctionClient, IFunctionHandler } from "../../src/cloud";
+import { lift } from "../../src/core";
 import { Container } from "../../src/target-sim/container";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
@@ -17,20 +17,7 @@ test("simple container from registry", async () => {
     args: ["-text=bang"],
   });
 
-  new Function(
-    app,
-    "Function",
-    Testing.makeHandler(
-      `
-      async handle() {
-        const url = "http://localhost:" + this.hostPort;
-        const res = await fetch(url);
-        return res.text();
-      }
-      `,
-      { hostPort: { obj: c.hostPort, ops: [] } }
-    )
-  );
+  new Function(app, "Function", httpGet(c));
 
   const sim = await app.startSimulator();
   sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
@@ -51,20 +38,7 @@ test("simple container from a dockerfile", async () => {
     containerPort: 3000,
   });
 
-  new Function(
-    app,
-    "Function",
-    Testing.makeHandler(
-      `
-      async handle() {
-        const url = "http://localhost:" + this.hostPort;
-        const res = await fetch(url);
-        return res.text();
-      }
-      `,
-      { hostPort: { obj: c.hostPort, ops: [] } }
-    )
-  );
+  new Function(app, "Function", httpGet(c));
 
   const sim = await app.startSimulator();
   sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
@@ -122,8 +96,8 @@ test("rebuild only if content had changes", async () => {
   const app2 = new MyApp();
   const r2 = await app2.cycle();
 
-  expect(r2[0]).toBe(
-    "image my-app:a9ae83b54b1ec21faa1a3255f05c095c already exists"
+  expect(r2[1]).toBe(
+    "Image my-app:a9ae83b54b1ec21faa1a3255f05c095c found, No need to build or pull."
   );
 
   // add a file to the workdir and see that we are rebuilding
@@ -134,8 +108,7 @@ test("rebuild only if content had changes", async () => {
 
   const app3 = new MyApp();
   const r3 = await app3.cycle();
-
-  expect(r3[0].startsWith(`building locally from ${workdir}`)).toBeTruthy();
+  expect(r3[1]).toContain("Building ");
 });
 
 test("simple container with a volume", async () => {
@@ -148,20 +121,7 @@ test("simple container with a volume", async () => {
     volumes: [`${__dirname}:/tmp`],
   });
 
-  new Function(
-    app,
-    "Function",
-    Testing.makeHandler(
-      `
-      async handle() {
-        const url = "http://localhost:" + this.hostPort;
-        const res = await fetch(url);
-        return res.text();
-      }
-      `,
-      { hostPort: { obj: c.hostPort, ops: [] } }
-    )
-  );
+  new Function(app, "Function", httpGet(c));
 
   const sim = await app.startSimulator();
   sim.onTrace({ callback: (trace) => console.log(">", trace.data.message) });
@@ -172,3 +132,46 @@ test("simple container with a volume", async () => {
 
   await sim.stop();
 });
+
+test("anonymous volume can be reused across restarts", async () => {
+  const app = new SimApp();
+
+  const c = new Container(app, "Container", {
+    name: "my-app",
+    image: join(__dirname, "my-docker-image.mounted-volume"),
+    containerPort: 3000,
+    volumes: ["/tmp"],
+  });
+
+  new Function(app, "Function", httpGet(c));
+
+  const sim = await app.startSimulator();
+  sim.onTrace({
+    callback: (trace) =>
+      console.log(">", trace.data?.error?.stack ?? trace.data.message),
+  });
+
+  const fn = sim.getResource("root/Function") as IFunctionClient;
+  const response = await fn.invoke();
+  expect(response?.split("\n").filter((s) => s.endsWith(".txt"))).toEqual([
+    "hello.txt",
+  ]);
+
+  await sim.stop();
+  await sim.start();
+
+  const fn2 = sim.getResource("root/Function") as IFunctionClient;
+  const response2 = await fn2.invoke();
+  expect(response2?.split("\n").filter((s) => s.endsWith(".txt"))).toEqual([
+    "hello.txt",
+    "world.txt",
+  ]);
+});
+
+function httpGet(c: Container): IFunctionHandler {
+  return lift({ hostPort: c.hostPort }).inflight(async (ctx) => {
+    const url = "http://localhost:" + ctx.hostPort;
+    const res = await fetch(url);
+    return res.text();
+  });
+}

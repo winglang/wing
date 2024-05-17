@@ -7,6 +7,9 @@
       "include": "#template-string"
     },
     {
+      "include": "#non-interpolated-string"
+    },
+    {
       "include": "#object-keys"
     },
     {
@@ -28,10 +31,23 @@
       "include": "#constants"
     },
     {
+      "include": "#intrinsics"
+    },
+    {
       "include": "#identifiers"
     }
   ],
   "repository": {
+    "non-interpolated-string": {
+      "name": "string.quoted.double.wing",
+      "begin": "#\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "include": "#string-character-escape"
+        }
+      ]
+    },
     "template-string": {
       "name": "string.quoted.double.wing",
       "begin": "\"",
@@ -177,6 +193,14 @@
         {
           "name": "variable.wing",
           "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "intrinsics": {
+      "patterns": [
+        {
+          "name": "meta.preprocessor.wing",
+          "match": "(@[a-zA-Z_]*)"
         }
       ]
     },

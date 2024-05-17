@@ -4,14 +4,12 @@ import classNames from "classnames";
 
 export interface UnsupportedInteractionProps {
   resourceType: string;
-  onOpenIssueClick: (url: string) => void;
 }
 
 const newIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
 export const UnsupportedInteraction = ({
   resourceType,
-  onOpenIssueClick,
 }: UnsupportedInteractionProps) => {
   const { theme } = useTheme();
 
@@ -38,7 +36,7 @@ export const UnsupportedInteraction = ({
             </h3>
             <div className="mt-2">
               <Button
-                onClick={() => onOpenIssueClick(newIssueUrl)}
+                onClick={() => window.open(newIssueUrl, "_blank")}
                 label="Open an issue"
               />
             </div>

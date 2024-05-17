@@ -5,31 +5,61 @@ exports[`api allows duplicates routes with different methods 1`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.body, headers: req.headers }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.body,
+  headers: req.headers
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
       {
-        "name": "post()",
+        "name": "post /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -143,10 +173,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -207,6 +233,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -240,6 +270,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -322,26 +353,54 @@ exports[`api handler can read the request params 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: JSON.stringify(req.query), headers: { "Content-Type": "application/json" } }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: JSON.stringify(req.query),
+  headers: { "Content-Type": "application/json" }
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -441,10 +500,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -505,6 +560,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -538,6 +597,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -620,26 +680,53 @@ exports[`api handler can read the request path 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.path }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.path
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -739,10 +826,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -803,6 +886,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -836,6 +923,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -918,26 +1006,54 @@ exports[`api handler can set response headers 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.headers,
+  headers: { "x-wingnuts": "cloudy" }
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -1037,10 +1153,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -1101,6 +1213,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1134,6 +1250,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1216,26 +1333,54 @@ exports[`api response returns Content-Type header from inflight 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.headers, headers: { "Content-Type": "application/octet-stream; charset=utf-8" } }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+    body: req.headers,
+    headers: { "Content-Type": "application/octet-stream; charset=utf-8" }
+  })
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -1335,10 +1480,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -1399,6 +1540,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1432,6 +1577,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1514,26 +1660,54 @@ exports[`api response returns default Content-Type header 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.body, headers: req.headers }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.body,
+  headers: req.headers
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -1633,10 +1807,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -1697,6 +1867,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1730,6 +1904,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1830,56 +2005,95 @@ exports[`api supports every method type 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.method }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.method
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
       {
-        "name": "post()",
+        "name": "post /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
       {
-        "name": "put()",
+        "name": "put /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
       {
-        "name": "delete()",
+        "name": "delete /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
       {
-        "name": "head()",
+        "name": "head /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
       {
-        "name": "options()",
+        "name": "options /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
       {
-        "name": "patch()",
+        "name": "patch /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -2063,10 +2277,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -2127,6 +2337,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -2160,6 +2374,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2242,26 +2457,53 @@ exports[`api with 'name' & 'age' parameter 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.vars ?? {} }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.vars ?? {}
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /:name/:age",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -2378,10 +2620,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -2442,6 +2680,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -2475,6 +2717,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2557,26 +2800,53 @@ exports[`api with 'name' parameter 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.vars ?? {} }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.vars ?? {}
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /:name",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -2685,10 +2955,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -2749,6 +3015,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -2782,6 +3052,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2844,26 +3115,61 @@ exports[`api with multiple GET routes and one lambda 1`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.body, headers: req.headers }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.body,
+  headers: req.headers
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello/foo",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
+      },
+      {
+        "name": "get /hello/bat",
+        "source": "root/my_api",
+        "sourceOp": "request",
+        "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -2979,10 +3285,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -3043,6 +3345,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -3076,6 +3382,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3165,48 +3472,102 @@ exports[`api with multiple methods on same route 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: "boom" }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx) => ({
+  body: ctx.body
+})
+  const $ctx = {
+  body: "boom"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/onrequesthandler1_c84819d7.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: "bang" }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx) => ({
+  body: ctx.body
+})
+  const $ctx = {
+  body: "bang"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
       {
-        "name": "post()",
+        "name": "post /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler1",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -3354,10 +3715,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -3418,6 +3775,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -3462,6 +3823,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3565,48 +3927,102 @@ exports[`api with multiple routes 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: "boom" }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx) => ({
+  body: ctx.body
+})
+  const $ctx = {
+  body: "boom"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/onrequesthandler1_c84819d7.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: "bang" }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx) => ({
+  body: ctx.body
+})
+  const $ctx = {
+  body: "bang"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello/world",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
       {
-        "name": "get()",
+        "name": "get /hello/wingnuts",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler1",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -3756,10 +4172,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -3820,6 +4232,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -3864,6 +4280,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3960,26 +4377,53 @@ exports[`api with one GET route 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: "boom" }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx) => ({
+  body: ctx.body
+})
+  const $ctx = {
+  body: "boom"
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -4079,10 +4523,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -4143,6 +4583,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -4176,6 +4620,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4258,26 +4703,53 @@ exports[`api with one GET route with request params 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.vars ?? {} }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.vars ?? {}
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /users/:name",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -4386,10 +4858,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -4450,6 +4918,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -4483,6 +4955,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4565,26 +5038,54 @@ exports[`api with one POST route, with body 2`] = `
   ".wing/onrequesthandler0_c82d41b2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require("[REDACTED]/wingsdk/src/target-sim/api.onrequest.inflight.js")).ApiOnRequestHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { body: req.body, headers: req.headers }; }
-};
-})())({
-
-}), args: {} }));
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            if (!event) {
+                throw new Error("invalid API request event");
+            }
+            let req = JSON.parse(event);
+            const response = await ctx.handler(req);
+            if (!response) {
+                return undefined;
+            }
+            else {
+                return JSON.stringify(response);
+            }
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, req) => ({
+  body: req.body,
+  headers: req.headers
+})
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "post()",
+        "name": "post /hello",
         "source": "root/my_api",
+        "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -4684,10 +5185,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -4748,6 +5245,10 @@ return class Handler {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -4781,6 +5282,7 @@ return class Handler {
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4887,10 +5389,6 @@ exports[`create an api 1`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -4951,6 +5449,10 @@ exports[`create an api 1`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -4973,6 +5475,7 @@ exports[`create an api 1`] = `
               },
               "display": {
                 "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",

@@ -8,9 +8,9 @@ import {
   DeleteMessageCommand,
   GetQueueUrlCommand,
 } from "@aws-sdk/client-sqs";
-import { IQueueClient } from "../cloud";
+import { IAwsQueueClient } from "./queue";
 
-export class QueueClient implements IQueueClient {
+export class QueueClient implements IAwsQueueClient {
   private _queueUrl?: string;
 
   constructor(

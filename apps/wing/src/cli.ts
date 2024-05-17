@@ -4,8 +4,7 @@ import { satisfies } from "compare-versions";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
 import { SNAPSHOTS_HELP } from "./commands/test/snapshots-help";
-import { loadEnvVariables } from "./env";
-import { currentPackage, projectTemplateNames } from "./util";
+import { currentPackage, projectTemplateNames, DEFAULT_PARALLEL_SIZE } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
 if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
@@ -22,10 +21,6 @@ const DEFAULT_PLATFORM = ["sim"];
 let analyticsExportFile: Promise<string | undefined> | undefined;
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
-  loadEnvVariables({
-    mode: subCommand,
-  });
-
   return async (...args: any[]) => {
     try {
       // paths other than the root path aren't working unless specified in the path arg
@@ -150,6 +145,10 @@ async function main() {
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
     .option(
+      "-w, --watch <globs...>",
+      "Watch additional paths for changes. Supports globs and '!' for negations."
+    )
+    .option(
       "-t, --platform <platform> --platform <platform>",
       "Target platform provider (builtin: sim)",
       collectPlatformVariadic,
@@ -175,11 +174,32 @@ async function main() {
       DEFAULT_PLATFORM
     )
     .option("-r, --rootId <rootId>", "App root id")
+    .option(
+      "-o, --output <output>",
+      'path to the output directory- default is "./target/<entrypoint>.<target>"'
+    )
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
     .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
+
+  program
+    .command("secrets")
+    .description("Manage secrets")
+    .argument("[entrypoint]", "program .w entrypoint")
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
+    )
+    .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
+    .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
+    .addOption(new Option("--list", "List required application secrets"))
+    .hook("preAction", progressHook)
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("secrets"));
 
   program
     .command("test")
@@ -213,6 +233,14 @@ async function main() {
     .addOption(
       new Option("-R, --retry [retries]", "Number of times to retry failed tests")
         .preset(3)
+        .argParser(parseInt)
+    )
+    .addOption(
+      new Option(
+        "-p, --parallel [batch]",
+        `Number of tests to be executed on parallel- if not specified- ${DEFAULT_PARALLEL_SIZE} will run on parallel, 0 to run all at once`
+      )
+        .preset(DEFAULT_PARALLEL_SIZE)
         .argParser(parseInt)
     )
     .hook("preAction", progressHook)

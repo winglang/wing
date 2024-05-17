@@ -2,9 +2,8 @@ import { Construct } from "constructs";
 import { PolicyStatement } from "./types";
 import { isValidArn } from "./util";
 import { FunctionInflightMethods, IFunctionClient } from "../cloud";
-import { InflightClient } from "../core";
+import { InflightClient, lift, LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
-import { Testing } from "../simulator";
 import { IInflightHost, Node, Resource } from "../std";
 import * as ui from "../ui";
 
@@ -127,34 +126,35 @@ export class FunctionRef extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      FunctionInflightMethods.INVOKE,
-      FunctionInflightMethods.INVOKE_ASYNC,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [FunctionInflightMethods.INVOKE]: [],
+      [FunctionInflightMethods.INVOKE_ASYNC]: [],
+    };
   }
 
   private addUserInterface() {
     Node.of(this).color = "pink";
 
-    const awsConsoleHandler = Testing.makeHandler(
-      `async handle() {
-        try {
-          const parts = this.function.functionArn.split(":");
-          const region = parts[3];
-          const name = parts[6];
-          return "https://" + region + ".console.aws.amazon.com/lambda/home?region=" + region + "#/functions/" + name;
-        } catch (e) {
-          return e.message;
-        }
-      }`,
-      {
-        function: {
-          obj: this,
-          ops: [],
-        },
+    const functionArn = this.functionArn;
+
+    const awsConsoleHandler = lift({ functionArn }).inflight(async (ctx) => {
+      try {
+        const parts = ctx.functionArn.split(":");
+        const region = parts[3];
+        const name = parts[6];
+        return (
+          "https://" +
+          region +
+          ".console.aws.amazon.com/lambda/home?region=" +
+          region +
+          "#/functions/" +
+          name
+        );
+      } catch (e: any) {
+        return e.message;
       }
-    );
+    });
 
     new ui.Field(this, "AwsConsoleField", "AWS Console", awsConsoleHandler, {
       link: true,

@@ -5,7 +5,7 @@ import { FunctionSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { App } from "../core";
+import { App, LiftMap } from "../core";
 import { PolicyStatement, ToSimulatorOutput } from "../simulator/simulator";
 import { IInflightHost, IResource } from "../std";
 import { Duration } from "../std/duration";
@@ -27,7 +27,6 @@ export class Function
   private readonly timeout: Duration;
   private readonly concurrency: number;
   private readonly permissions: Array<[IResource, string]> = [];
-  public _liftMap = undefined;
 
   constructor(
     scope: Construct,
@@ -72,11 +71,13 @@ export class Function
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.FunctionInflightMethods.INVOKE,
-      cloud.FunctionInflightMethods.INVOKE_ASYNC,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
+        [this.handler, ["handle"]],
+      ],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

@@ -572,20 +572,27 @@ The following is a list of supported indexable types:
 
 [`▲ top`][top]
 
-### 1.2 Utility Functions
+### 1.2 Intrinsic Functions
 
-| Name         | Extra information                                     |
-| ------------ | ----------------------------------------------------- |
-| `log`        | logs str                                              |
-| `assert`     | checks a condition and _throws_ if evaluated to false |
-| `unsafeCast` | cast a value into a different type                    |
-| `nodeof`     | obtain the [tree node](./02-concepts/02-application-tree.md) of a preflight object |
-| `lift`       | explicitly qualify a [lift](./02-concepts/01-preflight-and-inflight.md#explicit-lift-qualification) of a preflight object |
+Intrinsic functions are a special call-like expressions built into the Wing compiler with
+the following properties (given an example intrinsic `@x`):
+- `x` is not automatically a symbol that can be referenced
+- The arguments/return types must be representable Wing types, but can be more dynamic than user-defined functions
+  - For example, the return type may change between inflight and preflight
+
+| Name            | Extra information                                                                                                         |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `@log()`        | logs str                                                                                                                  |
+| `@assert()`     | checks a condition and _throws_ if evaluated to false                                                                     |
+| `@dirname`      | current source directory                                                                                                  |
+| `@unsafeCast()` | cast a value into a different type                                                                                        |
+| `@nodeof()`     | obtain the [tree node](./02-concepts/02-application-tree.md) of a preflight object                                        |
+| `@lift()`       | explicitly qualify a [lift](./02-concepts/01-preflight-and-inflight.md#explicit-lift-qualification) of a preflight object |
 
 > ```TS
-> log("Hello {name}");
-> assert(x > 0);
-> assert(x > 0, "x should be positive");
+> @log("Hello {name}");
+> @assert(x > 0);
+> @assert(x > 0, "x should be positive");
 > ```
 
 [`▲ top`][top]
@@ -950,6 +957,20 @@ let f = (opts: Options) => { };
 
 f(myRequired: "hello");
 f(myOptional: 12, myRequired: "dang");
+```
+
+A method implementation can omit any number of arguments from the end of an argument list when implementing an interface method. This is useful when you want to implement an interface method but don't need all of its arguments.
+
+```TS
+interface MyInterface {
+  myMethod(a: num, b: str, c: bool): void;
+}
+
+class MyClass impl MyInterface {
+  myMethod(a: num, b: str): void {
+    // This is a valid implementation of MyInterface.myMethod
+  }
+}
 ```
 
 ##### 1.7.1.5 Function return types

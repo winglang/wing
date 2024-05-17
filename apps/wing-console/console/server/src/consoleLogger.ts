@@ -31,6 +31,7 @@ export interface ConsoleLogger {
   verbose: (message: string, source?: LogSource, context?: LogContext) => void;
   log: (message: string, source?: LogSource, context?: LogContext) => void;
   error: (message: unknown, source?: LogSource, context?: LogContext) => void;
+  warning: (message: string, source?: LogSource, context?: LogContext) => void;
 }
 
 export interface CreateConsoleLoggerOptions {
@@ -67,6 +68,18 @@ export const createConsoleLogger = ({
         ctx: context,
       });
       onLog("info", message);
+    },
+    warning(message, source, context) {
+      log.warning(message);
+      this.messages.push({
+        id: `${nanoid()}`,
+        timestamp: Date.now(),
+        level: "warn",
+        message,
+        source: source ?? "console",
+        ctx: context,
+      });
+      onLog("warn", message);
     },
     error(error, source, context) {
       log.error(error);

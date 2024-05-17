@@ -5,7 +5,7 @@ body:
 - type: markdown
   attributes:
     value: |
-       :pray: Thanks for taking the time to fill out this enhancement request! Feel free to ping us on [Wing Slack](https://t.winglang.io/slack) if you have any questions or need help.
+       :pray: Thanks for taking the time to fill out this enhancement request! Feel free to ping us on [Wing Discord](https://t.winglang.io/discord) if you have any questions or need help.
 
 - type: markdown
   attributes:
@@ -71,4 +71,4 @@ body:
       <!-- Please keep this note for the community -->
       * Please vote by adding a 👍 reaction to the issue to help us prioritize.
       * If you are interested to work on this issue, please leave a comment.
-      * If this issue is labeled **needs-discussion**, it means the spec has not been finalized yet. Please reach out on the #dev channel in the [Wing Slack](https://t.winglang.io/slack).
+      * If this issue is labeled **needs-discussion**, it means the spec has not been finalized yet. Please reach out on the #dev channel in the [Wing Discord](https://t.winglang.io/discord).

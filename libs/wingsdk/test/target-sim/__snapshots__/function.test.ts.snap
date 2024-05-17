@@ -5,15 +5,8 @@ exports[`create a function 1`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -26,10 +19,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -63,10 +62,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -127,6 +122,10 @@ async handle(event) {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -169,7 +168,7 @@ async handle(event) {
 exports[`invoke function fails 1`] = `
 [
   "root/my_function started",
-  "Invoke (payload="{\\"name\\":\\"alice\\"}").",
+  "Error: Name must start with uppercase letter (Invoke (payload="{\\"name\\":\\"alice\\"}").)",
   "root/my_function stopped",
 ]
 `;
@@ -179,15 +178,8 @@ exports[`invoke function fails 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -200,10 +192,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -235,10 +233,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -299,6 +293,10 @@ async handle(event) {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -351,15 +349,8 @@ exports[`invoke function succeeds 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -372,10 +363,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -407,10 +404,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -471,6 +464,10 @@ async handle(event) {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -523,15 +520,8 @@ exports[`invoke function with environment variables 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -544,10 +534,16 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -581,10 +577,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -645,6 +637,10 @@ async handle(event) {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -687,7 +683,7 @@ async handle(event) {
 exports[`invoke function with process.exit(1) 1`] = `
 [
   "root/my_function started",
-  "Invoke (payload="{}").",
+  "Error: Process exited with code 1, signal null (Invoke (payload="{}").)",
   "root/my_function stopped",
 ]
 `;
@@ -697,21 +693,20 @@ exports[`invoke function with process.exit(1) 2`] = `
   ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle() {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
   process.exit(1);
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -743,10 +738,6 @@ async handle() {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -807,6 +798,10 @@ async handle() {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -851,89 +846,83 @@ exports[`runtime environment tests 1`] = `
   ".wing/function.0_c8d5fca2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const query = "q=URLUtils.searchParams&topic=api";
+      const p = new URLSearchParams(query);
+      const value = p.get("topic");
+      if (!value) {
+        throw new Error("URLSearchParams failed");
+      }
+      return value;
     }
-  }
-  async handle() {
-          
-    const query = "q=URLUtils.searchParams&topic=api";
-    const p = new URLSearchParams(query);
-    return p.get("topic");
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/function.1_c89ed254.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle() {
-          
-    return typeof fetch;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => typeof fetch
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/function.2_c8cd6c39.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const c = require("crypto");
+      return typeof c.createHash;
     }
-  }
-  async handle() {
-          
-    const c = require("crypto");
-    return typeof c.createHash;
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   ".wing/function.3_c8badafa.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const { nanoid } = require("nanoid");
+      return nanoid();
     }
-  }
-  async handle() {
-          
-    const { nanoid } = await import("nanoid");
-    return nanoid();
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -1005,10 +994,6 @@ return class Handler {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -1068,6 +1053,10 @@ return class Handler {
       "@winglang/sdk.sim.Policy": {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",

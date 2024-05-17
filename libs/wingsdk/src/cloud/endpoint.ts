@@ -27,6 +27,7 @@ export interface EndpointProps {
 
 /**
  * A cloud Endpoint
+ * @inflight `@winglang/sdk.cloud.IEndpointClient`
  * @abstract
  */
 export class Endpoint extends Resource {

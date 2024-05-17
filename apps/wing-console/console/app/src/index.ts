@@ -40,6 +40,7 @@ export interface CreateConsoleAppOptions {
   platform?: string[];
   stateDir?: string;
   open?: boolean;
+  watchGlobs?: string[];
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -133,6 +134,7 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     log: options.log ?? {
       info() {},
       error: console.error,
+      warning() {},
       verbose() {},
     },
     config: options.config ?? {

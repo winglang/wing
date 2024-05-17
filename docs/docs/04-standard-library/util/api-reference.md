@@ -13,6 +13,101 @@ sidebar_position: 100
 
 ## Classes <a name="Classes" id="Classes"></a>
 
+### ChildProcess <a name="ChildProcess" id="@winglang/sdk.util.ChildProcess"></a>
+
+Handle to a running child process.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.util.ChildProcess.Initializer"></a>
+
+```wing
+bring util;
+
+new util.ChildProcess(program: str, args: MutArray<str>, opts?: SpawnOptions);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.ChildProcess.Initializer.parameter.program">program</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#@winglang/sdk.util.ChildProcess.Initializer.parameter.args">args</a></code> | <code>MutArray&lt;str&gt;</code> | *No description.* |
+| <code><a href="#@winglang/sdk.util.ChildProcess.Initializer.parameter.opts">opts</a></code> | <code><a href="#@winglang/sdk.util.SpawnOptions">SpawnOptions</a></code> | *No description.* |
+
+---
+
+##### `program`<sup>Required</sup> <a name="program" id="@winglang/sdk.util.ChildProcess.Initializer.parameter.program"></a>
+
+- *Type:* str
+
+---
+
+##### `args`<sup>Required</sup> <a name="args" id="@winglang/sdk.util.ChildProcess.Initializer.parameter.args"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.util.ChildProcess.Initializer.parameter.opts"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.SpawnOptions">SpawnOptions</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.util.ChildProcess.kill">kill</a></code> | Kill the process. |
+| <code><a href="#@winglang/sdk.util.ChildProcess.wait">wait</a></code> | Wait for the process to finish and return its output. |
+
+---
+
+##### `kill` <a name="kill" id="@winglang/sdk.util.ChildProcess.kill"></a>
+
+```wing
+kill(signal?: num): void
+```
+
+Kill the process.
+
+###### `signal`<sup>Optional</sup> <a name="signal" id="@winglang/sdk.util.ChildProcess.kill.parameter.signal"></a>
+
+- *Type:* num
+
+the signal to send to the process (defaults to SIGTERM).
+
+---
+
+##### `wait` <a name="wait" id="@winglang/sdk.util.ChildProcess.wait"></a>
+
+```wing
+wait(): Output
+```
+
+Wait for the process to finish and return its output.
+
+Calling this method multiple times will return the same output.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.ChildProcess.property.pid">pid</a></code> | <code>num</code> | The child's OS-assigned process ID. |
+
+---
+
+##### `pid`<sup>Optional</sup> <a name="pid" id="@winglang/sdk.util.ChildProcess.property.pid"></a>
+
+```wing
+pid: num;
+```
+
+- *Type:* num
+
+The child's OS-assigned process ID.
+
+---
+
+
 ### Util <a name="Util" id="@winglang/sdk.util.Util"></a>
 
 Utility functions.
@@ -28,9 +123,11 @@ Utility functions.
 | <code><a href="#@winglang/sdk.util.Util.exec">exec</a></code> | Execute a program with the given arguments, wait for it to finish, and return its outputs. |
 | <code><a href="#@winglang/sdk.util.Util.nanoid">nanoid</a></code> | Generates a unique ID using the nanoid library. |
 | <code><a href="#@winglang/sdk.util.Util.os">os</a></code> | Returns a string identifying the operating system platform. |
+| <code><a href="#@winglang/sdk.util.Util.setEnv">setEnv</a></code> | Sets the given name and value as an environment variable. |
 | <code><a href="#@winglang/sdk.util.Util.sha256">sha256</a></code> | Computes the SHA256 hash of the given data. |
 | <code><a href="#@winglang/sdk.util.Util.shell">shell</a></code> | Executes a command in the shell and returns its standard output. |
 | <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
+| <code><a href="#@winglang/sdk.util.Util.spawn">spawn</a></code> | Execute a program with the given arguments, and return a `ChildProcess` object that can be used to interact with the process while it is running. |
 | <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
 | <code><a href="#@winglang/sdk.util.Util.ulid">ulid</a></code> | Generates universally unique lexicographically sortable identifier. |
 | <code><a href="#@winglang/sdk.util.Util.uuidv4">uuidv4</a></code> | Generates a version 4 UUID. |
@@ -183,6 +280,32 @@ Returns a string identifying the operating system platform.
 ```
 
 
+##### `setEnv` <a name="setEnv" id="@winglang/sdk.util.Util.setEnv"></a>
+
+```wing
+bring util;
+
+util.setEnv(name: str, value: str);
+```
+
+Sets the given name and value as an environment variable.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.util.Util.setEnv.parameter.name"></a>
+
+- *Type:* str
+
+The name of the environment variable.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.util.Util.setEnv.parameter.value"></a>
+
+- *Type:* str
+
+The value of the environment variable.
+
+---
+
 ##### `sha256` <a name="sha256" id="@winglang/sdk.util.Util.sha256"></a>
 
 ```wing
@@ -242,6 +365,40 @@ Suspends execution for a given duration.
 - *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 
 The time to suspend execution.
+
+---
+
+##### `spawn` <a name="spawn" id="@winglang/sdk.util.Util.spawn"></a>
+
+```wing
+bring util;
+
+util.spawn(program: str, args: MutArray<str>, opts?: SpawnOptions);
+```
+
+Execute a program with the given arguments, and return a `ChildProcess` object that can be used to interact with the process while it is running.
+
+###### `program`<sup>Required</sup> <a name="program" id="@winglang/sdk.util.Util.spawn.parameter.program"></a>
+
+- *Type:* str
+
+The program to execute.
+
+---
+
+###### `args`<sup>Required</sup> <a name="args" id="@winglang/sdk.util.Util.spawn.parameter.args"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+An array of arguments to pass to the program.
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.util.Util.spawn.parameter.opts"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.SpawnOptions">SpawnOptions</a>
+
+Spawn options including working directory, environment variables, and stdio configurations.
 
 ---
 
@@ -633,6 +790,109 @@ Whether to throw an error on command execution failure.
 
 ---
 
+### SpawnOptions <a name="SpawnOptions" id="@winglang/sdk.util.SpawnOptions"></a>
+
+Additional options for `util.spawn()`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.SpawnOptions.Initializer"></a>
+
+```wing
+bring util;
+
+let SpawnOptions = util.SpawnOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.SpawnOptions.property.cwd">cwd</a></code> | <code>str</code> | Path to a directory to run the command in. |
+| <code><a href="#@winglang/sdk.util.SpawnOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables. |
+| <code><a href="#@winglang/sdk.util.SpawnOptions.property.inheritEnv">inheritEnv</a></code> | <code>bool</code> | Whether to inherit environment variables from the host's environment. |
+| <code><a href="#@winglang/sdk.util.SpawnOptions.property.stderr">stderr</a></code> | <code><a href="#@winglang/sdk.util.Stdio">Stdio</a></code> | Configuration for the process's standard error stream. |
+| <code><a href="#@winglang/sdk.util.SpawnOptions.property.stdin">stdin</a></code> | <code><a href="#@winglang/sdk.util.Stdio">Stdio</a></code> | Configuration for the process's standard input stream. |
+| <code><a href="#@winglang/sdk.util.SpawnOptions.property.stdout">stdout</a></code> | <code><a href="#@winglang/sdk.util.Stdio">Stdio</a></code> | Configuration for the process's standard output stream. |
+
+---
+
+##### `cwd`<sup>Optional</sup> <a name="cwd" id="@winglang/sdk.util.SpawnOptions.property.cwd"></a>
+
+```wing
+cwd: str;
+```
+
+- *Type:* str
+- *Default:* the default working directory of the host
+
+Path to a directory to run the command in.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.util.SpawnOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* no environment variables
+
+Environment variables.
+
+---
+
+##### `inheritEnv`<sup>Optional</sup> <a name="inheritEnv" id="@winglang/sdk.util.SpawnOptions.property.inheritEnv"></a>
+
+```wing
+inheritEnv: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Whether to inherit environment variables from the host's environment.
+
+---
+
+##### `stderr`<sup>Optional</sup> <a name="stderr" id="@winglang/sdk.util.SpawnOptions.property.stderr"></a>
+
+```wing
+stderr: Stdio;
+```
+
+- *Type:* <a href="#@winglang/sdk.util.Stdio">Stdio</a>
+- *Default:* Stdio.INHERIT
+
+Configuration for the process's standard error stream.
+
+---
+
+##### `stdin`<sup>Optional</sup> <a name="stdin" id="@winglang/sdk.util.SpawnOptions.property.stdin"></a>
+
+```wing
+stdin: Stdio;
+```
+
+- *Type:* <a href="#@winglang/sdk.util.Stdio">Stdio</a>
+- *Default:* Stdio.INHERIT
+
+Configuration for the process's standard input stream.
+
+---
+
+##### `stdout`<sup>Optional</sup> <a name="stdout" id="@winglang/sdk.util.SpawnOptions.property.stdout"></a>
+
+```wing
+stdout: Stdio;
+```
+
+- *Type:* <a href="#@winglang/sdk.util.Stdio">Stdio</a>
+- *Default:* Stdio.INHERIT
+
+Configuration for the process's standard output stream.
+
+---
+
 ### UlidOptions <a name="UlidOptions" id="@winglang/sdk.util.UlidOptions"></a>
 
 Options to generate universally unique lexicographically sortable identifiers.
@@ -765,4 +1025,42 @@ inflight handle(): bool
 
 The Predicate function that is called.
 
+
+## Enums <a name="Enums" id="Enums"></a>
+
+### Stdio <a name="Stdio" id="@winglang/sdk.util.Stdio"></a>
+
+Describes what to do with a standard I/O stream for a child process.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.util.Stdio.INHERIT">INHERIT</a></code> | The child inherits from the corresponding parent descriptor. |
+| <code><a href="#@winglang/sdk.util.Stdio.PIPED">PIPED</a></code> | A new pipe should be arranged to connect the parent and child processes. |
+| <code><a href="#@winglang/sdk.util.Stdio.NULL">NULL</a></code> | This stream will be ignored. |
+
+---
+
+##### `INHERIT` <a name="INHERIT" id="@winglang/sdk.util.Stdio.INHERIT"></a>
+
+The child inherits from the corresponding parent descriptor.
+
+---
+
+
+##### `PIPED` <a name="PIPED" id="@winglang/sdk.util.Stdio.PIPED"></a>
+
+A new pipe should be arranged to connect the parent and child processes.
+
+---
+
+
+##### `NULL` <a name="NULL" id="@winglang/sdk.util.Stdio.NULL"></a>
+
+This stream will be ignored.
+
+This is the equivalent of attaching the stream to /dev/null.
+
+---
 

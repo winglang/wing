@@ -13,8 +13,8 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 use crate::{
 	ast::{
 		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Enum,
-		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference,
-		Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, IntrinsicKind, Literal, New,
+		Phase, Reference, Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -54,6 +54,7 @@ const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 const NODE_MODULES_DIR: &str = "node_modules";
 const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
+const __DIRNAME: &str = "__dirname";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
@@ -189,7 +190,7 @@ impl<'a> JSifier<'a> {
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.line(format!("const {HELPERS_VAR} = {STDLIB}.helpers;"));
 		output.line(format!(
-			"const {EXTERN_VAR} = {HELPERS_VAR}.createExternRequire(__dirname);"
+			"const {EXTERN_VAR} = {HELPERS_VAR}.createExternRequire({__DIRNAME});"
 		));
 		output.add_code(imports);
 
@@ -400,7 +401,7 @@ impl<'a> JSifier<'a> {
 			));
 		}
 
-		if !structure_args.is_empty() {
+		if !structure_args.is_empty() || self.types.append_empty_struct_to_arglist.contains(&arg_list.id) {
 			args.push(new_code!(&arg_list.span, "{ ", structure_args, " }"));
 		}
 
@@ -611,6 +612,11 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::Literal(lit) => match lit {
 				Literal::Nil => new_code!(expr_span, "undefined"),
+				Literal::NonInterpolatedString(s) => {
+					// escape newlines
+					let s = s.replace("\r", "\\r").replace("\n", "\\n");
+					new_code!(expr_span, s)
+				}
 				Literal::String(s) => {
 					// Unescape our string interpolation braces because in JS they don't need escaping
 					let s = s.replace("\\{", "{");
@@ -624,6 +630,8 @@ impl<'a> JSifier<'a> {
 						.iter()
 						.filter_map(|p| match p {
 							InterpolatedStringPart::Static(static_string) => {
+								// Unescape our string interpolation braces because in JS they don't need escaping
+								let static_string = static_string.replace("\\{", "{");
 								// escape any raw newlines in the string because js `"` strings can't contain them
 								let escaped = static_string.replace("\r\n", "\\r\\n").replace("\n", "\\n");
 
@@ -662,6 +670,31 @@ impl<'a> JSifier<'a> {
 				")"
 			),
 			ExprKind::Reference(_ref) => new_code!(expr_span, self.jsify_reference(&_ref, ctx)),
+			ExprKind::Intrinsic(intrinsic) => match intrinsic.kind {
+				IntrinsicKind::Dirname => {
+					let Some(source_path) = ctx.source_path else {
+						// Only happens inflight, so we can assume an error was caught earlier
+						return new_code!(expr_span, "");
+					};
+					let relative_source_path = make_relative_path(
+						self.out_dir.as_str(),
+						source_path
+							.parent()
+							.expect("source path is file in a directory")
+							.as_str(),
+					);
+					new_code!(
+						expr_span,
+						HELPERS_VAR,
+						".resolveDirname(",
+						__DIRNAME,
+						", \"",
+						relative_source_path,
+						"\")"
+					)
+				}
+				_ => new_code!(expr_span, ""),
+			},
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = match callee {
 					CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
@@ -1281,13 +1314,13 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_enum(&self, name: &Symbol, values: &IndexSet<Symbol>) -> CodeMaker {
+	fn jsify_enum(&self, name: &Symbol, values: &IndexMap<Symbol, Option<String>>) -> CodeMaker {
 		let mut code = CodeMaker::with_source(&name.span);
 		let mut value_index = 0;
 
 		code.open("(function (tmp) {");
 
-		for value in values {
+		for value in values.keys() {
 			code.line(new_code!(
 				&value.span,
 				"tmp[\"",
@@ -1681,7 +1714,7 @@ impl<'a> JSifier<'a> {
 		code.open("return `");
 
 		code.open(format!(
-			"require(\"${{{HELPERS_VAR}.normalPath(__dirname)}}/{client_path}\")({{"
+			"require(\"${{{HELPERS_VAR}.normalPath({__DIRNAME})}}/{client_path}\")({{"
 		));
 
 		if let Some(lifts) = &ctx.lifts {
@@ -2028,22 +2061,24 @@ fn jsify_symbol(symbol: &Symbol) -> CodeMaker {
 	new_code!(&symbol.span, &symbol.name)
 }
 
-fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
+fn parent_class_type(ctx: &JSifyContext<'_>) -> TypeRef {
+	// Get the current class type
 	let current_class_type = resolve_user_defined_type(
 		ctx.visit_ctx.current_class().expect("a class"),
 		ctx.visit_ctx.current_env().expect("an env"),
 		ctx.visit_ctx.current_stmt_idx(),
 	)
 	.expect("a class type");
-	let parent_class_phase = current_class_type
+	// Return the parent class type
+	current_class_type
 		.as_class()
 		.expect("a class")
 		.parent
 		.expect("a parent class")
-		.as_class()
-		.expect("a class")
-		.phase;
-	parent_class_phase
+}
+
+fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
+	parent_class_type(ctx).as_class().expect("a class").phase
 }
 
 fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {

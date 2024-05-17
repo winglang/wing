@@ -1,5 +1,5 @@
 import { Construct, IConstruct } from "constructs";
-import { App, LiftDepsMatrixRaw } from "../core";
+import { App, LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { Node } from "../std";
 
@@ -85,7 +85,7 @@ export interface IHostedLiftable extends ILiftable {
    * inflight host.
    * @internal
    */
-  _liftMap?: LiftDepsMatrixRaw;
+  _liftMap?: LiftMap;
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
@@ -96,20 +96,16 @@ export interface IHostedLiftable extends ILiftable {
    * other capabilities to the inflight host.
    */
   onLift(host: IInflightHost, ops: string[]): void;
+}
 
-  /**
-   * Return a list of all inflight operations that are supported by this resource.
-   *
-   * If this method doesn't exist, the resource is assumed to not support any inflight operations.
-   *
-   * @internal
-   */
-  _supportedOps(): string[];
+function hasLiftMap(x: any): x is { _liftMap: LiftMap } {
+  return x != null && typeof x._liftMap === "object";
 }
 
 /**
  * Abstract interface for `Resource`.
  * @skipDocs
+ * @noinflight
  */
 export interface IResource extends IConstruct, IHostedLiftable {
   /**
@@ -126,6 +122,7 @@ export interface IResource extends IConstruct, IHostedLiftable {
 /**
  * Shared behavior between all Wing SDK resources.
  * @skipDocs
+ * @noinflight
  */
 export abstract class Resource extends Construct implements IResource {
   /**
@@ -168,13 +165,6 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
-   * @internal
-   * */
-  public _supportedOps(): string[] {
-    return [];
-  }
-
-  /**
    * Return a code snippet that can be used to reference this resource inflight.
    *
    * @internal
@@ -194,14 +184,8 @@ export abstract class Resource extends Construct implements IResource {
    * actually bound.
    */
   public onLift(host: IInflightHost, ops: string[]): void {
-    for (const op of ops) {
-      // Add connection metadata
-      Node.of(this).addConnection({
-        source: host,
-        target: this,
-        name: op.endsWith("()") ? op : `${op}()`,
-      });
-    }
+    host;
+    ops;
   }
 
   /**
@@ -213,7 +197,35 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _preSynthesize(): void {
-    // do nothing by default
+    if (hasLiftMap(this) && !(this instanceof AutoIdResource)) {
+      addConnectionsFromLiftMap(this, this._liftMap);
+    }
+  }
+}
+
+function addConnectionsFromLiftMap(
+  construct: IConstruct,
+  liftData: LiftMap,
+  baseOp?: string
+) {
+  for (const [op, liftEntries] of Object.entries(liftData)) {
+    for (const [dep, depOps] of liftEntries) {
+      if (Construct.isConstruct(dep) && !(dep instanceof AutoIdResource)) {
+        // case 1: dep is an ordinary resource
+        for (const depOp of depOps) {
+          Node.of(construct).addConnection({
+            source: construct,
+            sourceOp: baseOp ?? op,
+            target: dep,
+            targetOp: depOp,
+            name: depOp,
+          });
+        }
+      } else if (hasLiftMap(dep)) {
+        // case 2: dep is an inflight
+        addConnectionsFromLiftMap(construct, dep._liftMap, baseOp ?? op);
+      }
+    }
   }
 }
 
@@ -221,6 +233,7 @@ export abstract class Resource extends Construct implements IResource {
  * A resource that has an automatically generated id.
  * Used by the Wing compiler to generate unique ids for auto generated resources
  * from inflight function closures.
+ * @noinflight
  */
 export abstract class AutoIdResource extends Resource {
   constructor(scope: Construct, idPrefix: string = "") {

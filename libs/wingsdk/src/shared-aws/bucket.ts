@@ -2,10 +2,8 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import { calculateBucketPermissions } from "./permissions";
 import { cloud, ui } from "..";
-import { IBucketClient } from "../cloud";
-import { InflightClient } from "../core";
+import { InflightClient, LiftMap, lift } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
-import { Testing } from "../simulator";
 import { IInflightHost, Node, Resource } from "../std";
 
 /**
@@ -47,12 +45,23 @@ export class Bucket {
 }
 
 /**
+ * A few inflight methods that can be used with an AWS bucket.
+ */
+export interface IAwsBucketClient extends cloud.IBucketClient {
+  /**
+   * Get the region of the bucket.
+   * @inflight
+   */
+  bucketRegion(): Promise<string>;
+}
+
+/**
  * A reference to an external S3 bucket.
- * @inflight `@winglang/sdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.aws.IAwsBucketClient`
  */
 export class BucketRef extends Resource {
   /** @internal */
-  public [INFLIGHT_SYMBOL]?: IBucketClient;
+  public [INFLIGHT_SYMBOL]?: IAwsBucketClient;
 
   /**
    * The Name of this bucket.
@@ -102,45 +111,48 @@ export class BucketRef extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.BucketInflightMethods.DELETE,
-      cloud.BucketInflightMethods.GET,
-      cloud.BucketInflightMethods.GET_JSON,
-      cloud.BucketInflightMethods.LIST,
-      cloud.BucketInflightMethods.PUT,
-      cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
-      cloud.BucketInflightMethods.EXISTS,
-      cloud.BucketInflightMethods.TRY_GET,
-      cloud.BucketInflightMethods.TRY_GET_JSON,
-      cloud.BucketInflightMethods.TRY_DELETE,
-      cloud.BucketInflightMethods.SIGNED_URL,
-      cloud.BucketInflightMethods.METADATA,
-      cloud.BucketInflightMethods.COPY,
-      cloud.BucketInflightMethods.RENAME,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.BucketInflightMethods.DELETE]: [],
+      [cloud.BucketInflightMethods.GET]: [],
+      [cloud.BucketInflightMethods.GET_JSON]: [],
+      [cloud.BucketInflightMethods.LIST]: [],
+      [cloud.BucketInflightMethods.PUT]: [],
+      [cloud.BucketInflightMethods.PUT_JSON]: [],
+      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
+      [cloud.BucketInflightMethods.EXISTS]: [],
+      [cloud.BucketInflightMethods.TRY_GET]: [],
+      [cloud.BucketInflightMethods.TRY_GET_JSON]: [],
+      [cloud.BucketInflightMethods.TRY_DELETE]: [],
+      [cloud.BucketInflightMethods.SIGNED_URL]: [],
+      [cloud.BucketInflightMethods.METADATA]: [],
+      [cloud.BucketInflightMethods.COPY]: [],
+      [cloud.BucketInflightMethods.RENAME]: [],
+      bucketRegion: [],
+    };
   }
 
   private addUserInterface() {
     Node.of(this).color = "amber";
 
-    const awsConsoleHandler = Testing.makeHandler(
-      `async handle() {
-        try {
-          const region = await this.bucket.bucketRegion();
-          return "https://" + region + ".console.aws.amazon.com/s3/buckets/" + this.bucket.bucketName + "?region=" + region;
-        } catch (e) {
-          return e.message;
-        }
-      }`,
-      {
-        bucket: {
-          obj: this,
-          ops: [],
-        },
+    const awsConsoleHandler = lift({
+      bucket: this,
+      bucketName: this.bucketName,
+    }).inflight(async (ctx) => {
+      try {
+        const region = await ctx.bucket.bucketRegion();
+        return (
+          "https://" +
+          region +
+          ".console.aws.amazon.com/s3/buckets/" +
+          ctx.bucketName +
+          "?region=" +
+          region
+        );
+      } catch (e: any) {
+        return e.message;
       }
-    );
+    });
 
     new ui.Field(this, "AwsConsoleField", "AWS Console", awsConsoleHandler, {
       link: true,
@@ -149,50 +161,53 @@ export class BucketRef extends Resource {
     new ui.ValueField(this, "BucketNameField", "Bucket Name", this.bucketName);
     new ui.ValueField(this, "BucketArnField", "Bucket ARN", this.bucketArn);
     new ui.FileBrowser(this, "FileBrowser", "File Browser", {
-      put: Testing.makeHandler(
-        `async handle(fileName, fileContent) {
-        this.bucket.put(fileName, fileContent);
-      }`,
-        {
-          bucket: {
-            obj: this,
-            ops: [],
-          },
+      put: lift({ bucket: this }).inflight(
+        async (ctx, fileName, fileContent) => {
+          await ctx.bucket.put(fileName, fileContent);
         }
       ),
-      get: Testing.makeHandler(
-        `async handle(fileName) {
-        return this.bucket.get(fileName);
-      }`,
-        {
-          bucket: {
-            obj: this,
-            ops: [],
-          },
+      get: lift({ bucket: this }).inflight(async (ctx, fileName) => {
+        return ctx.bucket.get(fileName);
+      }),
+      delete: lift({ bucket: this }).inflight(async (ctx, fileName) => {
+        await ctx.bucket.delete(fileName);
+      }),
+      list: lift({ bucket: this }).inflight(async (ctx) => {
+        return ctx.bucket.list();
+      }),
+    });
+  }
+}
+
+/**
+ * Utility class to work with bucket event handlers.
+ */
+export class BucketEventHandler {
+  /**
+   * Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`.
+   * @param handler the handler to convert
+   * @param eventType the event type
+   * @returns the on message handler.
+   */
+  public static toTopicOnMessageHandler(
+    handler: cloud.IBucketEventHandler,
+    eventType: cloud.BucketEventType
+  ): cloud.ITopicOnMessageHandler {
+    return lift({ handler, eventType }).inflight(async (ctx, event) => {
+      try {
+        const message = JSON.parse(event);
+        if (message?.Event === "s3:TestEvent") {
+          // aws sends a test event to the topic before of the actual one, we're ignoring it for now
+          return;
         }
-      ),
-      delete: Testing.makeHandler(
-        `async handle(fileName) {
-        return this.bucket.delete(fileName);
-      }`,
-        {
-          bucket: {
-            obj: this,
-            ops: [],
-          },
-        }
-      ),
-      list: Testing.makeHandler(
-        `async handle() {
-        return this.bucket.list();
-      }`,
-        {
-          bucket: {
-            obj: this,
-            ops: [],
-          },
-        }
-      ),
+        return await ctx.handler(
+          message.Records[0].s3.object.key,
+          ctx.eventType
+        );
+      } catch (error) {
+        console.warn("Error parsing the notification event message: ", error);
+        console.warn("Event: ", event);
+      }
     });
   }
 }
