@@ -94,7 +94,6 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
-
     fn.addPolicyStatements({
       actions: [
         "sqs:ReceiveMessage",
@@ -131,9 +130,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
-    host.addPolicyStatements(
-      ...calculateQueuePermissions(this.queue.arn, ops)
-    );
+    host.addPolicyStatements(...calculateQueuePermissions(this.queue.arn, ops));
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.

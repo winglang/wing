@@ -175,9 +175,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
-    host.addPolicyStatements(
-      ...calculateTopicPermissions(this.topic.arn, ops)
-    );
+    host.addPolicyStatements(...calculateTopicPermissions(this.topic.arn, ops));
 
     host.addEnvironment(this.envName(), this.topic.arn);
 

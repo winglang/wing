@@ -100,7 +100,6 @@ export class Table extends ex.Table implements IAwsTable {
         resources: [this.table.arn],
       });
     }
-  
 
     host.addEnvironment(this.envName(), this.table.name);
     host.addEnvironment(this.primaryKeyEnvName(), this.primaryKey);
