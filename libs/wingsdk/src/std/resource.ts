@@ -98,6 +98,10 @@ export interface IHostedLiftable extends ILiftable {
   onLift(host: IInflightHost, ops: string[]): void;
 }
 
+function hasLiftMap(x: any): x is { _liftMap: LiftMap } {
+  return x != null && typeof x._liftMap === "object";
+}
+
 /**
  * Abstract interface for `Resource`.
  * @skipDocs
@@ -203,26 +207,33 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _preSynthesize(): void {
-    if ((this as IHostedLiftable)._liftMap === undefined) {
-      return;
+    if (hasLiftMap(this) && !(this instanceof AutoIdResource)) {
+      addConnectionsFromLiftMap(this, this._liftMap);
     }
+  }
+}
 
-    const data = (this as IHostedLiftable)._liftMap!;
-    for (const [op, liftEntries] of Object.entries(data)) {
-      for (const [dep, depOps] of liftEntries) {
-        if (!Construct.isConstruct(dep)) {
-          continue;
-        }
-
+function addConnectionsFromLiftMap(
+  construct: IConstruct,
+  liftData: LiftMap,
+  baseOp?: string
+) {
+  for (const [op, liftEntries] of Object.entries(liftData)) {
+    for (const [dep, depOps] of liftEntries) {
+      if (Construct.isConstruct(dep) && !(dep instanceof AutoIdResource)) {
+        // case 1: dep is an ordinary resource
         for (const depOp of depOps) {
-          Node.of(this).addConnection({
-            source: this,
-            sourceOp: op,
+          Node.of(construct).addConnection({
+            source: construct,
+            sourceOp: baseOp ?? op,
             target: dep,
             targetOp: depOp,
             name: depOp,
           });
         }
+      } else if (hasLiftMap(dep)) {
+        // case 2: dep is an inflight
+        addConnectionsFromLiftMap(construct, dep._liftMap, baseOp ?? op);
       }
     }
   }

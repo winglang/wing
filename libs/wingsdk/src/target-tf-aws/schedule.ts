@@ -75,7 +75,9 @@ export class Schedule extends cloud.Schedule {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ScheduleInflightMethods.TICK,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "onTick()",
     });
 
