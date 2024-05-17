@@ -135,6 +135,16 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
+   * Generates an asynchronous JavaScript statement which can be used to create an inflight client
+   * for a resource.
+   *
+   * NOTE: This statement must be executed within an async context.
+   */
+  public static toInflight(obj: IResource) {
+    return obj._toInflight();
+  }
+
+  /**
    * Create an instance of this resource with the current App factory.
    * This is commonly used in the constructor of a pseudo-abstract resource class before the super() call.
    *
@@ -158,16 +168,6 @@ export abstract class Resource extends Construct implements IResource {
     ...props: any[]
   ): TResource {
     return App.of(scope).newAbstract(fqn, scope, id, ...props);
-  }
-
-  /**
-   * Generates an asynchronous JavaScript statement which can be used to create an inflight client
-   * for a resource.
-   * 
-   * NOTE: This statement must be executed within an async context.
-   */
-  public static toInflight(obj: IResource) {
-    return obj._toInflight();
   }
 
   /**
