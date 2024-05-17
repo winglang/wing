@@ -45,7 +45,7 @@ export class Function {
   }
 
   /**
-   * Returns the current Lambda invocation context.
+   * Returns the current Lambda invocation context, if the host is an AWS Lambda.
    * @see https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html
    * @inflight
    * @returns The current Lambda invocation context.
