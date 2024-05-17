@@ -21,6 +21,7 @@ import {
   IAwsFunction,
   NetworkConfig,
   PolicyStatement,
+  externalLibraries,
 } from "../shared-aws";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
@@ -262,7 +263,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     // write the entrypoint next to the partial inflight code emitted by the compiler, so that
     // `require` resolves naturally.
 
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createBundle(this.entrypoint, externalLibraries);
 
     // would prefer to create TerraformAsset in the constructor, but using a CDKTF token for
     // the "path" argument isn't supported
