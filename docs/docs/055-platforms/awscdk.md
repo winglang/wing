@@ -41,19 +41,18 @@ and the `output` fields:
 
 ```json
 {
-  "app": "CDK_STACK_NAME='MyStack' CDK_AWS_ACCOUNT='111111555555' CDK_AWS_REGION='us-east-1' wing compile --platform @winglang/platform-awscdk main.w",
-  "output": "target/main.awscdk",
-
+  "app": "wing compile --output cdk.out --platform @winglang/platform-awscdk main.w",
   // ... rest of cdk.json
 }
 ```
 
-The `awscdk` platform uses the following environment variables as configuration options:
+You will also need to set the following environment variables. You can define them in your shell or in a `.env` file:
 
-* `CDK_STACK_NAME` (required) - sets the CloudFormation stack name to use.
-- `CDK_AWS_ACCOUNT` and `CDK_AWS_REGION` (optional) - the AWS environment for deployment and context
-  lookups (e.g. VPC lookups). The default is to use the AWS account region defined in the CLI
-  environment.
+```
+CDK_STACK_NAME=MyStack             # (required) sets the CloudFormation stack name to use.
+CDK_AWS_ACCOUNT=111111555555       # AWS account to deploy to (required if you are using context lookups, optional otherwise)
+CDK_AWS_REGION=us-east-1           # AWS region to deploy to (required if you are using context lookups, optional otherwise)
+```
 
 Now, the AWS CDK CLI will work as normal:
 
