@@ -48,10 +48,13 @@ and the `output` fields:
 
 You will also need to set the following environment variables. You can define them in your shell or in a `.env` file:
 
-```
-CDK_STACK_NAME=MyStack             # (required) sets the CloudFormation stack name to use.
-CDK_AWS_ACCOUNT=111111555555       # AWS account to deploy to (required if you are using context lookups, optional otherwise)
-CDK_AWS_REGION=us-east-1           # AWS region to deploy to (required if you are using context lookups, optional otherwise)
+```dotenv
+# (required) sets the CloudFormation stack name to use.
+CDK_STACK_NAME=MyStack
+# AWS account to deploy to (required if you are using context lookups, optional otherwise)        
+CDK_AWS_ACCOUNT=111111555555
+# AWS region to deploy to (required if you are using context lookups, optional otherwise)
+CDK_AWS_REGION=us-east-1
 ```
 
 Now, the AWS CDK CLI will work as normal:
