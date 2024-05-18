@@ -279,10 +279,8 @@ export class Function extends cloud.Function implements IAwsFunction {
   /** @internal */
   public get _liftMap(): core.LiftMap {
     return {
-      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
-      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
-        [this.handler, ["handle"]],
-      ],
+      [cloud.FunctionInflightMethods.INVOKE]: [],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [],
     };
   }
 
