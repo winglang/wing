@@ -166,6 +166,18 @@ project.eslint!.addOverride({
   },
 });
 
+project.eslint!.addOverride({
+  files: ["vitest.config.mts"],
+  rules: {
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        devDependencies: true,
+      },
+    ],
+  },
+});
+
 project.package.addField("optionalDependencies", {
   esbuild: "^0.19.12",
 });
