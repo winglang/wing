@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
-import { ITopicOnMessageHandler, Topic, TopicInflightMethods } from "./topic";
+import { ITopicOnMessageHandler, Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
@@ -90,7 +90,15 @@ export class Bucket extends Resource {
    */
   protected createTopic(actionType: BucketEventType): Topic {
     const topic = new Topic(this, actionType.toLowerCase());
+
     this.node.addDependency(topic);
+
+    Node.of(this).addConnection({
+      source: this,
+      target: topic,
+      name: `${actionType}()`,
+    });
+
     return topic;
   }
 
@@ -132,55 +140,19 @@ export class Bucket extends Resource {
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
-      const topic = this.getTopic(BucketEventType.CREATE).onMessage(
+      this.getTopic(BucketEventType.CREATE).onMessage(
         this.createTopicHandler(BucketEventType.CREATE, inflight)
       );
-      for (const op of [
-        BucketInflightMethods.PUT,
-        BucketInflightMethods.PUT_JSON,
-      ]) {
-        Node.of(this).addConnection({
-          source: this,
-          sourceOp: op,
-          target: topic,
-          targetOp: TopicInflightMethods.PUBLISH,
-          name: BucketEventType.CREATE,
-        });
-      }
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
-      const topic = this.getTopic(BucketEventType.UPDATE).onMessage(
+      this.getTopic(BucketEventType.UPDATE).onMessage(
         this.createTopicHandler(BucketEventType.UPDATE, inflight)
       );
-      for (const op of [
-        BucketInflightMethods.PUT,
-        BucketInflightMethods.PUT_JSON,
-      ]) {
-        Node.of(this).addConnection({
-          source: this,
-          sourceOp: op,
-          target: topic,
-          targetOp: TopicInflightMethods.PUBLISH,
-          name: BucketEventType.UPDATE,
-        });
-      }
     }
     if (eventNames.includes(BucketEventType.DELETE)) {
-      const topic = this.getTopic(BucketEventType.DELETE).onMessage(
+      this.getTopic(BucketEventType.DELETE).onMessage(
         this.createTopicHandler(BucketEventType.DELETE, inflight)
       );
-      for (const op of [
-        BucketInflightMethods.DELETE,
-        BucketInflightMethods.TRY_DELETE,
-      ]) {
-        Node.of(this).addConnection({
-          source: this,
-          sourceOp: op,
-          target: topic,
-          targetOp: TopicInflightMethods.PUBLISH,
-          name: BucketEventType.DELETE,
-        });
-      }
     }
   }
 

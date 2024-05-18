@@ -193,9 +193,7 @@ exports.handler = async function(event) {
       {
         "name": "onTick()",
         "source": "root/my_schedule",
-        "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
-        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -443,9 +441,7 @@ exports.handler = async function(event) {
       {
         "name": "onTick()",
         "source": "root/my_schedule",
-        "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
-        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -693,9 +689,7 @@ exports.handler = async function(event) {
       {
         "name": "onTick()",
         "source": "root/my_schedule",
-        "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
-        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
