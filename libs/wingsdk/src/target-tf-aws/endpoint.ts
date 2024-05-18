@@ -24,12 +24,7 @@ export class Endpoint extends cloud.Endpoint {
 
   /** @internal */
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("endpoints can only be bound by tfaws.Function for now");
-    }
-
     host.addEnvironment(this.urlEnvName(), this.url);
-
     super.onLift(host, ops);
   }
 

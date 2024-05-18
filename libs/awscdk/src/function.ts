@@ -12,7 +12,7 @@ import { Construct, IConstruct } from "constructs";
 import { cloud, std, core } from "@winglang/sdk";
 import { NotImplementedError } from "@winglang/sdk/lib/core/errors";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
-import { IAwsFunction, PolicyStatement, externalLibraries } from "@winglang/sdk/lib/shared-aws";
+import { IAwsFunction, NetworkConfig, PolicyStatement, externalLibraries } from "@winglang/sdk/lib/shared-aws";
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
@@ -197,6 +197,11 @@ export class Function
     for (const statement of statements) {
       this.function.addToRolePolicy(new CdkPolicyStatement(statement));
     }
+  }
+
+  public addNetwork(config: NetworkConfig): void {
+    config;
+    throw new Error("The AWS CDK platform provider does not support adding network configurations to AWS Lambda functions at the moment.");
   }
 
   private envName(): string {

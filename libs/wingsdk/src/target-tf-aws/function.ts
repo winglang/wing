@@ -16,8 +16,10 @@ import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import {
+  AwsInflightHost,
   Effect,
   IAwsFunction,
+  NetworkConfig,
   PolicyStatement,
   externalLibraries,
 } from "../shared-aws";
@@ -32,18 +34,6 @@ const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 64,
   disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
 };
-
-/**
- * Function network configuration
- * used to hold data on subnets and security groups
- * that should be used when a function is deployed within a VPC.
- */
-export interface FunctionNetworkConfig {
-  /** List of subnets to attach on function */
-  readonly subnetIds: string[];
-  /** List of security groups to place function in */
-  readonly securityGroupIds: string[];
-}
 
 /**
  * Options for granting invoke permissions to the current function
@@ -253,7 +243,7 @@ export class Function extends cloud.Function implements IAwsFunction {
           },
         ],
       });
-      this.addNetworkConfig({
+      this.addNetwork({
         subnetIds: [...app.subnets.private.map((s) => s.id)],
         securityGroupIds: [sg.id],
       });
@@ -297,8 +287,8 @@ export class Function extends cloud.Function implements IAwsFunction {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("functions can only be bound by tfaws.Function for now");
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     if (
@@ -331,7 +321,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   /**
    * Add VPC configurations to lambda function
    */
-  public addNetworkConfig(vpcConfig: FunctionNetworkConfig) {
+  public addNetwork(vpcConfig: NetworkConfig) {
     if (!this.subnets || !this.securityGroups) {
       this.subnets = new Set();
       this.securityGroups = new Set();
