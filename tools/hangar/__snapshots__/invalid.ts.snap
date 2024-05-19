@@ -1498,74 +1498,117 @@ Duration <DURATION>"
 `;
 
 exports[`explicit_lift_qualification.test.w 1`] = `
-"error: Expected type to be \\"IResource\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:22:10
+"error: Lift blocks are only allowed in inflight phase
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:11:5
    |
-22 |     lift(prelight_string, [\\"contains\\"]); // Explicit qualification on preflight non-class
-   |          ^^^^^^^^^^^^^^^
+11 |     lift {bucket: [put]}{} // Lift statment in preflight method
+   |     ^^^^^^^^^^^^^^^^^^^^^^
 
 
-error: lift() calls must be at the top of the method
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:18:5
+error: Lift blocks are only allowed in inflight phase
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:21:1
    |
-18 |     lift(b, [\\"put\\"]); // Explicit qualification with inflight object, lift call as non first statement
-   |     ^^^^^^^^^^^^^^^^^
+21 | lift {bucket: [put]}{}
+   | ^^^^^^^^^^^^^^^^^^^^^^
 
 
-error: lift() calls must be at the top of the method
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:22:5
+error: Expected a preflight object, but found inflight expression instead
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:26:11
    |
-22 |     lift(prelight_string, [\\"contains\\"]); // Explicit qualification on preflight non-class
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+26 |     lift {b: [put]}{} // Explicit qualification with inflight object
+   |           ^
 
 
-error: lift() calls must be at the top of the method
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:27:5
+error: Expected a preflight object type, but found str instead
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:27:11
    |
-27 |     lift(bucket, [inflight_qualifier]); // Explicit qualification with inflight qualifiers, lift call as non first statement
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:18:10
+27 |     lift {prelight_string: contains}{} // Explicit qualification on preflight non-class
+   |           ^^^^^^^^^^^^^^^
    |
-18 |     lift(b, [\\"put\\"]); // Explicit qualification with inflight object, lift call as non first statement
-   |          ^
+   = hint: Preflight objects are instances of either a class or interface defined preflight without the \`inflight\` modifier
 
 
-error: Qualification list must not contain any inflight elements
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:27:18
+error: Object of type Bucket does not have an inflight member named \\"shoot\\"
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:28:20
    |
-27 |     lift(bucket, [inflight_qualifier]); // Explicit qualification with inflight qualifiers, lift call as non first statement
-   |                  ^^^^^^^^^^^^^^^^^^^^
+28 |     lift {bucket: [shoot]}{} // Explicit qualification with unknown member
+   |           ------   ^^^^^
+   |           |         
+   |           Operation does not exist in this object
 
 
-error: lift() calls are only allowed in inflight methods and closures defined in preflight
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:32:7
+error: Object of type Bucket does not have an inflight member named \\"shoot\\"
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:29:19
    |
-32 |       lift(bucket, [\\"get\\"]); // lift() call in inner closure
-   |       ^^^^^^^^^^^^^^^^^^^^^^
+29 |     lift {bucket: shoot}{} // Explicit qualification with unknown, single method format
+   |           ------  ^^^^^
+   |           |        
+   |           Operation does not exist in this object
 
 
-error: lift() calls are only allowed in inflight methods and closures defined in preflight
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:37:9
+error: Unknown symbol \\"not_bucket\\"
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:30:11
    |
-37 |         lift(bucket, [\\"get\\"]); // lift() call in inner class
-   |         ^^^^^^^^^^^^^^^^^^^^^^
+30 |     lift {not_bucket: put, not_bucket_again: get}{} // Explicit qualification with unknown objects
+   |           ^^^^^^^^^^
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:45:5
+error: Unknown symbol \\"not_bucket_again\\"
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:30:28
    |
-45 |     b.put(\\"k\\", \\"v\\"); // With no explicit qualification this should be an error
+30 |     lift {not_bucket: put, not_bucket_again: get}{} // Explicit qualification with unknown objects
+   |                            ^^^^^^^^^^^^^^^^
+
+
+error: Only inflight members may be qualified. \\"addObject\\" is a preflight member.
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:31:19
+   |
+31 |     lift {bucket: addObject}{} // Explicit qualification with preflight method op
+   |                   ^^^^^^^^^
+
+
+error: Only instance (non-static) members may be qualified
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:32:28
+   |
+32 |     lift {preflight_class: static_method}{} // Explicit qualification with static method
+   |                            ^^^^^^^^^^^^^
+
+
+error: Cannot reference an inflight value from within a preflight expression
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:26:11
+   |
+26 |     lift {b: [put]}{} // Explicit qualification with inflight object
+   |           ^
+
+
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:37:5
+   |
+37 |     b.put(\\"k\\", \\"v\\"); // With no explicit qualification this should be an error
    |     ^
-
-
-error: Expression of type \\"IPreflightInterface\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
-   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:49:5
    |
-49 |     i.method(); // With no explicit qualification this should be an error
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
+
+
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:41:5
+   |
+41 |     b2.put(\\"k\\", \\"v\\"); // With explicit qualification, but outside of lift block, this should be an error
+   |     ^^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
+
+
+error: Expression of type \\"IPreflightInterface\\" references an unknown preflight object, can't qualify its capabilities
+   --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:44:5
+   |
+44 |     i.method(); // With no explicit qualification this should be an error
    |     ^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
 
@@ -2526,25 +2569,34 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.test.w 1`] = `
-"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:36:5
    |
 36 |     x.put(\\"hello\\", \\"world\\");
    |     ^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
-error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:43:5
    |
 43 |     q.push(\\"push!\\");
    |     ^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:48:12
    |
 48 |     assert(b.list().length == 0);
    |            ^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
 
@@ -2555,18 +2607,24 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.test.w 1`] = `
-"error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+"error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:32:5
    |
 32 |     q.push(\\"push!\\");
    |     ^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
-error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:35:5
    |
 35 |     q2.push(\\"push!\\");
    |     ^^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
 
@@ -2577,18 +2635,24 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.test.w 1`] = `
-"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:15:5
    |
 15 |     x.put(\\"hello\\", \\"world\\");
    |     ^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:19:5
    |
 19 |     y.put(\\"boom\\", \\"shakalaka\\");
    |     ^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
 
@@ -3712,18 +3776,24 @@ Duration <DURATION>"
 `;
 
 exports[`resource_captures.test.w 1`] = `
-"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/resource_captures.test.w:14:5
    |
 14 |     b.put(\\"hello\\", \\"world\\");
    |     ^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/resource_captures.test.w:17:5
    |
 17 |     this.collectionOfResources.at(0).put(\\"hello\\", \\"world\\");
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
 
@@ -4163,32 +4233,52 @@ Duration <DURATION>"
 `;
 
 exports[`simulator_permissions.test.w 1`] = `
-"error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
-   --> ../../../examples/tests/invalid/simulator_permissions.test.w:10:8
+"error: Expected expression
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:10:21
    |
 10 |   lift(buckets.at(1), [\\"put\\"]);
-   |        ^^^^^^^^^^^^^
+   |                     ^
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+error: Expected expression
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:20:21
+   |
+20 |   lift(buckets.at(0), [\\"list\\"]);
+   |                     ^
+
+
+error: Unknown parser error
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:10:3
+   |
+10 |   lift(buckets.at(1), [\\"put\\"]);
+   |   ^^^^
+
+
+error: Unknown parser error
+   --> ../../../examples/tests/invalid/simulator_permissions.test.w:20:3
+   |
+20 |   lift(buckets.at(0), [\\"list\\"]);
+   |   ^^^^
+
+
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/simulator_permissions.test.w:15:3
    |
 15 |   buckets.at(i).put(\\"key\\", \\"value\\");
    |   ^^^^^^^^^^^^^
-
-
-error: Expected a preflight object as first argument to \`lift\` builtin, found inflight expression instead
-   --> ../../../examples/tests/invalid/simulator_permissions.test.w:20:8
    |
-20 |   lift(buckets.at(0), [\\"list\\"]);
-   |        ^^^^^^^^^^^^^
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
-error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities. Use \`lift()\` to explicitly qualify the preflight object to disable this error.
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities
    --> ../../../examples/tests/invalid/simulator_permissions.test.w:25:3
    |
 25 |   buckets.at(i).put(\\"key\\", \\"value\\");
    |   ^^^^^^^^^^^^^
+   |
+   = hint: Use a \`lift\` block to explicitly qualify the preflight object and disable this error
+   = hint: For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification
 
 
 

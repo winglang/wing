@@ -220,6 +220,15 @@ where
 			}
 		}
 		StmtKind::CompilerDebugEnv => {}
+		StmtKind::ExplicitLift(explict_lift) => {
+			for q in explict_lift.qualifications.iter() {
+				v.visit_expr(&q.obj);
+				for op in q.ops.iter() {
+					v.visit_symbol(op);
+				}
+			}
+			v.visit_scope(&explict_lift.statements);
+		}
 	}
 }
 
