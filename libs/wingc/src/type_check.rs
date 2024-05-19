@@ -6391,7 +6391,7 @@ impl<'a> TypeChecker<'a> {
 						if v.kind != VariableKind::InstanceMember {
 							self.spanned_error(
 								op,
-								"Only instance (non-static) members may qualify the lift".to_string(),
+								"Only instance (non-static) members may be qualified".to_string(),
 							);
 						}
 					}
