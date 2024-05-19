@@ -22,7 +22,9 @@ pub struct LiftVisitor<'a> {
 	ctx: VisitContext,
 	jsify: &'a JSifier<'a>,
 	lifts_stack: Vec<Lifts>,
+	// Used during visiting to track whether we're inside an explicit `lift` qualification block
 	in_disable_lift_qual_err: usize,
+	// Used during visiting to track whether we're inside an inner inflight class
 	in_inner_inflight_class: usize,
 }
 
