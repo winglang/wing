@@ -38,16 +38,39 @@ test "validates the AWS Function" {
   }
 }
 
-test "can access lambda context" {
+let fn = new cloud.Function(inflight (msg: str?) => {
   if let ctx = aws.Function.context() {
     log(Json.stringify(ctx));
     expect.equal(ctx.functionVersion, "$LATEST");
 
     let remainingTime = ctx.remainingTimeInMillis();
     assert(remainingTime > 0);
+
+
+    if msg == "error" {
+      throw "fake error";
+    }
+
+    return msg;
   } else {
     if target == "tf-aws" || target == "awscdk" {
       expect.fail("Expected to have a context object");
     }
   }
+}) as "FunctionAccessingContext";
+
+test "can access lambda context" {
+  let result = fn.invoke("hello");
+  expect.equal(result, "hello");
+
+  let result2 = fn.invoke("hello2");
+  expect.equal(result2, "hello2");
+
+  let var msg = "";
+  try {
+    fn.invoke("error");
+  } catch err {
+    msg = err;
+  }
+  expect.ok(msg.contains("fake error"), "Expected fake error message");
 }

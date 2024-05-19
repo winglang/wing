@@ -12,7 +12,12 @@ import { Construct, IConstruct } from "constructs";
 import { cloud, std, core } from "@winglang/sdk";
 import { NotImplementedError } from "@winglang/sdk/lib/core/errors";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
-import { IAwsFunction, PolicyStatement, externalLibraries } from "@winglang/sdk/lib/shared-aws";
+import {
+  IAwsFunction,
+  PolicyStatement,
+  externalLibraries,
+} from "@winglang/sdk/lib/shared-aws";
+import { makeAwsLambdaHandler } from "@winglang/sdk/lib/shared-aws/function-util";
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
@@ -219,20 +224,6 @@ export class Function
    * @internal
    */
   protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
-    const inflightClient = handler._toInflight();
-    const lines = new Array<string>();
-    const client = "$handler";
-
-    lines.push('"use strict";');
-    lines.push(`var ${client} = undefined;`);
-    lines.push("exports.handler = async function(event, context) {");
-    lines.push("  globalThis.$awsLambdaContext = context;");
-    lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
-    lines.push(
-      `  return await ${client}.handle(event === null ? undefined : event);`
-    );
-    lines.push("};");
-
-    return lines;
+    return makeAwsLambdaHandler(handler);
   }
 }
