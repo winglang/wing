@@ -33,4 +33,16 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: toInflight
+  kind: 2
+  detail: "preflight (obj: IResource): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic preflight toInflight: preflight (obj: IResource): str\n```\n---\nGenerates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.\n### Parameters\n- `obj` — `IResource`\n\n### Remarks\nNOTE: This statement must be executed within an async context."
+  sortText: ff|toInflight
+  insertText: toInflight($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 

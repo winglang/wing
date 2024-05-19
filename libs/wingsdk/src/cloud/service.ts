@@ -47,12 +47,8 @@ export class Service extends Resource implements IInflightHost {
    */
   protected readonly entrypoint!: string;
 
-  /**
-   * Reference to the service's handler - an inflight closure.
-   */
-  protected readonly handler!: IServiceHandler;
-
   private readonly _env: Record<string, string> = {};
+  private readonly handler!: IServiceHandler;
 
   constructor(
     scope: Construct,

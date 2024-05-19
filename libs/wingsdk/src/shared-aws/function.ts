@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { PolicyStatement } from "./types";
+import { AwsInflightHost, IAwsInflightHost } from "./inflight-host";
 import { isValidArn } from "./util";
 import { FunctionInflightMethods, IFunctionClient } from "../cloud";
 import { InflightClient, lift, LiftMap } from "../core";
@@ -20,7 +20,7 @@ export const externalLibraries = [
 /**
  * A shared interface for AWS functions.
  */
-export interface IAwsFunction {
+export interface IAwsFunction extends IAwsInflightHost {
   /**
    * AWS Function arn
    */
@@ -30,16 +30,6 @@ export interface IAwsFunction {
    * AWS Function name
    */
   readonly functionName: string;
-
-  /**
-   * Add an environment variable to the function.
-   */
-  addEnvironment(key: string, value: string): void;
-
-  /**
-   * Add policy statements to the function's IAM role.
-   */
-  addPolicyStatements(...policies: PolicyStatement[]): void;
 }
 
 /**
@@ -79,8 +69,6 @@ export class Function {
 
   private static isAwsFunction(obj: any): obj is IAwsFunction {
     return (
-      typeof obj.addPolicyStatements === "function" &&
-      typeof obj.addEnvironment === "function" &&
       typeof obj.functionArn === "string" &&
       typeof obj.functionName === "string"
     );
@@ -161,15 +149,12 @@ export class FunctionRef extends Resource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    // if this is an AWS function, add the necessary IAM permissions
-    const fn = Function.from(host);
-
-    if (fn) {
+    if (AwsInflightHost.isAwsInflightHost(host)) {
       if (
         ops.includes(FunctionInflightMethods.INVOKE) ||
         ops.includes(FunctionInflightMethods.INVOKE_ASYNC)
       ) {
-        fn.addPolicyStatements({
+        host.addPolicyStatements({
           actions: ["lambda:InvokeFunction"],
           resources: [this.functionArn],
         });

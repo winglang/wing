@@ -54,9 +54,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
-      sourceOp: cloud.ScheduleInflightMethods.TICK,
       target: fn,
-      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "onTick()",
     });
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
