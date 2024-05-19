@@ -329,6 +329,11 @@ new cloud.Function(inflight () => {
 });
 ```
 
+Within the first clause of the `lift` block, a list of qualifications on preflight objects can be added.
+
+Statements within a `lift` block are exempt from the compiler's analyzer that tries to determine preflight object usage automatically.
+If an inflight method is directly or indirectly called within a `lift` block without sufficient resource qualifications, it may result in errors at runtime.
+
 ## Phase-independent code
 
 The global functions `log`, `assert`, and `throw` can all be used in both preflight and inflight code.
