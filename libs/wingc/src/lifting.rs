@@ -201,7 +201,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 	fn visit_expr(&mut self, node: &'a Expr) {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
-		self.with_expr(node.id, |v|	{
+		self.with_expr(node.id, |v| {
 			let expr_phase = v.jsify.types.get_expr_phase(&node).unwrap();
 			let expr_type = v.jsify.types.get_expr_type(&node);
 
@@ -220,15 +220,20 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			// Inflight expressions that evaluate to a preflight type are currently unsupported because
 			// we can't determine exactly which preflight object is being accessed and therefore can't
 			// qualify the original lift expression.
-			if expr_phase == Phase::Inflight && expr_type.is_preflight_object_type() && v.ctx.current_property().is_some() && v.in_disable_lift_qual_err == 0 {
-				report_diagnostic(Diagnostic {
-					message: format!(
-						"Expression of type \"{expr_type}\" references an unknown preflight object, can't qualify its capabilities. Use `lift()` to explicitly qualify the preflight object to disable this error."
+			if expr_phase == Phase::Inflight
+				&& expr_type.is_preflight_object_type()
+				&& v.ctx.current_property().is_some()
+				&& v.in_disable_lift_qual_err == 0
+			{
+				Diagnostic::new(
+					format!(
+						"Expression of type \"{expr_type}\" references an unknown preflight object, can't qualify its capabilities"
 					),
-					span: Some(node.span.clone()),
-					annotations: vec![],
-					hints: vec![],
-				});
+					node,
+				)
+				.hint("Use a `lift` block to explicitly qualify the preflight object and disable this error")
+				.hint("For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification")
+				.report();
 			}
 
 			//---------------
@@ -260,9 +265,9 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				let mut lifts = v.lifts_stack.pop().unwrap();
 				let is_field = code.contains("this."); // TODO: starts_with?
 				lifts.lift(
-					v.ctx.current_method().map(|(m,_)|m).expect("a method"),
+					v.ctx.current_method().map(|(m, _)| m).expect("a method"),
 					property.map(|p| v.jsify_symbol_to_op_array(&p)),
-					&code
+					&code,
 				);
 				lifts.capture(&Liftable::Expr(node.id), &code, is_field);
 				v.lifts_stack.push(lifts);

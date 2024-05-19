@@ -657,7 +657,7 @@ impl<'s> Parser<'s> {
 	fn build_lift_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		// Lift statements are only legal in inflight
 		if phase != Phase::Inflight {
-			return self.with_error("Lift statements are only allowed in inflight phase", statement_node);
+			return self.with_error("Lift blocks are only allowed in inflight phase", statement_node);
 		}
 
 		let lift_qualifications_node = statement_node.child_by_field_name("lift_qualifications").unwrap();

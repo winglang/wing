@@ -1871,12 +1871,12 @@ impl<'a> TypeChecker<'a> {
 		});
 	}
 
-	fn spanned_error_with_hints<S: Into<String>>(&self, spanned: &impl Spanned, message: S, hints: Vec<String>) {
+	fn spanned_error_with_hints<S: ToString, H: ToString>(&self, spanned: &impl Spanned, message: S, hints: &[H]) {
 		report_diagnostic(Diagnostic {
-			message: message.into(),
+			message: message.to_string(),
 			span: Some(spanned.span()),
 			annotations: vec![],
-			hints,
+			hints: hints.iter().map(|h| h.to_string()).collect(),
 		});
 	}
 
@@ -3318,7 +3318,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 
-		self.spanned_error_with_hints(span, message, hints);
+		self.spanned_error_with_hints(span, message, &hints);
 
 		// Evaluate to one of the expected types
 		first_expected_type
@@ -3342,7 +3342,7 @@ impl<'a> TypeChecker<'a> {
 				"str, num, bool, json, and enums are stringable".to_string()
 			};
 
-			self.spanned_error_with_hints(span, message, vec![hint]);
+			self.spanned_error_with_hints(span, message, &[hint]);
 		}
 	}
 
@@ -3505,7 +3505,7 @@ impl<'a> TypeChecker<'a> {
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
 				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
 				if !var_info.name.span.file_id.is_empty() && self.check_for_inferences(&var_info.type_) {
-					self.spanned_error(&var_info.name, "Unable to infer type".to_string());
+					self.spanned_error(&var_info.name, "Unable to infer type");
 				}
 			}
 		}
@@ -4645,7 +4645,7 @@ impl<'a> TypeChecker<'a> {
 						}],
 					);
 				} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
-					self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
+					self.spanned_error(variable, "Variable cannot be reassigned from inflight");
 				}
 			}
 			ResolveReferenceResult::Location(container_type, _) => match **container_type {
@@ -4653,26 +4653,26 @@ impl<'a> TypeChecker<'a> {
 				Type::Map(_) => {
 					self.spanned_error_with_hints(
 						variable,
-						"Cannot update elements of an immutable Map".to_string(),
-						vec!["Consider using MutMap instead".to_string()],
+						"Cannot update elements of an immutable Map",
+						&["Consider using MutMap instead"],
 					);
 				}
 				Type::Json(_) => {
 					self.spanned_error_with_hints(
 						variable,
-						"Cannot update elements of an immutable Json".to_string(),
-						vec!["Consider using MutJson instead".to_string()],
+						"Cannot update elements of an immutable Json",
+						&["Consider using MutJson instead"],
 					);
 				}
 				Type::Array(_) => {
 					self.spanned_error_with_hints(
 						variable,
-						"Cannot update elements of an immutable Array".to_string(),
-						vec!["Consider using MutArray instead".to_string()],
+						"Cannot update elements of an immutable Array",
+						&["Consider using MutArray instead"],
 					);
 				}
 				Type::String => {
-					self.spanned_error(variable, "Strings are immutable".to_string());
+					self.spanned_error(variable, "Strings are immutable");
 				}
 				Type::Inferred(_)
 				| Type::Unresolved
@@ -6186,11 +6186,7 @@ impl<'a> TypeChecker<'a> {
 				env,
 			),
 			Type::Struct(ref s) => self.get_property_from_class_like(s, property, true, env),
-			_ => {
-				self
-					.spanned_error_with_var(property, "Property not found".to_string())
-					.0
-			}
+			_ => self.spanned_error_with_var(property, "Property not found").0,
 		}
 	}
 
@@ -6331,7 +6327,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if &parent.root == name && parent.fields.is_empty() {
-			self.spanned_error(parent, "Class cannot extend itself".to_string());
+			self.spanned_error(parent, "Class cannot extend itself");
 			return (None, None);
 		}
 
@@ -6356,12 +6352,6 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_lift_statement(&mut self, lift_quals: &ExplicitLift, env: &mut SymbolEnv) {
-		// TODO
-		// 1. Validate all obj are references to preflight objects
-		// 2. Validate all ops are inflight memebers of the objs
-		// 3. Disabled qual erros for inner block (in lifting.rs)
-		// 4. Type check the inner block
-
 		for qual in lift_quals.qualifications.iter() {
 			let (obj_type, obj_phase) = self.type_check_exp(&qual.obj, env);
 			// Skip unknown references (diagnotics already emitted in `resolve_reference`)
@@ -6377,9 +6367,10 @@ impl<'a> TypeChecker<'a> {
 			}
 			// Make sure the object type is a preflight type
 			if !obj_type.is_preflight_object_type() {
-				self.spanned_error(
+				self.spanned_error_with_hints(
 					&qual.obj,
 					format!("Expected a preflight object type, but found {obj_type} instead"),
+					&["Preflight objects are instances of either a class or interface defined preflight without the `inflight` modifier"],
 				);
 				continue;
 			}
@@ -6391,7 +6382,10 @@ impl<'a> TypeChecker<'a> {
 						if v.phase != Phase::Inflight {
 							self.spanned_error(
 								op,
-								format!("Only inflight members may be qualified. \"{op}\" is a {} member.", v.phase),
+								format!(
+									"Only inflight members may be qualified. \"{op}\" is a {} member.",
+									v.phase
+								),
 							);
 						}
 						if v.kind != VariableKind::InstanceMember {
@@ -6404,7 +6398,7 @@ impl<'a> TypeChecker<'a> {
 					Some(_) => panic!("expected object envs to only have variables"),
 					None => self.spanned_error_with_annotations(
 						op,
-						format!("Object of type {obj_type} does not have an inflight member named {op}"),
+						format!("Object of type {obj_type} does not have an inflight member named \"{op}\""),
 						vec![DiagnosticAnnotation::new(
 							"Operation does not exist in this object",
 							&qual.obj,
