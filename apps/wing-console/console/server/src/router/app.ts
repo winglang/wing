@@ -129,18 +129,6 @@ export const createAppRouter = () => {
         getNodeIds(node);
         return list;
       }),
-    "app.selectNode": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string().optional(),
-        }),
-      )
-      .mutation(async ({ ctx, input }) => {
-        ctx.setSelectedNode(input.resourcePath ?? "");
-      }),
-    "app.selectedNode": createProcedure.query(async ({ ctx }) => {
-      return ctx.getSelectedNode();
-    }),
     "app.nodeBreadcrumbs": createProcedure
       .input(
         z.object({
@@ -521,7 +509,12 @@ function createExplorerItemFromConstructTreeNode(
   showTests = false,
   includeHiddens = false,
 ): ExplorerItem {
-  const label = node.display?.title ?? node.id;
+  const cloudResourceType = node.constructInfo?.fqn?.split(".").at(-1);
+
+  const label =
+    node.display?.title === cloudResourceType
+      ? node.id
+      : node.display?.title ?? node.id;
 
   return {
     id: node.path,

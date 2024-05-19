@@ -35,6 +35,9 @@ export class Api extends cloud.Api implements ISimulatorResource {
       simulatorAttrToken(this, "url"),
       { label: `Api ${this.node.path}` }
     );
+
+    Node.of(this.endpoint).hidden = true;
+
     this.policy = new Policy(this, "Policy", { principal: this });
   }
 
@@ -124,7 +127,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     Node.of(this).addConnection({
       source: this,
       target: fn,
-      name: `${method.toLowerCase()}()`,
+      name: `${method.toLowerCase()} ${path}`,
     });
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
   }

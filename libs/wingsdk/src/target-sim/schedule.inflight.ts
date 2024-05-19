@@ -12,7 +12,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 export class Schedule
   implements IScheduleClient, ISimulatorResourceInstance, IEventPublisher
@@ -91,6 +91,7 @@ export class Schedule
 
       this.context.addTrace({
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         data: {
           message: `Running task with function handle: ${task.functionHandle}.`,
         },
@@ -108,6 +109,7 @@ export class Schedule
           sourceType: SCHEDULE_FQN,
           timestamp: new Date().toISOString(),
           type: TraceType.RESOURCE,
+          level: LogLevel.ERROR,
         });
       });
     }

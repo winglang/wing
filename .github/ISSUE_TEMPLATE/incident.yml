@@ -32,12 +32,12 @@ body:
         - label: WORKAROUND - if there is one, make sure it is documented in the section above.
         - label: PRIORITIZE (P0/P1/P2 - see the definitions [here](https://www.winglang.io/contributing/maintainers/operations#severity-levels)).
         - label: (optional) CONTACT a relevant person who has more information about the incident.
-        - label: (optional) ANNOUNCE major incidents on Slack \#dev or \#general channels. "NOTICE - P0 incident started. {incident-description}. Track on {link to issue}".
+        - label: (optional) ANNOUNCE major incidents on Discord \#dev or \#general channels. "NOTICE - P0 incident started. {incident-description}. Track on {link to issue}".
         - label: HANDLE by reverting or forward fixing.
         - label: UPDATE the team on your actions in the created \#alert Slack thread throughout the incident.
         - label: RESOLVE the incident on [PagerDuty](https://monada.pagerduty.com/incidents) (BetterStack resolves automatically).
         - label: UPDATE the team on the issue closure.
-        - label: (optional) ANNOUNCE closure of major incidents on Slack \#dev or \#general channels. "NOTICE - P0 incident ended. {incident-resolution-description}. Track on {link to issue}".
+        - label: (optional) ANNOUNCE closure of major incidents on Discord \#dev or \#general channels. "NOTICE - P0 incident ended. {incident-resolution-description}. Track on {link to issue}".
         - label: UNPIN the incident issue.
-        - label: LESSONS LEARNED should be shared via the "post-mortem" workflow on \#dev Slack channel.
+        - label: LESSONS LEARNED should be shared via the "post-mortem" workflow on \#dev Discord channel.
         - label: CLOSE the incident issue.

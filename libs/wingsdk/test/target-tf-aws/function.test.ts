@@ -63,7 +63,7 @@ test("function will be behind a vpc when vpc_lambda is set to true", () => {
   expect(tfResourcesOfCount(output, "aws_vpc")).toEqual(1);
   expect(tfFunction.vpc_config).toBeDefined();
   expect(tfFunction.vpc_config.security_group_ids.length).toEqual(1);
-  expect(tfFunction.vpc_config.subnet_ids.length).toEqual(1);
+  expect(tfFunction.vpc_config.subnet_ids.length).toEqual(2);
   expect(tfSanitize(output)).toMatchSnapshot();
 });
 
@@ -204,7 +204,7 @@ test("vpc permissions are added even if there is no policy", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const f = new tfaws.Function(app, "Function", INFLIGHT_CODE);
 
-  f.addNetworkConfig({
+  f.addNetwork({
     securityGroupIds: ["sg-1234567890"],
     subnetIds: ["subnet-1234567890"],
   });

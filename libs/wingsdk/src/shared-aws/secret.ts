@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { AwsInflightHost } from "./inflight-host";
 import { calculateSecretPermissions } from "./permissions";
 import { isValidArn } from "./util";
 import { cloud } from "..";
@@ -30,9 +30,8 @@ export class SecretRef extends Resource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    const fn = Function.from(host);
-    if (fn) {
-      fn.addPolicyStatements(
+    if (AwsInflightHost.isAwsInflightHost(host)) {
+      host.addPolicyStatements(
         ...calculateSecretPermissions(this.secretArn, ops)
       );
     }

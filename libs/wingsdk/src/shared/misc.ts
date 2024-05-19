@@ -51,5 +51,5 @@ export async function shell(
 
 export function isPath(s: string) {
   s = normalPath(s);
-  return s.startsWith("./") || s.startsWith("/");
+  return s.startsWith("./") || s.startsWith("../") || s.startsWith("/");
 }

@@ -221,10 +221,40 @@ export interface Trace {
   readonly type: TraceType;
 
   /**
+   * The log level of the event.
+   */
+  readonly level: LogLevel;
+
+  /**
    * The timestamp of the event, in ISO 8601 format.
    * @example 2020-01-01T00:00:00.000Z
    */
   readonly timestamp: string;
+}
+
+/**
+ * Log level
+ */
+export enum LogLevel {
+  /**
+   * Mostly used for debugging
+   */
+  VERBOSE = "verbose",
+
+  /**
+   * Information that is useful to developers
+   */
+  INFO = "info",
+
+  /**
+   * Warnings that are not errors, but may require attention
+   */
+  WARNING = "warning",
+
+  /**
+   * Errors that should be addressed
+   */
+  ERROR = "error",
 }
 
 /**

@@ -274,7 +274,7 @@ jobs:
     needs:
       - build
     if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
-    uses: ./.github/workflows/tf-aws-test.yml
+    uses: ./.github/workflows/sdk-spec-test.yml
     secrets: inherit
 
   console-preview:

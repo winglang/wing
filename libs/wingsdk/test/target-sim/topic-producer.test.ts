@@ -69,7 +69,6 @@ test("publishing multiple messages to topic", async () => {
 
       const processor = inflight(async (_, event) => {
         if (event.message === "") throw new Error("No message recieved");
-        console.log("event");
       });
 
       topic.onMessage(processor);

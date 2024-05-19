@@ -10,8 +10,8 @@ any kind.
 The [Wing Contributor's Handbook] has tons of relevant information. If you can't find what you need
 here, please let us know by [submitting an issue].
 
-The best way to get started is by asking for help in the [#contrib] channel on
-the [Wing Slack].
+The best way to get started is by asking for help in the #help channel on
+the [Wing Discord].
 
 ## Quick Links
 
@@ -25,9 +25,8 @@ Here is a curated list of topics from the [Wing Contributor's Handbook]:
 
 ## Code of Conduct
 
-The Wing community follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md). Please review it before contributing issues, pull requests, or joining the [Wing Slack].
+The Wing community follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md). Please review it before contributing issues, pull requests, or joining the [Wing Discord].
 
-[Wing Slack]: https://t.winglang.io/slack
+[Wing Discord]: https://t.winglang.io/discord
 [Wing Contributor's Handbook]: https://www.winglang.io/contributing/
-[#contrib]: https://winglang.slack.com/archives/C04BJBTVDV4
 [submitting an issue]: https://github.com/winglang/wing/issues/new
