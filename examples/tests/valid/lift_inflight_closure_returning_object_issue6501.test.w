@@ -24,9 +24,10 @@ let bar = inflight (): cloud.Bucket => {
 };
 
 test "test qualify closure returning a preflight object" {
-  lift(b, ["put"]);
-  // Call the inflight handler and then call a method on the result in a single satatement.
-  // Here we expect the `handle` method to qualify `bar`'s lift and no other qualfications.
-  bar().put("a", "value");
+  lift {b: put} {
+    // Call the inflight handler and then call a method on the result in a single satatement.
+    // Here we expect the `handle` method to qualify `bar`'s lift and no other qualfications.
+    bar().put("a", "value");
+  }
   assert(b.get("a") == "value");
 }
