@@ -6391,7 +6391,7 @@ impl<'a> TypeChecker<'a> {
 						if v.phase != Phase::Inflight {
 							self.spanned_error(
 								op,
-								format!("Only inflight memebers may qualify the lift. {op} is {}.", v.phase),
+								format!("Only inflight members may be qualified. \"{op}\" is a {} member.", v.phase),
 							);
 						}
 						if v.kind != VariableKind::InstanceMember {
