@@ -11,10 +11,10 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic, IntrinsicKind, Literal,
-	New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation,
-	TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	ElifBlock, ElifLetBlock, Elifs, Enum, ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic,
+	IntrinsicKind, LiftQualification, Literal, New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct,
+	StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{
