@@ -308,7 +308,7 @@ new cloud.Function(inflight () => {
 });
 ```
 
-To explicitly qualify lifts in an inflight closure or inflight method and supress the above compiler error use the `lift` statement:
+To explicitly qualify lifts in an inflight closure or inflight method and suppress the above compiler error, create a `lift` block:
 
 ```js playground
 bring cloud;
