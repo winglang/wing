@@ -320,7 +320,7 @@ new cloud.Function(inflight () => {
   if !use_main {
     b = secondary_bucket;
   }
-  // Explicitly sate that `put` may be used on `main_bucket` and `secondary_bucket`
+  // Explicitly state that methods named `put` may be used on `main_bucket` and `secondary_bucket`
   lift {main_bucket: [put], secondary_bucket: [put]} {
     // Error is supressed in this block and all possible values of `b` are explicitly qualified with `put`
     b.put("key1", "value"); 
