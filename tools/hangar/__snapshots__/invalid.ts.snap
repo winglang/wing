@@ -1963,7 +1963,7 @@ error: Variable is not reassignable
    | ^^^
 
 
-error: Expected type to be \\"(message: str): void\\", but got \\"str\\" instead
+error: Expected type to be \\"(value: stringable): void\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/global_symbols.test.w:10:7
    |
 10 | log = \\"hi\\";
@@ -2323,13 +2323,6 @@ error: Unable to infer type
   |                             ^^^^
 
 
-error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:25:44
-   |
-25 | let stringInterpolationCannotBeInferred = (nice) => {
-   |                                            ^^^^
-
-
 error: Property not found
    --> ../../../examples/tests/invalid/inference.test.w:63:19
    |
@@ -2437,13 +2430,6 @@ error: Unable to infer type
   |
 4 | let preflightClosureArgs = (nice) => { return true; };
   |     ^^^^^^^^^^^^^^^^^^^^
-
-
-error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.test.w:25:5
-   |
-25 | let stringInterpolationCannotBeInferred = (nice) => {
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 
@@ -2803,14 +2789,14 @@ Duration <DURATION>"
 `;
 
 exports[`intrinsics.test.w 1`] = `
-"error: @dirname does not require arguments
+"error: @dirname does not expect arguments
   --> ../../../examples/tests/invalid/intrinsics.test.w:6:20
   |
 6 | let path = @dirname();
   |                    ^^
 
 
-error: @dirname cannot be used while inflight
+error: @dirname cannot be used in inflight
   --> ../../../examples/tests/invalid/intrinsics.test.w:2:11
   |
 2 |   let x = @dirname;
@@ -4405,7 +4391,7 @@ Duration <DURATION>"
 `;
 
 exports[`stringify.test.w 1`] = `
-"error: Expected type to be stringable, but got \\"B\\" instead
+"error: Expected type to be \\"stringable\\", but got \\"B\\" instead
   --> ../../../examples/tests/invalid/stringify.test.w:3:13
   |
 3 | log(\\"hello {b}\\");
@@ -4414,13 +4400,22 @@ exports[`stringify.test.w 1`] = `
   = hint: str, num, bool, json, and enums are stringable
 
 
-error: Expected type to be stringable, but got \\"str?\\" instead
+error: Expected type to be \\"stringable\\", but got \\"str?\\" instead
   --> ../../../examples/tests/invalid/stringify.test.w:7:7
   |
 7 | log(\\"{x}\\");
   |       ^
   |
   = hint: str? is an optional, try unwrapping it with 'x ?? \\"nil\\"' or 'x!'
+
+
+error: Expected type to be \\"stringable\\", but got \\"B\\" instead
+   --> ../../../examples/tests/invalid/stringify.test.w:10:5
+   |
+10 | log(b);
+   |     ^
+   |
+   = hint: str, num, bool, json, and enums are stringable
 
 
 
@@ -5040,7 +5035,7 @@ exports[`void_in_expression_position.test.w 1`] = `
   |            ^^^
 
 
-error: Expected type to be stringable, but got \\"void\\" instead
+error: Expected type to be \\"stringable\\", but got \\"void\\" instead
   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:4:22
   |
 4 | let x = \\"my name is {log(\\"mister cloud\\")}\\";
