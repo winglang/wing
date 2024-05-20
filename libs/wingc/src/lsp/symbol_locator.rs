@@ -126,7 +126,8 @@ impl<'a> SymbolLocator<'a> {
 			| Type::Unresolved
 			| Type::Inferred(_)
 			| Type::Function(_)
-			| Type::Enum(_) => None,
+			| Type::Enum(_)
+			| Type::Stringable => None,
 
 			Type::Array(_)
 			| Type::MutArray(_)

@@ -107,6 +107,7 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 				Type::Anything
 				| Type::Number
 				| Type::String
+				| Type::Stringable
 				| Type::Duration
 				| Type::Boolean
 				| Type::Void
