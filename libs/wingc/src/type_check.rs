@@ -248,6 +248,10 @@ pub enum Type {
 	Interface(Interface),
 	Struct(Struct),
 	Enum(Enum),
+	/// A special type for parameters that accept any stringable value.
+	/// If you have a value of this type, the only thing you know you can do
+	/// for sure is that you can stringify it.
+	Stringable,
 }
 
 pub const CLASS_INIT_NAME: &'static str = "new";
@@ -746,6 +750,13 @@ impl Subtype for Type {
 			(Self::Boolean, Self::Boolean) => true,
 			(Self::Duration, Self::Duration) => true,
 			(Self::Void, Self::Void) => true,
+			// These types are stringable
+			(Self::String, Self::Stringable) => true,
+			(Self::Number, Self::Stringable) => true,
+			(Self::Boolean, Self::Stringable) => true,
+			(Self::Json(_), Self::Stringable) => true,
+			(Self::MutJson, Self::Stringable) => true,
+			(Self::Enum(_), Self::Stringable) => true,
 			_ => false,
 		}
 	}
@@ -844,6 +855,7 @@ impl Display for Type {
 			Type::Anything => write!(f, "any"),
 			Type::Number => write!(f, "num"),
 			Type::String => write!(f, "str"),
+			Type::Stringable => write!(f, "stringable"),
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
@@ -1210,6 +1222,7 @@ impl TypeRef {
 			Type::Function(_) => false,
 			Type::Class(_) => false,
 			Type::Interface(_) => false,
+			Type::Stringable => false,
 		}
 	}
 
@@ -1355,6 +1368,7 @@ pub struct Types {
 	mut_json_idx: usize,
 	nil_idx: usize,
 	err_idx: usize,
+	stringable_idx: usize,
 
 	inferences: Vec<Option<TypeRef>>,
 	/// Lookup table from an Expr's `id` to its resolved type and phase
@@ -1393,6 +1407,8 @@ impl Types {
 		let nil_idx = types.len() - 1;
 		types.push(Box::new(Type::Unresolved));
 		let err_idx = types.len() - 1;
+		types.push(Box::new(Type::Stringable));
+		let stringable_idx = types.len() - 1;
 
 		let libraries = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0);
 
@@ -1412,6 +1428,7 @@ impl Types {
 			mut_json_idx,
 			nil_idx,
 			err_idx,
+			stringable_idx,
 			type_for_expr: Vec::new(),
 			json_literal_casts: IndexMap::new(),
 			scope_envs: Vec::new(),
@@ -1427,6 +1444,10 @@ impl Types {
 
 	pub fn string(&self) -> TypeRef {
 		self.get_typeref(self.string_idx)
+	}
+
+	pub fn stringable(&self) -> TypeRef {
+		self.get_typeref(self.stringable_idx)
 	}
 
 	pub fn nil(&self) -> TypeRef {
@@ -1723,6 +1744,7 @@ impl Types {
 			| Type::Class(_)
 			| Type::Interface(_)
 			| Type::Enum(_)
+			| Type::Stringable
 			| Type::Void
 			| Type::Nil
 			| Type::Anything
@@ -1950,15 +1972,15 @@ impl<'a> TypeChecker<'a> {
 			Type::Function(FunctionSignature {
 				this_type: None,
 				parameters: vec![FunctionParameter {
-					name: "message".into(),
-					typeref: self.types.string(),
-					docs: Docs::with_summary("The message to log"),
+					name: "value".into(),
+					typeref: self.types.stringable(),
+					docs: Docs::with_summary("The value to log"),
 					variadic: false,
 				}],
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("console.log($args$)".to_string()),
-				docs: Docs::with_summary("Logs a message"),
+				docs: Docs::with_summary("Logs a value"),
 				implicit_scope_param: false,
 			}),
 			scope,
@@ -2108,7 +2130,7 @@ impl<'a> TypeChecker<'a> {
 					if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 						let (exp_type, p) = self.type_check_exp(interpolated_expr, env);
 						phase = combine_phases(phase, p);
-						self.validate_type_is_stringable(exp_type, interpolated_expr);
+						self.validate_type_in(exp_type, &[self.types.stringable()], interpolated_expr);
 					}
 				});
 				(self.types.string(), phase)
@@ -2676,7 +2698,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_intrinsic(&mut self, intrinsic: &Intrinsic, env: &mut SymbolEnv, exp: &Expr) -> (TypeRef, Phase) {
 		if !intrinsic.kind.is_valid_phase(&env.phase) {
-			self.spanned_error(exp, format!("{} cannot be used while {}", intrinsic.kind, env.phase));
+			self.spanned_error(exp, format!("{} cannot be used in {}", intrinsic.kind, env.phase));
 		}
 		if let Some(intrinsic_type) = intrinsic.kind.get_type(&self.types) {
 			if let Some(sig) = intrinsic_type.as_function_sig() {
@@ -2690,7 +2712,7 @@ impl<'a> TypeChecker<'a> {
 				return (sig.return_type, sig.phase);
 			} else {
 				if let Some(arg_list) = &intrinsic.arg_list {
-					self.spanned_error(&arg_list.span, format!("{} does not require arguments", intrinsic.kind));
+					self.spanned_error(&arg_list.span, format!("{} does not expect arguments", intrinsic.kind));
 				}
 				return (intrinsic_type, Phase::Independent);
 			}
@@ -3318,32 +3340,21 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 
+		if expected_types.len() == 1 && matches!(*expected_types[0], Type::Stringable) {
+			if actual_type.maybe_unwrap_option().is_stringable() {
+				hints.push(format!(
+					"{} is an optional, try unwrapping it with 'x ?? \"nil\"' or 'x!'",
+					actual_type
+				));
+			} else {
+				hints.push("str, num, bool, json, and enums are stringable".to_string());
+			};
+		}
+
 		self.spanned_error_with_hints(span, message, &hints);
 
 		// Evaluate to one of the expected types
 		first_expected_type
-	}
-
-	pub fn validate_type_is_stringable(&mut self, actual_type: TypeRef, span: &impl Spanned) {
-		// If it's a type we can't resolve then we silently ignore it, assuming an error was already reported
-		if actual_type.is_unresolved() || actual_type.is_inferred() {
-			return;
-		}
-
-		if !actual_type.is_stringable() {
-			let message = format!("Expected type to be stringable, but got \"{actual_type}\" instead");
-
-			let hint = if actual_type.maybe_unwrap_option().is_stringable() {
-				format!(
-					"{} is an optional, try unwrapping it with 'x ?? \"nil\"' or 'x!'",
-					actual_type
-				)
-			} else {
-				"str, num, bool, json, and enums are stringable".to_string()
-			};
-
-			self.spanned_error_with_hints(span, message, &[hint]);
-		}
 	}
 
 	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {
@@ -4688,6 +4699,7 @@ impl<'a> TypeChecker<'a> {
 				| Type::Class(_)
 				| Type::Interface(_)
 				| Type::Struct(_)
+				| Type::Stringable
 				| Type::Enum(_) => self.spanned_error(
 					variable,
 					format!("Unsupported reassignment of element of type {}", var_type),
@@ -6052,6 +6064,7 @@ impl<'a> TypeChecker<'a> {
 				let (instance_type, instance_phase) = self.type_check_exp(object, env);
 				let (index_type, index_phase) = self.type_check_exp(index, env);
 
+				// Given a[b], we type check the expression according to the type of a.
 				let res = match *instance_type {
 					// TODO: it might be possible to look at Type::Json's inner data to give a more specific type
 					Type::Json(_) => {
@@ -6093,7 +6106,8 @@ impl<'a> TypeChecker<'a> {
 					| Type::Class(_)
 					| Type::Interface(_)
 					| Type::Struct(_)
-					| Type::Enum(_) => {
+					| Type::Enum(_)
+					| Type::Stringable => {
 						let err = self.spanned_error_with_var(object, format!("Type \"{}\" is not indexable", instance_type));
 						ResolveReferenceResult::Variable(err.0)
 					}
@@ -6389,10 +6403,7 @@ impl<'a> TypeChecker<'a> {
 							);
 						}
 						if v.kind != VariableKind::InstanceMember {
-							self.spanned_error(
-								op,
-								"Only instance (non-static) members may be qualified".to_string(),
-							);
+							self.spanned_error(op, "Only instance (non-static) members may be qualified".to_string());
 						}
 					}
 					Some(_) => panic!("expected object envs to only have variables"),

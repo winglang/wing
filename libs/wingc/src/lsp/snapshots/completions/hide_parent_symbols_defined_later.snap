@@ -29,10 +29,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: log
   kind: 3
-  detail: "(message: str): void"
+  detail: "(value: stringable): void"
   documentation:
     kind: markdown
-    value: "```wing\nlog: (message: str): void\n```\n---\nLogs a message\n### Parameters\n- `message` — `str` — The message to log"
+    value: "```wing\nlog: (value: stringable): void\n```\n---\nLogs a value\n### Parameters\n- `value` — `stringable` — The value to log"
   sortText: cc|log
   insertText: log($1)
   insertTextFormat: 2

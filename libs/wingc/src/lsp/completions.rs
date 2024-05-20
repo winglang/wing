@@ -1087,6 +1087,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				Type::Anything
 				| Type::Number
 				| Type::String
+				| Type::Stringable
 				| Type::Duration
 				| Type::Boolean
 				| Type::Void
