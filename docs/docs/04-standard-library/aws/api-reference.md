@@ -59,6 +59,7 @@ Get the region of the bucket.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.BucketRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.BucketRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -87,6 +88,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.BucketRef.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.BucketRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.BucketRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.BucketRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -167,6 +186,7 @@ new aws.Domain(props: DomainProps);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.Domain.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Domain.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -195,6 +215,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Domain.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Domain.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Domain.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Domain.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -347,6 +385,7 @@ If not defined, an empty string will be passed.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.FunctionRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.FunctionRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -375,6 +414,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.FunctionRef.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.FunctionRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.FunctionRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.FunctionRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -459,6 +516,7 @@ Get the queue URL.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.QueueRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.QueueRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -487,6 +545,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.QueueRef.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.QueueRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.QueueRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.QueueRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -592,6 +668,7 @@ Retrieve the Json value of the secret.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.SecretRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.SecretRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -620,6 +697,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.SecretRef.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.SecretRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.SecretRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.SecretRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -754,6 +849,37 @@ The `onRequest` handler.
 - *Type:* MutMap&lt;str&gt;
 
 HTTP response headers to add to all responses (used by CORS).
+
+---
+
+
+
+### AwsInflightHost <a name="AwsInflightHost" id="@winglang/sdk.aws.AwsInflightHost"></a>
+
+Represents an inflight host on AWS.
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.AwsInflightHost.isAwsInflightHost">isAwsInflightHost</a></code> | Returns `true` if `obj` implements `IAwsInflightHost`. |
+
+---
+
+##### `isAwsInflightHost` <a name="isAwsInflightHost" id="@winglang/sdk.aws.AwsInflightHost.isAwsInflightHost"></a>
+
+```wing
+bring aws;
+
+aws.AwsInflightHost.isAwsInflightHost(obj: any);
+```
+
+Returns `true` if `obj` implements `IAwsInflightHost`.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.AwsInflightHost.isAwsInflightHost.parameter.obj"></a>
+
+- *Type:* any
 
 ---
 
@@ -1303,6 +1429,51 @@ The website's custom domain object.
 
 ---
 
+### NetworkConfig <a name="NetworkConfig" id="@winglang/sdk.aws.NetworkConfig"></a>
+
+Function network configuration used to hold data on subnets and security groups that should be used when a function is deployed within a VPC.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.aws.NetworkConfig.Initializer"></a>
+
+```wing
+bring aws;
+
+let NetworkConfig = aws.NetworkConfig{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.NetworkConfig.property.securityGroupIds">securityGroupIds</a></code> | <code>MutArray&lt;str&gt;</code> | List of security groups to place function in. |
+| <code><a href="#@winglang/sdk.aws.NetworkConfig.property.subnetIds">subnetIds</a></code> | <code>MutArray&lt;str&gt;</code> | List of subnets to attach on function. |
+
+---
+
+##### `securityGroupIds`<sup>Required</sup> <a name="securityGroupIds" id="@winglang/sdk.aws.NetworkConfig.property.securityGroupIds"></a>
+
+```wing
+securityGroupIds: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+
+List of security groups to place function in.
+
+---
+
+##### `subnetIds`<sup>Required</sup> <a name="subnetIds" id="@winglang/sdk.aws.NetworkConfig.property.subnetIds"></a>
+
+```wing
+subnetIds: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+
+List of subnets to attach on function.
+
+---
+
 ### PolicyStatement <a name="PolicyStatement" id="@winglang/sdk.aws.PolicyStatement"></a>
 
 AWS IAM Policy Statement.
@@ -1537,59 +1708,32 @@ AWS Dynamodb name.
 
 ### IAwsFunction <a name="IAwsFunction" id="@winglang/sdk.aws.IAwsFunction"></a>
 
+- *Extends:* <a href="#@winglang/sdk.aws.IAwsInflightHost">IAwsInflightHost</a>
+
 - *Implemented By:* <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>
 
 A shared interface for AWS functions.
 
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsFunction.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
-| <code><a href="#@winglang/sdk.aws.IAwsFunction.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
-
----
-
-##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.aws.IAwsFunction.addEnvironment"></a>
-
-```wing
-addEnvironment(key: str, value: str): void
-```
-
-Add an environment variable to the function.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.aws.IAwsFunction.addEnvironment.parameter.key"></a>
-
-- *Type:* str
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.aws.IAwsFunction.addEnvironment.parameter.value"></a>
-
-- *Type:* str
-
----
-
-##### `addPolicyStatements` <a name="addPolicyStatements" id="@winglang/sdk.aws.IAwsFunction.addPolicyStatements"></a>
-
-```wing
-addPolicyStatements(...policies: Array<PolicyStatement>): void
-```
-
-Add policy statements to the function's IAM role.
-
-###### `policies`<sup>Required</sup> <a name="policies" id="@winglang/sdk.aws.IAwsFunction.addPolicyStatements.parameter.policies"></a>
-
-- *Type:* <a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>
-
----
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.property.functionArn">functionArn</a></code> | <code>str</code> | AWS Function arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.property.functionName">functionName</a></code> | <code>str</code> | AWS Function name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.IAwsFunction.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
 
 ---
 
@@ -1614,6 +1758,73 @@ functionName: str;
 - *Type:* str
 
 AWS Function name.
+
+---
+
+### IAwsInflightHost <a name="IAwsInflightHost" id="@winglang/sdk.aws.IAwsInflightHost"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>, <a href="#@winglang/sdk.aws.IAwsInflightHost">IAwsInflightHost</a>
+
+Represents an `IInflightHost` on AWS.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsInflightHost.addNetwork">addNetwork</a></code> | Adds the host to the specified network. |
+| <code><a href="#@winglang/sdk.aws.IAwsInflightHost.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
+
+---
+
+##### `addNetwork` <a name="addNetwork" id="@winglang/sdk.aws.IAwsInflightHost.addNetwork"></a>
+
+```wing
+addNetwork(config: NetworkConfig): void
+```
+
+Adds the host to the specified network.
+
+###### `config`<sup>Required</sup> <a name="config" id="@winglang/sdk.aws.IAwsInflightHost.addNetwork.parameter.config"></a>
+
+- *Type:* <a href="#@winglang/sdk.aws.NetworkConfig">NetworkConfig</a>
+
+The network configuration.
+
+---
+
+##### `addPolicyStatements` <a name="addPolicyStatements" id="@winglang/sdk.aws.IAwsInflightHost.addPolicyStatements"></a>
+
+```wing
+addPolicyStatements(...policies: Array<PolicyStatement>): void
+```
+
+Add policy statements to the function's IAM role.
+
+###### `policies`<sup>Required</sup> <a name="policies" id="@winglang/sdk.aws.IAwsInflightHost.addPolicyStatements.parameter.policies"></a>
+
+- *Type:* <a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsInflightHost.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.IAwsInflightHost.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
 
 ---
 

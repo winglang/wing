@@ -7,8 +7,8 @@ pub mod symbol_env;
 pub(crate) mod type_reference_transform;
 
 use crate::ast::{
-	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition,
-	IfLet, Intrinsic, IntrinsicKind, New, TypeAnnotationKind,
+	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExplicitLift, ExprId,
+	FunctionDefinition, IfLet, Intrinsic, IntrinsicKind, New, TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -248,6 +248,10 @@ pub enum Type {
 	Interface(Interface),
 	Struct(Struct),
 	Enum(Enum),
+	/// A special type for parameters that accept any stringable value.
+	/// If you have a value of this type, the only thing you know you can do
+	/// for sure is that you can stringify it.
+	Stringable,
 }
 
 pub const CLASS_INIT_NAME: &'static str = "new";
@@ -746,6 +750,13 @@ impl Subtype for Type {
 			(Self::Boolean, Self::Boolean) => true,
 			(Self::Duration, Self::Duration) => true,
 			(Self::Void, Self::Void) => true,
+			// These types are stringable
+			(Self::String, Self::Stringable) => true,
+			(Self::Number, Self::Stringable) => true,
+			(Self::Boolean, Self::Stringable) => true,
+			(Self::Json(_), Self::Stringable) => true,
+			(Self::MutJson, Self::Stringable) => true,
+			(Self::Enum(_), Self::Stringable) => true,
 			_ => false,
 		}
 	}
@@ -844,6 +855,7 @@ impl Display for Type {
 			Type::Anything => write!(f, "any"),
 			Type::Number => write!(f, "num"),
 			Type::String => write!(f, "str"),
+			Type::Stringable => write!(f, "stringable"),
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
@@ -1210,6 +1222,7 @@ impl TypeRef {
 			Type::Function(_) => false,
 			Type::Class(_) => false,
 			Type::Interface(_) => false,
+			Type::Stringable => false,
 		}
 	}
 
@@ -1355,6 +1368,7 @@ pub struct Types {
 	mut_json_idx: usize,
 	nil_idx: usize,
 	err_idx: usize,
+	stringable_idx: usize,
 
 	inferences: Vec<Option<TypeRef>>,
 	/// Lookup table from an Expr's `id` to its resolved type and phase
@@ -1394,6 +1408,8 @@ impl Types {
 		let nil_idx = types.len() - 1;
 		types.push(Box::new(Type::Unresolved));
 		let err_idx = types.len() - 1;
+		types.push(Box::new(Type::Stringable));
+		let stringable_idx = types.len() - 1;
 
 		let libraries = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0);
 
@@ -1413,6 +1429,7 @@ impl Types {
 			mut_json_idx,
 			nil_idx,
 			err_idx,
+			stringable_idx,
 			type_for_expr: Vec::new(),
 			json_literal_casts: IndexMap::new(),
 			scope_envs: Vec::new(),
@@ -1429,6 +1446,10 @@ impl Types {
 
 	pub fn string(&self) -> TypeRef {
 		self.get_typeref(self.string_idx)
+	}
+
+	pub fn stringable(&self) -> TypeRef {
+		self.get_typeref(self.stringable_idx)
 	}
 
 	pub fn nil(&self) -> TypeRef {
@@ -1725,6 +1746,7 @@ impl Types {
 			| Type::Class(_)
 			| Type::Interface(_)
 			| Type::Enum(_)
+			| Type::Stringable
 			| Type::Void
 			| Type::Nil
 			| Type::Anything
@@ -1745,7 +1767,6 @@ pub enum UtilityFunctions {
 	Assert,
 	UnsafeCast,
 	Nodeof,
-	Lift,
 }
 
 impl Display for UtilityFunctions {
@@ -1755,7 +1776,6 @@ impl Display for UtilityFunctions {
 			UtilityFunctions::Assert => write!(f, "assert"),
 			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
 			UtilityFunctions::Nodeof => write!(f, "nodeof"),
-			UtilityFunctions::Lift => write!(f, "lift"),
 		}
 	}
 }
@@ -1875,12 +1895,12 @@ impl<'a> TypeChecker<'a> {
 		});
 	}
 
-	fn spanned_error_with_hints<S: Into<String>>(&self, spanned: &impl Spanned, message: S, hints: Vec<String>) {
+	fn spanned_error_with_hints<S: ToString, H: ToString>(&self, spanned: &impl Spanned, message: S, hints: &[H]) {
 		report_diagnostic(Diagnostic {
-			message: message.into(),
+			message: message.to_string(),
 			span: Some(spanned.span()),
 			annotations: vec![],
-			hints,
+			hints: hints.iter().map(|h| h.to_string()).collect(),
 		});
 	}
 
@@ -1954,15 +1974,15 @@ impl<'a> TypeChecker<'a> {
 			Type::Function(FunctionSignature {
 				this_type: None,
 				parameters: vec![FunctionParameter {
-					name: "message".into(),
-					typeref: self.types.string(),
-					docs: Docs::with_summary("The message to log"),
+					name: "value".into(),
+					typeref: self.types.stringable(),
+					docs: Docs::with_summary("The value to log"),
 					variadic: false,
 				}],
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("console.log($args$)".to_string()),
-				docs: Docs::with_summary("Logs a message"),
+				docs: Docs::with_summary("Logs a value"),
 				implicit_scope_param: false,
 			}),
 			scope,
@@ -2035,42 +2055,6 @@ impl<'a> TypeChecker<'a> {
 				phase: Phase::Preflight,
 				js_override: Some("$helpers.nodeof($args$)".to_string()),
 				docs: Docs::with_summary("Obtain the tree node of a preflight resource."),
-				implicit_scope_param: false,
-			}),
-			scope,
-		);
-
-		let str_array_type = self.types.add_type(Type::Array(self.types.string()));
-		self.add_builtin(
-			&UtilityFunctions::Lift.to_string(),
-			Type::Function(FunctionSignature {
-				this_type: None,
-				parameters: vec![
-					FunctionParameter {
-						name: "preflightObject".into(),
-						typeref: self.types.resource_base_interface(),
-						docs: Docs::with_summary("The preflight object to qualify"),
-						variadic: false,
-					},
-					FunctionParameter {
-						name: "qualifications".into(),
-						typeref: str_array_type,
-						docs: Docs::with_summary("
-							The qualifications to apply to the preflight object.\n
-							This is an array of strings denoting members of the object that are accessed in the current method/function.\n
-							For example, if the method accesses the `push` and `pop` members of a `cloud.Queue` object, the qualifications should be `[\"push\", \"pop\"]`."
-						),
-						variadic: false,
-					},
-				],
-				return_type: self.types.void(),
-				phase: Phase::Inflight,
-				// This builtin actually compiles to nothing in JS, it's a marker that behaves like a function in the type checker
-				// and is used during the lifting phase to explicitly define lifts for an inflight method
-				js_override: Some("".to_string()),
-				docs: Docs::with_summary(
-					"Explicitly apply qualifications to a preflight object used in the current method/function",
-				),
 				implicit_scope_param: false,
 			}),
 			scope,
@@ -2196,7 +2180,7 @@ impl<'a> TypeChecker<'a> {
 					if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 						let (exp_type, p) = self.type_check_exp(interpolated_expr, env);
 						phase = combine_phases(phase, p);
-						self.validate_type_is_stringable(exp_type, interpolated_expr);
+						self.validate_type_in(exp_type, &[self.types.stringable()], interpolated_expr);
 					}
 				});
 				(self.types.string(), phase)
@@ -2764,7 +2748,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_intrinsic(&mut self, intrinsic: &Intrinsic, env: &mut SymbolEnv, exp: &Expr) -> (TypeRef, Phase) {
 		if !intrinsic.kind.is_valid_phase(&env.phase) {
-			self.spanned_error(exp, format!("{} cannot be used while {}", intrinsic.kind, env.phase));
+			self.spanned_error(exp, format!("{} cannot be used in {}", intrinsic.kind, env.phase));
 		}
 		let arg_list = intrinsic
 			.arg_list
@@ -2790,7 +2774,7 @@ impl<'a> TypeChecker<'a> {
 				}
 			} else {
 				if let Some(arg_list) = &intrinsic.arg_list {
-					self.spanned_error(&arg_list.span, format!("{} does not require arguments", intrinsic.kind));
+					self.spanned_error(&arg_list.span, format!("{} does not expect arguments", intrinsic.kind));
 				}
 				return (intrinsic_type, Phase::Independent);
 			}
@@ -3418,32 +3402,21 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 
-		self.spanned_error_with_hints(span, message, hints);
+		if expected_types.len() == 1 && matches!(*expected_types[0], Type::Stringable) {
+			if actual_type.maybe_unwrap_option().is_stringable() {
+				hints.push(format!(
+					"{} is an optional, try unwrapping it with 'x ?? \"nil\"' or 'x!'",
+					actual_type
+				));
+			} else {
+				hints.push("str, num, bool, json, and enums are stringable".to_string());
+			};
+		}
+
+		self.spanned_error_with_hints(span, message, &hints);
 
 		// Evaluate to one of the expected types
 		first_expected_type
-	}
-
-	pub fn validate_type_is_stringable(&mut self, actual_type: TypeRef, span: &impl Spanned) {
-		// If it's a type we can't resolve then we silently ignore it, assuming an error was already reported
-		if actual_type.is_unresolved() || actual_type.is_inferred() {
-			return;
-		}
-
-		if !actual_type.is_stringable() {
-			let message = format!("Expected type to be stringable, but got \"{actual_type}\" instead");
-
-			let hint = if actual_type.maybe_unwrap_option().is_stringable() {
-				format!(
-					"{} is an optional, try unwrapping it with 'x ?? \"nil\"' or 'x!'",
-					actual_type
-				)
-			} else {
-				"str, num, bool, json, and enums are stringable".to_string()
-			};
-
-			self.spanned_error_with_hints(span, message, vec![hint]);
-		}
 	}
 
 	pub fn type_check_file_or_dir(&mut self, source_path: &Utf8Path, scope: &Scope) {
@@ -3605,7 +3578,7 @@ impl<'a> TypeChecker<'a> {
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
 				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
 				if !var_info.name.span.file_id.is_empty() && self.check_for_inferences(&var_info.type_) {
-					self.spanned_error(&var_info.name, "Unable to infer type".to_string());
+					self.spanned_error(&var_info.name, "Unable to infer type");
 				}
 			}
 		}
@@ -4116,6 +4089,9 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::SuperConstructor { arg_list } => {
 				tc.type_check_super_constructor_against_parent_initializer(stmt, arg_list, env);
+			}
+			StmtKind::ExplicitLift(lift_quals) => {
+				tc.type_check_lift_statement(lift_quals, env);
 			}
 		});
 	}
@@ -4742,7 +4718,7 @@ impl<'a> TypeChecker<'a> {
 						}],
 					);
 				} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
-					self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
+					self.spanned_error(variable, "Variable cannot be reassigned from inflight");
 				}
 			}
 			ResolveReferenceResult::Location(container_type, _) => match **container_type {
@@ -4750,26 +4726,26 @@ impl<'a> TypeChecker<'a> {
 				Type::Map(_) => {
 					self.spanned_error_with_hints(
 						variable,
-						"Cannot update elements of an immutable Map".to_string(),
-						vec!["Consider using MutMap instead".to_string()],
+						"Cannot update elements of an immutable Map",
+						&["Consider using MutMap instead"],
 					);
 				}
 				Type::Json(_) => {
 					self.spanned_error_with_hints(
 						variable,
-						"Cannot update elements of an immutable Json".to_string(),
-						vec!["Consider using MutJson instead".to_string()],
+						"Cannot update elements of an immutable Json",
+						&["Consider using MutJson instead"],
 					);
 				}
 				Type::Array(_) => {
 					self.spanned_error_with_hints(
 						variable,
-						"Cannot update elements of an immutable Array".to_string(),
-						vec!["Consider using MutArray instead".to_string()],
+						"Cannot update elements of an immutable Array",
+						&["Consider using MutArray instead"],
 					);
 				}
 				Type::String => {
-					self.spanned_error(variable, "Strings are immutable".to_string());
+					self.spanned_error(variable, "Strings are immutable");
 				}
 				Type::Inferred(_)
 				| Type::Unresolved
@@ -4785,6 +4761,7 @@ impl<'a> TypeChecker<'a> {
 				| Type::Class(_)
 				| Type::Interface(_)
 				| Type::Struct(_)
+				| Type::Stringable
 				| Type::Enum(_) => self.spanned_error(
 					variable,
 					format!("Unsupported reassignment of element of type {}", var_type),
@@ -6149,6 +6126,7 @@ impl<'a> TypeChecker<'a> {
 				let (instance_type, instance_phase) = self.type_check_exp(object, env);
 				let (index_type, index_phase) = self.type_check_exp(index, env);
 
+				// Given a[b], we type check the expression according to the type of a.
 				let res = match *instance_type {
 					// TODO: it might be possible to look at Type::Json's inner data to give a more specific type
 					Type::Json(_) => {
@@ -6190,7 +6168,8 @@ impl<'a> TypeChecker<'a> {
 					| Type::Class(_)
 					| Type::Interface(_)
 					| Type::Struct(_)
-					| Type::Enum(_) => {
+					| Type::Enum(_)
+					| Type::Stringable => {
 						let err = self.spanned_error_with_var(object, format!("Type \"{}\" is not indexable", instance_type));
 						ResolveReferenceResult::Variable(err.0)
 					}
@@ -6283,11 +6262,7 @@ impl<'a> TypeChecker<'a> {
 				env,
 			),
 			Type::Struct(ref s) => self.get_property_from_class_like(s, property, true, env),
-			_ => {
-				self
-					.spanned_error_with_var(property, "Property not found".to_string())
-					.0
-			}
+			_ => self.spanned_error_with_var(property, "Property not found").0,
 		}
 	}
 
@@ -6428,7 +6403,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		if &parent.root == name && parent.fields.is_empty() {
-			self.spanned_error(parent, "Class cannot extend itself".to_string());
+			self.spanned_error(parent, "Class cannot extend itself");
 			return (None, None);
 		}
 
@@ -6450,6 +6425,71 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(parent, format!("Expected \"{}\" to be a class", parent));
 			(None, None)
 		}
+	}
+
+	fn type_check_lift_statement(&mut self, lift_quals: &ExplicitLift, env: &mut SymbolEnv) {
+		for qual in lift_quals.qualifications.iter() {
+			let (obj_type, obj_phase) = self.type_check_exp(&qual.obj, env);
+			// Skip unknown references (diagnotics already emitted in `resolve_reference`)
+			if obj_type.is_unresolved() {
+				continue;
+			}
+			// Make sure the object isn't inflight
+			if obj_phase == Phase::Inflight {
+				self.spanned_error(
+					&qual.obj,
+					format!("Expected a preflight object, but found {obj_phase} expression instead"),
+				);
+			}
+			// Make sure the object type is a preflight type
+			if !obj_type.is_preflight_object_type() {
+				self.spanned_error_with_hints(
+					&qual.obj,
+					format!("Expected a preflight object type, but found {obj_type} instead"),
+					&["Preflight objects are instances of either a class or interface defined preflight without the `inflight` modifier"],
+				);
+				continue;
+			}
+			// Make sure all the ops are inflight instance members of the object
+			for op in qual.ops.iter() {
+				let obj_env = obj_type.as_env().expect("a preflight object to have an env");
+				match obj_env.lookup(op, None) {
+					Some(SymbolKind::Variable(v)) => {
+						if v.phase != Phase::Inflight {
+							self.spanned_error(
+								op,
+								format!(
+									"Only inflight members may be qualified. \"{op}\" is a {} member.",
+									v.phase
+								),
+							);
+						}
+						if v.kind != VariableKind::InstanceMember {
+							self.spanned_error(op, "Only instance (non-static) members may be qualified".to_string());
+						}
+					}
+					Some(_) => panic!("expected object envs to only have variables"),
+					None => self.spanned_error_with_annotations(
+						op,
+						format!("Object of type {obj_type} does not have an inflight member named \"{op}\""),
+						vec![DiagnosticAnnotation::new(
+							"Operation does not exist in this object",
+							&qual.obj,
+						)],
+					),
+				}
+			}
+		}
+
+		// Type check the inner statements
+		let scope_env = self.types.add_symbol_env(SymbolEnv::new(
+			Some(env.get_ref()),
+			SymbolEnvKind::Scope,
+			env.phase,
+			self.ctx.current_stmt_idx(),
+		));
+		self.types.set_scope_env(&lift_quals.statements, scope_env);
+		self.inner_scopes.push((&lift_quals.statements, self.ctx.clone()));
 	}
 }
 

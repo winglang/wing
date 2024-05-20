@@ -72,8 +72,9 @@ module.exports = function({ $b, $bar }) {
       return $obj;
     }
     async handle() {
-      ;
-      (await (await $bar()).put("a", "value"));
+      {
+        (await (await $bar()).put("a", "value"));
+      }
       $helpers.assert($helpers.eq((await $b.get("a")), "value"), "b.get(\"a\") == \"value\"");
     }
   }

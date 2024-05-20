@@ -98,10 +98,6 @@ export interface IHostedLiftable extends ILiftable {
   onLift(host: IInflightHost, ops: string[]): void;
 }
 
-function hasLiftMap(x: any): x is { _liftMap: LiftMap } {
-  return x != null && typeof x._liftMap === "object";
-}
-
 /**
  * Abstract interface for `Resource`.
  * @skipDocs
@@ -136,6 +132,16 @@ export abstract class Resource extends Construct implements IResource {
   public static onLiftType(host: IInflightHost, ops: string[]): void {
     host;
     ops;
+  }
+
+  /**
+   * Generates an asynchronous JavaScript statement which can be used to create an inflight client
+   * for a resource.
+   *
+   * NOTE: This statement must be executed within an async context.
+   */
+  public static toInflight(obj: IResource) {
+    return obj._toInflight();
   }
 
   /**
@@ -184,8 +190,14 @@ export abstract class Resource extends Construct implements IResource {
    * actually bound.
    */
   public onLift(host: IInflightHost, ops: string[]): void {
-    host;
-    ops;
+    for (const op of ops) {
+      // Add connection metadata
+      Node.of(this).addConnection({
+        source: host,
+        target: this,
+        name: op.endsWith("()") ? op : `${op}()`,
+      });
+    }
   }
 
   /**
@@ -197,35 +209,7 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _preSynthesize(): void {
-    if (hasLiftMap(this) && !(this instanceof AutoIdResource)) {
-      addConnectionsFromLiftMap(this, this._liftMap);
-    }
-  }
-}
-
-function addConnectionsFromLiftMap(
-  construct: IConstruct,
-  liftData: LiftMap,
-  baseOp?: string
-) {
-  for (const [op, liftEntries] of Object.entries(liftData)) {
-    for (const [dep, depOps] of liftEntries) {
-      if (Construct.isConstruct(dep) && !(dep instanceof AutoIdResource)) {
-        // case 1: dep is an ordinary resource
-        for (const depOp of depOps) {
-          Node.of(construct).addConnection({
-            source: construct,
-            sourceOp: baseOp ?? op,
-            target: dep,
-            targetOp: depOp,
-            name: depOp,
-          });
-        }
-      } else if (hasLiftMap(dep)) {
-        // case 2: dep is an inflight
-        addConnectionsFromLiftMap(construct, dep._liftMap, baseOp ?? op);
-      }
-    }
+    // do nothing by default
   }
 }
 

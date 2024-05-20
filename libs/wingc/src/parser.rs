@@ -11,10 +11,10 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic, IntrinsicKind, Literal,
-	New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation,
-	TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	ElifBlock, ElifLetBlock, Elifs, Enum, ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic,
+	IntrinsicKind, LiftQualification, Literal, New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct,
+	StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{
@@ -641,6 +641,7 @@ impl<'s> Parser<'s> {
 			"test_statement" => self.build_test_statement(statement_node)?,
 			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
 			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase, idx)?,
+			"lift_statement" => self.build_lift_statement(statement_node, phase)?,
 			"ERROR" => return self.with_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -651,6 +652,37 @@ impl<'s> Parser<'s> {
 			idx,
 			doc,
 		})
+	}
+
+	fn build_lift_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+		// Lift statements are only legal in inflight
+		if phase != Phase::Inflight {
+			return self.with_error("Lift blocks are only allowed in inflight phase", statement_node);
+		}
+
+		let lift_qualifications_node = statement_node.child_by_field_name("lift_qualifications").unwrap();
+		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+
+		let mut qualifications = vec![];
+
+		let mut qual_cursor = lift_qualifications_node
+			.child_by_field_name("qualification")
+			.unwrap()
+			.walk();
+
+		for qual_node in lift_qualifications_node.named_children(&mut qual_cursor) {
+			let obj = self.build_expression(&qual_node.child_by_field_name("obj").unwrap(), phase)?;
+			let mut ops = vec![];
+			for op_node in get_actual_children_by_field_name(qual_node, "ops") {
+				ops.push(self.node_symbol(&op_node)?);
+			}
+			qualifications.push(LiftQualification { obj, ops });
+		}
+
+		Ok(StmtKind::ExplicitLift(ExplicitLift {
+			qualifications,
+			statements,
+		}))
 	}
 
 	fn build_try_catch_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -2812,6 +2844,7 @@ fn is_valid_module_statement(stmt: &Stmt) -> bool {
 		StmtKind::Assignment { .. } => false,
 		StmtKind::Scope(_) => false,
 		StmtKind::TryCatch { .. } => false,
+		StmtKind::ExplicitLift(_) => false,
 		// TODO: support constants https://github.com/winglang/wing/issues/3606
 		// TODO: support test statements https://github.com/winglang/wing/issues/3571
 		StmtKind::Let { .. } => false,

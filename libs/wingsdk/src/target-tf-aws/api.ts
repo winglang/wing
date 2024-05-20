@@ -83,9 +83,7 @@ export class Api extends cloud.Api implements IAwsApi {
 
     Node.of(this).addConnection({
       source: this,
-      sourceOp: cloud.ApiInflightMethods.REQUEST,
       target: fn,
-      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: `${lowerMethod}()`,
     });
   }
@@ -245,12 +243,7 @@ export class Api extends cloud.Api implements IAwsApi {
 
   /** @internal */
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("apis can only be bound by tfaws.Function for now");
-    }
-
     host.addEnvironment(this.urlEnvName(), this.url);
-
     super.onLift(host, ops);
   }
 

@@ -160,7 +160,7 @@
         },
         {
           "name": "support.class.wing",
-          "match": "\\b(void|str|num|bool|any|duration|Map|Set|MutMap|MutSet|Array|MutArray|Promise|Json|MutJson)\\b"
+          "match": "\\b(void|str|num|bool|any|duration|regex|datetime|stringable|Map|Set|MutMap|MutSet|Array|MutArray|Promise|Json|MutJson)\\b"
         }
       ]
     },

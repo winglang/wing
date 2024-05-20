@@ -51,7 +51,7 @@ export interface MetadataEntry {
 export class Node {
   /** Add an ordering dependency on another construct.
   An `IDependable` */
-  readonly addDependency: (deps?: ((readonly (IDependable)[])) | undefined) => void;
+  readonly addDependency: (deps: (readonly (IDependable)[])) => void;
   /** Adds a metadata entry to this construct.
   Entries are arbitrary values and will also include a stack trace to allow tracing back to
   the code location for when the entry was added. It can be used, for example, to include source

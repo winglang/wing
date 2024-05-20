@@ -12,7 +12,7 @@ import { Construct, IConstruct } from "constructs";
 import { cloud, std, core } from "@winglang/sdk";
 import { NotImplementedError } from "@winglang/sdk/lib/core/errors";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
-import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
+import { IAwsFunction, NetworkConfig, PolicyStatement, externalLibraries } from "@winglang/sdk/lib/shared-aws";
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
@@ -73,7 +73,7 @@ export class Function
     // This is a workaround for https://github.com/aws/aws-cdk/issues/28732
     const inflightCodeApproximation = this._getCodeLines(inflight).join("\n");
     writeFileSync(this.entrypoint, inflightCodeApproximation);
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createBundle(this.entrypoint, externalLibraries);
 
     const code = Code.fromAsset(resolve(bundle.directory));
 
@@ -96,7 +96,7 @@ export class Function
 
     // produce an inflight code bundle using the latest information, including all
     // changes made to captured variables/resources after the constructor
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createBundle(this.entrypoint, externalLibraries);
 
     // copy files from bundle.directory to this.assetPath
     const assetDir = resolve(App.of(this).outdir, this.assetPath);
@@ -197,6 +197,11 @@ export class Function
     for (const statement of statements) {
       this.function.addToRolePolicy(new CdkPolicyStatement(statement));
     }
+  }
+
+  public addNetwork(config: NetworkConfig): void {
+    config;
+    throw new Error("The AWS CDK platform provider does not support adding network configurations to AWS Lambda functions at the moment.");
   }
 
   private envName(): string {

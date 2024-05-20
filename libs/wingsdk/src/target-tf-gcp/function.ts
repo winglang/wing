@@ -273,7 +273,7 @@ export class Function extends cloud.Function {
   /** @internal */
   public get _liftMap(): LiftMap {
     return {
-      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
+      [cloud.FunctionInflightMethods.INVOKE]: [],
     };
   }
 

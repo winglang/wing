@@ -1,12 +1,12 @@
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Function } from "./function";
 import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import { DynamodbTableItem } from "../.gen/providers/aws/dynamodb-table-item";
 import * as core from "../core";
 import * as ex from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { AwsInflightHost } from "../shared-aws";
 import { IAwsTable } from "../shared-aws/table";
 import { Json, IInflightHost } from "../std";
 
@@ -57,8 +57,8 @@ export class Table extends ex.Table implements IAwsTable {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("tables can only be bound by tfaws.Function for now");
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     if (
