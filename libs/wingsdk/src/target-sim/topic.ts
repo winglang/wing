@@ -45,7 +45,9 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "onMessage()",
     });
 
@@ -77,7 +79,9 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE_ASYNC,
       name: "subscribeQueue()",
     });
 

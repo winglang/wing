@@ -59,7 +59,9 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
       Node.of(this).addConnection({
         source: this,
+        sourceOp: cloud.QueueInflightMethods.POP,
         target: this.dlq.queue,
+        targetOp: cloud.QueueInflightMethods.PUSH,
         name: "dead-letter queue",
       });
     }
@@ -111,7 +113,9 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.QueueInflightMethods.PUSH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "setConsumer()",
     });
 
