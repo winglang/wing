@@ -1053,9 +1053,22 @@ new aws.Function();
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Function.context">context</a></code> | Returns the current Lambda invocation context, if the host is an AWS Lambda. |
 | <code><a href="#@winglang/sdk.aws.Function.from">from</a></code> | If the inflight host is an AWS Lambda, return a helper interface for working with it. |
 
 ---
+
+##### `context` <a name="context" id="@winglang/sdk.aws.Function.context"></a>
+
+```wing
+bring aws;
+
+aws.Function.context();
+```
+
+Returns the current Lambda invocation context, if the host is an AWS Lambda.
+
+> [https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html)
 
 ##### `from` <a name="from" id="@winglang/sdk.aws.Function.from"></a>
 
@@ -1998,6 +2011,128 @@ bucketName: str;
 - *Type:* str
 
 AWS Bucket name.
+
+---
+
+### ILambdaContext <a name="ILambdaContext" id="@winglang/sdk.aws.ILambdaContext"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.ILambdaContext">ILambdaContext</a>
+
+The AWS Lambda context object.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.remainingTimeInMillis">remainingTimeInMillis</a></code> | Returns the number of milliseconds left before the execution times out. |
+
+---
+
+##### `remainingTimeInMillis` <a name="remainingTimeInMillis" id="@winglang/sdk.aws.ILambdaContext.remainingTimeInMillis"></a>
+
+```wing
+remainingTimeInMillis(): num
+```
+
+Returns the number of milliseconds left before the execution times out.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.awsRequestId">awsRequestId</a></code> | <code>str</code> | The identifier of the invocation request. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.functionName">functionName</a></code> | <code>str</code> | The name of the Lambda function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.functionVersion">functionVersion</a></code> | <code>str</code> | The version of the function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.invokedFunctionArn">invokedFunctionArn</a></code> | <code>str</code> | The Amazon Resource Name (ARN) that's used to invoke the function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.logGroupName">logGroupName</a></code> | <code>str</code> | The log group for the function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.logStreamName">logStreamName</a></code> | <code>str</code> | The log stream for the function instance. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.memoryLimitInMB">memoryLimitInMB</a></code> | <code>str</code> | The amount of memory that's allocated for the function. |
+
+---
+
+##### `awsRequestId`<sup>Required</sup> <a name="awsRequestId" id="@winglang/sdk.aws.ILambdaContext.property.awsRequestId"></a>
+
+```wing
+awsRequestId: str;
+```
+
+- *Type:* str
+
+The identifier of the invocation request.
+
+---
+
+##### `functionName`<sup>Required</sup> <a name="functionName" id="@winglang/sdk.aws.ILambdaContext.property.functionName"></a>
+
+```wing
+functionName: str;
+```
+
+- *Type:* str
+
+The name of the Lambda function.
+
+---
+
+##### `functionVersion`<sup>Required</sup> <a name="functionVersion" id="@winglang/sdk.aws.ILambdaContext.property.functionVersion"></a>
+
+```wing
+functionVersion: str;
+```
+
+- *Type:* str
+
+The version of the function.
+
+---
+
+##### `invokedFunctionArn`<sup>Required</sup> <a name="invokedFunctionArn" id="@winglang/sdk.aws.ILambdaContext.property.invokedFunctionArn"></a>
+
+```wing
+invokedFunctionArn: str;
+```
+
+- *Type:* str
+
+The Amazon Resource Name (ARN) that's used to invoke the function.
+
+Indicates if the invoker specified a version number or alias.
+
+---
+
+##### `logGroupName`<sup>Required</sup> <a name="logGroupName" id="@winglang/sdk.aws.ILambdaContext.property.logGroupName"></a>
+
+```wing
+logGroupName: str;
+```
+
+- *Type:* str
+
+The log group for the function.
+
+---
+
+##### `logStreamName`<sup>Required</sup> <a name="logStreamName" id="@winglang/sdk.aws.ILambdaContext.property.logStreamName"></a>
+
+```wing
+logStreamName: str;
+```
+
+- *Type:* str
+
+The log stream for the function instance.
+
+---
+
+##### `memoryLimitInMB`<sup>Required</sup> <a name="memoryLimitInMB" id="@winglang/sdk.aws.ILambdaContext.property.memoryLimitInMB"></a>
+
+```wing
+memoryLimitInMB: str;
+```
+
+- *Type:* str
+
+The amount of memory that's allocated for the function.
 
 ---
 

@@ -23,6 +23,7 @@ import {
   PolicyStatement,
   externalLibraries,
 } from "../shared-aws";
+import { makeAwsLambdaHandler } from "../shared-aws/function-util";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 
@@ -407,19 +408,6 @@ export class Function extends cloud.Function implements IAwsFunction {
    * @internal
    */
   protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
-    const inflightClient = handler._toInflight();
-    const lines = new Array<string>();
-    const client = "$handler";
-
-    lines.push('"use strict";');
-    lines.push(`var ${client} = undefined;`);
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
-    lines.push(
-      `  return await ${client}.handle(event === null ? undefined : event);`
-    );
-    lines.push("};");
-
-    return lines;
+    return makeAwsLambdaHandler(handler);
   }
 }
