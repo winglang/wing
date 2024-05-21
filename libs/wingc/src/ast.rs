@@ -8,7 +8,6 @@ use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 
-use crate::docs::Documented;
 use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
@@ -588,22 +587,7 @@ impl Display for IntrinsicKind {
 	}
 }
 
-impl Documented for IntrinsicKind {
-	fn render_docs(&self) -> String {
-		match self {
-			IntrinsicKind::Unknown => "".to_string(),
-			IntrinsicKind::Dirname => r#"Get the normalized absolute path of the current source file's directory.
-
-The resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.
-It should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."#.to_string(),
-			IntrinsicKind::Inflight => r#"TODO"#.to_string(),
-		}
-	}
-}
-
 impl IntrinsicKind {
-	pub const VALUES: [IntrinsicKind; 3] = [IntrinsicKind::Unknown, IntrinsicKind::Dirname, IntrinsicKind::Inflight];
-
 	pub fn from_str(s: &str) -> Self {
 		match s {
 			"@dirname" => IntrinsicKind::Dirname,
@@ -624,6 +608,12 @@ impl IntrinsicKind {
 				_ => false,
 			},
 		}
+	}
+}
+
+impl Into<Symbol> for IntrinsicKind {
+	fn into(self) -> Symbol {
+		Symbol::global(self.to_string())
 	}
 }
 

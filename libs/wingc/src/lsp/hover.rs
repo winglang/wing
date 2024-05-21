@@ -50,13 +50,6 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 							range: Some(span.into()),
 						})
 					}
-					SymbolLocatorResult::Intrinsic { name, kind } => Some(Hover {
-						contents: HoverContents::Markup(MarkupContent {
-							kind: MarkupKind::Markdown,
-							value: kind.render_docs(),
-						}),
-						range: Some((&name.span).into()),
-					}),
 					_ => None,
 				};
 			}

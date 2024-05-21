@@ -2,16 +2,18 @@
 source: libs/wingc/src/lsp/completions.rs
 ---
 - label: "@dirname"
-  kind: 3
+  kind: 6
+  detail: str
   documentation:
     kind: markdown
-    value: "Get the normalized absolute path of the current source file's directory.\n\nThe resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.\nIt should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."
-  sortText: cc|@dirname
+    value: "```wing\nstatic preflight @dirname: str\n```\n---\nGet the normalized absolute path of the current source file's directory.\n\nThe resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.\nIt should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."
+  sortText: bb|@dirname
 - label: "@inflight"
   kind: 3
+  detail: "preflight (file: str, options: ImportInflightOptions?): any"
   documentation:
     kind: markdown
-    value: TODO
+    value: "```wing\nstatic preflight @inflight: preflight (file: str, options: ImportInflightOptions?): any\n```\n---\nExplicitly apply qualifications to a preflight object used in the current method/function\n### Parameters\n- `file` — `str` — Path to extern file to create inflight. Relative to the current wing file.\n- `...options` — `ImportInflightOptions?` — Options for the importInflight built-in.\n  \n  - `export?` — `str?` — Name of exported function.\n  - `lifts?` — `Map<LiftDeclaration>?` — Mapping of available symbols to a lift declaration."
   sortText: cc|@inflight
   insertText: "@inflight($1)"
   insertTextFormat: 2

@@ -1358,6 +1358,7 @@ pub struct Types {
 	/// all of the symbol environments of the files (or subdirectories) in that directory
 	pub source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
 	pub libraries: SymbolEnv,
+	pub intrinsics: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
 	bool_idx: usize,
@@ -1380,7 +1381,6 @@ pub struct Types {
 	/// Expressions used in references that actually refer to a type.
 	/// Key is the ExprId of the object of a InstanceMember, and the value is a TypeMember representing the whole reference.
 	type_expressions: IndexMap<ExprId, Reference>,
-	pub intrinsics: HashMap<IntrinsicKind, TypeRef>,
 	/// Append empty struct to end of arg list
 	pub append_empty_struct_to_arglist: HashSet<ArgListId>,
 }
@@ -1411,14 +1411,11 @@ impl Types {
 		types.push(Box::new(Type::Stringable));
 		let stringable_idx = types.len() - 1;
 
-		let libraries = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0);
-
 		Self {
 			types,
 			namespaces: Vec::new(),
 			symbol_envs: Vec::new(),
 			source_file_envs: IndexMap::new(),
-			libraries,
 			numeric_idx,
 			string_idx,
 			bool_idx,
@@ -1436,7 +1433,8 @@ impl Types {
 			inferences: Vec::new(),
 			type_expressions: IndexMap::new(),
 			append_empty_struct_to_arglist: HashSet::new(),
-			intrinsics: HashMap::new(),
+			libraries: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
+			intrinsics: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0),
 		}
 	}
 
@@ -2061,10 +2059,23 @@ impl<'a> TypeChecker<'a> {
 		);
 
 		// Intrinsics
-		self
-			.types
-			.intrinsics
-			.insert(IntrinsicKind::Dirname, self.types.string());
+		let _ = self.types.intrinsics.define(
+			&Symbol::global(IntrinsicKind::Dirname.to_string()),
+			SymbolKind::Variable(VariableInfo {
+				access: AccessModifier::Public,
+				name: Symbol::global(IntrinsicKind::Dirname.to_string()),
+				docs: Some(Docs::with_summary(r#"Get the normalized absolute path of the current source file's directory.
+
+The resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.
+It should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."#)),
+				kind: VariableKind::StaticMember,
+				phase: Phase::Preflight,
+				type_: self.types.string(),
+				reassignable: false,
+			}),
+			AccessModifier::Public,
+			StatementIdx::Top,
+		);
 
 		let import_inflight_options_fqn = format!("{}.std.ImportInflightOptions", WINGSDK_ASSEMBLY_NAME);
 		let import_inflight_options = self
@@ -2086,12 +2097,8 @@ impl<'a> TypeChecker<'a> {
 				},
 				FunctionParameter {
 					name: "options".into(),
-					typeref: import_inflight_options,
-					docs: Docs::with_summary(
-						"
-							TODO
-							",
-					),
+					typeref: self.types.make_option(import_inflight_options),
+					docs: import_inflight_options.as_struct().unwrap().docs.clone(),
 					variadic: false,
 				},
 			],
@@ -2099,14 +2106,27 @@ impl<'a> TypeChecker<'a> {
 			return_type: self.types.anything(),
 			phase: Phase::Preflight,
 			// The emitted JS is dynamic
-			js_override: Some("throw 'TODO'".to_string()),
+			js_override: None,
 			docs: Docs::with_summary(
 				"Explicitly apply qualifications to a preflight object used in the current method/function",
 			),
 			implicit_scope_param: false,
 		});
 		let inflight_t = self.types.add_type(inflight_t);
-		self.types.intrinsics.insert(IntrinsicKind::Inflight, inflight_t);
+		let _ = self.types.intrinsics.define(
+			&IntrinsicKind::Inflight.clone().into(),
+			SymbolKind::Variable(VariableInfo {
+				access: AccessModifier::Public,
+				name: IntrinsicKind::Inflight.into(),
+				docs: None,
+				kind: VariableKind::StaticMember,
+				phase: Phase::Preflight,
+				type_: inflight_t,
+				reassignable: false,
+			}),
+			AccessModifier::Public,
+			StatementIdx::Top,
+		);
 	}
 
 	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
@@ -2755,8 +2775,13 @@ impl<'a> TypeChecker<'a> {
 			.as_ref()
 			.map(|arg_list| (arg_list, self.type_check_arg_list(arg_list, env)));
 
-		let xxx = self.types.intrinsics.get(&intrinsic.kind).map(|x| *x);
-		if let Some(intrinsic_type) = xxx {
+		if let Some(intrinsic_type) = self
+			.types
+			.intrinsics
+			.lookup(&intrinsic.kind.clone().into(), None)
+			.and_then(|x| x.as_variable())
+			.map(|x| x.type_)
+		{
 			if let Some(sig) = intrinsic_type.as_function_sig() {
 				if let Some((arg_list, arg_list_types)) = arg_list {
 					self.type_check_arg_list_against_function_sig(arg_list, &sig, exp, arg_list_types);

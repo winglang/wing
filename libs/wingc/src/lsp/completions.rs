@@ -7,8 +7,7 @@ use std::cmp::max;
 use tree_sitter::{Node, Point};
 
 use crate::ast::{
-	AccessModifier, CalleeKind, Expr, ExprKind, IntrinsicKind, Phase, Reference, Scope, Symbol, TypeAnnotation,
-	UserDefinedType,
+	AccessModifier, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, UserDefinedType,
 };
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
@@ -1037,25 +1036,8 @@ fn get_completions_from_class(
 fn get_intrinsic_list(types: &Types) -> Vec<CompletionItem> {
 	let mut completions = vec![];
 
-	for intrinsic in IntrinsicKind::VALUES {
-		let Some(t) = types.intrinsics.get(&intrinsic) else {
-			continue;
-		};
-
-		let documentation = Some(Documentation::MarkupContent(MarkupContent {
-			kind: MarkupKind::Markdown,
-			value: intrinsic.render_docs(),
-		}));
-
-		let mut item = CompletionItem {
-			label: intrinsic.to_string(),
-			documentation,
-			kind: Some(CompletionItemKind::FUNCTION),
-			..Default::default()
-		};
-		if t.is_function_sig() {
-			convert_to_call_completion(&mut item);
-		}
+	for intrinsic in types.intrinsics.iter(false) {
+		let item = format_symbol_kind_as_completion(&intrinsic.0, intrinsic.1).unwrap();
 		completions.push(item);
 	}
 	completions
