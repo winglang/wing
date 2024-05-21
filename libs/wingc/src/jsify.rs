@@ -702,12 +702,8 @@ impl<'a> JSifier<'a> {
 						let ss = &ss[1..ss.len() - 1];
 						let extern_path = Utf8Path::new(&ss);
 
-						let extern_path = normalize_path(extern_path, ctx.source_path);
-						if !extern_path.exists() {
-							todo!()
-							// self.spanned_error(exp, format!("Extern file '{}' does not exist", extern_path));
-						}
-						extern_path
+						// TODO Warn if path does not exist
+						normalize_path(extern_path, ctx.source_path)
 					} else {
 						return new_code!(&expression.span, "");
 					};

@@ -2108,7 +2108,23 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 			// The emitted JS is dynamic
 			js_override: None,
 			docs: Docs::with_summary(
-				"Explicitly apply qualifications to a preflight object used in the current method/function",
+				r#"Create an inflight function from the given file.
+The file must be a JavaScript or TypeScript file with a default export that matches the inferred return where `@inflight` is used.
+
+For example:
+
+```wing
+bring cloud;
+new cloud.Function(@inflight("./handler.ts"));
+```
+
+`./handler.ts` Must default export an `async ({}, string?) => string?` function. The first argument is anything lifted into that function, e.g.:
+
+```wing
+let bucket = new cloud.Bucket();
+new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
+```
+"#,
 			),
 			implicit_scope_param: false,
 		});
@@ -3603,6 +3619,9 @@ It should primarily be used in preflight or in inflights that are guaranteed to 
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
 				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
 				if !var_info.name.span.file_id.is_empty() && self.check_for_inferences(&var_info.type_) {
+					if var_info.name.name == IntrinsicKind::Inflight.to_string() {
+						todo!()
+					}
 					self.spanned_error(&var_info.name, "Unable to infer type");
 				}
 			}
