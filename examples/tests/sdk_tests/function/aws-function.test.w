@@ -39,24 +39,23 @@ test "validates the AWS Function" {
 }
 
 let fn = new cloud.Function(inflight (msg: str?) => {
+  if msg == "error" {
+    throw "fake error";
+  }
+
   if let ctx = aws.Function.context() {
     log(Json.stringify(ctx));
     expect.equal(ctx.functionVersion, "$LATEST");
 
     let remainingTime = ctx.remainingTimeInMillis();
     assert(remainingTime > 0);
-
-
-    if msg == "error" {
-      throw "fake error";
-    }
-
-    return msg;
   } else {
     if target == "tf-aws" || target == "awscdk" {
       expect.fail("Expected to have a context object");
     }
   }
+
+  return msg;
 }) as "FunctionAccessingContext";
 
 test "can access lambda context" {
