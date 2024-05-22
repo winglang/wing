@@ -89,7 +89,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiConnectOptions\n```\n---\nOptions for Api patch endpoint."
+    value: "```wing\nstruct ApiConnectOptions extends FunctionProps\n```\n---\nOptions for Api patch endpoint.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|ApiConnectOptions
 - label: ApiCorsOptions
   kind: 22
@@ -101,37 +101,37 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiDeleteOptions\n```\n---\nOptions for Api put endpoint."
+    value: "```wing\nstruct ApiDeleteOptions extends FunctionProps\n```\n---\nOptions for Api put endpoint.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|ApiDeleteOptions
 - label: ApiGetOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiGetOptions\n```\n---\nOptions for Api get endpoint."
+    value: "```wing\nstruct ApiGetOptions extends FunctionProps\n```\n---\nOptions for Api get endpoint.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|ApiGetOptions
 - label: ApiHeadOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiHeadOptions\n```\n---\nOptions for Api patch endpoint."
+    value: "```wing\nstruct ApiHeadOptions extends FunctionProps\n```\n---\nOptions for Api patch endpoint.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|ApiHeadOptions
 - label: ApiOptionsOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiOptionsOptions\n```\n---\nOptions for Api patch endpoint."
+    value: "```wing\nstruct ApiOptionsOptions extends FunctionProps\n```\n---\nOptions for Api patch endpoint.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|ApiOptionsOptions
 - label: ApiPatchOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiPatchOptions\n```\n---\nOptions for Api patch endpoint."
+    value: "```wing\nstruct ApiPatchOptions extends FunctionProps\n```\n---\nOptions for Api patch endpoint.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|ApiPatchOptions
 - label: ApiPostOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiPostOptions\n```\n---\nOptions for Api post endpoint."
+    value: "```wing\nstruct ApiPostOptions extends FunctionProps\n```\n---\nOptions for Api post endpoint.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|ApiPostOptions
 - label: ApiProps
   kind: 22
@@ -143,7 +143,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiPutOptions\n```\n---\nOptions for Api put endpoint."
+    value: "```wing\nstruct ApiPutOptions extends FunctionProps\n```\n---\nOptions for Api put endpoint.\n### Fields\n- `concurrency?` — `num?` — The maximum concurrent invocations that can run at one time.\n- `env?` — `Map<str>?` — Environment variables to pass to the function.\n- `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n- `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — `duration?` — The maximum amount of time the function can run."
   sortText: hh|ApiPutOptions
 - label: ApiRequest
   kind: 22
