@@ -2040,3 +2040,20 @@ fn entrypoint_this() {
     "#
 	);
 }
+
+#[test]
+fn allow_type_def_before_super() {
+	assert_compile_ok!(
+		r#"
+    class Foo {
+      new(x: num) {}
+    }
+    class Bar extends Foo {
+      new() {
+        class Baz {}
+        super(1);
+      }
+    }
+    "#
+	);
+}
