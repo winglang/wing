@@ -3619,9 +3619,6 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
 				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
 				if !var_info.name.span.file_id.is_empty() && self.check_for_inferences(&var_info.type_) {
-					if var_info.name.name == IntrinsicKind::Inflight.to_string() {
-						todo!()
-					}
 					self.spanned_error(&var_info.name, "Unable to infer type");
 				}
 			}
