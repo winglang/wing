@@ -3,9 +3,9 @@
 ## stdout.log
 ```log
 pass ─ new_in_static.test.wsim » root/env0/test:play with buckets
- 
- 
+
 Tests 1 passed (1)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

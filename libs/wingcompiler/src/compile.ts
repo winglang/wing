@@ -7,8 +7,8 @@ import { normalPath } from "./util";
 import { existsSync } from "fs";
 import { BuiltinPlatform } from "./constants";
 import { CompileError, PreflightError } from "./errors";
-import { Worker } from "worker_threads";
 import { readFile } from "fs/promises";
+import { fork } from "child_process";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -16,7 +16,7 @@ Error.stackTraceLimit = 50;
 
 // const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
-const WINGC_PREFLIGHT = "preflight.js";
+const WINGC_PREFLIGHT = "preflight.cjs";
 const DOT_WING = ".wing";
 
 const BUILTIN_PLATFORMS = [
@@ -63,6 +63,9 @@ export interface CompileOptions {
 
   // target directory for the output files
   readonly targetDir?: string;
+
+  // overrides the target directory for the output files
+  readonly output?: string;
 }
 
 /**
@@ -139,7 +142,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
   const target = determineTargetFromPlatforms(options.platform);
-  const synthDir = resolveSynthDir(targetdir, entrypointFile, target, testing);
+  const synthDir = options.output ?? resolveSynthDir(targetdir, entrypointFile, target, testing);
   log?.("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, DOT_WING);
   log?.("work dir: %s", workDir);
@@ -184,7 +187,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       WING_VALUES: options.value?.length == 0 ? undefined : options.value,
       WING_VALUES_FILE: options.values ?? defaultValuesFile(),
       WING_NODE_MODULES: wingNodeModules,
-      WING_IMPORTED_NAMESPACES: compileForPreflightResult.compilerOutput?.imported_namespaces.join(";"),
+      WING_IMPORTED_NAMESPACES:
+        compileForPreflightResult.compilerOutput?.imported_namespaces.join(";"),
     };
 
     if (options.rootId) {
@@ -201,7 +205,10 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         delete preflightEnv.Path;
       }
     }
-    await runPreflightCodeInWorkerThread(compileForPreflightResult.preflightEntrypoint, preflightEnv);
+    await runPreflightCodeInWorkerThread(
+      compileForPreflightResult.preflightEntrypoint,
+      preflightEnv
+    );
   }
   return synthDir;
 }
@@ -221,7 +228,7 @@ interface CompileForPreflightResult {
   readonly preflightEntrypoint: string;
   readonly compilerOutput?: {
     imported_namespaces: string[];
-  }
+  };
 }
 
 async function compileForPreflight(props: {
@@ -248,8 +255,8 @@ npm i @wingcloud/framework
       preflightEntrypoint: await typescriptFramework.compile({
         workDir: props.workDir,
         entrypoint: props.entrypointFile,
-      })
-    }
+      }),
+    };
   } else {
     let env: Record<string, string> = {
       RUST_BACKTRACE: "full",
@@ -301,22 +308,20 @@ npm i @wingcloud/framework
 
     return {
       preflightEntrypoint: join(props.workDir, WINGC_PREFLIGHT),
-      compilerOutput: JSON.parse(
-        compilerOutput as string
-      ),
-    }
+      compilerOutput: JSON.parse(compilerOutput as string),
+    };
   }
 }
 
 /**
  * Check if in the current working directory there is a default values file
- * only the first match is returned from the list of default values files 
- * 
+ * only the first match is returned from the list of default values files
+ *
  * @returns default values file from the current working directory
  */
 function defaultValuesFile() {
-  const defaultConfigs = [ "wing.toml", "wing.yaml", "wing.yml", "wing.json"]
-  
+  const defaultConfigs = ["wing.toml", "wing.yaml", "wing.yml", "wing.json"];
+
   for (const configFile of defaultConfigs) {
     if (existsSync(join(process.cwd(), configFile))) {
       return configFile;
@@ -330,32 +335,14 @@ async function runPreflightCodeInWorkerThread(
   env: Record<string, string | undefined>
 ): Promise<void> {
   try {
-    // Create a shimmed entrypoint that ensures we always load the compiler's version of the SDK
-    const sdkEntrypoint = require.resolve("@winglang/sdk");
-    const shim = `\
-var Module = require('module');
-var original_resolveFilename = Module._resolveFilename;
-var WINGSDK = '@winglang/sdk';
-var WINGSDK_PATH = '${normalPath(sdkEntrypoint)}';
-var WINGSDK_DIR = '${normalPath(join(sdkEntrypoint, "..", ".."))}';
-
-Module._resolveFilename = function () {
-  const path = arguments[0];
-  if(path === WINGSDK) return WINGSDK_PATH;
-  if(path.startsWith(WINGSDK)){
-    arguments[0] = path.replace(WINGSDK, WINGSDK_DIR);
-  }
-  return original_resolveFilename.apply(this, arguments);
-};
-
-require('${normalPath(entrypoint)}');
-`;
+    env.WING_PREFLIGHT_ENTRYPOINT = JSON.stringify(entrypoint);
 
     await new Promise((resolve, reject) => {
-      const worker = new Worker(shim, {
+      const worker = fork(join(__dirname, "..", "preflight.shim.cjs"), {
         env,
-        eval: true,
+        stdio: "inherit",
       });
+      worker.on("message", reject);
       worker.on("error", reject);
       worker.on("exit", (code) => {
         if (code === 0) {

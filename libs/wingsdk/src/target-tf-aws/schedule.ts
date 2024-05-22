@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
@@ -6,8 +5,10 @@ import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule
 import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { convertBetweenHandlers } from "../shared/convert";
-import { convertUnixCronToAWSCron } from "../shared-aws/schedule";
+import {
+  ScheduleOnTickHandler,
+  convertUnixCronToAWSCron,
+} from "../shared-aws/schedule";
 import { Node } from "../std";
 
 /**
@@ -40,15 +41,7 @@ export class Schedule extends cloud.Schedule {
     inflight: cloud.IScheduleOnTickHandler,
     props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname.replace("target-tf-aws", "shared-aws"),
-        "schedule.ontick.inflight.js"
-      ),
-      "ScheduleOnTickHandlerClient"
-    );
-
+    const functionHandler = ScheduleOnTickHandler.toFunctionHandler(inflight);
     let fn = this.handlers[inflight._id];
     if (fn) {
       return fn;

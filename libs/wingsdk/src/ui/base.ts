@@ -10,6 +10,7 @@ export const VISUAL_COMPONENT_SYMBOL = Symbol.for(
 /**
  * A visual component is used to customize the view of other classes in the Wing Console.
  * This is a base class for all other visual components.
+ * @noinflight
  */
 export abstract class VisualComponent extends Resource {
   /**

@@ -196,6 +196,7 @@ impl<'a> Fold for ClosureTransformer<'a> {
 					// we need to set this to false.
 					is_static: false,
 					access: AccessModifier::Public,
+					doc: None,
 				};
 
 				// class_init_body :=
@@ -211,14 +212,14 @@ impl<'a> Fold for ClosureTransformer<'a> {
 							))),
 							WingSpan::for_file(file_id),
 						))),
-						arg_list: ArgList {
-							named_args: IndexMap::new(),
-							pos_args: vec![Expr::new(
+						arg_list: ArgList::new(
+							vec![Expr::new(
 								ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::for_file(file_id)))),
 								WingSpan::for_file(file_id),
 							)],
-							span: WingSpan::for_file(file_id),
-						},
+							IndexMap::new(),
+							WingSpan::for_file(file_id),
+						),
 					},
 					WingSpan::for_file(file_id),
 				);
@@ -236,6 +237,7 @@ impl<'a> Fold for ClosureTransformer<'a> {
 					},
 					0,
 					WingSpan::for_file(file_id),
+					doc: None,
 				)];
 				let class_init_body = self.ast.new_scope(class_init_body, WingSpan::for_file(file_id));
 
@@ -259,6 +261,7 @@ impl<'a> Fold for ClosureTransformer<'a> {
 						},
 						0,
 						WingSpan::for_file(file_id),
+						doc: None,
 					);
 
 					self.class_statements.push(parent_this_def);
@@ -290,6 +293,7 @@ impl<'a> Fold for ClosureTransformer<'a> {
 							body: FunctionBody::Statements(class_init_body),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
+							doc: None,
 						},
 						fields: class_fields,
 						implements: vec![],
@@ -309,12 +313,14 @@ impl<'a> Fold for ClosureTransformer<'a> {
 							body: FunctionBody::Statements(empty_scope),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
+							doc: None,
 						},
 						access: AccessModifier::Private,
 						auto_id: true,
 					}),
 					self.nearest_stmt_idx,
 					WingSpan::for_file(file_id),
+					doc: None,
 				);
 
 				// new_class_instance :=
@@ -324,11 +330,7 @@ impl<'a> Fold for ClosureTransformer<'a> {
 				let new_class_instance = Expr::new(
 					ExprKind::New(New {
 						class: class_udt,
-						arg_list: ArgList {
-							named_args: IndexMap::new(),
-							pos_args: vec![],
-							span: WingSpan::for_file(file_id),
-						},
+						arg_list: ArgList::new_empty(WingSpan::for_file(file_id)),
 						obj_id: None,
 						obj_scope: None,
 					}),
@@ -380,7 +382,9 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::ElementAccess { .. } => {
+				fold::fold_reference(self, node)
+			}
 		}
 	}
 

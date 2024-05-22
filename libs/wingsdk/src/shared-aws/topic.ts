@@ -1,4 +1,5 @@
 import { cloud } from "..";
+import { lift } from "../core";
 
 /**
  * A shared interface for AWS topics.
@@ -35,5 +36,26 @@ export class Topic {
     return (
       typeof obj.topicArn === "string" && typeof obj.topicName === "string"
     );
+  }
+}
+
+/**
+ * A helper class for working with AWS topic on message handlers.
+ */
+export class TopicOnMessageHandler {
+  /**
+   * Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`.
+   * @param handler The `onMessage` handler.
+   * @returns The `cloud.Function` handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.ITopicOnMessageHandler
+  ): cloud.IFunctionHandler {
+    return lift({ handler }).inflight(async (ctx, event) => {
+      for (const record of (event as any).Records ?? []) {
+        await ctx.handler(record.Sns.Message);
+        return undefined;
+      }
+    });
   }
 }

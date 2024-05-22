@@ -13,32 +13,32 @@ source: libs/wingc/src/jsify/tests.rs
       }
 
       inflight foo() {
-        this.arr.at(0).put("hello", "world");
+        this.arr[0].put("hello", "world");
       }
     }
     
 ```
 
-## inflight.Foo-1.js
+## inflight.Foo-1.cjs
 
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
-    constructor({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_ }) {
-      this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_;
+    constructor({ $_helpers_lookup_this_arr__0_ }) {
+      this.$_helpers_lookup_this_arr__0_ = $_helpers_lookup_this_arr__0_;
     }
     async foo() {
-      (await this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_.put("hello", "world"));
+      (await this.$_helpers_lookup_this_arr__0_.put("hello", "world"));
     }
   }
   return Foo;
 }
-//# sourceMappingURL=inflight.Foo-1.js.map
+//# sourceMappingURL=inflight.Foo-1.cjs.map
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -48,6 +48,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -59,7 +60,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
           })
         `;
       }
@@ -68,7 +69,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType()};
             const client = new FooClient({
-              $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 0))},
+              $_helpers_lookup_this_arr__0_: ${$stdlib.core.liftObject($helpers.lookup(this.arr, 0))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -78,10 +79,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "foo": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 0), ["put"]],
+            [$helpers.lookup(this.arr, 0), ["put"]],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 0), []],
+            [$helpers.lookup(this.arr, 0), []],
           ],
         });
       }
@@ -91,6 +92,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

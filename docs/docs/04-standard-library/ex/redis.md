@@ -62,7 +62,7 @@ the key.
 ##### `get` <a name="get" id="@winglang/sdk.ex.IRedisClient.get"></a>
 
 ```wing
-inflight get(key: str): str
+inflight get(key: str): str?
 ```
 
 Get value at given key.
@@ -78,7 +78,7 @@ the key to get.
 ##### `hget` <a name="hget" id="@winglang/sdk.ex.IRedisClient.hget"></a>
 
 ```wing
-inflight hget(key: str, field: str): str
+inflight hget(key: str, field: str): str?
 ```
 
 Returns the value associated with field in the hash stored at key.
@@ -208,6 +208,7 @@ Get url of redis server.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.ex.Redis.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ex.Redis.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -236,6 +237,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ex.Redis.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.ex.Redis.toInflight"></a>
+
+```wing
+bring ex;
+
+ex.Redis.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.ex.Redis.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -313,7 +332,7 @@ Removes the specified key.
 ##### `get` <a name="get" id="@winglang/sdk.ex.RedisClientBase.get"></a>
 
 ```wing
-get(key: str): str
+get(key: str): str?
 ```
 
 Get value at given key.
@@ -327,7 +346,7 @@ Get value at given key.
 ##### `hget` <a name="hget" id="@winglang/sdk.ex.RedisClientBase.hget"></a>
 
 ```wing
-hget(key: str, field: str): str
+hget(key: str, field: str): str?
 ```
 
 Returns the value associated with field in the hash stored at key.

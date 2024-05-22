@@ -40,9 +40,23 @@ topic.onMessage(inflight (message: str) => {
 });
 ```
 
+### Subscribing a Queue to a Topic
+
+```js
+bring cloud;
+
+let queue = new cloud.Queue();
+queue.setConsumer(inflight (message str) => {
+  log("Topic published message: {message}");
+});
+
+let topic = new cloud.Topic();
+topic.subscribeQueue(queue);
+```
+
 ### Publishing to a topic
 
-The inflight method `publish` sends a message to all of the topic's subscribers.
+The inflight method `publish` sends messages to all of the topic's subscribers.
 
 ```js
 bring cloud;
@@ -50,7 +64,10 @@ bring cloud;
 let topic = new cloud.Topic();
 
 inflight () => {
-  topic.publish("Hello World!");
+  topic.publish(
+    "Topics can now publish",
+    "multiple messages at once"
+  );
 };
 ```
 

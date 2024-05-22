@@ -1,9 +1,9 @@
 use crate::{
 	ast::{
-		ArgList, Ast, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum, Expr,
-		ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface,
-		InterpolatedString, InterpolatedStringPart, Literal, New, Reference, Scope, ScopeId, Stmt, StmtId, StmtKind,
-		Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum,
+		ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet,
+		Interface, InterpolatedString, InterpolatedStringPart, Intrinsic, LiftQualification, Literal, New, Reference,
+		Scope, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -211,12 +211,24 @@ where
 		StmtKind::SuperConstructor { arg_list } => StmtKind::SuperConstructor {
 			arg_list: f.fold_args(arg_list),
 		},
+		StmtKind::ExplicitLift(explicit_lift) => StmtKind::ExplicitLift(ExplicitLift {
+			qualifications: explicit_lift
+				.qualifications
+				.into_iter()
+				.map(|q| LiftQualification {
+					obj: f.fold_expr(q.obj),
+					ops: q.ops.into_iter().map(|op| f.fold_symbol(op)).collect(),
+				})
+				.collect(),
+			statements: f.fold_scope(explicit_lift.statements),
+		}),
 	};
 	let stmt = Stmt {
 		id: stmt.id,
 		kind,
 		span: stmt.span,
 		idx: stmt.idx,
+		doc: node.doc,
 	};
 	f.ast_mut().set_stmt(stmt);
 	node
@@ -260,6 +272,7 @@ where
 		phase: node.phase,
 		is_static: node.is_static,
 		access: node.access,
+		doc: node.doc,
 	}
 }
 
@@ -270,6 +283,7 @@ where
 	StructField {
 		name: f.fold_symbol(node.name),
 		member_type: f.fold_type_annotation(node.member_type),
+		doc: node.doc,
 	}
 }
 
@@ -282,7 +296,7 @@ where
 		methods: node
 			.methods
 			.into_iter()
-			.map(|(name, sig)| (f.fold_symbol(name), f.fold_function_signature(sig)))
+			.map(|(name, sig, doc)| (f.fold_symbol(name), f.fold_function_signature(sig), doc))
 			.collect(),
 		extends: node
 			.extends
@@ -290,6 +304,7 @@ where
 			.map(|interface| f.fold_user_defined_type(interface))
 			.collect(),
 		access: node.access,
+		phase: node.phase,
 	}
 }
 
@@ -315,7 +330,7 @@ where
 {
 	Enum {
 		name: f.fold_symbol(node.name),
-		values: node.values.into_iter().map(|v| f.fold_symbol(v)).collect(),
+		values: node.values.into_iter().map(|v| (f.fold_symbol(v.0), v.1)).collect(),
 		access: node.access,
 	}
 }
@@ -333,6 +348,11 @@ where
 			end: Box::new(f.fold_expr(*end)),
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
+		ExprKind::Intrinsic(intrinsic) => ExprKind::Intrinsic(Intrinsic {
+			arg_list: intrinsic.arg_list.map(|arg_list| f.fold_args(arg_list)),
+			name: f.fold_symbol(intrinsic.name),
+			kind: intrinsic.kind,
+		}),
 		ExprKind::Call { callee, arg_list } => ExprKind::Call {
 			callee: match callee {
 				CalleeKind::Expr(expr) => CalleeKind::Expr(Box::new(f.fold_expr(*expr))),
@@ -432,6 +452,7 @@ where
 		Literal::Boolean(x) => Literal::Boolean(x),
 		Literal::Number(x) => Literal::Number(x),
 		Literal::String(x) => Literal::String(x),
+		Literal::NonInterpolatedString(x) => Literal::NonInterpolatedString(x),
 		Literal::Nil => Literal::Nil,
 	}
 }
@@ -455,6 +476,10 @@ where
 			type_name: f.fold_user_defined_type(type_name),
 			property: f.fold_symbol(property),
 		},
+		Reference::ElementAccess { object, index } => Reference::ElementAccess {
+			object: Box::new(f.fold_expr(*object)),
+			index: Box::new(f.fold_expr(*index)),
+		},
 	}
 }
 
@@ -472,6 +497,7 @@ where
 		is_static: node.is_static,
 		span: node.span,
 		access: node.access,
+		doc: node.doc,
 	}
 }
 
@@ -506,15 +532,15 @@ pub fn fold_args<F>(f: &mut F, node: ArgList) -> ArgList
 where
 	F: Fold + ?Sized,
 {
-	ArgList {
-		pos_args: node.pos_args.into_iter().map(|arg| f.fold_expr(arg)).collect(),
-		named_args: node
+	ArgList::new(
+		node.pos_args.into_iter().map(|arg| f.fold_expr(arg)).collect(),
+		node
 			.named_args
 			.into_iter()
 			.map(|(name, arg)| (f.fold_symbol(name), f.fold_expr(arg)))
 			.collect(),
-		span: node.span,
-	}
+		node.span,
+	)
 }
 
 pub fn fold_type_annotation<F>(f: &mut F, node: TypeAnnotation) -> TypeAnnotation

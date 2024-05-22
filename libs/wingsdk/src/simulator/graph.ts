@@ -1,9 +1,11 @@
+import { PolicyStatement } from "./simulator";
 import { resolveTokens } from "./tokens";
 
 export interface Definition {
   path: string;
   deps?: string[];
   props?: Record<string, any>;
+  policy?: PolicyStatement[];
 }
 
 class Node<T extends Definition> {
@@ -42,6 +44,12 @@ export class Graph<T extends Definition> {
       resolveTokens(resource.props ?? {}, (token) => {
         implicitDeps.push(token.path);
         return "[T]"; // <-- we don't really use the result, just need to return something
+      });
+
+      // do the same for resource.policy
+      resolveTokens(resource.policy ?? {}, (token) => {
+        implicitDeps.push(token.path);
+        return "[T]";
       });
 
       // now add all implicit dependencies

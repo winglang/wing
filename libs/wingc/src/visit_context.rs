@@ -13,11 +13,17 @@ pub struct FunctionContext {
 }
 
 #[derive(Clone)]
+pub enum PropertyObject {
+	UserDefinedType(UserDefinedType),
+	Instance(ExprId),
+}
+
+#[derive(Clone)]
 pub struct VisitContext {
 	phase: Vec<Phase>,
 	env: Vec<SymbolEnvRef>,
 	function_env: Vec<SymbolEnvRef>,
-	property: Vec<Symbol>,
+	property: Vec<(PropertyObject, Symbol)>,
 	function: Vec<FunctionContext>,
 	class: Vec<UserDefinedType>,
 	statement: Vec<usize>,
@@ -162,15 +168,15 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_property(&mut self, property: &Symbol) {
-		self.property.push(property.clone());
+	pub fn push_property(&mut self, property_object: PropertyObject, property: &Symbol) {
+		self.property.push((property_object, property.clone()));
 	}
 
 	pub fn pop_property(&mut self) {
 		self.property.pop();
 	}
 
-	pub fn current_property(&self) -> Option<Symbol> {
+	pub fn current_property(&self) -> Option<(PropertyObject, Symbol)> {
 		self.property.last().cloned()
 	}
 

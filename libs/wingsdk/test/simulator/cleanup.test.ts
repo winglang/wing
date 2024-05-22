@@ -1,11 +1,11 @@
 import * as cp from "child_process";
 import { expect, test } from "vitest";
 import { Service } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { SimApp } from "../sim-app";
 
 const script = (simdir: string) => `
-const { simulator } = require("./");
+const { simulator } = require("./src");
 
 async function main() {
   const sim = new simulator.Simulator({ simfile: "${simdir}" });
@@ -28,8 +28,7 @@ async function main() {
 main();
 `;
 
-const code = `
-async handle() {
+const code = inflight(async () => {
   console.log("start!");
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   return async () => {
@@ -37,7 +36,7 @@ async handle() {
     await sleep(1000);
     console.log("stopped!");
   };
-}`;
+});
 
 // This test validates that if a process running the simulator is killed
 // and that process has code set up for gracefully shutting down the simulator,
@@ -46,8 +45,7 @@ async handle() {
 test("simulator cleanup", async () => {
   // Synthesize configuration for the simulator to use in the test
   const app = new SimApp({ isTestEnvironment: true });
-  const handler = Testing.makeHandler(code);
-  new Service(app, "Service", handler);
+  new Service(app, "Service", code);
   const simdir = app.synth();
 
   // Start the simulator in a child process
@@ -55,13 +53,12 @@ test("simulator cleanup", async () => {
     stdio: ["pipe", "pipe", "pipe"],
   });
 
-  // Uncomment the following lines to see the output of the child process
-  // child.stdout?.on("data", (data) => {
-  //   console.error(data.toString());
-  // });
-  // child.stderr?.on("data", (data) => {
-  //   console.error(data.toString());
-  // });
+  child.stdout?.on("data", (data) => {
+    console.error(data.toString());
+  });
+  child.stderr?.on("data", (data) => {
+    console.error(data.toString());
+  });
 
   let stopped = false;
 
@@ -72,11 +69,23 @@ test("simulator cleanup", async () => {
         resolve(undefined);
       }
     });
+    child.stderr?.on("data", (data) => {
+      if (data.toString().includes("stopped!")) {
+        stopped = true;
+        resolve(undefined);
+      }
+    });
   });
 
   // Wait for the "Simulator started" message, then kill the child process
   await new Promise((resolve) => {
     child.stdout?.on("data", (data) => {
+      if (data.toString().includes("Simulator started")) {
+        child.kill("SIGTERM");
+        resolve(undefined);
+      }
+    });
+    child.stderr?.on("data", (data) => {
       if (data.toString().includes("Simulator started")) {
         child.kill("SIGTERM");
         resolve(undefined);

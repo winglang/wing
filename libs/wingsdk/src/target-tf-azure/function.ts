@@ -12,6 +12,7 @@ import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
+import { LiftMap } from "../core";
 import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import {
@@ -192,7 +193,7 @@ export class Function extends cloud.Function {
     // Move index.js to function name directory. Every Azure function in a function app
     // must be in its own folder containing an index.js and function.json files
     fs.mkdirSync(`${codeDir}/${this.functionName}`);
-    fs.renameSync(bundle.entrypointPath, `${outDir}/index.js`);
+    fs.renameSync(bundle.outfilePath, `${outDir}/index.js`);
 
     // As per documentation "a function must have exactly one trigger" so for now
     // by default a function will support http get requests
@@ -291,8 +292,10 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [cloud.FunctionInflightMethods.INVOKE];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.FunctionInflightMethods.INVOKE]: [],
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

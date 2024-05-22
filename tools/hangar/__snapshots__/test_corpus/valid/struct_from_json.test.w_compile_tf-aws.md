@@ -1,7 +1,7 @@
 # [struct_from_json.test.w](../../../../../examples/tests/valid/struct_from_json.test.w) | compile | tf-aws
 
-## inflight.$Closure1-2.js
-```js
+## inflight.$Closure1-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $cloud_BucketProps, $j }) {
@@ -18,11 +18,11 @@ module.exports = function({ $cloud_BucketProps, $j }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-2.js.map
+//# sourceMappingURL=inflight.$Closure1-2.cjs.map
 ```
 
-## inflight.$Closure2-2.js
-```js
+## inflight.$Closure2-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student }) {
@@ -59,11 +59,11 @@ module.exports = function({ $Student }) {
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-2.js.map
+//# sourceMappingURL=inflight.$Closure2-2.cjs.map
 ```
 
-## inflight.$Closure3-2.js
-```js
+## inflight.$Closure3-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student, $jStudent1 }) {
@@ -86,14 +86,14 @@ module.exports = function({ $Student, $jStudent1 }) {
   }
   return $Closure3;
 }
-//# sourceMappingURL=inflight.$Closure3-2.js.map
+//# sourceMappingURL=inflight.$Closure3-2.cjs.map
 ```
 
-## inflight.$Closure4-2.js
-```js
+## inflight.$Closure4-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyStruct, $std_Json }) {
+module.exports = function({ $MyStruct, $expectedSchema, $jMyStruct, $schema, $std_Json }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -103,16 +103,16 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
     async handle() {
       const s = $MyStruct;
       (await s.validate($jMyStruct));
-      $helpers.assert($helpers.eq($_schema_asStr___, ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
+      $helpers.assert($helpers.eq((await $schema.asStr()), ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
     }
   }
   return $Closure4;
 }
-//# sourceMappingURL=inflight.$Closure4-2.js.map
+//# sourceMappingURL=inflight.$Closure4-2.cjs.map
 ```
 
-## inflight.$Closure5-2.js
-```js
+## inflight.$Closure5-2.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) {
@@ -131,11 +131,11 @@ module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) 
   }
   return $Closure5;
 }
-//# sourceMappingURL=inflight.$Closure5-2.js.map
+//# sourceMappingURL=inflight.$Closure5-2.cjs.map
 ```
 
-## inflight.UsesStructInImportedFile-1.js
-```js
+## inflight.UsesStructInImportedFile-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -145,7 +145,7 @@ module.exports = function({  }) {
   }
   return UsesStructInImportedFile;
 }
-//# sourceMappingURL=inflight.UsesStructInImportedFile-1.js.map
+//# sourceMappingURL=inflight.UsesStructInImportedFile-1.cjs.map
 ```
 
 ## main.tf.json
@@ -167,8 +167,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -176,9 +176,10 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
-const externalStructs = require("./preflight.structs-1.js");
-const otherExternalStructs = require("./preflight.structs2-2.js");
+const externalStructs = require("./preflight.structs-1.cjs");
+const otherExternalStructs = require("./preflight.structs2-2.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -187,7 +188,7 @@ class $Root extends $stdlib.std.Resource {
     const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
     const MyStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyStruct",type:"object",properties:{m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["m1","m2",]});
     const SomeStruct = $stdlib.std.Struct._createJsonSchema({$id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",]});
-    const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:"object"},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
+    const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:["object","string","boolean","number","array"]},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
     const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({$id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
     const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -198,7 +199,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-2.cjs")({
             $cloud_BucketProps: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"))},
             $j: ${$stdlib.core.liftObject(j)},
           })
@@ -234,7 +235,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-2.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
           })
         `;
@@ -267,7 +268,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-2.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
             $jStudent1: ${$stdlib.core.liftObject(jStudent1)},
           })
@@ -303,11 +304,11 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-2.cjs")({
             $MyStruct: ${$stdlib.core.liftObject(MyStruct)},
-            $_schema_asStr___: ${$stdlib.core.liftObject((schema.asStr()))},
             $expectedSchema: ${$stdlib.core.liftObject(expectedSchema)},
             $jMyStruct: ${$stdlib.core.liftObject(jMyStruct)},
+            $schema: ${$stdlib.core.liftObject(schema)},
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
@@ -326,14 +327,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [(schema.asStr()), []],
             [expectedSchema, []],
             [jMyStruct, []],
+            [schema, ["asStr"]],
           ],
           "$inflight_init": [
-            [(schema.asStr()), []],
             [expectedSchema, []],
             [jMyStruct, []],
+            [schema, []],
           ],
         });
       }
@@ -346,7 +347,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-2.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-2.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
             $std_Boolean: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
             $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
@@ -502,39 +503,41 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "struct_from_json.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
-## preflight.structs-1.js
-```js
+## preflight.structs-1.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const Bar = $stdlib.std.Struct._createJsonSchema({$id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
 const Foo = $stdlib.std.Struct._createJsonSchema({$id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
 const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
 const MyStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyStruct",type:"object",properties:{m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["m1","m2",]});
 const SomeStruct = $stdlib.std.Struct._createJsonSchema({$id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",]});
-const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:"object"},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
+const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:["object","string","boolean","number","array"]},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
 const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({$id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
 const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
 module.exports = {  };
-//# sourceMappingURL=preflight.structs-1.js.map
+//# sourceMappingURL=preflight.structs-1.cjs.map
 ```
 
-## preflight.structs2-2.js
-```js
+## preflight.structs2-2.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const Bar = $stdlib.std.Struct._createJsonSchema({$id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
 const Foo = $stdlib.std.Struct._createJsonSchema({$id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
 const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
 const MyStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyStruct",type:"object",properties:{m1:{type:"object",properties:{val:{type:"number"},},required:["val",]},m2:{type:"object",properties:{val:{type:"string"},},required:["val",]},},required:["m1","m2",]});
 const SomeStruct = $stdlib.std.Struct._createJsonSchema({$id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",]});
-const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:"object"},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
+const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:["object","string","boolean","number","array"]},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
 const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({$id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
 const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
 class UsesStructInImportedFile extends $stdlib.std.Resource {
@@ -544,7 +547,7 @@ class UsesStructInImportedFile extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.UsesStructInImportedFile-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.UsesStructInImportedFile-1.cjs")({
       })
     `;
   }
@@ -567,6 +570,6 @@ class UsesStructInImportedFile extends $stdlib.std.Resource {
   }
 }
 module.exports = { UsesStructInImportedFile };
-//# sourceMappingURL=preflight.structs2-2.js.map
+//# sourceMappingURL=preflight.structs2-2.cjs.map
 ```
 

@@ -1,3 +1,12 @@
+export class ClassWithInnerType {}
+
+export namespace ClassWithInnerType {
+  /** This type cannot be referenced in wing (yet) */
+  export interface InnerStruct {
+    readonly field: string;
+  }
+}
+
 export class JsiiClass {
   /** @internal */
   _field: number;
@@ -25,9 +34,17 @@ export class JsiiClass {
   public static staticMethod(arg: string) {
     return `Got ${arg}`;
   }
-  
-  public methodWithStructParam(s: SomeStruct): string {
+
+  public methodWithStructParam(s: ClassWithInnerType.InnerStruct): string {
     return s.field;
+  }
+}
+
+export class JsiiClassWithPrivateConstructor {
+  private constructor() {}
+
+  public static makeInstance(): JsiiClassWithPrivateConstructor {
+    return new JsiiClassWithPrivateConstructor();
   }
 }
 
@@ -36,11 +53,15 @@ export class JsiiClass {
  */
 export interface IFakeClosure {
   /** @internal */
-  (x: number): number
+  (x: number): number;
 
   fn(x: number): number;
 }
 
 export interface SomeStruct {
   readonly field: string;
+}
+
+export interface ISomeInterface {
+  method(): void;
 }

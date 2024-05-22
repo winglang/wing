@@ -67,23 +67,23 @@ A resource in the SDK has several parts:
 
 * A set of base APIs that must be implemented by all cloud targets. Typically the resource's preflight APIs correspond to a base class in TypeScript, and the resource's inflight APIs correspond to an interface in TypeScript. These are defined in `src/cloud` or `src/ex`. For example, [`src/cloud/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/cloud/bucket.ts).
 * An interface representing the inflight API common across all cloud targets. By convention, if the resource is named like `Gizmo`, the inflight interface should be named `IGizmoClient`. This is usually in the same file as the preflight API.
-* A simulator implementation in `src/sim`. This includes:
-  * A schema with information to simulate the resource and display the resource in the Wing console. Currently these are in [`src/sim/schema-resources.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/sim/schema-resources.ts).
-  * A class that implements the polycon API and can produce the resource's simulation schema. For example, [`src/sim/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/sim/bucket.ts).
-  * An class that implements the inflight API and can simulate the resource. For example, [`src/sim/bucket.sim.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/sim/bucket.sim.ts).
-  * Unit tests for the simulator implementation. For example, [`test/sim/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/sim/bucket.test.ts).
+* A simulator implementation in `src/target-sim`. This includes:
+  * A schema with information to simulate the resource and display the resource in the Wing console. Currently these are in [`src/target-sim/schema-resources.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/target-sim/schema-resources.ts).
+  * A class that implements the polycon API and can produce the resource's simulation schema. For example, [`src/target-sim/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/target-sim/bucket.ts).
+  * An class that implements the inflight API and can simulate the resource. For example, [`src/target-sim/bucket.inflight.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/target-sim/bucket.inflight.ts).
+  * Unit tests for the simulator implementation. For example, [`test/target-sim/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/target-sim/bucket.test.ts).
 * An implementation for each target cloud (currently just AWS). This includes:
-  * A class that implements the polycon API and creates all of the required terraform resources. For example, [`src/tf-aws/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/tf-aws/bucket.ts).
-  * A class that implements the inflight API that interacts with the cloud resource. For example, [`src/tf-aws/bucket.inflight.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/tf-aws/bucket.inflight.ts).
-  * Unit tests for the cloud infrastructure. For example, [`test/tf-aws/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/tf-aws/bucket.test.ts).
-  * End-to-end tests. These are added to the "examples" directory at the root of the repository. For example, [`examples/tests/sdk_tests/bucket/bucket_list.w`](https://github.com/winglang/wing/blob/main/examples/tests/sdk_tests/bucket/bucket_list.w).
+  * A class that implements the polycon API and creates all of the required terraform resources. For example, [`src/shared-aws/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/shared-aws/bucket.ts).
+  * A class that implements the inflight API that interacts with the cloud resource. For example, [`src/shared-aws/bucket.inflight.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/shared-aws/bucket.inflight.ts).
+  * Unit tests for the cloud infrastructure. For example, [`test/target-tf-aws/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/target-tf-aws/bucket.test.ts).
+  * End-to-end tests. These are added to the "examples" directory at the root of the repository. For example, [`examples/tests/sdk_tests/bucket/bucket_list.test.w`](https://github.com/winglang/wing/blob/main/examples/tests/sdk_tests/bucket/bucket_list.test.w).
 
 If you are implementing a new resource, or implementing an existing resource for a new cloud provider, try to take a look at code for existing resources (`Bucket`, `Function`, `Queue`) to see how to structure your code.
 
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
-You can also join us on our [Wing Slack] to ask questions (or just say hi)!
+You can also join us on our [Wing Discord] to ask questions (or just say hi)!
 
-[Wing Slack]: https://t.winglang.io/slack
+[Wing Discord]: https://t.winglang.io/discord
 
 ## 🏁 How do I add and run tests to the SDK?
 

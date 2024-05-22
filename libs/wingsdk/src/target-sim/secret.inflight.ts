@@ -1,6 +1,3 @@
-import * as fs from "fs";
-import * as os from "os";
-import * as path from "path";
 import { SecretAttributes, SecretSchema } from "./schema-resources";
 import { ISecretClient, SECRET_FQN } from "../cloud";
 import {
@@ -8,27 +5,25 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { Json, TraceType } from "../std";
+import { Json, LogLevel, TraceType } from "../std";
 
 export class Secret implements ISecretClient, ISimulatorResourceInstance {
-  private readonly context: ISimulatorContext;
-  private readonly secretsFile: string;
+  private _context: ISimulatorContext | undefined;
   private readonly name: string;
 
-  constructor(props: SecretSchema["props"], context: ISimulatorContext) {
-    this.context = context;
-
-    this.secretsFile = path.join(os.homedir(), ".wing", "secrets.json");
-    if (!fs.existsSync(this.secretsFile)) {
-      throw new Error(
-        `No secrets file found at ${this.secretsFile} while looking for secret ${props.name}`
-      );
-    }
-
+  constructor(props: SecretSchema) {
     this.name = props.name;
   }
 
-  public async init(): Promise<SecretAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<SecretAttributes> {
+    this._context = context;
     return {};
   }
 
@@ -45,19 +40,22 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
       data: {
         message: "Get value",
       },
+      level: LogLevel.VERBOSE,
       sourcePath: this.context.resourcePath,
       sourceType: SECRET_FQN,
       type: TraceType.RESOURCE,
       timestamp: new Date().toISOString(),
     });
 
-    const secrets = JSON.parse(fs.readFileSync(this.secretsFile, "utf-8"));
+    const secretValue = process.env[this.name];
 
-    if (!secrets[this.name]) {
-      throw new Error(`No secret value for secret ${this.name}`);
+    if (!secretValue) {
+      throw new Error(
+        `No value for secret ${this.name}\n(hint: try running the "wing secrets -t TARGET" to store secret)`
+      );
     }
 
-    return secrets[this.name];
+    return secretValue;
   }
 
   public async valueJson(): Promise<Json> {

@@ -27,24 +27,12 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: lift
-  kind: 3
-  detail: "inflight (preflightObject: Resource, qualifications: Array<str>): void"
-  documentation:
-    kind: markdown
-    value: "```wing\nlift: inflight (preflightObject: Resource, qualifications: Array<str>): void\n```\n---\nExplicitly apply qualifications to a preflight object used in the current method/function\n### Parameters\n- `preflightObject` — `Resource` — The preflight object to qualify\n- `qualifications` — `Array<str>` — \n\t\t\t\t\t\t\tThe qualifications to apply to the preflight object.\n\n\t\t\t\t\t\t\tThis is an array of strings denoting members of the object that are accessed in the current method/function.\n\n\t\t\t\t\t\t\tFor example, if the method accesses the `push` and `pop` members of a `cloud.Queue` object, the qualifications should be `[\"push\", \"pop\"]`."
-  sortText: cc|lift
-  insertText: lift($1)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
 - label: log
   kind: 3
-  detail: "(message: str): void"
+  detail: "(value: stringable): void"
   documentation:
     kind: markdown
-    value: "```wing\nlog: (message: str): void\n```\n---\nLogs a message\n### Parameters\n- `message` — `str` — The message to log"
+    value: "```wing\nlog: (value: stringable): void\n```\n---\nLogs a value\n### Parameters\n- `value` — `stringable` — The value to log"
   sortText: cc|log
   insertText: log($1)
   insertTextFormat: 2
@@ -84,12 +72,18 @@ source: libs/wingc/src/lsp/completions.rs
 - label: bool
   kind: 14
   sortText: kl|zybool
+- label: datetime
+  kind: 14
+  sortText: kl|zydatetime
 - label: duration
   kind: 14
   sortText: kl|zyduration
 - label: num
   kind: 14
   sortText: kl|zynum
+- label: regex
+  kind: 14
+  sortText: kl|zyregex
 - label: str
   kind: 14
   sortText: kl|zystr

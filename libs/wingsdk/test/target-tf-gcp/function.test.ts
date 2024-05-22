@@ -1,7 +1,9 @@
+import { readdirSync, readFileSync, existsSync } from "fs";
+import { join } from "path";
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { Duration } from "../../src/std";
 import * as tfgcp from "../../src/target-tf-gcp";
 import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
@@ -13,16 +15,33 @@ const GCP_APP_OPTS = {
   zone: "us-central1",
 };
 
-const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
+const INFLIGHT_CODE = inflight(async (_, name) => {
+  console.log("Hello, " + name);
+});
 
 test("basic function", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  new Function(app, "Function", inflight);
+  new Function(app, "Function", INFLIGHT_CODE);
   const output = app.synth();
+
+  const functionOutDir = readdirSync(app.workdir, {
+    recursive: true,
+    withFileTypes: true,
+  }).find((d) => d.isDirectory())!;
+  const packageJson = JSON.parse(
+    readFileSync(
+      join(app.workdir, functionOutDir.name, "package.json"),
+      "utf-8"
+    )
+  );
+  const indexFilename = "index.cjs";
+  expect(packageJson.main).toBe(indexFilename);
+  expect(
+    existsSync(join(app.workdir, functionOutDir.name, indexFilename))
+  ).toBeTruthy();
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
@@ -42,10 +61,9 @@ test("basic function", () => {
 test("basic function with environment variables", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  new Function(app, "Function", inflight, {
+  new Function(app, "Function", INFLIGHT_CODE, {
     env: {
       FOO: "BAR",
       BOOM: "BAM",
@@ -73,10 +91,9 @@ test("basic function with environment variables", () => {
 test("basic function with timeout explicitly set", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  new Function(app, "Function", inflight, {
+  new Function(app, "Function", INFLIGHT_CODE, {
     timeout: Duration.fromSeconds(30),
   });
   const output = app.synth();
@@ -98,11 +115,10 @@ test("basic function with timeout explicitly set", () => {
 test("basic function with timeout beyond the allowed range", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
   expect(() => {
-    new Function(app, "Function", inflight, {
+    new Function(app, "Function", INFLIGHT_CODE, {
       timeout: Duration.fromSeconds(0),
     });
   }).toThrowErrorMatchingSnapshot();
@@ -111,10 +127,9 @@ test("basic function with timeout beyond the allowed range", () => {
 test("basic function with memory size specified", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  new Function(app, "Function", inflight, {
+  new Function(app, "Function", INFLIGHT_CODE, {
     memory: 256,
   });
   const output = app.synth();
@@ -136,11 +151,10 @@ test("basic function with memory size specified", () => {
 test("basic function with memory beyond the allowed range", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
   expect(() => {
-    new Function(app, "Function", inflight, {
+    new Function(app, "Function", INFLIGHT_CODE, {
       memory: 64,
     });
   }).toThrowErrorMatchingSnapshot();

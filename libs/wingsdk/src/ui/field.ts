@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, UIComponent } from "../core";
+import { App, UIComponent, lift } from "../core";
 import { Duration, IInflight } from "../std";
 
 /**
@@ -30,6 +30,7 @@ export interface FieldProps {
 
 /**
  * A field can be used to display a value.
+ * @noinflight
  */
 export class Field extends VisualComponent {
   /**
@@ -85,11 +86,6 @@ export class Field extends VisualComponent {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [];
-  }
-
-  /** @internal */
   public _toInflight(): string {
     throw new Error("Method not implemented.");
   }
@@ -112,4 +108,18 @@ export interface IFieldHandlerClient {
    * @inflight
    */
   handle(): Promise<string>;
+}
+
+/**
+ * A value field can be used to display a string value.
+ * @noinflight
+ */
+export class ValueField extends Field {
+  constructor(scope: Construct, id: string, label: string, value: string) {
+    const handler = lift({ value }).inflight(async (ctx) => {
+      return ctx.value;
+    });
+
+    super(scope, id, label, handler);
+  }
 }

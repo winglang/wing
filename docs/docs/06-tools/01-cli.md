@@ -88,20 +88,15 @@ The `wing test` command can be used to compile and execute tests in Wing applica
 Usage:
 
 ```sh
-$ wing test [entrypoint...] [--test-filter <regex>] [--retry [retries]]
+$ wing test [entrypoint...] [--test-filter <regex>] [--retry [retries]] [-t TARGET]
 ```
 
-`[entrypoint...]` is the list of entrypoints that will be compiled and tested. 
-A file is considered an entrypoint if its name is `main` or ends with `.main` or `.test` and the extension is `.w` or `.ts`. 
-Exact paths or partial text can be used. If partial, all entrypoints in the current directory that contain the partial path will be used. For example `wing test bucket` will test `bucket.test.w` and `bucket/get.test.w`.
+Tests are written in `test` blocks that contain *inflight code*. In Wing, each test is executed
+against a separate copy of the application being tested.
 
-By default, all entrypoints in the current directory will be used.
-
-`[--test-filter <regex>]` runs only specific tests within the entrypoints based on a provided regex.
-
-`[--retry [retries]]` will retry failed tests based on number provided. By default it will retry `3` times.
-
-For example ([test_bucket.test.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.test.w)):
+In the following example
+([test_bucket.test.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.test.w)),
+the application consists of a single `cloud.Bucket` and two tests `"put"` and `"get"`.
 
 ```js
 bring cloud;
@@ -120,7 +115,9 @@ test "get" {
 }
 ```
 
-Now, if we run the following command:
+Now, if we run the following command, the framework will run each one of these tests against a
+different bucket. This is how the `"put"` test can safely assume that `b.list()` initially returns
+an empty array.
 
 ```sh
 $ wing test test_bucket.test.w
@@ -128,7 +125,105 @@ pass | test_bucket.test.w | root/test:get
 pass | test_bucket.test.w | root/test:put
 ```
 
-We will see that both functions were invoked and that the tests passed.
+### Choosing which tests to run
+
+The `wing test` command accepts an optional list of test entrypoint files:
+
+```sh
+wing test [entrypoint...]
+```
+
+A file is considered an entrypoint if its name is `main` or ends with `.main` or `.test` and the
+extension is `.w` or `.ts`. 
+
+By default, all entrypoints in the current directory will be used.
+
+Exact paths or partial text can be used. If partial, all entrypoints in the current directory that
+contain the partial path will be used. For example `wing test bucket` will test `bucket.test.w` and
+`bucket/get.test.w`.
+
+The `--test-filter <regex>` option can be used to run only specific tests within the entrypoints
+based on a provided regular expression.
+
+### Cloud tests
+
+The `-t TARGET` option can be used to run tests on supported cloud platforms.
+
+> Currently, cloud tests are supported for Terraform (`tf-*`) and AWS CDK (`awscdk`).
+
+For example, `wing test -t tf-aws` will deploy to AWS using Terraform and execute tests. For this to
+work, you will need AWS credentials in your environment.
+
+Since each Wing test expects to run against its own isolated environment, the test framework will
+deploy a separate copy of your application for each test, execute the test and collect the results.
+
+Sometimes, when running tests on the cloud there could be intermittent issues such as connectivity
+or capacity issues. The `--retry <retries>` switch controls how many times to retry a failed test.
+By default it will retry 3 times.
+
+### Cloud test snapshots
+
+Sometimes it is not practical to execute all tests on the cloud in every commit. This could be
+because it can take a long time to run all these tests or because the cloud resources required are
+expensive.
+
+The Wing test framework has a built-in mechanism to mitigate these constraints called *cloud test
+snapshots*.
+
+This mechanism is only activated when running tests on the cloud (e.g. `-t TARGET` where `TARGET` is
+not `sim`).
+
+If all the tests pass, the framework will automatically capture a snapshot of the compiler output
+and store it next to the test file (under a `.snap.md` file with the same name as the test
+entrypoint).
+
+In the following example, we run `test_bucket.test.w` against the `tf-aws` target. After the tests passed, a snapshot is captured
+and stored under `test_bucket.test.w.tf-aws.snap.md`.
+
+```sh
+$ wing test -t tf-aws test_bucket.test.w
+✔ Compiling test_bucket.test.w to tf-aws...
+✔ terraform init
+✔ terraform apply
+...
+✔ Snapshot test_bucket.test.w.tf-aws.snap.md...
+```
+
+The snapshot file will include a snapshot of the `main.tf.json` file which includes the Terraform
+output of the compiler.
+
+Then, when running the same command within a CI system (which is detected by the `CI` environment
+variable), the framework will *not* attempt to deploy to the cloud, but instead will only assert
+that the output hasn't changed.
+
+```sh
+$ CI=1 wing test -t tf-aws test_bucket.test.w
+✔ Snapshot test_bucket.test.w.tf-aws.snap.md...
+```
+
+If the output has changed, the test will fail:
+
+```sh
+$ CI=1 wing test -t tf-aws test_bucket.test.w
+✖ Snapshot test_bucket.test.w.tf-aws.snap.md...
+Snapshot mismatch:
+ - Expected: test_bucket.test.w.tf-aws.snap.md
+ - Actual: test_bucket.test.w.tf-aws.snap.md.actual
+```
+
+The `--snapshots <mode>` or `-s <mode>` switch can be used to determine the behavior of the
+snapshots mechanism:
+
+* `never` - Disables the snapshots mechanism altogether. Should be used, for example, if you wish to
+  run cloud tests from within a CI system.
+* `deploy` - Deploys and captures the snapshot if test passed. This is the default behavior when
+  running cloud tests and `CI` is not set.
+* `assert` - Only verifies that the snapshots haven't changed. This is the default behavior when
+  running cloud tests and `CI` is set.
+* `update` - Only updates the snapshots without deploying. Use this with caution as this can
+  potentially result in a regressed behavior.
+* `auto` - Auto-detect `wet` or `assert` based on the `CI` environment variable (the behavior
+  described above).
 
 ## Package: `wing pack`
 
@@ -143,6 +238,31 @@ $ wing pack
 This will compile your current Wing directory, and bundle it as a tarball that can be published to [GitHub packages](https://github.com/features/packages) or [npm](https://www.npmjs.com/).
 
 See [Libraries](../05-libraries.md) for more details on packaging and consuming Wing libraries.
+
+:::
+
+## Store Secrets: `wing secrets`
+
+The `wing secrets` command can be used to store secrets needed by your application. The method of storing secrets depends on the target platform.
+
+Take the following Wing application:
+
+```js
+// main.w
+bring cloud;
+
+let secret = new cloud.Secret(name: "slack-token");
+```
+
+Usage:
+
+```sh
+$ wing secrets main.w
+
+1 secret(s) found
+
+? Enter the secret value for slack-token: [hidden]
+```
 
 ## Environment Variables
 

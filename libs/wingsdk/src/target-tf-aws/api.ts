@@ -1,6 +1,4 @@
 import { createHash } from "crypto";
-import { join } from "path";
-
 import { Fn, Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -15,13 +13,12 @@ import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { VpcEndpoint } from "../.gen/providers/aws/vpc-endpoint";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IAwsApi, STAGE_NAME } from "../shared-aws";
+import { ApiEndpointHandler, IAwsApi, STAGE_NAME } from "../shared-aws";
 import { API_DEFAULT_RESPONSE } from "../shared-aws/api.default";
 import { IInflightHost, Node } from "../std";
 
@@ -46,9 +43,12 @@ export class Api extends cloud.Api implements IAwsApi {
       getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
+
     this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
       label: `Api ${this.node.path}`,
     });
+
+    Node.of(this.endpoint).hidden = true;
   }
 
   protected get _endpoint(): cloud.Endpoint {
@@ -224,17 +224,9 @@ export class Api extends cloud.Api implements IAwsApi {
   ): Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
-      const newInflight = convertBetweenHandlers(
+      const newInflight = ApiEndpointHandler.toFunctionHandler(
         inflight,
-        join(
-          __dirname.replace("target-tf-aws", "shared-aws"),
-          "api.onrequest.inflight.js"
-        ),
-        "ApiOnRequestHandlerClient",
-        {
-          corsHeaders: this._generateCorsHeaders(this.corsOptions)
-            ?.defaultResponse,
-        }
+        cloud.Api.renderCorsHeaders(this.corsOptions)?.defaultResponse
       );
       const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}`;
       handler = new Function(
@@ -251,12 +243,7 @@ export class Api extends cloud.Api implements IAwsApi {
 
   /** @internal */
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("apis can only be bound by tfaws.Function for now");
-    }
-
     host.addEnvironment(this.urlEnvName(), this.url);
-
     super.onLift(host, ops);
   }
 
@@ -557,7 +544,7 @@ class WingRestApi extends Construct {
       action: "lambda:InvokeFunction",
       functionName: handler.functionName,
       principal: "apigateway.amazonaws.com",
-      sourceArn: `${this.api.executionArn}/*/${method}${Api._toOpenApiPath(
+      sourceArn: `${this.api.executionArn}/*/${method}${Api.renderOpenApiPath(
         path
       )}`,
     });

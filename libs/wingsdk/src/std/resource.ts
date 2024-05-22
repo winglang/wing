@@ -1,7 +1,6 @@
 import { Construct, IConstruct } from "constructs";
-import { App, LiftDepsMatrixRaw } from "../core";
+import { App, LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
-import { log } from "../shared/log";
 import { Node } from "../std";
 
 /**
@@ -86,7 +85,7 @@ export interface IHostedLiftable extends ILiftable {
    * inflight host.
    * @internal
    */
-  _liftMap?: LiftDepsMatrixRaw;
+  _liftMap?: LiftMap;
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
@@ -97,20 +96,12 @@ export interface IHostedLiftable extends ILiftable {
    * other capabilities to the inflight host.
    */
   onLift(host: IInflightHost, ops: string[]): void;
-
-  /**
-   * Return a list of all inflight operations that are supported by this resource.
-   *
-   * If this method doesn't exist, the resource is assumed to not support any inflight operations.
-   *
-   * @internal
-   */
-  _supportedOps(): string[];
 }
 
 /**
  * Abstract interface for `Resource`.
  * @skipDocs
+ * @noinflight
  */
 export interface IResource extends IConstruct, IHostedLiftable {
   /**
@@ -127,6 +118,7 @@ export interface IResource extends IConstruct, IHostedLiftable {
 /**
  * Shared behavior between all Wing SDK resources.
  * @skipDocs
+ * @noinflight
  */
 export abstract class Resource extends Construct implements IResource {
   /**
@@ -138,11 +130,18 @@ export abstract class Resource extends Construct implements IResource {
    * other capabilities to the inflight host.
    */
   public static onLiftType(host: IInflightHost, ops: string[]): void {
-    log(
-      `onLiftType called on a resource type (${
-        this.constructor.name
-      }) with a host (${host.node.path}) and ops: ${JSON.stringify(ops)}`
-    );
+    host;
+    ops;
+  }
+
+  /**
+   * Generates an asynchronous JavaScript statement which can be used to create an inflight client
+   * for a resource.
+   *
+   * NOTE: This statement must be executed within an async context.
+   */
+  public static toInflight(obj: IResource) {
+    return obj._toInflight();
   }
 
   /**
@@ -172,13 +171,6 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
-   * @internal
-   * */
-  public _supportedOps(): string[] {
-    return [];
-  }
-
-  /**
    * Return a code snippet that can be used to reference this resource inflight.
    *
    * @internal
@@ -198,12 +190,6 @@ export abstract class Resource extends Construct implements IResource {
    * actually bound.
    */
   public onLift(host: IInflightHost, ops: string[]): void {
-    log(
-      `onLift called on a resource (${this.node.path}) with a host (${
-        host.node.path
-      }) and ops: ${JSON.stringify(ops)}`
-    );
-
     for (const op of ops) {
       // Add connection metadata
       Node.of(this).addConnection({
@@ -231,6 +217,7 @@ export abstract class Resource extends Construct implements IResource {
  * A resource that has an automatically generated id.
  * Used by the Wing compiler to generate unique ids for auto generated resources
  * from inflight function closures.
+ * @noinflight
  */
 export abstract class AutoIdResource extends Resource {
   constructor(scope: Construct, idPrefix: string = "") {

@@ -3,7 +3,7 @@ import { Resource } from "./resource";
 import { Test } from "./test";
 import { Function, FunctionProps, IFunctionHandler } from "../cloud";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, LiftMap } from "../core";
 import { Node } from "../std";
 
 /**
@@ -109,11 +109,11 @@ export class TestRunner extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      TestRunnerInflightMethods.LIST_TESTS,
-      TestRunnerInflightMethods.RUN_TEST,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [TestRunnerInflightMethods.LIST_TESTS]: [],
+      [TestRunnerInflightMethods.RUN_TEST]: [],
+    };
   }
 
   /**
@@ -221,10 +221,40 @@ export interface Trace {
   readonly type: TraceType;
 
   /**
+   * The log level of the event.
+   */
+  readonly level: LogLevel;
+
+  /**
    * The timestamp of the event, in ISO 8601 format.
    * @example 2020-01-01T00:00:00.000Z
    */
   readonly timestamp: string;
+}
+
+/**
+ * Log level
+ */
+export enum LogLevel {
+  /**
+   * Mostly used for debugging
+   */
+  VERBOSE = "verbose",
+
+  /**
+   * Information that is useful to developers
+   */
+  INFO = "info",
+
+  /**
+   * Warnings that are not errors, but may require attention
+   */
+  WARNING = "warning",
+
+  /**
+   * Errors that should be addressed
+   */
+  ERROR = "error",
 }
 
 /**

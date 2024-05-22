@@ -3,4 +3,4 @@ source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
 Can't access preflight member "x" on inflight instance of type "A" 9:14
-Expression of type "A" references an unknown preflight object, can't qualify its capabilities. Use `lift()` to explicitly qualify the preflight object to disable this error. 9:12
+Expression of type "A" references an unknown preflight object, can't qualify its capabilities 9:12

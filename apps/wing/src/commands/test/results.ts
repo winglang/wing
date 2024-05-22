@@ -2,11 +2,10 @@ import { mkdir, writeFile } from "fs/promises";
 import { parse } from "path";
 import { std } from "@winglang/sdk";
 import chalk from "chalk";
+import { SnapshotResult } from "./snapshots";
+import { SingleTestResult } from "./test";
 
-export function printResults(
-  testResults: { testName: string; results: std.TestResult[] }[],
-  duration: number
-) {
+export function printResults(testResults: SingleTestResult[], duration: number) {
   const durationInSeconds = duration / 1000;
   const totalSum = testResults.length;
   const unsupportedFiles = testResults.filter(({ results }) =>
@@ -29,7 +28,6 @@ export function printResults(
     (acc, { results }) => acc + results.filter(({ pass }) => !!pass).length,
     0
   );
-  console.log(" "); // for getting a new line- \n does't seem to work :(
   const areErrors = failing.length + unsupportedFiles.length > 0 && totalSum > 1;
   const showTitle = totalSum > 1;
 
@@ -37,6 +35,7 @@ export function printResults(
 
   if (showTitle) {
     // prints a list of the tests names with an icon
+    res.push("");
     res.push(`Results:`);
     res.push(...passing.map(({ testName }) => `    ${chalk.green("✓")} ${testName}`));
     res.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
@@ -45,7 +44,7 @@ export function printResults(
 
   if (areErrors) {
     // prints error messages form failed tests
-    res.push(" ");
+    res.push("");
     res.push("Errors:");
     res.push(
       ...[...failing, ...unsupportedFiles].map(({ testName, results }) =>
@@ -62,7 +61,7 @@ export function printResults(
   }
 
   // prints a summary of how many tests passed and failed
-  res.push(" ");
+  res.push("");
   const testCount = [
     failingTestsNumber && chalk.red(` ${failingTestsNumber} failed`),
     passingTestsNumber && chalk.green(` ${passingTestsNumber} passed`),
@@ -84,6 +83,12 @@ export function printResults(
       `(${failingTestsNumber + passingTestsNumber + unsupportedTestsNumber})`
     )}`
   );
+
+  const snapshotSummary = renderSnapshotSummary(testResults);
+
+  // print snapshot summary
+  res.push(`${chalk.dim("Snapshots")} ${snapshotSummary}`);
+
   // prints a summary of how many tests files passed and failed
   res.push(`${chalk.dim("Test Files")}${fileCount} ${chalk.dim(`(${totalSum})`)}`);
 
@@ -94,13 +99,47 @@ export function printResults(
     ).toFixed(2)}s`
   );
 
-  console.log(res.filter((value) => !!value).join("\n"));
+  console.log(res.join("\n"));
 }
 
 export interface TestResultsJson {
   duration: number;
   platforms: string[];
   results: Record<string, Record<string, std.TestResult>>;
+}
+
+function renderSnapshotSummary(results: SingleTestResult[]) {
+  const stats: { [key: string]: number } = {};
+
+  // count the number of each snapshot result
+  for (const t of results) {
+    stats[t.snapshot] = (stats[t.snapshot] ?? 0) + 1;
+  }
+
+  // color map
+  const snapshotSummaryColors = {
+    [SnapshotResult.NEW]: chalk.yellow,
+    [SnapshotResult.UPDATED]: chalk.yellow,
+    [SnapshotResult.VERIFIED]: chalk.green,
+    [SnapshotResult.SKIPPED]: chalk.dim,
+    [SnapshotResult.MISMATCH]: chalk.red,
+  };
+
+  const snapshotSummary = [];
+  for (const t of [
+    SnapshotResult.MISMATCH,
+    SnapshotResult.VERIFIED,
+    SnapshotResult.NEW,
+    SnapshotResult.UPDATED,
+    SnapshotResult.SKIPPED,
+  ]) {
+    const count = t in stats ? stats[t] : 0;
+    if (count > 0) {
+      snapshotSummary.push(snapshotSummaryColors[t](`${stats[t]} ${t.toLowerCase()}`));
+    }
+  }
+
+  return snapshotSummary.join(chalk.dim(" | "));
 }
 
 export async function writeResultsToFile(

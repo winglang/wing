@@ -1,7 +1,7 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { lift } from "../../src/core";
 import * as tfAzure from "../../src/target-tf-azure";
 import { StorageAccountPermissions } from "../../src/target-tf-azure/counter";
 import {
@@ -49,22 +49,18 @@ test("counter with initial value", () => {
 test("function with a counter binding", () => {
   const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-  const val = await this.my_counter.inc(2);
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.INC],
-      },
-    }
+  new cloud.Function(
+    app,
+    "Function",
+    lift({ my_counter: counter })
+      .grant({ my_counter: ["inc"] })
+      .inflight(async (ctx) => {
+        const val = await ctx.my_counter.inc(2);
+        console.log(val);
+      })
   );
-  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
     "azurerm_application_insights",
     "azurerm_linux_function_app",
@@ -84,19 +80,16 @@ test("function with a counter binding", () => {
 test("inc() policy statement", () => {
   const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-  const val = await this.my_counter.inc(2);
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.INC],
-      },
-    }
+  new cloud.Function(
+    app,
+    "Function",
+    lift({ my_counter: counter })
+      .grant({ my_counter: ["inc"] })
+      .inflight(async (ctx) => {
+        const val = await ctx.my_counter.inc(2);
+        console.log(val);
+      })
   );
-  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(output).toContain(StorageAccountPermissions.READ_WRITE);
@@ -107,19 +100,16 @@ test("inc() policy statement", () => {
 test("dec() policy statement", () => {
   const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-  const val = await this.my_counter.dec(2);
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.DEC],
-      },
-    }
+  new cloud.Function(
+    app,
+    "Function",
+    lift({ my_counter: counter })
+      .grant({ my_counter: ["dec"] })
+      .inflight(async (ctx) => {
+        const val = await ctx.my_counter.dec(2);
+        console.log(val);
+      })
   );
-  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(output).toContain(StorageAccountPermissions.READ_WRITE);
@@ -130,19 +120,16 @@ test("dec() policy statement", () => {
 test("peek() policy statement", () => {
   const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-  const val = await this.my_counter.peek();
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.PEEK],
-      },
-    }
+  new cloud.Function(
+    app,
+    "Function",
+    lift({ my_counter: counter })
+      .grant({ my_counter: ["peek"] })
+      .inflight(async (ctx) => {
+        const val = await ctx.my_counter.peek();
+        console.log(val);
+      })
   );
-  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(output).toContain(StorageAccountPermissions.READ);
@@ -153,19 +140,16 @@ test("peek() policy statement", () => {
 test("set() policy statement", () => {
   const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
-    `async handle(event) {
-  const val = await this.my_counter.set();
-  console.log(val);
-}`,
-    {
-      my_counter: {
-        obj: counter,
-        ops: [cloud.CounterInflightMethods.SET],
-      },
-    }
+  new cloud.Function(
+    app,
+    "Function",
+    lift({ my_counter: counter })
+      .grant({ my_counter: ["set"] })
+      .inflight(async (ctx) => {
+        const val = await ctx.my_counter.set(12);
+        console.log(val);
+      })
   );
-  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
   expect(output).toContain(StorageAccountPermissions.READ_WRITE);
   expect(tfSanitize(output)).toMatchSnapshot();

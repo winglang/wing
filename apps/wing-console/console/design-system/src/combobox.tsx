@@ -26,6 +26,7 @@ export interface ComboboxProps {
   showSelected?: boolean;
   renderItem?: (item: Item) => JSX.Element;
   dataTestid?: string;
+  autoComplete?: boolean;
 }
 
 export const Combobox = ({
@@ -43,6 +44,7 @@ export const Combobox = ({
   showSelected = true,
   renderItem,
   dataTestid,
+  autoComplete = true,
 }: ComboboxProps) => {
   const { theme } = useTheme();
 
@@ -88,6 +90,7 @@ export const Combobox = ({
               ref={inputRef}
               as="input"
               placeholder={placeholder}
+              autoComplete={autoComplete ? "on" : "off"}
               className={classNames(
                 inputClassName,
                 theme.bgInput,

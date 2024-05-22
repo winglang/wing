@@ -42,7 +42,7 @@ pub fn stdout_buffer_writer() -> BufferWriter {
 }
 
 fn color_choice() -> ColorChoice {
-	if atty::is(atty::Stream::Stderr) {
+	if std::io::IsTerminal::is_terminal(&std::io::stderr()) {
 		termcolor::ColorChoice::Auto
 	} else {
 		termcolor::ColorChoice::Never

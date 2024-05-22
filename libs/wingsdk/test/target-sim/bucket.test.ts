@@ -4,7 +4,7 @@ import { test, expect } from "vitest";
 import { listMessages, treeJsonOf, waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
 import { BucketEventType } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight, lift } from "../../src/core";
 import { Node } from "../../src/std";
 import { METADATA_FILENAME } from "../../src/target-sim/bucket.inflight";
 import { SimApp } from "../sim-app";
@@ -23,6 +23,7 @@ test("create a bucket", async () => {
     },
     path: "root/my_bucket",
     addr: expect.any(String),
+    policy: [],
     props: {
       public: false,
       initialObjects: {},
@@ -39,7 +40,7 @@ test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const testInflight = Testing.makeHandler("async handle() {}");
+  const testInflight = inflight(async () => console.log("I am done"));
   bucket.onCreate(testInflight);
 
   const s = await app.startSimulator();
@@ -48,13 +49,17 @@ test("update an object in bucket", async () => {
 
   // WHEN
   await client.put(KEY, JSON.stringify({ msg: "Hello world 1!" }));
-  await waitUntilTraceCount(s, 4, (trace) => trace.data.message.includes(KEY));
   await client.put(KEY, JSON.stringify({ msg: "Hello world 2!" }));
-  await waitUntilTraceCount(s, 5, (trace) => trace.data.message.includes(KEY));
+  await waitUntilTraceCount(s, 1, (trace) =>
+    trace.data.message.includes(`I am done`)
+  );
 
   // THEN
-  expect(listMessages(s)).toMatchSnapshot();
   await s.stop();
+  expect(listMessages(s)).toMatchSnapshot();
+  // The bucket notification topic should only publish one message, since the
+  // second put() call counts as an update, not a create.
+  expect(listMessages(s).filter((m) => m.includes(`Publish`))).toHaveLength(1);
 });
 
 test("bucket on event creates 3 topics, and sends the right event and key in the event handlers", async () => {
@@ -62,15 +67,12 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
   const logBucket = new cloud.Bucket(app, "log_bucket");
-  const testInflight = Testing.makeHandler(
-    `async handle(key, event) { await this.bucket.put(key, event); console.log("I am done"); }`,
-    {
-      bucket: {
-        obj: logBucket,
-        ops: [cloud.BucketInflightMethods.PUT],
-      },
-    }
-  );
+  const testInflight = lift({ bucket: logBucket })
+    .grant({ bucket: [cloud.BucketInflightMethods.PUT] })
+    .inflight(async (ctx, key, event) => {
+      await ctx.bucket.put(key, event);
+      console.log("I am done");
+    });
 
   bucket.onEvent(testInflight);
 
@@ -331,7 +333,7 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[1].data.status).toEqual("failure");
+  expect(s.listTraces()[2].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -370,9 +372,9 @@ test("removing a key will call onDelete method", async () => {
   const app = new SimApp();
 
   const bucket = new cloud.Bucket(app, bucketName);
-  const testInflight = Testing.makeHandler(
-    `async handle(key) { console.log("Received " + key); }`
-  );
+  const testInflight = inflight(async (_, key) => {
+    console.log("Received " + key);
+  });
   bucket.onDelete(testInflight);
 
   const s = await app.startSimulator();

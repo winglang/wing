@@ -2,22 +2,95 @@
 
 exports[`create a counter 1`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
-        "path": "root/my_counter",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 123,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -27,10 +100,6 @@ exports[`create a counter 1`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -72,10 +141,6 @@ exports[`create a counter 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -92,6 +157,14 @@ exports[`create a counter 1`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -106,6 +179,22 @@ exports[`create a counter 1`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -132,33 +221,106 @@ exports[`create a counter 1`] = `
 
 exports[`dec 1`] = `
 [
-  "root/my_counter started",
-  "Dec (amount=1).",
-  "Dec (amount=1).",
-  "Dec (amount=10).",
-  "Dec (amount=10).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "dec()",
+  "dec()",
+  "dec(10)",
+  "dec(10)",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`dec 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
-        "path": "root/my_counter",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 123,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -168,10 +330,6 @@ exports[`dec 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -213,10 +371,6 @@ exports[`dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -233,6 +387,14 @@ exports[`dec 2`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -247,6 +409,22 @@ exports[`dec 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -273,33 +451,106 @@ exports[`dec 2`] = `
 
 exports[`inc 1`] = `
 [
-  "root/my_counter started",
-  "Inc (amount=1).",
-  "Inc (amount=1).",
-  "Inc (amount=10).",
-  "Inc (amount=10).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "inc()",
+  "inc()",
+  "inc(10)",
+  "inc(10)",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`inc 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
-        "path": "root/my_counter",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 123,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -309,10 +560,6 @@ exports[`inc 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -354,10 +601,6 @@ exports[`inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -374,6 +617,14 @@ exports[`inc 2`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -388,6 +639,22 @@ exports[`inc 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -414,33 +681,106 @@ exports[`inc 2`] = `
 
 exports[`key dec 1`] = `
 [
-  "root/my_counter started",
-  "Dec (amount=1, key: my-key).",
-  "Dec (amount=1, key: my-key).",
-  "Dec (amount=10, key: my-key).",
-  "Dec (amount=10, key: my-key).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "dec(1, "my-key")",
+  "dec(nil, "my-key")",
+  "dec(10, "my-key")",
+  "dec(10, "my-key")",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`key dec 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 0
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
-        "path": "root/my_counter",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 0,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -450,10 +790,6 @@ exports[`key dec 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -495,10 +831,6 @@ exports[`key dec 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -515,6 +847,14 @@ exports[`key dec 2`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -529,6 +869,22 @@ exports[`key dec 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -555,33 +911,106 @@ exports[`key dec 2`] = `
 
 exports[`key inc 1`] = `
 [
-  "root/my_counter started",
-  "Inc (amount=1, key: my-key).",
-  "Inc (amount=1, key: my-key).",
-  "Inc (amount=10, key: my-key).",
-  "Inc (amount=10, key: my-key).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "inc(1, "my-key")",
+  "inc(nil, "my-key")",
+  "inc(10, "my-key")",
+  "inc(10, "my-key")",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`key inc 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 0
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
-        "path": "root/my_counter",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 0,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -591,10 +1020,6 @@ exports[`key inc 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -636,10 +1061,6 @@ exports[`key inc 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -656,6 +1077,14 @@ exports[`key inc 2`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -670,6 +1099,22 @@ exports[`key inc 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -696,31 +1141,104 @@ exports[`key inc 2`] = `
 
 exports[`key set to new value 1`] = `
 [
-  "root/my_counter started",
-  "Set (value=5, key: my-key).",
-  "Peek (value=5, key: my-key).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "set(5, "my-key")",
+  "peek("my-key")",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`key set to new value 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 0
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
-        "path": "root/my_counter",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 0,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -730,10 +1248,6 @@ exports[`key set to new value 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -775,10 +1289,6 @@ exports[`key set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -795,6 +1305,14 @@ exports[`key set to new value 2`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -809,6 +1327,22 @@ exports[`key set to new value 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -835,31 +1369,104 @@ exports[`key set to new value 2`] = `
 
 exports[`set to new value 1`] = `
 [
-  "root/my_counter started",
-  "Set (value=5).",
-  "Peek (value=5).",
-  "root/my_counter stopped",
+  "root/my_counter/Resource started",
+  "set(5)",
+  "peek()",
+  "root/my_counter/Resource stopped",
 ]
 `;
 
 exports[`set to new value 2`] = `
 {
+  ".wing/resource_c81f10c5.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 123
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
-        "attrs": {},
-        "path": "root/my_counter",
+    "resources": {
+      "root/my_counter/Resource": {
+        "addr": "c81f10c55a36e5ca9846b94e2177596099ff6376ac",
+        "path": "root/my_counter/Resource",
+        "policy": [],
         "props": {
-          "initial": 123,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81f10c5.cjs",
+          "sourceCodeLanguage": "javascript",
         },
-        "type": "@winglang/sdk.cloud.Counter",
+        "type": "@winglang/sdk.sim.Resource",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -869,10 +1476,6 @@ exports[`set to new value 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -914,10 +1517,6 @@ exports[`set to new value 2`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -934,6 +1533,14 @@ exports[`set to new value 2`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -948,6 +1555,22 @@ exports[`set to new value 2`] = `
     "tree": {
       "children": {
         "my_counter": {
+          "children": {
+            "Resource": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "color": "emerald",
+                "description": "A simulated resource",
+                "hidden": true,
+                "title": "Resource",
+              },
+              "id": "Resource",
+              "path": "root/my_counter/Resource",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",

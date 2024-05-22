@@ -12,6 +12,150 @@ sidebar_position: 100
 
 ## Resources <a name="Resources" id="Resources"></a>
 
+### BucketRef <a name="BucketRef" id="@winglang/sdk.aws.BucketRef"></a>
+
+A reference to an external S3 bucket.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.BucketRef.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.BucketRef(bucketName: str);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.BucketRef.Initializer.parameter.bucketName">bucketName</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `bucketName`<sup>Required</sup> <a name="bucketName" id="@winglang/sdk.aws.BucketRef.Initializer.parameter.bucketName"></a>
+
+- *Type:* str
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsBucketClient.bucketRegion">bucketRegion</a></code> | Get the region of the bucket. |
+
+---
+
+##### `bucketRegion` <a name="bucketRegion" id="@winglang/sdk.aws.IAwsBucketClient.bucketRegion"></a>
+
+```wing
+inflight bucketRegion(): str
+```
+
+Get the region of the bucket.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.BucketRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.BucketRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.BucketRef.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.BucketRef.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.BucketRef.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.BucketRef.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.BucketRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.BucketRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.BucketRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.BucketRef.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.BucketRef.property.bucketArn">bucketArn</a></code> | <code>str</code> | The ARN of this bucket. |
+| <code><a href="#@winglang/sdk.aws.BucketRef.property.bucketName">bucketName</a></code> | <code>str</code> | The Name of this bucket. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.BucketRef.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `bucketArn`<sup>Required</sup> <a name="bucketArn" id="@winglang/sdk.aws.BucketRef.property.bucketArn"></a>
+
+```wing
+bucketArn: str;
+```
+
+- *Type:* str
+
+The ARN of this bucket.
+
+---
+
+##### `bucketName`<sup>Required</sup> <a name="bucketName" id="@winglang/sdk.aws.BucketRef.property.bucketName"></a>
+
+```wing
+bucketName: str;
+```
+
+- *Type:* str
+
+The Name of this bucket.
+
+---
+
+
 ### Domain <a name="Domain" id="@winglang/sdk.aws.Domain"></a>
 
 AWS implementation of `cloud.Domain`.
@@ -42,6 +186,7 @@ new aws.Domain(props: DomainProps);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.Domain.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Domain.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -70,6 +215,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Domain.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Domain.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Domain.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Domain.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -184,7 +347,7 @@ new aws.FunctionRef(functionArn: str);
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-inflight invoke(payload?: str): str
+inflight invoke(payload?: str): str?
 ```
 
 Invokes the function with a payload and waits for the result.
@@ -222,6 +385,7 @@ If not defined, an empty string will be passed.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.FunctionRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.FunctionRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -250,6 +414,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.FunctionRef.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.FunctionRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.FunctionRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.FunctionRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -317,60 +499,24 @@ new aws.QueueRef(queueArn: str);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push one or more messages to the queue. |
+| <code><a href="#@winglang/sdk.aws.IAwsQueueClient.queueUrl">queueUrl</a></code> | Get the queue URL. |
 
 ---
 
-##### `approxSize` <a name="approxSize" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
+##### `queueUrl` <a name="queueUrl" id="@winglang/sdk.aws.IAwsQueueClient.queueUrl"></a>
 
 ```wing
-inflight approxSize(): num
+inflight queueUrl(): str
 ```
 
-Retrieve the approximate number of messages in the queue.
-
-##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
-
-```wing
-inflight pop(): str
-```
-
-Pop a message from the queue.
-
-##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
-
-```wing
-inflight purge(): void
-```
-
-Purge all of the messages in the queue.
-
-##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
-
-```wing
-inflight push(...messages: Array<str>): void
-```
-
-Push one or more messages to the queue.
-
-###### `messages`<sup>Required</sup> <a name="messages" id="@winglang/sdk.cloud.IQueueClient.push.parameter.messages"></a>
-
-- *Type:* str
-
-Payload to send to the queue.
-
-Each message must be non-empty.
-
----
+Get the queue URL.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.QueueRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.QueueRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -399,6 +545,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.QueueRef.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.QueueRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.QueueRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.QueueRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -432,6 +596,158 @@ queueArn: str;
 - *Type:* str
 
 The ARN of this queue.
+
+---
+
+
+### SecretRef <a name="SecretRef" id="@winglang/sdk.aws.SecretRef"></a>
+
+A reference to an existing secret.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.SecretRef.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.SecretRef(secretArn: str);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.Initializer.parameter.secretArn">secretArn</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="@winglang/sdk.aws.SecretRef.Initializer.parameter.secretArn"></a>
+
+- *Type:* str
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ISecretClient.value">value</a></code> | Retrieve the value of the secret. |
+| <code><a href="#@winglang/sdk.cloud.ISecretClient.valueJson">valueJson</a></code> | Retrieve the Json value of the secret. |
+
+---
+
+##### `value` <a name="value" id="@winglang/sdk.cloud.ISecretClient.value"></a>
+
+```wing
+inflight value(options?: GetSecretValueOptions): str
+```
+
+Retrieve the value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.value.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
+
+##### `valueJson` <a name="valueJson" id="@winglang/sdk.cloud.ISecretClient.valueJson"></a>
+
+```wing
+inflight valueJson(options?: GetSecretValueOptions): Json
+```
+
+Retrieve the Json value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.valueJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.SecretRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.SecretRef.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.SecretRef.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.SecretRef.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.SecretRef.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.SecretRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.SecretRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.SecretRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.SecretRef.property.secretArn">secretArn</a></code> | <code>str</code> | The ARN of the secret. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.SecretRef.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="@winglang/sdk.aws.SecretRef.property.secretArn"></a>
+
+```wing
+secretArn: str;
+```
+
+- *Type:* str
+
+The ARN of the secret.
 
 ---
 
@@ -484,6 +800,91 @@ The cloud.Api.
 
 
 
+### ApiEndpointHandler <a name="ApiEndpointHandler" id="@winglang/sdk.aws.ApiEndpointHandler"></a>
+
+A helper class for working with AWS api endpoint handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.ApiEndpointHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.ApiEndpointHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler">toFunctionHandler</a></code> | Returns a `cloud.Function` handler for handling requests from a `cloud.Api`. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.ApiEndpointHandler.toFunctionHandler(handler: IApiEndpointHandler, headers?: MutMap<str>);
+```
+
+Returns a `cloud.Function` handler for handling requests from a `cloud.Api`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+The `onRequest` handler.
+
+---
+
+###### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.aws.ApiEndpointHandler.toFunctionHandler.parameter.headers"></a>
+
+- *Type:* MutMap&lt;str&gt;
+
+HTTP response headers to add to all responses (used by CORS).
+
+---
+
+
+
+### AwsInflightHost <a name="AwsInflightHost" id="@winglang/sdk.aws.AwsInflightHost"></a>
+
+Represents an inflight host on AWS.
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.AwsInflightHost.isAwsInflightHost">isAwsInflightHost</a></code> | Returns `true` if `obj` implements `IAwsInflightHost`. |
+
+---
+
+##### `isAwsInflightHost` <a name="isAwsInflightHost" id="@winglang/sdk.aws.AwsInflightHost.isAwsInflightHost"></a>
+
+```wing
+bring aws;
+
+aws.AwsInflightHost.isAwsInflightHost(obj: any);
+```
+
+Returns `true` if `obj` implements `IAwsInflightHost`.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.AwsInflightHost.isAwsInflightHost.parameter.obj"></a>
+
+- *Type:* any
+
+---
+
+
+
 ### Bucket <a name="Bucket" id="@winglang/sdk.aws.Bucket"></a>
 
 A helper class for working with AWS buckets.
@@ -525,6 +926,60 @@ If the bucket is an AWS Bucket, return a helper interface for working with it.
 - *Type:* <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>
 
 The cloud.Bucket.
+
+---
+
+
+
+### BucketEventHandler <a name="BucketEventHandler" id="@winglang/sdk.aws.BucketEventHandler"></a>
+
+Utility class to work with bucket event handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.BucketEventHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.BucketEventHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler">toTopicOnMessageHandler</a></code> | Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`. |
+
+---
+
+##### `toTopicOnMessageHandler` <a name="toTopicOnMessageHandler" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler"></a>
+
+```wing
+bring aws;
+
+aws.BucketEventHandler.toTopicOnMessageHandler(handler: IBucketEventHandler, eventType: BucketEventType);
+```
+
+Converts a `cloud.IBucketEventHandler` to a `cloud.ITopicOnMessageHandler`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+
+the handler to convert.
+
+---
+
+###### `eventType`<sup>Required</sup> <a name="eventType" id="@winglang/sdk.aws.BucketEventHandler.toTopicOnMessageHandler.parameter.eventType"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
+
+the event type.
 
 ---
 
@@ -598,9 +1053,22 @@ new aws.Function();
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Function.context">context</a></code> | Returns the current Lambda invocation context, if the host is an AWS Lambda. |
 | <code><a href="#@winglang/sdk.aws.Function.from">from</a></code> | If the inflight host is an AWS Lambda, return a helper interface for working with it. |
 
 ---
+
+##### `context` <a name="context" id="@winglang/sdk.aws.Function.context"></a>
+
+```wing
+bring aws;
+
+aws.Function.context();
+```
+
+Returns the current Lambda invocation context, if the host is an AWS Lambda.
+
+> [https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html)
 
 ##### `from` <a name="from" id="@winglang/sdk.aws.Function.from"></a>
 
@@ -668,16 +1136,16 @@ The cloud.Queue.
 
 
 
-### ReactApp <a name="ReactApp" id="@winglang/sdk.aws.ReactApp"></a>
+### QueueSetConsumerHandler <a name="QueueSetConsumerHandler" id="@winglang/sdk.aws.QueueSetConsumerHandler"></a>
 
-A helper class for working with AWS react apps.
+Utility class for working with the queue consumer handler.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.aws.ReactApp.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.QueueSetConsumerHandler.Initializer"></a>
 
 ```wing
 bring aws;
 
-new aws.ReactApp();
+new aws.QueueSetConsumerHandler();
 ```
 
 | **Name** | **Type** | **Description** |
@@ -690,25 +1158,25 @@ new aws.ReactApp();
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.aws.ReactApp.from">from</a></code> | If the bucket is an AWS Bucket, return a helper interface for working with it. |
+| <code><a href="#@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler">toFunctionHandler</a></code> | Converts a queue consumer handler to a function handler. |
 
 ---
 
-##### `from` <a name="from" id="@winglang/sdk.aws.ReactApp.from"></a>
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler"></a>
 
 ```wing
 bring aws;
 
-aws.ReactApp.from(react: ReactApp);
+aws.QueueSetConsumerHandler.toFunctionHandler(handler: IQueueSetConsumerHandler);
 ```
 
-If the bucket is an AWS Bucket, return a helper interface for working with it.
+Converts a queue consumer handler to a function handler.
 
-###### `react`<sup>Required</sup> <a name="react" id="@winglang/sdk.aws.ReactApp.from.parameter.react"></a>
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.QueueSetConsumerHandler.toFunctionHandler.parameter.handler"></a>
 
-- *Type:* <a href="#@winglang/sdk.ex.ReactApp">ReactApp</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
 
-The ex.ReactApp.
+The queue consumer handler.
 
 ---
 
@@ -806,6 +1274,52 @@ The cloud.Topic.
 
 
 
+### TopicOnMessageHandler <a name="TopicOnMessageHandler" id="@winglang/sdk.aws.TopicOnMessageHandler"></a>
+
+A helper class for working with AWS topic on message handlers.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.TopicOnMessageHandler.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.TopicOnMessageHandler();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler">toFunctionHandler</a></code> | Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`. |
+
+---
+
+##### `toFunctionHandler` <a name="toFunctionHandler" id="@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler"></a>
+
+```wing
+bring aws;
+
+aws.TopicOnMessageHandler.toFunctionHandler(handler: ITopicOnMessageHandler);
+```
+
+Returns a `cloud.Function` handler for handling messages from a `cloud.Topic`.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.aws.TopicOnMessageHandler.toFunctionHandler.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
+
+The `onMessage` handler.
+
+---
+
+
+
 ### Website <a name="Website" id="@winglang/sdk.aws.Website"></a>
 
 A helper class for working with AWS buckets.
@@ -853,122 +1367,6 @@ The cloud.Bucket.
 
 
 ## Structs <a name="Structs" id="Structs"></a>
-
-### AwsReactAppProps <a name="AwsReactAppProps" id="@winglang/sdk.aws.AwsReactAppProps"></a>
-
-Options for AWS `ReactApp`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.aws.AwsReactAppProps.Initializer"></a>
-
-```wing
-bring aws;
-
-let AwsReactAppProps = aws.AwsReactAppProps{ ... };
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.projectPath">projectPath</a></code> | <code>str</code> | The path to the React app root folder- can be absolute or relative to the wing folder. |
-| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.buildCommand">buildCommand</a></code> | <code>str</code> | A command for building the React app. |
-| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.buildDir">buildDir</a></code> | <code>str</code> | The path to the React app build folder- relative to the `projectPath`. |
-| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.localPort">localPort</a></code> | <code>num</code> | A port to start a local build of the React app on. |
-| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.startCommand">startCommand</a></code> | <code>str</code> | A command for starting React app locally. |
-| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.useBuildCommand">useBuildCommand</a></code> | <code>bool</code> | In sim, if `true` - will use the start command, and if `false` - the build command. |
-| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.domain">domain</a></code> | <code><a href="#@winglang/sdk.aws.Domain">Domain</a></code> | The website's custom domain object. |
-
----
-
-##### `projectPath`<sup>Required</sup> <a name="projectPath" id="@winglang/sdk.aws.AwsReactAppProps.property.projectPath"></a>
-
-```wing
-projectPath: str;
-```
-
-- *Type:* str
-
-The path to the React app root folder- can be absolute or relative to the wing folder.
-
----
-
-##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="@winglang/sdk.aws.AwsReactAppProps.property.buildCommand"></a>
-
-```wing
-buildCommand: str;
-```
-
-- *Type:* str
-- *Default:* "npm run build"
-
-A command for building the React app.
-
----
-
-##### `buildDir`<sup>Optional</sup> <a name="buildDir" id="@winglang/sdk.aws.AwsReactAppProps.property.buildDir"></a>
-
-```wing
-buildDir: str;
-```
-
-- *Type:* str
-- *Default:* "/build"
-
-The path to the React app build folder- relative to the `projectPath`.
-
----
-
-##### `localPort`<sup>Optional</sup> <a name="localPort" id="@winglang/sdk.aws.AwsReactAppProps.property.localPort"></a>
-
-```wing
-localPort: num;
-```
-
-- *Type:* num
-- *Default:* 3001
-
-A port to start a local build of the React app on.
-
----
-
-##### `startCommand`<sup>Optional</sup> <a name="startCommand" id="@winglang/sdk.aws.AwsReactAppProps.property.startCommand"></a>
-
-```wing
-startCommand: str;
-```
-
-- *Type:* str
-- *Default:* "npm run start"
-
-A command for starting React app locally.
-
----
-
-##### `useBuildCommand`<sup>Optional</sup> <a name="useBuildCommand" id="@winglang/sdk.aws.AwsReactAppProps.property.useBuildCommand"></a>
-
-```wing
-useBuildCommand: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-In sim, if `true` - will use the start command, and if `false` - the build command.
-
----
-
-##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.aws.AwsReactAppProps.property.domain"></a>
-
-```wing
-domain: Domain;
-```
-
-- *Type:* <a href="#@winglang/sdk.aws.Domain">Domain</a>
-- *Default:* undefined
-
-The website's custom domain object.
-
----
 
 ### AwsWebsiteProps <a name="AwsWebsiteProps" id="@winglang/sdk.aws.AwsWebsiteProps"></a>
 
@@ -1041,6 +1439,51 @@ domain: Domain;
 - *Default:* undefined
 
 The website's custom domain object.
+
+---
+
+### NetworkConfig <a name="NetworkConfig" id="@winglang/sdk.aws.NetworkConfig"></a>
+
+Function network configuration used to hold data on subnets and security groups that should be used when a function is deployed within a VPC.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.aws.NetworkConfig.Initializer"></a>
+
+```wing
+bring aws;
+
+let NetworkConfig = aws.NetworkConfig{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.NetworkConfig.property.securityGroupIds">securityGroupIds</a></code> | <code>MutArray&lt;str&gt;</code> | List of security groups to place function in. |
+| <code><a href="#@winglang/sdk.aws.NetworkConfig.property.subnetIds">subnetIds</a></code> | <code>MutArray&lt;str&gt;</code> | List of subnets to attach on function. |
+
+---
+
+##### `securityGroupIds`<sup>Required</sup> <a name="securityGroupIds" id="@winglang/sdk.aws.NetworkConfig.property.securityGroupIds"></a>
+
+```wing
+securityGroupIds: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+
+List of security groups to place function in.
+
+---
+
+##### `subnetIds`<sup>Required</sup> <a name="subnetIds" id="@winglang/sdk.aws.NetworkConfig.property.subnetIds"></a>
+
+```wing
+subnetIds: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+
+List of subnets to attach on function.
 
 ---
 
@@ -1278,59 +1721,32 @@ AWS Dynamodb name.
 
 ### IAwsFunction <a name="IAwsFunction" id="@winglang/sdk.aws.IAwsFunction"></a>
 
+- *Extends:* <a href="#@winglang/sdk.aws.IAwsInflightHost">IAwsInflightHost</a>
+
 - *Implemented By:* <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>
 
 A shared interface for AWS functions.
 
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsFunction.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
-| <code><a href="#@winglang/sdk.aws.IAwsFunction.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
-
----
-
-##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.aws.IAwsFunction.addEnvironment"></a>
-
-```wing
-addEnvironment(key: str, value: str): void
-```
-
-Add an environment variable to the function.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.aws.IAwsFunction.addEnvironment.parameter.key"></a>
-
-- *Type:* str
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.aws.IAwsFunction.addEnvironment.parameter.value"></a>
-
-- *Type:* str
-
----
-
-##### `addPolicyStatements` <a name="addPolicyStatements" id="@winglang/sdk.aws.IAwsFunction.addPolicyStatements"></a>
-
-```wing
-addPolicyStatements(...policies: Array<PolicyStatement>): void
-```
-
-Add policy statements to the function's IAM role.
-
-###### `policies`<sup>Required</sup> <a name="policies" id="@winglang/sdk.aws.IAwsFunction.addPolicyStatements.parameter.policies"></a>
-
-- *Type:* <a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>
-
----
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.property.functionArn">functionArn</a></code> | <code>str</code> | AWS Function arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.property.functionName">functionName</a></code> | <code>str</code> | AWS Function name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.IAwsFunction.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
 
 ---
 
@@ -1355,6 +1771,73 @@ functionName: str;
 - *Type:* str
 
 AWS Function name.
+
+---
+
+### IAwsInflightHost <a name="IAwsInflightHost" id="@winglang/sdk.aws.IAwsInflightHost"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>, <a href="#@winglang/sdk.aws.IAwsInflightHost">IAwsInflightHost</a>
+
+Represents an `IInflightHost` on AWS.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsInflightHost.addNetwork">addNetwork</a></code> | Adds the host to the specified network. |
+| <code><a href="#@winglang/sdk.aws.IAwsInflightHost.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
+
+---
+
+##### `addNetwork` <a name="addNetwork" id="@winglang/sdk.aws.IAwsInflightHost.addNetwork"></a>
+
+```wing
+addNetwork(config: NetworkConfig): void
+```
+
+Adds the host to the specified network.
+
+###### `config`<sup>Required</sup> <a name="config" id="@winglang/sdk.aws.IAwsInflightHost.addNetwork.parameter.config"></a>
+
+- *Type:* <a href="#@winglang/sdk.aws.NetworkConfig">NetworkConfig</a>
+
+The network configuration.
+
+---
+
+##### `addPolicyStatements` <a name="addPolicyStatements" id="@winglang/sdk.aws.IAwsInflightHost.addPolicyStatements"></a>
+
+```wing
+addPolicyStatements(...policies: Array<PolicyStatement>): void
+```
+
+Add policy statements to the function's IAM role.
+
+###### `policies`<sup>Required</sup> <a name="policies" id="@winglang/sdk.aws.IAwsInflightHost.addPolicyStatements.parameter.policies"></a>
+
+- *Type:* <a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsInflightHost.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.IAwsInflightHost.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
 
 ---
 
@@ -1408,46 +1891,6 @@ queueUrl: str;
 - *Type:* str
 
 AWS Queue url.
-
----
-
-### IAwsReactApp <a name="IAwsReactApp" id="@winglang/sdk.aws.IAwsReactApp"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsReactApp">IAwsReactApp</a>
-
-A shared interface for AWS react app.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsReactApp.property.bucketArn">bucketArn</a></code> | <code>str</code> | AWS Bucket arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsReactApp.property.bucketName">bucketName</a></code> | <code>str</code> | AWS Bucket name. |
-
----
-
-##### `bucketArn`<sup>Required</sup> <a name="bucketArn" id="@winglang/sdk.aws.IAwsReactApp.property.bucketArn"></a>
-
-```wing
-bucketArn: str;
-```
-
-- *Type:* str
-
-AWS Bucket arn.
-
----
-
-##### `bucketName`<sup>Required</sup> <a name="bucketName" id="@winglang/sdk.aws.IAwsReactApp.property.bucketName"></a>
-
-```wing
-bucketName: str;
-```
-
-- *Type:* str
-
-AWS Bucket name.
 
 ---
 
@@ -1568,6 +2011,128 @@ bucketName: str;
 - *Type:* str
 
 AWS Bucket name.
+
+---
+
+### ILambdaContext <a name="ILambdaContext" id="@winglang/sdk.aws.ILambdaContext"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.ILambdaContext">ILambdaContext</a>
+
+The AWS Lambda context object.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.remainingTimeInMillis">remainingTimeInMillis</a></code> | Returns the number of milliseconds left before the execution times out. |
+
+---
+
+##### `remainingTimeInMillis` <a name="remainingTimeInMillis" id="@winglang/sdk.aws.ILambdaContext.remainingTimeInMillis"></a>
+
+```wing
+remainingTimeInMillis(): num
+```
+
+Returns the number of milliseconds left before the execution times out.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.awsRequestId">awsRequestId</a></code> | <code>str</code> | The identifier of the invocation request. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.functionName">functionName</a></code> | <code>str</code> | The name of the Lambda function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.functionVersion">functionVersion</a></code> | <code>str</code> | The version of the function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.invokedFunctionArn">invokedFunctionArn</a></code> | <code>str</code> | The Amazon Resource Name (ARN) that's used to invoke the function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.logGroupName">logGroupName</a></code> | <code>str</code> | The log group for the function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.logStreamName">logStreamName</a></code> | <code>str</code> | The log stream for the function instance. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.memoryLimitInMB">memoryLimitInMB</a></code> | <code>str</code> | The amount of memory that's allocated for the function. |
+
+---
+
+##### `awsRequestId`<sup>Required</sup> <a name="awsRequestId" id="@winglang/sdk.aws.ILambdaContext.property.awsRequestId"></a>
+
+```wing
+awsRequestId: str;
+```
+
+- *Type:* str
+
+The identifier of the invocation request.
+
+---
+
+##### `functionName`<sup>Required</sup> <a name="functionName" id="@winglang/sdk.aws.ILambdaContext.property.functionName"></a>
+
+```wing
+functionName: str;
+```
+
+- *Type:* str
+
+The name of the Lambda function.
+
+---
+
+##### `functionVersion`<sup>Required</sup> <a name="functionVersion" id="@winglang/sdk.aws.ILambdaContext.property.functionVersion"></a>
+
+```wing
+functionVersion: str;
+```
+
+- *Type:* str
+
+The version of the function.
+
+---
+
+##### `invokedFunctionArn`<sup>Required</sup> <a name="invokedFunctionArn" id="@winglang/sdk.aws.ILambdaContext.property.invokedFunctionArn"></a>
+
+```wing
+invokedFunctionArn: str;
+```
+
+- *Type:* str
+
+The Amazon Resource Name (ARN) that's used to invoke the function.
+
+Indicates if the invoker specified a version number or alias.
+
+---
+
+##### `logGroupName`<sup>Required</sup> <a name="logGroupName" id="@winglang/sdk.aws.ILambdaContext.property.logGroupName"></a>
+
+```wing
+logGroupName: str;
+```
+
+- *Type:* str
+
+The log group for the function.
+
+---
+
+##### `logStreamName`<sup>Required</sup> <a name="logStreamName" id="@winglang/sdk.aws.ILambdaContext.property.logStreamName"></a>
+
+```wing
+logStreamName: str;
+```
+
+- *Type:* str
+
+The log stream for the function instance.
+
+---
+
+##### `memoryLimitInMB`<sup>Required</sup> <a name="memoryLimitInMB" id="@winglang/sdk.aws.ILambdaContext.property.memoryLimitInMB"></a>
+
+```wing
+memoryLimitInMB: str;
+```
+
+- *Type:* str
+
+The amount of memory that's allocated for the function.
 
 ---
 

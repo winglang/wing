@@ -3,9 +3,9 @@
 ## stdout.log
 ```log
 pass ─ test_without_bring.test.wsim » root/env0/test:hello test
- 
- 
+
 Tests 1 passed (1)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

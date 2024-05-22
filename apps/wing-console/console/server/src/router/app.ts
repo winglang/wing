@@ -14,7 +14,6 @@ import type {
 import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
 import type { FileLink } from "../utils/createRouter.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { isTermsAccepted, getLicense } from "../utils/terms-and-conditions.js";
 import type { IFunctionClient, Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -130,18 +129,6 @@ export const createAppRouter = () => {
         getNodeIds(node);
         return list;
       }),
-    "app.selectNode": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string().optional(),
-        }),
-      )
-      .mutation(async ({ ctx, input }) => {
-        ctx.setSelectedNode(input.resourcePath ?? "");
-      }),
-    "app.selectedNode": createProcedure.query(async ({ ctx }) => {
-      return ctx.getSelectedNode();
-    }),
     "app.nodeBreadcrumbs": createProcedure
       .input(
         z.object({
@@ -469,37 +456,8 @@ export const createAppRouter = () => {
         return ui as Array<{
           kind: string;
           label: string;
-          handler: string;
+          handler: string | Record<string, string>;
         }>;
-      }),
-    "app.getResourceUiField": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string(),
-        }),
-      )
-      .query(async ({ input, ctx }) => {
-        const simulator = await ctx.simulator();
-        const client = simulator.getResource(
-          input.resourcePath,
-        ) as IFunctionClient;
-        return {
-          value: await client.invoke(""),
-        };
-      }),
-
-    "app.invokeResourceUiButton": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string(),
-        }),
-      )
-      .mutation(async ({ input, ctx }) => {
-        const simulator = await ctx.simulator();
-        const client = simulator.getResource(
-          input.resourcePath,
-        ) as IFunctionClient;
-        await client.invoke("");
       }),
 
     "app.analytics": createProcedure.query(async ({ ctx }) => {
@@ -551,7 +509,12 @@ function createExplorerItemFromConstructTreeNode(
   showTests = false,
   includeHiddens = false,
 ): ExplorerItem {
-  const label = node.display?.title ?? node.id;
+  const cloudResourceType = node.constructInfo?.fqn?.split(".").at(-1);
+
+  const label =
+    node.display?.title === cloudResourceType
+      ? node.id
+      : node.display?.title ?? node.id;
 
   return {
     id: node.path,

@@ -129,7 +129,9 @@ jobs:
 
       - name: Install Playwright
         working-directory: apps/wing-console/console/app
-        run: pnpm exec playwright install --with-deps
+        run: |
+          sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+          pnpm exec playwright install --with-deps
 
       - name: Test
         run: pnpm test:ci
@@ -272,7 +274,7 @@ jobs:
     needs:
       - build
     if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
-    uses: ./.github/workflows/tf-aws-test.yml
+    uses: ./.github/workflows/sdk-spec-test.yml
     secrets: inherit
 
   console-preview:

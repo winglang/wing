@@ -1,7 +1,7 @@
 # [redis.test.w](../../../../../examples/tests/valid/redis.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $r }) {
@@ -17,11 +17,11 @@ module.exports = function({ $r }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $queue, $r, $r2, $util_Util }) {
@@ -44,7 +44,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
 ## main.tf.json
@@ -114,7 +114,8 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.Redis_KEN15securityGroup_9FF06889.id}"
+          "${aws_security_group.Redis_KEN21securityGroup_139152DE.id}",
+          "${aws_security_group.Redis_KEN24securityGroup_6EFFC29B.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.Redis_RedisSubnetGroup_E7D796E2.name}"
       },
@@ -133,7 +134,8 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.r2_KEN24securityGroup_AFC21ADF.id}"
+          "${aws_security_group.r2_KEN35securityGroup_DF1EB5F4.id}",
+          "${aws_security_group.r2_KEN38securityGroup_41F37500.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.r2_RedisSubnetGroup_C415566B.name}"
       }
@@ -148,7 +150,8 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "name": "redis-c8cdb969-subnetGroup",
         "subnet_ids": [
-          "${aws_subnet.PrivateSubnet.id}"
+          "${aws_subnet.PrivateSubnet.id}",
+          "${aws_subnet.PrivateSubnet2.id}"
         ]
       },
       "r2_RedisSubnetGroup_C415566B": {
@@ -160,7 +163,8 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "name": "r2-c882797c-subnetGroup",
         "subnet_ids": [
-          "${aws_subnet.PrivateSubnet.id}"
+          "${aws_subnet.PrivateSubnet.id}",
+          "${aws_subnet.PrivateSubnet2.id}"
         ]
       }
     },
@@ -223,7 +227,10 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "batch_size": 1,
         "event_source_arn": "${aws_sqs_queue.Queue.arn}",
-        "function_name": "${aws_lambda_function.Queue-SetConsumer0.function_name}"
+        "function_name": "${aws_lambda_function.Queue-SetConsumer0.function_name}",
+        "function_response_types": [
+          "ReportBatchItemFailures"
+        ]
       }
     },
     "aws_lambda_function": {
@@ -256,10 +263,12 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "timeout": "${aws_sqs_queue.Queue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [
-            "${aws_security_group.Redis_KEN15securityGroup_9FF06889.id}"
+            "${aws_security_group.Redis_KEN21securityGroup_139152DE.id}",
+            "${aws_security_group.Redis_KEN24securityGroup_6EFFC29B.id}"
           ],
           "subnet_ids": [
-            "${aws_subnet.PrivateSubnet.id}"
+            "${aws_subnet.PrivateSubnet.id}",
+            "${aws_subnet.PrivateSubnet2.id}"
           ]
         }
       }
@@ -309,6 +318,35 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "vpc_id": "${aws_vpc.VPC.id}"
       },
+      "PrivateRouteTable2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/PrivateRouteTable2",
+            "uniqueId": "PrivateRouteTable2"
+          }
+        },
+        "route": [
+          {
+            "carrier_gateway_id": null,
+            "cidr_block": "0.0.0.0/0",
+            "core_network_arn": null,
+            "destination_prefix_list_id": null,
+            "egress_only_gateway_id": null,
+            "gateway_id": null,
+            "ipv6_cidr_block": null,
+            "local_gateway_id": null,
+            "nat_gateway_id": "${aws_nat_gateway.NATGateway.id}",
+            "network_interface_id": null,
+            "transit_gateway_id": null,
+            "vpc_endpoint_id": null,
+            "vpc_peering_connection_id": null
+          }
+        ],
+        "tags": {
+          "Name": "Default-c82bf964-private-route-table-2"
+        },
+        "vpc_id": "${aws_vpc.VPC.id}"
+      },
       "PublicRouteTable": {
         "//": {
           "metadata": {
@@ -350,6 +388,16 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "route_table_id": "${aws_route_table.PrivateRouteTable.id}",
         "subnet_id": "${aws_subnet.PrivateSubnet.id}"
       },
+      "PrivateRouteTableAssociation2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/PrivateRouteTableAssociation2",
+            "uniqueId": "PrivateRouteTableAssociation2"
+          }
+        },
+        "route_table_id": "${aws_route_table.PrivateRouteTable2.id}",
+        "subnet_id": "${aws_subnet.PrivateSubnet2.id}"
+      },
       "PublicRouteTableAssociation": {
         "//": {
           "metadata": {
@@ -386,11 +434,11 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       }
     },
     "aws_security_group": {
-      "Redis_KEN15securityGroup_9FF06889": {
+      "Redis_KEN21securityGroup_139152DE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Redis/KEN.15]}securityGroup",
-            "uniqueId": "Redis_KEN15securityGroup_9FF06889"
+            "path": "root/Default/Default/Redis/KEN.21]}securityGroup",
+            "uniqueId": "Redis_KEN21securityGroup_139152DE"
           }
         },
         "egress": [
@@ -426,11 +474,51 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "name": "3542402a-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "r2_KEN24securityGroup_AFC21ADF": {
+      "Redis_KEN24securityGroup_6EFFC29B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/r2/KEN.24]}securityGroup",
-            "uniqueId": "r2_KEN24securityGroup_AFC21ADF"
+            "path": "root/Default/Default/Redis/KEN.24]}securityGroup",
+            "uniqueId": "Redis_KEN24securityGroup_6EFFC29B"
+          }
+        },
+        "egress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0
+          }
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": [
+              "${aws_subnet.PrivateSubnet2.cidr_block}"
+            ],
+            "description": null,
+            "from_port": 6379,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_groups": null,
+            "self": true,
+            "to_port": 6379
+          }
+        ],
+        "name": "3542402a-securityGroup",
+        "vpc_id": "${aws_vpc.VPC.id}"
+      },
+      "r2_KEN35securityGroup_DF1EB5F4": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/r2/KEN.35]}securityGroup",
+            "uniqueId": "r2_KEN35securityGroup_DF1EB5F4"
           }
         },
         "egress": [
@@ -452,6 +540,46 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
           {
             "cidr_blocks": [
               "${aws_subnet.PrivateSubnet.cidr_block}"
+            ],
+            "description": null,
+            "from_port": 6379,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_groups": null,
+            "self": true,
+            "to_port": 6379
+          }
+        ],
+        "name": "30c8c4ae-securityGroup",
+        "vpc_id": "${aws_vpc.VPC.id}"
+      },
+      "r2_KEN38securityGroup_41F37500": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/r2/KEN.38]}securityGroup",
+            "uniqueId": "r2_KEN38securityGroup_41F37500"
+          }
+        },
+        "egress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0
+          }
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": [
+              "${aws_subnet.PrivateSubnet2.cidr_block}"
             ],
             "description": null,
             "from_port": 6379,
@@ -495,6 +623,20 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "vpc_id": "${aws_vpc.VPC.id}"
       },
+      "PrivateSubnet2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/PrivateSubnet2",
+            "uniqueId": "PrivateSubnet2"
+          }
+        },
+        "availability_zone": "${data.aws_region.Region.name}b",
+        "cidr_block": "10.0.8.0/22",
+        "tags": {
+          "Name": "Default-c82bf964-private-subnet-2"
+        },
+        "vpc_id": "${aws_vpc.VPC.id}"
+      },
       "PublicSubnet": {
         "//": {
           "metadata": {
@@ -530,8 +672,8 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -539,6 +681,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const ex = $stdlib.ex;
@@ -553,7 +696,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $r: ${$stdlib.core.liftObject(r)},
           })
         `;
@@ -588,7 +731,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $queue: ${$stdlib.core.liftObject(queue)},
             $r: ${$stdlib.core.liftObject(r)},
             $r2: ${$stdlib.core.liftObject(r2)},
@@ -632,6 +775,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "redis.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

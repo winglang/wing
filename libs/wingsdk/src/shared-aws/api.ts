@@ -1,4 +1,6 @@
+import type { APIGatewayProxyEvent } from "aws-lambda";
 import { cloud } from "..";
+import { lift } from "../core";
 
 /**
  * The stage name for the API, used in its url.
@@ -66,5 +68,36 @@ export class Api {
       typeof obj.invokeUrl === "string" &&
       typeof obj.deploymentId === "string"
     );
+  }
+}
+
+/**
+ * A helper class for working with AWS api endpoint handlers.
+ */
+export class ApiEndpointHandler {
+  /**
+   * Returns a `cloud.Function` handler for handling requests from a `cloud.Api`.
+   * @param handler The `onRequest` handler.
+   * @param headers HTTP response headers to add to all responses (used by CORS)
+   * @returns The `cloud.Function` handler.
+   */
+  public static toFunctionHandler(
+    handler: cloud.IApiEndpointHandler,
+    headers?: Record<string, string>
+  ): cloud.IFunctionHandler {
+    return lift({
+      handler,
+      headers: headers ?? {},
+    }).inflight(async (ctx, request) => {
+      const {
+        apigwFunctionHandler,
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+      } = require("@winglang/sdk/lib/shared-aws/api-util.js");
+      return apigwFunctionHandler(
+        request as unknown as APIGatewayProxyEvent,
+        ctx.handler,
+        ctx.headers
+      ) as unknown as string;
+    });
   }
 }

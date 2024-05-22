@@ -58,9 +58,6 @@ export const getResourceIconComponent = (
     case "@winglang/sdk.cloud.Website": {
       return solid ? SolidGlobeAltIcon : GlobeAltIcon;
     }
-    case "@winglang/sdk.ex.ReactApp": {
-      return ReactIcon;
-    }
     case "@winglang/sdk.cloud.Counter": {
       return solid ? SolidCalculatorIcon : CalculatorIcon;
     }
@@ -160,7 +157,7 @@ export const getResourceIconColors = (options: {
   resourceType: string | undefined;
   darkenOnGroupHover?: boolean;
   forceDarken?: boolean;
-  color?: Colors;
+  color?: Colors | string;
 }) => {
   switch (options.resourceType) {
     case "@winglang/sdk.cloud.Bucket": {
@@ -233,16 +230,11 @@ export const getResourceIconColors = (options: {
         options.forceDarken && colors.violet.forceDarken,
       ];
     }
-    case "@winglang/sdk.ex.ReactApp": {
-      return [
-        colors.sky.default,
-        options.darkenOnGroupHover && colors.sky.groupHover,
-        options.forceDarken && colors.sky.forceDarken,
-      ];
-    }
     default: {
       let color: Colors =
-        options.color && colors[options.color] ? options.color : "slate";
+        options.color && Object.keys(colors).includes(options.color)
+          ? (options.color as Colors)
+          : "slate";
       return [
         colors[color].default,
         options.darkenOnGroupHover && colors[color].groupHover,

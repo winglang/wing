@@ -1,13 +1,20 @@
-import { join } from "path";
 import { Topic as SNSTopic } from "aws-cdk-lib/aws-sns";
-import { LambdaSubscription } from "aws-cdk-lib/aws-sns-subscriptions";
+import { Queue as SQSQeueue } from "aws-cdk-lib/aws-sqs";
+import {
+  LambdaSubscription,
+  SqsSubscription,
+} from "aws-cdk-lib/aws-sns-subscriptions";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
-import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsTopic } from "@winglang/sdk/lib/shared-aws/topic";
+import {
+  IAwsTopic,
+  TopicOnMessageHandler,
+} from "@winglang/sdk/lib/shared-aws/topic";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
+import { Queue } from "./queue";
+import { LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -26,14 +33,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname,
-        "topic.onmessage.inflight.js"
-      ),
-      "TopicOnMessageHandlerClient"
-    );
+    const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
 
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
@@ -43,7 +43,9 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     );
 
     if (!isAwsCdkFunction(fn)) {
-      throw new Error("Expected function to implement 'IAwsCdkFunction' method");
+      throw new Error(
+        "Expected function to implement 'IAwsCdkFunction' method"
+      );
     }
 
     const subscription = new LambdaSubscription(fn.awscdkFunction);
@@ -58,12 +60,27 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     return fn;
   }
 
+  public subscribeQueue(queue: cloud.Queue): void {
+    if (!(queue instanceof Queue)) {
+      throw new Error(
+        "'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic"
+      );
+    }
+
+    const baseTopic = SNSTopic.fromTopicArn(this, "BaseTopic", this.topicArn);
+    const baseQueue = SQSQeueue.fromQueueArn(this, "BaseQueue", queue.queueArn);
+    baseTopic.addSubscription(new SqsSubscription(baseQueue));
+  }
+
   public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!isAwsCdkFunction(host)) {
       throw new Error("Expected 'host' to implement 'IAwsCdkFunction' method");
     }
 
-    addPolicyStatements(host.awscdkFunction, calculateTopicPermissions(this.topic.topicArn, ops));
+    addPolicyStatements(
+      host.awscdkFunction,
+      calculateTopicPermissions(this.topic.topicArn, ops)
+    );
 
     host.addEnvironment(this.envName(), this.topic.topicArn);
 
@@ -72,16 +89,15 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "TopicClient",
-      [`process.env["${this.envName()}"]`]
-    );
+    return core.InflightClient.for(__dirname, __filename, "TopicClient", [
+      `process.env["${this.envName()}"]`,
+    ]);
   }
   /** @internal */
-  public _supportedOps(): string[] {
-    return [cloud.TopicInflightMethods.PUBLISH];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.TopicInflightMethods.PUBLISH]: [],
+    };
   }
 
   /** @internal */

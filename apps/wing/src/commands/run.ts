@@ -1,10 +1,10 @@
 import { existsSync } from "fs";
-import { resolve } from "path";
+import { dirname, resolve } from "path";
 import { createConsoleApp } from "@wingconsole/app";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { debug } from "debug";
 import { glob } from "glob";
-import once from "lodash.once";
+import { loadEnvVariables } from "../env";
 import { parseNumericString } from "../util";
 import { beforeShutdown } from "../util.before-shutdown.js";
 
@@ -31,6 +31,11 @@ export interface RunOptions {
    * @default wingCompiler.BuiltinPlatform.SIM
    */
   readonly platform?: string[];
+
+  /**
+   * Additional paths to watch or ignore for changes. Supports globs.
+   */
+  readonly watch?: string[];
 }
 
 /**
@@ -63,6 +68,8 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     throw new Error(entrypoint + " doesn't exist");
   }
 
+  loadEnvVariables({ cwd: resolve(dirname(entrypoint)) });
+
   if (options?.platform && options?.platform[0] !== BuiltinPlatform.SIM) {
     throw new Error(
       `The first platform in the list must be the sim platform (try "-t sim -t ${options.platform.join(
@@ -85,13 +92,12 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     platform: options?.platform,
     requireAcceptTerms: !!process.stdin.isTTY,
     open: openBrowser,
+    watchGlobs: options?.watch,
   });
   const url = `http://localhost:${port}/`;
   console.log(`The Wing Console is running at ${url}`);
 
-  const onExit = once(async (exitCode: number) => {
-    await close(() => process.exit(exitCode));
+  beforeShutdown(async () => {
+    await close();
   });
-
-  beforeShutdown(() => onExit(0));
 }

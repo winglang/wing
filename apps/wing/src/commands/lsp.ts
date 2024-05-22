@@ -100,6 +100,7 @@ export async function lsp() {
         hoverProvider: true,
         documentSymbolProvider: true,
         definitionProvider: true,
+        renameProvider: true,
       },
     };
     return result;
@@ -136,9 +137,14 @@ export async function lsp() {
     for (const rd of raw_diagnostics) {
       if (rd.span) {
         const diagnosticUri = "file://" + rd.span.file_id;
+        let message = rd.message;
+        if (rd.hints.length > 0) {
+          message += `\n${rd.hints.map((hint) => `hint: ${hint}`).join("\n")}`;
+        }
+
         const diag = Diagnostic.create(
           Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
-          `${rd.message}\n${rd.hints.map((hint) => `hint: ${hint}`).join("\n")}`,
+          message,
           undefined,
           undefined,
           undefined,
@@ -209,6 +215,9 @@ export async function lsp() {
   });
   connection.onDocumentSymbol(async (params) => {
     return callWing("wingc_on_document_symbol", params);
+  });
+  connection.onRenameRequest(async (params) => {
+    return callWing("wingc_on_rename", params);
   });
   connection.onHover(async (params) => {
     return callWing("wingc_on_hover", params);

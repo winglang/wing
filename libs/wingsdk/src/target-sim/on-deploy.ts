@@ -3,7 +3,7 @@ import { OnDeploySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { BaseResourceSchema } from "../simulator";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflight, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 export class OnDeploy extends cloud.OnDeploy {
@@ -30,21 +30,18 @@ export class OnDeploy extends cloud.OnDeploy {
     }
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: OnDeploySchema = {
-      type: cloud.ON_DEPLOY_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        functionHandle: simulatorHandleToken(this.fn),
-      },
-      attrs: {},
+  public toSimulator(): ToSimulatorOutput {
+    const props: OnDeploySchema = {
+      functionHandle: simulatorHandleToken(this.fn),
     };
-    return schema;
+    return {
+      type: cloud.ON_DEPLOY_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

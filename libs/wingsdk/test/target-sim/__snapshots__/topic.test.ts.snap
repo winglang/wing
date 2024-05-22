@@ -7,15 +7,23 @@ exports[`create a topic 1`] = `
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_topic": {
         "addr": "c81b9a117401b1959f70a55462f9df8add290b0fda",
-        "attrs": {},
         "path": "root/my_topic",
         "props": {},
         "type": "@winglang/sdk.cloud.Topic",
       },
-    ],
+      "root/my_topic/Policy": {
+        "addr": "c8635ef174eab9aa010e5bed09a712307a6b70e731",
+        "path": "root/my_topic/Policy",
+        "props": {
+          "principal": "\${wsim#root/my_topic#attrs.handle}",
+          "statements": [],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -25,10 +33,6 @@ exports[`create a topic 1`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -70,10 +74,6 @@ exports[`create a topic 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -90,6 +90,14 @@ exports[`create a topic 1`] = `
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
       },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -104,6 +112,21 @@ exports[`create a topic 1`] = `
     "tree": {
       "children": {
         "my_topic": {
+          "children": {
+            "Policy": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A simulated resource policy",
+                "hidden": true,
+                "title": "Policy",
+              },
+              "id": "Policy",
+              "path": "root/my_topic/Policy",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",

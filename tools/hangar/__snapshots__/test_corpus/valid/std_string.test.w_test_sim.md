@@ -2,13 +2,13 @@
 
 ## stdout.log
 ```log
-pass ┌ std_string.test.wsim » root/env0/test:string
-     │ index of "s" in s1 is 0
-     │ string
-     └ some strings are immutable
- 
- 
+[INFO] string | index of "s" in s1 is 0
+[INFO] string | string
+[INFO] string | some strings are immutable
+pass ─ std_string.test.wsim » root/env0/test:string
+
 Tests 1 passed (1)
+Snapshots 1 skipped
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

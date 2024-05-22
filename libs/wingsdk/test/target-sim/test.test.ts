@@ -1,21 +1,19 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { Test } from "../../src/std";
 import { SimApp } from "../sim-app";
 
-const INFLIGHT_CODE = `
-async handle(event) {
-  console.log("this test should pass!");
-}`;
+const INFLIGHT_CODE = inflight(async () =>
+  console.log("this test should pass!")
+);
 
 test("create a test", async () => {
   // GIVEN
   class Root extends Construct {
     constructor(scope: Construct, id: string) {
       super(scope, id);
-      const handler = Testing.makeHandler(INFLIGHT_CODE);
-      new Test(this, "test:my_test", handler);
+      new Test(this, "test:my_test", INFLIGHT_CODE);
     }
   }
   const app = new SimApp({ isTestEnvironment: true, rootConstruct: Root });
@@ -30,6 +28,7 @@ test("create a test", async () => {
     },
     path: "root/env0/test:my_test/Handler",
     addr: expect.any(String),
+    policy: [],
     props: {
       environmentVariables: {},
       sourceCodeFile: expect.any(String),

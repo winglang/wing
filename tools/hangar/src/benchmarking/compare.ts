@@ -3,6 +3,8 @@ import { parseRoundedJson } from "./util";
 import { getBenchForBranch, upsertPRComment } from "./github";
 import { createTable } from "./table_report";
 
+const MINIMUM_INTERESTING_PERCENTAGE = 3;
+
 interface ProcessedBenchData {
   mean: number;
   moe: number;
@@ -121,6 +123,8 @@ export async function compareBenchmarks(
   markdown += `| :-- | --: | --: | --: |\n`;
   let colors = "";
 
+  let hasInterestingResults = false;
+
   for (const key in differences) {
     const diff = differences[key];
     let prependSign = "";
@@ -132,8 +136,10 @@ export async function compareBenchmarks(
       appendColor = "🟩";
     }
 
-    if (Math.abs(diff.meanDiff) <= diff.maxSD) {
+    if (diff.meanPercentDiff <= MINIMUM_INTERESTING_PERCENTAGE) {
       appendColor = "⬜";
+    } else {
+      hasInterestingResults = true;
     }
 
     colors += appendColor;
@@ -172,7 +178,7 @@ export async function compareBenchmarks(
 
     const prNumber = parseInt(process.env.BENCH_PR ?? "");
 
-    if (prNumber) {
+    if (hasInterestingResults && prNumber) {
       const comment = `\
 ## Benchmarks
 

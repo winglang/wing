@@ -1,10 +1,10 @@
 # [capture_mutables.test.w](../../../../../examples/tests/valid/capture_mutables.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, $s_size }) {
+module.exports = function({ $a, $aCloned, $m, $s }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,19 +12,19 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($a_length, 1), "a.length == 1");
-      $helpers.assert($helpers.eq($s_size, 1), "s.size == 1");
-      $helpers.assert($helpers.eq($Object_keys_m__length, 1), "m.size() == 1");
-      $helpers.assert($helpers.eq($aCloned_length, 1), "aCloned.length == 1");
+      $helpers.assert($helpers.eq($a.length, 1), "a.length == 1");
+      $helpers.assert($helpers.eq($s.size, 1), "s.size == 1");
+      $helpers.assert($helpers.eq(Object.keys($m).length, 1), "m.size() == 1");
+      $helpers.assert($helpers.eq($aCloned.length, 1), "aCloned.length == 1");
     }
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $handler }) {
@@ -40,7 +40,7 @@ module.exports = function({ $handler }) {
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
 ## main.tf.json
@@ -62,8 +62,8 @@ module.exports = function({ $handler }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -71,6 +71,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -82,11 +83,11 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
-            $Object_keys_m__length: ${$stdlib.core.liftObject(Object.keys(m).length)},
-            $aCloned_length: ${$stdlib.core.liftObject(aCloned.length)},
-            $a_length: ${$stdlib.core.liftObject(a.length)},
-            $s_size: ${$stdlib.core.liftObject(s.size)},
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+            $a: ${$stdlib.core.liftObject(a)},
+            $aCloned: ${$stdlib.core.liftObject(aCloned)},
+            $m: ${$stdlib.core.liftObject(m)},
+            $s: ${$stdlib.core.liftObject(s)},
           })
         `;
       }
@@ -104,16 +105,16 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [Object.keys(m).length, []],
-            [a.length, []],
-            [aCloned.length, []],
-            [s.size, []],
+            [a, ["length"]],
+            [aCloned, ["length"]],
+            [m, ["size"]],
+            [s, ["size"]],
           ],
           "$inflight_init": [
-            [Object.keys(m).length, []],
-            [a.length, []],
-            [aCloned.length, []],
-            [s.size, []],
+            [a, []],
+            [aCloned, []],
+            [m, []],
+            [s, []],
           ],
         });
       }
@@ -126,7 +127,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $handler: ${$stdlib.core.liftObject(handler)},
           })
         `;
@@ -164,6 +165,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "capture_mutables.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

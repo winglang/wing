@@ -1,23 +1,25 @@
 use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
-use indexmap::{IndexMap, IndexSet};
+use indexmap::IndexMap;
 use itertools::Itertools;
 use phf::{phf_map, phf_set};
 use regex::Regex;
 use std::cell::RefCell;
 use std::collections::HashSet;
+use std::ops::Range;
 use std::{fs, str, vec};
 use tree_sitter::Node;
-use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	AccessModifier, ArgList, AssignmentKind, Ast, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
-	ScopeId, Spanned, Stmt, StmtId, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
-	UnaryOperator, UserDefinedType,
+	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
+	ElifBlock, ElifLetBlock, Elifs, Enum, ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic,
+	IntrinsicKind, LiftQualification, Literal, New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct,
+	StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
+use crate::diagnostic::{
+	report_diagnostic, Diagnostic, DiagnosticResult, WingLocation, WingSpan, ERR_EXPECTED_SEMICOLON,
+};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
@@ -114,7 +116,6 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"inflight",
 	"preflight",
 	"elif",
-	"init",
 	"any",
 	"num",
 	"str",
@@ -239,7 +240,7 @@ fn parse_wing_file(
 
 	let language = tree_sitter_wing::language();
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
-	tree_sitter_parser.set_language(language).unwrap();
+	tree_sitter_parser.set_language(&language).unwrap();
 
 	let tree_sitter_tree = match tree_sitter_parser.parse(&source_text.as_bytes(), None) {
 		Some(tree) => tree,
@@ -346,7 +347,7 @@ fn parse_wing_directory(
 
 	// Create a fake AST (since the directory doesn't have any source code to parse)
 	let mut tree_sitter_parser = tree_sitter::Parser::new();
-	tree_sitter_parser.set_language(tree_sitter_wing::language()).unwrap();
+	tree_sitter_parser.set_language(&tree_sitter_wing::language()).unwrap();
 	let tree_sitter_tree = tree_sitter_parser.parse("", None).unwrap();
 	let mut ast = Ast::new();
 	let root = ast.new_scope(vec![], WingSpan::default());
@@ -492,6 +493,10 @@ impl<'s> Parser<'s> {
 		return str::from_utf8(&self.source[node.byte_range()]).unwrap();
 	}
 
+	fn node_text_from_range(&self, byte_range: Range<usize>) -> &str {
+		return str::from_utf8(&self.source[byte_range]).unwrap();
+	}
+
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
 		if node.is_error() {
 			self.with_error(format!("Expected {}", expected), &node)
@@ -557,11 +562,11 @@ impl<'s> Parser<'s> {
 					}),
 					span.clone(),
 				))),
-				arg_list: ArgList {
-					pos_args: vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
-					named_args: IndexMap::new(),
-					span: span.clone(),
-				},
+				arg_list: ArgList::new(
+					vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
+					IndexMap::new(),
+					span.clone(),
+				),
 			},
 			span.clone(),
 		))
@@ -583,16 +588,31 @@ impl<'s> Parser<'s> {
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let mut cursor = scope_node.walk();
 
-		let statements = scope_node
-			.named_children(&mut cursor)
-			.filter(|child| !child.is_extra() && child.kind() != "AUTOMATIC_BLOCK")
-			.enumerate()
-			.filter_map(|(i, st_node)| self.build_statement(&st_node, i, phase).ok())
-			.collect();
+		let mut statements = vec![];
+		let mut doc_builder = DocBuilder::new(self);
+
+		for child in scope_node.named_children(&mut cursor) {
+			let DocBuilderResult::Done(doc) = doc_builder.process_node(&child) else {
+				continue;
+			};
+			if child.kind() == "AUTOMATIC_BLOCK" {
+				continue;
+			}
+
+			if let Ok(stmt) = self.build_statement(&child, statements.len(), phase, doc) {
+				statements.push(stmt);
+			}
+		}
 		self.ast.borrow_mut().new_scope(statements, span)
 	}
 
-	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase) -> DiagnosticResult<StmtId> {
+	fn build_statement(
+		&self,
+		statement_node: &Node,
+		idx: usize,
+		phase: Phase,
+		doc: Option<String>,
+	) -> DiagnosticResult<StmtId> {
 		let span = self.node_span(statement_node);
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let stmt_kind = match statement_node.kind() {
@@ -629,11 +649,43 @@ impl<'s> Parser<'s> {
 			"test_statement" => self.build_test_statement(statement_node)?,
 			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
 			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase, idx)?,
+			"lift_statement" => self.build_lift_statement(statement_node, phase)?,
 			"ERROR" => return self.with_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
 
-		Ok(self.ast.borrow_mut().new_stmt(stmt_kind, idx, span))
+		Ok(self.ast.borrow_mut().new_stmt(stmt_kind, idx, span, doc))
+	}
+
+	fn build_lift_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+		// Lift statements are only legal in inflight
+		if phase != Phase::Inflight {
+			return self.with_error("Lift blocks are only allowed in inflight phase", statement_node);
+		}
+
+		let lift_qualifications_node = statement_node.child_by_field_name("lift_qualifications").unwrap();
+		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+
+		let mut qualifications = vec![];
+
+		let mut qual_cursor = lift_qualifications_node
+			.child_by_field_name("qualification")
+			.unwrap()
+			.walk();
+
+		for qual_node in lift_qualifications_node.named_children(&mut qual_cursor) {
+			let obj = self.build_expression(&qual_node.child_by_field_name("obj").unwrap(), phase)?;
+			let mut ops = vec![];
+			for op_node in get_actual_children_by_field_name(qual_node, "ops") {
+				ops.push(self.node_symbol(&op_node)?);
+			}
+			qualifications.push(LiftQualification { obj, ops });
+		}
+
+		Ok(StmtKind::ExplicitLift(ExplicitLift {
+			qualifications,
+			statements,
+		}))
 	}
 
 	fn build_try_catch_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -837,12 +889,21 @@ impl<'s> Parser<'s> {
 		let mut cursor = statement_node.walk();
 		let mut members = vec![];
 
-		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
+		let mut doc_builder = DocBuilder::new(self);
+
+		for field_node in statement_node.named_children(&mut cursor) {
+			let DocBuilderResult::Done(doc) = doc_builder.process_node(&field_node) else {
+				continue;
+			};
+			if field_node.kind() != "struct_field" {
+				continue;
+			}
 			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
 			let type_ = self.get_child_field(&field_node, "type").ok();
 			let f = StructField {
 				name: identifier,
 				member_type: self.build_type_annotation(type_, phase)?,
+				doc,
 			};
 			members.push(f);
 		}
@@ -1113,8 +1174,13 @@ impl<'s> Parser<'s> {
 		}
 
 		let mut cursor = statement_node.walk();
-		let mut values = IndexSet::<Symbol>::new();
+		let mut values = IndexMap::<Symbol, Option<String>>::new();
+		let mut doc_builder = DocBuilder::new(self);
+
 		for node in statement_node.named_children(&mut cursor) {
+			let DocBuilderResult::Done(value_doc) = doc_builder.process_node(&node) else {
+				continue;
+			};
 			if node.kind() != "enum_field" {
 				continue;
 			}
@@ -1126,8 +1192,7 @@ impl<'s> Parser<'s> {
 			}
 
 			let symbol = diagnostic.unwrap();
-			let success = values.insert(symbol.clone());
-			if !success {
+			if values.insert(symbol.clone(), value_doc).is_some() {
 				self
 					.with_error::<Node>(format!("Duplicated enum value {}", symbol.name), &node)
 					.err();
@@ -1187,14 +1252,18 @@ impl<'s> Parser<'s> {
 		let mut initializer = None;
 		let mut inflight_initializer = None;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+
+		let mut doc_builder = DocBuilder::new(self);
+
 		for class_element in statement_node
 			.child_by_field_name("implementation")
 			.unwrap()
 			.named_children(&mut cursor)
 		{
-			if class_element.is_extra() {
+			let DocBuilderResult::Done(doc) = doc_builder.process_node(&class_element) else {
 				continue;
-			}
+			};
+
 			match class_element.kind() {
 				"method_definition" => {
 					let Ok(method_name) = self.node_symbol(&class_element.child_by_field_name("name").unwrap()) else {
@@ -1202,7 +1271,7 @@ impl<'s> Parser<'s> {
 					};
 
 					let Ok(func_def) =
-						self.build_function_definition(Some(method_name.clone()), &class_element, class_phase, false)
+						self.build_function_definition(Some(method_name.clone()), &class_element, class_phase, false, doc)
 					else {
 						continue;
 					};
@@ -1217,7 +1286,7 @@ impl<'s> Parser<'s> {
 					methods.push((method_name, func_def))
 				}
 				"class_field" => {
-					let Ok(class_field) = self.build_class_field(class_element, class_phase) else {
+					let Ok(class_field) = self.build_class_field(class_element, class_phase, doc) else {
 						continue;
 					};
 
@@ -1231,14 +1300,14 @@ impl<'s> Parser<'s> {
 					if initializer.is_some() && !is_inflight {
 						self
 							.with_error::<Node>(
-								format!("Multiple initializers defined in class {}", name.name),
+								format!("Multiple constructors defined in class {}", name.name),
 								&class_element,
 							)
 							.err();
 					} else if inflight_initializer.is_some() && is_inflight {
 						self
 							.with_error::<Node>(
-								format!("Multiple inflight initializers defined in class {}", name.name),
+								format!("Multiple inflight constructors defined in class {}", name.name),
 								&class_element,
 							)
 							.err();
@@ -1247,7 +1316,7 @@ impl<'s> Parser<'s> {
 					let parameters = self.build_parameter_list(&parameters_node, class_phase, false)?;
 					if !parameters.is_empty() && is_inflight && class_phase == Phase::Preflight {
 						self
-							.with_error::<Node>("Inflight initializers cannot have parameters", &parameters_node)
+							.with_error::<Node>("Inflight constructors cannot have parameters", &parameters_node)
 							.err();
 					}
 
@@ -1260,9 +1329,11 @@ impl<'s> Parser<'s> {
 						span: self.node_span(&class_element),
 					});
 
+					let ctor_symb_span = self.node_span(&class_element.child_by_field_name("ctor_name").unwrap());
+
 					if is_inflight {
 						inflight_initializer = Some(FunctionDefinition {
-							name: Some(CLASS_INFLIGHT_INIT_NAME.into()),
+							name: Some(Symbol::new(CLASS_INFLIGHT_INIT_NAME, ctor_symb_span)),
 							body: FunctionBody::Statements(
 								self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Inflight),
 							),
@@ -1274,10 +1345,11 @@ impl<'s> Parser<'s> {
 							is_static: false,
 							span: self.node_span(&class_element),
 							access: AccessModifier::Public,
+							doc,
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
-							name: Some(CLASS_INIT_NAME.into()),
+							name: Some(Symbol::new(CLASS_INIT_NAME, ctor_symb_span)),
 							body: FunctionBody::Statements(
 								self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Preflight),
 							),
@@ -1289,6 +1361,7 @@ impl<'s> Parser<'s> {
 							},
 							span: self.node_span(&class_element),
 							access: AccessModifier::Public,
+							doc,
 						})
 					}
 				}
@@ -1306,7 +1379,7 @@ impl<'s> Parser<'s> {
 		for method in &methods {
 			if method.0.name == "constructor" {
 				Diagnostic::new(
-					"Reserved method name. Initializers are declared with \"init\"",
+					"Reserved method name. Constructors are declared with a method named \"new\"",
 					&method.0,
 				)
 				.report();
@@ -1324,16 +1397,17 @@ impl<'s> Parser<'s> {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
-							span: WingSpan::default(),
+							span: name.span(),
 						}),
-						span: WingSpan::default(),
+						span: name.span(),
 					}),
 					phase: Phase::Preflight,
 				},
-				body: FunctionBody::Statements(self.ast.borrow_mut().new_scope(vec![], WingSpan::default())),
+				body: FunctionBody::Statements(Scope::new(vec![], name.span())),
 				is_static: false,
-				span: WingSpan::default(),
+				span: name.span(),
 				access: AccessModifier::Public,
+				doc: None,
 			},
 		};
 
@@ -1349,16 +1423,17 @@ impl<'s> Parser<'s> {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
-							span: WingSpan::default(),
+							span: name.span(),
 						}),
-						span: WingSpan::default(),
+						span: name.span(),
 					}),
 					phase: Phase::Inflight,
 				},
-				body: FunctionBody::Statements(self.ast.borrow_mut().new_scope(vec![], WingSpan::default())),
+				body: FunctionBody::Statements(self.ast.borrow_mut().new_scope(vec![], name.span())),
 				is_static: false,
-				span: WingSpan::default(),
+				span: name.span(),
 				access: AccessModifier::Public,
+				doc: None,
 			},
 		};
 
@@ -1420,7 +1495,12 @@ impl<'s> Parser<'s> {
 		}))
 	}
 
-	fn build_class_field(&self, class_element: Node<'_>, class_phase: Phase) -> Result<ClassField, ()> {
+	fn build_class_field(
+		&self,
+		class_element: Node<'_>,
+		class_phase: Phase,
+		doc: Option<String>,
+	) -> Result<ClassField, ()> {
 		let modifiers = class_element.child_by_field_name("modifiers");
 		let is_static = self.get_modifier("static", &modifiers)?.is_some();
 		if is_static {
@@ -1442,6 +1522,7 @@ impl<'s> Parser<'s> {
 			is_static,
 			phase,
 			access: self.get_access_modifier(&class_element.child_by_field_name("modifiers"))?,
+			doc,
 		})
 	}
 
@@ -1449,25 +1530,34 @@ impl<'s> Parser<'s> {
 		let mut cursor = statement_node.walk();
 		let mut extends = vec![];
 		let mut methods = vec![];
+
+		let interface_modifiers = statement_node.child_by_field_name("modifiers");
+		let phase = if self.get_modifier("inflight_specifier", &interface_modifiers)?.is_some() {
+			Phase::Inflight
+		} else {
+			phase
+		};
+
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+		let mut doc_builder = DocBuilder::new(self);
 
 		for interface_element in statement_node
 			.child_by_field_name("implementation")
 			.unwrap()
 			.named_children(&mut cursor)
 		{
-			if interface_element.is_extra() {
+			let DocBuilderResult::Done(doc) = doc_builder.process_node(&interface_element) else {
 				continue;
-			}
+			};
 			match interface_element.kind() {
 				"method_signature" => {
 					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, phase) {
-						methods.push((method_name, func_sig))
+						methods.push((method_name, func_sig, doc))
 					}
 				}
 				"inflight_method_signature" => {
 					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, Phase::Inflight) {
-						methods.push((method_name, func_sig))
+						methods.push((method_name, func_sig, doc))
 					}
 				}
 				"class_field" => {
@@ -1518,12 +1608,11 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(&access_modifier_node);
+		let access = self.get_access_modifier(&interface_modifiers)?;
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Interfaces must be public (\"pub\") or private",
-				&access_modifier_node.expect("access modifier node"),
+				&interface_modifiers.expect("access modifier node"),
 			)?;
 		}
 
@@ -1532,6 +1621,7 @@ impl<'s> Parser<'s> {
 			methods,
 			extends,
 			access,
+			phase,
 		}))
 	}
 
@@ -1585,7 +1675,7 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(None, anon_closure_node, phase, false)
+		self.build_function_definition(None, anon_closure_node, phase, false, None)
 	}
 
 	fn build_function_definition(
@@ -1594,6 +1684,7 @@ impl<'s> Parser<'s> {
 		func_def_node: &Node,
 		phase: Phase,
 		require_annotations: bool,
+		doc: Option<String>,
 	) -> DiagnosticResult<FunctionDefinition> {
 		let modifiers = func_def_node.child_by_field_name("modifiers");
 
@@ -1633,6 +1724,7 @@ impl<'s> Parser<'s> {
 			is_static,
 			span: self.node_span(func_def_node),
 			access: self.get_access_modifier(&modifiers)?,
+			doc,
 		})
 	}
 
@@ -1943,11 +2035,25 @@ impl<'s> Parser<'s> {
 				actual_node_span,
 			)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node, phase)?),
-			"structured_access_expression" => {
-				self.report_unimplemented_grammar("structured_access_expression", "reference", &actual_node)
-			}
+			"structured_access_expression" => Ok(self.build_structured_access_expression(&actual_node, phase)?),
 			other => self.with_error(format!("Expected reference, got {other}"), &actual_node),
 		}
+	}
+
+	fn build_structured_access_expression(&self, structured_access_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
+		let object_expr = structured_access_node.named_child(0).unwrap();
+		let object_expr = self.build_expression(&object_expr, phase)?;
+
+		let index_expr = structured_access_node.named_child(1).unwrap();
+		let index_expr = self.build_expression(&index_expr, phase)?;
+
+		Ok(Expr::new(
+			ExprKind::Reference(Reference::ElementAccess {
+				object: Box::new(object_expr),
+				index: Box::new(index_expr),
+			}),
+			self.node_span(structured_access_node),
+		))
 	}
 
 	fn build_arg_list(&self, arg_list_node: &Node, phase: Phase) -> DiagnosticResult<ArgList> {
@@ -1985,11 +2091,7 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		Ok(ArgList {
-			pos_args,
-			named_args,
-			span,
-		})
+		Ok(ArgList::new(pos_args, named_args, span))
 	}
 
 	fn build_expression(&self, exp_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
@@ -2003,7 +2105,7 @@ impl<'s> Parser<'s> {
 				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node, phase)
 				} else {
-					Ok(ArgList::new(WingSpan::default()))
+					Ok(ArgList::new_empty(WingSpan::default()))
 				};
 
 				let obj_id = if let Some(id_node) = expression_node.child_by_field_name("id") {
@@ -2066,6 +2168,16 @@ impl<'s> Parser<'s> {
 				},
 				expression_span,
 			)),
+			"non_interpolated_string" => {
+				// skipping the first #
+				let byte_range = (expression_node.start_byte() + 1)..expression_node.end_byte();
+				Ok(Expr::new(
+					ExprKind::Literal(Literal::NonInterpolatedString(
+						self.node_text_from_range(byte_range).into(),
+					)),
+					expression_span,
+				))
+			}
 			"string" => {
 				if expression_node.named_child_count() == 0 {
 					Ok(Expr::new(
@@ -2163,6 +2275,24 @@ impl<'s> Parser<'s> {
 				})),
 				expression_span,
 			)),
+			"intrinsic" => {
+				let name = self.node_symbol(&self.get_child_field(expression_node, "name")?)?;
+				let kind = IntrinsicKind::from_str(&name.name);
+				let arg_list = if let Some(arg_node) = expression_node.child_by_field_name("args") {
+					Some(self.build_arg_list(&arg_node, phase)?)
+				} else {
+					None
+				};
+
+				if matches!(kind, IntrinsicKind::Unknown) {
+					self.add_error("Invalid intrinsic", &expression_node);
+				}
+
+				Ok(Expr::new(
+					ExprKind::Intrinsic(Intrinsic { name, arg_list, kind }),
+					expression_span,
+				))
+			}
 			"duration" => self.build_duration(&expression_node),
 			"reference" => self.build_reference(&expression_node, phase),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
@@ -2414,41 +2544,56 @@ impl<'s> Parser<'s> {
 	}
 	/// Given a node, returns the last non-extra node before it.
 	fn last_non_extra(node: Node) -> Node {
-		let parent = node.parent();
-		if let Some(parent) = parent {
-			if parent.is_extra() {
-				return Self::last_non_extra(parent);
+		let mut sibling = node.prev_sibling();
+		while let Some(s) = sibling {
+			if !s.is_extra() {
+				break;
 			}
+			sibling = s.prev_sibling();
 		}
-		if node.is_extra() {
-			let mut sibling = node.prev_sibling();
-			while let Some(s) = sibling {
-				if !s.is_extra() {
-					break;
-				}
-				sibling = s.prev_sibling();
-			}
 
-			return sibling.unwrap_or(node);
-		} else {
-			return node;
-		}
+		return sibling.unwrap_or(node);
 	}
 
 	fn report_unhandled_errors(&self, root: &Node) {
-		let iter = traverse(root.walk(), Order::Pre);
-		for node in iter {
+		let iterator = crate::ts_traversal::PostOrderIter::new(root);
+		for node in iterator {
 			if node.kind() == "AUTOMATIC_SEMICOLON" {
-				let target_node = Self::last_non_extra(node);
+				let target_node = Self::last_non_extra(node).range();
+				let end_byte = target_node.end_byte;
+				let end_point: WingLocation = target_node.end_point.into();
+
 				let diag = Diagnostic {
 					message: ERR_EXPECTED_SEMICOLON.to_string(),
-					span: Some(self.node_span(&target_node)),
+					span: Some(WingSpan {
+						start: end_point,
+						end: end_point,
+						end_offset: end_byte,
+						start_offset: end_byte,
+						file_id: self.source_name.to_string(),
+					}),
 					annotations: vec![],
 					hints: vec![],
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
-				self.add_error("Expected block".to_string(), &Self::last_non_extra(node));
+				let target_node = Self::last_non_extra(node).range();
+				let end_byte = target_node.end_byte;
+				let end_point: WingLocation = target_node.end_point.into();
+
+				let diag = Diagnostic {
+					message: "Expected block".to_string(),
+					span: Some(WingSpan {
+						start: end_point,
+						end: end_point,
+						end_offset: end_byte,
+						start_offset: end_byte,
+						file_id: self.source_name.to_string(),
+					}),
+					annotations: vec![],
+					hints: vec![],
+				};
+				report_diagnostic(diag);
 			} else if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
 					if node.named_child_count() == 0 {
@@ -2559,6 +2704,7 @@ impl<'s> Parser<'s> {
 				is_static: true,
 				span: statements_span.clone(),
 				access: AccessModifier::Public,
+				doc: None,
 			}),
 			statements_span.clone(),
 		);
@@ -2573,14 +2719,52 @@ impl<'s> Parser<'s> {
 				},
 				obj_id: Some(test_id),
 				obj_scope: None,
-				arg_list: ArgList {
-					pos_args: vec![inflight_closure],
-					named_args: IndexMap::new(),
-					span: type_span.clone(),
-				},
+				arg_list: ArgList::new(vec![inflight_closure], IndexMap::new(), type_span.clone()),
 			}),
 			span,
 		)))
+	}
+}
+
+struct DocBuilder<'a> {
+	doc_lines: Vec<&'a str>,
+	parser: &'a Parser<'a>,
+}
+
+enum DocBuilderResult {
+	Done(Option<String>),
+	Continue,
+	Skip,
+}
+
+impl<'a> DocBuilder<'a> {
+	fn new(parser: &'a Parser) -> Self {
+		Self {
+			doc_lines: Vec::new(),
+			parser,
+		}
+	}
+
+	fn process_node(&mut self, node: &Node) -> DocBuilderResult {
+		if node.kind() == "doc" {
+			self.doc_lines.push(
+				self
+					.parser
+					.get_child_field(&node, "content")
+					.map_or("", |n| self.parser.node_text(&n)),
+			);
+			DocBuilderResult::Continue
+		} else if node.is_extra() {
+			DocBuilderResult::Skip
+		} else {
+			let doc = if self.doc_lines.is_empty() {
+				DocBuilderResult::Done(None)
+			} else {
+				DocBuilderResult::Done(Some(self.doc_lines.join("\n")))
+			};
+			self.doc_lines.clear();
+			doc
+		}
 	}
 }
 
@@ -2663,6 +2847,7 @@ fn is_valid_module_statement(stmt: &Stmt) -> bool {
 		StmtKind::Assignment { .. } => false,
 		StmtKind::Scope(_) => false,
 		StmtKind::TryCatch { .. } => false,
+		StmtKind::ExplicitLift(_) => false,
 		// TODO: support constants https://github.com/winglang/wing/issues/3606
 		// TODO: support test statements https://github.com/winglang/wing/issues/3571
 		StmtKind::Let { .. } => false,
@@ -2734,7 +2919,7 @@ mod tests {
 		// Test get_actual_children_by_field_name
 		let language = tree_sitter_wing::language();
 		let mut tree_sitter_parser = tree_sitter::Parser::new();
-		tree_sitter_parser.set_language(language).unwrap();
+		tree_sitter_parser.set_language(&language).unwrap();
 
 		let tree_sitter_tree = tree_sitter_parser
 			.parse("let x: ((num)) = 1;".as_bytes(), None)

@@ -1,50 +1,38 @@
 import * as fs from "fs";
 import { join } from "path";
-import { CounterAttributes, CounterSchema } from "./schema-resources";
+import { CounterBackendProps } from "./counter";
+import { IResource, IResourceContext } from "./resource";
 import { exists } from "./util";
 import { ICounterClient } from "../cloud";
-import {
-  ISimulatorContext,
-  ISimulatorResourceInstance,
-  UpdatePlan,
-} from "../simulator/simulator";
 
 const VALUES_FILENAME = "values.json";
 
-export class Counter implements ICounterClient, ISimulatorResourceInstance {
+export class CounterBackend implements ICounterClient, IResource {
   private values: Map<string, number>;
   private initial: number;
-  private readonly context: ISimulatorContext;
+  private ctx: IResourceContext;
 
-  public constructor(
-    props: CounterSchema["props"],
-    context: ISimulatorContext
-  ) {
+  public constructor(ctx: IResourceContext, props: CounterBackendProps) {
+    this.ctx = ctx;
     this.initial = props.initial ?? 0;
     this.values = new Map().set("default", this.initial);
-    this.context = context;
   }
 
-  public async init(): Promise<CounterAttributes> {
-    const valuesFile = join(this.context.statedir, VALUES_FILENAME);
+  public async onStart(): Promise<void> {
+    // Load the values from disk
+    const valuesFile = join(this.ctx.statedir(), VALUES_FILENAME);
     const valueFilesExists = await exists(valuesFile);
     if (valueFilesExists) {
       const valuesContents = await fs.promises.readFile(valuesFile, "utf-8");
       const values = JSON.parse(valuesContents);
       this.values = new Map(values);
     }
-    return {};
   }
 
-  public async cleanup(): Promise<void> {}
-
-  public async plan() {
-    return UpdatePlan.AUTO;
-  }
-
-  public async save(): Promise<void> {
+  public async onStop(): Promise<void> {
+    // Save the values to disk
     fs.writeFileSync(
-      join(this.context.statedir, VALUES_FILENAME),
+      join(this.ctx.statedir(), VALUES_FILENAME),
       JSON.stringify(Array.from(this.values.entries()))
     );
   }
@@ -53,55 +41,25 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
     amount: number = 1,
     key: string = "default"
   ): Promise<number> {
-    return this.context.withTrace({
-      message: `Inc (amount=${amount}${
-        key != "default" ? ", key: " + key : ""
-      }).`,
-      activity: async () => {
-        const prev = this.values.get(key) ?? this.initial;
-        this.values.set(key, prev + amount);
-        return prev;
-      },
-    });
+    const prev = this.values.get(key) ?? this.initial;
+    this.values.set(key, prev + amount);
+    return prev;
   }
 
   public async dec(
     amount: number = 1,
     key: string = "default"
   ): Promise<number> {
-    key;
-    return this.context.withTrace({
-      message: `Dec (amount=${amount}${
-        key != "default" ? ", key: " + key : ""
-      }).`,
-      activity: async () => {
-        const prev = this.values.get(key) ?? this.initial;
-        this.values.set(key, prev - amount);
-        return prev;
-      },
-    });
+    const prev = this.values.get(key) ?? this.initial;
+    this.values.set(key, prev - amount);
+    return prev;
   }
 
   public async peek(key: string = "default"): Promise<number> {
-    return this.context.withTrace({
-      message: `Peek (value=${this.values.get(key) ?? this.initial}${
-        key != "default" ? ", key: " + key : ""
-      }).`,
-      activity: async () => {
-        return this.values.get(key) ?? this.initial;
-      },
-    });
+    return this.values.get(key) ?? this.initial;
   }
 
   public async set(value: number, key: string = "default"): Promise<void> {
-    key;
-    return this.context.withTrace({
-      message: `Set (value=${value}${
-        key != "default" ? ", key: " + key : ""
-      }).`,
-      activity: async () => {
-        this.values.set(key, value);
-      },
-    });
+    this.values.set(key, value);
   }
 }

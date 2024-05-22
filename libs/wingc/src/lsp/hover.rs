@@ -38,18 +38,28 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 					});
 				}
 			} else {
-				if let SymbolLocatorResult::LooseField { field_type, field, .. } = &symbol_finder.result {
-					let span = symbol_finder.located_span().unwrap();
-					let value = format!("```wing\n{}: {field_type}\n```", field.name);
+				return match &symbol_finder.result {
+					SymbolLocatorResult::LooseField { field_type, field, .. } => {
+						let span = symbol_finder.located_span().unwrap();
+						let value = format!("```wing\n{}: {field_type}\n```", field.name);
 
-					return Some(Hover {
+						Some(Hover {
+							contents: HoverContents::Markup(MarkupContent {
+								kind: MarkupKind::Markdown,
+								value,
+							}),
+							range: Some(span.into()),
+						})
+					}
+					SymbolLocatorResult::Intrinsic { name, kind } => Some(Hover {
 						contents: HoverContents::Markup(MarkupContent {
 							kind: MarkupKind::Markdown,
-							value,
+							value: kind.render_docs(),
 						}),
-						range: Some(span.into()),
-					});
-				}
+						range: Some((&name.span).into()),
+					}),
+					_ => None,
+				};
 			}
 
 			None
@@ -118,7 +128,7 @@ mod tests {
 		r#"
 bring cloud;
 new cloud. 
-		//^
+    //^
 "#,
 	);
 
@@ -412,5 +422,237 @@ struct S {
 Json.stringify({});
 //^
 "#
+	);
+
+	test_hover_list!(
+		variadic_args,
+		r#"
+  class Arr {
+    pub addMany(...items: Array<str>) {
+  
+    }
+  }
+  
+  let arr = new Arr();
+  arr.addMany("a","b","c");
+      //^
+  "#,
+	);
+
+	test_hover_list!(
+		class_doc,
+		r#"
+  /// Class doc
+  class Foo {
+      //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		enum_doc,
+		r#"
+  /// Enum doc
+  enum Foo {
+     //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		struct_doc,
+		r#"
+  /// Struct doc
+  struct Foo {
+       //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		interface_doc,
+		r#"
+  /// Interface doc
+  interface Foo {
+          //^
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		class_field_doc,
+		r#"
+  class Foo {
+    /// Class field doc
+    field: num;
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		class_method_doc,
+		r#"
+  class Foo {
+    /// Class method doc
+    do() { }
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		interface_method_doc,
+		r#"
+  interface Foo {
+    /// Interface method doc
+    do(): void;
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		enum_variant_doc,
+		r#"
+  enum Foo {
+    /// Enum variant doc
+    A
+  }
+	Foo.A;
+    //^		
+  "#,
+	);
+
+	test_hover_list!(
+		struct_field_doc,
+		r#"
+  struct Foo {
+    /// Struct field doc
+    field: num;
+  //^		
+  }
+  "#,
+	);
+
+	test_hover_list!(
+		inherited_struct_field_doc,
+		r#"
+  struct Foo {
+    /// Parent struct field doc
+    field: num;
+  }
+  struct ChildFoo extends Foo {
+	    child_field: num;
+  }
+  let child = ChildFoo { field: 1, child_field: 2 };
+  child.field;
+      //^
+ 	"#,
+	);
+
+	test_hover_list!(
+		inherited_interface_method_doc,
+		r#"
+  interface Foo {
+    /// Parent interface method doc
+    do(): void;
+  }
+  interface ChildFoo extends Foo {
+    child_do(): void;
+  }		
+  (x: ChildFoo) => {
+    x.do();
+    //^
+  };
+ 	"#,
+	);
+
+	test_hover_list!(
+		ignoe_empty_lines_in_doc,
+		r#"
+  /// Class doc with empty lines after it
+
+  class Foo {
+      //^
+  
+	"#,
+	);
+
+	test_hover_list!(
+		class_doc_with_multiline_and_markdown,
+		r#"
+  /// Class doc
+  /// With multiline
+  /// ## And markdown
+  class Foo {
+      //^
+    pub a: num;
+  }
+	"#,
+	);
+
+	test_hover_list!(
+		member_doc_on_same_line_as_something_else,
+		r#"
+  class Foo { /// Member doc in unexpected place
+    field: num;
+  //^
+  }
+	"#,
+	);
+
+	test_hover_list!(
+		ctor_doc,
+		r#"
+  class Bob {
+    /// I'm bob the constructor
+    new() {}
+  //^
+  }
+	"#
+	);
+
+	test_hover_list!(
+		inflight_ctor_doc,
+		r#"
+  class Bob {
+    /// I'm bob the constructor (inflight)
+    inflight new() {}
+           //^
+  }
+	"#
+	);
+
+	test_hover_list!(
+		ctor_doc_from_new_expr,
+		r#"
+  class Bob {
+    /// I'm bob the constructor
+    new() {}
+  }
+  new Bob();
+    //^	
+	"#
+	);
+
+	test_hover_list!(
+		inflight_ctor_doc_from_new_expr,
+		r#"
+  inflight class Bob {
+    /// I'm bob the constructor (inflight)
+    new() {}
+  }
+  inflight () => { new Bob(); };
+                     //^
+	"#
+	);
+
+	test_hover_list!(
+		intrinsics,
+		r#"
+@dirname
+  //^
+  "#,
 	);
 }

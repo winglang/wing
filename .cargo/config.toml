@@ -1,5 +1,4 @@
 [env]
-WASI_SDK = { value = ".cargo/wasi-sdk-20.0", relative = true }
 # tree-sitter build fails with newer version of clang unless implicit-function-declaration is ignored
-CC_wasm32_wasi = { value = ".cargo/wasi-sdk-20.0/bin/clang -Wno-error=implicit-function-declaration", relative = true }
-AR_wasm32_wasi = { value = ".cargo/wasi-sdk-20.0/bin/ar", relative = true }
+CC_wasm32_wasi = { value = ".cargo/wasi-sdk-21.0/bin/clang -Wno-error=implicit-function-declaration", relative = true }
+AR_wasm32_wasi = { value = ".cargo/wasi-sdk-21.0/bin/ar", relative = true }

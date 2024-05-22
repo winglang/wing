@@ -13,15 +13,16 @@ const PREC = {
   UNARY: 120,
   OPTIONAL_TEST: 130,
   POWER: 140,
-  MEMBER: 150,
-  CALL: 160,
-  OPTIONAL_UNWRAP: 170,
+  STRUCTURED_ACCESS: 150, // x[y]
+  MEMBER: 160,
+  CALL: 170,
+  OPTIONAL_UNWRAP: 180,
 };
 
 module.exports = grammar({
   name: "wing",
 
-  extras: ($) => [$.comment, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
+  extras: ($) => [$.comment, $.doc, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
 
   word: ($) => $.identifier,
 
@@ -32,6 +33,7 @@ module.exports = grammar({
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
     [$.json_map_literal, $.map_literal, $.array_literal],
     [$.json_literal, $.structured_access_expression],
+    [$.intrinsic, $.call],
   ],
 
   conflicts: ($) => [
@@ -40,7 +42,7 @@ module.exports = grammar({
 
     // These modifier conflicts should be solved through GLR parsing
     [$.field_modifiers, $.method_modifiers],
-    [$.class_modifiers, $.closure_modifiers],
+    [$.class_modifiers, $.closure_modifiers, $.interface_modifiers],
     [$.inflight_method_signature, $.field_modifiers],
   ],
 
@@ -53,9 +55,10 @@ module.exports = grammar({
       choice(braced(optional(repeat($._statement))), $.AUTOMATIC_BLOCK),
     _semicolon: ($) => choice(";", $.AUTOMATIC_SEMICOLON),
     comment: ($) =>
-      token(
-        choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))
-      ),
+      token(choice(seq(/\/\/[^\/]/, /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))),
+
+    doc: ($) => seq("///", field("content", $.doc_content)),
+    doc_content: ($) => /.*/,
 
     // Identifiers
     reference: ($) =>
@@ -123,7 +126,8 @@ module.exports = grammar({
         $.try_catch_statement,
         $.compiler_dbg_env,
         $.super_constructor_statement,
-        $.throw_statement
+        $.throw_statement,
+        $.lift_statement,
       ),
 
     import_statement: ($) =>
@@ -158,6 +162,13 @@ module.exports = grammar({
 
     throw_statement: ($) =>
       seq("throw", optional(field("expression", $.expression)), $._semicolon),
+
+    lift_statement: ($) =>
+      seq("lift", field("lift_qualifications", $.lift_qualifications), field("block", $.block)),
+
+    lift_qualifications: ($) => seq("{", field("qualification", commaSep1($.lift_qualification)), "}"),
+
+    lift_qualification: ($) => seq(field("obj", $.expression), ":", choice(field("ops", $.identifier), field("ops", seq("[", commaSep1($.identifier), "]")))),
 
     assignment_operator: ($) => choice("=", "+=", "-="),
 
@@ -225,14 +236,20 @@ module.exports = grammar({
         $._semicolon
       ),
 
+    /// Interfaces
+
+    interface_modifiers: ($) =>
+      repeat1(choice($.access_modifier, $.inflight_specifier)),
+
     interface_definition: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
+        optional(field("modifiers", $.interface_modifiers)),
         "interface",
         field("name", $.identifier),
         optional(seq("extends", field("extends", commaSep1($.custom_type)))),
         field("implementation", $.interface_implementation)
       ),
+
     interface_implementation: ($) =>
       braced(
         repeat(
@@ -342,12 +359,29 @@ module.exports = grammar({
         $.struct_literal,
         $.optional_test,
         $.compiler_dbg_panic,
-        $.optional_unwrap
+        $.optional_unwrap,
+        $.intrinsic
       ),
+
+    intrinsic: ($) =>
+      prec.right(
+        seq(
+          field("name", $.intrinsic_identifier),
+          optional(field("args", $.argument_list))
+        )
+      ),
+    intrinsic_identifier: ($) => /@[A-Za-z_$0-9]*/,
 
     // Primitives
     _literal: ($) =>
-      choice($.string, $.number, $.bool, $.duration, $.nil_value),
+      choice(
+        $.string,
+        $.non_interpolated_string,
+        $.number,
+        $.bool,
+        $.duration,
+        $.nil_value
+      ),
 
     number: ($) => choice($._integer, $._decimal),
     _integer: ($) => /\d[\d_]*/,
@@ -373,6 +407,12 @@ module.exports = grammar({
     months: ($) => seq(field("value", $.number), "mo"),
     years: ($) => seq(field("value", $.number), "y"),
     nil_value: ($) => "nil",
+    non_interpolated_string: ($) =>
+      seq(
+        '#"',
+        repeat(choice($._non_interpolated_string_fragment, $._escape_sequence)),
+        '"'
+      ),
     string: ($) =>
       seq(
         '"',
@@ -387,6 +427,8 @@ module.exports = grammar({
       ),
     template_substitution: ($) => seq("{", $.expression, "}"),
     _string_fragment: ($) => token.immediate(prec(1, /[^{"\\]+/)),
+    _non_interpolated_string_fragment: ($) =>
+      token.immediate(prec(1, /[^"\\]+/)),
     _escape_sequence: ($) =>
       token.immediate(
         seq(
@@ -422,15 +464,7 @@ module.exports = grammar({
     argument_list: ($) =>
       seq(
         "(",
-        choice(
-          commaSep($.positional_argument),
-          commaSep($.keyword_argument),
-          seq(
-            commaSep($.positional_argument),
-            ",",
-            commaSep($.keyword_argument)
-          )
-        ),
+        commaSep(choice($.positional_argument, $.keyword_argument)),
         ")"
       ),
 
@@ -490,7 +524,7 @@ module.exports = grammar({
     initializer: ($) =>
       seq(
         optional(field("inflight", $.inflight_specifier)),
-        "new",
+        field("ctor_name", "new"),
         field("parameter_list", $.parameter_list),
         field("block", $.block)
       ),
@@ -569,13 +603,15 @@ module.exports = grammar({
     _container_value_type: ($) =>
       seq("<", field("type_parameter", $._type), ">"),
 
-    unwrap_or: ($) => prec.right(PREC.UNWRAP_OR,
-      seq(
-        field("left", $.expression),
-        field("op", "??"),
-        field("right", $.expression)
-      )
-    ),
+    unwrap_or: ($) =>
+      prec.right(
+        PREC.UNWRAP_OR,
+        seq(
+          field("left", $.expression),
+          field("op", "??"),
+          field("right", $.expression)
+        )
+      ),
 
     optional_unwrap: ($) =>
       prec.right(PREC.OPTIONAL_UNWRAP, seq($.expression, "!")),
@@ -674,7 +710,10 @@ module.exports = grammar({
     map_literal_member: ($) => seq($.expression, "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
-      prec.right(seq($.expression, "[", $.expression, "]")),
+      prec.right(
+        PREC.STRUCTURED_ACCESS,
+        seq($.expression, "[", $.expression, "]")
+      ),
 
     json_literal: ($) =>
       choice(
