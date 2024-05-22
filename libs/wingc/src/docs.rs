@@ -133,6 +133,7 @@ impl Documented for TypeRef {
 			| Type::Map(_)
 			| Type::MutMap(_)
 			| Type::Set(_)
+			| Type::Stringable
 			| Type::MutSet(_) => "".to_string(),
 		}
 	}

@@ -116,6 +116,9 @@ impl<'a> ExternDTSifier<'a> {
 			Type::Inferred(_) | Type::Unresolved => {
 				panic!("Extern must use resolved types")
 			}
+			Type::Stringable => {
+				panic!("Unsupported type stringable")
+			}
 		}
 	}
 

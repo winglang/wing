@@ -73,10 +73,8 @@ export class Function
   /** @internal */
   public get _liftMap(): LiftMap {
     return {
-      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
-      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
-        [this.handler, ["handle"]],
-      ],
+      [cloud.FunctionInflightMethods.INVOKE]: [],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [],
     };
   }
 

@@ -338,7 +338,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_reference(&self, reference: &Reference, ctx: &mut JSifyContext) -> CodeMaker {
+	pub fn jsify_reference(&self, reference: &Reference, ctx: &mut JSifyContext) -> CodeMaker {
 		match reference {
 			Reference::Identifier(identifier) => new_code!(&identifier.span, &identifier.name),
 			Reference::InstanceMember {
@@ -1309,6 +1309,11 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			StmtKind::CompilerDebugEnv => {}
+			StmtKind::ExplicitLift(explicit_lift_block) => {
+				code.open("{");
+				code.add_code(self.jsify_scope_body(&explicit_lift_block.statements, ctx));
+				code.close("}");
+			}
 		};
 		ctx.visit_ctx.pop_stmt();
 		code
@@ -2117,6 +2122,7 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			}
 			StmtKind::TryCatch { .. } => {}
 			StmtKind::CompilerDebugEnv => {}
+			StmtKind::ExplicitLift(_) => {}
 		}
 	}
 

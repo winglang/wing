@@ -1031,9 +1031,12 @@ exports.handler = async function(event) {
       {
         "name": "setConsumer()",
         "source": "root/my_queue",
-        "sourceOp": "push",
         "target": "root/my_queue/Consumer0",
-        "targetOp": "invoke",
+      },
+      {
+        "name": "push()",
+        "source": "root/my_queue_messages/Function",
+        "target": "root/my_queue",
       },
     ],
     "version": "connections-0.1",
@@ -1366,9 +1369,7 @@ exports.handler = async function(event) {
       {
         "name": "setConsumer()",
         "source": "root/my_queue",
-        "sourceOp": "push",
         "target": "root/my_queue/Consumer0",
-        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",

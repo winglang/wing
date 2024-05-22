@@ -48,12 +48,12 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
       {
-        "name": "post()",
+        "name": "post /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -392,7 +392,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -716,7 +716,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -1041,7 +1041,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -1366,7 +1366,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -1691,7 +1691,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -2033,37 +2033,37 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
       {
-        "name": "post()",
+        "name": "post /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
       {
-        "name": "put()",
+        "name": "put /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
       {
-        "name": "delete()",
+        "name": "delete /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
       {
-        "name": "head()",
+        "name": "head /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
       {
-        "name": "options()",
+        "name": "options /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
       {
-        "name": "patch()",
+        "name": "patch /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -2471,7 +2471,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /:name/:age",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -2812,7 +2812,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /:name",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -3126,7 +3126,12 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello/foo",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler0",
+      },
+      {
+        "name": "get /hello/bat",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -3515,12 +3520,12 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
       {
-        "name": "post()",
+        "name": "post /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler1",
       },
@@ -3966,12 +3971,12 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello/world",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
       {
-        "name": "get()",
+        "name": "get /hello/wingnuts",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler1",
       },
@@ -4370,7 +4375,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -4694,7 +4699,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "get()",
+        "name": "get /users/:name",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },
@@ -5028,7 +5033,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "post()",
+        "name": "post /hello",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler0",
       },

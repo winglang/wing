@@ -370,10 +370,11 @@ describe("retry and parallel options", () => {
 bring util;
 
 test "t1" {
-  util.sleep(2s);
+  util.sleep(1s);
+  log("t1 ends");
   assert(true);
 }
-    `
+  `
     );
     fs.writeFileSync(
       "t2.test.w",
@@ -381,19 +382,22 @@ test "t1" {
 bring util;
 
 test "t2" {
-  util.sleep(1s);
+  log("t2 ends");
   assert(true);
 }
-    `
+  `
     );
 
-    const startingTime = Date.now();
     await wingTest(["t1.test.w", "t2.test.w"], {
       clean: true,
       platform: [BuiltinPlatform.SIM],
       parallel: 1,
     });
-    expect(Date.now() - startingTime).toBeGreaterThanOrEqual(3 * 1000);
+    // we are running the tests one by one so first t1 should log and then t2
+    const t1Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t1 ends"));
+    const t2Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t2 ends"));
+
+    expect(t2Ends).toBeGreaterThan(t1Ends);
   });
 
   test("wing test --parallel 2", async () => {
@@ -407,7 +411,8 @@ test "t2" {
 bring util;
 
 test "t1" {
-util.sleep(2s);
+util.sleep(1s);
+log("t1 ends");
 assert(true);
 }
   `
@@ -418,19 +423,22 @@ assert(true);
 bring util;
 
 test "t2" {
-util.sleep(2s);
-assert(true);
+  log("t2 ends");
+  assert(true);
 }
   `
     );
 
-    const startingTime = Date.now();
     await wingTest(["t1.test.w", "t2.test.w"], {
       clean: true,
       platform: [BuiltinPlatform.SIM],
       parallel: 2,
     });
-    expect(Date.now() - startingTime).toBeLessThan(4 * 1000);
+    // we are running the tests in parallel so first t2 should log and then t1
+    const t2Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t2 ends"));
+    const t1Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t1 ends"));
+
+    expect(t2Ends).toBeLessThan(t1Ends);
   });
 });
 

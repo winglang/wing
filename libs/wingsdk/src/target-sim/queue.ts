@@ -111,9 +111,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
-      sourceOp: cloud.QueueInflightMethods.PUSH,
       target: fn,
-      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "setConsumer()",
     });
 

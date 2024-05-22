@@ -583,9 +583,6 @@ impl<'a> JsiiImporter<'a> {
 		if let Some(properties) = jsii_interface.properties() {
 			for p in properties {
 				debug!("Found property {} with type {:?}", p.name.green(), p.type_);
-				if member_phase == Phase::Inflight {
-					todo!("No support for inflight properties yet");
-				}
 				let base_wing_type = self.type_ref_to_wing_type(&p.type_);
 				let is_optional = if let Some(true) = p.optional { true } else { false };
 				let is_static = if let Some(true) = p.static_ { true } else { false };
@@ -864,10 +861,8 @@ impl<'a> JsiiImporter<'a> {
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
 		let mut param_type = self.type_ref_to_wing_type(&parameter.type_);
 
-		// TODO variadic parameter support https://github.com/winglang/wing/issues/397
 		if parameter.variadic.unwrap_or(false) {
 			param_type = self.wing_types.add_type(Type::Array(param_type));
-			param_type = self.wing_types.add_type(Type::Optional(param_type));
 		}
 
 		if parameter.optional.unwrap_or(false) {
