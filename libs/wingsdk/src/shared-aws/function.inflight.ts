@@ -5,10 +5,21 @@ import {
   LogType,
 } from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@smithy/util-utf8";
+import { ILambdaContext } from "./function";
 import { IFunctionClient } from "../cloud";
 import { LogLevel, Trace, TraceType } from "../std";
 
 export class FunctionClient implements IFunctionClient {
+  public static async context(): Promise<ILambdaContext | undefined> {
+    const obj = (globalThis as any).$awsLambdaContext;
+    if (!obj) {
+      return undefined;
+    }
+    // workaround for the fact that JSII doesn't allow methods to start with "get"
+    obj.remainingTimeInMillis = obj.getRemainingTimeInMillis;
+    return obj;
+  }
+
   constructor(
     private readonly functionArn: string,
     private readonly constructPath: string,

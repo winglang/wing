@@ -49,6 +49,7 @@ new ui.Button(label: str, handler: IButtonHandler);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.ui.Button.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.Button.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 | <code><a href="#@winglang/sdk.ui.Button.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
 
 ---
@@ -78,6 +79,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.Button.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.ui.Button.toInflight"></a>
+
+```wing
+bring ui;
+
+ui.Button.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.ui.Button.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -162,6 +181,7 @@ new ui.Field(label: str, handler: IFieldHandler, props?: FieldProps);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.ui.Field.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.Field.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 | <code><a href="#@winglang/sdk.ui.Field.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
 
 ---
@@ -191,6 +211,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.Field.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.ui.Field.toInflight"></a>
+
+```wing
+bring ui;
+
+ui.Field.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.ui.Field.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -268,6 +306,7 @@ new ui.FileBrowser(label: str, handlers: FileBrowserHandlers);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.ui.FileBrowser.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.FileBrowser.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 | <code><a href="#@winglang/sdk.ui.FileBrowser.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
 
 ---
@@ -297,6 +336,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.FileBrowser.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.ui.FileBrowser.toInflight"></a>
+
+```wing
+bring ui;
+
+ui.FileBrowser.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.ui.FileBrowser.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -381,6 +438,7 @@ new ui.HttpClient(label: str, getUrlHandler: IHttpClientGetUrlHandler, getApiSpe
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.ui.HttpClient.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.HttpClient.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 | <code><a href="#@winglang/sdk.ui.HttpClient.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
 
 ---
@@ -410,6 +468,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.HttpClient.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.ui.HttpClient.toInflight"></a>
+
+```wing
+bring ui;
+
+ui.HttpClient.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.ui.HttpClient.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -556,6 +632,7 @@ Shorthand for `add(new ui.Field(...))`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.ui.Section.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.Section.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 | <code><a href="#@winglang/sdk.ui.Section.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
 
 ---
@@ -585,6 +662,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.Section.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.ui.Section.toInflight"></a>
+
+```wing
+bring ui;
+
+ui.Section.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.ui.Section.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -662,6 +757,7 @@ new ui.ValueField(label: str, value: str);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.ui.ValueField.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.ValueField.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 | <code><a href="#@winglang/sdk.ui.ValueField.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
 
 ---
@@ -691,6 +787,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.ValueField.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.ui.ValueField.toInflight"></a>
+
+```wing
+bring ui;
+
+ui.ValueField.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.ui.ValueField.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -756,6 +870,7 @@ new ui.VisualComponent();
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.ui.VisualComponent.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.ui.VisualComponent.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 | <code><a href="#@winglang/sdk.ui.VisualComponent.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
 
 ---
@@ -785,6 +900,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.VisualComponent.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.ui.VisualComponent.toInflight"></a>
+
+```wing
+bring ui;
+
+ui.VisualComponent.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.ui.VisualComponent.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 

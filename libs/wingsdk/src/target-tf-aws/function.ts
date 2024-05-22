@@ -15,7 +15,15 @@ import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { Effect, IAwsFunction, PolicyStatement } from "../shared-aws";
+import {
+  AwsInflightHost,
+  Effect,
+  IAwsFunction,
+  NetworkConfig,
+  PolicyStatement,
+  externalLibraries,
+} from "../shared-aws";
+import { makeAwsLambdaHandler } from "../shared-aws/function-util";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 
@@ -27,18 +35,6 @@ const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 64,
   disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
 };
-
-/**
- * Function network configuration
- * used to hold data on subnets and security groups
- * that should be used when a function is deployed within a VPC.
- */
-export interface FunctionNetworkConfig {
-  /** List of subnets to attach on function */
-  readonly subnetIds: string[];
-  /** List of security groups to place function in */
-  readonly securityGroupIds: string[];
-}
 
 /**
  * Options for granting invoke permissions to the current function
@@ -248,7 +244,7 @@ export class Function extends cloud.Function implements IAwsFunction {
           },
         ],
       });
-      this.addNetworkConfig({
+      this.addNetwork({
         subnetIds: [...app.subnets.private.map((s) => s.id)],
         securityGroupIds: [sg.id],
       });
@@ -268,7 +264,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     // write the entrypoint next to the partial inflight code emitted by the compiler, so that
     // `require` resolves naturally.
 
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createBundle(this.entrypoint, externalLibraries);
 
     // would prefer to create TerraformAsset in the constructor, but using a CDKTF token for
     // the "path" argument isn't supported
@@ -284,16 +280,14 @@ export class Function extends cloud.Function implements IAwsFunction {
   /** @internal */
   public get _liftMap(): core.LiftMap {
     return {
-      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
-      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
-        [this.handler, ["handle"]],
-      ],
+      [cloud.FunctionInflightMethods.INVOKE]: [],
+      [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [],
     };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("functions can only be bound by tfaws.Function for now");
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     if (
@@ -326,7 +320,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   /**
    * Add VPC configurations to lambda function
    */
-  public addNetworkConfig(vpcConfig: FunctionNetworkConfig) {
+  public addNetwork(vpcConfig: NetworkConfig) {
     if (!this.subnets || !this.securityGroups) {
       this.subnets = new Set();
       this.securityGroups = new Set();
@@ -414,19 +408,6 @@ export class Function extends cloud.Function implements IAwsFunction {
    * @internal
    */
   protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
-    const inflightClient = handler._toInflight();
-    const lines = new Array<string>();
-    const client = "$handler";
-
-    lines.push('"use strict";');
-    lines.push(`var ${client} = undefined;`);
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
-    lines.push(
-      `  return await ${client}.handle(event === null ? undefined : event);`
-    );
-    lines.push("};");
-
-    return lines;
+    return makeAwsLambdaHandler(handler);
   }
 }

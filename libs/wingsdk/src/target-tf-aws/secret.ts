@@ -1,11 +1,11 @@
 import { TerraformOutput } from "cdktf";
 import { Construct } from "constructs";
-import { Function } from "./function";
 import { DataAwsSecretsmanagerSecret } from "../.gen/providers/aws/data-aws-secretsmanager-secret";
 import { SecretsmanagerSecret } from "../.gen/providers/aws/secretsmanager-secret";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { AwsInflightHost } from "../shared-aws";
 import { calculateSecretPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
 
@@ -52,8 +52,8 @@ export class Secret extends cloud.Secret {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("secrets can only be bound by tfaws.Function for now");
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     host.addPolicyStatements(

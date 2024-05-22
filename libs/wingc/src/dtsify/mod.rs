@@ -330,7 +330,8 @@ impl<'a> DTSifier<'a> {
 			| StmtKind::Assignment { .. }
 			| StmtKind::Scope(_)
 			| StmtKind::TryCatch { .. }
-			| StmtKind::CompilerDebugEnv => {}
+			| StmtKind::CompilerDebugEnv
+			| StmtKind::ExplicitLift(_) => {}
 		}
 
 		code

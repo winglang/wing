@@ -114,3 +114,12 @@ let notAStruct = {
 
 let isBucket = Json new cloud.Bucket();
 //                  ^^^^^^^^^^^^^^^^^^ "Bucket" is not a legal JSON value
+
+let objInsteadOfArray: StructyJson = {
+  stuff: {a: 1}, // Error: expeced an array but got a JSON object
+  foo: "bar",
+  maybe: {
+    good: true,
+  }
+};
+

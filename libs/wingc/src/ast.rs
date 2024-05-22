@@ -507,6 +507,19 @@ pub enum StmtKind {
 		finally_statements: Option<Scope>,
 	},
 	CompilerDebugEnv,
+	ExplicitLift(ExplicitLift),
+}
+
+#[derive(Debug)]
+pub struct ExplicitLift {
+	pub qualifications: Vec<LiftQualification>,
+	pub statements: Scope,
+}
+
+#[derive(Debug)]
+pub struct LiftQualification {
+	pub obj: Expr,
+	pub ops: Vec<Symbol>,
 }
 
 #[derive(Debug)]
