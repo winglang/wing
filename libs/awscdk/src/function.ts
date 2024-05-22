@@ -12,7 +12,13 @@ import { Construct, IConstruct } from "constructs";
 import { cloud, std, core } from "@winglang/sdk";
 import { NotImplementedError } from "@winglang/sdk/lib/core/errors";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
-import { IAwsFunction, NetworkConfig, PolicyStatement, externalLibraries } from "@winglang/sdk/lib/shared-aws";
+import {
+  IAwsFunction,
+  NetworkConfig,
+  PolicyStatement,
+  externalLibraries,
+} from "@winglang/sdk/lib/shared-aws";
+import { makeAwsLambdaHandler } from "@winglang/sdk/lib/shared-aws/function-util";
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
@@ -201,7 +207,9 @@ export class Function
 
   public addNetwork(config: NetworkConfig): void {
     config;
-    throw new Error("The AWS CDK platform provider does not support adding network configurations to AWS Lambda functions at the moment.");
+    throw new Error(
+      "The AWS CDK platform provider does not support adding network configurations to AWS Lambda functions at the moment."
+    );
   }
 
   private envName(): string {
@@ -218,5 +226,12 @@ export class Function
 
   public get functionName(): string {
     return this.function.functionName;
+  }
+
+  /**
+   * @internal
+   */
+  protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
+    return makeAwsLambdaHandler(handler);
   }
 }
