@@ -47,14 +47,11 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 						if let Some(p) = &class.parent {
 							let t = resolve_user_defined_type(&p, &types.get_scope_env(&root_scope), 0).ok()?;
 							let init_lookup = t.as_class()?.env.lookup(
-								&Symbol {
-									name: if t.is_preflight_class() {
-										CLASS_INIT_NAME.into()
+								&if t.is_preflight_class() {
+										CLASS_INIT_NAME
 									} else {
-										CLASS_INFLIGHT_INIT_NAME.into()
-									},
-									span: Default::default(),
-								},
+										CLASS_INFLIGHT_INIT_NAME
+									}.into(),
 								None,
 							);
 
