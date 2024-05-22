@@ -183,9 +183,11 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             highlight={props.highlight}
             onClick={props.onClick}
           >
-            <NodeChildren>
-              <div className="absolute">{props.children}</div>
-            </NodeChildren>
+            <div className="p-4">
+              <NodeChildren>
+                <div className="absolute">{props.children}</div>
+              </NodeChildren>
+            </div>
           </Wrapper>
         </div>
       </Node>
@@ -402,8 +404,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             <NodeChildren>
               {inflights.length > 0 && renderedNode}
 
-              <Node elk={{ id: `${id}#children` }}>
-                <Port
+              {/* <Node elk={{ id: `${id}#children` }}> */}
+              {/* <Port
                   elk={{
                     id: `${id}#children-target`,
                     layoutOptions: {
@@ -411,9 +413,9 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                       "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
                     },
                   }}
-                />
-                {children}
-              </Node>
+                /> */}
+              {children}
+              {/* </Node> */}
             </NodeChildren>
           </ContainerNode>
         );
