@@ -7,7 +7,7 @@ use std::cmp::max;
 use tree_sitter::{Node, Point};
 
 use crate::ast::{
-	AccessModifier, CalleeKind, Expr, ExprKind, IntrinsicKind, Phase, Reference, Scope, Symbol, TypeAnnotation,
+	AccessModifier, Ast, CalleeKind, Expr, ExprKind, IntrinsicKind, Phase, Reference, Scope, Symbol, TypeAnnotation,
 	UserDefinedType,
 };
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};

@@ -229,7 +229,7 @@ where
 					v.visit_symbol(op);
 				}
 			}
-			v.visit_scope(&explict_lift.statements);
+			v.visit_scope(v.ast().get_scope(explict_lift.statements));
 		}
 	}
 }

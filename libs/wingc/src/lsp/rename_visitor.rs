@@ -14,14 +14,16 @@ pub struct RenameVisitor<'a> {
 	types: &'a Types,
 	linked_symbols: Vec<LinkedSymbol<'a>>,
 	ctx: VisitContext,
+	ast: &'a Ast,
 }
 
 impl<'a> RenameVisitor<'a> {
-	pub fn new(types: &'a Types) -> Self {
+	pub fn new(types: &'a Types, ast: &'a Ast) -> Self {
 		Self {
 			types,
 			linked_symbols: vec![],
 			ctx: VisitContext::new(),
+			ast,
 		}
 	}
 
@@ -110,7 +112,7 @@ impl<'a> VisitorWithContext for RenameVisitor<'a> {
 
 impl<'a> Visit<'a> for RenameVisitor<'a> {
 	fn visit_scope(&mut self, node: &'a Scope) {
-		self.ctx.push_env(self.types.get_scope_env(&node));
+		self.ctx.push_env(self.types.get_scope_env(self.ast, node.id));
 		visit_scope(self, node);
 		self.ctx.pop_env();
 	}
@@ -133,6 +135,10 @@ impl<'a> Visit<'a> for RenameVisitor<'a> {
 			_ => {}
 		}
 		crate::visit::visit_stmt(self, stmt);
+	}
+
+	fn ast(&self) -> &'a Ast {
+		self.ast
 	}
 }
 

@@ -7,8 +7,8 @@ pub mod symbol_env;
 pub(crate) mod type_reference_transform;
 
 use crate::ast::{
-	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExplicitLift, ExprId,
-	FunctionDefinition, IfLet, Intrinsic, New, TypeAnnotationKind,
+	self, AccessModifier, ArgListId, AssignmentKind, Ast, BringSource, CalleeKind, ClassField, ExplicitLift, ExprId,
+	FunctionDefinition, IfLet, Intrinsic, New, ScopeId, TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -4420,10 +4420,10 @@ impl<'a> TypeChecker<'a> {
 
 		// Verify if all fields of a class/resource are initialized in the ctor.
 		let init_statements = match &ast_class.initializer.body {
-			FunctionBody::Statements(s) => s,
+			FunctionBody::Statements(s) => *s,
 			FunctionBody::External(_) => panic!("init cannot be extern"),
 		};
-		self.check_class_field_initialization(&init_statements, &ast_class.fields, Phase::Preflight);
+		self.check_class_field_initialization(init_statements, &ast_class.fields, Phase::Preflight);
 
 		// If our parent's ctor has any parameters make sure there's a call to it as the first statement of our ctor
 		// (otherwise the call can be implicit and we don't need to check for it)
@@ -4448,10 +4448,11 @@ impl<'a> TypeChecker<'a> {
 				.type_
 				.as_function_sig()
 				.expect("ctor to be a function");
-			if let FunctionBody::Statements(ctor_body) = &ctor_def.body {
+			if let FunctionBody::Statements(ctor_body) = ctor_def.body {
+				let ctor_body = self.ast.get_scope(ctor_body);
 				if parent_ctor_sig.min_parameters() > 0
 					&& !matches!(
-						ctor_body.statements.first(),
+						ctor_body.statements.first().map(|s| self.ast.get_stmt(*s)),
 						Some(Stmt {
 							kind: StmtKind::SuperConstructor { .. },
 							..
@@ -6425,8 +6426,8 @@ impl<'a> TypeChecker<'a> {
 			env.phase,
 			self.ctx.current_stmt_idx(),
 		));
-		self.types.set_scope_env(&lift_quals.statements, scope_env);
-		self.inner_scopes.push((&lift_quals.statements, self.ctx.clone()));
+		self.types.set_scope_env(self.ast, lift_quals.statements, scope_env);
+		self.inner_scopes.push((lift_quals.statements, self.ctx.clone()));
 	}
 }
 

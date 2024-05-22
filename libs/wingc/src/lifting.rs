@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 use crate::{
 	ast::{
-		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+		Ast, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 		UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
@@ -370,7 +370,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 						node.name.as_ref(),
 						&node.signature,
 						node.is_static,
-						self.jsify.types.get_scope_env(self.ast, *scope_id),
+						self.jsify.types.get_scope_env(self.ast, *scope),
 					);
 				}
 

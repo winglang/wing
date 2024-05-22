@@ -12,9 +12,9 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Enum,
-		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, IntrinsicKind, Literal, New,
-		Phase, Reference, Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, Ast, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs,
+		Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, IntrinsicKind, Literal, New,
+		Phase, Reference, ScopeId, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -1318,7 +1318,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::CompilerDebugEnv => {}
 			StmtKind::ExplicitLift(explicit_lift_block) => {
 				code.open("{");
-				code.add_code(self.jsify_scope_body(&explicit_lift_block.statements, ctx));
+				code.add_code(self.jsify_scope_body(explicit_lift_block.statements, ctx));
 				code.close("}");
 			}
 		};
@@ -2094,7 +2094,7 @@ fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
 	parent_class_type(ctx).as_class().expect("a class").phase
 }
 
-fn get_public_symbols(ast: &Ast, scope: &Scope) -> Vec<Symbol> {
+fn get_public_symbols(ast: &Ast, scope: ScopeId) -> Vec<Symbol> {
 	let mut symbols = Vec::new();
 
 	for stmt in ast.get_scope(scope).get_statements(ast) {
@@ -2135,42 +2135,6 @@ fn get_public_symbols(ast: &Ast, scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
-}
-
-fn jsify_function_parameters(func_def: &FunctionDefinition) -> CodeMaker {
-	let mut parameter_list = vec![];
-
-	for p in &func_def.signature.parameters {
-		if p.variadic {
-			parameter_list.push(new_code!(&func_def.span, "...", jsify_symbol(&p.name)));
-		} else {
-			parameter_list.push(jsify_symbol(&p.name));
-		}
-	}
-
-	new_code!(&func_def.span, parameter_list)
-}
-
-fn jsify_symbol(symbol: &Symbol) -> CodeMaker {
-	new_code!(&symbol.span, &symbol.name)
-}
-
-fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
-	let current_class_type = resolve_user_defined_type(
-		ctx.visit_ctx.current_class().expect("a class"),
-		ctx.visit_ctx.current_env().expect("an env"),
-		ctx.visit_ctx.current_stmt_idx(),
-	)
-	.expect("a class type");
-	let parent_class_phase = current_class_type
-		.as_class()
-		.expect("a class")
-		.parent
-		.expect("a parent class")
-		.as_class()
-		.expect("a class")
-		.phase;
-	parent_class_phase
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {

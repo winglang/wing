@@ -15,6 +15,7 @@ use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 //static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
 static AST_COUNTER: AtomicUsize = AtomicUsize::new(0);
+static ARGLIST_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 macro_rules! ast_type_id {
 	($name:ident) => {
@@ -114,9 +115,18 @@ impl Ast {
 		self.scopes.set(scope.id, scope);
 	}
 
-	pub fn new_stmt(&mut self, kind: StmtKind, idx: usize, span: WingSpan) -> StmtId {
+	pub fn new_stmt(&mut self, kind: StmtKind, idx: usize, doc: Option<String>, span: WingSpan) -> StmtId {
 		let id = self.stmts.gen_id();
-		self.stmts.add(id, Stmt { id, kind, span, idx });
+		self.stmts.add(
+			id,
+			Stmt {
+				id,
+				kind,
+				span,
+				idx,
+				doc,
+			},
+		);
 		id
 	}
 
@@ -437,6 +447,7 @@ pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
 	pub idx: usize,
+	pub doc: Option<String>,
 	pub id: StmtId,
 }
 
@@ -650,7 +661,7 @@ pub enum StmtKind {
 #[derive(Debug)]
 pub struct ExplicitLift {
 	pub qualifications: Vec<LiftQualification>,
-	pub statements: Scope,
+	pub statements: ScopeId,
 }
 
 #[derive(Debug)]

@@ -1,9 +1,10 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum,
+		ArgList, Ast, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum,
 		ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet,
 		Interface, InterpolatedString, InterpolatedStringPart, Intrinsic, LiftQualification, Literal, New, Reference,
-		Scope, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		Scope, ScopeId, Stmt, StmtId, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
+		UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -228,7 +229,7 @@ where
 		kind,
 		span: stmt.span,
 		idx: stmt.idx,
-		doc: node.doc,
+		doc: stmt.doc,
 	};
 	f.ast_mut().set_stmt(stmt);
 	node

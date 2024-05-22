@@ -10,10 +10,10 @@ use std::{fs, str, vec};
 use tree_sitter::Node;
 
 use crate::ast::{
-	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
+	AccessModifier, ArgList, AssignmentKind, Ast, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
 	ElifBlock, ElifLetBlock, Elifs, Enum, ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition,
 	FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic,
-	IntrinsicKind, LiftQualification, Literal, New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct,
+	IntrinsicKind, LiftQualification, Literal, New, Phase, Reference, ScopeId, Spanned, Stmt, StmtId, StmtKind, Struct,
 	StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
@@ -654,7 +654,7 @@ impl<'s> Parser<'s> {
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
 
-		Ok(self.ast.borrow_mut().new_stmt(stmt_kind, idx, span, doc))
+		Ok(self.ast.borrow_mut().new_stmt(stmt_kind, idx, doc, span))
 	}
 
 	fn build_lift_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -1403,7 +1403,7 @@ impl<'s> Parser<'s> {
 					}),
 					phase: Phase::Preflight,
 				},
-				body: FunctionBody::Statements(Scope::new(vec![], name.span())),
+				body: FunctionBody::Statements(self.ast.borrow_mut().new_scope(vec![], name.span())),
 				is_static: false,
 				span: name.span(),
 				access: AccessModifier::Public,

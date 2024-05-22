@@ -1,5 +1,5 @@
 use crate::{
-	ast::{AssignmentKind, FunctionDefinition, Reference, Stmt, StmtKind, Symbol},
+	ast::{AssignmentKind, Ast, FunctionDefinition, Reference, Stmt, StmtKind, Symbol},
 	visit::{self, Visit},
 };
 

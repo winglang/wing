@@ -20,13 +20,13 @@ pub fn on_rename_request(params: RenameParams) -> WorkspaceEdit {
 			let project_data = project_data.borrow();
 			let uri = params.text_document_position.text_document.uri;
 			let file = check_utf8(uri.to_file_path().expect("LSP only works on real filesystems"));
-			let scope = project_data.asts.get(&file).unwrap();
+			let ast = project_data.asts.get(&file).unwrap();
 
 			let new_word = params.new_name;
 			let position = params.text_document_position.position;
 
-			let mut reference_visitor = RenameVisitor::new(&types);
-			reference_visitor.visit_scope(scope);
+			let mut reference_visitor = RenameVisitor::new(&types, ast);
+			reference_visitor.visit_scope(ast.root());
 
 			let text_edits = reference_visitor.create_text_edits(position, new_word.clone());
 

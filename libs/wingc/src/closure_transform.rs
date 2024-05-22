@@ -236,8 +236,8 @@ impl<'a> Fold for ClosureTransformer<'a> {
 						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::for_file(file_id)),
 					},
 					0,
+					None,
 					WingSpan::for_file(file_id),
-					doc: None,
 				)];
 				let class_init_body = self.ast.new_scope(class_init_body, WingSpan::for_file(file_id));
 
@@ -260,8 +260,8 @@ impl<'a> Fold for ClosureTransformer<'a> {
 							type_: None,
 						},
 						0,
+						None,
 						WingSpan::for_file(file_id),
-						doc: None,
 					);
 
 					self.class_statements.push(parent_this_def);
@@ -319,8 +319,8 @@ impl<'a> Fold for ClosureTransformer<'a> {
 						auto_id: true,
 					}),
 					self.nearest_stmt_idx,
+					None,
 					WingSpan::for_file(file_id),
-					doc: None,
 				);
 
 				// new_class_instance :=
