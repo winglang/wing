@@ -49,17 +49,14 @@ export class Api extends cloud.Api implements IAwsApi {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions
+    props?: cloud.FunctionProps,
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
 
-    if (props) {
-      console.warn(`Api.${lowerMethod} does not support props yet`);
-    }
     this._validatePath(path);
 
-    const fn = this.addHandler(inflight, method, path);
+    const fn = this.addHandler(inflight, method, path, props);
     const apiSpecEndpoint = this.api.addEndpoint(path, upperMethod, fn);
     this._addToSpec(path, upperMethod, apiSpecEndpoint, this.corsOptions);
 
@@ -184,9 +181,10 @@ export class Api extends cloud.Api implements IAwsApi {
   private addHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
+    props?: cloud.FunctionProps,
   ): cloud.Function {
-    return this.addInflightHandler(inflight, method, path);
+    return this.addInflightHandler(inflight, method, path, props);
   }
 
   /**
@@ -198,7 +196,8 @@ export class Api extends cloud.Api implements IAwsApi {
   private addInflightHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
+    props?: cloud.FunctionProps,
   ): cloud.Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
@@ -207,7 +206,8 @@ export class Api extends cloud.Api implements IAwsApi {
       handler = new cloud.Function(
         this,
         App.of(this).makeId(this, prefix),
-        newInflight
+        newInflight,
+        props,
       );
       this.handlers[inflight._id] = handler;
     }

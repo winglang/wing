@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { Endpoint } from "./endpoint";
+import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
@@ -587,42 +588,42 @@ export class Api extends Resource {
 /**
  * Options for Api get endpoint.
  */
-export interface ApiGetOptions {}
+export interface ApiGetOptions extends FunctionProps {}
 
 /**
  * Options for Api post endpoint.
  */
-export interface ApiPostOptions {}
+export interface ApiPostOptions extends FunctionProps {}
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiPutOptions {}
+export interface ApiPutOptions extends FunctionProps {}
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiDeleteOptions {}
+export interface ApiDeleteOptions extends FunctionProps {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiPatchOptions {}
+export interface ApiPatchOptions extends FunctionProps {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiOptionsOptions {}
+export interface ApiOptionsOptions extends FunctionProps {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiHeadOptions {}
+export interface ApiHeadOptions extends FunctionProps {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiConnectOptions {}
+export interface ApiConnectOptions extends FunctionProps {}
 
 /**
  * Inflight methods and members of `cloud.Api`.
