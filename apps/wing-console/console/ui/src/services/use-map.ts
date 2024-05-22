@@ -211,8 +211,7 @@ export const useMap = ({}: UseMapOptions = {}) => {
               source: {
                 id: connection.source,
                 nodeFqn: nodeFqns.get(connection.source),
-                operation:
-                  connection.sourceOp ?? connection.name.replace("()", ""),
+                operation: connection.sourceOp,
               },
               target: {
                 id: connection.target,

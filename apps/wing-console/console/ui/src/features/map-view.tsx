@@ -272,6 +272,26 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               select();
             }}
           >
+            <Port
+              elk={{
+                id: `${id}##source`,
+                layoutOptions: {
+                  "elk.port.side": "EAST",
+                  "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                },
+              }}
+            />
+
+            <Port
+              elk={{
+                id: `${id}##target`,
+                layoutOptions: {
+                  "elk.port.side": "WEST",
+                  "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                },
+              }}
+            />
+
             {!hasChildNodes && (
               <div
                 className={clsx(
@@ -297,26 +317,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 </span>
               </div>
             )}
-
-            <Port
-              elk={{
-                id: `${id}##source`,
-                layoutOptions: {
-                  "elk.port.side": "EAST",
-                  "elk.port.anchor": `[${PORT_ANCHOR},0]`,
-                },
-              }}
-            />
-
-            <Port
-              elk={{
-                id: `${id}##target`,
-                layoutOptions: {
-                  "elk.port.side": "WEST",
-                  "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                },
-              }}
-            />
 
             <div className="pl-2">
               <NodeChildren className="text-xs">
@@ -417,6 +417,26 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               {children}
               {/* </Node> */}
             </NodeChildren>
+
+            <Port
+              elk={{
+                id: `${id}##source`,
+                layoutOptions: {
+                  "elk.port.side": "EAST",
+                  "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                },
+              }}
+            />
+
+            <Port
+              elk={{
+                id: `${id}##target`,
+                layoutOptions: {
+                  "elk.port.side": "WEST",
+                  "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                },
+              }}
+            />
           </ContainerNode>
         );
       }
