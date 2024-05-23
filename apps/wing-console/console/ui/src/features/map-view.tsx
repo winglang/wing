@@ -564,10 +564,7 @@ const RoundedEdge: FunctionComponent<
       return path;
     }, [additionalPoints]);
 
-    const arrowHeadId = useId();
-    const arrowHeadMarker = useMemo(() => {
-      return `url(#${arrowHeadId})`;
-    }, [arrowHeadId]);
+    const lastPoint = additionalPoints.at(-1);
 
     return (
       <svg
@@ -575,10 +572,6 @@ const RoundedEdge: FunctionComponent<
         height={graphHeight}
         className={clsx(
           "absolute inset-0 pointer-events-none",
-          // !highlighted && "z-[1]",
-          // highlighted && !selected && "z-[2]",
-          // selected && "z-[3]",
-          // "hover:z-[3]",
           !highlighted && Z_INDICES.EDGE,
           highlighted && !selected && Z_INDICES.EDGE_HIGHLIGHTED,
           selected && Z_INDICES.EDGE_SELECTED,
@@ -586,38 +579,20 @@ const RoundedEdge: FunctionComponent<
           "cursor-pointer",
         )}
       >
-        <defs>
-          <marker
-            className="stroke-none fill-slate-500 dark:fill-slate-800"
-            markerWidth="6"
-            markerHeight="4"
-            orient="auto"
-            id={arrowHeadId}
-            refX="4"
-            refY="2"
-          >
-            <path d="M0 0 v4 l5 -2 z" />
-          </marker>
-        </defs>
         <g
           className={clsx(
             "fill-none stroke-1 group pointer-events-auto",
             "transition-colors",
             !selected &&
-              !highlighted &&
-              "stroke-slate-300 dark:stroke-slate-700",
+              !highlighted && ["stroke-slate-300 dark:stroke-slate-500"],
             (selected || highlighted) && "stroke-sky-500 dark:stroke-sky-400",
             "hover:stroke-sky-500",
-            "dark:hover:stroke-sky-900",
+            "dark:hover:stroke-sky-300",
           )}
           transform={`translate(${offsetX} ${offsetY})`}
           onClick={onClick}
         >
-          <path
-            className="stroke-[8] opacity-0"
-            d={d}
-            markerEnd={arrowHeadMarker}
-          >
+          <path className="stroke-[8] opacity-0" d={d}>
             <title>
               {edge.id} (from {edge.sources.join(",")} to{" "}
               {edge.targets.join(",")})
@@ -625,20 +600,27 @@ const RoundedEdge: FunctionComponent<
           </path>
           <path
             className={clsx(
-              "stroke-[6] stroke-sky-100 dark:stroke-sky-500/50",
+              "stroke-[6] stroke-sky-100 dark:stroke-sky-700",
               !selected && "opacity-0",
               selected && "opacity-100",
               "group-hover:opacity-100",
               "transition-opacity",
             )}
             d={d}
-          >
-            <title>
-              {edge.id} (from {edge.sources.join(",")} to{" "}
-              {edge.targets.join(",")})
-            </title>
-          </path>
-          <path d={d} markerEnd={arrowHeadMarker} />
+          />
+          <path d={d} />
+          <path
+            className={clsx(
+              "transition-colors",
+              "stroke-none",
+              !selected &&
+                !highlighted && ["fill-slate-300 dark:fill-slate-500"],
+              (selected || highlighted) && "fill-sky-500 dark:fill-sky-400",
+              "group-hover:fill-sky-500",
+              "dark:hover:fill-sky-900",
+            )}
+            d={`M${lastPoint?.x ?? 0} ${(lastPoint?.y ?? 0) - 2} v4 l5 -2 z`}
+          />
         </g>
       </svg>
     );
@@ -754,7 +736,7 @@ export const MapView = memo(
 
     return (
       <div className={clsx("h-full flex flex-col", theme.bg4)}>
-        <div className="grow relative bg-slate-50 dark:bg-slate-500">
+        <div className="grow relative">
           {!rootNodes && (
             <div
               className={clsx(
