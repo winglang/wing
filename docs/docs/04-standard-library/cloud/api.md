@@ -859,6 +859,97 @@ The maximum amount of time the function can run.
 
 ---
 
+### ApiEndpointOptions <a name="ApiEndpointOptions" id="@winglang/sdk.cloud.ApiEndpointOptions"></a>
+
+Base options for Api endpoints.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiEndpointOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let ApiEndpointOptions = cloud.ApiEndpointOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiEndpointOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
+| <code><a href="#@winglang/sdk.cloud.ApiEndpointOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ApiEndpointOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ApiEndpointOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ApiEndpointOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ApiEndpointOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ApiEndpointOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ApiEndpointOptions.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ApiEndpointOptions.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 1024
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ApiEndpointOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
+
 ### ApiGetOptions <a name="ApiGetOptions" id="@winglang/sdk.cloud.ApiGetOptions"></a>
 
 Options for Api get endpoint.

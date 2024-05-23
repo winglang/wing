@@ -586,44 +586,49 @@ export class Api extends Resource {
 }
 
 /**
+ * Base options for Api endpoints.
+ */
+export interface ApiEndpointOptions extends FunctionProps {}
+
+/**
  * Options for Api get endpoint.
  */
-export interface ApiGetOptions extends FunctionProps {}
+export interface ApiGetOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api post endpoint.
  */
-export interface ApiPostOptions extends FunctionProps {}
+export interface ApiPostOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiPutOptions extends FunctionProps {}
+export interface ApiPutOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiDeleteOptions extends FunctionProps {}
+export interface ApiDeleteOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiPatchOptions extends FunctionProps {}
+export interface ApiPatchOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiOptionsOptions extends FunctionProps {}
+export interface ApiOptionsOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiHeadOptions extends FunctionProps {}
+export interface ApiHeadOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiConnectOptions extends FunctionProps {}
+export interface ApiConnectOptions extends ApiEndpointOptions {}
 
 /**
  * Inflight methods and members of `cloud.Api`.

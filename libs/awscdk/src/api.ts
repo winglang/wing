@@ -49,7 +49,7 @@ export class Api extends cloud.Api implements IAwsApi {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.FunctionProps,
+    props?: cloud.ApiEndpointOptions,
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
@@ -182,7 +182,7 @@ export class Api extends cloud.Api implements IAwsApi {
     inflight: cloud.IApiEndpointHandler,
     method: string,
     path: string,
-    props?: cloud.FunctionProps,
+    props?: cloud.ApiEndpointOptions,
   ): cloud.Function {
     return this.addInflightHandler(inflight, method, path, props);
   }
@@ -197,7 +197,7 @@ export class Api extends cloud.Api implements IAwsApi {
     inflight: cloud.IApiEndpointHandler,
     method: string,
     path: string,
-    props?: cloud.FunctionProps,
+    props?: cloud.ApiEndpointOptions,
   ): cloud.Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
