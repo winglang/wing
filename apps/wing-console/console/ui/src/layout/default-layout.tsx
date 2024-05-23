@@ -58,7 +58,6 @@ const defaultLayoutConfig: LayoutConfig = {
   },
   errorScreen: {
     position: "default",
-    displayTitle: true,
     displayLinks: true,
   },
   panels: {
@@ -219,8 +218,6 @@ export const DefaultLayout = ({
                   <BlueScreenOfDeath
                     title="An error has occurred"
                     error={errorMessage.data ?? ""}
-                    displayLinks={layout.errorScreen?.displayLinks}
-                    displayWingTitle={layout.errorScreen?.displayTitle}
                   />
                 </div>
               )}
@@ -428,7 +425,6 @@ export const DefaultLayout = ({
                         title="An error has occurred"
                         error={errorMessage.data ?? ""}
                         displayLinks={layout.errorScreen?.displayLinks}
-                        displayWingTitle={layout.errorScreen?.displayTitle}
                       />
                     </TopResizableWidget>
                   </div>
