@@ -91,7 +91,7 @@ export const EndpointTree = ({
                                 ? "cursor-not-allowed"
                                 : "cursor-pointer",
                             )}
-                            title="Open a tunnel for this enpoint"
+                            title="Open a tunnel for this endpoint"
                             onClick={() => {
                               exposeEndpoint(endpoint.id);
                             }}
