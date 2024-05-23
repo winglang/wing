@@ -19,7 +19,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { ApiEndpointHandler, IAwsApi, STAGE_NAME } from "../shared-aws";
-import { API_DEFAULT_RESPONSE } from "../shared-aws/api.default";
+import { createApiDefaultResponse } from "../shared-aws/api.default";
 import { IInflightHost, Node } from "../std";
 
 /**
@@ -390,7 +390,6 @@ class WingRestApi extends Construct {
      *   - 404 (Not Found) for other HTTP methods.
      * - If CORS options are undefined, `defaultResponse` set up a mock 404 response for any HTTP method.
      */
-    const defaultResponse = API_DEFAULT_RESPONSE(props.cors);
 
     /**
      * BASIC API Gateway properties
@@ -404,6 +403,10 @@ class WingRestApi extends Construct {
         produce: () => {
           // Retrieves the API specification.
           const apiSpec = props.getApiSpec();
+          const defaultResponse = createApiDefaultResponse(
+            Object.keys(apiSpec.paths),
+            props.cors
+          );
 
           // Merges the specification with `defaultResponse` to handle requests to undefined routes (`/{proxy+}`).
           // This integration ensures comprehensive route handling:
