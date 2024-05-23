@@ -1,12 +1,12 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { ApiRoute, ApiSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { Function } from "../cloud";
 import * as cloud from "../cloud";
 import { lift } from "../core";
 import { ToSimulatorOutput } from "../simulator/simulator";

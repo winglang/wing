@@ -1,11 +1,11 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { Function } from "../cloud";
 import * as cloud from "../cloud";
 import { lift, LiftMap } from "../core";
 import { ToSimulatorOutput } from "../simulator";

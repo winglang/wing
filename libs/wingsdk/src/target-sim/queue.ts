@@ -1,10 +1,7 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import {
-  Function,
-  FunctionInflightMethods as SimFunctionInflightMethods,
-} from "./function";
+import { FunctionInflightMethods as SimFunctionInflightMethods } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
@@ -80,7 +77,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
     const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
-    const fn = new Function(
+    const fn = new cloud.Function(
       this,
       App.of(this).makeId(this, "Consumer"),
       functionHandler,
