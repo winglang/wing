@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
+import { Function } from "../cloud";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { ScheduleSchema } from "./schema-resources";
