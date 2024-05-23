@@ -117,7 +117,7 @@ export const ContainerNode = memo(
           "transition-all",
           "rounded-lg",
           "relative",
-          "cursor-default",
+          "cursor-pointer",
           {
             "outline-2": selected,
           },
@@ -136,7 +136,7 @@ export const ContainerNode = memo(
             {
               "rounded-b-none": open,
             },
-            "cursor-pointer",
+            "pointer-events-none",
           )}
         >
           {Icon && (
