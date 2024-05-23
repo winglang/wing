@@ -1,5 +1,6 @@
+import { Button, useNotifications } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 import {
   OpenFileInEditorButton,
@@ -19,6 +20,13 @@ export const BlueScreenOfDeath = memo(
     displayWingTitle?: boolean;
   }) => {
     const [formattedPathsError, setFormattedPathsError] = useState("");
+    const { showNotification } = useNotifications();
+
+    const copyError = useCallback(() => {
+      navigator.clipboard.writeText(error);
+      showNotification("Error copied to clipboard", { type: "success" });
+    }, [error, showNotification]);
+
     useEffect(() => {
       if (!displayLinks) {
         setFormattedPathsError(error);
@@ -48,8 +56,18 @@ export const BlueScreenOfDeath = memo(
           )}
 
           <div className="space-y-4">
-            <OpenFileInEditorButton className="cursor-text select-text">
-              <div>{title}</div>
+            <OpenFileInEditorButton className="cursor-text select-text group">
+              <div className="flex gap-x-4 items-center">
+                <div className="bg-slate-400 px-4 text-[#004295]">{title}</div>
+                <Button
+                  onClick={copyError}
+                  primary
+                  small
+                  className="opacity-0 group-hover:opacity-100 transition-all"
+                >
+                  Copy error
+                </Button>
+              </div>
               <div className="py-4">
                 <span
                   className="outline-none whitespace-pre-wrap"
