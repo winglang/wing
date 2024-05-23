@@ -55,8 +55,8 @@ export const BlueScreenOfDeath = memo(
             </div>
           )}
 
-          <div className="space-y-4">
-            <OpenFileInEditorButton className="cursor-text select-text group">
+          <div className="space-y-4 group">
+            <OpenFileInEditorButton className="cursor-text select-text">
               <div className="flex gap-x-4 items-center">
                 <div className="bg-slate-400 px-4 text-[#004295]">{title}</div>
                 <Button
