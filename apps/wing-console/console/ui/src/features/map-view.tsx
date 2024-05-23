@@ -617,9 +617,11 @@ const RoundedEdge: FunctionComponent<
                 !highlighted && ["fill-slate-300 dark:fill-slate-500"],
               (selected || highlighted) && "fill-sky-500 dark:fill-sky-400",
               "group-hover:fill-sky-500",
-              "dark:hover:fill-sky-900",
+              "dark:group-hover:fill-sky-300",
             )}
-            d={`M${lastPoint?.x ?? 0} ${(lastPoint?.y ?? 0) - 2} v4 l5 -2 z`}
+            d={`M${(lastPoint?.x ?? 0) - 4} ${
+              (lastPoint?.y ?? 0) - 2
+            } v4 l5 -2 z`}
           />
         </g>
       </svg>
