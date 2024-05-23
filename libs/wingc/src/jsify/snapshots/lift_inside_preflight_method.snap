@@ -82,7 +82,6 @@ class $Root extends $stdlib.std.Resource {
       }
       defineBucket(name) {
         const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, name);
-        const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {

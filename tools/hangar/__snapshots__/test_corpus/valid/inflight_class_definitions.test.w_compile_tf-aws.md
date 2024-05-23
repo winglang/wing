@@ -343,7 +343,6 @@ class $Root extends $stdlib.std.Resource {
             });
           }
         }
-        const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {

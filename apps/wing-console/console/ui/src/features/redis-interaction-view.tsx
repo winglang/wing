@@ -67,7 +67,6 @@ export const RedisInteractionView = memo(({ resourcePath }: RedisViewProps) => {
     },
     [
       execCommand,
-      open,
       updateCommandHistory,
       updateTerminalHistory,
       clearTerminalHistory,
