@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "../cloud";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { ScheduleSchema } from "./schema-resources";
@@ -10,6 +9,7 @@ import {
   makeSimulatorJsClient,
   convertDurationToCronExpression,
 } from "./util";
+import { Function } from "../cloud";
 import * as cloud from "../cloud";
 import { lift } from "../core";
 import { ToSimulatorOutput } from "../simulator";

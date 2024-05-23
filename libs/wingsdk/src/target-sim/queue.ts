@@ -1,9 +1,7 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import {
-  FunctionInflightMethods as SimFunctionInflightMethods,
-} from "./function";
+import { FunctionInflightMethods as SimFunctionInflightMethods } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
