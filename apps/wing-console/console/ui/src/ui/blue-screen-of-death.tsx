@@ -1,4 +1,5 @@
-import { useNotifications } from "@wingconsole/design-system";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { Button, useNotifications } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { memo, useCallback, useEffect, useState } from "react";
 
@@ -42,38 +43,35 @@ export const BlueScreenOfDeath = memo(
     return (
       <div
         className={classNames(
-          "absolute h-full w-full z-50 px-10 py-20 bg-[#004295] overflow-auto flex justify-center items-center",
+          "absolute inset-0",
+          "px-10 pb-4 bg-[#004295] flex justify-center items-center",
         )}
         data-testid="blue-screen-of-death"
       >
-        <div className="h-full w-full text-md font-share-tech text-white max-w-7xl break-words space-y-4">
-          <div className="space-y-4">
-            <div className="flex">
-              <button
-                onClick={copyError}
-                className={classNames(
-                  "px-4",
-                  "bg-slate-400 hover:bg-slate-450 text-[#004295]",
-                  "focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 outline-none",
-                )}
-              >
-                Click here to copy the error
-              </button>
-            </div>
-            <OpenFileInEditorButton className="cursor-text select-text">
-              <div className="py-4">
+        <div className="relative w-full h-full text-md font-share-tech text-white flex flex-col max-w-7xl break-words space-y-4">
+          <div className="flex-grow overflow-hidden flex flex-col">
+            <OpenFileInEditorButton className="cursor-text select-text flex-grow flex flex-col h-full">
+              <div className="py-10 overflow-auto h-full">
+                <div className="flex mb-4">
+                  <div className="bg-slate-400 px-4 text-[#004295]">
+                    {title}
+                  </div>
+                </div>
                 <span
                   className="outline-none whitespace-pre-wrap"
                   dangerouslySetInnerHTML={{ __html: formattedPathsError }}
                 />
               </div>
             </OpenFileInEditorButton>
-            {displayLinks && (
-              <div className="w-full text-center">
-                Click on any error reference to navigate to your IDE{" "}
-                <span className="animate-ping">_</span>
-              </div>
-            )}
+          </div>
+
+          <div className="flex flex-col items-center flex-shrink-0">
+            <button
+              onClick={copyError}
+              className="text-center px-4 py-1 text-white hover:bg-[#003A80] transition-all"
+            >
+              Click here to copy the error
+            </button>
           </div>
         </div>
       </div>
