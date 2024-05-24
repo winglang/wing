@@ -473,7 +473,10 @@ const RoundedEdge: FunctionComponent<
             "dark:hover:stroke-sky-300",
           )}
           transform={`translate(${offsetX} ${offsetY})`}
-          onClick={onClick}
+          onClick={(event) => {
+            event.stopPropagation();
+            onClick?.();
+          }}
         >
           <path className="stroke-[8] opacity-0" d={d}>
             <title>
@@ -612,15 +615,18 @@ export const MapView = memo(
 
     const { theme } = useTheme();
 
-    useKeyPressEvent(
-      "Escape",
-      useCallback(() => {
-        onSelectedNodeIdChange?.(undefined);
-      }, [onSelectedNodeIdChange]),
-    );
+    const unselectedNode = useCallback(() => {
+      onSelectedNodeIdChange?.("root");
+    }, [onSelectedNodeIdChange]);
+
+    useKeyPressEvent("Escape", unselectedNode);
 
     return (
-      <div className={clsx("h-full flex flex-col", theme.bg4)}>
+      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+      <div
+        className={clsx("h-full flex flex-col", theme.bg4)}
+        onClick={unselectedNode}
+      >
         <div className="grow relative">
           {!rootNodes && (
             <div
