@@ -136,7 +136,21 @@ impl<'a> ExternDTSifier<'a> {
 			Type::Boolean => "boolean".to_string(),
 			Type::Void => "void".to_string(),
 			Type::Nil => "undefined".to_string(),
-			Type::Json(_) => "Readonly<any>".to_string(),
+			Type::Json(Some(data)) => match &data.kind {
+				JsonDataKind::Type(inner) => self.dtsify_type(inner.type_, is_inflight),
+				JsonDataKind::List(inner_types) => inner_types
+					.iter()
+					.map(|t| self.dtsify_type(t.type_, is_inflight))
+					.join(" | "),
+				JsonDataKind::Fields(fields) => {
+					let mut field_text = vec![];
+					for (name, inner) in fields {
+						field_text.push(format!("{}: {}", name, self.dtsify_type(inner.type_, is_inflight)));
+					}
+					format!("{{ {} }}", field_text.join(", "))
+				}
+			},
+			Type::Json(None) => "Readonly<any>".to_string(),
 			Type::MutJson => "any".to_string(),
 			Type::Duration => {
 				let duration_type = self
@@ -160,11 +174,19 @@ impl<'a> ExternDTSifier<'a> {
 			Type::Class(_) | Type::Interface(_) | Type::Struct(_) | Type::Enum(_) => {
 				self.resolve_named_type(type_, is_inflight)
 			}
-			Type::Inferred(_) | Type::Unresolved => {
-				panic!("Extern must use resolved types")
+			Type::Inferred(iid) => {
+				let t = self.types.get_inference_by_id(*iid);
+				if let Some(t) = t {
+					self.dtsify_type(t, is_inflight)
+				} else {
+					panic!("Extern must use resolved types")
+				}
 			}
 			Type::Stringable => {
 				panic!("Unsupported type stringable")
+			}
+			Type::Unresolved => {
+				panic!("Extern must use resolved types")
 			}
 		}
 	}
@@ -229,7 +251,13 @@ impl<'a> ExternDTSifier<'a> {
 
 		let is_inflight = matches!(f.phase, Phase::Inflight);
 
-		let return_type = self.dtsify_type(f.return_type, is_inflight);
+		let return_type = if f.return_type.is_strict_option() {
+			let unwrapped_type = *f.return_type.maybe_unwrap_option();
+			let type_string = self.dtsify_type(unwrapped_type, is_inflight);
+			format!("{} | void", type_string)
+		} else {
+			self.dtsify_type(f.return_type, is_inflight)
+		};
 		let return_type = if is_inflight {
 			format!("Promise<{return_type}>")
 		} else {

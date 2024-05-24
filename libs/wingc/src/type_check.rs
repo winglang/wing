@@ -2714,7 +2714,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		// Make sure this is a function signature type
-		let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
+		let func_sig = if let Some(func_sig) = func_type.as_deep_function_sig() {
 			func_sig.clone()
 		} else if let Some(class) = func_type.as_preflight_class() {
 			// return the signature of the "handle" method

@@ -136,7 +136,7 @@ export class Node {
   readonly setContext: (key: string, value?: any) => void;
   /** Return a direct child by id, or undefined.
   @returns the child if found, or undefined */
-  readonly tryFindChild: (id: string) => (IConstruct) | undefined;
+  readonly tryFindChild: (id: string) => IConstruct | void;
   /** Retrieves a value from tree context.
   Context is usually initialized at the root, but can be overridden at any point in the tree.
   @returns The context value or `undefined` if there is no context value for this key. */

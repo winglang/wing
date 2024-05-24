@@ -2,8 +2,11 @@
 
 ## stdout.log
 ```log
-[INFO] x | "message" should be "message"
-pass ─ intrinsics.test.wsim » root/env0/test:x
+[INFO] invoke inflight function | "message" should be "message"
+[INFO] invoke inflight function | [ 1, 2, 3 ]
+[INFO] invoke inflight function | "message" should be "message"
+[INFO] invoke inflight function | [ 1, 2, 3 ]
+pass ─ intrinsics.test.wsim » root/env0/test:invoke inflight function
 
 Tests 1 passed (1)
 Snapshots 1 skipped

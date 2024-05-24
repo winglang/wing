@@ -26,15 +26,17 @@ pub class Example {
   }
 }
 let example = new Example();
-let queue = new cloud.Queue();
+let funcFunction = @inflight("./inline_typescript.ts",
+export: "main",
+lifts: [
+  { obj: example },
+  { obj: [1, 2, 3], alias: "numbers" },
+]);
+let func = new cloud.Function(funcFunction);
 
-queue.setConsumer(@inflight("./inline_typescript.ts",
-  lifts: [{ obj: example }],
-));
+let fileThatDoesNotExist: inflight (str): str = @inflight("./inflight_ts/example1.ts");
 
-test "x" {
-  queue.push("message");
-  util.waitUntil(inflight () => {
-    return counter.peek() > 0;
-  });
+test "invoke inflight function" {
+  funcFunction("message");
+  func.invoke("message");
 }

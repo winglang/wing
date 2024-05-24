@@ -708,7 +708,7 @@ impl<'a> JSifier<'a> {
 						return new_code!(&expression.span, "");
 					};
 
-					let mut export_name = new_code!(&expression.span, "default");
+					let mut export_name = new_code!(&expression.span, "\"default\"");
 					let mut lifts: IndexMap<String, (&Expr, Option<&Vec<Expr>>, CodeMaker)> = IndexMap::new();
 					for x in &arg_list.named_args {
 						if x.0.name == "export" {
@@ -769,7 +769,7 @@ impl<'a> JSifier<'a> {
 											match &obj_expression.kind {
 												ExprKind::Reference(reference) => {
 													if let Reference::Identifier(identifier) = reference {
-														identifier.name.clone()
+														format!("\"{}\"", identifier.name)
 													} else {
 														report_diagnostic(Diagnostic {
 															message: "Must specify an \"alias\"  for a non-identifier reference".to_string(),
@@ -804,9 +804,9 @@ impl<'a> JSifier<'a> {
 											}
 											expr_text.append("]");
 										}
-										expr_text.append(", alias: \"");
+										expr_text.append(", alias: ");
 										expr_text.append(&alias);
-										expr_text.append("\" })");
+										expr_text.append(" })");
 
 										lifts.insert(alias, (obj_expression, ops, expr_text));
 									}
@@ -830,11 +830,11 @@ impl<'a> JSifier<'a> {
 
 					let require_path = self.get_require_path(&path, expr_span);
 					if let Some(require_path) = require_path {
-						lift_string.append("\"async (ctx, ...args) => require('");
+						lift_string.append("`require('");
 						lift_string.append(require_path);
-						lift_string.append("')['");
+						lift_string.append("')[");
 						lift_string.append(export_name);
-						lift_string.append("'](ctx, ...args)\"");
+						lift_string.append("]`");
 					}
 
 					if arg_list.named_args.get("lifts").is_some() {

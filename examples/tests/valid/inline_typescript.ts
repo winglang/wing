@@ -1,8 +1,9 @@
 import inflight from "./inline_typescript.inflight";
 
-export default inflight(async ({ example }, message) => {
+export const main = inflight(async ({ example, numbers }, message) => {
   const exampleMessage = await example.getMessage();
   console.log(`"${message}" should be "${exampleMessage}"`);
+  console.log(numbers);
   if (message !== exampleMessage) {
     throw new Error("Message is not the same");
   }
