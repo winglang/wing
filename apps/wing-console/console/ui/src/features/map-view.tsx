@@ -24,55 +24,13 @@ import type {
   EdgeComponent,
   EdgeComponentProps,
 } from "../ui/elk-flow/types.js";
-import { useZoomPane } from "../ui/zoom-pane.js";
 
 const Z_INDICES = {
-  EDGE: "z-[1]",
-  EDGE_HIGHLIGHTED: "z-[2]",
-  EDGE_SELECTED: "z-[3]",
-  EDGE_HOVERED: "hover:z-[3]",
-  CONSTRUCT: "z-[0]",
+  EDGE: "z-[1000]",
+  EDGE_HIGHLIGHTED: "z-[1001]",
+  EDGE_SELECTED: "z-[1002]",
+  EDGE_HOVERED: "hover:z-[1003]",
 };
-
-interface InflightPortProps {
-  occupied?: boolean;
-  highlight?: boolean;
-}
-
-const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
-  <>
-    <div
-      className={clsx(
-        "size-2.5 rounded-full bg-white border border-slate-200",
-        // "opacity-0",
-        // props.occupied && "opacity-100",
-        "group-hover/construct:opacity-100 group-hover/construct:border-sky-300",
-        "outline outline-0 group-hover/construct:outline-4 outline-sky-200",
-        props.highlight && "outline-4 border-sky-300",
-        "transition-all",
-        "invisible",
-        "pointer-events-none",
-      )}
-    >
-      <div className="w-full h-full relative group/inflight-port">
-        <div className="absolute inset-0 flex items-center justify-around pointer-events-none">
-          {/* <div
-            className={clsx(
-              !props.occupied && "size-0",
-              props.occupied && "size-1.5",
-              // "group-hover/inflight-port:size-1.5",
-              // "rounded-full bg-sky-400 transition-all",
-              "rounded-full transition-all",
-              "bg-slate-400",
-              "group-hover/construct:bg-sky-400",
-              props.highlight && "bg-sky-400",
-            )}
-          ></div> */}
-        </div>
-      </div>
-    </div>
-  </>
-);
 
 const SPACING_BASE_VALUE = 32;
 const PORT_ANCHOR = 0;
@@ -82,11 +40,6 @@ const baseLayoutOptions: LayoutOptions = {
   "elk.alignment": "CENTER",
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
   "elk.algorithm": "org.eclipse.elk.layered",
-  // "elk.layered.layering.strategy": "MIN_WIDTH",
-  // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
-  // "elk.layered.layering.strategy": "STRETCH_WIDTH",
-  // "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
-  // "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
 };
 
@@ -163,17 +116,9 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
           id: props.id,
           layoutOptions: {
             ...baseLayoutOptions,
-            // "elk.layered.layering.strategy": "MIN_WIDTH",
-            // "elk.layered.spacing.baseValue": "1",
           },
         }}
-        className={clsx(
-          "inline-block",
-          "group",
-          // "p-2",
-          // "z-0",
-          Z_INDICES.CONSTRUCT,
-        )}
+        className={clsx("inline-block", "group")}
         data-elk-id={props.id}
       >
         <div className={clsx("w-full h-full relative")}>
@@ -235,18 +180,12 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             layoutOptions: {
               "elk.algorithm": "org.eclipse.elk.layered",
               "elk.aspectRatio": "0.1",
-              // "elk.direction": "DOWN",
               "elk.layered.spacing.baseValue": "1",
-              // "elk.layered.layering.strategy": "MIN_WIDTH",
-              // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
-              // "elk.layered.layering.strategy": "STRETCH_WIDTH",
               "elk.portConstraints": "FIXED_SIDE",
             },
           }}
           className={clsx(
             "inline-block group/construct cursor-pointer",
-            // "z-20",
-            Z_INDICES.CONSTRUCT,
             hasChildNodes && "pointer-events-none",
           )}
           data-elk-id={id}
@@ -330,15 +269,9 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                           "elk.portConstraints": "FIXED_SIDE",
                         },
                       }}
-                      className={clsx(
-                        "inline-block pointer-events-none",
-                        // "z-20",
-                        Z_INDICES.CONSTRUCT,
-                      )}
+                      className={clsx("inline-block pointer-events-none")}
                     >
-                      <div
-                      // className="border-t border-slate-200 dark:border-slate-800"
-                      >
+                      <div>
                         <div
                           className={clsx(
                             "px-2.5 py-1.5 text-xs whitespace-nowrap",
@@ -346,9 +279,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                             "font-mono",
                           )}
                         >
-                          {/* <span className="italic text-indigo-500 dark:text-indigo-400">
-                        inflight{" "}
-                      </span> */}
                           <span>{inflight.name}()</span>
                         </div>
                       </div>
@@ -361,12 +291,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                             "elk.port.anchor": `[${PORT_ANCHOR},0]`,
                           },
                         }}
-                      >
-                        <InflightPort
-                          occupied={inflight.sourceOccupied}
-                          highlight={highlight}
-                        />
-                      </Port>
+                      />
 
                       <Port
                         elk={{
@@ -376,12 +301,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                             "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
                           },
                         }}
-                      >
-                        <InflightPort
-                          occupied={inflight.targetOccupied}
-                          highlight={highlight}
-                        />
-                      </Port>
+                      />
                     </Node>
                   ))}
                 </div>
@@ -404,18 +324,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             <NodeChildren>
               {inflights.length > 0 && renderedNode}
 
-              {/* <Node elk={{ id: `${id}#children` }}> */}
-              {/* <Port
-                  elk={{
-                    id: `${id}#children-target`,
-                    layoutOptions: {
-                      "elk.port.side": "WEST",
-                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                    },
-                  }}
-                /> */}
               {children}
-              {/* </Node> */}
             </NodeChildren>
 
             <Port
@@ -440,32 +349,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
           </ContainerNode>
         );
       }
-
-      // if (hasChildNodes) {
-      //   return (
-      //     <ContainerNode
-      //       id={`${id}#container`}
-      //       name={`${name}`}
-      //       pseudoContainer
-      //       resourceType={fqn}
-      //       highlight={highlight}
-      //       onClick={select}
-      //     >
-      //       {renderedNode}
-      //       <ContainerNode
-      //         id={`${id}#children`}
-      //         // name={`${name} Children`}
-      //         name="Children"
-      //         pseudoContainer
-      //         resourceType={fqn}
-      //         highlight={highlight}
-      //         // onClick={select}
-      //       >
-      //         {children}
-      //       </ContainerNode>
-      //     </ContainerNode>
-      //   );
-      // }
 
       return renderedNode;
     },
