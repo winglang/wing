@@ -101,7 +101,7 @@ const PortComponent = <K extends keyof IntrinsicElements = "div">({
   const node = useContext(ElkNodeContext);
   const port = useMemo(
     () => node.ports?.find((port) => port.id === elk.id),
-    [],
+    [elk.id, node.ports],
   );
   assert(port);
 
