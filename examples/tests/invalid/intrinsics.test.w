@@ -5,6 +5,3 @@ inflight () => {
 
 let path = @dirname();
 //                 ^^ Unexpected arguments
-
-
-/// @inflight

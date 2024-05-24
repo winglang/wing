@@ -709,7 +709,8 @@ impl<'a> JSifier<'a> {
 							annotations: vec![],
 							hints: vec![],
 						});
-						return new_code!(&expression.span, "");
+
+						normalize_path(&Utf8PathBuf::from("dummy.ts"), ctx.source_path)
 					};
 
 					let mut export_name = new_code!(&expression.span, "\"default\"");
@@ -773,7 +774,7 @@ impl<'a> JSifier<'a> {
 											match &obj_expression.kind {
 												ExprKind::Reference(reference) => {
 													if let Reference::Identifier(identifier) = reference {
-														format!("\"{}\"", identifier.name)
+														identifier.name.clone()
 													} else {
 														report_diagnostic(Diagnostic {
 															message: "Must specify an \"alias\"  for a non-identifier reference".to_string(),
@@ -808,9 +809,9 @@ impl<'a> JSifier<'a> {
 											}
 											expr_text.append("]");
 										}
-										expr_text.append(", alias: ");
+										expr_text.append(", alias: \"");
 										expr_text.append(&alias);
-										expr_text.append(" })");
+										expr_text.append("\" })");
 
 										lifts.insert(alias, (obj_expression, ops, expr_text));
 									}

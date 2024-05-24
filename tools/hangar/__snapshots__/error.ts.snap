@@ -86,6 +86,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`intrinsics.test.w 1`] = `
+"error: Inflight path must be a non-interpolated string literal
+  --> ../../../examples/tests/error/intrinsics.test.w:4:40
+  |
+4 | let func: inflight (): str = @inflight(funkPath, lifts: [
+  |                                        ^^^^^^^^
+
+
+error: Must specify an \\"alias\\" to lift this expression
+  --> ../../../examples/tests/error/intrinsics.test.w:6:10
+  |
+6 |   { obj: [1, 2, 3] }
+  |          ^^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`invalid-token.test.w 1`] = `
 "[ERROR] test cannot access unresolved token | Error: Unable to resolve attribute 'fake-attr' for resource \\"root/env0/MyResource/Resource\\" referenced by \\"root/env0/test:test cannot access unresolved token/Handler\\"
 [ERROR] (no test) | Error: Unable to resolve attribute 'fake-attr' for resource \\"root/env0/MyResource/Resource\\" referenced by \\"root/env0/test:test cannot access unresolved token/Handler\\"
