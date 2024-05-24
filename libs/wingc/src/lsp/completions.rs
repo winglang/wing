@@ -871,7 +871,7 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 		if !existing_fields.contains(&field_data.0) {
 			if let Some(mut base_completion) = format_symbol_kind_as_completion(&field_data.0, &field_data.1) {
 				let v = field_data.1.as_variable().unwrap();
-				let is_optional = v.type_.is_option();
+				let is_optional = v.type_.is_strict_option();
 
 				if v.type_.maybe_unwrap_option().is_struct() {
 					base_completion.insert_text = Some(format!("{}: {{\n$1\n}}", field_data.0));

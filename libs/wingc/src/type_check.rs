@@ -1117,6 +1117,11 @@ impl TypeRef {
 		matches!(**self, Type::Optional(_) | Type::Anything)
 	}
 
+	/// Same as is_option, but does not consider `anything` as an optional
+	pub fn is_strict_option(&self) -> bool {
+		matches!(**self, Type::Optional(_))
+	}
+
 	pub fn is_immutable_collection(&self) -> bool {
 		matches!(**self, Type::Array(_) | Type::Map(_) | Type::Set(_))
 	}
@@ -2631,7 +2636,14 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			let (t, item_phase) = self.type_check_exp(item, env);
 			phase = combine_phases(phase, item_phase);
 
-			if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+			if t.is_json()
+				&& !matches!(
+					*t,
+					Type::Json(Some(JsonData {
+						kind: JsonDataKind::List(_),
+						..
+					}))
+				) {
 				// This is an array of JSON, change the element type to reflect that
 				let json_data = JsonData {
 					expression_id: exp.id,
@@ -2650,7 +2662,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				}
 			}
 
-			if !self.ctx.in_json() {
+			if !self.ctx.in_json() && !t.is_json() {
 				// If we're not in a Json literal, validate the type of each element
 				self.validate_type(t, element_type, item);
 				element_type = self.types.maybe_unwrap_inference(element_type);

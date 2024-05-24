@@ -2,7 +2,8 @@
 export interface Lifts {
   example: Example$Inflight
 };
-type ExpectedFunction = IQueueSetConsumerHandler$Inflight;
+type HandlerFunction<T> = T extends { handle: (...args: any[]) => any } ? T['handle'] : T;
+type ExpectedFunction = HandlerFunction<IQueueSetConsumerHandler$Inflight>;
 export type Handler = (ctx: Lifts, ...args: Parameters<ExpectedFunction>) => ReturnType<ExpectedFunction>;
 export function inflight(handler: Handler): Handler { return handler; }
 export default inflight;

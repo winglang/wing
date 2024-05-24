@@ -27,8 +27,9 @@ pub class Example {
 }
 let example = new Example();
 let queue = new cloud.Queue();
-queue.setConsumer(@inflight("./inline_typescript.ts", 
-  lifts: { example: { lift: example, ops: ["getMessage", "done"] } }
+
+queue.setConsumer(@inflight("./inline_typescript.ts",
+  lifts: [{ obj: example }],
 ));
 
 test "x" {

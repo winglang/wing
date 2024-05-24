@@ -702,44 +702,113 @@ impl<'a> JSifier<'a> {
 						let ss = &ss[1..ss.len() - 1];
 						let extern_path = Utf8Path::new(&ss);
 
-						// TODO Warn if path does not exist
+						// TODO Warn if path does not exist or create it automatically?
 						normalize_path(extern_path, ctx.source_path)
 					} else {
 						return new_code!(&expression.span, "");
 					};
 
-					let mut export_name = "default";
-
-					let mut lifts: IndexMap<String, (&Expr, Option<&Vec<Expr>>)> = IndexMap::new();
+					let mut export_name = new_code!(&expression.span, "default");
+					let mut lifts: IndexMap<String, (&Expr, Option<&Vec<Expr>>, CodeMaker)> = IndexMap::new();
 					for x in &arg_list.named_args {
 						if x.0.name == "export" {
-							if let ExprKind::Literal(Literal::String(s)) = &x.1.kind {
-								export_name = &s[1..s.len() - 1];
-							}
+							export_name = self.jsify_expression(&x.1, ctx);
 						} else if x.0.name == "lifts" {
-							if let ExprKind::JsonLiteral { element, .. } = &x.1.kind {
-								if let ExprKind::JsonMapLiteral { fields } = &element.kind {
-									for field in fields {
-										let alias = field.0.name.clone();
-										if let ExprKind::JsonLiteral { element, .. } = &field.1.kind {
-											if let ExprKind::JsonMapLiteral { fields } = &element.kind {
-												let eee = if let Some(ll) = fields.get("lift") {
-													ll
-												} else {
-													continue;
-												};
-												let ops = if let Some(ll) = fields.get("ops") {
-													if let ExprKind::ArrayLiteral { items, .. } = &ll.kind {
-														Some(items)
-													} else {
-														None
-													}
-												} else {
-													None
-												};
-												lifts.insert(alias, (eee, ops));
+							let items = match &x.1.kind {
+								ExprKind::JsonLiteral { element, .. } => {
+									if let ExprKind::ArrayLiteral { items, .. } = &element.kind {
+										items
+									} else {
+										panic!("Must specify an statically-known array of lifts");
+									}
+								}
+								ExprKind::ArrayLiteral { items, .. } => items,
+								_ => {
+									report_diagnostic(Diagnostic {
+										message: "Must specify an statically-known array of lifts".to_string(),
+										annotations: vec![],
+										hints: vec![],
+										span: Some(x.1.span.clone()),
+									});
+									continue;
+								}
+							};
+							for item in items {
+								if let ExprKind::JsonLiteral { element, .. } = &item.kind {
+									if let ExprKind::JsonMapLiteral { fields } = &element.kind {
+										let Some(obj_expression) = fields.get("obj") else {
+											report_diagnostic(Diagnostic {
+												message: "Must specify an \"obj\" to lift".to_string(),
+												annotations: vec![],
+												hints: vec![],
+												span: Some(item.span.clone()),
+											});
+											continue;
+										};
+										let ops = fields.get("ops").and_then(|ops| {
+											if let ExprKind::ArrayLiteral { items, .. } = &ops.kind {
+												Some(items)
+											} else {
+												None
 											}
+										});
+
+										let alias = if let Some(alias) = fields.get("alias") {
+											if let ExprKind::Literal(Literal::String(alias)) = &alias.kind {
+												alias.clone()
+											} else {
+												report_diagnostic(Diagnostic {
+													message: "\"alias\" must be a non-interpolated string literal".to_string(),
+													annotations: vec![],
+													hints: vec![],
+													span: Some(alias.span.clone()),
+												});
+												continue;
+											}
+										} else {
+											match &obj_expression.kind {
+												ExprKind::Reference(reference) => {
+													if let Reference::Identifier(identifier) = reference {
+														identifier.name.clone()
+													} else {
+														report_diagnostic(Diagnostic {
+															message: "Must specify an \"alias\"  for a non-identifier reference".to_string(),
+															annotations: vec![],
+															hints: vec![],
+															span: Some(obj_expression.span.clone()),
+														});
+														continue;
+													}
+												}
+												_ => {
+													report_diagnostic(Diagnostic {
+														message: "Must specify an \"alias\" to lift this expression".to_string(),
+														annotations: vec![],
+														hints: vec![],
+														span: Some(obj_expression.span.clone()),
+													});
+													continue;
+												}
+											}
+										};
+
+										// manually build the expression to inject the alias
+										let mut expr_text = CodeMaker::default();
+										expr_text.append("({ obj: ");
+										expr_text.append(self.jsify_expression(obj_expression, ctx));
+										if let Some(ops) = ops {
+											expr_text.append(", ops: [");
+											for op in ops {
+												expr_text.append(self.jsify_expression(op, ctx));
+												expr_text.append(", ");
+											}
+											expr_text.append("]");
 										}
+										expr_text.append(", alias: \"");
+										expr_text.append(&alias);
+										expr_text.append("\" })");
+
+										lifts.insert(alias, (obj_expression, ops, expr_text));
 									}
 								}
 							}
@@ -761,14 +830,21 @@ impl<'a> JSifier<'a> {
 
 					let require_path = self.get_require_path(&path, expr_span);
 					if let Some(require_path) = require_path {
-						lift_string.append(format!(
-							"\"async (ctx, ...args) => require('{require_path}')['{export_name}'](ctx, ...args)\""
-						));
+						lift_string.append("\"async (ctx, ...args) => require('");
+						lift_string.append(require_path);
+						lift_string.append("')['");
+						lift_string.append(export_name);
+						lift_string.append("'](ctx, ...args)\"");
 					}
 
-					if let Some(arg) = arg_list.named_args.get("lifts") {
-						lift_string.append(", ");
-						lift_string.append(self.jsify_expression(arg, ctx))
+					if arg_list.named_args.get("lifts").is_some() {
+						let list = lifts
+							.iter()
+							.map(|(.., (.., expr_code))| expr_code.clone())
+							.collect_vec();
+						lift_string.append(", [");
+						lift_string.append(CodeMaker::from(list));
+						lift_string.append("]");
 					}
 
 					lift_string.append(")");

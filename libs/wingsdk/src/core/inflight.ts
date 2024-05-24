@@ -126,10 +126,14 @@ export function importInflight(
   const newGrants: Record<string, string[]> = {};
 
   // convert the lifts to the correct format for the Lifter
-  for (const [name, value] of Object.entries(lifts ?? {})) {
-    newLifts[name] = value.lift;
-    if (value.ops) {
-      newGrants[name] = value.ops;
+  for (const liftAnnotation of lifts ?? []) {
+    if (liftAnnotation.alias === undefined) {
+      throw new Error("The alias field is required for all lifts");
+    }
+
+    newLifts[liftAnnotation.alias] = liftAnnotation.obj;
+    if (liftAnnotation.ops) {
+      newGrants[liftAnnotation.alias] = liftAnnotation.ops;
     }
   }
 
