@@ -1,10 +1,7 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import {
-  Function,
-  FunctionInflightMethods as SimFunctionInflightMethods,
-} from "./function";
+import { FunctionInflightMethods as SimFunctionInflightMethods } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
@@ -59,7 +56,9 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
       Node.of(this).addConnection({
         source: this,
+        sourceOp: cloud.QueueInflightMethods.POP,
         target: this.dlq.queue,
+        targetOp: cloud.QueueInflightMethods.PUSH,
         name: "dead-letter queue",
       });
     }
@@ -80,7 +79,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
     const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
-    const fn = new Function(
+    const fn = new cloud.Function(
       this,
       App.of(this).makeId(this, "Consumer"),
       functionHandler,
@@ -111,7 +110,9 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.QueueInflightMethods.PUSH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "setConsumer()",
     });
 

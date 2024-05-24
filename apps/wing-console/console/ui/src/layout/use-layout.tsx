@@ -67,7 +67,6 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
   const edgeMetadata = trpc["app.edgeMetadata"].useQuery(
     {
       edgeId: selectedEdgeId || "",
-      showTests,
     },
     {
       enabled: !!selectedEdgeId,

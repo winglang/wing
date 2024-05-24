@@ -1,11 +1,11 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { Function } from "../cloud";
 import * as cloud from "../cloud";
 import { lift, LiftMap } from "../core";
 import { ToSimulatorOutput } from "../simulator";
@@ -45,7 +45,9 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "onMessage()",
     });
 
@@ -77,7 +79,9 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE_ASYNC,
       name: "subscribeQueue()",
     });
 

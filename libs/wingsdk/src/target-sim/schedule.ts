@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { ScheduleSchema } from "./schema-resources";
@@ -10,6 +9,7 @@ import {
   makeSimulatorJsClient,
   convertDurationToCronExpression,
 } from "./util";
+import { Function } from "../cloud";
 import * as cloud from "../cloud";
 import { lift } from "../core";
 import { ToSimulatorOutput } from "../simulator";
@@ -54,7 +54,9 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ScheduleInflightMethods.TICK,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "onTick()",
     });
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);

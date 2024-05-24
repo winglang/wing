@@ -67,23 +67,22 @@ export class Api extends cloud.Api implements IAwsApi {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions
+    props?: cloud.ApiEndpointOptions
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
 
-    if (props) {
-      console.warn(`Api.${lowerMethod} does not support props yet`);
-    }
     this._validatePath(path);
 
-    const fn = this.addHandler(inflight, method, path);
+    const fn = this.addHandler(inflight, method, path, props);
     const apiSpecEndpoint = this.api.addEndpoint(path, upperMethod, fn);
     this._addToSpec(path, upperMethod, apiSpecEndpoint, this.corsOptions);
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ApiInflightMethods.REQUEST,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: `${lowerMethod}()`,
     });
   }
@@ -202,9 +201,10 @@ export class Api extends cloud.Api implements IAwsApi {
   private addHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
+    props?: cloud.ApiEndpointOptions
   ): Function {
-    let fn = this.addInflightHandler(inflight, method, path);
+    let fn = this.addInflightHandler(inflight, method, path, props);
     if (!(fn instanceof Function)) {
       throw new Error("Api only supports creating tfaws.Function right now");
     }
@@ -220,7 +220,8 @@ export class Api extends cloud.Api implements IAwsApi {
   private addInflightHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
+    props?: cloud.ApiEndpointOptions
   ): Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
@@ -232,7 +233,8 @@ export class Api extends cloud.Api implements IAwsApi {
       handler = new Function(
         this,
         App.of(this).makeId(this, prefix),
-        newInflight
+        newInflight,
+        props
       );
       Node.of(handler).hidden = true;
       this.handlers[inflight._id] = handler;
