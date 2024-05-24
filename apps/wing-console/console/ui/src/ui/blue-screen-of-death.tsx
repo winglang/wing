@@ -52,9 +52,7 @@ export const BlueScreenOfDeath = memo(
             <OpenFileInEditorButton className="cursor-text select-text flex-grow flex flex-col h-full">
               <div className="py-10 overflow-auto h-full">
                 <div className="flex mb-4">
-                  <div className="bg-slate-400 px-4 text-[#004295]">
-                    {title}
-                  </div>
+                  <div className="underline font-semibold">{title}</div>
                 </div>
                 <span
                   className="outline-none whitespace-pre-wrap"
@@ -67,7 +65,10 @@ export const BlueScreenOfDeath = memo(
           <div className="flex flex-col items-center flex-shrink-0">
             <button
               onClick={copyError}
-              className="text-center px-4 py-1 text-white hover:bg-[#003A80] transition-all"
+              className={classNames(
+                "text-center px-4 py-1 transition-all",
+                "bg-slate-400 hover:bg-slate-450 px-4 text-[#004295]",
+              )}
             >
               Click here to copy the error
             </button>
