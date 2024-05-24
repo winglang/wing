@@ -25,16 +25,24 @@ pub class Example {
     counter.inc();
   }
 }
+
+let echo: inflight (str): str = @inflight("./inflight_ts/example1.ts");
+
 let example = new Example();
-let funcFunction = @inflight("./inline_typescript.ts",
-export: "main",
-lifts: [
-  { obj: example },
-  { obj: [1, 2, 3], alias: "numbers" },
-]);
+let funcFunction = @inflight("./inflight_ts/example2.ts",
+  export: "main",
+  lifts: [
+    { obj: example },
+    { obj: example, alias: "exampleCopy", ops: ["getMessage"]},
+    { obj: [1, 2, 3], alias: "numbers" },
+  ]
+);
 let func = new cloud.Function(funcFunction);
 
-let fileThatDoesNotExist: inflight (str): str = @inflight("./inflight_ts/example1.ts");
+
+test "invoke default function" {
+  assert(echo("message") == "message");
+}
 
 test "invoke inflight function" {
   funcFunction("message");

@@ -4,8 +4,28 @@
 ```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $func, $funcFunction }) {
+module.exports = function({ $echo }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      $helpers.assert($helpers.eq((await $echo("message")), "message"), "echo(\"message\") == \"message\"");
+    }
+  }
+  return $Closure1;
+}
+//# sourceMappingURL=inflight.$Closure1-2.cjs.map
+```
+
+## inflight.$Closure2-2.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $func, $funcFunction }) {
+  class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -16,9 +36,9 @@ module.exports = function({ $func, $funcFunction }) {
       (await $func.invoke("message"));
     }
   }
-  return $Closure1;
+  return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure1-2.cjs.map
+//# sourceMappingURL=inflight.$Closure2-2.cjs.map
 ```
 
 ## inflight.Bar-1.cjs
@@ -307,8 +327,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-2.cjs")({
-            $func: ${$stdlib.core.liftObject(func)},
-            $funcFunction: ${$stdlib.core.liftObject(funcFunction)},
+            $echo: ${$stdlib.core.liftObject(echo)},
           })
         `;
       }
@@ -317,6 +336,42 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+            [echo, ["handle"]],
+          ],
+          "$inflight_init": [
+            [echo, []],
+          ],
+        });
+      }
+    }
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-2.cjs")({
+            $func: ${$stdlib.core.liftObject(func)},
+            $funcFunction: ${$stdlib.core.liftObject(funcFunction)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType()};
+            const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -343,11 +398,12 @@ class $Root extends $stdlib.std.Resource {
     (expect.Util.equal($helpers.resolveDirname(__dirname, "../../.."), (fs.Util.dirname(currentFile))));
     (expect.Util.equal((bar.Bar.getSubdir(this)), (fs.Util.join($helpers.resolveDirname(__dirname, "../../.."), "subdir"))));
     const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+    const echo = $stdlib.core.importInflight(`require('../../../inflight_ts/example1.ts')["default"]`);
     const example = new Example(this, "Example");
-    const funcFunction = $stdlib.core.importInflight(`require('../../../inline_typescript.ts')["main"]`, [({ obj: example, alias: "example" }), ({ obj: [1, 2, 3], alias: "numbers" })]);
+    const funcFunction = $stdlib.core.importInflight(`require('../../../inflight_ts/example2.ts')["main"]`, [({ obj: example, alias: "example" }), ({ obj: example, ops: ["getMessage", ], alias: "exampleCopy" }), ({ obj: [1, 2, 3], alias: "numbers" })]);
     const func = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", funcFunction);
-    const fileThatDoesNotExist = $stdlib.core.importInflight(`require('../../../inflight_ts/example1.ts')["default"]`);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke inflight function", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke default function", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:invoke inflight function", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

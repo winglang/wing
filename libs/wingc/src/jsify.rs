@@ -697,14 +697,18 @@ impl<'a> JSifier<'a> {
 				}
 				IntrinsicKind::Inflight => {
 					let arg_list = intrinsic.arg_list.as_ref().unwrap();
-					let path = if let ExprKind::Literal(Literal::String(ss)) = &arg_list.pos_args[0].kind {
-						// trim off the first and last character (the quotes)
-						let ss = &ss[1..ss.len() - 1];
+					let path = if let Some(ss) = &arg_list.pos_args[0].as_static_string() {
 						let extern_path = Utf8Path::new(&ss);
 
 						// TODO Warn if path does not exist or create it automatically?
 						normalize_path(extern_path, ctx.source_path)
 					} else {
+						report_diagnostic(Diagnostic {
+							message: "Inflight path must be a non-interpolated string literal".to_string(),
+							span: Some(arg_list.pos_args[0].span.clone()),
+							annotations: vec![],
+							hints: vec![],
+						});
 						return new_code!(&expression.span, "");
 					};
 
@@ -754,8 +758,8 @@ impl<'a> JSifier<'a> {
 										});
 
 										let alias = if let Some(alias) = fields.get("alias") {
-											if let ExprKind::Literal(Literal::String(alias)) = &alias.kind {
-												alias.clone()
+											if let Some(alias) = alias.as_static_string() {
+												alias.to_string()
 											} else {
 												report_diagnostic(Diagnostic {
 													message: "\"alias\" must be a non-interpolated string literal".to_string(),

@@ -1,4 +1,4 @@
-import inflight from "./inline_typescript.inflight";
+import inflight from "./example2.inflight";
 
 export const main = inflight(async ({ example, numbers }, message) => {
   const exampleMessage = await example.getMessage();

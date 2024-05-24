@@ -708,6 +708,20 @@ impl Expr {
 		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
 		Self { id, kind, span }
 	}
+
+	pub fn as_static_string(&self) -> Option<&str> {
+		match &self.kind {
+			ExprKind::Literal(Literal::String(s)) => {
+				// strip the quotes ("data")
+				Some(&s[1..s.len() - 1])
+			}
+			ExprKind::Literal(Literal::NonInterpolatedString(s)) => {
+				// strip the quotes (#"data")
+				Some(&s[2..s.len() - 1])
+			}
+			_ => None,
+		}
+	}
 }
 
 pub type ArgListId = usize;
