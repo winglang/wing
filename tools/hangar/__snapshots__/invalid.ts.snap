@@ -2529,6 +2529,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`inflight_intrinsic.test.w 1`] = `
+"error: Inflight path must be a non-interpolated string literal
+  --> ../../../examples/tests/invalid/inflight_intrinsic.test.w:2:40
+  |
+2 | let func: inflight (): str = @inflight(funkPath, lifts: [
+  |                                        ^^^^^^^^
+
+
+error: Must specify an \\"alias\\" to lift this expression
+  --> ../../../examples/tests/invalid/inflight_intrinsic.test.w:4:10
+  |
+4 |   { obj: [1, 2, 3] }
+  |          ^^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`inflight_reassign.test.w 1`] = `
 "error: Variable cannot be reassigned from inflight
   --> ../../../examples/tests/invalid/inflight_reassign.test.w:5:3

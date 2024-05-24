@@ -1,5 +1,3 @@
-/// @inflight
-
 let funkPath = "./path.ts";
 let func: inflight (): str = @inflight(funkPath, lifts: [
 //                   ^^^^^^^^ Must be a string literal
