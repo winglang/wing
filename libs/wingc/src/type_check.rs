@@ -4567,21 +4567,39 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				.as_function_sig()
 				.expect("ctor to be a function");
 			if let FunctionBody::Statements(ctor_body) = &ctor_def.body {
-				if parent_ctor_sig.min_parameters() > 0
-					&& !matches!(
-						ctor_body.statements.first(),
-						Some(Stmt {
-							kind: StmtKind::SuperConstructor { .. },
-							..
-						})
-					) {
-					self.spanned_error(
-						ctor_body,
-						format!(
-							"Missing super() call as first statement of {}'s constructor",
-							ast_class.name
-						),
-					);
+				// Make sure there's a `super()` call to the parent ctor
+				if parent_ctor_sig.min_parameters() > 0 {
+					// Find the `super()` call
+					if let Some((idx, super_call)) = ctor_body
+						.statements
+						.iter()
+						.enumerate()
+						.find(|(_, s)| matches!(s.kind, StmtKind::SuperConstructor { .. }))
+					{
+						// We have a super call, make sure it's the first statement (after any type defs)
+						let expected_idx = ctor_body
+							.statements
+							.iter()
+							.position(|s| !s.kind.is_type_def())
+							.expect("at least the super call stmt");
+						if idx != expected_idx {
+							self.spanned_error(
+								super_call,
+								format!(
+									"super() call must be the first statement of {}'s constructor",
+									ast_class.name
+								),
+							);
+						}
+					} else {
+						self.spanned_error(
+							ctor_body,
+							format!(
+								"Missing super() call as first statement of {}'s constructor",
+								ast_class.name
+							),
+						);
+					}
 				}
 			}
 		}

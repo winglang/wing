@@ -509,6 +509,15 @@ pub enum StmtKind {
 	ExplicitLift(ExplicitLift),
 }
 
+impl StmtKind {
+	pub fn is_type_def(&self) -> bool {
+		matches!(
+			self,
+			StmtKind::Class(_) | StmtKind::Interface(_) | StmtKind::Struct(_) | StmtKind::Enum(_)
+		)
+	}
+}
+
 #[derive(Debug)]
 pub struct ExplicitLift {
 	pub qualifications: Vec<LiftQualification>,

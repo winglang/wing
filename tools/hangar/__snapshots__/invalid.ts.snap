@@ -726,13 +726,6 @@ exports[`class.test.w 1`] = `
    |     ^^^^^^^^
 
 
-error: Call to super constructor must be first statement in constructor
-    --> ../../../examples/tests/invalid/class.test.w:109:5
-    |
-109 |     super(name, major);
-    |     ^^^^^^^^^^^^^^^^^^^
-
-
 error: Call to super constructor can only be done from within class constructor
     --> ../../../examples/tests/invalid/class.test.w:114:5
     |
@@ -887,16 +880,11 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^
 
 
-error: Missing super() call as first statement of PaidStudent's constructor
-    --> ../../../examples/tests/invalid/class.test.w:107:45
-    |  
-107 |     new(name: str, major: str, hrlyWage: num) {
-    | /---------------------------------------------^
-108 | |     this.hrlyWage = hrlyWage;
-109 | |     super(name, major);
-110 | | //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
-111 | |   }
-    | \\\\---^
+error: super() call must be the first statement of PaidStudent's constructor
+    --> ../../../examples/tests/invalid/class.test.w:109:5
+    |
+109 |     super(name, major);
+    |     ^^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot instantiate abstract class \\"Resource\\"
