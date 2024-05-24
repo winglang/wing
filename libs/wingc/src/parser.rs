@@ -640,7 +640,7 @@ impl<'s> Parser<'s> {
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
 			"test_statement" => self.build_test_statement(statement_node)?,
 			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
-			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase, idx)?,
+			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase)?,
 			"lift_statement" => self.build_lift_statement(statement_node, phase)?,
 			"ERROR" => return self.with_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
@@ -2616,10 +2616,9 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_super_constructor_statement(&self, statement_node: &Node, phase: Phase, idx: usize) -> Result<StmtKind, ()> {
+	fn build_super_constructor_statement(&self, statement_node: &Node, phase: Phase) -> Result<StmtKind, ()> {
 		// Calls to super constructor can only occur in specific scenario:
-		// 1. We are in a derived class' constructor
-		// 2. The statement is the first statement in the block
+		// We are in a derived class' constructor
 		let parent_block = statement_node.parent();
 		if let Some(p) = parent_block {
 			let parent_block_context = p.parent();
@@ -2627,14 +2626,6 @@ impl<'s> Parser<'s> {
 			if let Some(context) = parent_block_context {
 				match context.kind() {
 					"initializer" | "inflight_initializer" => {
-						// Check that call to super constructor was first in statement block
-						if idx != 0 {
-							self.with_error(
-								"Call to super constructor must be first statement in constructor",
-								statement_node,
-							)?;
-						};
-
 						// Check that the class has a parent
 						let class_node = context.parent().unwrap().parent().unwrap();
 						let parent_class = class_node.child_by_field_name("parent");
