@@ -42,27 +42,13 @@ export const BlueScreenOfDeath = memo(
     return (
       <div
         className={classNames(
-          "absolute inset-0",
-          "px-10 pb-4 bg-[#004295] flex justify-center items-center",
+          "absolute h-full w-full z-50 px-10 py-10 bg-[#004295] overflow-auto flex justify-center items-center",
         )}
         data-testid="blue-screen-of-death"
       >
-        <div className="relative w-full h-full text-md font-share-tech text-white flex flex-col max-w-7xl break-words space-y-4">
-          <div className="flex-grow overflow-hidden flex flex-col">
-            <OpenFileInEditorButton className="cursor-text select-text flex-grow flex flex-col h-full">
-              <div className="py-10 overflow-auto h-full">
-                <div className="flex mb-4">
-                  <div className="underline font-semibold">{title}</div>
-                </div>
-                <span
-                  className="outline-none whitespace-pre-wrap"
-                  dangerouslySetInnerHTML={{ __html: formattedPathsError }}
-                />
-              </div>
-            </OpenFileInEditorButton>
-          </div>
-
-          <div className="flex flex-col items-center flex-shrink-0">
+        <div className="h-full w-full text-md font-share-tech text-white max-w-7xl break-words space-y-4">
+          <div className="flex items-center gap-x-4">
+            <div className="underline">{title}</div>
             <button
               onClick={copyError}
               className={classNames(
@@ -70,8 +56,25 @@ export const BlueScreenOfDeath = memo(
                 "bg-slate-400 hover:bg-slate-450 px-4 text-[#004295]",
               )}
             >
-              Click here to copy the error
+              Copy error
             </button>
+          </div>
+          <div className="space-y-4">
+            <OpenFileInEditorButton className="cursor-text select-text">
+              <div className="py-4">
+                <span
+                  className="outline-none whitespace-pre-wrap"
+                  dangerouslySetInnerHTML={{ __html: formattedPathsError }}
+                />
+              </div>
+            </OpenFileInEditorButton>
+
+            {displayLinks && (
+              <div className="w-full text-center pb-4">
+                Click on any error reference to navigate to your IDE{" "}
+                <span className="animate-ping">_</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
