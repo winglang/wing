@@ -126,7 +126,9 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const fn = this.createOrGetFunction(inflight, props, path, method);
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ApiInflightMethods.REQUEST,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: `${method.toLowerCase()} ${path}`,
     });
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
