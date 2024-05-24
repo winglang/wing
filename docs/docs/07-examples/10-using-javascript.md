@@ -28,8 +28,11 @@ let bucket = new cloud.Bucket();
 bucket.onCreate(@inflight("./bucket_create.ts"));
 //              ^ onCreate expects an `inflight (str): void` function, so the file must export a function with a typescript signature that matches
 //                        ^ Relative (to current file) path to javascript or typescript file
-//                          Note: This must be a static string and the file must exist at compile time
+//                          Note: This must be a static string
 ```
+
+`wing compile` will generate `bucket_create.inflight.ts` while will which will contain all of the information needed for TypeScript type checking and IDE support.
+With that, you can create the `bucket_create.ts` file:
 
 ```ts
 // bucket_create.ts
@@ -41,8 +44,8 @@ export default inflight(async ({}, file) => {
 });
 ```
 
-`wing compile` will generate `bucket_create.inflight.ts` while will which will contain all of the information needed for TypeScript type checking and IDE support.
-Something missing here is the ability to reference preflight resources inside an inflight function. Let's create a Queue and pass it to the inflight function:
+Something missing here is the ability to reference preflight resources inside an inflight function.
+Let's create a Queue and pass it to the inflight function while exploring other options:
 
 ```wing
 // main.w
@@ -50,12 +53,14 @@ bring cloud;
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 
-bucket.onCreate(@inflight("./bucket_create.ts", lifts: { 
-  myQueue: { lift: queue, ops: ["push"] }
-//^ name, does not need to match the variable being lifted
-//               ^ object to lift, can be any preflight expression
-//                           ^ methods to lift, if not provided then all methods will be granted
-}));
+bucket.onCreate(@inflight("./bucket_create.ts",
+  export: "default",
+//        ^ Optional named export from the file, default is the default export
+  lifts:[{ obj: queue, alias: "myQueue", ops: ["push"] }],
+//       ^ object to lift, can be any preflight expression
+//                     ^ Optional alias, by default, this will be the variable name passed to obj
+//                                     ^ methods to lift, if not provided then all methods will be granted
+));
 ``` 
 
 ```ts
