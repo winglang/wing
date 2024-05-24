@@ -58,7 +58,6 @@ const defaultLayoutConfig: LayoutConfig = {
   },
   errorScreen: {
     position: "default",
-    displayTitle: true,
     displayLinks: true,
   },
   panels: {
@@ -217,10 +216,8 @@ export const DefaultLayout = ({
               layout.errorScreen?.position === "default" && (
                 <div className="flex-1 flex relative">
                   <BlueScreenOfDeath
-                    title={"An error has occurred:"}
+                    title="An error has occurred"
                     error={errorMessage.data ?? ""}
-                    displayLinks={layout.errorScreen?.displayLinks}
-                    displayWingTitle={layout.errorScreen?.displayTitle}
                   />
                 </div>
               )}
@@ -425,10 +422,9 @@ export const DefaultLayout = ({
                       )}
                     >
                       <BlueScreenOfDeath
-                        title={"An error has occurred:"}
+                        title="An error has occurred"
                         error={errorMessage.data ?? ""}
                         displayLinks={layout.errorScreen?.displayLinks}
-                        displayWingTitle={layout.errorScreen?.displayTitle}
                       />
                     </TopResizableWidget>
                   </div>
