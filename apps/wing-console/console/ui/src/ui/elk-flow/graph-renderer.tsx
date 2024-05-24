@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 
 import { assert } from "./assert.js";
 import {
@@ -19,8 +20,9 @@ import {
 } from "./node-children.js";
 import { NodeContext, type NodeProps } from "./node.js";
 import { PortContext, type PortProps } from "./port.js";
-import { createPrependPortal } from "./preprend-portal.js";
 import type { IntrinsicElements, EdgeComponent } from "./types.js";
+
+const DepthContext = createContext<number>(0);
 
 const ElkNodeContext = createContext<ElkNode>({
   id: "",
@@ -42,6 +44,8 @@ const NodeComponent = <K extends keyof IntrinsicElements = "div">({
   const portal = useContext(PortalContext);
   assert(portal);
 
+  const depth = useContext(DepthContext);
+
   const parent = useContext(ElkNodeContext);
   const node = useMemo(
     () => parent.children?.find((child) => child.id === elk.id),
@@ -51,7 +55,7 @@ const NodeComponent = <K extends keyof IntrinsicElements = "div">({
   const origins = useContext(OriginsContext);
   const origin = origins.get(elk.id);
 
-  return createPrependPortal(
+  return createPortal(
     createElement(
       as ?? "div",
       {
@@ -63,12 +67,15 @@ const NodeComponent = <K extends keyof IntrinsicElements = "div">({
           left: `${origin?.x ?? 0}px`,
           width: `${node?.width ?? 0}px`,
           height: `${node?.height ?? 0}px`,
+          zIndex: depth,
         },
       },
       node ? (
-        <ElkNodeContext.Provider key="children" value={node}>
-          {children}
-        </ElkNodeContext.Provider>
+        <DepthContext.Provider value={depth + 1}>
+          <ElkNodeContext.Provider key="children" value={node}>
+            {children}
+          </ElkNodeContext.Provider>
+        </DepthContext.Provider>
       ) : (
         <></>
       ),
