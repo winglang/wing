@@ -826,7 +826,7 @@ impl<'a> JSifier<'a> {
 						.add_file(&shim_path, shim.to_string())
 						.unwrap();
 
-					let mut lift_string = new_code!(expr_span, "$stdlib.core.importInflight(");
+					let mut lift_string = new_code!(expr_span, STDLIB_CORE, ".importInflight(");
 
 					let require_path = self.get_require_path(&path, expr_span);
 					if let Some(require_path) = require_path {

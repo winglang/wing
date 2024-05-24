@@ -120,7 +120,7 @@ export function importInflight(
   /**
    * The lifts the JS needs to be able to access.
    */
-  lifts: ImportInflightOptions["lifts"]
+  lifts?: ImportInflightOptions["lifts"]
 ) {
   const newLifts: Record<string, any> = {};
   const newGrants: Record<string, string[]> = {};
