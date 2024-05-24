@@ -1,5 +1,4 @@
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import { Button, useNotifications } from "@wingconsole/design-system";
+import { useNotifications } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { memo, useCallback, useEffect, useState } from "react";
 
