@@ -69,7 +69,6 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         const foo = (() => {
-          const __parent_this_1 = this;
           class $Closure1 extends $stdlib.std.AutoIdResource {
             _id = $stdlib.core.closureId();
             constructor($scope, $id, ) {

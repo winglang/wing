@@ -56,7 +56,7 @@ export const EndpointInteraction = ({
             <Button
               id={toggleId}
               small
-              title="Open a tunnel for this enpoint"
+              title="Open a tunnel for this endpoint"
               disabled={endpoint.exposeStatus === "connecting"}
               className="px-0.5 h-7 content-end"
               onClick={exposeEndpoint}
