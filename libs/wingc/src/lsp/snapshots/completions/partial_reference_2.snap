@@ -4,8 +4,5 @@ source: libs/wingc/src/lsp/completions.rs
 - label: bThing
   kind: 5
   detail: Inner
-  documentation:
-    kind: markdown
-    value: "```wing\nbThing: Inner\nstruct Inner\n```\n---\n### Fields\n- `durationThing` — `duration`"
   sortText: ab|bThing
 

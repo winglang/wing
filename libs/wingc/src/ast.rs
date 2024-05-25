@@ -596,6 +596,10 @@ impl Display for IntrinsicKind {
 }
 
 impl Documented for IntrinsicKind {
+	fn docs(&self) -> Option<&crate::docs::Docs> {
+		None
+	}
+
 	fn render_docs(&self) -> String {
 		match self {
 			IntrinsicKind::Dirname => r#"Get the normalized absolute path of the current source file's directory.

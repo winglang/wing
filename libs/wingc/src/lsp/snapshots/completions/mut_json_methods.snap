@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): bool"
   documentation:
     kind: markdown
-    value: "```wing\nasBool: (): bool\n```\n---\nConvert Json element to boolean if possible.\n\n### Returns\na boolean."
+    value: "Convert Json element to boolean if possible.\n\n#### Returns\na boolean."
   sortText: ff|asBool
   insertText: asBool()
 - label: asNum
@@ -14,7 +14,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): num"
   documentation:
     kind: markdown
-    value: "```wing\nasNum: (): num\n```\n---\nConvert Json element to number if possible.\n\n### Returns\na number."
+    value: "Convert Json element to number if possible.\n\n#### Returns\na number."
   sortText: ff|asNum
   insertText: asNum()
 - label: asStr
@@ -22,7 +22,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): str"
   documentation:
     kind: markdown
-    value: "```wing\nasStr: (): str\n```\n---\nConvert Json element to string if possible.\n\n### Returns\na string."
+    value: "Convert Json element to string if possible.\n\n#### Returns\na string."
   sortText: ff|asStr
   insertText: asStr()
 - label: delete
@@ -30,7 +30,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): bool"
   documentation:
     kind: markdown
-    value: "```wing\ndelete: (key: str): bool\n```\n---\nRemoves the specified element from a map.\n### Parameters\n- `key` — `str` — The key.\n\n### Returns\ntrue if the given key is no longer present"
+    value: "Removes the specified element from a map.\n\n#### Returns\ntrue if the given key is no longer present"
   sortText: ff|delete
   insertText: delete($1)
   insertTextFormat: 2
@@ -42,7 +42,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): MutJson"
   documentation:
     kind: markdown
-    value: "```wing\nget: (key: str): MutJson\n```\n---\nReturns the value associated with the specified Json key.\n### Parameters\n- `key` — `str` — The key of the Json property.\n\n### Returns\nThe value associated with the specified Json key\n\n*@throws* *Json property does not exist if the given key is not part of an existing property*"
+    value: "Returns the value associated with the specified Json key.\n\n#### Returns\nThe value associated with the specified Json key\n\n*@throws* *Json property does not exist if the given key is not part of an existing property*"
   sortText: ff|get
   insertText: get($1)
   insertTextFormat: 2
@@ -54,7 +54,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(index: num): MutJson"
   documentation:
     kind: markdown
-    value: "```wing\ngetAt: (index: num): MutJson\n```\n---\nReturns a specified element at a given index from MutJson Array.\n### Parameters\n- `index` — `num` — The index of the element in the MutJson Array to return.\n\n### Returns\nThe element at given index in MutJson Array\n\n*@throws* *index out of bounds error if the given index does not exist for the MutJson Array*"
+    value: "Returns a specified element at a given index from MutJson Array.\n\n#### Returns\nThe element at given index in MutJson Array\n\n*@throws* *index out of bounds error if the given index does not exist for the MutJson Array*"
   sortText: ff|getAt
   insertText: getAt($1)
   insertTextFormat: 2
@@ -66,7 +66,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): bool"
   documentation:
     kind: markdown
-    value: "```wing\nhas: (key: str): bool\n```\n---\nChecks if a Json object has a given key.\n### Parameters\n- `key` — `str` — The key to check.\n\n### Returns\nBoolean value corresponding to whether the key exists"
+    value: "Checks if a Json object has a given key.\n\n#### Returns\nBoolean value corresponding to whether the key exists"
   sortText: ff|has
   insertText: has($1)
   insertTextFormat: 2
@@ -78,7 +78,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str, value: MutJson): void"
   documentation:
     kind: markdown
-    value: "```wing\nset: (key: str, value: MutJson): void\n```\n---\nAdds or updates an element in MutJson with a specific key and value.\n### Parameters\n- `key` — `str` — The key of the element to add.\n- `value` — `MutJson` — The value of the element to add."
+    value: Adds or updates an element in MutJson with a specific key and value.
   sortText: ff|set
   insertText: set($1)
   insertTextFormat: 2
@@ -90,7 +90,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(index: num, value: MutJson): void"
   documentation:
     kind: markdown
-    value: "```wing\nsetAt: (index: num, value: MutJson): void\n```\n---\nSet element in MutJson Array with a specific key and value.\n### Parameters\n- `index` — `num`\n- `value` — `MutJson` — The value of the element to set."
+    value: Set element in MutJson Array with a specific key and value.
   sortText: ff|setAt
   insertText: setAt($1)
   insertTextFormat: 2
@@ -102,7 +102,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): bool?"
   documentation:
     kind: markdown
-    value: "```wing\ntryAsBool: (): bool?\n```\n---\nConvert Json element to boolean if possible.\n\n### Returns\na boolean."
+    value: "Convert Json element to boolean if possible.\n\n#### Returns\na boolean."
   sortText: ff|tryAsBool
   insertText: tryAsBool()
 - label: tryAsNum
@@ -110,7 +110,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): num?"
   documentation:
     kind: markdown
-    value: "```wing\ntryAsNum: (): num?\n```\n---\nConvert Json element to number if possible.\n\n### Returns\na number."
+    value: "Convert Json element to number if possible.\n\n#### Returns\na number."
   sortText: ff|tryAsNum
   insertText: tryAsNum()
 - label: tryAsStr
@@ -118,7 +118,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): str?"
   documentation:
     kind: markdown
-    value: "```wing\ntryAsStr: (): str?\n```\n---\nConvert Json element to string if possible.\n\n### Returns\na string."
+    value: "Convert Json element to string if possible.\n\n#### Returns\na string."
   sortText: ff|tryAsStr
   insertText: tryAsStr()
 - label: tryGet
@@ -126,7 +126,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): MutJson?"
   documentation:
     kind: markdown
-    value: "```wing\ntryGet: (key: str): MutJson?\n```\n---\nOptionally returns an specified element from the Json.\n### Parameters\n- `key` — `str` — The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+    value: "Optionally returns an specified element from the Json.\n\n#### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
   sortText: ff|tryGet
   insertText: tryGet($1)
   insertTextFormat: 2
@@ -138,7 +138,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(index: num): MutJson?"
   documentation:
     kind: markdown
-    value: "```wing\ntryGetAt: (index: num): MutJson?\n```\n---\nOptionally returns a specified element at a given index from Json Array.\n### Parameters\n- `index` — `num` — The index of the element in the Json Array to return.\n\n### Returns\nThe element at given index in Json Array, or undefined if index is not valid"
+    value: "Optionally returns a specified element at a given index from Json Array.\n\n#### Returns\nThe element at given index in Json Array, or undefined if index is not valid"
   sortText: ff|tryGetAt
   insertText: tryGetAt($1)
   insertTextFormat: 2

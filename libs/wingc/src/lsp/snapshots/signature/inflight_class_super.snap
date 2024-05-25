@@ -5,7 +5,7 @@ signatures:
   - label: "(sound: str): A"
     documentation:
       kind: markdown
-      value: "### Parameters\n- `sound` — `str`"
+      value: ""
     parameters:
       - label: "sound: str"
     activeParameter: 0

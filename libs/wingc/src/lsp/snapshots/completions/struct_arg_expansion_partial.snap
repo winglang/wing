@@ -1,6 +1,24 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: "a1:"
+  kind: 5
+  detail: num
+  sortText: "ab|a|a1:"
+  insertText: "a1: $1"
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
+- label: "b1:"
+  kind: 5
+  detail: num
+  sortText: "ab|a|b1:"
+  insertText: "b1: $1"
+  insertTextFormat: 2
+  command:
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
 - label: this
   kind: 6
   detail: Construct
@@ -32,12 +50,12 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: Foo
+- label: S
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct Foo {\n  x: str;\n  y: num;\n}\n```"
-  sortText: hh|Foo
+    value: "```wing\nstruct S {\n  a1: num;\n  b1: num;\n}\n```"
+  sortText: hh|S
 - label: Json
   kind: 14
   sortText: kl|zyJson

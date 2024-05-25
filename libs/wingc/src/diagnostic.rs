@@ -237,6 +237,10 @@ impl WingSpan {
 		}
 	}
 
+	pub fn byte_size(&self) -> usize {
+		self.end_offset - self.start_offset
+	}
+
 	/// Checks if this span is the default span. This means the span is covers nothing by ending at (0,0).
 	pub fn is_default(&self) -> bool {
 		self.end == WingLocation::default()

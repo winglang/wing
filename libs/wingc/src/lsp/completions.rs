@@ -14,7 +14,8 @@ use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
 use crate::docs::Documented;
 use crate::lsp::sync::{JSII_TYPES, PROJECT_DATA, WING_TYPES};
-use crate::type_check::symbol_env::{LookupResult, StatementIdx};
+use crate::type_check::jsii_importer::is_construct_base;
+use crate::type_check::symbol_env::{LookupResult, StatementIdx, SymbolEnvKind};
 use crate::type_check::{
 	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, ClassLike, Namespace, Struct, SymbolKind, Type,
 	TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
@@ -427,7 +428,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						};
 					}
 				}
-			} else if !last_char_is_colon && (nearest_non_reference.kind() == "argument_list") {
+			} else if !last_char_is_colon && matches!(nearest_non_reference.kind(), "argument_list" | "positional_argument") {
 				if let Some(callish_expr) = scope_visitor.expression_trail.iter().rev().find_map(|e| match &e.kind {
 					ExprKind::Call { arg_list, callee } => Some((
 						match callee {
@@ -441,8 +442,15 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					ExprKind::New(new_expr) => Some((types.get_expr_type(&e), &new_expr.arg_list)),
 					_ => None,
 				}) {
-					let mut completions =
-						get_current_scope_completions(&types, &scope_visitor, &node_to_complete, &preceding_text);
+					let mut completions = vec![];
+
+					if !matches!(
+						nearest_non_reference.prev_named_sibling().map(|n| n.kind()),
+						Some("keyword_argument")
+					) {
+						// We haven't run into any keyword args yet, so let's show options for positional args (expressions)
+						completions = get_current_scope_completions(&types, &scope_visitor, &node_to_complete, &preceding_text);
+					}
 
 					let arg_list_strings = &callish_expr
 						.1
@@ -1014,6 +1022,17 @@ fn get_completions_from_class(
 				return None;
 			}
 
+			// ignore members from the constructs library
+			if let SymbolEnvKind::Type(t) = symbol_data.2.env.kind {
+				if let Some(class) = t.as_class() {
+					if let Some(fqn) = &class.fqn {
+						if fqn.starts_with("constructs.") || is_construct_base(fqn) {
+							return None;
+						}
+					}
+				}
+			}
+
 			// See `Phase::can_call_to` for phase access rules
 			if let Some(current_phase) = current_phase {
 				if variable.type_.maybe_unwrap_option().as_function_sig().is_some()
@@ -1034,6 +1053,17 @@ fn get_completions_from_class(
 		.collect()
 }
 
+fn make_documentation(text: String) -> Option<Documentation> {
+	if text.is_empty() {
+		None
+	} else {
+		Some(Documentation::MarkupContent(MarkupContent {
+			kind: MarkupKind::Markdown,
+			value: text,
+		}))
+	}
+}
+
 fn get_intrinsic_list(types: &Types) -> Vec<CompletionItem> {
 	let mut completions = vec![];
 
@@ -1042,14 +1072,9 @@ fn get_intrinsic_list(types: &Types) -> Vec<CompletionItem> {
 			continue;
 		};
 
-		let documentation = Some(Documentation::MarkupContent(MarkupContent {
-			kind: MarkupKind::Markdown,
-			value: intrinsic.render_docs(),
-		}));
-
 		let mut item = CompletionItem {
 			label: intrinsic.to_string(),
-			documentation,
+			documentation: make_documentation(intrinsic.render_docs()),
 			kind: Some(CompletionItemKind::FUNCTION),
 			..Default::default()
 		};
@@ -1067,15 +1092,10 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 		return None;
 	}
 
-	let documentation = Some(Documentation::MarkupContent(MarkupContent {
-		kind: MarkupKind::Markdown,
-		value: symbol_kind.render_docs(),
-	}));
-
 	Some(match symbol_kind {
 		SymbolKind::Type(t) => CompletionItem {
 			label: name.to_string(),
-			documentation,
+			documentation: make_documentation(symbol_kind.render_docs()),
 			kind: Some(match **t {
 				Type::Array(_)
 				| Type::MutArray(_)
@@ -1111,11 +1131,12 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 				Some(CompletionItemKind::VARIABLE)
 			};
 			let is_method = kind == Some(CompletionItemKind::FUNCTION);
+			let docs = v.docs.as_ref().or_else(|| v.type_.docs());
 
 			let mut completion_item = CompletionItem {
 				label: name.to_string(),
 				detail: Some(v.type_.to_string()),
-				documentation,
+				documentation: docs.and_then(|d| make_documentation(d.render())),
 				kind,
 				..Default::default()
 			};
@@ -1139,7 +1160,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 		}
 		SymbolKind::Namespace(..) => CompletionItem {
 			label: name.to_string(),
-			documentation,
+			documentation: make_documentation(symbol_kind.render_docs()),
 			kind: Some(CompletionItemKind::MODULE),
 			..Default::default()
 		},
@@ -1224,6 +1245,17 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_expr(&mut self, node: &'a Expr) {
 		let mut set_node = false;
 
+		if self.nearest_expr.is_none() && !node.span.is_default() && node.span.contains_location(&self.exact_position) {
+			if let Some(last) = self.expression_trail.last() {
+				if node.span.byte_size() > last.span.byte_size() {
+					// This typically happens when inside transformed/generated code
+					// where the order of nodes is not necessarily depth-first
+					return;
+				}
+			}
+			self.expression_trail.push(node);
+		}
+
 		// if the span is exactly the same, we want to set the node
 		if node.span.start == self.target_span.start && node.span.end == self.target_span.end {
 			set_node = true;
@@ -1248,10 +1280,6 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 					}
 				}
 			}
-		}
-
-		if self.nearest_expr.is_none() && node.span.contains_location(&self.exact_position) {
-			self.expression_trail.push(node);
 		}
 
 		// if this node is possibly what we're looking for, no need to visit its children
@@ -1759,6 +1787,21 @@ x(one: "", )
 	);
 
 	test_completion_list!(
+		call_struct_expansion_partial_text,
+		r#"
+struct A {
+	one: str;
+	two: str;
+}
+
+let x = (arg1: A) => {};
+
+x(one: "", tw )
+           //^
+"#
+	);
+
+	test_completion_list!(
 		nested_struct_literal,
 		r#"
 struct Inner {
@@ -1957,6 +2000,16 @@ let s: S = { a: 1, b:  };
                    //^
 "#,
 		assert!(struct_show_values.iter().any(|c| c.label == "x"))
+	);
+
+	test_completion_list!(
+		struct_arg_expansion_partial,
+		r#"
+struct S { a1: num; b1: num; }
+let func = (a: num, s: S) => {};
+func(1, a )
+       //^
+"#,
 	);
 
 	test_completion_list!(
