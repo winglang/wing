@@ -98,7 +98,7 @@ Replace `<bucket-name>`, `<region>`, `path/to/my/key/terraform.tfstate` and `<ta
 
 
 ```bash
-wing compile -t tf-aws --plugins=plugin.static-backend.js main.w
+wing compile -t tf-aws -t plugin.static-backend.js main.w
 ```
 
 You can find a more detailed example [here](https://github.com/winglang/examples/tree/main/examples/s3-backend).
