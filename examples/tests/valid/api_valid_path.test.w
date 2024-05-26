@@ -1,6 +1,8 @@
 bring cloud;
 bring expect;
 
+let api = new cloud.Api() as "default api";
+
 let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     body: "ok",
@@ -8,23 +10,22 @@ let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 };
 
-let testInvalidPath = (path:str) => {
-  let api = new cloud.Api() as "api for path {path}";
+let testInvalidPath = (path:str, apiInstance: cloud.Api?) => {
   let var error = "";
   let expected = "Invalid path {path}. Url parts can only contain alpha-numeric chars, \"-\", \"_\" and \".\". Params can only contain alpha-numeric chars and \"_\".";
   try {
-    api.get(path, handler);
+    (apiInstance ?? api).get(path, handler);
   } catch e {
     error = e;
   }
   expect.equal(error, expected);
 };
 
-let testValidPath = (path:str) => {
-  let api = new cloud.Api() as "api for path {path}";
+
+let testValidPath = (path:str, apiInstance: cloud.Api?) => {
   let var error = "";
   try {
-    api.get(path, handler);
+    (apiInstance ?? api).get(path, handler);
   } catch e {
     error = e;
   }
@@ -65,4 +66,4 @@ testValidPath("/test/segment1/:param1/segment2?query1=value1?query2=value2");
 testValidPath("/test/segment1/segment2?query=value1&query2=value2");
 testValidPath("/test/path.withDots");
 testValidPath("/test/path/.withDots/:param/:param-dash/x");
-testValidPath("/");
+testValidPath("/", new cloud.Api() as "api for root path");
