@@ -1,11 +1,11 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
-- label: "durationThing:"
+- label: "two:"
   kind: 5
-  detail: duration
-  sortText: "ab|a|durationThing:"
-  insertText: "durationThing: $1"
+  detail: str
+  sortText: "ab|a|two:"
+  insertText: "two: $1"
   insertTextFormat: 2
   command:
     title: triggerCompletion

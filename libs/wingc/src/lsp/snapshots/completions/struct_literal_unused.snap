@@ -4,9 +4,6 @@ source: libs/wingc/src/lsp/completions.rs
 - label: "y:"
   kind: 5
   detail: num
-  documentation:
-    kind: markdown
-    value: "```wing\ny: num\n```"
   sortText: "ab|a|y:"
   insertText: "y: $1"
   insertTextFormat: 2

@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: Json, options: JsonValidationOptions?): T1"
   documentation:
     kind: markdown
-    value: "```wing\nstatic fromJson: (json: Json, options: JsonValidationOptions?): T1\n```\n---\nConverts a Json to a Struct.\n### Parameters\n- `json` — `Json`\n- `...options` — `JsonValidationOptions?`\n  \n  - `unsafe?` — `bool?` — Unsafe mode to skip validation (may lead to runtime errors)."
+    value: Converts a Json to a Struct.
   sortText: ff|fromJson
   insertText: fromJson($1)
   insertTextFormat: 2
@@ -18,7 +18,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: str): T1"
   documentation:
     kind: markdown
-    value: "```wing\nstatic parseJson: (json: str): T1\n```\n---\nParse a Json string into a Struct.\n### Parameters\n- `json` — `str`"
+    value: Parse a Json string into a Struct.
   sortText: ff|parseJson
   insertText: parseJson($1)
   insertTextFormat: 2
@@ -30,7 +30,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): JsonSchema"
   documentation:
     kind: markdown
-    value: "```wing\nstatic schema: (): JsonSchema\n```\n---\nRetrieve the schema for this struct."
+    value: Retrieve the schema for this struct.
   sortText: ff|schema
   insertText: schema()
 - label: tryFromJson
@@ -38,7 +38,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: Json): T1?"
   documentation:
     kind: markdown
-    value: "```wing\nstatic tryFromJson: (json: Json): T1?\n```\n---\nConverts a Json to a Struct, returning nil if the Json is not valid.\n### Parameters\n- `json` — `Json`"
+    value: "Converts a Json to a Struct, returning nil if the Json is not valid."
   sortText: ff|tryFromJson
   insertText: tryFromJson($1)
   insertTextFormat: 2
@@ -50,7 +50,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(json: str?): T1?"
   documentation:
     kind: markdown
-    value: "```wing\nstatic tryParseJson: (json: str?): T1?\n```\n---\nParse a Json string into a Struct, returning nil if the Json is not valid.\n### Parameters\n- `json` — `str?`"
+    value: "Parse a Json string into a Struct, returning nil if the Json is not valid."
   sortText: ff|tryParseJson
   insertText: tryParseJson($1)
   insertTextFormat: 2

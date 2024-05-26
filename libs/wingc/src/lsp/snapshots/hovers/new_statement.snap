@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nstatic preflight new: preflight (props: BucketProps?): Bucket\n```\n---\n### Parameters\n- `...props` — `BucketProps?`\n  \n  - `public?` — `bool?` — Whether the bucket's objects should be publicly accessible."
+  value: "```wing\nnew(...props: BucketProps?): Bucket\n```\n---\nA cloud object store."
 range:
   start:
     line: 2

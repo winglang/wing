@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\npreflight addMany: preflight (...items: Array<str>): void\n```\n---\n### Parameters\n- `...items` — `Array<str>`"
+  value: "```wing\npreflight addMany(...items: Array<str>): void\n```"
 range:
   start:
     line: 8
