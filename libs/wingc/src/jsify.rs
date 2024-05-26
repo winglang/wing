@@ -697,7 +697,7 @@ impl<'a> JSifier<'a> {
 				}
 				IntrinsicKind::Inflight => {
 					let arg_list = intrinsic.arg_list.as_ref().unwrap();
-					let path = if let Some(ss) = &arg_list.pos_args[0].as_static_string() {
+					let inflight_absolute_path = if let Some(ss) = &arg_list.pos_args[0].as_static_string() {
 						let extern_path = Utf8Path::new(&ss);
 
 						// TODO Warn if path does not exist or create it automatically?
@@ -712,9 +712,6 @@ impl<'a> JSifier<'a> {
 
 						return CodeMaker::default();
 					};
-
-					let path = make_relative_path(self.out_dir.as_str(), path.as_str());
-					let path = Utf8PathBuf::from(path);
 
 					let mut export_name = new_code!(&expression.span, "\"default\"");
 					let mut lifts: IndexMap<String, (&Expr, Option<&Vec<Expr>>, CodeMaker)> = IndexMap::new();
@@ -828,9 +825,11 @@ impl<'a> JSifier<'a> {
 					let function_type = self.types.maybe_unwrap_inference(function_type);
 					let shim = dts.dtsify_inflight(&function_type, &lifts);
 
-					let shim_path = path
-						.with_file_name(format!(".{}", path.file_name().unwrap()))
+					let shim_path = inflight_absolute_path
+						.with_file_name(format!(".{}", inflight_absolute_path.file_name().unwrap()))
 						.with_extension("inflight.ts");
+					let shim_path = make_relative_path(self.out_dir.as_str(), shim_path.as_str());
+
 					self
 						.output_files
 						.borrow_mut()
@@ -839,7 +838,7 @@ impl<'a> JSifier<'a> {
 
 					let mut lift_string = new_code!(expr_span, STDLIB_CORE, ".importInflight(");
 
-					let require_path = self.get_require_path(&path, expr_span);
+					let require_path = self.get_require_path(&inflight_absolute_path, expr_span);
 					if let Some(require_path) = require_path {
 						lift_string.append("`require('");
 						lift_string.append(require_path);
