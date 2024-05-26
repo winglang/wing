@@ -710,8 +710,11 @@ impl<'a> JSifier<'a> {
 							hints: vec![],
 						});
 
-						normalize_path(&Utf8PathBuf::from("dummy.ts"), ctx.source_path)
+						return CodeMaker::default();
 					};
+
+					let path = make_relative_path(self.out_dir.as_str(), path.as_str());
+					let path = Utf8PathBuf::from(path);
 
 					let mut export_name = new_code!(&expression.span, "\"default\"");
 					let mut lifts: IndexMap<String, (&Expr, Option<&Vec<Expr>>, CodeMaker)> = IndexMap::new();
