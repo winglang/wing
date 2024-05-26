@@ -1,5 +1,5 @@
 import { createServer } from "net";
-import { test, expect } from "vitest";
+import { test, expect, describe } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
 import { inflight, lift } from "../../src/core";
@@ -786,4 +786,61 @@ test("api does not use a port that is already taken", async () => {
 
   // clean up the server
   server.close();
+});
+
+describe("sibling paths are found", () => {
+  test("none parametrized paths are not siblings", () => {
+    const app = new SimApp();
+    const api = new cloud.Api(app, "my_api");
+
+    try {
+      api.get("/abc", INFLIGHT_CODE_NO_BODY);
+      api.get("/def", INFLIGHT_CODE_NO_BODY);
+      expect(true).toBeTruthy();
+    } catch (e) {
+      expect(false).toBeTruthy();
+    }
+  });
+  test("root parameterized paths are siblings", () => {
+    const app = new SimApp();
+    const api = new cloud.Api(app, "my_api");
+
+    try {
+      api.get("/:username/a", INFLIGHT_CODE_NO_BODY);
+      api.get("/:id/b", INFLIGHT_CODE_NO_BODY);
+      expect(false).toBeTruthy();
+    } catch (e) {
+      expect(e.message).toBe(
+        "Endpoint for path '/:id/b' and method 'GET' conflicts with existing sibling endpoint for path '/:username/a'- try to match the parameter names to avoid this error."
+      );
+    }
+  });
+
+  test("paths with different param name at the same index are siblings", () => {
+    const app = new SimApp();
+    const api = new cloud.Api(app, "my_api");
+
+    try {
+      api.get("/something/:username", INFLIGHT_CODE_NO_BODY);
+      api.get("/something_else/:id", INFLIGHT_CODE_NO_BODY);
+      expect(false).toBeTruthy();
+    } catch (e) {
+      expect(e.message).toBe(
+        "Endpoint for path '/something_else/:id' and method 'GET' conflicts with existing sibling endpoint for path '/something/:username'- try to match the parameter names to avoid this error."
+      );
+    }
+  });
+
+  test("paths with the same param name at the same index are siblings", () => {
+    const app = new SimApp();
+    const api = new cloud.Api(app, "my_api");
+
+    try {
+      api.get("/something/:username", INFLIGHT_CODE_NO_BODY);
+      api.get("/something_else/:username", INFLIGHT_CODE_NO_BODY);
+      expect(true).toBeTruthy();
+    } catch (e) {
+      expect(false).toBeTruthy();
+    }
+  });
 });
