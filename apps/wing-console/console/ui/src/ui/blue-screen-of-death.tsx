@@ -13,7 +13,6 @@ export const BlueScreenOfDeath = memo(
     error = "",
     displayLinks = true,
   }: {
-    title: string;
     error: string;
     displayLinks?: boolean;
   }) => {
@@ -48,7 +47,6 @@ export const BlueScreenOfDeath = memo(
       >
         <div className="h-full w-full text-md font-share-tech text-white max-w-7xl break-words space-y-4">
           <div className="flex items-center gap-x-4">
-            <div className="underline">{title}</div>
             <button
               onClick={copyError}
               className={classNames(
@@ -56,7 +54,7 @@ export const BlueScreenOfDeath = memo(
                 "bg-slate-400 hover:bg-slate-450 px-4 text-[#004295]",
               )}
             >
-              Copy error
+              Copy
             </button>
           </div>
           <div className="space-y-4">

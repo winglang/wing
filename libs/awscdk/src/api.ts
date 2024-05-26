@@ -10,8 +10,12 @@ import { CfnPermission } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
-import { ApiEndpointHandler, IAwsApi, STAGE_NAME } from "@winglang/sdk/lib/shared-aws/api";
-import { API_DEFAULT_RESPONSE } from "@winglang/sdk/lib/shared-aws/api.default";
+import {
+  ApiEndpointHandler,
+  IAwsApi,
+  STAGE_NAME,
+} from "@winglang/sdk/lib/shared-aws/api";
+import { createApiDefaultResponse } from "@winglang/sdk/lib/shared-aws/api.default";
 import { isAwsCdkFunction } from "./function";
 
 /**
@@ -201,7 +205,10 @@ export class Api extends cloud.Api implements IAwsApi {
   ): cloud.Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
-      const newInflight = ApiEndpointHandler.toFunctionHandler(inflight, Api.renderCorsHeaders(this.corsOptions)?.defaultResponse);
+      const newInflight = ApiEndpointHandler.toFunctionHandler(
+        inflight,
+        Api.renderCorsHeaders(this.corsOptions)?.defaultResponse
+      );
       const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
       handler = new cloud.Function(
         this,
@@ -277,13 +284,16 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
-    const defaultResponse = API_DEFAULT_RESPONSE(props.cors);
-
     this.api = new SpecRestApi(this, `${id}`, {
       apiDefinition: ApiDefinition.fromInline(
         Lazy.any({
           produce: () => {
             const injectGreedy404Handler = (openApiSpec: cloud.OpenApiSpec) => {
+              const defaultResponse = createApiDefaultResponse(
+                Object.keys(openApiSpec.paths),
+                props.cors
+              );
+
               openApiSpec.paths = {
                 ...openApiSpec.paths,
                 ...defaultResponse,
