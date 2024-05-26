@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nenum Foo\n```\n---\n Enum doc"
+  value: "```wing\nenum Foo {\n}\n```\n---\n Enum doc"
 range:
   start:
     line: 2

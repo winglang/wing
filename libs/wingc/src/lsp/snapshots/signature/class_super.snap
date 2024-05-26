@@ -5,7 +5,7 @@ signatures:
   - label: "(hello: num): Base"
     documentation:
       kind: markdown
-      value: "### Parameters\n- `hello` — `num`"
+      value: ""
     parameters:
       - label: "hello: num"
     activeParameter: 0
