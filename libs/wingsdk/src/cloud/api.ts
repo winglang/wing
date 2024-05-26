@@ -442,7 +442,9 @@ export class Api extends Resource {
     const partsA = pathA.split("/");
     const partsB = pathB.split("/");
 
-    for (let i = 0; i < partsA.length; i++) {
+    let shorter = partsA.length < partsB.length ? partsA : partsB;
+
+    for (let i = 0; i < shorter.length; i++) {
       const partA = partsA[i];
       const partB = partsB[i];
       if (
