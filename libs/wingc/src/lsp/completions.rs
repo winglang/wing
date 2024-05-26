@@ -1928,8 +1928,9 @@ S.
 		hide_private,
 		r#"
 class S {
-  a: num;
-  new() { this.a = 2; }
+  shouldBeHidden: num;
+	pub shouldBeVisible: num;
+  new() { this.a = 0; this.shouldBeVisible = 0 }
 }
 let x = new S();
 x.
