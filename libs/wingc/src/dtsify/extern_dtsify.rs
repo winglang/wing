@@ -81,7 +81,7 @@ impl<'a> ExternDTSifier<'a> {
 		code.append(self.dtsify_type(*inflight_function, true));
 		code.append(">;");
 		code.line(
-			"export type Handler = (ctx: Lifts, ...args: Parameters<ExpectedFunction>) => ReturnType<ExpectedFunction>;",
+			"export type Handler = ((ctx: Lifts, ...args: Parameters<ExpectedFunction>) => ReturnType<ExpectedFunction>) & {};",
 		);
 		code.line("export function inflight(handler: Handler): Handler { return handler; }");
 		code.line("export default inflight;");

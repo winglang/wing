@@ -824,7 +824,10 @@ impl<'a> JSifier<'a> {
 					let function_type = self.types.get_expr_type(expression);
 					let function_type = self.types.maybe_unwrap_inference(function_type);
 					let shim = dts.dtsify_inflight(&function_type, &lifts);
-					let shim_path = path.with_extension("inflight.ts");
+
+					let shim_path = path
+						.with_file_name(format!(".{}", path.file_name().unwrap()))
+						.with_extension("inflight.ts");
 					self
 						.output_files
 						.borrow_mut()
