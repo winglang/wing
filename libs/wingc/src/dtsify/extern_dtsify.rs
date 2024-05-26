@@ -7,6 +7,7 @@ use itertools::Itertools;
 
 use crate::{
 	ast::{AccessModifier, Expr, Phase},
+	docs::Documented,
 	dtsify::{ignore_member_phase, TYPE_INFLIGHT_POSTFIX},
 	files::{remove_file, update_file, FilesError},
 	jsify::codemaker::CodeMaker,
@@ -80,6 +81,14 @@ impl<'a> ExternDTSifier<'a> {
 		code.line("type ExpectedFunction = HandlerFunction<");
 		code.append(self.dtsify_type(*inflight_function, true));
 		code.append(">;");
+
+		if let Some(docs) = inflight_function
+			.as_deep_function_sig()
+			.and_then(|sig| sig.docs())
+			.and_then(|d| d.as_jsdoc_comment())
+		{
+			code.line(docs);
+		}
 		code.line(
 			"export type Handler = ((ctx: Lifts, ...args: Parameters<ExpectedFunction>) => ReturnType<ExpectedFunction>) & {};",
 		);

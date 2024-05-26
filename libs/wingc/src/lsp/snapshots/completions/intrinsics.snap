@@ -6,14 +6,14 @@ source: libs/wingc/src/lsp/completions.rs
   detail: str
   documentation:
     kind: markdown
-    value: "```wing\nstatic preflight @dirname: str\n```\n---\nGet the normalized absolute path of the current source file's directory.\n\nThe resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.\nIt should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."
+    value: "Get the normalized absolute path of the current source file's directory.\n\nThe resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.\nIt should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."
   sortText: bb|@dirname
 - label: "@inflight"
   kind: 3
   detail: "preflight (file: str, options: ImportInflightOptions?): any"
   documentation:
     kind: markdown
-    value: "```wing\nstatic preflight @inflight: preflight (file: str, options: ImportInflightOptions?): any\n```\n---\nCreate an inflight function from the given file.\nThe file must be a JavaScript or TypeScript file with a default export that matches the inferred return where `@inflight` is used.\n\nFor example:\n\n```wing\nbring cloud;\nnew cloud.Function(@inflight(\"./handler.ts\"));\n```\n\n`./handler.ts` Must default export an `async ({}, string?) => string?` function. The first argument is anything lifted into that function, e.g.:\n\n```wing\nlet bucket = new cloud.Bucket();\nnew cloud.Function(@inflight(\"./handler.ts\"), lifts: { bucket: [\"put\"] });\n```\n### Parameters\n- `file` — `str` — Path to extern file to create inflight. Relative to the current wing file.\n- `...options` — `ImportInflightOptions?` — Options for the `@inflight` intrinsic.\n  \n  - `export?` — `str?` — Name of exported function.\n  - `lifts?` — `Array<LiftAnnotation>?` — Mapping of available symbols to a lift declaration."
+    value: "Create an inflight function from the given file.\nThe file must be a JavaScript or TypeScript file with a default export that matches the inferred return where `@inflight` is used.\n\nFor example:\n\n```wing\nbring cloud;\nnew cloud.Function(@inflight(\"./handler.ts\"));\n```\n\n`./handler.ts` Must default export an `async ({}, string?) => string?` function. The first argument is anything lifted into that function, e.g.:\n\n```wing\nlet bucket = new cloud.Bucket();\nnew cloud.Function(@inflight(\"./handler.ts\"), lifts: { bucket: [\"put\"] });\n```"
   sortText: cc|@inflight
   insertText: "@inflight($1)"
   insertTextFormat: 2

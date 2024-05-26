@@ -84,7 +84,12 @@ impl Files {
 				fs::create_dir_all(parent).map_err(FilesError::IoError)?;
 			}
 
-			write_file(&full_path, content)?;
+			if path.is_absolute() {
+				// This file may lie outside the output directory, so we may not always want to write it
+				update_file(&full_path, content)?;
+			} else {
+				write_file(&full_path, content)?;
+			}
 		}
 		Ok(())
 	}
