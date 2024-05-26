@@ -44,4 +44,8 @@ test "path vars at endpoint root are working as expected" {
   let unknownRes = http.get("{api.url}/123/comments/unknown-path");
   expect.equal(unknownRes.status, 404);
   expect.match(unknownRes.body, "Error");
+  
+  let unknownRes2 = http.get("{api.url}/123/unknown-path");
+  expect.equal(unknownRes2.status, 404);
+  expect.match(unknownRes2.body, "Error");
 }
