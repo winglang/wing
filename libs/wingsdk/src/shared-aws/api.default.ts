@@ -6,6 +6,8 @@ import * as cloud from "../cloud";
  * The response is a mock integration type, which means it returns a mocked response without
  * forwarding the request to any backend. The response status code is set to 204 for OPTIONS
  * and 404 for any other HTTP method. The Content-Type header is set to `application/json`.
+ * @param paths The user defined api endpoint paths. Used for creating a base path to the default response
+ * @param corsOptions cors options to apply to the default path
  * @internal
  */
 export const createApiDefaultResponse = (
