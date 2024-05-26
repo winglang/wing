@@ -1681,7 +1681,7 @@ impl<'a> JSifier<'a> {
 		};
 
 		// Check if the first statement is a super constructor call, if not we need to add one
-		let super_called = if let Some(s) = init_statements.statements.first() {
+		let super_called = if let Some(s) = init_statements.statements.iter().find(|s| !s.kind.is_type_def()) {
 			matches!(s.kind, StmtKind::SuperConstructor { .. })
 		} else {
 			false

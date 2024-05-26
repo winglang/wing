@@ -80,7 +80,9 @@ export class Api extends cloud.Api implements IAwsApi {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ApiInflightMethods.REQUEST,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: `${lowerMethod}()`,
     });
   }

@@ -1266,8 +1266,18 @@ export interface PolicyStatement {
 export interface ConnectionData {
   /** The path of the source construct. */
   readonly source: string;
+  /**
+   * An operation that the source object supports.
+   * @default - no operation
+   */
+  readonly sourceOp?: string;
   /** The path of the target construct. */
   readonly target: string;
+  /**
+   * An operation that the target object supports.
+   * @default - no operation
+   */
+  readonly targetOp?: string;
   /** A name for the connection. */
   readonly name: string;
 }
