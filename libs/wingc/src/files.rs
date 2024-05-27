@@ -84,7 +84,12 @@ impl Files {
 				fs::create_dir_all(parent).map_err(FilesError::IoError)?;
 			}
 
-			write_file(&full_path, content)?;
+			if path.starts_with("..") {
+				// This file may lie outside the output directory, so we may not always want to write it
+				update_file(&full_path, content)?;
+			} else {
+				write_file(&full_path, content)?;
+			}
 		}
 		Ok(())
 	}
@@ -109,6 +114,11 @@ pub fn update_file(path: &Utf8Path, content: &str) -> Result<(), FilesError> {
 	} else {
 		Ok(())
 	}
+}
+
+/// Remove file from the filesystem
+pub fn remove_file(path: &Utf8Path) -> Result<(), FilesError> {
+	fs::remove_file(path).map_err(FilesError::IoError)
 }
 
 #[cfg(test)]

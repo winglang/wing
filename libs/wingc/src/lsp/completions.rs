@@ -7,8 +7,7 @@ use std::cmp::max;
 use tree_sitter::{Node, Point};
 
 use crate::ast::{
-	AccessModifier, CalleeKind, Expr, ExprKind, IntrinsicKind, Phase, Reference, Scope, Symbol, TypeAnnotation,
-	UserDefinedType,
+	AccessModifier, CalleeKind, Expr, ExprKind, Phase, Reference, Scope, Symbol, TypeAnnotation, UserDefinedType,
 };
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
@@ -880,7 +879,7 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 		if !existing_fields.contains(&field_data.0) {
 			if let Some(mut base_completion) = format_symbol_kind_as_completion(&field_data.0, &field_data.1) {
 				let v = field_data.1.as_variable().unwrap();
-				let is_optional = v.type_.is_option();
+				let is_optional = v.type_.is_strict_option();
 
 				if v.type_.maybe_unwrap_option().is_struct() {
 					base_completion.insert_text = Some(format!("{}: {{\n$1\n}}", field_data.0));
@@ -1067,20 +1066,8 @@ fn make_documentation(text: String) -> Option<Documentation> {
 fn get_intrinsic_list(types: &Types) -> Vec<CompletionItem> {
 	let mut completions = vec![];
 
-	for intrinsic in IntrinsicKind::VALUES {
-		let Some(t) = intrinsic.get_type(types) else {
-			continue;
-		};
-
-		let mut item = CompletionItem {
-			label: intrinsic.to_string(),
-			documentation: make_documentation(intrinsic.render_docs()),
-			kind: Some(CompletionItemKind::FUNCTION),
-			..Default::default()
-		};
-		if t.is_function_sig() {
-			convert_to_call_completion(&mut item);
-		}
+	for intrinsic in types.intrinsics.iter(false) {
+		let item = format_symbol_kind_as_completion(&intrinsic.0, intrinsic.1).unwrap();
 		completions.push(item);
 	}
 	completions
