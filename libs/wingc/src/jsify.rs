@@ -697,21 +697,6 @@ impl<'a> JSifier<'a> {
 				}
 				IntrinsicKind::Inflight => {
 					let arg_list = intrinsic.arg_list.as_ref().unwrap();
-					let inflight_absolute_path = if let Some(ss) = &arg_list.pos_args[0].as_static_string() {
-						let extern_path = Utf8Path::new(&ss);
-
-						// TODO Warn if path does not exist or create it automatically?
-						normalize_path(extern_path, ctx.source_path)
-					} else {
-						report_diagnostic(Diagnostic {
-							message: "Inflight path must be a non-interpolated string literal".to_string(),
-							span: Some(arg_list.pos_args[0].span.clone()),
-							annotations: vec![],
-							hints: vec![],
-						});
-
-						return CodeMaker::default();
-					};
 
 					let mut export_name = new_code!(&expression.span, "\"default\"");
 					let mut lifts: IndexMap<String, (&Expr, Option<&Vec<Expr>>, CodeMaker)> = IndexMap::new();
@@ -825,6 +810,21 @@ impl<'a> JSifier<'a> {
 					let function_type = self.types.maybe_unwrap_inference(function_type);
 					let shim = dts.dtsify_inflight(&function_type, &lifts);
 
+					let inflight_absolute_path = if let Some(ss) = &arg_list.pos_args[0].as_static_string() {
+						let extern_path = Utf8Path::new(&ss);
+
+						// TODO Warn if path does not exist or create it automatically?
+						normalize_path(extern_path, ctx.source_path)
+					} else {
+						report_diagnostic(Diagnostic {
+							message: "Inflight path must be a non-interpolated string literal".to_string(),
+							span: Some(arg_list.pos_args[0].span.clone()),
+							annotations: vec![],
+							hints: vec![],
+						});
+
+						return CodeMaker::default();
+					};
 					let shim_path = inflight_absolute_path
 						.with_file_name(format!(".{}", inflight_absolute_path.file_name().unwrap()))
 						.with_extension("inflight.ts");
