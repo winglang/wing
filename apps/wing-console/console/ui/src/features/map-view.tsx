@@ -1,17 +1,14 @@
-import { CubeTransparentIcon } from "@heroicons/react/20/solid";
-import { CubeIcon } from "@heroicons/react/24/outline";
-import { BoltIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import {
   ResourceIcon,
   SpinnerLoader,
-  getResourceIconComponent,
   useTheme,
 } from "@wingconsole/design-system";
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import clsx from "classnames";
 import { type ElkPoint, type LayoutOptions } from "elkjs";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { memo, useCallback, useEffect, useId, useMemo } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { useKeyPressEvent } from "react-use";
 
 import { useMap } from "../services/use-map.js";
@@ -48,10 +45,20 @@ interface WrapperProps {
   fqn: string;
   highlight?: boolean;
   onClick?: () => void;
+  collapsed?: boolean;
+  onCollapse?: (value: boolean) => void;
 }
 
 const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
-  ({ name, fqn, highlight, onClick, children }) => {
+  ({
+    name,
+    fqn,
+    highlight,
+    onClick,
+    collapsed = false,
+    onCollapse = () => {},
+    children,
+  }) => {
     return (
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
       <div
@@ -76,7 +83,6 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
         <div
           className={clsx(
             "px-2.5 py-1 flex items-center gap-1.5",
-            // inflights.length > 0 &&
             "border-b border-slate-200 dark:border-slate-800",
           )}
         >
@@ -91,9 +97,23 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
           >
             {name}
           </span>
+          <div className="flex grow justify-end">
+            {collapsed && (
+              <ChevronDownIcon
+                className="size-4"
+                onClick={() => onCollapse(false)}
+              />
+            )}
+            {!collapsed && (
+              <ChevronUpIcon
+                className="size-4"
+                onClick={() => onCollapse(true)}
+              />
+            )}
+          </div>
         </div>
 
-        {children}
+        {collapsed || children}
       </div>
     );
   },
@@ -106,6 +126,8 @@ interface ContainerNodeProps {
   resourceType?: string;
   highlight?: boolean;
   onClick?: () => void;
+  collapsed?: boolean;
+  onCollapse?: (value: boolean) => void;
 }
 
 const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
@@ -127,6 +149,8 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             fqn={props.resourceType!}
             highlight={props.highlight}
             onClick={props.onClick}
+            onCollapse={props.onCollapse}
+            collapsed={props.collapsed}
           >
             <div className="p-4">
               <NodeChildren>
@@ -153,6 +177,8 @@ interface ConstructNodeProps {
   hasChildNodes?: boolean;
   onSelectedNodeIdChange: (id: string | undefined) => void;
   color?: string;
+  onCollapse: (value: boolean) => void;
+  collapsed: boolean;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -167,6 +193,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       children,
       hasChildNodes,
       color,
+      onCollapse,
+      collapsed,
     }) => {
       const select = useCallback(
         () => onSelectedNodeIdChange(id),
@@ -254,6 +282,14 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 >
                   {name}
                 </span>
+                {collapsed && (
+                  <div className="flex grow justify-end pl-1">
+                    <ChevronDownIcon
+                      className="size-4"
+                      onClick={() => onCollapse(false)}
+                    />
+                  </div>
+                )}
               </div>
             )}
 
@@ -320,6 +356,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             resourceType={fqn}
             highlight={highlight}
             onClick={select}
+            onCollapse={onCollapse}
+            collapsed={collapsed}
           >
             <NodeChildren>
               {inflights.length > 0 && renderedNode}
@@ -534,7 +572,13 @@ export const MapView = memo(
     selectedEdgeId,
     onSelectedEdgeIdChange,
   }: MapViewV2Props) => {
-    const { nodeInfo, isNodeHidden, rootNodes, edges } = useMap({});
+    const [collapsedNodes, setCollapsedNodes] = useState<Set<string>>(() => {
+      return new Set<string>();
+    });
+
+    const { nodeInfo, isNodeHidden, rootNodes, edges } = useMap({
+      collapsedNodes,
+    });
 
     const RenderEdge = useCallback<EdgeComponent>(
       (props) => {
@@ -598,6 +642,22 @@ export const MapView = memo(
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             highlight={props.selectedNodeId === props.constructTreeNode.path}
             hasChildNodes={childNodes.length > 0}
+            collapsed={collapsedNodes.has(props.constructTreeNode.path)}
+            onCollapse={(value) => {
+              if (value) {
+                setCollapsedNodes((previous) => {
+                  const newCollapsedNodes = new Set(previous);
+                  newCollapsedNodes.add(props.constructTreeNode.path);
+                  return newCollapsedNodes;
+                });
+              } else {
+                setCollapsedNodes((previous) => {
+                  const newCollapsedNodes = new Set(previous);
+                  newCollapsedNodes.delete(props.constructTreeNode.path);
+                  return newCollapsedNodes;
+                });
+              }
+            }}
           >
             {childNodes.map((child) => (
               <RenderNode
@@ -610,7 +670,7 @@ export const MapView = memo(
           </ConstructNode>
         );
       },
-      [isNodeHidden, nodeInfo],
+      [isNodeHidden, nodeInfo, collapsedNodes],
     );
 
     const { theme } = useTheme();
