@@ -248,14 +248,22 @@ export const useMap = ({}: UseMapOptions = {}) => {
         `${connection.source.id}#${connection.source.operation}##${connection.target.id}#${connection.target.operation}`,
       resolveNode: (node) => {
         const path = resolveNode(node.id);
-        console.log(node.id, path);
         return {
           id: path,
           nodeFqn: nodeFqns.get(path),
-          operation: node.operation,
+          // Make the operation anonymous if the node is hidden.
+          operation: path === node.id ? node.operation : undefined,
         };
       },
-    });
+    })
+      .filter((connection) => {
+        // Filter connections that go to parents.
+        return !connection.source.id.startsWith(`${connection.target.id}/`);
+      })
+      .filter((connection) => {
+        // Filter connections that go to themselves.
+        return connection.source.id !== connection.target.id;
+      });
   }, [rawConnections, nodeFqns, isNodeHidden, resolveNode]);
 
   const getConnectionId = useCallback(
