@@ -547,7 +547,7 @@ test("api response returns Content-Type header from inflight", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("api response returns without Content-Type header", async () => {
+test("api response returns default Content-Type header", async () => {
   // GIVEN
   const ROUTE = "/hello";
 
@@ -568,7 +568,9 @@ test("api response returns without Content-Type header", async () => {
 
   expect(response.status).toEqual(200);
   // the default for no body requests
-  expect(response.headers.get("Content-Type")).toEqual(null);
+  expect(response.headers.get("Content-Type")).toEqual(
+    "text/html; charset=utf-8"
+  );
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
