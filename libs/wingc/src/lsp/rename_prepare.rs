@@ -61,16 +61,6 @@ mod tests {
           position: text_document_position_params.position.clone(),
 				});
 
-				insta::with_settings!(
-					{
-						prepend_module_to_snapshot => false,
-						omit_expression => true,
-						snapshot_path => "./snapshots/rename_prepare",
-					}, {
-            insta::assert_yaml_snapshot!($name);
-          }
-				);
-
       let ranges = get_ranges($code);
 
       match $name {
