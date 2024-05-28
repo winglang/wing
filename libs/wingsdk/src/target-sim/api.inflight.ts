@@ -314,7 +314,7 @@ export class Api
 function transformRequest(req: express.Request): ApiRequest {
   return {
     headers: sanitizeParamLikeObject(req.headers),
-    body: Object.keys(req.body).length > 0 ? req.body : "",
+    body: Object.keys(req.body).length > 0 ? req.body : undefined,
     method: parseHttpMethod(req.method),
     path: req.path,
     query: sanitizeParamLikeObject(req.query as any),
