@@ -5,12 +5,22 @@ bring expect;
 
 let api = new cloud.Api();
 let body = Json {"cat": "Tion"};
+let emptyBody = "";
 
 api.post("/", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   expect.equal(req.method, cloud.HttpMethod.POST);
   expect.equal(req.path, "/");
   expect.equal(req.body, Json.stringify(body));
   expect.equal(req.headers?.get("content-type"), "application/json");
+
+  return cloud.ApiResponse {
+    status: 200,
+    body: req.body
+  };
+});
+
+api.post("/empty", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+  expect.equal(req.body, emptyBody);
 
   return cloud.ApiResponse {
     status: 200,
@@ -30,4 +40,12 @@ test "http.post and http.fetch can preform a call to an api" {
   expect.equal(fetchResponse.body , Json.stringify(body));
   expect.equal(fetchResponse.status , 200);
   expect.match(fetchResponse.url , api.url);
+}
+
+test "http.post with an empty string body" {
+  let response: http.Response = http.post("{api.url}/empty", headers: { "content-type" => "application/json" }, body: "");
+
+  expect.equal(response.body , emptyBody);
+  expect.equal(response.status , 200);
+  expect.match(response.url , api.url);
 }
