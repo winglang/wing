@@ -96,6 +96,10 @@ impl Ast {
 		}
 	}
 
+	pub fn gen_stmt_id(&mut self) -> StmtId {
+		self.stmts.gen_id()
+	}
+
 	pub fn new_scope(&mut self, statements: Vec<StmtId>, span: WingSpan) -> ScopeId {
 		let id = self.scopes.gen_id();
 		let scope = Scope { id, statements, span };
@@ -117,6 +121,27 @@ impl Ast {
 
 	pub fn new_stmt(&mut self, kind: StmtKind, idx: usize, doc: Option<String>, span: WingSpan) -> StmtId {
 		let id = self.stmts.gen_id();
+		self.stmts.add(
+			id,
+			Stmt {
+				id,
+				kind,
+				span,
+				idx,
+				doc,
+			},
+		);
+		id
+	}
+
+	pub fn new_stmt_with_id(
+		&mut self,
+		id: StmtId,
+		kind: StmtKind,
+		idx: usize,
+		doc: Option<String>,
+		span: WingSpan,
+	) -> StmtId {
 		self.stmts.add(
 			id,
 			Stmt {
@@ -858,12 +883,14 @@ pub struct Expr {
 	pub kind: ExprKind,
 	/// The span of the expression.
 	pub span: WingSpan,
+	/// The statement in which this expression is located
+	pub stmt: StmtId,
 }
 
 impl Expr {
-	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
+	pub fn new(kind: ExprKind, stmt: StmtId, span: WingSpan) -> Self {
 		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
-		Self { id, kind, span }
+		Self { id, kind, span, stmt }
 	}
 }
 

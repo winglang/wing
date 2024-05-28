@@ -1,3 +1,4 @@
+#![deny(unused_must_use)] // For StackGuard
 use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
 use indexmap::IndexMap;
 use itertools::Itertools;
@@ -363,6 +364,24 @@ fn parse_wing_directory(
 	dependent_wing_paths
 }
 
+#[must_use = "You must use this guard, otherwise it will immediately drop and pop the value from the stack"]
+struct StackGuard<'a, T> {
+	stack: &'a RefCell<Vec<T>>,
+}
+
+impl<'a, T> StackGuard<'a, T> {
+	fn push(stack: &'a RefCell<Vec<T>>, value: T) -> Self {
+		stack.borrow_mut().push(value);
+		StackGuard { stack }
+	}
+}
+
+impl<'a, T> Drop for StackGuard<'a, T> {
+	fn drop(&mut self) {
+		self.stack.borrow_mut().pop();
+	}
+}
+
 /// Parses a single Wing source file.
 pub struct Parser<'a> {
 	/// Source code of the file being parsed
@@ -376,6 +395,9 @@ pub struct Parser<'a> {
 	/// Track all file paths that have been found while parsing the current file
 	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
 	referenced_wing_paths: RefCell<Vec<Utf8PathBuf>>,
+
+	/// Track the current statement being traversed
+	current_statement: RefCell<Vec<StmtId>>,
 
 	/// The generated AST
 	ast: RefCell<Ast>,
@@ -420,8 +442,9 @@ impl<'s> Parser<'s> {
 			// mutability from the root of the Json literal.
 			in_json: RefCell::new(0),
 			is_in_mut_json: RefCell::new(false),
-			referenced_wing_paths: RefCell::new(Vec::new()),
+			referenced_wing_paths: RefCell::new(vec![]),
 			ast: RefCell::new(Ast::new()),
+			current_statement: RefCell::new(vec![]),
 		}
 	}
 
@@ -543,16 +566,16 @@ impl<'s> Parser<'s> {
 		};
 		let span = self.node_span(node);
 		// represent duration literals as the AST equivalent of `duration.fromSeconds(value)`
-		Ok(Expr::new(
+		Ok(self.new_expr(
 			ExprKind::Call {
-				callee: CalleeKind::Expr(Box::new(Expr::new(
+				callee: CalleeKind::Expr(Box::new(self.new_expr(
 					ExprKind::Reference(Reference::InstanceMember {
-						object: Box::new(Expr::new(
+						object: Box::new(self.new_expr(
 							ExprKind::Reference(Reference::Identifier(Symbol {
 								name: "duration".to_string(),
 								span: span.clone(),
 							})),
-							span.clone(),
+							node,
 						)),
 						property: Symbol {
 							name: "fromSeconds".to_string(),
@@ -560,16 +583,20 @@ impl<'s> Parser<'s> {
 						},
 						optional_accessor: false,
 					}),
-					span.clone(),
+					node,
 				))),
 				arg_list: ArgList::new(
-					vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
+					vec![self.new_expr(ExprKind::Literal(Literal::Number(seconds)), node)],
 					IndexMap::new(),
 					span.clone(),
 				),
 			},
-			span.clone(),
+			node,
 		))
+	}
+
+	fn new_expr(&self, kind: ExprKind, node: &Node) -> Expr {
+		Expr::new(kind, self.current_stmt_id(), self.node_span(node))
 	}
 
 	fn node_span(&self, node: &Node) -> WingSpan {
@@ -615,6 +642,9 @@ impl<'s> Parser<'s> {
 	) -> DiagnosticResult<StmtId> {
 		let span = self.node_span(statement_node);
 		CompilationContext::set(CompilationPhase::Parsing, &span);
+
+		let _guard = StackGuard::push(&self.current_statement, self.ast.borrow_mut().gen_stmt_id());
+
 		let stmt_kind = match statement_node.kind() {
 			"import_statement" => self.build_bring_statement(statement_node)?,
 
@@ -654,7 +684,16 @@ impl<'s> Parser<'s> {
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
 
-		Ok(self.ast.borrow_mut().new_stmt(stmt_kind, idx, doc, span))
+		Ok(
+			self
+				.ast
+				.borrow_mut()
+				.new_stmt_with_id(self.current_stmt_id(), stmt_kind, idx, doc, span),
+		)
+	}
+
+	fn current_stmt_id(&self) -> StmtId {
+		*self.current_statement.borrow().last().expect("a current statement id")
 	}
 
 	fn build_lift_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -1962,7 +2001,7 @@ impl<'s> Parser<'s> {
 
 		if let Some(property) = nested_node.child_by_field_name("property") {
 			if object_expr.kind() == "json_container_type" {
-				Ok(Expr::new(
+				Ok(self.new_expr(
 					ExprKind::Reference(Reference::TypeMember {
 						type_name: UserDefinedType {
 							root: Symbol::global(WINGSDK_STD_MODULE),
@@ -1971,7 +2010,7 @@ impl<'s> Parser<'s> {
 						},
 						property: self.node_symbol(&property)?,
 					}),
-					self.node_span(&object_expr),
+					&object_expr,
 				))
 			} else {
 				let object_expr = self.build_expression(&object_expr, phase)?;
@@ -1980,13 +2019,13 @@ impl<'s> Parser<'s> {
 					"?." => true,
 					_ => false,
 				};
-				Ok(Expr::new(
+				Ok(self.new_expr(
 					ExprKind::Reference(Reference::InstanceMember {
 						object: Box::new(object_expr),
 						property: self.node_symbol(&property)?,
 						optional_accessor,
 					}),
-					self.node_span(&nested_node),
+					&nested_node,
 				))
 			}
 		} else {
@@ -2028,11 +2067,10 @@ impl<'s> Parser<'s> {
 
 	fn build_reference(&self, reference_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
 		let actual_node = reference_node.named_child(0).unwrap();
-		let actual_node_span = self.node_span(&actual_node);
 		match actual_node.kind() {
-			"reference_identifier" => Ok(Expr::new(
+			"reference_identifier" => Ok(self.new_expr(
 				ExprKind::Reference(Reference::Identifier(self.node_symbol(&actual_node)?)),
-				actual_node_span,
+				&actual_node,
 			)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node, phase)?),
 			"structured_access_expression" => Ok(self.build_structured_access_expression(&actual_node, phase)?),
@@ -2047,12 +2085,12 @@ impl<'s> Parser<'s> {
 		let index_expr = structured_access_node.named_child(1).unwrap();
 		let index_expr = self.build_expression(&index_expr, phase)?;
 
-		Ok(Expr::new(
+		Ok(self.new_expr(
 			ExprKind::Reference(Reference::ElementAccess {
 				object: Box::new(object_expr),
 				index: Box::new(index_expr),
 			}),
-			self.node_span(structured_access_node),
+			structured_access_node,
 		))
 	}
 
@@ -2119,17 +2157,17 @@ impl<'s> Parser<'s> {
 					None
 				};
 
-				Ok(Expr::new(
+				Ok(self.new_expr(
 					ExprKind::New(New {
 						class: class_udt,
 						obj_id,
 						arg_list: arg_list?,
 						obj_scope,
 					}),
-					expression_span,
+					exp_node,
 				))
 			}
-			"binary_expression" | "unwrap_or" => Ok(Expr::new(
+			"binary_expression" | "unwrap_or" => Ok(self.new_expr(
 				ExprKind::Binary {
 					left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap(), phase)?),
 					right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap(), phase)?),
@@ -2154,9 +2192,9 @@ impl<'s> Parser<'s> {
 						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
 				},
-				expression_span,
+				exp_node,
 			)),
-			"unary_expression" => Ok(Expr::new(
+			"unary_expression" => Ok(self.new_expr(
 				ExprKind::Unary {
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 						"-" => UnaryOperator::Minus,
@@ -2166,23 +2204,23 @@ impl<'s> Parser<'s> {
 					},
 					exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap(), phase)?),
 				},
-				expression_span,
+				exp_node,
 			)),
 			"non_interpolated_string" => {
 				// skipping the first #
 				let byte_range = (expression_node.start_byte() + 1)..expression_node.end_byte();
-				Ok(Expr::new(
+				Ok(self.new_expr(
 					ExprKind::Literal(Literal::NonInterpolatedString(
 						self.node_text_from_range(byte_range).into(),
 					)),
-					expression_span,
+					exp_node,
 				))
 			}
 			"string" => {
 				if expression_node.named_child_count() == 0 {
-					Ok(Expr::new(
+					Ok(self.new_expr(
 						ExprKind::Literal(Literal::String(self.node_text(&expression_node).into())),
-						expression_span,
+						exp_node,
 					))
 				} else {
 					// We must go over the string and separate it into parts (static and expr)
@@ -2226,9 +2264,9 @@ impl<'s> Parser<'s> {
 						str::from_utf8(&self.source[last_end..end]).unwrap().into(),
 					));
 
-					Ok(Expr::new(
+					Ok(self.new_expr(
 						ExprKind::Literal(Literal::InterpolatedString(InterpolatedString { parts })),
-						expression_span,
+						exp_node,
 					))
 				}
 			}
@@ -2238,42 +2276,44 @@ impl<'s> Parser<'s> {
 				} else {
 					Some(false)
 				};
-				Ok(Expr::new(
-					ExprKind::Range {
-						start: Box::new(
-							self.build_expression(
-								&expression_node
-									.child_by_field_name("start")
-									.expect("range expression should always include start"),
-								phase,
-							)?,
-						),
-						inclusive: inclusive,
-						end: Box::new(
-							self.build_expression(
-								&expression_node
-									.child_by_field_name("end")
-									.expect("range expression should always include end"),
-								phase,
-							)?,
-						),
-					},
-					expression_span,
-				))
+				Ok(
+					self.new_expr(
+						ExprKind::Range {
+							start: Box::new(
+								self.build_expression(
+									&expression_node
+										.child_by_field_name("start")
+										.expect("range expression should always include start"),
+									phase,
+								)?,
+							),
+							inclusive: inclusive,
+							end: Box::new(
+								self.build_expression(
+									&expression_node
+										.child_by_field_name("end")
+										.expect("range expression should always include end"),
+									phase,
+								)?,
+							),
+						},
+						exp_node,
+					),
+				)
 			}
-			"number" => Ok(Expr::new(
+			"number" => Ok(self.new_expr(
 				ExprKind::Literal(Literal::Number(parse_number(self.node_text(&expression_node)))),
-				expression_span,
+				exp_node,
 			)),
-			"nil_value" => Ok(Expr::new(ExprKind::Literal(Literal::Nil), expression_span)),
-			"bool" => Ok(Expr::new(
+			"nil_value" => Ok(self.new_expr(ExprKind::Literal(Literal::Nil), exp_node)),
+			"bool" => Ok(self.new_expr(
 				ExprKind::Literal(Literal::Boolean(match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
 					"ERROR" => self.with_error::<bool>("Expected boolean literal", expression_node)?,
 					other => return self.report_unimplemented_grammar(other, "boolean literal", expression_node),
 				})),
-				expression_span,
+				exp_node,
 			)),
 			"intrinsic" => {
 				let name = self.node_symbol(&self.get_child_field(expression_node, "name")?)?;
@@ -2288,10 +2328,7 @@ impl<'s> Parser<'s> {
 					self.add_error("Invalid intrinsic", &expression_node);
 				}
 
-				Ok(Expr::new(
-					ExprKind::Intrinsic(Intrinsic { name, arg_list, kind }),
-					expression_span,
-				))
+				Ok(self.new_expr(ExprKind::Intrinsic(Intrinsic { name, arg_list, kind }), exp_node))
 			}
 			"duration" => self.build_duration(&expression_node),
 			"reference" => self.build_reference(&expression_node, phase),
@@ -2304,18 +2341,18 @@ impl<'s> Parser<'s> {
 				} else {
 					CalleeKind::Expr(Box::new(self.build_expression(&caller_node, phase)?))
 				};
-				Ok(Expr::new(
+				Ok(self.new_expr(
 					ExprKind::Call {
 						callee,
 						arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap(), phase)?,
 					},
-					expression_span,
+					exp_node,
 				))
 			}
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
-			"closure" => Ok(Expr::new(
+			"closure" => Ok(self.new_expr(
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, phase)?),
-				expression_span,
+				exp_node,
 			)),
 			"array_literal" => {
 				let array_type = if let Some(type_node) = get_actual_child_by_field_name(*expression_node, "type") {
@@ -2338,17 +2375,17 @@ impl<'s> Parser<'s> {
 					items.push(self.build_expression(&element_node, phase)?);
 				}
 
-				Ok(Expr::new(
+				Ok(self.new_expr(
 					ExprKind::ArrayLiteral {
 						items,
 						type_: array_type,
 					},
-					expression_span,
+					exp_node,
 				))
 			}
 			"json_map_literal" => {
 				let fields = self.build_json_map_fields(expression_node, phase)?;
-				Ok(Expr::new(ExprKind::JsonMapLiteral { fields }, expression_span))
+				Ok(self.new_expr(ExprKind::JsonMapLiteral { fields }, exp_node))
 			}
 			"map_literal" => {
 				let map_type = if let Some(type_node) = get_actual_child_by_field_name(*expression_node, "type") {
@@ -2359,12 +2396,12 @@ impl<'s> Parser<'s> {
 
 				let fields = self.build_map_fields(expression_node, phase)?;
 
-				Ok(Expr::new(
+				Ok(self.new_expr(
 					ExprKind::MapLiteral {
 						fields,
 						type_: map_type,
 					},
-					expression_span,
+					exp_node,
 				))
 			}
 			"json_literal" => {
@@ -2394,7 +2431,7 @@ impl<'s> Parser<'s> {
 						.is_missing()
 				{
 					self.add_error("Json literal must have an element", &named_element_child.unwrap());
-					Expr::new(ExprKind::Literal(Literal::Number(0.0)), self.node_span(&element_node))
+					self.new_expr(ExprKind::Literal(Literal::Number(0.0)), &element_node)
 				} else {
 					self.build_expression(&element_node, phase)?
 				};
@@ -2412,7 +2449,7 @@ impl<'s> Parser<'s> {
 				}
 
 				let element = Box::new(exp);
-				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
+				Ok(self.new_expr(ExprKind::JsonLiteral { is_mut, element }, exp_node))
 			}
 			"struct_literal" => {
 				let type_ = self.build_type_annotation(get_actual_child_by_field_name(*expression_node, "type"), phase);
@@ -2433,35 +2470,32 @@ impl<'s> Parser<'s> {
 						}
 					}
 				}
-				Ok(Expr::new(
-					ExprKind::StructLiteral { type_: type_?, fields },
-					expression_span,
-				))
+				Ok(self.new_expr(ExprKind::StructLiteral { type_: type_?, fields }, exp_node))
 			}
 			"optional_test" => {
 				let expression = self.build_expression(&expression_node.named_child(0).unwrap(), phase);
-				Ok(Expr::new(
+				Ok(self.new_expr(
 					ExprKind::Unary {
 						op: UnaryOperator::OptionalTest,
 						exp: Box::new(expression?),
 					},
-					expression_span,
+					exp_node,
 				))
 			}
 			"optional_unwrap" => {
 				let expression = self.build_expression(&expression_node.named_child(0).unwrap(), phase);
-				Ok(Expr::new(
+				Ok(self.new_expr(
 					ExprKind::Unary {
 						op: UnaryOperator::OptionalUnwrap,
 						exp: Box::new(expression?),
 					},
-					expression_span,
+					exp_node,
 				))
 			}
 			"compiler_dbg_panic" => {
 				// Handle the debug panic expression (during parsing)
 				dbg_panic!();
-				Ok(Expr::new(ExprKind::CompilerDebugPanic, expression_span))
+				Ok(self.new_expr(ExprKind::CompilerDebugPanic, exp_node))
 			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
@@ -2527,6 +2561,7 @@ impl<'s> Parser<'s> {
 		}
 		Ok(Expr::new(
 			ExprKind::SetLiteral { items, type_: set_type },
+			self.current_stmt_id(),
 			expression_span,
 		))
 	}
@@ -2683,6 +2718,7 @@ impl<'s> Parser<'s> {
 				"\"test:{}\"",
 				&name_text[1..name_text.len() - 1]
 			))),
+			self.current_stmt_id(),
 			self.node_span(&name_node),
 		));
 		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), Phase::Inflight);
@@ -2706,6 +2742,7 @@ impl<'s> Parser<'s> {
 				access: AccessModifier::Public,
 				doc: None,
 			}),
+			self.current_stmt_id(),
 			statements_span.clone(),
 		);
 
@@ -2721,6 +2758,7 @@ impl<'s> Parser<'s> {
 				obj_scope: None,
 				arg_list: ArgList::new(vec![inflight_closure], IndexMap::new(), type_span.clone()),
 			}),
+			self.current_stmt_id(),
 			span,
 		)))
 	}

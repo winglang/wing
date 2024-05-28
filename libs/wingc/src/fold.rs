@@ -411,6 +411,7 @@ where
 	Expr {
 		id: node.id,
 		kind,
+		stmt: node.stmt,
 		span: node.span,
 	}
 }

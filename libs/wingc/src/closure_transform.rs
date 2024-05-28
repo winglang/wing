@@ -210,21 +210,26 @@ impl<'a> Fold for ClosureTransformer<'a> {
 								"nodeof",
 								WingSpan::for_file(file_id),
 							))),
+							expr.stmt,
 							WingSpan::for_file(file_id),
 						))),
 						arg_list: ArgList::new(
 							vec![Expr::new(
 								ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::for_file(file_id)))),
+								expr.stmt,
 								WingSpan::for_file(file_id),
 							)],
 							IndexMap::new(),
 							WingSpan::for_file(file_id),
 						),
 					},
+					expr.stmt,
 					WingSpan::for_file(file_id),
 				);
 
-				let class_init_body = vec![self.ast.new_stmt(
+				let stmt_id = self.ast.gen_stmt_id();
+				let class_init_body = vec![self.ast.new_stmt_with_id(
+					stmt_id,
 					StmtKind::Assignment {
 						kind: AssignmentKind::Assign,
 						variable: Reference::InstanceMember {
@@ -233,7 +238,11 @@ impl<'a> Fold for ClosureTransformer<'a> {
 							optional_accessor: false,
 						},
 
-						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::for_file(file_id)),
+						value: Expr::new(
+							ExprKind::Literal(Literal::Boolean(true)),
+							stmt_id,
+							WingSpan::for_file(file_id),
+						),
 					},
 					0,
 					None,
@@ -249,12 +258,15 @@ impl<'a> Fold for ClosureTransformer<'a> {
 						WingSpan::for_file(file_id),
 					);
 					let this_name = Symbol::new("this", WingSpan::for_file(file_id));
-					let parent_this_def = self.ast.new_stmt(
+					let stmt_id = self.ast.gen_stmt_id();
+					let parent_this_def = self.ast.new_stmt_with_id(
+						stmt_id,
 						StmtKind::Let {
 							reassignable: false,
 							var_name: parent_this_name,
 							initial_value: Expr::new(
 								ExprKind::Reference(Reference::Identifier(this_name.clone())),
+								stmt_id,
 								WingSpan::for_file(file_id),
 							),
 							type_: None,
@@ -334,6 +346,7 @@ impl<'a> Fold for ClosureTransformer<'a> {
 						obj_id: None,
 						obj_scope: None,
 					}),
+					expr.stmt,         // <<-- stmt of original expression
 					expr.span.clone(), // <<-- span of original expression
 				);
 
