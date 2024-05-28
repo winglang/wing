@@ -367,7 +367,7 @@ pub fn compile(
 		jsifier.jsify(file, &scope);
 	}
 	if !found_errors() {
-		match jsifier.output_files.borrow().emit_files(out_dir, true) {
+		match jsifier.output_files.borrow().emit_files(out_dir) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
@@ -383,7 +383,7 @@ pub fn compile(
 		}
 		if !found_errors() {
 			let output_files = dtsifier.output_files.borrow();
-			match output_files.emit_files(out_dir, true) {
+			match output_files.emit_files(out_dir) {
 				Ok(()) => {}
 				Err(err) => report_diagnostic(err.into()),
 			}

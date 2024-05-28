@@ -76,7 +76,7 @@ impl Files {
 
 	/// Write all files to the given directory.
 	/// If minimize_updates is true, only write files that have changed.
-	pub fn emit_files(&self, out_dir: &Utf8Path, minimize_updates: bool) -> Result<(), FilesError> {
+	pub fn emit_files(&self, out_dir: &Utf8Path) -> Result<(), FilesError> {
 		for (path, content) in &self.data {
 			let full_path = out_dir.join(path);
 
@@ -85,12 +85,7 @@ impl Files {
 				fs::create_dir_all(parent).map_err(FilesError::IoError)?;
 			}
 
-			if minimize_updates {
-				// This file may lie outside the output directory, so we may not always want to write it
-				update_file(&full_path, content)?;
-			} else {
-				write_file(&full_path, content)?;
-			}
+			update_file(&full_path, content)?;
 		}
 		Ok(())
 	}
@@ -162,7 +157,7 @@ mod tests {
 			.add_file("file2", "content2".to_owned())
 			.expect("Failed to add file");
 
-		assert!(files.emit_files(out_dir, false).is_ok());
+		assert!(files.emit_files(out_dir).is_ok());
 
 		// Verify that the files were emitted correctly
 		let file1_path = out_dir.join("file1");
@@ -194,7 +189,7 @@ mod tests {
 			.add_file("file2", "content2".to_owned())
 			.expect("Failed to add file");
 
-		assert!(files.emit_files(out_dir, true).is_ok());
+		assert!(files.emit_files(out_dir).is_ok());
 
 		// Verify that the files were emitted correctly
 		let file1_path = &out_dir.join("file1");
@@ -226,7 +221,7 @@ mod tests {
 			.add_file("subdir/file1", "content1".to_owned())
 			.expect("Failed to add file");
 
-		assert!(files.emit_files(out_dir, false).is_ok());
+		assert!(files.emit_files(out_dir).is_ok());
 
 		// Verify that the files were emitted correctly
 		let file1_path = out_dir.join("subdir").join("file1");

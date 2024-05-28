@@ -21,7 +21,6 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly maxWorkers: number;
   private readonly workers = new Array<Sandbox>();
   private createBundlePromise!: Promise<void>;
-  private lastBundleTimestamp = new Date(0);
 
   constructor(props: FunctionSchema) {
     this.sourceCodeFile = props.sourceCodeFile;
@@ -63,17 +62,15 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       return UpdatePlan.REPLACE;
     }
 
-    await this.createBundlePromise;
-    if (!this.bundle) {
-      throw new Error("Bundle not created");
-    }
+    // Make sure that we don't have an ongoing bundle operation
+    await this.ensureBundled();
 
     // Check if any of the bundled files have changed since the last bundling
-    const inputFiles = this.bundle.inputFiles;
-    const modifiedFiles = await checkFilesModifiedSince(
+    const inputFiles = this.bundle!.inputFiles;
+    const modifiedFiles = await filesModifiedSince(
       inputFiles,
       process.cwd(),
-      this.lastBundleTimestamp
+      this.bundle!.time
     );
     if (modifiedFiles.length > 0) {
       this.addTrace(
@@ -155,7 +152,13 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         this.addTrace(msg, TraceType.RESOURCE, level);
       }
     );
-    this.lastBundleTimestamp = new Date();
+  }
+
+  private async ensureBundled(): Promise<void> {
+    await this.createBundlePromise;
+    if (!this.bundle) {
+      throw new Error("Bundle not created");
+    }
   }
 
   // Used internally by cloud.Queue to apply backpressure
@@ -183,13 +186,9 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   private async initWorker(): Promise<Sandbox> {
     // ensure inflight code is bundled before we create any workers
-    await this.createBundlePromise;
+    await this.ensureBundled();
 
-    if (!this.bundle) {
-      throw new Error("Bundle not created");
-    }
-
-    return new Sandbox(this.bundle.outfilePath, {
+    return new Sandbox(this.bundle!.outfilePath, {
       env: {
         ...this.env,
         WING_SIMULATOR_CALLER: this.context.resourceHandle,
@@ -218,7 +217,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 }
 
-async function checkFilesModifiedSince(
+async function filesModifiedSince(
   filePaths: string[],
   directory: string,
   dateTime: Date
