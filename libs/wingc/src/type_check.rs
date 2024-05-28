@@ -3270,7 +3270,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
-	/// to the diagnostics.
+	/// to the diagnostics- based on the parent type.
 	///
 	/// Returns the given type on success, otherwise returns the expected type.
 	fn validate_nested_type(
