@@ -75,7 +75,6 @@ impl Files {
 	}
 
 	/// Write all files to the given directory.
-	/// If minimize_updates is true, only write files that have changed.
 	pub fn emit_files(&self, out_dir: &Utf8Path) -> Result<(), FilesError> {
 		for (path, content) in &self.data {
 			let full_path = out_dir.join(path);
