@@ -2130,7 +2130,7 @@ impl<'a> TypeChecker<'a> {
 					if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 						let (exp_type, p) = self.type_check_exp(interpolated_expr, env);
 						phase = combine_phases(phase, p);
-						self.validate_type_in(exp_type, &[self.types.stringable()], interpolated_expr);
+						self.validate_type_in(exp_type, &[self.types.stringable()], interpolated_expr, None, None);
 					}
 				});
 				(self.types.string(), phase)
@@ -2195,7 +2195,7 @@ impl<'a> TypeChecker<'a> {
 				(self.types.number(), phase)
 			}
 			BinaryOperator::Equal | BinaryOperator::NotEqual => {
-				self.validate_type_binary_equality(rtype, ltype, exp);
+				self.validate_type_binary_equality(rtype, ltype, exp, None, None);
 				(self.types.bool(), phase)
 			}
 			BinaryOperator::Less | BinaryOperator::LessOrEqual | BinaryOperator::Greater | BinaryOperator::GreaterOrEqual => {
@@ -3133,27 +3133,53 @@ impl<'a> TypeChecker<'a> {
 		actual_type: TypeRef,
 		expected_type: TypeRef,
 		span: &impl Spanned,
+		actual_parent_type: Option<TypeRef>,
+		expected_parent_type: Option<TypeRef>,
 	) -> TypeRef {
 		if let (
 			Type::Array(inner_actual) | Type::MutArray(inner_actual),
 			Type::Array(inner_expected) | Type::MutArray(inner_expected),
 		) = (&*actual_type, &*expected_type)
 		{
-			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
+			self.validate_type_binary_equality(
+				*inner_actual,
+				*inner_expected,
+				span,
+				Some(actual_parent_type.unwrap_or(actual_type)),
+				Some(expected_parent_type.unwrap_or(expected_type)),
+			)
 		} else if let (
 			Type::Map(inner_actual) | Type::MutMap(inner_actual),
 			Type::Map(inner_expected) | Type::MutMap(inner_expected),
 		) = (&*actual_type, &*expected_type)
 		{
-			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
+			self.validate_type_binary_equality(
+				*inner_actual,
+				*inner_expected,
+				span,
+				Some(actual_parent_type.unwrap_or(actual_type)),
+				Some(expected_parent_type.unwrap_or(expected_type)),
+			)
 		} else if let (
 			Type::Set(inner_actual) | Type::MutSet(inner_actual),
 			Type::Set(inner_expected) | Type::MutSet(inner_expected),
 		) = (&*actual_type, &*expected_type)
 		{
-			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
+			self.validate_type_binary_equality(
+				*inner_actual,
+				*inner_expected,
+				span,
+				Some(actual_parent_type.unwrap_or(actual_type)),
+				Some(expected_parent_type.unwrap_or(expected_type)),
+			)
 		} else {
-			self.validate_type(actual_type, expected_type, span)
+			self.validate_nested_type(
+				actual_type,
+				expected_type,
+				span,
+				actual_parent_type,
+				expected_parent_type,
+			)
 		}
 	}
 
@@ -3240,13 +3266,45 @@ impl<'a> TypeChecker<'a> {
 	///
 	/// Returns the given type on success, otherwise returns the expected type.
 	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> TypeRef {
-		self.validate_type_in(actual_type, &[expected_type], span)
+		self.validate_type_in(actual_type, &[expected_type], span, None, None)
+	}
+
+	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
+	/// to the diagnostics.
+	///
+	/// Returns the given type on success, otherwise returns the expected type.
+	fn validate_nested_type(
+		&mut self,
+		actual_type: TypeRef,
+		expected_type: TypeRef,
+		span: &impl Spanned,
+		actual_parent_type: Option<TypeRef>,
+		expected_parent_type: Option<TypeRef>,
+	) -> TypeRef {
+		if let Some(expected_parent_t) = expected_parent_type {
+			self.validate_type_in(
+				actual_type,
+				&[expected_type],
+				span,
+				actual_parent_type,
+				Some(&[expected_parent_t]),
+			)
+		} else {
+			self.validate_type_in(actual_type, &[expected_type], span, actual_parent_type, None)
+		}
 	}
 
 	/// Validate that the given type is a subtype (or same) as the one of the expected types. If not, add
 	/// an error to the diagnostics.
 	/// Returns the given type on success, otherwise returns one of the expected types.
-	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl Spanned) -> TypeRef {
+	fn validate_type_in(
+		&mut self,
+		actual_type: TypeRef,
+		expected_types: &[TypeRef],
+		span: &impl Spanned,
+		actual_parent_type: Option<TypeRef>,
+		expected_parent_types: Option<&[TypeRef]>,
+	) -> TypeRef {
 		assert!(expected_types.len() > 0);
 		let first_expected_type = expected_types[0];
 		let mut return_type = actual_type;
@@ -3295,18 +3353,20 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 
-		let expected_type_str = if expected_types.len() > 1 {
-			let expected_types_list = expected_types
+		let expected_type_origin = expected_parent_types.unwrap_or(expected_types);
+		let expected_type_str = if expected_type_origin.len() > 1 {
+			let expected_types_list = expected_type_origin
 				.iter()
 				.map(|t| format!("{}", t))
 				.collect::<Vec<String>>()
 				.join(",");
 			format!("one of \"{}\"", expected_types_list)
 		} else {
-			format!("\"{}\"", first_expected_type)
+			format!("\"{}\"", expected_type_origin[0])
 		};
 
-		let message = format!("Expected type to be {expected_type_str}, but got \"{return_type}\" instead");
+		let return_type_str = actual_parent_type.unwrap_or(return_type);
+		let message = format!("Expected type to be {expected_type_str}, but got \"{return_type_str}\" instead");
 		let mut hints: Vec<String> = vec![];
 		if return_type.is_nil() && expected_types.len() == 1 {
 			hints.push(format!(
@@ -4741,8 +4801,8 @@ impl<'a> TypeChecker<'a> {
 		// ```
 		match kind {
 			AssignmentKind::AssignIncr => {
-				self.validate_type_in(exp_type, &[self.types.number(), self.types.string()], value);
-				self.validate_type_in(var_type, &[self.types.number(), self.types.string()], value);
+				self.validate_type_in(exp_type, &[self.types.number(), self.types.string()], value, None, None);
+				self.validate_type_in(var_type, &[self.types.number(), self.types.string()], value, None, None);
 			}
 			AssignmentKind::AssignDecr => {
 				self.validate_type(exp_type, self.types.number(), value);
@@ -6086,11 +6146,23 @@ impl<'a> TypeChecker<'a> {
 				let res = match *instance_type {
 					// TODO: it might be possible to look at Type::Json's inner data to give a more specific type
 					Type::Json(_) => {
-						self.validate_type_in(index_type, &[self.types.number(), self.types.string()], index);
+						self.validate_type_in(
+							index_type,
+							&[self.types.number(), self.types.string()],
+							index,
+							None,
+							None,
+						);
 						ResolveReferenceResult::Location(instance_type, self.types.json()) // indexing into a Json object returns a Json object
 					}
 					Type::MutJson => {
-						self.validate_type_in(index_type, &[self.types.number(), self.types.string()], index);
+						self.validate_type_in(
+							index_type,
+							&[self.types.number(), self.types.string()],
+							index,
+							None,
+							None,
+						);
 						ResolveReferenceResult::Location(instance_type, self.types.mut_json()) // indexing into a MutJson object returns a MutJson object
 					}
 					Type::Array(inner_type) | Type::MutArray(inner_type) => {
