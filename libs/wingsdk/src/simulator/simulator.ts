@@ -1084,7 +1084,8 @@ export class Simulator {
 
       case UpdatePlan.AUTO:
         // Replace the resource if the new configuration is different from the current configuration
-        // Note: we're comparing the unresolved configurations, either of which both contain tokens.
+        //
+        // Note: we're comparing the unresolved configurations, either of which may contain tokens.
         // So even if the configurations may look the same, it's possible that a replacement
         // is still necessary.
         return invalidated;
