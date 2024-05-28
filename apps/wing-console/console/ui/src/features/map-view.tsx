@@ -34,12 +34,12 @@ const PORT_ANCHOR = 0;
 const EDGE_ROUNDED_RADIUS = 10;
 // For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
 const baseLayoutOptions: LayoutOptions = {
+  "elk.interactiveLayout": "true",
   "elk.alignment": "CENTER",
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
   "elk.algorithm": "org.eclipse.elk.layered",
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
 };
-
 interface WrapperProps {
   name: string;
   fqn: string;

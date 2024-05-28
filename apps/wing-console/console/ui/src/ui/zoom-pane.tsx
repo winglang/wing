@@ -27,6 +27,8 @@ export interface Viewport {
 type BoundingBox = Viewport;
 
 export interface ZoomPaneContextValue {
+  expandAll(): void;
+  collapseAll(): void;
   zoomIn(): void;
   zoomOut(): void;
   zoomToFit(viewport?: Viewport, skipAnimation?: boolean): void;
@@ -251,6 +253,14 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     containerRef.current,
   );
 
+  const expandAll = useCallback(() => {
+    console.log("expandAll");
+  }, []);
+
+  const collapseAll = useCallback(() => {
+    console.log("collapseAll");
+  }, []);
+
   const zoomIn = useCallback(() => {
     const container = containerRef.current;
     if (!container) {
@@ -398,6 +408,8 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         <div className="grow"></div>
         <div className="relative cursor-grab backdrop-blur">
           <MapControls
+            onExpandAll={expandAll}
+            onCollapseAll={collapseAll}
             onZoomIn={zoomIn}
             onZoomOut={zoomOut}
             onZoomToFit={zoomToFit}

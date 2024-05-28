@@ -1,3 +1,4 @@
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import {
   ArrowsPointingOutIcon,
   MagnifyingGlassMinusIcon,
@@ -9,9 +10,13 @@ export interface MapControlsProps {
   onZoomIn?: () => void;
   onZoomOut?: () => void;
   onZoomToFit?: () => void;
+  onCollapseAll?: () => void;
+  onExpandAll?: () => void;
 }
 
 export const MapControls = ({
+  onCollapseAll,
+  onExpandAll,
   onZoomIn,
   onZoomOut,
   onZoomToFit,
@@ -22,6 +27,13 @@ export const MapControls = ({
 
       <div>
         <Toolbar>
+          <ToolbarButton title="Collapse all" onClick={onCollapseAll}>
+            <ChevronDownIcon className="w-4 h-4" />
+          </ToolbarButton>
+          <ToolbarButton title="Expand all" onClick={onExpandAll}>
+            <ChevronUpIcon className="w-4 h-4" />
+          </ToolbarButton>
+
           <ToolbarButton title="Zoom out" onClick={onZoomOut}>
             <MagnifyingGlassMinusIcon className="w-4 h-4" />
           </ToolbarButton>
