@@ -75,7 +75,8 @@ impl Files {
 	}
 
 	/// Write all files to the given directory.
-	pub fn emit_files(&self, out_dir: &Utf8Path) -> Result<(), FilesError> {
+	/// If minimize_updates is true, only write files that have changed.
+	pub fn emit_files(&self, out_dir: &Utf8Path, minimize_updates: bool) -> Result<(), FilesError> {
 		for (path, content) in &self.data {
 			let full_path = out_dir.join(path);
 
@@ -84,7 +85,11 @@ impl Files {
 				fs::create_dir_all(parent).map_err(FilesError::IoError)?;
 			}
 
-			write_file(&full_path, content)?;
+			if minimize_updates {
+				update_file(&full_path, content)?;
+			} else {
+				write_file(&full_path, content)?;
+			}
 		}
 		Ok(())
 	}
@@ -151,7 +156,7 @@ mod tests {
 			.add_file("file2", "content2".to_owned())
 			.expect("Failed to add file");
 
-		assert!(files.emit_files(out_dir).is_ok());
+		assert!(files.emit_files(out_dir, false).is_ok());
 
 		// Verify that the files were emitted correctly
 		let file1_path = out_dir.join("file1");
@@ -166,6 +171,46 @@ mod tests {
 	}
 
 	#[test]
+	fn test_emit_files_with_minimize_updates() {
+		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
+		let out_dir = Utf8Path::from_path(temp_dir.path()).expect("invalid unicode path");
+
+		write_file(&out_dir.join("file1"), "content1").expect("Failed to write file");
+
+		let file1_stat = out_dir.join("file1").metadata().expect("Failed to get file metadata");
+		let file1_modified = file1_stat.modified().expect("Failed to get file modified time");
+
+		let mut files = Files::new();
+		files
+			.add_file("file1", "content1".to_owned())
+			.expect("Failed to add file");
+		files
+			.add_file("file2", "content2".to_owned())
+			.expect("Failed to add file");
+
+		assert!(files.emit_files(out_dir, true).is_ok());
+
+		// Verify that the files were emitted correctly
+		let file1_path = &out_dir.join("file1");
+		let file2_path = out_dir.join("file2");
+		assert!(file1_path.exists());
+		assert!(file2_path.exists());
+
+		let file1_content = fs::read_to_string(file1_path).expect("Failed to read file");
+		let file2_content = fs::read_to_string(file2_path).expect("Failed to read file");
+		assert_eq!(file1_content, "content1");
+		assert_eq!(file2_content, "content2");
+
+		// Verify that file1 was not updated
+		let updated = file1_path
+			.metadata()
+			.expect("Failed to get file metadata")
+			.modified()
+			.expect("Failed to get file modified time");
+		assert_eq!(updated, file1_modified);
+	}
+
+	#[test]
 	fn test_emit_files_creates_intermediate_directories() {
 		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
 		let out_dir = Utf8Path::from_path(temp_dir.path()).expect("invalid unicode path");
@@ -175,7 +220,7 @@ mod tests {
 			.add_file("subdir/file1", "content1".to_owned())
 			.expect("Failed to add file");
 
-		assert!(files.emit_files(out_dir).is_ok());
+		assert!(files.emit_files(out_dir, false).is_ok());
 
 		// Verify that the files were emitted correctly
 		let file1_path = out_dir.join("subdir").join("file1");
