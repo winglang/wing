@@ -58,6 +58,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   public async save(): Promise<void> {}
 
   public async plan(invalidated: boolean): Promise<UpdatePlan> {
+    // If our function config changed, always replace
     if (invalidated) {
       return UpdatePlan.REPLACE;
     }
