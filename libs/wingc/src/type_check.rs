@@ -7,8 +7,8 @@ pub mod symbol_env;
 pub(crate) mod type_reference_transform;
 
 use crate::ast::{
-	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExplicitLift, ExprId,
-	FunctionDefinition, IfLet, Intrinsic, IntrinsicKind, New, TypeAnnotationKind,
+	self, AccessModifier, ArgListId, AssignmentKind, Ast, BringSource, CalleeKind, ClassField, ExplicitLift, ExprId,
+	FunctionDefinition, IfLet, Intrinsic, IntrinsicKind, New, ScopeId, TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -4567,6 +4567,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 				.as_function_sig()
 				.expect("ctor to be a function");
 			if let FunctionBody::Statements(ctor_body) = ctor_def.body {
+				let ctor_body = self.ast.get_scope(ctor_body);
 				// Make sure there's a `super()` call to the parent ctor
 				if parent_ctor_sig.min_parameters() > 0 {
 					// Find the `super()` call
@@ -4574,7 +4575,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 						.statements
 						.iter()
 						.enumerate()
-						.find(|(_, s)| matches!(self.ast.get_stmt(*s).kind, StmtKind::SuperConstructor { .. }))
+						.find(|(_, s)| matches!(self.ast.get_stmt(**s).kind, StmtKind::SuperConstructor { .. }))
 					{
 						// We have a super call, make sure it's the first statement (after any type defs)
 						let expected_idx = ctor_body
@@ -4584,7 +4585,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							.expect("at least the super call stmt");
 						if idx != expected_idx {
 							self.spanned_error(
-								super_call,
+								self.ast.get_stmt(*super_call),
 								format!(
 									"super() call must be the first statement of {}'s constructor",
 									ast_class.name
@@ -4592,13 +4593,13 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							);
 						}
 					} else {
-					self.spanned_error(
-						ctor_body,
-						format!(
-							"Missing super() call as first statement of {}'s constructor",
-							ast_class.name
-						),
-					);
+						self.spanned_error(
+							ctor_body,
+							format!(
+								"Missing super() call as first statement of {}'s constructor",
+								ast_class.name
+							),
+						);
 					}
 				}
 			}

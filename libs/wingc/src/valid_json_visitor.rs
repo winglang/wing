@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Expr, ExprKind, Intrinsic, IntrinsicKind, Scope},
+	ast::{Ast, Expr, ExprKind, Intrinsic, IntrinsicKind, Scope},
 	diagnostic::{report_diagnostic, Diagnostic},
 	type_check::{JsonData, JsonDataKind, Type, Types},
 	visit::{self, Visit},

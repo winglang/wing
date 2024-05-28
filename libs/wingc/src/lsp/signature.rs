@@ -4,7 +4,7 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{CalleeKind, Class, Expr, ExprKind, New, Stmt, StmtKind, Symbol};
+use crate::ast::{Ast, CalleeKind, Class, Expr, ExprKind, New, Stmt, StmtKind, Symbol};
 use crate::docs::{render_summary, Documented};
 use crate::jsify::codemaker::CodeMaker;
 use crate::lsp::sync::PROJECT_DATA;

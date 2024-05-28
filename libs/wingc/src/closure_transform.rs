@@ -171,14 +171,15 @@ impl<'a> Fold for ClosureTransformer<'a> {
 				let class_init_params: Vec<FunctionParameter> = vec![];
 
 				let parent_this = format!("{}_{}", PARENT_THIS_NAME, self.closure_counter);
-				let mut this_transform = RenameThisTransformer::new(self.ast_mut(), &parent_this.as_str());
-				let new_func_def = if self.inside_scope_with_this {
+				let (new_func_def, preformed_this_renames) = if self.inside_scope_with_this {
+					let mut this_transform = RenameThisTransformer::new(self.ast_mut(), &parent_this.as_str());
 					// If we are inside a class, we transform inflight closures with an extra
 					// `let __parent_this_${CLOSURE_COUNT} = this;` statement before the class definition, and replace references
 					// to `this` with `__parent_this_${CLOSURE_COUNT}` so that they can access the parent class's fields.
-					this_transform.fold_function_definition(func_def)
+					let tr = this_transform.fold_function_definition(func_def);
+					(tr, this_transform.performed_renames)
 				} else {
-					func_def
+					(func_def, false)
 				};
 
 				let new_func_def = FunctionDefinition {
@@ -247,7 +248,7 @@ impl<'a> Fold for ClosureTransformer<'a> {
 
 				// If we are inside a scope with "this", add define `let __parent_this_${CLOSURE_COUNT} = this` which can be
 				// used by the newly-created preflight classes
-				if self.inside_scope_with_this && this_transform.performed_renames {
+				if self.inside_scope_with_this && preformed_this_renames {
 					let parent_this_name = Symbol::new(parent_this, WingSpan::for_file(file_id));
 					let this_name = Symbol::new("this", WingSpan::for_file(file_id));
 					let stmt_id = self.ast.gen_stmt_id();
@@ -356,20 +357,17 @@ struct RenameThisTransformer<'a> {
 	from: &'a str,
 	to: &'a str,
 	performed_renames: bool,
-	// The transform shouldn't change references to `this` inside inflight classes since
-	// they refer to different objects.
-	inside_class: bool,
 	/// The AST being transformed
 	ast: &'a mut Ast,
 }
 
 impl<'a> RenameThisTransformer<'a> {
-	fn new(to: &'a str) -> Self {
+	fn new(ast: &'a mut Ast, to: &'a str) -> Self {
 		Self {
 			from: "this",
 			to,
-			inside_class: false,
 			performed_renames: false,
+			ast,
 		}
 	}
 }
