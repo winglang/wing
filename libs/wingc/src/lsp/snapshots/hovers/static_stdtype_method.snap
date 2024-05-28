@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nstatic stringify: (json: any, options: JsonStringifyOptions?): str\n```\n---\nFormats Json as string.\n### Parameters\n- `json` — `any` — to format as string.\n- `...options` — `JsonStringifyOptions?`\n  \n  - `indent` — `num` — Indentation spaces number.\n\n### Returns\nstring representation of the Json"
+  value: "```wing\nstatic stringify(json: any, ...options: JsonStringifyOptions?): str\n```\n---\nFormats Json as string.\n\n#### Returns\nstring representation of the Json"
 range:
   start:
     line: 1

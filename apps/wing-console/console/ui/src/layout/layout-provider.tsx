@@ -64,7 +64,6 @@ export function LayoutProvider({
         },
         errorScreen: {
           position: "bottom",
-          displayTitle: false,
           displayLinks: false,
         },
         statusBar: {

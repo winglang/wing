@@ -4,23 +4,17 @@ source: libs/wingc/src/lsp/completions.rs
 - label: this
   kind: 6
   detail: "inflight (): void"
-  documentation:
-    kind: markdown
-    value: "```wing\npreflight this: inflight (): void\n```"
   sortText: bb|this
 - label: x
   kind: 6
   detail: num
-  documentation:
-    kind: markdown
-    value: "```wing\npreflight x: num\n```"
   sortText: bb|x
 - label: assert
   kind: 3
   detail: "(condition: bool, message: str?): void"
   documentation:
     kind: markdown
-    value: "```wing\nassert: (condition: bool, message: str?): void\n```\n---\nAsserts that a condition is true\n### Parameters\n- `condition` — `bool` — The condition to assert\n- `message` — `str?` — The message to log if the condition is false"
+    value: Asserts that a condition is true
   sortText: cc|assert
   insertText: assert($1)
   insertTextFormat: 2
@@ -32,7 +26,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(value: stringable): void"
   documentation:
     kind: markdown
-    value: "```wing\nlog: (value: stringable): void\n```\n---\nLogs a value\n### Parameters\n- `value` — `stringable` — The value to log"
+    value: Logs a value
   sortText: cc|log
   insertText: log($1)
   insertTextFormat: 2
@@ -44,7 +38,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "preflight (construct: IConstruct): Node"
   documentation:
     kind: markdown
-    value: "```wing\nnodeof: preflight (construct: IConstruct): Node\n```\n---\nObtain the tree node of a preflight resource.\n### Parameters\n- `construct` — `IConstruct` — The construct to obtain the tree node of"
+    value: Obtain the tree node of a preflight resource.
   sortText: cc|nodeof
   insertText: nodeof($1)
   insertTextFormat: 2
@@ -56,7 +50,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(value: any): any"
   documentation:
     kind: markdown
-    value: "```wing\nunsafeCast: (value: any): any\n```\n---\nCasts a value into a different type. This is unsafe and can cause runtime errors\n### Parameters\n- `value` — `any` — The value to cast into a different type"
+    value: Casts a value into a different type. This is unsafe and can cause runtime errors
   sortText: cc|unsafeCast
   insertText: unsafeCast($1)
   insertTextFormat: 2
