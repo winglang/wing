@@ -660,12 +660,10 @@ describe("in-place updates", () => {
       "root/State.my_value = bang",
       "root/Service started",
       "root/Function started",
-      "Update: 0 added, 2 updated, 0 deleted",
+      "Update: 0 added, 1 updated, 0 deleted",
       "root/Service stopped",
-      "root/Function stopped",
       "root/State.my_value = bing",
       "root/Service started",
-      "root/Function started",
     ]);
   });
 
@@ -694,35 +692,13 @@ describe("in-place updates", () => {
       "root/Bucket1/Policy started",
       "root/OnDeploy/Function started",
       "root/OnDeploy started",
-      "Update: 0 added, 3 updated, 0 deleted",
-      "root/OnDeploy stopped",
-      "root/OnDeploy/Function stopped",
+      "Update: 0 added, 2 updated, 0 deleted",
       "root/Bucket1/Policy stopped",
+      "root/OnDeploy stopped",
       "root/Bucket1 stopped",
       "root/Bucket1 started",
       "root/Bucket1/Policy started",
-      "root/OnDeploy/Function started",
       "root/OnDeploy started",
-    ]);
-  });
-
-  test("cloud.Function is always replaced", async () => {
-    const app = new SimApp();
-    new Function(app, "Function", NOOP);
-
-    const sim = await app.startSimulator();
-
-    const app2 = new SimApp();
-    new Function(app2, "Function", NOOP);
-
-    const app2Dir = app2.synth();
-    await sim.update(app2Dir);
-
-    expect(simTraces(sim)).toEqual([
-      "root/Function started",
-      "Update: 0 added, 1 updated, 0 deleted",
-      "root/Function stopped",
-      "root/Function started",
     ]);
   });
 
@@ -761,10 +737,8 @@ describe("in-place updates", () => {
     expect(simTraces(sim)).toEqual([
       "root/OnDeploy/Function started",
       "root/OnDeploy started",
-      "Update: 0 added, 2 updated, 0 deleted",
+      "Update: 0 added, 1 updated, 0 deleted",
       "root/OnDeploy stopped",
-      "root/OnDeploy/Function stopped",
-      "root/OnDeploy/Function started",
       "root/OnDeploy started",
     ]);
   });
@@ -800,15 +774,13 @@ describe("in-place updates", () => {
       "root/Api/OnRequestHandler0 started",
       "root/Api/Policy started",
       "root/Api/ApiEventMapping0 started",
-      "Update: 0 added, 3 updated, 0 deleted",
+      "Update: 0 added, 2 updated, 0 deleted",
+      "root/Api/Endpoint stopped",
       "root/Api/Policy stopped",
       "root/Api/ApiEventMapping0 stopped",
-      "root/Api/OnRequestHandler0 stopped",
-      "root/Api/Endpoint stopped",
       "root/Api stopped",
       "root/Api started",
       "root/Api/Endpoint started",
-      "root/Api/OnRequestHandler0 started",
       "root/Api/Policy started",
       "root/Api/ApiEventMapping0 started",
     ]);

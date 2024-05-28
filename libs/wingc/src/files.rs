@@ -84,12 +84,7 @@ impl Files {
 				fs::create_dir_all(parent).map_err(FilesError::IoError)?;
 			}
 
-			if path.starts_with("..") {
-				// This file may lie outside the output directory, so we may not always want to write it
-				update_file(&full_path, content)?;
-			} else {
-				write_file(&full_path, content)?;
-			}
+			update_file(&full_path, content)?;
 		}
 		Ok(())
 	}
@@ -173,6 +168,46 @@ mod tests {
 		let file2_content = fs::read_to_string(file2_path).expect("Failed to read file");
 		assert_eq!(file1_content, "content1");
 		assert_eq!(file2_content, "content2");
+	}
+
+	#[test]
+	fn test_emit_files_avoids_rewrites() {
+		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
+		let out_dir = Utf8Path::from_path(temp_dir.path()).expect("invalid unicode path");
+
+		write_file(&out_dir.join("file1"), "content1").expect("Failed to write file");
+
+		let file1_stat = out_dir.join("file1").metadata().expect("Failed to get file metadata");
+		let file1_modified = file1_stat.modified().expect("Failed to get file modified time");
+
+		let mut files = Files::new();
+		files
+			.add_file("file1", "content1".to_owned())
+			.expect("Failed to add file");
+		files
+			.add_file("file2", "content2".to_owned())
+			.expect("Failed to add file");
+
+		assert!(files.emit_files(out_dir).is_ok());
+
+		// Verify that the files were emitted correctly
+		let file1_path = &out_dir.join("file1");
+		let file2_path = out_dir.join("file2");
+		assert!(file1_path.exists());
+		assert!(file2_path.exists());
+
+		let file1_content = fs::read_to_string(file1_path).expect("Failed to read file");
+		let file2_content = fs::read_to_string(file2_path).expect("Failed to read file");
+		assert_eq!(file1_content, "content1");
+		assert_eq!(file2_content, "content2");
+
+		// Verify that file1 was not updated
+		let updated = file1_path
+			.metadata()
+			.expect("Failed to get file metadata")
+			.modified()
+			.expect("Failed to get file modified time");
+		assert_eq!(updated, file1_modified);
 	}
 
 	#[test]
