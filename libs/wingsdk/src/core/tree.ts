@@ -89,7 +89,8 @@ export type UIComponent =
   | UISection
   | UIButton
   | UIHttpClient
-  | UIFileBrowser;
+  | UIFileBrowser
+  | UIGraph;
 
 /** @internal */
 export interface UIField {
@@ -132,6 +133,12 @@ export interface UIFileBrowser {
   readonly deleteHandler: string;
   readonly getHandler: string;
   readonly listHandler: string;
+}
+
+/** @internal */
+export interface UIGraph {
+  readonly kind: "graph";
+  readonly title: string;
 }
 
 /**

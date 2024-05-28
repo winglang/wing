@@ -8,6 +8,7 @@ import { Domain } from "./domain";
 import { Endpoint } from "./endpoint";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { Function } from "./function";
+import { Metric } from "./metric";
 import { OnDeploy } from "./on-deploy";
 import { POLICY_FQN, Policy } from "./policy";
 import { Queue } from "./queue";
@@ -29,6 +30,7 @@ import {
   DOMAIN_FQN,
   ENDPOINT_FQN,
   FUNCTION_FQN,
+  METRIC_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
   SCHEDULE_FQN,
@@ -61,6 +63,7 @@ const SIMULATOR_CLASS_DATA = {
   [ENDPOINT_FQN]: "Endpoint",
   [EVENT_MAPPING_FQN]: "EventMapping",
   [FUNCTION_FQN]: "Function",
+  [METRIC_FQN]: "Metric",
   [ON_DEPLOY_FQN]: "OnDeploy",
   [POLICY_FQN]: "Policy",
   [QUEUE_FQN]: "Queue",
@@ -116,6 +119,9 @@ export class App extends core.App {
 
       case FUNCTION_FQN:
         return require.resolve("./function.inflight");
+
+      case METRIC_FQN:
+        return require.resolve("./metric.inflight");
 
       case ON_DEPLOY_FQN:
         return require.resolve("./on-deploy.inflight");
@@ -184,6 +190,9 @@ export class App extends core.App {
 
       case FUNCTION_FQN:
         return Function;
+
+      case METRIC_FQN:
+        return Metric;
 
       case ON_DEPLOY_FQN:
         return OnDeploy;

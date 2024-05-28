@@ -4,6 +4,7 @@ export * from "./counter";
 export * from "./domain";
 export * from "./endpoint";
 export * from "./function";
+export * from "./metric";
 export * from "./on-deploy";
 export * from "./queue";
 export * from "./schedule";
