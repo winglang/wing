@@ -68,8 +68,8 @@ function mapApigatewayEventToCloudApiRequest(
  * @param body body
  * @returns JSON body
  */
-function parseBody(request: APIGatewayProxyEvent): string {
-  if (!request.body) return "";
+function parseBody(request: APIGatewayProxyEvent): string | undefined {
+  if (request.body === null) return undefined;
 
   const contentType = Object.entries(request.headers).find(
     ([key, _]) => key.toLowerCase() === "content-type"
