@@ -5,13 +5,14 @@ use lsp_types::{
 };
 
 use crate::ast::{CalleeKind, Class, Expr, ExprKind, New, Stmt, StmtKind, Symbol};
-use crate::docs::Documented;
+use crate::docs::{render_summary, Documented};
+use crate::jsify::codemaker::CodeMaker;
 use crate::lsp::sync::PROJECT_DATA;
 use crate::lsp::sync::WING_TYPES;
 
 use crate::type_check::symbol_env::SymbolEnvRef;
 use crate::type_check::{
-	resolve_super_method, resolve_user_defined_type, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	resolve_super_method, resolve_user_defined_type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_scope, visit_stmt, Visit};
 use crate::wasm_util::extern_json_fn;
@@ -35,10 +36,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			let mut scope_visitor = ScopeVisitor::new(&types, params.text_document_position_params.position);
 			scope_visitor.visit_scope(root_scope);
 
-			let sig_data: (
-				crate::type_check::UnsafeRef<crate::type_check::Type>,
-				&crate::ast::ArgList,
-			) = if scope_visitor.call_stmt.is_some() {
+			let sig_data: (TypeRef, &crate::ast::ArgList) = if scope_visitor.call_stmt.is_some() {
 				let stmt = scope_visitor.call_stmt?;
 				let class = scope_visitor.class?;
 
@@ -137,11 +135,17 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			let param_text = param_data.join(", ");
 			let label = format!("({}): {}", param_text, sig.return_type);
 
+			let mut sig_docs = CodeMaker::default();
+			if let Some(d) = sig_data.0.docs() {
+				render_summary(&mut sig_docs, d);
+			}
+			let sig_docs = sig_docs.to_string();
+
 			let signature_info = SignatureInformation {
 				label,
 				documentation: Some(Documentation::MarkupContent(MarkupContent {
 					kind: MarkupKind::Markdown,
-					value: sig_data.0.render_docs(),
+					value: sig_docs.to_string(),
 				})),
 				parameters: Some(
 					sig
@@ -153,15 +157,21 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 							let p_type = p.1.typeref;
 							let structy = p_type.maybe_unwrap_option();
 							let structy = structy.as_struct();
-							let p_docs = p_type.render_docs();
-							let p_docs = if p_docs.is_empty() {
+
+							let docstring = p.1.docs.render();
+							let p_docs = if docstring.is_empty() {
 								None
 							} else {
 								Some(Documentation::MarkupContent(MarkupContent {
 									kind: MarkupKind::Markdown,
-									value: p_docs,
+									value: if sig_docs.is_empty() {
+										docstring
+									} else {
+										format!("{docstring}\n\n")
+									},
 								}))
 							};
+
 							ParameterInformation {
 								label: if last_arg && structy.is_some() {
 									ParameterLabel::Simple(format!("...{}", p.1.name))
@@ -173,7 +183,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 									if p.0 == sig.parameters.len() - 1 {
 										Some(Documentation::MarkupContent(MarkupContent {
 											kind: MarkupKind::Markdown,
-											value: p_type.render_docs(),
+											value: format!("```wing\n{}\n```\n", p_type.render_docs()),
 										}))
 									} else {
 										p_docs

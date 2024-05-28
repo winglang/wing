@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nstatic preflight static_method: preflight (): void\n```"
+  value: "```wing\nstatic preflight static_method(): void\n```"
 range:
   start:
     line: 4

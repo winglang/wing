@@ -415,7 +415,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
         },
       },
     },
-    "/{proxy+}": {
+    "/{name}/{age}/{proxy+}": {
       "x-amazon-apigateway-any-method": {
         "produces": [
           "application/json",
@@ -502,7 +502,7 @@ exports[`api with 'name' parameter 1`] = `
         },
       },
     },
-    "/{proxy+}": {
+    "/{name}/{proxy+}": {
       "x-amazon-apigateway-any-method": {
         "produces": [
           "application/json",

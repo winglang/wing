@@ -253,18 +253,38 @@ export abstract class AutoIdResource extends Resource {
 }
 
 /**
- * Annotations about what resources an inflight operation may access.
- *
- * The following example says that the operation may call "put" on a resource
- * at "this.inner", or it may call "get" on a resource passed as an argument named
- * "other".
- * @example
- * { "this.inner": { ops: ["put"] }, "other": { ops: ["get"] } }
- *
- * @internal
+ * Annotations about preflight data and desired inflight operations.
  */
-export interface OperationAnnotation {
-  [resource: string]: {
-    ops: string[];
-  };
+export interface LiftAnnotation {
+  /**
+   * Preflight object to lift
+   */
+  readonly obj: any;
+
+  /**
+   * Name of the object in the inflight context.
+   * Required if the object provided is not an identifier.
+   * @default "obj" If the object is a simple identifier, it will be used as the alias
+   */
+  readonly alias?: string;
+
+  /**
+   * Operations to lift on the object.
+   * @default * All possible operations will be available
+   */
+  readonly ops?: string[];
+}
+
+/** Options for the `@inflight` intrinsic */
+export interface ImportInflightOptions {
+  /**
+   * Name of exported function
+   * @default "default"
+   * */
+  readonly export?: string;
+  /**
+   * Mapping of available symbols to a lift declaration
+   * @default * All possible operations will be available
+   */
+  readonly lifts?: LiftAnnotation[];
 }

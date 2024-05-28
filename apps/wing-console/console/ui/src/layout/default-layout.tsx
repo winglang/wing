@@ -220,10 +220,7 @@ export const DefaultLayout = ({
             {cloudAppState === "error" &&
               layout.errorScreen?.position === "default" && (
                 <div className="flex-1 flex relative">
-                  <BlueScreenOfDeath
-                    title="An error has occurred"
-                    error={errorMessage.data ?? ""}
-                  />
+                  <BlueScreenOfDeath error={errorMessage.data ?? ""} />
                 </div>
               )}
 
@@ -424,7 +421,6 @@ export const DefaultLayout = ({
                       )}
                     >
                       <BlueScreenOfDeath
-                        title="An error has occurred"
                         error={errorMessage.data ?? ""}
                         displayLinks={layout.errorScreen?.displayLinks}
                       />

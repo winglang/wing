@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Expr, ExprKind, Scope},
+	ast::{Expr, ExprKind, Intrinsic, IntrinsicKind, Scope},
 	diagnostic::{report_diagnostic, Diagnostic},
 	type_check::{JsonData, JsonDataKind, Type, Types},
 	visit::{self, Visit},
@@ -26,7 +26,37 @@ impl<'a> ValidJsonVisitor<'a> {
 
 impl<'a> Visit<'_> for ValidJsonVisitor<'a> {
 	fn visit_expr(&mut self, expr: &Expr) {
+		if matches!(
+			expr.kind,
+			ExprKind::Intrinsic(Intrinsic {
+				kind: IntrinsicKind::Unknown,
+				..
+			})
+		) {
+			// don't bother checking unknown intrinsics
+			return;
+		}
+
 		if let Some(t) = self.types.try_get_expr_type(expr.id) {
+			let t = self.types.maybe_unwrap_inference(t);
+
+			// If the type is Array<Json>, check if the entire array is being cast to a Array<Struct>
+			if let Type::Array(inner_t) = &*t {
+				let inner_t = self.types.maybe_unwrap_inference(*inner_t);
+				if let Type::Json(Some(JsonData { expression_id, .. })) = &*inner_t {
+					let exclude = if expr.id == *expression_id {
+						// this is a origin of the Json literal data, so check if it's being cast to something else
+						self.types.get_type_from_json_cast(*expression_id).is_some()
+					} else {
+						// only bother checking literals, no reason to check references to Json data
+						matches!(expr.kind, ExprKind::JsonLiteral { .. })
+					};
+					if exclude {
+						return;
+					}
+				}
+			}
+
 			// if the type is json with known values, then we may need to validate that the values are legal json values
 			if let Type::Json(Some(JsonData { kind, expression_id })) = &*t {
 				// if this json expr is not being cast to something else, then it must be a legal json value
@@ -77,6 +107,9 @@ impl<'a> Visit<'_> for ValidJsonVisitor<'a> {
 							}
 						}
 					}
+
+					// don't bother checking the children of this expr since we've already validated the json values
+					return;
 				}
 			}
 		}
