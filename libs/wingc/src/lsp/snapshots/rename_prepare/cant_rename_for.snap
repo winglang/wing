@@ -1,0 +1,5 @@
+---
+source: libs/wingc/src/lsp/rename_prepare.rs
+---
+defaultBehavior: false
+

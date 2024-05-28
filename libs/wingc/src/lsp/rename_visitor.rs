@@ -1,4 +1,4 @@
-use lsp_types::{Position, Range, TextEdit};
+use lsp_types::{Position, PrepareRenameResponse, Range, TextEdit};
 
 use crate::diagnostic::WingLocation;
 use crate::type_check::symbol_env::LookupResult;
@@ -99,6 +99,44 @@ impl<'a> RenameVisitor<'a> {
 			}
 		}
 		vec![]
+	}
+
+	fn prepare_symbol_rename(&self, symbol: &Symbol) -> PrepareRenameResponse {
+		return PrepareRenameResponse::RangeWithPlaceholder {
+			range: Range {
+				start: Position {
+					line: symbol.span.start.line,
+					character: symbol.span.start.col,
+				},
+				end: Position {
+					line: symbol.span.end.line,
+					character: symbol.span.end.col,
+				},
+			},
+			placeholder: symbol.name.clone(),
+		};
+	}
+
+	pub fn prepare_rename(&mut self, position: Position) -> PrepareRenameResponse {
+		let location = WingLocation {
+			line: position.line,
+			col: position.character,
+		};
+		for symbol in &self.linked_symbols {
+			if symbol.symbol.span.contains_location(&location) {
+				return self.prepare_symbol_rename(&symbol.symbol);
+			}
+
+			// to remove the lock we must get out of the for loop
+			for child in symbol.references.iter() {
+				if child.span.contains_location(&location) {
+					return self.prepare_symbol_rename(child);
+				}
+			}
+		}
+		PrepareRenameResponse::DefaultBehavior {
+			default_behavior: false,
+		}
 	}
 }
 

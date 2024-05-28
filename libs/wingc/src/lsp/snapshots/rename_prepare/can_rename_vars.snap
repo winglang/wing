@@ -1,0 +1,12 @@
+---
+source: libs/wingc/src/lsp/rename_prepare.rs
+---
+range:
+  start:
+    line: 3
+    character: 8
+  end:
+    line: 3
+    character: 15
+placeholder: buckets
+

@@ -1,0 +1,12 @@
+---
+source: libs/wingc/src/lsp/rename_prepare.rs
+---
+range:
+  start:
+    line: 8
+    character: 10
+  end:
+    line: 8
+    character: 15
+placeholder: thing
+
