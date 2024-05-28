@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { Resource } from "./resource";
+import { Resource, ResourceInflightMethods } from "./resource";
 import { bindSimulatorResource, makeSimulatorJsClientV2 } from "./util";
 import * as cloud from "../cloud";
 import { LiftMap, lift } from "../core";
@@ -40,10 +40,18 @@ export class Counter extends cloud.Counter {
   /** @internal */
   public get _liftMap(): LiftMap {
     return {
-      [cloud.CounterInflightMethods.INC]: [[this.backend, ["call"]]],
-      [cloud.CounterInflightMethods.DEC]: [[this.backend, ["call"]]],
-      [cloud.CounterInflightMethods.PEEK]: [[this.backend, ["call"]]],
-      [cloud.CounterInflightMethods.SET]: [[this.backend, ["call"]]],
+      [cloud.CounterInflightMethods.INC]: [
+        [this.backend, [ResourceInflightMethods.CALL]],
+      ],
+      [cloud.CounterInflightMethods.DEC]: [
+        [this.backend, [ResourceInflightMethods.CALL]],
+      ],
+      [cloud.CounterInflightMethods.PEEK]: [
+        [this.backend, [ResourceInflightMethods.CALL]],
+      ],
+      [cloud.CounterInflightMethods.SET]: [
+        [this.backend, [ResourceInflightMethods.CALL]],
+      ],
     };
   }
 

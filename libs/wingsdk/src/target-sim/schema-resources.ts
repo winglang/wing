@@ -43,6 +43,14 @@ export interface FunctionSchema {
   readonly timeout: number;
   /** The maximum number of concurrent invocations that can run at one time. */
   readonly concurrency: number;
+  /** The metrics for the function. */
+  readonly metrics: FunctionMetrics;
+}
+
+/** Schema for FunctionSchema.metrics */
+export interface FunctionMetrics {
+  /** The duration metric for the function. */
+  readonly duration: ResourceHandle;
 }
 
 /** Runtime attributes for cloud.Function */
@@ -50,9 +58,9 @@ export interface FunctionAttributes {}
 
 export interface DeadLetterQueueSchema {
   /** Dead-letter queue handler token */
-  dlqHandler: string;
+  readonly dlqHandler: string;
   /** Number of time a message will be processed */
-  maxDeliveryAttempts: number;
+  readonly maxDeliveryAttempts: number;
 }
 
 /** Schema for cloud.Queue */
@@ -289,3 +297,9 @@ export interface SimResourceSchema {
 export interface SimResourceAttributes {
   [key: string]: string;
 }
+
+/** Properties for cloud.Metric */
+export interface MetricSchema {}
+
+/** Runtime attributes for cloud.Metric */
+export interface MetricAttributes {}

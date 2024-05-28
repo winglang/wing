@@ -1,4 +1,4 @@
-import { DomainSchema } from "./schema-resources";
+import { DomainAttributes, DomainSchema } from "./schema-resources";
 import { IDomainClient } from "../cloud";
 import {
   ISimulatorContext,
@@ -8,7 +8,7 @@ import {
 
 export class Domain implements IDomainClient, ISimulatorResourceInstance {
   constructor(_props: DomainSchema) {}
-  public async init(_context: ISimulatorContext): Promise<Record<string, any>> {
+  public async init(_context: ISimulatorContext): Promise<DomainAttributes> {
     return {};
   }
 

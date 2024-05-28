@@ -1,7 +1,7 @@
 import { stat } from "fs/promises";
 import * as path from "path";
 import { FunctionAttributes, FunctionSchema } from "./schema-resources";
-import { FUNCTION_FQN, IFunctionClient } from "../cloud";
+import { FUNCTION_FQN, IFunctionClient, IMetricClient } from "../cloud";
 import { Bundle } from "../shared/bundling";
 import { Sandbox, SandboxTimeoutError } from "../shared/sandbox";
 import {
@@ -21,6 +21,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly maxWorkers: number;
   private readonly workers = new Array<Sandbox>();
   private createBundlePromise!: Promise<void>;
+  private readonly durationMetricHandle: string;
+  private durationMetricClient: IMetricClient | undefined;
 
   constructor(props: FunctionSchema) {
     this.sourceCodeFile = props.sourceCodeFile;
@@ -30,6 +32,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     this.env = props.environmentVariables ?? {};
     this.timeout = props.timeout;
     this.maxWorkers = props.concurrency;
+    this.durationMetricHandle = props.metrics.duration;
   }
 
   private get context(): ISimulatorContext {
@@ -43,6 +46,9 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     this._context = context;
     this.originalFile = path.resolve(context.simdir, this.sourceCodeFile);
     this.createBundlePromise = this.createBundle();
+    this.durationMetricClient = this.context.getClient(
+      this.durationMetricHandle
+    ) as IMetricClient;
     return {};
   }
 
@@ -91,8 +97,10 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
+        const startTime = Date.now();
         const worker = await this.findAvailableWorker();
         if (!worker) {
+          await this.recordDuration(startTime);
           throw new Error(
             "Too many requests, the function has reached its concurrency limit."
           );
@@ -107,6 +115,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
           } else {
             throw err;
           }
+        } finally {
+          await this.recordDuration(startTime);
         }
       },
     });
@@ -116,33 +126,48 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     await this.context.withTrace({
       message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
+        const startTime = Date.now();
         const worker = await this.findAvailableWorker();
         if (!worker) {
+          await this.recordDuration(startTime);
           throw new Error(
             "Too many requests, the function has reached its concurrency limit."
           );
         }
         process.nextTick(() => {
-          void worker.call("handler", payload).catch((e) => {
-            // If the call fails, we log the error and continue since we've already
-            // handed control back to the caller.
-            this.context.addTrace({
-              data: {
-                message: `InvokeAsync (payload=${JSON.stringify(
-                  payload
-                )}) failure.`,
-                status: "failure",
-                error: e,
-              },
-              type: TraceType.LOG,
-              level: LogLevel.ERROR,
-              sourcePath: this.context.resourcePath,
-              sourceType: FUNCTION_FQN,
-              timestamp: new Date().toISOString(),
-            });
+          void (async () => {
+            try {
+              await worker.call("handler", payload);
+            } catch (e) {
+              // If the call fails, we log the error and continue since we've already
+              // handed control back to the caller.
+              this.context.addTrace({
+                data: {
+                  message: `InvokeAsync (payload=${JSON.stringify(
+                    payload
+                  )}) failure.`,
+                  status: "failure",
+                  error: e,
+                },
+                type: TraceType.LOG,
+                level: LogLevel.ERROR,
+                sourcePath: this.context.resourcePath,
+                sourceType: FUNCTION_FQN,
+                timestamp: new Date().toISOString(),
+              });
+            }
+            await this.recordDuration(startTime);
           });
         });
       },
+    });
+  }
+
+  private async recordDuration(startTime: number): Promise<void> {
+    const elapsed = Date.now() - startTime;
+    await this.durationMetricClient?.publish({
+      value: elapsed,
+      timestamp: new Date(),
     });
   }
 

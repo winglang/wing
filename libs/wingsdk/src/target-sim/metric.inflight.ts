@@ -1,42 +1,69 @@
-import { MetricBackendProps } from "./metric";
-import { IResource, IResourceContext } from "./resource";
+import { MetricAttributes, MetricSchema } from "./schema-resources";
 import {
   IMetricClient,
   MetricQueryOptions,
   MetricRecord,
   MetricRecordOptions,
 } from "../cloud";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
 
-export class MetricBackend implements IResource, IMetricClient {
+export class Metric implements ISimulatorResourceInstance, IMetricClient {
   private _records: MetricRecord[] = [];
+  private _context: ISimulatorContext | undefined;
 
-  constructor(_ctx: IResourceContext, _props: MetricBackendProps) {}
+  constructor(_props: MetricSchema) {}
 
-  public async onStart(): Promise<void> {
-    // TODO: load state
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
   }
 
-  public async onStop(): Promise<void> {
-    // TODO: save state
+  public async init(context: ISimulatorContext): Promise<MetricAttributes> {
+    this._context = context;
+    return {};
   }
 
-  public async publish(opts: MetricRecordOptions): Promise<void> {
-    this._records.push({
-      timestamp: opts.timestamp ?? new Date(),
-      value: opts.value,
+  public async cleanup(): Promise<void> {}
+
+  public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
+  public async publish(record: MetricRecordOptions): Promise<void> {
+    return this.context.withTrace({
+      message: `Publish(${record})`,
+      activity: async () => {
+        this._records.push({
+          timestamp: record.timestamp ?? new Date(),
+          value: record.value,
+        });
+      },
     });
   }
 
   public async query(options: MetricQueryOptions): Promise<MetricRecord[]> {
-    const records = [];
-    for (const record of this._records) {
-      if (
-        (!options.startTime || record.timestamp >= options.startTime) &&
-        (!options.endTime || record.timestamp <= options.endTime)
-      ) {
-        records.push(record);
-      }
-    }
-    return records;
+    return this.context.withTrace({
+      message: `Query(${options})`,
+      activity: async () => {
+        const records = [];
+        for (const record of this._records) {
+          if (
+            (!options.startTime || record.timestamp >= options.startTime) &&
+            (!options.endTime || record.timestamp <= options.endTime)
+          ) {
+            records.push(record);
+          }
+        }
+        return records;
+      },
+    });
   }
 }

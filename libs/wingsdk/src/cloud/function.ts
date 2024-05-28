@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
+import { Metric } from "./metric";
 import { fqnForType } from "../constants";
 import { App, Lifting } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
@@ -68,6 +69,11 @@ export class Function extends Resource implements IInflightHost {
    */
   protected readonly entrypoint!: string;
 
+  /**
+   * The function's metrics.
+   */
+  public readonly metrics!: FunctionMetrics;
+
   constructor(
     scope: Construct,
     id: string,
@@ -109,6 +115,14 @@ export class Function extends Resource implements IInflightHost {
         "concurrency option on cloud.Function must be a positive integer"
       );
     }
+
+    this.metrics = {
+      duration: new Metric(this, "MetricDuration", {
+        name: "Duration",
+        unit: "milliseconds",
+        description: "The amount of time spent processing events.",
+      }),
+    };
   }
 
   /** @internal */
@@ -123,6 +137,7 @@ export class Function extends Resource implements IInflightHost {
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
     Lifting.lift(this.handler, this, ["handle"]);
+    Lifting.lift(this.metrics.duration, this, ["publish"]);
   }
 
   /**
@@ -163,6 +178,16 @@ export class Function extends Resource implements IInflightHost {
   public get env(): Record<string, string> {
     return { ...this._env };
   }
+}
+
+/**
+ * Metrics for a cloud.Function.
+ */
+export interface FunctionMetrics {
+  /**
+   * How long the function takes to process events.
+   */
+  readonly duration: Metric;
 }
 
 /**

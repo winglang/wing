@@ -62,6 +62,9 @@ export class Function
       environmentVariables: this.env,
       timeout: this.timeout.seconds * 1000,
       concurrency: this.concurrency,
+      metrics: {
+        duration: simulatorHandleToken(this.metrics.duration),
+      },
     };
     return {
       type: cloud.FUNCTION_FQN,
@@ -73,9 +76,13 @@ export class Function
   /** @internal */
   public get _liftMap(): LiftMap {
     return {
-      [cloud.FunctionInflightMethods.INVOKE]: [[this.handler, ["handle"]]],
+      [cloud.FunctionInflightMethods.INVOKE]: [
+        [this.handler, ["handle"]],
+        [this.metrics.duration, [cloud.MetricInflightMethods.PUBLISH]],
+      ],
       [cloud.FunctionInflightMethods.INVOKE_ASYNC]: [
         [this.handler, ["handle"]],
+        [this.metrics.duration, [cloud.MetricInflightMethods.PUBLISH]],
       ],
     };
   }
