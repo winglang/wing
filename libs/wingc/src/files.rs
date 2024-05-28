@@ -171,7 +171,7 @@ mod tests {
 	}
 
 	#[test]
-	fn test_emit_files_with_minimize_updates() {
+	fn test_emit_files_avoids_rewrites() {
 		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
 		let out_dir = Utf8Path::from_path(temp_dir.path()).expect("invalid unicode path");
 
