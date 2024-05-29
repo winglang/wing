@@ -1,4 +1,3 @@
-import { basename } from "path";
 import { liftObject, LiftMap, INFLIGHT_INIT_METHOD_NAME } from "./lifting";
 import {
   AsyncFunction,
@@ -37,33 +36,6 @@ export interface InflightBinding {
  * Utility class with functions about inflight clients.
  */
 export class InflightClient {
-  /**
-   * Returns code for creating an inflight client.
-   */
-  public static for(
-    dirname: string,
-    filename: string,
-    clientClass: string,
-    args: string[] | undefined,
-    liftedFields?: Record<string, string>
-  ): string {
-    const inflightDir = dirname;
-    const inflightFile = basename(filename).split(".")[0] + ".inflight";
-    let argsStr = "";
-    if (args !== undefined) {
-      argsStr = args.join(", ");
-    } else {
-      argsStr += "{";
-      for (const [key, value] of Object.entries(liftedFields ?? {})) {
-        argsStr += `${key}: ${value},`;
-      }
-      argsStr += "}";
-    }
-    return `new (require("${normalPath(
-      `${inflightDir}/${inflightFile}`
-    )}")).${clientClass}(${argsStr})`;
-  }
-
   /**
    * Returns code for implementing `_toInflightType()`.
    */
