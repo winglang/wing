@@ -47,3 +47,33 @@ assert(Array<Json>[nil] == ["a"]);
 
 assert(Array<Json?>[nil] == ["a"]);
 // this is ok
+
+
+let c1: num? = nil;
+let c2: str? = nil;
+assert([c1] == [c2]);
+//     ^^^^^^^^^^^^ Expected type to be "Array<num?>", but got "Array<str?>" instead
+
+
+assert([[1]] == [["1"]]);
+//     ^^^^^^^^^^^^^^^^ Expected type to be "Array<Array<num>>", but got "Array<Array<str>>" instead
+
+assert([["1"]] == [[1]]);
+//     ^^^^^^^^^^^^^^^^ Expected type to be "Array<Array<str>>", but got "Array<Array<num>>" instead
+
+let d1 = {"a" => 1};
+let d2 = {"b" => "b"};
+assert(d1 == d2);
+//     ^^^^^^^^ Expected type to be "Map<num>", but got "Map<str>" instead
+
+let e1 = MutSet<bool>[true, true, true];
+let e2 = Set<num>[1,2,3,3,3,2];
+
+assert(e1 == e2);
+//     ^^^^^^^^ Expected type to be "MutSet<bool>", but got "Set<num>" instead
+
+let f1 = Set<num>[1,2,3,3,3,2];
+let f2 = MutSet<num>[1,2,3,3,3,2];
+
+assert(f1 == f2);
+// this is ok

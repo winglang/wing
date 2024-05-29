@@ -3133,8 +3133,8 @@ impl<'a> TypeChecker<'a> {
 		actual_type: TypeRef,
 		expected_type: TypeRef,
 		span: &impl Spanned,
-		actual_parent_type: Option<TypeRef>,
-		expected_parent_type: Option<TypeRef>,
+		actual_original_type: Option<TypeRef>,
+		expected_original_type: Option<TypeRef>,
 	) -> TypeRef {
 		if let (
 			Type::Array(inner_actual) | Type::MutArray(inner_actual),
@@ -3145,8 +3145,8 @@ impl<'a> TypeChecker<'a> {
 				*inner_actual,
 				*inner_expected,
 				span,
-				Some(actual_parent_type.unwrap_or(actual_type)),
-				Some(expected_parent_type.unwrap_or(expected_type)),
+				Some(actual_original_type.unwrap_or(actual_type)),
+				Some(expected_original_type.unwrap_or(expected_type)),
 			)
 		} else if let (
 			Type::Map(inner_actual) | Type::MutMap(inner_actual),
@@ -3157,8 +3157,8 @@ impl<'a> TypeChecker<'a> {
 				*inner_actual,
 				*inner_expected,
 				span,
-				Some(actual_parent_type.unwrap_or(actual_type)),
-				Some(expected_parent_type.unwrap_or(expected_type)),
+				Some(actual_original_type.unwrap_or(actual_type)),
+				Some(expected_original_type.unwrap_or(expected_type)),
 			)
 		} else if let (
 			Type::Set(inner_actual) | Type::MutSet(inner_actual),
@@ -3169,16 +3169,16 @@ impl<'a> TypeChecker<'a> {
 				*inner_actual,
 				*inner_expected,
 				span,
-				Some(actual_parent_type.unwrap_or(actual_type)),
-				Some(expected_parent_type.unwrap_or(expected_type)),
+				Some(actual_original_type.unwrap_or(actual_type)),
+				Some(expected_original_type.unwrap_or(expected_type)),
 			)
 		} else {
 			self.validate_nested_type(
 				actual_type,
 				expected_type,
 				span,
-				actual_parent_type,
-				expected_parent_type,
+				actual_original_type,
+				expected_original_type,
 			)
 		}
 	}
@@ -3278,19 +3278,19 @@ impl<'a> TypeChecker<'a> {
 		actual_type: TypeRef,
 		expected_type: TypeRef,
 		span: &impl Spanned,
-		actual_parent_type: Option<TypeRef>,
-		expected_parent_type: Option<TypeRef>,
+		actual_original_type: Option<TypeRef>,
+		expected_original_type: Option<TypeRef>,
 	) -> TypeRef {
-		if let Some(expected_parent_t) = expected_parent_type {
+		if let Some(expected_original_t) = expected_original_type {
 			self.validate_type_in(
 				actual_type,
 				&[expected_type],
 				span,
-				actual_parent_type,
-				Some(&[expected_parent_t]),
+				actual_original_type,
+				Some(&[expected_original_t]),
 			)
 		} else {
-			self.validate_type_in(actual_type, &[expected_type], span, actual_parent_type, None)
+			self.validate_type_in(actual_type, &[expected_type], span, actual_original_type, None)
 		}
 	}
 
@@ -3302,8 +3302,8 @@ impl<'a> TypeChecker<'a> {
 		actual_type: TypeRef,
 		expected_types: &[TypeRef],
 		span: &impl Spanned,
-		actual_parent_type: Option<TypeRef>,
-		expected_parent_types: Option<&[TypeRef]>,
+		actual_original_type: Option<TypeRef>,
+		expected_original_types: Option<&[TypeRef]>,
 	) -> TypeRef {
 		assert!(expected_types.len() > 0);
 		let first_expected_type = expected_types[0];
@@ -3353,7 +3353,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 
-		let expected_type_origin = expected_parent_types.unwrap_or(expected_types);
+		let expected_type_origin = expected_original_types.unwrap_or(expected_types);
 		let expected_type_str = if expected_type_origin.len() > 1 {
 			let expected_types_list = expected_type_origin
 				.iter()
@@ -3365,7 +3365,7 @@ impl<'a> TypeChecker<'a> {
 			format!("\"{}\"", expected_type_origin[0])
 		};
 
-		let return_type_str = actual_parent_type.unwrap_or(return_type);
+		let return_type_str = actual_original_type.unwrap_or(return_type);
 		let message = format!("Expected type to be {expected_type_str}, but got \"{return_type_str}\" instead");
 		let mut hints: Vec<String> = vec![];
 		if return_type.is_nil() && expected_types.len() == 1 {
