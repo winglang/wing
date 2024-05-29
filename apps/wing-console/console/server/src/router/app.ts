@@ -320,11 +320,13 @@ export const createAppRouter = () => {
             id: sourceNode.id,
             path: sourceNode.path,
             type: getResourceType(sourceNode, simulator),
+            display: sourceNode.display,
           },
           target: {
             id: targetNode?.id ?? "",
             path: targetNode?.path ?? "",
             type: (targetNode && getResourceType(targetNode, simulator)) ?? "",
+            display: targetNode.display,
           },
           inflights: targetInflight
             ? [
@@ -460,7 +462,12 @@ function createExplorerItemFromConstructTreeNode(
   showTests = false,
   includeHiddens = false,
 ): ExplorerItem {
-  const label = node.display?.title ?? node.id;
+  const cloudResourceType = node.constructInfo?.fqn?.split(".").at(-1);
+
+  const label =
+    node.display?.title === cloudResourceType
+      ? node.id
+      : node.display?.title ?? node.id;
 
   return {
     id: node.path,

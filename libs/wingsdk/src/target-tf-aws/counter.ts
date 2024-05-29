@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
-import { Function } from "./function";
 import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { AwsInflightHost } from "../shared-aws";
 import { COUNTER_HASH_KEY } from "../shared-aws/commons";
 import { IAwsCounter } from "../shared-aws/counter";
 import { calculateCounterPermissions } from "../shared-aws/permissions";
@@ -59,8 +59,8 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("counters can only be bound by tfaws.Function for now");
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     host.addPolicyStatements(

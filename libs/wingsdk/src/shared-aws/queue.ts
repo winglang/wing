@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { AwsInflightHost } from "./inflight-host";
 import { calculateQueuePermissions } from "./permissions";
 import { isValidArn } from "./util";
 import { cloud, ui } from "..";
@@ -91,12 +91,14 @@ export class QueueRef extends Resource {
 
   public onLift(host: IInflightHost, ops: string[]): void {
     // if this is an AWS function, add the necessary IAM permissions
-    const fn = Function.from(host);
-    if (fn) {
-      fn.addPolicyStatements(...calculateQueuePermissions(this.queueArn, ops));
+    if (AwsInflightHost.isAwsInflightHost(host)) {
+      host.addPolicyStatements(
+        ...calculateQueuePermissions(this.queueArn, ops)
+      );
     }
 
     host.addEnvironment(this.envName(), this.queueArn);
+
     super.onLift(host, ops);
   }
 

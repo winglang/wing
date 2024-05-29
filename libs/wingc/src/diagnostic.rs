@@ -237,6 +237,10 @@ impl WingSpan {
 		}
 	}
 
+	pub fn byte_size(&self) -> usize {
+		self.end_offset - self.start_offset
+	}
+
 	/// Checks if this span is the default span. This means the span is covers nothing by ending at (0,0).
 	pub fn is_default(&self) -> bool {
 		self.end == WingLocation::default()
@@ -296,8 +300,24 @@ impl Diagnostic {
 		});
 	}
 
-	pub fn report(&self) {
-		report_diagnostic(self.clone());
+	pub fn add_hint(&mut self, hint: impl ToString) {
+		self.hints.push(hint.to_string());
+	}
+
+	pub fn annotate(self, msg: impl ToString, span: impl Spanned) -> Self {
+		let mut new = self;
+		new.add_anotation(msg, span);
+		new
+	}
+
+	pub fn hint(self, hint: impl ToString) -> Self {
+		let mut new = self;
+		new.add_hint(hint);
+		new
+	}
+
+	pub fn report(self) {
+		report_diagnostic(self);
 	}
 }
 

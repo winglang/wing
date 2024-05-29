@@ -12,8 +12,17 @@ import { bridgeConnections } from "./use-map.bridge-connections.js";
 const isNodeHidden: IsNodeHidden<string> = (path: string) =>
   path.startsWith("h");
 const getNodeId: GetNodeId<string> = (path: string) => path;
-const serializeConnection: GetConnectionId<string> = (connection) =>
+const getConnectionId: GetConnectionId<string> = (connection) =>
   `${connection.source}#${connection.target}`;
+const resolveNode = (path: string) => {
+  const parts = path.split("/");
+  for (const [index, part] of Object.entries(parts)) {
+    if (isNodeHidden(part)) {
+      return parts.slice(0, Number(index)).join("/");
+    }
+  }
+  return path;
+};
 
 test("happy path", () => {
   const connections: Connection<string>[] = [
@@ -28,7 +37,8 @@ test("happy path", () => {
       connections,
       isNodeHidden,
       getNodeId,
-      getConnectionId: serializeConnection,
+      getConnectionId,
+      resolveNode,
     }),
   ).toEqual([
     {
@@ -55,7 +65,8 @@ test("creates one-level bridges", () => {
       connections,
       isNodeHidden,
       getNodeId,
-      getConnectionId: serializeConnection,
+      getConnectionId,
+      resolveNode,
     }),
   ).toEqual([
     {
@@ -86,7 +97,8 @@ test("creates multi-level bridges", () => {
       connections,
       isNodeHidden,
       getNodeId,
-      getConnectionId: serializeConnection,
+      getConnectionId,
+      resolveNode,
     }),
   ).toEqual([
     {
@@ -137,7 +149,8 @@ test("creates graph bridges", () => {
       connections,
       isNodeHidden,
       getNodeId,
-      getConnectionId: serializeConnection,
+      getConnectionId,
+      resolveNode,
     }),
   ).toEqual([
     {
@@ -200,7 +213,8 @@ test("handles cyclic graph correctly", () => {
       connections,
       isNodeHidden,
       getNodeId,
-      getConnectionId: serializeConnection,
+      getConnectionId,
+      resolveNode,
     }),
   ).toEqual([
     {
@@ -239,7 +253,8 @@ test("handles cyclic graph with hidden nodes correctly", () => {
       connections,
       isNodeHidden,
       getNodeId,
-      getConnectionId: serializeConnection,
+      getConnectionId,
+      resolveNode,
     }),
   ).toEqual([
     {
@@ -270,12 +285,13 @@ test("handles hidden leafs correctly", () => {
       connections,
       isNodeHidden,
       getNodeId,
-      getConnectionId: serializeConnection,
+      getConnectionId,
+      resolveNode,
     }),
   ).toEqual([]);
 });
 
-test("handles hidden leafs correctly 2", () => {
+test("handles hidden leafs correctly", () => {
   const connections: Connection<string>[] = [
     {
       source: "h1",
@@ -296,7 +312,8 @@ test("handles hidden leafs correctly 2", () => {
       connections,
       isNodeHidden,
       getNodeId,
-      getConnectionId: serializeConnection,
+      getConnectionId,
+      resolveNode,
     }),
   ).toEqual([
     {
@@ -306,7 +323,7 @@ test("handles hidden leafs correctly 2", () => {
   ]);
 });
 
-test("handles hidden leafs correctly 2", () => {
+test("handles hidden leafs correctly", () => {
   const connections: Connection<{ path: string }>[] = [
     {
       source: { path: "h1" },
@@ -334,11 +351,77 @@ test("handles hidden leafs correctly 2", () => {
       getConnectionId(connection) {
         return `${connection.source.path}#${connection.target.path}`;
       },
+      resolveNode(node) {
+        const path = resolveNode(node.path);
+        if (!path) {
+          return;
+        }
+
+        return {
+          path,
+        };
+      },
     }),
   ).toEqual([
     {
       source: { path: "2" },
       target: { path: "4" },
+    },
+  ]);
+});
+
+test("upcasts connections", () => {
+  const connections: Connection<string>[] = [
+    {
+      source: "1",
+      target: "2/h3",
+    },
+  ];
+
+  expect(
+    bridgeConnections({
+      connections,
+      isNodeHidden,
+      getNodeId,
+      getConnectionId,
+      resolveNode,
+    }),
+  ).toEqual([
+    {
+      source: "1",
+      target: "2",
+    },
+  ]);
+});
+
+test("upcasts connections", () => {
+  const connections: Connection<string>[] = [
+    {
+      source: "1",
+      target: "2/h4/5/h6",
+    },
+    {
+      source: "2/h3",
+      target: "3",
+    },
+  ];
+
+  expect(
+    bridgeConnections({
+      connections,
+      isNodeHidden,
+      getNodeId,
+      getConnectionId,
+      resolveNode,
+    }),
+  ).toEqual([
+    {
+      source: "1",
+      target: "2",
+    },
+    {
+      source: "2",
+      target: "3",
     },
   ]);
 });

@@ -149,7 +149,7 @@ export interface GraphGeneratorProps {
 
 export const GraphGenerator: FunctionComponent<
   PropsWithChildren<GraphGeneratorProps>
-> = memo((props) => {
+> = memo(({ onGraph, ...props }) => {
   const [root] = useState<ElkNode>(() => ({
     ...props.elk,
   }));
@@ -201,7 +201,7 @@ export const GraphGenerator: FunctionComponent<
 
       return JSON.stringify({ ...root, edges });
     });
-  });
+  }, [root, props.edges]);
 
   useEffect(() => {
     if (!jsonGraph) {
@@ -219,13 +219,13 @@ export const GraphGenerator: FunctionComponent<
           return;
         }
 
-        props.onGraph?.(graph);
+        onGraph?.(graph);
       })
       .catch((error) => console.error("elk layout error:", error));
     return () => {
       abort = true;
     };
-  }, [jsonGraph]);
+  }, [jsonGraph, onGraph]);
 
   return (
     <ElkNodeContext.Provider value={root}>

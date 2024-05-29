@@ -6,3 +6,6 @@ log("hello {b}");
 let x: str? = nil;
 log("{x}");
 // ^ Error: expected type to be stringable
+
+log(b);
+// ^ Error: expected type to be stringable

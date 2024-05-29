@@ -11,10 +11,10 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic, IntrinsicKind, Literal,
-	New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation,
-	TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	ElifBlock, ElifLetBlock, Elifs, Enum, ExplicitLift, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Intrinsic,
+	IntrinsicKind, LiftQualification, Literal, New, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Struct,
+	StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{
@@ -640,7 +640,8 @@ impl<'s> Parser<'s> {
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
 			"test_statement" => self.build_test_statement(statement_node)?,
 			"compiler_dbg_env" => StmtKind::CompilerDebugEnv,
-			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase, idx)?,
+			"super_constructor_statement" => self.build_super_constructor_statement(statement_node, phase)?,
+			"lift_statement" => self.build_lift_statement(statement_node, phase)?,
 			"ERROR" => return self.with_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -651,6 +652,37 @@ impl<'s> Parser<'s> {
 			idx,
 			doc,
 		})
+	}
+
+	fn build_lift_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
+		// Lift statements are only legal in inflight
+		if phase != Phase::Inflight {
+			return self.with_error("Lift blocks are only allowed in inflight phase", statement_node);
+		}
+
+		let lift_qualifications_node = statement_node.child_by_field_name("lift_qualifications").unwrap();
+		let statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+
+		let mut qualifications = vec![];
+
+		let mut qual_cursor = lift_qualifications_node
+			.child_by_field_name("qualification")
+			.unwrap()
+			.walk();
+
+		for qual_node in lift_qualifications_node.named_children(&mut qual_cursor) {
+			let obj = self.build_expression(&qual_node.child_by_field_name("obj").unwrap(), phase)?;
+			let mut ops = vec![];
+			for op_node in get_actual_children_by_field_name(qual_node, "ops") {
+				ops.push(self.node_symbol(&op_node)?);
+			}
+			qualifications.push(LiftQualification { obj, ops });
+		}
+
+		Ok(StmtKind::ExplicitLift(ExplicitLift {
+			qualifications,
+			statements,
+		}))
 	}
 
 	fn build_try_catch_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -2584,10 +2616,9 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_super_constructor_statement(&self, statement_node: &Node, phase: Phase, idx: usize) -> Result<StmtKind, ()> {
+	fn build_super_constructor_statement(&self, statement_node: &Node, phase: Phase) -> Result<StmtKind, ()> {
 		// Calls to super constructor can only occur in specific scenario:
-		// 1. We are in a derived class' constructor
-		// 2. The statement is the first statement in the block
+		// We are in a derived class' constructor
 		let parent_block = statement_node.parent();
 		if let Some(p) = parent_block {
 			let parent_block_context = p.parent();
@@ -2595,14 +2626,6 @@ impl<'s> Parser<'s> {
 			if let Some(context) = parent_block_context {
 				match context.kind() {
 					"initializer" | "inflight_initializer" => {
-						// Check that call to super constructor was first in statement block
-						if idx != 0 {
-							self.with_error(
-								"Call to super constructor must be first statement in constructor",
-								statement_node,
-							)?;
-						};
-
 						// Check that the class has a parent
 						let class_node = context.parent().unwrap().parent().unwrap();
 						let parent_class = class_node.child_by_field_name("parent");
@@ -2812,6 +2835,7 @@ fn is_valid_module_statement(stmt: &Stmt) -> bool {
 		StmtKind::Assignment { .. } => false,
 		StmtKind::Scope(_) => false,
 		StmtKind::TryCatch { .. } => false,
+		StmtKind::ExplicitLift(_) => false,
 		// TODO: support constants https://github.com/winglang/wing/issues/3606
 		// TODO: support test statements https://github.com/winglang/wing/issues/3571
 		StmtKind::Let { .. } => false,

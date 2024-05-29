@@ -40,7 +40,7 @@ export const FileBrowserView = ({
     if (currentFile && !fileEntries.some((file) => file.id === currentFile)) {
       setCurrentFile(undefined);
     }
-  }, [fileEntries]);
+  }, [fileEntries, currentFile]);
 
   useEffect(() => {
     onCurrentFileChange(currentFile);

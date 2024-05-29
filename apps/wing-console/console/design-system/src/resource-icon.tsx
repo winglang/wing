@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import type { FunctionComponent, SVGProps } from "react";
 
+import type { Colors } from "./utils/colors.js";
 import {
   getResourceIconColors,
   getResourceIconComponent,
@@ -14,6 +15,8 @@ export interface ResourceIconProps extends IconProps {
   darkenOnGroupHover?: boolean;
   forceDarken?: boolean;
   solid?: boolean;
+  color?: Colors | string;
+  icon?: string;
 }
 
 export interface IconComponent extends FunctionComponent<IconProps> {}
@@ -30,11 +33,13 @@ export const ResourceIcon = ({
   const Component = getResourceIconComponent(resourceType, {
     solid,
     resourceId: resourcePath,
+    icon: props.icon,
   });
   const colors = getResourceIconColors({
     resourceType,
     darkenOnGroupHover,
     forceDarken,
+    color: props.color,
   });
   return <Component className={classNames(className, colors)} {...props} />;
 };

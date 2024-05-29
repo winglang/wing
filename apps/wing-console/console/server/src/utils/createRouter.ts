@@ -48,7 +48,6 @@ export interface LayoutConfig {
   };
   errorScreen?: {
     position?: "default" | "bottom";
-    displayTitle?: boolean;
     displayLinks?: boolean;
   };
   panels?: {

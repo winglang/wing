@@ -5,7 +5,7 @@ signatures:
   - label: "(key: str, body: str): void"
     documentation:
       kind: markdown
-      value: "Add a file to the bucket that is uploaded when the app is deployed.\n### Parameters\n- `key` — `str`\n- `body` — `str`\n\n### Remarks\nTODO: In the future this will support uploading any `Blob` type or\nreferencing a file from the local filesystem."
+      value: Add a file to the bucket that is uploaded when the app is deployed.
     parameters:
       - label: "key: str"
       - label: "body: str"

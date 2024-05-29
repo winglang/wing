@@ -19,6 +19,7 @@ const createTreeMenuItemFromExplorerTreeItem = (
         resourcePath={item.id}
         className="w-4 h-4"
         color={item.display?.color}
+        icon={item.display?.icon}
       />
     ) : undefined,
     children: item.childItems?.map((item) =>

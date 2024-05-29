@@ -224,6 +224,7 @@ specify the key to be set.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Counter.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.cloud.Counter.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -252,6 +253,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Counter.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.cloud.Counter.toInflight"></a>
+
+```wing
+bring cloud;
+
+cloud.Counter.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Counter.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 

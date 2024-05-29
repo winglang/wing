@@ -24,55 +24,13 @@ import type {
   EdgeComponent,
   EdgeComponentProps,
 } from "../ui/elk-flow/types.js";
-import { useZoomPane } from "../ui/zoom-pane.js";
 
 const Z_INDICES = {
-  EDGE: "z-[1]",
-  EDGE_HIGHLIGHTED: "z-[2]",
-  EDGE_SELECTED: "z-[3]",
-  EDGE_HOVERED: "hover:z-[3]",
-  CONSTRUCT: "z-[0]",
+  EDGE: "z-[1000]",
+  EDGE_HIGHLIGHTED: "z-[1001]",
+  EDGE_SELECTED: "z-[1002]",
+  EDGE_HOVERED: "hover:z-[1003]",
 };
-
-interface InflightPortProps {
-  occupied?: boolean;
-  highlight?: boolean;
-}
-
-const InflightPort: FunctionComponent<InflightPortProps> = (props) => (
-  <>
-    <div
-      className={clsx(
-        "size-2.5 rounded-full bg-white border border-slate-200",
-        // "opacity-0",
-        // props.occupied && "opacity-100",
-        "group-hover/construct:opacity-100 group-hover/construct:border-sky-300",
-        "outline outline-0 group-hover/construct:outline-4 outline-sky-200",
-        props.highlight && "outline-4 border-sky-300",
-        "transition-all",
-        "invisible",
-        "pointer-events-none",
-      )}
-    >
-      <div className="w-full h-full relative group/inflight-port">
-        <div className="absolute inset-0 flex items-center justify-around pointer-events-none">
-          {/* <div
-            className={clsx(
-              !props.occupied && "size-0",
-              props.occupied && "size-1.5",
-              // "group-hover/inflight-port:size-1.5",
-              // "rounded-full bg-sky-400 transition-all",
-              "rounded-full transition-all",
-              "bg-slate-400",
-              "group-hover/construct:bg-sky-400",
-              props.highlight && "bg-sky-400",
-            )}
-          ></div> */}
-        </div>
-      </div>
-    </div>
-  </>
-);
 
 const SPACING_BASE_VALUE = 32;
 const PORT_ANCHOR = 0;
@@ -82,11 +40,6 @@ const baseLayoutOptions: LayoutOptions = {
   "elk.alignment": "CENTER",
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
   "elk.algorithm": "org.eclipse.elk.layered",
-  // "elk.layered.layering.strategy": "MIN_WIDTH",
-  // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
-  // "elk.layered.layering.strategy": "STRETCH_WIDTH",
-  // "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
-  // "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
   "elk.layered.spacing.baseValue": `${SPACING_BASE_VALUE}`, // See https://eclipse.dev/elk/reference/options/org-eclipse-elk-layered-spacing-baseValue.html.
 };
 
@@ -95,10 +48,12 @@ interface WrapperProps {
   fqn: string;
   highlight?: boolean;
   onClick?: () => void;
+  color?: string;
+  icon?: string;
 }
 
 const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
-  ({ name, fqn, highlight, onClick, children }) => {
+  ({ name, fqn, highlight, onClick, children, color, icon }) => {
     return (
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
       <div
@@ -127,7 +82,12 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
             "border-b border-slate-200 dark:border-slate-800",
           )}
         >
-          <ResourceIcon className="size-4 -ml-0.5" resourceType={fqn} />
+          <ResourceIcon
+            className="size-4 -ml-0.5"
+            resourceType={fqn}
+            icon={icon}
+            color={color}
+          />
 
           <span
             className={clsx(
@@ -153,6 +113,8 @@ interface ContainerNodeProps {
   resourceType?: string;
   highlight?: boolean;
   onClick?: () => void;
+  color?: string;
+  icon?: string;
 }
 
 const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
@@ -163,17 +125,9 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
           id: props.id,
           layoutOptions: {
             ...baseLayoutOptions,
-            // "elk.layered.layering.strategy": "MIN_WIDTH",
-            // "elk.layered.spacing.baseValue": "1",
           },
         }}
-        className={clsx(
-          "inline-block",
-          "group",
-          // "p-2",
-          // "z-0",
-          Z_INDICES.CONSTRUCT,
-        )}
+        className={clsx("inline-block", "group")}
         data-elk-id={props.id}
       >
         <div className={clsx("w-full h-full relative")}>
@@ -182,10 +136,14 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             fqn={props.resourceType!}
             highlight={props.highlight}
             onClick={props.onClick}
+            color={props.color}
+            icon={props.icon}
           >
-            <NodeChildren>
-              <div className="absolute">{props.children}</div>
-            </NodeChildren>
+            <div className="p-4">
+              <NodeChildren>
+                <div className="absolute">{props.children}</div>
+              </NodeChildren>
+            </div>
           </Wrapper>
         </div>
       </Node>
@@ -205,6 +163,8 @@ interface ConstructNodeProps {
   highlight?: boolean;
   hasChildNodes?: boolean;
   onSelectedNodeIdChange: (id: string | undefined) => void;
+  color?: string;
+  icon?: string;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -218,6 +178,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       inflights,
       children,
       hasChildNodes,
+      color,
+      icon,
     }) => {
       const select = useCallback(
         () => onSelectedNodeIdChange(id),
@@ -231,17 +193,12 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             layoutOptions: {
               "elk.algorithm": "org.eclipse.elk.layered",
               "elk.aspectRatio": "0.1",
-              // "elk.direction": "DOWN",
               "elk.layered.spacing.baseValue": "1",
-              // "elk.layered.layering.strategy": "MIN_WIDTH",
-              // "elk.layered.layering.strategy": "NETWORK_SIMPLEX",
-              // "elk.layered.layering.strategy": "STRETCH_WIDTH",
+              "elk.portConstraints": "FIXED_SIDE",
             },
           }}
           className={clsx(
             "inline-block group/construct cursor-pointer",
-            // "z-20",
-            Z_INDICES.CONSTRUCT,
             hasChildNodes && "pointer-events-none",
           )}
           data-elk-id={id}
@@ -267,28 +224,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               select();
             }}
           >
-            {!hasChildNodes && (
-              <div
-                className={clsx(
-                  "px-2.5 py-1 flex items-center gap-1.5",
-                  inflights.length > 0 &&
-                    "border-b border-slate-200 dark:border-slate-800",
-                )}
-              >
-                <ResourceIcon className="size-4 -ml-0.5" resourceType={fqn} />
-
-                <span
-                  className={clsx(
-                    "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
-                    !highlight && " text-slate-600 dark:text-slate-300",
-                    highlight && "text-sky-600 dark:text-sky-300",
-                  )}
-                >
-                  {name}
-                </span>
-              </div>
-            )}
-
             <Port
               elk={{
                 id: `${id}##source`,
@@ -309,6 +244,33 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
               }}
             />
 
+            {!hasChildNodes && (
+              <div
+                className={clsx(
+                  "px-2.5 py-1 flex items-center gap-1.5",
+                  inflights.length > 0 &&
+                    "border-b border-slate-200 dark:border-slate-800",
+                )}
+              >
+                <ResourceIcon
+                  className="size-4 -ml-0.5"
+                  resourceType={fqn}
+                  color={color}
+                  icon={icon}
+                />
+
+                <span
+                  className={clsx(
+                    "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
+                    !highlight && " text-slate-600 dark:text-slate-300",
+                    highlight && "text-sky-600 dark:text-sky-300",
+                  )}
+                >
+                  {name}
+                </span>
+              </div>
+            )}
+
             <div className="pl-2">
               <NodeChildren className="text-xs">
                 <div className="absolute">
@@ -321,15 +283,9 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                           "elk.portConstraints": "FIXED_SIDE",
                         },
                       }}
-                      className={clsx(
-                        "inline-block pointer-events-none",
-                        // "z-20",
-                        Z_INDICES.CONSTRUCT,
-                      )}
+                      className={clsx("inline-block pointer-events-none")}
                     >
-                      <div
-                      // className="border-t border-slate-200 dark:border-slate-800"
-                      >
+                      <div>
                         <div
                           className={clsx(
                             "px-2.5 py-1.5 text-xs whitespace-nowrap",
@@ -337,9 +293,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                             "font-mono",
                           )}
                         >
-                          {/* <span className="italic text-indigo-500 dark:text-indigo-400">
-                        inflight{" "}
-                      </span> */}
                           <span>{inflight.name}()</span>
                         </div>
                       </div>
@@ -352,12 +305,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                             "elk.port.anchor": `[${PORT_ANCHOR},0]`,
                           },
                         }}
-                      >
-                        <InflightPort
-                          occupied={inflight.sourceOccupied}
-                          highlight={highlight}
-                        />
-                      </Port>
+                      />
 
                       <Port
                         elk={{
@@ -367,12 +315,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                             "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
                           },
                         }}
-                      >
-                        <InflightPort
-                          occupied={inflight.targetOccupied}
-                          highlight={highlight}
-                        />
-                      </Port>
+                      />
                     </Node>
                   ))}
                 </div>
@@ -391,52 +334,37 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             resourceType={fqn}
             highlight={highlight}
             onClick={select}
+            color={color}
+            icon={icon}
           >
             <NodeChildren>
               {inflights.length > 0 && renderedNode}
 
-              <Node elk={{ id: `${id}#children` }}>
-                <Port
-                  elk={{
-                    id: `${id}#children-target`,
-                    layoutOptions: {
-                      "elk.port.side": "WEST",
-                      "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
-                    },
-                  }}
-                />
-                {children}
-              </Node>
+              {children}
             </NodeChildren>
+
+            <Port
+              elk={{
+                id: `${id}##source`,
+                layoutOptions: {
+                  "elk.port.side": "EAST",
+                  "elk.port.anchor": `[${PORT_ANCHOR},0]`,
+                },
+              }}
+            />
+
+            <Port
+              elk={{
+                id: `${id}##target`,
+                layoutOptions: {
+                  "elk.port.side": "WEST",
+                  "elk.port.anchor": `[-${PORT_ANCHOR},0]`,
+                },
+              }}
+            />
           </ContainerNode>
         );
       }
-
-      // if (hasChildNodes) {
-      //   return (
-      //     <ContainerNode
-      //       id={`${id}#container`}
-      //       name={`${name}`}
-      //       pseudoContainer
-      //       resourceType={fqn}
-      //       highlight={highlight}
-      //       onClick={select}
-      //     >
-      //       {renderedNode}
-      //       <ContainerNode
-      //         id={`${id}#children`}
-      //         // name={`${name} Children`}
-      //         name="Children"
-      //         pseudoContainer
-      //         resourceType={fqn}
-      //         highlight={highlight}
-      //         // onClick={select}
-      //       >
-      //         {children}
-      //       </ContainerNode>
-      //     </ContainerNode>
-      //   );
-      // }
 
       return renderedNode;
     },
@@ -535,10 +463,7 @@ const RoundedEdge: FunctionComponent<
       return path;
     }, [additionalPoints]);
 
-    const arrowHeadId = useId();
-    const arrowHeadMarker = useMemo(() => {
-      return `url(#${arrowHeadId})`;
-    }, [arrowHeadId]);
+    const lastPoint = additionalPoints.at(-1);
 
     return (
       <svg
@@ -546,10 +471,6 @@ const RoundedEdge: FunctionComponent<
         height={graphHeight}
         className={clsx(
           "absolute inset-0 pointer-events-none",
-          // !highlighted && "z-[1]",
-          // highlighted && !selected && "z-[2]",
-          // selected && "z-[3]",
-          // "hover:z-[3]",
           !highlighted && Z_INDICES.EDGE,
           highlighted && !selected && Z_INDICES.EDGE_HIGHLIGHTED,
           selected && Z_INDICES.EDGE_SELECTED,
@@ -557,38 +478,23 @@ const RoundedEdge: FunctionComponent<
           "cursor-pointer",
         )}
       >
-        <defs>
-          <marker
-            className="stroke-none fill-slate-500 dark:fill-slate-800"
-            markerWidth="6"
-            markerHeight="4"
-            orient="auto"
-            id={arrowHeadId}
-            refX="4"
-            refY="2"
-          >
-            <path d="M0 0 v4 l5 -2 z" />
-          </marker>
-        </defs>
         <g
           className={clsx(
             "fill-none stroke-1 group pointer-events-auto",
             "transition-colors",
             !selected &&
-              !highlighted &&
-              "stroke-slate-300 dark:stroke-slate-700",
+              !highlighted && ["stroke-slate-300 dark:stroke-slate-500"],
             (selected || highlighted) && "stroke-sky-500 dark:stroke-sky-400",
             "hover:stroke-sky-500",
-            "dark:hover:stroke-sky-900",
+            "dark:hover:stroke-sky-300",
           )}
           transform={`translate(${offsetX} ${offsetY})`}
-          onClick={onClick}
+          onClick={(event) => {
+            event.stopPropagation();
+            onClick?.();
+          }}
         >
-          <path
-            className="stroke-[8] opacity-0"
-            d={d}
-            markerEnd={arrowHeadMarker}
-          >
+          <path className="stroke-[8] opacity-0" d={d}>
             <title>
               {edge.id} (from {edge.sources.join(",")} to{" "}
               {edge.targets.join(",")})
@@ -596,20 +502,29 @@ const RoundedEdge: FunctionComponent<
           </path>
           <path
             className={clsx(
-              "stroke-[6] stroke-sky-100 dark:stroke-sky-500/50",
+              "stroke-[6] stroke-sky-100 dark:stroke-sky-700",
               !selected && "opacity-0",
               selected && "opacity-100",
               "group-hover:opacity-100",
               "transition-opacity",
             )}
             d={d}
-          >
-            <title>
-              {edge.id} (from {edge.sources.join(",")} to{" "}
-              {edge.targets.join(",")})
-            </title>
-          </path>
-          <path d={d} markerEnd={arrowHeadMarker} />
+          />
+          <path d={d} />
+          <path
+            className={clsx(
+              "transition-colors",
+              "stroke-none",
+              !selected &&
+                !highlighted && ["fill-slate-300 dark:fill-slate-500"],
+              (selected || highlighted) && "fill-sky-500 dark:fill-sky-400",
+              "group-hover:fill-sky-500",
+              "dark:group-hover:fill-sky-300",
+            )}
+            d={`M${(lastPoint?.x ?? 0) - 4} ${
+              (lastPoint?.y ?? 0) - 2
+            } v4 l5 -2 z`}
+          />
         </g>
       </svg>
     );
@@ -679,11 +594,23 @@ export const MapView = memo(
           props.constructTreeNode.children ?? {},
         ).filter((node) => !isNodeHidden(node.path));
 
+        const fqn = props.constructTreeNode.constructInfo?.fqn;
+
+        const cloudResourceType = fqn?.split(".").at(-1);
+
+        const name =
+          props.constructTreeNode.display?.title === cloudResourceType
+            ? props.constructTreeNode.id
+            : props.constructTreeNode.display?.title ??
+              props.constructTreeNode.id;
+
         return (
           <ConstructNode
             id={props.constructTreeNode.path}
-            name={props.constructTreeNode.id}
-            fqn={props.constructTreeNode.constructInfo?.fqn ?? ""}
+            name={name ?? ""}
+            fqn={fqn ?? ""}
+            color={props.constructTreeNode.display?.color}
+            icon={props.constructTreeNode.display?.icon}
             inflights={info.type === "construct" ? info.inflights : []}
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             highlight={props.selectedNodeId === props.constructTreeNode.path}
@@ -705,16 +632,19 @@ export const MapView = memo(
 
     const { theme } = useTheme();
 
-    useKeyPressEvent(
-      "Escape",
-      useCallback(() => {
-        onSelectedNodeIdChange?.(undefined);
-      }, [onSelectedNodeIdChange]),
-    );
+    const unselectedNode = useCallback(() => {
+      onSelectedNodeIdChange?.("root");
+    }, [onSelectedNodeIdChange]);
+
+    useKeyPressEvent("Escape", unselectedNode);
 
     return (
-      <div className={clsx("h-full flex flex-col", theme.bg4)}>
-        <div className="grow relative bg-slate-50 dark:bg-slate-500">
+      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+      <div
+        className={clsx("h-full flex flex-col", theme.bg4)}
+        onClick={unselectedNode}
+      >
+        <div className="grow relative">
           {!rootNodes && (
             <div
               className={clsx(

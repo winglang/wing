@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): void"
   documentation:
     kind: markdown
-    value: "```wing\nclear: (): void\n```\n---\nRemoves all elements."
+    value: Removes all elements.
   sortText: ff|clear
   insertText: clear()
 - label: copy
@@ -14,7 +14,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): Map"
   documentation:
     kind: markdown
-    value: "```wing\ncopy: (): Map\n```\n---\nCreate an immutable shallow copy of this map.\n\n### Returns\nan ImmutableMap with the same values as this map"
+    value: "Create an immutable shallow copy of this map.\n\n#### Returns\nan ImmutableMap with the same values as this map"
   sortText: ff|copy
   insertText: copy()
 - label: delete
@@ -22,7 +22,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): bool"
   documentation:
     kind: markdown
-    value: "```wing\ndelete: (key: str): bool\n```\n---\nRemoves the specified element from a map.\n### Parameters\n- `key` — `str` — The key.\n\n### Returns\ntrue if the given key is no longer present"
+    value: "Removes the specified element from a map.\n\n#### Returns\ntrue if the given key is no longer present"
   sortText: ff|delete
   insertText: delete($1)
   insertTextFormat: 2
@@ -34,7 +34,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): Array<ArrayEntry>"
   documentation:
     kind: markdown
-    value: "```wing\nentries: (): Array<ArrayEntry>\n```\n---\nReturns the entries from the map.\n\n### Returns\nthe entries as Array<ArrayEntry>"
+    value: "Returns the entries from the map.\n\n#### Returns\nthe entries as Array<ArrayEntry>"
   sortText: ff|entries
   insertText: entries()
 - label: get
@@ -42,7 +42,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): T1"
   documentation:
     kind: markdown
-    value: "```wing\nget: (key: str): T1\n```\n---\nReturns a specified element from the map.\n### Parameters\n- `key` — `str` — The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or throw an error if the key can't be found\n\n### Remarks\nIf the value that is associated to the provided key is an object, then you will get a reference\nto that object and any change made to that object will effectively modify it inside the map."
+    value: "Returns a specified element from the map.\n\n#### Returns\nThe element associated with the specified key, or throw an error if the key can't be found\n\n#### Remarks\nIf the value that is associated to the provided key is an object, then you will get a reference\nto that object and any change made to that object will effectively modify it inside the map."
   sortText: ff|get
   insertText: get($1)
   insertTextFormat: 2
@@ -54,7 +54,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): bool"
   documentation:
     kind: markdown
-    value: "```wing\nhas: (key: str): bool\n```\n---\nReturns a boolean indicating whether an element with the specified key exists or not.\n### Parameters\n- `key` — `str` — The key of the element to test for presence.\n\n### Returns\ntrue if an element with the specified key exists in the map; otherwise false."
+    value: "Returns a boolean indicating whether an element with the specified key exists or not.\n\n#### Returns\ntrue if an element with the specified key exists in the map; otherwise false."
   sortText: ff|has
   insertText: has($1)
   insertTextFormat: 2
@@ -66,7 +66,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): Array<str>"
   documentation:
     kind: markdown
-    value: "```wing\nkeys: (): Array<str>\n```\n---\nReturns the keys of this map.\n\n### Returns\nan array containing the keys of this map"
+    value: "Returns the keys of this map.\n\n#### Returns\nan array containing the keys of this map"
   sortText: ff|keys
   insertText: keys()
 - label: set
@@ -74,7 +74,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str, value: T1): void"
   documentation:
     kind: markdown
-    value: "```wing\nset: (key: str, value: T1): void\n```\n---\nAdds or updates an entry in a Map object with a specified key and a value.\n### Parameters\n- `key` — `str` — The key of the element to add.\n- `value` — `T1` — The value of the element to add.\n\n### Remarks\nTODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659"
+    value: "Adds or updates an entry in a Map object with a specified key and a value.\n\n#### Remarks\nTODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659"
   sortText: ff|set
   insertText: set($1)
   insertTextFormat: 2
@@ -86,7 +86,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): num"
   documentation:
     kind: markdown
-    value: "```wing\nsize: (): num\n```\n---\nReturns the number of elements in the map.\n\n### Returns\nThe number of elements in map\n\n### Remarks\nTODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658"
+    value: "Returns the number of elements in the map.\n\n#### Returns\nThe number of elements in map\n\n#### Remarks\nTODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658"
   sortText: ff|size
   insertText: size()
 - label: tryGet
@@ -94,7 +94,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): T1?"
   documentation:
     kind: markdown
-    value: "```wing\ntryGet: (key: str): T1?\n```\n---\nOptionally returns a specified element from the map.\n### Parameters\n- `key` — `str` — The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+    value: "Optionally returns a specified element from the map.\n\n#### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
   sortText: ff|tryGet
   insertText: tryGet($1)
   insertTextFormat: 2
@@ -106,7 +106,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): Array"
   documentation:
     kind: markdown
-    value: "```wing\nvalues: (): Array\n```\n---\nReturns the values of this map.\n\n### Returns\nan array containing of type T the values of this map"
+    value: "Returns the values of this map.\n\n#### Returns\nan array containing of type T the values of this map"
   sortText: ff|values
   insertText: values()
 

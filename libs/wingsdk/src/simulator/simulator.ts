@@ -634,6 +634,13 @@ export class Simulator {
       return { granted: true };
     }
 
+    if (method === "then") {
+      // Always grant permissions for the "then" method so that an error isn't thrown
+      // if `await client` is called on a Proxy object. In JavaScript, `await x` will
+      // implicitly call `x.then()`.
+      return { granted: true };
+    }
+
     const callerPath = this._handles.tryFindPath(callerHandle);
     if (!callerPath) {
       return {
@@ -1055,9 +1062,18 @@ export class Simulator {
     oldConfig: BaseResourceSchema,
     newConfig: BaseResourceSchema
   ) {
+    const state = (r: BaseResourceSchema) =>
+      JSON.stringify({
+        props: r.props,
+        type: r.type,
+        policyStatements: r.policy,
+      });
+
+    const invalidated = state(oldConfig) !== state(newConfig);
+
     // consult the resource's "plan()" method if it has one
     const instance = this.tryGetResource(path) as ISimulatorResourceInstance;
-    const plan = instance ? await instance.plan(newConfig) : UpdatePlan.AUTO;
+    const plan = instance ? await instance.plan(invalidated) : UpdatePlan.AUTO;
 
     switch (plan) {
       case UpdatePlan.SKIP:
@@ -1067,14 +1083,12 @@ export class Simulator {
         return true;
 
       case UpdatePlan.AUTO:
-        const state = (r: BaseResourceSchema) =>
-          JSON.stringify({
-            props: r.props,
-            type: r.type,
-            policyStatements: r.policy,
-          });
-
-        return state(oldConfig) !== state(newConfig);
+        // Replace the resource if the new configuration is different from the current configuration
+        //
+        // Note: we're comparing the unresolved configurations, either of which may contain tokens.
+        // So even if the configurations may look the same, it's possible that a replacement
+        // is still necessary.
+        return invalidated;
     }
   }
 }
@@ -1173,9 +1187,9 @@ export interface ISimulatorResourceInstance {
    * If this is not implemented, the default behavior is to automatically replace the resource if
    * the new configuration is different from the current configuration.
    *
-   * @param newConfig The new configuration to apply (this could include unresolved tokens)
+   * @param invalidated Whether the new configuration is different from the current configuration.
    */
-  plan(newConfig: BaseResourceSchema): Promise<UpdatePlan>;
+  plan(invalidated: boolean): Promise<UpdatePlan>;
 }
 
 /**

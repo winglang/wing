@@ -126,7 +126,8 @@ impl<'a> SymbolLocator<'a> {
 			| Type::Unresolved
 			| Type::Inferred(_)
 			| Type::Function(_)
-			| Type::Enum(_) => None,
+			| Type::Enum(_)
+			| Type::Stringable => None,
 
 			Type::Array(_)
 			| Type::MutArray(_)
@@ -189,7 +190,7 @@ impl<'a> SymbolLocator<'a> {
 			}
 			SymbolLocatorResult::StructField { struct_type, field } => self.lookup_property_on_type(&struct_type, field),
 			SymbolLocatorResult::LooseField { .. } => None,
-			SymbolLocatorResult::Intrinsic { .. } => None,
+			SymbolLocatorResult::Intrinsic { name, .. } => Some(self.types.intrinsics.lookup_ext(name, None)),
 		}
 	}
 

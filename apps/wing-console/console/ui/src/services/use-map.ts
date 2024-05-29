@@ -180,6 +180,28 @@ export const useMap = ({}: UseMapOptions = {}) => {
     [hiddenMap],
   );
 
+  const resolveNodePath = useCallback(
+    (path: string) => {
+      const parts = path.split("/");
+      for (const [index, part] of Object.entries(parts)) {
+        const path = parts.slice(0, Number(index) + 1).join("/");
+        if (isNodeHidden(path)) {
+          return parts.slice(0, Number(index)).join("/");
+        }
+      }
+      return path;
+    },
+    [isNodeHidden],
+  );
+
+  const resolveNode = useCallback(
+    (path: string) => {
+      const nodePath = path.match(/^(.+?)#/)?.[1] ?? path;
+      return resolveNodePath(nodePath);
+    },
+    [resolveNodePath],
+  );
+
   const rootNodes = useMemo(() => {
     if (!rawTree) {
       return;
@@ -211,8 +233,7 @@ export const useMap = ({}: UseMapOptions = {}) => {
               source: {
                 id: connection.source,
                 nodeFqn: nodeFqns.get(connection.source),
-                operation:
-                  connection.sourceOp ?? connection.name.replace("()", ""),
+                operation: connection.sourceOp,
               },
               target: {
                 id: connection.target,
@@ -225,8 +246,25 @@ export const useMap = ({}: UseMapOptions = {}) => {
       getNodeId: (node) => node.id,
       getConnectionId: (connection) =>
         `${connection.source.id}#${connection.source.operation}##${connection.target.id}#${connection.target.operation}`,
-    });
-  }, [rawConnections, nodeFqns, isNodeHidden]);
+      resolveNode: (node) => {
+        const path = resolveNode(node.id);
+        return {
+          id: path,
+          nodeFqn: nodeFqns.get(path),
+          // Make the operation anonymous if the node is hidden.
+          operation: path === node.id ? node.operation : undefined,
+        };
+      },
+    })
+      .filter((connection) => {
+        // Filter connections that go to parents.
+        return !connection.source.id.startsWith(`${connection.target.id}/`);
+      })
+      .filter((connection) => {
+        // Filter connections that go to themselves.
+        return connection.source.id !== connection.target.id;
+      });
+  }, [rawConnections, nodeFqns, isNodeHidden, resolveNode]);
 
   const getConnectionId = useCallback(
     (
