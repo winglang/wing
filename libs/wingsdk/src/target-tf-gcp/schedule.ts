@@ -94,18 +94,4 @@ export class Schedule extends cloud.Schedule {
 
     return cronFunction;
   }
-
-  /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-gcp", "shared-gcp"),
-      __filename,
-      "ScheduleClient",
-      [`process.env["${this.envName()}"]`]
-    );
-  }
-
-  private envName(): string {
-    return `SCHEDULE_EVENT_${this.node.addr.slice(-8)}`;
-  }
 }

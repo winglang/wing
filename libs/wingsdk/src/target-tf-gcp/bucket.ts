@@ -43,6 +43,16 @@ const BUCKET_NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.Bucket {
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename
+        .replace("target-tf-gcp", "shared-gcp")
+        .replace("bucket", "bucket.inflight"),
+      "BucketClient"
+    );
+  }
+
   public readonly bucket: StorageBucket;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
@@ -205,13 +215,10 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return InflightClient.for(
-      __dirname.replace("target-tf-gcp", "shared-gcp"),
-      __filename,
-      "BucketClient",
-      [`process.env["${this.envName()}"]`]
-    );
+  public _liftedFields(): Record<string, string> {
+    return {
+      $bucketName: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

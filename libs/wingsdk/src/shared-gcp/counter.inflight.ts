@@ -6,11 +6,18 @@ const COUNTER_ENTITY_KIND = "Counter";
 
 export class CounterClient implements ICounterClient {
   private readonly client: Datastore;
+  private readonly databaseName: string;
+  private readonly initial: number;
 
-  constructor(
-    private readonly databaseName: string,
-    private readonly initial: number = 0
-  ) {
+  constructor({
+    $databaseName,
+    $initial,
+  }: {
+    $databaseName: string;
+    $initial?: number;
+  }) {
+    this.databaseName = $databaseName;
+    this.initial = $initial ?? 0;
     this.client = new Datastore({ databaseId: this.databaseName });
   }
 

@@ -21,7 +21,7 @@ test("invoke with successful response", async () => {
   });
 
   // WHEN
-  const client = new FunctionClient(FUNCTION_NAME);
+  const client = new FunctionClient({ $functionName: FUNCTION_NAME });
   const response = await client.invoke(PAYLOAD);
 
   // THEN
@@ -43,7 +43,7 @@ test("invoke with unsuccessful response", async () => {
     url: "",
   });
   // THEN
-  const client = new FunctionClient(FUNCTION_NAME);
+  const client = new FunctionClient({ $functionName: FUNCTION_NAME });
 
   await expect(() => client.invoke(PAYLOAD)).rejects.toThrowError(ERROR);
 });

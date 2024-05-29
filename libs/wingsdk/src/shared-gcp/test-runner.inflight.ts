@@ -7,14 +7,14 @@ export class TestRunnerClient implements ITestRunnerClient {
   private readonly tests: Map<string, string>;
   private readonly token: string;
 
-  constructor(tests: string) {
+  constructor({ $tests }: { $tests: string }) {
     // Expects a JSON string of the form:
     // [
     //   ["testPath1", "functionArn1"],
     //   ["testPath2", "functionArn2"],
     //   ...
     // ]
-    this.tests = new Map(JSON.parse(tests) as [string, string][]);
+    this.tests = new Map(JSON.parse($tests) as [string, string][]);
     this.token = execSync("gcloud auth print-identity-token")
       .toString()
       .replace("\n", "");
@@ -30,11 +30,11 @@ export class TestRunnerClient implements ITestRunnerClient {
       throw new Error(`No test found with path "${path}"`);
     }
 
-    const client = new FunctionClient(
-      functionArn,
-      process.env.GOOGLE_PROJECT_ID as string,
-      process.env.GOOGLE_REGION as string
-    );
+    const client = new FunctionClient({
+      $functionName: functionArn,
+      $projectId: process.env.GOOGLE_PROJECT_ID as string,
+      $region: process.env.GOOGLE_REGION as string,
+    });
     let traces: Trace[] = [];
     let pass = false;
     let error: string | undefined;

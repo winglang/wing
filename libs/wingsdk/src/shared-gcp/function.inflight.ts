@@ -4,11 +4,22 @@ import { RequestRedirect, Util as http } from "../http";
 import { Trace } from "../std";
 
 export class FunctionClient implements IFunctionClient {
-  constructor(
-    private readonly functionName: string,
-    private readonly projectId: string,
-    private readonly region: string
-  ) {}
+  private readonly functionName: string;
+  private readonly projectId: string;
+  private readonly region: string;
+  constructor({
+    $functionName,
+    $projectId,
+    $region,
+  }: {
+    $functionName: string;
+    $projectId: string;
+    $region: string;
+  }) {
+    this.functionName = $functionName;
+    this.projectId = $projectId;
+    this.region = $region;
+  }
 
   private get functionURL(): string {
     return `https://${this.region}-${this.projectId}.cloudfunctions.net/${this.functionName}`;
