@@ -6,7 +6,8 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Bar {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return Bar;
@@ -20,7 +21,8 @@ module.exports = function({  }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return Foo;
@@ -34,7 +36,8 @@ module.exports = function({  }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return Foo;
@@ -48,7 +51,8 @@ module.exports = function({  }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Widget {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return Widget;
@@ -133,16 +137,10 @@ class Foo extends $stdlib.std.Resource {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const FooClient = ${Foo._toInflightType()};
-        const client = new FooClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
+  _liftedState() {
+    return {
+      ...(super._liftedState?.() ?? {}),
+    };
   }
   get _liftMap() {
     return ({
@@ -177,16 +175,10 @@ class Bar extends $stdlib.std.Resource {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const BarClient = ${Bar._toInflightType()};
-        const client = new BarClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
+  _liftedState() {
+    return {
+      ...(super._liftedState?.() ?? {}),
+    };
   }
   get _liftMap() {
     return ({
@@ -205,16 +197,10 @@ class Foo extends $stdlib.std.Resource {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const FooClient = ${Foo._toInflightType()};
-        const client = new FooClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
+  _liftedState() {
+    return {
+      ...(super._liftedState?.() ?? {}),
+    };
   }
   get _liftMap() {
     return ({
@@ -278,16 +264,10 @@ class Widget extends $stdlib.std.Resource {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const WidgetClient = ${Widget._toInflightType()};
-        const client = new WidgetClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
+  _liftedState() {
+    return {
+      ...(super._liftedState?.() ?? {}),
+    };
   }
   get _liftMap() {
     return ({

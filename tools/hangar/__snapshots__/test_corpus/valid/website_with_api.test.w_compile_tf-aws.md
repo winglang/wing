@@ -6,7 +6,8 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -26,7 +27,8 @@ module.exports = function({ $std_Json, $usersTable }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -51,7 +53,8 @@ module.exports = function({ $std_Json, $usersTable }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure3 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -78,7 +81,8 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure4 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -645,21 +649,15 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
-            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"))},
             $usersTable: ${$stdlib.core.liftObject(usersTable)},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -681,21 +679,15 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
-            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"))},
             $usersTable: ${$stdlib.core.liftObject(usersTable)},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType()};
-            const client = new $Closure2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -718,22 +710,16 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.cjs")({
             $api_url: ${$stdlib.core.liftObject(api.url)},
-            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
             $http_HttpMethod: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
-            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.http.Util") ?? http.Util, "@winglang/sdk/http", "Util"))},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType()};
-            const client = new $Closure3Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -756,22 +742,16 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
             $api_url: ${$stdlib.core.liftObject(api.url)},
-            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
             $http_HttpMethod: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
-            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.http.Util") ?? http.Util, "@winglang/sdk/http", "Util"))},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType()};
-            const client = new $Closure4Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({

@@ -6,7 +6,8 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -26,7 +27,8 @@ module.exports = function({  }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url, $http_Util }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -47,8 +49,9 @@ module.exports = function({ $api_url, $http_Util }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $cloud_Api }) {
   class AnApi extends $cloud_Api {
-    constructor({  }) {
-      super({  });
+    constructor($args) {
+      const {  } = $args;
+      super($args);
     }
   }
   return AnApi;
@@ -302,20 +305,14 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.AnApi-1.cjs")({
-            $cloud_Api: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cloud.Api, "@winglang/sdk/cloud", "Api"))},
+            $cloud_Api: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.cloud.Api") ?? cloud.Api, "@winglang/sdk/cloud", "Api"))},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const AnApiClient = ${AnApi._toInflightType()};
-            const client = new AnApiClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
@@ -336,16 +333,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -366,20 +357,14 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $api_url: ${$stdlib.core.liftObject(api.url)},
-            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.http.Util") ?? http.Util, "@winglang/sdk/http", "Util"))},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType()};
-            const client = new $Closure2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({

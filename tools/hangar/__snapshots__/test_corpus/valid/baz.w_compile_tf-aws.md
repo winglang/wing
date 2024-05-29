@@ -6,7 +6,8 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Baz {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return Baz;
@@ -34,16 +35,10 @@ class Baz extends $stdlib.std.Resource {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const BazClient = ${Baz._toInflightType()};
-        const client = new BazClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
+  _liftedState() {
+    return {
+      ...(super._liftedState?.() ?? {}),
+    };
   }
   get _liftMap() {
     return ({

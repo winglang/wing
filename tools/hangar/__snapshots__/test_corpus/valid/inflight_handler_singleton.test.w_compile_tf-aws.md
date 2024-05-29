@@ -6,7 +6,8 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $foo }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -27,7 +28,8 @@ module.exports = function({ $foo }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $foo }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -48,7 +50,8 @@ module.exports = function({ $foo }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
   class $Closure3 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -76,7 +79,8 @@ module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $foo, $std_Duration, $util_Util }) {
   class $Closure4 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -98,7 +102,8 @@ module.exports = function({ $foo, $std_Duration, $util_Util }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $fn3, $std_Duration, $util_Util }) {
   class $Closure5 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -120,7 +125,8 @@ module.exports = function({ $fn3, $std_Duration, $util_Util }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
     async inc() {
       this.n += 1;
@@ -451,16 +457,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const FooClient = ${Foo._toInflightType()};
-            const client = new FooClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -488,16 +488,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -523,16 +517,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType()};
-            const client = new $Closure2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -554,23 +542,17 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.cjs")({
-            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.expect.Util") ?? expect.Util, "@winglang/sdk/expect", "Util"))},
             $fn: ${$stdlib.core.liftObject(fn)},
             $fn2: ${$stdlib.core.liftObject(fn2)},
             $sim: ${$stdlib.core.liftObject(sim)},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType()};
-            const client = new $Closure3Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -597,21 +579,15 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
             $foo: ${$stdlib.core.liftObject(foo)},
-            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
-            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Duration") ?? std.Duration, "@winglang/sdk/std", "Duration"))},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.util.Util") ?? util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType()};
-            const client = new $Closure4Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -634,21 +610,15 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.cjs")({
             $fn3: ${$stdlib.core.liftObject(fn3)},
-            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
-            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Duration") ?? std.Duration, "@winglang/sdk/std", "Duration"))},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.util.Util") ?? util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure5Client = ${$Closure5._toInflightType()};
-            const client = new $Closure5Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({

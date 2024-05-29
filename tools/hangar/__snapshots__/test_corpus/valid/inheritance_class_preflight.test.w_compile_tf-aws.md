@@ -6,8 +6,9 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $FooBase }) {
   class Foo extends $FooBase {
-    constructor({  }) {
-      super({  });
+    constructor($args) {
+      const {  } = $args;
+      super($args);
     }
   }
   return Foo;
@@ -21,7 +22,8 @@ module.exports = function({ $FooBase }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class FooBase {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return FooBase;
@@ -78,16 +80,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const FooBaseClient = ${FooBase._toInflightType()};
-            const client = new FooBaseClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -113,16 +109,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const FooClient = ${Foo._toInflightType()};
-            const client = new FooClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {

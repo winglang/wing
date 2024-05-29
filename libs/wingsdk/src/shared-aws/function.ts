@@ -177,7 +177,7 @@ export class FunctionRef extends Resource {
   public _liftedState(): Record<string, string> {
     return {
       $functionArn: `process.env["${this.envName()}"]`,
-      $constructPath: `${this.node.path}`,
+      $constructPath: `"${this.node.path}"`,
     };
   }
 

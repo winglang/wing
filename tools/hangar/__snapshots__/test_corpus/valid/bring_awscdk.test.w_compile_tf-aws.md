@@ -6,7 +6,8 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class CdkDockerImageFunction {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return CdkDockerImageFunction;
@@ -61,16 +62,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const CdkDockerImageFunctionClient = ${CdkDockerImageFunction._toInflightType()};
-            const client = new CdkDockerImageFunctionClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({

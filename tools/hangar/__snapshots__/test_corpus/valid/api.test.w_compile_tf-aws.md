@@ -6,7 +6,8 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $counter, $std_Json }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -29,7 +30,8 @@ module.exports = function({ $counter, $std_Json }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -50,7 +52,8 @@ module.exports = function({ $api_url }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $__parent_this_3_api_url }) {
   class $Closure3 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -71,7 +74,8 @@ module.exports = function({ $__parent_this_3_api_url }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class A {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return A;
@@ -491,20 +495,14 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $counter: ${$stdlib.core.liftObject(counter)},
-            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType($scope.node.root.typeForFqn("@winglang/sdk.std.Json") ?? std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -530,16 +528,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType()};
-            const client = new $Closure2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -570,16 +562,10 @@ class $Root extends $stdlib.std.Resource {
               })
             `;
           }
-          _toInflight() {
-            return `
-              (await (async () => {
-                const $Closure3Client = ${$Closure3._toInflightType()};
-                const client = new $Closure3Client({
-                });
-                if (client.$inflight_init) { await client.$inflight_init(); }
-                return client;
-              })())
-            `;
+          _liftedState() {
+            return {
+              ...(super._liftedState?.() ?? {}),
+            };
           }
           get _liftMap() {
             return ({
@@ -600,16 +586,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const AClient = ${A._toInflightType()};
-            const client = new AClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({

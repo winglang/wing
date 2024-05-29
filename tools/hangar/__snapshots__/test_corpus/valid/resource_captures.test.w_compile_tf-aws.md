@@ -6,7 +6,8 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $r }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -36,7 +37,8 @@ module.exports = function({ $r }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Another {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
     async meaningOfLife() {
       return 42;
@@ -56,7 +58,8 @@ module.exports = function({  }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class First {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return First;
@@ -70,7 +73,8 @@ module.exports = function({  }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyResource {
-    constructor({ $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr, $this_extBucket, $this_extNum, $this_mapOfNum, $this_myBool, $this_myNum, $this_myOptStr, $this_myQueue, $this_myResource, $this_myStr, $this_setOfStr }) {
+    constructor($args) {
+      const { $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr, $this_extBucket, $this_extNum, $this_mapOfNum, $this_myBool, $this_myNum, $this_myOptStr, $this_myQueue, $this_myResource, $this_myStr, $this_setOfStr } = $args;
       this.$this_another = $this_another;
       this.$this_another_first_myResource = $this_another_first_myResource;
       this.$this_another_myField = $this_another_myField;
@@ -256,16 +260,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const FirstClient = ${First._toInflightType()};
-            const client = new FirstClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -286,16 +284,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const AnotherClient = ${Another._toInflightType()};
-            const client = new AnotherClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -334,30 +326,24 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const MyResourceClient = ${MyResource._toInflightType()};
-            const client = new MyResourceClient({
-              $this_another: ${$stdlib.core.liftObject(this.another)},
-              $this_another_first_myResource: ${$stdlib.core.liftObject(this.another.first.myResource)},
-              $this_another_myField: ${$stdlib.core.liftObject(this.another.myField)},
-              $this_arrayOfStr: ${$stdlib.core.liftObject(this.arrayOfStr)},
-              $this_extBucket: ${$stdlib.core.liftObject(this.extBucket)},
-              $this_extNum: ${$stdlib.core.liftObject(this.extNum)},
-              $this_mapOfNum: ${$stdlib.core.liftObject(this.mapOfNum)},
-              $this_myBool: ${$stdlib.core.liftObject(this.myBool)},
-              $this_myNum: ${$stdlib.core.liftObject(this.myNum)},
-              $this_myOptStr: ${$stdlib.core.liftObject(this.myOptStr)},
-              $this_myQueue: ${$stdlib.core.liftObject(this.myQueue)},
-              $this_myResource: ${$stdlib.core.liftObject(this.myResource)},
-              $this_myStr: ${$stdlib.core.liftObject(this.myStr)},
-              $this_setOfStr: ${$stdlib.core.liftObject(this.setOfStr)},
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+          $this_another: $stdlib.core.liftObject(this.another),
+          $this_another_first_myResource: $stdlib.core.liftObject(this.another.first.myResource),
+          $this_another_myField: $stdlib.core.liftObject(this.another.myField),
+          $this_arrayOfStr: $stdlib.core.liftObject(this.arrayOfStr),
+          $this_extBucket: $stdlib.core.liftObject(this.extBucket),
+          $this_extNum: $stdlib.core.liftObject(this.extNum),
+          $this_mapOfNum: $stdlib.core.liftObject(this.mapOfNum),
+          $this_myBool: $stdlib.core.liftObject(this.myBool),
+          $this_myNum: $stdlib.core.liftObject(this.myNum),
+          $this_myOptStr: $stdlib.core.liftObject(this.myOptStr),
+          $this_myQueue: $stdlib.core.liftObject(this.myQueue),
+          $this_myResource: $stdlib.core.liftObject(this.myResource),
+          $this_myStr: $stdlib.core.liftObject(this.myStr),
+          $this_setOfStr: $stdlib.core.liftObject(this.setOfStr),
+        };
       }
       get _liftMap() {
         return ({
@@ -433,16 +419,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({

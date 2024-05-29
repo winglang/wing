@@ -6,7 +6,8 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $c }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
@@ -26,7 +27,8 @@ module.exports = function({ $c }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class A {
-    constructor({ $this_a }) {
+    constructor($args) {
+      const { $this_a } = $args;
       this.$this_a = $this_a;
     }
     async do() {
@@ -44,8 +46,9 @@ module.exports = function({  }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $A }) {
   class B extends $A {
-    constructor({ $this_b, $this_a }) {
-      super({ $this_a });
+    constructor($args) {
+      const { $this_b, $this_a } = $args;
+      super($args);
       this.$this_b = $this_b;
     }
     async do() {
@@ -63,8 +66,9 @@ module.exports = function({ $A }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $B }) {
   class C extends $B {
-    constructor({ $this_b, $this_c, $this_a }) {
-      super({ $this_b, $this_a });
+    constructor($args) {
+      const { $this_b, $this_c, $this_a } = $args;
+      super($args);
       this.$this_b = $this_b;
       this.$this_c = $this_c;
     }
@@ -123,17 +127,11 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const AClient = ${A._toInflightType()};
-            const client = new AClient({
-              $this_a: ${$stdlib.core.liftObject(this.a)},
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+          $this_a: $stdlib.core.liftObject(this.a),
+        };
       }
       get _liftMap() {
         return ({
@@ -158,18 +156,12 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const BClient = ${B._toInflightType()};
-            const client = new BClient({
-              $this_b: ${$stdlib.core.liftObject(this.b)},
-              $this_a: ${$stdlib.core.liftObject(this.a)},
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+          $this_b: $stdlib.core.liftObject(this.b),
+          $this_a: $stdlib.core.liftObject(this.a),
+        };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
@@ -194,19 +186,13 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const CClient = ${C._toInflightType()};
-            const client = new CClient({
-              $this_b: ${$stdlib.core.liftObject(this.b)},
-              $this_c: ${$stdlib.core.liftObject(this.c)},
-              $this_a: ${$stdlib.core.liftObject(this.a)},
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+          $this_b: $stdlib.core.liftObject(this.b),
+          $this_c: $stdlib.core.liftObject(this.c),
+          $this_a: $stdlib.core.liftObject(this.a),
+        };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {
@@ -236,16 +222,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
