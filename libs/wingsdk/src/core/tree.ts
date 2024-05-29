@@ -81,6 +81,11 @@ export interface DisplayInfo {
    * The color of the resource in the UI.
    */
   readonly color?: Colors;
+
+  /**
+   * The icon of the resource in the UI.
+   */
+  readonly icon?: string;
 }
 
 /** @internal */
@@ -241,7 +246,8 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
     display.title ||
     display.hidden ||
     ui ||
-    display.color
+    display.color ||
+    display.icon
   ) {
     return {
       title: display.title,
@@ -250,6 +256,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
       sourceModule: display.sourceModule,
       ui: ui.length > 0 ? ui : undefined,
       color: isOfTypeColors(display.color) ? display.color : undefined,
+      icon: display.icon,
     };
   }
   return;
