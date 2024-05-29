@@ -37,7 +37,8 @@ source: libs/wingc/src/jsify/tests.rs
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
-    constructor({ $this_c }) {
+    constructor($args) {
+      const { $this_c } = $args;
       this.$this_c = $this_c;
     }
     async incCounter() {
@@ -81,17 +82,11 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const FooClient = ${Foo._toInflightType()};
-            const client = new FooClient({
-              $this_c: ${$stdlib.core.liftObject(this.c)},
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+          $this_c: $stdlib.core.liftObject(this.c),
+        };
       }
       get _liftMap() {
         return ({

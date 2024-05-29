@@ -42,8 +42,9 @@ pub class Child extends ParentClass impl ClassInterface {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $ParentClass }) {
   class Child extends $ParentClass {
-    constructor({  }) {
-      super({  });
+    constructor($args) {
+      const {  } = $args;
+      super($args);
     }
   }
   return Child;
@@ -58,7 +59,8 @@ module.exports = function({ $ParentClass }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class ParentClass {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
     static async static_method() {
     }
@@ -112,16 +114,10 @@ class ParentClass extends $stdlib.std.Resource {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const ParentClassClient = ${ParentClass._toInflightType()};
-        const client = new ParentClassClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
+  _liftedState() {
+    return {
+      ...(super._liftedState?.() ?? {}),
+    };
   }
   get _liftMap() {
     return ({
@@ -151,16 +147,10 @@ class Child extends ParentClass {
       })
     `;
   }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const ChildClient = ${Child._toInflightType()};
-        const client = new ChildClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
+  _liftedState() {
+    return {
+      ...(super._liftedState?.() ?? {}),
+    };
   }
   get _liftMap() {
     return $stdlib.core.mergeLiftDeps(super._liftMap, {

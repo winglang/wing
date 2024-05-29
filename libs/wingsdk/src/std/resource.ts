@@ -1,6 +1,5 @@
 import { Construct, IConstruct } from "constructs";
 import { App, InflightClient, LiftMap } from "../core";
-import { AbstractMemberError } from "../core/errors";
 import { Node } from "../std";
 
 /**
@@ -196,7 +195,7 @@ export abstract class Resource extends Construct implements IResource {
    * @abstract
    */
   public _liftedState(): Record<string, string> {
-    throw new AbstractMemberError();
+    return {};
   }
 
   /**

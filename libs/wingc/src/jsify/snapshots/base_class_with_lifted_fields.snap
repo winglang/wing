@@ -29,7 +29,8 @@ source: libs/wingc/src/jsify/tests.rs
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Base {
-    constructor({  }) {
+    constructor($args) {
+      const {  } = $args;
     }
   }
   return Base;
@@ -44,8 +45,9 @@ module.exports = function({  }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Base }) {
   class Derived extends $Base {
-    constructor({ $this_f }) {
-      super({  });
+    constructor($args) {
+      const { $this_f } = $args;
+      super($args);
       this.$this_f = $this_f;
     }
     async foo() {
@@ -82,16 +84,10 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const BaseClient = ${Base._toInflightType()};
-            const client = new BaseClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+        };
       }
       get _liftMap() {
         return ({
@@ -111,17 +107,11 @@ class $Root extends $stdlib.std.Resource {
           })
         `;
       }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const DerivedClient = ${Derived._toInflightType()};
-            const client = new DerivedClient({
-              $this_f: ${$stdlib.core.liftObject(this.f)},
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
+      _liftedState() {
+        return {
+          ...(super._liftedState?.() ?? {}),
+          $this_f: $stdlib.core.liftObject(this.f),
+        };
       }
       get _liftMap() {
         return $stdlib.core.mergeLiftDeps(super._liftMap, {

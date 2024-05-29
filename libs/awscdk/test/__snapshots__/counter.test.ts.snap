@@ -68,7 +68,14 @@ exports[`dec() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
-  my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+  my_counter: 
+(await (async () => {
+  const klass = require(\\"[REDACTED]/awscdk/src/counter.inflight.ts\\").CounterClient;
+  const client = new klass({$tableName: process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], $initial: 0});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -314,7 +321,14 @@ exports[`function with a counter binding 1`] = `
     console.log(val);
   }
   const $ctx = {
-  my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+  my_counter: 
+(await (async () => {
+  const klass = require(\\"[REDACTED]/awscdk/src/counter.inflight.ts\\").CounterClient;
+  const client = new klass({$tableName: process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], $initial: 0});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -499,7 +513,14 @@ exports[`inc() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
-  my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+  my_counter: 
+(await (async () => {
+  const klass = require(\\"[REDACTED]/awscdk/src/counter.inflight.ts\\").CounterClient;
+  const client = new klass({$tableName: process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], $initial: 0});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -684,7 +705,14 @@ exports[`peek() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
-  my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+  my_counter: 
+(await (async () => {
+  const klass = require(\\"[REDACTED]/awscdk/src/counter.inflight.ts\\").CounterClient;
+  const client = new klass({$tableName: process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], $initial: 0});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -869,7 +897,14 @@ exports[`set() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
-  my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+  my_counter: 
+(await (async () => {
+  const klass = require(\\"[REDACTED]/awscdk/src/counter.inflight.ts\\").CounterClient;
+  const client = new klass({$tableName: process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], $initial: 0});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
