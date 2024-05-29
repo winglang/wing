@@ -146,13 +146,6 @@ export class Redis extends ex.Redis {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "RedisClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
-  }
-
-  /** @internal */
   public _liftedState(): Record<string, string> {
     return {
       $clusterId: `process.env["${this.envName()}"]`,

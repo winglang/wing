@@ -3,7 +3,6 @@ import { Construct, IConstruct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import { DataAwsLambdaInvocation } from "../.gen/providers/aws/data-aws-lambda-invocation";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { IInflight } from "../std";
 
 /**
@@ -55,16 +54,6 @@ export class OnDeploy extends cloud.OnDeploy {
       }
       c.node.addDependency(this);
     }
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "OnDeployClient",
-      []
-    );
   }
 }
 
