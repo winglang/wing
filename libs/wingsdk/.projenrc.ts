@@ -93,6 +93,7 @@ const project = new cdk.JsiiProject({
     // tunnels
     "@winglang/wingtunnels@workspace:^",
     "glob",
+    "external-assert@npm:assert@2.1.0",
   ],
   devDeps: [
     `@cdktf/provider-aws@^19`, // only for testing Wing plugins
