@@ -1,15 +1,16 @@
 bring cloud;
 bring http;
 bring util;
+bring expect;
 
 let api = new cloud.Api();
 let body = Json {"cat": "Tion"};
 
-api.post("/path", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  assert(req.method == cloud.HttpMethod.POST);
-  assert(req.path == "/path");
-  assert(req.body == Json.stringify(body));
-  assert(req.headers?.get("content-type") == "application/json");
+api.post("/", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+  expect.equal(req.method, cloud.HttpMethod.POST);
+  expect.equal(req.path, "/");
+  expect.equal(req.body, Json.stringify(body));
+  expect.equal(req.headers?.get("content-type"), "application/json");
 
   return cloud.ApiResponse {
     status: 200,
@@ -19,15 +20,14 @@ api.post("/path", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 
 
 test "http.post and http.fetch can preform a call to an api" {
-  let url = api.url + "/path";
-  let response: http.Response = http.post(url, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
-  let fetchResponse: http.Response = http.post(url, method: http.HttpMethod.POST, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
+  let response: http.Response = http.post(api.url, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
+  let fetchResponse: http.Response = http.post(api.url, method: http.HttpMethod.POST, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
 
-  assert(response.body == Json.stringify(body));
-  assert(response.status == 200);
-  assert(response.url == url);
+  expect.equal(response.body , Json.stringify(body));
+  expect.equal(response.status , 200);
+  expect.match(response.url , api.url);
 
-  assert(fetchResponse.body == Json.stringify(body));
-  assert(fetchResponse.status == 200);
-  assert(fetchResponse.url == url);
+  expect.equal(fetchResponse.body , Json.stringify(body));
+  expect.equal(fetchResponse.status , 200);
+  expect.match(fetchResponse.url , api.url);
 }

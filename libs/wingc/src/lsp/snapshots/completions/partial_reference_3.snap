@@ -4,8 +4,5 @@ source: libs/wingc/src/lsp/completions.rs
 - label: durationThing
   kind: 5
   detail: duration
-  documentation:
-    kind: markdown
-    value: "```wing\ndurationThing: duration\n```"
   sortText: ab|durationThing
 

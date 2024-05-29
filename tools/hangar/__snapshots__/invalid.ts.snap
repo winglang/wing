@@ -2384,7 +2384,7 @@ error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1
    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
   --> ../../../examples/tests/invalid/inference.test.w:4:29
   |
 4 | let preflightClosureArgs = (nice) => { return true; };
@@ -2398,7 +2398,7 @@ error: Property not found
    |                   ^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:60:23
    |
 60 | let func2 = inflight (request) => {
@@ -2437,7 +2437,7 @@ error: Property not found
     |              ^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
     --> ../../../examples/tests/invalid/inference.test.w:107:19
     |
 107 | let unknownArg = (arg) => {
@@ -2458,42 +2458,42 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
     |          ^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:69:5
    |
 69 | let anotherEmptyArray = [];
    |     ^^^^^^^^^^^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:21:5
    |
 21 | let clonedArray = emptyArray.copyMut();
    |     ^^^^^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:16:5
    |
 16 | let emptyArray = [];
    |     ^^^^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:60:5
    |
 60 | let func2 = inflight (request) => {
    |     ^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:18:5
    |
 18 | let numArray = emptyArray;
    |     ^^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
   --> ../../../examples/tests/invalid/inference.test.w:4:5
   |
 4 | let preflightClosureArgs = (nice) => { return true; };
@@ -2588,6 +2588,28 @@ exports[`inflight_class_interface_structural_typing.test.w 1`] = `
    |
 26 |   let x: IGoo = new NotGoo();
    |                 ^^^^^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`inflight_intrinsic.test.w 1`] = `
+"error: Must specify an \\"alias\\" to lift this expression
+  --> ../../../examples/tests/invalid/inflight_intrinsic.test.w:4:10
+  |
+4 |   { obj: [1, 2, 3] }
+  |          ^^^^^^^^^
+
+
+error: Inflight path must be a non-interpolated string literal
+  --> ../../../examples/tests/invalid/inflight_intrinsic.test.w:2:40
+  |
+2 | let func: inflight (): str = @inflight(funkPath, lifts: [
+  |                                        ^^^^^^^^
 
 
 
@@ -4923,7 +4945,7 @@ error: expression \\"await_expression\\" is not supported yet - see https://gith
   |         ^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
   --> ../../../examples/tests/invalid/unimplemented_grammar.test.w:2:5
   |
 2 | let somePromise = Promise<str>{};

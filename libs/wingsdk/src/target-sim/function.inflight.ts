@@ -1,3 +1,4 @@
+import { stat } from "fs/promises";
 import * as path from "path";
 import { FunctionAttributes, FunctionSchema } from "./schema-resources";
 import { FUNCTION_FQN, IFunctionClient } from "../cloud";
@@ -56,10 +57,34 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   public async save(): Promise<void> {}
 
-  public async plan(): Promise<UpdatePlan> {
-    // for now, always replace because we can't determine if the function code
-    // has changed since the last update. see https://github.com/winglang/wing/issues/6116
-    return UpdatePlan.REPLACE;
+  public async plan(invalidated: boolean): Promise<UpdatePlan> {
+    // If our function config changed, always replace
+    if (invalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    // Make sure that we don't have an ongoing bundle operation
+    await this.ensureBundled();
+
+    // Check if any of the bundled files have changed since the last bundling
+    const inputFiles = this.bundle!.inputFiles;
+    const modifiedFiles = await filesModifiedSince(
+      inputFiles,
+      process.cwd(),
+      this.bundle!.time
+    );
+    if (modifiedFiles.length > 0) {
+      this.addTrace(
+        `Files modified since last bundling: [${modifiedFiles
+          .map((x) => `"${x}"`)
+          .join(", ")}]`,
+        TraceType.SIMULATOR,
+        LogLevel.VERBOSE
+      );
+      return UpdatePlan.REPLACE;
+    }
+
+    return UpdatePlan.SKIP;
   }
 
   public async invoke(payload: string): Promise<string> {
@@ -130,6 +155,13 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     );
   }
 
+  private async ensureBundled(): Promise<void> {
+    await this.createBundlePromise;
+    if (!this.bundle) {
+      throw new Error("Bundle not created");
+    }
+  }
+
   // Used internally by cloud.Queue to apply backpressure
   public async hasAvailableWorkers(): Promise<boolean> {
     return (
@@ -155,13 +187,9 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   private async initWorker(): Promise<Sandbox> {
     // ensure inflight code is bundled before we create any workers
-    await this.createBundlePromise;
+    await this.ensureBundled();
 
-    if (!this.bundle) {
-      throw new Error("Bundle not created");
-    }
-
-    return new Sandbox(this.bundle.outfilePath, {
+    return new Sandbox(this.bundle!.outfilePath, {
       env: {
         ...this.env,
         WING_SIMULATOR_CALLER: this.context.resourceHandle,
@@ -187,5 +215,32 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       sourceType: FUNCTION_FQN,
       timestamp: new Date().toISOString(),
     });
+  }
+}
+
+async function filesModifiedSince(
+  filePaths: string[],
+  directory: string,
+  dateTime: Date
+): Promise<string[]> {
+  const absolutePaths = filePaths.map((filePath) =>
+    path.resolve(directory, filePath)
+  );
+
+  try {
+    const statsPromises = absolutePaths.map((filePath) => stat(filePath));
+    const stats = await Promise.all(statsPromises);
+    const changedFiles = new Array<string>();
+
+    for (let i = 0; i < absolutePaths.length; i++) {
+      if (stats[i].mtime > dateTime) {
+        changedFiles.push(absolutePaths[i]);
+      }
+    }
+
+    return changedFiles;
+  } catch (error) {
+    console.error("Error checking file modification times:", error);
+    throw error;
   }
 }
