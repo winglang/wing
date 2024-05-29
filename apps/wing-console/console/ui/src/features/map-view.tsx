@@ -8,10 +8,11 @@ import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import clsx from "classnames";
 import { type ElkPoint, type LayoutOptions } from "elkjs";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useKeyPressEvent } from "react-use";
 
 import { useMap } from "../services/use-map.js";
+import { useCollapseNodes } from "../ui/collapse-nodes.js";
 import { assert } from "../ui/elk-flow/assert.js";
 import { Graph } from "../ui/elk-flow/graph.js";
 import { NodeChildren } from "../ui/elk-flow/node-children.js";
@@ -98,18 +99,10 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
             {name}
           </span>
           <div className="flex grow justify-end">
-            {collapsed && (
-              <ChevronDownIcon
-                className="size-4"
-                onClick={() => onCollapse(false)}
-              />
-            )}
-            {!collapsed && (
-              <ChevronUpIcon
-                className="size-4"
-                onClick={() => onCollapse(true)}
-              />
-            )}
+            <button className="pl-1" onClick={() => onCollapse(!collapsed)}>
+              {collapsed && <ChevronDownIcon className="size-4" />}
+              {!collapsed && <ChevronUpIcon className="size-4" />}
+            </button>
           </div>
         </div>
 
@@ -572,13 +565,30 @@ export const MapView = memo(
     selectedEdgeId,
     onSelectedEdgeIdChange,
   }: MapViewV2Props) => {
-    const [collapsedNodes, setCollapsedNodes] = useState<Set<string>>(() => {
-      return new Set<string>();
-    });
+    const { collapsedNodes, setNodeList, setCollapsedNodes } =
+      useCollapseNodes();
 
     const { nodeInfo, isNodeHidden, rootNodes, edges } = useMap({
       collapsedNodes,
     });
+
+    useEffect(() => {
+      const collapsibleNodes = rootNodes?.filter((node) => {
+        const children = Object.values(node.children ?? {});
+        if (children.length === 0) {
+          return;
+        }
+        return children.some((child) => !isNodeHidden(child.path));
+      });
+
+      setNodeList(
+        new Set(
+          collapsibleNodes
+            ?.filter((node) => node !== undefined)
+            .map((node) => node?.path),
+        ),
+      );
+    }, [rootNodes, setNodeList]);
 
     const RenderEdge = useCallback<EdgeComponent>(
       (props) => {
@@ -670,7 +680,7 @@ export const MapView = memo(
           </ConstructNode>
         );
       },
-      [isNodeHidden, nodeInfo, collapsedNodes],
+      [isNodeHidden, nodeInfo, collapsedNodes, setCollapsedNodes],
     );
 
     const { theme } = useTheme();

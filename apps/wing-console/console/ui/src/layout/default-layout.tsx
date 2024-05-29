@@ -15,6 +15,7 @@ import { EndpointsTreeView } from "../features/endpoints-tree-view.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
+import { CollapseNodesProvider } from "../ui/collapse-nodes.js";
 import { EdgeMetadata } from "../ui/edge-metadata.js";
 import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
@@ -295,12 +296,14 @@ export const DefaultLayout = ({
                         )}
                         data-testid="map-view"
                       >
-                        <MapView
-                          selectedNodeId={selectedItems[0]}
-                          onSelectedNodeIdChange={setSelectedItemSingle}
-                          selectedEdgeId={selectedEdgeId}
-                          onSelectedEdgeIdChange={setSelectedEdgeId}
-                        />
+                        <CollapseNodesProvider defaultBehavior="collapsed">
+                          <MapView
+                            selectedNodeId={selectedItems[0]}
+                            onSelectedNodeIdChange={setSelectedItemSingle}
+                            selectedEdgeId={selectedEdgeId}
+                            onSelectedEdgeIdChange={setSelectedEdgeId}
+                          />
+                        </CollapseNodesProvider>
                       </div>
                       {!layout.rightPanel?.hide && (
                         <LeftResizableWidget

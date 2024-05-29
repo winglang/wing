@@ -28,10 +28,10 @@ export const MapControls = ({
       <div>
         <Toolbar>
           <ToolbarButton title="Collapse all" onClick={onCollapseAll}>
-            <ChevronDownIcon className="w-4 h-4" />
+            <ChevronUpIcon className="w-4 h-4" />
           </ToolbarButton>
           <ToolbarButton title="Expand all" onClick={onExpandAll}>
-            <ChevronUpIcon className="w-4 h-4" />
+            <ChevronDownIcon className="w-4 h-4" />
           </ToolbarButton>
 
           <ToolbarButton title="Zoom out" onClick={onZoomOut}>

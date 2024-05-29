@@ -162,7 +162,7 @@ export const useMap = ({ collapsedNodes }: UseMapOptions = {}) => {
     const hiddenMap = new Map<string, boolean>();
     const traverse = (node: ConstructTreeNode, forceHidden?: boolean) => {
       const hidden = forceHidden || node.display?.hidden || false;
-      const collapsed = collapsedNodes?.has(node.path);
+      const collapsed = collapsedNodes?.has(node.path) ?? false;
       hiddenMap.set(node.path, hidden);
       for (const child of Object.values(node.children ?? {})) {
         traverse(child, hidden || collapsed);
