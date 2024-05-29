@@ -715,7 +715,6 @@ impl<'s> Parser<'s> {
 		} else {
 			None
 		};
-		//TODO: here
 
 		// If both catch and finally are missing, report an error
 		if catch_block.is_none() && finally_statements.is_none() {
