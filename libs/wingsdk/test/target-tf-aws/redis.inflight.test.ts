@@ -6,7 +6,8 @@ import { mockClient } from "aws-sdk-client-mock";
 import { test, expect } from "vitest";
 import { RedisClient } from "../../src/target-tf-aws/redis.inflight";
 
-const getMockClient = () => new RedisClient("fake-cluster", new MockRedis());
+const getMockClient = () =>
+  new RedisClient({ $clusterId: "fake-cluster", $connection: new MockRedis() });
 mockClient(ElastiCacheClient)
   .on(DescribeCacheClustersCommand)
   .resolves({

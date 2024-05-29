@@ -1,5 +1,5 @@
 import { Construct, IConstruct } from "constructs";
-import { App, LiftMap } from "../core";
+import { App, InflightClient, LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { Node } from "../std";
 
@@ -186,10 +186,9 @@ export abstract class Resource extends Construct implements IResource {
    * Return a code snippet that can be used to reference this resource inflight.
    *
    * @internal
-   * @abstract
    */
   public _toInflight(): string {
-    throw new AbstractMemberError();
+    return InflightClient.forV2(this.constructor, this._liftedFields());
   }
 
   /**

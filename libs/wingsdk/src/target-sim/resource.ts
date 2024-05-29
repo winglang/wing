@@ -3,7 +3,11 @@ import { join, relative } from "path";
 import { Construct } from "constructs";
 import { SimResourceSchema } from "./schema-resources";
 import { simulatorAttrToken, simulatorHandleToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import { App, LiftMap, Lifting } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { PolicyStatement, ToSimulatorOutput } from "../simulator";
@@ -16,6 +20,14 @@ import {
   Json,
   LogLevel,
 } from "../std";
+
+/**
+ * List of inflight operations available for `Resource`.
+ * @internal
+ */
+export enum ResourceInflightMethods {
+  CALL = "call",
+}
 
 /**
  * Contract that a resource backend must implement.
@@ -77,6 +89,14 @@ export class Resource
     IInflightHost,
     ISimulatorInflightHost
 {
+  /** @internal */
+  public static _methods = [ResourceInflightMethods.CALL];
+
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Resource", Resource._methods);
+  }
+
   private readonly permissions: Array<[IStdResource, string]> = [];
   private readonly _env: Record<string, string> = {};
   private readonly factory: IResourceFactory;
@@ -232,13 +252,13 @@ export class Resource
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  public _liftedFields(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }
 
@@ -251,14 +271,6 @@ export interface IResourceClient {
    * @inflight
    */
   call(method: string, args?: Array<Json>): Promise<Json>;
-}
-
-/**
- * List of inflight operations available for `Resource`.
- * @internal
- */
-export enum ResourceInflightMethods {
-  CALL = "call",
 }
 
 /**

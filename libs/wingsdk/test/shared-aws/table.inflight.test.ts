@@ -34,11 +34,11 @@ describe("inflight table tests", () => {
     const columns = {
       somenumber: ColumnType.NUMBER,
     };
-    client = new TableClient(
-      MOCK_TABLE_NAME,
-      PRIMARY_KEY,
-      JSON.stringify(columns)
-    );
+    client = new TableClient({
+      $tableName: MOCK_TABLE_NAME,
+      $primaryKey: PRIMARY_KEY,
+      $columns: JSON.stringify(columns),
+    });
   });
 
   test("insert", async () => {

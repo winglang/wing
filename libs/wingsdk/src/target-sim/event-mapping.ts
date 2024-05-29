@@ -6,7 +6,11 @@ import {
   ResourceHandle,
 } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import { fqnForType } from "../constants";
 import { LiftMap } from "../core";
 import {
@@ -39,6 +43,12 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
 
 export const EVENT_MAPPING_FQN = fqnForType("sim.EventMapping");
 
+/**
+ * List of inflight operations available for `EventMapping`.
+ * @internal
+ */
+export enum EventMappingInflightMethods {}
+
 export interface EventMappingProps {
   subscriber: IResource;
   publisher: IResource;
@@ -51,6 +61,14 @@ export interface EventMappingProps {
  * @inflight `@winglang/sdk.sim.EventMapping`
  */
 export class EventMapping extends Resource implements ISimulatorResource {
+  /** @internal */
+  public static _methods = [];
+
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("EventMapping", EventMapping._methods);
+  }
+
   private readonly _eventProps: EventMappingProps;
 
   constructor(scope: Construct, id: string, props: EventMappingProps) {
@@ -85,11 +103,12 @@ export class EventMapping extends Resource implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  /** @internal */
+  public _liftedFields(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }

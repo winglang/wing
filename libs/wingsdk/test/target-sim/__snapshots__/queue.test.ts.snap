@@ -1001,21 +1001,34 @@ exports.handler = async function(event) {
     await ctx.queue.push("F");
   }
   const $ctx = {
-  queue: (function() {
-  let handle = process.env.QUEUE_HANDLE_54fcf4cd;
-  if (!handle) {
-    throw new Error("Missing environment variable: QUEUE_HANDLE_54fcf4cd");
+  queue: 
+(await (async () => {
+  const klass = (function() {
+  class QueueClient {
+    constructor({ $handle }) {
+      const simulatorUrl = process.env.WING_SIMULATOR_URL;
+      if (!simulatorUrl) {
+        throw new Error("Missing environment variable: WING_SIMULATOR_URL");
+      }
+      const caller = process.env.WING_SIMULATOR_CALLER;
+      if (!caller) {
+        throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+      }
+      this.backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, $handle, caller);
+    }
+    async $inflight_init() {}
+    async push(...args) { return this.backend.push(...args); }
+async purge(...args) { return this.backend.purge(...args); }
+async approxSize(...args) { return this.backend.approxSize(...args); }
+async pop(...args) { return this.backend.pop(...args); }
   }
-  const simulatorUrl = process.env.WING_SIMULATOR_URL;
-  if (!simulatorUrl) {
-    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
-  }
-  const caller = process.env.WING_SIMULATOR_CALLER;
-  if (!caller) {
-    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
-  }
-  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
-})()
+  return QueueClient;
+})();
+  const client = new klass({$handle: process.env["QUEUE_HANDLE_54fcf4cd"]});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);

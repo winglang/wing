@@ -4,7 +4,11 @@ import { EventMapping } from "./event-mapping";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { TopicSchema } from "./schema-resources";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import { Function } from "../cloud";
 import * as cloud from "../cloud";
 import { lift, LiftMap } from "../core";
@@ -17,6 +21,11 @@ import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.Topic implements ISimulatorResource {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Topic", cloud.Topic._methods);
+  }
+
   public readonly policy: Policy;
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
@@ -89,13 +98,13 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  public _liftedFields(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 
   /** @internal */

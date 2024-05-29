@@ -5,7 +5,11 @@ import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { ApiRoute, ApiSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import { Function } from "../cloud";
 import * as cloud from "../cloud";
 import { lift } from "../core";
@@ -18,6 +22,11 @@ import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
  * @inflight `@winglang/sdk.cloud.IApiClient`
  */
 export class Api extends cloud.Api implements ISimulatorResource {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Api", cloud.Api._methods);
+  }
+
   private readonly handlers: Record<
     string,
     { func: Function; mapping: EventMapping }
@@ -126,7 +135,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const fn = this.createOrGetFunction(inflight, props, path, method);
     Node.of(this).addConnection({
       source: this,
-      sourceOp: cloud.ApiInflightMethods.REQUEST,
+      sourceOp: "request",
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: `${method.toLowerCase()} ${path}`,
@@ -258,12 +267,12 @@ export class Api extends cloud.Api implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  public _liftedFields(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }

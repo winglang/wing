@@ -11,12 +11,13 @@ import {
 import { IAwsQueueClient } from "./queue";
 
 export class QueueClient implements IAwsQueueClient {
+  private readonly client: SQSClient = new SQSClient({});
+  private readonly _queueUrlOrArn: string;
   private _queueUrl?: string;
 
-  constructor(
-    private readonly _queueUrlOrArn: string,
-    private readonly client: SQSClient = new SQSClient({})
-  ) {}
+  constructor({ $queueUrlOrArn }: { $queueUrlOrArn: string }) {
+    this._queueUrlOrArn = $queueUrlOrArn;
+  }
 
   public async push(...messages: string[]): Promise<void> {
     if (messages.includes("")) {

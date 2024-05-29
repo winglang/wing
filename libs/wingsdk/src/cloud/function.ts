@@ -13,6 +13,15 @@ import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
 export const FUNCTION_FQN = fqnForType("cloud.Function");
 
 /**
+ * List of inflight operations available for `Function`.
+ * @internal
+ */
+export enum FunctionInflightMethods {
+  INVOKE = "invoke",
+  INVOKE_ASYNC = "invokeAsync",
+}
+
+/**
  * Options for `Function`.
  */
 export interface FunctionProps {
@@ -55,6 +64,12 @@ export interface FunctionProps {
  * @abstract
  */
 export class Function extends Resource implements IInflightHost {
+  /** @internal */
+  public static _methods = [
+    FunctionInflightMethods.INVOKE,
+    FunctionInflightMethods.INVOKE_ASYNC,
+  ];
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: IFunctionClient;
   private readonly _env: Record<string, string> = {};
@@ -205,15 +220,4 @@ export interface IFunctionHandlerClient {
    * @inflight
    */
   handle(event?: string): Promise<string | undefined>;
-}
-
-/**
- * List of inflight operations available for `Function`.
- * @internal
- */
-export enum FunctionInflightMethods {
-  /** `Function.invoke` */
-  INVOKE = "invoke",
-  /** `Function.invokeAsync` */
-  INVOKE_ASYNC = "invokeAsync",
 }

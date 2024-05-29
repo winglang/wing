@@ -14,6 +14,16 @@ import { IInflight, IInflightHost, Node, Resource } from "../std";
 export const SERVICE_FQN = fqnForType("cloud.Service");
 
 /**
+ * List of inflight operations for `Service`.
+ * @internal
+ */
+export enum ServiceInflightMethods {
+  START = "start",
+  STOP = "stop",
+  STARTED = "started",
+}
+
+/**
  * Options for `Service`.
  */
 export interface ServiceProps {
@@ -39,6 +49,13 @@ export interface ServiceProps {
  * @abstract
  */
 export class Service extends Resource implements IInflightHost {
+  /** @internal */
+  public static _methods = [
+    ServiceInflightMethods.START,
+    ServiceInflightMethods.STOP,
+    ServiceInflightMethods.STARTED,
+  ];
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: IServiceClient;
 
@@ -232,14 +249,4 @@ export interface IServiceStopHandlerClient {
    * @inflight
    */
   handle(): Promise<void>;
-}
-
-/**
- * List of inflight operations for `Service`.
- * @internal
- */
-export enum ServiceInflightMethods {
-  START = "start",
-  STOP = "stop",
-  STARTED = "started",
 }

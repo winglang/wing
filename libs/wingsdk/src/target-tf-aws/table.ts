@@ -25,6 +25,16 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.ex.ITableClient`
  */
 export class Table extends ex.Table implements IAwsTable {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("table", "table.inflight"),
+      "TableClient"
+    );
+  }
+
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
@@ -109,17 +119,12 @@ export class Table extends ex.Table implements IAwsTable {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "TableClient",
-      [
-        `process.env["${this.envName()}"]`,
-        `process.env["${this.primaryKeyEnvName()}"]`,
-        `process.env["${this.columnsEnvName()}"]`,
-      ]
-    );
+  public _liftedFields(): Record<string, string> {
+    return {
+      $tableName: `process.env["${this.envName()}"]`,
+      $primaryKey: `process.env["${this.primaryKeyEnvName()}"]`,
+      $columns: `process.env["${this.columnsEnvName()}"]`,
+    };
   }
 
   /** @internal */

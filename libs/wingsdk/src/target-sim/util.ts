@@ -1,5 +1,4 @@
 import { access, constants } from "fs";
-import { basename } from "path";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { isSimulatorInflightHost } from "./resource";
@@ -23,14 +22,27 @@ export async function exists(filePath: string): Promise<boolean> {
   }
 }
 
-export function makeEnvVarName(type: string, resource: IConstruct): string {
-  return `${type
+export function makeEnvVarName(
+  resource: IConstruct,
+  typeName?: string
+): string {
+  typeName = typeName ?? resource.constructor.name;
+  return `${typeName
     .toUpperCase()
     .replace(/[^A-Z]+/g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
 }
 
+/**
+ * A default implementation of _liftedFields that works for most simulated resources.
+ */
+export function simulatorLiftedFieldsFor(resource: IConstruct) {
+  const env = makeEnvVarName(resource);
+  return {
+    $handle: `process.env["${env}"]`,
+  };
+}
+
 export function bindSimulatorResource(
-  filename: string,
   resource: Resource,
   host: IInflightHost,
   ops: string[]
@@ -41,8 +53,7 @@ export function bindSimulatorResource(
       "Host resource must implement sim.ISimulatorInflightHost to bind simulator resources"
     );
   }
-  const type = basename(filename).split(".")[0];
-  const env = makeEnvVarName(type, resource);
+  const env = makeEnvVarName(resource);
   const handle = simulatorHandleToken(resource);
   host.addEnvironment(env, handle);
   host.node.addDependency(resource);
@@ -51,9 +62,8 @@ export function bindSimulatorResource(
   }
 }
 
-export function makeSimulatorJsClient(filename: string, resource: Resource) {
-  const type = basename(filename).split(".")[0];
-  const env = makeEnvVarName(type, resource);
+export function makeSimulatorJsClient(resource: Resource) {
+  const env = makeEnvVarName(resource);
   return `(function() {
   let handle = process.env.${env};
   if (!handle) {
@@ -71,7 +81,45 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
 })()`;
 }
 
+/**
+ * Returns JavaScript code for a class that proxies method calls directly through the simulator.
+ * This should be used by any simulator resources that are not implemented with sim.Resource.
+ */
 export function makeSimulatorJsClientType(type: string, methods: string[]) {
+  const methodLines = [];
+  for (const method of methods) {
+    methodLines.push(
+      `async ${method}(...args) { return this.backend.${method}(...args); }`
+    );
+  }
+  return `(function() {
+  class ${type}Client {
+    constructor({ $handle }) {
+      const simulatorUrl = process.env.WING_SIMULATOR_URL;
+      if (!simulatorUrl) {
+        throw new Error("Missing environment variable: WING_SIMULATOR_URL");
+      }
+      const caller = process.env.WING_SIMULATOR_CALLER;
+      if (!caller) {
+        throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+      }
+      this.backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, $handle, caller);
+    }
+    async $inflight_init() {}
+    ${methodLines.join("\n")}
+  }
+  return ${type}Client;
+})()`;
+}
+
+/**
+ * Returns JavaScript code for a class that proxies method through a "call" method.
+ * This should be used by any simulator resources that are implemented with sim.Resource.
+ */
+export function makeSimulatorJsClientTypeProxy(
+  type: string,
+  methods: string[]
+) {
   const methodLines = [];
   for (const method of methods) {
     methodLines.push(
@@ -95,34 +143,6 @@ export function makeSimulatorJsClientType(type: string, methods: string[]) {
     ${methodLines.join("\n")}
   }
   return ${type}Client;
-})()`;
-}
-
-export function makeSimulatorJsClientV2(filename: string, resource: Resource) {
-  const type = basename(filename).split(".")[0];
-  const env = makeEnvVarName(type, resource);
-  return `(function() {
-  let handle = process.env.${env};
-  if (!handle) {
-    throw new Error("Missing environment variable: ${env}");
-  }
-  const simulatorUrl = process.env.WING_SIMULATOR_URL;
-  if (!simulatorUrl) {
-    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
-  }
-  const caller = process.env.WING_SIMULATOR_CALLER;
-  if (!caller) {
-    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
-  }
-  const backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
-  const client = new Proxy(backend, {
-    get: function(target, prop, receiver) {
-      return async function(...args) {
-        return backend.call(prop, args);
-      };
-    },
-  });
-  return client;
 })()`;
 }
 

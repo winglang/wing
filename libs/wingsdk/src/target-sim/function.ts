@@ -5,9 +5,8 @@ import { FunctionSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import {
   bindSimulatorResource,
-  makeEnvVarName,
-  makeSimulatorJsClient,
   makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
 } from "./util";
 import * as cloud from "../cloud";
 import { App, LiftMap } from "../core";
@@ -31,10 +30,7 @@ export class Function
 {
   /** @internal */
   public static _toInflightType(): string {
-    return makeSimulatorJsClientType("Function", [
-      cloud.FunctionInflightMethods.INVOKE,
-      cloud.FunctionInflightMethods.INVOKE_ASYNC,
-    ]);
+    return makeSimulatorJsClientType("Function", cloud.Function._methods);
   }
 
   private readonly timeout: Duration;
@@ -95,21 +91,13 @@ export class Function
 
   /** @internal */
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
   /** @internal */
   public _liftedFields(): Record<string, string> {
-    const env = makeEnvVarName("function", this);
-    return {
-      $handle: `process.env["${env}"]`,
-    };
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+    return simulatorLiftedFieldsFor(this);
   }
 }
 

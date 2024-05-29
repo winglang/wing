@@ -34,10 +34,12 @@ import {
 import { Datetime, Json } from "../std";
 
 export class BucketClient implements IAwsBucketClient {
-  constructor(
-    private readonly bucketName: string,
-    private readonly s3Client: S3Client = new S3Client({})
-  ) {}
+  private readonly s3Client: S3Client = new S3Client({});
+  private readonly bucketName: string;
+
+  constructor({ $bucketName }: { $bucketName: string }) {
+    this.bucketName = $bucketName;
+  }
 
   public async bucketRegion(): Promise<string> {
     const res = await this.s3Client.send(

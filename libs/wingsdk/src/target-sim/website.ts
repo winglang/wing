@@ -2,7 +2,11 @@ import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { WebsiteSchema, FileRoutes } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import * as cloud from "../cloud";
 import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Node } from "../std";
@@ -11,6 +15,11 @@ import { IInflightHost, Node } from "../std";
  * A static website.
  */
 export class Website extends cloud.Website implements ISimulatorResource {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Website", cloud.Website._methods);
+  }
+
   private fileRoutes: FileRoutes = {};
   private readonly endpoint: cloud.Endpoint;
   private readonly errorDocument?: string;
@@ -62,12 +71,12 @@ export class Website extends cloud.Website implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  public _liftedFields(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }

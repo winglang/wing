@@ -4,7 +4,6 @@ import { Function } from "./function";
 import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule";
 import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import {
   ScheduleOnTickHandler,
   convertUnixCronToAWSCron,
@@ -82,19 +81,5 @@ export class Schedule extends cloud.Schedule {
     });
 
     return fn;
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "ScheduleClient",
-      [`process.env["${this.envName()}"]`]
-    );
-  }
-
-  private envName(): string {
-    return `SCHEDULE_EVENT_${this.node.addr.slice(-8)}`;
   }
 }

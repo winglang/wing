@@ -8,13 +8,20 @@ import { RedisClientBase } from "../ex";
 const IoRedis = require("ioredis");
 
 export class RedisClient extends RedisClientBase {
+  private readonly elasticacheClient = new ElastiCacheClient({});
+  private readonly clusterId: string;
+  private connection?: any;
   private connectionUrl?: string;
-  constructor(
-    private readonly clusterId: string,
-    private connection?: any,
-    private readonly elasticacheClient = new ElastiCacheClient({})
-  ) {
+  constructor({
+    $clusterId,
+    $connection,
+  }: {
+    $clusterId: string;
+    $connection?: any;
+  }) {
     super();
+    this.clusterId = $clusterId;
+    this.connection = $connection;
   }
 
   /**

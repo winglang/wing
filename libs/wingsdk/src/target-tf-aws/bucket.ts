@@ -51,6 +51,16 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.aws.IAwsBucketClient`
  */
 export class Bucket extends cloud.Bucket implements IAwsBucket {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("bucket", "bucket.inflight"),
+      "BucketClient"
+    );
+  }
+
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
   private readonly notificationTopics: S3BucketNotificationTopic[] = [];
@@ -148,13 +158,10 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "BucketClient",
-      [`process.env["${this.envName()}"]`]
-    );
+  public _liftedFields(): Record<string, string> {
+    return {
+      $bucketName: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

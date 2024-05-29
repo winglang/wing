@@ -15,6 +15,14 @@ import { IInflightHost, Resource } from "../std";
  */
 export class SecretRef extends Resource {
   /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("secret", "secret.inflight"),
+      "SecretClient"
+    );
+  }
+
+  /** @internal */
   public [INFLIGHT_SYMBOL]?: ISecretClient;
   /** The ARN of the secret */
   public readonly secretArn: string;
@@ -41,10 +49,10 @@ export class SecretRef extends Resource {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return InflightClient.for(__dirname, __filename, "SecretClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _liftedFields(): Record<string, string> {
+    return {
+      $secretArn: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

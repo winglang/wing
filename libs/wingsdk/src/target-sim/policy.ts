@@ -21,8 +21,6 @@ export interface PolicyProps {
 
 /**
  * Implementation of `sim.Policy`.
- *
- * @inflight `@winglang/sdk.sim.IPolicyClient`
  */
 export class Policy extends Resource implements ISimulatorResource {
   private readonly statements: Map<IResource, Set<string>> = new Map();

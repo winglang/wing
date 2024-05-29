@@ -24,7 +24,14 @@ exports[`function with a function binding 2`] = `
     await ctx.fn1.invoke(JSON.stringify({ hello: "world" }));
   }
   const $ctx = {
-  fn1: new (require("[REDACTED]/wingsdk/src/shared-aws/function.inflight")).FunctionClient(process.env["FUNCTION_NAME_50735b21"], "root/Default/Function1")
+  fn1: 
+(await (async () => {
+  const klass = require("[REDACTED]/wingsdk/src/shared-aws/function.inflight.js").FunctionClient;
+  const client = new klass({$functionArn: process.env["FUNCTION_NAME_50735b21"], $constructPath: root/Default/Function1});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -154,7 +161,14 @@ exports[`function with a queue binding 1`] = `
     await ctx.queue.push("info");
   }
   const $ctx = {
-  queue: new (require("[REDACTED]/wingsdk/src/shared-aws/queue.inflight")).QueueClient(process.env["QUEUE_URL_1cfcc997"])
+  queue: 
+(await (async () => {
+  const klass = require("[REDACTED]/wingsdk/src/shared-aws/queue.inflight.js").QueueClient;
+  const client = new klass({$queueUrlOrArn: process.env["QUEUE_URL_1cfcc997"]});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);

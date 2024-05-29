@@ -29,7 +29,14 @@ exports[`function with a table binding 1`] = `
     await ctx.my_table.insert("test", { id: "test" });
   }
   const $ctx = {
-  my_table: new (require("[REDACTED]/wingsdk/src/shared-aws/table.inflight")).TableClient(process.env["DYNAMODB_TABLE_NAME_e7245baa"], process.env["DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY"], process.env["DYNAMODB_TABLE_NAME_e7245baa_COLUMNS"])
+  my_table: 
+(await (async () => {
+  const klass = require("[REDACTED]/wingsdk/src/shared-aws/table.inflight.js").TableClient;
+  const client = new klass({$tableName: process.env["DYNAMODB_TABLE_NAME_e7245baa"], $primaryKey: process.env["DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY"], $columns: process.env["DYNAMODB_TABLE_NAME_e7245baa_COLUMNS"]});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);

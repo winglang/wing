@@ -10,12 +10,39 @@ import { Node, Resource } from "../std";
 export const REDIS_FQN = fqnForType("ex.Redis");
 
 /**
+ * List of inflight operations available for `Redis`.
+ * @internal
+ */
+export enum RedisInflightMethods {
+  URL = "url",
+  SET = "set",
+  GET = "get",
+  HSET = "hset",
+  HGET = "hget",
+  SADD = "sadd",
+  SMEMBERS = "smembers",
+  DEL = "del",
+}
+
+/**
  * A cloud redis db.
  *
  * @inflight `@winglang/sdk.ex.IRedisClient`
  * @abstract
  */
 export class Redis extends Resource {
+  /** @internal */
+  public static _methods = [
+    RedisInflightMethods.URL,
+    RedisInflightMethods.SET,
+    RedisInflightMethods.GET,
+    RedisInflightMethods.HSET,
+    RedisInflightMethods.HGET,
+    RedisInflightMethods.SADD,
+    RedisInflightMethods.SMEMBERS,
+    RedisInflightMethods.DEL,
+  ];
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: IRedisClient;
 
@@ -104,29 +131,6 @@ export interface IRedisClient {
    * @inflight
    */
   del(key: string): Promise<number>;
-}
-
-/**
- * List of inflight operations available for `Redis`.
- * @internal
- */
-export enum RedisInflightMethods {
-  /** `Redis.url` */
-  URL = "url",
-  /** `Redis.set` */
-  SET = "set",
-  /** `Redis.get` */
-  GET = "get",
-  /** `Redis.hset` */
-  HSET = "hset",
-  /** `Redis.hget` */
-  HGET = "hget",
-  /** `Redis.sadd` */
-  SADD = "sadd",
-  /** `Redis.smembers` */
-  SMEMBERS = "smembers",
-  /** `Redis.del` */
-  DEL = "del",
 }
 
 /**

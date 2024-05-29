@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { ISimulatorInflightHost, ISimulatorResource } from "./resource";
 import { ServiceSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { bindSimulatorResource, simulatorLiftedFieldsFor } from "./util";
 import * as cloud from "../cloud";
 import { App, LiftMap } from "../core";
 import { PolicyStatement, ToSimulatorOutput } from "../simulator";
@@ -60,11 +60,12 @@ export class Service
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  /** @internal */
+  public _liftedFields(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }

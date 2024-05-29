@@ -12,6 +12,12 @@ import { Duration, IInflight, Node, Resource } from "../std";
 export const SCHEDULE_FQN = fqnForType("cloud.Schedule");
 
 /**
+ * List of inflight operations available for `Schedule`.
+ * @internal
+ */
+export enum ScheduleInflightMethods {}
+
+/**
  * Options for `Schedule`.
  */
 export interface ScheduleProps {
@@ -46,6 +52,9 @@ export interface ScheduleProps {
  * @abstract
  */
 export class Schedule extends Resource {
+  /** @internal */
+  public static _methods = [];
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: IScheduleClient;
 

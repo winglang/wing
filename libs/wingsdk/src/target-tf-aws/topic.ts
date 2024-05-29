@@ -29,8 +29,19 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.Topic implements IAwsTopic {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("topic", "topic.inflight"),
+      "TopicClient"
+    );
+  }
+
   private readonly topic: SnsTopic;
   private readonly handlers: Record<string, Function> = {};
+
   /**
    * Topic's publishing permissions. can be use as a dependency of another resource.
    * (the one that got the permissions to publish)
@@ -183,14 +194,12 @@ export class Topic extends cloud.Topic implements IAwsTopic {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "TopicClient",
-      [`process.env["${this.envName()}"]`]
-    );
+  public _liftedFields(): Record<string, string> {
+    return {
+      $topicArn: `process.env["${this.envName()}"]`,
+    };
   }
+
   /** @internal */
   public get _liftMap(): core.LiftMap {
     return {

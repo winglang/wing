@@ -14,6 +14,16 @@ const OUTPUT_TEST_RUNNER_FUNCTION_IDENTIFIERS =
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
 export class TestRunner extends std.TestRunner {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("test-runner", "test-runner.inflight"),
+      "TestRunnerClient"
+    );
+  }
+
   constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
     super(scope, id, props);
 
@@ -77,13 +87,10 @@ export class TestRunner extends std.TestRunner {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "TestRunnerClient",
-      [`process.env["${this.envTestFunctionArns()}"]`]
-    );
+  public _liftedFields(): Record<string, string> {
+    return {
+      $tests: `process.env["${this.envTestFunctionArns()}"]`,
+    };
   }
 
   private envTestFunctionArns(): string {

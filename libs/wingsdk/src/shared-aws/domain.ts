@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { App } from "../core";
-import { NotImplementedError } from "../core/errors";
 
 /**
  * AWS implementation of `cloud.Domain`.
@@ -77,12 +76,5 @@ export class Domain extends cloud.Domain {
    */
   public get iamCertificate(): string | undefined {
     return this._iamCertificate;
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    throw new NotImplementedError(
-      "Domain inflight client is not implemented yet on this target."
-    );
   }
 }

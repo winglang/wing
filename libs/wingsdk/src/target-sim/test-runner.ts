@@ -2,7 +2,11 @@ import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { TestRunnerSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import { ToSimulatorOutput } from "../simulator/simulator";
 import * as std from "../std";
 import { IInflightHost } from "../std";
@@ -13,6 +17,11 @@ import { IInflightHost } from "../std";
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
 export class TestRunner extends std.TestRunner implements ISimulatorResource {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("TestRunner", std.TestRunner._methods);
+  }
+
   constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
     super(scope, id, props);
   }
@@ -29,7 +38,7 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource("test-runner", this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
@@ -56,7 +65,7 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient("test-runner", this);
+  public _liftedFields(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }

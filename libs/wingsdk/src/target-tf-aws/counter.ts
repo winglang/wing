@@ -73,11 +73,6 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.forV2(Counter, this._liftedFields());
-  }
-
-  /** @internal */
   public _liftedFields(): Record<string, string> {
     return {
       $tableName: `process.env["${this.envName()}"]`,

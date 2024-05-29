@@ -798,7 +798,16 @@ exports[`queue name valid 2`] = `
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require("[REDACTED]/wingsdk/src/shared-aws/function.inflight")).FunctionClient(process.env["FUNCTION_NAME_fd688af4"], "root/Default/Queue-SetConsumer0")"`;
+exports[`queue with a consumer function 1`] = `
+"
+(await (async () => {
+  const klass = require("[REDACTED]/wingsdk/src/shared-aws/function.inflight.js").FunctionClient;
+  const client = new klass({$functionArn: process.env["FUNCTION_NAME_fd688af4"], $constructPath: root/Default/Queue-SetConsumer0});
+  if (client.$inflight_init) { await client.$inflight_init(); }
+  return client;
+})())
+"
+`;
 
 exports[`queue with a consumer function 2`] = `
 {

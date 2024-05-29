@@ -29,6 +29,16 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.aws.IAwsQueueClient`
  */
 export class Queue extends cloud.Queue implements IAwsQueue {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-aws", "shared-aws")
+        .replace("queue", "queue.inflight"),
+      "QueueClient"
+    );
+  }
+
   private readonly queue: SqsQueue;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
@@ -140,13 +150,10 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "QueueClient",
-      [`process.env["${this.envName()}"]`]
-    );
+  public _liftedFields(): Record<string, string> {
+    return {
+      $queueUrlOrArn: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {

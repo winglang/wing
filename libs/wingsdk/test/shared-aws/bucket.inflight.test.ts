@@ -46,7 +46,7 @@ test("put an object into the bucket", async () => {
     .resolves({});
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.put(KEY, VALUE);
 
   // THEN
@@ -69,7 +69,7 @@ test("put an object into the bucket specifying the content-type", async () => {
     .resolves({});
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.put(KEY, VALUE, { contentType: CONTENT_TYPE });
 
   // THEN
@@ -90,7 +90,7 @@ test("putJson an object into the bucket", async () => {
     .resolves({});
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.putJson(KEY, VALUE as any);
 
   // THEN
@@ -107,7 +107,7 @@ test("get an object from the bucket", async () => {
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.get(KEY);
 
   // THEN
@@ -124,7 +124,7 @@ test("get a non-existent object from the bucket", async () => {
     .rejects(new Error("Object does not exist"));
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
 
   // THEN
   await expect(() => client.get(KEY)).rejects.toThrowError(
@@ -142,7 +142,7 @@ test("getJson an object from the bucket", async () => {
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.getJson(KEY);
 
   // THEN
@@ -154,7 +154,7 @@ test("list bucket objects", async () => {
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY1 = "KEY1";
   const KEY2 = "KEY2";
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   s3Mock
     .on(ListObjectsV2Command, { Bucket: BUCKET_NAME })
     .resolves({ Contents: [{ Key: KEY1 }, { Key: KEY2 }] });
@@ -173,7 +173,7 @@ test("delete object from the bucket", async () => {
     .resolves({});
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.delete(KEY);
 
   // THEN
@@ -199,7 +199,7 @@ test("delete object from the bucket with mustExist option", async () => {
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.delete(KEY, { mustExist: true });
 
   // THEN
@@ -216,7 +216,7 @@ test("delete non-existent object from the bucket with mustExist option", async (
     .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
 
   // THEN
   await expect(() =>
@@ -241,7 +241,7 @@ test("Given a non public bucket when reaching to a key public url it should thro
   s3Mock.on(HeadObjectCommand).rejects({ name: "NotFound" });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
 
   try {
     await client.publicUrl(KEY);
@@ -273,7 +273,7 @@ test("Given a public bucket when reaching to a non-existent key, public url it s
     .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   try {
     await client.publicUrl(KEY);
   } catch (err) {
@@ -314,7 +314,7 @@ test("Given a public bucket, when giving one of its keys, we should get its publ
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.publicUrl(KEY);
 
   // THEN
@@ -339,7 +339,7 @@ test("check that an object exists in the bucket", async () => {
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const objectExists = await client.exists(KEY);
 
   // THEN
@@ -356,7 +356,7 @@ test("check that an object doesn't exist in the bucket", async () => {
     .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const objectExists = await client.exists(KEY);
 
   // THEN
@@ -382,7 +382,7 @@ test("tryGet an existing object from the bucket", async () => {
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const objectTryGet = await client.tryGet(KEY);
 
   // THEN
@@ -402,7 +402,7 @@ test("tryGet a non-existent object from the bucket", async () => {
     .rejects({ name: "NotFound" });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const objectTryGet = await client.tryGet(KEY);
 
   // THEN
@@ -420,7 +420,7 @@ test("tryGet object from the bucket throws an unknown error", async () => {
   s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
 
   // THEN
   await expect(() => client.tryGet(KEY)).rejects.toThrowError(/unknown error/);
@@ -445,7 +445,7 @@ test("tryGetJson an existing object from the bucket", async () => {
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const objectTryGetJson = await client.tryGetJson(KEY);
 
   // THEN
@@ -465,7 +465,7 @@ test("tryGetJson a non-existent object from the bucket", async () => {
     .rejects({ name: "NotFound" });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const objectTryGetJson = await client.tryGetJson(KEY);
 
   // THEN
@@ -483,7 +483,7 @@ test("tryGetJson object from the bucket throws an unknown error", async () => {
   s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
 
   // THEN
   await expect(() => client.tryGet(KEY)).rejects.toThrowError(/unknown error/);
@@ -508,7 +508,7 @@ test("tryGetJson an existing non-Json object from the bucket", async () => {
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
 
   // THEN
   // it seems to throw a different error per OS/ node version
@@ -533,7 +533,7 @@ test("tryDelete an existing object from the bucket", async () => {
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const objectTryDelete = await client.tryDelete(KEY);
 
   // THEN
@@ -550,7 +550,7 @@ test("tryDelete a non-existent object from the bucket", async () => {
     .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const objectTryDelete = await client.tryDelete(KEY);
 
   // THEN
@@ -568,7 +568,7 @@ test("Given a bucket when reaching to a non-existent key, signed url it should t
     .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   try {
     await client.signedUrl(KEY);
   } catch (err) {
@@ -607,7 +607,7 @@ test.skip("Given a bucket, when giving one of its keys, we should get its signed
     .mockResolvedValue(VALUE);
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const signedUrl = await client.signedUrl(KEY);
   // THEN
   expect(signedUrlFn).toBeCalledTimes(1);
@@ -629,7 +629,7 @@ test("get metadata of an object", async () => {
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.metadata(KEY);
 
   // THEN
@@ -654,7 +654,7 @@ test("metadata may not contains content-type if it is unknown", async () => {
   });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.metadata(KEY);
 
   // THEN
@@ -673,7 +673,7 @@ test("metadata fail on non-existent object", async () => {
     .rejects(new NotFound({ message: "NotFound error", $metadata: {} }));
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
 
   // THEN
   await expect(() => client.metadata(KEY)).rejects.toThrowError(
@@ -695,7 +695,7 @@ test("copy objects within the bucket", async () => {
     .resolves({});
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response1 = await client.copy(SRC_KEY, SRC_KEY);
   const response2 = await client.copy(SRC_KEY, DST_KEY);
 
@@ -718,7 +718,7 @@ test("copy a non-existent object within the bucket", async () => {
     .rejects(new NotFound({ message: "NotFound error", $metadata: {} }));
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
 
   // THEN
   await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
@@ -743,7 +743,7 @@ test("rename valid object in the bucket", async () => {
     .resolves({});
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
   const response = await client.rename(SRC_KEY, DST_KEY);
 
   // THEN
@@ -756,7 +756,7 @@ test("renaming an object to its current name should throw an error", async () =>
   const SRC_KEY = "SRC/KEY";
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
 
   // THEN
   await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
@@ -778,7 +778,7 @@ test("rename non-existent object within the bucket", async () => {
     .rejects(new NotFound({ message: "NotFound error", $metadata: {} }));
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME);
+  const client = new BucketClient({ $bucketName: BUCKET_NAME });
 
   // THEN
   await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(

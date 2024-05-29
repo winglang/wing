@@ -2,9 +2,8 @@ import { Construct } from "constructs";
 import { Resource } from "./resource";
 import {
   bindSimulatorResource,
-  makeEnvVarName,
-  makeSimulatorJsClientType,
-  makeSimulatorJsClientV2,
+  makeSimulatorJsClientTypeProxy,
+  simulatorLiftedFieldsFor,
 } from "./util";
 import * as cloud from "../cloud";
 import { LiftMap, lift } from "../core";
@@ -18,12 +17,7 @@ import { Node, IInflightHost } from "../std";
 export class Counter extends cloud.Counter {
   /** @internal */
   public static _toInflightType(): string {
-    return makeSimulatorJsClientType("Counter", [
-      cloud.CounterInflightMethods.INC,
-      cloud.CounterInflightMethods.DEC,
-      cloud.CounterInflightMethods.PEEK,
-      cloud.CounterInflightMethods.SET,
-    ]);
+    return makeSimulatorJsClientTypeProxy("Counter", cloud.Counter._methods);
   }
 
   public readonly initial: number;
@@ -62,20 +56,12 @@ export class Counter extends cloud.Counter {
 
   /** @internal */
   public _liftedFields(): Record<string, string> {
-    const env = makeEnvVarName("resource", this.backend);
-    return {
-      $handle: `process.env["${env}"]`,
-    };
+    return simulatorLiftedFieldsFor(this.backend);
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this.backend, host, ops);
+    bindSimulatorResource(this.backend, host, ops);
     super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClientV2(__filename, this.backend);
   }
 }
 

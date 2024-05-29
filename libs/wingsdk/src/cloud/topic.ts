@@ -9,17 +9,28 @@ import { Node, Resource, IInflight } from "../std";
 export const TOPIC_FQN = fqnForType("cloud.Topic");
 
 /**
+ * List of inflight operations available for `Topic`.
+ * @internal
+ */
+export enum TopicInflightMethods {
+  PUBLISH = "publish",
+}
+
+/**
  * Options for `Topic`.
  */
 export interface TopicProps {}
 
 /**
- * A topic.
+ * A topic for pub/sub notifications.
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  * @abstract
  */
 export class Topic extends Resource {
+  /** @internal */
+  public static _methods = [TopicInflightMethods.PUBLISH];
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: ITopicClient;
 
@@ -105,13 +116,4 @@ export interface ITopicOnMessageHandlerClient {
    * @inflight
    */
   handle(event: string): Promise<void>;
-}
-
-/**
- * List of inflight operations available for `Topic`.
- * @internal
- */
-export enum TopicInflightMethods {
-  /** `Topic.publish` */
-  PUBLISH = "publish",
 }

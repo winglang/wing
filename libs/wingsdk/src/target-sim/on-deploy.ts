@@ -1,12 +1,22 @@
 import { Construct } from "constructs";
+import { ISimulatorResource } from "./resource";
 import { OnDeploySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import * as cloud from "../cloud";
 import { ToSimulatorOutput } from "../simulator";
 import { IInflight, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
-export class OnDeploy extends cloud.OnDeploy {
+export class OnDeploy extends cloud.OnDeploy implements ISimulatorResource {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("OnDeploy", cloud.OnDeploy._methods);
+  }
+
   private readonly fn: cloud.Function;
   constructor(
     scope: Construct,
@@ -41,12 +51,12 @@ export class OnDeploy extends cloud.OnDeploy {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  public _liftedFields(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }

@@ -11,6 +11,27 @@ import { Json, Node, Resource } from "../std";
 export const TABLE_FQN = fqnForType("ex.Table");
 
 /**
+ * List of inflight operations available for `Table`.
+ * @internal
+ */
+export enum TableInflightMethods {
+  /** `Table.insert` */
+  INSERT = "insert",
+  /** `Table.insert` */
+  UPSERT = "upsert",
+  /** `Table.update` */
+  UPDATE = "update",
+  /** `Table.delete` */
+  DELETE = "delete",
+  /** `Table.get` */
+  GET = "get",
+  /** `Table.tryGet` */
+  TRYGET = "tryGet",
+  /** `Table.list` */
+  LIST = "list",
+}
+
+/**
  * Table column types
  */
 export enum ColumnType {
@@ -60,7 +81,19 @@ export interface TableProps {
  */
 export class Table extends Resource {
   /** @internal */
+  public static _methods = [
+    TableInflightMethods.INSERT,
+    TableInflightMethods.UPSERT,
+    TableInflightMethods.UPDATE,
+    TableInflightMethods.DELETE,
+    TableInflightMethods.GET,
+    TableInflightMethods.TRYGET,
+    TableInflightMethods.LIST,
+  ];
+
+  /** @internal */
   public [INFLIGHT_SYMBOL]?: ITableClient;
+
   /**
    * Table name
    */
@@ -169,25 +202,4 @@ export interface ITableClient {
    */
   // TODO: change the return type to Iterator<Map<string, Json>> in the future.
   list(): Promise<Array<Json>>;
-}
-
-/**
- * List of inflight operations available for `Table`.
- * @internal
- */
-export enum TableInflightMethods {
-  /** `Table.insert` */
-  INSERT = "insert",
-  /** `Table.insert` */
-  UPSERT = "upsert",
-  /** `Table.update` */
-  UPDATE = "update",
-  /** `Table.delete` */
-  DELETE = "delete",
-  /** `Table.get` */
-  GET = "get",
-  /** `Table.tryGet` */
-  TRYGET = "tryGet",
-  /** `Table.list` */
-  LIST = "list",
 }

@@ -2,7 +2,11 @@ import { Construct } from "constructs";
 import { Container } from "./container";
 import { ISimulatorResource } from "./resource";
 import { RedisSchema } from "./schema-resources";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import { LiftMap } from "../core";
 import * as ex from "../ex";
 import { ToSimulatorOutput } from "../simulator";
@@ -14,6 +18,11 @@ import { IInflightHost } from "../std";
  * @inflight `@winglang/sdk.redis.IRedisClient`
  */
 export class Redis extends ex.Redis implements ISimulatorResource {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Redis", ex.Redis._methods);
+  }
+
   private readonly WING_REDIS_IMAGE =
     process.env.WING_REDIS_IMAGE ??
     // Redis version 7.0.9
@@ -48,7 +57,7 @@ export class Redis extends ex.Redis implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
   }
 
@@ -67,7 +76,7 @@ export class Redis extends ex.Redis implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
+  public _liftedFields(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }

@@ -1,7 +1,11 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { SecretSchema } from "./schema-resources";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClientType,
+  simulatorLiftedFieldsFor,
+} from "./util";
 import * as cloud from "../cloud";
 import { LiftMap } from "../core";
 import { ResourceNames } from "../shared/resource-names";
@@ -14,6 +18,11 @@ import { IInflightHost } from "../std";
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret implements ISimulatorResource {
+  /** @internal */
+  public static _toInflightType(): string {
+    return makeSimulatorJsClientType("Secret", cloud.Secret._methods);
+  }
+
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
 
@@ -23,13 +32,8 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host, ops);
+    bindSimulatorResource(this, host, ops);
     super.onLift(host, ops);
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    return makeSimulatorJsClient(__filename, this);
   }
 
   /** @internal */
@@ -48,5 +52,10 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
       type: cloud.SECRET_FQN,
       props,
     };
+  }
+
+  /** @internal */
+  public _liftedFields(): Record<string, string> {
+    return simulatorLiftedFieldsFor(this);
   }
 }

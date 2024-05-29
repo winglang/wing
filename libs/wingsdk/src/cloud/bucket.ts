@@ -14,6 +14,28 @@ import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
 export const BUCKET_FQN = fqnForType("cloud.Bucket");
 
 /**
+ * List of inflight operations available for `Bucket`.
+ * @internal
+ */
+export enum BucketInflightMethods {
+  PUT = "put",
+  GET = "get",
+  LIST = "list",
+  DELETE = "delete",
+  PUT_JSON = "putJson",
+  GET_JSON = "getJson",
+  PUBLIC_URL = "publicUrl",
+  EXISTS = "exists",
+  TRY_GET = "tryGet",
+  TRY_GET_JSON = "tryGetJson",
+  TRY_DELETE = "tryDelete",
+  SIGNED_URL = "signedUrl",
+  METADATA = "metadata",
+  COPY = "copy",
+  RENAME = "rename",
+}
+
+/**
  * Options for `Bucket`.
  */
 export interface BucketProps {
@@ -31,6 +53,24 @@ export interface BucketProps {
  * @abstract
  */
 export class Bucket extends Resource {
+  /** @internal */
+  public static _methods = [
+    BucketInflightMethods.PUT,
+    BucketInflightMethods.GET,
+    BucketInflightMethods.LIST,
+    BucketInflightMethods.DELETE,
+    BucketInflightMethods.PUT_JSON,
+    BucketInflightMethods.GET_JSON,
+    BucketInflightMethods.PUBLIC_URL,
+    BucketInflightMethods.EXISTS,
+    BucketInflightMethods.TRY_GET,
+    BucketInflightMethods.TRY_GET_JSON,
+    BucketInflightMethods.TRY_DELETE,
+    BucketInflightMethods.METADATA,
+    BucketInflightMethods.COPY,
+    BucketInflightMethods.RENAME,
+  ];
+
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
   /** @internal */
@@ -533,41 +573,4 @@ export enum BucketEventType {
    * Update
    */
   UPDATE = "onUpdate",
-}
-
-/**
- * List of inflight operations available for `Bucket`.
- * @internal
- */
-export enum BucketInflightMethods {
-  /** `Bucket.put` */
-  PUT = "put",
-  /** `Bucket.get` */
-  GET = "get",
-  /** `Bucket.list` */
-  LIST = "list",
-  /** `Bucket.delete` */
-  DELETE = "delete",
-  /** `Bucket.putJson` */
-  PUT_JSON = "putJson",
-  /** `Bucket.getJson` */
-  GET_JSON = "getJson",
-  /** `Bucket.publicUrl` */
-  PUBLIC_URL = "publicUrl",
-  /** `Bucket.exists` */
-  EXISTS = "exists",
-  /** `Bucket.tryGet` */
-  TRY_GET = "tryGet",
-  /** `Bucket.tryGetJson` */
-  TRY_GET_JSON = "tryGetJson",
-  /** `Bucket.tryDelete` */
-  TRY_DELETE = "tryDelete",
-  /** `Bucket.signedUrl` */
-  SIGNED_URL = "signedUrl",
-  /** `Bucket.metadata` */
-  METADATA = "metadata",
-  /** `Bucket.copy` */
-  COPY = "copy",
-  /** `Bucket.rename` */
-  RENAME = "rename",
 }

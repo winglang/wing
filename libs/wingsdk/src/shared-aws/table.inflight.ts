@@ -13,12 +13,23 @@ import { validateRow } from "../shared/table-utils";
 import { Json } from "../std";
 
 export class TableClient implements ITableClient {
-  constructor(
-    private readonly tableName: string,
-    private readonly primaryKey: string,
-    private readonly columns: string,
-    private readonly client = new DynamoDBClient({})
-  ) {}
+  private readonly client = new DynamoDBClient({});
+  private readonly tableName: string;
+  private readonly primaryKey: string;
+  private readonly columns: string;
+  constructor({
+    $tableName,
+    $primaryKey,
+    $columns,
+  }: {
+    $tableName: string;
+    $primaryKey: string;
+    $columns: string;
+  }) {
+    this.tableName = $tableName;
+    this.primaryKey = $primaryKey;
+    this.columns = $columns;
+  }
 
   public async insert(key: string, row: Json): Promise<void> {
     validateRow(row, JSON.parse(this.columns));

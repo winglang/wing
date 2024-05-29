@@ -9,6 +9,15 @@ import { Json, Node, Resource } from "../std";
 export const SECRET_FQN = fqnForType("cloud.Secret");
 
 /**
+ * List of inflight operations available for `Secret`.
+ * @internal
+ */
+export enum SecretInflightMethods {
+  VALUE = "value",
+  VALUE_JSON = "valueJson",
+}
+
+/**
  * Options for `Secret`.
  */
 export interface SecretProps {
@@ -31,6 +40,12 @@ export interface SecretProps {
  * @abstract
  */
 export class Secret extends Resource {
+  /** @internal */
+  public static _methods = [
+    SecretInflightMethods.VALUE,
+    SecretInflightMethods.VALUE_JSON,
+  ];
+
   /** @internal */
   public [INFLIGHT_SYMBOL]?: ISecretClient;
   /** @internal */
@@ -89,15 +104,4 @@ export interface ISecretClient {
    * @inflight
    */
   valueJson(options?: GetSecretValueOptions): Promise<Json>;
-}
-
-/**
- * List of inflight operations available for `Secret`.
- * @internal
- */
-export enum SecretInflightMethods {
-  /** `Secret.value` */
-  VALUE = "value",
-  /** `Secret.valueJson` */
-  VALUE_JSON = "valueJson",
 }

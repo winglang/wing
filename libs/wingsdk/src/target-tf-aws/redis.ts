@@ -22,6 +22,14 @@ const ELASTICACHE_NAME_OPTS: NameOptions = {
 };
 
 export class Redis extends ex.Redis {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename.replace("redis", "redis.inflight"),
+      "RedisClient"
+    );
+  }
+
   private readonly clusterId: string;
   private readonly clusterArn: string;
   private readonly securityGroups: SecurityGroup[];
@@ -142,6 +150,13 @@ export class Redis extends ex.Redis {
     return core.InflightClient.for(__dirname, __filename, "RedisClient", [
       `process.env["${this.envName()}"]`,
     ]);
+  }
+
+  /** @internal */
+  public _liftedFields(): Record<string, string> {
+    return {
+      $clusterId: `process.env["${this.envName()}"]`,
+    };
   }
 
   private envName(): string {
