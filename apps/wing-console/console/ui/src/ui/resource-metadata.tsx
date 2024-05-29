@@ -181,6 +181,7 @@ export const ResourceMetadata = memo(
                 resourcePath={relationship.path}
                 className="w-4 h-4"
                 color={relationship.display?.color}
+                icon={relationship.display?.icon}
               />
             ),
           })),
@@ -199,6 +200,7 @@ export const ResourceMetadata = memo(
                 resourcePath={relationship.path}
                 className="w-4 h-4"
                 color={relationship.display?.color}
+                icon={relationship.display?.icon}
               />
             ),
           })),
@@ -247,6 +249,7 @@ export const ResourceMetadata = memo(
               resourceType={node.type}
               resourcePath={node.path}
               color={node.display?.color}
+              icon={node.display?.icon}
             />
           </div>
 

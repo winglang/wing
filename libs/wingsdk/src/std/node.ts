@@ -80,6 +80,15 @@ export class Node {
    */
   public color?: string;
 
+  /**
+   * The icon of the construct for display purposes.
+   * Supported icons are from Heroicons:
+   * - https://heroicons.com/
+   * e.g.
+   * - "academic-cap"
+   */
+  public icon?: string;
+
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
   private _app: IApp | undefined;

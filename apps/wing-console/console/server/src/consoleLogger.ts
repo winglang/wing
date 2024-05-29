@@ -1,4 +1,5 @@
 import { errorMessage } from "@wingconsole/error-message";
+import type { DisplayInfo } from "@winglang/sdk/lib/core/tree.js";
 import { nanoid } from "nanoid";
 
 import type { LogInterface } from "./utils/LogInterface.js";

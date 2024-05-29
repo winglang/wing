@@ -16,6 +16,7 @@ export interface ResourceIconProps extends IconProps {
   forceDarken?: boolean;
   solid?: boolean;
   color?: Colors | string;
+  icon?: string;
 }
 
 export interface IconComponent extends FunctionComponent<IconProps> {}
@@ -32,6 +33,7 @@ export const ResourceIcon = ({
   const Component = getResourceIconComponent(resourceType, {
     solid,
     resourceId: resourcePath,
+    icon: props.icon,
   });
   const colors = getResourceIconColors({
     resourceType,
