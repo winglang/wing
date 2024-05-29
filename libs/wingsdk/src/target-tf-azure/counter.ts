@@ -47,6 +47,16 @@ export enum StorageAccountPermissions {
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.Counter {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-azure", "shared-azure")
+        .replace("counter", "counter.inflight"),
+      "CounterClient"
+    );
+  }
+
   private readonly storageAccount: StorageAccount;
   public readonly storageTable: StorageTable;
 
@@ -106,18 +116,13 @@ export class Counter extends cloud.Counter {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-azure", "shared-azure"),
-      __filename,
-      "CounterClient",
-      [
-        `process.env["${this.envStorageAccountName()}"]`,
-        `process.env["${this.envStorageTableName()}"]`,
-        `"${this.envAccountKeyVariable()}"`,
-        `${this.initial}`,
-      ]
-    );
+  public _liftedFields(): Record<string, string> {
+    return {
+      $storageAccountName: `process.env["${this.envStorageAccountName()}"]`,
+      $storageTableName: `process.env["${this.envStorageTableName()}"]`,
+      $accountKeyVariable: `"${this.envAccountKeyVariable()}"`,
+      $initial: `${this.initial}`,
+    };
   }
 
   private envStorageAccountName(): string {

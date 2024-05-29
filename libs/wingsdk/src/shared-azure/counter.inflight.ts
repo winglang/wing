@@ -6,13 +6,27 @@ const PARTITION_KEY = "partitionKey";
 
 export class CounterClient implements ICounterClient {
   private client: TableClient;
+  private readonly storageAccountName: string;
+  private readonly storageTableName: string;
+  private readonly accountKeyVariable: string;
+  private readonly initial: number;
 
-  constructor(
-    private readonly storageAccountName: string,
-    private readonly storageTableName: string,
-    private readonly accountKeyVariable: string,
-    private readonly initial: number = 0
-  ) {
+  constructor({
+    $storageAccountName,
+    $storageTableName,
+    $accountKeyVariable,
+    $initial,
+  }: {
+    $storageAccountName: string;
+    $storageTableName: string;
+    $accountKeyVariable: string;
+    $initial?: number;
+  }) {
+    this.storageAccountName = $storageAccountName;
+    this.storageTableName = $storageTableName;
+    this.accountKeyVariable = $accountKeyVariable;
+    this.initial = $initial ?? 0;
+
     if (!process.env[this.accountKeyVariable]) {
       throw new Error("missing storage account key");
     }

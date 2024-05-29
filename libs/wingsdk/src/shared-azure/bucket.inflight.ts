@@ -24,17 +24,21 @@ export class BucketClient implements IBucketClient {
   private readonly defaultAzureCredential: DefaultAzureCredential =
     new DefaultAzureCredential();
 
-  constructor(
-    bucketName: string,
-    storageAccount: string,
-    blobServiceClient?: BlobServiceClient
-  ) {
-    this.bucketName = bucketName;
-    this.storageAccount = storageAccount;
+  constructor({
+    $bucketName,
+    $storageAccount,
+    $blobServiceClient,
+  }: {
+    $bucketName: string;
+    $storageAccount: string;
+    $blobServiceClient?: BlobServiceClient;
+  }) {
+    this.bucketName = $bucketName;
+    this.storageAccount = $storageAccount;
     this.blobServiceClient =
-      blobServiceClient ??
+      $blobServiceClient ??
       new BlobServiceClient(
-        `https://${storageAccount}.blob.core.windows.net`,
+        `https://${$storageAccount}.blob.core.windows.net`,
         this.defaultAzureCredential
       );
     this.containerClient = this.blobServiceClient.getContainerClient(

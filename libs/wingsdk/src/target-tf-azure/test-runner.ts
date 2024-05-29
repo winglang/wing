@@ -14,6 +14,16 @@ const OUTPUT_TEST_RUNNER_FUNCTION_IDENTIFIERS =
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
 export class TestRunner extends std.TestRunner {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-azure", "shared-azure")
+        .replace("test-runner", "test-runner.inflight"),
+      "TestRunnerClient"
+    );
+  }
+
   constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
     super(scope, id, props);
     // This output is created so the CLI's `wing test` command can obtain a list
@@ -75,10 +85,10 @@ export class TestRunner extends std.TestRunner {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "TestRunnerClient", [
-      `process.env["${this.envTestFunctionIdentifiers()}"]`,
-    ]);
+  public _liftedFields(): Record<string, string> {
+    return {
+      $tests: `process.env["${this.envTestFunctionIdentifiers()}"]`,
+    };
   }
 
   private envTestFunctionIdentifiers(): string {

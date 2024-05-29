@@ -1831,7 +1831,6 @@ impl<'a> JSifier<'a> {
 			// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
 			// `_liftType`).
 			code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
-			code.add_code(self.jsify_to_inflight_method(&class.name));
 			code.add_code(self.jsify_lifted_fields(&class.name, class_type));
 
 			// emit `onLift` and `onLiftType` to bind permissions and environment variables to inflight hosts
@@ -1945,19 +1944,6 @@ impl<'a> JSifier<'a> {
 		}
 
 		code.close("};");
-		code.close("}");
-		code
-	}
-
-	fn jsify_to_inflight_method(&self, class_name: &Symbol) -> CodeMaker {
-		let mut code = CodeMaker::with_source(&class_name.span);
-
-		code.open("_toInflight() {");
-
-		code.line(format!(
-			"return {STDLIB_CORE}.InflightClient.forV2({class_name}, this._liftedFields());"
-		));
-
 		code.close("}");
 		code
 	}

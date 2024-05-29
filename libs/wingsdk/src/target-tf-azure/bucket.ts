@@ -49,7 +49,16 @@ export enum StorageAccountPermissions {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.Bucket {
-  /** Storage container */
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename
+        .replace("target-tf-azure", "shared-azure")
+        .replace("bucket", "bucket.inflight"),
+      "BucketClient"
+    );
+  }
+
   public readonly storageContainer: StorageContainer;
   private readonly public: boolean;
   private readonly storageAccount: StorageAccount;
@@ -217,16 +226,11 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-azure", "shared-azure"),
-      __filename,
-      "BucketClient",
-      [
-        `process.env["${this.envName()}"]`,
-        `process.env["${this.envStorageAccountName()}"]`,
-      ]
-    );
+  public _liftedFields(): Record<string, string> {
+    return {
+      $bucketName: `process.env["${this.envName()}"]`,
+      $storageAccount: `process.env["${this.envStorageAccountName()}"]`,
+    };
   }
 
   private envName(): string {
