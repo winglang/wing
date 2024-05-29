@@ -150,14 +150,14 @@ impl<'a> LiftVisitor<'a> {
 		let current_env = self.ctx.current_env().expect("an env");
 		let result = current_env.lookup_nested_str(&node.full_path_str(), Some(self.ctx.current_stmt_idx()));
 		let type_ = match result {
-			LookupResult::Found(SymbolKind::Type(t), _) => *t,
-			_ => todo!(),
+			LookupResult::Found(SymbolKind::Type(t), _) => Some(*t),
+			_ => None,
 		};
 
 		// We don't have the FQN for any non-JSII classes (e.g. winglib classes)
-		let fqn = if let Some(class) = type_.as_class() {
+		let fqn = if let Some(class) = type_.as_ref().and_then(|t| t.as_class()) {
 			class.fqn.clone()
-		} else if let Some(iface) = type_.as_interface() {
+		} else if let Some(iface) = type_.as_ref().and_then(|t| t.as_interface()) {
 			iface.fqn.clone()
 		} else {
 			None
