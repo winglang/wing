@@ -1558,6 +1558,41 @@ error: Expected type to be \\"Json\\", but got \\"nil\\" instead
    = hint: to allow \\"nil\\" assignment use optional type: \\"Json?\\"
 
 
+error: Expected type to be \\"Array<num?>\\", but got \\"Array<str?>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:54:8
+   |
+54 | assert([c1] == [c2]);
+   |        ^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<Array<num>>\\", but got \\"Array<Array<str>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:58:8
+   |
+58 | assert([[1]] == [[\\"1\\"]]);
+   |        ^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<Array<str>>\\", but got \\"Array<Array<num>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:61:8
+   |
+61 | assert([[\\"1\\"]] == [[1]]);
+   |        ^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:66:8
+   |
+66 | assert(d1 == d2);
+   |        ^^^^^^^^
+
+
+error: Expected type to be \\"MutSet<bool>\\", but got \\"Set<num>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:72:8
+   |
+72 | assert(e1 == e2);
+   |        ^^^^^^^^
+
+
 
 Tests 1 failed (1)
 Snapshots 1 skipped
