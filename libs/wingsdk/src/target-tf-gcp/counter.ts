@@ -90,7 +90,7 @@ export class Counter extends cloud.Counter {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $databaseName: `process.env["${this.envName()}"]`,
       $initial: `${this.initial}`,

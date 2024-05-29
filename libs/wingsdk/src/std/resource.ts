@@ -77,7 +77,7 @@ export interface ILiftable {
    *
    * @internal
    */
-  _liftedFields?(): Record<string, string>;
+  _liftedState?(): Record<string, string>;
 }
 
 /**
@@ -188,14 +188,14 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _toInflight(): string {
-    return InflightClient.forV2(this.constructor, this._liftedFields());
+    return InflightClient.forV2(this.constructor, this._liftedState());
   }
 
   /**
    * @internal
    * @abstract
    */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     throw new AbstractMemberError();
   }
 
@@ -267,7 +267,7 @@ export abstract class AutoIdResource extends Resource {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {};
   }
 }

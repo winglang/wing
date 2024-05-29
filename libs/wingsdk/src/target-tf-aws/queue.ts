@@ -150,7 +150,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $queueUrlOrArn: `process.env["${this.envName()}"]`,
     };

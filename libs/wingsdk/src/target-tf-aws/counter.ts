@@ -73,7 +73,7 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $tableName: `process.env["${this.envName()}"]`,
       $initial: `${this.initial}`,

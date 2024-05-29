@@ -1932,9 +1932,9 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_lifted_fields(&self, class_name: &Symbol, class_type: TypeRef) -> CodeMaker {
 		let mut code = CodeMaker::with_source(&class_name.span);
-		code.open("_liftedFields() {");
+		code.open("_liftedState() {");
 		code.open("return {");
-		code.line("...(super._liftedFields?.() ?? {}),");
+		code.line("...(super._liftedState?.() ?? {}),");
 
 		// Get lifted fields from entire class ancestry
 		let lifts = Self::class_lifted_fields(class_type);

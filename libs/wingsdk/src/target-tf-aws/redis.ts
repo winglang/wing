@@ -153,7 +153,7 @@ export class Redis extends ex.Redis {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $clusterId: `process.env["${this.envName()}"]`,
     };

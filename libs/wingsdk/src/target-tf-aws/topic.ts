@@ -194,7 +194,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $topicArn: `process.env["${this.envName()}"]`,
     };

@@ -55,7 +55,7 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return simulatorLiftedFieldsFor(this);
   }
 }

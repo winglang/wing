@@ -76,7 +76,7 @@ export class Secret extends cloud.Secret {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $secretArn: `process.env["${this.envName()}"]`,
     };

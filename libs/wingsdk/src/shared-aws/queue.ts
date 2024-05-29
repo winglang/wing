@@ -111,7 +111,7 @@ export class QueueRef extends Resource {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $queueUrlOrArn: `process.env["${this.envName()}"]`,
     };

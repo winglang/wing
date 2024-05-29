@@ -145,7 +145,7 @@ export class Container extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return simulatorLiftedFieldsFor(this);
   }
 }

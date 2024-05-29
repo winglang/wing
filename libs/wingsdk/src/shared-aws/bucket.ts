@@ -105,7 +105,7 @@ export class BucketRef extends Resource {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $bucketName: `process.env["${this.envName()}"]`,
     };

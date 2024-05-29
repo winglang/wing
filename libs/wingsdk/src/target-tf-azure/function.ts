@@ -316,7 +316,7 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $functionName: `process.env["${this.envName()}"]`,
     };

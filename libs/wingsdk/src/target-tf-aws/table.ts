@@ -119,7 +119,7 @@ export class Table extends ex.Table implements IAwsTable {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $tableName: `process.env["${this.envName()}"]`,
       $primaryKey: `process.env["${this.primaryKeyEnvName()}"]`,

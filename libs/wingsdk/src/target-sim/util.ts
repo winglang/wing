@@ -33,7 +33,7 @@ export function makeEnvVarName(
 }
 
 /**
- * A default implementation of _liftedFields that works for most simulated resources.
+ * A default implementation of _liftedState that works for most simulated resources.
  */
 export function simulatorLiftedFieldsFor(resource: IConstruct) {
   const env = makeEnvVarName(resource);

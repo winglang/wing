@@ -85,7 +85,7 @@ export class TestRunner extends std.TestRunner {
   }
 
   /** @internal */
-  public _liftedFields(): Record<string, string> {
+  public _liftedState(): Record<string, string> {
     return {
       $tests: `process.env["${this.envTestFunctionIdentifiers()}"]`,
     };
