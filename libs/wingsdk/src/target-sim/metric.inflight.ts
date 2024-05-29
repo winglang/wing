@@ -39,7 +39,7 @@ export class Metric implements ISimulatorResourceInstance, IMetricClient {
 
   public async publish(record: MetricRecordOptions): Promise<void> {
     return this.context.withTrace({
-      message: `Publish(${record})`,
+      message: `Publish(${JSON.stringify(record)})`,
       activity: async () => {
         this._records.push({
           timestamp: record.timestamp ?? new Date(),
@@ -49,9 +49,11 @@ export class Metric implements ISimulatorResourceInstance, IMetricClient {
     });
   }
 
-  public async query(options: MetricQueryOptions): Promise<MetricRecord[]> {
+  public async query(
+    options: MetricQueryOptions = {}
+  ): Promise<MetricRecord[]> {
     return this.context.withTrace({
-      message: `Query(${options})`,
+      message: `Query(${JSON.stringify(options)})`,
       activity: async () => {
         const records = [];
         for (const record of this._records) {

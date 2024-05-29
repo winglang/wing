@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource } from "../std";
 
 /**
@@ -37,6 +38,9 @@ export interface MetricProps {
  * @abstract
  */
 export class Metric extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IMetricClient;
+
   constructor(scope: Construct, id: string, props: MetricProps) {
     if (new.target === Metric) {
       return Resource._newFromFactory(METRIC_FQN, scope, id, props);
@@ -46,6 +50,7 @@ export class Metric extends Resource {
 
     Node.of(this).title = "Metric";
     Node.of(this).description = "A cloud metric";
+    Node.of(this).hidden = true; // Metrics are hidden by default
   }
 }
 
@@ -106,12 +111,12 @@ export interface MetricQueryOptions {
   /**
    * The start time of the query.
    */
-  readonly startTime: Date;
+  readonly startTime?: Date;
 
   /**
    * The end time of the query.
    */
-  readonly endTime: Date;
+  readonly endTime?: Date;
 
   // TODO: period
   // TODO: statistic

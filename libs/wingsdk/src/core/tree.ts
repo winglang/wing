@@ -139,6 +139,8 @@ export interface UIFileBrowser {
 export interface UIGraph {
   readonly kind: "graph";
   readonly title: string;
+  readonly handler: string;
+  readonly refreshRate: number;
 }
 
 /**

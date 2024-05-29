@@ -64,6 +64,7 @@ export class Function
       concurrency: this.concurrency,
       metrics: {
         duration: simulatorHandleToken(this.metrics.duration),
+        errors: simulatorHandleToken(this.metrics.errors),
       },
     };
     return {

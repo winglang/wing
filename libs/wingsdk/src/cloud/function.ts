@@ -3,10 +3,11 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { Metric } from "./metric";
 import { fqnForType } from "../constants";
-import { App, Lifting } from "../core";
+import { App, Lifting, lift } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
+import * as ui from "../ui";
 
 /**
  * Global identifier for `Function`.
@@ -122,7 +123,33 @@ export class Function extends Resource implements IInflightHost {
         unit: "milliseconds",
         description: "The amount of time spent processing events.",
       }),
+      errors: new Metric(this, "MetricErrors", {
+        name: "Errors",
+        unit: "count",
+        description: "The number of times the function has errored.",
+      }),
     };
+
+    // Prevent an infinite loop since the user interface may
+    // create new Function instances, which would then create new user interfaces...
+    if (!(this.node.scope instanceof ui.VisualComponent)) {
+      this.addUserInterface();
+    }
+  }
+
+  private addUserInterface() {
+    const durationHandler = lift({
+      metric: this.metrics.duration,
+    }).inflight(async (ctx) => {
+      try {
+        const startTime = new Date(Date.now() - 1000 * 60 * 5); // 5 minutes ago
+        const records = await ctx.metric.query({ startTime });
+        return records;
+      } catch (e: any) {
+        return e.message;
+      }
+    });
+    new ui.Graph(this, "DurationGraph", "Duration", durationHandler);
   }
 
   /** @internal */
@@ -138,6 +165,7 @@ export class Function extends Resource implements IInflightHost {
     // inflight "handle" method on the handler resource.
     Lifting.lift(this.handler, this, ["handle"]);
     Lifting.lift(this.metrics.duration, this, ["publish"]);
+    Lifting.lift(this.metrics.errors, this, ["publish"]);
   }
 
   /**
@@ -188,6 +216,11 @@ export interface FunctionMetrics {
    * How long the function takes to process events.
    */
   readonly duration: Metric;
+
+  /**
+   * The number of times the function has errored.
+   */
+  readonly errors: Metric;
 }
 
 /**

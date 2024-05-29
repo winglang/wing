@@ -44,13 +44,15 @@ export interface FunctionSchema {
   /** The maximum number of concurrent invocations that can run at one time. */
   readonly concurrency: number;
   /** The metrics for the function. */
-  readonly metrics: FunctionMetrics;
+  readonly metrics: FunctionSchemaMetrics;
 }
 
 /** Schema for FunctionSchema.metrics */
-export interface FunctionMetrics {
+export interface FunctionSchemaMetrics {
   /** The duration metric for the function. */
   readonly duration: ResourceHandle;
+  /** The errors metric for the function. */
+  readonly errors: ResourceHandle;
 }
 
 /** Runtime attributes for cloud.Function */
