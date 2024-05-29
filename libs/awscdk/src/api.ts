@@ -22,6 +22,14 @@ import { isAwsCdkFunction } from "./function";
  * AWS Implementation of `cloud.Api`.
  */
 export class Api extends cloud.Api implements IAwsApi {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename.replace("api", "api.inflight"),
+      "ApiClient"
+    );
+  }
+
   private readonly api: WingRestApi;
   private readonly handlers: Record<string, cloud.Function> = {};
   private readonly endpoint: cloud.Endpoint;
@@ -53,7 +61,7 @@ export class Api extends cloud.Api implements IAwsApi {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiEndpointOptions,
+    props?: cloud.ApiEndpointOptions
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
@@ -186,7 +194,7 @@ export class Api extends cloud.Api implements IAwsApi {
     inflight: cloud.IApiEndpointHandler,
     method: string,
     path: string,
-    props?: cloud.ApiEndpointOptions,
+    props?: cloud.ApiEndpointOptions
   ): cloud.Function {
     return this.addInflightHandler(inflight, method, path, props);
   }
@@ -201,7 +209,7 @@ export class Api extends cloud.Api implements IAwsApi {
     inflight: cloud.IApiEndpointHandler,
     method: string,
     path: string,
-    props?: cloud.ApiEndpointOptions,
+    props?: cloud.ApiEndpointOptions
   ): cloud.Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
@@ -214,7 +222,7 @@ export class Api extends cloud.Api implements IAwsApi {
         this,
         App.of(this).makeId(this, prefix),
         newInflight,
-        props,
+        props
       );
       this.handlers[inflight._id] = handler;
     }
@@ -229,10 +237,10 @@ export class Api extends cloud.Api implements IAwsApi {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "ApiClient", [
-      `process.env["${this.urlEnvName()}"]`,
-    ]);
+  public _liftedState(): Record<string, string> {
+    return {
+      $url: `process.env["${this.urlEnvName()}"]`,
+    };
   }
 
   private urlEnvName(): string {

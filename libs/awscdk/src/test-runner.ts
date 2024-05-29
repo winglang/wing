@@ -11,6 +11,14 @@ const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WingTestRunnerFunctionArns";
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
 export class TestRunner extends std.TestRunner {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename.replace("test-runner", "test-runner.inflight"),
+      "TestRunnerClient"
+    );
+  }
+
   constructor(scope: Construct, id: string, props: std.TestRunnerProps = {}) {
     super(scope, id, props);
 
@@ -62,7 +70,7 @@ export class TestRunner extends std.TestRunner {
     const arns = new Map<string, string>();
     for (const test of this.findTests()) {
       if (test._fn) {
-        if (!(isAwsCdkFunction(test._fn))) {
+        if (!isAwsCdkFunction(test._fn)) {
           throw new Error(
             `Unsupported test function type, ${test._fn.node.path} was not a tfaws.Function`
           );
@@ -74,13 +82,10 @@ export class TestRunner extends std.TestRunner {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
-      __filename,
-      "TestRunnerClient",
-      [`process.env["${this.envTestFunctionArns()}"]`]
-    );
+  public _liftedState(): Record<string, string> {
+    return {
+      $tests: `process.env["${this.envTestFunctionArns()}"]`,
+    };
   }
 
   private envTestFunctionArns(): string {

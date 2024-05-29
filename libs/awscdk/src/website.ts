@@ -6,7 +6,7 @@ import { Bucket as S3Bucket } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 import { createEncryptedBucket } from "./bucket";
-import { core, cloud } from "@winglang/sdk/lib";
+import { cloud } from "@winglang/sdk/lib";
 import { IAwsWebsite } from "@winglang/sdk/lib/shared-aws";
 
 const INDEX_FILE = "index.html";
@@ -58,7 +58,10 @@ export class Website extends cloud.Website implements IAwsWebsite {
 
     this._url = `https://${distribution.domainName}`;
 
-    this.endpoint = new cloud.Endpoint(this, "Endpoint", this._url, { label: `Website ${this.node.path}`, browserSupport: true })
+    this.endpoint = new cloud.Endpoint(this, "Endpoint", this._url, {
+      label: `Website ${this.node.path}`,
+      browserSupport: true,
+    });
   }
 
   protected get _endpoint(): cloud.Endpoint {
@@ -81,16 +84,6 @@ export class Website extends cloud.Website implements IAwsWebsite {
 
   private formatPath(path: string): string {
     return path.split(sep).join(posix.sep);
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "WebsiteClient",
-      []
-    );
   }
 
   public get bucketArn(): string {

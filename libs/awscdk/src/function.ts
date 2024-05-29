@@ -9,7 +9,7 @@ import {
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Asset } from "aws-cdk-lib/aws-s3-assets";
 import { Construct, IConstruct } from "constructs";
-import { cloud, std, core } from "@winglang/sdk";
+import { cloud, std } from "@winglang/sdk";
 import { NotImplementedError } from "@winglang/sdk/lib/core/errors";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
 import {
@@ -22,7 +22,7 @@ import { makeAwsLambdaHandler } from "@winglang/sdk/lib/shared-aws/function-util
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
-import { LiftMap } from "@winglang/sdk/lib/core";
+import { InflightClient, LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * Implementation of `awscdk.Function` are expected to implement this
@@ -56,6 +56,14 @@ export class Function
   extends cloud.Function
   implements IAwsCdkFunction, IAwsFunction
 {
+  /** @internal */
+  public static _toInflightType(): string {
+    return InflightClient.forType(
+      __filename.replace("function", "function.inflight"),
+      "FunctionClient"
+    );
+  }
+
   private readonly function: CdkFunction;
   private readonly assetPath: string;
 
@@ -140,10 +148,11 @@ export class Function
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "FunctionClient", [
-      `process.env["${this.envName()}"], "${this.node.path}"`,
-    ]);
+  public _liftedState(): Record<string, string> {
+    return {
+      $functionArn: `process.env["${this.envName()}"]`,
+      $constructPath: this.node.path,
+    };
   }
 
   /**

@@ -22,6 +22,14 @@ import { LiftMap } from "@winglang/sdk/lib/core";
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.Topic implements IAwsTopic {
+  /** @internal */
+  public static _toInflightType(): string {
+    return core.InflightClient.forType(
+      __filename.replace("topic", "topic.inflight"),
+      "TopicClient"
+    );
+  }
+
   private readonly topic: SNSTopic;
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
@@ -88,11 +96,12 @@ export class Topic extends cloud.Topic implements IAwsTopic {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "TopicClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+  public _liftedState(): Record<string, string> {
+    return {
+      $topicArn: `process.env["${this.envName()}"]`,
+    };
   }
+
   /** @internal */
   public get _liftMap(): LiftMap {
     return {

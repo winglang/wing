@@ -260,16 +260,6 @@ export class Api extends cloud.Api implements IAwsApi {
   }
 
   /** @internal */
-  public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
-      __filename,
-      "ApiClient",
-      [`process.env["${this.urlEnvName()}"]`]
-    );
-  }
-
-  /** @internal */
   public _liftedState(): Record<string, string> {
     return {
       $url: `process.env["${this.urlEnvName()}"]`,
