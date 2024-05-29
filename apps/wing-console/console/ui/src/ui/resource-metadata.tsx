@@ -17,6 +17,7 @@ import {
   getResourceIconComponent,
   Attribute,
   ScrollableArea,
+  getResourceIconColors,
 } from "@wingconsole/design-system";
 import type { NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
@@ -82,13 +83,18 @@ export const ResourceMetadata = memo(
       "interact",
       "interact-actions",
     ]);
+
+    const icon = useMemo(() => {
+      return getResourceIconComponent(node.type, {
+        resourceId: node.id,
+        icon: node.display?.icon,
+      });
+    }, [node]);
+
     const { resourceGroup, connectionsGroups } = useMemo(() => {
       const connectionsGroupsArray: ConnectionsGroup[] = [];
       let resourceGroup: AttributeGroup | undefined;
       if (node.props) {
-        const icon = getResourceIconComponent(node.type, {
-          resourceId: node.id,
-        });
         switch (node.type) {
           case "@winglang/sdk.cloud.Function": {
             resourceGroup = {
@@ -262,7 +268,7 @@ export const ResourceMetadata = memo(
         </div>
         {resourceUI.data && resourceUI.data.length > 0 && (
           <InspectorSection
-            icon={CubeIcon}
+            icon={icon ?? CubeIcon}
             text={nodeLabel ?? "Properties"}
             open={openInspectorSections.includes("resourceUI")}
             onClick={() => toggleInspectorSection("resourceUI")}
