@@ -132,7 +132,7 @@ export const SignInModal = (props: SignInModalProps) => {
   }, [githubIsLoading, googleIsLoading]);
 
   return (
-    <Modal visible={signInRequired}>
+    <Modal visible={signInRequired} data-testId="signin-modal">
       <div className="flex flex-col gap-4 max-w-lg items-center">
         <h3
           className={classNames(
