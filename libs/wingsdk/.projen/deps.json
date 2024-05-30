@@ -284,11 +284,6 @@
       "type": "bundled"
     },
     {
-      "name": "external-assert",
-      "version": "npm:assert@2.1.0",
-      "type": "bundled"
-    },
-    {
       "name": "glob",
       "type": "bundled"
     },
