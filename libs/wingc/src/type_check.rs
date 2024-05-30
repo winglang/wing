@@ -4124,7 +4124,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		CompilationContext::set(CompilationPhase::TypeChecking, &stmt.span);
 
 		// Set the current statement index for symbol lookup checks.
-		self.with_stmt(stmt.idx, |tc| match &stmt.kind {
+		self.with_stmt(stmt, |tc| match &stmt.kind {
 			StmtKind::Let {
 				reassignable,
 				var_name,
