@@ -48,10 +48,12 @@ interface WrapperProps {
   fqn: string;
   highlight?: boolean;
   onClick?: () => void;
+  color?: string;
+  icon?: string;
 }
 
 const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
-  ({ name, fqn, highlight, onClick, children }) => {
+  ({ name, fqn, highlight, onClick, children, color, icon }) => {
     return (
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
       <div
@@ -80,7 +82,12 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
             "border-b border-slate-200 dark:border-slate-800",
           )}
         >
-          <ResourceIcon className="size-4 -ml-0.5" resourceType={fqn} />
+          <ResourceIcon
+            className="size-4 -ml-0.5"
+            resourceType={fqn}
+            icon={icon}
+            color={color}
+          />
 
           <span
             className={clsx(
@@ -106,6 +113,8 @@ interface ContainerNodeProps {
   resourceType?: string;
   highlight?: boolean;
   onClick?: () => void;
+  color?: string;
+  icon?: string;
 }
 
 const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
@@ -127,6 +136,8 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             fqn={props.resourceType!}
             highlight={props.highlight}
             onClick={props.onClick}
+            color={props.color}
+            icon={props.icon}
           >
             <div className="p-4">
               <NodeChildren>
@@ -153,6 +164,7 @@ interface ConstructNodeProps {
   hasChildNodes?: boolean;
   onSelectedNodeIdChange: (id: string | undefined) => void;
   color?: string;
+  icon?: string;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -167,6 +179,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       children,
       hasChildNodes,
       color,
+      icon,
     }) => {
       const select = useCallback(
         () => onSelectedNodeIdChange(id),
@@ -243,6 +256,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                   className="size-4 -ml-0.5"
                   resourceType={fqn}
                   color={color}
+                  icon={icon}
                 />
 
                 <span
@@ -320,6 +334,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             resourceType={fqn}
             highlight={highlight}
             onClick={select}
+            color={color}
+            icon={icon}
           >
             <NodeChildren>
               {inflights.length > 0 && renderedNode}
@@ -594,6 +610,7 @@ export const MapView = memo(
             name={name ?? ""}
             fqn={fqn ?? ""}
             color={props.constructTreeNode.display?.color}
+            icon={props.constructTreeNode.display?.icon}
             inflights={info.type === "construct" ? info.inflights : []}
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             highlight={props.selectedNodeId === props.constructTreeNode.path}
