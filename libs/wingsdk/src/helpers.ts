@@ -1,18 +1,17 @@
 // Code in this file will be automatically included in all inflight code bundles,
 // so avoid importing anything heavy here.
+import { notDeepStrictEqual } from "node:assert";
 import * as path from "node:path";
 import type { Construct } from "constructs";
-import type { Node } from "./std/node";
 // since we moved from node:18 to node:20 the deepStrictEqual doesn't work as expected.
 // https://github.com/winglang/wing/issues/4444
-// therefore we're using an npm package called "assert" instead.
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { deepStrictEqual, notDeepStrictEqual } = require("external-assert");
+// therefore we're using a local version of the comparison from node 18: https://github.com/nodejs/node/blob/v18.x/lib/internal/util/comparisons.js
+import { deepStrictEqual } from "./equality";
+import type { Node } from "./std/node";
 
 export function eq(a: any, b: any): boolean {
   try {
-    deepStrictEqual(a, b);
-    return true;
+    return deepStrictEqual(a, b);
   } catch {
     return false;
   }
