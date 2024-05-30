@@ -220,12 +220,6 @@ export const useMap = ({}: UseMapOptions = {}) => {
       connections:
         rawConnections
           .filter((connection) => {
-            return (
-              connection.sourceOp !== "invokeAsync" &&
-              connection.targetOp !== "invokeAsync"
-            );
-          })
-          .filter((connection) => {
             return connection.source !== connection.target;
           })
           .map((connection) => {
