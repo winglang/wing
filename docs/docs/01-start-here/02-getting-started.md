@@ -1,9 +1,26 @@
 ---
-id: installation
-title: Installation
-keywords: [Wing installation, installation, Wing toolchain]
+id: getting-started
+title: Getting Started
+keywords: [Getting started, Wing installation, installation, Wing toolchain]
 slug: /
 ---
+
+## Welcome
+
+Welcome, it's great to see you here!
+
+As you prepare to start taking flight with Wing 😉, there are a few things you need to do to get set up.
+This guide will walk you through the steps to setup Wing on your machine, create your first project, run it in the Wing Simulator and deploy it to AWS.
+
+:::info
+
+Wing is still in active development, and we would love to hear what you think! Please ping us on [Wing Slack](https://t.winglang.io/slack), share what you want to build
+and let us know if you encounter any issues. There's also a cute channel with music recommendations 🎶
+
+:::
+
+> Did you know that you can also take Wing for a spin without installing anything?
+> Check out the [Wing Playground](https://www.winglang.io/play/).
 
 ## Prerequisite
 
