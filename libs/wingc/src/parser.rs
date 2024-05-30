@@ -688,6 +688,16 @@ impl<'s> Parser<'s> {
 	fn build_try_catch_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		let try_statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
 		let catch_block = if let Some(catch_block) = statement_node.child_by_field_name("catch_block") {
+			if let Some(parenthesized_identifier) = statement_node.child_by_field_name("parenthesized_exception_identifier") {
+				return self.with_error::<StmtKind>(
+					format!(
+						"Unexpected parentheses in catch block. Use 'catch {}' instead of 'catch {}'.",
+						self.node_text(&parenthesized_identifier.child(1).expect("no identifier found")),
+						self.node_text(&parenthesized_identifier)
+					),
+					&parenthesized_identifier,
+				);
+			}
 			Some(CatchBlock {
 				statements: self.build_scope(&catch_block, phase),
 				exception_var: if let Some(exception_var_node) = statement_node.child_by_field_name("exception_identifier") {
