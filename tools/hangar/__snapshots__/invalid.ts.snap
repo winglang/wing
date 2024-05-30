@@ -4832,6 +4832,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`try_catch_parenthesis.test.w 1`] = `
+"error: Unexpected parentheses in catch block. Use 'catch e' instead of 'catch (e)'.
+  --> ../../../examples/tests/invalid/try_catch_parenthesis.test.w:3:9
+  |
+3 | } catch (e) {
+  |         ^^^
+
+
+error: Unexpected parentheses in catch block. Use 'catch longError' instead of 'catch (longError)'.
+   --> ../../../examples/tests/invalid/try_catch_parenthesis.test.w:10:9
+   |
+10 | } catch (longError) {
+   |         ^^^^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`try_no_catch_or_finally.test.w 1`] = `
 "error: Missing \`catch\` or \`finally\` blocks for this try statement
   --> ../../../examples/tests/invalid/try_no_catch_or_finally.test.w:1:1
