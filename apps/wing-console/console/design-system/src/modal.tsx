@@ -10,7 +10,6 @@ export interface ModalProps {
   setVisible?: (visible: boolean) => void;
   className?: string;
   children?: ReactNode;
-  dataTestId?: string;
 }
 
 export const Modal = ({
@@ -18,7 +17,6 @@ export const Modal = ({
   setVisible,
   className,
   children,
-  dataTestId,
 }: ModalProps) => {
   const { theme } = useTheme();
 
@@ -28,7 +26,6 @@ export const Modal = ({
         as="div"
         className="relative z-50"
         onClose={() => setVisible?.(false)}
-        data-testid={dataTestId}
       >
         <Transition.Child
           as={Fragment}
