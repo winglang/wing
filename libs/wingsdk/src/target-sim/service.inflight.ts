@@ -76,7 +76,6 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     await this.ensureBundled();
 
     // Check if any of the bundled files have changed since the last bundling
-    // Check if any of the bundled files have changed since the last bundling
     const bundleInvalidated = await isBundleInvalidated(
       this.resolvedSourceCodeFile,
       this.bundle!,

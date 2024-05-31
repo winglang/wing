@@ -49,13 +49,15 @@ export function createBundle(
 
   const stats = statSync(normalEntrypoint);
 
+  // Track what time we started bundling so we can invalidate the bundle if any
+  // of the source files are modified after this time.
   let startTime = new Date();
 
   // For unknown reasons, the date created here by JavaScript can sometimes be a
   // few milliseconds before the last modification date of the entrypoint file.
-  // This can cause the bundle to be invalidated when it shouldn't be. To avoid
-  // this, we check if the mtime of the entrypoint file is newer than the start
-  // time, and update the start time if it is.
+  // This can cause the bundle to be invalidated when it shouldn't be. To
+  // prevent this flakiness in unit tests, we check if the modification date of the
+  // entrypoint file and update the start time if it's newer.
   if (stats.mtime > startTime) {
     startTime = stats.mtime;
   }
