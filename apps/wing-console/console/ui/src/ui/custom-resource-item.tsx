@@ -11,6 +11,8 @@ import type {
 } from "../../../../../../libs/wingsdk/lib/core/index.js";
 
 import { CustomResourceFileBrowser } from "./custom-resource-file-browser.js";
+import type { GraphType } from "./custom-resource-graph.js";
+import { CustomResourceGraph } from "./custom-resource-graph.js";
 import { CustomResourceHttpClientItem } from "./custom-resource-http-client.js";
 import { CustomResourceUiButtonItem } from "./custom-resource-ui-button.js";
 import { CustomResourceUiFieldItem } from "./custom-resource-ui-field.js";
@@ -65,6 +67,12 @@ export const CustomResourceUiItem = ({ item }: { item: UIComponent }) => {
           label={uiComponent.label}
           getUrlHandler={uiComponent.getUrlHandler}
           getApiSpecHandler={uiComponent.getApiSpecHandler}
+        />
+      )}
+      {uiComponent.kind === "graph" && (
+        <CustomResourceGraph
+          handlerPath={uiComponent.handler}
+          graphType={uiComponent.type as GraphType}
         />
       )}
     </>

@@ -19,6 +19,12 @@ export interface GraphProps {
    * @default - every 5 seconds
    */
   readonly refreshRate?: Duration;
+
+  /**
+   * The type of graph.
+   * @default - "line"
+   */
+  readonly graphType?: string;
 }
 
 /**
@@ -37,6 +43,7 @@ export class Graph extends VisualComponent {
   private readonly fn: Function;
   private readonly title: string;
   private readonly refreshRate: Duration;
+  private readonly graphType: string;
 
   constructor(
     scope: Construct,
@@ -49,6 +56,7 @@ export class Graph extends VisualComponent {
     this.title = title;
     this.fn = new Function(this, "Handler", handler);
     this.refreshRate = props.refreshRate ?? Duration.fromSeconds(5);
+    this.graphType = props.graphType ?? "line";
   }
 
   /** @internal */
@@ -58,6 +66,7 @@ export class Graph extends VisualComponent {
       title: this.title,
       handler: this.fn.node.path,
       refreshRate: this.refreshRate.seconds,
+      type: this.graphType,
     };
   }
 
@@ -83,5 +92,5 @@ export interface IGraphHandlerClient {
    * Function that returns data to display.
    * @inflight
    */
-  handle(): Promise<MetricRecord>; // TODO: change to something else
+  handle(): Promise<Array<MetricRecord>>; // TODO: change to something else
 }

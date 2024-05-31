@@ -141,6 +141,7 @@ export interface UIGraph {
   readonly title: string;
   readonly handler: string;
   readonly refreshRate: number;
+  readonly type: string; // "line", "bar", "scatter", etc
 }
 
 /**

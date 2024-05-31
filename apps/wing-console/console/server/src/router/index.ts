@@ -16,6 +16,7 @@ import { createTestRouter } from "./test.js";
 import { createTopicRouter } from "./topic.js";
 import { createUiButtonRouter } from "./ui-button.js";
 import { createUiFieldRouter } from "./ui-field.js";
+import { createUiGraphRouter } from "./ui-graph.js";
 import { createUpdaterRouter } from "./updater.js";
 import { createWebsiteRouter } from "./website.js";
 
@@ -41,6 +42,7 @@ export const mergeAllRouters = () => {
     createUiFieldRouter(),
     createHttpClientRouter(),
     createFileBrowserRouter(),
+    createUiGraphRouter(),
   );
 
   return { router };
