@@ -711,11 +711,6 @@ describe("in-place updates", () => {
 
     const sim = await app.startSimulator();
 
-    // // cloud.Function bundles its code in the background,
-    // // so we're calling the function once to make sure the bundling finishes
-    // const fn = sim.getResource("/Function") as IFunctionClient;
-    // await fn.invoke();
-
     const app2 = new SimApp();
     new Function(app2, "Function", NOOP);
 
@@ -744,10 +739,9 @@ describe("in-place updates", () => {
     //
     // Since we want to test the case where the Function is replaced, we need to
     // make sure that the bundling finishes before we synthesize the new app.
-    // So we're calling the function (which blocks until the bundling finishes).
+    // So we invoke the function to block until the bundling finishes.
     const fn = sim.getResource("/Function") as IFunctionClient;
     await fn.invoke();
-    console.log("invoked function once", new Date());
 
     const app2 = new SimApp({ outdir });
     new Function(app2, "Function", NOOP2);
