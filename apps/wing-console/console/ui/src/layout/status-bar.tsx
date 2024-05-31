@@ -4,6 +4,7 @@ import classNames from "classnames";
 
 import { AutoUpdater } from "../features/auto-updater.js";
 
+import { DiscordButton } from "./discord-button.js";
 import { ThemeToggle } from "./theme-toggle.js";
 
 export interface StatusBarProps {
@@ -65,8 +66,9 @@ export const StatusBar = ({
         </div>
       </div>
       {/*right side*/}
-      <div className="w-full flex space-x-0 justify-end">
+      <div className="w-full flex space-x-1 justify-end">
         <AutoUpdater />
+        <DiscordButton />
         {showThemeToggle && <ThemeToggle />}
       </div>
     </footer>
