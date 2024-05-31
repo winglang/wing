@@ -125,8 +125,6 @@ export function createBundle(
     outfilePath: outfile,
     sourcemapPath: outfileMap,
     inputFiles,
-    // We track the start time so that bundles can be invalidated properly even
-    // if a source file changes after esbuild started bundling.
     time: startTime,
   };
 }
