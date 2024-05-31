@@ -156,6 +156,7 @@ export const SignInModal = (props: SignInModalProps) => {
                 setGithubIsLoading(true);
                 void signInWithGithub();
               }}
+              dataTestid="signin-github-button"
             >
               {githubIsLoading ? (
                 <Loader size="xs" />
@@ -171,6 +172,7 @@ export const SignInModal = (props: SignInModalProps) => {
                 setGoogleIsLoading(true);
                 void signInWithGoogle();
               }}
+              dataTestid="signin-google-button"
             >
               {googleIsLoading ? (
                 <Loader size="xs" />

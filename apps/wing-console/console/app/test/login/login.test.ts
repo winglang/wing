@@ -6,8 +6,8 @@ describe(
   `${__dirname}/main.w`,
   () => {
     test("Check login page", async ({ page }) => {
-      const appState = page.getByTestId("signin-modal");
-      await expect(appState).toBeVisible();
+      const githubLogin = page.getByTestId("signin-github-button");
+      await expect(githubLogin).toBeVisible();
     });
   },
   { requireSignIn: true },
