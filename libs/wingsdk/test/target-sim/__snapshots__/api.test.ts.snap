@@ -289,7 +289,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -622,7 +621,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -954,7 +952,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1287,7 +1284,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1620,7 +1616,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1953,7 +1948,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -2429,7 +2423,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -2778,7 +2771,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /:name/:age",
               },
@@ -3119,7 +3111,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /:name",
               },
@@ -3455,7 +3446,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/foo",
               },
@@ -3902,7 +3892,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -3916,7 +3905,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
@@ -4365,7 +4353,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/world",
               },
@@ -4379,7 +4366,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/wingnuts",
               },
@@ -4711,7 +4697,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -5052,7 +5037,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /users/:name",
               },
@@ -5385,7 +5369,6 @@ exports.handler = async function(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
