@@ -40,8 +40,8 @@ new Group2();
 
 Instances of preflight classes define the application's construct tree. This way you can think about the generated cloud infrastructure as a logical tree where each node is some logical piece of infrastructure which may contain children nodes which are also part of your application's infrastructure (composition). 
 
-In Wing this tree structure is automatically generated for. Any class instantiated at the top level (global scope) is a child of the "root" node of of the tree. 
-Any class instantiated inside another class (in its constructor or one of it's other preflight methods) will be placed as a child of that other class.
+In Wing this tree structure is automatically generated. Any class instantiated at the top level (global scope) is a child of the "root" node of of the tree. 
+Any class instantiated inside another class (in its constructor or one of its other preflight methods) will be placed as a child of that other class.
 
 ```js
 class ThumbnailBucket {
@@ -91,7 +91,7 @@ class ImageStorage {
 }
 
 let imageStorage = new ImageStorage(); // This goes in root
-let defaultThumbnails = new ThumbnailBucket() as "defaultsThumbs" in imageStorage; // This is explicitly named "defaultsThumbs" and explicitly placed inside imageStorage
+let defaultThumbnails = new ThumbnailBucket() as "defaultThumbs" in imageStorage; // This is explicitly named "defaultThumbs" and explicitly placed inside imageStorage
 
 // Here's a tree view of the generated infrastructure:
 //
@@ -130,13 +130,13 @@ new MyBucket();
 ```
 
 Similarly, consider this case where we instantiate a class inside a parameter in a `super()` constructor call before the
-the class is creates and it's scope becomes valid:
+the class is creates and its scope becomes valid:
 
 ```js
 class Base {
   new(b: cloud.Bucket) {}
 }
-class Derived {
+class Derived extends Base {
   new() {
     super(new cloud.Bucket()); // Bucket create before `Derived` so scope defaults to caller
   }
