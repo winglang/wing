@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { deepStrictEqual } from "../src/equality"; // Adjust this path to where your function is defined
+import { deepStrictEqual } from "../../src/util/equality";
 
 describe("deepStrictEqual", () => {
   // Primitive types
