@@ -6,7 +6,7 @@ import type { Construct } from "constructs";
 import type { Node } from "./std/node";
 // since we moved from node:18 to node:20 the deepStrictEqual doesn't work as expected.
 // https://github.com/winglang/wing/issues/4444
-// therefore we're using a local version of the comparison from node 18: https://github.com/nodejs/node/blob/v18.x/lib/internal/util/comparisons.js
+// therefore we're using a local version of the comparison from node 18.
 import { deepStrictEqual } from "./util/equality";
 
 export function eq(a: any, b: any): boolean {
