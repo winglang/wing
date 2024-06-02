@@ -523,7 +523,14 @@ impl<'a> JSifier<'a> {
 						}) {
 							Some(SCOPE_PARAM.to_string())
 						} else {
-							Some("this".to_string())
+							// By default use `this` as the scope.
+							// If we're inside an argument to a `super()` call then `this` isn't avialble, in which case
+							// we can safely use the ctor's `$scope` arg.
+							if ctx.visit_ctx.current_stmt_is_super_call() {
+								Some(SCOPE_PARAM.to_string())
+							} else {
+								Some("this".to_string())
+							}
 						}
 					}
 				} else {
@@ -1146,7 +1153,7 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::with_source(&statement.span);
 
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
-		ctx.visit_ctx.push_stmt(statement.idx);
+		ctx.visit_ctx.push_stmt(statement);
 		match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
 				BringSource::BuiltinModule(name) => {
