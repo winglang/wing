@@ -72,7 +72,7 @@ pub struct JSifier<'a> {
 	/// Store the output files here.
 	pub output_files: RefCell<Files>,
 	/// Stored struct schemas that are referenced in the code.
-	pub referenced_struct_schemas: RefCell<BTreeMap<String, CodeMaker>>,
+	pub referenced_struct_schemas: RefCell<IndexMap<Utf8PathBuf, BTreeMap<String, CodeMaker>>>,
 	/// Counter for generating unique preflight file names.
 	preflight_file_counter: RefCell<usize>,
 
@@ -121,7 +121,7 @@ impl<'a> JSifier<'a> {
 			source_file_graph,
 			compilation_init_path,
 			out_dir,
-			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
+			referenced_struct_schemas: RefCell::new(IndexMap::new()),
 			inflight_file_counter: RefCell::new(0),
 			inflight_file_map: RefCell::new(IndexMap::new()),
 			preflight_file_counter: RefCell::new(0),
@@ -200,7 +200,7 @@ impl<'a> JSifier<'a> {
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}({SCOPE_PARAM}, $id) {{"));
 			root_class.line(format!("super({SCOPE_PARAM}, $id);"));
-			root_class.add_code(self.jsify_struct_schemas());
+			root_class.add_code(self.jsify_struct_schemas(source_path));
 			root_class.add_code(js);
 			root_class.close("}");
 			root_class.close("}");
@@ -244,7 +244,7 @@ impl<'a> JSifier<'a> {
 			}
 			output.close("};");
 		} else {
-			output.add_code(self.jsify_struct_schemas());
+			output.add_code(self.jsify_struct_schemas(source_path));
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
 			output.line(format!(
@@ -307,13 +307,17 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_struct_schemas(&self) -> CodeMaker {
+	fn jsify_struct_schemas(&self, source_path: &Utf8Path) -> CodeMaker {
 		// For each struct schema that is referenced in the code
 		// (this is determined by the StructSchemaVisitor before jsification starts)
 		// we write an inline call to stdlib struct class to instantiate the schema object
 		// preflight root class.
 		let mut code = CodeMaker::default();
-		for (name, schema_code) in self.referenced_struct_schemas.borrow().iter() {
+		let file_schemas = self.referenced_struct_schemas.borrow();
+		let Some(file_schemas) = file_schemas.get(source_path) else {
+			return code;
+		};
+		for (name, schema_code) in file_schemas.iter() {
 			let flat_name = name.replace(".", "_");
 
 			code.line(format!(
@@ -2010,9 +2014,12 @@ impl<'a> JSifier<'a> {
 		class_code
 	}
 
-	pub fn add_referenced_struct_schema(&self, struct_name: String, schema: CodeMaker) {
+	pub fn add_referenced_struct_schema(&self, file_path: &Utf8Path, struct_name: String, schema: CodeMaker) {
 		let mut struct_schemas = self.referenced_struct_schemas.borrow_mut();
-		struct_schemas.insert(struct_name, schema);
+		struct_schemas
+			.entry(file_path.into())
+			.or_default()
+			.insert(struct_name, schema);
 	}
 
 	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {
