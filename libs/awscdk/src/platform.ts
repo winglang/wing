@@ -13,6 +13,7 @@ import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 import { Website } from "./website";
 import { cloud } from "@winglang/sdk";
+import { Construct } from "constructs";
 
 const {
   API_FQN,
@@ -37,6 +38,20 @@ export class Platform implements platform.IPlatform {
 
   public newApp(appProps: any): any {
     return new App(appProps);
+  }
+
+  public newInstance(
+    type: string,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    const Type = this.typeForFqn(type);
+    if (!Type) {
+      throw new Error(`Unsupported resource type: ${type}`);
+    }
+
+    return new Type(scope, id, ...args);
   }
 
   public typeForFqn(fqn: string): any {

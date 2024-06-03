@@ -213,8 +213,10 @@ export class PolyconFactory {
   }
 
   private readonly newInstanceOverrides: any[];
-  public constructor(newInstanceOverrides: any[]) {
+  private readonly typeForFqnOverrides: any[];
+  public constructor(newInstanceOverrides: any[], typeForFqnOverrides: any[]) {
     this.newInstanceOverrides = newInstanceOverrides;
+    this.typeForFqnOverrides = typeForFqnOverrides;
   }
 
   public new(
@@ -237,7 +239,7 @@ export class PolyconFactory {
   }
 
   /**
-   * Provides a new instance of an object
+   * Provides a new instance of an object if an override exists.
    *
    * @param fqn string fqn of the resource type
    * @param scope construct scope
@@ -257,10 +259,43 @@ export class PolyconFactory {
       }
     }
 
+    for (const override of this.typeForFqnOverrides) {
+      const type = override(fqn);
+      if (type) {
+        return new type(scope, id, ...args);
+      }
+    }
+
     return undefined;
   }
 
+  /**
+   * Provides the type for an fqn (fully qualified name) if an override exists.
+   *
+   * @param fqn string fqn of the resource type
+   */
+  public typeForFqn(fqn: string): any {
+    for (const override of this.typeForFqnOverrides) {
+      const type = override(fqn);
+      if (type) {
+        return type;
+      }
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Registers the PolyconFactory to an App, so that given any construct,
+   * its PolyconFactory can be retrieved.
+   *
+   * @param app the App to register to
+   */
   public register(app: App) {
+    const existing = (app as any)[POLYCON_FACTORY_SYMBOL];
+    if (existing && existing !== this) {
+      throw new Error("PolyconFactory already registered");
+    }
     (app as any)[POLYCON_FACTORY_SYMBOL] = this;
   }
 }

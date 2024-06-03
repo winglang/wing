@@ -106,14 +106,18 @@ export class PlatformManager {
   public createPolyconFactory(): PolyconFactory {
     this.createPlatformInstances();
     const newInstanceOverrides: any[] = [];
+    const typeForFqnOverrides: any[] = [];
 
     this.platformInstances.forEach((instance) => {
       if (instance.newInstance) {
         newInstanceOverrides.push(instance.newInstance.bind(instance));
       }
+      if (instance.typeForFqn) {
+        typeForFqnOverrides.push(instance.typeForFqn.bind(instance));
+      }
     });
 
-    return new PolyconFactory(newInstanceOverrides);
+    return new PolyconFactory(newInstanceOverrides, typeForFqnOverrides);
   }
 
   // This method is called from preflight.js in order to return an App instance
