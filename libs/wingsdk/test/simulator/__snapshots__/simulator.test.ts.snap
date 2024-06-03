@@ -115,7 +115,7 @@ exports[`run single test > test failure 1`] = `
         "message": "Error: test failed (Invoke (payload=undefined).)",
         "status": "failure",
       },
-      "level": "verbose",
+      "level": "error",
       "sourcePath": "root/test/Handler",
       "sourceType": "@winglang/sdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
