@@ -1,12 +1,12 @@
 import { PolyconFactory } from "../../src/core";
-import { App, AppProps } from "../../src/target-tf-gcp";
-import { Platform } from "../../src/target-tf-gcp/platform";
+import { App, AppProps } from "../../src/target-tf-azure";
+import { Platform } from "../../src/target-tf-azure/platform";
 import { mkdtemp } from "../util";
 
-export interface GcpAppProps extends Partial<AppProps> {}
+export interface AzureAppProps extends Partial<AppProps> {}
 
-export class GcpApp extends App {
-  constructor(props: GcpAppProps = {}) {
+export class AzureApp extends App {
+  constructor(props: AzureAppProps = {}) {
     const platform = new Platform();
     const polyconFactory = new PolyconFactory(
       [platform.newInstance.bind(platform)],
@@ -18,10 +18,8 @@ export class GcpApp extends App {
       entrypointDir: __dirname,
       isTestEnvironment: false,
       rootConstruct: undefined,
-      projectId: "my-project",
-      region: "us-central1",
-      zone: "us-central1-a",
       polyconFactory,
+      location: "East US",
       ...props,
     });
   }

@@ -6,7 +6,7 @@ import { AzurermProvider } from "../.gen/providers/azurerm/provider";
 import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
 import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
-import { AppProps } from "../core";
+import { AppProps as CdktfAppProps } from "../core";
 import {
   CaseConventions,
   NameOptions,
@@ -17,9 +17,12 @@ import { CdktfApp } from "../shared-tf/app";
 /**
  * Azure app props
  */
-export interface AzureAppProps extends AppProps {
-  /** Location for resources to be deployed to */
-  readonly location: string;
+export interface AppProps extends CdktfAppProps {
+  /**
+   * Location for resources to be deployed to
+   * @default - use the value of the AZURE_LOCATION environment variable
+   */
+  readonly location?: string;
 }
 
 /**
@@ -77,9 +80,9 @@ export class App extends CdktfApp {
   private _applicationInsights?: ApplicationInsights;
   private _logAnalyticsWorkspace?: LogAnalyticsWorkspace;
 
-  constructor(props: AzureAppProps) {
+  constructor(props: AppProps) {
     super(props);
-    this.location = props.location ?? process.env.AZURE_LOCATION;
+    this.location = props.location ?? process.env.AZURE_LOCATION!;
     TestRunner._createTree(this, props.rootConstruct);
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
