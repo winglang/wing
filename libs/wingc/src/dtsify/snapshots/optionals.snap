@@ -46,8 +46,10 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-module.exports = {
-  ...require("./preflight.lib-1.cjs"),
+module.exports = function({ $PolyconFactory }) {
+  return {
+    ...require("./preflight.lib-1.cjs")({ $PolyconFactory }),
+  };
 };
 //# sourceMappingURL=preflight.cjs.map
 ```
@@ -66,37 +68,39 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-class ParentClass extends $stdlib.std.Resource {
-  constructor($scope, $id, ) {
-    super($scope, $id);
+module.exports = function({ $PolyconFactory }) {
+  class ParentClass extends $stdlib.std.Resource {
+    constructor($scope, $id, ) {
+      super($scope, $id);
+    }
+    addHandler(handler, s) {
+    }
+    static _toInflightType() {
+      return `
+        require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.cjs")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const ParentClassClient = ${ParentClass._toInflightType()};
+          const client = new ParentClassClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    get _liftMap() {
+      return ({
+        "$inflight_init": [
+        ],
+      });
+    }
   }
-  addHandler(handler, s) {
-  }
-  static _toInflightType() {
-    return `
-      require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.cjs")({
-      })
-    `;
-  }
-  _toInflight() {
-    return `
-      (await (async () => {
-        const ParentClassClient = ${ParentClass._toInflightType()};
-        const client = new ParentClassClient({
-        });
-        if (client.$inflight_init) { await client.$inflight_init(); }
-        return client;
-      })())
-    `;
-  }
-  get _liftMap() {
-    return ({
-      "$inflight_init": [
-      ],
-    });
-  }
-}
-module.exports = { ParentClass };
+  return { ParentClass };
+};
 //# sourceMappingURL=preflight.lib-1.cjs.map
 ```
 
