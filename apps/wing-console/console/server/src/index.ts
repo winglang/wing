@@ -256,7 +256,7 @@ export const createConsoleServer = async ({
 
       case "error": {
         const output = trace.data.error
-          ? `${trace.data.message}: ${await formatTraceError(trace.data.error)}`
+          ? await formatTraceError(trace.data.error)
           : message;
 
         consoleLogger.error(output, source, {
