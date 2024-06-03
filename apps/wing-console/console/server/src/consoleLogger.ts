@@ -84,14 +84,16 @@ export const createConsoleLogger = ({
     error(error, source, context) {
       log.error(error);
       const message = errorMessage(error);
-      this.messages.push({
-        id: `${nanoid()}`,
-        timestamp: Date.now(),
-        level: "error",
-        message,
-        source,
-        ctx: context,
-      });
+      if (source === "user") {
+        this.messages.push({
+          id: `${nanoid()}`,
+          timestamp: Date.now(),
+          level: "error",
+          message: `${source} - ${message}`,
+          source,
+          ctx: context,
+        });
+      }
       onLog("error", message);
     },
   };
