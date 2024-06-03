@@ -320,11 +320,13 @@ export const createAppRouter = () => {
             id: sourceNode.id,
             path: sourceNode.path,
             type: getResourceType(sourceNode, simulator),
+            display: sourceNode.display,
           },
           target: {
             id: targetNode?.id ?? "",
             path: targetNode?.path ?? "",
             type: (targetNode && getResourceType(targetNode, simulator)) ?? "",
+            display: targetNode.display,
           },
           inflights: targetInflight
             ? [

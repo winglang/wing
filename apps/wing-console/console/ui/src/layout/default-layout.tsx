@@ -296,7 +296,7 @@ export const DefaultLayout = ({
                         )}
                         data-testid="map-view"
                       >
-                        <CollapseNodesProvider defaultBehavior="collapsed">
+                        <CollapseNodesProvider>
                           <MapView
                             selectedNodeId={selectedItems[0]}
                             onSelectedNodeIdChange={setSelectedItemSingle}

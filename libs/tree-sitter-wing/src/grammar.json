@@ -139,6 +139,23 @@
       "type": "PATTERN",
       "value": "([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)"
     },
+    "parenthesized_identifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
     "_type_identifier": {
       "type": "ALIAS",
       "content": {
@@ -1906,12 +1923,25 @@
                   "type": "CHOICE",
                   "members": [
                     {
-                      "type": "FIELD",
-                      "name": "exception_identifier",
-                      "content": {
-                        "type": "SYMBOL",
-                        "name": "identifier"
-                      }
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "FIELD",
+                          "name": "exception_identifier",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "identifier"
+                          }
+                        },
+                        {
+                          "type": "FIELD",
+                          "name": "parenthesized_exception_identifier",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "parenthesized_identifier"
+                          }
+                        }
+                      ]
                     },
                     {
                       "type": "BLANK"

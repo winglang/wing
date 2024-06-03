@@ -8,6 +8,7 @@ export type Connection<T> = {
 export type GetConnectionId<T> = (connection: Connection<T>) => string;
 export type IsNodeHidden<T> = (node: T) => boolean;
 export type GetNodeId<T> = (node: T) => string;
+export type ResolveNode<T> = (node: T) => T | undefined;
 
 const resolveConnections = <T>(
   node: T,
@@ -15,9 +16,11 @@ const resolveConnections = <T>(
   allConnections: Connection<T>[],
   isNodeHidden: IsNodeHidden<T>,
   getNodeId: GetNodeId<T>,
+  resolveNode: ResolveNode<T>,
 ): T[] => {
-  if (!isNodeHidden(node)) {
-    return [node];
+  const resolvedNode = resolveNode(node);
+  if (resolvedNode) {
+    return [resolvedNode];
   }
 
   const connections = allConnections.filter(
@@ -31,26 +34,46 @@ const resolveConnections = <T>(
 
   return uniqby(
     nodes.flatMap((node) => {
-      if (isNodeHidden(node)) {
-        return resolveConnections(
-          node,
-          type,
-          allConnections,
-          isNodeHidden,
-          getNodeId,
-        );
-      }
-      return node;
+      return resolveConnections(
+        node,
+        type,
+        allConnections,
+        isNodeHidden,
+        getNodeId,
+        resolveNode,
+      );
     }),
     (node) => getNodeId(node),
   );
 };
 
 export interface BridgeConnectionsOptions<T> {
+  /**
+   * A list of connections to bridge.
+   */
   connections: Connection<T>[];
+
+  /**
+   * Returns whether a node is hidden.
+   */
   isNodeHidden: IsNodeHidden<T>;
+
+  /**
+   * Returns a unique identifier for a node.
+   */
   getNodeId: GetNodeId<T>;
+
+  /**
+   * Returns a unique identifier for a connection.
+   */
   getConnectionId: GetConnectionId<T>;
+
+  /**
+   * Allows resolving a node to a different one.
+   *
+   * This is useful when a node is hidden and should be replaced by another one (e.g. a parent node).
+   */
+  resolveNode: ResolveNode<T>;
 }
 
 export const bridgeConnections = <T>(options: BridgeConnectionsOptions<T>) => {
@@ -62,6 +85,7 @@ export const bridgeConnections = <T>(options: BridgeConnectionsOptions<T>) => {
         options.connections,
         options.isNodeHidden,
         options.getNodeId,
+        options.resolveNode,
       );
       const targets = resolveConnections(
         connection.target,
@@ -69,6 +93,7 @@ export const bridgeConnections = <T>(options: BridgeConnectionsOptions<T>) => {
         options.connections,
         options.isNodeHidden,
         options.getNodeId,
+        options.resolveNode,
       );
       return uniqby(
         sources.flatMap((source) => {

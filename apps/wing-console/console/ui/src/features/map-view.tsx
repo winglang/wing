@@ -46,6 +46,8 @@ interface WrapperProps {
   fqn: string;
   highlight?: boolean;
   onClick?: () => void;
+  color?: string;
+  icon?: string;
   collapsed?: boolean;
   onCollapse?: (value: boolean) => void;
 }
@@ -59,6 +61,8 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
     collapsed = false,
     onCollapse = () => {},
     children,
+    color,
+    icon,
   }) => {
     return (
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
@@ -87,7 +91,12 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
             "border-b border-slate-200 dark:border-slate-800",
           )}
         >
-          <ResourceIcon className="size-4 -ml-0.5" resourceType={fqn} />
+          <ResourceIcon
+            className="size-4 -ml-0.5"
+            resourceType={fqn}
+            icon={icon}
+            color={color}
+          />
 
           <span
             className={clsx(
@@ -121,6 +130,8 @@ interface ContainerNodeProps {
   onClick?: () => void;
   collapsed?: boolean;
   onCollapse?: (value: boolean) => void;
+  color?: string;
+  icon?: string;
 }
 
 const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
@@ -144,6 +155,8 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             onClick={props.onClick}
             onCollapse={props.onCollapse}
             collapsed={props.collapsed}
+            color={props.color}
+            icon={props.icon}
           >
             <div className="p-4">
               <NodeChildren>
@@ -172,6 +185,7 @@ interface ConstructNodeProps {
   color?: string;
   onCollapse: (value: boolean) => void;
   collapsed: boolean;
+  icon?: string;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -188,6 +202,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       color,
       onCollapse,
       collapsed,
+      icon,
     }) => {
       const select = useCallback(
         () => onSelectedNodeIdChange(id),
@@ -264,6 +279,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                   className="size-4 -ml-0.5"
                   resourceType={fqn}
                   color={color}
+                  icon={icon}
                 />
 
                 <span
@@ -351,6 +367,8 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             onClick={select}
             onCollapse={onCollapse}
             collapsed={collapsed}
+            color={color}
+            icon={icon}
           >
             <NodeChildren>
               {inflights.length > 0 && renderedNode}
@@ -565,30 +583,11 @@ export const MapView = memo(
     selectedEdgeId,
     onSelectedEdgeIdChange,
   }: MapViewV2Props) => {
-    const { collapsedNodes, setNodeList, setCollapsedNodes } =
-      useCollapseNodes();
+    const { expandNode, collapseNode, isNodeCollapsed } = useCollapseNodes();
 
     const { nodeInfo, isNodeHidden, rootNodes, edges } = useMap({
-      collapsedNodes,
+      isNodeCollapsed,
     });
-
-    useEffect(() => {
-      const collapsibleNodes = rootNodes?.filter((node) => {
-        const children = Object.values(node.children ?? {});
-        if (children.length === 0) {
-          return;
-        }
-        return children.some((child) => !isNodeHidden(child.path));
-      });
-
-      setNodeList(
-        new Set(
-          collapsibleNodes
-            ?.filter((node) => node !== undefined)
-            .map((node) => node?.path),
-        ),
-      );
-    }, [rootNodes, setNodeList]);
 
     const RenderEdge = useCallback<EdgeComponent>(
       (props) => {
@@ -648,24 +647,17 @@ export const MapView = memo(
             name={name ?? ""}
             fqn={fqn ?? ""}
             color={props.constructTreeNode.display?.color}
+            icon={props.constructTreeNode.display?.icon}
             inflights={info.type === "construct" ? info.inflights : []}
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             highlight={props.selectedNodeId === props.constructTreeNode.path}
             hasChildNodes={childNodes.length > 0}
-            collapsed={collapsedNodes.has(props.constructTreeNode.path)}
-            onCollapse={(value) => {
-              if (value) {
-                setCollapsedNodes((previous) => {
-                  const newCollapsedNodes = new Set(previous);
-                  newCollapsedNodes.add(props.constructTreeNode.path);
-                  return newCollapsedNodes;
-                });
+            collapsed={isNodeCollapsed(props.constructTreeNode)}
+            onCollapse={(collapse) => {
+              if (collapse) {
+                collapseNode(props.constructTreeNode.path);
               } else {
-                setCollapsedNodes((previous) => {
-                  const newCollapsedNodes = new Set(previous);
-                  newCollapsedNodes.delete(props.constructTreeNode.path);
-                  return newCollapsedNodes;
-                });
+                expandNode(props.constructTreeNode.path);
               }
             }}
           >
@@ -680,7 +672,7 @@ export const MapView = memo(
           </ConstructNode>
         );
       },
-      [isNodeHidden, nodeInfo, collapsedNodes, setCollapsedNodes],
+      [isNodeHidden, nodeInfo, collapseNode, expandNode, isNodeCollapsed],
     );
 
     const { theme } = useTheme();

@@ -1485,6 +1485,121 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`equality.test.w 1`] = `
+"error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
+  --> ../../../examples/tests/invalid/equality.test.w:8:8
+  |
+8 | assert([1,2] == [\\"a\\", \\"b\\"]);
+  |        ^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<str>\\", but got \\"Array<num>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:11:8
+   |
+11 | assert([\\"a\\", \\"b\\"] == [1,2]);
+   |        ^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<str>\\", but got \\"Array<Json>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:18:8
+   |
+18 | assert([\\"1\\", \\"2\\"] == [{a: 1}]);
+   |        ^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<Array<str>>\\", but got \\"Array<Array<Json>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:21:8
+   |
+21 | assert([[\\"1\\", \\"2\\"]] == [[{a: 1}]]);
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Map<Array<str>>\\", but got \\"Map<Array<num>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:24:8
+   |
+24 | assert({\\"a\\" => [\\"a\\"]} == {\\"a\\" => [1]});
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<Map<Array<num>>>\\", but got \\"Array<Map<Array<str>>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:27:8
+   |
+27 | assert([{\\"a\\" => [1]}] == [{\\"a\\" => [\\"a\\"]}]);
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<bool>?\\", but got \\"Array<str>?\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:33:8
+   |
+33 | assert(a1 == a2);
+   |        ^^^^^^^^
+
+
+error: Expected type to be \\"Array<str>\\", but got \\"Array<str>?\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:39:8
+   |
+39 | assert(b1 == b2);
+   |        ^^^^^^^^
+
+
+error: Expected type to be \\"Array<nil>\\", but got \\"Array<str>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:42:8
+   |
+42 | assert([nil] == [\\"a\\"]);
+   |        ^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Json\\", but got \\"nil\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:45:20
+   |
+45 | assert(Array<Json>[nil] == [\\"a\\"]);
+   |                    ^^^
+   |
+   = hint: to allow \\"nil\\" assignment use optional type: \\"Json?\\"
+
+
+error: Expected type to be \\"Array<num?>\\", but got \\"Array<str?>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:54:8
+   |
+54 | assert([c1] == [c2]);
+   |        ^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<Array<num>>\\", but got \\"Array<Array<str>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:58:8
+   |
+58 | assert([[1]] == [[\\"1\\"]]);
+   |        ^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<Array<str>>\\", but got \\"Array<Array<num>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:61:8
+   |
+61 | assert([[\\"1\\"]] == [[1]]);
+   |        ^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:66:8
+   |
+66 | assert(d1 == d2);
+   |        ^^^^^^^^
+
+
+error: Expected type to be \\"MutSet<bool>\\", but got \\"Set<num>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:72:8
+   |
+72 | assert(e1 == e2);
+   |        ^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`explicit_lift_qualification.test.w 1`] = `
 "error: Lift blocks are only allowed in inflight phase
    --> ../../../examples/tests/invalid/explicit_lift_qualification.test.w:11:5
@@ -4708,6 +4823,28 @@ exports[`throw_non_string.test.w 1`] = `
   |
 1 | throw 42;
   |       ^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`try_catch_parenthesis.test.w 1`] = `
+"error: Unexpected parentheses in catch block. Use 'catch e' instead of 'catch (e)'.
+  --> ../../../examples/tests/invalid/try_catch_parenthesis.test.w:3:9
+  |
+3 | } catch (e) {
+  |         ^^^
+
+
+error: Unexpected parentheses in catch block. Use 'catch longError' instead of 'catch (longError)'.
+   --> ../../../examples/tests/invalid/try_catch_parenthesis.test.w:10:9
+   |
+10 | } catch (longError) {
+   |         ^^^^^^^^^^^
 
 
 

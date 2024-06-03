@@ -80,6 +80,7 @@ process.on("message", async (message) => {${debugShim}
 `;
 
     const wrappedPath = entrypoint.replace(/\.cjs$/, ".sandbox.cjs");
+
     writeFileSync(wrappedPath, contents); // async fsPromises.writeFile "flush" option is not available in Node 20
     const bundle = createBundle(wrappedPath);
 

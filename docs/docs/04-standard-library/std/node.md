@@ -273,6 +273,7 @@ Invokes the `validate()` method on all validations added through
 | <code><a href="#@winglang/sdk.std.Node.property.defaultChild">defaultChild</a></code> | <code>constructs.IConstruct</code> | Returns the child construct that has the id `Default` or `Resource"`. |
 | <code><a href="#@winglang/sdk.std.Node.property.description">description</a></code> | <code>str</code> | Description of the construct for display purposes. |
 | <code><a href="#@winglang/sdk.std.Node.property.hidden">hidden</a></code> | <code>bool</code> | Whether the construct should be hidden by default in tree visualizations. |
+| <code><a href="#@winglang/sdk.std.Node.property.icon">icon</a></code> | <code>str</code> | The icon of the construct for display purposes. |
 | <code><a href="#@winglang/sdk.std.Node.property.sourceModule">sourceModule</a></code> | <code>str</code> | The source file or library where the construct was defined. |
 | <code><a href="#@winglang/sdk.std.Node.property.title">title</a></code> | <code>str</code> | Title of the construct for display purposes. |
 
@@ -508,6 +509,23 @@ hidden: bool;
 - *Type:* bool
 
 Whether the construct should be hidden by default in tree visualizations.
+
+---
+
+##### `icon`<sup>Optional</sup> <a name="icon" id="@winglang/sdk.std.Node.property.icon"></a>
+
+```wing
+icon: str;
+```
+
+- *Type:* str
+
+The icon of the construct for display purposes.
+
+Supported icons are from Heroicons:
+- https://heroicons.com/
+e.g.
+- "academic-cap"
 
 ---
 

@@ -109,10 +109,10 @@ const getNodeInflights = (
 };
 
 export interface UseMapOptions {
-  collapsedNodes?: Set<string>;
+  isNodeCollapsed?: (node: ConstructTreeNode) => boolean;
 }
 
-export const useMap = ({ collapsedNodes }: UseMapOptions = {}) => {
+export const useMap = ({ isNodeCollapsed }: UseMapOptions = {}) => {
   const query = trpc["app.map"].useQuery();
   const { tree: rawTree, connections: rawConnections } = query.data ?? {};
 
@@ -162,9 +162,12 @@ export const useMap = ({ collapsedNodes }: UseMapOptions = {}) => {
     const hiddenMap = new Map<string, boolean>();
     const traverse = (node: ConstructTreeNode, forceHidden?: boolean) => {
       const hidden = forceHidden || node.display?.hidden || false;
-      const collapsed = collapsedNodes?.has(node.path) ?? false;
+
       hiddenMap.set(node.path, hidden);
-      for (const child of Object.values(node.children ?? {})) {
+
+      const collapsed = isNodeCollapsed?.(node);
+      const children = Object.values(node.children ?? {});
+      for (const child of children) {
         traverse(child, hidden || collapsed);
       }
     };
@@ -173,7 +176,7 @@ export const useMap = ({ collapsedNodes }: UseMapOptions = {}) => {
       traverse(child!);
     }
     return hiddenMap;
-  }, [rawTree, collapsedNodes]);
+  }, [rawTree, isNodeCollapsed]);
 
   const isNodeHidden = useCallback(
     (path: string) => {
@@ -181,6 +184,28 @@ export const useMap = ({ collapsedNodes }: UseMapOptions = {}) => {
       return hiddenMap.get(nodePath) === true;
     },
     [hiddenMap],
+  );
+
+  const resolveNodePath = useCallback(
+    (path: string) => {
+      const parts = path.split("/");
+      for (const [index, part] of Object.entries(parts)) {
+        const path = parts.slice(0, Number(index) + 1).join("/");
+        if (isNodeHidden(path)) {
+          return parts.slice(0, Number(index)).join("/");
+        }
+      }
+      return path;
+    },
+    [isNodeHidden],
+  );
+
+  const resolveNode = useCallback(
+    (path: string) => {
+      const nodePath = path.match(/^(.+?)#/)?.[1] ?? path;
+      return resolveNodePath(nodePath);
+    },
+    [resolveNodePath],
   );
 
   const rootNodes = useMemo(() => {
@@ -227,8 +252,25 @@ export const useMap = ({ collapsedNodes }: UseMapOptions = {}) => {
       getNodeId: (node) => node.id,
       getConnectionId: (connection) =>
         `${connection.source.id}#${connection.source.operation}##${connection.target.id}#${connection.target.operation}`,
-    });
-  }, [rawConnections, nodeFqns, isNodeHidden]);
+      resolveNode: (node) => {
+        const path = resolveNode(node.id);
+        return {
+          id: path,
+          nodeFqn: nodeFqns.get(path),
+          // Make the operation anonymous if the node is hidden.
+          operation: path === node.id ? node.operation : undefined,
+        };
+      },
+    })
+      .filter((connection) => {
+        // Filter connections that go to parents.
+        return !connection.source.id.startsWith(`${connection.target.id}/`);
+      })
+      .filter((connection) => {
+        // Filter connections that go to themselves.
+        return connection.source.id !== connection.target.id;
+      });
+  }, [rawConnections, nodeFqns, isNodeHidden, resolveNode]);
 
   const getConnectionId = useCallback(
     (
