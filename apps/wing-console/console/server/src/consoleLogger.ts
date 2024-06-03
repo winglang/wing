@@ -89,7 +89,7 @@ export const createConsoleLogger = ({
           id: `${nanoid()}`,
           timestamp: Date.now(),
           level: "error",
-          message: `${source} - ${message}`,
+          message,
           source,
           ctx: context,
         });
