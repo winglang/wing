@@ -35,25 +35,14 @@ export const CollapseNodesProvider = ({
     new Set<string>(),
   );
 
-  const { rootNodes, isNodeHidden } = useMap();
+  const { rootNodes } = useMap();
 
   const expandAll = useCallback(() => {
-    const nodeList = new Set<string>();
-    if (rootNodes)
-      for (const node of rootNodes) {
-        const children = Object.values(node.children ?? {});
-        if (children.length === 0) {
-          continue;
-        }
-        for (const child of children) {
-          if (!isNodeHidden(child.path)) {
-            nodeList.add(child.path);
-          }
-        }
-      }
-
-    setExpandedNodes(nodeList);
-  }, [setExpandedNodes, rootNodes, isNodeHidden]);
+    if (!rootNodes) {
+      return;
+    }
+    setExpandedNodes(new Set<string>(rootNodes.map((node) => node.path)));
+  }, [setExpandedNodes, rootNodes]);
 
   const collapseAll = useCallback(() => {
     setExpandedNodes(new Set<string>());
