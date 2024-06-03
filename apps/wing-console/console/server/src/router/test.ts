@@ -19,7 +19,7 @@ const listTests = (simulator: Simulator): Promise<string[]> => {
 };
 
 const reloadSimulator = async (simulator: Simulator, logger: ConsoleLogger) => {
-  logger.verbose("Reloading simulator...", "console", {
+  logger.verbose("Reloading simulator...", "simulator", {
     messageType: "info",
   });
   await simulator.reload(true);
@@ -62,21 +62,21 @@ const runTest = async (
       `Test "${getTestName(resourcePath)}" succeeded (${
         Date.now() - startTime
       }ms)`,
-      "console",
+      "simulator",
       {
         messageType: "success",
       },
     );
   } catch (error: any) {
     let output = await formatTraceError(error?.message);
-    logger.log(output, "console", {
+    logger.log(output, "simulator", {
       messageType: "fail",
     });
     logger.log(
       `Test "${getTestName(resourcePath)}" failed (${
         Date.now() - startTime
       }ms)`,
-      "console",
+      "simulator",
       {
         messageType: "fail",
       },
@@ -159,7 +159,7 @@ export const createTestRouter = () => {
       const time = result.reduce((accumulator, r) => accumulator + r.time, 0);
 
       const message = `Tests completed: ${testPassed.length}/${testList.length} passed. (${time}ms)`;
-      ctx.logger.log(message, "console", {
+      ctx.logger.log(message, "simulator", {
         messageType: "summary",
       });
 

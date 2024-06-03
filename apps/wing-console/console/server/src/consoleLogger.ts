@@ -5,7 +5,7 @@ import type { LogInterface } from "./utils/LogInterface.js";
 
 export type LogLevel = "verbose" | "info" | "warn" | "error";
 
-export type LogSource = "compiler" | "console" | "simulator" | "user";
+export type LogSource = "simulator" | "user";
 
 export interface LogContext {
   sourceType?: string;
@@ -52,7 +52,7 @@ export const createConsoleLogger = ({
         timestamp: Date.now(),
         level: "verbose",
         message,
-        source: source ?? "console",
+        source: source ?? "simulator",
         ctx: context,
       });
       onLog("verbose", message);
@@ -64,7 +64,7 @@ export const createConsoleLogger = ({
         timestamp: Date.now(),
         level: "info",
         message,
-        source: source ?? "console",
+        source: source ?? "simulator",
         ctx: context,
       });
       onLog("info", message);
@@ -76,7 +76,7 @@ export const createConsoleLogger = ({
         timestamp: Date.now(),
         level: "warn",
         message,
-        source: source ?? "console",
+        source: source ?? "simulator",
         ctx: context,
       });
       onLog("warn", message);
@@ -93,6 +93,8 @@ export const createConsoleLogger = ({
           source,
           ctx: context,
         });
+      } else {
+        console.log({ source });
       }
       onLog("error", message);
     },

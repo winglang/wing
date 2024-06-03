@@ -353,14 +353,8 @@ export const createConsoleServer = async ({
 };
 
 function logSourceFromTraceType(trace: Trace): LogSource {
-  switch (trace.type) {
-    case "simulator": {
-      return "simulator";
-    }
-
-    case "resource": {
-      return "compiler";
-    }
+  if (trace.type === "simulator") {
+    return "simulator";
   }
 
   return "user";
