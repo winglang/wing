@@ -1,10 +1,14 @@
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import {
   ArrowsPointingOutIcon,
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
 } from "@heroicons/react/24/solid";
-import { Toolbar, ToolbarButton } from "@wingconsole/design-system";
+import {
+  SquareStackMinusIcon,
+  SquareStackPlusIcon,
+  Toolbar,
+  ToolbarButton,
+} from "@wingconsole/design-system";
 
 export interface MapControlsProps {
   onZoomIn?: () => void;
@@ -28,22 +32,22 @@ export const MapControls = ({
       <div>
         <Toolbar>
           <ToolbarButton title="Collapse all" onClick={onCollapseAll}>
-            <ChevronUpIcon className="w-4 h-4" />
+            <SquareStackMinusIcon className="size-4 rotate-90" />
           </ToolbarButton>
           <ToolbarButton title="Expand all" onClick={onExpandAll}>
-            <ChevronDownIcon className="w-4 h-4" />
+            <SquareStackPlusIcon className="size-4 rotate-90" />
           </ToolbarButton>
 
           <ToolbarButton title="Zoom out" onClick={onZoomOut}>
-            <MagnifyingGlassMinusIcon className="w-4 h-4" />
+            <MagnifyingGlassMinusIcon className="size-4" />
           </ToolbarButton>
 
           <ToolbarButton title="Zoom in" onClick={onZoomIn}>
-            <MagnifyingGlassPlusIcon className="w-4 h-4" />
+            <MagnifyingGlassPlusIcon className="size-4" />
           </ToolbarButton>
 
           <ToolbarButton title="Zoom to fit" onClick={onZoomToFit}>
-            <ArrowsPointingOutIcon className="w-4 h-4" />
+            <ArrowsPointingOutIcon className="size-4" />
           </ToolbarButton>
         </Toolbar>
       </div>
