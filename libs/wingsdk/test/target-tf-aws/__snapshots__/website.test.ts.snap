@@ -624,7 +624,7 @@ exports[`website with addFile 1`] = `
       "Website_File-additionhtml_546E3AAA": {
         "bucket": "\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}",
         "content": "<html>Hello world!</html>",
-        "content_type": "text/plain",
+        "content_type": "text/html",
         "depends_on": [
           "aws_s3_bucket.Website_WebsiteBucket_3C0321F0",
         ],

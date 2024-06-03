@@ -163,6 +163,9 @@ export abstract class App extends Construct implements IApp {
     this._synthHooks = props.synthHooks;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
 
+    if (!props.polyconFactory) {
+      throw new Error("PolyconFactory is required");
+    }
     props.polyconFactory.register(this);
   }
 
