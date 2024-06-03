@@ -262,11 +262,9 @@ export class PolyconFactory {
       }
     }
 
-    for (const override of this.typeForFqnOverrides) {
-      const type = override(fqn);
-      if (type) {
-        return new type(scope, id, ...args);
-      }
+    const ctor = this.typeForFqn(fqn);
+    if (ctor) {
+      return new ctor(scope, id, ...args);
     }
 
     return undefined;
