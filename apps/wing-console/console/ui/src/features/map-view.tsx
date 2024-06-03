@@ -85,11 +85,18 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
           onClick?.();
         }}
       >
+        {
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+        }
         <div
           className={clsx(
             "px-2.5 py-1 flex items-center gap-1.5",
             "border-b border-slate-200 dark:border-slate-800",
+            "cursor-pointer",
           )}
+          onClick={() => {
+            onCollapse(!collapsed);
+          }}
         >
           <ResourceIcon
             className="size-4 -ml-0.5"
@@ -108,13 +115,12 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
             {name}
           </span>
           <div className="flex grow justify-end">
-            <button className="pl-1" onClick={() => onCollapse(!collapsed)}>
+            <div className="pl-1">
               {collapsed && <ChevronDownIcon className="size-4" />}
               {!collapsed && <ChevronUpIcon className="size-4" />}
-            </button>
+            </div>
           </div>
         </div>
-
         {collapsed || children}
       </div>
     );
@@ -268,12 +274,18 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             />
 
             {!hasChildNodes && (
+              // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
               <div
                 className={clsx(
                   "px-2.5 py-1 flex items-center gap-1.5",
                   inflights.length > 0 &&
                     "border-b border-slate-200 dark:border-slate-800",
                 )}
+                onClick={() => {
+                  if (collapsed) {
+                    onCollapse(false);
+                  }
+                }}
               >
                 <ResourceIcon
                   className="size-4 -ml-0.5"
@@ -293,10 +305,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 </span>
                 {collapsed && (
                   <div className="flex grow justify-end pl-1">
-                    <ChevronDownIcon
-                      className="size-4"
-                      onClick={() => onCollapse(false)}
-                    />
+                    <ChevronDownIcon className="size-4" />
                   </div>
                 )}
               </div>
