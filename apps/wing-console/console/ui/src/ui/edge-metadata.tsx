@@ -110,6 +110,7 @@ export const EdgeMetadata = ({
                     resourceType={source.type}
                     resourcePath={source.path}
                     color={source.display?.color}
+                    icon={source.display?.icon}
                   />
                 </div>
                 <div className="truncate">{source.id}</div>
@@ -134,6 +135,7 @@ export const EdgeMetadata = ({
                     resourceType={target.type}
                     resourcePath={target.path}
                     color={target.display?.color}
+                    icon={target.display?.icon}
                   />
                 </div>
                 <div className="truncate">{target.id}</div>

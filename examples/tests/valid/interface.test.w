@@ -41,3 +41,12 @@ interface IThing1 {
 interface IThing2 {
   m1(): IThing1?;
 }
+
+// A documented interface (should be parsed without errors)
+/// Interface documentation
+/// blah blah blah
+interface IDocumentedInterface {
+    /// Method documentation
+    /// blah blah blah
+    method1(): void;
+}

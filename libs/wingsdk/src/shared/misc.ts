@@ -1,7 +1,8 @@
-import { ExecFileOptions, execFile } from "child_process";
+import { ExecOptions, ExecFileOptions, exec, execFile } from "child_process";
 import { readFileSync } from "fs";
 import { promisify } from "util";
 
+const execPromise = promisify(exec);
 const execFilePromise = promisify(execFile);
 
 export function readJsonSync(file: string) {
@@ -35,7 +36,20 @@ export async function runCommand(
   return stdout;
 }
 
+/**
+ * Just a helpful wrapper around `exec` that returns a promise.
+ * This will run commands through the shell, while `runCommand` doesn't.
+ */
+export async function shell(
+  cmd: string,
+  args: string[],
+  options?: ExecOptions
+): Promise<any> {
+  const { stdout } = await execPromise(cmd + " " + args.join(" "), options);
+  return stdout;
+}
+
 export function isPath(s: string) {
   s = normalPath(s);
-  return s.startsWith("./") || s.startsWith("/");
+  return s.startsWith("./") || s.startsWith("../") || s.startsWith("/");
 }

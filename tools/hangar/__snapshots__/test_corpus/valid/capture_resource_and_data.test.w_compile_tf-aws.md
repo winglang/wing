@@ -1,10 +1,10 @@
 # [capture_resource_and_data.test.w](../../../../../examples/tests/valid/capture_resource_and_data.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $data_size, $queue, $res }) {
+module.exports = function({ $data, $queue, $res }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ $data_size, $queue, $res }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($data_size, 3), "data.size == 3");
+      $helpers.assert($helpers.eq($data.size, 3), "data.size == 3");
       (await $res.put("file.txt", "world"));
       $helpers.assert($helpers.eq((await $res.get("file.txt")), "world"), "res.get(\"file.txt\") == \"world\"");
       (await $queue.push("spirulina"));
@@ -20,7 +20,7 @@ module.exports = function({ $data_size, $queue, $res }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -69,8 +69,8 @@ module.exports = function({ $data_size, $queue, $res }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -78,6 +78,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -90,8 +91,8 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
-            $data_size: ${$stdlib.core.liftObject(data.size)},
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+            $data: ${$stdlib.core.liftObject(data)},
             $queue: ${$stdlib.core.liftObject(queue)},
             $res: ${$stdlib.core.liftObject(res)},
           })
@@ -111,12 +112,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [data.size, []],
+            [data, ["size"]],
             [queue, ["push"]],
             [res, [].concat(["put"], ["get"])],
           ],
           "$inflight_init": [
-            [data.size, []],
+            [data, []],
             [queue, []],
             [res, []],
           ],
@@ -132,6 +133,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "capture_resource_and_data.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

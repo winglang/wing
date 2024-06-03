@@ -1,4 +1,4 @@
-import { Validator } from "jsonschema";
+import Ajv from "ajv";
 import { Json, JsonValidationOptions } from "./json";
 import { InflightClient } from "../core";
 import {
@@ -31,11 +31,11 @@ export class JsonSchema {
 
   /** @internal */
   public _rawSchema: any;
-  private validator: Validator;
+  private validator: Ajv;
 
   constructor(schema: Json) {
     this._rawSchema = schema;
-    this.validator = new Validator();
+    this.validator = new Ajv({ allErrors: true, allowUnionTypes: true });
   }
 
   /**
@@ -48,14 +48,16 @@ export class JsonSchema {
     if (options?.unsafe) {
       return; // skip validation
     }
-
-    const result = this.validator.validate(obj, this._rawSchema);
-    if (result.errors.length > 0) {
+    const validator = this.validator.compile(this._rawSchema);
+    const valid = validator(obj);
+    if (!valid) {
+      const schemaId = this._rawSchema.$id.replace("/", "");
       throw new Error(
-        `unable to parse ${this._rawSchema.$id.replace(
-          "/",
-          ""
-        )}:\n- ${result.errors.join("\n- ")}`
+        `unable to parse ${schemaId}:\n- ${validator.errors
+          ?.map(
+            (error: any) => schemaId + error.instancePath + " " + error.message
+          )
+          .join("\n- ")}`
       );
     }
   }

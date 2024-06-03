@@ -1,7 +1,6 @@
 import { Button, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import {
-  MouseEventHandler,
   createContext,
   forwardRef,
   useCallback,
@@ -14,7 +13,7 @@ import {
 } from "react";
 import type { DetailedHTMLProps, HTMLAttributes } from "react";
 import type { ReactNode } from "react";
-import { useEvent, useKeyPressEvent } from "react-use";
+import { useEvent } from "react-use";
 
 import { MapControls } from "./map-controls.js";
 
@@ -63,7 +62,7 @@ const boundingBoxOverlap = (a: BoundingBox, b: BoundingBox) => {
   );
 };
 const MIN_ZOOM_LEVEL = 0.125;
-const MAX_ZOOM_LEVEL = 1;
+const MAX_ZOOM_LEVEL = 1.5;
 const ZOOM_SENSITIVITY = 1.35;
 const MOVE_SENSITIVITY = 1.5;
 const WHEEL_SENSITIVITY = 0.01;
@@ -147,7 +146,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       }
     });
   }, []);
-  useEvent("wheel", onWheel as (event: Event) => void, containerRef.current);
+  useEvent("wheel", onWheel as (event: Event) => void, containerRef.current, {
+    // Use passive: false to prevent the default behavior of scrolling the page.
+    passive: false,
+  });
 
   const [isDragging, setDragging] = useState(false);
 
@@ -158,16 +160,24 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   // Keep track of whether the space key is pressed so we can show the user the grab cursor.
   // The map is draggable using click only when space is pressed.
   const [isSpacePressed, setSpacePressed] = useState(false);
-  useKeyPressEvent(
-    " ",
-    useCallback(() => {
-      setSpacePressed(true);
-    }, []),
-    useCallback(() => {
-      setSpacePressed(false);
-      setDragging(false);
-    }, []),
-  );
+  useEffect(() => {
+    const listener = (event: KeyboardEvent) => {
+      // Pressing option+cmd+i on Mac (which is used to open the devtools) fires a keydown event with key " " on Chrome.
+      if (event.altKey) {
+        return;
+      }
+
+      if (event.key === " ") {
+        setSpacePressed(event.type === "keydown");
+      }
+    };
+    window.addEventListener("keydown", listener);
+    window.addEventListener("keyup", listener);
+    return () => {
+      window.removeEventListener("keydown", listener);
+      window.removeEventListener("keyup", listener);
+    };
+  }, []);
 
   const dragStart = useRef({ x: 0, y: 0 });
   useEvent(
@@ -386,7 +396,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
 
       <div className="relative z-10 flex">
         <div className="grow"></div>
-        <div className="relative cursor-grab bg-slate-50/50 dark:bg-slate-500/50 backdrop-blur">
+        <div className="relative cursor-grab backdrop-blur">
           <MapControls
             onZoomIn={zoomIn}
             onZoomOut={zoomOut}

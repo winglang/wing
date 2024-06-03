@@ -81,10 +81,20 @@ export interface DisplayInfo {
    * The color of the resource in the UI.
    */
   readonly color?: Colors;
+
+  /**
+   * The icon of the resource in the UI.
+   */
+  readonly icon?: string;
 }
 
 /** @internal */
-export type UIComponent = UIField | UISection | UIButton;
+export type UIComponent =
+  | UIField
+  | UISection
+  | UIButton
+  | UIHttpClient
+  | UIFileBrowser;
 
 /** @internal */
 export interface UIField {
@@ -109,6 +119,24 @@ export interface UISection {
   readonly kind: "section";
   readonly label?: string;
   readonly children: UIComponent[];
+}
+
+/** @internal */
+export interface UIHttpClient {
+  readonly kind: "http-client";
+  readonly label: string;
+  readonly getUrlHandler: string;
+  readonly getApiSpecHandler: string;
+}
+
+/** @internal */
+export interface UIFileBrowser {
+  readonly kind: "file-browser";
+  readonly label: string;
+  readonly putHandler: string;
+  readonly deleteHandler: string;
+  readonly getHandler: string;
+  readonly listHandler: string;
 }
 
 /**
@@ -218,7 +246,8 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
     display.title ||
     display.hidden ||
     ui ||
-    display.color
+    display.color ||
+    display.icon
   ) {
     return {
       title: display.title,
@@ -227,6 +256,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
       sourceModule: display.sourceModule,
       ui: ui.length > 0 ? ui : undefined,
       color: isOfTypeColors(display.color) ? display.color : undefined,
+      icon: display.icon,
     };
   }
   return;

@@ -48,7 +48,6 @@ export interface LayoutConfig {
   };
   errorScreen?: {
     position?: "default" | "bottom";
-    displayTitle?: boolean;
     displayLinks?: boolean;
   };
   panels?: {
@@ -62,6 +61,7 @@ export interface TestItem {
   id: string;
   label: string;
   status: TestStatus;
+  datetime: number;
   time?: number;
 }
 

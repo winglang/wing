@@ -1,7 +1,7 @@
 # [bring_jsii.test.w](../../../../../examples/tests/valid/bring_jsii.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $greeting, $stuff_HelloWorld }) {
@@ -19,7 +19,21 @@ module.exports = function({ $greeting, $stuff_HelloWorld }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
+```
+
+## inflight.X-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class X {
+    constructor({  }) {
+    }
+  }
+  return X;
+}
+//# sourceMappingURL=inflight.X-1.cjs.map
 ```
 
 ## main.tf.json
@@ -41,8 +55,8 @@ module.exports = function({ $greeting, $stuff_HelloWorld }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -50,6 +64,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 const stuff = require("jsii-code-samples");
 const jsii_fixture = require("jsii-fixture");
@@ -64,7 +79,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $greeting: ${$stdlib.core.liftObject(greeting)},
             $stuff_HelloWorld: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"))},
           })
@@ -92,6 +107,36 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class X extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      method() {
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.X-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const XClient = ${X._toInflightType()};
+            const client = new XClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
     const hello = new stuff.HelloWorld();
     const greeting = (hello.sayHello("wingnuts"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:sayHello", new $Closure1(this, "$Closure1"));
@@ -99,13 +144,12 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq((jsiiClass.applyClosure(5, ((x) => {
       return (x * 2);
     }))), 10), "jsiiClass.applyClosure(5, (x) => { return x * 2; }) == 10");
-    const jsiiStruct = ({"field": "struct field"});
-    $helpers.assert($helpers.eq((jsiiClass.methodWithStructParam(jsiiStruct)), "struct field"), "jsiiClass.methodWithStructParam(jsiiStruct) == \"struct field\"");
+    $helpers.assert($helpers.eq((jsiiClass.methodWithStructParam(({"field": "struct field"}))), "struct field"), "jsiiClass.methodWithStructParam({ field: \"struct field\" }) == \"struct field\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_jsii.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

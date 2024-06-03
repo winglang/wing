@@ -8,6 +8,7 @@ import { BuiltinPlatform } from "@winglang/compiler";
 import packlist from "npm-packlist";
 import * as tar from "tar";
 import { compile } from "./compile";
+import { loadEnvVariables } from "../env";
 
 // TODO: add --dry-run option?
 // TODO: let the user specify library's supported targets in package.json, and compile to each before packaging
@@ -15,6 +16,11 @@ import { compile } from "./compile";
 
 const defaultGlobs = [
   "**/*.js",
+  "**/*.cjs",
+  "**/*.mjs",
+  "**/*.ts",
+  "**/*.cts",
+  "**/*.mts",
   "**/*.w",
   "README*",
   "LICENSE*",
@@ -74,6 +80,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
   const outfile = options.outFile ? resolve(options.outFile) : undefined;
   const outdir = outfile ? path.dirname(outfile) : userDir;
 
+  loadEnvVariables({ cwd: userDir });
   // check package.json exists
   const originalPkgJsonPath = path.join(userDir, "package.json");
   if (!(await exists(originalPkgJsonPath))) {
@@ -115,6 +122,13 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
       }
     }
 
+    // Check if package.json has non-empty "dependencies"
+    if (pkgJson.dependencies && Object.keys(pkgJson.dependencies).length > 0) {
+      throw new Error(
+        `Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead.`
+      );
+    }
+
     // move compiler output
     await fs.rename(compilerOutputDir, path.join(workdir, compilerOutputFolder));
 
@@ -133,7 +147,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
       }
     }
     pkgJson.files = [...pkgJsonFiles];
-    pkgJson.main = path.join(compilerOutputFolder, dotWingDir, "preflight.js");
+    pkgJson.main = path.join(compilerOutputFolder, dotWingDir, "preflight.cjs");
 
     // add "winglang" to "keywords"
     const keywords = new Set(pkgJson.keywords ?? []);

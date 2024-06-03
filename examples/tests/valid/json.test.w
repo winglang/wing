@@ -206,7 +206,7 @@ assert(notSpecified.get("foo") == "bar");
 
 // Check that empty {} is a Json
 let empty = {};
-assert(Json.has(empty, "something") == false);
+assert(empty.has("something") == false);
 
 struct Base {
   base: str;
@@ -225,6 +225,7 @@ struct StructyJson {
   foo: str;
   stuff: Array<num>;
   maybe: InnerStructyJson?;
+  buckets: Array<cloud.Bucket>?;
 }
 
 let arrayStruct: Array<StructyJson> = [ { foo: "", stuff: [] } ];
@@ -235,6 +236,12 @@ let deepCollectionStruct: Map<Array<Set<StructyJson>>> = { "1" => [ Set<StructyJ
 let notJsonMissingField: StructyJson = {
   foo: "bar",
   stuff: [],
+};
+
+let notJsonWithInnerArray: StructyJson = {
+  foo: "bar",
+  stuff: [],
+  buckets: [new cloud.Bucket() as "B1InList"]
 };
 
 let notJson: StructyJson = {

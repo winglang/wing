@@ -1,14 +1,17 @@
-import { join } from "path";
 import { Duration } from "aws-cdk-lib";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { std, core, cloud } from "@winglang/sdk";
-import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
+import {
+  IAwsQueue,
+  Queue as AwsQueue,
+  QueueSetConsumerHandler,
+} from "@winglang/sdk/lib/shared-aws/queue";
 import { addPolicyStatements, isAwsCdkFunction } from "./function";
+import { LiftMap } from "@winglang/sdk/lib/core";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -23,28 +26,41 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     super(scope, id, props);
     this.timeout = props.timeout ?? std.Duration.fromSeconds(30);
 
-    this.queue = new SQSQueue(this, "Default", {
-      visibilityTimeout: props.timeout
-        ? Duration.seconds(props.timeout?.seconds)
-        : Duration.seconds(30),
-      retentionPeriod: props.retentionPeriod
-        ? Duration.seconds(props.retentionPeriod?.seconds)
-        : Duration.hours(1),
-    });
+    const queueOpt = props.dlq
+      ? {
+          visibilityTimeout: props.timeout
+            ? Duration.seconds(props.timeout?.seconds)
+            : Duration.seconds(30),
+          retentionPeriod: props.retentionPeriod
+            ? Duration.seconds(props.retentionPeriod?.seconds)
+            : Duration.hours(1),
+          deadLetterQueue: {
+            queue: SQSQueue.fromQueueArn(
+              this,
+              "DeadLetterQueue",
+              AwsQueue.from(props.dlq.queue)?.queueArn!
+            ),
+            maxReceiveCount:
+              props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
+          },
+        }
+      : {
+          visibilityTimeout: props.timeout
+            ? Duration.seconds(props.timeout?.seconds)
+            : Duration.seconds(30),
+          retentionPeriod: props.retentionPeriod
+            ? Duration.seconds(props.retentionPeriod?.seconds)
+            : Duration.hours(1),
+        };
+
+    this.queue = new SQSQueue(this, "Default", queueOpt);
   }
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname,
-        "queue.setconsumer.inflight.js"
-      ),
-      "QueueSetConsumerHandlerClient"
-    );
+    const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
 
     const fn = new cloud.Function(
       // ok since we're not a tree root
@@ -63,6 +79,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
     const eventSource = new SqsEventSource(this.queue, {
       batchSize: props.batchSize ?? 1,
+      reportBatchItemFailures: true,
     });
 
     fn.awscdkFunction.addEventSource(eventSource);
@@ -77,13 +94,13 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.QueueInflightMethods.PUSH,
-      cloud.QueueInflightMethods.PURGE,
-      cloud.QueueInflightMethods.APPROX_SIZE,
-      cloud.QueueInflightMethods.POP,
-    ];
+  public get _liftMap(): LiftMap {
+    return {
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.QueueInflightMethods.PURGE]: [],
+      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
+      [cloud.QueueInflightMethods.POP]: [],
+    };
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
@@ -93,7 +110,10 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
     const env = this.envName();
 
-    addPolicyStatements(host.awscdkFunction, calculateQueuePermissions(this.queue.queueArn, ops));
+    addPolicyStatements(
+      host.awscdkFunction,
+      calculateQueuePermissions(this.queue.queueArn, ops)
+    );
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
@@ -104,12 +124,9 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "QueueClient",
-      [`process.env["${this.envName()}"]`]
-    );
+    return core.InflightClient.for(__dirname, __filename, "QueueClient", [
+      `process.env["${this.envName()}"]`,
+    ]);
   }
 
   private envName(): string {

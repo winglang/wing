@@ -47,8 +47,12 @@ export class Service extends Resource implements IInflightHost {
    */
   protected readonly entrypoint!: string;
 
+  /**
+   * Reference to the service's handler - an inflight closure.
+   */
+  protected readonly handler!: IServiceHandler;
+
   private readonly _env: Record<string, string> = {};
-  private readonly handler!: IServiceHandler;
 
   constructor(
     scope: Construct,
@@ -77,7 +81,7 @@ export class Service extends Resource implements IInflightHost {
 
     const workdir = App.of(this).workdir;
     mkdirSync(workdir, { recursive: true });
-    const entrypoint = join(workdir, `${assetName}.js`);
+    const entrypoint = join(workdir, `${assetName}.cjs`);
     this.entrypoint = entrypoint;
 
     if (process.env.WING_TARGET) {
@@ -189,7 +193,7 @@ export interface IServiceHandlerClient {
    * DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
    * running process, start it asynchronously.
    *
-   *
+   * @inflight
    * @returns an optional function that can be used to cleanup any resources when the service is
    * stopped.
    *
@@ -203,7 +207,6 @@ export interface IServiceHandlerClient {
    *     log("stoping service...");
    *   };
    * });
-   *
    */
   handle(): Promise<IServiceStopHandler | undefined>;
 }

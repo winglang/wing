@@ -5,7 +5,11 @@ import { connect, ConnectResponse } from "@winglang/wingtunnels";
 import { EndpointAttributes, EndpointSchema } from "./schema-resources";
 import { exists } from "./util";
 import { IEndpointClient } from "../cloud";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
 
 const STATE_FILENAME = "state.json";
 
@@ -25,11 +29,19 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
   private connectResponse?: ConnectResponse;
   private lastSubdomain?: string;
   private status: EndpointExposeStatus = "disconnected";
-  constructor(
-    private readonly _props: EndpointSchema["props"],
-    private readonly _context: ISimulatorContext
-  ) {}
-  public async init(): Promise<EndpointAttributes> {
+  private _context: ISimulatorContext | undefined;
+
+  constructor(private readonly _props: EndpointSchema) {}
+
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<EndpointAttributes> {
+    this._context = context;
     const state: StateFileContents = await this.loadState();
     if (state.subdomain) {
       await this.connect(state.subdomain);
@@ -53,6 +65,10 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
     });
   }
 
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
+
   public async expose(): Promise<void> {
     if (this.status === "connecting" || this.status === "connected") {
       throw new Error("Can only expose when status is disconnected.");
@@ -73,11 +89,11 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
 
   private async loadState(): Promise<StateFileContents> {
     const stateFileExists = await exists(
-      join(this._context.statedir, STATE_FILENAME)
+      join(this.context.statedir, STATE_FILENAME)
     );
     if (stateFileExists) {
       const stateFileContents = await readFile(
-        join(this._context.statedir, STATE_FILENAME),
+        join(this.context.statedir, STATE_FILENAME),
         "utf-8"
       );
       return JSON.parse(stateFileContents);
@@ -88,14 +104,14 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
 
   private async saveState(state: StateFileContents): Promise<void> {
     writeFileSync(
-      join(this._context.statedir, STATE_FILENAME),
+      join(this.context.statedir, STATE_FILENAME),
       JSON.stringify(state)
     );
   }
 
   private async connect(subdomain?: string) {
     try {
-      await this._context.withTrace({
+      await this.context.withTrace({
         message: `Creating tunnel for endpoint. ${
           subdomain ? `Using subdomain: ${subdomain}` : ""
         }`,

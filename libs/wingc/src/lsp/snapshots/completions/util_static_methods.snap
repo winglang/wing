@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(stringToDecode: str, url: bool?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic base64Decode: (stringToDecode: str, url: bool?): str\n```\n---\nConverts a string from base64 to UTF-8.\n### Parameters\n- `stringToDecode` — `str` — base64 string to decode.\n- `url` — `bool?` — If `true`, the source is expected to be a URL-safe base64 string.\n\n### Returns\nThe UTF-8 string."
+    value: "Converts a string from base64 to UTF-8.\n\n#### Returns\nThe UTF-8 string."
   sortText: ff|base64Decode
   insertText: base64Decode($1)
   insertTextFormat: 2
@@ -18,7 +18,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(stringToEncode: str, url: bool?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic base64Encode: (stringToEncode: str, url: bool?): str\n```\n---\nConverts a string from UTF-8 to base64.\n### Parameters\n- `stringToEncode` — `str` — The name of the UTF-8 string to encode.\n- `url` — `bool?` — If `true`, a URL-safe base64 string is returned.\n\n### Returns\nThe base64 string."
+    value: "Converts a string from UTF-8 to base64.\n\n#### Returns\nThe base64 string."
   sortText: ff|base64Encode
   insertText: base64Encode($1)
   insertTextFormat: 2
@@ -30,7 +30,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(name: str): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic env: (name: str): str\n```\n---\nReturns the value of an environment variable.\n### Parameters\n- `name` — `str` — The name of the environment variable.\n\n### Remarks\nThrows if not found or empty."
+    value: "Returns the value of an environment variable.\n\n#### Remarks\nThrows if not found or empty."
   sortText: ff|env
   insertText: env($1)
   insertTextFormat: 2
@@ -42,7 +42,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(program: str, args: Array<str>, opts: ExecOptions?): Output"
   documentation:
     kind: markdown
-    value: "```wing\nstatic exec: (program: str, args: Array<str>, opts: ExecOptions?): Output\n```\n---\nExecute a program with the given arguments, wait for it to finish, and return its outputs.\n### Parameters\n- `program` — `str` — The program to execute.\n- `args` — `Array<str>` — An array of arguments to pass to the program.\n- `...opts` — `ExecOptions?` — `ExecOptions`, such as the working directory and environment variables.\n  \n  - `cwd?` — `str?`\n  - `env?` — `Map<str>?`\n  - `inheritEnv?` — `bool?`\n\n### Returns\nA struct containing `stdout`, `stderr` and exit `status` of the executed program."
+    value: "Execute a program with the given arguments, wait for it to finish, and return its outputs.\n\n#### Returns\nA struct containing `stdout`, `stderr` and exit `status` of the executed program."
   sortText: ff|exec
   insertText: exec($1)
   insertTextFormat: 2
@@ -54,7 +54,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(options: NanoidOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n### Parameters\n- `...options` — `NanoidOptions?` — - Optional options object for generating the ID.\n  \n  - `alphabet?` — `str?` — Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.\n  - `size?` — `num?` — Size of ID.\n\n### Remarks\n#\n\n*@link* *https://github.com/ai/nanoid*"
+    value: "Generates a unique ID using the nanoid library.\n\n#### Remarks\n#\n\n*@link* *https://github.com/ai/nanoid*"
   sortText: ff|nanoid
   insertText: nanoid($1)
   insertTextFormat: 2
@@ -66,15 +66,27 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic os: (): str\n```\n---\nReturns a string identifying the operating system platform.\n\n### Returns\nThe operating system platform\n\n### Example\n```ts\n\"linux\", \"darwin\", \"win32\"\n```"
+    value: "Returns a string identifying the operating system platform.\n\n#### Returns\nThe operating system platform\n\n#### Example\n```ts\n\"linux\", \"darwin\", \"win32\"\n```"
   sortText: ff|os
   insertText: os()
+- label: setEnv
+  kind: 2
+  detail: "(name: str, value: str): void"
+  documentation:
+    kind: markdown
+    value: Sets the given name and value as an environment variable.
+  sortText: ff|setEnv
+  insertText: setEnv($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: sha256
   kind: 2
   detail: "(data: str): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic sha256: (data: str): str\n```\n---\nComputes the SHA256 hash of the given data.\n### Parameters\n- `data` — `str` — - The string to be hashed."
+    value: Computes the SHA256 hash of the given data.
   sortText: ff|sha256
   insertText: sha256($1)
   insertTextFormat: 2
@@ -86,7 +98,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(command: str, opts: ShellOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic shell: (command: str, opts: ShellOptions?): str\n```\n---\nExecutes a command in the shell and returns its standard output.\n### Parameters\n- `command` — `str` — The command string to execute in the shell.\n- `...opts` — `ShellOptions?` — `ShellOptions`, such as the working directory and environment variables.\n  \n  - `cwd?` — `str?`\n  - `env?` — `Map<str>?`\n  - `inheritEnv?` — `bool?`\n  - `throw?` — `bool?` — Whether to throw an error on command execution failure.\n\n### Returns\nThe standard output of the shell command.\n\n*@throws* *An error if the shell command execution fails or returns a non-zero exit code.*"
+    value: "Executes a command in the shell and returns its standard output.\n\n#### Returns\nThe standard output of the shell command.\n\n*@throws* *An error if the shell command execution fails or returns a non-zero exit code.*"
   sortText: ff|shell
   insertText: shell($1)
   insertTextFormat: 2
@@ -98,7 +110,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(name: str): str?"
   documentation:
     kind: markdown
-    value: "```wing\nstatic tryEnv: (name: str): str?\n```\n---\nReturns the value of an environment variable.\n### Parameters\n- `name` — `str` — The name of the environment variable.\n\n### Returns\nThe value of the environment variable or `nil`.\n\n### Remarks\nReturns `nil` if not found or empty."
+    value: "Returns the value of an environment variable.\n\n#### Returns\nThe value of the environment variable or `nil`.\n\n#### Remarks\nReturns `nil` if not found or empty."
   sortText: ff|tryEnv
   insertText: tryEnv($1)
   insertTextFormat: 2
@@ -110,7 +122,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(options: UlidOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic ulid: (options: UlidOptions?): str\n```\n---\nGenerates universally unique lexicographically sortable identifier.\n### Parameters\n- `...options` — `UlidOptions?` — - Optional options object for generating the ID.\n  \n  - `seed?` — `num?` — You can also input a seed time which will consistently give you the same string for the time component.\n\n### Remarks\n#\n\n*@link* *https://github.com/ulid/javascript*"
+    value: "Generates universally unique lexicographically sortable identifier.\n\n#### Remarks\n#\n\n*@link* *https://github.com/ulid/javascript*"
   sortText: ff|ulid
   insertText: ulid($1)
   insertTextFormat: 2
@@ -122,67 +134,85 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic uuidv4: (): str\n```\n---\nGenerates a version 4 UUID."
+    value: Generates a version 4 UUID.
   sortText: ff|uuidv4
   insertText: uuidv4()
+- label: ChildProcess
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass ChildProcess {\n  pid?: num;\n  kill(): void;\n  wait(): Output;\n}\n```\n---\nHandle to a running child process."
+  sortText: gg|ChildProcess
 - label: Util
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Util\n```\n---\nUtility functions.\n\n### Methods\n- `base64Decode` — `(stringToDecode: str, url: bool?): str` — Converts a string from base64 to UTF-8.\n- `base64Encode` — `(stringToEncode: str, url: bool?): str` — Converts a string from UTF-8 to base64.\n- `env` — `(name: str): str` — Returns the value of an environment variable.\n- `exec` — `(program: str, args: Array<str>, opts: ExecOptions?): Output` — Execute a program with the given arguments, wait for it to finish, and return its outputs.\n- `nanoid` — `(options: NanoidOptions?): str` — Generates a unique ID using the nanoid library.\n- `os` — `(): str` — Returns a string identifying the operating system platform.\n- `sha256` — `(data: str): str` — Computes the SHA256 hash of the given data.\n- `shell` — `(command: str, opts: ShellOptions?): str` — Executes a command in the shell and returns its standard output.\n- `sleep` — `inflight (delay: duration): void` — Suspends execution for a given duration.\n- `tryEnv` — `(name: str): str?` — Returns the value of an environment variable.\n- `ulid` — `(options: UlidOptions?): str` — Generates universally unique lexicographically sortable identifier.\n- `uuidv4` — `(): str` — Generates a version 4 UUID.\n- `waitUntil` — `inflight (predicate: inflight (): bool, props: WaitUntilProps?): bool` — Run a predicate repeatedly, waiting until it returns true or until the timeout elapses."
+    value: "```wing\nclass Util {\n  static base64Decode(): str;\n  static base64Encode(): str;\n  static env(): str;\n  static exec(): Output;\n  static nanoid(): str;\n  static os(): str;\n  /* ... */\n}\n```\n---\nUtility functions."
   sortText: gg|Util
 - label: CommandOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct CommandOptions\n```\n---\nBase command options.\n### Fields\n- `cwd?` — `str?` — Path to a directory to run the command in.\n- `env?` — `Map<str>?` — Environment variables.\n- `inheritEnv?` — `bool?` — Whether to inherit environment variables from the host's environment."
+    value: "```wing\nstruct CommandOptions {\n  cwd?: str;\n  env?: Map<str>;\n  inheritEnv?: bool;\n}\n```\n---\nBase command options."
   sortText: hh|CommandOptions
 - label: ExecOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ExecOptions extends CommandOptions\n```\n---\nAdditional options for `util.exec()`.\n### Fields\n- `cwd?` — `str?`\n- `env?` — `Map<str>?`\n- `inheritEnv?` — `bool?`"
+    value: "```wing\nstruct ExecOptions extends CommandOptions {\n  cwd?: str;\n  env?: Map<str>;\n  inheritEnv?: bool;\n}\n```\n---\nAdditional options for `util.exec()`."
   sortText: hh|ExecOptions
 - label: NanoidOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct NanoidOptions\n```\n---\nOptions to generating a unique ID.\n### Fields\n- `alphabet?` — `str?` — Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.\n- `size?` — `num?` — Size of ID."
+    value: "```wing\nstruct NanoidOptions {\n  alphabet?: str;\n  size?: num;\n}\n```\n---\nOptions to generating a unique ID."
   sortText: hh|NanoidOptions
 - label: Output
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct Output\n```\n---\nOutput of a finished process.\n### Fields\n- `status` — `num` — A process's exit status.\n- `stderr` — `str` — The standard error of a finished process.\n- `stdout` — `str` — The standard output of a finished process."
+    value: "```wing\nstruct Output {\n  status: num;\n  stderr: str;\n  stdout: str;\n}\n```\n---\nOutput of a finished process."
   sortText: hh|Output
 - label: ShellOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ShellOptions extends CommandOptions\n```\n---\nAdditional options for `util.shell()`.\n### Fields\n- `cwd?` — `str?`\n- `env?` — `Map<str>?`\n- `inheritEnv?` — `bool?`\n- `throw?` — `bool?` — Whether to throw an error on command execution failure."
+    value: "```wing\nstruct ShellOptions extends CommandOptions {\n  cwd?: str;\n  env?: Map<str>;\n  inheritEnv?: bool;\n  throw?: bool;\n}\n```\n---\nAdditional options for `util.shell()`."
   sortText: hh|ShellOptions
+- label: SpawnOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct SpawnOptions extends CommandOptions {\n  cwd?: str;\n  env?: Map<str>;\n  inheritEnv?: bool;\n  stderr?: Stdio;\n  stdin?: Stdio;\n  stdout?: Stdio;\n}\n```\n---\nAdditional options for `util.spawn()`."
+  sortText: hh|SpawnOptions
 - label: UlidOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct UlidOptions\n```\n---\nOptions to generate universally unique lexicographically sortable identifiers.\n### Fields\n- `seed?` — `num?` — You can also input a seed time which will consistently give you the same string for the time component."
+    value: "```wing\nstruct UlidOptions {\n  seed?: num;\n}\n```\n---\nOptions to generate universally unique lexicographically sortable identifiers."
   sortText: hh|UlidOptions
 - label: WaitUntilProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WaitUntilProps\n```\n---\nProperties for `util.waitUntil`.\n### Fields\n- `interval?` — `duration?` — Interval between predicate retries.\n- `throws?` — `bool?` — Whether to throw an error if the timeout elapses.\n- `timeout?` — `duration?` — The timeout for keep trying predicate."
+    value: "```wing\nstruct WaitUntilProps {\n  interval?: duration;\n  throws?: bool;\n  timeout?: duration;\n}\n```\n---\nProperties for `util.waitUntil`."
   sortText: hh|WaitUntilProps
 - label: IPredicateHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IPredicateHandler extends IInflight\n```\n---\nA predicate with an inflight \"handle\" method that can be passed to `util.busyWait`.\n### Methods\n- `handle` — `inflight (): bool` — The Predicate function that is called.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninflight (): bool\n```\n---\nA predicate with an inflight \"handle\" method that can be passed to `util.busyWait`."
   sortText: ii|IPredicateHandler
 - label: IPredicateHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IPredicateHandlerClient\n```\n---\nInflight client for `IPredicateHandler`.\n### Methods\n- `handle` — `inflight (): bool` — The Predicate function that is called."
+    value: "```wing\ninflight (): bool\n```\n---\nInflight client for `IPredicateHandler`."
   sortText: ii|IPredicateHandlerClient
+- label: Stdio
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum Stdio {\n  INHERIT,\n  PIPED,\n  NULL,\n}\n```\n---\nDescribes what to do with a standard I/O stream for a child process."
+  sortText: jj|Stdio
 

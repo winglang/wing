@@ -1,3 +1,5 @@
+import fs from "fs";
+import { join } from "path";
 import { Construct } from "constructs";
 import { Api } from "./api";
 import { App } from "./app";
@@ -8,7 +10,6 @@ import { Endpoint } from "./endpoint";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
-import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
@@ -33,7 +34,7 @@ import {
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
-import { REACT_APP_FQN, REDIS_FQN, TABLE_FQN } from "../ex";
+import { REDIS_FQN, TABLE_FQN } from "../ex";
 import { IPlatform } from "../platform";
 import { TEST_RUNNER_FQN } from "../std";
 
@@ -90,9 +91,6 @@ export class Platform implements IPlatform {
       case QUEUE_FQN:
         return Queue;
 
-      case REACT_APP_FQN:
-        return ReactApp;
-
       case REDIS_FQN:
         return Redis;
 
@@ -119,8 +117,42 @@ export class Platform implements IPlatform {
 
       case WEBSITE_FQN:
         return Website;
+
+      // SIM_CONTAINER_FQN skipped - it's not a multi-target construct
+
+      // SIM_RESOURCE_FQN skipped - it's not a multi-target construct
     }
 
     return undefined;
+  }
+
+  public async storeSecrets(secrets: Record<string, string>): Promise<void> {
+    let existingSecretsContent = "";
+    const envFile = join(process.env.WING_SOURCE_DIR!, ".env");
+
+    try {
+      existingSecretsContent = fs.readFileSync(envFile, "utf8");
+    } catch (error) {}
+
+    const existingSecrets = existingSecretsContent
+      .split("\n")
+      .filter((line) => line.trim() !== "")
+      .reduce((s, line) => {
+        const [key, value] = line.split("=", 2);
+        s[key] = value;
+        return s;
+      }, {} as { [key: string]: string });
+
+    for (const key in secrets) {
+      existingSecrets[key] = secrets[key];
+    }
+
+    const updatedContent = Object.entries(existingSecrets)
+      .map(([key, value]) => `${key}=${value}`)
+      .join("\n");
+
+    fs.writeFileSync(envFile, updatedContent);
+
+    console.log(`${Object.keys(secrets).length} secret(s) stored in .env`);
   }
 }

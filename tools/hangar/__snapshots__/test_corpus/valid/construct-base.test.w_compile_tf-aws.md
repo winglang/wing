@@ -1,7 +1,7 @@
 # [construct-base.test.w](../../../../../examples/tests/valid/construct-base.test.w) | compile | tf-aws
 
-## inflight.WingResource-1.js
-```js
+## inflight.WingResource-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -11,7 +11,7 @@ module.exports = function({  }) {
   }
   return WingResource;
 }
-//# sourceMappingURL=inflight.WingResource-1.js.map
+//# sourceMappingURL=inflight.WingResource-1.cjs.map
 ```
 
 ## main.tf.json
@@ -45,8 +45,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -54,6 +54,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 const cx = require("constructs");
 const aws = require("@cdktf/provider-aws");
@@ -67,7 +68,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.WingResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.WingResource-1.cjs")({
           })
         `;
       }
@@ -107,6 +108,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "construct-base.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

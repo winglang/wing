@@ -24,6 +24,7 @@ export interface SectionProps {
 
 /**
  * A section can be used to group other visual components.
+ * @noinflight
  */
 export class Section extends VisualComponent {
   /**
@@ -93,11 +94,6 @@ export class Section extends VisualComponent {
       label: this.label,
       children: this.subcomponents.map((c) => c._toUIComponent()),
     };
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    return [];
   }
 
   /** @internal */

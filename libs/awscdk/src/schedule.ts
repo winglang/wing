@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Duration } from "aws-cdk-lib";
 import { Rule, Schedule as EventSchedule } from "aws-cdk-lib/aws-events";
 import {
@@ -8,8 +7,7 @@ import {
 import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
-import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
-import { convertUnixCronToAWSCron } from "@winglang/sdk/lib/shared-aws/schedule";
+import { ScheduleOnTickHandler, convertUnixCronToAWSCron } from "@winglang/sdk/lib/shared-aws/schedule";
 import { isAwsCdkFunction } from "./function";
 
 
@@ -54,14 +52,7 @@ export class Schedule extends cloud.Schedule {
     inflight: cloud.IScheduleOnTickHandler,
     props?: cloud.ScheduleOnTickOptions | undefined
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname,
-        "schedule.ontick.inflight.js"
-      ),
-      "ScheduleOnTickHandlerClient"
-    );
+    const functionHandler = ScheduleOnTickHandler.toFunctionHandler(inflight);
 
     const fn = new cloud.Function(
       // ok since we're not a tree root

@@ -252,7 +252,7 @@ new cloud.Function(checkEndpoint);
 ```
 
 However, mutation to preflight data is not allowed.
-This mean means that variables from preflight cannot be reassigned to, and mutable collections like `MutArray` and `MutMap` cannot be modified.
+This mean means that variables from preflight cannot be reassigned to, and mutable collections like `MutArray` and `MutMap` cannot be modified (they're turned into their immutable counterparts, `Array` and `Map`, respectively when accessed inflight).
 
 ```js playground
 let var count = 3;
@@ -263,8 +263,7 @@ names.push("Jack"); // OK
 
 inflight () => {
   count = count + 1; // error: Variable cannot be reassigned from inflight
-  names.push("Jill"); // error: variable "names" cannot be mutated in inflight - error message not 
-                      // implemented yet, see https://github.com/winglang/wing/issues/3069
+  names.push("Jill"); // error: push doesn't exist in Array
 };
 ```
 
@@ -309,7 +308,7 @@ new cloud.Function(inflight () => {
 });
 ```
 
-To explicitly qualify lifts in an inflight closure or inflight method and supress the above compiler error use the `lift()` utility function:
+To explicitly qualify lifts in an inflight closure or inflight method and suppress the above compiler error, create a `lift` block:
 
 ```js playground
 bring cloud;
@@ -317,15 +316,23 @@ let main_bucket = new cloud.Bucket() as "main";
 let secondary_bucket = new cloud.Bucket() as "backup";
 let use_main = true;
 new cloud.Function(inflight () => {
-  lift(main_bucket, ["put"]); // Explicitly sate the "put" may be used on `main_bucket`
-  lift(secondary_bucket, ["put"]); // Explicitly sate the "put" may be used on `secondary_bucket`
   let var b = main_bucket;
   if !use_main {
     b = secondary_bucket;
   }
-  b.put("key", "value"); // Error is supressed and all possible values of `b` were explicitly qualified with "put"
+  // Explicitly state that methods named `put` may be used on `main_bucket` and `secondary_bucket`
+  lift {main_bucket: [put], secondary_bucket: [put]} {
+    // Error is supressed in this block and all possible values of `b` are explicitly qualified with `put`
+    b.put("key1", "value"); 
+    b.put("key2", "value");
+  }
 });
 ```
+
+Within the first clause of the `lift` block, a list of qualifications on preflight objects can be added.
+
+Statements within a `lift` block are exempt from the compiler's analyzer that tries to determine preflight object usage automatically.
+If an inflight method is directly or indirectly called within a `lift` block without sufficient resource qualifications, it may result in errors at runtime.
 
 ## Phase-independent code
 

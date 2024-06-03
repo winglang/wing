@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, LiftMap } from "../core";
 import { Node, IInflight, Resource } from "../std";
 
 /**
@@ -18,9 +18,15 @@ export const TEST_FQN = fqnForType("std.Test");
 export interface TestProps extends FunctionProps {}
 
 /**
+ * Inflight interface for `Test`.
+ * @skipDocs
+ */
+export interface ITestClient {}
+
+/**
  * A unit test.
  *
- * @inflight `@winglang/sdk.cloud.ITestClient`
+ * @inflight `@winglang/sdk.std.ITestClient`
  * @skipDocs
  */
 export class Test extends Resource {
@@ -54,8 +60,8 @@ export class Test extends Resource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [];
+  public get _liftMap(): LiftMap {
+    return {};
   }
 
   /** @internal */

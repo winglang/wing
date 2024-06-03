@@ -40,9 +40,23 @@ topic.onMessage(inflight (message: str) => {
 });
 ```
 
+### Subscribing a Queue to a Topic
+
+```js
+bring cloud;
+
+let queue = new cloud.Queue();
+queue.setConsumer(inflight (message str) => {
+  log("Topic published message: {message}");
+});
+
+let topic = new cloud.Topic();
+topic.subscribeQueue(queue);
+```
+
 ### Publishing to a topic
 
-The inflight method `publish` sends a message to all of the topic's subscribers.
+The inflight method `publish` sends messages to all of the topic's subscribers.
 
 ```js
 bring cloud;
@@ -50,7 +64,10 @@ bring cloud;
 let topic = new cloud.Topic();
 
 inflight () => {
-  topic.publish("Hello World!");
+  topic.publish(
+    "Topics can now publish",
+    "multiple messages at once"
+  );
 };
 ```
 
@@ -135,12 +152,13 @@ new cloud.Topic(props?: TopicProps);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.onMessage">onMessage</a></code> | Run an inflight whenever an message is published to the topic. |
+| <code><a href="#@winglang/sdk.cloud.Topic.subscribeQueue">subscribeQueue</a></code> | Subscribing queue to the topic. |
 
 ##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish message to topic. |
+| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish messages to topic, if multiple messages are passed then they will be published as a batch if supported by the target platform. |
 
 ---
 
@@ -164,15 +182,35 @@ Run an inflight whenever an message is published to the topic.
 
 ---
 
+##### `subscribeQueue` <a name="subscribeQueue" id="@winglang/sdk.cloud.Topic.subscribeQueue"></a>
+
+```wing
+subscribeQueue(queue: Queue, props?: TopicSubscribeQueueOptions): void
+```
+
+Subscribing queue to the topic.
+
+###### `queue`<sup>Required</sup> <a name="queue" id="@winglang/sdk.cloud.Topic.subscribeQueue.parameter.queue"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.subscribeQueue.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions">TopicSubscribeQueueOptions</a>
+
+---
+
 ##### `publish` <a name="publish" id="@winglang/sdk.cloud.ITopicClient.publish"></a>
 
 ```wing
-inflight publish(message: str): void
+inflight publish(...messages: Array<str>): void
 ```
 
-Publish message to topic.
+Publish messages to topic, if multiple messages are passed then they will be published as a batch if supported by the target platform.
 
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.message"></a>
+###### `messages`<sup>Required</sup> <a name="messages" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.messages"></a>
 
 - *Type:* str
 
@@ -185,6 +223,7 @@ Payload to publish to Topic.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.cloud.Topic.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -213,6 +252,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Topic.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.cloud.Topic.toInflight"></a>
+
+```wing
+bring cloud;
+
+cloud.Topic.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Topic.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -343,6 +400,67 @@ bring cloud;
 let TopicProps = cloud.TopicProps{ ... };
 ```
 
+
+### TopicSubscribeQueueOptions <a name="TopicSubscribeQueueOptions" id="@winglang/sdk.cloud.TopicSubscribeQueueOptions"></a>
+
+Options for `Topic.subscribeQueue`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicSubscribeQueueOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let TopicSubscribeQueueOptions = cloud.TopicSubscribeQueueOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.dlq">dlq</a></code> | <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps">DeadLetterQueueProps</a></code> | A dead-letter queue. |
+| <code><a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue retains a message. |
+| <code><a href="#@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue's consumers have to process a message. |
+
+---
+
+##### `dlq`<sup>Optional</sup> <a name="dlq" id="@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.dlq"></a>
+
+```wing
+dlq: DeadLetterQueueProps;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.DeadLetterQueueProps">DeadLetterQueueProps</a>
+- *Default:* no dead letter queue
+
+A dead-letter queue.
+
+---
+
+##### `retentionPeriod`<sup>Optional</sup> <a name="retentionPeriod" id="@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.retentionPeriod"></a>
+
+```wing
+retentionPeriod: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1h
+
+How long a queue retains a message.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TopicSubscribeQueueOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 30s
+
+How long a queue's consumers have to process a message.
+
+---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 

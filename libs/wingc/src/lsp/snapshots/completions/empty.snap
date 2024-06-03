@@ -6,38 +6,26 @@ source: libs/wingc/src/lsp/completions.rs
   detail: Construct
   documentation:
     kind: markdown
-    value: "```wing\npreflight this: Construct\nclass Construct impl IConstruct\n```\n---\nRepresents the building block of the construct graph.\n\n### Remarks\nAll constructs besides the root construct must be created within the scope of\nanother construct.\n\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+    value: "Represents the building block of the construct graph.\n\n#### Remarks\nAll constructs besides the root construct must be created within the scope of\nanother construct."
   sortText: bb|this
 - label: assert
   kind: 3
-  detail: "(condition: bool): void"
+  detail: "(condition: bool, message: str?): void"
   documentation:
     kind: markdown
-    value: "```wing\nassert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n### Parameters\n- `condition` — `bool` — The condition to assert"
+    value: Asserts that a condition is true
   sortText: cc|assert
   insertText: assert($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: lift
-  kind: 3
-  detail: "inflight (preflightObject: Resource, qualifications: Array<str>): void"
-  documentation:
-    kind: markdown
-    value: "```wing\nlift: inflight (preflightObject: Resource, qualifications: Array<str>): void\n```\n---\nExplicitly apply qualifications to a preflight object used in the current method/function\n### Parameters\n- `preflightObject` — `Resource` — The preflight object to qualify\n- `qualifications` — `Array<str>` — \n\t\t\t\t\t\t\tThe qualifications to apply to the preflight object.\n\n\t\t\t\t\t\t\tThis is an array of strings denoting members of the object that are accessed in the current method/function.\n\n\t\t\t\t\t\t\tFor example, if the method accesses the `push` and `pop` members of a `cloud.Queue` object, the qualifications should be `[\"push\", \"pop\"]`."
-  sortText: cc|lift
-  insertText: lift($1)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
 - label: log
   kind: 3
-  detail: "(message: str): void"
+  detail: "(value: stringable): void"
   documentation:
     kind: markdown
-    value: "```wing\nlog: (message: str): void\n```\n---\nLogs a message\n### Parameters\n- `message` — `str` — The message to log"
+    value: Logs a value
   sortText: cc|log
   insertText: log($1)
   insertTextFormat: 2
@@ -49,7 +37,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "preflight (construct: IConstruct): Node"
   documentation:
     kind: markdown
-    value: "```wing\nnodeof: preflight (construct: IConstruct): Node\n```\n---\nObtain the tree node of a preflight resource.\n### Parameters\n- `construct` — `IConstruct` — The construct to obtain the tree node of"
+    value: Obtain the tree node of a preflight resource.
   sortText: cc|nodeof
   insertText: nodeof($1)
   insertTextFormat: 2
@@ -61,7 +49,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(value: any): any"
   documentation:
     kind: markdown
-    value: "```wing\nunsafeCast: (value: any): any\n```\n---\nCasts a value into a different type. This is unsafe and can cause runtime errors\n### Parameters\n- `value` — `any` — The value to cast into a different type"
+    value: Casts a value into a different type. This is unsafe and can cause runtime errors
   sortText: cc|unsafeCast
   insertText: unsafeCast($1)
   insertTextFormat: 2
@@ -77,12 +65,18 @@ source: libs/wingc/src/lsp/completions.rs
 - label: bool
   kind: 14
   sortText: kl|zybool
+- label: datetime
+  kind: 14
+  sortText: kl|zydatetime
 - label: duration
   kind: 14
   sortText: kl|zyduration
 - label: num
   kind: 14
   sortText: kl|zynum
+- label: regex
+  kind: 14
+  sortText: kl|zyregex
 - label: str
   kind: 14
   sortText: kl|zystr

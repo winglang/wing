@@ -170,6 +170,15 @@ export class App extends CdktfApp {
       },
     });
 
+    const privateSubnet2 = new Subnet(this, "PrivateSubnet2", {
+      vpcId: this._vpc.id,
+      cidrBlock: "10.0.8.0/22", // 10.0.8.0 - 10.0.11.255
+      availabilityZone: `${this.region}b`,
+      tags: {
+        Name: `${identifier}-private-subnet-2`,
+      },
+    });
+
     // Create the internet gateway
     const internetGateway = new InternetGateway(this, "InternetGateway", {
       vpcId: this._vpc.id,
@@ -217,6 +226,20 @@ export class App extends CdktfApp {
       },
     });
 
+    const privateRouteTable2 = new RouteTable(this, "PrivateRouteTable2", {
+      vpcId: this._vpc.id,
+      route: [
+        {
+          // This will route all traffic to the NAT gateway
+          cidrBlock: "0.0.0.0/0",
+          natGatewayId: nat.id,
+        },
+      ],
+      tags: {
+        Name: `${identifier}-private-route-table-2`,
+      },
+    });
+
     // Associate route tables with subnets
     new RouteTableAssociation(this, "PublicRouteTableAssociation", {
       subnetId: publicSubnet.id,
@@ -228,8 +251,14 @@ export class App extends CdktfApp {
       routeTableId: privateRouteTable.id,
     });
 
+    new RouteTableAssociation(this, "PrivateRouteTableAssociation2", {
+      subnetId: privateSubnet2.id,
+      routeTableId: privateRouteTable2.id,
+    });
+
     this.subnets.public.push(publicSubnet);
     this.subnets.private.push(privateSubnet);
+    this.subnets.private.push(privateSubnet2);
     return this._vpc;
   }
 }

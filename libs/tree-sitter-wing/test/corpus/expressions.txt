@@ -596,3 +596,69 @@ let mo = 10mo;
     value: (duration
       (months
         value: (number)))))
+
+================================================================================
+Array access
+================================================================================
+
+log(x[y]);
+x[y] += 3;
+assert(x[y] == w[z]);
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (call
+      (reference
+        (reference_identifier))
+      (argument_list
+        (positional_argument
+          (reference
+            (structured_access_expression
+              (reference
+                (reference_identifier))
+              (reference
+                (reference_identifier))))))))
+  (variable_assignment_statement
+    (lvalue
+      (structured_access_expression
+        (reference
+          (reference_identifier))
+        (reference
+          (reference_identifier))))
+    (assignment_operator)
+    (number))
+  (expression_statement
+    (call
+      (reference
+        (reference_identifier))
+      (argument_list
+        (positional_argument
+          (binary_expression
+            (reference
+              (structured_access_expression
+                (reference
+                  (reference_identifier))
+                (reference
+                  (reference_identifier))))
+            (reference
+              (structured_access_expression
+                (reference
+                  (reference_identifier))
+                (reference
+                  (reference_identifier))))))))))
+
+================================================================================
+Intrinsic
+================================================================================
+
+@hi();
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (intrinsic
+      (intrinsic_identifier)
+      (argument_list))))

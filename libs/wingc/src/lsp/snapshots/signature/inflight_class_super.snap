@@ -1,0 +1,12 @@
+---
+source: libs/wingc/src/lsp/signature.rs
+---
+signatures:
+  - label: "(sound: str): A"
+    documentation:
+      kind: markdown
+      value: ""
+    parameters:
+      - label: "sound: str"
+    activeParameter: 0
+

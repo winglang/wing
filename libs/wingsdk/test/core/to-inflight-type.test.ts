@@ -13,6 +13,7 @@ const skip = [
   "std.TestRunner",
   "std.TestRunnerInflightMethods",
   "std.TraceType",
+  "std.LogLevel",
   "std.TEST_RUNNER_FQN",
   "std.Resource",
   "std.AutoIdResource",

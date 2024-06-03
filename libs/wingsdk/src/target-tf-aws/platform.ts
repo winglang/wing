@@ -7,7 +7,6 @@ import { Endpoint } from "./endpoint";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
-import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
@@ -29,7 +28,7 @@ import {
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
-import { REACT_APP_FQN, REDIS_FQN, TABLE_FQN } from "../ex";
+import { REDIS_FQN, TABLE_FQN } from "../ex";
 import { IPlatform } from "../platform";
 import { Domain } from "../shared-aws/domain";
 import { TEST_RUNNER_FQN } from "../std";
@@ -162,13 +161,54 @@ export class Platform implements IPlatform {
       case DOMAIN_FQN:
         return Domain;
 
-      case REACT_APP_FQN:
-        return ReactApp;
-
       case ENDPOINT_FQN:
         return Endpoint;
     }
 
     return undefined;
+  }
+
+  public async storeSecrets(secrets: Record<string, string>): Promise<void> {
+    const {
+      SecretsManagerClient,
+      GetSecretValueCommand,
+      CreateSecretCommand,
+      UpdateSecretCommand,
+    } = await import("@aws-sdk/client-secrets-manager");
+
+    console.log("Storing secrets in AWS Secrets Manager");
+    const client = new SecretsManagerClient({});
+
+    for (const [name, value] of Object.entries(secrets)) {
+      try {
+        // Attempt to retrieve the secret to check if it exists
+        await client.send(new GetSecretValueCommand({ SecretId: name }));
+        console.log(`Secret ${name} exists, updating it.`);
+        await client.send(
+          new UpdateSecretCommand({
+            SecretId: name,
+            SecretString: value,
+          })
+        );
+      } catch (error: any) {
+        if (error.name === "ResourceNotFoundException") {
+          // If the secret does not exist, create it
+          console.log(`Secret ${name} does not exist, creating it.`);
+          await client.send(
+            new CreateSecretCommand({
+              Name: name,
+              SecretString: value,
+            })
+          );
+        } else {
+          console.error(`Failed to store secret ${name}:`, error);
+          throw error;
+        }
+      }
+    }
+
+    console.log(
+      `${Object.keys(secrets).length} secret(s) stored AWS Secrets Manager`
+    );
   }
 }

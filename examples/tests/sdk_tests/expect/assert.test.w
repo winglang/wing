@@ -38,6 +38,8 @@ expect.notNil(d);
 expect.notEqual(d, "world");
 expect.notEqual(d, 1);
 expect.notEqual(d, true);
+expect.match("this contains hello world string", "hello");
+expect.doesNotMatch("this contains some random string", "world");
 
 test "equal str" {
     expect.equal("hello", "hello");
@@ -47,6 +49,10 @@ test "equal str" {
     expect.notEqual(d, "world");
     expect.notEqual(d, 1);
     expect.notEqual(d, true);
+    expect.match("this contains hello world string", "hello");
+    expect.doesNotMatch("this contains some random string", "world");
+
+    
 }
 
 // Bool tests
@@ -66,6 +72,8 @@ test "equal bool" {
     expect.nil(e);
     expect.notNil(f);
     expect.notEqual(f, false);
+    expect.ok(true,"succeeds");
+    expect.ok(2<3);
 }
 
 // List of str tests
@@ -129,7 +137,7 @@ test "equal sets" {
 // FIXME: Doesn't work
 // ERROR: unable to serialize immutable data object of type Datetime
 
-// examples/tests/sdk_tests/expect/target/test/assert.main.wsim.256800.tmp/.wing/preflight.js:319
+// examples/tests/sdk_tests/expect/target/test/assert.main.wsim.256800.tmp/.wing/preflight.cjs:319
 
 // let dt = datetime.fromIso("2023-07-18T20:18:25.177+03:00");
 
@@ -168,6 +176,40 @@ let myClass = new MyClass(1, "hello");
 
 expect.equal(myClass, myClass);
 expect.notEqual(myClass, new MyClass(1, "hello world") as "yet another my class");
+
+test "positive fail test" {
+   try {
+    expect.fail("This is a failure");
+   }catch err{
+    expect.equal(err, "This is a failure");
+   }
+}
+
+test "negative ok test"{
+    try {
+        expect.ok(false,"This Fails with this message");
+       }catch err{
+        expect.equal(err, "This Fails with this message");
+       }
+
+}
+
+test "negative match test"{
+    try{
+        expect.match("this contains hello world string", "new string");
+    }catch err{
+        expect.equal(err, "The input did not match the regular expression new string");
+    }
+}
+
+test "negative doesNotMatch test"{
+    try{
+        expect.doesNotMatch("this contains some random string", "random");
+    }catch err{
+        expect.equal(err, "The input should not match the regular expression random");
+    }
+}
+
 
 // custom inflight Class test
 // ERROR: Values have same structure but are not reference-equal:

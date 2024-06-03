@@ -7,21 +7,31 @@ import {
   ScheduleTask,
 } from "./schema-resources";
 import { IFunctionClient, IScheduleClient, SCHEDULE_FQN } from "../cloud";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
-import { TraceType } from "../std";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
+import { LogLevel, TraceType } from "../std";
 
 export class Schedule
   implements IScheduleClient, ISimulatorResourceInstance, IEventPublisher
 {
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
   private tasks = new Array<ScheduleTask>();
   private interval: CronExpression;
   private intervalTimeout?: NodeJS.Timeout;
 
-  constructor(props: ScheduleSchema["props"], context: ISimulatorContext) {
-    this.context = context;
+  constructor(props: ScheduleSchema) {
     this.interval = parseExpression(props.cronExpression, { utc: true });
     this.scheduleFunction();
+  }
+
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
   }
 
   // Calculate the delay for the next execution
@@ -37,7 +47,8 @@ export class Schedule
     }, this.nextDelay(this.interval));
   }
 
-  public async init(): Promise<ScheduleAttributes> {
+  public async init(context: ISimulatorContext): Promise<ScheduleAttributes> {
+    this._context = context;
     return {};
   }
 
@@ -46,6 +57,10 @@ export class Schedule
   }
 
   public async save(): Promise<void> {}
+
+  public async plan() {
+    return UpdatePlan.AUTO;
+  }
 
   public async addEventSubscription(
     subscriber: string,
@@ -76,6 +91,7 @@ export class Schedule
 
       this.context.addTrace({
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         data: {
           message: `Running task with function handle: ${task.functionHandle}.`,
         },
@@ -93,6 +109,7 @@ export class Schedule
           sourceType: SCHEDULE_FQN,
           timestamp: new Date().toISOString(),
           type: TraceType.RESOURCE,
+          level: LogLevel.ERROR,
         });
       });
     }

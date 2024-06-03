@@ -1,7 +1,7 @@
 # [json_static.test.w](../../../../../examples/tests/valid/json_static.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $jj, $std_Json }) {
@@ -18,14 +18,14 @@ module.exports = function({ $jj, $std_Json }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $std_Json }) {
+module.exports = function({  }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -34,13 +34,13 @@ module.exports = function({ $std_Json }) {
     }
     async handle() {
       const hasCheck = ({"a": "hello", "b": "wing"});
-      $helpers.assert($helpers.eq(((json, key) => { return json.hasOwnProperty(key); })(hasCheck, "a"), true), "Json.has(hasCheck, \"a\") == true");
-      $helpers.assert($helpers.eq(((json, key) => { return json.hasOwnProperty(key); })(hasCheck, "c"), false), "Json.has(hasCheck, \"c\") == false");
+      $helpers.assert($helpers.eq(((obj, key) => { return obj.hasOwnProperty(key); })(hasCheck,"a"), true), "hasCheck.has(\"a\") == true");
+      $helpers.assert($helpers.eq(((obj, key) => { return obj.hasOwnProperty(key); })(hasCheck,"c"), false), "hasCheck.has(\"c\") == false");
     }
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
 ## main.tf.json
@@ -62,8 +62,8 @@ module.exports = function({ $std_Json }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -71,6 +71,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -83,7 +84,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $jj: ${$stdlib.core.liftObject(jj)},
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
@@ -119,8 +120,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
-            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
           })
         `;
       }
@@ -181,6 +181,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "json_static.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

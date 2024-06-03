@@ -3,14 +3,15 @@ import { ISimulatorResource } from "./resource";
 import {
   EventMappingSchema,
   EventSubscription,
-  FunctionHandle,
+  ResourceHandle,
 } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
+import { LiftMap } from "../core";
 import {
-  BaseResourceSchema,
   ISimulatorResourceInstance,
+  ToSimulatorOutput,
 } from "../simulator/simulator";
 import { IInflightHost, IResource, Node, Resource } from "../std";
 
@@ -24,7 +25,7 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
    * @param subscriptionProps additional subscription properties
    */
   addEventSubscription: (
-    subscriber: FunctionHandle,
+    subscriber: ResourceHandle,
     subscriptionProps: EventSubscription
   ) => Promise<void>;
 
@@ -33,7 +34,7 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
    * @param subscriber the subscriber function
    * @param subscriptionProps additional subscription properties
    */
-  removeEventSubscription: (subscriber: FunctionHandle) => Promise<void>;
+  removeEventSubscription: (subscriber: ResourceHandle) => Promise<void>;
 }
 
 export const EVENT_MAPPING_FQN = fqnForType("sim.EventMapping");
@@ -63,31 +64,28 @@ export class EventMapping extends Resource implements ISimulatorResource {
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [];
+  public get _liftMap(): LiftMap {
+    return {};
   }
 
   public get eventProps(): EventMappingProps {
     return this._eventProps;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: EventMappingSchema = {
-      type: EVENT_MAPPING_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        subscriber: simulatorHandleToken(this.eventProps.subscriber),
-        publisher: simulatorHandleToken(this.eventProps.publisher),
-        subscriptionProps: this.eventProps.subscriptionProps,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: EventMappingSchema = {
+      subscriber: simulatorHandleToken(this.eventProps.subscriber),
+      publisher: simulatorHandleToken(this.eventProps.publisher),
+      subscriptionProps: this.eventProps.subscriptionProps,
     };
-    return schema;
+    return {
+      type: EVENT_MAPPING_FQN,
+      props,
+    };
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
   }
 

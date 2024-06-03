@@ -1,4 +1,3 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
@@ -6,10 +5,13 @@ import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-sou
 import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { IAwsQueue } from "../shared-aws";
+import { AwsInflightHost, IAwsQueue } from "../shared-aws";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
+import {
+  Queue as AwsQueue,
+  QueueSetConsumerHandler,
+} from "../shared-aws/queue";
 import { Duration, IInflightHost, Node } from "../std";
 
 /**
@@ -24,7 +26,7 @@ const NAME_OPTS: NameOptions = {
 /**
  * AWS implementation of `cloud.Queue`.
  *
- * @inflight `@winglang/sdk.cloud.IQueueClient`
+ * @inflight `@winglang/sdk.aws.IAwsQueueClient`
  */
 export class Queue extends cloud.Queue implements IAwsQueue {
   private readonly queue: SqsQueue;
@@ -32,40 +34,49 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.queue = new SqsQueue(this, "Default", {
-      visibilityTimeoutSeconds: props.timeout
-        ? props.timeout.seconds
-        : Duration.fromSeconds(30).seconds,
-      messageRetentionSeconds: props.retentionPeriod
-        ? props.retentionPeriod.seconds
-        : Duration.fromHours(1).seconds,
-      name: ResourceNames.generateName(this, NAME_OPTS),
-    });
+    const queueOpt = props.dlq
+      ? {
+          visibilityTimeoutSeconds: props.timeout
+            ? props.timeout.seconds
+            : Duration.fromSeconds(30).seconds,
+          messageRetentionSeconds: props.retentionPeriod
+            ? props.retentionPeriod.seconds
+            : Duration.fromHours(1).seconds,
+          name: ResourceNames.generateName(this, NAME_OPTS),
+          redrivePolicy: JSON.stringify({
+            deadLetterTargetArn: AwsQueue.from(props.dlq.queue)?.queueArn,
+            maxReceiveCount:
+              props.dlq.maxDeliveryAttempts ?? cloud.DEFAULT_DELIVERY_ATTEMPTS,
+          }),
+        }
+      : {
+          visibilityTimeoutSeconds: props.timeout
+            ? props.timeout.seconds
+            : Duration.fromSeconds(30).seconds,
+          messageRetentionSeconds: props.retentionPeriod
+            ? props.retentionPeriod.seconds
+            : Duration.fromHours(1).seconds,
+          name: ResourceNames.generateName(this, NAME_OPTS),
+        };
+
+    this.queue = new SqsQueue(this, "Default", queueOpt);
   }
 
   /** @internal */
-  public _supportedOps(): string[] {
-    return [
-      cloud.QueueInflightMethods.PUSH,
-      cloud.QueueInflightMethods.PURGE,
-      cloud.QueueInflightMethods.APPROX_SIZE,
-      cloud.QueueInflightMethods.POP,
-    ];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.QueueInflightMethods.PUSH]: [],
+      [cloud.QueueInflightMethods.PURGE]: [],
+      [cloud.QueueInflightMethods.APPROX_SIZE]: [],
+      [cloud.QueueInflightMethods.POP]: [],
+    };
   }
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname.replace("target-tf-aws", "shared-aws"),
-        "queue.setconsumer.inflight.js"
-      ),
-      "QueueSetConsumerHandlerClient"
-    );
-
+    const functionHandler = QueueSetConsumerHandler.toFunctionHandler(inflight);
     const fn = new Function(
       // ok since we're not a tree root
       this.node.scope!,
@@ -79,9 +90,8 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       }
     );
 
-    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
-    if (!(fn instanceof Function)) {
-      throw new Error("Queue only supports creating tfaws.Function right now");
+    if (!AwsInflightHost.isAwsInflightHost(fn)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     fn.addPolicyStatements({
@@ -99,11 +109,14 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       functionName: fn.functionName,
       eventSourceArn: this.queue.arn,
       batchSize: props.batchSize ?? 1,
+      functionResponseTypes: ["ReportBatchItemFailures"], // It allows the function to return the messages that failed to the queue
     });
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.QueueInflightMethods.PUSH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: "setConsumer()",
     });
 
@@ -111,11 +124,11 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("queues can only be bound by tfaws.Function for now");
-    }
-
     const env = this.envName();
+
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
+    }
 
     host.addPolicyStatements(...calculateQueuePermissions(this.queue.arn, ops));
 

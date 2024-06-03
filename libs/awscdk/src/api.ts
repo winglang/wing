@@ -1,5 +1,4 @@
 import { createHash } from "crypto";
-import { join } from "path";
 import { Lazy } from "aws-cdk-lib";
 import {
   ApiDefinition,
@@ -11,9 +10,12 @@ import { CfnPermission } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
-import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
-import { IAwsApi, STAGE_NAME } from "@winglang/sdk/lib/shared-aws/api";
-import { API_DEFAULT_RESPONSE } from "@winglang/sdk/lib/shared-aws/api.default";
+import {
+  ApiEndpointHandler,
+  IAwsApi,
+  STAGE_NAME,
+} from "@winglang/sdk/lib/shared-aws/api";
+import { createApiDefaultResponse } from "@winglang/sdk/lib/shared-aws/api.default";
 import { isAwsCdkFunction } from "./function";
 
 /**
@@ -51,17 +53,14 @@ export class Api extends cloud.Api implements IAwsApi {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions
+    props?: cloud.ApiEndpointOptions,
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
 
-    if (props) {
-      console.warn(`Api.${lowerMethod} does not support props yet`);
-    }
     this._validatePath(path);
 
-    const fn = this.addHandler(inflight, method, path);
+    const fn = this.addHandler(inflight, method, path, props);
     const apiSpecEndpoint = this.api.addEndpoint(path, upperMethod, fn);
     this._addToSpec(path, upperMethod, apiSpecEndpoint, this.corsOptions);
 
@@ -186,9 +185,10 @@ export class Api extends cloud.Api implements IAwsApi {
   private addHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
+    props?: cloud.ApiEndpointOptions,
   ): cloud.Function {
-    return this.addInflightHandler(inflight, method, path);
+    return this.addInflightHandler(inflight, method, path, props);
   }
 
   /**
@@ -200,24 +200,21 @@ export class Api extends cloud.Api implements IAwsApi {
   private addInflightHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
+    props?: cloud.ApiEndpointOptions,
   ): cloud.Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
-      const newInflight = convertBetweenHandlers(
+      const newInflight = ApiEndpointHandler.toFunctionHandler(
         inflight,
-        join(__dirname, "api.onrequest.inflight.js"),
-        "ApiOnRequestHandlerClient",
-        {
-          corsHeaders: this._generateCorsHeaders(this.corsOptions)
-            ?.defaultResponse,
-        }
+        Api.renderCorsHeaders(this.corsOptions)?.defaultResponse
       );
       const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
       handler = new cloud.Function(
         this,
         App.of(this).makeId(this, prefix),
-        newInflight
+        newInflight,
+        props,
       );
       this.handlers[inflight._id] = handler;
     }
@@ -287,13 +284,16 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
-    const defaultResponse = API_DEFAULT_RESPONSE(props.cors);
-
     this.api = new SpecRestApi(this, `${id}`, {
       apiDefinition: ApiDefinition.fromInline(
         Lazy.any({
           produce: () => {
             const injectGreedy404Handler = (openApiSpec: cloud.OpenApiSpec) => {
+              const defaultResponse = createApiDefaultResponse(
+                Object.keys(openApiSpec.paths),
+                props.cors
+              );
+
               openApiSpec.paths = {
                 ...openApiSpec.paths,
                 ...defaultResponse,
@@ -385,7 +385,7 @@ class WingRestApi extends Construct {
       action: "lambda:InvokeFunction",
       functionName: handler.awscdkFunction.functionName,
       principal: "apigateway.amazonaws.com",
-      sourceArn: this.api.arnForExecuteApi(method, Api._toOpenApiPath(path)),
+      sourceArn: this.api.arnForExecuteApi(method, Api.renderOpenApiPath(path)),
     });
   };
 }

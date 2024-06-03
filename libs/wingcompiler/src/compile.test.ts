@@ -12,60 +12,72 @@ export async function generateTmpDir() {
   return mkdtemp(join(tmpdir(), "-wing-compile-test"));
 }
 
-describe(
-  "compile tests",
-  () => {
-    test("should produce stable artifacts for tf-aws", async () => {
-      const targetDir = `${await generateTmpDir()}/target`;
-      const artifactDir = await compile(exampleFilePath, {
-        platform: [BuiltinPlatform.TF_AWS],
-        targetDir,
-      });
-
-      const stats = await stat(artifactDir);
-      expect(stats.isDirectory()).toBeTruthy();
-      expect(artifactDir).toContain(targetDir);
-      expect(basename(artifactDir)).toEqual("enums.test.tfaws")
+describe("compile tests", () => {
+  test("should produce stable artifacts for tf-aws", async () => {
+    const targetDir = `${await generateTmpDir()}/target`;
+    const artifactDir = await compile(exampleFilePath, {
+      platform: [BuiltinPlatform.TF_AWS],
+      targetDir,
     });
 
-    test("should produce temp artifacts for tf-aws testing", async () => {
-      const targetDir = `${await generateTmpDir()}/target`;
-      const artifactDir = await compile(exampleFilePath, {
-        platform: [BuiltinPlatform.TF_AWS],
-        targetDir,
-        testing: true,
-      });
+    const stats = await stat(artifactDir);
+    expect(stats.isDirectory()).toBeTruthy();
+    expect(artifactDir).toContain(targetDir);
+    expect(basename(artifactDir)).toEqual("enums.test.tfaws");
+  });
 
-      const stats = await stat(artifactDir);
-      expect(stats.isDirectory()).toBeTruthy();
-      expect(artifactDir).toContain(targetDir);
-      expect(basename(artifactDir).match(/enums\.test\.tfaws\.\d+$/)).toBeTruthy();
+  test("should produce temp artifacts for tf-aws testing", async () => {
+    const targetDir = `${await generateTmpDir()}/target`;
+    const artifactDir = await compile(exampleFilePath, {
+      platform: [BuiltinPlatform.TF_AWS],
+      targetDir,
+      testing: true,
     });
 
-    test("should produce stable artifacts for sim", async () => {
-      const targetDir = `${await generateTmpDir()}/target`;
-      const artifactDir = await compile(exampleFilePath, {
-        platform: [BuiltinPlatform.SIM],
-        targetDir,
-      });
+    const stats = await stat(artifactDir);
+    expect(stats.isDirectory()).toBeTruthy();
+    expect(artifactDir).toContain(targetDir);
+    expect(basename(artifactDir).match(/enums\.test\.tfaws\.\d+$/)).toBeTruthy();
+  });
 
-      const stats = await stat(artifactDir);
-      expect(stats.isDirectory()).toBeTruthy();
-      expect(artifactDir).toContain(targetDir);
-      expect(basename(artifactDir)).toEqual("enums.test.wsim")
+  test("should produce stable artifacts for sim", async () => {
+    const targetDir = `${await generateTmpDir()}/target`;
+    const artifactDir = await compile(exampleFilePath, {
+      platform: [BuiltinPlatform.SIM],
+      targetDir,
     });
 
-    test("should produce stable artifacts for sim testing", async () => {
-      const targetDir = `${await generateTmpDir()}/target`;
-      const artifactDir = await compile(exampleFilePath, {
-        platform: [BuiltinPlatform.SIM],
-        targetDir,
-        testing: true,
-      });
+    const stats = await stat(artifactDir);
+    expect(stats.isDirectory()).toBeTruthy();
+    expect(artifactDir).toContain(targetDir);
+    expect(basename(artifactDir)).toEqual("enums.test.wsim");
+  });
 
-      const stats = await stat(artifactDir);
-      expect(stats.isDirectory()).toBeTruthy();
-      expect(artifactDir).toContain(targetDir);
-      expect(basename(artifactDir)).toEqual("enums.test.wsim")
+  test("should produce stable artifacts for sim testing", async () => {
+    const targetDir = `${await generateTmpDir()}/target`;
+    const artifactDir = await compile(exampleFilePath, {
+      platform: [BuiltinPlatform.SIM],
+      targetDir,
+      testing: true,
     });
+
+    const stats = await stat(artifactDir);
+    expect(stats.isDirectory()).toBeTruthy();
+    expect(artifactDir).toContain(targetDir);
+    expect(basename(artifactDir)).toEqual("enums.test.wsim");
+  });
+
+  test("should be able to override the target directory", async () => {
+    const output = `${await generateTmpDir()}/a/b/dir.out`;
+    const artifactDir = await compile(exampleFilePath, {
+      platform: [BuiltinPlatform.SIM],
+      output,
+      testing: true,
+    });
+
+    const stats = await stat(artifactDir);
+    expect(stats.isDirectory()).toBeTruthy();
+    expect(artifactDir).toBe(output);
+    expect(basename(artifactDir)).toEqual("dir.out");
+  });
 });

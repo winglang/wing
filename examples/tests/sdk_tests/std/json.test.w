@@ -6,8 +6,8 @@ bring cloud;
 test "has()" {
   let obj = Json { key1: 1, key2: 2};
 
-  assert(Json.has(obj, "key1") == true);
-  assert(Json.has(obj, "key3") == false);
+  assert(obj.has("key1") == true);
+  assert(obj.has("key3") == false);
 }
 
 test "get()" {
@@ -178,4 +178,12 @@ test "deepCopy(), deepCopyMut()" {
   assert(copy != copyMut);
 
   assert(copyMut.get("object") == mutation);
+}
+
+test "delete() for MutJson" {
+  let mutObj = MutJson { x: 1, y: 2 };
+  mutObj.delete("x");
+  assert(mutObj.has("x") == false);
+  assert(mutObj.has("y")==true);
+  assert(mutObj.delete("random key that doesn't exist") == true);
 }

@@ -69,6 +69,41 @@ describe("wing pack", () => {
     await expectNoTarball(outdir);
   });
 
+  it("throws an error if package.json uses dependencies instead of peerDependencies", async () => {
+    // GIVEN
+    const projectDir = join(fixturesDir, "invalid6");
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+
+    // WHEN
+    await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow(
+      /Cannot create package with "dependencies" in package.json. Use "peerDependencies" instead./
+    );
+
+    // THEN
+    await expectNoTarball(outdir);
+  });
+
+  it("includes empty dependencies in package.json", async () => {
+    // valid1's package.json contains this:
+    // {
+    //   ...
+    //   "dependencies": {}
+    // }
+
+    // GIVEN
+    const projectDir = join(fixturesDir, "valid1");
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+
+    // WHEN
+    await expect(pack({ outFile: join(outdir, "tarball.tgz") })).resolves.not.toThrow();
+
+    // THEN
+    const tarballContents = await extractTarball(join(outdir, "tarball.tgz"), outdir);
+    expect(tarballContents).toBeDefined();
+  });
+
   it("includes extra files specified by package.json", async () => {
     // valid1's package.json contains this:
     // {
@@ -190,32 +225,34 @@ describe("wing pack", () => {
 
     expect(Object.keys(tarballContents).sort()).toMatchInlineSnapshot(`
       [
-        "$lib/.wing/inflight.Store-2.js",
-        "$lib/.wing/inflight.Store-2.js.map",
-        "$lib/.wing/inflight.Util-1.js",
-        "$lib/.wing/inflight.Util-1.js.map",
-        "$lib/.wing/preflight.d.ts",
-        "$lib/.wing/preflight.enums-1.d.ts",
-        "$lib/.wing/preflight.enums-1.js",
-        "$lib/.wing/preflight.enums-1.js.map",
-        "$lib/.wing/preflight.js",
-        "$lib/.wing/preflight.js.map",
-        "$lib/.wing/preflight.store-3.d.ts",
-        "$lib/.wing/preflight.store-3.js",
-        "$lib/.wing/preflight.store-3.js.map",
-        "$lib/.wing/preflight.subdir-4.d.ts",
-        "$lib/.wing/preflight.subdir-4.js",
-        "$lib/.wing/preflight.subdir-4.js.map",
-        "$lib/.wing/preflight.util-2.d.ts",
-        "$lib/.wing/preflight.util-2.js",
-        "$lib/.wing/preflight.util-2.js.map",
+        "$lib/.wing/inflight.Store-2.cjs",
+        "$lib/.wing/inflight.Store-2.cjs.map",
+        "$lib/.wing/inflight.Util-1.cjs",
+        "$lib/.wing/inflight.Util-1.cjs.map",
+        "$lib/.wing/preflight.cjs",
+        "$lib/.wing/preflight.cjs.map",
+        "$lib/.wing/preflight.d.cts",
+        "$lib/.wing/preflight.enums-1.cjs",
+        "$lib/.wing/preflight.enums-1.cjs.map",
+        "$lib/.wing/preflight.enums-1.d.cts",
+        "$lib/.wing/preflight.store-3.cjs",
+        "$lib/.wing/preflight.store-3.cjs.map",
+        "$lib/.wing/preflight.store-3.d.cts",
+        "$lib/.wing/preflight.subdir-4.cjs",
+        "$lib/.wing/preflight.subdir-4.cjs.map",
+        "$lib/.wing/preflight.subdir-4.d.cts",
+        "$lib/.wing/preflight.util-2.cjs",
+        "$lib/.wing/preflight.util-2.cjs.map",
+        "$lib/.wing/preflight.util-2.d.cts",
         "LICENSE",
         "README.md",
         "enums.w",
         "package.json",
         "store.w",
         "subdir/util.w",
+        "util.extern.d.ts",
         "util.js",
+        "util.ts",
       ]
     `);
 

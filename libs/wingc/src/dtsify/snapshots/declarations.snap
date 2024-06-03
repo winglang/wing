@@ -35,7 +35,7 @@ pub class Child extends ParentClass impl ClassInterface {
 }
 ```
 
-## inflight.Child-1.js
+## inflight.Child-1.cjs
 
 ```js
 "use strict";
@@ -48,10 +48,10 @@ module.exports = function({ $ParentClass }) {
   }
   return Child;
 }
-//# sourceMappingURL=inflight.Child-1.js.map
+//# sourceMappingURL=inflight.Child-1.cjs.map
 ```
 
-## inflight.ParentClass-1.js
+## inflight.ParentClass-1.cjs
 
 ```js
 "use strict";
@@ -69,86 +69,37 @@ module.exports = function({  }) {
   }
   return ParentClass;
 }
-//# sourceMappingURL=inflight.ParentClass-1.js.map
+//# sourceMappingURL=inflight.ParentClass-1.cjs.map
 ```
 
-## preflight.d.ts
-
-```js
-export * from "./preflight.lib-1.js"
-```
-
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 module.exports = {
-  ...require("./preflight.lib-1.js"),
+  ...require("./preflight.lib-1.cjs"),
 };
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 
-## preflight.lib-1.d.ts
+## preflight.d.cts
 
 ```js
-import * as $internal from "@winglang/sdk/lib/core/types"
-import { std } from "@winglang/sdk"
-export interface Struct {
-  readonly n: number;
-  readonly d: (readonly (std.Duration)[]);
-  readonly j: Readonly<$internal.Json>;
-}
-export interface Interface
-{
-  readonly method: (s: Struct) => string;
-}
-export interface Interface$Inflight
-{
-  readonly inflightMethod: () => Promise<string>;
-}
-export interface ClassInterface
-{
-  readonly addHandler: (handler: $internal.Inflight<(arg0: string) => Promise<string>>) => void;
-}
-export interface ClassInterface$Inflight
-{
-  readonly bar: () => Promise<void>;
-}
-export class ParentClass extends std.Resource implements ClassInterface
-{
-  constructor(scope: $internal.Construct, id: string);
-  [$internal.INFLIGHT_SYMBOL]?: ParentClass$Inflight;
-  _supportedOps(): $internal.OperationsOf<ParentClass$Inflight>;
-  addHandler: (handler: $internal.Inflight<(arg0: string) => Promise<string>>) => void;
-}
-export class ParentClass$Inflight implements ClassInterface$Inflight
-{
-  constructor();
-  static static_method: () => Promise<void>;
-  bar: () => Promise<void>;
-}
-export class Child extends ParentClass implements ClassInterface
-{
-  constructor(scope: $internal.Construct, id: string);
-  [$internal.INFLIGHT_SYMBOL]?: Child$Inflight;
-  _supportedOps(): $internal.OperationsOf<Child$Inflight>;
-}
-export class Child$Inflight extends ParentClass$Inflight implements ClassInterface$Inflight
-{
-  constructor();
-}
+export * from "./preflight.lib-1.cjs"
 ```
 
-## preflight.lib-1.js
+## preflight.lib-1.cjs
 
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class ParentClass extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -157,7 +108,7 @@ class ParentClass extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.cjs")({
       })
     `;
   }
@@ -195,7 +146,7 @@ class Child extends ParentClass {
   }
   static _toInflightType() {
     return `
-      require("${$helpers.normalPath(__dirname)}/inflight.Child-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Child-1.cjs")({
         $ParentClass: ${$stdlib.core.liftObject(ParentClass)},
       })
     `;
@@ -219,6 +170,55 @@ class Child extends ParentClass {
   }
 }
 module.exports = { ParentClass, Child };
-//# sourceMappingURL=preflight.lib-1.js.map
+//# sourceMappingURL=preflight.lib-1.cjs.map
+```
+
+## preflight.lib-1.d.cts
+
+```js
+import * as $internal from "@winglang/sdk/lib/core/types"
+import { std } from "@winglang/sdk"
+export interface Struct {
+  readonly n: number;
+  readonly d: (readonly (std.Duration)[]);
+  readonly j: Readonly<$internal.Json>;
+}
+export interface Interface
+{
+  readonly method: (s: Struct) => string;
+}
+export interface Interface$Inflight
+{
+  readonly inflightMethod: () => Promise<string>;
+}
+export interface ClassInterface
+{
+  readonly addHandler: (handler: $internal.Inflight<(arg0: string) => Promise<string>>) => void;
+}
+export interface ClassInterface$Inflight
+{
+  readonly bar: () => Promise<void>;
+}
+export class ParentClass extends std.Resource implements ClassInterface
+{
+  constructor(scope: $internal.Construct, id: string);
+  [$internal.INFLIGHT_SYMBOL]?: ParentClass$Inflight;
+  addHandler: (handler: $internal.Inflight<(arg0: string) => Promise<string>>) => void;
+}
+export class ParentClass$Inflight implements ClassInterface$Inflight
+{
+  constructor();
+  static static_method: () => Promise<void>;
+  bar: () => Promise<void>;
+}
+export class Child extends ParentClass implements ClassInterface
+{
+  constructor(scope: $internal.Construct, id: string);
+  [$internal.INFLIGHT_SYMBOL]?: Child$Inflight;
+}
+export class Child$Inflight extends ParentClass$Inflight implements ClassInterface$Inflight
+{
+  constructor();
+}
 ```
 

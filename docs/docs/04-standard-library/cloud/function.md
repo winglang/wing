@@ -127,6 +127,25 @@ if let lambdaFn = aws.Function.from(f) {
 }
 ```
 
+To access the AWS Lambda context object, you can use the `aws.Function` class as shown below.
+
+```ts playground
+bring aws;
+bring cloud;
+
+let f = new cloud.Function(inflight () => {
+  if let ctx = aws.Function.context() {
+    log(ctx.logGroupName); // prints the log group name
+    log(ctx.logStreamName); // prints the log stream name
+
+    let remainingTime = ctx.remainingTimeInMillis();
+    assert(remainingTime > 0);
+  }
+});
+```
+
+The `context()` method returns `nil` when ran on non-AWS targets.
+
 ### Azure (`tf-azure`)
 
 The Azure implementation of `cloud.Function` uses [Azure Functions](https://azure.microsoft.com/en-us/products/functions).
@@ -211,7 +230,7 @@ Add an environment variable to the function.
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-inflight invoke(payload?: str): str
+inflight invoke(payload?: str): str?
 ```
 
 Invokes the function with a payload and waits for the result.
@@ -249,6 +268,7 @@ If not defined, an empty string will be passed.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Function.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.cloud.Function.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -277,6 +297,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Function.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.cloud.Function.toInflight"></a>
+
+```wing
+bring cloud;
+
+cloud.Function.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Function.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -439,7 +477,7 @@ Inflight client for `IFunctionHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle"></a>
 
 ```wing
-inflight handle(event?: str): str
+inflight handle(event?: str): str?
 ```
 
 Entrypoint function that will be called when the cloud function is invoked.

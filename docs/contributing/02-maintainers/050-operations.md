@@ -30,7 +30,7 @@ Monitoring may take one of two forms:
 
 - Polling monitors via BetterUptime check the status of GitHub actions and hosted sites to make sure they are currently reporting successfully
   - "GitHub Action" checks includes builds, release, and other scheduled jobs that provide additional health verification
-- Manual reports from users via Slack or Github Issues
+- Manual reports from users via Discord or Github Issues
 
 Manual reports also must be manually escalated to become actual incidents by any available maintainers.
 Ideally manual reports should be minimized, and we should constantly look for ways to automate the detection of issues.
@@ -67,7 +67,7 @@ Whatever action(s) are technically, it is useful for the responder to be over-co
 
 Another good response is to reach out to someone who has more information about the issue.
 This could be the person who wrote the code, or someone who has more context about the system.
-It is important to be respectful of maintainer time especially if they are not on-call or during regular working hours for their timezone (listed in Slack).
+It is important to be respectful of maintainer time especially if they are not on-call or during regular working hours for their timezone (listed in Discord).
 In P0 circumstances where no other mitigation is feasible, it is acceptable to ping/call someone on off-hours for help in resolving the issue.
 
 ### Analysis
@@ -125,7 +125,7 @@ Any maintainer should be empowered to take ownership of an incident if they wish
 - (always, immediately) send a Slack message to #alert
 - (always, immediately) notify the primary responder
 - (if not acknowledged within 10 minutes) notify the secondary responder
-- (if not acknowledged) Repeat everything above except for the slack message up to 6 times.
+- (if not acknowledged) Repeat everything above except for the Slack message up to 6 times.
 
 The notification channel and timing is configured per user. It's recommended to configure it in the following way:
 

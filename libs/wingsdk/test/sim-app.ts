@@ -2,9 +2,9 @@ import * as fs from "fs";
 import { join } from "path";
 import { onTestFailed } from "vitest";
 import { directorySnapshot, mkdtemp } from "./util";
-import { Function, IFunctionClient } from "../src/cloud";
+import { Function, IFunctionClient, IFunctionHandler } from "../src/cloud";
 import { PolyconFactory } from "../src/core";
-import { Simulator, Testing } from "../src/simulator";
+import { Simulator } from "../src/simulator";
 import { App } from "../src/target-sim/app";
 import { Platform } from "../src/target-sim/platform";
 
@@ -12,6 +12,11 @@ import { Platform } from "../src/target-sim/platform";
  * @see AppProps
  */
 export interface SimAppProps {
+  /**
+   * The output directory for the synthesized app.
+   * @default - a fresh temporary directory
+   */
+  readonly outdir?: string;
   readonly isTestEnvironment?: boolean;
   readonly rootConstruct?: any;
 }
@@ -28,7 +33,7 @@ export class SimApp extends App {
   private functionIndex: number = 0;
 
   constructor(props: SimAppProps = {}) {
-    const { isTestEnvironment, rootConstruct } = props;
+    const { isTestEnvironment, rootConstruct, outdir } = props;
 
     const platform = new Platform();
     const polyconFactory = new PolyconFactory([
@@ -36,7 +41,7 @@ export class SimApp extends App {
     ]);
 
     super({
-      outdir: mkdtemp(),
+      outdir: outdir ?? mkdtemp(),
       entrypointDir: __dirname,
       isTestEnvironment,
       rootConstruct,
@@ -44,10 +49,16 @@ export class SimApp extends App {
     });
 
     // symlink the node_modules so we can test imports and stuffs
-    fs.symlinkSync(
-      join(__dirname, "..", "node_modules"),
-      join(this.outdir, "node_modules")
-    );
+    try {
+      fs.symlinkSync(
+        join(__dirname, "..", "node_modules"),
+        join(this.outdir, "node_modules")
+      );
+    } catch (e) {
+      if (e.code !== "EEXIST") {
+        throw e;
+      }
+    }
   }
 
   /**
@@ -56,15 +67,10 @@ export class SimApp extends App {
    * @returns An "invoker" function which can be used to invoke the function after the simulator had
    * started.
    */
-  public newCloudFunction(code: string) {
+  public newCloudFunction(handler: IFunctionHandler) {
     const id = `Function.${this.functionIndex++}`;
-    new Function(
-      this,
-      id,
-      Testing.makeHandler(`async handle() {
-          ${code}
-        }`)
-    );
+
+    new Function(this, id, handler);
 
     // returns an "invoker" for this function
     return async (s: Simulator) => {

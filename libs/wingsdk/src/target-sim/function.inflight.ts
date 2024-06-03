@@ -1,38 +1,47 @@
 import * as path from "path";
 import { FunctionAttributes, FunctionSchema } from "./schema-resources";
 import { FUNCTION_FQN, IFunctionClient } from "../cloud";
-import { Bundle } from "../shared/bundling";
-import { Sandbox } from "../shared/sandbox";
+import { Bundle, isBundleInvalidated } from "../shared/bundling";
+import { Sandbox, SandboxTimeoutError } from "../shared/sandbox";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
+  UpdatePlan,
 } from "../simulator/simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
-  private readonly originalFile: string;
+  private readonly sourceCodeFile: string;
+  private originalFile!: string;
   private bundle: Bundle | undefined;
   private readonly env: Record<string, string>;
-  private readonly context: ISimulatorContext;
+  private _context: ISimulatorContext | undefined;
   private readonly timeout: number;
   private readonly maxWorkers: number;
   private readonly workers = new Array<Sandbox>();
-  private createBundlePromise: Promise<void>;
+  private createBundlePromise!: Promise<void>;
 
-  constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
+  constructor(props: FunctionSchema) {
+    this.sourceCodeFile = props.sourceCodeFile;
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
-    this.originalFile = path.resolve(context.simdir, props.sourceCodeFile);
     this.env = props.environmentVariables ?? {};
-    this.context = context;
     this.timeout = props.timeout;
     this.maxWorkers = props.concurrency;
-
-    this.createBundlePromise = this.createBundle();
   }
 
-  public async init(): Promise<FunctionAttributes> {
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  public async init(context: ISimulatorContext): Promise<FunctionAttributes> {
+    this._context = context;
+    this.originalFile = path.resolve(context.simdir, this.sourceCodeFile);
+    this.createBundlePromise = this.createBundle();
     return {};
   }
 
@@ -42,13 +51,32 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     // and the bundling code is allowed to run after the simulator has stopped, it might fail
     // and throw an error to the user because the files the simulator was using may no longer be there there.
     await this.createBundlePromise;
-
-    for (const worker of this.workers) {
-      await worker.cleanup();
-    }
+    await Promise.allSettled(this.workers.map((w) => w.cleanup()));
   }
 
   public async save(): Promise<void> {}
+
+  public async plan(invalidated: boolean): Promise<UpdatePlan> {
+    // If our function config changed, always replace
+    if (invalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    // Make sure that we don't have an ongoing bundle operation
+    await this.ensureBundled();
+
+    // Check if any of the bundled files have changed since the last bundling
+    const bundleInvalidated = await isBundleInvalidated(
+      this.originalFile,
+      this.bundle!,
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
+    );
+    if (bundleInvalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    return UpdatePlan.SKIP;
+  }
 
   public async invoke(payload: string): Promise<string> {
     return this.context.withTrace({
@@ -60,7 +88,17 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
             "Too many requests, the function has reached its concurrency limit."
           );
         }
-        return worker.call("handler", payload);
+        try {
+          return await worker.call("handler", payload);
+        } catch (err) {
+          if (err instanceof SandboxTimeoutError) {
+            throw new Error(
+              `Function timed out (it was configured with a timeout of ${this.timeout}ms).`
+            );
+          } else {
+            throw err;
+          }
+        }
       },
     });
   }
@@ -76,16 +114,19 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
           );
         }
         process.nextTick(() => {
-          // If the call fails, we log the error and continue since we've already
-          // handed control back to the caller.
           void worker.call("handler", payload).catch((e) => {
+            // If the call fails, we log the error and continue since we've already
+            // handed control back to the caller.
             this.context.addTrace({
               data: {
-                message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
+                message: `InvokeAsync (payload=${JSON.stringify(
+                  payload
+                )}) failure.`,
                 status: "failure",
                 error: e,
               },
-              type: TraceType.RESOURCE,
+              type: TraceType.LOG,
+              level: LogLevel.ERROR,
               sourcePath: this.context.resourcePath,
               sourceType: FUNCTION_FQN,
               timestamp: new Date().toISOString(),
@@ -97,9 +138,19 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 
   private async createBundle(): Promise<void> {
-    this.bundle = await Sandbox.createBundle(this.originalFile, (msg) => {
-      this.addTrace(msg);
-    });
+    this.bundle = await Sandbox.createBundle(
+      this.originalFile,
+      (msg, level) => {
+        this.addTrace(msg, TraceType.RESOURCE, level);
+      }
+    );
+  }
+
+  private async ensureBundled(): Promise<void> {
+    await this.createBundlePromise;
+    if (!this.bundle) {
+      throw new Error("Bundle not created");
+    }
   }
 
   // Used internally by cloud.Queue to apply backpressure
@@ -127,28 +178,30 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   private async initWorker(): Promise<Sandbox> {
     // ensure inflight code is bundled before we create any workers
-    await this.createBundlePromise;
+    await this.ensureBundled();
 
-    if (!this.bundle) {
-      throw new Error("Bundle not created");
-    }
-
-    return new Sandbox(this.bundle.entrypointPath, {
+    return new Sandbox(this.bundle!.outfilePath, {
       env: {
         ...this.env,
+        WING_SIMULATOR_CALLER: this.context.resourceHandle,
         WING_SIMULATOR_URL: this.context.serverUrl,
       },
       timeout: this.timeout,
-      log: (internal, _level, message) => {
-        this.addTrace(message, internal);
+      log: (internal, level, message) => {
+        this.addTrace(
+          message,
+          internal ? TraceType.SIMULATOR : TraceType.LOG,
+          level
+        );
       },
     });
   }
 
-  private addTrace(message: string, internal: boolean = true) {
+  private addTrace(message: string, type: TraceType, level: LogLevel) {
     this.context.addTrace({
       data: { message },
-      type: internal ? TraceType.RESOURCE : TraceType.LOG,
+      type,
+      level,
       sourcePath: this.context.resourcePath,
       sourceType: FUNCTION_FQN,
       timestamp: new Date().toISOString(),

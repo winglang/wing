@@ -1,0 +1,7 @@
+{
+  "name": "examples-valid-esm",
+  "type": "module",
+  "volta": {
+    "extends": "../../../package.json"
+  }
+}

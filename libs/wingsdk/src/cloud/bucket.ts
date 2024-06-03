@@ -1,12 +1,11 @@
 import * as fs from "fs";
 import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
-import { Topic } from "./topic";
+import { ITopicOnMessageHandler, Topic, TopicInflightMethods } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
-import { convertBetweenHandlers } from "../shared/convert";
 import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
 
 /**
@@ -91,15 +90,7 @@ export class Bucket extends Resource {
    */
   protected createTopic(actionType: BucketEventType): Topic {
     const topic = new Topic(this, actionType.toLowerCase());
-
     this.node.addDependency(topic);
-
-    Node.of(this).addConnection({
-      source: this,
-      target: topic,
-      name: `${actionType}()`,
-    });
-
     return topic;
   }
 
@@ -107,7 +98,7 @@ export class Bucket extends Resource {
    * Gets topic form the topics map, or creates if not exists
    * @param actionType
    */
-  private getTopic(actionType: BucketEventType): Topic {
+  protected getTopic(actionType: BucketEventType): Topic {
     if (!this._topics.has(actionType)) {
       this._topics.set(actionType, this.createTopic(actionType));
     }
@@ -115,30 +106,17 @@ export class Bucket extends Resource {
   }
 
   /**
-   * Resolves the path to the bucket.onevent.inflight file
-   */
-  protected eventHandlerLocation(): string {
-    throw new Error(
-      "please specify under the target file (to get the right relative path)"
-    );
-  }
-
-  /**
    * Creates an inflight handler from inflight code
    * @param eventType
    * @param inflight
    */
-  private createInflightHandler(
+  protected createTopicHandler(
     eventType: BucketEventType,
     inflight: IBucketEventHandler
-  ): IInflight {
-    return convertBetweenHandlers(
-      inflight,
-      // since uses __dirname should be specified under the target directory
-      this.eventHandlerLocation(),
-      "BucketEventHandlerClient",
-      { eventType }
-    );
+  ): ITopicOnMessageHandler {
+    eventType;
+    inflight;
+    throw new Error("Method not implemented.");
   }
 
   /**
@@ -154,19 +132,55 @@ export class Bucket extends Resource {
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
-      this.getTopic(BucketEventType.CREATE).onMessage(
-        this.createInflightHandler(BucketEventType.CREATE, inflight)
+      const topic = this.getTopic(BucketEventType.CREATE).onMessage(
+        this.createTopicHandler(BucketEventType.CREATE, inflight)
       );
+      for (const op of [
+        BucketInflightMethods.PUT,
+        BucketInflightMethods.PUT_JSON,
+      ]) {
+        Node.of(this).addConnection({
+          source: this,
+          sourceOp: op,
+          target: topic,
+          targetOp: TopicInflightMethods.PUBLISH,
+          name: BucketEventType.CREATE,
+        });
+      }
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
-      this.getTopic(BucketEventType.UPDATE).onMessage(
-        this.createInflightHandler(BucketEventType.UPDATE, inflight)
+      const topic = this.getTopic(BucketEventType.UPDATE).onMessage(
+        this.createTopicHandler(BucketEventType.UPDATE, inflight)
       );
+      for (const op of [
+        BucketInflightMethods.PUT,
+        BucketInflightMethods.PUT_JSON,
+      ]) {
+        Node.of(this).addConnection({
+          source: this,
+          sourceOp: op,
+          target: topic,
+          targetOp: TopicInflightMethods.PUBLISH,
+          name: BucketEventType.UPDATE,
+        });
+      }
     }
     if (eventNames.includes(BucketEventType.DELETE)) {
-      this.getTopic(BucketEventType.DELETE).onMessage(
-        this.createInflightHandler(BucketEventType.DELETE, inflight)
+      const topic = this.getTopic(BucketEventType.DELETE).onMessage(
+        this.createTopicHandler(BucketEventType.DELETE, inflight)
       );
+      for (const op of [
+        BucketInflightMethods.DELETE,
+        BucketInflightMethods.TRY_DELETE,
+      ]) {
+        Node.of(this).addConnection({
+          source: this,
+          sourceOp: op,
+          target: topic,
+          targetOp: TopicInflightMethods.PUBLISH,
+          name: BucketEventType.DELETE,
+        });
+      }
     }
   }
 
@@ -469,9 +483,12 @@ export interface BucketOnEventOptions {}
  * A resource with an inflight "handle" method that can be passed to
  * the bucket events.
  *
- * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
+ * @inflight `@winglang/sdk.cloud.IBucketEventHandlerClient`
  */
-export interface IBucketEventHandler extends IInflight {}
+export interface IBucketEventHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IBucketEventHandlerClient["handle"];
+}
 
 /**
  * A resource with an inflight "handle" method that can be passed to

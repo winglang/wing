@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: otherInflight
+  kind: 2
+  detail: "inflight (): void"
+  sortText: ff|otherInflight
+  insertText: otherInflight()
+- label: status
+  kind: 2
+  detail: "inflight (): num"
+  sortText: ff|status
+  insertText: status()
+

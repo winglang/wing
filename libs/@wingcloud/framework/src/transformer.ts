@@ -27,41 +27,15 @@ export class InflightTransformer {
       return false;
     }
 
-    function getImportSpecifier(node: ts.Declaration): string {
-      if (ts.isImportSpecifier(node)) {
-        return node.parent.parent.parent.moduleSpecifier.getText();
-      } else if (ts.isNamespaceImport(node)) {
-        return node.parent.parent.moduleSpecifier.getText();
-      } else if (ts.isImportClause(node)) {
-        return node.parent.moduleSpecifier.getText();
-      }
-      return "";
-    }
-
     /**
-     * Checks if the given node is a reference to the `inflight` function from this library
+     * Checks if the given node is a reference to special `inflight` symbol
+     * This will be any symbol that has a jsdoc tag `@wing inflight`
      */
     function isInflightSymbol(node: ts.Node) {
-      let sym = typeChecker.getSymbolAtLocation(node);
-      if (!sym) return false;
-
-      if (sym.name === "inflight") {
-        const decl = sym.declarations?.at(0);
-        if (!decl) {
-          return true;
-        } else if (
-          decl
-            .getSourceFile()
-            .fileName.replaceAll("\\", "/")
-            .includes("/@wingcloud/framework/")
-        ) {
-          return true;
-        } else {
-          return getImportSpecifier(decl) === '"@wingcloud/framework"';
-        }
-      }
-
-      return false;
+      let sym = typeChecker.getTypeAtLocation(node).symbol;
+      const docs = sym.getJsDocTags(typeChecker);
+      const wingDoc = docs?.find((doc) => doc.name === "wing");
+      return wingDoc?.text?.[0]?.text === "inflight";
     }
 
     return (sourceFile: ts.SourceFile) => {

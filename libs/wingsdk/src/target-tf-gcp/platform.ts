@@ -3,9 +3,10 @@ import { App } from "./app";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
+import { Schedule } from "./schedule";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
-import { BUCKET_FQN, COUNTER_FQN, FUNCTION_FQN } from "../cloud";
+import { BUCKET_FQN, COUNTER_FQN, FUNCTION_FQN, SCHEDULE_FQN } from "../cloud";
 import { TABLE_FQN } from "../ex";
 import { IPlatform } from "../platform";
 import { TEST_RUNNER_FQN } from "../std";
@@ -47,6 +48,8 @@ export class Platform implements IPlatform {
         return Table;
       case COUNTER_FQN:
         return Counter;
+      case SCHEDULE_FQN:
+        return Schedule;
     }
 
     return undefined;

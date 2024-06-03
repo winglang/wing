@@ -11,8 +11,8 @@ test "expect.equal" {
   expect.equal(1,2 );
 }
 
-test "bucket failed get" {
-  bucket.get("doesn't exist");
+test "bucket failed delete" {
+  bucket.delete("doesn't exist", mustExist: true);
 }
 
 test "throw from closure" {
@@ -20,4 +20,9 @@ test "throw from closure" {
     throw "ouch";
   };
   closure();
+}
+
+test "assert with message" {
+  let x = false;
+  assert(x, "x is false");
 }

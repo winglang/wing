@@ -220,6 +220,15 @@ where
 			}
 		}
 		StmtKind::CompilerDebugEnv => {}
+		StmtKind::ExplicitLift(explict_lift) => {
+			for q in explict_lift.qualifications.iter() {
+				v.visit_expr(&q.obj);
+				for op in q.ops.iter() {
+					v.visit_symbol(op);
+				}
+			}
+			v.visit_scope(&explict_lift.statements);
+		}
 	}
 }
 
@@ -286,8 +295,9 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	v.visit_symbol(&node.name);
-	for value in &node.values {
+	for (value, _doc) in &node.values {
 		v.visit_symbol(value);
+		// TODO: Visit _doc
 	}
 }
 
@@ -326,6 +336,12 @@ where
 		}
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
+		}
+		ExprKind::Intrinsic(instrinsic) => {
+			v.visit_symbol(&instrinsic.name);
+			if let Some(arg_list) = &instrinsic.arg_list {
+				v.visit_args(arg_list);
+			}
 		}
 		ExprKind::Call { callee, arg_list } => {
 			match callee {
@@ -408,6 +424,7 @@ where
 		Literal::Boolean(_) => {}
 		Literal::Number(_) => {}
 		Literal::String(_) => {}
+		Literal::NonInterpolatedString(_) => {}
 	}
 }
 
@@ -430,6 +447,10 @@ where
 		Reference::TypeMember { type_name, property } => {
 			v.visit_user_defined_type(type_name);
 			v.visit_symbol(property);
+		}
+		Reference::ElementAccess { object, index } => {
+			v.visit_expr(object);
+			v.visit_expr(index);
 		}
 	}
 }

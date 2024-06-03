@@ -14,7 +14,6 @@ import type {
 import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
 import type { FileLink } from "../utils/createRouter.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { isTermsAccepted, getLicense } from "../utils/terms-and-conditions.js";
 import type { IFunctionClient, Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -130,18 +129,6 @@ export const createAppRouter = () => {
         getNodeIds(node);
         return list;
       }),
-    "app.selectNode": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string().optional(),
-        }),
-      )
-      .mutation(async ({ ctx, input }) => {
-        ctx.setSelectedNode(input.resourcePath ?? "");
-      }),
-    "app.selectedNode": createProcedure.query(async ({ ctx }) => {
-      return ctx.getSelectedNode();
-    }),
     "app.nodeBreadcrumbs": createProcedure
       .input(
         z.object({
@@ -296,18 +283,21 @@ export const createAppRouter = () => {
       .input(
         z.object({
           edgeId: z.string(),
-          showTests: z.boolean().optional(),
         }),
       )
       .query(async ({ ctx, input }) => {
-        const { edgeId, showTests } = input;
+        const { edgeId } = input;
         const simulator = await ctx.simulator();
 
         const { tree } = simulator.tree().rawData();
         const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
 
-        const sourcePath = edgeId.split("->")[0]?.trim();
-        const targetPath = edgeId.split("->")[1]?.trim();
+        let [, sourcePath, _sourceInflight, , targetPath, targetInflight] =
+          edgeId.match(/^(.+?)#(.*?)#(.*?)#(.+?)#(.*?)#(.*?)$/i) ?? [];
+
+        targetPath = targetPath?.startsWith("#")
+          ? targetPath.slice(1)
+          : targetPath;
 
         const sourceNode = nodeMap.get(sourcePath);
         if (!sourceNode) {
@@ -325,51 +315,26 @@ export const createAppRouter = () => {
           });
         }
 
-        const connections = simulator.connections();
-
-        const inflights = sourceNode.display?.hidden
-          ? []
-          : connections
-              ?.filter(({ source, target, name }) => {
-                if (!isFoundInPath(sourceNode, nodeMap, source, true)) {
-                  return false;
-                }
-
-                if (!isFoundInPath(targetNode, nodeMap, target, true)) {
-                  return false;
-                }
-
-                if (name === "$inflight_init()") {
-                  return false;
-                }
-
-                if (
-                  !showTests &&
-                  (matchTest(sourceNode.path) || matchTest(targetNode.path))
-                ) {
-                  return false;
-                }
-
-                return true;
-              })
-              .map((connection) => {
-                return {
-                  name: connection.name,
-                };
-              }) ?? [];
-
         return {
           source: {
             id: sourceNode.id,
             path: sourceNode.path,
             type: getResourceType(sourceNode, simulator),
+            display: sourceNode.display,
           },
           target: {
             id: targetNode?.id ?? "",
             path: targetNode?.path ?? "",
             type: (targetNode && getResourceType(targetNode, simulator)) ?? "",
+            display: targetNode.display,
           },
-          inflights,
+          inflights: targetInflight
+            ? [
+                {
+                  name: targetInflight,
+                },
+              ]
+            : [],
         };
       }),
     "app.invalidateQuery": createProcedure.subscription(({ ctx }) => {
@@ -388,42 +353,17 @@ export const createAppRouter = () => {
         };
       });
     }),
-    "app.map": createProcedure
-      .input(
-        z
-          .object({
-            showTests: z.boolean().optional(),
-          })
-          .optional(),
-      )
-      .query(async ({ ctx, input }) => {
-        const simulator = await ctx.simulator();
+    "app.map": createProcedure.query(async ({ ctx }) => {
+      const simulator = await ctx.simulator();
 
-        const { tree } = simulator.tree().rawData();
-        const connections = simulator.connections();
-        const shakedTree = shakeTree(tree);
-        const nodeMap = buildConstructTreeNodeMap(shakedTree);
-        const nodes = [
-          createMapNodeFromConstructTreeNode(
-            shakedTree,
-            simulator,
-            input?.showTests,
-          ),
-        ];
-        const edges = uniqby(
-          createMapEdgesFromConnectionData(
-            nodeMap,
-            connections,
-            input?.showTests,
-          ),
-          (edge) => edge.id,
-        );
+      const { tree } = simulator.tree().rawData();
+      const connections = simulator.connections();
 
-        return {
-          nodes,
-          edges,
-        };
-      }),
+      return {
+        tree,
+        connections,
+      };
+    }),
     "app.state": createProcedure.query(async ({ ctx }) => {
       return ctx.appState();
     }),
@@ -469,37 +409,8 @@ export const createAppRouter = () => {
         return ui as Array<{
           kind: string;
           label: string;
-          handler: string;
+          handler: string | Record<string, string>;
         }>;
-      }),
-    "app.getResourceUiField": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string(),
-        }),
-      )
-      .query(async ({ input, ctx }) => {
-        const simulator = await ctx.simulator();
-        const client = simulator.getResource(
-          input.resourcePath,
-        ) as IFunctionClient;
-        return {
-          value: await client.invoke(""),
-        };
-      }),
-
-    "app.invokeResourceUiButton": createProcedure
-      .input(
-        z.object({
-          resourcePath: z.string(),
-        }),
-      )
-      .mutation(async ({ input, ctx }) => {
-        const simulator = await ctx.simulator();
-        const client = simulator.getResource(
-          input.resourcePath,
-        ) as IFunctionClient;
-        await client.invoke("");
       }),
 
     "app.analytics": createProcedure.query(async ({ ctx }) => {
@@ -551,7 +462,12 @@ function createExplorerItemFromConstructTreeNode(
   showTests = false,
   includeHiddens = false,
 ): ExplorerItem {
-  const label = node.display?.title ?? node.id;
+  const cloudResourceType = node.constructInfo?.fqn?.split(".").at(-1);
+
+  const label =
+    node.display?.title === cloudResourceType
+      ? node.id
+      : node.display?.title ?? node.id;
 
   return {
     id: node.path,
@@ -626,45 +542,6 @@ export interface MapEdge {
   id: string;
   source: string;
   target: string;
-}
-
-function createMapEdgesFromConnectionData(
-  nodeMap: ConstructTreeNodeMap,
-  connections: NodeConnection[],
-  showTests = false,
-): MapEdge[] {
-  return [
-    ...connections
-      .filter((connection) => {
-        return connectionsBasicFilter(connection, nodeMap, showTests);
-      })
-      ?.map((connection: NodeConnection) => {
-        const source = getVisualNodePath(connection.source, nodeMap);
-        const target = getVisualNodePath(connection.target, nodeMap);
-        return {
-          id: `${source} -> ${target}`,
-          source,
-          target,
-        };
-      })
-      ?.filter(({ source, target }) => {
-        // Remove redundant connections to a parent resource if there's already a connection to a child resource.
-        if (
-          connections.some((connection) => {
-            if (
-              connection.source === source &&
-              connection.target.startsWith(`${target}/`)
-            ) {
-              return true;
-            }
-          })
-        ) {
-          return false;
-        }
-
-        return true;
-      }),
-  ].flat();
 }
 
 function getResourceType(

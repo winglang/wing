@@ -5,12 +5,15 @@ signatures:
   - label: "(key: str, ...opts): void"
     documentation:
       kind: markdown
-      value: "Delete an existing object using a key from the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n- `...opts` — `BucketDeleteOptions?` — Options available for delete an item from a bucket.\n  \n  - `mustExist?` — `bool?` — Check failures on the method and retrieve errors if any."
+      value: Delete an existing object using a key from the bucket.
     parameters:
       - label: "key: str"
+        documentation:
+          kind: markdown
+          value: "Key of the object.\n\n"
       - label: "...opts"
         documentation:
           kind: markdown
-          value: "```wing\nstruct BucketDeleteOptions\n```\n---\nOptions for `Bucket.delete()`.\n### Fields\n- `mustExist?` — `bool?` — Check failures on the method and retrieve errors if any."
+          value: "```wing\nstruct BucketDeleteOptions {\n  mustExist?: bool;\n}\n```\n"
     activeParameter: 1
 

@@ -1,37 +1,59 @@
 import { resolve } from "path";
 import { ServiceAttributes, ServiceSchema } from "./schema-resources";
 import { IServiceClient, SERVICE_FQN } from "../cloud";
-import { Bundle } from "../shared/bundling";
+import { Bundle, isBundleInvalidated } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
-import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
-import { TraceType } from "../std";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+  UpdatePlan,
+} from "../simulator";
+import { LogLevel, TraceType } from "../std";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {
-  private readonly context: ISimulatorContext;
-  private readonly originalFile: string;
+  private _context: ISimulatorContext | undefined;
+  private readonly sourceCodeFile: string;
   private readonly autoStart: boolean;
+  private resolvedSourceCodeFile!: string;
   private sandbox: Sandbox | undefined;
   private bundle: Bundle | undefined;
-  private createBundlePromise: Promise<void>;
   private running: boolean = false;
   private environmentVariables: Record<string, string>;
+  private createBundlePromise!: Promise<void>;
 
-  constructor(props: ServiceSchema["props"], context: ISimulatorContext) {
-    this.context = context;
-    this.originalFile = resolve(context.simdir, props.sourceCodeFile);
+  constructor(props: ServiceSchema) {
+    this.sourceCodeFile = props.sourceCodeFile;
     this.autoStart = props.autoStart;
     this.environmentVariables = props.environmentVariables ?? {};
+  }
 
-    this.createBundlePromise = this.createBundle();
+  private get context(): ISimulatorContext {
+    if (!this._context) {
+      throw new Error("Cannot access context during class construction");
+    }
+    return this._context;
+  }
+
+  private async ensureBundled(): Promise<void> {
+    await this.createBundlePromise;
+    if (!this.bundle) {
+      throw new Error("Bundle not created");
+    }
   }
 
   private async createBundle(): Promise<void> {
-    this.bundle = await Sandbox.createBundle(this.originalFile, (msg) => {
-      this.addTrace(msg);
-    });
+    this.bundle = await Sandbox.createBundle(
+      this.resolvedSourceCodeFile,
+      (msg, level) => {
+        this.addTrace(msg, TraceType.RESOURCE, level);
+      }
+    );
   }
 
-  public async init(): Promise<ServiceAttributes> {
+  public async init(context: ISimulatorContext): Promise<ServiceAttributes> {
+    this._context = context;
+    this.resolvedSourceCodeFile = resolve(context.simdir, this.sourceCodeFile);
+    this.createBundlePromise = this.createBundle();
     if (this.autoStart) {
       await this.start();
     }
@@ -39,10 +61,32 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {
+    await this.createBundlePromise;
     await this.stop();
   }
 
   public async save(): Promise<void> {}
+
+  public async plan(invalidated: boolean): Promise<UpdatePlan> {
+    if (invalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    // Make sure that we don't have an ongoing bundle operation
+    await this.ensureBundled();
+
+    // Check if any of the bundled files have changed since the last bundling
+    const bundleInvalidated = await isBundleInvalidated(
+      this.resolvedSourceCodeFile,
+      this.bundle!,
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
+    );
+    if (bundleInvalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    return UpdatePlan.SKIP;
+  }
 
   public async start(): Promise<void> {
     // Do nothing if service is already running.
@@ -53,17 +97,26 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     await this.createBundlePromise;
 
     if (!this.bundle) {
-      this.addTrace("Failed to start service: bundle is not created");
+      this.addTrace(
+        "Failed to start service: bundle is not created",
+        TraceType.RESOURCE,
+        LogLevel.ERROR
+      );
       return;
     }
 
-    this.sandbox = new Sandbox(this.bundle.entrypointPath, {
+    this.sandbox = new Sandbox(this.bundle.outfilePath, {
       env: {
         ...this.environmentVariables,
         WING_SIMULATOR_URL: this.context.serverUrl,
+        WING_SIMULATOR_CALLER: this.context.resourceHandle,
       },
-      log: (internal, _level, message) => {
-        this.addTrace(message, internal);
+      log: (internal, level, message) => {
+        this.addTrace(
+          message,
+          internal ? TraceType.SIMULATOR : TraceType.LOG,
+          level
+        );
       },
     });
 
@@ -71,7 +124,11 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       await this.sandbox.call("start");
       this.running = true;
     } catch (e: any) {
-      this.addTrace(`Failed to start service: ${e.message}`);
+      this.addTrace(
+        `Failed to start service: ${e.message}`,
+        TraceType.RESOURCE,
+        LogLevel.ERROR
+      );
     }
   }
 
@@ -87,7 +144,11 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       await this.sandbox.call("stop");
       await this.sandbox.cleanup();
     } catch (e: any) {
-      this.addTrace(`Failed to stop service: ${e.message}`);
+      this.addTrace(
+        `Failed to stop service: ${e.message} ${e.stack}`,
+        TraceType.RESOURCE,
+        LogLevel.ERROR
+      );
     }
   }
 
@@ -95,13 +156,14 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     return this.running;
   }
 
-  private addTrace(message: string, internal: boolean = true) {
+  private addTrace(message: string, type: TraceType, level: LogLevel) {
     this.context.addTrace({
       data: { message },
-      type: internal ? TraceType.RESOURCE : TraceType.LOG,
+      type,
       sourcePath: this.context.resourcePath,
       sourceType: SERVICE_FQN,
       timestamp: new Date().toISOString(),
+      level,
     });
   }
 }
