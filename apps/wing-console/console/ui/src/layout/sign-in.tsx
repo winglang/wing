@@ -133,7 +133,10 @@ export const SignInModal = (props: SignInModalProps) => {
 
   return (
     <Modal visible={signInRequired}>
-      <div className="flex flex-col gap-4 max-w-lg items-center">
+      <div
+        className="flex flex-col gap-4 max-w-lg items-center"
+        data-testid="signin-modal"
+      >
         <h3
           className={classNames(
             theme.text1,
@@ -156,6 +159,7 @@ export const SignInModal = (props: SignInModalProps) => {
                 setGithubIsLoading(true);
                 void signInWithGithub();
               }}
+              dataTestid="signin-github-button"
             >
               {githubIsLoading ? (
                 <Loader size="xs" />
@@ -171,6 +175,7 @@ export const SignInModal = (props: SignInModalProps) => {
                 setGoogleIsLoading(true);
                 void signInWithGoogle();
               }}
+              dataTestid="signin-google-button"
             >
               {googleIsLoading ? (
                 <Loader size="xs" />
