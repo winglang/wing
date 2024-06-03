@@ -20,7 +20,7 @@ export interface LogEntry {
   timestamp?: number;
   level: LogLevel;
   message: string;
-  source?: LogSource;
+  source: LogSource;
   ctx?: LogContext;
 }
 
