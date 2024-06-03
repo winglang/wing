@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+[ERROR] f1 concurrency limit reached | Error: Too many requests, the function has reached its concurrency limit.
 [INFO] queue applies backpressure to functions with limited concurrency | c: 3
 pass ─ concurrency.test.wsim » root/env0/test:f1 concurrency limit reached                                    
 pass ─ concurrency.test.wsim » root/env1/test:queue applies backpressure to functions with limited concurrency

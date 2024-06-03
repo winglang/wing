@@ -30,7 +30,52 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_stacktraces.test.w 1`] = `
-"fail ┌ inflight_stacktraces.test.wsim » root/env0/test:assert              
+"[ERROR] assert | Error: assertion failed: false
+  --> ../../../examples/tests/error/inflight_stacktraces.test.w:7:3
+  | let bucket = new cloud.Bucket();
+  | 
+  | test \\"assert\\" {
+7 |   assert(false);
+  |   ^
+at <ABSOLUTE>/inflight_stacktraces.test.w:7:3
+[ERROR] expect.equal | Error: Expected values to be strictly deep-equal:
+
+1 !== 2
+
+   --> ../../../examples/tests/error/inflight_stacktraces.test.w:11:3
+   | }
+   | 
+   | test \\"expect.equal\\" {
+11 |   expect.equal(1,2 );
+   |   ^
+at <ABSOLUTE>/inflight_stacktraces.test.w:11:3
+[ERROR] bucket failed delete | Error: Object does not exist (key=doesn't exist).
+[ERROR] bucket failed delete | Error: Object does not exist (key=doesn't exist).
+   --> ../../../examples/tests/error/inflight_stacktraces.test.w:15:3
+   | }
+   | 
+   | test \\"bucket failed delete\\" {
+15 |   bucket.delete(\\"doesn't exist\\", mustExist: true);
+   |   ^
+at <ABSOLUTE>/inflight_stacktraces.test.w:15:3
+[ERROR] throw from closure | Error: ouch
+   --> ../../../examples/tests/error/inflight_stacktraces.test.w:20:5
+   | 
+   | test \\"throw from closure\\" {
+   |   let closure = inflight () => {
+20 |     throw \\"ouch\\";
+   |     ^
+at closure <ABSOLUTE>/inflight_stacktraces.test.w:20:5
+at <ABSOLUTE>/inflight_stacktraces.test.w:22:3
+[ERROR] assert with message | Error: assertion failed: x is false
+   --> ../../../examples/tests/error/inflight_stacktraces.test.w:27:3
+   | 
+   | test \\"assert with message\\" {
+   |   let x = false;
+27 |   assert(x, \\"x is false\\");
+   |   ^
+at <ABSOLUTE>/inflight_stacktraces.test.w:27:3
+fail ┌ inflight_stacktraces.test.wsim » root/env0/test:assert              
      │ Error: assertion failed: false
      │   --> ../../../examples/tests/error/inflight_stacktraces.test.w:7:3
      │   | let bucket = new cloud.Bucket();

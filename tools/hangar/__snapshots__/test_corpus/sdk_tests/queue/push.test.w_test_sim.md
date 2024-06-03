@@ -2,6 +2,8 @@
 
 ## stdout.log
 ```log
+[ERROR] (no test) | Error: Empty messages are not allowed
+[ERROR] (no test) | Error: Empty messages are not allowed
 pass ─ push.test.wsim » root/env0/push
 
 Tests 1 passed (1)

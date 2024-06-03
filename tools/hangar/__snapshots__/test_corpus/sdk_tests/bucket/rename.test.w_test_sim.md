@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+[ERROR] rename() | Error: Source object does not exist (srcKey=no-such-obj.txt).
 pass ─ rename.test.wsim » root/env0/test:rename()
 
 Tests 1 passed (1)

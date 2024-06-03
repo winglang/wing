@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+[ERROR] copy() | Error: Source object does not exist (srcKey=no-such-file.txt).
 pass ─ copy.test.wsim » root/env0/test:copy()
 
 Tests 1 passed (1)
