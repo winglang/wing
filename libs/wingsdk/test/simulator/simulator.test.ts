@@ -12,7 +12,7 @@ import {
   OnDeploy,
   Service,
 } from "../../src/cloud";
-import { InflightBindings, inflight, lift } from "../../src/core";
+import { inflight, lift } from "../../src/core";
 import { Simulator } from "../../src/simulator";
 import { ITestRunnerClient, Test, TestResult, TraceType } from "../../src/std";
 import { State } from "../../src/target-sim";
@@ -20,6 +20,9 @@ import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
 
 const NOOP = inflight(async () => {});
+const NOOP2 = inflight(async () => {
+  console.log("noop2");
+});
 const OK_200 = inflight(async () => ({ status: 200 }));
 
 describe("run single test", () => {
@@ -633,7 +636,7 @@ describe("in-place updates", () => {
 
     const myState2 = new State(app2, "State");
 
-    const myService2 = new Service(
+    new Service(
       app2,
       "Service",
       lift({ myState: myState2, stateKey })
@@ -702,7 +705,59 @@ describe("in-place updates", () => {
     ]);
   });
 
-  test("cloud.Service is always replaced", async () => {
+  test("cloud.Function is not replaced if its inflight code does not change", async () => {
+    const app = new SimApp();
+    new Function(app, "Function", NOOP);
+
+    const sim = await app.startSimulator();
+
+    const app2 = new SimApp();
+    new Function(app2, "Function", NOOP);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Function started",
+      "Update: 0 added, 0 updated, 0 deleted",
+    ]);
+  });
+
+  test("cloud.Function is replaced if its inflight code changes", async () => {
+    const outdir = mkdtemp();
+    console.log("outdir", outdir);
+
+    const app = new SimApp({ outdir });
+    new Function(app, "Function", NOOP);
+
+    const sim = await app.startSimulator();
+
+    // cloud.Function bundles its code in the background. Because of this, it's
+    // possible that the code later in this test that synthesizes a version of
+    // the app with new inflight code could run before the simulator's bundling starts,
+    // in which case no Function replacement would be necessary.
+    //
+    // Since we want to test the case where the Function is replaced, we need to
+    // make sure that the bundling finishes before we synthesize the new app.
+    // So we invoke the function to block until the bundling finishes.
+    const fn = sim.getResource("/Function") as IFunctionClient;
+    await fn.invoke();
+
+    const app2 = new SimApp({ outdir });
+    new Function(app2, "Function", NOOP2);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Function started",
+      "Update: 0 added, 1 updated, 0 deleted",
+      "root/Function stopped",
+      "root/Function started",
+    ]);
+  });
+
+  test("cloud.Service is not replaced if its inflight code does not change", async () => {
     const app = new SimApp();
     new Service(app, "Service", NOOP);
 
@@ -710,6 +765,26 @@ describe("in-place updates", () => {
 
     const app2 = new SimApp();
     new Service(app2, "Service", NOOP);
+
+    const app2Dir = app2.synth();
+    await sim.update(app2Dir);
+
+    expect(simTraces(sim)).toEqual([
+      "root/Service started",
+      "Update: 0 added, 0 updated, 0 deleted",
+    ]);
+  });
+
+  test("cloud.Service is replaced if its inflight code changes", async () => {
+    const outdir = mkdtemp();
+
+    const app = new SimApp({ outdir });
+    new Service(app, "Service", NOOP);
+
+    const sim = await app.startSimulator();
+
+    const app2 = new SimApp({ outdir });
+    new Service(app2, "Service", NOOP2);
 
     const app2Dir = app2.synth();
     await sim.update(app2Dir);
