@@ -931,7 +931,7 @@ export class Simulator {
               status: "failure",
             },
             type: TraceType.RESOURCE,
-            level: LogLevel.VERBOSE,
+            level: LogLevel.ERROR,
             sourcePath: resourceConfig.path,
             sourceType: resourceConfig.type,
             timestamp: new Date().toISOString(),
