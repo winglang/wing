@@ -193,7 +193,6 @@ impl<'a> JSifier<'a> {
 		output.line(format!(
 			"const {EXTERN_VAR} = {HELPERS_VAR}.createExternRequire({__DIRNAME});"
 		));
-		output.add_code(imports);
 
 		if is_entrypoint {
 			output.line(format!(
@@ -211,13 +210,13 @@ impl<'a> JSifier<'a> {
 			root_class.close("}");
 			root_class.close("}");
 
+			output.add_code(imports);
 			output.add_code(root_class);
 			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
 				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: $PolyconFactory }});",
 				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
 			));
-			// output.line("$PolyconFactory.register($APP);".to_string());
 			output.line("$APP.synth();".to_string());
 		} else if is_directory {
 			let directory_children = self.source_file_graph.dependencies_of(source_path);
@@ -233,27 +232,35 @@ impl<'a> JSifier<'a> {
 			//   ...require("./preflight.inner-file2.cjs"),
 			// };
 			// ```
-			output.open("module.exports = {");
+			output.open("module.exports = function({ $PolyconFactory }) {");
+			output.open("return {");
 			for file in directory_children {
 				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
 				if file.is_dir() {
 					let directory_name = file.file_stem().unwrap();
 					output.line(format!(
-						"get {directory_name}() {{ return require(\"./{preflight_file_name}\") }},"
+						"get {directory_name}() {{ return require(\"./{preflight_file_name}\")({{ $PolyconFactory }}) }},"
 					));
 				} else {
-					output.line(format!("...require(\"./{preflight_file_name}\"),"));
+					output.line(format!(
+						"...require(\"./{preflight_file_name}\")({{ $PolyconFactory }}),"
+					));
 				}
 			}
 			output.close("};");
+			output.close("};");
 		} else {
+			output.open("module.exports = function({ $PolyconFactory }) {");
+			output.add_code(imports);
 			output.add_code(self.jsify_struct_schemas(source_path));
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
 			output.line(format!(
-				"module.exports = {{ {} }};",
+				"return {{ {} }};",
 				exports.iter().map(ToString::to_string).join(", ")
 			));
+
+			output.close("};");
 		}
 
 		// Generate a name for the JS file this preflight code will be written to
@@ -1172,7 +1179,9 @@ impl<'a> JSifier<'a> {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
 					let var_name = identifier.as_ref().unwrap_or(&name);
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
+					code.line(format!(
+						"const {var_name} = require(\"./{preflight_file_name}\")({{ $PolyconFactory }});"
+					))
 				}
 				BringSource::JsiiModule(name) => {
 					// checked during type checking
@@ -1184,21 +1193,27 @@ impl<'a> JSifier<'a> {
 					let var_name = identifier.as_ref().expect("bring wing library requires an alias");
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
+					code.line(format!(
+						"const {var_name} = require(\"./{preflight_file_name}\")({{ $PolyconFactory }});"
+					))
 				}
 				BringSource::WingFile(path) => {
 					// checked during type checking
 					let var_name = identifier.as_ref().expect("bring wing file requires an alias");
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(path).unwrap();
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
+					code.line(format!(
+						"const {var_name} = require(\"./{preflight_file_name}\")({{ $PolyconFactory }});"
+					))
 				}
 				BringSource::Directory(path) => {
 					// checked during type checking
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(path).unwrap();
 					let var_name = identifier.as_ref().expect("bring wing directory requires an alias");
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
+					code.line(format!(
+						"const {var_name} = require(\"./{preflight_file_name}\")({{ $PolyconFactory }});"
+					))
 				}
 			},
 			StmtKind::SuperConstructor { arg_list } => {
@@ -1800,8 +1815,7 @@ impl<'a> JSifier<'a> {
 				if let Some(fqn) = &parent_type.as_class().unwrap().fqn {
 					code.append(new_code!(
 						&class.name.span,
-						// TODO: extends ($PolyconFactory.typeForFqn(
-						" extends (this?.node?.root?.typeForFqn(\"",
+						" extends ($PolyconFactory.typeForFqn(\"",
 						fqn,
 						"\") ?? ",
 						self.jsify_user_defined_type(parent, ctx),
