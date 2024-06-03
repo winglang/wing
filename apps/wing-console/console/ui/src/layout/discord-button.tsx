@@ -3,7 +3,7 @@ import classNames from "classnames";
 
 import { DiscordIcon } from "./discord-icon.js";
 
-const WING_DISCORD_URL = "https://discord.gg/FBvMBQQkqR";
+const WING_DISCORD_URL = "https://t.winglang.io/discord";
 
 const openDiscordLink = () => {
   open(WING_DISCORD_URL, "_blank");
