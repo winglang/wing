@@ -10,6 +10,10 @@ import { App } from "../src/target-sim/app";
  * @see AppProps
  */
 export interface SimAppProps {
+  /**
+   * The output directory for the synthesized app.
+   * @default - a fresh temporary directory
+   */
   readonly outdir?: string;
   readonly isTestEnvironment?: boolean;
   readonly rootConstruct?: any;

@@ -7,6 +7,9 @@ import { normalPath } from "./misc";
 
 const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
 
+// TODO: refactor Bundle into a dedicated class with methods to check if the bundling is
+// finished, invalidated, etc.
+
 export interface Bundle {
   directory: string;
   hash: string;
