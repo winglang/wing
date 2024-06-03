@@ -20,7 +20,7 @@ export interface LogEntry {
   timestamp?: number;
   level: LogLevel;
   message: string;
-  source: LogSource;
+  source?: LogSource;
   ctx?: LogContext;
 }
 
@@ -84,7 +84,6 @@ export const createConsoleLogger = ({
     error(error, source, context) {
       log.error(error);
       const message = errorMessage(error);
-      if (source === "user") {
         this.messages.push({
           id: `${nanoid()}`,
           timestamp: Date.now(),
@@ -93,7 +92,6 @@ export const createConsoleLogger = ({
           source,
           ctx: context,
         });
-      }
       onLog("error", message);
     },
   };
