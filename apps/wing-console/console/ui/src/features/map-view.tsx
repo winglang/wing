@@ -64,8 +64,9 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
     color,
     icon,
   }) => {
+    /* eslint-disable jsx-a11y/no-static-element-interactions */
+    /* eslint-disable jsx-a11y/click-events-have-key-events */
     return (
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
       <div
         className={clsx(
           "w-full h-full",
@@ -85,9 +86,6 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
           onClick?.();
         }}
       >
-        {
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-        }
         <div
           className={clsx(
             "px-2.5 py-1 flex items-center gap-1.5",
