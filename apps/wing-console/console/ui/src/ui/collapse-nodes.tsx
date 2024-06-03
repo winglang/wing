@@ -1,23 +1,24 @@
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core";
 import type { ReactNode } from "react";
-import { createContext, useCallback, useContext, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-import type { Node } from "../shared/Node.js";
+import { useMap } from "../services/use-map.js";
 
 interface CollapseNodesContextType {
-  collapsedNodes: Set<string>;
-  expandedNodes: Set<string>;
   expandNode: (nodeId: string) => void;
   collapseNode: (nodeId: string) => void;
   collapseAll: () => void;
   expandAll: () => void;
-  setNodeList: (nodes: Set<string>) => void;
   isNodeCollapsed: (node: ConstructTreeNode) => boolean;
 }
 
 const context = createContext<CollapseNodesContextType | undefined>(undefined);
-
-export type DefaultBehavior = "collapsed" | "expanded";
 
 export const useCollapseNodes = () => {
   const contextValue = useContext(context);
@@ -36,48 +37,48 @@ export interface CollapseNodesProviderProps {
 export const CollapseNodesProvider = ({
   children,
 }: CollapseNodesProviderProps) => {
-  const [collapsedNodes, setCollapsedNodes] = useState<Set<string>>(
-    new Set<string>(),
-  );
-
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(
     new Set<string>(),
   );
 
-  const [nodeList, setNodeList] = useState<Set<string>>(new Set<string>());
+  const { rootNodes, isNodeHidden } = useMap();
 
   const expandAll = useCallback(() => {
-    setCollapsedNodes(new Set<string>());
+    const nodeList = new Set<string>();
+    if (rootNodes)
+      for (const node of rootNodes) {
+        const children = Object.values(node.children ?? {});
+        if (children.length === 0) {
+          continue;
+        }
+        for (const child of children) {
+          if (!isNodeHidden(child.path)) {
+            nodeList.add(child.path);
+          }
+        }
+      }
+
     setExpandedNodes(nodeList);
-  }, [setCollapsedNodes, setExpandedNodes, nodeList]);
+  }, [setExpandedNodes, rootNodes, isNodeHidden]);
 
   const collapseAll = useCallback(() => {
-    setCollapsedNodes(nodeList);
     setExpandedNodes(new Set<string>());
-  }, [nodeList, setCollapsedNodes]);
+  }, [setExpandedNodes]);
 
   const collapseNode = useCallback(
     (nodeId: string) => {
-      setCollapsedNodes((previous) => {
-        previous.add(nodeId);
-        return new Set(previous);
-      });
       setExpandedNodes((previous) => {
         previous.delete(nodeId);
         return new Set(previous);
       });
     },
-    [setCollapsedNodes],
+    [setExpandedNodes],
   );
 
   const expandNode = useCallback(
     (nodeId: string) => {
       setExpandedNodes((previous) => {
         previous.add(nodeId);
-        return new Set(previous);
-      });
-      setCollapsedNodes((previous) => {
-        previous.delete(nodeId);
         return new Set(previous);
       });
     },
@@ -99,11 +100,8 @@ export const CollapseNodesProvider = ({
   return (
     <context.Provider
       value={{
-        collapsedNodes,
-        expandedNodes,
         expandNode,
         collapseNode,
-        setNodeList,
         collapseAll,
         expandAll,
         isNodeCollapsed,
