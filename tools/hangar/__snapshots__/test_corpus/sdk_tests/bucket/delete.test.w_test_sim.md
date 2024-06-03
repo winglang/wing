@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+[ERROR] delete | Error: Object does not exist (key=file1.json).
 pass ─ delete.test.wsim » root/env0/test:delete
 
 Tests 1 passed (1)

@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+[ERROR] get | Error: Row does not exist (key=bar)
 pass ─ get.test.wsim » root/env0/test:get
 
 Tests 1 passed (1)
