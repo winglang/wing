@@ -1,12 +1,6 @@
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core";
 import type { ReactNode } from "react";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 import { useMap } from "../services/use-map.js";
 

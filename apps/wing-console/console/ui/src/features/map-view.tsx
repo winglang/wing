@@ -59,7 +59,7 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
     highlight,
     onClick,
     collapsed = false,
-    onCollapse = () => {},
+    onCollapse = (value: boolean) => {},
     children,
     color,
     icon,
