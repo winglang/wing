@@ -46,6 +46,7 @@ export const createConsoleLogger = ({
   return {
     messages: new Array<LogEntry>(),
     verbose(message, source, context) {
+      log.info(message);
       this.messages.push({
         id: `${nanoid()}`,
         timestamp: Date.now(),
@@ -57,6 +58,7 @@ export const createConsoleLogger = ({
       onLog("verbose", message);
     },
     log(message, source, context) {
+      log.info(message);
       this.messages.push({
         id: `${nanoid()}`,
         timestamp: Date.now(),
@@ -68,6 +70,7 @@ export const createConsoleLogger = ({
       onLog("info", message);
     },
     warning(message, source, context) {
+      log.warning(message);
       this.messages.push({
         id: `${nanoid()}`,
         timestamp: Date.now(),
@@ -79,6 +82,7 @@ export const createConsoleLogger = ({
       onLog("warn", message);
     },
     error(error, source, context) {
+      log.error(error);
       const message = errorMessage(error);
       if (source === "user") {
         this.messages.push({
@@ -89,8 +93,6 @@ export const createConsoleLogger = ({
           source,
           ctx: context,
         });
-      } else {
-        log.error(error);
       }
       onLog("error", message);
     },
