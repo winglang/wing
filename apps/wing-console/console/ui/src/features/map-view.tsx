@@ -12,7 +12,6 @@ import { memo, useCallback, useMemo } from "react";
 import { useKeyPressEvent } from "react-use";
 
 import { useMap } from "../services/use-map.js";
-import { useCollapseNodes } from "../ui/collapse-nodes.js";
 import { assert } from "../ui/elk-flow/assert.js";
 import { Graph } from "../ui/elk-flow/graph.js";
 import { NodeChildren } from "../ui/elk-flow/node-children.js";
@@ -584,8 +583,7 @@ export interface MapViewV2Props {
   expandedItems: string[];
   onExpand: (id: string) => void;
   onCollapse: (id: string) => void;
-  onExpandAll(): void;
-  onCollapseAll(): void;
+  isNodeCollapsed: (id: string) => boolean;
 }
 
 export const MapView = memo(
@@ -597,21 +595,8 @@ export const MapView = memo(
     expandedItems,
     onExpand,
     onCollapse,
-    onExpandAll,
-    onCollapseAll,
+    isNodeCollapsed,
   }: MapViewV2Props) => {
-    const isNodeCollapsed = useCallback(
-      (node: ConstructTreeNode) => {
-        const children = Object.values(node.children ?? {});
-        const isCollapsible = children.some((child) => !child.display?.hidden);
-        if (!isCollapsible) {
-          return false;
-        }
-        return !expandedItems.includes(node.path);
-      },
-      [expandedItems],
-    );
-
     const { nodeInfo, isNodeHidden, rootNodes, edges } = useMap({
       isNodeCollapsed,
     });
@@ -679,7 +664,7 @@ export const MapView = memo(
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             highlight={props.selectedNodeId === props.constructTreeNode.path}
             hasChildNodes={childNodes.length > 0}
-            collapsed={isNodeCollapsed(props.constructTreeNode)}
+            collapsed={isNodeCollapsed(props.constructTreeNode.path)}
             onCollapse={(collapse) => {
               if (collapse) {
                 onCollapse(props.constructTreeNode.path);

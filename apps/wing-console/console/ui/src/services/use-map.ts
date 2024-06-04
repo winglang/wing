@@ -109,10 +109,10 @@ const getNodeInflights = (
 };
 
 export interface UseMapOptions {
-  isNodeCollapsed?: (node: ConstructTreeNode) => boolean;
+  isNodeCollapsed: (id: string) => boolean;
 }
 
-export const useMap = ({ isNodeCollapsed }: UseMapOptions = {}) => {
+export const useMap = ({ isNodeCollapsed }: UseMapOptions) => {
   const query = trpc["app.map"].useQuery();
   const { tree: rawTree, connections: rawConnections } = query.data ?? {};
 
@@ -165,7 +165,7 @@ export const useMap = ({ isNodeCollapsed }: UseMapOptions = {}) => {
 
       hiddenMap.set(node.path, hidden);
 
-      const collapsed = isNodeCollapsed?.(node);
+      const collapsed = isNodeCollapsed(node.path);
       const children = Object.values(node.children ?? {});
       for (const child of children) {
         traverse(child, hidden || collapsed);

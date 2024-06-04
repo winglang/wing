@@ -38,6 +38,7 @@ export const useExplorer = () => {
     setExpandedItems,
     expand,
     collapse,
+    isNodeCollapsed,
     expandAll,
     collapseAll,
   } = useTreeMenuItems({
@@ -92,6 +93,7 @@ export const useExplorer = () => {
     setExpandedItems,
     expand,
     collapse,
+    isNodeCollapsed,
     expandAll,
     collapseAll,
   };

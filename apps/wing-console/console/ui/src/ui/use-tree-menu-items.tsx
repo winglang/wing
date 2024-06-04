@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export interface TreeMenuItem {
   id: string;
@@ -83,6 +83,18 @@ export function useTreeMenuItems(options?: {
     });
   }, []);
 
+  const isNodeCollapsed = useCallback(
+    (itemId: string) => {
+      const item = items.find((index) => index.id === itemId);
+      if (!item || !item.children) {
+        return false;
+      }
+
+      return item.children.length > 0 && !expandedItems.includes(itemId);
+    },
+    [expandedItems, items],
+  );
+
   return {
     items,
     setItems,
@@ -95,5 +107,6 @@ export function useTreeMenuItems(options?: {
     collapseAll,
     expand,
     collapse,
+    isNodeCollapsed,
   };
 }

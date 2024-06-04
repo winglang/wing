@@ -6,7 +6,6 @@ import { useEffect, useState, useContext, useMemo, useCallback } from "react";
 import { trpc } from "../services/trpc.js";
 import { useExplorer } from "../services/use-explorer.js";
 import { TestsContext } from "../tests-context.js";
-import { useCollapseNodes } from "../ui/collapse-nodes.js";
 
 export interface UseLayoutProps {
   cloudAppState: State;
@@ -23,6 +22,7 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     setExpandedItems,
     expand,
     collapse,
+    isNodeCollapsed,
     expandAll,
     collapseAll,
   } = useExplorer();
@@ -101,6 +101,7 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     setExpandedItems,
     expand,
     collapse,
+    isNodeCollapsed,
     expandAll,
     collapseAll,
     theme,
