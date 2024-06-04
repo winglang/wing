@@ -263,7 +263,7 @@ export const DefaultLayout = ({
                               return (
                                 <TopResizableWidget
                                   key={component.type}
-                                  className="h-1/3"
+                                  className="h-1/5"
                                 >
                                   {panelComponent}
                                 </TopResizableWidget>
