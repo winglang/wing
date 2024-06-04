@@ -3,19 +3,12 @@ import {
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
 } from "@heroicons/react/24/solid";
-import {
-  SquareStackMinusIcon,
-  SquareStackPlusIcon,
-  Toolbar,
-  ToolbarButton,
-} from "@wingconsole/design-system";
+import { Toolbar, ToolbarButton } from "@wingconsole/design-system";
 
 export interface MapControlsProps {
   onZoomIn?: () => void;
   onZoomOut?: () => void;
   onZoomToFit?: () => void;
-  onCollapseAll?: () => void;
-  onExpandAll?: () => void;
 }
 
 export const MapControls = ({
