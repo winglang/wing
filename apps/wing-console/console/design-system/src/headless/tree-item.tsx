@@ -123,10 +123,7 @@ export const TreeItem = ({
 
   useEffect(() => {
     if (selected) {
-      ref.current?.scrollIntoView({
-        block: "center",
-        inline: "center",
-      });
+      ref.current?.scrollIntoView();
     }
   }, [selected, ref]);
 
