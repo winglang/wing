@@ -20,7 +20,7 @@ export interface LogEntry {
   timestamp?: number;
   level: LogLevel;
   message: string;
-  source: LogSource;
+  source?: LogSource;
   ctx?: LogContext;
 }
 
@@ -46,54 +46,48 @@ export const createConsoleLogger = ({
   return {
     messages: new Array<LogEntry>(),
     verbose(message, source, context) {
-      log.info(message);
       this.messages.push({
         id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "verbose",
         message,
-        source: source ?? "simulator",
+        source,
         ctx: context,
       });
       onLog("verbose", message);
     },
     log(message, source, context) {
-      log.info(message);
       this.messages.push({
         id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "info",
         message,
-        source: source ?? "simulator",
+        source,
         ctx: context,
       });
       onLog("info", message);
     },
     warning(message, source, context) {
-      log.warning(message);
       this.messages.push({
         id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "warn",
         message,
-        source: source ?? "simulator",
+        source,
         ctx: context,
       });
       onLog("warn", message);
     },
     error(error, source, context) {
-      log.error(error);
       const message = errorMessage(error);
-      if (source === "user") {
-        this.messages.push({
-          id: `${nanoid()}`,
-          timestamp: Date.now(),
-          level: "error",
-          message,
-          source,
-          ctx: context,
-        });
-      }
+      this.messages.push({
+        id: `${nanoid()}`,
+        timestamp: Date.now(),
+        level: "error",
+        message,
+        source,
+        ctx: context,
+      });
       onLog("error", message);
     },
   };
