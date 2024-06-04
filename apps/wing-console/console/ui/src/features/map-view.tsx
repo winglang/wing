@@ -91,9 +91,6 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
             "border-b border-slate-200 dark:border-slate-800",
             "cursor-pointer",
           )}
-          onClick={() => {
-            onCollapse(!collapsed);
-          }}
         >
           <ResourceIcon
             className="size-4 -ml-0.5"
@@ -112,9 +109,28 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
             {name}
           </span>
           <div className="flex grow justify-end">
-            <div className="pl-1">
-              {collapsed && <ChevronDownIcon className="size-4" />}
-              {!collapsed && <ChevronUpIcon className="size-4" />}
+            <div
+              className="pl-1"
+              onClick={() => {
+                onCollapse(!collapsed);
+              }}
+            >
+              {collapsed && (
+                <ChevronDownIcon
+                  className={clsx(
+                    "size-4",
+                    "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                  )}
+                />
+              )}
+              {!collapsed && (
+                <ChevronUpIcon
+                  className={clsx(
+                    "size-4",
+                    "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                  )}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -278,11 +294,6 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                   inflights.length > 0 &&
                     "border-b border-slate-200 dark:border-slate-800",
                 )}
-                onClick={() => {
-                  if (collapsed) {
-                    onCollapse(false);
-                  }
-                }}
               >
                 <ResourceIcon
                   className="size-4 -ml-0.5"
@@ -301,8 +312,20 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                   {name}
                 </span>
                 {collapsed && (
-                  <div className="flex grow justify-end pl-1">
-                    <ChevronDownIcon className="size-4" />
+                  <div
+                    className="flex grow justify-end pl-1"
+                    onClick={() => {
+                      if (collapsed) {
+                        onCollapse(false);
+                      }
+                    }}
+                  >
+                    <ChevronDownIcon
+                      className={clsx(
+                        "size-4",
+                        "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                      )}
+                    />
                   </div>
                 )}
               </div>
@@ -580,9 +603,9 @@ export interface MapViewV2Props {
   onSelectedNodeIdChange: (id: string | undefined) => void;
   selectedEdgeId?: string;
   onSelectedEdgeIdChange?: (id: string | undefined) => void;
-  onExpand: (id: string) => void;
-  onCollapse: (id: string) => void;
-  isNodeCollapsed: (id: string) => boolean;
+  onExpand: (path: string) => void;
+  onCollapse: (path: string) => void;
+  isCollapsed: (path: string) => boolean;
 }
 
 export const MapView = memo(
@@ -591,13 +614,12 @@ export const MapView = memo(
     onSelectedNodeIdChange,
     selectedEdgeId,
     onSelectedEdgeIdChange,
-
     onExpand,
     onCollapse,
-    isNodeCollapsed,
+    isCollapsed,
   }: MapViewV2Props) => {
     const { nodeInfo, isNodeHidden, rootNodes, edges } = useMap({
-      isNodeCollapsed,
+      isCollapsed,
     });
 
     const RenderEdge = useCallback<EdgeComponent>(
@@ -663,7 +685,7 @@ export const MapView = memo(
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             highlight={props.selectedNodeId === props.constructTreeNode.path}
             hasChildNodes={childNodes.length > 0}
-            collapsed={isNodeCollapsed(props.constructTreeNode.path)}
+            collapsed={isCollapsed(props.constructTreeNode.path)}
             onCollapse={(collapse) => {
               if (collapse) {
                 onCollapse(props.constructTreeNode.path);
@@ -683,7 +705,7 @@ export const MapView = memo(
           </ConstructNode>
         );
       },
-      [isNodeHidden, nodeInfo, onCollapse, onExpand, isNodeCollapsed],
+      [isNodeHidden, nodeInfo, onCollapse, onExpand, isCollapsed],
     );
 
     const { theme } = useTheme();

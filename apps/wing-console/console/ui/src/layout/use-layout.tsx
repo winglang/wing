@@ -22,7 +22,7 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     setExpandedItems,
     expand,
     collapse,
-    isNodeCollapsed,
+    isCollapsed,
     expandAll,
     collapseAll,
   } = useExplorer();
@@ -101,7 +101,7 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     setExpandedItems,
     expand,
     collapse,
-    isNodeCollapsed,
+    isCollapsed,
     expandAll,
     collapseAll,
     theme,

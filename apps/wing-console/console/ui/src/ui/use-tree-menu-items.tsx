@@ -83,7 +83,7 @@ export function useTreeMenuItems(options?: {
     });
   }, []);
 
-  const isNodeCollapsed = useCallback(
+  const isCollapsed = useCallback(
     (itemId: string) => {
       const item = items.find((index) => index.id === itemId);
       if (!item || !item.children) {
@@ -107,6 +107,6 @@ export function useTreeMenuItems(options?: {
     collapseAll,
     expand,
     collapse,
-    isNodeCollapsed,
+    isCollapsed,
   };
 }
