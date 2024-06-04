@@ -1,8 +1,14 @@
 import type { ConstructTreeNode } from "@winglang/sdk/lib/core";
 import type { ReactNode } from "react";
-import { createContext, useCallback, useContext, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
-import { useMap } from "../services/use-map.js";
+import { trpc } from "../services/trpc.js";
 
 interface CollapseNodesContextType {
   expandNode: (nodeId: string) => void;
@@ -35,7 +41,15 @@ export const CollapseNodesProvider = ({
     new Set<string>(),
   );
 
-  const { rootNodes } = useMap();
+  const mapQuery = trpc["app.map"].useQuery();
+  const rootNodes = useMemo(() => {
+    if (!mapQuery.data) {
+      return;
+    }
+
+    const children = mapQuery.data.tree?.children?.["Default"]?.children;
+    return children ? (Object.values(children) as ConstructTreeNode[]) : [];
+  }, [mapQuery]);
 
   const expandAll = useCallback(() => {
     if (!rootNodes) {
