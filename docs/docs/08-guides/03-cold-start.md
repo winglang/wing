@@ -4,7 +4,7 @@ id: cold-start
 keywords: [Lambda, API Gateway, Cold Start, Provisioned Concurrency]
 ---
 
-This post demonstrates how you can leverage the Wing platform to aggregate Lambda functions, thus optimizing both costs and deployment time by using a single Lambda for multiple endpoints.
+This post demonstrates how you can leverage a Wing platform to aggregate Lambda functions, thus optimizing both costs and deployment time by using a single Lambda for multiple endpoints.
 
 We address the issue of high costs associated with provisioned concurrency as a solution to the cold start problem.
 
