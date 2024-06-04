@@ -302,7 +302,6 @@ export const DefaultLayout = ({
                           onSelectedNodeIdChange={setSelectedItemSingle}
                           selectedEdgeId={selectedEdgeId}
                           onSelectedEdgeIdChange={setSelectedEdgeId}
-                          expandedItems={expandedItems}
                           onExpand={expand}
                           onCollapse={collapse}
                           isNodeCollapsed={isNodeCollapsed}

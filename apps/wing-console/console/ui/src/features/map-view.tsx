@@ -580,7 +580,6 @@ export interface MapViewV2Props {
   onSelectedNodeIdChange: (id: string | undefined) => void;
   selectedEdgeId?: string;
   onSelectedEdgeIdChange?: (id: string | undefined) => void;
-  expandedItems: string[];
   onExpand: (id: string) => void;
   onCollapse: (id: string) => void;
   isNodeCollapsed: (id: string) => boolean;
@@ -592,7 +591,7 @@ export const MapView = memo(
     onSelectedNodeIdChange,
     selectedEdgeId,
     onSelectedEdgeIdChange,
-    expandedItems,
+
     onExpand,
     onCollapse,
     isNodeCollapsed,
