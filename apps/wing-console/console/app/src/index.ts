@@ -133,7 +133,7 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     },
     log: options.log ?? {
       info() {},
-      error: console.error,
+      error() {},
       warning() {},
       verbose() {},
     },
