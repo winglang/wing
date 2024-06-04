@@ -78,7 +78,6 @@ export const DefaultLayout = ({
     setExpandedItems,
     expand,
     collapse,
-    isCollapsed,
     expandAll,
     collapseAll,
     theme,
@@ -304,7 +303,7 @@ export const DefaultLayout = ({
                           onSelectedEdgeIdChange={setSelectedEdgeId}
                           onExpand={expand}
                           onCollapse={collapse}
-                          isCollapsed={isCollapsed}
+                          expandedItems={expandedItems}
                         />
                       </div>
                       {!layout.rightPanel?.hide && (

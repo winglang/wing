@@ -83,18 +83,6 @@ export function useTreeMenuItems(options?: {
     });
   }, []);
 
-  const isCollapsed = useCallback(
-    (itemId: string) => {
-      const item = items.find((index) => index.id === itemId);
-      if (!item || !item.children) {
-        return false;
-      }
-
-      return item.children.length > 0 && !expandedItems.includes(itemId);
-    },
-    [expandedItems, items],
-  );
-
   return {
     items,
     setItems,
@@ -107,6 +95,5 @@ export function useTreeMenuItems(options?: {
     collapseAll,
     expand,
     collapse,
-    isCollapsed,
   };
 }

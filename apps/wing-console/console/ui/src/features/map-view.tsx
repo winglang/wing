@@ -605,7 +605,7 @@ export interface MapViewV2Props {
   onSelectedEdgeIdChange?: (id: string | undefined) => void;
   onExpand: (path: string) => void;
   onCollapse: (path: string) => void;
-  isCollapsed: (path: string) => boolean;
+  expandedItems: string[];
 }
 
 export const MapView = memo(
@@ -616,10 +616,10 @@ export const MapView = memo(
     onSelectedEdgeIdChange,
     onExpand,
     onCollapse,
-    isCollapsed,
+    expandedItems,
   }: MapViewV2Props) => {
     const { nodeInfo, isNodeHidden, rootNodes, edges } = useMap({
-      isCollapsed,
+      expandedItems,
     });
 
     const RenderEdge = useCallback<EdgeComponent>(
@@ -651,46 +651,51 @@ export const MapView = memo(
       }>
     >(
       (props) => {
-        if (isNodeHidden(props.constructTreeNode.path)) {
+        const node = props.constructTreeNode;
+        if (isNodeHidden(node.path)) {
           return <></>;
         }
 
-        const info = nodeInfo?.get(props.constructTreeNode.path);
+        const info = nodeInfo?.get(node.path);
         if (!info) {
           return <></>;
         }
 
-        const childNodes = Object.values(
-          props.constructTreeNode.children ?? {},
-        ).filter((node) => !isNodeHidden(node.path));
+        const childNodes = Object.values(node.children ?? {}).filter(
+          (node) => !isNodeHidden(node.path),
+        );
 
-        const fqn = props.constructTreeNode.constructInfo?.fqn;
+        const fqn = node.constructInfo?.fqn;
 
         const cloudResourceType = fqn?.split(".").at(-1);
 
         const name =
-          props.constructTreeNode.display?.title === cloudResourceType
-            ? props.constructTreeNode.id
-            : props.constructTreeNode.display?.title ??
-              props.constructTreeNode.id;
+          node.display?.title === cloudResourceType
+            ? node.id
+            : node.display?.title ?? node.id;
+
+        const children = Object.values(node.children ?? {});
+        const canBeExpanded =
+          !!node.children && children.some((child) => !child.display?.hidden);
+        const collapsed = canBeExpanded && !expandedItems.includes(node.path);
 
         return (
           <ConstructNode
-            id={props.constructTreeNode.path}
+            id={node.path}
             name={name ?? ""}
             fqn={fqn ?? ""}
-            color={props.constructTreeNode.display?.color}
-            icon={props.constructTreeNode.display?.icon}
+            color={node.display?.color}
+            icon={node.display?.icon}
             inflights={info.type === "construct" ? info.inflights : []}
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
-            highlight={props.selectedNodeId === props.constructTreeNode.path}
+            highlight={props.selectedNodeId === node.path}
             hasChildNodes={childNodes.length > 0}
-            collapsed={isCollapsed(props.constructTreeNode.path)}
+            collapsed={collapsed}
             onCollapse={(collapse) => {
               if (collapse) {
-                onCollapse(props.constructTreeNode.path);
+                onCollapse(node.path);
               } else {
-                onExpand(props.constructTreeNode.path);
+                onExpand(node.path);
               }
             }}
           >
@@ -705,7 +710,7 @@ export const MapView = memo(
           </ConstructNode>
         );
       },
-      [isNodeHidden, nodeInfo, onCollapse, onExpand, isCollapsed],
+      [isNodeHidden, nodeInfo, onCollapse, onExpand, expandedItems],
     );
 
     const { theme } = useTheme();
