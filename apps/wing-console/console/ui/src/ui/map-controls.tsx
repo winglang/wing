@@ -19,8 +19,6 @@ export interface MapControlsProps {
 }
 
 export const MapControls = ({
-  onCollapseAll,
-  onExpandAll,
   onZoomIn,
   onZoomOut,
   onZoomToFit,
@@ -31,13 +29,6 @@ export const MapControls = ({
 
       <div>
         <Toolbar>
-          <ToolbarButton title="Collapse all" onClick={onCollapseAll}>
-            <SquareStackMinusIcon className="size-4 rotate-90" />
-          </ToolbarButton>
-          <ToolbarButton title="Expand all" onClick={onExpandAll}>
-            <SquareStackPlusIcon className="size-4 rotate-90" />
-          </ToolbarButton>
-
           <ToolbarButton title="Zoom out" onClick={onZoomOut}>
             <MagnifyingGlassMinusIcon className="size-4" />
           </ToolbarButton>

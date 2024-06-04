@@ -78,6 +78,7 @@ export const DefaultLayout = ({
     expandedItems,
     setExpandedItems,
     expand,
+    collapse,
     expandAll,
     collapseAll,
     theme,
@@ -296,14 +297,17 @@ export const DefaultLayout = ({
                         )}
                         data-testid="map-view"
                       >
-                        <CollapseNodesProvider>
-                          <MapView
-                            selectedNodeId={selectedItems[0]}
-                            onSelectedNodeIdChange={setSelectedItemSingle}
-                            selectedEdgeId={selectedEdgeId}
-                            onSelectedEdgeIdChange={setSelectedEdgeId}
-                          />
-                        </CollapseNodesProvider>
+                        <MapView
+                          selectedNodeId={selectedItems[0]}
+                          onSelectedNodeIdChange={setSelectedItemSingle}
+                          selectedEdgeId={selectedEdgeId}
+                          onSelectedEdgeIdChange={setSelectedEdgeId}
+                          expandedItems={expandedItems}
+                          onExpand={expand}
+                          onCollapse={collapse}
+                          onExpandAll={expandAll}
+                          onCollapseAll={collapseAll}
+                        />
                       </div>
                       {!layout.rightPanel?.hide && (
                         <LeftResizableWidget

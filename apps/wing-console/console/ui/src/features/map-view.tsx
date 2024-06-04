@@ -8,7 +8,7 @@ import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
 import clsx from "classnames";
 import { type ElkPoint, type LayoutOptions } from "elkjs";
 import type { FunctionComponent, PropsWithChildren } from "react";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { useKeyPressEvent } from "react-use";
 
 import { useMap } from "../services/use-map.js";
@@ -581,6 +581,11 @@ export interface MapViewV2Props {
   onSelectedNodeIdChange: (id: string | undefined) => void;
   selectedEdgeId?: string;
   onSelectedEdgeIdChange?: (id: string | undefined) => void;
+  expandedItems: string[];
+  onExpand: (id: string) => void;
+  onCollapse: (id: string) => void;
+  onExpandAll(): void;
+  onCollapseAll(): void;
 }
 
 export const MapView = memo(
@@ -589,8 +594,23 @@ export const MapView = memo(
     onSelectedNodeIdChange,
     selectedEdgeId,
     onSelectedEdgeIdChange,
+    expandedItems,
+    onExpand,
+    onCollapse,
+    onExpandAll,
+    onCollapseAll,
   }: MapViewV2Props) => {
-    const { expandNode, collapseNode, isNodeCollapsed } = useCollapseNodes();
+    const isNodeCollapsed = useCallback(
+      (node: ConstructTreeNode) => {
+        const children = Object.values(node.children ?? {});
+        const isCollapsible = children.some((child) => !child.display?.hidden);
+        if (!isCollapsible) {
+          return false;
+        }
+        return !expandedItems.includes(node.path);
+      },
+      [expandedItems],
+    );
 
     const { nodeInfo, isNodeHidden, rootNodes, edges } = useMap({
       isNodeCollapsed,
@@ -662,9 +682,9 @@ export const MapView = memo(
             collapsed={isNodeCollapsed(props.constructTreeNode)}
             onCollapse={(collapse) => {
               if (collapse) {
-                collapseNode(props.constructTreeNode.path);
+                onCollapse(props.constructTreeNode.path);
               } else {
-                expandNode(props.constructTreeNode.path);
+                onExpand(props.constructTreeNode.path);
               }
             }}
           >
@@ -679,7 +699,7 @@ export const MapView = memo(
           </ConstructNode>
         );
       },
-      [isNodeHidden, nodeInfo, collapseNode, expandNode, isNodeCollapsed],
+      [isNodeHidden, nodeInfo, onCollapse, onExpand, isNodeCollapsed],
     );
 
     const { theme } = useTheme();

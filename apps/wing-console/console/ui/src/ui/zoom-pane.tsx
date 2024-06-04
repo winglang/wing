@@ -15,7 +15,6 @@ import type { DetailedHTMLProps, HTMLAttributes } from "react";
 import type { ReactNode } from "react";
 import { useEvent } from "react-use";
 
-import { useCollapseNodes } from "./collapse-nodes.js";
 import { MapControls } from "./map-controls.js";
 
 export interface Viewport {
@@ -28,8 +27,6 @@ export interface Viewport {
 type BoundingBox = Viewport;
 
 export interface ZoomPaneContextValue {
-  expandAll(): void;
-  collapseAll(): void;
   zoomIn(): void;
   zoomOut(): void;
   zoomToFit(viewport?: Viewport, skipAnimation?: boolean): void;
@@ -254,8 +251,6 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     containerRef.current,
   );
 
-  const { expandAll, collapseAll } = useCollapseNodes();
-
   const zoomIn = useCallback(() => {
     const container = containerRef.current;
     if (!container) {
@@ -402,8 +397,6 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       <div className="relative z-10 flex">
         <div className="absolute cursor-grab backdrop-blur right-0">
           <MapControls
-            onExpandAll={expandAll}
-            onCollapseAll={collapseAll}
             onZoomIn={zoomIn}
             onZoomOut={zoomOut}
             onZoomToFit={zoomToFit}
