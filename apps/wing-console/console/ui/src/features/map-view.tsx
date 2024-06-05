@@ -134,7 +134,7 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
             </div>
           </div>
         </div>
-        {collapsed || children}
+        {!collapsed && children}
       </div>
     );
   },
