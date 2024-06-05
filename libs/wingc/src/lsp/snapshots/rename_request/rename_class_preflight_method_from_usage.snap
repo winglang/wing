@@ -5,26 +5,26 @@ changes:
   "file:///main.w":
     - range:
         start:
-          line: 2
+          line: 8
           character: 6
         end:
-          line: 2
-          character: 10
-      newText: t1
-    - range:
-        start:
-          line: 6
-          character: 16
-        end:
-          line: 6
-          character: 20
-      newText: t1
-    - range:
-        start:
-          line: 9
-          character: 7
-        end:
-          line: 9
+          line: 8
           character: 11
+      newText: t1
+    - range:
+        start:
+          line: 17
+          character: 2
+        end:
+          line: 17
+          character: 7
+      newText: t1
+    - range:
+        start:
+          line: 19
+          character: 2
+        end:
+          line: 19
+          character: 7
       newText: t1
 

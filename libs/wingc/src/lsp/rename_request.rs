@@ -343,16 +343,36 @@ test "pow" {
 		"t1"
 	);
 
-	// TODO: not supported yet
 	test_rename_request!(
 		rename_struct_key,
 		r#"
-    struct user {
+    struct User {
       name: str;
-      //^
+    //---^
     }
  
- let a: user = {name: "a"};
+ let a: User = {name: "a"};
+              //----
+
+ log(a.name);
+     //----
+		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		rename_struct_key_usage,
+		r#"
+    struct User {
+      name: str;
+    //----
+    }
+ 
+ let a: User = {name: "a"};
+              //----
+
+ log(a.name);
+     //---^
 		"#,
 		"t1"
 	);
@@ -417,6 +437,219 @@ test "pow" {
       hershy.stepOnKeyboard();
     }
 		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		rename_class_property,
+		r#"
+class Cat {
+  pub name: str;
+    //---^
+  new(name: str) {
+    this.name = name;
+       //----
+  }
+
+  inflight pub jump(height: num) {}
+  pub sleep(d: duration) {
+    log("{this.name} sleeps");
+             //----
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+b.sleep(24h);
+log(b.name);
+    //----
+
+test "a cat scares b cat" {
+  a.jump(5);
+  b.jump(-5);
+}
+		"#,
+		"t1"
+	);
+	test_rename_request!(
+		rename_class_property_from_usage,
+		r#"
+class Cat {
+  pub name: str;
+    //----
+  new(name: str) {
+    this.name = name;
+       //----
+  }
+
+  inflight pub jump(height: num) {}
+  pub sleep(d: duration) {
+    log("{this.name} sleeps");
+             //----
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+b.sleep(24h);
+log(b.name);
+    //---^
+
+test "a cat scares b cat" {
+  a.jump(5);
+  b.jump(-5);
+}
+		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		rename_class_inflight_method,
+		r#"
+class Cat {
+  pub name: str;
+  new(name: str) {
+    this.name = name;
+  }
+
+  inflight pub jump(height: num) {}
+             //---^
+  pub sleep(d: duration) {
+    log("{this.name} sleeps");
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+b.sleep(24h);
+log(b.name);
+
+test "a cat scares b cat" {
+  a.jump(5);
+  //----
+  b.jump(-5);
+  //----
+}
+		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		rename_class_inflight_method_from_usage,
+		r#"
+class Cat {
+  pub name: str;
+  new(name: str) {
+    this.name = name;
+  }
+
+  inflight pub jump(height: num) {}
+             //----
+  pub sleep(d: duration) {
+    log("{this.name} sleeps");
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+b.sleep(24h);
+log(b.name);
+
+test "a cat scares b cat" {
+  a.jump(5);
+  //----
+  b.jump(-5);
+  //---^
+}
+		"#,
+		"t1"
+	);
+	test_rename_request!(
+		rename_class_preflight_method,
+		r#"
+class Cat {
+  pub name: str;
+  new(name: str) {
+    this.name = name;
+  }
+
+  inflight pub jump(height: num) {}
+  pub sleep(d: duration) {
+    //----^
+    log("{this.name} sleeps");
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+//-----
+b.sleep(24h);
+//-----
+log(b.name);
+
+test "a cat scares b cat" {
+  a.jump(5);
+  b.jump(-5);
+}
+		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		rename_class_preflight_method_from_usage,
+		r#"
+class Cat {
+  pub name: str;
+  new(name: str) {
+    this.name = name;
+  }
+
+  inflight pub jump(height: num) {}
+  pub sleep(d: duration) {
+    //-----
+    log("{this.name} sleeps");
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+//----^
+b.sleep(24h);
+//-----
+log(b.name);
+
+test "a cat scares b cat" {
+  a.jump(5);
+  b.jump(-5);
+}
+		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		new_scope_args,
+		r#"
+	  class Cat {
+	    pub name: str;
+	    new(name: str) {
+	      //---^
+	      this.name = name;
+	                //----
+	    }
+	  }
+	  "#,
 		"t1"
 	);
 }
