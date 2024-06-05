@@ -1,9 +1,9 @@
 name: SDK Spec Tests
 run-name: SDK Spec Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
 on:
-  release:
-    types:
-      - published # runs only unstable targets
+  # release: #TODO: uncomment to enable unstable targets, at this moment there are none
+  # types:
+  # - published # runs only unstable targets
   workflow_call: {}
   workflow_dispatch:
     inputs:
@@ -81,7 +81,7 @@ jobs:
           elif [ "${{env.TARGET}}" = "all-stable" ]; then
             target='["tf-aws", "sim"]'
           elif [ "${{env.TARGET}}" = "all-unstable" ]; then
-            target='["tf-azure"]'
+            target='[]'
           else
            target='["${{env.TARGET}}"]'
           fi
