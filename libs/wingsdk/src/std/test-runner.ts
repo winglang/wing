@@ -1,4 +1,4 @@
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { Resource } from "./resource";
 import { Test } from "./test";
 import { Function, FunctionProps, IFunctionHandler } from "../cloud";
@@ -15,7 +15,7 @@ export const TEST_RUNNER_FQN = fqnForType("std.TestRunner");
  * Properties for `TestRunner`.
  * @skipDocs
  */
-export interface TestRunnerProps {}
+export interface TestRunnerProps { }
 
 /**
  * A test engine.
@@ -40,14 +40,40 @@ export class TestRunner extends Resource {
       // Node.of(root).root
       Node._markRoot(Root);
 
+      let roots: IConstruct[] = [];
       if (app.isTestEnvironment) {
-        new Root(app, "env0");
+        let firstRoot = new Root(app, "env0");
+        roots.push(firstRoot);
         const tests = app._testRunner!.findTests();
         for (let i = 1; i < tests.length; i++) {
-          new Root(app, "env" + i);
+          roots.push(new Root(app, "env" + i));
+        }
+
+        // Remove test constructs that don't belong in the current environment.
+        // this should leave a single test in each environment.
+        for (let i = 0; i < tests.length; i++) {
+          let currentTestSuffix = tests[i].node.path.substring(firstRoot.node.path.length);
+          TestRunner._disconnectTree(roots[i], (node) => {
+            return node instanceof Test && !node.node.path.endsWith(currentTestSuffix);
+          });
         }
       } else {
         new Root(app, "Default");
+      }
+    }
+  }
+
+  /**
+   * Scan the given construct tree and disconnect nodes that don't match the predicate.
+   * @internal
+  */
+  public static _disconnectTree(root: IConstruct, predicate: (node: IConstruct) => boolean) {
+    //const node = Node.of(Root);
+    if (predicate(root)) {
+      root.node.scope?.node.tryRemoveChild(root.node.id);
+    } else {
+      for (const child of root.node.children) {
+        TestRunner._disconnectTree(child, predicate);
       }
     }
   }
