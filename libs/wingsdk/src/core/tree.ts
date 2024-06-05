@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
 import { App } from "./app";
-import { IResource, Node, Resource } from "../std";
+import { Node } from "../std";
 import { VisualComponent } from "../ui/base";
 import { Colors, isOfTypeColors } from "../ui/colors";
 
@@ -220,14 +220,7 @@ export function synthesizeTree(app: App, outdir: string) {
   );
 }
 
-function isIResource(construct: IConstruct): construct is IResource {
-  return construct instanceof Resource;
-}
-
 function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
-  if (!isIResource(construct)) {
-    return;
-  }
   const display = Node.of(construct);
 
   const ui: UIComponent[] = [];
