@@ -155,6 +155,9 @@ export const GraphGenerator: FunctionComponent<
   }));
 
   const [jsonGraph, setJsonGraph] = useState<string>();
+
+  const lastGraph = useRef<ElkNode>();
+
   useEffect(() => {
     const nodeMap = new Map<string, ElkNode>();
     const processNode = (node: ElkNode) => {
@@ -212,9 +215,50 @@ export const GraphGenerator: FunctionComponent<
 
     const elk = new ELK();
 
+    const loadLastPositions = (graph: ElkNode) => {
+      if (!lastGraph.current) {
+        return graph;
+      }
+
+      const newGraph = JSON.parse(JSON.stringify(graph));
+
+      const processNode = (node: ElkNode) => {
+        const lastNode = lastGraph.current?.children?.find(
+          (lastNode) => lastNode.id === node.id,
+        );
+        if (lastNode) {
+          node.layoutOptions = {
+            ...node.layoutOptions,
+            "elk.position": `(x=${lastNode.x},y=${lastNode.y})`,
+          };
+          node.x = lastNode.x;
+          node.y = lastNode.y;
+        }
+        if (node.children) {
+          for (const child of node.children) {
+            processNode(child);
+          }
+        }
+      };
+
+      if (newGraph.children) {
+        for (const child of newGraph.children) {
+          processNode(child);
+        }
+      }
+
+      return newGraph;
+    };
+
+    const newGraph = loadLastPositions(JSON.parse(jsonGraph));
+
+    console.log("newGraph", newGraph);
     void elk
-      .layout(JSON.parse(jsonGraph))
+      .layout(newGraph)
       .then((graph) => {
+        lastGraph.current = graph;
+        console.log("generated", graph);
+
         if (abort) {
           return;
         }
