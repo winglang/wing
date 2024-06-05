@@ -26,6 +26,8 @@ const log = debug("wing:test");
 const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS";
 const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
 
+const PARALLELISM = { [BuiltinPlatform.TF_AZURE]: 5 };
+
 /**
  * Options for the `test` command.
  */
@@ -548,6 +550,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
 async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
   const { clean, testFilter, retry, platform = [BuiltinPlatform.SIM] } = options;
+  let tfParallelism = PARALLELISM[platform[0]];
 
   try {
     const installed = await isTerraformInstalled(synthDir);
@@ -559,7 +562,7 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
 
     await withSpinner("terraform init", async () => terraformInit(synthDir));
 
-    await withSpinner("terraform apply", () => terraformApply(synthDir));
+    await withSpinner("terraform apply", () => terraformApply(synthDir, tfParallelism));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
       const target = determineTargetFromPlatforms(platform);
@@ -598,7 +601,7 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
     if (clean) {
-      await cleanupTf(synthDir);
+      await cleanupTf(synthDir, tfParallelism);
     } else {
       noCleanUp(synthDir);
     }
@@ -697,8 +700,8 @@ const targetFolder: Record<string, string> = {
   [BuiltinPlatform.TF_GCP]: "shared-gcp",
 };
 
-async function cleanupTf(synthDir: string) {
-  await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
+async function cleanupTf(synthDir: string, parallelism?: number) {
+  await withSpinner("terraform destroy", () => terraformDestroy(synthDir, parallelism));
   rmSync(synthDir, { recursive: true, force: true });
 }
 
@@ -711,12 +714,20 @@ export async function terraformInit(synthDir: string) {
   return execCapture("terraform init", { cwd: synthDir });
 }
 
-async function terraformApply(synthDir: string) {
-  return execCapture("terraform apply -auto-approve", { cwd: synthDir });
+async function terraformApply(synthDir: string, parallelism?: number) {
+  return execCapture(
+    `terraform apply -auto-approve ${parallelism ? `-parallelism=${parallelism}` : ""}`,
+    { cwd: synthDir }
+  );
 }
 
-async function terraformDestroy(synthDir: string) {
-  return execCapture("terraform destroy -auto-approve", { cwd: synthDir });
+async function terraformDestroy(synthDir: string, parallelism?: number) {
+  return execCapture(
+    `terraform destroy -auto-approve ${parallelism ? `-parallelism=${parallelism}` : ""}`,
+    {
+      cwd: synthDir,
+    }
+  );
 }
 
 async function terraformOutput(synthDir: string, name: string) {
