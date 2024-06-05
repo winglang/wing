@@ -108,9 +108,11 @@ const getNodeInflights = (
   }));
 };
 
-export interface UseMapOptions {}
+export interface UseMapOptions {
+  expandedItems: string[];
+}
 
-export const useMap = ({}: UseMapOptions = {}) => {
+export const useMap = ({ expandedItems }: UseMapOptions) => {
   const query = trpc["app.map"].useQuery();
   const { tree: rawTree, connections: rawConnections } = query.data ?? {};
 
@@ -160,9 +162,16 @@ export const useMap = ({}: UseMapOptions = {}) => {
     const hiddenMap = new Map<string, boolean>();
     const traverse = (node: ConstructTreeNode, forceHidden?: boolean) => {
       const hidden = forceHidden || node.display?.hidden || false;
+
       hiddenMap.set(node.path, hidden);
-      for (const child of Object.values(node.children ?? {})) {
-        traverse(child, hidden);
+
+      const children = Object.values(node.children ?? {});
+      const canBeExpanded =
+        !!node.children && children.some((child) => !child.display?.hidden);
+      const collapsed = canBeExpanded && !expandedItems.includes(node.path);
+
+      for (const child of children) {
+        traverse(child, hidden || collapsed);
       }
     };
     const pseudoRoot = rawTree?.children?.["Default"];
@@ -170,7 +179,7 @@ export const useMap = ({}: UseMapOptions = {}) => {
       traverse(child!);
     }
     return hiddenMap;
-  }, [rawTree]);
+  }, [rawTree, expandedItems]);
 
   const isNodeHidden = useCallback(
     (path: string) => {

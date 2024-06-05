@@ -395,8 +395,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       </div>
 
       <div className="relative z-10 flex">
-        <div className="grow"></div>
-        <div className="relative cursor-grab backdrop-blur">
+        <div className="absolute cursor-grab backdrop-blur right-0">
           <MapControls
             onZoomIn={zoomIn}
             onZoomOut={zoomOut}

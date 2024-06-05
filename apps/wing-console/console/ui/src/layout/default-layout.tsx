@@ -77,6 +77,7 @@ export const DefaultLayout = ({
     expandedItems,
     setExpandedItems,
     expand,
+    collapse,
     expandAll,
     collapseAll,
     theme,
@@ -261,7 +262,7 @@ export const DefaultLayout = ({
                               return (
                                 <TopResizableWidget
                                   key={component.type}
-                                  className="h-1/3"
+                                  className="h-1/5"
                                 >
                                   {panelComponent}
                                 </TopResizableWidget>
@@ -300,6 +301,9 @@ export const DefaultLayout = ({
                           onSelectedNodeIdChange={setSelectedItemSingle}
                           selectedEdgeId={selectedEdgeId}
                           onSelectedEdgeIdChange={setSelectedEdgeId}
+                          onExpand={expand}
+                          onCollapse={collapse}
+                          expandedItems={expandedItems}
                         />
                       </div>
                       {!layout.rightPanel?.hide && (
