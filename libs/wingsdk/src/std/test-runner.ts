@@ -68,7 +68,6 @@ export class TestRunner extends Resource {
    * @internal
   */
   public static _disconnectTree(root: IConstruct, predicate: (node: IConstruct) => boolean) {
-    //const node = Node.of(Root);
     if (predicate(root)) {
       root.node.scope?.node.tryRemoveChild(root.node.id);
     } else {
