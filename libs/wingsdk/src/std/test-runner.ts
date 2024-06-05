@@ -15,7 +15,7 @@ export const TEST_RUNNER_FQN = fqnForType("std.TestRunner");
  * Properties for `TestRunner`.
  * @skipDocs
  */
-export interface TestRunnerProps { }
+export interface TestRunnerProps {}
 
 /**
  * A test engine.
@@ -52,9 +52,14 @@ export class TestRunner extends Resource {
         // Remove test constructs that don't belong in the current environment.
         // this should leave a single test in each environment.
         for (let i = 0; i < tests.length; i++) {
-          let currentTestSuffix = tests[i].node.path.substring(firstRoot.node.path.length);
+          let currentTestSuffix = tests[i].node.path.substring(
+            firstRoot.node.path.length
+          );
           TestRunner._disconnectTree(roots[i], (node) => {
-            return node instanceof Test && !node.node.path.endsWith(currentTestSuffix);
+            return (
+              node instanceof Test &&
+              !node.node.path.endsWith(currentTestSuffix)
+            );
           });
         }
       } else {
@@ -66,8 +71,11 @@ export class TestRunner extends Resource {
   /**
    * Scan the given construct tree and disconnect nodes that don't match the predicate.
    * @internal
-  */
-  public static _disconnectTree(root: IConstruct, predicate: (node: IConstruct) => boolean) {
+   */
+  public static _disconnectTree(
+    root: IConstruct,
+    predicate: (node: IConstruct) => boolean
+  ) {
     if (predicate(root)) {
       root.node.scope?.node.tryRemoveChild(root.node.id);
     } else {
