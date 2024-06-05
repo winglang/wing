@@ -521,15 +521,16 @@ pub fn fold_args<F>(f: &mut F, node: ArgList) -> ArgList
 where
 	F: Fold + ?Sized,
 {
-	ArgList::new(
-		node.pos_args.into_iter().map(|arg| f.fold_expr(arg)).collect(),
-		node
+	ArgList {
+		pos_args: node.pos_args.into_iter().map(|arg| f.fold_expr(arg)).collect(),
+		named_args: node
 			.named_args
 			.into_iter()
 			.map(|(name, arg)| (f.fold_symbol(name), f.fold_expr(arg)))
 			.collect(),
-		node.span,
-	)
+		span: node.span,
+		id: node.id,
+	}
 }
 
 pub fn fold_type_annotation<F>(f: &mut F, node: TypeAnnotation) -> TypeAnnotation

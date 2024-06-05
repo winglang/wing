@@ -87,7 +87,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
     ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = `${method.toUpperCase()} ${pathPattern}`;
-    Node.of(fn).hidden = true;
 
     const eventMapping = new EventMapping(
       this,

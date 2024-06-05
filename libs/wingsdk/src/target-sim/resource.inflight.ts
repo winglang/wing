@@ -1,7 +1,7 @@
 import * as path from "path";
 import { IResourceClient, SIM_RESOURCE_FQN } from "./resource";
 import { SimResourceAttributes, SimResourceSchema } from "./schema-resources";
-import { Bundle } from "../shared/bundling";
+import { Bundle, isBundleInvalidated } from "../shared/bundling";
 import {
   SandboxMultipleConcurrentCallsError,
   Sandbox,
@@ -136,9 +136,23 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
 
   public async save(): Promise<void> {}
 
-  public async plan(): Promise<UpdatePlan> {
-    // TODO: support other update plans
-    return UpdatePlan.REPLACE;
+  public async plan(invalidated: boolean): Promise<UpdatePlan> {
+    // TODO: support customizing update plans
+    if (invalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    // Check if any of the bundled files have changed since the last bundling
+    const bundleInvalidated = await isBundleInvalidated(
+      this.resolvedSourceCodeFile,
+      this.bundle!,
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
+    );
+    if (bundleInvalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    return UpdatePlan.SKIP;
   }
 
   public async call(method: string, args: Array<Json> = []): Promise<Json> {
