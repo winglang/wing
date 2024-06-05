@@ -165,10 +165,12 @@ test "Add fixtures" {
 class WidgetService {
   data: cloud.Bucket;
   counter: cloud.Counter;
+  bucket: myBucket;
 
   new() {
     this.data = new cloud.Bucket();
     this.counter = new cloud.Counter();
+    this.bucket = new myBucket() as "MyInternalBucket";
     
     // a field displays a labeled value, with optional refreshing
     new ui.Field(

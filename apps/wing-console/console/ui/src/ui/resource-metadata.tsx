@@ -1,10 +1,5 @@
+import { CubeIcon } from "@heroicons/react/20/solid";
 import {
-  CubeIcon,
-  ArrowLeftOnRectangleIcon,
-  ArrowRightOnRectangleIcon,
-} from "@heroicons/react/20/solid";
-import {
-  ArrowPathRoundedSquareIcon,
   CubeTransparentIcon,
   CursorArrowRaysIcon,
 } from "@heroicons/react/24/outline";
@@ -17,7 +12,6 @@ import {
   getResourceIconComponent,
   Attribute,
   ScrollableArea,
-  getResourceIconColors,
 } from "@wingconsole/design-system";
 import type { NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
@@ -216,7 +210,7 @@ export const ResourceMetadata = memo(
         resourceGroup,
         connectionsGroups: connectionsGroupsArray,
       };
-    }, [node, inbound, outbound]);
+    }, [node, inbound, outbound, icon]);
 
     const nodeLabel = useMemo(() => {
       const cloudResourceTypeName = node.type.split(".").at(-1) || "";
