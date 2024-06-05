@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import {
   ResourceIcon,
   SpinnerLoader,
@@ -115,7 +115,7 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
               }}
             >
               {collapsed && (
-                <ChevronDownIcon
+                <ChevronRightIcon
                   className={clsx(
                     "size-4",
                     "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
@@ -123,7 +123,7 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
                 />
               )}
               {!collapsed && (
-                <ChevronUpIcon
+                <ChevronDownIcon
                   className={clsx(
                     "size-4",
                     "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
@@ -319,7 +319,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                       }
                     }}
                   >
-                    <ChevronDownIcon
+                    <ChevronRightIcon
                       className={clsx(
                         "size-4",
                         "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
