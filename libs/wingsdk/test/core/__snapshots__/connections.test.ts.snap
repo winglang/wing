@@ -195,6 +195,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
