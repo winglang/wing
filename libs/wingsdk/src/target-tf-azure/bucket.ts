@@ -108,7 +108,6 @@ export class Bucket extends cloud.Bucket {
       [cloud.BucketInflightMethods.LIST]: [],
       [cloud.BucketInflightMethods.PUT]: [],
       [cloud.BucketInflightMethods.PUT_JSON]: [],
-      [cloud.BucketInflightMethods.PUBLIC_URL]: [],
       [cloud.BucketInflightMethods.EXISTS]: [],
       [cloud.BucketInflightMethods.TRY_GET]: [],
       [cloud.BucketInflightMethods.TRY_GET_JSON]: [],

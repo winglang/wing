@@ -701,8 +701,12 @@ const targetFolder: Record<string, string> = {
 };
 
 async function cleanupTf(synthDir: string, parallelism?: number) {
-  await withSpinner("terraform destroy", () => terraformDestroy(synthDir, parallelism));
-  rmSync(synthDir, { recursive: true, force: true });
+  try {
+    await withSpinner("terraform destroy", () => terraformDestroy(synthDir, parallelism));
+    rmSync(synthDir, { recursive: true, force: true });
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 async function isTerraformInstalled(synthDir: string) {

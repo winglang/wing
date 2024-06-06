@@ -21,6 +21,12 @@ catch { }
 let no_value = util.tryEnv(NOT_ACTUAL_ENV);
 assert(no_value == nil);
 
+/**
+ * setEnv()
+ */
+ util.setEnv("FOO", "bar");
+ assert(util.env("FOO") == "bar");
+
 test "use util from inflight" {
   // --inflight env--
   assert(util.env("WING_TARGET").length > 0);
@@ -28,15 +34,8 @@ test "use util from inflight" {
   // --inflight tryEnv--
   let noValue = util.Util.tryEnv(NOT_ACTUAL_ENV);
   assert(noValue == nil);
-}
-
-/**
- * setEnv()
- */
-util.setEnv("FOO", "bar");
-assert(util.env("FOO") == "bar");
  
-test "set env from inflight" {
+// "set env from inflight" 
   util.setEnv("FOO", "baz");
   assert(util.env("FOO") == "baz");
 }
