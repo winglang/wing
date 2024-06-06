@@ -382,15 +382,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/b2/Default",
                           },
-                          "S3BucketNotification": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformResource",
-                              "version": "0.20.3",
-                            },
-                            "display": {},
-                            "id": "S3BucketNotification",
-                            "path": "root/Default/Default/BigPublisher/b2/S3BucketNotification",
-                          },
                           "OnCreate": {
                             "children": {
                               "Default": {
@@ -493,6 +484,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "fqn": "cdktf.TerraformResource",
                                   "version": "0.20.3",
                                 },
+                                "display": {},
                                 "id": "InvokePermission-c8957161bd24a9a75910007bdeef4fc517fd85b21a",
                                 "path": "root/Default/Default/BigPublisher/b2/OnCreate-OnMessage0/InvokePermission-c8957161bd24a9a75910007bdeef4fc517fd85b21a",
                               },
@@ -522,6 +514,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "fqn": "cdktf.TerraformResource",
                               "version": "0.20.3",
                             },
+                            "display": {},
                             "id": "S3BucketNotification",
                             "path": "root/Default/Default/BigPublisher/b2/S3BucketNotification",
                           },
