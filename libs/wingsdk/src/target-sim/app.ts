@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { IConstruct } from "constructs";
 import { SIM_CONTAINER_FQN } from "./container";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { POLICY_FQN } from "./policy";
@@ -31,6 +32,7 @@ import {
   TypeSchema,
   WingSimulatorSchema,
 } from "../simulator";
+import { resolveTokens } from "../simulator/tokens";
 import { TEST_RUNNER_FQN } from "../std";
 
 /**
@@ -166,7 +168,9 @@ export class App extends core.App {
     }
 
     // write simulator.json file into workdir
-    this.synthSimulatorFile(this.outdir);
+    const spec = this.synthSimulatorFile(this.outdir);
+
+    this.addTokenConnections(spec);
 
     // write tree.json file into workdir
     core.synthesizeTree(this, this.outdir);
@@ -181,6 +185,35 @@ export class App extends core.App {
     }
 
     return this.outdir;
+  }
+
+  /**
+   * Scans the app spec for token references and adds connections to reflect
+   * this relationship.
+   *
+   * @param spec The simulator spec
+   */
+  private addTokenConnections(spec: WingSimulatorSchema) {
+    const map: Record<string, IConstruct> = {};
+    for (const c of this.node.findAll()) {
+      map[c.node.path] = c;
+    }
+
+    for (const [from, resource] of Object.entries(spec.resources)) {
+      resolveTokens(resource.props, (to) => {
+        // skip references to the "handle" of the target resource because it would be reflected by
+        // the connections created by inflight method calls.
+        if (to.attr !== "handle") {
+          core.Connections.of(this).add({
+            source: map[from],
+            target: map[to.path],
+            targetOp: to.attr,
+            name: "<ref>",
+          });
+        }
+        return "<TOKEN>"; // <-- not used
+      });
+    }
   }
 
   private synthSimulatorFile(outdir: string) {
@@ -222,5 +255,7 @@ export class App extends core.App {
       JSON.stringify(contents, undefined, 2),
       { encoding: "utf8" }
     );
+
+    return contents;
   }
 }

@@ -228,7 +228,7 @@ function addConnectionsFromLiftMap(
             sourceOp: baseOp ?? op,
             target: dep,
             targetOp: depOp,
-            name: depOp,
+            name: "call",
           });
         }
       } else if (hasLiftMap(dep)) {

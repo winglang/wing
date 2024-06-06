@@ -37,6 +37,7 @@ export const useExplorer = () => {
     expandedItems,
     setExpandedItems,
     expand,
+    collapse,
     expandAll,
     collapseAll,
   } = useTreeMenuItems({
@@ -83,10 +84,6 @@ export const useExplorer = () => {
     setSelectedItems([selectedNode]);
   }, [selectedNode, setSelectedItems]);
 
-  useEffect(() => {
-    expandAll();
-  }, [items, expandAll]);
-
   return {
     items,
     selectedItems,
@@ -94,6 +91,7 @@ export const useExplorer = () => {
     expandedItems,
     setExpandedItems,
     expand,
+    collapse,
     expandAll,
     collapseAll,
   };
