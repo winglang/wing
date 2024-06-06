@@ -22,6 +22,7 @@ const createTreeMenuItemFromExplorerTreeItem = (
         icon={item.display?.icon}
       />
     ) : undefined,
+    expanded: item.display?.expanded ?? false,
     children: item.childItems?.map((item) =>
       createTreeMenuItemFromExplorerTreeItem(item),
     ),
