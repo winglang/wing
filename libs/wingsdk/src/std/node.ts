@@ -90,9 +90,9 @@ export class Node {
   public icon?: string;
 
   /**
-   * Whether the construct is expandable in the UI.
+   * Whether the construct is collapsible in the UI.
    */
-  public expandable?: boolean;
+  public collapsible?: boolean;
 
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;

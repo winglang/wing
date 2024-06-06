@@ -46,7 +46,7 @@ interface WrapperProps {
   onClick?: () => void;
   color?: string;
   icon?: string;
-  collapsable?: boolean;
+  collapsible?: boolean;
   collapsed?: boolean;
   onCollapse?: (value: boolean) => void;
 }
@@ -60,7 +60,7 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
     children,
     color,
     icon,
-    collapsable,
+    collapsible,
     collapsed = false,
     onCollapse = (value: boolean) => {},
   }) => {
@@ -110,7 +110,7 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
             {name}
           </span>
           <div className="flex grow justify-end">
-            {collapsable && (
+            {collapsible && (
               <div
                 className="pl-1"
                 onClick={() => {
@@ -153,7 +153,7 @@ interface ContainerNodeProps {
   collapsed?: boolean;
   onCollapse?: (value: boolean) => void;
   color?: string;
-  collapsable?: boolean;
+  collapsible?: boolean;
   icon?: string;
 }
 
@@ -179,7 +179,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             onCollapse={props.onCollapse}
             collapsed={props.collapsed}
             color={props.color}
-            collapsable={props.collapsable}
+            collapsible={props.collapsible}
             icon={props.icon}
           >
             <div className="p-4">
@@ -210,7 +210,7 @@ interface ConstructNodeProps {
   onCollapse: (value: boolean) => void;
   collapsed: boolean;
   icon?: string;
-  collapsable?: boolean;
+  collapsible?: boolean;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -228,7 +228,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       onCollapse,
       collapsed,
       icon,
-      collapsable = true,
+      collapsible = true,
     }) => {
       const select = useCallback(
         () => onSelectedNodeIdChange(id),
@@ -405,7 +405,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             collapsed={collapsed}
             color={color}
             icon={icon}
-            collapsable={collapsable}
+            collapsible={collapsible}
           >
             <NodeChildren>
               {inflights.length > 0 && renderedNode}
@@ -684,7 +684,7 @@ export const MapView = memo(
 
         const children = Object.values(node.children ?? {});
         const canBeExpanded =
-          node.display?.expandable !== false &&
+          node.display?.collapsible !== false &&
           !!node.children &&
           children.some((child) => !child.display?.hidden);
         const collapsed = canBeExpanded && !expandedItems.includes(node.path);
@@ -700,7 +700,7 @@ export const MapView = memo(
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             highlight={props.selectedNodeId === node.path}
             hasChildNodes={childNodes.length > 0}
-            collapsable={node.display?.expandable}
+            collapsible={node.display?.collapsible}
             collapsed={collapsed}
             onCollapse={(collapse) => {
               if (collapse) {

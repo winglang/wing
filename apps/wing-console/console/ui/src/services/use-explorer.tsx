@@ -22,7 +22,7 @@ const createTreeMenuItemFromExplorerTreeItem = (
         icon={item.display?.icon}
       />
     ) : undefined,
-    expandable: item.display?.expandable,
+    collapsible: item.display?.collapsible,
     children: item.childItems?.map((item) =>
       createTreeMenuItemFromExplorerTreeItem(item),
     ),
@@ -86,21 +86,26 @@ export const useExplorer = () => {
   }, [selectedNode, setSelectedItems]);
 
   const initialExpandedItems = useMemo(() => {
-    const nonExpandableItems: string[] = [];
+    const newItems: string[] = [];
 
-    const accumulateNonExpandableItems = (items: TreeMenuItem[]): void => {
+    // if there is only one item, expand it
+    if (items.length === 1 && items[0]) {
+      return [items[0].id];
+    }
+
+    const getNonCollasibleItems = (items: TreeMenuItem[]): void => {
       for (const item of items) {
-        if (item.expandable === false) {
-          nonExpandableItems.push(item.id);
+        if (item.collapsible === false) {
+          newItems.push(item.id);
         }
         if (item.children && item.children.length > 0) {
-          accumulateNonExpandableItems(item.children);
+          getNonCollasibleItems(item.children);
         }
       }
     };
 
-    accumulateNonExpandableItems(items);
-    return nonExpandableItems;
+    getNonCollasibleItems(items);
+    return newItems;
   }, [items]);
 
   useEffect(() => {

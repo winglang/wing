@@ -88,9 +88,9 @@ export interface DisplayInfo {
   readonly icon?: string;
 
   /**
-   * Whether the resource is expandable in the UI.
+   * Whether the resource is collapsible in the UI.
    */
-  readonly expandable?: boolean;
+  readonly collapsible?: boolean;
 }
 
 /** @internal */
@@ -246,7 +246,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
     ui ||
     display.color ||
     display.icon ||
-    display.expandable
+    display.collapsible
   ) {
     return {
       title: display.title,
@@ -256,7 +256,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
       ui: ui.length > 0 ? ui : undefined,
       color: isOfTypeColors(display.color) ? display.color : undefined,
       icon: display.icon,
-      expandable: display.expandable,
+      collapsible: display.collapsible,
     };
   }
   return;
