@@ -96,12 +96,12 @@ export const Menu = ({
                   theme.bgInput,
                   theme.borderInput,
                   theme.focusVisible,
-                  "rounded-xl",
+                  "rounded-lg",
                   "p-1 text-sm/6",
                 )}
               >
                 {children}
-                <div className="p-1">
+                <div className="p-0.5">
                   {items.map((item, index) => (
                     <HeadlessMenu.Item key={item.label || index}>
                       {({ active }) => (
@@ -117,7 +117,7 @@ export const Menu = ({
                                 theme.textInput,
                                 item.disabled &&
                                   "cursor-not-allowed opacity-50",
-                                "group flex w-full items-center gap-2 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10",
+                                "group flex w-full items-center gap-2 rounded py-1.5 px-3 data-[focus]:bg-white/10",
                               )}
                             >
                               {item.icon && (
