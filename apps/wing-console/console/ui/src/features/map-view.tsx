@@ -46,6 +46,7 @@ interface WrapperProps {
   onClick?: () => void;
   color?: string;
   icon?: string;
+  collapsable?: boolean;
   collapsed?: boolean;
   onCollapse?: (value: boolean) => void;
 }
@@ -56,11 +57,12 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
     fqn,
     highlight,
     onClick,
-    collapsed = false,
-    onCollapse = (value: boolean) => {},
     children,
     color,
     icon,
+    collapsable,
+    collapsed = false,
+    onCollapse = (value: boolean) => {},
   }) => {
     /* eslint-disable jsx-a11y/no-static-element-interactions */
     /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -108,29 +110,31 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
             {name}
           </span>
           <div className="flex grow justify-end">
-            <div
-              className="pl-1"
-              onClick={() => {
-                onCollapse(!collapsed);
-              }}
-            >
-              {collapsed && (
-                <ChevronRightIcon
-                  className={clsx(
-                    "size-4",
-                    "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
-                  )}
-                />
-              )}
-              {!collapsed && (
-                <ChevronDownIcon
-                  className={clsx(
-                    "size-4",
-                    "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
-                  )}
-                />
-              )}
-            </div>
+            {collapsable && (
+              <div
+                className="pl-1"
+                onClick={() => {
+                  onCollapse(!collapsed);
+                }}
+              >
+                {collapsed && (
+                  <ChevronRightIcon
+                    className={clsx(
+                      "size-4",
+                      "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                    )}
+                  />
+                )}
+                {!collapsed && (
+                  <ChevronDownIcon
+                    className={clsx(
+                      "size-4",
+                      "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                    )}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
         {!collapsed && children}
@@ -149,6 +153,7 @@ interface ContainerNodeProps {
   collapsed?: boolean;
   onCollapse?: (value: boolean) => void;
   color?: string;
+  collapsable?: boolean;
   icon?: string;
 }
 
@@ -174,6 +179,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             onCollapse={props.onCollapse}
             collapsed={props.collapsed}
             color={props.color}
+            collapsable={props.collapsable}
             icon={props.icon}
           >
             <div className="p-4">
@@ -204,6 +210,7 @@ interface ConstructNodeProps {
   onCollapse: (value: boolean) => void;
   collapsed: boolean;
   icon?: string;
+  collapsable?: boolean;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -221,6 +228,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       onCollapse,
       collapsed,
       icon,
+      collapsable = true,
     }) => {
       const select = useCallback(
         () => onSelectedNodeIdChange(id),
@@ -397,6 +405,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             collapsed={collapsed}
             color={color}
             icon={icon}
+            collapsable={collapsable}
           >
             <NodeChildren>
               {inflights.length > 0 && renderedNode}
@@ -675,7 +684,9 @@ export const MapView = memo(
 
         const children = Object.values(node.children ?? {});
         const canBeExpanded =
-          !!node.children && children.some((child) => !child.display?.hidden);
+          node.display?.expandable !== false &&
+          !!node.children &&
+          children.some((child) => !child.display?.hidden);
         const collapsed = canBeExpanded && !expandedItems.includes(node.path);
 
         return (
@@ -689,6 +700,7 @@ export const MapView = memo(
             onSelectedNodeIdChange={props.onSelectedNodeIdChange}
             highlight={props.selectedNodeId === node.path}
             hasChildNodes={childNodes.length > 0}
+            collapsable={node.display?.expandable}
             collapsed={collapsed}
             onCollapse={(collapse) => {
               if (collapse) {

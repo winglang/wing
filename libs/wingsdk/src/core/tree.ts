@@ -86,6 +86,11 @@ export interface DisplayInfo {
    * The icon of the resource in the UI.
    */
   readonly icon?: string;
+
+  /**
+   * Whether the resource is expandable in the UI.
+   */
+  readonly expandable?: boolean;
 }
 
 /** @internal */
@@ -240,7 +245,8 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
     display.hidden ||
     ui ||
     display.color ||
-    display.icon
+    display.icon ||
+    display.expandable
   ) {
     return {
       title: display.title,
@@ -250,6 +256,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
       ui: ui.length > 0 ? ui : undefined,
       color: isOfTypeColors(display.color) ? display.color : undefined,
       icon: display.icon,
+      expandable: display.expandable,
     };
   }
   return;

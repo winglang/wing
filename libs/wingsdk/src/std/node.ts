@@ -89,6 +89,11 @@ export class Node {
    */
   public icon?: string;
 
+  /**
+   * Whether the construct is expandable in the UI.
+   */
+  public expandable?: boolean;
+
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
   private _app: IApp | undefined;

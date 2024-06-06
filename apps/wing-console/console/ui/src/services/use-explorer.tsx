@@ -1,6 +1,6 @@
 import { ResourceIcon } from "@wingconsole/design-system";
 import type { ExplorerItem } from "@wingconsole/server";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { TreeMenuItem } from "../ui/use-tree-menu-items.js";
 import { useTreeMenuItems } from "../ui/use-tree-menu-items.js";
@@ -22,6 +22,7 @@ const createTreeMenuItemFromExplorerTreeItem = (
         icon={item.display?.icon}
       />
     ) : undefined,
+    expandable: item.display?.expandable,
     children: item.childItems?.map((item) =>
       createTreeMenuItemFromExplorerTreeItem(item),
     ),
@@ -83,6 +84,28 @@ export const useExplorer = () => {
     }
     setSelectedItems([selectedNode]);
   }, [selectedNode, setSelectedItems]);
+
+  const initialExpandedItems = useMemo(() => {
+    const nonExpandableItems: string[] = [];
+
+    const accumulateNonExpandableItems = (items: TreeMenuItem[]): void => {
+      for (const item of items) {
+        if (item.expandable === false) {
+          nonExpandableItems.push(item.id);
+        }
+        if (item.children && item.children.length > 0) {
+          accumulateNonExpandableItems(item.children);
+        }
+      }
+    };
+
+    accumulateNonExpandableItems(items);
+    return nonExpandableItems;
+  }, [items]);
+
+  useEffect(() => {
+    setExpandedItems(initialExpandedItems);
+  }, [initialExpandedItems, setExpandedItems]);
 
   return {
     items,
