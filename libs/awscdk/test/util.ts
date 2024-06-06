@@ -1,4 +1,29 @@
 import { Template } from "aws-cdk-lib/assertions";
+import { App, CdkAppProps, Platform } from "../src";
+import { PolyconFactory } from "@winglang/sdk/lib/core";
+import { mkdtemp } from "@winglang/sdk/test/util";
+
+export interface AwsCdkAppProps extends Partial<CdkAppProps> {}
+
+export class AwsCdkApp extends App {
+  constructor(props: AwsCdkAppProps = {}) {
+    const platform = new Platform();
+    const polyconFactory = new PolyconFactory(
+      [platform.newInstance.bind(platform)],
+      [platform.typeForFqn.bind(platform)]
+    );
+
+    super({
+      outdir: mkdtemp(),
+      entrypointDir: __dirname,
+      isTestEnvironment: false,
+      rootConstruct: undefined,
+      polyconFactory,
+      stackName: "my-project",
+      ...props,
+    });
+  }
+}
 
 /**
  * Sanitize the text of a code bundle to remove path references that are system-specific.
@@ -32,8 +57,3 @@ export function awscdkSanitize(template: Template): any {
 
   return JSON.parse(jsonString);
 }
-
-export const CDK_APP_OPTS = {
-  stackName: "my-project",
-  entrypointDir: __dirname,
-};

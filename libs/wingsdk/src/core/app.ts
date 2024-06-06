@@ -205,7 +205,15 @@ export abstract class App extends Construct implements IApp {
 
 const POLYCON_FACTORY_SYMBOL = Symbol("@winglang/sdk.core.PolyconFactory");
 
+/**
+ * A factory for instantiating new classes defined by platform(s).
+ */
 export class PolyconFactory {
+  /**
+   * Returns the PolyconFactory for the given scope.
+   * @param scope the scope to get the PolyconFactory for
+   * @returns the PolyconFactory for the given scope
+   */
   public static of(scope: IConstruct): PolyconFactory {
     const app = Node.of(scope).app;
     const factory = (app as any)[POLYCON_FACTORY_SYMBOL];
@@ -217,11 +225,16 @@ export class PolyconFactory {
 
   private readonly newInstanceOverrides: any[];
   private readonly typeForFqnOverrides: any[];
+
   public constructor(newInstanceOverrides: any[], typeForFqnOverrides: any[]) {
     this.newInstanceOverrides = newInstanceOverrides;
     this.typeForFqnOverrides = typeForFqnOverrides;
   }
 
+  /**
+   * Instantiates a new object of the given type.
+   * Throws an error if the type is not supported by any of the registered platforms.
+   */
   public new(
     fqn: string,
     ctor: any,

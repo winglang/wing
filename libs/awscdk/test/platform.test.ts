@@ -1,15 +1,24 @@
 import { test, expect } from "vitest";
-import { Platform } from "../src/platform"
+import { Platform } from "../src/platform";
 import { mkdtemp } from "@winglang/sdk/test/util";
 import { readdirSync } from "fs";
 import { Bucket } from "../src";
 import { Stack } from "aws-cdk-lib";
+import { PolyconFactory } from "@winglang/sdk/lib/core";
 
 test("wing platform", async () => {
   const workdir = mkdtemp();
   const platform = new Platform();
   process.env.CDK_STACK_NAME = "MyStack";
-  const app = platform.newApp?.({ entrypointDir: workdir, outdir: workdir });
+  const factory = new PolyconFactory(
+    [platform.newInstance.bind(platform)],
+    [platform.typeForFqn.bind(platform)]
+  );
+  const app = platform.newApp?.({
+    entrypointDir: workdir,
+    outdir: workdir,
+    polyconFactory: factory,
+  });
 
   new Bucket(app, "bucket");
 
@@ -56,8 +65,16 @@ test("CDK_STACK_NAME, CDK_AWS_ACCOUNT, CDK_AWS_REGION", async () => {
   process.env.CDK_STACK_NAME = "YourStack";
   process.env.CDK_AWS_ACCOUNT = "123";
   process.env.CDK_AWS_REGION = "us-west-2";
+  const factory = new PolyconFactory(
+    [platform.newInstance.bind(platform)],
+    [platform.typeForFqn.bind(platform)]
+  );
 
-  const app = platform.newApp?.({ entrypointDir: workdir, outdir: workdir });
+  const app = platform.newApp?.({
+    entrypointDir: workdir,
+    outdir: workdir,
+    polyconFactory: factory,
+  });
   const stack = Stack.of(app);
 
   expect(stack.resolve(stack.region)).toStrictEqual("us-west-2");
