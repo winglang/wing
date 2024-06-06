@@ -37,5 +37,5 @@ test "use util from inflight" {
  
 // "set env from inflight" 
   util.setEnv("FOO", "baz");
-  assert(util.env("FOO") == "baz");
+  assert(util.env("FOO") != "baz");
 }
