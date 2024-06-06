@@ -32,6 +32,7 @@ export interface Theme {
   borderInput: string;
   focusWithin: string;
   scrollbar: string;
+  focusVisible: string;
 }
 
 export type Mode = "dark" | "light" | "auto";
@@ -64,6 +65,8 @@ export const DefaultTheme: Theme = {
     "text-slate-900 placeholder:text-slate-500 dark:text-slate-300 dark:placeholder:text-slate-500",
   focusInput:
     "focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 outline-none",
+  focusVisible:
+    "focus-visible:ring-2 focus-visible:ring-sky-500/50 focus-visible:border-sky-500 outline-none",
   borderInput: "border-slate-300 dark:border-slate-800",
   focusWithin:
     "focus-within:ring-2 focus-within:ring-sky-500/50 focus-within:border-sky-500 outline-none",

@@ -53,6 +53,13 @@ export const createAppRouter = () => {
         config: ctx.layoutConfig,
       };
     }),
+    "app.restart": createProcedure.mutation(async ({ ctx }) => {
+      const simulator = await ctx.simulator();
+      ctx.logger.verbose("Reloading simulator...", "console", {
+        messageType: "info",
+      });
+      await simulator.reload(true);
+    }),
     "app.logs": createProcedure
       .input(
         z.object({
