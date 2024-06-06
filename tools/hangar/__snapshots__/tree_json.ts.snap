@@ -382,6 +382,15 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/b2/Default",
                           },
+                          "S3BucketNotification": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "S3BucketNotification",
+                            "path": "root/Default/Default/BigPublisher/b2/S3BucketNotification",
+                          },
                           "OnCreate": {
                             "children": {
                               "Default": {
