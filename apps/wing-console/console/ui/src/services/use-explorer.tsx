@@ -94,7 +94,7 @@ export const useExplorer = () => {
 
     const getExpandedNodes = (items: TreeMenuItem[]): void => {
       for (const item of items) {
-        if (item.expanded === false) {
+        if (item.expanded === true) {
           newItems.push(item.id);
         }
         if (item.children && item.children.length > 0) {

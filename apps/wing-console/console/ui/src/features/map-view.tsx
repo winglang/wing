@@ -56,11 +56,11 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
     fqn,
     highlight,
     onClick,
+    collapsed = false,
+    onCollapse = (value: boolean) => {},
     children,
     color,
     icon,
-    collapsed = false,
-    onCollapse = (value: boolean) => {},
   }) => {
     /* eslint-disable jsx-a11y/no-static-element-interactions */
     /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -202,7 +202,7 @@ interface ConstructNodeProps {
   onSelectedNodeIdChange: (id: string | undefined) => void;
   color?: string;
   onCollapse: (value: boolean) => void;
-  expanded: boolean;
+  collapsed: boolean;
   icon?: string;
 }
 
@@ -219,7 +219,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       hasChildNodes,
       color,
       onCollapse,
-      expanded,
+      collapsed,
       icon,
     }) => {
       const select = useCallback(
