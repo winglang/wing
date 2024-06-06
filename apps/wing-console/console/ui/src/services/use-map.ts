@@ -167,9 +167,7 @@ export const useMap = ({ expandedItems }: UseMapOptions) => {
 
       const children = Object.values(node.children ?? {});
       const canBeExpanded =
-        node.display?.collapsible !== false &&
-        !!node.children &&
-        children.some((child) => !child.display?.hidden);
+        !!node.children && children.some((child) => !child.display?.hidden);
       const collapsed = canBeExpanded && !expandedItems.includes(node.path);
 
       for (const child of children) {

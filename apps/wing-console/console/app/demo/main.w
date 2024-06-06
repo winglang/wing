@@ -107,7 +107,7 @@ let table = new ex.Table(
 let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
   rate: 5m
 }) as "Rate Schedule";
-nodeof(rateSchedule).collapsible = false;
+nodeof(rateSchedule).expanded = true;
 
 rateSchedule.onTick(inflight () => {
   log("Rate schedule ticked!");

@@ -90,9 +90,12 @@ export class Node {
   public icon?: string;
 
   /**
-   * Whether the construct is collapsible in the UI.
+   * The default view of this resource in the UI. By default, nodes are collapsed,
+   * so set this to `true` if you want the node to be expanded by default.
+   *
+   * @default false
    */
-  public collapsible?: boolean;
+  readonly expanded?: boolean;
 
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;

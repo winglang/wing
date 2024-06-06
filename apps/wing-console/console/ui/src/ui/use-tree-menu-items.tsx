@@ -7,7 +7,7 @@ export interface TreeMenuItem {
   label: string;
   secondaryLabel?: string | ReactNode | ((item: TreeMenuItem) => ReactNode);
   children?: TreeMenuItem[];
-  collapsible?: boolean;
+  expanded?: boolean;
 }
 
 export function useTreeMenuItems(options?: {

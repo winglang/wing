@@ -22,7 +22,6 @@ const createTreeMenuItemFromExplorerTreeItem = (
         icon={item.display?.icon}
       />
     ) : undefined,
-    collapsible: item.display?.collapsible,
     children: item.childItems?.map((item) =>
       createTreeMenuItemFromExplorerTreeItem(item),
     ),
@@ -93,18 +92,18 @@ export const useExplorer = () => {
       return [items[0].id];
     }
 
-    const getNonCollasibleItems = (items: TreeMenuItem[]): void => {
+    const getExpandedNodes = (items: TreeMenuItem[]): void => {
       for (const item of items) {
-        if (item.collapsible === false) {
+        if (item.expanded === false) {
           newItems.push(item.id);
         }
         if (item.children && item.children.length > 0) {
-          getNonCollasibleItems(item.children);
+          getExpandedNodes(item.children);
         }
       }
     };
 
-    getNonCollasibleItems(items);
+    getExpandedNodes(items);
     return newItems;
   }, [items]);
 

@@ -88,9 +88,12 @@ export interface DisplayInfo {
   readonly icon?: string;
 
   /**
-   * Whether the resource is collapsible in the UI.
+   * The default view of this resource in the UI. By default, nodes are collapsed,
+   * so set this to `true` if you want the node to be expanded by default.
+   *
+   * @default false
    */
-  readonly collapsible?: boolean;
+  readonly expanded?: boolean;
 }
 
 /** @internal */
@@ -246,7 +249,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
     ui ||
     display.color ||
     display.icon ||
-    display.collapsible
+    display.expanded
   ) {
     return {
       title: display.title,
@@ -256,7 +259,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
       ui: ui.length > 0 ? ui : undefined,
       color: isOfTypeColors(display.color) ? display.color : undefined,
       icon: display.icon,
-      collapsible: display.collapsible,
+      expanded: display.expanded,
     };
   }
   return;
