@@ -14,7 +14,6 @@ describe("compatibility spy", async () => {
   const manager = new platform.PlatformManager({
     platformPaths: ["sim", join(__dirname, "../lib")],
   });
-  const factory = manager.createPolyconFactory();
 
   vi.spyOn(manager, "loadPlatformPath").mockImplementation(
     (platformPath: string) => {
@@ -23,6 +22,8 @@ describe("compatibility spy", async () => {
       );
     }
   );
+
+  const factory = manager.createPolyconFactory();
 
   const app = manager.createApp({
     entrypointDir: __dirname,

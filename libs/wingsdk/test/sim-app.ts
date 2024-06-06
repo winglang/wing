@@ -36,9 +36,10 @@ export class SimApp extends App {
     const { isTestEnvironment, rootConstruct, outdir } = props;
 
     const platform = new Platform();
-    const polyconFactory = new PolyconFactory([
-      platform.newInstance.bind(platform),
-    ]);
+    const polyconFactory = new PolyconFactory(
+      [platform.newInstance.bind(platform)],
+      [platform.typeForFqn.bind(platform)]
+    );
 
     super({
       outdir: outdir ?? mkdtemp(),

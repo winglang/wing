@@ -21,9 +21,10 @@ test("app name can be customized", () => {
   // WHEN
   const outdir = join(mkdtemp(), `${APP_NAME}.wsim`);
   const platform = new Platform();
-  const polyconFactory = new PolyconFactory([
-    platform.newInstance.bind(platform),
-  ]);
+  const polyconFactory = new PolyconFactory(
+    [platform.newInstance.bind(platform)],
+    [platform.typeForFqn.bind(platform)]
+  );
   const app = new App({
     outdir,
     name: APP_NAME,

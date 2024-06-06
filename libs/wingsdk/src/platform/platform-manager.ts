@@ -117,6 +117,11 @@ export class PlatformManager {
       }
     });
 
+    // Reverse the overrides so that the last platform's newInstance
+    // method is attempted first, then the second to last, etc.
+    newInstanceOverrides.reverse();
+    typeForFqnOverrides.reverse();
+
     return new PolyconFactory(newInstanceOverrides, typeForFqnOverrides);
   }
 
@@ -303,6 +308,10 @@ function collectHooks(platformInstances: IPlatform[]) {
       result.storeSecretsHook = instance.storeSecrets.bind(instance);
     }
   });
+
+  // Reverse the newInstanceOverrides so that the last platform's newInstance
+  // method is attempted first, then the second to last, etc.
+  result.newInstanceOverrides = result.newInstanceOverrides.reverse();
 
   return result;
 }
