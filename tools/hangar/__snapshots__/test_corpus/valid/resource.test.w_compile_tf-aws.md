@@ -709,6 +709,8 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
@@ -725,7 +727,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.c = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+        this.c = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
       }
       static _toInflightType() {
         return `
@@ -869,10 +871,10 @@ class $Root extends $stdlib.std.Resource {
     class BigPublisher extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
-        this.b2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
-        this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
-        this.t = this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "Topic");
+        this.b = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+        this.b2 = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
+        this.q = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
+        this.t = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "Topic");
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
@@ -1131,16 +1133,15 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    const bucket = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const res = new Bar(this, "Bar", "Arr", bucket, MyEnum.B);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
     const bigOlPublisher = new BigPublisher(this, "BigPublisher");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:dependency cycles", new $Closure5(this, "$Closure5"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:dependency cycles", new $Closure5(this, "$Closure5"));
     new ScopeAndIdTestClass(this, "ScopeAndIdTestClass");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

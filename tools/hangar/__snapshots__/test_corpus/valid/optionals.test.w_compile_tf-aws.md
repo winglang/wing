@@ -124,6 +124,8 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -455,8 +457,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const payloadWithoutOptions = ({"a": "a"});
-    const payloadWithBucket = ({"a": "a", "c": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "orange bucket")});
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:t", new $Closure1(this, "$Closure1"));
+    const payloadWithBucket = ({"a": "a", "c": globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "orange bucket")});
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:t", new $Closure1(this, "$Closure1"));
     const str1 = undefined;
     const str2 = undefined;
     {
@@ -536,8 +538,7 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq($helpers.unwrap(maybeY), ""), "maybeY! == \"\"");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "optionals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "optionals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

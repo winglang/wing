@@ -551,6 +551,8 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
 const cloud = $stdlib.cloud;
 const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
@@ -588,7 +590,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "default api");
+    const api = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "default api");
     const handler = new $Closure1(this, "$Closure1");
     const testInvalidPath = ((path, apiInstance) => {
       let error = "";
@@ -643,11 +645,10 @@ class $Root extends $stdlib.std.Resource {
     (testValidPath("/test/segment1/segment2?query=value1&query2=value2"));
     (testValidPath("/test/path.withDots"));
     (testValidPath("/test/path/.withDots/:param/:param-dash/x"));
-    (testValidPath("/", this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "api for root path")));
+    (testValidPath("/", globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "api for root path")));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api_valid_path.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api_valid_path.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```
