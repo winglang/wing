@@ -80,10 +80,8 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-module.exports = function({ $PolyconFactory }) {
-  return {
-    ...require("./preflight.lib-1.cjs")({ $PolyconFactory }),
-  };
+module.exports = {
+  ...require("./preflight.lib-1.cjs"),
 };
 //# sourceMappingURL=preflight.cjs.map
 ```
@@ -102,78 +100,76 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-module.exports = function({ $PolyconFactory }) {
-  class ParentClass extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    addHandler(handler) {
-    }
-    static _toInflightType() {
-      return `
-        require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.cjs")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const ParentClassClient = ${ParentClass._toInflightType()};
-          const client = new ParentClassClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    get _liftMap() {
-      return ({
-        "foo": [
-        ],
-        "bar": [
-        ],
-        "$inflight_init": [
-        ],
-      });
-    }
-    static get _liftTypeMap() {
-      return ({
-        "static_method": [
-        ],
-      });
-    }
+class ParentClass extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
   }
-  class Child extends ParentClass {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static _toInflightType() {
-      return `
-        require("${$helpers.normalPath(__dirname)}/inflight.Child-1.cjs")({
-          $ParentClass: ${$stdlib.core.liftObject(ParentClass)},
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const ChildClient = ${Child._toInflightType()};
-          const client = new ChildClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    get _liftMap() {
-      return $stdlib.core.mergeLiftDeps(super._liftMap, {
-        "$inflight_init": [
-        ],
-      });
-    }
+  addHandler(handler) {
   }
-  return { ParentClass, Child };
-};
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.cjs")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const ParentClassClient = ${ParentClass._toInflightType()};
+        const client = new ParentClassClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "foo": [
+      ],
+      "bar": [
+      ],
+      "$inflight_init": [
+      ],
+    });
+  }
+  static get _liftTypeMap() {
+    return ({
+      "static_method": [
+      ],
+    });
+  }
+}
+class Child extends ParentClass {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.Child-1.cjs")({
+        $ParentClass: ${$stdlib.core.liftObject(ParentClass)},
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const ChildClient = ${Child._toInflightType()};
+        const client = new ChildClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return $stdlib.core.mergeLiftDeps(super._liftMap, {
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+module.exports = { ParentClass, Child };
 //# sourceMappingURL=preflight.lib-1.cjs.map
 ```
 
