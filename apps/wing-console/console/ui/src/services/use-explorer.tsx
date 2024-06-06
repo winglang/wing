@@ -22,7 +22,7 @@ const createTreeMenuItemFromExplorerTreeItem = (
         icon={item.display?.icon}
       />
     ) : undefined,
-    expanded: item.display?.expanded ?? false,
+    expanded: item.display?.expanded,
     children: item.childItems?.map((item) =>
       createTreeMenuItemFromExplorerTreeItem(item),
     ),
@@ -88,8 +88,7 @@ export const useExplorer = () => {
   const initialExpandedItems = useMemo(() => {
     const newItems: string[] = [];
 
-    // if there is only one item, expand it
-    if (items.length === 1 && items[0]) {
+    if (items.length === 1 && items[0] && items[0].expanded !== false) {
       return [items[0].id];
     }
 
