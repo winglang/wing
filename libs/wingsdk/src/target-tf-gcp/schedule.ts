@@ -89,7 +89,7 @@ export class Schedule extends cloud.Schedule {
       sourceOp: cloud.ScheduleInflightMethods.TICK,
       target: cronFunction,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
-      name: "onTick()",
+      name: "tick",
     });
 
     return cronFunction;

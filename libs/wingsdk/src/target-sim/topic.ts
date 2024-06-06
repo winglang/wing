@@ -35,7 +35,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = "onMessage()";
+    Node.of(fn).title = "Subscriber";
 
     new EventMapping(this, App.of(this).makeId(this, "TopicEventMapping"), {
       subscriber: fn,
@@ -48,7 +48,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
-      name: "onMessage()",
+      name: "subscriber",
     });
 
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE_ASYNC);
@@ -69,7 +69,8 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       {}
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = "subscribeQueue()";
+    Node.of(fn).title = "QueueSubscriber";
+    Node.of(fn).hidden = true;
 
     new EventMapping(this, App.of(this).makeId(this, "TopicEventMapping"), {
       subscriber: fn,
@@ -82,7 +83,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE_ASYNC,
-      name: "subscribeQueue()",
+      name: "push",
     });
 
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE_ASYNC);

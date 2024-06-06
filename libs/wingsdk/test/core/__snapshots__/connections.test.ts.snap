@@ -203,3 +203,16 @@ exports.handler = async function(event) {
   },
 }
 `;
+
+exports[`source can be omitted from \`nodeof(x).addConnection()\` 1`] = `
+{
+  "connections": [
+    {
+      "name": "my_connection",
+      "source": "root/B1",
+      "target": "root/B2",
+    },
+  ],
+  "version": "connections-0.1",
+}
+`;
