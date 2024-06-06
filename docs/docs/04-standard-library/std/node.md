@@ -571,8 +571,8 @@ let AddConnectionProps = AddConnectionProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.std.AddConnectionProps.property.name">name</a></code> | <code>str</code> | A name for the connection. |
-| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.source">source</a></code> | <code>constructs.IConstruct</code> | The source of the connection. |
 | <code><a href="#@winglang/sdk.std.AddConnectionProps.property.target">target</a></code> | <code>constructs.IConstruct</code> | The target of the connection. |
+| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.source">source</a></code> | <code>constructs.IConstruct</code> | The source of the connection. |
 | <code><a href="#@winglang/sdk.std.AddConnectionProps.property.sourceOp">sourceOp</a></code> | <code>str</code> | An operation that the source construct supports. |
 | <code><a href="#@winglang/sdk.std.AddConnectionProps.property.targetOp">targetOp</a></code> | <code>str</code> | An operation that the target construct supports. |
 
@@ -590,18 +590,6 @@ A name for the connection.
 
 ---
 
-##### `source`<sup>Required</sup> <a name="source" id="@winglang/sdk.std.AddConnectionProps.property.source"></a>
-
-```wing
-source: IConstruct;
-```
-
-- *Type:* constructs.IConstruct
-
-The source of the connection.
-
----
-
 ##### `target`<sup>Required</sup> <a name="target" id="@winglang/sdk.std.AddConnectionProps.property.target"></a>
 
 ```wing
@@ -611,6 +599,19 @@ target: IConstruct;
 - *Type:* constructs.IConstruct
 
 The target of the connection.
+
+---
+
+##### `source`<sup>Optional</sup> <a name="source" id="@winglang/sdk.std.AddConnectionProps.property.source"></a>
+
+```wing
+source: IConstruct;
+```
+
+- *Type:* constructs.IConstruct
+- *Default:* this
+
+The source of the connection.
 
 ---
 

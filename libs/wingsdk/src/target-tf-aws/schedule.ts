@@ -78,7 +78,7 @@ export class Schedule extends cloud.Schedule {
       sourceOp: cloud.ScheduleInflightMethods.TICK,
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
-      name: "onTick()",
+      name: "tick",
     });
 
     return fn;

@@ -144,7 +144,7 @@ export const EdgeMetadata = ({
           </Attribute>
 
           <div className="border-t border-transparent">
-            <Attribute name="Access" centerLabel={false}>
+            <Attribute name="Connections" centerLabel={false}>
               <div className="w-full">
                 <Tree
                   entries={entries}
