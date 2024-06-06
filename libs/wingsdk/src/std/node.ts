@@ -95,7 +95,7 @@ export class Node {
    *
    * @default false
    */
-  readonly expanded?: boolean;
+  public expanded?: boolean;
 
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
