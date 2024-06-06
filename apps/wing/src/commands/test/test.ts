@@ -45,7 +45,7 @@ export interface TestOptions extends CompileOptions {
    */
   readonly testFilter?: string;
   /**
-   * How many times failed tests should be retried.
+   * How many times failed tests should be retried. default is one
    */
   readonly retry?: number;
   /**
@@ -115,17 +115,27 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   const startTime = Date.now();
   const results: SingleTestResult[] = [];
   process.env.WING_TARGET = determineTargetFromPlatforms(options.platform ?? []);
-  const testFile = async (entrypoint: string) => {
+  const testFile = async (
+    entrypoint: string,
+    retries: number = options.retry || 1
+  ): Promise<void> => {
     const testName = renderTestName(entrypoint);
     try {
       const singleTestResults = await testOne(testName, entrypoint, options);
+      if (singleTestResults.results.some((t) => !t.pass) && retries > 1) {
+        console.log(`Retrying failed tests. ${retries - 1} retries left.`);
+        return await testFile(entrypoint, retries - 1);
+      }
       results.push(singleTestResults);
     } catch (error: any) {
       console.log(error.message);
+      if (retries > 1) {
+        console.log(`Retrying failed tests. ${retries - 1} retries left.`);
+        return await testFile(entrypoint, retries - 1);
+      }
       const snapshot = error.message?.startsWith(SNAPSHOT_ERROR_PREFIX)
         ? SnapshotResult.MISMATCH
         : SnapshotResult.SKIPPED;
-
       results.push({
         testName,
         snapshot,
@@ -146,7 +156,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 
   await PromisePool.withConcurrency(options.parallel || selectedEntrypoints.length)
     .for(selectedEntrypoints)
-    .process(testFile);
+    .process((entrypointFile) => testFile(entrypointFile));
 
   const testDuration = Date.now() - startTime;
   printResults(results, testDuration);
@@ -342,34 +352,15 @@ export function filterTests(tests: Array<string>, regexString?: string): Array<s
   }
 }
 
-async function runTestsWithRetry(
+async function runTests(
   testRunner: std.ITestRunnerClient,
-  tests: string[],
-  retries: number
+  tests: string[]
 ): Promise<std.TestResult[]> {
-  let runCount = retries + 1;
-  let remainingTests = tests;
   const results: std.TestResult[] = [];
 
-  while (runCount > 0 && remainingTests.length > 0) {
-    const failedTests: string[] = [];
-
-    for (const testPath of remainingTests) {
-      const result = await testRunner.runTest(testPath);
-      results.push(result);
-
-      if (!result.pass) {
-        failedTests.push(testPath);
-      }
-    }
-
-    remainingTests = failedTests;
-
-    if (remainingTests.length > 0 && runCount > 1) {
-      console.log(`Retrying failed tests. ${runCount - 1} retries left.`);
-    }
-
-    runCount--;
+  for (const testPath of tests) {
+    const result = await testRunner.runTest(testPath);
+    results.push(result);
   }
 
   return results;
@@ -450,7 +441,7 @@ function shouldSkipTrace(trace: std.Trace): boolean {
 
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
-  const { clean, testFilter, retry } = options;
+  const { clean, testFilter } = options;
 
   let outputStream: SpinnerStream | undefined;
   let traceProcessor: TraceProcessor | undefined;
@@ -516,7 +507,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   const tests = await testRunner.listTests();
   const filteredTests = filterTests(tests, testFilter);
 
-  const results = await runTestsWithRetry(testRunner, filteredTests, retry ?? 0);
+  const results = await runTests(testRunner, filteredTests);
 
   await s.stop();
 
@@ -549,7 +540,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 }
 
 async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
-  const { clean, testFilter, retry, platform = [BuiltinPlatform.SIM] } = options;
+  const { clean, testFilter, platform = [BuiltinPlatform.SIM] } = options;
   let tfParallelism = PARALLELISM[platform[0]];
 
   try {
@@ -578,7 +569,7 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      return runTestsWithRetry(testRunner, tests, retry ?? 0);
+      return runTests(testRunner, tests);
     });
 
     const testReport = await renderTestReport(synthDir, results);
@@ -609,7 +600,7 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
 }
 
 async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
-  const { clean, testFilter, retry } = options;
+  const { clean, testFilter } = options;
   try {
     await isAwsCdkInstalled(synthDir);
 
@@ -635,7 +626,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      return runTestsWithRetry(testRunner, tests, retry ?? 0);
+      return runTests(testRunner, tests);
     });
 
     const testReport = await renderTestReport(synthDir, results);
