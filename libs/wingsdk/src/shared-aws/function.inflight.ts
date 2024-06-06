@@ -5,10 +5,21 @@ import {
   LogType,
 } from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@smithy/util-utf8";
+import { ILambdaContext } from "./function";
 import { IFunctionClient } from "../cloud";
-import { Trace, TraceType, Json } from "../std";
+import { LogLevel, Trace, TraceType, Json } from "../std";
 
 export class FunctionClient implements IFunctionClient {
+  public static async context(): Promise<ILambdaContext | undefined> {
+    const obj = (globalThis as any).$awsLambdaContext;
+    if (!obj) {
+      return undefined;
+    }
+    // workaround for the fact that JSII doesn't allow methods to start with "get"
+    obj.remainingTimeInMillis = obj.getRemainingTimeInMillis;
+    return obj;
+  }
+
   constructor(
     private readonly functionArn: string,
     private readonly constructPath: string,
@@ -95,11 +106,16 @@ function parseCommandOutput(
     } catch (_) {}
 
     if (errorData && "errorMessage" in errorData) {
-      const newError = new Error(
-        `Invoke failed with message: "${
-          errorData.errorMessage
-        }"\nLogs: ${cloudwatchLogsPath(functionArn)}`
+      let errorMessage = `Invoke failed with message: "${
+        errorData.errorMessage
+      }"\nLogs: ${cloudwatchLogsPath(functionArn)}`;
+      errorMessage = errorMessage.replace(
+        "Task timed out after",
+        "Function timed out after"
       );
+
+      const newError = new Error();
+      newError.message = errorMessage;
       newError.name = errorData.errorType;
       newError.stack = errorData.trace?.join("\n");
       throw newError;
@@ -150,6 +166,7 @@ export function parseLogs(logs: string, sourcePath: string) {
         sourceType: "@winglang/sdk.cloud.Function",
         sourcePath,
         type: TraceType.LOG,
+        level: LogLevel.INFO,
       };
       traces.push(trace);
     }

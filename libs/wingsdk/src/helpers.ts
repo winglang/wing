@@ -1,13 +1,17 @@
 // Code in this file will be automatically included in all inflight code bundles,
 // so avoid importing anything heavy here.
-import { deepStrictEqual, notDeepStrictEqual } from "node:assert";
+import { notDeepStrictEqual } from "node:assert";
+import * as path from "node:path";
 import type { Construct } from "constructs";
 import type { Node } from "./std/node";
+// since we moved from node:18 to node:20 the deepStrictEqual doesn't work as expected.
+// https://github.com/winglang/wing/issues/4444
+// therefore we're using a local version of the comparison from node 18.
+import { deepStrictEqual } from "./util/equality";
 
 export function eq(a: any, b: any): boolean {
   try {
-    deepStrictEqual(a, b);
-    return true;
+    return deepStrictEqual(a, b);
   } catch {
     return false;
   }
@@ -44,8 +48,8 @@ export function nodeof(construct: Construct): Node {
   return Node.of(construct);
 }
 
-export function normalPath(path: string): string {
-  return path.replace(/\\+/g, "/");
+export function normalPath(p: string): string {
+  return p.replace(/\\+/g, "/");
 }
 
 export function unwrap<T>(value: T): T | never {
@@ -154,4 +158,11 @@ export function createExternRequire(dirname: string) {
     });
     return newRequire(externPath);
   };
+}
+
+export function resolveDirname(
+  outdir: string,
+  relativeSourceDir: string
+): string {
+  return normalPath(path.resolve(outdir, relativeSourceDir));
 }

@@ -37,10 +37,6 @@ exports[`create a queue 1`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -101,6 +97,10 @@ exports[`create a queue 1`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -146,6 +146,7 @@ exports[`create a queue 1`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -609,7 +610,7 @@ exports[`push rejects empty message 1`] = `
 [
   "root/my_queue started",
   "root/my_queue/Policy started",
-  "Push (messages=).",
+  "Error: Empty messages are not allowed (Push (messages=).)",
   "root/my_queue/Policy stopped",
   "root/my_queue stopped",
 ]
@@ -651,10 +652,6 @@ exports[`push rejects empty message 2`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -716,6 +713,10 @@ exports[`push rejects empty message 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -761,6 +762,7 @@ exports[`push rejects empty message 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -820,10 +822,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -884,6 +882,10 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -929,6 +931,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -939,6 +942,55 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
 {
+  ".wing/consumer0_c87f5b09.cjs": ""use strict";
+var $handler = undefined;
+exports.handler = async function(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            const batchItemFailures = [];
+            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
+            if (!parsed.messages)
+                throw new Error('No "messages" field in event.');
+            for (const $message of parsed.messages) {
+                try {
+                    await ctx.handler($message.payload);
+                }
+                catch (error) {
+                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
+                    batchItemFailures.push($message);
+                }
+            }
+            return batchItemFailures.length > 0
+                ? JSON.stringify(batchItemFailures)
+                : undefined;
+        }
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (_, message) => {
+  if (message === "BAD MESSAGE") {
+    throw new Error("ERROR");
+  }
+}
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
+  return await $handler.handle(event);
+};",
   ".wing/function_c8ab799f.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
@@ -977,65 +1029,28 @@ exports.handler = async function(event) {
 )()));
   return await $handler.handle(event);
 };",
-  ".wing/setconsumer0_c8e33b9b.cjs": ""use strict";
-var $handler = undefined;
-exports.handler = async function(event) {
-  $handler = $handler ?? ((await (async () => {
-  const $func = async (ctx, event) => {
-            const batchItemFailures = [];
-            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
-            if (!parsed.messages)
-                throw new Error('No "messages" field in event.');
-            for (const $message of parsed.messages) {
-                try {
-                    await ctx.handler($message.payload);
-                }
-                catch (error) {
-                    batchItemFailures.push($message);
-                }
-            }
-            return batchItemFailures.length > 0
-                ? JSON.stringify(batchItemFailures)
-                : undefined;
-        }
-  const $ctx = {
-  handler: (await (async () => {
-  const $func = async (_, message) => {
-  if (message === "BAD MESSAGE") {
-    throw new Error("ERROR");
-  }
-}
-  const $ctx = {
-  
-  };
-  let newFunction = async (...args) => {
-    return $func($ctx, ...args);
-  };
-  newFunction.handle = newFunction;
-  return newFunction;
-}
-)())
-  };
-  let newFunction = async (...args) => {
-    return $func($ctx, ...args);
-  };
-  newFunction.handle = newFunction;
-  return newFunction;
-}
-)()));
-  return await $handler.handle(event);
-};",
   "connections.json": {
     "connections": [
       {
         "name": "setConsumer()",
         "source": "root/my_queue",
-        "target": "root/my_queue/SetConsumer0",
+        "sourceOp": "push",
+        "target": "root/my_queue/Consumer0",
+        "targetOp": "invoke",
       },
       {
-        "name": "push()",
+        "name": "push",
         "source": "root/my_queue_messages/Function",
+        "sourceOp": "invoke",
         "target": "root/my_queue",
+        "targetOp": "push",
+      },
+      {
+        "name": "push",
+        "source": "root/my_queue_messages/Function",
+        "sourceOp": "invokeAsync",
+        "target": "root/my_queue",
+        "targetOp": "push",
       },
     ],
     "version": "connections-0.1",
@@ -1051,6 +1066,19 @@ exports.handler = async function(event) {
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
+      "root/my_queue/Consumer0": {
+        "addr": "c87f5b093f4d7a68e031a80df92e521a0631f02a44",
+        "path": "root/my_queue/Consumer0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/consumer0_c87f5b09.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
       "root/my_queue/Policy": {
         "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
         "path": "root/my_queue/Policy",
@@ -1059,11 +1087,11 @@ exports.handler = async function(event) {
           "statements": [
             {
               "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+              "resourceHandle": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
             },
             {
               "operation": "hasAvailableWorkers",
-              "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+              "resourceHandle": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
             },
           ],
         },
@@ -1072,32 +1100,19 @@ exports.handler = async function(event) {
       "root/my_queue/QueueEventMapping0": {
         "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "deps": [
-          "root/my_queue/SetConsumer0",
+          "root/my_queue/Consumer0",
           "root/my_queue",
           "root/my_queue/Policy",
         ],
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_queue#attrs.handle}",
-          "subscriber": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 5,
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      "root/my_queue/SetConsumer0": {
-        "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
-        "path": "root/my_queue/SetConsumer0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.cjs",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
       },
       "root/my_queue_messages": {
         "addr": "c8e2354407fd3536187725c2b37c5327f47bb841e9",
@@ -1144,10 +1159,6 @@ exports.handler = async function(event) {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
@@ -1208,6 +1219,10 @@ exports.handler = async function(event) {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1223,6 +1238,19 @@ exports.handler = async function(event) {
       "children": {
         "my_queue": {
           "children": {
+            "Consumer0": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "setConsumer()",
+              },
+              "id": "Consumer0",
+              "path": "root/my_queue/Consumer0",
+            },
             "Policy": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1246,19 +1274,6 @@ exports.handler = async function(event) {
               },
               "id": "QueueEventMapping0",
               "path": "root/my_queue/QueueEventMapping0",
-            },
-            "SetConsumer0": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
-              },
-              "id": "SetConsumer0",
-              "path": "root/my_queue/SetConsumer0",
             },
           },
           "constructInfo": {
@@ -1304,6 +1319,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1314,7 +1330,7 @@ exports.handler = async function(event) {
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 {
-  ".wing/setconsumer0_c8e33b9b.cjs": ""use strict";
+  ".wing/consumer0_c87f5b09.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
@@ -1328,6 +1344,7 @@ exports.handler = async function(event) {
                     await ctx.handler($message.payload);
                 }
                 catch (error) {
+                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
                     batchItemFailures.push($message);
                 }
             }
@@ -1367,7 +1384,9 @@ exports.handler = async function(event) {
       {
         "name": "setConsumer()",
         "source": "root/my_queue",
-        "target": "root/my_queue/SetConsumer0",
+        "sourceOp": "push",
+        "target": "root/my_queue/Consumer0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -1383,6 +1402,19 @@ exports.handler = async function(event) {
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
+      "root/my_queue/Consumer0": {
+        "addr": "c87f5b093f4d7a68e031a80df92e521a0631f02a44",
+        "path": "root/my_queue/Consumer0",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/consumer0_c87f5b09.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
       "root/my_queue/Policy": {
         "addr": "c88a4c68047871c2d322479c886423828e8119d85c",
         "path": "root/my_queue/Policy",
@@ -1391,11 +1423,11 @@ exports.handler = async function(event) {
           "statements": [
             {
               "operation": "invoke",
-              "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+              "resourceHandle": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
             },
             {
               "operation": "hasAvailableWorkers",
-              "resourceHandle": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+              "resourceHandle": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
             },
           ],
         },
@@ -1404,32 +1436,19 @@ exports.handler = async function(event) {
       "root/my_queue/QueueEventMapping0": {
         "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "deps": [
-          "root/my_queue/SetConsumer0",
+          "root/my_queue/Consumer0",
           "root/my_queue",
           "root/my_queue/Policy",
         ],
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_queue#attrs.handle}",
-          "subscriber": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/Consumer0#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      "root/my_queue/SetConsumer0": {
-        "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
-        "path": "root/my_queue/SetConsumer0",
-        "policy": [],
-        "props": {
-          "concurrency": 100,
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.cjs",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
       },
     },
     "sdkVersion": "0.0.0",
@@ -1441,10 +1460,6 @@ exports.handler = async function(event) {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -1506,6 +1521,10 @@ exports.handler = async function(event) {
         "className": "Policy",
         "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
       },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
+      },
       "@winglang/sdk.sim.State": {
         "className": "State",
         "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
@@ -1521,6 +1540,19 @@ exports.handler = async function(event) {
       "children": {
         "my_queue": {
           "children": {
+            "Consumer0": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "setConsumer()",
+              },
+              "id": "Consumer0",
+              "path": "root/my_queue/Consumer0",
+            },
             "Policy": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1545,19 +1577,6 @@ exports.handler = async function(event) {
               "id": "QueueEventMapping0",
               "path": "root/my_queue/QueueEventMapping0",
             },
-            "SetConsumer0": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.3.0",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
-              },
-              "id": "SetConsumer0",
-              "path": "root/my_queue/SetConsumer0",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1575,6 +1594,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

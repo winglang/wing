@@ -6,6 +6,7 @@ export interface NodeDisplay {
   sourceModule?: string;
   hidden?: boolean;
   color?: string;
+  icon?: string;
 }
 
 export interface NodeConnection {

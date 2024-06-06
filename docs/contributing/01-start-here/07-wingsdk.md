@@ -81,9 +81,9 @@ A resource in the SDK has several parts:
 If you are implementing a new resource, or implementing an existing resource for a new cloud provider, try to take a look at code for existing resources (`Bucket`, `Function`, `Queue`) to see how to structure your code.
 
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
-You can also join us on our [Wing Slack] to ask questions (or just say hi)!
+You can also join us on our [Wing Discord] to ask questions (or just say hi)!
 
-[Wing Slack]: https://t.winglang.io/slack
+[Wing Discord]: https://t.winglang.io/discord
 
 ## 🏁 How do I add and run tests to the SDK?
 

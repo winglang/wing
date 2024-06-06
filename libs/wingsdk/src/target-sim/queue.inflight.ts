@@ -19,7 +19,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { Json, TraceType } from "../std";
+import { LogLevel, Json, TraceType } from "../std";
 
 export class Queue
   implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
@@ -189,6 +189,7 @@ export class Queue
 
         this.context.addTrace({
           type: TraceType.RESOURCE,
+          level: LogLevel.VERBOSE,
           data: {
             message: `Sending messages (messages=${JSON.stringify(
               messagesPayload
@@ -220,6 +221,7 @@ export class Queue
               sourcePath: this.context.resourcePath,
               sourceType: QUEUE_FQN,
               type: TraceType.RESOURCE,
+              level: LogLevel.ERROR,
               timestamp: new Date().toISOString(),
             });
             this.pushMessagesBackToQueue(messages);
@@ -243,6 +245,7 @@ export class Queue
         sourcePath: this.context.resourcePath,
         sourceType: QUEUE_FQN,
         type: TraceType.RESOURCE,
+        level: LogLevel.WARNING,
         timestamp: new Date().toISOString(),
       });
     }, this.timeoutSeconds * 1000);

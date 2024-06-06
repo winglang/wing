@@ -26,13 +26,19 @@ import { createConsoleApp } from "../dist/index.js";
  * `describe(wingfile, callback)`. Any tests added in
  * this callback will belong to the group.
  */
-export const describe = (wingfile: string, callback: () => void) => {
+export const describe = (
+  wingfile: string,
+  callback: () => void,
+  options?: {
+    requireSignIn?: boolean;
+  },
+) => {
   let server: { port: number; close: () => void } | undefined;
 
   test.beforeEach(async ({ page }) => {
     server = await createConsoleApp({
       wingfile: path.resolve(__dirname, wingfile),
-      requireSignIn: false,
+      requireSignIn: options?.requireSignIn ?? false,
     });
 
     await page.goto(`http://localhost:${server.port}/`);

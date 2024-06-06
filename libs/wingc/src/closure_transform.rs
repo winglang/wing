@@ -156,16 +156,12 @@ impl Fold for ClosureTransformer {
 				let class_fields: Vec<ClassField> = vec![];
 				let class_init_params: Vec<FunctionParameter> = vec![];
 
+				let parent_this = format!("{}_{}", PARENT_THIS_NAME, self.closure_counter);
+				let mut this_transform = RenameThisTransformer::new(&parent_this.as_str());
 				let new_func_def = if self.inside_scope_with_this {
 					// If we are inside a class, we transform inflight closures with an extra
 					// `let __parent_this_${CLOSURE_COUNT} = this;` statement before the class definition, and replace references
 					// to `this` with `__parent_this_${CLOSURE_COUNT}` so that they can access the parent class's fields.
-					let parent_this = format!("{}_{}", PARENT_THIS_NAME, self.closure_counter);
-					let mut this_transform = RenameThisTransformer {
-						from: "this",
-						to: parent_this.as_str(),
-						inside_class: false,
-					};
 					this_transform.fold_function_definition(func_def)
 				} else {
 					func_def
@@ -181,6 +177,7 @@ impl Fold for ClosureTransformer {
 					// we need to set this to false.
 					is_static: false,
 					access: AccessModifier::Public,
+					doc: None,
 				};
 
 				// class_init_body :=
@@ -220,15 +217,13 @@ impl Fold for ClosureTransformer {
 						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::for_file(file_id)),
 					},
 					span: WingSpan::for_file(file_id),
+					doc: None,
 				}];
 
 				// If we are inside a scope with "this", add define `let __parent_this_${CLOSURE_COUNT} = this` which can be
 				// used by the newly-created preflight classes
-				if self.inside_scope_with_this {
-					let parent_this_name = Symbol::new(
-						format!("{}_{}", PARENT_THIS_NAME, self.closure_counter),
-						WingSpan::for_file(file_id),
-					);
+				if self.inside_scope_with_this && this_transform.performed_renames {
+					let parent_this_name = Symbol::new(parent_this, WingSpan::for_file(file_id));
 					let this_name = Symbol::new("this", WingSpan::for_file(file_id));
 					let parent_this_def = Stmt {
 						kind: StmtKind::Let {
@@ -242,6 +237,7 @@ impl Fold for ClosureTransformer {
 						},
 						span: WingSpan::for_file(file_id),
 						idx: 0,
+						doc: None,
 					};
 					self.class_statements.push(parent_this_def);
 				}
@@ -271,6 +267,7 @@ impl Fold for ClosureTransformer {
 							body: FunctionBody::Statements(Scope::new(class_init_body, WingSpan::for_file(file_id))),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
+							doc: None,
 						},
 						fields: class_fields,
 						implements: vec![],
@@ -290,12 +287,14 @@ impl Fold for ClosureTransformer {
 							body: FunctionBody::Statements(Scope::new(vec![], WingSpan::for_file(file_id))),
 							span: WingSpan::for_file(file_id),
 							access: AccessModifier::Public,
+							doc: None,
 						},
 						access: AccessModifier::Private,
 						auto_id: true,
 					}),
 					idx: self.nearest_stmt_idx,
 					span: WingSpan::for_file(file_id),
+					doc: None,
 				};
 
 				// new_class_instance :=
@@ -325,34 +324,31 @@ impl Fold for ClosureTransformer {
 struct RenameThisTransformer<'a> {
 	from: &'a str,
 	to: &'a str,
-	// The transform shouldn't change references to `this` inside inflight classes since
-	// they refer to different objects.
-	inside_class: bool,
+	performed_renames: bool,
 }
 
-impl Default for RenameThisTransformer<'_> {
-	fn default() -> Self {
+impl<'a> RenameThisTransformer<'a> {
+	fn new(to: &'a str) -> Self {
 		Self {
 			from: "this",
-			to: PARENT_THIS_NAME,
-			inside_class: false,
+			to,
+			performed_renames: false,
 		}
 	}
 }
 
 impl<'a> Fold for RenameThisTransformer<'a> {
 	fn fold_class(&mut self, node: Class) -> Class {
-		let old_inside_class = self.inside_class;
-		self.inside_class = true;
-		let new_class = fold::fold_class(self, node);
-		self.inside_class = old_inside_class;
-		new_class
+		// The transform shouldn't change references to `this` inside inflight classes since
+		// they refer to different objects. Skip inner class.
+		node
 	}
 
 	fn fold_reference(&mut self, node: Reference) -> Reference {
 		match node {
 			Reference::Identifier(ident) => {
-				if !self.inside_class && ident.name == self.from {
+				if ident.name == self.from {
+					self.performed_renames = true;
 					Reference::Identifier(Symbol {
 						name: self.to.to_string(),
 						span: ident.span,

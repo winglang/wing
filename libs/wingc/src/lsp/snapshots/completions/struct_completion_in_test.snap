@@ -4,9 +4,6 @@ source: libs/wingc/src/lsp/completions.rs
 - label: "ab:"
   kind: 5
   detail: num
-  documentation:
-    kind: markdown
-    value: "```wing\nab: num\n```"
   sortText: "ab|a|ab:"
   insertText: "ab: $1"
   insertTextFormat: 2

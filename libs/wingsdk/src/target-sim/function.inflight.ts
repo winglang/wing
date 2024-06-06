@@ -1,14 +1,14 @@
 import * as path from "path";
 import { FunctionAttributes, FunctionSchema } from "./schema-resources";
 import { FUNCTION_FQN, IFunctionClient } from "../cloud";
-import { Bundle } from "../shared/bundling";
-import { Sandbox } from "../shared/sandbox";
+import { Bundle, isBundleInvalidated } from "../shared/bundling";
+import { Sandbox, SandboxTimeoutError } from "../shared/sandbox";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { Json, TraceType } from "../std";
+import { LogLevel, Json, TraceType } from "../std";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly sourceCodeFile: string;
@@ -56,10 +56,26 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   public async save(): Promise<void> {}
 
-  public async plan(): Promise<UpdatePlan> {
-    // for now, always replace because we can't determine if the function code
-    // has changed since the last update. see https://github.com/winglang/wing/issues/6116
-    return UpdatePlan.REPLACE;
+  public async plan(invalidated: boolean): Promise<UpdatePlan> {
+    // If our function config changed, always replace
+    if (invalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    // Make sure that we don't have an ongoing bundle operation
+    await this.ensureBundled();
+
+    // Check if any of the bundled files have changed since the last bundling
+    const bundleInvalidated = await isBundleInvalidated(
+      this.originalFile,
+      this.bundle!,
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
+    );
+    if (bundleInvalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    return UpdatePlan.SKIP;
   }
 
   public async invoke(payload: Json): Promise<Json> {
@@ -72,7 +88,17 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
             "Too many requests, the function has reached its concurrency limit."
           );
         }
-        return worker.call("handler", payload);
+        try {
+          return await worker.call("handler", payload);
+        } catch (err) {
+          if (err instanceof SandboxTimeoutError) {
+            throw new Error(
+              `Function timed out (it was configured with a timeout of ${this.timeout}ms).`
+            );
+          } else {
+            throw err;
+          }
+        }
       },
     });
   }
@@ -99,7 +125,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
                 status: "failure",
                 error: e,
               },
-              type: TraceType.RESOURCE,
+              type: TraceType.LOG,
+              level: LogLevel.ERROR,
               sourcePath: this.context.resourcePath,
               sourceType: FUNCTION_FQN,
               timestamp: new Date().toISOString(),
@@ -111,9 +138,19 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 
   private async createBundle(): Promise<void> {
-    this.bundle = await Sandbox.createBundle(this.originalFile, (msg) => {
-      this.addTrace(msg, TraceType.SIMULATOR);
-    });
+    this.bundle = await Sandbox.createBundle(
+      this.originalFile,
+      (msg, level) => {
+        this.addTrace(msg, TraceType.RESOURCE, level);
+      }
+    );
+  }
+
+  private async ensureBundled(): Promise<void> {
+    await this.createBundlePromise;
+    if (!this.bundle) {
+      throw new Error("Bundle not created");
+    }
   }
 
   // Used internally by cloud.Queue to apply backpressure
@@ -141,29 +178,30 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   private async initWorker(): Promise<Sandbox> {
     // ensure inflight code is bundled before we create any workers
-    await this.createBundlePromise;
+    await this.ensureBundled();
 
-    if (!this.bundle) {
-      throw new Error("Bundle not created");
-    }
-
-    return new Sandbox(this.bundle.outfilePath, {
+    return new Sandbox(this.bundle!.outfilePath, {
       env: {
         ...this.env,
         WING_SIMULATOR_CALLER: this.context.resourceHandle,
         WING_SIMULATOR_URL: this.context.serverUrl,
       },
       timeout: this.timeout,
-      log: (internal, _level, message) => {
-        this.addTrace(message, internal ? TraceType.SIMULATOR : TraceType.LOG);
+      log: (internal, level, message) => {
+        this.addTrace(
+          message,
+          internal ? TraceType.SIMULATOR : TraceType.LOG,
+          level
+        );
       },
     });
   }
 
-  private addTrace(message: string, type: TraceType) {
+  private addTrace(message: string, type: TraceType, level: LogLevel) {
     this.context.addTrace({
       data: { message },
       type,
+      level,
       sourcePath: this.context.resourcePath,
       sourceType: FUNCTION_FQN,
       timestamp: new Date().toISOString(),

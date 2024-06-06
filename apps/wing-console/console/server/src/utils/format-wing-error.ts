@@ -31,7 +31,7 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
             fileId: filePath,
             rangeStart: start,
             rangeEnd: end,
-            message,
+            message: "",
             style: "primary",
           });
         }
@@ -77,6 +77,7 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
       output.push(
         await prettyPrintError(error.causedBy, {
           sourceEntrypoint: resolve(entryPoint ?? "."),
+          resetCache: true,
         }),
       );
 
@@ -107,7 +108,7 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
 };
 
 export const formatTraceError = async (error: string): Promise<string> => {
-  let output = await prettyPrintError(error);
+  let output = await prettyPrintError(error, { resetCache: true });
 
   // Remove ANSI color codes
   const regex =

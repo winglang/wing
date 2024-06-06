@@ -1,17 +1,30 @@
 import * as cloud from "../cloud";
 
 /**
- * `API_DEFAULT_RESPONSE` is a constant that defines the default response when a request occurs.
+ * `createApiDefaultResponse` is a function that defines the default response when a request occurs.
  * It is used to handle all requests that do not match any defined routes in the API Gateway.
  * The response is a mock integration type, which means it returns a mocked response without
  * forwarding the request to any backend. The response status code is set to 204 for OPTIONS
  * and 404 for any other HTTP method. The Content-Type header is set to `application/json`.
+ * @param paths The user defined api endpoint paths. Used for creating a base path to the default response
+ * @param corsOptions cors options to apply to the default path
  * @internal
  */
-export const API_DEFAULT_RESPONSE = (corsOptions?: cloud.ApiCorsOptions) => {
+export const createApiDefaultResponse = (
+  paths: string[],
+  corsOptions?: cloud.ApiCorsOptions
+) => {
+  const defaultKey =
+    // the longest a sequence of parameters starts form the root
+    paths.reduce((result: string, key: string) => {
+      // matches single sequence of parameters starts form the root
+      let matched = key.match(/^(\/{[A-Za-z0-9\-_]+})*/g)?.[0] ?? "";
+      return matched.length > result.length ? matched : result;
+    }, "") + "/{proxy+}";
+
   if (corsOptions) {
     return {
-      "/{proxy+}": {
+      [defaultKey]: {
         "x-amazon-apigateway-any-method": {
           produces: ["application/json"],
           "x-amazon-apigateway-integration": {
@@ -93,7 +106,7 @@ export const API_DEFAULT_RESPONSE = (corsOptions?: cloud.ApiCorsOptions) => {
     };
   } else {
     return {
-      "/{proxy+}": {
+      [defaultKey]: {
         "x-amazon-apigateway-any-method": {
           produces: ["application/json"],
           "x-amazon-apigateway-integration": {

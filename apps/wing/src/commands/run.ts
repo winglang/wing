@@ -31,6 +31,11 @@ export interface RunOptions {
    * @default wingCompiler.BuiltinPlatform.SIM
    */
   readonly platform?: string[];
+
+  /**
+   * Additional paths to watch or ignore for changes. Supports globs.
+   */
+  readonly watch?: string[];
 }
 
 /**
@@ -87,6 +92,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     platform: options?.platform,
     requireAcceptTerms: !!process.stdin.isTTY,
     open: openBrowser,
+    watchGlobs: options?.watch,
   });
   const url = `http://localhost:${port}/`;
   console.log(`The Wing Console is running at ${url}`);

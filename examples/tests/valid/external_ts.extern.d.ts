@@ -51,7 +51,7 @@ export interface MetadataEntry {
 export class Node {
   /** Add an ordering dependency on another construct.
   An `IDependable` */
-  readonly addDependency: (deps?: ((readonly (IDependable)[])) | undefined) => void;
+  readonly addDependency: (deps: (readonly (IDependable)[])) => void;
   /** Adds a metadata entry to this construct.
   Entries are arbitrary values and will also include a stack trace to allow tracing back to
   the code location for when the entry was added. It can be used, for example, to include source
@@ -136,7 +136,7 @@ export class Node {
   readonly setContext: (key: string, value?: any) => void;
   /** Return a direct child by id, or undefined.
   @returns the child if found, or undefined */
-  readonly tryFindChild: (id: string) => (IConstruct) | undefined;
+  readonly tryFindChild: (id: string) => IConstruct | void;
   /** Retrieves a value from tree context.
   Context is usually initialized at the root, but can be overridden at any point in the tree.
   @returns The context value or `undefined` if there is no context value for this key. */
@@ -187,7 +187,14 @@ export interface IHostedLiftable extends ILiftable {
 }
 /** Abstract interface for `Resource`. */
 export interface IResource extends IConstruct, IHostedLiftable {
+  /** The tree node. */
   readonly node: Node;
+  /** A hook called by the Wing compiler once for each inflight host that needs to use this object inflight.
+  The list of requested inflight methods
+  needed by the inflight host are given by `ops`.
+  
+  This method is commonly used for adding permissions, environment variables, or
+  other capabilities to the inflight host. */
   readonly onLift: (host: IInflightHost, ops: (readonly (string)[])) => void;
 }
 /** Shared behavior between all Wing SDK resources. */
@@ -207,10 +214,22 @@ containers (such as ECS or Kubernetes), VMs or even physical servers.
 
 This data represents the code together with the bindings to preflight data required to run. */
 export interface IInflight extends IHostedLiftable {
+  /** A hook called by the Wing compiler once for each inflight host that needs to use this object inflight.
+  The list of requested inflight methods
+  needed by the inflight host are given by `ops`.
+  
+  This method is commonly used for adding permissions, environment variables, or
+  other capabilities to the inflight host. */
   readonly onLift: (host: IInflightHost, ops: (readonly (string)[])) => void;
 }
 /** A resource with an inflight "handle" method that can be passed to the bucket events. */
 export interface IBucketEventHandler extends IInflight {
+  /** A hook called by the Wing compiler once for each inflight host that needs to use this object inflight.
+  The list of requested inflight methods
+  needed by the inflight host are given by `ops`.
+  
+  This method is commonly used for adding permissions, environment variables, or
+  other capabilities to the inflight host. */
   readonly onLift: (host: IInflightHost, ops: (readonly (string)[])) => void;
 }
 /** `onCreate` event options. */

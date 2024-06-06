@@ -9,6 +9,7 @@ import { SqsQueuePolicy } from "../.gen/providers/aws/sqs-queue-policy";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { AwsInflightHost } from "../shared-aws";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
 import { IAwsTopic, TopicOnMessageHandler } from "../shared-aws/topic";
 import { IInflightHost, Node, Resource } from "../std";
@@ -82,7 +83,9 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE_ASYNC,
       name: "onMessage()",
     });
 
@@ -168,8 +171,8 @@ export class Topic extends cloud.Topic implements IAwsTopic {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("topics can only be bound by tfaws.Function for now");
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     host.addPolicyStatements(...calculateTopicPermissions(this.topic.arn, ops));

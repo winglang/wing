@@ -26,7 +26,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { Json, TraceType } from "../std";
+import { LogLevel, Json, TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -130,7 +130,7 @@ export class Api
     this.port = addrInfo.port;
     this.url = `http://${addrInfo.address}:${addrInfo.port}`;
 
-    this.addTrace(`Server listening on ${this.url}`);
+    this.addTrace(`Server listening on ${this.url}`, LogLevel.VERBOSE);
 
     return {
       url: this.url,
@@ -138,7 +138,8 @@ export class Api
   }
 
   public async cleanup(): Promise<void> {
-    this.addTrace(`Closing server on ${this.url}`);
+    this.addTrace(`Closing server on ${this.url}`, LogLevel.VERBOSE);
+
     return new Promise((resolve, reject) => {
       this.server?.close((err) => {
         if (err) {
@@ -219,7 +220,8 @@ export class Api
     const index = this.routes.findIndex((s) => s.functionHandle === subscriber);
     if (index === -1) {
       this.addTrace(
-        `Internal error: No route found for subscriber ${subscriber}.`
+        `Internal error: No route found for subscriber ${subscriber}.`,
+        LogLevel.WARNING
       );
       return;
     }
@@ -227,7 +229,8 @@ export class Api
     const layerIndex = this.app._router.stack.indexOf(layer);
     if (layerIndex === -1) {
       this.addTrace(
-        `Internal error: No express layer found for route ${this.routes[index].pathPattern}.`
+        `Internal error: No express layer found for route ${this.routes[index].pathPattern}.`,
+        LogLevel.WARNING
       );
       return;
     }
@@ -258,7 +261,8 @@ export class Api
           this.addTrace(
             `Processing "${route.method} ${
               route.pathPattern
-            }" params=${JSON.stringify(req.params)}).`
+            }" params=${JSON.stringify(req.params)}).`,
+            LogLevel.VERBOSE
           );
 
           const apiRequest = transformRequest(req);
@@ -280,7 +284,10 @@ export class Api
             } else {
               res.end();
             }
-            this.addTrace(`${route.method} ${route.pathPattern} - ${status}.`);
+            this.addTrace(
+              `${route.method} ${route.pathPattern} - ${status}.`,
+              LogLevel.VERBOSE
+            );
           } catch (err) {
             return next(err);
           }
@@ -289,9 +296,10 @@ export class Api
     );
   }
 
-  private addTrace(message: string): void {
+  private addTrace(message: string, level: LogLevel): void {
     this.context.addTrace({
       type: TraceType.RESOURCE,
+      level,
       data: {
         message,
       },

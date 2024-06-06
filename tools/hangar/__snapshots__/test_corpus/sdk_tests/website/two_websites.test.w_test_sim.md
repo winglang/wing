@@ -2,6 +2,8 @@
 
 ## stdout.log
 ```log
+[INFO] deploying two websites | Website server listening on http://<IP>:<PORT>
+[INFO] deploying two websites | Website server listening on http://<IP>:<PORT>
 pass ─ two_websites.test.wsim » root/env0/test:deploying two websites
 
 Tests 1 passed (1)

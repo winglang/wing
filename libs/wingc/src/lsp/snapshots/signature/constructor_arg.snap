@@ -5,11 +5,11 @@ signatures:
   - label: "(...props): Bucket"
     documentation:
       kind: markdown
-      value: "### Parameters\n- `...props` — `BucketProps?`\n  \n  - `public?` — `bool?` — Whether the bucket's objects should be publicly accessible."
+      value: ""
     parameters:
       - label: "...props"
         documentation:
           kind: markdown
-          value: "```wing\nstruct BucketProps\n```\n---\nOptions for `Bucket`.\n### Fields\n- `public?` — `bool?` — Whether the bucket's objects should be publicly accessible."
+          value: "```wing\nstruct BucketProps {\n  public?: bool;\n}\n```\n"
     activeParameter: 0
 

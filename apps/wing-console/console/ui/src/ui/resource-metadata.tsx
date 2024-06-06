@@ -1,10 +1,5 @@
+import { CubeIcon } from "@heroicons/react/20/solid";
 import {
-  CubeIcon,
-  ArrowLeftOnRectangleIcon,
-  ArrowRightOnRectangleIcon,
-} from "@heroicons/react/20/solid";
-import {
-  ArrowPathRoundedSquareIcon,
   CubeTransparentIcon,
   CursorArrowRaysIcon,
 } from "@heroicons/react/24/outline";
@@ -82,13 +77,18 @@ export const ResourceMetadata = memo(
       "interact",
       "interact-actions",
     ]);
+
+    const icon = useMemo(() => {
+      return getResourceIconComponent(node.type, {
+        resourceId: node.id,
+        icon: node.display?.icon,
+      });
+    }, [node]);
+
     const { resourceGroup, connectionsGroups } = useMemo(() => {
       const connectionsGroupsArray: ConnectionsGroup[] = [];
       let resourceGroup: AttributeGroup | undefined;
       if (node.props) {
-        const icon = getResourceIconComponent(node.type, {
-          resourceId: node.id,
-        });
         switch (node.type) {
           case "@winglang/sdk.cloud.Function": {
             resourceGroup = {
@@ -181,6 +181,7 @@ export const ResourceMetadata = memo(
                 resourcePath={relationship.path}
                 className="w-4 h-4"
                 color={relationship.display?.color}
+                icon={relationship.display?.icon}
               />
             ),
           })),
@@ -199,6 +200,7 @@ export const ResourceMetadata = memo(
                 resourcePath={relationship.path}
                 className="w-4 h-4"
                 color={relationship.display?.color}
+                icon={relationship.display?.icon}
               />
             ),
           })),
@@ -208,7 +210,7 @@ export const ResourceMetadata = memo(
         resourceGroup,
         connectionsGroups: connectionsGroupsArray,
       };
-    }, [node, inbound, outbound]);
+    }, [node, inbound, outbound, icon]);
 
     const nodeLabel = useMemo(() => {
       const cloudResourceTypeName = node.type.split(".").at(-1) || "";
@@ -247,6 +249,7 @@ export const ResourceMetadata = memo(
               resourceType={node.type}
               resourcePath={node.path}
               color={node.display?.color}
+              icon={node.display?.icon}
             />
           </div>
 
@@ -259,7 +262,7 @@ export const ResourceMetadata = memo(
         </div>
         {resourceUI.data && resourceUI.data.length > 0 && (
           <InspectorSection
-            icon={CubeIcon}
+            icon={icon ?? CubeIcon}
             text={nodeLabel ?? "Properties"}
             open={openInspectorSections.includes("resourceUI")}
             onClick={() => toggleInspectorSection("resourceUI")}
@@ -384,7 +387,8 @@ export const ResourceMetadata = memo(
               </div>
             </InspectorSection>
 
-            {connectionsGroups && connectionsGroups.length > 0 && (
+            {/* Need to fix the relationships data. */}
+            {/* {connectionsGroups && connectionsGroups.length > 0 && (
               <InspectorSection
                 text="Relationships"
                 open={openInspectorSections.includes("relationships")}
@@ -462,7 +466,7 @@ export const ResourceMetadata = memo(
                   ))}
                 </div>
               </InspectorSection>
-            )}
+            )} */}
 
             <div className={classNames(theme.border3, "border-t")}></div>
           </>

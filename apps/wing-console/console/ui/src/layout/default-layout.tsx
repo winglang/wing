@@ -58,7 +58,6 @@ const defaultLayoutConfig: LayoutConfig = {
   },
   errorScreen: {
     position: "default",
-    displayTitle: true,
     displayLinks: true,
   },
   panels: {
@@ -78,6 +77,7 @@ export const DefaultLayout = ({
     expandedItems,
     setExpandedItems,
     expand,
+    collapse,
     expandAll,
     collapseAll,
     theme,
@@ -197,6 +197,11 @@ export const DefaultLayout = ({
     [expand, setSelectedItems],
   );
 
+  const setSelectedItemSingle = useCallback(
+    (nodeId: string | undefined) => setSelectedItems(nodeId ? [nodeId] : []),
+    [setSelectedItems],
+  );
+
   return (
     <>
       <SignInModal />
@@ -216,12 +221,7 @@ export const DefaultLayout = ({
             {cloudAppState === "error" &&
               layout.errorScreen?.position === "default" && (
                 <div className="flex-1 flex relative">
-                  <BlueScreenOfDeath
-                    title={"An error has occurred:"}
-                    error={errorMessage.data ?? ""}
-                    displayLinks={layout.errorScreen?.displayLinks}
-                    displayWingTitle={layout.errorScreen?.displayTitle}
-                  />
+                  <BlueScreenOfDeath error={errorMessage.data ?? ""} />
                 </div>
               )}
 
@@ -262,7 +262,7 @@ export const DefaultLayout = ({
                               return (
                                 <TopResizableWidget
                                   key={component.type}
-                                  className="h-1/3"
+                                  className="h-1/5"
                                 >
                                   {panelComponent}
                                 </TopResizableWidget>
@@ -297,13 +297,13 @@ export const DefaultLayout = ({
                         data-testid="map-view"
                       >
                         <MapView
-                          showTests={showTests}
                           selectedNodeId={selectedItems[0]}
-                          onSelectedNodeIdChange={(nodeId) =>
-                            setSelectedItems(nodeId ? [nodeId] : [])
-                          }
+                          onSelectedNodeIdChange={setSelectedItemSingle}
                           selectedEdgeId={selectedEdgeId}
                           onSelectedEdgeIdChange={setSelectedEdgeId}
+                          onExpand={expand}
+                          onCollapse={collapse}
+                          expandedItems={expandedItems}
                         />
                       </div>
                       {!layout.rightPanel?.hide && (
@@ -425,10 +425,8 @@ export const DefaultLayout = ({
                       )}
                     >
                       <BlueScreenOfDeath
-                        title={"An error has occurred:"}
                         error={errorMessage.data ?? ""}
                         displayLinks={layout.errorScreen?.displayLinks}
-                        displayWingTitle={layout.errorScreen?.displayTitle}
                       />
                     </TopResizableWidget>
                   </div>

@@ -1,32 +1,6 @@
-import {
-  ArchiveBoxIcon,
-  BeakerIcon,
-  BoltIcon,
-  CalculatorIcon,
-  ClockIcon,
-  CloudIcon,
-  CubeIcon,
-  GlobeAltIcon,
-  MegaphoneIcon,
-  QueueListIcon,
-  TableCellsIcon,
-  KeyIcon,
-} from "@heroicons/react/24/outline";
-import {
-  ArchiveBoxIcon as SolidArchiveBoxIcon,
-  BeakerIcon as SolidBeakerIcon,
-  BoltIcon as SolidBoltIcon,
-  CalculatorIcon as SolidCalculatorIcon,
-  ClockIcon as SolidClockIcon,
-  CloudIcon as SolidCloudIcon,
-  GlobeAltIcon as SolidGlobeAltIcon,
-  MegaphoneIcon as SolidMegaphoneIcon,
-  QueueListIcon as SolidQueueListIcon,
-  TableCellsIcon as SolidTableCellsIcon,
-  KeyIcon as SolidKeyIcon,
-} from "@heroicons/react/24/solid";
+import * as OutlineHeroIcons from "@heroicons/react/24/outline";
+import * as SolidHeroIcons from "@heroicons/react/24/solid";
 
-import { ReactIcon } from "../icons/react-icon.js";
 import { RedisIcon } from "../icons/redis-icon.js";
 
 import type { Colors } from "./colors.js";
@@ -38,52 +12,75 @@ const matchTest = (path: string) => {
   return isTest.test(path);
 };
 
+const getHeroIconName = (heroiconId: string): string => {
+  const parts = heroiconId.split("-");
+  const resourceName = parts
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join("");
+  return `${resourceName}Icon`;
+};
+
 export const getResourceIconComponent = (
   resourceType: string | undefined,
-  { solid = true, resourceId }: { solid?: boolean; resourceId?: string } = {},
+  {
+    solid = true,
+    resourceId,
+    icon,
+  }: { solid?: boolean; resourceId?: string; icon?: string } = {},
 ) => {
+  const iconSet = solid ? SolidHeroIcons : OutlineHeroIcons;
+
   if (resourceId && matchTest(resourceId)) {
-    return solid ? SolidBeakerIcon : BeakerIcon;
+    return iconSet.BeakerIcon;
   }
+  if (icon) {
+    // icon is a heroicon id string, e.g. "academic-cap" so we need to convert it to the actual component
+    // @ts-ignore
+    let iconComponent = iconSet[getHeroIconName(icon)];
+    if (iconComponent) {
+      return iconComponent;
+    }
+  }
+
   switch (resourceType) {
     case "@winglang/sdk.cloud.Bucket": {
-      return solid ? SolidArchiveBoxIcon : ArchiveBoxIcon;
+      return iconSet.ArchiveBoxIcon;
     }
     case "@winglang/sdk.cloud.Function": {
-      return solid ? SolidBoltIcon : BoltIcon;
+      return iconSet.BoltIcon;
     }
     case "@winglang/sdk.cloud.Queue": {
-      return solid ? SolidQueueListIcon : QueueListIcon;
+      return iconSet.QueueListIcon;
     }
     case "@winglang/sdk.cloud.Website": {
-      return solid ? SolidGlobeAltIcon : GlobeAltIcon;
+      return iconSet.GlobeAltIcon;
     }
     case "@winglang/sdk.cloud.Counter": {
-      return solid ? SolidCalculatorIcon : CalculatorIcon;
+      return iconSet.CalculatorIcon;
     }
     case "@winglang/sdk.cloud.Topic": {
-      return solid ? SolidMegaphoneIcon : MegaphoneIcon;
+      return iconSet.MegaphoneIcon;
     }
     case "@winglang/sdk.cloud.Api": {
-      return solid ? SolidCloudIcon : CloudIcon;
+      return iconSet.CloudIcon;
     }
     case "@winglang/sdk.ex.Table": {
-      return solid ? SolidTableCellsIcon : TableCellsIcon;
+      return iconSet.TableCellsIcon;
     }
     case "@winglang/sdk.cloud.Schedule": {
-      return solid ? SolidClockIcon : ClockIcon;
+      return iconSet.ClockIcon;
     }
     case "@winglang/sdk.ex.Redis": {
       return RedisIcon;
     }
     case "@winglang/sdk.std.Test": {
-      return solid ? SolidBeakerIcon : BeakerIcon;
+      return iconSet.BeakerIcon;
     }
     case "@winglang/sdk.cloud.Secret": {
-      return solid ? SolidKeyIcon : KeyIcon;
+      return iconSet.KeyIcon;
     }
     default: {
-      return CubeIcon;
+      return iconSet.CubeIcon;
     }
   }
 };
@@ -157,8 +154,23 @@ export const getResourceIconColors = (options: {
   resourceType: string | undefined;
   darkenOnGroupHover?: boolean;
   forceDarken?: boolean;
-  color?: Colors;
+  color?: Colors | string;
 }) => {
+  let color: Colors =
+    options.color && Object.keys(colors).includes(options.color)
+      ? (options.color as Colors)
+      : "slate";
+
+  let defaultColor = [
+    colors[color].default,
+    options.darkenOnGroupHover && colors[color].groupHover,
+    options.forceDarken && colors[color].forceDarken,
+  ];
+
+  if (options.color) {
+    return defaultColor;
+  }
+
   switch (options.resourceType) {
     case "@winglang/sdk.cloud.Bucket": {
       return [
@@ -231,13 +243,7 @@ export const getResourceIconColors = (options: {
       ];
     }
     default: {
-      let color: Colors =
-        options.color && colors[options.color] ? options.color : "slate";
-      return [
-        colors[color].default,
-        options.darkenOnGroupHover && colors[color].groupHover,
-        options.forceDarken && colors[color].forceDarken,
-      ];
+      return defaultColor;
     }
   }
 };

@@ -133,7 +133,6 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         const s = "inResource";
         $helpers.assert($helpers.eq(s, "inResource"), "s == \"inResource\"");
-        const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {

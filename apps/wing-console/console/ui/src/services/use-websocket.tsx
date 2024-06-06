@@ -37,6 +37,7 @@ export const useWebSocketState = () => {
         webSocket.readyState === WebSocket.OPEN ? "open" : "closed",
       );
     };
+    onStateChange();
     webSocket.addEventListener("close", onStateChange);
     webSocket.addEventListener("open", onStateChange);
     return () => {

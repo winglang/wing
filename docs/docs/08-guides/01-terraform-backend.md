@@ -70,14 +70,14 @@ aws dynamodb create-table --table-name <table-name> --attribute-definitions Attr
 
 This revised command creates a DynamoDB table with the On-Demand capacity mode, eliminating the need for capacity planning and managing throughput.
 
-## Step 4: Configure Terraform Backend with a Wing Plugin
+## Step 4: Configure Terraform Backend with a Wing Platform
 
-Winglang provides the functionality of a `postSynth` plugin which can be leveraged to modify the Terraform configuration during the compilation phase. In our scenario, we will utilize this feature to configure the S3 backend for Terraform. This facilitates the separation of concerns by allowing us to develop the Wing application independently from its deployment logistics.
+Winglang provides the functionality of a `postSynth` platform extension which can be leveraged to modify the Terraform configuration during the compilation phase. In our scenario, we will utilize this feature to configure the S3 backend for Terraform. This facilitates the separation of concerns by allowing us to develop the Wing application independently from its deployment logistics.
 
-Now, utilize the Winglang static plugin for injecting the S3 backend configuration during the compilation phase:
+Now, utilize the Winglang static platform for injecting the S3 backend configuration during the compilation phase:
 
 ```javascript
-// plugin.static-backend.js
+// platform.static-backend.js
 
 exports.Platform = class TFBackend {
   postSynth(config) {
@@ -98,14 +98,14 @@ Replace `<bucket-name>`, `<region>`, `path/to/my/key/terraform.tfstate` and `<ta
 
 
 ```bash
-wing compile -t tf-aws --plugins=plugin.static-backend.js main.w
+wing compile -t tf-aws -t platform.static-backend.js main.w
 ```
 
 You can find a more detailed example [here](https://github.com/winglang/examples/tree/main/examples/s3-backend).
 
 ## Step 5: Initialize Backend
 
-After configuring the backend with the Wing plugin, the final step is to initialize it. When using the static plugin, we can change the directory to the synthesized application, e.g. `cd target/main.tfaws` and run
+After configuring the backend with the Wing platform, the final step is to initialize it. When using the static platform, we can change the directory to the synthesized application, e.g. `cd target/main.tfaws` and run
 
 :::info
 
@@ -117,7 +117,7 @@ This command will require valid AWS credentials with the correct [permissions](h
 terraform init
 ```
 
-This command initializes your Terraform workspace by installing the necessary Terraform provider and plugins. During this process, it will also set up the S3 backend with the parameters provided by the Wing plugin and output a confirmation that the backend was successfully initialized.
+This command initializes your Terraform workspace by installing the necessary Terraform provider and plugins. During this process, it will also set up the S3 backend with the parameters provided by the Wing platform and output a confirmation that the backend was successfully initialized.
 
 ## Summary
 

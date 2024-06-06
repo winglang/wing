@@ -32,6 +32,16 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
+      "B1InList": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/B1InList/Default",
+            "uniqueId": "B1InList"
+          }
+        },
+        "bucket_prefix": "b1inlist-c8cc4391-",
+        "force_destroy": false
+      },
       "Bucket": {
         "//": {
           "metadata": {
@@ -216,6 +226,7 @@ class $Root extends $stdlib.std.Resource {
     const mapStruct = ({["1"]: ({"foo": "", "stuff": []})});
     const deepCollectionStruct = ({["1"]: [new Set([({"foo": "", "stuff": []})])]});
     const notJsonMissingField = ({"foo": "bar", "stuff": []});
+    const notJsonWithInnerArray = ({"foo": "bar", "stuff": [], "buckets": [this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "B1InList")]});
     const notJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
     let mutableJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
     const hasBucket = ({"a": ({"a": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket")})});

@@ -21,6 +21,7 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     expandedItems,
     setExpandedItems,
     expand,
+    collapse,
     expandAll,
     collapseAll,
   } = useExplorer();
@@ -67,7 +68,6 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
   const edgeMetadata = trpc["app.edgeMetadata"].useQuery(
     {
       edgeId: selectedEdgeId || "",
-      showTests,
     },
     {
       enabled: !!selectedEdgeId,
@@ -99,6 +99,7 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     expandedItems,
     setExpandedItems,
     expand,
+    collapse,
     expandAll,
     collapseAll,
     theme,

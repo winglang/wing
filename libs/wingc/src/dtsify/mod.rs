@@ -280,7 +280,7 @@ impl<'a> DTSifier<'a> {
 			StmtKind::Enum(enu) => {
 				code.open(format!("export enum {} {{", enu.name.name));
 				for value in &enu.values {
-					code.line(format!("{},", value.name));
+					code.line(format!("{},", value.0.name));
 				}
 				code.close("}");
 			}
@@ -330,7 +330,8 @@ impl<'a> DTSifier<'a> {
 			| StmtKind::Assignment { .. }
 			| StmtKind::Scope(_)
 			| StmtKind::TryCatch { .. }
-			| StmtKind::CompilerDebugEnv => {}
+			| StmtKind::CompilerDebugEnv
+			| StmtKind::ExplicitLift(_) => {}
 		}
 
 		code

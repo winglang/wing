@@ -1,14 +1,14 @@
 import { resolve } from "path";
 import { ServiceAttributes, ServiceSchema } from "./schema-resources";
 import { IServiceClient, SERVICE_FQN } from "../cloud";
-import { Bundle } from "../shared/bundling";
+import { Bundle, isBundleInvalidated } from "../shared/bundling";
 import { Sandbox } from "../shared/sandbox";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator";
-import { TraceType } from "../std";
+import { LogLevel, TraceType } from "../std";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {
   private _context: ISimulatorContext | undefined;
@@ -34,11 +34,18 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     return this._context;
   }
 
+  private async ensureBundled(): Promise<void> {
+    await this.createBundlePromise;
+    if (!this.bundle) {
+      throw new Error("Bundle not created");
+    }
+  }
+
   private async createBundle(): Promise<void> {
     this.bundle = await Sandbox.createBundle(
       this.resolvedSourceCodeFile,
-      (msg) => {
-        this.addTrace(msg, TraceType.SIMULATOR);
+      (msg, level) => {
+        this.addTrace(msg, TraceType.RESOURCE, level);
       }
     );
   }
@@ -60,10 +67,25 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
 
   public async save(): Promise<void> {}
 
-  public async plan(): Promise<UpdatePlan> {
-    // for now, always replace because we can't determine if the function code
-    // has changed since the last update. see https://github.com/winglang/wing/issues/6116
-    return UpdatePlan.REPLACE;
+  public async plan(invalidated: boolean): Promise<UpdatePlan> {
+    if (invalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    // Make sure that we don't have an ongoing bundle operation
+    await this.ensureBundled();
+
+    // Check if any of the bundled files have changed since the last bundling
+    const bundleInvalidated = await isBundleInvalidated(
+      this.resolvedSourceCodeFile,
+      this.bundle!,
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
+    );
+    if (bundleInvalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    return UpdatePlan.SKIP;
   }
 
   public async start(): Promise<void> {
@@ -77,7 +99,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     if (!this.bundle) {
       this.addTrace(
         "Failed to start service: bundle is not created",
-        TraceType.RESOURCE
+        TraceType.RESOURCE,
+        LogLevel.ERROR
       );
       return;
     }
@@ -88,8 +111,12 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
         WING_SIMULATOR_URL: this.context.serverUrl,
         WING_SIMULATOR_CALLER: this.context.resourceHandle,
       },
-      log: (internal, _level, message) => {
-        this.addTrace(message, internal ? TraceType.SIMULATOR : TraceType.LOG);
+      log: (internal, level, message) => {
+        this.addTrace(
+          message,
+          internal ? TraceType.SIMULATOR : TraceType.LOG,
+          level
+        );
       },
     });
 
@@ -99,7 +126,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     } catch (e: any) {
       this.addTrace(
         `Failed to start service: ${e.message}`,
-        TraceType.RESOURCE
+        TraceType.RESOURCE,
+        LogLevel.ERROR
       );
     }
   }
@@ -118,7 +146,8 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     } catch (e: any) {
       this.addTrace(
         `Failed to stop service: ${e.message} ${e.stack}`,
-        TraceType.RESOURCE
+        TraceType.RESOURCE,
+        LogLevel.ERROR
       );
     }
   }
@@ -127,13 +156,14 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     return this.running;
   }
 
-  private addTrace(message: string, type: TraceType) {
+  private addTrace(message: string, type: TraceType, level: LogLevel) {
     this.context.addTrace({
       data: { message },
       type,
       sourcePath: this.context.resourcePath,
       sourceType: SERVICE_FQN,
       timestamp: new Date().toISOString(),
+      level,
     });
   }
 }

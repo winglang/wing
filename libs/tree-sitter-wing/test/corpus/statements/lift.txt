@@ -1,0 +1,29 @@
+====================
+Explicit Lift
+====================
+
+lift {x: y, z: [a,b,c]} {
+  do();
+}
+
+---
+
+(source
+  (lift_statement
+    lift_qualifications: (lift_qualifications
+      qualification: (lift_qualification
+        obj: (reference
+          (reference_identifier))
+        ops: (identifier))
+      qualification: (lift_qualification
+        obj: (reference
+          (reference_identifier))
+        ops: (identifier)
+        ops: (identifier)
+        ops: (identifier)))
+    block: (block
+      (expression_statement
+        (call
+          caller: (reference
+            (reference_identifier))
+          args: (argument_list))))))

@@ -1,3 +1,5 @@
+use camino::Utf8Path;
+
 use crate::{
 	ast::{Reference, Scope},
 	jsify::JSifier,
@@ -9,14 +11,16 @@ use crate::{
 
 pub struct StructSchemaVisitor<'a> {
 	jsify: &'a JSifier<'a>,
+	path: &'a Utf8Path,
 	ctx: VisitContext,
 }
 
 impl<'a> StructSchemaVisitor<'a> {
-	pub fn new(jsifier: &'a JSifier<'a>) -> Self {
+	pub fn new(path: &'a Utf8Path, jsifier: &'a JSifier<'a>) -> Self {
 		Self {
 			jsify: jsifier,
 			ctx: VisitContext::new(),
+			path,
 		}
 	}
 }
@@ -37,7 +41,7 @@ impl<'a> Visit<'a> for StructSchemaVisitor<'a> {
 					// add the schema to the jsifier's referenced struct schemas
 					self
 						.jsify
-						.add_referenced_struct_schema(type_name.clone().to_string(), struct_code);
+						.add_referenced_struct_schema(&self.path, type_name.clone().to_string(), struct_code);
 				}
 				visit::visit_reference(self, node);
 			}

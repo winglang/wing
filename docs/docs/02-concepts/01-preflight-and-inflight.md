@@ -308,7 +308,7 @@ new cloud.Function(inflight () => {
 });
 ```
 
-To explicitly qualify lifts in an inflight closure or inflight method and supress the above compiler error use the `lift()` utility function:
+To explicitly qualify lifts in an inflight closure or inflight method and suppress the above compiler error, create a `lift` block:
 
 ```js playground
 bring cloud;
@@ -316,15 +316,23 @@ let main_bucket = new cloud.Bucket() as "main";
 let secondary_bucket = new cloud.Bucket() as "backup";
 let use_main = true;
 new cloud.Function(inflight () => {
-  lift(main_bucket, ["put"]); // Explicitly sate the "put" may be used on `main_bucket`
-  lift(secondary_bucket, ["put"]); // Explicitly sate the "put" may be used on `secondary_bucket`
   let var b = main_bucket;
   if !use_main {
     b = secondary_bucket;
   }
-  b.put("key", "value"); // Error is supressed and all possible values of `b` were explicitly qualified with "put"
+  // Explicitly state that methods named `put` may be used on `main_bucket` and `secondary_bucket`
+  lift {main_bucket: [put], secondary_bucket: [put]} {
+    // Error is supressed in this block and all possible values of `b` are explicitly qualified with `put`
+    b.put("key1", "value"); 
+    b.put("key2", "value");
+  }
 });
 ```
+
+Within the first clause of the `lift` block, a list of qualifications on preflight objects can be added.
+
+Statements within a `lift` block are exempt from the compiler's analyzer that tries to determine preflight object usage automatically.
+If an inflight method is directly or indirectly called within a `lift` block without sufficient resource qualifications, it may result in errors at runtime.
 
 ## Phase-independent code
 

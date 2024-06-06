@@ -13,6 +13,7 @@ use crate::{
 	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
+use indexmap::IndexMap;
 use wingii::{
 	fqn::FQN,
 	jsii::{self, CollectionKind, PrimitiveType, TypeReference},
@@ -240,14 +241,21 @@ impl<'a> JsiiImporter<'a> {
 		let enum_fqn = FQN::from(jsii_enum.fqn.as_str());
 		let enum_symbol = Self::jsii_name_to_symbol(enum_name, &jsii_enum.location_in_module);
 
+		let values = jsii_enum
+			.members
+			.iter()
+			.map(|m| {
+				(
+					Self::jsii_name_to_symbol(&m.name, &jsii_enum.location_in_module),
+					m.docs.as_ref().and_then(|d| d.summary.clone()),
+				)
+			})
+			.collect::<IndexMap<_, _>>();
+
 		let enum_type_ref = self.wing_types.add_type(Type::Enum(Enum {
 			name: enum_symbol.clone(),
 			docs: Docs::from(&jsii_enum.docs),
-			values: jsii_enum
-				.members
-				.iter()
-				.map(|m| Self::jsii_name_to_symbol(&m.name, &jsii_enum.location_in_module))
-				.collect(),
+			values,
 		}));
 
 		self.register_jsii_type(&enum_fqn, &enum_symbol, enum_type_ref)
@@ -343,8 +351,11 @@ impl<'a> JsiiImporter<'a> {
 		let phase = if is_struct {
 			Phase::Independent
 		} else {
-			// All JSII imported interfaces are considered preflight interfaces
-			Phase::Preflight
+			if extract_docstring_tag(&jsii_interface.docs, "inflight") == Some("true") {
+				Phase::Inflight
+			} else {
+				Phase::Preflight
+			}
 		};
 
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
@@ -446,6 +457,11 @@ impl<'a> JsiiImporter<'a> {
 	) {
 		// Look for a client interface for this resource
 		let inflight_tag: Option<&str> = extract_docstring_tag(docs, "inflight");
+
+		if inflight_tag == Some("true") {
+			debug!("{wing_type} does not seem to have an inflight client");
+			return;
+		}
 
 		let client_interface = inflight_tag.map(|fqn| {
 			// Some fully qualified package names include "@" characters,
@@ -567,9 +583,6 @@ impl<'a> JsiiImporter<'a> {
 		if let Some(properties) = jsii_interface.properties() {
 			for p in properties {
 				debug!("Found property {} with type {:?}", p.name.green(), p.type_);
-				if member_phase == Phase::Inflight {
-					todo!("No support for inflight properties yet");
-				}
 				let base_wing_type = self.type_ref_to_wing_type(&p.type_);
 				let is_optional = if let Some(true) = p.optional { true } else { false };
 				let is_static = if let Some(true) = p.static_ { true } else { false };
@@ -848,10 +861,8 @@ impl<'a> JsiiImporter<'a> {
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
 		let mut param_type = self.type_ref_to_wing_type(&parameter.type_);
 
-		// TODO variadic parameter support https://github.com/winglang/wing/issues/397
 		if parameter.variadic.unwrap_or(false) {
 			param_type = self.wing_types.add_type(Type::Array(param_type));
-			param_type = self.wing_types.add_type(Type::Optional(param_type));
 		}
 
 		if parameter.optional.unwrap_or(false) {

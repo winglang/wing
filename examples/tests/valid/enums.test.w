@@ -31,3 +31,12 @@ test "toStr inflight" {
   assert("{SomeEnum.TWO}" == "TWO");
   assert("{SomeEnum.THREE}" == "THREE");
 }
+
+// A documented enum (should be parssed without errors)
+/// Enum documentation
+/// blah blah blah
+enum DocumentedEnum {
+    /// Variant documentation
+    /// blah blah blah
+    VARIANT
+}

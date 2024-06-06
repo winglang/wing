@@ -59,6 +59,7 @@ Get the region of the bucket.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.BucketRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.BucketRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -87,6 +88,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.BucketRef.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.BucketRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.BucketRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.BucketRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -167,6 +186,7 @@ new aws.Domain(props: DomainProps);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.Domain.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.Domain.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -195,6 +215,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Domain.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.Domain.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.Domain.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.Domain.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -347,6 +385,7 @@ If not defined, an empty string will be passed.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.FunctionRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.FunctionRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -375,6 +414,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.FunctionRef.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.FunctionRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.FunctionRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.FunctionRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -459,6 +516,7 @@ Get the queue URL.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.QueueRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.QueueRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -487,6 +545,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.QueueRef.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.QueueRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.QueueRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.QueueRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -520,6 +596,158 @@ queueArn: str;
 - *Type:* str
 
 The ARN of this queue.
+
+---
+
+
+### SecretRef <a name="SecretRef" id="@winglang/sdk.aws.SecretRef"></a>
+
+A reference to an existing secret.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.SecretRef.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.SecretRef(secretArn: str);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.Initializer.parameter.secretArn">secretArn</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="@winglang/sdk.aws.SecretRef.Initializer.parameter.secretArn"></a>
+
+- *Type:* str
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ISecretClient.value">value</a></code> | Retrieve the value of the secret. |
+| <code><a href="#@winglang/sdk.cloud.ISecretClient.valueJson">valueJson</a></code> | Retrieve the Json value of the secret. |
+
+---
+
+##### `value` <a name="value" id="@winglang/sdk.cloud.ISecretClient.value"></a>
+
+```wing
+inflight value(options?: GetSecretValueOptions): str
+```
+
+Retrieve the value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.value.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
+
+##### `valueJson` <a name="valueJson" id="@winglang/sdk.cloud.ISecretClient.valueJson"></a>
+
+```wing
+inflight valueJson(options?: GetSecretValueOptions): Json
+```
+
+Retrieve the Json value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.valueJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.aws.SecretRef.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.SecretRef.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.SecretRef.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.SecretRef.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.SecretRef.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.aws.SecretRef.toInflight"></a>
+
+```wing
+bring aws;
+
+aws.SecretRef.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.SecretRef.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.SecretRef.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.aws.SecretRef.property.secretArn">secretArn</a></code> | <code>str</code> | The ARN of the secret. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.SecretRef.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `secretArn`<sup>Required</sup> <a name="secretArn" id="@winglang/sdk.aws.SecretRef.property.secretArn"></a>
+
+```wing
+secretArn: str;
+```
+
+- *Type:* str
+
+The ARN of the secret.
 
 ---
 
@@ -621,6 +849,37 @@ The `onRequest` handler.
 - *Type:* MutMap&lt;str&gt;
 
 HTTP response headers to add to all responses (used by CORS).
+
+---
+
+
+
+### AwsInflightHost <a name="AwsInflightHost" id="@winglang/sdk.aws.AwsInflightHost"></a>
+
+Represents an inflight host on AWS.
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.AwsInflightHost.isAwsInflightHost">isAwsInflightHost</a></code> | Returns `true` if `obj` implements `IAwsInflightHost`. |
+
+---
+
+##### `isAwsInflightHost` <a name="isAwsInflightHost" id="@winglang/sdk.aws.AwsInflightHost.isAwsInflightHost"></a>
+
+```wing
+bring aws;
+
+aws.AwsInflightHost.isAwsInflightHost(obj: any);
+```
+
+Returns `true` if `obj` implements `IAwsInflightHost`.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.aws.AwsInflightHost.isAwsInflightHost.parameter.obj"></a>
+
+- *Type:* any
 
 ---
 
@@ -794,9 +1053,22 @@ new aws.Function();
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.aws.Function.context">context</a></code> | Returns the current Lambda invocation context, if the host is an AWS Lambda. |
 | <code><a href="#@winglang/sdk.aws.Function.from">from</a></code> | If the inflight host is an AWS Lambda, return a helper interface for working with it. |
 
 ---
+
+##### `context` <a name="context" id="@winglang/sdk.aws.Function.context"></a>
+
+```wing
+bring aws;
+
+aws.Function.context();
+```
+
+Returns the current Lambda invocation context, if the host is an AWS Lambda.
+
+> [https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html)
 
 ##### `from` <a name="from" id="@winglang/sdk.aws.Function.from"></a>
 
@@ -1170,6 +1442,51 @@ The website's custom domain object.
 
 ---
 
+### NetworkConfig <a name="NetworkConfig" id="@winglang/sdk.aws.NetworkConfig"></a>
+
+Function network configuration used to hold data on subnets and security groups that should be used when a function is deployed within a VPC.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.aws.NetworkConfig.Initializer"></a>
+
+```wing
+bring aws;
+
+let NetworkConfig = aws.NetworkConfig{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.NetworkConfig.property.securityGroupIds">securityGroupIds</a></code> | <code>MutArray&lt;str&gt;</code> | List of security groups to place function in. |
+| <code><a href="#@winglang/sdk.aws.NetworkConfig.property.subnetIds">subnetIds</a></code> | <code>MutArray&lt;str&gt;</code> | List of subnets to attach on function. |
+
+---
+
+##### `securityGroupIds`<sup>Required</sup> <a name="securityGroupIds" id="@winglang/sdk.aws.NetworkConfig.property.securityGroupIds"></a>
+
+```wing
+securityGroupIds: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+
+List of security groups to place function in.
+
+---
+
+##### `subnetIds`<sup>Required</sup> <a name="subnetIds" id="@winglang/sdk.aws.NetworkConfig.property.subnetIds"></a>
+
+```wing
+subnetIds: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+
+List of subnets to attach on function.
+
+---
+
 ### PolicyStatement <a name="PolicyStatement" id="@winglang/sdk.aws.PolicyStatement"></a>
 
 AWS IAM Policy Statement.
@@ -1404,59 +1721,32 @@ AWS Dynamodb name.
 
 ### IAwsFunction <a name="IAwsFunction" id="@winglang/sdk.aws.IAwsFunction"></a>
 
+- *Extends:* <a href="#@winglang/sdk.aws.IAwsInflightHost">IAwsInflightHost</a>
+
 - *Implemented By:* <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>
 
 A shared interface for AWS functions.
 
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsFunction.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
-| <code><a href="#@winglang/sdk.aws.IAwsFunction.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
-
----
-
-##### `addEnvironment` <a name="addEnvironment" id="@winglang/sdk.aws.IAwsFunction.addEnvironment"></a>
-
-```wing
-addEnvironment(key: str, value: str): void
-```
-
-Add an environment variable to the function.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.aws.IAwsFunction.addEnvironment.parameter.key"></a>
-
-- *Type:* str
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.aws.IAwsFunction.addEnvironment.parameter.value"></a>
-
-- *Type:* str
-
----
-
-##### `addPolicyStatements` <a name="addPolicyStatements" id="@winglang/sdk.aws.IAwsFunction.addPolicyStatements"></a>
-
-```wing
-addPolicyStatements(...policies: Array<PolicyStatement>): void
-```
-
-Add policy statements to the function's IAM role.
-
-###### `policies`<sup>Required</sup> <a name="policies" id="@winglang/sdk.aws.IAwsFunction.addPolicyStatements.parameter.policies"></a>
-
-- *Type:* <a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>
-
----
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.property.functionArn">functionArn</a></code> | <code>str</code> | AWS Function arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.property.functionName">functionName</a></code> | <code>str</code> | AWS Function name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.IAwsFunction.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
 
 ---
 
@@ -1481,6 +1771,73 @@ functionName: str;
 - *Type:* str
 
 AWS Function name.
+
+---
+
+### IAwsInflightHost <a name="IAwsInflightHost" id="@winglang/sdk.aws.IAwsInflightHost"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>, <a href="#@winglang/sdk.aws.IAwsInflightHost">IAwsInflightHost</a>
+
+Represents an `IInflightHost` on AWS.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsInflightHost.addNetwork">addNetwork</a></code> | Adds the host to the specified network. |
+| <code><a href="#@winglang/sdk.aws.IAwsInflightHost.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
+
+---
+
+##### `addNetwork` <a name="addNetwork" id="@winglang/sdk.aws.IAwsInflightHost.addNetwork"></a>
+
+```wing
+addNetwork(config: NetworkConfig): void
+```
+
+Adds the host to the specified network.
+
+###### `config`<sup>Required</sup> <a name="config" id="@winglang/sdk.aws.IAwsInflightHost.addNetwork.parameter.config"></a>
+
+- *Type:* <a href="#@winglang/sdk.aws.NetworkConfig">NetworkConfig</a>
+
+The network configuration.
+
+---
+
+##### `addPolicyStatements` <a name="addPolicyStatements" id="@winglang/sdk.aws.IAwsInflightHost.addPolicyStatements"></a>
+
+```wing
+addPolicyStatements(...policies: Array<PolicyStatement>): void
+```
+
+Add policy statements to the function's IAM role.
+
+###### `policies`<sup>Required</sup> <a name="policies" id="@winglang/sdk.aws.IAwsInflightHost.addPolicyStatements.parameter.policies"></a>
+
+- *Type:* <a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsInflightHost.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.aws.IAwsInflightHost.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
 
 ---
 
@@ -1654,6 +2011,128 @@ bucketName: str;
 - *Type:* str
 
 AWS Bucket name.
+
+---
+
+### ILambdaContext <a name="ILambdaContext" id="@winglang/sdk.aws.ILambdaContext"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.ILambdaContext">ILambdaContext</a>
+
+The AWS Lambda context object.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.remainingTimeInMillis">remainingTimeInMillis</a></code> | Returns the number of milliseconds left before the execution times out. |
+
+---
+
+##### `remainingTimeInMillis` <a name="remainingTimeInMillis" id="@winglang/sdk.aws.ILambdaContext.remainingTimeInMillis"></a>
+
+```wing
+remainingTimeInMillis(): num
+```
+
+Returns the number of milliseconds left before the execution times out.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.awsRequestId">awsRequestId</a></code> | <code>str</code> | The identifier of the invocation request. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.functionName">functionName</a></code> | <code>str</code> | The name of the Lambda function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.functionVersion">functionVersion</a></code> | <code>str</code> | The version of the function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.invokedFunctionArn">invokedFunctionArn</a></code> | <code>str</code> | The Amazon Resource Name (ARN) that's used to invoke the function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.logGroupName">logGroupName</a></code> | <code>str</code> | The log group for the function. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.logStreamName">logStreamName</a></code> | <code>str</code> | The log stream for the function instance. |
+| <code><a href="#@winglang/sdk.aws.ILambdaContext.property.memoryLimitInMB">memoryLimitInMB</a></code> | <code>str</code> | The amount of memory that's allocated for the function. |
+
+---
+
+##### `awsRequestId`<sup>Required</sup> <a name="awsRequestId" id="@winglang/sdk.aws.ILambdaContext.property.awsRequestId"></a>
+
+```wing
+awsRequestId: str;
+```
+
+- *Type:* str
+
+The identifier of the invocation request.
+
+---
+
+##### `functionName`<sup>Required</sup> <a name="functionName" id="@winglang/sdk.aws.ILambdaContext.property.functionName"></a>
+
+```wing
+functionName: str;
+```
+
+- *Type:* str
+
+The name of the Lambda function.
+
+---
+
+##### `functionVersion`<sup>Required</sup> <a name="functionVersion" id="@winglang/sdk.aws.ILambdaContext.property.functionVersion"></a>
+
+```wing
+functionVersion: str;
+```
+
+- *Type:* str
+
+The version of the function.
+
+---
+
+##### `invokedFunctionArn`<sup>Required</sup> <a name="invokedFunctionArn" id="@winglang/sdk.aws.ILambdaContext.property.invokedFunctionArn"></a>
+
+```wing
+invokedFunctionArn: str;
+```
+
+- *Type:* str
+
+The Amazon Resource Name (ARN) that's used to invoke the function.
+
+Indicates if the invoker specified a version number or alias.
+
+---
+
+##### `logGroupName`<sup>Required</sup> <a name="logGroupName" id="@winglang/sdk.aws.ILambdaContext.property.logGroupName"></a>
+
+```wing
+logGroupName: str;
+```
+
+- *Type:* str
+
+The log group for the function.
+
+---
+
+##### `logStreamName`<sup>Required</sup> <a name="logStreamName" id="@winglang/sdk.aws.ILambdaContext.property.logStreamName"></a>
+
+```wing
+logStreamName: str;
+```
+
+- *Type:* str
+
+The log stream for the function instance.
+
+---
+
+##### `memoryLimitInMB`<sup>Required</sup> <a name="memoryLimitInMB" id="@winglang/sdk.aws.ILambdaContext.property.memoryLimitInMB"></a>
+
+```wing
+memoryLimitInMB: str;
+```
+
+- *Type:* str
+
+The amount of memory that's allocated for the function.
 
 ---
 

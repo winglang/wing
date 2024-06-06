@@ -16,6 +16,11 @@ export interface PrettyPrintErrorOptions {
    * If provided, ANSI color and format will be used.
    */
   chalk?: typeof Chalk;
+
+  /**
+   * If true, will force reload all sources.
+   */
+  resetCache?: boolean;
 }
 
 /**
@@ -35,6 +40,10 @@ export async function prettyPrintError(
   const fRed = (s: string) => (chalk ? chalk.red(s) : s);
   const fBold = (s: string) => (chalk ? chalk.bold(s) : s);
   const fDim = (s: string) => (chalk ? chalk.dim(s) : s);
+
+  if (options?.resetCache) {
+    StackTracey.resetCache();
+  }
 
   let st: StackTracey | undefined;
   let originalMessage = "";

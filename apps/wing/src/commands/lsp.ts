@@ -100,6 +100,7 @@ export async function lsp() {
         hoverProvider: true,
         documentSymbolProvider: true,
         definitionProvider: true,
+        renameProvider: { prepareProvider: true },
       },
     };
     return result;
@@ -214,6 +215,12 @@ export async function lsp() {
   });
   connection.onDocumentSymbol(async (params) => {
     return callWing("wingc_on_document_symbol", params);
+  });
+  connection.onRenameRequest(async (params) => {
+    return callWing("wingc_on_rename", params);
+  });
+  connection.onPrepareRename(async (params) => {
+    return callWing("wingc_on_prepare_rename", params);
   });
   connection.onHover(async (params) => {
     return callWing("wingc_on_hover", params);

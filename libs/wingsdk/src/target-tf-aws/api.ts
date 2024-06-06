@@ -19,7 +19,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { ApiEndpointHandler, IAwsApi, STAGE_NAME } from "../shared-aws";
-import { API_DEFAULT_RESPONSE } from "../shared-aws/api.default";
+import { createApiDefaultResponse } from "../shared-aws/api.default";
 import { IInflightHost, Node } from "../std";
 
 /**
@@ -43,9 +43,12 @@ export class Api extends cloud.Api implements IAwsApi {
       getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
+
     this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
       label: `Api ${this.node.path}`,
     });
+
+    Node.of(this.endpoint).hidden = true;
   }
 
   protected get _endpoint(): cloud.Endpoint {
@@ -64,23 +67,22 @@ export class Api extends cloud.Api implements IAwsApi {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions
+    props?: cloud.ApiEndpointOptions
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
 
-    if (props) {
-      console.warn(`Api.${lowerMethod} does not support props yet`);
-    }
     this._validatePath(path);
 
-    const fn = this.addHandler(inflight, method, path);
+    const fn = this.addHandler(inflight, method, path, props);
     const apiSpecEndpoint = this.api.addEndpoint(path, upperMethod, fn);
     this._addToSpec(path, upperMethod, apiSpecEndpoint, this.corsOptions);
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ApiInflightMethods.REQUEST,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: `${lowerMethod}()`,
     });
   }
@@ -199,9 +201,10 @@ export class Api extends cloud.Api implements IAwsApi {
   private addHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
+    props?: cloud.ApiEndpointOptions
   ): Function {
-    let fn = this.addInflightHandler(inflight, method, path);
+    let fn = this.addInflightHandler(inflight, method, path, props);
     if (!(fn instanceof Function)) {
       throw new Error("Api only supports creating tfaws.Function right now");
     }
@@ -217,7 +220,8 @@ export class Api extends cloud.Api implements IAwsApi {
   private addInflightHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
+    props?: cloud.ApiEndpointOptions
   ): Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
@@ -229,7 +233,8 @@ export class Api extends cloud.Api implements IAwsApi {
       handler = new Function(
         this,
         App.of(this).makeId(this, prefix),
-        newInflight
+        newInflight,
+        props
       );
       Node.of(handler).hidden = true;
       this.handlers[inflight._id] = handler;
@@ -240,12 +245,7 @@ export class Api extends cloud.Api implements IAwsApi {
 
   /** @internal */
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("apis can only be bound by tfaws.Function for now");
-    }
-
     host.addEnvironment(this.urlEnvName(), this.url);
-
     super.onLift(host, ops);
   }
 
@@ -392,7 +392,6 @@ class WingRestApi extends Construct {
      *   - 404 (Not Found) for other HTTP methods.
      * - If CORS options are undefined, `defaultResponse` set up a mock 404 response for any HTTP method.
      */
-    const defaultResponse = API_DEFAULT_RESPONSE(props.cors);
 
     /**
      * BASIC API Gateway properties
@@ -406,6 +405,10 @@ class WingRestApi extends Construct {
         produce: () => {
           // Retrieves the API specification.
           const apiSpec = props.getApiSpec();
+          const defaultResponse = createApiDefaultResponse(
+            Object.keys(apiSpec.paths),
+            props.cors
+          );
 
           // Merges the specification with `defaultResponse` to handle requests to undefined routes (`/{proxy+}`).
           // This integration ensures comprehensive route handling:

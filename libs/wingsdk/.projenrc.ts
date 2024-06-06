@@ -2,7 +2,7 @@ import { JsonFile, cdk, javascript, DependencyType } from "projen";
 
 const JSII_DEPS = ["constructs@^10.3"];
 const CDKTF_VERSION = "0.20.3";
-const AWS_SDK_VERSION = "3.490.0";
+const AWS_SDK_VERSION = "3.577.0";
 
 const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
@@ -163,6 +163,18 @@ project.eslint!.addOverride({
   files: ["src/**/index.ts"],
   rules: {
     "sort-exports/sort-exports": ["error", { sortDir: "asc" }],
+  },
+});
+
+project.eslint!.addOverride({
+  files: ["vitest.config.mts"],
+  rules: {
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        devDependencies: true,
+      },
+    ],
   },
 });
 

@@ -62,7 +62,7 @@ const boundingBoxOverlap = (a: BoundingBox, b: BoundingBox) => {
   );
 };
 const MIN_ZOOM_LEVEL = 0.125;
-const MAX_ZOOM_LEVEL = 1;
+const MAX_ZOOM_LEVEL = 1.5;
 const ZOOM_SENSITIVITY = 1.35;
 const MOVE_SENSITIVITY = 1.5;
 const WHEEL_SENSITIVITY = 0.01;
@@ -146,7 +146,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       }
     });
   }, []);
-  useEvent("wheel", onWheel as (event: Event) => void, containerRef.current);
+  useEvent("wheel", onWheel as (event: Event) => void, containerRef.current, {
+    // Use passive: false to prevent the default behavior of scrolling the page.
+    passive: false,
+  });
 
   const [isDragging, setDragging] = useState(false);
 
@@ -392,8 +395,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       </div>
 
       <div className="relative z-10 flex">
-        <div className="grow"></div>
-        <div className="relative cursor-grab bg-slate-50/50 dark:bg-slate-500/50 backdrop-blur">
+        <div className="absolute cursor-grab backdrop-blur right-0">
           <MapControls
             onZoomIn={zoomIn}
             onZoomOut={zoomOut}
