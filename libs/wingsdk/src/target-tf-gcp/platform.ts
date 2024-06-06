@@ -30,10 +30,10 @@ export class Platform implements IPlatform {
   ): any {
     const Type = this.typeForFqn(type);
     if (!Type) {
-      throw new Error(`Unsupported resource type: ${type}`);
+      return new Type(scope, id, ...args);
     }
 
-    return new Type(scope, id, ...args);
+    return undefined;
   }
 
   public typeForFqn(fqn: string): any {

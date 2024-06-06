@@ -203,6 +203,8 @@ export abstract class App extends Construct implements IApp {
   }
 }
 
+// TODO: Move this to a separate file
+
 const POLYCON_FACTORY_SYMBOL = Symbol("@winglang/sdk.core.PolyconFactory");
 
 /**
