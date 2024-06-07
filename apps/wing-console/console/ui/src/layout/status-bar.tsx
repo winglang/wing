@@ -4,6 +4,7 @@ import classNames from "classnames";
 
 import { AutoUpdater } from "../features/auto-updater.js";
 
+import { RestartButton } from "./restart-button.js";
 import { ThemeToggle } from "./theme-toggle.js";
 
 export interface StatusBarProps {
@@ -11,6 +12,7 @@ export interface StatusBarProps {
   cloudAppState: State;
   isError?: boolean;
   showThemeToggle?: boolean;
+  onRestart?: () => void;
 }
 
 export const StatusBar = ({
@@ -18,6 +20,7 @@ export const StatusBar = ({
   cloudAppState,
   isError = false,
   showThemeToggle = false,
+  onRestart,
 }: StatusBarProps) => {
   const { theme } = useTheme();
   const loading =
@@ -39,7 +42,7 @@ export const StatusBar = ({
     >
       {/*left side*/}
       <div className="w-full flex space-x-6">
-        <div title={wingVersion} className="truncate space-x-1 min-w-[7rem]">
+        <div title={wingVersion} className="truncate space-x-1">
           {wingVersion && (
             <>
               <span>Wing</span>
@@ -65,9 +68,9 @@ export const StatusBar = ({
         </div>
       </div>
       {/*right side*/}
-      <div className="w-full flex space-x-1 justify-end">
+      <div className="w-full flex space-x-4 justify-end">
         <AutoUpdater />
-        {showThemeToggle && <ThemeToggle />}
+        <RestartButton onRestart={onRestart} />
       </div>
     </footer>
   );

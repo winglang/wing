@@ -457,6 +457,7 @@ export const DefaultLayout = ({
                   cloudAppState={cloudAppState}
                   isError={cloudAppState === "error"}
                   showThemeToggle={layout.statusBar?.showThemeToggle}
+                  onRestart={restartSimulator}
                 />
               </div>
             )}

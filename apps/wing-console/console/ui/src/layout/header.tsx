@@ -3,6 +3,8 @@ import { useTheme, Button } from "@wingconsole/design-system";
 import classNames from "classnames";
 
 import { DiscordButton } from "./discord-button.js";
+import { RestartButton } from "./restart-button.js";
+import { ThemeToggle } from "./theme-toggle.js";
 
 export interface HeaderProps {
   title: string;
@@ -26,9 +28,7 @@ export const Header = ({
       )}
     >
       <div className="w-1/3 grow flex items-center gap-x-1 text-sm">
-        <Button onClick={onRestart} small icon={ArrowPathIcon}>
-          Restart simulator
-        </Button>
+        <ThemeToggle />
       </div>
       <div className="w-1/3 justify-center items-center text-center gap-x-1 flex text-sm">
         {title}
