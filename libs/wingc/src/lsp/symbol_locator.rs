@@ -225,7 +225,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			return;
 		}
 
-		self.ctx.push_stmt(node.idx);
+		self.ctx.push_stmt(node);
 
 		// Handle situations where symbols are actually defined in inner scopes
 		match &node.kind {

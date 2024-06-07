@@ -1,13 +1,14 @@
 bring "@cdktf/provider-aws" as aws;
 bring "cdktf" as cdktf;
 
-new aws.s3Bucket.S3Bucket(
+let bucket = new aws.s3Bucket.S3Bucket(
   bucketPrefix: "hello",
   versioning: {
     enabled: true,
     mfaDelete: true,
   },
 ) as "Bucket";
+nodeof(bucket).color = "pink";
 
 class Foo {
   new() {
