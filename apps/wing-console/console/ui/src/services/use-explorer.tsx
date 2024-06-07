@@ -86,13 +86,11 @@ export const useExplorer = () => {
   }, [selectedNode, setSelectedItems]);
 
   useEffect(() => {
-    const initialExpandedItems = () => {
-      const newItems: string[] = [];
+    let newItems: string[] = [];
 
-      if (items.length === 1 && items[0] && items[0].expanded !== false) {
-        return [items[0].id];
-      }
-
+    if (items.length === 1 && items[0] && items[0].expanded !== false) {
+      newItems = [items[0].id];
+    } else {
       const getExpandedNodes = (items: TreeMenuItem[]): void => {
         for (const item of items) {
           if (item.expanded === true) {
@@ -103,12 +101,10 @@ export const useExplorer = () => {
           }
         }
       };
-
       getExpandedNodes(items);
-      return newItems;
-    };
+    }
 
-    setExpandedItems(initialExpandedItems);
+    setExpandedItems(newItems);
   }, [setExpandedItems, items]);
 
   return {
