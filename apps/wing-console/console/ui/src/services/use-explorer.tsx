@@ -86,26 +86,30 @@ export const useExplorer = () => {
   }, [selectedNode, setSelectedItems]);
 
   useEffect(() => {
-    let newItems: string[] = [];
+    setExpandedItems(() => {
+      if (items.length === 1 && items[0] && items[0].expanded !== false) {
+        return [items[0].id];
+      }
 
-    if (items.length === 1 && items[0] && items[0].expanded !== false) {
-      newItems = [items[0].id];
-    } else {
-      const getExpandedNodes = (items: TreeMenuItem[]): void => {
+      const getExpandedNodes = (items: TreeMenuItem[]): string[] => {
+        let expandedNodes: string[] = [];
         for (const item of items) {
           if (item.expanded === true) {
-            newItems.push(item.id);
+            expandedNodes.push(item.id);
           }
           if (item.children && item.children.length > 0) {
-            getExpandedNodes(item.children);
+            expandedNodes = [
+              ...expandedNodes,
+              ...getExpandedNodes(item.children),
+            ];
           }
         }
+        return expandedNodes;
       };
-      getExpandedNodes(items);
-    }
 
-    setExpandedItems(newItems);
-  }, [setExpandedItems, items]);
+      return getExpandedNodes(items);
+    });
+  }, [items, setExpandedItems]);
 
   return {
     items,
