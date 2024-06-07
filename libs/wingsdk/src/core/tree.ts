@@ -88,8 +88,8 @@ export interface DisplayInfo {
   readonly icon?: string;
 
   /**
-   * The default view of this resource in the UI. By default, nodes are collapsed,
-   * so set this to `true` if you want the node to be expanded by default.
+   * Whether the node is expanded or collapsed by default in the UI.
+   * By default, nodes are collapsed. Set this to `true` if you want the node to be expanded by default.
    *
    * @default false
    */
