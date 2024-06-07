@@ -104,7 +104,10 @@ export class Node {
    * metadata describing how one construct is related to another construct.
    */
   public addConnection(props: AddConnectionProps) {
-    this._connections.add(props);
+    this._connections.add({
+      source: props.source ?? this.construct,
+      ...props,
+    });
   }
 
   // ---- constructs 10.x APIs ----
@@ -423,8 +426,9 @@ export class Node {
 export interface AddConnectionProps {
   /**
    * The source of the connection.
+   * @default this
    */
-  readonly source: IConstruct;
+  readonly source?: IConstruct;
 
   /**
    * An operation that the source construct supports.
