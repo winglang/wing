@@ -85,31 +85,31 @@ export const useExplorer = () => {
     setSelectedItems([selectedNode]);
   }, [selectedNode, setSelectedItems]);
 
-  const initialExpandedItems = useMemo(() => {
-    const newItems: string[] = [];
+  useEffect(() => {
+    const initialExpandedItems = () => {
+      const newItems: string[] = [];
 
-    if (items.length === 1 && items[0] && items[0].expanded !== false) {
-      return [items[0].id];
-    }
-
-    const getExpandedNodes = (items: TreeMenuItem[]): void => {
-      for (const item of items) {
-        if (item.expanded === true) {
-          newItems.push(item.id);
-        }
-        if (item.children && item.children.length > 0) {
-          getExpandedNodes(item.children);
-        }
+      if (items.length === 1 && items[0] && items[0].expanded !== false) {
+        return [items[0].id];
       }
+
+      const getExpandedNodes = (items: TreeMenuItem[]): void => {
+        for (const item of items) {
+          if (item.expanded === true) {
+            newItems.push(item.id);
+          }
+          if (item.children && item.children.length > 0) {
+            getExpandedNodes(item.children);
+          }
+        }
+      };
+
+      getExpandedNodes(items);
+      return newItems;
     };
 
-    getExpandedNodes(items);
-    return newItems;
-  }, [items]);
-
-  useEffect(() => {
     setExpandedItems(initialExpandedItems);
-  }, [initialExpandedItems, setExpandedItems]);
+  }, [setExpandedItems, items]);
 
   return {
     items,
