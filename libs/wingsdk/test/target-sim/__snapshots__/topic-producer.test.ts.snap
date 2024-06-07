@@ -9,7 +9,7 @@ exports[`publishing messages to topic 1`] = `
   "root/TopicTester/Function started",
   "Sending message (message=ABC, subscriber=sim-1).",
   "InvokeAsync (payload="ABC").",
-  "resp {}",
+  "Publish (messages=ABC).",
   "Invoke (payload="ABC").",
   "Message received",
   "root/TopicTester/MyTopic/Policy stopped",

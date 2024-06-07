@@ -203,7 +203,39 @@ export class Queue
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
         void fnClient
-          .invoke({ messages: messagesPayload } as unknown as Json)
+          .invoke({ messages: messages } as unknown as Json)
+          .then((result) => {
+            if (this.dlq && result) {
+              const errorList = result as any;
+              let retriesMessages = [];
+              for (const msg of errorList) {
+                if (
+                  msg.remainingDeliveryAttempts < this.dlq.maxDeliveryAttempts
+                ) {
+                  msg.remainingDeliveryAttempts++;
+                  retriesMessages.push(msg);
+                } else {
+                  let dlq = this.context.getClient(
+                    this.dlq.dlqHandler
+                  ) as IQueueClient;
+
+                  void dlq.push(msg.payload).catch((err) => {
+                    this.context.addTrace({
+                      type: TraceType.RESOURCE,
+                      level: LogLevel.ERROR,
+                      data: {
+                        message: `Pushing messages to the dead-letter queue generates an error -> ${err}`,
+                      },
+                      sourcePath: this.context.resourcePath,
+                      sourceType: QUEUE_FQN,
+                      timestamp: new Date().toISOString(),
+                    });
+                  });
+                }
+              }
+              this.messages.push(...retriesMessages);
+            }
+          })
           .catch((err) => {
             // If the function is at a concurrency limit, pretend we just didn't call it
             if (

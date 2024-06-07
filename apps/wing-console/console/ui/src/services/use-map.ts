@@ -228,11 +228,20 @@ export const useMap = ({ expandedItems }: UseMapOptions) => {
     return bridgeConnections({
       connections:
         rawConnections
-          .filter((connection) => {
-            return (
-              connection.sourceOp !== "invokeAsync" &&
-              connection.targetOp !== "invokeAsync"
-            );
+          .map((connection) => {
+            // Convert invokeAsync to invoke, since they
+            // are the same to the map view.
+            return {
+              ...connection,
+              sourceOp:
+                connection.sourceOp === "invokeAsync"
+                  ? "invoke"
+                  : connection.sourceOp,
+              targetOp:
+                connection.targetOp === "invokeAsync"
+                  ? "invoke"
+                  : connection.targetOp,
+            };
           })
           .filter((connection) => {
             return connection.source !== connection.target;

@@ -948,20 +948,22 @@ exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx, event) => {
             const batchItemFailures = [];
-            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
-            if (!parsed.messages)
-                throw new Error('No "messages" field in event.');
-            for (const $message of parsed.messages) {
-                try {
-                    await ctx.handler($message.payload);
-                }
-                catch (error) {
-                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
-                    batchItemFailures.push($message);
+            const eventWithMessages = event;
+            if (eventWithMessages.messages) {
+                for (const $message of eventWithMessages.messages) {
+                    try {
+                        await ctx.handler($message.payload);
+                    }
+                    catch (error) {
+                        batchItemFailures.push($message);
+                    }
                 }
             }
+            else {
+                throw new Error('No "messages" field in event.');
+            }
             return batchItemFailures.length > 0
-                ? JSON.stringify(batchItemFailures)
+                ? batchItemFailures
                 : undefined;
         }
   const $ctx = {
@@ -1032,21 +1034,21 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/my_queue",
         "sourceOp": "push",
         "target": "root/my_queue/Consumer0",
         "targetOp": "invoke",
       },
       {
-        "name": "push",
+        "name": "call",
         "source": "root/my_queue_messages/Function",
         "sourceOp": "invoke",
         "target": "root/my_queue",
         "targetOp": "push",
       },
       {
-        "name": "push",
+        "name": "call",
         "source": "root/my_queue_messages/Function",
         "sourceOp": "invokeAsync",
         "target": "root/my_queue",
@@ -1246,7 +1248,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
+                "title": "Consumer",
               },
               "id": "Consumer0",
               "path": "root/my_queue/Consumer0",
@@ -1336,20 +1338,22 @@ exports.handler = async function(event) {
   $handler = $handler ?? ((await (async () => {
   const $func = async (ctx, event) => {
             const batchItemFailures = [];
-            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
-            if (!parsed.messages)
-                throw new Error('No "messages" field in event.');
-            for (const $message of parsed.messages) {
-                try {
-                    await ctx.handler($message.payload);
-                }
-                catch (error) {
-                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
-                    batchItemFailures.push($message);
+            const eventWithMessages = event;
+            if (eventWithMessages.messages) {
+                for (const $message of eventWithMessages.messages) {
+                    try {
+                        await ctx.handler($message.payload);
+                    }
+                    catch (error) {
+                        batchItemFailures.push($message);
+                    }
                 }
             }
+            else {
+                throw new Error('No "messages" field in event.');
+            }
             return batchItemFailures.length > 0
-                ? JSON.stringify(batchItemFailures)
+                ? batchItemFailures
                 : undefined;
         }
   const $ctx = {
@@ -1382,7 +1386,7 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/my_queue",
         "sourceOp": "push",
         "target": "root/my_queue/Consumer0",
@@ -1548,7 +1552,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
+                "title": "Consumer",
               },
               "id": "Consumer0",
               "path": "root/my_queue/Consumer0",

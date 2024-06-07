@@ -10,13 +10,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -60,6 +59,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -358,13 +363,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -401,6 +405,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -685,13 +695,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -727,6 +736,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -1011,13 +1026,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -1054,6 +1068,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -1338,13 +1358,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -1381,6 +1400,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -1665,13 +1690,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -1708,6 +1732,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -2010,13 +2040,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -2094,6 +2123,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -2462,13 +2497,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -2504,6 +2538,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -2805,13 +2845,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -2847,6 +2886,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -3120,13 +3165,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -3170,6 +3214,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -3477,13 +3527,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -3519,13 +3568,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -3568,6 +3616,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler1",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -3931,13 +3985,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -3973,13 +4026,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -4022,6 +4074,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler1",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -4380,13 +4438,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -4422,6 +4479,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -4706,13 +4769,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -4748,6 +4810,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -5041,13 +5109,12 @@ exports.handler = async function(event) {
             if (!event) {
                 throw new Error("invalid API request event");
             }
-            let req = JSON.parse(event);
-            const response = await ctx.handler(req);
+            const response = await ctx.handler(event);
             if (!response) {
                 return undefined;
             }
             else {
-                return JSON.stringify(response);
+                return response;
             }
         }
   const $ctx = {
@@ -5084,6 +5151,12 @@ exports.handler = async function(event) {
         "sourceOp": "request",
         "target": "root/my_api/OnRequestHandler0",
         "targetOp": "invoke",
+      },
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
       },
     ],
     "version": "connections-0.1",
@@ -5341,7 +5414,14 @@ exports.handler = async function(event) {
 exports[`create an api 1`] = `
 {
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "<ref>",
+        "source": "root/my_api/Endpoint",
+        "target": "root/my_api",
+        "targetOp": "url",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {

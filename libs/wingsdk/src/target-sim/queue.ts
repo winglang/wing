@@ -87,7 +87,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     );
     const fnNode = Node.of(fn);
     fnNode.sourceModule = SDK_SOURCE_MODULE;
-    fnNode.title = "setConsumer()";
+    fnNode.title = "Consumer";
 
     const mapping = new EventMapping(
       this,
@@ -113,7 +113,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       sourceOp: cloud.QueueInflightMethods.PUSH,
       target: fn,
       targetOp: cloud.FunctionInflightMethods.INVOKE,
-      name: "setConsumer()",
+      name: "consumer",
     });
 
     return fn;
@@ -178,7 +178,9 @@ export class QueueSetConsumerHandler {
         throw new Error('No "messages" field in event.');
       }
 
-      return batchItemFailures.length > 0 ? batchItemFailures : undefined;
+      return batchItemFailures.length > 0
+        ? (batchItemFailures as unknown as Json)
+        : undefined;
     });
   }
 }
