@@ -1,8 +1,8 @@
 bring cloud;
 
-let b = new cloud.Bucket();
+let t = new cloud.Topic();
 let q = new cloud.Queue();
 
 q.setConsumer(inflight (msg: str) => {
-  b.put("file.txt", msg);
+  t.publish("msg");
 });
