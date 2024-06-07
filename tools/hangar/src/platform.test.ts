@@ -11,13 +11,13 @@ import { tmpdir } from "os";
 import { Testing } from "cdktf";
 
 describe("Multiple platforms", () => {
-  const app = "main.w";
+  const app = "example.main.w";
   const appFile = path.join(platformsDir, app);
 
   test("only first platform app is used", async () => {
     const args = ["compile"];
     const platforms = ["tf-aws", "tf-azure"];
-    const targetDir = path.join(platformsDir, "target", "main.tfaws");
+    const targetDir = path.join(platformsDir, "target", "example.main.tfaws");
 
     await runWingCommand({
       cwd: tmpDir,
@@ -34,8 +34,10 @@ describe("Multiple platforms", () => {
     const terraformOutputString = JSON.stringify(terraformOutput);
 
     expect(terraformOutput).toMatchSnapshot();
-    expect(tfResourcesOfCount(terraformOutputString, "aws_sns_topic")) // should be sqs since tf-aws (tf-azure does not have a queue impl)
-      .toEqual(1);
+    // tf-azure does not have a Topic impl, so it falls back to tf-aws
+    expect(tfResourcesOfCount(terraformOutputString, "aws_sns_topic")).toEqual(
+      1
+    );
   });
 });
 
