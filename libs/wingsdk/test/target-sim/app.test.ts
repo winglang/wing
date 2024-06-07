@@ -23,7 +23,7 @@ test("app name can be customized", () => {
   const platform = new Platform();
   const polyconFactory = new PolyconFactory(
     [platform.newInstance.bind(platform)],
-    [platform.typeForFqn.bind(platform)]
+    [platform.resolveType.bind(platform)]
   );
   const app = new App({
     outdir,

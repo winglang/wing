@@ -38,7 +38,7 @@ export class SimApp extends App {
     const platform = new Platform();
     const polyconFactory = new PolyconFactory(
       [platform.newInstance.bind(platform)],
-      [platform.typeForFqn.bind(platform)]
+      [platform.resolveType.bind(platform)]
     );
 
     super({

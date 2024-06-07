@@ -297,7 +297,7 @@ const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class AnApi extends (globalThis.$PolyconFactory.typeForFqn("@winglang/sdk.cloud.Api") ?? cloud.Api) {
+    class AnApi extends (globalThis.$PolyconFactory.resolveType("@winglang/sdk.cloud.Api") ?? cloud.Api) {
       constructor($scope, $id, ) {
         super($scope, $id);
       }

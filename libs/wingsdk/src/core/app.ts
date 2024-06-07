@@ -226,11 +226,11 @@ export class PolyconFactory {
   }
 
   private readonly newInstanceOverrides: any[];
-  private readonly typeForFqnOverrides: any[];
+  private readonly resolveTypeOverrides: any[];
 
-  public constructor(newInstanceOverrides: any[], typeForFqnOverrides: any[]) {
+  public constructor(newInstanceOverrides: any[], resolveTypeOverrides: any[]) {
     this.newInstanceOverrides = newInstanceOverrides;
-    this.typeForFqnOverrides = typeForFqnOverrides;
+    this.resolveTypeOverrides = resolveTypeOverrides;
   }
 
   /**
@@ -277,7 +277,7 @@ export class PolyconFactory {
       }
     }
 
-    const ctor = this.typeForFqn(fqn);
+    const ctor = this.resolveType(fqn);
     if (ctor) {
       return new ctor(scope, id, ...args);
     }
@@ -290,8 +290,8 @@ export class PolyconFactory {
    *
    * @param fqn string fqn of the resource type
    */
-  public typeForFqn(fqn: string): any {
-    for (const override of this.typeForFqnOverrides) {
+  public resolveType(fqn: string): any {
+    for (const override of this.resolveTypeOverrides) {
       const type = override(fqn);
       if (type) {
         return type;

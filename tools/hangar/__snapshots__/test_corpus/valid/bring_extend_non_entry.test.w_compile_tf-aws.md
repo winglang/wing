@@ -66,7 +66,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 const cdk8s = require("cdk8s");
-class Foo extends (globalThis.$PolyconFactory.typeForFqn("cdk8s.Chart") ?? cdk8s.Chart) {
+class Foo extends (globalThis.$PolyconFactory.resolveType("cdk8s.Chart") ?? cdk8s.Chart) {
   constructor($scope, $id, ) {
     super($scope, $id);
   }

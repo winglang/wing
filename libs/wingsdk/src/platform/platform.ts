@@ -32,7 +32,7 @@ export interface IPlatform {
    *
    * @param fqn string fqn of the resource type
    */
-  typeForFqn?(fqn: string): any;
+  resolveType?(fqn: string): any;
 
   /**
    * New App Method

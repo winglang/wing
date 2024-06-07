@@ -30,7 +30,7 @@ export class Platform implements platform.IPlatform {
   }
 
   newInstance(fqn: string, scope: Construct, id: string, ...args: any) {
-    const type = PolyconFactory.of(scope).typeForFqn(fqn);
+    const type = PolyconFactory.of(scope).resolveType(fqn);
 
     if (!type) {
       return undefined;

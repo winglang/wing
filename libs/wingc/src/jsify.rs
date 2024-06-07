@@ -1775,7 +1775,7 @@ impl<'a> JSifier<'a> {
 				if let Some(fqn) = &parent_type.as_class().unwrap().fqn {
 					code.append(new_code!(
 						&class.name.span,
-						" extends (globalThis.$PolyconFactory.typeForFqn(\"",
+						" extends (globalThis.$PolyconFactory.resolveType(\"",
 						fqn,
 						"\") ?? ",
 						self.jsify_user_defined_type(parent, ctx),

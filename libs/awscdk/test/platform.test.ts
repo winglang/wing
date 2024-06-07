@@ -12,7 +12,7 @@ test("wing platform", async () => {
   process.env.CDK_STACK_NAME = "MyStack";
   const factory = new PolyconFactory(
     [platform.newInstance.bind(platform)],
-    [platform.typeForFqn.bind(platform)]
+    [platform.resolveType.bind(platform)]
   );
   const app = platform.newApp?.({
     entrypointDir: workdir,
@@ -67,7 +67,7 @@ test("CDK_STACK_NAME, CDK_AWS_ACCOUNT, CDK_AWS_REGION", async () => {
   process.env.CDK_AWS_REGION = "us-west-2";
   const factory = new PolyconFactory(
     [platform.newInstance.bind(platform)],
-    [platform.typeForFqn.bind(platform)]
+    [platform.resolveType.bind(platform)]
   );
 
   const app = platform.newApp?.({

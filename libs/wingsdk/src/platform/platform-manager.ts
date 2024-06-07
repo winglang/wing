@@ -106,23 +106,23 @@ export class PlatformManager {
   public createPolyconFactory(): PolyconFactory {
     this.createPlatformInstances();
     const newInstanceOverrides: any[] = [];
-    const typeForFqnOverrides: any[] = [];
+    const resolveTypeOverrides: any[] = [];
 
     this.platformInstances.forEach((instance) => {
       if (instance.newInstance) {
         newInstanceOverrides.push(instance.newInstance.bind(instance));
       }
-      if (instance.typeForFqn) {
-        typeForFqnOverrides.push(instance.typeForFqn.bind(instance));
+      if (instance.resolveType) {
+        resolveTypeOverrides.push(instance.resolveType.bind(instance));
       }
     });
 
     // Reverse the overrides so that the last platform's newInstance
     // method is attempted first, then the second to last, etc.
     newInstanceOverrides.reverse();
-    typeForFqnOverrides.reverse();
+    resolveTypeOverrides.reverse();
 
-    return new PolyconFactory(newInstanceOverrides, typeForFqnOverrides);
+    return new PolyconFactory(newInstanceOverrides, resolveTypeOverrides);
   }
 
   // This method is called from preflight.js in order to return an App instance

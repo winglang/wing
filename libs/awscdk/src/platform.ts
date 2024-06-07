@@ -46,7 +46,7 @@ export class Platform implements platform.IPlatform {
     id: string,
     ...args: any[]
   ): any {
-    const Type = this.typeForFqn(type);
+    const Type = this.resolveType(type);
     if (Type) {
       return new Type(scope, id, ...args);
     }
@@ -54,7 +54,7 @@ export class Platform implements platform.IPlatform {
     return undefined;
   }
 
-  public typeForFqn(fqn: string): any {
+  public resolveType(fqn: string): any {
     switch (fqn) {
       case API_FQN:
         return Api;
