@@ -336,7 +336,7 @@ pub struct Class {
 	// and instead the user will need to pass the relevant args to the class's init method.
 	pub std_construct_args: bool,
 
-	// Unique identifier for this class type, used to generate a unique type alias for this class se we can
+	// Unique identifier for this class type, used to generate a unique type alias for this class so we can
 	// reference it regardless of type name shadowing or scoping.
 	pub uid: usize,
 }

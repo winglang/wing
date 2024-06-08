@@ -153,11 +153,7 @@ impl<'a> JSifier<'a> {
 		}) {
 			let scope_env = self.types.get_scope_env(&scope);
 			let s = self.jsify_statement(&scope_env, statement, &mut jsify_context); // top level statements are always preflight
-			if let StmtKind::Bring {
-				identifier: _,
-				source: _,
-			} = statement.kind
-			{
+			if matches!(statement.kind, StmtKind::Bring { .. }) {
 				imports.add_code(s);
 			} else {
 				js.add_code(s);
