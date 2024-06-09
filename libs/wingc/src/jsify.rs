@@ -905,9 +905,11 @@ impl<'a> JSifier<'a> {
 							CalleeKind::Expr(expr) => match &expr.kind {
 								// for "loose" macros, e.g. `print()`, $self$ is the global object
 								ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
-								ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
-									self.jsify_expression(&object, ctx).to_string()
-								}
+								ExprKind::Reference(Reference::InstanceMember {
+									object,
+									optional_accessor,
+									..
+								}) => self.format_with_optional_default(object, ctx, *optional_accessor),
 								ExprKind::Reference(Reference::TypeMember { property, .. }) => {
 									// remove the property name from the expression string
 									expr_string.split(".").filter(|s| s != &property.name).join(".")
@@ -1062,6 +1064,24 @@ impl<'a> JSifier<'a> {
 				dbg_panic!();
 				new_code!(expr_span, "")
 			}
+		}
+	}
+
+	fn format_with_optional_default(&self, exp: &Expr, ctx: &mut JSifyContext, is_optional: bool) -> String {
+		let base_expression = self.jsify_expression(&exp, ctx).to_string();
+		if is_optional {
+			let exp_type = self.types.get_expr_type(exp);
+			let unwrapped_type = exp_type.maybe_unwrap_option();
+			let default = if unwrapped_type.is_map() {
+				"new Map()"
+			} else if unwrapped_type.is_iterable() {
+				"[]"
+			} else {
+				"{}"
+			};
+			format!("({} ?? {})", base_expression, default)
+		} else {
+			base_expression
 		}
 	}
 
