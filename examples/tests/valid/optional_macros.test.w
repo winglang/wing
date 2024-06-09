@@ -7,6 +7,8 @@ struct Result {
   mapItems: Array<Map<str>>?;
   setItem: Set<num>?;
   setItems: Array<Set<num>>?;
+  structItem: Result?;
+  structItems: Array<Result>?;
 }
 
 test "optional chaining macros" {
@@ -29,6 +31,9 @@ test "optional chaining macros" {
 
   expect.equal(result.setItems?.tryAt(0)?.size, nil);
   expect.equal(result.setItems?.tryAt(0)?.has(6), nil);
+
+  expect.equal(result.structItem?.item, nil);
+  expect.equal(result.structItems?.tryAt(0)?.item, nil);
 }
 
 
