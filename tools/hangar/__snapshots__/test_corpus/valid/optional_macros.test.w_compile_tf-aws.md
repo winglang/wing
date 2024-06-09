@@ -25,6 +25,8 @@ module.exports = function({ $expect_Util }) {
       (await $expect_Util.equal((await result.setItem?.has?.(6)), undefined));
       (await $expect_Util.equal((result.setItems ?? []).at(0)?.size, undefined));
       (await $expect_Util.equal((await (result.setItems ?? []).at(0)?.has?.(6)), undefined));
+      (await $expect_Util.equal(result.structItem?.item, undefined));
+      (await $expect_Util.equal((result.structItems ?? []).at(0)?.item, undefined));
     }
   }
   return $Closure1;
