@@ -4,6 +4,7 @@
   "pipeline": {
     "compile": {
       "dependsOn": ["@winglang/wingii#compile", "@winglang/tree-sitter-wing#compile"],
+      "inputs": ["$TURBO_DEFAULT$", "scripts/postcompile.sh"],
       "outputs": [
         "../../target/wasm32-wasi/release/wingc.wasm",
         "../../target/wasm32-wasi/release/libwingc.*",
