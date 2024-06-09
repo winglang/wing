@@ -23,7 +23,7 @@
       ]
     },
     "dev": {
-      "inputs": ["examples/**/*.rs"],
+      "inputs": ["*.json", "*.toml", "src/**/*.rs", "examples/**/*.rs"],
       "dependsOn": ["@winglang/sdk#compile"]
     }
   }
