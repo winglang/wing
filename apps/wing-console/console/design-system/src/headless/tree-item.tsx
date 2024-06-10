@@ -121,6 +121,12 @@ export const TreeItem = ({
   });
   const canBeExpanded = !!children;
 
+  useEffect(() => {
+    if (selected) {
+      ref.current?.scrollIntoView();
+    }
+  }, [selected, ref]);
+
   return (
     <li
       ref={ref}

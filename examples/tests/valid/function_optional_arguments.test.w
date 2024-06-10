@@ -71,3 +71,18 @@ assert(fn4(opt1: "hey") == "hey 0");
 assert(fn4({}) == "none 0");
 // Use default
 assert(fn4() == "none");
+
+// Test implicitly optional named args used within methods
+class Foo {
+  pub static staticMethod(opts: ImplitictlyOptionalOptions): str {
+    return "{opts.opt1 ?? "none"} {opts.opt2 ?? 0}";
+  }
+
+  pub method(opts: ImplitictlyOptionalOptions): str {
+    return "{opts.opt1 ?? "none"} {opts.opt2 ?? 0}";
+  }
+}
+
+let foo = new Foo();
+assert(foo.method() == "none 0");
+assert(Foo.staticMethod() == "none 0");

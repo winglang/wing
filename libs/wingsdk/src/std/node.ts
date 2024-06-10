@@ -89,6 +89,14 @@ export class Node {
    */
   public icon?: string;
 
+  /**
+   * Whether the node is expanded or collapsed by default in the UI.
+   * By default, nodes are collapsed. Set this to `true` if you want the node to be expanded by default.
+   *
+   * @default false
+   */
+  public expanded?: boolean;
+
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
   private _app: IApp | undefined;
@@ -104,7 +112,10 @@ export class Node {
    * metadata describing how one construct is related to another construct.
    */
   public addConnection(props: AddConnectionProps) {
-    this._connections.add(props);
+    this._connections.add({
+      source: props.source ?? this.construct,
+      ...props,
+    });
   }
 
   // ---- constructs 10.x APIs ----
@@ -423,8 +434,9 @@ export class Node {
 export interface AddConnectionProps {
   /**
    * The source of the connection.
+   * @default this
    */
-  readonly source: IConstruct;
+  readonly source?: IConstruct;
 
   /**
    * An operation that the source construct supports.
