@@ -29,7 +29,7 @@ A function can be invoked in two ways:
 * **invoke()** - Executes the function with a payload and waits for the result.
 * **invokeAsync()** - Kicks off the execution of the function with a payload and returns immediately while the function is running.
 
-```ts playground
+```ts playground example
 bring cloud;
 bring util;
 
@@ -61,7 +61,7 @@ It is possible to leverage this behavior to cache objects across function execut
 
 The following example reads the `bigdata.json` file once and reuses it every time `query()` is called.
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let big = new cloud.Bucket();
@@ -97,7 +97,9 @@ The sim implementation of `cloud.Function` runs the inflight code as a JavaScrip
 
 By default, a maximum of 10 workers can be processing requests sent to a `cloud.Function` concurrently, but this number can be adjusted with the `concurrency` property:
 
-```ts playground
+```ts playground example
+bring cloud;
+
 new cloud.Function(inflight () => {
   // ... code that shouldn't run concurrently ...
 }, concurrency: 1);

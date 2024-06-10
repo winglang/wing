@@ -7,7 +7,7 @@ keywords: [Wing example]
 
 ### Preflight function
 
-```ts playground
+```ts playground example
 // preflight function - when declared in preflight context
 let dup = (s: str, count: num): str => {
   // code
@@ -18,7 +18,7 @@ let dup = (s: str, count: num): str => {
 
 Inflight functions are Wing's distributed computing primitive. They are isolated code blocks which can be packaged and executed on compute platforms in the cloud (such as containers, Lambda/Cloud Function, etc..).
 
-```ts playground
+```ts playground example
 
 let handler = inflight (message: str): void => {
   // using the inflight modifier 
@@ -32,7 +32,7 @@ let handler = inflight (message: str): void => {
 };
 ```
 ### Struct Expansion
-```ts playground
+```ts playground example
 struct Options {
   prefix: str?;
   delim: str;

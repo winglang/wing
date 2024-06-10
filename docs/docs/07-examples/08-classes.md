@@ -5,7 +5,7 @@ keywords: [Wing example]
 ---
 
 ### Preflight class
-```ts playground
+```ts playground example
 bring cloud;
 bring util;
 
@@ -47,7 +47,7 @@ new cloud.Function(inflight () => {
 ```
 
 ### Inflight interface
-```js playground
+```js playground example
 bring cloud;
 
 interface IProfile {
@@ -70,7 +70,7 @@ new cloud.Function(inflight () => {
 ```
 
 ### Preflight interface
-```ts playground
+```ts playground example
 /**
  * Preflight Interface
  **/ 
@@ -95,7 +95,7 @@ class BucketBasedKeyValueStore impl IKVStore {
 ```
 
 ### Complete IKVStore 
-```js playground
+```js playground example
 bring cloud;
 
 interface IKVStore extends std.IResource { 

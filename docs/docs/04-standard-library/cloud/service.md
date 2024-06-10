@@ -26,7 +26,7 @@ When defining a service, the first argument is an inflight closure that represen
 the service handler. This handler is responsible to perform any initialization
 activity and **return asynchronously** when initialization is complete.
 
-```js
+```js example
 bring cloud;
 
 new cloud.Service(inflight () => {
@@ -42,7 +42,7 @@ new cloud.Service(inflight () => {
 By default the service resource will start automatically, however this can be disabled by passing
 `autoStart: false` to the constructor.
 
-```js
+```js example
 bring cloud;
 
 let handler = inflight () => {
@@ -58,7 +58,7 @@ Optionally, the service handler inflight closure can return another inflight clo
 called when the service is stopped. Using a return closure allows naturally passing context between
 the async calls.
 
-```js
+```js example
 bring cloud;
 
 new cloud.Service(inflight() => {
@@ -82,7 +82,7 @@ counters.
 An important aspect to note is that consecutive starts and stops have no affect on a service. For
 example, if a `service.start()` is called on a service that is already started, nothing will happen.
 
-```js
+```js example
 bring cloud;
 
 let startCounter = new cloud.Counter() as "start counter";

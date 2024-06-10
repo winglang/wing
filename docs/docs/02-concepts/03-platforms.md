@@ -123,7 +123,7 @@ There might be times when you need to write code that is specific to a particula
 
 With the Wing `util` library, you can access environment variables. The `WING_TARGET` environment variable contains the current platform target as it's value, which you can use to conditionally run target-specific code. See the example below:
 
-```js playground
+```js playground example
 bring cloud;
 bring util;
 

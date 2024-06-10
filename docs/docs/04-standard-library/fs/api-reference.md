@@ -22,7 +22,7 @@ and will be normalized to the target platform if running on Windows.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.fs.Util.Initializer"></a>
 
-```wing
+```wing example
 bring fs;
 
 new fs.Util();

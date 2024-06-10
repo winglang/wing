@@ -11,7 +11,7 @@ Winglang incorporates a lightweight testing framework, which is built around the
 
 You can create a test by adding the following code structure to any Winglang file (.w):
 
-```ts wing
+```ts wing example
 test "<test-name>" {
   // test code
 }
@@ -21,7 +21,7 @@ If a test throws an exception (typically using the `assert` function), it's cons
 
 Here's an example:
 
-```ts playground
+```ts playground example
 // example.w
 bring math;
 
@@ -50,7 +50,7 @@ Duration 0m0.54s
 
 Every Winglang test is executed in complete isolation. Take a look at the following code:
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let b = new cloud.Bucket();
@@ -73,7 +73,7 @@ In the first test (`bucket list should include created file`), a file is created
 
 Consider the following example:
 
-```ts playground
+```ts playground example
 bring cloud;
 bring util;
 
@@ -140,7 +140,7 @@ Wing Console provides a straightforward method to run either a single test or al
 
 Consider the following code:
 
-```ts playground
+```ts playground example
 // example.w
 bring cloud;
 
