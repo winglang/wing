@@ -70,7 +70,7 @@ export const StatusBar = ({
       {/*right side*/}
       <div className="w-full flex space-x-4 justify-end">
         <AutoUpdater />
-        <RestartButton onRestart={onRestart} />
+        {showThemeToggle && <ThemeToggle />}
       </div>
     </footer>
   );

@@ -28,13 +28,13 @@ export const Header = ({
       )}
     >
       <div className="w-1/3 grow flex items-center gap-x-1 text-sm">
-        <ThemeToggle />
+        {showDiscordButton && <DiscordButton />}
       </div>
       <div className="w-1/3 justify-center items-center text-center gap-x-1 flex text-sm">
         {title}
       </div>
       <div className="w-1/3 flex space-x-2 justify-end">
-        {showDiscordButton && <DiscordButton />}
+        <RestartButton onRestart={onRestart} />
       </div>
     </div>
   );
