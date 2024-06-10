@@ -89,6 +89,14 @@ export class Node {
    */
   public icon?: string;
 
+  /**
+   * Whether the node is expanded or collapsed by default in the UI.
+   * By default, nodes are collapsed. Set this to `true` if you want the node to be expanded by default.
+   *
+   * @default false
+   */
+  public expanded?: boolean;
+
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
   private _app: IApp | undefined;
