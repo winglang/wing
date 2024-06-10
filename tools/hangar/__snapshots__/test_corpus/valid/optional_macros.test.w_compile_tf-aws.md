@@ -13,20 +13,20 @@ module.exports = function({ $expect_Util }) {
     }
     async handle() {
       const result = ({});
-      (await $expect_Util.equal(((result.item ?? {}))?.["id"], undefined));
-      (await $expect_Util.equal(((obj, key) => { return obj.hasOwnProperty(key); })((result.item ?? {}),"id"), false));
-      (await $expect_Util.equal((((result.items ?? []).at(0) ?? {}))?.["id"], undefined));
-      (await $expect_Util.equal(((obj, key) => { return obj.hasOwnProperty(key); })(((result.items ?? []).at(0) ?? {}),"id"), false));
-      (await $expect_Util.equal(((result.mapItem ?? new Map()))["a"], undefined));
-      (await $expect_Util.equal(("id" in ((result.mapItem ?? new Map()))), false));
-      (await $expect_Util.equal((((result.mapItems ?? []).at(0) ?? new Map()))["id"], undefined));
-      (await $expect_Util.equal(("id" in (((result.mapItems ?? []).at(0) ?? new Map()))), false));
+      (await $expect_Util.equal((result.item === undefined ? undefined : (result.item)?.["id"]), undefined));
+      (await $expect_Util.equal((result.item === undefined ? undefined : ((obj, key) => { return obj.hasOwnProperty(key); })(result.item,"id")), undefined));
+      (await $expect_Util.equal((result.items?.at(0) === undefined ? undefined : (result.items?.at(0))?.["id"]), undefined));
+      (await $expect_Util.equal((result.items?.at(0) === undefined ? undefined : ((obj, key) => { return obj.hasOwnProperty(key); })(result.items?.at(0),"id")), undefined));
+      (await $expect_Util.equal((result.mapItem === undefined ? undefined : (result.mapItem)["a"]), undefined));
+      (await $expect_Util.equal((result.mapItem === undefined ? undefined : ("id" in (result.mapItem))), undefined));
+      (await $expect_Util.equal((result.mapItems?.at(0) === undefined ? undefined : (result.mapItems?.at(0))["id"]), undefined));
+      (await $expect_Util.equal((result.mapItems?.at(0) === undefined ? undefined : ("id" in (result.mapItems?.at(0)))), undefined));
       (await $expect_Util.equal(result.setItem?.size, undefined));
       (await $expect_Util.equal((await result.setItem?.has?.(6)), undefined));
-      (await $expect_Util.equal((result.setItems ?? []).at(0)?.size, undefined));
-      (await $expect_Util.equal((await (result.setItems ?? []).at(0)?.has?.(6)), undefined));
+      (await $expect_Util.equal((result.setItems === undefined ? undefined : result.setItems?.at(0))?.size, undefined));
+      (await $expect_Util.equal((await (result.setItems === undefined ? undefined : result.setItems?.at(0))?.has?.(6)), undefined));
       (await $expect_Util.equal(result.structItem?.item, undefined));
-      (await $expect_Util.equal((result.structItems ?? []).at(0)?.item, undefined));
+      (await $expect_Util.equal((result.structItems === undefined ? undefined : result.structItems?.at(0))?.item, undefined));
     }
   }
   return $Closure1;
