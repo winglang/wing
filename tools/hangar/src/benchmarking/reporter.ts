@@ -1,14 +1,11 @@
-import { Reporter, BenchmarkReportsMap } from "vitest/reporters";
+import { Reporter, JsonReporter } from "vitest/reporters";
 import { join } from "path";
 import { hangarDir } from "../paths";
 import { renameSync, existsSync } from "fs";
 import { printTable } from "./table_report";
 import { compareBenchmarks } from "./compare";
 
-export default class WingJsonReporter
-  extends BenchmarkReportsMap.json
-  implements Reporter
-{
+export default class WingJsonReporter extends JsonReporter implements Reporter {
   async writeReport(report: string): Promise<void> {
     // If there is an existing report, move it
     const currentReportPath = join(hangarDir, "results", "report.json");
