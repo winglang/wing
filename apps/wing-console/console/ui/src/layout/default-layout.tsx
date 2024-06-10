@@ -221,7 +221,7 @@ export const DefaultLayout = ({
           )}
         >
           <PersistentStateProvider>
-            <Header title={title} onRestart={restartSimulator} />
+            <Header />
             {cloudAppState === "error" &&
               layout.errorScreen?.position === "default" && (
                 <div className="flex-1 flex relative">
@@ -236,19 +236,6 @@ export const DefaultLayout = ({
                     data-testid="loading-overlay"
                     className="fixed inset-0"
                   />
-                )}
-                {restarting && (
-                  <div
-                    className={classNames(
-                      "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
-                      "transition-all",
-                      "z-50",
-                    )}
-                  >
-                    <div className="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <SpinnerLoader data-testid="main-view-loader" />
-                    </div>
-                  </div>
                 )}
 
                 <div className="flex-1 flex relative gap-0.5">

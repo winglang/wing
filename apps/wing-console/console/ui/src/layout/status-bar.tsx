@@ -4,7 +4,6 @@ import classNames from "classnames";
 
 import { AutoUpdater } from "../features/auto-updater.js";
 
-import { RestartButton } from "./restart-button.js";
 import { ThemeToggle } from "./theme-toggle.js";
 
 export interface StatusBarProps {
@@ -34,7 +33,7 @@ export const StatusBar = ({
   return (
     <footer
       className={classNames(
-        theme.bg3,
+        theme.bg1,
         theme.text1,
         theme.border3,
         "py-1 px-4 flex text-2xs w-full relative z-10",
@@ -67,6 +66,8 @@ export const StatusBar = ({
           </span>
         </div>
       </div>
+      {/*center*/}
+      <div className="w-full flex justify-center items-center"></div>
       {/*right side*/}
       <div className="w-full flex space-x-4 justify-end">
         <AutoUpdater />

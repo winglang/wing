@@ -1,9 +1,21 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { Button } from "@wingconsole/design-system";
 
-export const RestartButton = ({ onRestart }: { onRestart?: () => void }) => {
+export const RestartButton = ({
+  onRestart,
+  loading,
+}: {
+  onRestart?: () => void;
+  loading: boolean;
+}) => {
   return (
-    <Button onClick={onRestart} small icon={ArrowPathIcon}>
+    <Button
+      onClick={onRestart}
+      small
+      icon={ArrowPathIcon}
+      disabled={loading}
+      iconClassName={loading ? "animate-spin" : undefined}
+    >
       Restart simulator
     </Button>
   );

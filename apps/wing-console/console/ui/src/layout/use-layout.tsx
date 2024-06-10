@@ -74,16 +74,9 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     },
   );
 
-  const restartSimulatorMutation = trpc["app.restart"].useMutation();
-
   const { loading, setLoading } = useLoading({
     duration: 400,
   });
-
-  const restartSimulator = useCallback(async () => {
-    setSelectedItems(["root"]);
-    await restartSimulatorMutation.mutateAsync();
-  }, [restartSimulatorMutation, setSelectedItems]);
 
   useEffect(() => {
     setLoading(
@@ -120,7 +113,5 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     onResourceClick,
     title,
     wingfile,
-    restartSimulator,
-    restarting: restartSimulatorMutation.isLoading,
   };
 };
