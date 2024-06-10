@@ -23,13 +23,13 @@ export interface Example {
 
 const docExamplesDir = join(testDir, 'doc_examples');
 
-export function searchDirectoryForWingExamples(directory: string): Example[] {
+export function findExamples(directory: string): Example[] {
   const items = fs.readdirSync(directory, { withFileTypes: true });
   let examples: Example[] = [];
   for (const item of items) {
     const fullPath = join(directory, item.name);
     if (item.isDirectory()) {
-      examples.push(...searchDirectoryForWingExamples(fullPath)); // Recurse into subdirectories
+      examples.push(...findExamples(fullPath)); // Recurse into subdirectories
     } else if (item.isFile() && fullPath.endsWith('.md')) {
       examples.push(...extractExamples(fullPath));
     }
@@ -72,7 +72,7 @@ export function extractExamples(filePath: string): Example[] {
 
 function generateTestsFromDocExamples(): void {
 
-  const examples = searchDirectoryForWingExamples(docsRoot);
+  const examples = findExamples(docsRoot);
   examples.forEach((example) => {
     const testName = `${example.filePath.split('/').pop()}_example_${example.exampleNumber}`;
 
