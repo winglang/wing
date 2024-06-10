@@ -1,0 +1,37 @@
+name: Scheduled Workflow
+
+on:
+  schedule:
+    - cron: "0 0 * * 1" # Every Saturday at midnight UTC, I assume the main build won't be triggered right before this one
+  workflow_dispatch: {}
+
+env:
+  MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test if is maintainer
+        uses: tspascoal/get-user-teams-membership@v3
+        id: testUserGroup
+        if: ${{ env.MANUAL == 'true' }}
+        with:
+          username: ${{ github.actor }}
+          team: "maintainers"
+          GITHUB_TOKEN: ${{ secrets.GH_GROUPS_READ_TOKEN }}
+      - name: cancel run if not allowed
+        if: ${{ env.MANUAL == 'true' && steps.testUserGroup.outputs.isTeamMember == 'false' }}
+        run: |
+          echo "User ${{github.actor}} is not allowed to dispatch this action."
+          exit 1
+
+      - name: Configure azure credentials
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Remove all resources
+        run: |
+          for rg in $(az group list --query "[].name" -o tsv); do
+            az group delete --name $rg --yes --no-wait
+           done
