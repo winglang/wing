@@ -96,14 +96,14 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(arr7.length, 3), "arr7.length == 3");
     $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr7, 1), 2), "arr7.at(1) == 2");
     {
-      const $if_let_value = emptyArray.at(0);
+      const $if_let_value = emptyArray?.at(0);
       if ($if_let_value != undefined) {
         const val = $if_let_value;
         $helpers.assert(false, "false");
       }
     }
     {
-      const $if_let_value = arr1.at(0);
+      const $if_let_value = arr1?.at(0);
       if ($if_let_value != undefined) {
         const val = $if_let_value;
         $helpers.assert($helpers.eq(val, 1), "val == 1");

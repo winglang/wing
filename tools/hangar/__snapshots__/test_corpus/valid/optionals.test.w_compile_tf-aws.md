@@ -324,7 +324,7 @@ class $Root extends $stdlib.std.Resource {
       if ((parts.length < 1)) {
         return undefined;
       }
-      return ({"first": (parts.at(0) ?? ""), "last": (parts.at(1) ?? "")});
+      return ({"first": (parts?.at(0) ?? ""), "last": (parts?.at(1) ?? "")});
     });
     const json_obj = ({"ghost": "spooky"});
     let something_else = false;
