@@ -1,5 +1,5 @@
 // This file was auto generated from an example found in: 04-tests.md_example_5
-// Example metadata: {"valid":true}
+// Example metadata: {"valid":false}
 // example.w
 bring cloud;
 

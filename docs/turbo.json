@@ -3,6 +3,9 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
+      "inputs": [
+        "./docs/**/*"
+      ],
       "outputs": [
         "../examples/tests/doc_examples/**/*.w"
       ]

@@ -10,6 +10,7 @@
         "src/generated_test_targets.ts"
       ],
       "dependsOn": [
+        "@winglang/docs#compile",
         "examples-valid#topo",
         "examples-invalid#topo",
         "examples-error#topo",
@@ -20,6 +21,13 @@
     },
     "test": {
       "dependsOn": ["^package", "test:generate"],
+      "env": ["CI"]
+    },
+    "test:doc_examples": {
+      "dependsOn": [
+        "^package", 
+        "test:generate"
+      ],
       "env": ["CI"]
     },
     "bench": {

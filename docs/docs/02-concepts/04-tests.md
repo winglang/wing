@@ -140,7 +140,7 @@ Wing Console provides a straightforward method to run either a single test or al
 
 Consider the following code:
 
-```ts playground example
+```ts playground example{valid: false}
 // example.w
 bring cloud;
 
