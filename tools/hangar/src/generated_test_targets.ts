@@ -72,11 +72,10 @@ export async function compileTest(
     fileMap[subpath] = fileContents;
   }
 
-  if (skipMarkdownSnapshot) {
-    return;
+  if (!skipMarkdownSnapshot) {
+    await createMarkdownSnapshot(fileMap, absoluteWingPath, "compile", "tf-aws");
   }
   
-  await createMarkdownSnapshot(fileMap, absoluteWingPath, "compile", "tf-aws");
 }
 
 export async function testTest(
@@ -112,10 +111,9 @@ export async function testTest(
 
   if (out.stderr) fileMap["stderr.log"] = out.stderr;
   if (out.stdout) fileMap["stdout.log"] = out.stdout;
-  if (skipMarkdownSnapshot) {
-    return;
+  if (!skipMarkdownSnapshot) {
+    await createMarkdownSnapshot(fileMap, absoluteWingPath, "test", "sim");
   }
-  await createMarkdownSnapshot(fileMap, absoluteWingPath, "test", "sim");
 }
 
 function isEntrypointFile(path: string) {
