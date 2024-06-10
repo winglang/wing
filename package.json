@@ -25,7 +25,8 @@
   },
   "pnpm": {
     "overrides": {
-      "mime": "^3.0.0"
+      "mime": "^3.0.0",
+      "rollup": "^4.18.0"
     },
     "patchedDependencies": {
       "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",

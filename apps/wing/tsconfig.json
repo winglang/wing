@@ -21,7 +21,10 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "baseUrl": ".",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@trpc/server/observable/index.js": ["../wing-console/console/server/node_modules/@trpc/server/observable/index.d.ts"],
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

@@ -25,7 +25,7 @@
     "npm": "^9.8.1",
     "octokit": "^3.1.2",
     "tsx": "^4.7.0",
-    "vitest": "^0.34.6",
+    "vitest": "^1.6.0",
     "winglang": "workspace:^",
     "yaml": "^2.3.2"
   },
