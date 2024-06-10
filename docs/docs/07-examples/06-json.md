@@ -101,18 +101,18 @@ log(j.get("k").asStr());
 ### To `num`
 ```js playground example
 let j = Json {
-    k: 12
+  k: 12
 };
-log(j.get("k").asNum());
+log("{j.get("k").asNum()}");
 ```
 
 ### To `bool`
 
 ```js playground example
 let j = Json {
-    k:true
+  k:true
 };
-log(j.get("k").asBool());
+log("{j.get("k").asBool()}");
 ```
 
 ## Safely convert to structs
