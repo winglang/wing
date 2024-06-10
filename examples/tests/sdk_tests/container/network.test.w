@@ -9,7 +9,7 @@ bring http;
 bring util;
 bring expect;
 
-// only relevant in simulator on linux
+// only relevant in simulator
 if util.env("WING_TARGET") == "sim" {
   let networkHost = new sim.Container(
     name: "http-echo",
