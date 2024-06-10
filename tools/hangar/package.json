@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "wing test suite",
   "scripts": {
+    "vitest": "vitest run",
     "test": "vitest run --update",
     "test:generate": "tsx src/generate_tests.ts",
     "test:watch": "vitest watch",
