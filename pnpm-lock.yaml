@@ -1038,6 +1038,8 @@ importers:
         specifier: ~5.3.11
         version: 5.3.11(patch_hash=ckgthkljzwfnfbd5qz6x7vtvme)
 
+  examples/tests/doc_examples: {}
+
   examples/tests/error: {}
 
   examples/tests/invalid:
