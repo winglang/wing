@@ -15,7 +15,7 @@ A NoSQL database table that can be used to store and query data.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.ex.Table.Initializer"></a>
 
-```wing example
+```wing
 bring ex;
 
 new ex.Table(props: TableProps);

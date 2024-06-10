@@ -20,7 +20,7 @@ The `cloud.OnDeploy` resource runs a block of inflight code each time the applic
 
 ## Usage
 
-```ts playground example
+```ts playground
 bring cloud;
 
 let bucket = new cloud.Bucket();
@@ -35,7 +35,7 @@ let setup = new cloud.OnDeploy(inflight () => {
 
 To specify that the `cloud.OnDeploy` resource should be run before or after another resource is created or updated, use the `executeBefore` or `executeAfter` properties:
 
-```ts playground example
+```ts playground
 bring cloud;
 
 let counter = new cloud.Counter();

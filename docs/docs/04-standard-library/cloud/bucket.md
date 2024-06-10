@@ -26,7 +26,7 @@ Unlike other kinds of storage like file storage, data is not stored in a hierarc
 
 ### Defining a bucket
 
-```js example
+```js
 bring cloud;
 
 let bucket = new cloud.Bucket(

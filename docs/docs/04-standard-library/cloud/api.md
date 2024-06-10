@@ -29,7 +29,7 @@ When a client invokes a route, the corresponding event handler function executes
 
 The following example shows a complete REST API implementation using `cloud.Api`, `ex.Table` & `cloud.Counter`
 
-```ts playground example
+```ts playground
 bring cloud;
 bring ex;
 

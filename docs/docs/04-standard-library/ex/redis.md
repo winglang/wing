@@ -15,7 +15,7 @@ A cloud redis db.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.ex.Redis.Initializer"></a>
 
-```wing example
+```wing
 bring ex;
 
 new ex.Redis();

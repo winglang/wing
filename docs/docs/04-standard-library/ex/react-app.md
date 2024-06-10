@@ -45,7 +45,7 @@ If the `useBuildCommand` environment variable is set OR if `ReactApp` is compile
 
 `ex.ReactApp` allows you to pass preflight string values from Wing to the React app using `addEnvironment` method:
 
-```ts example
+```ts
 bring cloud;
 bring util;
 bring ex;

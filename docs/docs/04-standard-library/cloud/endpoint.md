@@ -19,7 +19,7 @@ The `cloud.Endpoint` represents a publicly accessible endpoint and outputs it as
 
 ## Usage
 
-```ts playground example
+```ts playground
 bring cloud;
 
 let endpoint = new cloud.Endpoint("https://example.com");
