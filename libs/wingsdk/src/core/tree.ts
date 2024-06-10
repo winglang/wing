@@ -86,6 +86,14 @@ export interface DisplayInfo {
    * The icon of the resource in the UI.
    */
   readonly icon?: string;
+
+  /**
+   * Whether the node is expanded or collapsed by default in the UI.
+   * By default, nodes are collapsed. Set this to `true` if you want the node to be expanded by default.
+   *
+   * @default false
+   */
+  readonly expanded?: boolean;
 }
 
 /** @internal */
@@ -240,7 +248,8 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
     display.hidden ||
     ui ||
     display.color ||
-    display.icon
+    display.icon ||
+    display.expanded
   ) {
     return {
       title: display.title,
@@ -250,6 +259,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
       ui: ui.length > 0 ? ui : undefined,
       color: isOfTypeColors(display.color) ? display.color : undefined,
       icon: display.icon,
+      expanded: display.expanded,
     };
   }
   return;
