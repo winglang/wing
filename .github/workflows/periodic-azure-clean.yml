@@ -4,16 +4,12 @@ on:
   schedule:
     - cron: "0 0 * * 1" # Every Saturday at midnight UTC, I assume the main build won't be triggered right before this one
   workflow_dispatch: {}
-  pull_request: #TODO: for TEST!!
-    types:
-      - opened
-      - synchronize
 
 env:
   MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
 
 jobs:
-  run:
+  azure-cleanup:
     runs-on: ubuntu-latest
     steps:
       - name: test if is maintainer
