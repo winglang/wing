@@ -38,7 +38,6 @@ export * from "./tabs.js";
 export * from "./response-input.js";
 export * from "./json-response-input.js";
 export * from "./file-preview.js";
-export * from "./menu.js";
 
 export * from "./icons/redis-icon.js";
 export * from "./icons/wing-icon.js";
@@ -48,6 +47,5 @@ export * from "./icons/play-all-icon.js";
 export * from "./icons/horizontal-line-icon.js";
 export * from "./icons/square-stack-minus-icon.js";
 export * from "./icons/square-stack-plus-icon.js";
-export * from "./icons/menu-icon.js";
 
 export * from "./utils/icon-utils.js";
