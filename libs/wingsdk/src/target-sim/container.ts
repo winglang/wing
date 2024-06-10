@@ -54,6 +54,18 @@ export interface ContainerProps {
   readonly args?: string[];
 
   /**
+   * Container network
+   * @default - default docker network
+   */
+  readonly network?: string;
+
+  /**
+   * Container entrypoint
+   * @default - default image entrypoint
+   */
+  readonly entrypoint?: string;
+
+  /**
    * A glob of local files to consider as input sources for the container, relative to the build
    * context directory.
    *
@@ -115,6 +127,8 @@ export class Container extends Resource implements ISimulatorResource {
       volumes: this.props.volumes,
       args: this.props.args,
       cwd: App.of(this).entrypointDir,
+      network: this.props.network,
+      entrypoint: this.props.entrypoint,
     };
     return {
       type: SIM_CONTAINER_FQN,
