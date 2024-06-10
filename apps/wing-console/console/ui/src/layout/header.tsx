@@ -16,7 +16,6 @@ export const Header = () => {
   const restartSimulatorMutation = trpc["app.restart"].useMutation();
 
   const restartSimulator = useCallback(async () => {
-    //setSelectedItems(["root"]);
     await restartSimulatorMutation.mutateAsync();
   }, [restartSimulatorMutation]);
 

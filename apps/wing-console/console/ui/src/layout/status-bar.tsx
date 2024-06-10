@@ -11,7 +11,6 @@ export interface StatusBarProps {
   cloudAppState: State;
   isError?: boolean;
   showThemeToggle?: boolean;
-  onRestart?: () => void;
 }
 
 export const StatusBar = ({
@@ -19,7 +18,6 @@ export const StatusBar = ({
   cloudAppState,
   isError = false,
   showThemeToggle = false,
-  onRestart,
 }: StatusBarProps) => {
   const { theme } = useTheme();
   const loading =
