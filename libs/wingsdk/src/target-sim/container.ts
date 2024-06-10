@@ -54,8 +54,10 @@ export interface ContainerProps {
   readonly args?: string[];
 
   /**
-   * Container network
+   * Docker network to use for the container - such as 'host', 'bridge', etc.
+   * @link https://docs.docker.com/network.
    * @default - default docker network
+   * @example 'host'
    */
   readonly network?: string;
 

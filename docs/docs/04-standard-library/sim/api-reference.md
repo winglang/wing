@@ -728,7 +728,7 @@ let ContainerProps = sim.ContainerProps{ ... };
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.containerPort">containerPort</a></code> | <code>num</code> | Internal container port to expose. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.entrypoint">entrypoint</a></code> | <code>str</code> | Container entrypoint. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to set in the container. |
-| <code><a href="#@winglang/sdk.sim.ContainerProps.property.network">network</a></code> | <code>str</code> | Container network. |
+| <code><a href="#@winglang/sdk.sim.ContainerProps.property.network">network</a></code> | <code>str</code> | Docker network to use for the container - such as 'host', 'bridge', etc. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.sourceHash">sourceHash</a></code> | <code>str</code> | An explicit source hash that represents the container source. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.sourcePattern">sourcePattern</a></code> | <code>str</code> | A glob of local files to consider as input sources for the container, relative to the build context directory. |
 | <code><a href="#@winglang/sdk.sim.ContainerProps.property.volumes">volumes</a></code> | <code>MutArray&lt;str&gt;</code> | Volume mount points. |
@@ -820,9 +820,18 @@ network: str;
 - *Type:* str
 - *Default:* default docker network
 
-Container network.
+Docker network to use for the container - such as 'host', 'bridge', etc.
+
+> [https://docs.docker.com/network.](https://docs.docker.com/network.)
 
 ---
+
+*Example*
+
+```wing
+'host'
+```
+
 
 ##### `sourceHash`<sup>Optional</sup> <a name="sourceHash" id="@winglang/sdk.sim.ContainerProps.property.sourceHash"></a>
 
