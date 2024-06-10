@@ -53,10 +53,7 @@ export function extractExamples(filePath: string): Example[] {
           metadata = JSON.parse(metaDataString);
         }
       } catch (e) {
-        if (process.env.DEBUG == 1) {
-          console.log(e);
-        }
-        console.error(`Unable to parse metadata for example #${index + 1} in ${filePath}`);
+        console.error(`Unable to parse metadata for example #${index + 1} in ${filePath}`, e);
       }
       const code = block.match(/```.*?\n([\s\S]*?)```/)![1];
       console.log(`Metadata: ${metadata}`);

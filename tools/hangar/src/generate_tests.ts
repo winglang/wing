@@ -18,6 +18,7 @@ interface GenerateTestsOptions {
   isRecursive?: boolean;
   level?: number;
   includeJavaScriptInSnapshots?: boolean;
+  skipMarkdownSnapshot?: boolean;
 }
 
 function generateTests(options: GenerateTestsOptions) {
@@ -27,6 +28,7 @@ function generateTests(options: GenerateTestsOptions) {
     isRecursive = true,
     level = 0,
     includeJavaScriptInSnapshots = true,
+    skipMarkdownSnapshot = false,
   } = options;
   for (const fileInfo of readdirSync(sourceDir, { withFileTypes: true })) {
     if (fileInfo.isDirectory() && isRecursive) {
@@ -41,6 +43,7 @@ function generateTests(options: GenerateTestsOptions) {
         isRecursive,
         level: level + 1,
         includeJavaScriptInSnapshots,
+        skipMarkdownSnapshot
       });
       continue;
     }
@@ -79,13 +82,13 @@ function generateTests(options: GenerateTestsOptions) {
   test${skipText}("wing compile -t tf-aws", async () => {
     await compileTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(
       metaComment?.env
-    )}, ${includeJavaScriptInSnapshots});
+    )}, ${includeJavaScriptInSnapshots}, ${skipMarkdownSnapshot});
   });
   
   test${skipText}("wing test -t sim", async () => {
     await testTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(
       metaComment?.env
-    )}, ${includeJavaScriptInSnapshots});
+    )}, ${skipMarkdownSnapshot});
   });`;
 
     mkdirSync(destination, { recursive: true });
@@ -97,7 +100,8 @@ generateTests({
   sourceDir: validDocExamplesDir,
   destination: generatedWingExamplesDir,
   isRecursive: true,
-  includeJavaScriptInSnapshots: true,
+  includeJavaScriptInSnapshots: false,
+  skipMarkdownSnapshot: true
 });
 generateTests({
   sourceDir: validTestDir,
