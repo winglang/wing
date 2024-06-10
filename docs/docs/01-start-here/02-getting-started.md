@@ -14,7 +14,7 @@ This guide will walk you through the steps to setup Wing on your machine, create
 
 :::info
 
-Wing is still in active development, and we would love to hear what you think! Please ping us on [Wing Slack](https://t.winglang.io/slack), share what you want to build
+Wing is still in active development, and we would love to hear what you think! Please ping us on [Wing Discord](https://t.winglang.io/discord), share what you want to build
 and let us know if you encounter any issues. There's also a cute channel with music recommendations 🎶
 
 :::
