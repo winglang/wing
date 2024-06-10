@@ -1,6 +1,7 @@
 // This file was auto generated from an example found in: 08-classes.md_example_4
 // Example metadata: {"valid":true}
 bring cloud;
+bring ex;
 
 interface IKVStore extends std.IResource { 
   inflight get(key: str): Json;
@@ -21,9 +22,9 @@ class BucketBasedKeyValueStore impl IKVStore {
 }
 
 class TableBasedKeyValueStore impl IKVStore {
-  table: cloud.Table;
+  table: ex.Table;
   new() {
-    this.table = new cloud.Table(
+    this.table = new ex.Table(
       name: "table",
       primaryKey: "key",
       columns: {
@@ -34,7 +35,7 @@ class TableBasedKeyValueStore impl IKVStore {
   pub inflight get(key: str): Json {
     return this.table.get(key);
   }
-  pub inflight set(key: str, value: Json): str {
+  pub inflight set(key: str, value: Json) {
     this.table.insert(key, value);
   }
 }
@@ -42,18 +43,20 @@ class TableBasedKeyValueStore impl IKVStore {
 let bucketBased: IKVStore = new BucketBasedKeyValueStore();
 let tableBased: IKVStore = new TableBasedKeyValueStore();
 
-let testKv = inflight (kv: IKVStore):void => {
-  kv.set("k", Json { 
-    value: "v" 
+test "bucketBased KVStore" {
+  bucketBased.set("k", Json {
+    value: "v"
   });
-  let result = kv.get("k");
+  let result = bucketBased.get("k");
   log("{result.get("value")}");
   assert("v" == str.fromJson(result.get("value")));
-};
+}
 
-new cloud.Function(inflight () => {
-  log("testing bucketBased KVStore");
-  testKv(bucketBased);
-  log("testing tableBased KVStore");
-  testKv(tableBased);
-});
+test "tableBased KVStore" {
+  tableBased.set("k", Json {
+    value: "v"
+  });
+  let result = tableBased.get("k");
+  log("{result.get("value")}");
+  assert("v" == str.fromJson(result.get("value")));
+}

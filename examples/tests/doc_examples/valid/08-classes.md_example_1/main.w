@@ -4,8 +4,8 @@ bring cloud;
 bring util;
 
 class Foo  {
-  field1: str;     // <-- readonly
-  var field2: num; // <-- reassignable
+  pub field1: str;     // <-- readonly
+  pub var field2: num; // <-- reassignable
   inflight field3: Array<str>;
 
   new() {

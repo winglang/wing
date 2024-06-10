@@ -3,11 +3,11 @@
 
 let handler = inflight (message: str): void => {
   // using the inflight modifier 
-  let dup = inflight (s: str, count: num): str => {
+  let dup = inflight (s: str, count: num) => {
     // code
   };
   // inflight modifier is not required when function is declared in inflight context
-  let sup = (s: str, count: num): str => {
+  let sup = (s: str, count: num) => {
     // code
   };
 };

@@ -56,7 +56,6 @@ export function extractExamples(filePath: string): Example[] {
         console.error(`Unable to parse metadata for example #${index + 1} in ${filePath}`, e);
       }
       const code = block.match(/```.*?\n([\s\S]*?)```/)![1];
-      console.log(`Metadata: ${metadata}`);
       examples.push({
         code,
         filePath,
@@ -87,5 +86,6 @@ function generateTestsFromDocExamples(): void {
   });
 }
 
-fs.rmSync(docExamplesDir, { recursive: true, force: true });
+fs.rmSync(join(docExamplesDir, "invalid"), { recursive: true, force: true });
+fs.rmSync(join(docExamplesDir, "valid"), { recursive: true, force: true });
 generateTestsFromDocExamples();

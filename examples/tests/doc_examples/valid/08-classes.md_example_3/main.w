@@ -1,5 +1,6 @@
 // This file was auto generated from an example found in: 08-classes.md_example_3
 // Example metadata: {"valid":true}
+bring cloud;
 /**
  * Preflight Interface
  **/ 

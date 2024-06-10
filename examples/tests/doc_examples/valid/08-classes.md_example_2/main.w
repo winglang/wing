@@ -2,7 +2,7 @@
 // Example metadata: {"valid":true}
 bring cloud;
 
-interface IProfile {
+inflight interface IProfile {
   inflight name(): str;
 }
 
