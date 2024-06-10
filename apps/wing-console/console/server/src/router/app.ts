@@ -55,10 +55,13 @@ export const createAppRouter = () => {
     }),
     "app.restart": createProcedure.mutation(async ({ ctx }) => {
       const simulator = await ctx.simulator();
-      ctx.logger.verbose("Reloading simulator...", "console", {
+      ctx.logger.verbose("Restarting simulator...", "console", {
         messageType: "info",
       });
       await simulator.reload(true);
+      ctx.logger.verbose("Simulator restarted.", "console", {
+        messageType: "info",
+      });
     }),
     "app.logs": createProcedure
       .input(

@@ -16,7 +16,7 @@ export const RestartButton = ({
       disabled={loading}
       iconClassName={loading ? "animate-spin" : undefined}
     >
-      Restart simulator
+      Reset
     </Button>
   );
 };
