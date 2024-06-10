@@ -1,4 +1,4 @@
-name: Scheduled Workflow
+name: Periodic Azure cleanup
 
 on:
   schedule:
