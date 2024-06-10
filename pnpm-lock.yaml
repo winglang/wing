@@ -6,7 +6,6 @@ settings:
 
 overrides:
   mime: ^3.0.0
-  rollup: ^4.18.0
 
 patchedDependencies:
   jsii@5.3.11:
@@ -8264,7 +8263,7 @@ packages:
     resolution: {integrity: sha512-6aEYR910NyP73oHiJglti74iRyOwgFU4x3meH/H8OJx6Ry0j6cOVZ5X/wTvub7G7Ao6qaHBEaNsV3GLJkSsF+Q==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^4.18.0
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -9996,7 +9995,7 @@ packages:
       magic-string: 0.30.7
       remark-external-links: 8.0.0
       remark-slug: 6.1.0
-      rollup: 4.18.0
+      rollup: 3.29.4
       typescript: 5.2.2
       vite: 4.5.2
     transitivePeerDependencies:
@@ -21657,6 +21656,14 @@ packages:
     dependencies:
       glob: 7.2.3
 
+  /rollup@3.29.4:
+    resolution: {integrity: sha512-oWzmBZwvYrU0iJHtDmhsm662rC15FRXmcjCk1xD771dFDx5jJ02ufAQQTn0etB2emNk4J9EZg/yWKpsn9BWGRw==}
+    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
+
   /rollup@4.18.0:
     resolution: {integrity: sha512-QmJz14PX3rzbJCN1SG4Xe/bAAX2a6NpCP8ab2vfu2GiUr8AQcr2nCV/oEO3yneFarB67zk8ShlIyWb2LGTb3Sg==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -22964,7 +22971,7 @@ packages:
       joycon: 3.1.1
       postcss-load-config: 3.1.4
       resolve-from: 5.0.0
-      rollup: 4.18.0
+      rollup: 3.29.4
       source-map: 0.8.0-beta.0
       sucrase: 3.34.0
       tree-kill: 1.2.2
@@ -23731,7 +23738,7 @@ packages:
     dependencies:
       esbuild: 0.18.20
       postcss: 8.4.35
-      rollup: 4.18.0
+      rollup: 3.29.4
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
