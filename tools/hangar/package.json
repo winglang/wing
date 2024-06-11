@@ -7,7 +7,7 @@
     "test": "vitest run --update",
     "test:generate": "tsx src/generate_tests.ts",
     "test:watch": "vitest watch",
-    "bench": "vitest bench --run"
+    "bench": "vitest bench --run && tsx src/benchmarking/compare_script.ts"
   },
   "author": "Wing Cloud",
   "license": "Apache-2.0",
