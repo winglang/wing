@@ -19,6 +19,8 @@ The `cloud.Secret` class represents a secret value (like an API key, certificate
 Secrets are encrypted at rest and in transit, and are only decrypted when they are used in a task.
 Storing a secret allows you to use the value in different compute tasks while only having to rotate or revoke it in one place.
 
+You can use the [`wing secrets`](https://www.winglang.io/docs/tools/cli#store-secrets-wing-secrets) command to store secrets in the target platform.
+
 ## Usage
 
 ### Defining a secret
