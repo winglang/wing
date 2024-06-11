@@ -272,6 +272,7 @@ Invokes the `validate()` method on all validations added through
 | <code><a href="#@winglang/sdk.std.Node.property.color">color</a></code> | <code>str</code> | The color of the construct for display purposes. |
 | <code><a href="#@winglang/sdk.std.Node.property.defaultChild">defaultChild</a></code> | <code>constructs.IConstruct</code> | Returns the child construct that has the id `Default` or `Resource"`. |
 | <code><a href="#@winglang/sdk.std.Node.property.description">description</a></code> | <code>str</code> | Description of the construct for display purposes. |
+| <code><a href="#@winglang/sdk.std.Node.property.expanded">expanded</a></code> | <code>bool</code> | Whether the node is expanded or collapsed by default in the UI. |
 | <code><a href="#@winglang/sdk.std.Node.property.hidden">hidden</a></code> | <code>bool</code> | Whether the construct should be hidden by default in tree visualizations. |
 | <code><a href="#@winglang/sdk.std.Node.property.icon">icon</a></code> | <code>str</code> | The icon of the construct for display purposes. |
 | <code><a href="#@winglang/sdk.std.Node.property.sourceModule">sourceModule</a></code> | <code>str</code> | The source file or library where the construct was defined. |
@@ -500,6 +501,21 @@ Description of the construct for display purposes.
 
 ---
 
+##### `expanded`<sup>Optional</sup> <a name="expanded" id="@winglang/sdk.std.Node.property.expanded"></a>
+
+```wing
+expanded: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Whether the node is expanded or collapsed by default in the UI.
+
+By default, nodes are collapsed. Set this to `true` if you want the node to be expanded by default.
+
+---
+
 ##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/sdk.std.Node.property.hidden"></a>
 
 ```wing
@@ -571,8 +587,8 @@ let AddConnectionProps = AddConnectionProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.std.AddConnectionProps.property.name">name</a></code> | <code>str</code> | A name for the connection. |
-| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.source">source</a></code> | <code>constructs.IConstruct</code> | The source of the connection. |
 | <code><a href="#@winglang/sdk.std.AddConnectionProps.property.target">target</a></code> | <code>constructs.IConstruct</code> | The target of the connection. |
+| <code><a href="#@winglang/sdk.std.AddConnectionProps.property.source">source</a></code> | <code>constructs.IConstruct</code> | The source of the connection. |
 | <code><a href="#@winglang/sdk.std.AddConnectionProps.property.sourceOp">sourceOp</a></code> | <code>str</code> | An operation that the source construct supports. |
 | <code><a href="#@winglang/sdk.std.AddConnectionProps.property.targetOp">targetOp</a></code> | <code>str</code> | An operation that the target construct supports. |
 
@@ -590,18 +606,6 @@ A name for the connection.
 
 ---
 
-##### `source`<sup>Required</sup> <a name="source" id="@winglang/sdk.std.AddConnectionProps.property.source"></a>
-
-```wing
-source: IConstruct;
-```
-
-- *Type:* constructs.IConstruct
-
-The source of the connection.
-
----
-
 ##### `target`<sup>Required</sup> <a name="target" id="@winglang/sdk.std.AddConnectionProps.property.target"></a>
 
 ```wing
@@ -611,6 +615,19 @@ target: IConstruct;
 - *Type:* constructs.IConstruct
 
 The target of the connection.
+
+---
+
+##### `source`<sup>Optional</sup> <a name="source" id="@winglang/sdk.std.AddConnectionProps.property.source"></a>
+
+```wing
+source: IConstruct;
+```
+
+- *Type:* constructs.IConstruct
+- *Default:* this
+
+The source of the connection.
 
 ---
 
