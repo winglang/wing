@@ -22,9 +22,7 @@ export const RestartButton = ({
       )}
       disabled={loading}
     >
-      <ArrowPathIcon
-        className={classNames("size-3.5", loading && "animate-spin")}
-      />
+      <ArrowPathIcon className="size-3.5" />
       <span>Restart</span>
     </button>
   );

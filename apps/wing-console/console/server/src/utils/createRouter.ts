@@ -86,6 +86,7 @@ export interface RouterMeta {
 
 export interface RouterContext {
   simulator(): Promise<simulator.Simulator>;
+  restartSimulator(): Promise<void>;
   testSimulator(): Promise<simulator.Simulator>;
   appDetails(): Promise<{
     wingVersion: string | undefined;
