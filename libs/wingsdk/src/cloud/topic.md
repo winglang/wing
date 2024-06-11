@@ -46,7 +46,7 @@ topic.onMessage(inflight (message: str) => {
 bring cloud;
 
 let queue = new cloud.Queue();
-queue.setConsumer(inflight (message str) => {
+queue.setConsumer(inflight (message: str) => {
   log("Topic published message: {message}");
 });
 

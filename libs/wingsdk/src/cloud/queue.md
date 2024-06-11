@@ -54,8 +54,8 @@ new cloud.Function(inflight () => {
   q.push("message a");
   q.push("message b", "message c", "message d");
   log("approxSize is ${q.approxSize()}");
-  log("popping message ${q.pop()}");
-  log("popping message ${q.pop()}");
+  log("popping message ${q.pop()!}");
+  log("popping message ${q.pop()!}");
   log("approxSize is ${q.approxSize()}");
   q.purge();
   log("approxSize is ${q.approxSize()}");
@@ -89,6 +89,7 @@ The following example defines a reference to an Amazon SQS queue with a specific
 message to the queue from the function:
 
 ```js example
+bring cloud;
 bring aws;
 
 let outbox = new aws.QueueRef("arn:aws:sqs:us-east-1:111111111111:Outbox");

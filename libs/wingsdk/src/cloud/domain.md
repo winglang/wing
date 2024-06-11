@@ -20,7 +20,7 @@ The `cloud.Domain` resource represents a domain configuration in the cloud.
 
 ### Defining a domain
 
-```js example
+```js
 bring cloud;
 
 let domain = new cloud.Domain(

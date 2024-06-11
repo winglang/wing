@@ -97,7 +97,9 @@ The sim implementation of `cloud.Function` runs the inflight code as a JavaScrip
 
 By default, a maximum of 10 workers can be processing requests sent to a `cloud.Function` concurrently, but this number can be adjusted with the `concurrency` property:
 
-```ts playground example
+```ts playground
+bring cloud;
+
 new cloud.Function(inflight () => {
   // ... code that shouldn't run concurrently ...
 }, concurrency: 1);

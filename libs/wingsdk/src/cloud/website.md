@@ -22,7 +22,7 @@ Websites are typically used to serve static content, such as HTML, CSS, and Java
 
 ### Website
 
-```ts example
+```ts
 bring cloud;
 
 let website = new cloud.Website(path: "./public");
