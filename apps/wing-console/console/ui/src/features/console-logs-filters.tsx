@@ -107,7 +107,9 @@ export const ConsoleLogsFilters = memo(
             className="max-w-[10rem]"
             label={
               selectedResourceIds.length > 0
-                ? ` ${selectedResourceIds.join(", ")}`
+                ? ` ${selectedResourceIds
+                    .join(", ")
+                    .replaceAll("root/Default/", "")}`
                 : "All resources"
             }
             items={resourceIds.map((id) => ({
@@ -123,7 +125,9 @@ export const ConsoleLogsFilters = memo(
             className="max-w-[10rem]"
             label={
               selectedResourceTypes.length > 0
-                ? ` ${selectedResourceTypes.join(", ")}`
+                ? ` ${selectedResourceTypes
+                    .join(", ")
+                    .replaceAll("@winglang/", "")}`
                 : "All types"
             }
             items={resourceTypes.map((type) => ({
