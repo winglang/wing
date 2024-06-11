@@ -26,7 +26,7 @@ Queues by default are not FIFO (first in, first out) - so the order of messages 
 
 ### Setting a Queue Consumer
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let q = new cloud.Queue();
@@ -45,7 +45,7 @@ new cloud.Function(inflight () => {
 
 Pushing messages, popping them, and purging.
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let q = new cloud.Queue();
@@ -66,7 +66,7 @@ new cloud.Function(inflight () => {
 
 Creating a queue and adding a dead-letter queue with the maximum number of attempts configured
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let dlq = new cloud.Queue() as "dead-letter queue";
@@ -88,7 +88,7 @@ If you would like to reference an existing queue from within your application yo
 The following example defines a reference to an Amazon SQS queue with a specific ARN and sends a
 message to the queue from the function:
 
-```js
+```js example
 bring aws;
 
 let outbox = new aws.QueueRef("arn:aws:sqs:us-east-1:111111111111:Outbox");
