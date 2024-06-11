@@ -52,3 +52,14 @@ export function unwrap<T>(value: T): T | never {
   }
   throw new Error("Unexpected nil");
 }
+
+export function bringJs(moduleFile: string, preflightTypesObjectName: string, outPreflightTypesObject: Object): Object {
+  return Object.fromEntries(Object.entries(require(moduleFile)).filter(([k, v]) => {
+    // If this is the preflight types array then update the input object and skip it
+    if (k === preflightTypesObjectName) {
+      Object.assign(outPreflightTypesObject, v);
+      return false;
+    }
+    return true;
+  }));
+}

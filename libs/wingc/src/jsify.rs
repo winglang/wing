@@ -59,6 +59,7 @@ const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_IN
 //const PREFLIGHT_TYPES_MAP: &str = "globalThis.$preflightTypesMap";
 //const PREFLIGHT_TYPES_MAP: &str = "this.node.root.$preflightTypesMap";
 const PREFLIGHT_TYPES_MAP: &str = "$helpers.nodeof(this).root.$preflightTypesMap";
+const MODULE_PREFLIGHT_TYPES_MAP: &str = "$preflightTypesMap";
 
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
@@ -186,6 +187,10 @@ impl<'a> JSifier<'a> {
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.line(format!("const {HELPERS_VAR} = {STDLIB}.helpers;"));
 
+		// A single preflight types map per file, all preflight types defined in this file and imported from other files
+		// go into this map.
+		output.line(format!("let {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
+
 		output.add_code(imports);
 
 		if is_entrypoint {
@@ -195,8 +200,8 @@ impl<'a> JSifier<'a> {
 			root_class.line("super($scope, $id);");
 			root_class.add_code(self.jsify_struct_schemas());
 
-			// Create global map of preflight class types
-			root_class.line(format!("{PREFLIGHT_TYPES_MAP} = {{}};"));
+			// Create global map of preflight class types and add all preflight types to it
+			root_class.line(format!("{PREFLIGHT_TYPES_MAP} = {MODULE_PREFLIGHT_TYPES_MAP};"));
 
 			root_class.add_code(js);
 			root_class.close("}");
@@ -227,25 +232,53 @@ impl<'a> JSifier<'a> {
 			//   ...require("./preflight.inner-file2.js"),
 			// };
 			// ```
-			output.open("module.exports = {");
+			// output.open("module.exports = {");
+			// for file in directory_children {
+			// 	let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
+			// 	if file.is_dir() {
+			// 		let directory_name = file.file_stem().unwrap();
+			// 		output.line(format!(
+			// 			"get {directory_name}() {{ return require(\"./{preflight_file_name}\") }},"
+			// 		));
+			// 	} else {
+			// 		output.line(format!("...require(\"./{preflight_file_name}\"),"));
+			// 	}
+			// }
+			// output.close("};");
+
+			// supposing a directory has a files and a subdirectory in it,
+			// we generate code like this:
+			// ```
+			// let $brought;
+			// $brought = $helpers.bringJs("./preflight.inner-file1.js", "$preflightTypesMap", $preflightTypesMap);
+			// module.exports = { ...module.export, ...$brought };
+			// $brought = $helpers.bringJs("./preflight.inner-directory1.js", "$preflightTypesMap", $preflightTypesMap);
+			// module.exports = { ...module.export, get inner_directory1() { return $brought; } };
+			// ```
+
+			output.line("let $brought;");
 			for file in directory_children {
 				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
 				if file.is_dir() {
 					let directory_name = file.file_stem().unwrap();
+					output.line(format!("$brought = $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, \"{MODULE_PREFLIGHT_TYPES_MAP}\", {MODULE_PREFLIGHT_TYPES_MAP});"));
 					output.line(format!(
-						"get {directory_name}() {{ return require(\"./{preflight_file_name}\") }},"
+						"module.exports = {{ ...module.exports, get {directory_name}() {{ return $brought; }} }};"
 					));
 				} else {
-					output.line(format!("...require(\"./{preflight_file_name}\"),"));
+					output.line(format!("$brought = $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, \"{MODULE_PREFLIGHT_TYPES_MAP}\", {MODULE_PREFLIGHT_TYPES_MAP});"));
+					output.line("module.exports = { ...module.exports, ...$brought };");
 				}
 			}
-			output.close("};");
+			output.line(format!(
+				"module.exports = {{ ...module.exports, {MODULE_PREFLIGHT_TYPES_MAP} }};"
+			));
 		} else {
 			output.add_code(self.jsify_struct_schemas());
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
 			output.line(format!(
-				"module.exports = {{ {} }};",
+				"module.exports = {{ {}, {MODULE_PREFLIGHT_TYPES_MAP} }};",
 				exports.iter().map(ToString::to_string).join(", ")
 			));
 		}
@@ -916,25 +949,10 @@ impl<'a> JSifier<'a> {
 					code.line(format!("const {var_name} = require(\"{name}\");"))
 				}
 				BringSource::WingLibrary(_, module_dir) => {
-					// checked during type checking
-					let var_name = identifier.as_ref().expect("bring wing library requires an alias");
-					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
+					code.append(self.jsify_bring_stmt(module_dir, identifier));
 				}
-				BringSource::WingFile(name) => {
-					// checked during type checking
-					let var_name = identifier.as_ref().expect("bring wing file requires an alias");
-					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
-				}
-				BringSource::Directory(name) => {
-					// checked during type checking
-					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
-					let var_name = identifier.as_ref().expect("bring wing directory requires an alias");
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
+				BringSource::Directory(name) | BringSource::WingFile(name) => {
+					code.append(self.jsify_bring_stmt(Utf8Path::new(&name.name), identifier));
 				}
 			},
 			StmtKind::SuperConstructor { arg_list } => {
@@ -1204,6 +1222,20 @@ impl<'a> JSifier<'a> {
 			StmtKind::CompilerDebugEnv => {}
 		};
 		ctx.visit_ctx.pop_stmt();
+		code
+	}
+
+	fn jsify_bring_stmt(&self, path: &Utf8Path, identifier: &Option<Symbol>) -> CodeMaker {
+		let mut code = CodeMaker::default();
+		// checked during type checking
+		let var_name = identifier.as_ref().expect("bring wing module requires an alias");
+		let preflight_file_map = self.preflight_file_map.borrow();
+		let preflight_file_name = preflight_file_map.get(path).unwrap();
+		code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"));
+		// Add brought preflight types to this module's preflight types
+		code.line(format!(
+			"Object.assign({MODULE_PREFLIGHT_TYPES_MAP}, {var_name}.{MODULE_PREFLIGHT_TYPES_MAP});"
+		));
 		code
 	}
 
@@ -1538,17 +1570,13 @@ impl<'a> JSifier<'a> {
 			// class types in a global preflight types map indexed by the class's unique id.
 			if class.phase == Phase::Inflight {
 				code.line(format!(
-					"if ({PREFLIGHT_TYPES_MAP}[{}]) {{ throw new Error(\"{} is already in type map\"); }}",
+					"if ({MODULE_PREFLIGHT_TYPES_MAP}[{}]) {{ throw new Error(\"{} is already in type map\"); }}",
 					class_type.as_class().unwrap().uid,
 					class.name
 				));
 				code.line(format!(
-					"{PREFLIGHT_TYPES_MAP}[{}] = {};",
+					"{MODULE_PREFLIGHT_TYPES_MAP}[{}] = {};",
 					class_type.as_class().unwrap().uid,
-					class.name
-				));
-				code.line(format!(
-					"console.log(`Adding {} to ${{$helpers.nodeof(this).root.node.id}}`);",
 					class.name
 				));
 			}
@@ -1560,7 +1588,7 @@ impl<'a> JSifier<'a> {
 	pub fn class_singleton(&self, type_: TypeRef) -> String {
 		let c = type_.as_class().unwrap();
 		format!(
-			"{PREFLIGHT_TYPES_MAP}[{}]._singleton(this,\"{}_singleton_{}\")",
+			"{MODULE_PREFLIGHT_TYPES_MAP}[{}]._singleton(this,\"{}_singleton_{}\")",
 			c.uid, c.name, c.uid
 		)
 	}
