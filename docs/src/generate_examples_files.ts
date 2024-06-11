@@ -7,6 +7,8 @@ import { docsRoot, testDir } from "../../tools/hangar/src/paths";
  *  - Examples that require importing other examples
  *  - Examples that require `wing.toml`
  *  - TypeScript examples
+ *  - Website examples (need to generate some dummy static site config)
+ *  - Examples that should only be tested on specific target platforms
  */
 export interface ExampleMetadata {
   /** @default true */
