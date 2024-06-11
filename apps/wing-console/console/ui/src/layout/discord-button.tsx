@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 
 import { DiscordIcon } from "./discord-icon.js";
@@ -9,16 +10,19 @@ const openDiscordLink = () => {
 };
 
 export const DiscordButton = () => {
+  const { theme } = useTheme();
+
   return (
     <button
       className={classNames(
-        "rounded-3xl font-medium flex focus:outline-none",
+        "font-medium flex focus:outline-none",
         "transition-color duration-300 cursor-pointer",
         "gap-x-1.5 p-1 items-center justify-center",
-        "bg-[#5661eb] hover:bg-[#4449c0]",
-        "text-white dark:text-slate-300",
+        theme.textInput,
+        theme.bg2Hover,
       )}
       onClick={() => openDiscordLink()}
+      title="Join our Discord community!"
     >
       <DiscordIcon className="size-4" />
     </button>

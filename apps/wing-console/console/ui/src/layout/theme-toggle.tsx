@@ -1,4 +1,11 @@
-import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
+import {
+  MoonIcon as MoonIconOutline,
+  SunIcon as SunIconOutline,
+} from "@heroicons/react/24/outline";
+import {
+  MoonIcon as MoonIconSolid,
+  SunIcon as SunIconSolid,
+} from "@heroicons/react/24/solid";
 import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useCallback, useMemo } from "react";
@@ -24,17 +31,35 @@ export const ThemeToggle = () => {
     <button
       className={classNames(
         theme.textInput,
-        "rounded-3xl font-medium flex focus:outline-none",
-        "hover:bg-slate-200 hover:dark:bg-slate-600",
+        "font-medium flex focus:outline-none",
         "transition-color duration-300 cursor-pointer",
         "gap-x-1 p-1",
+        theme.bg2Hover,
       )}
       onClick={toggleThemeMode}
+      title="Toggle theme"
     >
-      {currentTheme === "light" && <SunIcon className="h-4" />}
-      {currentTheme === "dark" && <MoonIcon className="h-4" />}
       {mode === "auto" && (
-        <div className="font-light capitalize text-xs">{mode}</div>
+        <div className="relative size-4 flex">
+          {currentTheme === "light" && (
+            <>
+              <SunIconSolid className="absolute -top-1 -right-1 size-3.5" />
+              <MoonIconOutline className="absolute bottom-0 left-0 size-3" />
+            </>
+          )}
+          {currentTheme === "dark" && (
+            <>
+              <SunIconOutline className="absolute -top-1 -right-1 size-3.5" />
+              <MoonIconSolid className="absolute bottom-0 left-0 size-3" />
+            </>
+          )}
+        </div>
+      )}
+      {mode !== "auto" && (
+        <>
+          {currentTheme === "light" && <SunIconSolid className="h-4" />}
+          {currentTheme === "dark" && <MoonIconSolid className="h-4" />}
+        </>
       )}
     </button>
   );

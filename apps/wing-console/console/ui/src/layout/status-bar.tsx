@@ -1,9 +1,14 @@
-import { useTheme, Loader } from "@wingconsole/design-system";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { useTheme, Loader, Button, Modal } from "@wingconsole/design-system";
 import type { State } from "@wingconsole/server";
 import classNames from "classnames";
+import { useState, useCallback } from "react";
 
 import { AutoUpdater } from "../features/auto-updater.js";
+import { trpc } from "../services/trpc.js";
 
+import { DiscordButton } from "./discord-button.js";
+import { RestartButton } from "./restart-button.js";
 import { ThemeToggle } from "./theme-toggle.js";
 
 export interface StatusBarProps {
@@ -28,17 +33,30 @@ export const StatusBar = ({
     success: "success",
     error: "error",
   };
+
+  const restartMutation = trpc["app.restart"].useMutation();
+  const [showRestartModal, setShowRestartModal] = useState(false);
+
+  const restart = useCallback(async () => {
+    setShowRestartModal(false);
+    await restartMutation.mutateAsync();
+  }, [restartMutation]);
+
   return (
     <footer
       className={classNames(
         theme.bg1,
         theme.text1,
         theme.border3,
-        "py-1 px-4 flex text-2xs w-full relative z-10",
+        "px-4 flex items-center text-2xs w-full relative z-10",
       )}
     >
       {/*left side*/}
-      <div className="w-full flex space-x-6">
+      <div className="w-full flex gap-4 items-center">
+        <RestartButton
+          onClick={() => setShowRestartModal(true)}
+          loading={restartMutation.isLoading}
+        />
         <div title={wingVersion} className="truncate space-x-1">
           {wingVersion && (
             <>
@@ -67,9 +85,33 @@ export const StatusBar = ({
       {/*center*/}
       <div className="w-full flex justify-center items-center"></div>
       {/*right side*/}
-      <div className="w-full flex space-x-4 justify-end">
+      <div className="w-full flex gap-2 items-center justify-end">
         <AutoUpdater />
+        <DiscordButton />
         {showThemeToggle && <ThemeToggle />}
+
+        <Modal visible={showRestartModal}>
+          <div className="flex flex-col gap-4 max-w-lg items-center">
+            <h3
+              className={classNames(
+                theme.text1,
+                "text-base font-semibold leading-6",
+              )}
+            >
+              Restart Application
+            </h3>
+            <p className={classNames(theme.text2, "text-sm text-center")}>
+              Are you sure you want to reset all state and restart the
+              application?
+            </p>
+            <div className="flex justify-around gap-2">
+              <Button onClick={() => setShowRestartModal(false)}>Cancel</Button>{" "}
+              <Button onClick={restart} dataTestid="restart-simulator-button">
+                Restart
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </div>
     </footer>
   );

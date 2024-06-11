@@ -218,7 +218,6 @@ export const DefaultLayout = ({
           )}
         >
           <PersistentStateProvider>
-            <Header />
             {cloudAppState === "error" &&
               layout.errorScreen?.position === "default" && (
                 <div className="flex-1 flex relative">

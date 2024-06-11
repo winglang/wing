@@ -1,22 +1,31 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { Button } from "@wingconsole/design-system";
+import { useTheme } from "@wingconsole/design-system";
+import classNames from "classnames";
 
 export const RestartButton = ({
-  onRestart,
+  onClick,
   loading,
 }: {
-  onRestart?: () => void;
+  onClick?: () => void;
   loading: boolean;
 }) => {
+  const { theme } = useTheme();
+
   return (
-    <Button
-      onClick={onRestart}
-      small
-      icon={ArrowPathIcon}
+    <button
+      onClick={onClick}
+      className={classNames(
+        "flex items-center gap-x-1 px-1 py-0.5",
+        theme.bg2Hover,
+        "transition-all",
+        loading && "cursor-not-allowed opacity-50",
+      )}
       disabled={loading}
-      iconClassName={loading ? "animate-spin" : undefined}
     >
-      Reset
-    </Button>
+      <ArrowPathIcon
+        className={classNames("size-4", loading ? "animate-spin" : "")}
+      />
+      <span>Restart</span>
+    </button>
   );
 };
