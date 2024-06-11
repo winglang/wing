@@ -55,7 +55,7 @@ export const StatusBar = ({
       <div className="w-full flex gap-4 items-center">
         <RestartButton
           onClick={() => setShowRestartModal(true)}
-          loading={restartMutation.isLoading}
+          disabled={restartMutation.isLoading || loading}
         />
         <div title={wingVersion} className="truncate space-x-1">
           {wingVersion && (

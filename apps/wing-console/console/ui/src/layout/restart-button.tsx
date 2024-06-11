@@ -4,10 +4,10 @@ import classNames from "classnames";
 
 export const RestartButton = ({
   onClick,
-  loading,
+  disabled,
 }: {
   onClick?: () => void;
-  loading: boolean;
+  disabled: boolean;
 }) => {
   const { theme } = useTheme();
 
@@ -18,9 +18,9 @@ export const RestartButton = ({
         "flex items-center gap-x-1 px-1 py-0.5",
         theme.bg2Hover,
         "transition-all",
-        loading && "cursor-not-allowed opacity-50",
+        disabled && "cursor-not-allowed opacity-50",
       )}
-      disabled={loading}
+      disabled={disabled}
     >
       <ArrowPathIcon className="size-3.5" />
       <span>Restart</span>
