@@ -14,7 +14,6 @@ interface ButtonProps {
   disabled?: boolean;
   className?: string;
   icon?: IconComponent;
-  iconClassName?: string;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   small?: boolean;
   transparent?: boolean;
@@ -36,7 +35,6 @@ export const Button = forwardRef<
       className,
       onClick,
       icon: Icon,
-      iconClassName,
       children,
       small = false,
       transparent = false,
@@ -81,11 +79,7 @@ export const Button = forwardRef<
         onClick={onClick}
         data-testid={dataTestid}
       >
-        {Icon && (
-          <Icon
-            className={classNames(label && "-ml-0.5", "size-4", iconClassName)}
-          />
-        )}
+        {Icon && <Icon className={classNames(label && "-ml-0.5", "h-4 w-4")} />}
         {label}
         {children}
       </button>
