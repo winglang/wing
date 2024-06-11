@@ -43,13 +43,13 @@ export const ThemeToggle = () => {
         <div className="relative size-4 flex">
           {currentTheme === "light" && (
             <>
-              <SunIconSolid className="absolute -top-1 -right-1 size-3.5" />
+              <SunIconSolid className="absolute -top-[2.5px] -right-[2.5px] size-3.5" />
               <MoonIconOutline className="absolute bottom-0 left-0 size-3" />
             </>
           )}
           {currentTheme === "dark" && (
             <>
-              <SunIconOutline className="absolute -top-1 -right-1 size-3.5" />
+              <SunIconOutline className="absolute -top-[2.5px] -right-[2.5px] size-3.5" />
               <MoonIconSolid className="absolute bottom-0 left-0 size-3" />
             </>
           )}
