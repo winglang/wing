@@ -53,6 +53,23 @@ export const createAppRouter = () => {
         config: ctx.layoutConfig,
       };
     }),
+    "app.logsFilters": createProcedure.query(async ({ ctx }) => {
+      const simulator = await ctx.simulator();
+      const resourceIds = simulator.listResources();
+
+      const resourceTypes = resourceIds
+        .map((resourceId) => {
+          const config = simulator.tryGetResourceConfig(resourceId);
+          return config?.type;
+        })
+        .sort()
+        .filter(Boolean) as string[];
+
+      return {
+        resourceIds,
+        resourceTypes: uniqby(resourceTypes, (type) => type),
+      };
+    }),
     "app.logs": createProcedure
       .input(
         z.object({
@@ -65,15 +82,28 @@ export const createAppRouter = () => {
             }),
             timestamp: z.number(),
             text: z.string(),
+            resourceIds: z.array(z.string()),
+            resourceTypes: z.array(z.string()),
           }),
         }),
       )
       .query(async ({ ctx, input }) => {
         return ctx.logger.messages.filter(
           (entry) =>
+            // filter by level
             input.filters.level[entry.level] &&
+            // filter by resourceIds
+            (input.filters.resourceIds.length === 0 ||
+              (entry.ctx?.sourcePath &&
+                input.filters.resourceIds.includes(entry.ctx?.sourcePath))) &&
+            // filter by resourceTypes
+            (input.filters.resourceTypes.length === 0 ||
+              (entry.ctx?.sourceType &&
+                input.filters.resourceTypes.includes(entry.ctx.sourceType))) &&
+            // filter by timestamp
             entry.timestamp &&
             entry.timestamp >= input.filters.timestamp &&
+            // filter by text
             (!input.filters.text ||
               `${entry.message}${entry.ctx?.sourcePath}`
                 .toLowerCase()

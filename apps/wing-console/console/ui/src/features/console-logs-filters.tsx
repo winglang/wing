@@ -17,8 +17,13 @@ export interface ConsoleLogsFiltersProps {
   selectedLogTypeFilters: LogLevel[];
   setSelectedLogTypeFilters: (types: LogLevel[]) => void;
   clearLogs: () => void;
-  isLoading: boolean;
   onSearch: (search: string) => void;
+  resourceIds?: string[];
+  selectedResourceIds: string[];
+  setSelectedResourceIds: (ids: string[]) => void;
+  resourceTypes?: string[];
+  selectedResourceTypes: string[];
+  setSelectedResourceTypes: (types: string[]) => void;
 }
 
 export const ConsoleLogsFilters = memo(
@@ -26,8 +31,13 @@ export const ConsoleLogsFilters = memo(
     selectedLogTypeFilters,
     setSelectedLogTypeFilters,
     clearLogs,
-    isLoading,
     onSearch,
+    resourceIds,
+    selectedResourceIds,
+    setSelectedResourceIds,
+    resourceTypes,
+    selectedResourceTypes,
+    setSelectedResourceTypes,
   }: ConsoleLogsFiltersProps) => {
     const [searchText, setSearchText] = useState("");
 
@@ -92,6 +102,30 @@ export const ConsoleLogsFilters = memo(
           onChange={setSelectedLogTypeFilters as any}
           defaultSelection={defaultSelection}
         />
+        {resourceIds && (
+          <Listbox
+            label={
+              selectedResourceIds.length > 0
+                ? ` ${selectedResourceIds.join(", ")}`
+                : "All resources"
+            }
+            items={resourceIds.map((id) => ({ value: id, label: id }))}
+            selected={selectedResourceIds}
+            onChange={setSelectedResourceIds}
+          />
+        )}
+        {resourceTypes && (
+          <Listbox
+            label={
+              selectedResourceTypes.length > 0
+                ? ` ${selectedResourceTypes.join(", ")}`
+                : "All types"
+            }
+            items={resourceTypes.map((type) => ({ value: type, label: type }))}
+            selected={selectedResourceTypes}
+            onChange={setSelectedResourceTypes}
+          />
+        )}
       </div>
     );
   },

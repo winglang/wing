@@ -25,7 +25,14 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
   );
   const [searchText, setSearchText] = useState("");
 
+  const [selectedResourceIds, setSelectedResourceIds] = useState<string[]>([]);
+  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>(
+    [],
+  );
+
   const [logsTimeFilter, setLogsTimeFilter] = useState(0);
+
+  const filters = trpc["app.logsFilters"].useQuery();
 
   const logs = trpc["app.logs"].useQuery(
     {
@@ -38,6 +45,8 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         },
         text: searchText,
         timestamp: logsTimeFilter,
+        resourceIds: selectedResourceIds,
+        resourceTypes: selectedResourceTypes,
       },
     },
     {
@@ -86,8 +95,13 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         selectedLogTypeFilters={selectedLogTypeFilters}
         setSelectedLogTypeFilters={setSelectedLogTypeFilters}
         clearLogs={clearLogs}
-        isLoading={false} // display logs also while in loading state
         onSearch={setSearchText}
+        resourceIds={filters.data?.resourceIds ?? []}
+        selectedResourceIds={selectedResourceIds}
+        setSelectedResourceIds={setSelectedResourceIds}
+        resourceTypes={filters.data?.resourceTypes ?? []}
+        selectedResourceTypes={selectedResourceTypes}
+        setSelectedResourceTypes={setSelectedResourceTypes}
       />
       <div className="relative h-full">
         <ScrollableArea
