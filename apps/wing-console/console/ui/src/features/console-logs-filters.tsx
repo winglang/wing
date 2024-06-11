@@ -104,24 +104,32 @@ export const ConsoleLogsFilters = memo(
         />
         {resourceIds && (
           <Listbox
+            className="max-w-[10rem]"
             label={
               selectedResourceIds.length > 0
                 ? ` ${selectedResourceIds.join(", ")}`
                 : "All resources"
             }
-            items={resourceIds.map((id) => ({ value: id, label: id }))}
+            items={resourceIds.map((id) => ({
+              label: id.replaceAll("root/Default/", ""),
+              value: id,
+            }))}
             selected={selectedResourceIds}
             onChange={setSelectedResourceIds}
           />
         )}
         {resourceTypes && (
           <Listbox
+            className="max-w-[10rem]"
             label={
               selectedResourceTypes.length > 0
                 ? ` ${selectedResourceTypes.join(", ")}`
                 : "All types"
             }
-            items={resourceTypes.map((type) => ({ value: type, label: type }))}
+            items={resourceTypes.map((type) => ({
+              label: type.replaceAll("@winglang/", ""),
+              value: type,
+            }))}
             selected={selectedResourceTypes}
             onChange={setSelectedResourceTypes}
           />
