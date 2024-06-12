@@ -49,7 +49,9 @@ function generateTests(options: GenerateTestsOptions) {
 
     const metaComment = parseMetaCommentFromPath(join(sourceDir, filename));
 
-    let skipText = "";
+    console.error(
+      `Test file: ${filename}, metaComment: ${metaComment}, current platform: ${process.platform}, CI: ${process.env.CI}`
+    );
 
     if (metaComment?.skip) {
       continue;
@@ -59,7 +61,7 @@ function generateTests(options: GenerateTestsOptions) {
       metaComment?.skipPlatforms?.includes(process.platform) &&
       process.env.CI
     ) {
-      skipText = ".skip";
+      continue;
     }
 
     // ensure windows paths are escaped
@@ -73,13 +75,13 @@ function generateTests(options: GenerateTestsOptions) {
     .fill("../")
     .join("")}../../generated_test_targets";
   
-  test${skipText}("wing compile -t tf-aws", async () => {
+  test("wing compile -t tf-aws", async () => {
     await compileTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(
       metaComment?.env
     )}, ${includeJavaScriptInSnapshots});
   });
   
-  test${skipText}("wing test -t sim", async () => {
+  test("wing test -t sim", async () => {
     await testTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(
       metaComment?.env
     )}, ${includeJavaScriptInSnapshots});
