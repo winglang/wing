@@ -26,6 +26,11 @@ export interface ConsoleLogsFiltersProps {
   setSelectedResourceTypes: (types: string[]) => void;
 }
 
+const getResourceIdLabel = (id: string) => id.replaceAll("root/Default/", "");
+
+const getResourceTypeLabel = (type: string) =>
+  type.replaceAll("@winglang/", "");
+
 export const ConsoleLogsFilters = memo(
   ({
     selectedLogTypeFilters,
@@ -72,13 +77,13 @@ export const ConsoleLogsFilters = memo(
     const resourceIdsLabel = useMemo(() => {
       return selectedResourceIds.length === 0
         ? "All resources"
-        : ` ${selectedResourceIds.join(", ").replaceAll("root/Default/", "")}`;
+        : getResourceIdLabel(selectedResourceIds.join(", "));
     }, [selectedResourceIds]);
 
     const resourceTypesLabel = useMemo(() => {
       return selectedResourceTypes.length === 0
         ? "All types"
-        : ` ${selectedResourceTypes.join(", ").replaceAll("@winglang/", "")}`;
+        : getResourceTypeLabel(selectedResourceTypes.join(", "));
     }, [selectedResourceTypes]);
 
     return (
@@ -111,11 +116,11 @@ export const ConsoleLogsFilters = memo(
         />
         {resourceIds && (
           <Listbox
-            className="max-w-[10rem]"
+            className="max-w-[14rem]"
             title={resourceIdsLabel}
             label={resourceIdsLabel}
             items={resourceIds.map((id) => ({
-              label: id.replaceAll("root/Default/", ""),
+              label: getResourceIdLabel(id),
               value: id,
             }))}
             selected={selectedResourceIds}
@@ -126,11 +131,11 @@ export const ConsoleLogsFilters = memo(
         )}
         {resourceTypes && (
           <Listbox
-            className="max-w-[10rem]"
+            className="max-w-[14rem]"
             title={resourceTypesLabel}
             label={resourceTypesLabel}
             items={resourceTypes.map((type) => ({
-              label: type.replaceAll("@winglang/", ""),
+              label: getResourceTypeLabel(type),
               value: type,
             }))}
             selected={selectedResourceTypes}
