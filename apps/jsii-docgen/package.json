@@ -47,7 +47,7 @@
     "projen": "^0.71.163",
     "tsx": "^4.7.0",
     "typescript": "~5.3.3",
-    "vitest": "^1.6.0"
+    "vitest": "^1.3.1"
   },
   "dependencies": {
     "@jsii/spec": "^1.94.0",

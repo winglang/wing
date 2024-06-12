@@ -14,7 +14,6 @@ export const invalidTestDir = path.join(testDir, "invalid");
 export const benchmarksTestDir = path.join(validTestDir, "benchmarks");
 export const errorTestDir = path.join(testDir, "error");
 export const hangarDir = path.join(repoRoot, "tools", "hangar");
-export const resultsDir = path.join(hangarDir, "results");
 export const tmpDir = path.join(hangarDir, "tmp");
 export const npmCacheDir = path.join(tmpDir, ".npm");
 export const tmpNodeModulesDir = path.join(tmpDir, "node_modules");

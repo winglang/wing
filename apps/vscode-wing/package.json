@@ -27,7 +27,7 @@
     "organization": true
   },
   "devDependencies": {
-    "@trpc/client": "^10.45.2",
+    "@trpc/client": "^10.38.1",
     "@types/node": "^20.11.0",
     "@types/node-fetch": "^2.6.4",
     "@types/vscode": "^1.70.0",

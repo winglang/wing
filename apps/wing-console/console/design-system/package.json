@@ -49,7 +49,7 @@
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.2.1",
-    "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/coverage-c8": "^0.31.4",
     "@wingconsole/eslint-plugin": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
     "bump-pack": "workspace:^",
@@ -58,7 +58,7 @@
     "tsup": "^8.0.2",
     "typescript": "^5.2.2",
     "vite": "^4.5.2",
-    "vitest": "^1.6.0",
+    "vitest": "^0.34.6",
     "webpack": "^5.88.2"
   },
   "volta": {

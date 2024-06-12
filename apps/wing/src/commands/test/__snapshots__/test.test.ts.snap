@@ -11,10 +11,10 @@ exports[`printing test reports > verbose traces are shown if debug mode is enabl
 "fail ┌ hello.w » root/env0/test:test
      │ Push (message=cool).
      │ sleeping for 500 ms
-     │ Sending messages (messages=["cool"], subscriber=sim-4).
-     │ Invoke (payload="{\\"messages\\":[\\"cool\\"]}").
+     │ Sending messages (messages=[\\"cool\\"], subscriber=sim-4).
+     │ Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"cool\\\\\\"]}\\").
      │ Subscriber error - returning 1 messages to queue: Missing environment variable: QUEUE_HANDLE_7164aec4
      │ Get (key=file.txt).
-     │ Invoke (payload="").
+     │ Invoke (payload=\\"\\").
      └ Error: Object does not exist (key=file.txt)"
 `;
