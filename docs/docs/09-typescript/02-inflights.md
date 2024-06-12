@@ -54,7 +54,7 @@ main((root) => {
 Inflight closures themselves can also be lifted. Once lifted, they can be called like normal closure:
 
 ```ts
-import { main, lift } from "@wingcloud/framework";
+import { main, lift, inflight } from "@wingcloud/framework";
 
 main((root) => {
   const myInflight = inflight(async () => {
