@@ -2,7 +2,7 @@ import { MagnifyingGlassIcon, NoSymbolIcon } from "@heroicons/react/24/outline";
 import { Button, Input, Listbox } from "@wingconsole/design-system";
 import type { LogLevel } from "@wingconsole/server";
 import debounce from "lodash.debounce";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 const logLevels = ["verbose", "info", "warn", "error"] as const;
 
@@ -47,32 +47,39 @@ export const ConsoleLogsFilters = memo(
       debouncedOnSearch(searchText);
     }, [debouncedOnSearch, searchText]);
 
-    const [defaultSelection, setDefaultSelection] = useState<string[]>();
-    const [combinationName, setCombinationName] = useState<string>();
+    const [defaultLogTypeSelection] = useState(selectedLogTypeFilters);
 
-    useEffect(() => {
+    const logTypeLabel = useMemo(() => {
       if (selectedLogTypeFilters.length === 4) {
-        setCombinationName("All levels");
+        return "All levels";
       } else if (
         selectedLogTypeFilters.length === 3 &&
         selectedLogTypeFilters.includes("verbose") === false
       ) {
-        setCombinationName("Default levels");
+        return "Default levels";
       } else if (selectedLogTypeFilters.length === 0) {
-        setCombinationName("Hide all");
+        return "Hide all";
       } else if (
         selectedLogTypeFilters.length === 1 &&
         selectedLogTypeFilters[0]
       ) {
-        setCombinationName(`${logLevelNames[selectedLogTypeFilters[0]]} only`);
+        return `${logLevelNames[selectedLogTypeFilters[0]]} only`;
       } else {
-        setCombinationName("Custom levels");
+        return "Custom levels";
       }
     }, [selectedLogTypeFilters]);
 
-    useEffect(() => {
-      setDefaultSelection(selectedLogTypeFilters);
-    }, [selectedLogTypeFilters]);
+    const resourceIdsLabel = useMemo(() => {
+      return selectedResourceIds.length === 0
+        ? "All resources"
+        : ` ${selectedResourceIds.join(", ").replaceAll("root/Default/", "")}`;
+    }, [selectedResourceIds]);
+
+    const resourceTypesLabel = useMemo(() => {
+      return selectedResourceTypes.length === 0
+        ? "All types"
+        : ` ${selectedResourceTypes.join(", ").replaceAll("@winglang/", "")}`;
+    }, [selectedResourceTypes]);
 
     return (
       <div className="flex px-2 space-x-2 pt-1">
@@ -93,49 +100,43 @@ export const ConsoleLogsFilters = memo(
         />
 
         <Listbox
-          label={combinationName}
+          label={logTypeLabel}
           items={logLevels.map((type) => ({
             value: type,
             label: logLevelNames[type],
           }))}
           selected={selectedLogTypeFilters}
           onChange={setSelectedLogTypeFilters as any}
-          defaultSelection={defaultSelection}
+          defaultSelection={defaultLogTypeSelection}
         />
         {resourceIds && (
           <Listbox
             className="max-w-[10rem]"
-            label={
-              selectedResourceIds.length > 0
-                ? ` ${selectedResourceIds
-                    .join(", ")
-                    .replaceAll("root/Default/", "")}`
-                : "All resources"
-            }
+            title={resourceIdsLabel}
+            label={resourceIdsLabel}
             items={resourceIds.map((id) => ({
               label: id.replaceAll("root/Default/", ""),
               value: id,
             }))}
             selected={selectedResourceIds}
             onChange={setSelectedResourceIds}
+            defaultLabel="All resources"
+            defaultSelection={[]}
           />
         )}
         {resourceTypes && (
           <Listbox
             className="max-w-[10rem]"
-            label={
-              selectedResourceTypes.length > 0
-                ? ` ${selectedResourceTypes
-                    .join(", ")
-                    .replaceAll("@winglang/", "")}`
-                : "All types"
-            }
+            title={resourceTypesLabel}
+            label={resourceTypesLabel}
             items={resourceTypes.map((type) => ({
               label: type.replaceAll("@winglang/", ""),
               value: type,
             }))}
             selected={selectedResourceTypes}
             onChange={setSelectedResourceTypes}
+            defaultLabel="All types"
+            defaultSelection={[]}
           />
         )}
       </div>

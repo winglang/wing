@@ -23,6 +23,8 @@ export interface ListboxProps {
   selected?: string[];
   onChange?: (selected: string[]) => void;
   disabled?: boolean;
+  title?: string;
+  defaultLabel?: string;
 }
 
 export const Listbox = ({
@@ -35,6 +37,8 @@ export const Listbox = ({
   selected,
   onChange,
   disabled = false,
+  title = "",
+  defaultLabel = "Default",
 }: ListboxProps) => {
   const { theme } = useTheme();
 
@@ -76,6 +80,7 @@ export const Listbox = ({
             )}
             icon={icon}
             transparent={transparent}
+            title={title}
           >
             {label && <span className="block truncate">{label}</span>}
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1.5">
@@ -115,12 +120,22 @@ export const Listbox = ({
                     <li
                       className={classNames(
                         "relative cursor-default select-none py-2 pl-10 pr-4",
+                        theme.bgInputHover,
                       )}
-                      onClick={() => onChange?.(defaultSelection)}
+                      onClick={() => {
+                        console.log("defaultSelection", defaultSelection);
+                        onChange?.(defaultSelection);
+                      }}
                     >
-                      <span className={`block truncate font-normal`}>
-                        Default
+                      <span className="block truncate font-normal">
+                        {defaultLabel}
                       </span>
+                      {defaultSelection.length === 0 &&
+                        selected.length === 0 && (
+                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
+                            <CheckIcon className="h-4 w-4" aria-hidden="true" />
+                          </span>
+                        )}
                     </li>
 
                     <div className="relative">
@@ -159,11 +174,11 @@ export const Listbox = ({
                     >
                       {item.label}
                     </span>
-                    {selected?.includes(item.value) ? (
+                    {selected?.includes(item.value) && (
                       <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
                         <CheckIcon className="h-4 w-4" aria-hidden="true" />
                       </span>
-                    ) : undefined}
+                    )}
                   </HeadlessListbox.Option>
                 ))}
               </HeadlessListbox.Options>
