@@ -201,7 +201,9 @@ impl<'a> JSifier<'a> {
 			root_class.add_code(self.jsify_struct_schemas());
 
 			// Create global map of preflight class types and add all preflight types to it
-			root_class.line(format!("{PREFLIGHT_TYPES_MAP} = {MODULE_PREFLIGHT_TYPES_MAP};"));
+			root_class.line(format!(
+				"{PREFLIGHT_TYPES_MAP} = {{ ...{MODULE_PREFLIGHT_TYPES_MAP} }};"
+			));
 
 			root_class.add_code(js);
 			root_class.close("}");
@@ -278,7 +280,7 @@ impl<'a> JSifier<'a> {
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
 			output.line(format!(
-				"module.exports = {{ {}, {MODULE_PREFLIGHT_TYPES_MAP} }};",
+				"module.exports = {{ {MODULE_PREFLIGHT_TYPES_MAP}, {} }};",
 				exports.iter().map(ToString::to_string).join(", ")
 			));
 		}
