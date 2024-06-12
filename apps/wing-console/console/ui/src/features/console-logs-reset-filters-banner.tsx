@@ -16,7 +16,7 @@ export const ConsoleLogsResetFiltersBanner = ({
 
   return (
     <>
-      {shownLogs === 0 && (
+      {shownLogs === 0 && hiddenLogs > 0 && (
         <div
           className={classNames(
             "flex justify-between px-2 py-1 text-xs",
@@ -29,6 +29,9 @@ export const ConsoleLogsResetFiltersBanner = ({
             )}
           >
             All logs entries are hidden by the current filters
+            <span className="italic ml-1.5 text-slate-550 dark:text-slate-350">
+              ({hiddenLogs} hidden entries)
+            </span>
           </div>
 
           <button
@@ -41,7 +44,7 @@ export const ConsoleLogsResetFiltersBanner = ({
               theme.text1Hover,
             )}
           >
-            Reset filters
+            Clear filters
           </button>
         </div>
       )}

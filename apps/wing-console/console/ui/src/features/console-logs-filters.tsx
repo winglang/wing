@@ -188,9 +188,11 @@ export const ConsoleLogsFilters = memo(
           defaultSelection={[]}
         />
 
-        <Button transparent onClick={onResetFilters} title="Reset filters">
-          Reset
-        </Button>
+        <div className="flex grow justify-end">
+          <Button onClick={onResetFilters} title="Clear filters">
+            Clear filters
+          </Button>
+        </div>
       </div>
     );
   },
