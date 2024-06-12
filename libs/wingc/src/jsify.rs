@@ -187,23 +187,21 @@ impl<'a> JSifier<'a> {
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.line(format!("const {HELPERS_VAR} = {STDLIB}.helpers;"));
 
-		// A single preflight types map per file, all preflight types defined in this file and imported from other files
-		// go into this map.
-		output.line(format!("let {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
-
-		output.add_code(imports);
-
 		if is_entrypoint {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}($scope, $id) {{"));
 			root_class.line("super($scope, $id);");
+			root_class.line(format!("{PREFLIGHT_TYPES_MAP} = {{ }};"));
+
+			// The root preflight types map
+			root_class.line(format!("let {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
+
+			root_class.add_code(imports);
 			root_class.add_code(self.jsify_struct_schemas());
 
-			// Create global map of preflight class types and add all preflight types to it
-			root_class.line(format!(
-				"{PREFLIGHT_TYPES_MAP} = {{ ...{MODULE_PREFLIGHT_TYPES_MAP} }};"
-			));
+			// A global map pointing to the root preflight types map
+			root_class.line(format!("{PREFLIGHT_TYPES_MAP} = {MODULE_PREFLIGHT_TYPES_MAP};"));
 
 			root_class.add_code(js);
 			root_class.close("}");
@@ -258,24 +256,29 @@ impl<'a> JSifier<'a> {
 			// module.exports = { ...module.export, get inner_directory1() { return $brought; } };
 			// ```
 
-			output.line("let $brought;");
+			// This module's preflight type map
+			output.line(format!("let {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
+
 			for file in directory_children {
 				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
 				if file.is_dir() {
 					let directory_name = file.file_stem().unwrap();
-					output.line(format!("$brought = $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, \"{MODULE_PREFLIGHT_TYPES_MAP}\", {MODULE_PREFLIGHT_TYPES_MAP});"));
 					output.line(format!(
-						"module.exports = {{ ...module.exports, get {directory_name}() {{ return $brought; }} }};"
+						"Object.assign(module.exports, {{ get {directory_name}() {{ return $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, \"{MODULE_PREFLIGHT_TYPES_MAP}\", {MODULE_PREFLIGHT_TYPES_MAP}); }} }});"
 					));
 				} else {
-					output.line(format!("$brought = $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, \"{MODULE_PREFLIGHT_TYPES_MAP}\", {MODULE_PREFLIGHT_TYPES_MAP});"));
-					output.line("module.exports = { ...module.exports, ...$brought };");
+					output.line(format!(
+						"Object.assign(module.exports, $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`, \"{MODULE_PREFLIGHT_TYPES_MAP}\", {MODULE_PREFLIGHT_TYPES_MAP}));"
+					));
 				}
 			}
 			output.line(format!(
 				"module.exports = {{ ...module.exports, {MODULE_PREFLIGHT_TYPES_MAP} }};"
 			));
 		} else {
+			// This module's preflight type map
+			output.line(format!("let {MODULE_PREFLIGHT_TYPES_MAP} = {{}};"));
+			output.add_code(imports);
 			output.add_code(self.jsify_struct_schemas());
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
@@ -940,10 +943,7 @@ impl<'a> JSifier<'a> {
 					code.line(format!("const {var_name} = {STDLIB}.{name};"))
 				}
 				BringSource::TrustedModule(name, module_dir) => {
-					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
-					let var_name = identifier.as_ref().unwrap_or(&name);
-					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
+					code.append(self.jsify_bring_stmt(module_dir, &Some(identifier.as_ref().unwrap_or(name).clone())));
 				}
 				BringSource::JsiiModule(name) => {
 					// checked during type checking
@@ -1567,8 +1567,8 @@ impl<'a> JSifier<'a> {
 			// 	));
 			// }
 
-			// Inflight classes might need to be lift-qualified (onLift), but their type name might not be necessarily avaialble
-			// at the scope when they are qualified (it might even be shadowed by another type name). We atore a reference to these
+			// Inflight classes might need to be lift-qualified (onLift), but their type name might not be necessarily available
+			// at the scope when they are qualified (it might even be shadowed by another type name). We store a reference to these
 			// class types in a global preflight types map indexed by the class's unique id.
 			if class.phase == Phase::Inflight {
 				code.line(format!(
@@ -1590,7 +1590,7 @@ impl<'a> JSifier<'a> {
 	pub fn class_singleton(&self, type_: TypeRef) -> String {
 		let c = type_.as_class().unwrap();
 		format!(
-			"{MODULE_PREFLIGHT_TYPES_MAP}[{}]._singleton(this,\"{}_singleton_{}\")",
+			"{PREFLIGHT_TYPES_MAP}[{}]._singleton(this,\"{}_singleton_{}\")",
 			c.uid, c.name, c.uid
 		)
 	}
