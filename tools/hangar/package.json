@@ -5,6 +5,7 @@
   "scripts": {
     "test": "vitest run --update",
     "test:generate": "tsx src/generate_tests.ts",
+    "test:doc_examples": "vitest run src/test_corpus/doc_examples",
     "test:watch": "vitest watch",
     "bench": "vitest bench --run"
   },

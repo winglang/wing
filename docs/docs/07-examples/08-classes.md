@@ -5,13 +5,13 @@ keywords: [Wing example]
 ---
 
 ### Preflight class
-```ts playground
+```ts playground example
 bring cloud;
 bring util;
 
 class Foo  {
-  field1: str;     // <-- readonly
-  var field2: num; // <-- reassignable
+  pub field1: str;     // <-- readonly
+  pub var field2: num; // <-- reassignable
   inflight field3: Array<str>;
 
   new() {
@@ -47,10 +47,10 @@ new cloud.Function(inflight () => {
 ```
 
 ### Inflight interface
-```js playground
+```js playground example
 bring cloud;
 
-interface IProfile {
+inflight interface IProfile {
   inflight name(): str;
 }
 
@@ -70,7 +70,8 @@ new cloud.Function(inflight () => {
 ```
 
 ### Preflight interface
-```ts playground
+```ts playground example
+bring cloud;
 /**
  * Preflight Interface
  **/ 
@@ -95,8 +96,9 @@ class BucketBasedKeyValueStore impl IKVStore {
 ```
 
 ### Complete IKVStore 
-```js playground
+```js playground example
 bring cloud;
+bring ex;
 
 interface IKVStore extends std.IResource { 
   inflight get(key: str): Json;
@@ -117,9 +119,9 @@ class BucketBasedKeyValueStore impl IKVStore {
 }
 
 class TableBasedKeyValueStore impl IKVStore {
-  table: cloud.Table;
+  table: ex.Table;
   new() {
-    this.table = new cloud.Table(
+    this.table = new ex.Table(
       name: "table",
       primaryKey: "key",
       columns: {
@@ -130,7 +132,7 @@ class TableBasedKeyValueStore impl IKVStore {
   pub inflight get(key: str): Json {
     return this.table.get(key);
   }
-  pub inflight set(key: str, value: Json): str {
+  pub inflight set(key: str, value: Json) {
     this.table.insert(key, value);
   }
 }
@@ -138,19 +140,21 @@ class TableBasedKeyValueStore impl IKVStore {
 let bucketBased: IKVStore = new BucketBasedKeyValueStore();
 let tableBased: IKVStore = new TableBasedKeyValueStore();
 
-let testKv = inflight (kv: IKVStore):void => {
-  kv.set("k", Json { 
-    value: "v" 
+test "bucketBased KVStore" {
+  bucketBased.set("k", Json {
+    value: "v"
   });
-  let result = kv.get("k");
+  let result = bucketBased.get("k");
   log("{result.get("value")}");
   assert("v" == str.fromJson(result.get("value")));
-};
+}
 
-new cloud.Function(inflight () => {
-  log("testing bucketBased KVStore");
-  testKv(bucketBased);
-  log("testing tableBased KVStore");
-  testKv(tableBased);
-});
+test "tableBased KVStore" {
+  tableBased.set("k", Json {
+    value: "v"
+  });
+  let result = tableBased.get("k");
+  log("{result.get("value")}");
+  assert("v" == str.fromJson(result.get("value")));
+}
 ```
