@@ -23,7 +23,11 @@ export const ConsoleLogsResetFiltersBanner = ({
             theme.bg4,
           )}
         >
-          <div className={classNames("text-slate-600 dark:text-slate-300")}>
+          <div
+            className={classNames(
+              "text-slate-600 dark:text-slate-300 font-light",
+            )}
+          >
             All logs entries are hidden by the current filters
           </div>
 
