@@ -217,10 +217,10 @@ export const ConsoleLogsFilters = memo(
           <div className="flex grow justify-end">
             <Button
               onClick={onResetFilters}
-              title="Clear filters"
+              title="Reset filters"
               className="truncate"
             >
-              Clear filters
+              Reset filters
             </Button>
           </div>
         </div>
@@ -258,7 +258,7 @@ export const ConsoleLogsFilters = memo(
                 theme.text1Hover,
               )}
             >
-              Clear filters
+              Reset filters
             </button>
           </div>
         )}
