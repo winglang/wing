@@ -117,7 +117,11 @@ fn install_sdk() -> Result<(), Box<dyn Error>> {
 	std::fs::create_dir_all(WING_CACHE_DIR.as_str())?;
 	let mut install_command = std::process::Command::new("npm");
 	install_command.arg("install").arg("esbuild"); // TODO: should this not be an optional dependency?
-	install_command.arg(format!("@winglang/sdk@{}", env!("CARGO_PKG_VERSION")));
+
+	// No need to install the latest verison of SDK from npm in tests
+	if !cfg!(test) {
+		install_command.arg(format!("@winglang/sdk@{}", env!("CARGO_PKG_VERSION")));
+	}
 	install_command.current_dir(WING_CACHE_DIR.as_str());
 	install_command.stdout(std::process::Stdio::piped());
 	install_command.stderr(std::process::Stdio::piped());
