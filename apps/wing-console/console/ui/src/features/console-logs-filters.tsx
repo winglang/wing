@@ -97,35 +97,43 @@ export const ConsoleLogsFilters = memo(
       }
     }, [selectedLogTypeFilters]);
 
-    const resourceIdsLabel = useMemo(() => {
-      return selectedResourceIds.length === 0
-        ? "All resource Ids"
-        : getResourceIdLabel(selectedResourceIds.join(", "));
-    }, [selectedResourceIds]);
-
-    const resourceTypeItems = useMemo(() => {
-      if (!resources) {
-        return [];
+    const renderResourceIdsLabel = useCallback((selected?: string[]) => {
+      if (!selected || selected.length === 0) {
+        return <span className="truncate">All resource Ids</span>;
       }
-      const resourceTypes = uniqby(
-        resources
-          .sort((a, b) => a.type?.localeCompare(b.type ?? "") ?? 0)
-          .filter((resource) => resource.type !== undefined),
-        (resource) => resource.type,
+      return (
+        <span className="flex gap-1 truncate">
+          {selected.map((type) => {
+            const Icon = getResourceIconComponent(type);
+            return (
+              <span key={type} className="flex items-center gap-1 truncate">
+                <Icon className="size-4 shrink-0" />
+                <span className="truncate">{getResourceIdLabel(type)}</span>
+              </span>
+            );
+          })}
+        </span>
       );
+    }, []);
 
-      return resourceTypes.map((resource) => ({
-        label: getResourceTypeLabel(resource.type),
-        value: resource.type ?? "",
-        icon: getResourceIconComponent(resource.type),
-      }));
-    }, [resources]);
-
-    const resourceTypesLabel = useMemo(() => {
-      return selectedResourceTypes.length === 0
-        ? "All types"
-        : getResourceTypeLabel(selectedResourceTypes.join(", "));
-    }, [selectedResourceTypes]);
+    const renderResourceTypesLabel = useCallback((selected?: string[]) => {
+      if (!selected || selected.length === 0) {
+        return <span className="truncate">All types</span>;
+      }
+      return (
+        <span className="flex gap-1 truncate">
+          {selected.map((type) => {
+            const Icon = getResourceIconComponent(type);
+            return (
+              <span key={type} className="flex items-center gap-1 truncate">
+                <Icon className="size-4 shrink-0" />
+                <span className="truncate">{getResourceTypeLabel(type)}</span>
+              </span>
+            );
+          })}
+        </span>
+      );
+    }, []);
 
     const resourceIdItems = useMemo(() => {
       if (!resources) {
@@ -149,6 +157,24 @@ export const ConsoleLogsFilters = memo(
         icon: getResourceIconComponent(resource.type),
       }));
     }, [resources, selectedResourceTypes, selectedResourceIds]);
+
+    const resourceTypeItems = useMemo(() => {
+      if (!resources) {
+        return [];
+      }
+      const resourceTypes = uniqby(
+        resources
+          .sort((a, b) => a.type?.localeCompare(b.type ?? "") ?? 0)
+          .filter((resource) => resource.type !== undefined),
+        (resource) => resource.type,
+      );
+
+      return resourceTypes.map((resource) => ({
+        label: getResourceTypeLabel(resource.type),
+        value: resource.type ?? "",
+        icon: getResourceIconComponent(resource.type),
+      }));
+    }, [resources]);
 
     const showIncompatibleResourceTypeWarning = useMemo(() => {
       if (!resources || selectedResourceTypes.length === 0) {
@@ -194,8 +220,7 @@ export const ConsoleLogsFilters = memo(
 
           <Listbox
             className="max-w-[14rem]"
-            title={resourceTypesLabel}
-            label={resourceTypesLabel}
+            renderLabel={renderResourceTypesLabel}
             items={resourceTypeItems}
             selected={selectedResourceTypes}
             onChange={setSelectedResourceTypes}
@@ -205,8 +230,7 @@ export const ConsoleLogsFilters = memo(
 
           <Listbox
             className="max-w-[14rem]"
-            title={resourceIdsLabel}
-            label={resourceIdsLabel}
+            renderLabel={renderResourceIdsLabel}
             items={resourceIdItems}
             selected={selectedResourceIds}
             onChange={setSelectedResourceIds}

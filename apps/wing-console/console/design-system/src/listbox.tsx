@@ -17,6 +17,7 @@ export interface ListboxItem {
 
 export interface ListboxProps {
   label?: string;
+  renderLabel?: (selected?: string[]) => JSX.Element;
   icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
   className?: string;
   items: ListboxItem[];
@@ -31,6 +32,7 @@ export interface ListboxProps {
 
 export const Listbox = ({
   label,
+  renderLabel,
   icon,
   className,
   items,
@@ -84,7 +86,10 @@ export const Listbox = ({
             transparent={transparent}
             title={title}
           >
-            {label && <span className="block truncate">{label}</span>}
+            {renderLabel && renderLabel(selected)}
+            {!renderLabel && label && (
+              <span className="block truncate">{label}</span>
+            )}
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1.5">
               <ChevronUpDownIcon
                 className={classNames(theme.textInput, "h-4 w-4")}
