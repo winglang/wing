@@ -14,7 +14,7 @@ errorWingFiles.forEach((wingFile) => {
       path.join(errorTestDir, wingFile)
     );
 
-    const metaComment = parseMetaCommentFromPath(wingFile);
+    const metaComment = parseMetaCommentFromPath(relativeWingFile);
     if (shouldSkipTest(metaComment)) {
       return;
     }
