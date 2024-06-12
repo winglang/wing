@@ -1,7 +1,7 @@
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from "fs";
 import { appWithParamsDir, sdkTestsDir, validTestDir } from "./paths";
 import { join, extname } from "path";
-import { parseMetaCommentFromPath } from "./meta_comment";
+import { parseMetaCommentFromPath, shouldSkipTest } from "./meta_comment";
 
 const generatedTestDir = join(__dirname, "test_corpus", "valid");
 const generatedSDKTestDir = join(__dirname, "test_corpus", "sdk_tests");
@@ -49,21 +49,7 @@ function generateTests(options: GenerateTestsOptions) {
 
     const metaComment = parseMetaCommentFromPath(join(sourceDir, filename));
 
-    console.error(
-      `Test file: ${filename}, metaComment: ${metaComment}, current platform: ${process.platform}, CI: ${process.env.CI}`
-    );
-
-    let skipText = "";
-    if (metaComment?.skip) {
-      skipText = ".skip";
-    }
-
-    if (
-      metaComment?.skipPlatforms?.includes(process.platform) &&
-      process.env.CI
-    ) {
-      skipText = ".skip";
-    }
+    let skipText = shouldSkipTest(metaComment) ? ".skip" : "";
 
     // ensure windows paths are escaped
     const escapedSourceDir = sourceDir.replace(/\\/g, "\\\\");
