@@ -123,10 +123,9 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         setSelectedLogTypeFilters={setSelectedLogTypeFilters}
         clearLogs={clearLogs}
         onSearch={setSearchText}
-        resourceIds={filters.data?.resourceIds ?? []}
+        resources={filters.data?.resources ?? []}
         selectedResourceIds={selectedResourceIds}
         setSelectedResourceIds={setSelectedResourceIds}
-        resourceTypes={filters.data?.resourceTypes ?? []}
         selectedResourceTypes={selectedResourceTypes}
         setSelectedResourceTypes={setSelectedResourceTypes}
         onResetFilters={resetFilters}

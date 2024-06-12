@@ -1,6 +1,7 @@
 import { Listbox as HeadlessListbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
+import type { ForwardRefExoticComponent, SVGProps } from "react";
 import { Fragment, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
@@ -11,11 +12,12 @@ import { useTheme } from "./theme-provider.js";
 export interface ListboxItem {
   value: string;
   label: string;
+  icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
 }
 
 export interface ListboxProps {
   label?: string;
-  icon?: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>;
+  icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
   className?: string;
   items: ListboxItem[];
   defaultSelection?: string[];
@@ -164,17 +166,18 @@ export const Listbox = ({
                   >
                     <span
                       className={classNames(
-                        "block truncate",
+                        "truncate flex items-center gap-2",
                         selected?.includes(item.value)
                           ? theme.text1
                           : "text-slate-850 dark:text-slate-300",
                       )}
                     >
+                      {item.icon && <item.icon className="size-4" />}
                       {item.label}
                     </span>
                     {selected?.includes(item.value) && (
                       <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
-                        <CheckIcon className="h-4 w-4" aria-hidden="true" />
+                        <CheckIcon className="size-4" aria-hidden="true" />
                       </span>
                     )}
                   </HeadlessListbox.Option>

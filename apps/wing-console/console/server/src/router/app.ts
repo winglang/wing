@@ -14,7 +14,7 @@ import type {
 import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
 import type { FileLink } from "../utils/createRouter.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import type { IFunctionClient, Simulator } from "../wingsdk.js";
+import type { Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
@@ -55,19 +55,17 @@ export const createAppRouter = () => {
     }),
     "app.logsFilters": createProcedure.query(async ({ ctx }) => {
       const simulator = await ctx.simulator();
-      const resourceIds = simulator.listResources();
 
-      const resourceTypes = resourceIds
-        .map((resourceId) => {
-          const config = simulator.tryGetResourceConfig(resourceId);
-          return config?.type;
-        })
-        .sort()
-        .filter(Boolean) as string[];
+      const resources = simulator.listResources().map((resourceId) => {
+        const config = simulator.tryGetResourceConfig(resourceId);
+        return {
+          id: resourceId,
+          type: config?.type,
+        };
+      });
 
       return {
-        resourceIds,
-        resourceTypes: uniqby(resourceTypes, (type) => type),
+        resources,
       };
     }),
     "app.logs": createProcedure

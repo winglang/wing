@@ -1,7 +1,13 @@
 import { MagnifyingGlassIcon, NoSymbolIcon } from "@heroicons/react/24/outline";
-import { Button, Input, Listbox } from "@wingconsole/design-system";
+import {
+  Button,
+  getResourceIconComponent,
+  Input,
+  Listbox,
+} from "@wingconsole/design-system";
 import type { LogLevel } from "@wingconsole/server";
 import debounce from "lodash.debounce";
+import uniqby from "lodash.uniqby";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 const logLevels = ["verbose", "info", "warn", "error"] as const;
@@ -13,15 +19,19 @@ const logLevelNames = {
   error: "Errors",
 } as const;
 
+interface Resource {
+  id: string;
+  type?: string;
+}
+
 export interface ConsoleLogsFiltersProps {
   selectedLogTypeFilters: LogLevel[];
   setSelectedLogTypeFilters: (types: LogLevel[]) => void;
   clearLogs: () => void;
   onSearch: (search: string) => void;
-  resourceIds?: string[];
+  resources?: Resource[];
   selectedResourceIds: string[];
   setSelectedResourceIds: (ids: string[]) => void;
-  resourceTypes?: string[];
   selectedResourceTypes: string[];
   setSelectedResourceTypes: (types: string[]) => void;
   onResetFilters: () => void;
@@ -29,8 +39,8 @@ export interface ConsoleLogsFiltersProps {
 
 const getResourceIdLabel = (id: string) => id.replaceAll("root/Default/", "");
 
-const getResourceTypeLabel = (type: string) =>
-  type.replaceAll("@winglang/", "");
+const getResourceTypeLabel = (type?: string) =>
+  type?.replaceAll("@winglang/", "") ?? "";
 
 export const ConsoleLogsFilters = memo(
   ({
@@ -38,10 +48,9 @@ export const ConsoleLogsFilters = memo(
     setSelectedLogTypeFilters,
     clearLogs,
     onSearch,
-    resourceIds,
+    resources,
     selectedResourceIds,
     setSelectedResourceIds,
-    resourceTypes,
     selectedResourceTypes,
     setSelectedResourceTypes,
     onResetFilters,
@@ -82,11 +91,40 @@ export const ConsoleLogsFilters = memo(
         : getResourceIdLabel(selectedResourceIds.join(", "));
     }, [selectedResourceIds]);
 
+    const resourceTypeItems = useMemo(() => {
+      if (!resources) {
+        return [];
+      }
+      const resourceTypes = uniqby(
+        resources
+          .sort((a, b) => a.type?.localeCompare(b.type ?? "") ?? 0)
+          .filter((resource) => resource.type !== undefined),
+        (resource) => resource.type,
+      );
+
+      return resourceTypes.map((resource) => ({
+        label: getResourceTypeLabel(resource.type),
+        value: resource.type ?? "",
+        icon: getResourceIconComponent(resource.type),
+      }));
+    }, [resources]);
+
     const resourceTypesLabel = useMemo(() => {
       return selectedResourceTypes.length === 0
         ? "All types"
         : getResourceTypeLabel(selectedResourceTypes.join(", "));
     }, [selectedResourceTypes]);
+
+    const resourceIdItems = useMemo(() => {
+      if (!resources) {
+        return [];
+      }
+      return resources.map((resource) => ({
+        label: getResourceIdLabel(resource.id),
+        value: resource.id,
+        icon: getResourceIconComponent(resource.type),
+      }));
+    }, [resources]);
 
     return (
       <div className="flex px-2 space-x-2 pt-1">
@@ -115,37 +153,27 @@ export const ConsoleLogsFilters = memo(
           defaultSelection={defaultLogTypeSelection}
         />
 
-        {resourceTypes && (
-          <Listbox
-            className="max-w-[14rem]"
-            title={resourceTypesLabel}
-            label={resourceTypesLabel}
-            items={resourceTypes.map((type) => ({
-              label: getResourceTypeLabel(type),
-              value: type,
-            }))}
-            selected={selectedResourceTypes}
-            onChange={setSelectedResourceTypes}
-            defaultLabel="All types"
-            defaultSelection={[]}
-          />
-        )}
+        <Listbox
+          className="max-w-[14rem]"
+          title={resourceTypesLabel}
+          label={resourceTypesLabel}
+          items={resourceTypeItems}
+          selected={selectedResourceTypes}
+          onChange={setSelectedResourceTypes}
+          defaultLabel="All types"
+          defaultSelection={[]}
+        />
 
-        {resourceIds && (
-          <Listbox
-            className="max-w-[14rem]"
-            title={resourceIdsLabel}
-            label={resourceIdsLabel}
-            items={resourceIds.map((id) => ({
-              label: getResourceIdLabel(id),
-              value: id,
-            }))}
-            selected={selectedResourceIds}
-            onChange={setSelectedResourceIds}
-            defaultLabel="All resources"
-            defaultSelection={[]}
-          />
-        )}
+        <Listbox
+          className="max-w-[14rem]"
+          title={resourceIdsLabel}
+          label={resourceIdsLabel}
+          items={resourceIdItems}
+          selected={selectedResourceIds}
+          onChange={setSelectedResourceIds}
+          defaultLabel="All resources"
+          defaultSelection={[]}
+        />
 
         <Button transparent onClick={onResetFilters} title="Reset filters">
           Reset
