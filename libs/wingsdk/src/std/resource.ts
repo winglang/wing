@@ -242,8 +242,6 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public static _singleton(scope: Construct, id: string): Resource {
-    console.log(`creating singleton for ${id} in ${Node.of(scope).root.node.path}`)
-    //const root: any = scope.node.root;
     const root: any = Node.of(scope).root;
     let t: any = this;
     if (root.resourceSingletons === undefined) {
@@ -251,16 +249,10 @@ export abstract class Resource extends Construct implements IResource {
     }
     const instance = root.resourceSingletons[t];
     if (instance) {
-      console.log(`reusing...`);
       return instance;
     }
-    console.log(`creating...`);
     root.resourceSingletons[t] = new t(root, id);
     return root.resourceSingletons[t];
-    // if (!this._singletonInstance) {
-    //   this._singletonInstance = new t(scope.node.root, id);
-    // }
-    // return this._singletonInstance;
   }
 }
 
