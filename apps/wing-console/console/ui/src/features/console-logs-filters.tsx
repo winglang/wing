@@ -241,7 +241,7 @@ export const ConsoleLogsFilters = memo(
               </div>
             ) : (
               <div className="flex gap-1">
-                <span>All logs entries are hidden by the current filters</span>
+                <span>All logs entries are hidden by the current filters.</span>
                 <span className="italic opacity-80">
                   ({hiddenLogs} hidden entries)
                 </span>
