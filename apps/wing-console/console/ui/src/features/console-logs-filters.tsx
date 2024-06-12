@@ -106,8 +106,10 @@ export const ConsoleLogsFilters = memo(
       const Icon = getResourceIconComponent(type);
       return (
         <span className="flex items-center truncate">
-          <Icon className="size-4 shrink-0" />
-          <span className="truncate">{getResourceIdLabel(type)}</span>
+          <span className="flex items-center gap-1 truncate">
+            <Icon className="size-4 shrink-0" />
+            <span className="truncate">{getResourceIdLabel(type)}</span>
+          </span>
           <span>
             {selected.length > 1 && (
               <span>, and {selected.length - 1} more</span>
@@ -126,8 +128,10 @@ export const ConsoleLogsFilters = memo(
       const Icon = getResourceIconComponent(selected[0]);
       return (
         <span className="flex items-center truncate">
-          <Icon className="size-4 shrink-0" />
-          <span className="truncate">{getResourceTypeLabel(type)}</span>
+          <span className="flex items-center gap-1 truncate">
+            <Icon className="size-4 shrink-0" />
+            <span className="truncate">{getResourceTypeLabel(type)}</span>
+          </span>
           <span>
             {selected.length > 1 && (
               <span>, and {selected.length - 1} more</span>
