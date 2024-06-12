@@ -233,20 +233,20 @@ export const ConsoleLogsFilters = memo(
               theme.bg4,
             )}
           >
-            {showIncompatibleResourceTypeWarning ? (
-              <div className="flex gap-1">
-                <ExclamationTriangleIcon className="size-4" />
-                The selected resource Ids and resource type filters are
-                incompatible.
-              </div>
-            ) : (
-              <div className="flex gap-1">
-                <span>All logs entries are hidden by the current filters.</span>
-                <span className="italic opacity-80">
-                  ({hiddenLogs} hidden entries)
+            <div className="flex gap-1">
+              {showIncompatibleResourceTypeWarning ? (
+                <span className="flex gap-1">
+                  <ExclamationTriangleIcon className="size-4" />
+                  The selected resource Ids and resource type filters are
+                  incompatible.
                 </span>
-              </div>
-            )}
+              ) : (
+                <span>All logs entries are hidden by the current filters.</span>
+              )}
+              <span className="italic opacity-80">
+                ({hiddenLogs} hidden entries)
+              </span>
+            </div>
 
             <button
               onClick={onResetFilters}
