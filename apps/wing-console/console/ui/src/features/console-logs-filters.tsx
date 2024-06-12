@@ -101,17 +101,16 @@ export const ConsoleLogsFilters = memo(
       if (!selected || selected.length === 0) {
         return <span className="truncate">All resource Ids</span>;
       }
+
+      const type = selected[0] as string;
+      const Icon = getResourceIconComponent(type);
       return (
-        <span className="flex gap-1 truncate">
-          {selected.map((type) => {
-            const Icon = getResourceIconComponent(type);
-            return (
-              <span key={type} className="flex items-center gap-1 truncate">
-                <Icon className="size-4 shrink-0" />
-                <span className="truncate">{getResourceIdLabel(type)}</span>
-              </span>
-            );
-          })}
+        <span className="flex items-center gap-1 truncate">
+          <Icon className="size-4 shrink-0" />
+          <span className="truncate">{getResourceIdLabel(type)}</span>
+          <span className="truncate">
+            {selected.length > 1 && <span>and {selected.length - 1} more</span>}
+          </span>
         </span>
       );
     }, []);
@@ -120,17 +119,16 @@ export const ConsoleLogsFilters = memo(
       if (!selected || selected.length === 0) {
         return <span className="truncate">All types</span>;
       }
+
+      const type = selected[0] as string;
+      const Icon = getResourceIconComponent(selected[0]);
       return (
-        <span className="flex gap-1 truncate">
-          {selected.map((type) => {
-            const Icon = getResourceIconComponent(type);
-            return (
-              <span key={type} className="flex items-center gap-1 truncate">
-                <Icon className="size-4 shrink-0" />
-                <span className="truncate">{getResourceTypeLabel(type)}</span>
-              </span>
-            );
-          })}
+        <span className="flex items-center gap-1 truncate">
+          <Icon className="size-4 shrink-0" />
+          <span className="truncate">{getResourceTypeLabel(type)}</span>
+          <span className="truncate">
+            {selected.length > 1 && <span>and {selected.length - 1} more</span>}
+          </span>
         </span>
       );
     }, []);

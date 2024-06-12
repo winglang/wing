@@ -86,7 +86,9 @@ export const Listbox = ({
             transparent={transparent}
             title={title}
           >
-            {renderLabel && renderLabel(selected)}
+            {renderLabel && (
+              <span className="block truncate">{renderLabel(selected)}</span>
+            )}
             {!renderLabel && label && (
               <span className="block truncate">{label}</span>
             )}
