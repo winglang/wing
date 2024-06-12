@@ -97,25 +97,6 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
     setSearchText("");
   }, []);
 
-  const showClearFiltersBanner = useMemo(() => {
-    if (!logs.data) {
-      return false;
-    }
-    return (
-      logs.data?.hiddenLogs > 0 &&
-      (selectedLogTypeFilters !== DEFAULT_LOG_LEVELS ||
-        selectedResourceIds.length > 0 ||
-        selectedResourceTypes.length > 0 ||
-        searchText.length > 0)
-    );
-  }, [
-    logs.data,
-    selectedLogTypeFilters,
-    selectedResourceIds,
-    selectedResourceTypes,
-    searchText,
-  ]);
-
   return (
     <div className="relative h-full flex flex-col gap-2">
       <ConsoleLogsFilters
@@ -130,13 +111,12 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         setSelectedResourceTypes={setSelectedResourceTypes}
         onResetFilters={resetFilters}
       />
-      {showClearFiltersBanner && (
-        <ConsoleLogsResetFiltersBanner
-          shownLogs={logs.data?.logs.length ?? 0}
-          hiddenLogs={logs.data?.hiddenLogs ?? 0}
-          onResetFilters={resetFilters}
-        />
-      )}
+
+      <ConsoleLogsResetFiltersBanner
+        shownLogs={logs.data?.logs.length ?? 0}
+        hiddenLogs={logs.data?.hiddenLogs ?? 0}
+        onResetFilters={resetFilters}
+      />
 
       <div className="relative h-full">
         <ScrollableArea

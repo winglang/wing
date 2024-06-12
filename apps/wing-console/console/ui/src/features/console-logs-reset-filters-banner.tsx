@@ -15,32 +15,32 @@ export const ConsoleLogsResetFiltersBanner = ({
   const { theme } = useTheme();
 
   return (
-    <div>
-      <div
-        className={classNames(
-          "flex justify-between px-2 py-1 text-xs",
-          theme.bg4,
-        )}
-      >
-        {shownLogs === 0 && (
+    <>
+      {shownLogs === 0 && (
+        <div
+          className={classNames(
+            "flex justify-between px-2 py-1 text-xs",
+            theme.bg4,
+          )}
+        >
           <div className={classNames(theme.text2)}>
             All logs entries are hidden by the current filters
           </div>
-        )}
 
-        <button
-          onClick={onResetFilters}
-          className={classNames(
-            "text-xs underline cursor-pointer rounded",
-            "px-1 outline-none transition-all",
-            theme.focusInput,
-            theme.text1,
-            theme.text1Hover,
-          )}
-        >
-          Reset filters
-        </button>
-      </div>
-    </div>
+          <button
+            onClick={onResetFilters}
+            className={classNames(
+              "text-xs underline cursor-pointer rounded",
+              "px-1 outline-none transition-all",
+              theme.focusInput,
+              theme.text1,
+              theme.text1Hover,
+            )}
+          >
+            Reset filters
+          </button>
+        </div>
+      )}
+    </>
   );
 };

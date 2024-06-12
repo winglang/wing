@@ -37,7 +37,7 @@ export interface ConsoleLogsFiltersProps {
   onResetFilters: () => void;
 }
 
-const getResourceIdLabel = (id: string) => id.replaceAll("root/Default/", "");
+const getResourceIdLabel = (id: string) => id;
 
 const getResourceTypeLabel = (type?: string) =>
   type?.replaceAll("@winglang/", "") ?? "";
@@ -119,12 +119,25 @@ export const ConsoleLogsFilters = memo(
       if (!resources) {
         return [];
       }
-      return resources.map((resource) => ({
+      let filteredResources = resources;
+
+      // filter resources by selected types
+      if (selectedResourceTypes.length > 0) {
+        filteredResources = resources.filter((resource) =>
+          selectedResourceTypes.includes(resource.type ?? ""),
+        );
+      }
+
+      return filteredResources.map((resource) => ({
         label: getResourceIdLabel(resource.id),
         value: resource.id,
         icon: getResourceIconComponent(resource.type),
       }));
-    }, [resources]);
+    }, [resources, selectedResourceTypes]);
+
+    useMemo(() => {
+      setSelectedResourceIds([]);
+    }, [selectedResourceTypes]);
 
     return (
       <div className="flex px-2 space-x-2 pt-1">
