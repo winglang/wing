@@ -1011,6 +1011,9 @@ importers:
 
   apps/wingcli-v2:
     dependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../../libs/wingsdk
       '@winglang/wingc':
         specifier: workspace:^
         version: link:../../libs/wingc
