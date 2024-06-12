@@ -46,7 +46,7 @@ exports[`default topic behavior 1`] = `
 
 exports[`topic with multiple subscribers 1`] = `
 "(await (async () => {
-  const $func = async (_, event) => console.log(\\"Got Event: \\", event)
+  const $func = async (_, event) => console.log("Got Event: ", event)
   const $ctx = {
   
   };
@@ -61,7 +61,7 @@ exports[`topic with multiple subscribers 1`] = `
 
 exports[`topic with multiple subscribers 2`] = `
 "(await (async () => {
-  const $func = async (_, event) => console.log(\\"Ohh yea!! \\", event)
+  const $func = async (_, event) => console.log("Ohh yea!! ", event)
   const $ctx = {
   
   };
@@ -334,7 +334,7 @@ exports[`topic with multiple subscribers 3`] = `
 
 exports[`topic with subscriber function 1`] = `
 "(await (async () => {
-  const $func = async (_, event) => console.log(\\"Received: \\", event)
+  const $func = async (_, event) => console.log("Received: ", event)
   const $ctx = {
   
   };
