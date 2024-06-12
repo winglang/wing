@@ -8,7 +8,6 @@ import classNames from "classnames";
 import { useState, useRef, useEffect, useCallback, memo, useMemo } from "react";
 
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
-import { ConsoleLogsResetFiltersBanner } from "../features/console-logs-reset-filters-banner.js";
 import { ConsoleLogs } from "../features/console-logs.js";
 import { trpc } from "../services/trpc.js";
 
@@ -110,12 +109,8 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         selectedResourceTypes={selectedResourceTypes}
         setSelectedResourceTypes={setSelectedResourceTypes}
         onResetFilters={resetFilters}
-      />
-
-      <ConsoleLogsResetFiltersBanner
         shownLogs={logs.data?.logs.length ?? 0}
         hiddenLogs={logs.data?.hiddenLogs ?? 0}
-        onResetFilters={resetFilters}
       />
 
       <div className="relative h-full">
