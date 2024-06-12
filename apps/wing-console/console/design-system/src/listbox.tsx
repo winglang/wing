@@ -122,16 +122,13 @@ export const Listbox = ({
                         "relative cursor-default select-none py-2 pl-10 pr-4",
                         theme.bgInputHover,
                       )}
-                      onClick={() => {
-                        console.log("defaultSelection", defaultSelection);
-                        onChange?.(defaultSelection);
-                      }}
+                      onClick={() => onChange?.(defaultSelection)}
                     >
                       <span className="block truncate font-normal">
                         {defaultLabel}
                       </span>
                       {defaultSelection.length === 0 &&
-                        selected.length === 0 && (
+                        selected?.length === 0 && (
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
                             <CheckIcon className="h-4 w-4" aria-hidden="true" />
                           </span>
