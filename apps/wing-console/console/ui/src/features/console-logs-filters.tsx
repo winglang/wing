@@ -105,11 +105,13 @@ export const ConsoleLogsFilters = memo(
       const type = selected[0] as string;
       const Icon = getResourceIconComponent(type);
       return (
-        <span className="flex items-center gap-1 truncate">
+        <span className="flex items-center truncate">
           <Icon className="size-4 shrink-0" />
           <span className="truncate">{getResourceIdLabel(type)}</span>
-          <span className="truncate">
-            {selected.length > 1 && <span>and {selected.length - 1} more</span>}
+          <span>
+            {selected.length > 1 && (
+              <span>, and {selected.length - 1} more</span>
+            )}
           </span>
         </span>
       );
@@ -123,11 +125,13 @@ export const ConsoleLogsFilters = memo(
       const type = selected[0] as string;
       const Icon = getResourceIconComponent(selected[0]);
       return (
-        <span className="flex items-center gap-1 truncate">
+        <span className="flex items-center truncate">
           <Icon className="size-4 shrink-0" />
           <span className="truncate">{getResourceTypeLabel(type)}</span>
-          <span className="truncate">
-            {selected.length > 1 && <span>and {selected.length - 1} more</span>}
+          <span>
+            {selected.length > 1 && (
+              <span>, and {selected.length - 1} more</span>
+            )}
           </span>
         </span>
       );
