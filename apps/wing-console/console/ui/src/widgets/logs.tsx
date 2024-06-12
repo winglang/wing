@@ -5,9 +5,10 @@ import {
 } from "@wingconsole/design-system";
 import type { LogEntry, LogLevel } from "@wingconsole/server";
 import classNames from "classnames";
-import { useState, useRef, useEffect, useCallback, memo } from "react";
+import { useState, useRef, useEffect, useCallback, memo, useMemo } from "react";
 
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
+import { ConsoleLogsResetFiltersBanner } from "../features/console-logs-reset-filters-banner.js";
 import { ConsoleLogs } from "../features/console-logs.js";
 import { trpc } from "../services/trpc.js";
 
@@ -89,6 +90,32 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
 
   const clearLogs = useCallback(() => setLogsTimeFilter(Date.now()), []);
 
+  const resetFilters = useCallback(() => {
+    setSelectedLogTypeFilters(DEFAULT_LOG_LEVELS);
+    setSelectedResourceIds([]);
+    setSelectedResourceTypes([]);
+    setSearchText("");
+  }, []);
+
+  const showClearFiltersBanner = useMemo(() => {
+    if (!logs.data) {
+      return false;
+    }
+    return (
+      logs.data?.hiddenLogs > 0 &&
+      (selectedLogTypeFilters !== DEFAULT_LOG_LEVELS ||
+        selectedResourceIds.length > 0 ||
+        selectedResourceTypes.length > 0 ||
+        searchText.length > 0)
+    );
+  }, [
+    logs.data,
+    selectedLogTypeFilters,
+    selectedResourceIds,
+    selectedResourceTypes,
+    searchText,
+  ]);
+
   return (
     <div className="relative h-full flex flex-col gap-2">
       <ConsoleLogsFilters
@@ -102,7 +129,16 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         resourceTypes={filters.data?.resourceTypes ?? []}
         selectedResourceTypes={selectedResourceTypes}
         setSelectedResourceTypes={setSelectedResourceTypes}
+        onResetFilters={resetFilters}
       />
+      {showClearFiltersBanner && (
+        <ConsoleLogsResetFiltersBanner
+          shownLogs={logs.data?.logs.length ?? 0}
+          hiddenLogs={logs.data?.hiddenLogs ?? 0}
+          onResetFilters={resetFilters}
+        />
+      )}
+
       <div className="relative h-full">
         <ScrollableArea
           ref={scrollableRef}
@@ -115,7 +151,10 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
           )}
           onScrolledToBottomChange={setScrolledToBottom}
         >
-          <ConsoleLogs logs={logs.data ?? []} onResourceClick={onLogClick} />
+          <ConsoleLogs
+            logs={logs.data?.logs ?? []}
+            onResourceClick={onLogClick}
+          />
         </ScrollableArea>
       </div>
     </div>

@@ -24,6 +24,7 @@ export interface ConsoleLogsFiltersProps {
   resourceTypes?: string[];
   selectedResourceTypes: string[];
   setSelectedResourceTypes: (types: string[]) => void;
+  onResetFilters: () => void;
 }
 
 const getResourceIdLabel = (id: string) => id.replaceAll("root/Default/", "");
@@ -43,6 +44,7 @@ export const ConsoleLogsFilters = memo(
     resourceTypes,
     selectedResourceTypes,
     setSelectedResourceTypes,
+    onResetFilters,
   }: ConsoleLogsFiltersProps) => {
     const [searchText, setSearchText] = useState("");
 
@@ -144,6 +146,10 @@ export const ConsoleLogsFilters = memo(
             defaultSelection={[]}
           />
         )}
+
+        <Button transparent onClick={onResetFilters} title="Reset filters">
+          Reset
+        </Button>
       </div>
     );
   },

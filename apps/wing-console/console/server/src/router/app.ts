@@ -88,7 +88,13 @@ export const createAppRouter = () => {
         }),
       )
       .query(async ({ ctx, input }) => {
-        return ctx.logger.messages.filter(
+        // filter by timestamp
+        const logs = ctx.logger.messages.filter(
+          (entry) =>
+            entry.timestamp && entry.timestamp >= input.filters.timestamp,
+        );
+
+        const filteredLogs = logs.filter(
           (entry) =>
             // filter by level
             input.filters.level[entry.level] &&
@@ -100,15 +106,16 @@ export const createAppRouter = () => {
             (input.filters.resourceTypes.length === 0 ||
               (entry.ctx?.sourceType &&
                 input.filters.resourceTypes.includes(entry.ctx.sourceType))) &&
-            // filter by timestamp
-            entry.timestamp &&
-            entry.timestamp >= input.filters.timestamp &&
             // filter by text
             (!input.filters.text ||
               `${entry.message}${entry.ctx?.sourcePath}`
                 .toLowerCase()
                 .includes(input.filters.text.toLowerCase())),
         );
+        return {
+          logs: filteredLogs,
+          hiddenLogs: logs.length - filteredLogs.length,
+        };
       }),
     "app.error": createProcedure.query(({ ctx }) => {
       return ctx.errorMessage();
