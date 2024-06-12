@@ -25,7 +25,7 @@ You can use the [`wing secrets`](https://www.winglang.io/docs/tools/cli#store-se
 
 ### Defining a secret
 
-```js
+```js example
 bring cloud;
 
 let secret = new cloud.Secret(
@@ -37,7 +37,7 @@ Before deploying your application, you will be expected to store the secret valu
 
 ### Retrieving secret values
 
-```js
+```js example
 bring cloud;
 
 let secret = new cloud.Secret(

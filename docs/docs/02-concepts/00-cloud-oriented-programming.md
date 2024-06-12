@@ -15,7 +15,7 @@ cloud without having to worry about the underlying infrastructure.
 It's best explained through an example:
 
 
-```js
+```js example
 bring cloud;
 
 let queue = new cloud.Queue(timeout: 2m);
