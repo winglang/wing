@@ -27,7 +27,7 @@
     "bump-pack": "workspace:^",
     "typescript": "^5.3.3",
     "tsup": "^8.0.2",
-    "vitest": "^1.6.0"
+    "vitest": "^0.34.6"
   },
   "scripts": {
     "compile": "tsup",

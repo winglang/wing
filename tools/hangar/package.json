@@ -3,11 +3,10 @@
   "version": "0.0.0",
   "description": "wing test suite",
   "scripts": {
-    "vitest": "vitest run",
     "test": "vitest run --update",
     "test:generate": "tsx src/generate_tests.ts",
     "test:watch": "vitest watch",
-    "bench": "vitest bench --run && tsx src/benchmarking/compare_script.ts"
+    "bench": "vitest bench --run"
   },
   "author": "Wing Cloud",
   "license": "Apache-2.0",
@@ -26,7 +25,7 @@
     "npm": "^9.8.1",
     "octokit": "^3.1.2",
     "tsx": "^4.7.0",
-    "vitest": "^1.6.0",
+    "vitest": "^0.34.6",
     "winglang": "workspace:^",
     "yaml": "^2.3.2"
   },

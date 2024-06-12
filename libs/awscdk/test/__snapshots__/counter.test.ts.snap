@@ -68,7 +68,7 @@ exports[`dec() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
-  my_counter: new (require("[REDACTED]/awscdk/src/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], 0)
+  my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -314,7 +314,7 @@ exports[`function with a counter binding 1`] = `
     console.log(val);
   }
   const $ctx = {
-  my_counter: new (require("[REDACTED]/awscdk/src/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], 0)
+  my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -499,7 +499,7 @@ exports[`inc() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
-  my_counter: new (require("[REDACTED]/awscdk/src/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], 0)
+  my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -684,7 +684,7 @@ exports[`peek() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
-  my_counter: new (require("[REDACTED]/awscdk/src/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], 0)
+  my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
@@ -869,7 +869,7 @@ exports[`set() policy statement 1`] = `
     console.log(val);
   }
   const $ctx = {
-  my_counter: new (require("[REDACTED]/awscdk/src/counter.inflight")).CounterClient(process.env["DYNAMODB_TABLE_NAME_c7ebcb7a"], 0)
+  my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
   };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
