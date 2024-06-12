@@ -94,7 +94,6 @@ export const ConsoleLogsFilters = memo(
           onClick={clearLogs}
           title="Clear logs"
         />
-
         <Input
           value={searchText}
           className="min-w-[14rem]"
@@ -103,7 +102,6 @@ export const ConsoleLogsFilters = memo(
           placeholder="Filter..."
           onChange={(event) => setSearchText(event.target.value)}
         />
-
         <Listbox
           label={logTypeLabel}
           items={logLevels.map((type) => ({
@@ -114,21 +112,7 @@ export const ConsoleLogsFilters = memo(
           onChange={setSelectedLogTypeFilters as any}
           defaultSelection={defaultLogTypeSelection}
         />
-        {resourceIds && (
-          <Listbox
-            className="max-w-[14rem]"
-            title={resourceIdsLabel}
-            label={resourceIdsLabel}
-            items={resourceIds.map((id) => ({
-              label: getResourceIdLabel(id),
-              value: id,
-            }))}
-            selected={selectedResourceIds}
-            onChange={setSelectedResourceIds}
-            defaultLabel="All resources"
-            defaultSelection={[]}
-          />
-        )}
+
         {resourceTypes && (
           <Listbox
             className="max-w-[14rem]"
@@ -141,6 +125,22 @@ export const ConsoleLogsFilters = memo(
             selected={selectedResourceTypes}
             onChange={setSelectedResourceTypes}
             defaultLabel="All types"
+            defaultSelection={[]}
+          />
+        )}
+
+        {resourceIds && (
+          <Listbox
+            className="max-w-[14rem]"
+            title={resourceIdsLabel}
+            label={resourceIdsLabel}
+            items={resourceIds.map((id) => ({
+              label: getResourceIdLabel(id),
+              value: id,
+            }))}
+            selected={selectedResourceIds}
+            onChange={setSelectedResourceIds}
+            defaultLabel="All resources"
             defaultSelection={[]}
           />
         )}

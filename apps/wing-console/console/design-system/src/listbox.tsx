@@ -108,7 +108,6 @@ export const Listbox = ({
               <HeadlessListbox.Options
                 className={classNames(
                   theme.bgInput,
-                  theme.textInput,
                   "z-10 m-1 max-h-60 w-full overflow-auto rounded-md",
                   "py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
                 )}
@@ -121,6 +120,7 @@ export const Listbox = ({
                       className={classNames(
                         "relative cursor-default select-none py-2 pl-10 pr-4",
                         theme.bgInputHover,
+                        theme.text1,
                       )}
                       onClick={() => onChange?.(defaultSelection)}
                     >
@@ -142,7 +142,7 @@ export const Listbox = ({
                       >
                         <div
                           className={classNames(
-                            theme.borderInput,
+                            theme.border4,
                             "w-full border-t",
                           )}
                         ></div>
@@ -163,11 +163,12 @@ export const Listbox = ({
                     value={item.value}
                   >
                     <span
-                      className={`block truncate ${
+                      className={classNames(
+                        "block truncate",
                         selected?.includes(item.value)
-                          ? "font-medium"
-                          : "font-normal"
-                      }`}
+                          ? theme.text1
+                          : "text-slate-850 dark:text-slate-300",
+                      )}
                     >
                       {item.label}
                     </span>
