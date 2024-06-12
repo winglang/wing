@@ -93,7 +93,9 @@ fn command_build(source_file: Utf8PathBuf, target: Option<Target>) -> Result<(),
 	tracing::info!("Using SDK at {}", sdk_root);
 
 	// Special pragma used by wingc to find the SDK types
-	std::env::set_var("WINGSDK_MANIFEST_ROOT", &sdk_root);
+	if !cfg!(test) {
+		std::env::set_var("WINGSDK_MANIFEST_ROOT", &sdk_root);
+	}
 
 	let result = compile(&project_dir, &source_file, None, &work_dir);
 
