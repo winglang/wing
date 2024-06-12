@@ -117,7 +117,7 @@ export const Listbox = ({
               <HeadlessListbox.Options
                 className={classNames(
                   theme.bgInput,
-                  "z-10 m-1 max-h-60 w-full overflow-auto rounded-md",
+                  "z-10 m-1 max-h-80 w-full overflow-auto rounded-md",
                   "py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
                 )}
               >

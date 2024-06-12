@@ -105,16 +105,12 @@ export const ConsoleLogsFilters = memo(
       const type = selected[0] as string;
       const Icon = getResourceIconComponent(type);
       return (
-        <span className="flex items-center truncate">
-          <span className="flex items-center gap-1 truncate">
-            <Icon className="size-4 shrink-0" />
-            <span className="truncate">{getResourceIdLabel(type)}</span>
-          </span>
-          <span>
-            {selected.length > 1 && (
-              <span>, and {selected.length - 1} more</span>
-            )}
-          </span>
+        <span className="flex items-center truncate gap-1">
+          <Icon className="size-4 shrink-0" />
+          <span className="truncate">{getResourceIdLabel(type)}</span>
+          {selected.length > 1 && (
+            <span className="opacity-80"> and {selected.length - 1} more</span>
+          )}
         </span>
       );
     }, []);
@@ -127,16 +123,12 @@ export const ConsoleLogsFilters = memo(
       const type = selected[0] as string;
       const Icon = getResourceIconComponent(selected[0]);
       return (
-        <span className="flex items-center truncate">
-          <span className="flex items-center gap-1 truncate">
-            <Icon className="size-4 shrink-0" />
-            <span className="truncate">{getResourceTypeLabel(type)}</span>
-          </span>
-          <span>
-            {selected.length > 1 && (
-              <span>, and {selected.length - 1} more</span>
-            )}
-          </span>
+        <span className="flex items-center truncate gap-1">
+          <Icon className="size-4 shrink-0" />
+          <span className="truncate">{getResourceTypeLabel(type)}</span>
+          {selected.length > 1 && (
+            <span className="opacity-80"> and {selected.length - 1} more</span>
+          )}
         </span>
       );
     }, []);
