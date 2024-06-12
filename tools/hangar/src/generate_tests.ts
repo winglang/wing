@@ -53,15 +53,16 @@ function generateTests(options: GenerateTestsOptions) {
       `Test file: ${filename}, metaComment: ${metaComment}, current platform: ${process.platform}, CI: ${process.env.CI}`
     );
 
+    let skipText = "";
     if (metaComment?.skip) {
-      continue;
+      skipText = ".skip";
     }
 
     if (
       metaComment?.skipPlatforms?.includes(process.platform) &&
       process.env.CI
     ) {
-      continue;
+      skipText = ".skip";
     }
 
     // ensure windows paths are escaped
@@ -75,16 +76,16 @@ function generateTests(options: GenerateTestsOptions) {
     .fill("../")
     .join("")}../../generated_test_targets";
   
-  test("wing compile -t tf-aws", async () => {
+  test${skipText}("wing compile -t tf-aws", async () => {
     await compileTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(
       metaComment?.env
     )}, ${includeJavaScriptInSnapshots});
   });
   
-  test("wing test -t sim", async () => {
+  test${skipText}("wing test -t sim", async () => {
     await testTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(
       metaComment?.env
-    )}, ${includeJavaScriptInSnapshots});
+    )});
   });`;
 
     mkdirSync(destination, { recursive: true });
