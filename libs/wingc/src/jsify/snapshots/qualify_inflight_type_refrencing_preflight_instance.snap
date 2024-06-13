@@ -158,8 +158,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[145]) { throw new Error("InflightC is already in type map"); }
-    $preflightTypesMap[145] = InflightC;
+    if ($preflightTypesMap[144]) { throw new Error("InflightC is already in type map"); }
+    $preflightTypesMap[144] = InflightC;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -187,11 +187,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[145]._singleton(this,"InflightC_singleton_145"), ["foo"]],
+            [$helpers.nodeof(this).root.$preflightTypesMap[144]._singleton(this,"InflightC_singleton_144"), ["foo"]],
             [InflightC, []],
           ],
           "$inflight_init": [
-            [$helpers.nodeof(this).root.$preflightTypesMap[145]._singleton(this,"InflightC_singleton_145"), []],
+            [$helpers.nodeof(this).root.$preflightTypesMap[144]._singleton(this,"InflightC_singleton_144"), []],
             [InflightC, []],
           ],
         });
