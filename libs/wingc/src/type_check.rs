@@ -423,32 +423,6 @@ pub trait ClassLike: Display {
 			None
 		}
 	}
-
-	// fn phase(&self) -> Phase {
-	// 	// A class is considered a "preflight class" if it has any preflight fields.
-	// 	// Having a preflight state means that different instances of the class
-	// 	// might access different preflight data. Such instances need to be lifted
-	// 	// into inflight individually. Non preflight class instances don't need to be
-	// 	// lifted and can therefore be instantiated inflight.
-	// 	if self
-	// 		.fields(true)
-	// 		.any(|(_, vi)| vi.kind == VariableKind::InstanceMember && vi.phase == Phase::Preflight)
-	// 	{
-	// 		return Phase::Preflight;
-	// 	}
-
-	// 	// If all memebers are phase independent, then this class is phase independent
-	// 	if self
-	// 		.get_env()
-	// 		.iter(true)
-	// 		.all(|(_, v, _)| v.as_variable().unwrap().phase == Phase::Independent)
-	// 	{
-	// 		return Phase::Independent;
-	// 	}
-
-	// 	// Otherwise, this is an inflight class
-	// 	Phase::Inflight
-	// }
 }
 
 impl ClassLike for Interface {
