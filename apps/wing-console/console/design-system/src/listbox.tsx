@@ -200,7 +200,10 @@ export const Listbox = ({
                           )}
                       </li>
                       <div
-                        className={classNames(theme.border4, "w-full border-t")}
+                        className={classNames(
+                          "border-slate-300 dark:border-slate-700",
+                          "w-full border-t",
+                        )}
                       />
                     </>
                   )}
