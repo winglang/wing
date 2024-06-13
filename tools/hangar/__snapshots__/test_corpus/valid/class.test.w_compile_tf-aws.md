@@ -529,10 +529,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class C1 extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -1154,7 +1157,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $A_12 = new A(this, "$A_12");
+    if ($preflightTypesMap[19]) { throw new Error("A is already in type map"); }
+    $preflightTypesMap[19] = A;
     class B extends A {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -1184,12 +1188,9 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-<<<<<<< HEAD
-    const $B_13 = new B(this, "$B_13");
-    class $Closure4 extends $stdlib.std.AutoIdResource {
-=======
+    if ($preflightTypesMap[20]) { throw new Error("B is already in type map"); }
+    $preflightTypesMap[20] = B;
     class $Closure5 extends $stdlib.std.AutoIdResource {
->>>>>>> main
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -1216,11 +1217,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$B_13, ["sound"]],
+            [$helpers.nodeof(this).root.$preflightTypesMap[20]._singleton(this,"B_singleton_20"), ["sound"]],
             [B, []],
           ],
           "$inflight_init": [
-            [$B_13, []],
+            [$helpers.nodeof(this).root.$preflightTypesMap[20]._singleton(this,"B_singleton_20"), []],
             [B, []],
           ],
         });

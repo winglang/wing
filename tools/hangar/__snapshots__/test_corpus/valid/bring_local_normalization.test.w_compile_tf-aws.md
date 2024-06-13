@@ -68,6 +68,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 class Bar extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -102,7 +103,7 @@ class Bar extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { Bar };
+module.exports = { $preflightTypesMap, Bar };
 //# sourceMappingURL=preflight.bar-1.cjs.map
 ```
 
@@ -113,6 +114,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 class Baz extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -144,7 +146,7 @@ class Baz extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { Baz };
+module.exports = { $preflightTypesMap, Baz };
 //# sourceMappingURL=preflight.baz-2.cjs.map
 ```
 
@@ -158,12 +160,18 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const foo = require("./preflight.foo-3.cjs");
-const bar = require("./preflight.bar-1.cjs");
-const baz = require("./preflight.baz-2.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const foo = require("./preflight.foo-3.cjs");
+    Object.assign($preflightTypesMap, foo.$preflightTypesMap);
+    const bar = require("./preflight.bar-1.cjs");
+    Object.assign($preflightTypesMap, bar.$preflightTypesMap);
+    const baz = require("./preflight.baz-2.cjs");
+    Object.assign($preflightTypesMap, baz.$preflightTypesMap);
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     $helpers.assert($helpers.eq((foo.Foo.foo(this)), "foo"), "foo.Foo.foo() == \"foo\"");
     $helpers.assert($helpers.eq((foo.Foo.bar(this)), "bar"), "foo.Foo.bar() == \"bar\"");
     $helpers.assert($helpers.eq((foo.Foo.baz(this)), "baz"), "foo.Foo.baz() == \"baz\"");
@@ -184,8 +192,11 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 const bar = require("./preflight.bar-1.cjs");
+Object.assign($preflightTypesMap, bar.$preflightTypesMap);
 const baz = require("./preflight.baz-2.cjs");
+Object.assign($preflightTypesMap, baz.$preflightTypesMap);
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -223,7 +234,7 @@ class Foo extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { Foo };
+module.exports = { $preflightTypesMap, Foo };
 //# sourceMappingURL=preflight.foo-3.cjs.map
 ```
 

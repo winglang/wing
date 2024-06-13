@@ -59,7 +59,9 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 const file3 = require("./preflight.empty-1.cjs");
+Object.assign($preflightTypesMap, file3.$preflightTypesMap);
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
 const Color =
@@ -169,7 +171,7 @@ class Store extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { Util, Store, Color };
+module.exports = { $preflightTypesMap, Util, Store, Color };
 //# sourceMappingURL=preflight.cjs.map
 ```
 
@@ -180,7 +182,8 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-module.exports = {  };
+let $preflightTypesMap = {};
+module.exports = { $preflightTypesMap,  };
 //# sourceMappingURL=preflight.empty-1.cjs.map
 ```
 

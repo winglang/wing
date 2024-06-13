@@ -29,11 +29,14 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const stdFs = $stdlib.fs;
-const stdFs2 = $stdlib.fs;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const stdFs = $stdlib.fs;
+    const stdFs2 = $stdlib.fs;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     $helpers.assert($helpers.eq((stdFs.Util.dirname("/")), "/"), "stdFs.dirname(\"/\") == \"/\"");
     $helpers.assert($helpers.eq((stdFs2.Util.dirname("/")), "/"), "stdFs2.dirname(\"/\") == \"/\"");
   }

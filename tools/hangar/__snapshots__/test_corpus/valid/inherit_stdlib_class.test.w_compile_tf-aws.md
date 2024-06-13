@@ -290,11 +290,14 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const http = $stdlib.http;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class AnApi extends (this?.node?.root?.typeForFqn("@winglang/sdk.cloud.Api") ?? cloud.Api) {
       constructor($scope, $id, ) {
         super($scope, $id);

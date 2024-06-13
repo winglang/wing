@@ -193,10 +193,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const jsii_fixture = require("jsii-fixture");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const jsii_fixture = require("jsii-fixture");
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -232,7 +235,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $Foo_0 = new Foo(this, "$Foo_0");
+    if ($preflightTypesMap[0]) { throw new Error("Foo is already in type map"); }
+    $preflightTypesMap[0] = Foo;
     class FooChild extends Foo {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -265,7 +269,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $FooChild_1 = new FooChild(this, "$FooChild_1");
+    if ($preflightTypesMap[1]) { throw new Error("FooChild is already in type map"); }
+    $preflightTypesMap[1] = FooChild;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -293,11 +298,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$Foo_0, ["field1", "field2"]],
+            [$helpers.nodeof(this).root.$preflightTypesMap[0]._singleton(this,"Foo_singleton_0"), [].concat(["field1"], ["field2"])],
             [Foo, []],
           ],
           "$inflight_init": [
-            [$Foo_0, []],
+            [$helpers.nodeof(this).root.$preflightTypesMap[0]._singleton(this,"Foo_singleton_0"), []],
             [Foo, []],
           ],
         });
@@ -330,11 +335,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$FooChild_1, ["field1", "field2", "field3"]],
+            [$helpers.nodeof(this).root.$preflightTypesMap[1]._singleton(this,"FooChild_singleton_1"), [].concat(["field1"], ["field2"], ["field3"])],
             [FooChild, []],
           ],
           "$inflight_init": [
-            [$FooChild_1, []],
+            [$helpers.nodeof(this).root.$preflightTypesMap[1]._singleton(this,"FooChild_singleton_1"), []],
             [FooChild, []],
           ],
         });
