@@ -98,7 +98,7 @@ export const StatusBar = ({
                 "text-base font-semibold leading-6",
               )}
             >
-              Restart Application
+              Reset Application
             </h3>
             <p className={classNames(theme.text2, "text-sm text-center")}>
               Are you sure you want to reset all state and restart the
@@ -107,7 +107,7 @@ export const StatusBar = ({
             <div className="flex justify-around gap-2">
               <Button onClick={() => setShowRestartModal(false)}>Cancel</Button>{" "}
               <Button onClick={restart} dataTestid="restart-simulator-button">
-                Restart
+                Reset
               </Button>
             </div>
           </div>
