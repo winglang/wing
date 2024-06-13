@@ -16,7 +16,7 @@ import debounce from "lodash.debounce";
 import uniqby from "lodash.uniqby";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
-const logLevels = ["verbose", "info", "warn", "error"] as const;
+export const LOG_LEVELS: LogLevel[] = ["verbose", "info", "warn", "error"];
 
 const logLevelNames = {
   verbose: "Verbose",
@@ -41,6 +41,7 @@ export interface ConsoleLogsFiltersProps {
   selectedResourceTypes: string[];
   setSelectedResourceTypes: (types: string[]) => void;
   onResetFilters: () => void;
+  onClearFilters: () => void;
   shownLogs: number;
   hiddenLogs: number;
 }
@@ -62,6 +63,7 @@ export const ConsoleLogsFilters = memo(
     selectedResourceTypes,
     setSelectedResourceTypes,
     onResetFilters,
+    onClearFilters,
     shownLogs,
     hiddenLogs,
   }: ConsoleLogsFiltersProps) => {
@@ -207,7 +209,7 @@ export const ConsoleLogsFilters = memo(
           />
           <Listbox
             label={logTypeLabel}
-            items={logLevels.map((type) => ({
+            items={LOG_LEVELS.map((type) => ({
               value: type,
               label: logLevelNames[type],
             }))}
@@ -236,42 +238,44 @@ export const ConsoleLogsFilters = memo(
             defaultSelection={[]}
           />
 
-          <div className="flex grow justify-end">
-            <Button
-              onClick={onResetFilters}
-              title="Reset filters"
-              className="truncate"
-            >
-              Reset filters
-            </Button>
-          </div>
+          <Button
+            onClick={onResetFilters}
+            title="Reset filters"
+            className="truncate"
+          >
+            Reset filters
+          </Button>
         </div>
 
         {(showIncompatibleResourceTypeWarning || showAllLogsHiddenWarning) && (
           <div
             className={classNames(
-              "flex px-2 py-1 text-xs gap-2 justify-between",
+              "flex px-2 py-1 text-xs gap-2",
               "text-slate-600 dark:text-slate-300 font-light",
               theme.bg4,
             )}
           >
             <div className="flex gap-1">
-              {showIncompatibleResourceTypeWarning ? (
+              {showIncompatibleResourceTypeWarning && (
                 <span className="flex gap-1">
                   <ExclamationTriangleIcon className="size-4" />
                   The selected resource Ids and resource type filters are
                   incompatible.
                 </span>
-              ) : (
-                <span>All logs entries are hidden by the current filters.</span>
               )}
+              {!showIncompatibleResourceTypeWarning &&
+                showAllLogsHiddenWarning && (
+                  <span>
+                    All logs entries are hidden by the current filters.
+                  </span>
+                )}
               <span className="italic opacity-80">
                 ({hiddenLogs} hidden entries)
               </span>
             </div>
 
             <button
-              onClick={onResetFilters}
+              onClick={onClearFilters}
               className={classNames(
                 "text-xs underline cursor-pointer rounded",
                 "px-1 outline-none transition-all",
@@ -280,7 +284,7 @@ export const ConsoleLogsFilters = memo(
                 theme.text1Hover,
               )}
             >
-              Reset filters
+              Clear filters
             </button>
           </div>
         )}

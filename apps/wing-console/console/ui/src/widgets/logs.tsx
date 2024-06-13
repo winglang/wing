@@ -7,7 +7,10 @@ import type { LogEntry, LogLevel } from "@wingconsole/server";
 import classNames from "classnames";
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 
-import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
+import {
+  ConsoleLogsFilters,
+  LOG_LEVELS,
+} from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
 import { trpc } from "../services/trpc.js";
 
@@ -96,6 +99,13 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
     setSearchText("");
   }, []);
 
+  const clearFilters = useCallback(() => {
+    setSelectedLogTypeFilters(LOG_LEVELS);
+    setSelectedResourceIds([]);
+    setSelectedResourceTypes([]);
+    setSearchText("");
+  }, []);
+
   return (
     <div className="relative h-full flex flex-col gap-2">
       <ConsoleLogsFilters
@@ -109,6 +119,7 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         selectedResourceTypes={selectedResourceTypes}
         setSelectedResourceTypes={setSelectedResourceTypes}
         onResetFilters={resetFilters}
+        onClearFilters={clearFilters}
         shownLogs={logs.data?.logs.length ?? 0}
         hiddenLogs={logs.data?.hiddenLogs ?? 0}
       />
