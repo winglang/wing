@@ -79,6 +79,10 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
     dockerRun.push("--rm");
     dockerRun.push("--name", this.containerName);
 
+    if (this.props.network) {
+      dockerRun.push(`--network=${this.props.network}`);
+    }
+
     if (this.props.containerPort) {
       dockerRun.push("-p", this.props.containerPort.toString());
     }
@@ -105,6 +109,11 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       } else {
         dockerRun.push(volume);
       }
+    }
+
+    if (this.props.entrypoint) {
+      dockerRun.push("--entrypoint");
+      dockerRun.push(this.props.entrypoint);
     }
 
     dockerRun.push(this.imageTag);
@@ -143,6 +152,15 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
 
       // if we are waiting for a port, check if the container is listening to it
       if (this.props.containerPort) {
+        // when using the host network, the host port is the same as the container port
+        if (this.props.network === "host") {
+          hostPort = this.props.containerPort;
+          return (
+            container?.[0]?.Config?.ExposedPorts?.[`${hostPort}/tcp`] !==
+            undefined
+          );
+        }
+
         hostPort =
           container?.[0]?.NetworkSettings?.Ports?.[
             `${this.props.containerPort}/tcp`
