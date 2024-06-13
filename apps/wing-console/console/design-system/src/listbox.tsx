@@ -184,7 +184,9 @@ export const Listbox = ({
                         )}
                         onClick={() => onChange?.(defaultSelection ?? [])}
                       >
-                        <span className="block truncate font-normal">
+                        <span
+                          className={classNames("block truncate font-normal")}
+                        >
                           {defaultLabel}
                         </span>
                         {defaultSelection?.length === 0 &&
@@ -197,6 +199,9 @@ export const Listbox = ({
                             </span>
                           )}
                       </li>
+                      <div
+                        className={classNames(theme.border4, "w-full border-t")}
+                      />
                     </>
                   )}
 
