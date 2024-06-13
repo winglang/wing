@@ -201,7 +201,7 @@ export const Listbox = ({
                       </li>
                       <div
                         className={classNames(
-                          "border-slate-300 dark:border-slate-700",
+                          "border-slate-100 dark:border-slate-700",
                           "w-full border-t",
                         )}
                       />
