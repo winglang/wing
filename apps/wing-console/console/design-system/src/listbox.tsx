@@ -233,7 +233,11 @@ export const Listbox = ({
                             : "text-slate-850 dark:text-slate-300",
                         )}
                       >
-                        {item.icon && <item.icon className="size-4" />}
+                        {item.icon && (
+                          <item.icon
+                            className={classNames("size-4", theme.text2)}
+                          />
+                        )}
                         {item.label}
                       </span>
                       {selected?.includes(item.value) && (

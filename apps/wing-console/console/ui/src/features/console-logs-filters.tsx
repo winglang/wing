@@ -119,7 +119,7 @@ export const ConsoleLogsFilters = memo(
       const Icon = getResourceIconComponent(type);
       return (
         <span className="flex items-center truncate gap-1">
-          <Icon className="size-4 shrink-0" />
+          <Icon className={classNames("size-4 shrink-0", theme.text2)} />
           <span className="truncate">{getResourceIdLabel(type)}</span>
           {selected.length > 1 && (
             <span className="opacity-80"> and {selected.length - 1} more</span>
