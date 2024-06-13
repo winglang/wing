@@ -77,24 +77,26 @@ export const ConsoleLogsFilters = memo(
       debouncedOnSearch(searchText);
     }, [debouncedOnSearch, searchText]);
 
+    const [defaultLogTypes] = useState(selectedLogTypeFilters);
     const resetFiltersDisabled = useMemo(() => {
       return (
-        selectedLogTypeFilters.length === 3 &&
-        selectedLogTypeFilters.includes("verbose") === false &&
+        selectedLogTypeFilters === defaultLogTypes &&
         selectedResourceIds.length === 0 &&
         selectedResourceTypes.length === 0
       );
-    }, [selectedLogTypeFilters, selectedResourceIds, selectedResourceTypes]);
+    }, [
+      defaultLogTypes,
+      selectedLogTypeFilters,
+      selectedResourceIds,
+      selectedResourceTypes,
+    ]);
 
     const [defaultLogTypeSelection] = useState(selectedLogTypeFilters);
 
     const logTypeLabel = useMemo(() => {
       if (selectedLogTypeFilters.length === 4) {
         return "All levels";
-      } else if (
-        selectedLogTypeFilters.length === 3 &&
-        selectedLogTypeFilters.includes("verbose") === false
-      ) {
+      } else if (selectedLogTypeFilters === defaultLogTypes) {
         return "Default levels";
       } else if (selectedLogTypeFilters.length === 0) {
         return "Hide all";
@@ -106,7 +108,7 @@ export const ConsoleLogsFilters = memo(
       } else {
         return "Custom levels";
       }
-    }, [selectedLogTypeFilters]);
+    }, [selectedLogTypeFilters, defaultLogTypes]);
 
     const renderResourceIdsLabel = useCallback((selected?: string[]) => {
       if (!selected || selected.length === 0) {

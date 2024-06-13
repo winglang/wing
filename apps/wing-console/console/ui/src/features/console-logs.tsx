@@ -202,6 +202,7 @@ export interface ConsoleLogsProps {
   onRowClick?: (log: LogEntry) => void;
   onResourceClick?: (log: LogEntry) => void;
   showIcons?: boolean;
+  hiddenLogs: number;
 }
 
 export const ConsoleLogs = memo(
@@ -210,6 +211,7 @@ export const ConsoleLogs = memo(
     onRowClick,
     onResourceClick,
     showIcons = true,
+    hiddenLogs,
   }: ConsoleLogsProps) => {
     const { theme } = useTheme();
 
@@ -227,7 +229,7 @@ export const ConsoleLogs = memo(
             showIcons={showIcons}
           />
         ))}
-        {logs.length === 0 && (
+        {logs.length === 0 && hiddenLogs == 0 && (
           <div className={classNames(theme.text1, "text-2xs px-2 select-none")}>
             No logs
           </div>

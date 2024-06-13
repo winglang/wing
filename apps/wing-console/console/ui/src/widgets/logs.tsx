@@ -138,6 +138,7 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         >
           <ConsoleLogs
             logs={logs.data?.logs ?? []}
+            hiddenLogs={logs.data?.hiddenLogs ?? 0}
             onResourceClick={onLogClick}
           />
         </ScrollableArea>
