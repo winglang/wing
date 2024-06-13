@@ -119,7 +119,7 @@ class MyResource {
   }
   pub inflight methodOptNum1(arg: num?): num? {
     // TODO: need a way to convert from Json to num?
-    return unsafeCast(this.backend.call("methodOptNum1", Json  [arg ?? 0]));
+    return unsafeCast(this.backend.call("methodOptNum1", Json [arg ?? 0]));
   }
   pub inflight methodOptNum2(arg: num?): num? {
     // TODO: need a way to convert from Json to num?
