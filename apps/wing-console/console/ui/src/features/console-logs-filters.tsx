@@ -237,6 +237,7 @@ export const ConsoleLogsFilters = memo(
             onChange={setSelectedResourceTypes}
             defaultLabel="All types"
             defaultSelection={[]}
+            showSearch
           />
 
           <Listbox
@@ -247,6 +248,7 @@ export const ConsoleLogsFilters = memo(
             onChange={setSelectedResourceIds}
             defaultLabel="All resource Ids"
             defaultSelection={[]}
+            showSearch
           />
 
           <button

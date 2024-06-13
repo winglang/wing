@@ -1,8 +1,12 @@
 import { Listbox as HeadlessListbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import {
+  CheckIcon,
+  ChevronUpDownIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import type { ForwardRefExoticComponent, SVGProps } from "react";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 
@@ -28,6 +32,7 @@ export interface ListboxProps {
   disabled?: boolean;
   title?: string;
   defaultLabel?: string;
+  showSearch?: boolean;
 }
 
 export const Listbox = ({
@@ -43,6 +48,7 @@ export const Listbox = ({
   disabled = false,
   title = "",
   defaultLabel = "Default",
+  showSearch = false,
 }: ListboxProps) => {
   const { theme } = useTheme();
 
@@ -64,6 +70,24 @@ export const Listbox = ({
     document.body.append(root);
     return () => root.remove();
   }, [root]);
+
+  const [search, setSearch] = useState("");
+
+  const filteredItems = useMemo(() => {
+    if (search === "") {
+      return items;
+    }
+    return items.filter((item) =>
+      item.label.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+    );
+  }, [search, items]);
+
+  const showDefaultOption = useMemo(() => {
+    return (
+      defaultSelection &&
+      defaultLabel.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+    );
+  }, [defaultSelection, defaultLabel, search]);
 
   return (
     <HeadlessListbox
@@ -117,78 +141,109 @@ export const Listbox = ({
               <HeadlessListbox.Options
                 className={classNames(
                   theme.bgInput,
-                  "z-10 m-1 max-h-80 w-full overflow-auto rounded-md",
+                  "z-10 m-1 w-full rounded-md",
                   "py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
                 )}
               >
-                {defaultSelection && (
-                  <>
-                    {/* TODO: Fix a11y */}
-                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
-                    <li
-                      className={classNames(
-                        "relative cursor-default select-none py-2 pl-10 pr-4",
-                        theme.bgInputHover,
-                        theme.text1,
-                      )}
-                      onClick={() => onChange?.(defaultSelection)}
-                    >
-                      <span className="block truncate font-normal">
-                        {defaultLabel}
-                      </span>
-                      {defaultSelection.length === 0 &&
-                        selected?.length === 0 && (
-                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
-                            <CheckIcon className="h-4 w-4" aria-hidden="true" />
-                          </span>
-                        )}
-                    </li>
-
-                    <div className="relative">
-                      <div
-                        className="absolute inset-0 flex items-center"
+                {showSearch && (
+                  <div className="px-1 relative pb-1">
+                    <div className="pointer-events-none absolute inset-y-0 left-1 flex items-center pl-2">
+                      <MagnifyingGlassIcon
+                        className={classNames("size-4", theme.text2)}
                         aria-hidden="true"
-                      >
-                        <div
-                          className={classNames(
-                            theme.border4,
-                            "w-full border-t",
-                          )}
-                        ></div>
-                      </div>
+                      />
                     </div>
-                  </>
+                    <input
+                      type="text"
+                      className={classNames(
+                        theme.borderInput,
+                        "pl-8",
+                        "inline-flex gap-2 items-center px-2.5 py-1.5 border text-xs rounded",
+                        "outline-none w-full shadow-inner",
+                        theme.bg3,
+                        theme.textInput,
+                        theme.focusInput,
+                      )}
+                      placeholder="Search..."
+                      value={search}
+                      onChange={(event) => setSearch(event.target.value)}
+                    />
+                  </div>
                 )}
 
-                {items.map((item, index) => (
-                  <HeadlessListbox.Option
-                    key={index}
-                    className={({ active }) =>
-                      classNames(
-                        "relative cursor-default select-none py-2 pl-10 pr-4",
-                        active && theme.bgInputHover,
-                      )
-                    }
-                    value={item.value}
-                  >
-                    <span
-                      className={classNames(
-                        "truncate flex items-center gap-2",
-                        selected?.includes(item.value)
-                          ? theme.text1
-                          : "text-slate-850 dark:text-slate-300",
-                      )}
-                    >
-                      {item.icon && <item.icon className="size-4" />}
-                      {item.label}
-                    </span>
-                    {selected?.includes(item.value) && (
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
-                        <CheckIcon className="size-4" aria-hidden="true" />
-                      </span>
+                <div className="overflow-auto max-h-80">
+                  {showDefaultOption && (
+                    <>
+                      {/* TODO: Fix a11y */}
+                      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
+                      <li
+                        className={classNames(
+                          "relative cursor-default select-none py-2 pl-10 pr-4",
+                          theme.bgInputHover,
+                          theme.text1,
+                        )}
+                        onClick={() => onChange?.(defaultSelection ?? [])}
+                      >
+                        <span className="block truncate font-normal">
+                          {defaultLabel}
+                        </span>
+                        {defaultSelection?.length === 0 &&
+                          selected?.length === 0 && (
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
+                              <CheckIcon
+                                className="h-4 w-4"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          )}
+                      </li>
+                    </>
+                  )}
+
+                  {filteredItems.length === 0 &&
+                    search !== "" &&
+                    !showDefaultOption && (
+                      <div
+                        className={classNames(
+                          theme.text2,
+                          "py-2",
+                          "w-full text-center",
+                        )}
+                      >
+                        No items found
+                      </div>
                     )}
-                  </HeadlessListbox.Option>
-                ))}
+
+                  {filteredItems.map((item, index) => (
+                    <HeadlessListbox.Option
+                      key={index}
+                      className={({ active }) =>
+                        classNames(
+                          "relative cursor-default select-none py-2 pl-10 pr-4",
+                          active && theme.bgInputHover,
+                        )
+                      }
+                      value={item.value}
+                    >
+                      <span
+                        className={classNames(
+                          "truncate flex items-center gap-2",
+                          selected?.includes(item.value)
+                            ? theme.text1
+                            : "text-slate-850 dark:text-slate-300",
+                        )}
+                      >
+                        {item.icon && <item.icon className="size-4" />}
+                        {item.label}
+                      </span>
+                      {selected?.includes(item.value) && (
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
+                          <CheckIcon className="size-4" aria-hidden="true" />
+                        </span>
+                      )}
+                    </HeadlessListbox.Option>
+                  ))}
+                </div>
               </HeadlessListbox.Options>
             </div>
           </Transition>,
