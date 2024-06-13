@@ -18,8 +18,11 @@ if util.env("WING_TARGET") == "sim" {
     args: ["-text=bang"],
     network: "host",
   ) as "network-host";
+
+  let localUrl = "http://localhost:{networkHost.hostPort!}";
   
   test "container with host network" {
     expect.equal(networkHost.hostPort, "5678");
+    expect.equal(localUrl, "http://localhost:5678");
   }
 }
