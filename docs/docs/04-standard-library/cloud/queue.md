@@ -549,14 +549,14 @@ Inflight client for `IQueueSetConsumerHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle"></a>
 
 ```wing
-inflight handle(message: Json): void
+inflight handle(message: str): void
 ```
 
 Function that will be called when a message is received from the queue.
 
 ###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle.parameter.message"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* str
 
 ---
 
