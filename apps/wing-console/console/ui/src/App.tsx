@@ -6,7 +6,8 @@ import {
 } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
 
-import { LayoutProvider, LayoutType } from "./layout/layout-provider.js";
+import type { LayoutType } from "./layout/layout-provider.js";
+import { LayoutProvider } from "./layout/layout-provider.js";
 import { trpc } from "./services/trpc.js";
 import { TestsContextProvider } from "./tests-context.js";
 
@@ -41,13 +42,9 @@ export const App = ({ layout, theme, color, onTrace }: AppProps) => {
   const layoutConfig = trpc["app.layoutConfig"].useQuery();
   const appDetails = trpc["app.details"].useQuery();
   const appState = trpc["app.state"].useQuery();
-  const themeMode = trpc["config.getThemeMode"].useQuery();
 
   return (
-    <ThemeProvider
-      mode={theme ?? themeMode?.data?.mode ?? "auto"}
-      theme={buildTheme(color)}
-    >
+    <ThemeProvider theme={buildTheme(color)}>
       <NotificationsProvider>
         <TestsContextProvider>
           <LayoutProvider

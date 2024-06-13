@@ -1,13 +1,16 @@
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from "fs";
-import { sdkTestsDir, validTestDir } from "./paths";
+import { appWithParamsDir, sdkTestsDir, validTestDir, docsRoot, docsExamplesDir, validDocExamplesDir } from "./paths";
 import { join, extname } from "path";
 import { parseMetaCommentFromPath } from "./meta_comment";
+import { searchDirectoryForWingExamples } from "./test_examples";
 
 const generatedTestDir = join(__dirname, "test_corpus", "valid");
 const generatedSDKTestDir = join(__dirname, "test_corpus", "sdk_tests");
+const generatedWingExamplesDir = join(__dirname, "test_corpus", "doc_examples");
 
 rmSync(generatedTestDir, { recursive: true, force: true });
 rmSync(generatedSDKTestDir, { recursive: true, force: true });
+rmSync(generatedWingExamplesDir, { recursive: true, force: true });
 
 interface GenerateTestsOptions {
   sourceDir: string;
@@ -15,6 +18,7 @@ interface GenerateTestsOptions {
   isRecursive?: boolean;
   level?: number;
   includeJavaScriptInSnapshots?: boolean;
+  skipMarkdownSnapshot?: boolean;
 }
 
 function generateTests(options: GenerateTestsOptions) {
@@ -24,6 +28,7 @@ function generateTests(options: GenerateTestsOptions) {
     isRecursive = true,
     level = 0,
     includeJavaScriptInSnapshots = true,
+    skipMarkdownSnapshot = false,
   } = options;
   for (const fileInfo of readdirSync(sourceDir, { withFileTypes: true })) {
     if (fileInfo.isDirectory() && isRecursive) {
@@ -38,6 +43,7 @@ function generateTests(options: GenerateTestsOptions) {
         isRecursive,
         level: level + 1,
         includeJavaScriptInSnapshots,
+        skipMarkdownSnapshot
       });
       continue;
     }
@@ -76,13 +82,13 @@ function generateTests(options: GenerateTestsOptions) {
   test${skipText}("wing compile -t tf-aws", async () => {
     await compileTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(
       metaComment?.env
-    )}, ${includeJavaScriptInSnapshots});
+    )}, ${includeJavaScriptInSnapshots}, ${skipMarkdownSnapshot});
   });
   
   test${skipText}("wing test -t sim", async () => {
     await testTest("${escapedSourceDir}", "${filename}", ${JSON.stringify(
       metaComment?.env
-    )}, ${includeJavaScriptInSnapshots});
+    )}, ${skipMarkdownSnapshot});
   });`;
 
     mkdirSync(destination, { recursive: true });
@@ -91,9 +97,22 @@ function generateTests(options: GenerateTestsOptions) {
 }
 
 generateTests({
+  sourceDir: validDocExamplesDir,
+  destination: generatedWingExamplesDir,
+  isRecursive: true,
+  includeJavaScriptInSnapshots: false,
+  skipMarkdownSnapshot: true
+});
+generateTests({
   sourceDir: validTestDir,
   destination: generatedTestDir,
   isRecursive: false,
+  includeJavaScriptInSnapshots: true,
+});
+generateTests({
+  sourceDir: appWithParamsDir,
+  destination: generatedTestDir,
+  isRecursive: true,
   includeJavaScriptInSnapshots: true,
 });
 generateTests({

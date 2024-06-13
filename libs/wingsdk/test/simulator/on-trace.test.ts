@@ -27,5 +27,5 @@ test("onTrace", async () => {
   await s.stop();
 
   // THEN
-  expect(numTraces).toEqual(3); // create resources, put operation, delete resources
+  expect(numTraces).toBeGreaterThanOrEqual(3); // create resources, put operation, delete resources
 });

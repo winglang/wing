@@ -23,10 +23,10 @@ The timezone used in cron expressions is always UTC.
 
 ### From cron
 
-```ts playground
+```ts playground example
 bring cloud;
 
-let schedule = new cloud.Schedule(cron: "* * * * ?");
+let schedule = new cloud.Schedule(cron: "* * * * *");
 
 schedule.onTick(inflight () => {
   log("schedule: triggered");
@@ -35,7 +35,7 @@ schedule.onTick(inflight () => {
 
 ### From rate
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let schedule = new cloud.Schedule(rate: 1m);
@@ -121,6 +121,7 @@ Create a function that runs when receiving the scheduled event.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Schedule.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.cloud.Schedule.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -149,6 +150,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Schedule.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.cloud.Schedule.toInflight"></a>
+
+```wing
+bring cloud;
+
+cloud.Schedule.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Schedule.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 
@@ -192,10 +211,24 @@ let ScheduleOnTickOptions = cloud.ScheduleOnTickOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ScheduleOnTickOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
 
 ---
 
@@ -287,13 +320,21 @@ Trigger events according to a cron schedule using the UNIX cron format.
 
 Timezone is UTC.
 [minute] [hour] [day of month] [month] [day of week]
+'*' means all possible values.
+'-' means a range of values.
+',' means a list of values.
+[minute] allows 0-59.
+[hour] allows 0-23.
+[day of month] allows 1-31.
+[month] allows 1-12 or JAN-DEC.
+[day of week] allows 0-6 or SUN-SAT.
 
 ---
 
 *Example*
 
 ```wing
-"0/1 * ? * *"
+"* * * * *"
 ```
 
 

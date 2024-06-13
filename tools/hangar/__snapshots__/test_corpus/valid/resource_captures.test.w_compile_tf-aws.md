@@ -1,7 +1,7 @@
 # [resource_captures.test.w](../../../../../examples/tests/valid/resource_captures.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $r }) {
@@ -27,11 +27,11 @@ module.exports = function({ $r }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.Another-1.js
-```js
+## inflight.Another-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -47,11 +47,11 @@ module.exports = function({  }) {
   }
   return Another;
 }
-//# sourceMappingURL=inflight.Another-1.js.map
+//# sourceMappingURL=inflight.Another-1.cjs.map
 ```
 
-## inflight.First-1.js
-```js
+## inflight.First-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -61,35 +61,30 @@ module.exports = function({  }) {
   }
   return First;
 }
-//# sourceMappingURL=inflight.First-1.js.map
+//# sourceMappingURL=inflight.First-1.cjs.map
 ```
 
-## inflight.MyResource-1.js
-```js
+## inflight.MyResource-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyResource {
-    constructor({ $___this_setOfStr_has__s3____, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myOptStr, $this_myQueue, $this_myResource, $this_myStr }) {
-      this.$___this_setOfStr_has__s3____ = $___this_setOfStr_has__s3____;
-      this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_;
-      this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_;
-      this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__ = $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__;
-      this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__ = $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__;
-      this.$_this_setOfStr_has__s1___ = $_this_setOfStr_has__s1___;
-      this.$_this_setOfStr_has__s2___ = $_this_setOfStr_has__s2___;
+    constructor({ $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr, $this_extBucket, $this_extNum, $this_mapOfNum, $this_myBool, $this_myNum, $this_myOptStr, $this_myQueue, $this_myResource, $this_myStr, $this_setOfStr }) {
       this.$this_another = $this_another;
       this.$this_another_first_myResource = $this_another_first_myResource;
       this.$this_another_myField = $this_another_myField;
-      this.$this_arrayOfStr_length = $this_arrayOfStr_length;
+      this.$this_arrayOfStr = $this_arrayOfStr;
       this.$this_extBucket = $this_extBucket;
       this.$this_extNum = $this_extNum;
+      this.$this_mapOfNum = $this_mapOfNum;
       this.$this_myBool = $this_myBool;
       this.$this_myNum = $this_myNum;
       this.$this_myOptStr = $this_myOptStr;
       this.$this_myQueue = $this_myQueue;
       this.$this_myResource = $this_myResource;
       this.$this_myStr = $this_myStr;
+      this.$this_setOfStr = $this_setOfStr;
     }
     async testNoCapture() {
       const arr = [1, 2, 3];
@@ -97,14 +92,14 @@ module.exports = function({  }) {
       console.log(String.raw({ raw: ["array.len=", ""] }, arr.length));
     }
     async testCaptureCollectionsOfData() {
-      $helpers.assert($helpers.eq(this.$this_arrayOfStr_length, 2), "this.arrayOfStr.length == 2");
-      $helpers.assert($helpers.eq(this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_, "s1"), "this.arrayOfStr.at(0) == \"s1\"");
-      $helpers.assert($helpers.eq(this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_, "s2"), "this.arrayOfStr.at(1) == \"s2\"");
-      $helpers.assert($helpers.eq(this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__, 11), "this.mapOfNum.get(\"k1\") == 11");
-      $helpers.assert($helpers.eq(this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__, 22), "this.mapOfNum.get(\"k2\") == 22");
-      $helpers.assert(this.$_this_setOfStr_has__s1___, "this.setOfStr.has(\"s1\")");
-      $helpers.assert(this.$_this_setOfStr_has__s2___, "this.setOfStr.has(\"s2\")");
-      $helpers.assert(this.$___this_setOfStr_has__s3____, "!this.setOfStr.has(\"s3\")");
+      $helpers.assert($helpers.eq(this.$this_arrayOfStr.length, 2), "this.arrayOfStr.length == 2");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.$this_arrayOfStr, 0), "s1"), "this.arrayOfStr.at(0) == \"s1\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.$this_arrayOfStr, 1), "s2"), "this.arrayOfStr.at(1) == \"s2\"");
+      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.$this_mapOfNum, "k1"), 11), "this.mapOfNum.get(\"k1\") == 11");
+      $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.$this_mapOfNum, "k2"), 22), "this.mapOfNum.get(\"k2\") == 22");
+      $helpers.assert((await this.$this_setOfStr.has("s1")), "this.setOfStr.has(\"s1\")");
+      $helpers.assert((await this.$this_setOfStr.has("s2")), "this.setOfStr.has(\"s2\")");
+      $helpers.assert((!(await this.$this_setOfStr.has("s3"))), "!this.setOfStr.has(\"s3\")");
     }
     async testCapturePrimitives() {
       $helpers.assert($helpers.eq(this.$this_myStr, "myString"), "this.myStr == \"myString\"");
@@ -148,7 +143,7 @@ module.exports = function({  }) {
   }
   return MyResource;
 }
-//# sourceMappingURL=inflight.MyResource-1.js.map
+//# sourceMappingURL=inflight.MyResource-1.cjs.map
 ```
 
 ## main.tf.json
@@ -169,11 +164,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "MyResource_cloudCounter_0782991D": {
+      "MyResource_Counter_D9D84476": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Counter/Default",
-            "uniqueId": "MyResource_cloudCounter_0782991D"
+            "path": "root/Default/Default/MyResource/Counter/Default",
+            "uniqueId": "MyResource_Counter_D9D84476"
           }
         },
         "attribute": [
@@ -184,51 +179,51 @@ module.exports = function({  }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c87187fa"
+        "name": "wing-counter-Counter-c8736322"
       }
     },
     "aws_s3_bucket": {
-      "MyResource_Another_First_cloudBucket_5C44A510": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/Another/First/cloud.Bucket/Default",
-            "uniqueId": "MyResource_Another_First_cloudBucket_5C44A510"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8e81a49-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       },
-      "MyResource_cloudBucket_B5E6C951": {
+      "MyResource_Another_First_Bucket_1DA21BC0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Bucket/Default",
-            "uniqueId": "MyResource_cloudBucket_B5E6C951"
+            "path": "root/Default/Default/MyResource/Another/First/Bucket/Default",
+            "uniqueId": "MyResource_Another_First_Bucket_1DA21BC0"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8f3d54f-",
+        "bucket_prefix": "bucket-c859322f-",
         "force_destroy": false
       },
-      "cloudBucket": {
+      "MyResource_Bucket_0DE6FCB5": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/MyResource/Bucket/Default",
+            "uniqueId": "MyResource_Bucket_0DE6FCB5"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c87b43ba-",
         "force_destroy": false
       }
     },
     "aws_sqs_queue": {
-      "MyResource_cloudQueue_E7A2C0F4": {
+      "MyResource_Queue_C2F2FBE5": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Queue/Default",
-            "uniqueId": "MyResource_cloudQueue_E7A2C0F4"
+            "path": "root/Default/Default/MyResource/Queue/Default",
+            "uniqueId": "MyResource_Queue_C2F2FBE5"
           }
         },
         "message_retention_seconds": 3600,
-        "name": "cloud-Queue-c8185458",
+        "name": "Queue-c84748c7",
         "visibility_timeout_seconds": 30
       }
     }
@@ -236,8 +231,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -245,6 +240,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -252,11 +248,11 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.First-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.First-1.cjs")({
           })
         `;
       }
@@ -286,7 +282,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.cjs")({
           })
         `;
       }
@@ -315,7 +311,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, externalBucket, externalNum) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
         this.myStr = "myString";
         this.myNum = 42;
         this.myBool = true;
@@ -324,17 +320,17 @@ class $Root extends $stdlib.std.Resource {
         this.mapOfNum = ({["k1"]: 11, ["k2"]: 22});
         this.setOfStr = new Set(["s1", "s2", "s1"]);
         this.another = new Another(this, "Another");
-        this.myQueue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+        this.myQueue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
         this.extBucket = externalBucket;
         this.extNum = externalNum;
-        this.unusedResource = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+        this.unusedResource = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
       }
       helloPreflight() {
         return this.another;
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.cjs")({
           })
         `;
       }
@@ -343,25 +339,20 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType()};
             const client = new MyResourceClient({
-              $___this_setOfStr_has__s3____: ${$stdlib.core.liftObject((!(this.setOfStr.has("s3"))))},
-              $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0))},
-              $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1))},
-              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"))},
-              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"))},
-              $_this_setOfStr_has__s1___: ${$stdlib.core.liftObject((this.setOfStr.has("s1")))},
-              $_this_setOfStr_has__s2___: ${$stdlib.core.liftObject((this.setOfStr.has("s2")))},
               $this_another: ${$stdlib.core.liftObject(this.another)},
               $this_another_first_myResource: ${$stdlib.core.liftObject(this.another.first.myResource)},
               $this_another_myField: ${$stdlib.core.liftObject(this.another.myField)},
-              $this_arrayOfStr_length: ${$stdlib.core.liftObject(this.arrayOfStr.length)},
+              $this_arrayOfStr: ${$stdlib.core.liftObject(this.arrayOfStr)},
               $this_extBucket: ${$stdlib.core.liftObject(this.extBucket)},
               $this_extNum: ${$stdlib.core.liftObject(this.extNum)},
+              $this_mapOfNum: ${$stdlib.core.liftObject(this.mapOfNum)},
               $this_myBool: ${$stdlib.core.liftObject(this.myBool)},
               $this_myNum: ${$stdlib.core.liftObject(this.myNum)},
               $this_myOptStr: ${$stdlib.core.liftObject(this.myOptStr)},
               $this_myQueue: ${$stdlib.core.liftObject(this.myQueue)},
               $this_myResource: ${$stdlib.core.liftObject(this.myResource)},
               $this_myStr: ${$stdlib.core.liftObject(this.myStr)},
+              $this_setOfStr: ${$stdlib.core.liftObject(this.setOfStr)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -373,14 +364,9 @@ class $Root extends $stdlib.std.Resource {
           "testNoCapture": [
           ],
           "testCaptureCollectionsOfData": [
-            [(!(this.setOfStr.has("s3"))), []],
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0), []],
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1), []],
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), []],
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), []],
-            [(this.setOfStr.has("s1")), []],
-            [(this.setOfStr.has("s2")), []],
-            [this.arrayOfStr.length, []],
+            [this.arrayOfStr, [].concat(["length"], ["at"])],
+            [this.mapOfNum, ["get"]],
+            [this.setOfStr, ["has"]],
           ],
           "testCapturePrimitives": [
             [this.myBool, []],
@@ -391,13 +377,13 @@ class $Root extends $stdlib.std.Resource {
             [this.myOptStr, []],
           ],
           "testCaptureResource": [
-            [this.myResource, ["get", "list", "put"]],
+            [this.myResource, [].concat(["put"], ["get"], ["list"])],
           ],
           "testNestedInflightField": [
             [this.another.myField, []],
           ],
           "testNestedResource": [
-            [this.another.first.myResource, ["get", "list", "put"]],
+            [this.another.first.myResource, [].concat(["list"], ["put"], ["get"])],
             [this.myStr, []],
           ],
           "testExpressionRecursive": [
@@ -409,30 +395,25 @@ class $Root extends $stdlib.std.Resource {
             [this.extNum, []],
           ],
           "testUserDefinedResource": [
-            [this.another, ["anotherFunc", "meaningOfLife"]],
+            [this.another, [].concat(["meaningOfLife"], ["anotherFunc"])],
           ],
           "testInflightField": [
           ],
           "$inflight_init": [
-            [(!(this.setOfStr.has("s3"))), []],
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0), []],
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1), []],
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), []],
-            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), []],
-            [(this.setOfStr.has("s1")), []],
-            [(this.setOfStr.has("s2")), []],
             [this.another, []],
             [this.another.first.myResource, []],
             [this.another.myField, []],
-            [this.arrayOfStr.length, []],
+            [this.arrayOfStr, []],
             [this.extBucket, []],
             [this.extNum, []],
+            [this.mapOfNum, []],
             [this.myBool, []],
             [this.myNum, []],
             [this.myOptStr, []],
             [this.myQueue, []],
             [this.myResource, []],
             [this.myStr, []],
+            [this.setOfStr, []],
           ],
           "inflightField": [
           ],
@@ -447,7 +428,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $r: ${$stdlib.core.liftObject(r)},
           })
         `;
@@ -466,7 +447,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [r, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]],
+            [r, [].concat(["testNoCapture"], ["testCaptureCollectionsOfData"], ["testCapturePrimitives"], ["testCaptureOptional"], ["testCaptureResource"], ["testNestedInflightField"], ["testNestedResource"], ["testExpressionRecursive"], ["testExternal"], ["testUserDefinedResource"], ["testInflightField"])],
           ],
           "$inflight_init": [
             [r, []],
@@ -474,7 +455,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const r = new MyResource(this, "MyResource", b, 12);
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
@@ -482,6 +463,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource_captures.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

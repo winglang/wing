@@ -1,3 +1,4 @@
+import type { KeyValueItem } from "@wingconsole/design-system";
 import {
   Attribute,
   Button,
@@ -9,19 +10,20 @@ import {
   useKeyValueList,
   useTheme,
 } from "@wingconsole/design-system";
+import type { OpenApiSpec } from "@wingconsole/server/src/wingsdk.js";
 import { createPersistentState } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { memo, useCallback, useEffect, useId, useState } from "react";
 
-import { AppMode } from "../AppContext.js";
+import type { AppMode } from "../AppContext.js";
+import type { ApiRequest, ApiResponse, ApiRoute } from "../shared/api.js";
 import {
-  ApiRequest,
-  ApiResponse,
-  ApiRoute,
+  getParametersFromOpenApi,
   getHeaderValues,
   getRoutesFromOpenApi,
   HTTP_HEADERS,
   HTTP_METHODS,
+  getRequestBodyFromOpenApi,
 } from "../shared/api.js";
 
 import { ApiResponseBodyPanel } from "./api-response-body-panel.js";
@@ -29,11 +31,13 @@ import { ApiResponseHeadersPanel } from "./api-response-headers-panel.js";
 
 export interface ApiInteractionProps {
   resourceId: string;
-  appMode: AppMode;
+  appMode?: AppMode;
   apiResponse?: ApiResponse;
-  schemaData: any;
+  url: string;
+  openApiSpec: OpenApiSpec;
   callFetch: (data: ApiRequest) => void;
   isLoading: boolean;
+  resetApiResponse?: () => void;
 }
 
 export const ApiInteraction = memo(
@@ -42,27 +46,35 @@ export const ApiInteraction = memo(
     appMode,
     apiResponse,
     callFetch,
-    schemaData,
+    url,
+    openApiSpec,
     isLoading,
+    resetApiResponse = () => {},
   }: ApiInteractionProps) => {
     const { theme } = useTheme();
 
     const { usePersistentState } = createPersistentState(resourceId);
-    const bodyId = useId();
 
-    const [url, setUrl] = useState("");
     const [routes, setRoutes] = useState<ApiRoute[]>([]);
 
-    const [valuesList, setValuesList] = useState<string[]>([]);
-
     const [currentHeaderKey, setCurrentHeaderKey] = usePersistentState("");
+    const [currentHeaderValues, setCurrentHeaderValues] = usePersistentState<
+      string[]
+    >([]);
+    const [currentMethod, setCurrentMethod] = usePersistentState("GET");
+
     const [currentRoute, setCurrentRoute] = usePersistentState("");
 
-    const [currentMethod, setCurrentMethod] = usePersistentState("GET");
+    const bodyId = useId();
+    const [isBodyEdited, setIsBodyEdited] = usePersistentState(false);
     const [body, setBody] = usePersistentState("");
+    const [bodyPlaceholder, setBodyPlaceholder] = usePersistentState<
+      string | undefined
+    >();
 
     const [currentOptionsTab, setCurrentOptionsTab] =
       usePersistentState("headers");
+
     const [currentResponseTab, setCurrentResponseTab] =
       usePersistentState("body");
 
@@ -71,7 +83,7 @@ export const ApiInteraction = memo(
       addItem: addHeader,
       removeItem: removeHeader,
       editItem: editHeader,
-      removeAll: removeAllHeaders,
+      setItems: setHeaders,
     } = useKeyValueList({
       useState: usePersistentState,
     });
@@ -82,7 +94,6 @@ export const ApiInteraction = memo(
       removeItem: removeQueryParameter,
       editItem: editQueryParameter,
       setItems: setQueryParameters,
-      removeAll: removeAllQueryParameters,
     } = useKeyValueList({
       useState: usePersistentState,
     });
@@ -95,6 +106,21 @@ export const ApiInteraction = memo(
       useState: usePersistentState,
     });
 
+    // TODO revisit
+    const openResponseTab = useCallback(
+      (tabId: string) => {
+        setCurrentResponseTab(tabId);
+      },
+      [setCurrentResponseTab],
+    );
+
+    const openOptionTab = useCallback(
+      (tabId: string) => {
+        setCurrentOptionsTab(tabId);
+      },
+      [setCurrentOptionsTab],
+    );
+
     const apiCall = useCallback(async () => {
       if (!url || !currentMethod || !currentRoute) {
         return;
@@ -102,9 +128,19 @@ export const ApiInteraction = memo(
       callFetch({
         url,
         route: currentRoute,
-        variables: pathVariables,
+        variables: pathVariables.map((variable) => {
+          return {
+            key: variable.key,
+            value: variable.value ?? "",
+          };
+        }),
         method: currentMethod,
-        headers,
+        headers: headers.map((header) => {
+          return {
+            key: header.key,
+            value: header.value ?? "",
+          };
+        }),
         body,
       });
     }, [
@@ -117,40 +153,125 @@ export const ApiInteraction = memo(
       body,
     ]);
 
-    // TODO revisit
-    const openResponseTab = useCallback(
-      (tabId: string) => {
-        setCurrentResponseTab(tabId);
+    const loadDataFromOpenApi = useCallback(
+      (path: string, method: string) => {
+        setHeaders((headers) => {
+          const headersFromSpec = getParametersFromOpenApi({
+            path: path,
+            method: method,
+            openApi: openApiSpec,
+            type: "header",
+          });
+          const newHeaders = headersFromSpec.filter(
+            (header) =>
+              !headers.some(
+                (existingHeader) => existingHeader.key === header.key,
+              ),
+          );
+          return [
+            ...headers.filter((header) => header.value !== ""),
+            ...newHeaders,
+          ];
+        });
+
+        setQueryParameters((queryParameters) => {
+          const queryParametersFromSpec = getParametersFromOpenApi({
+            path: path,
+            method: method,
+            openApi: openApiSpec,
+            type: "query",
+          });
+          const newQueryParameters = queryParametersFromSpec.filter(
+            (parameter) =>
+              !queryParameters.some(
+                (existingParameter) => existingParameter.key === parameter.key,
+              ),
+          );
+          return [
+            ...queryParameters.filter((parameter) => parameter.value !== ""),
+            ...newQueryParameters,
+          ];
+        });
+
+        setPathVariables((pathVariables) => {
+          const variablesFromSpec = getParametersFromOpenApi({
+            path: path,
+            method: method,
+            openApi: openApiSpec,
+            type: "path",
+          });
+          const newPathVariables = variablesFromSpec.filter(
+            (variable) =>
+              !pathVariables.some(
+                (existingVariable) => existingVariable.key === variable.key,
+              ),
+          );
+          return [
+            ...pathVariables.filter((variable) => variable.value !== ""),
+            ...newPathVariables,
+          ];
+        });
+
+        // Set the body
+        const bodyFromSpec = getRequestBodyFromOpenApi(
+          path,
+          method,
+          openApiSpec,
+        );
+        const body = bodyFromSpec
+          ? JSON.stringify(bodyFromSpec, undefined, 2)
+          : undefined;
+
+        if (!isBodyEdited) {
+          setBody(body ?? "");
+        }
+        setBodyPlaceholder(body);
       },
-      [setCurrentResponseTab],
-    );
-    const openOptionTab = useCallback(
-      (tabId: string) => {
-        setCurrentOptionsTab(tabId);
-      },
-      [setCurrentOptionsTab],
+      [
+        openApiSpec,
+        setHeaders,
+        setBody,
+        isBodyEdited,
+        setBodyPlaceholder,
+        setQueryParameters,
+        setPathVariables,
+      ],
     );
 
-    useEffect(() => {
-      if (!currentHeaderKey) {
-        setValuesList([]);
-        return;
-      }
-      setValuesList(getHeaderValues(currentHeaderKey));
-    }, [currentHeaderKey]);
+    const handleMethodChange = useCallback(
+      (route: string, method: string) => {
+        setCurrentMethod(method);
+        loadDataFromOpenApi(route, method);
+      },
+      [setCurrentMethod, loadDataFromOpenApi],
+    );
 
     const handleRouteChange = useCallback(
       (value: string) => {
-        const newRoute = value && !value.startsWith("/") ? `/${value}` : value;
+        let [method, route] = value.split(" ");
+        if (!route) {
+          method = currentMethod;
+          route = value;
+        }
+
+        const newRoute = route && !route.startsWith("/") ? `/${route}` : route;
         setCurrentRoute(newRoute);
+
         const search = newRoute.split(/\?(.*)/s)[1];
         const urlParameters = new URLSearchParams(search || "");
 
+        const path = newRoute.split(/\?(.*)/s)[0] || "";
+
+        const isListedRoute = routes.some(
+          (item) => item.route === path && item.method === method,
+        );
+
+        if (!isListedRoute) {
+          setBodyPlaceholder(undefined);
+        }
+
         setQueryParameters(() => {
-          const newUrlParameters: {
-            key: string;
-            value: string;
-          }[] = [];
+          const newUrlParameters: KeyValueItem[] = [];
           for (const [key, value] of urlParameters.entries()) {
             newUrlParameters.push({
               key,
@@ -161,10 +282,7 @@ export const ApiInteraction = memo(
         });
 
         setPathVariables(() => {
-          const newPathVariables: {
-            key: string;
-            value: string;
-          }[] = [];
+          const newPathVariables: KeyValueItem[] = [];
 
           const matches = newRoute.matchAll(/{(\w+)}/g) || [];
           for (const match of matches) {
@@ -178,17 +296,48 @@ export const ApiInteraction = memo(
           }
           return newPathVariables;
         });
+
+        if (isListedRoute && method) {
+          setCurrentMethod(method);
+          loadDataFromOpenApi(path, method);
+        }
+        resetApiResponse();
       },
-      [setCurrentRoute, setPathVariables, setQueryParameters],
+      [
+        routes,
+        setBodyPlaceholder,
+        setCurrentRoute,
+        setCurrentMethod,
+        currentMethod,
+        setPathVariables,
+        setQueryParameters,
+        loadDataFromOpenApi,
+        resetApiResponse,
+      ],
     );
 
+    // load the routes from the open api spec on mount
+    useEffect(() => {
+      setRoutes(getRoutesFromOpenApi(openApiSpec));
+    }, [openApiSpec]);
+
+    // Load the possible values for the current header key
+    useEffect(() => {
+      if (!currentHeaderKey) {
+        setCurrentHeaderValues([]);
+        return;
+      }
+      setCurrentHeaderValues(getHeaderValues(currentHeaderKey));
+    }, [currentHeaderKey, setCurrentHeaderValues]);
+
+    // Sync the query parameters with the current route.
     useEffect(() => {
       if (!currentRoute) {
         return;
       }
       const urlParameters = new URLSearchParams();
       for (const item of queryParameters) {
-        urlParameters.append(item.key, item.value);
+        urlParameters.append(item.key, item.value ?? "");
       }
       let newRoute = currentRoute.split("?")[0] || "";
       if (urlParameters.toString()) {
@@ -197,33 +346,14 @@ export const ApiInteraction = memo(
       setCurrentRoute(newRoute);
     }, [currentRoute, queryParameters, setCurrentRoute]);
 
-    useEffect(() => {
-      if (!schemaData) {
-        return;
-      }
-
-      setUrl(schemaData.url);
-      const routes = getRoutesFromOpenApi(schemaData.openApiSpec);
-      setRoutes(routes);
-      const methods = routes
-        .filter((item) => {
-          return item.route === currentRoute;
-        })
-        .map((route) => route.method);
-      if (methods.length > 0 && methods[0]) {
-        setCurrentMethod(methods[0]);
-      }
-    }, [currentRoute, schemaData, setCurrentMethod]);
-
     // TODO: Refactor inline functions below. For example, with `useCallback` or with additional memo components.
-
     return (
       <div className="h-full flex-1 flex flex-col text-sm space-y-1">
         <div className="relative grow">
           {appMode === "local" && (
             <Attribute name="URL" value={url} noLeftPadding />
           )}
-          <div className="space-y-2 flex-col grow mt-4">
+          <div className="space-y-4 flex-col grow mt-4">
             <div className="flex gap-1 w-full">
               <div className="group flex grow relative gap-x-1">
                 <div
@@ -243,9 +373,9 @@ export const ApiInteraction = memo(
                       return { label: method, value: method };
                     })}
                     value={currentMethod}
-                    onChange={(method) => {
-                      setCurrentMethod(method);
-                    }}
+                    onChange={(value) =>
+                      handleMethodChange(currentRoute, value)
+                    }
                     btnClassName={classNames(
                       theme.bgInput,
                       theme.bgInputHover,
@@ -259,22 +389,16 @@ export const ApiInteraction = memo(
                   />
                   <Combobox
                     placeholder="Enter a route"
+                    autoComplete={false}
                     items={routes.map((route) => {
                       return {
                         label: `${route.method} ${route.route}`,
                         value: `${route.method} ${route.route}`,
                       };
                     })}
+                    filter={false}
                     value={currentRoute}
-                    onChange={(value) => {
-                      const [method, route] = value.split(" ");
-                      if (method && HTTP_METHODS.includes(method) && route) {
-                        setCurrentMethod(method);
-                        handleRouteChange(route);
-                      } else {
-                        handleRouteChange(value);
-                      }
-                    }}
+                    onChange={handleRouteChange}
                     className="w-full"
                     inputClassName={classNames(
                       "border-none focus-none text-xs outline-none w-full rounded-r",
@@ -316,7 +440,7 @@ export const ApiInteraction = memo(
                     name: "Headers",
                     count: headers.length,
                     panel: (
-                      <div className="pt-2">
+                      <div className="pt-2 px-1">
                         <KeyValueList
                           items={headers}
                           onAddItem={addHeader}
@@ -324,8 +448,9 @@ export const ApiInteraction = memo(
                           onEditItem={editHeader}
                           disabled={isLoading}
                           keysList={Object.keys(HTTP_HEADERS)}
-                          valuesList={valuesList}
+                          valuesList={currentHeaderValues}
                           onKeyChange={setCurrentHeaderKey}
+                          autoComplete={false}
                         />
                       </div>
                     ),
@@ -335,7 +460,7 @@ export const ApiInteraction = memo(
                     name: "Params",
                     count: queryParameters.length + pathVariables.length,
                     panel: (
-                      <div className="pt-2 space-y-2">
+                      <div className="pt-2 space-y-2 px-1">
                         <div className="space-y-1">
                           {pathVariables.length > 0 && (
                             <div className={classNames("text-sm", theme.text2)}>
@@ -349,6 +474,7 @@ export const ApiInteraction = memo(
                             onRemoveItem={removeQueryParameter}
                             onEditItem={editQueryParameter}
                             disabled={isLoading}
+                            autoComplete={false}
                           />
                         </div>
                         {pathVariables.length > 0 && (
@@ -362,6 +488,7 @@ export const ApiInteraction = memo(
                               onEditItem={editPathVariable}
                               disabled={isLoading}
                               keyDisabled={true}
+                              autoComplete={false}
                             />
                           </div>
                         )}
@@ -370,18 +497,22 @@ export const ApiInteraction = memo(
                   },
                   {
                     id: "body",
-                    name: `Body`,
+                    name: `Body ${isBodyEdited ? "*" : ""}`,
                     panel: (
-                      <div className="pt-2">
+                      <div className="pt-2 px-1">
                         <TextArea
                           id={bodyId}
                           containerClassName="w-full"
-                          className="text-sm min-h-[2rem]"
-                          placeholder="Body..."
+                          className="text-sm min-h-[6rem]"
+                          placeholder={bodyPlaceholder ?? "Body..."}
                           value={body}
-                          onInput={(event) =>
-                            setBody(event.currentTarget.value)
-                          }
+                          onInput={(event) => {
+                            const value = event.currentTarget.value;
+                            setBody(value);
+                            setIsBodyEdited(
+                              value !== "" && value !== bodyPlaceholder,
+                            );
+                          }}
                         />
                       </div>
                     ),
@@ -404,21 +535,25 @@ export const ApiInteraction = memo(
                       id: "body",
                       name: "Body",
                       panel: (
-                        <ApiResponseBodyPanel
-                          response={apiResponse}
-                          isLoading={isLoading}
-                          dataTestid="cloud.api:response-body"
-                        />
+                        <div className="px-1">
+                          <ApiResponseBodyPanel
+                            response={apiResponse}
+                            isLoading={isLoading}
+                            dataTestid="cloud.api:response-body"
+                          />
+                        </div>
                       ),
                     },
                     {
                       id: "headers",
                       name: "Headers",
                       panel: (
-                        <ApiResponseHeadersPanel
-                          headers={apiResponse?.headers ?? []}
-                          isLoading={isLoading}
-                        />
+                        <div className="px-1">
+                          <ApiResponseHeadersPanel
+                            headers={apiResponse?.headers ?? []}
+                            isLoading={isLoading}
+                          />
+                        </div>
                       ),
                     },
                   ]}

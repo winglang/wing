@@ -1,5 +1,664 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`QueueRef in an TFAWS app can be used to reference an existing queue 1`] = `
+{
+  "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+      "QueueRef_AwsConsoleField_Handler_CloudwatchLogGroup_1FAC3ED5": {
+        "name": "/aws/lambda/Handler-c85cfbef",
+        "retention_in_days": 30,
+      },
+      "QueueRef_QueueArnField_Handler_CloudwatchLogGroup_BDFDF613": {
+        "name": "/aws/lambda/Handler-c8c3c90a",
+        "retention_in_days": 30,
+      },
+      "QueueRef_QueueUrlField_Handler_CloudwatchLogGroup_8AB6E3DD": {
+        "name": "/aws/lambda/Handler-c8ec121e",
+        "retention_in_days": 30,
+      },
+    },
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+      "QueueRef_AwsConsoleField_Handler_IamRole_0DD0004C": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+      "QueueRef_QueueArnField_Handler_IamRole_C121BD5E": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+      "QueueRef_QueueUrlField_Handler_IamRole_709A15CB": {
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:GetQueueUrl"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:SendMessage"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:GetQueueAttributes"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+      "QueueRef_AwsConsoleField_Handler_IamRolePolicy_184A5238": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:GetQueueUrl"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:SendMessage"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:PurgeQueue"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:GetQueueAttributes"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:ReceiveMessage","sqs:DeleteMessage"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"}]}",
+        "role": "\${aws_iam_role.QueueRef_AwsConsoleField_Handler_IamRole_0DD0004C.name}",
+      },
+      "QueueRef_QueueArnField_Handler_IamRolePolicy_64EE3F4B": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
+        "role": "\${aws_iam_role.QueueRef_QueueArnField_Handler_IamRole_C121BD5E.name}",
+      },
+      "QueueRef_QueueUrlField_Handler_IamRolePolicy_A9F2F773": {
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:GetQueueUrl"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:SendMessage"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:PurgeQueue"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:GetQueueAttributes"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"},{"Action":["sqs:ReceiveMessage","sqs:DeleteMessage"],"Resource":["arn:aws:sqs:us-west-2:123456789012:MyQueue1234"],"Effect":"Allow"}]}",
+        "role": "\${aws_iam_role.QueueRef_QueueUrlField_Handler_IamRole_709A15CB.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+      "QueueRef_AwsConsoleField_Handler_IamRolePolicyAttachment_1F892467": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.QueueRef_AwsConsoleField_Handler_IamRole_0DD0004C.name}",
+      },
+      "QueueRef_QueueArnField_Handler_IamRolePolicyAttachment_BA9083B2": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.QueueRef_QueueArnField_Handler_IamRole_C121BD5E.name}",
+      },
+      "QueueRef_QueueUrlField_Handler_IamRolePolicyAttachment_9FA1E52D": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.QueueRef_QueueUrlField_Handler_IamRole_709A15CB.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "Function": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "QUEUE_ARN_23984aca": "arn:aws:sqs:us-west-2:123456789012:MyQueue1234",
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
+        },
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+      "QueueRef_AwsConsoleField_Handler_2D13D4BF": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "QUEUE_ARN_23984aca": "arn:aws:sqs:us-west-2:123456789012:MyQueue1234",
+            "WING_FUNCTION_NAME": "Handler-c85cfbef",
+          },
+        },
+        "function_name": "Handler-c85cfbef",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.QueueRef_AwsConsoleField_Handler_IamRole_0DD0004C.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.QueueRef_AwsConsoleField_Handler_S3Object_C4237D42.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+      "QueueRef_QueueArnField_Handler_0B477E06": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "Handler-c8c3c90a",
+          },
+        },
+        "function_name": "Handler-c8c3c90a",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.QueueRef_QueueArnField_Handler_IamRole_C121BD5E.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.QueueRef_QueueArnField_Handler_S3Object_6AD15EC0.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+      "QueueRef_QueueUrlField_Handler_42A4BE81": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "QUEUE_ARN_23984aca": "arn:aws:sqs:us-west-2:123456789012:MyQueue1234",
+            "WING_FUNCTION_NAME": "Handler-c8ec121e",
+          },
+        },
+        "function_name": "Handler-c8ec121e",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.QueueRef_QueueUrlField_Handler_IamRole_709A15CB.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.QueueRef_QueueUrlField_Handler_S3Object_225E3B78.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+      "QueueRef_AwsConsoleField_Handler_S3Object_C4237D42": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+      "QueueRef_QueueArnField_Handler_S3Object_6AD15EC0": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+      "QueueRef_QueueUrlField_Handler_S3Object_225E3B78": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
+`;
+
+exports[`QueueRef in an TFAWS app can be used to reference an existing queue 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "display": {},
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Function/CloudwatchLogGroup",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "Default",
+                    "path": "root/Default/Function/Default",
+                  },
+                  "IamRole": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "IamRole",
+                    "path": "root/Default/Function/IamRole",
+                  },
+                  "IamRolePolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "IamRolePolicy",
+                    "path": "root/Default/Function/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "IamRolePolicyAttachment",
+                    "path": "root/Default/Function/IamRolePolicyAttachment",
+                  },
+                  "S3Object": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "display": {},
+                    "id": "S3Object",
+                    "path": "root/Default/Function/S3Object",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
+              "QueueRef": {
+                "children": {
+                  "AwsConsoleField": {
+                    "children": {
+                      "Handler": {
+                        "children": {
+                          "Asset": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "Asset",
+                            "path": "root/Default/QueueRef/AwsConsoleField/Handler/Asset",
+                          },
+                          "CloudwatchLogGroup": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "CloudwatchLogGroup",
+                            "path": "root/Default/QueueRef/AwsConsoleField/Handler/CloudwatchLogGroup",
+                          },
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "Default",
+                            "path": "root/Default/QueueRef/AwsConsoleField/Handler/Default",
+                          },
+                          "IamRole": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "IamRole",
+                            "path": "root/Default/QueueRef/AwsConsoleField/Handler/IamRole",
+                          },
+                          "IamRolePolicy": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/QueueRef/AwsConsoleField/Handler/IamRolePolicy",
+                          },
+                          "IamRolePolicyAttachment": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/QueueRef/AwsConsoleField/Handler/IamRolePolicyAttachment",
+                          },
+                          "S3Object": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "S3Object",
+                            "path": "root/Default/QueueRef/AwsConsoleField/Handler/S3Object",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.3.0",
+                        },
+                        "display": {
+                          "description": "A cloud function (FaaS)",
+                          "title": "Function",
+                        },
+                        "id": "Handler",
+                        "path": "root/Default/QueueRef/AwsConsoleField/Handler",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "hidden": true,
+                    },
+                    "id": "AwsConsoleField",
+                    "path": "root/Default/QueueRef/AwsConsoleField",
+                  },
+                  "QueueArnField": {
+                    "children": {
+                      "Handler": {
+                        "children": {
+                          "Asset": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "Asset",
+                            "path": "root/Default/QueueRef/QueueArnField/Handler/Asset",
+                          },
+                          "CloudwatchLogGroup": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "CloudwatchLogGroup",
+                            "path": "root/Default/QueueRef/QueueArnField/Handler/CloudwatchLogGroup",
+                          },
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "Default",
+                            "path": "root/Default/QueueRef/QueueArnField/Handler/Default",
+                          },
+                          "IamRole": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "IamRole",
+                            "path": "root/Default/QueueRef/QueueArnField/Handler/IamRole",
+                          },
+                          "IamRolePolicy": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/QueueRef/QueueArnField/Handler/IamRolePolicy",
+                          },
+                          "IamRolePolicyAttachment": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/QueueRef/QueueArnField/Handler/IamRolePolicyAttachment",
+                          },
+                          "S3Object": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "S3Object",
+                            "path": "root/Default/QueueRef/QueueArnField/Handler/S3Object",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.3.0",
+                        },
+                        "display": {
+                          "description": "A cloud function (FaaS)",
+                          "title": "Function",
+                        },
+                        "id": "Handler",
+                        "path": "root/Default/QueueRef/QueueArnField/Handler",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "hidden": true,
+                    },
+                    "id": "QueueArnField",
+                    "path": "root/Default/QueueRef/QueueArnField",
+                  },
+                  "QueueUrlField": {
+                    "children": {
+                      "Handler": {
+                        "children": {
+                          "Asset": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "Asset",
+                            "path": "root/Default/QueueRef/QueueUrlField/Handler/Asset",
+                          },
+                          "CloudwatchLogGroup": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "CloudwatchLogGroup",
+                            "path": "root/Default/QueueRef/QueueUrlField/Handler/CloudwatchLogGroup",
+                          },
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "Default",
+                            "path": "root/Default/QueueRef/QueueUrlField/Handler/Default",
+                          },
+                          "IamRole": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "IamRole",
+                            "path": "root/Default/QueueRef/QueueUrlField/Handler/IamRole",
+                          },
+                          "IamRolePolicy": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/QueueRef/QueueUrlField/Handler/IamRolePolicy",
+                          },
+                          "IamRolePolicyAttachment": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/QueueRef/QueueUrlField/Handler/IamRolePolicyAttachment",
+                          },
+                          "S3Object": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.20.3",
+                            },
+                            "display": {},
+                            "id": "S3Object",
+                            "path": "root/Default/QueueRef/QueueUrlField/Handler/S3Object",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.3.0",
+                        },
+                        "display": {
+                          "description": "A cloud function (FaaS)",
+                          "title": "Function",
+                        },
+                        "id": "Handler",
+                        "path": "root/Default/QueueRef/QueueUrlField/Handler",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "hidden": true,
+                    },
+                    "id": "QueueUrlField",
+                    "path": "root/Default/QueueRef/QueueUrlField",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "color": "pink",
+                  "ui": [
+                    {
+                      "handler": "root/Default/QueueRef/QueueUrlField/Handler",
+                      "kind": "field",
+                      "label": "SQS Queue URL",
+                      "link": true,
+                    },
+                    {
+                      "handler": "root/Default/QueueRef/AwsConsoleField/Handler",
+                      "kind": "field",
+                      "label": "AWS Console",
+                      "link": true,
+                    },
+                    {
+                      "handler": "root/Default/QueueRef/QueueArnField/Handler",
+                      "kind": "field",
+                      "label": "SQS Queue ARN",
+                    },
+                  ],
+                },
+                "id": "QueueRef",
+                "path": "root/Default/QueueRef",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.3",
+                },
+                "display": {},
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "display": {},
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.3",
+            },
+            "display": {},
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.3",
+        },
+        "display": {},
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.3",
+    },
+    "display": {},
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
 exports[`default queue behavior 1`] = `
 {
   "resource": {
@@ -29,6 +688,7 @@ exports[`default queue behavior 2`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
                   },
@@ -49,6 +709,7 @@ exports[`default queue behavior 2`] = `
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -57,6 +718,7 @@ exports[`default queue behavior 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -65,6 +727,7 @@ exports[`default queue behavior 2`] = `
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -73,6 +736,7 @@ exports[`default queue behavior 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -81,6 +745,7 @@ exports[`default queue behavior 2`] = `
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -117,6 +782,7 @@ exports[`queue name valid 2`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/The-Incredible_Queue-01/Default",
                   },
@@ -137,6 +803,7 @@ exports[`queue name valid 2`] = `
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -145,6 +812,7 @@ exports[`queue name valid 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -153,6 +821,7 @@ exports[`queue name valid 2`] = `
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -161,6 +830,7 @@ exports[`queue name valid 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -169,6 +839,7 @@ exports[`queue name valid 2`] = `
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -176,7 +847,7 @@ exports[`queue name valid 2`] = `
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_fd688af4\\"], \\"root/Default/Queue-SetConsumer0\\")"`;
+exports[`queue with a consumer function 1`] = `"new (require("[REDACTED]/wingsdk/src/shared-aws/function.inflight")).FunctionClient(process.env["FUNCTION_NAME_fd688af4"], "root/Default/Queue-SetConsumer0")"`;
 
 exports[`queue with a consumer function 2`] = `
 {
@@ -189,12 +860,12 @@ exports[`queue with a consumer function 2`] = `
     },
     "aws_iam_role": {
       "Queue-SetConsumer0_IamRole_7F9ED9ED": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Queue-SetConsumer0_IamRolePolicy_0299B5AB": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
       },
     },
@@ -209,6 +880,9 @@ exports[`queue with a consumer function 2`] = `
         "batch_size": 1,
         "event_source_arn": "\${aws_sqs_queue.Queue.arn}",
         "function_name": "\${aws_lambda_function.Queue-SetConsumer0.function_name}",
+        "function_response_types": [
+          "ReportBatchItemFailures",
+        ],
       },
     },
     "aws_lambda_function": {
@@ -273,6 +947,7 @@ exports[`queue with a consumer function 3`] = `
                   "fqn": "cdktf.TerraformResource",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
               },
@@ -280,6 +955,9 @@ exports[`queue with a consumer function 3`] = `
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
                 },
                 "id": "ParameterRegistrar",
                 "path": "root/Default/ParameterRegistrar",
@@ -291,6 +969,7 @@ exports[`queue with a consumer function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
                   },
@@ -299,6 +978,7 @@ exports[`queue with a consumer function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "EventSourceMapping",
                     "path": "root/Default/Queue/EventSourceMapping",
                   },
@@ -321,6 +1001,7 @@ exports[`queue with a consumer function 3`] = `
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Queue-SetConsumer0/Asset",
                   },
@@ -329,6 +1010,7 @@ exports[`queue with a consumer function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Queue-SetConsumer0/CloudwatchLogGroup",
                   },
@@ -337,6 +1019,7 @@ exports[`queue with a consumer function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Queue-SetConsumer0/Default",
                   },
@@ -345,6 +1028,7 @@ exports[`queue with a consumer function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRole",
                     "path": "root/Default/Queue-SetConsumer0/IamRole",
                   },
@@ -353,6 +1037,7 @@ exports[`queue with a consumer function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicy",
                     "path": "root/Default/Queue-SetConsumer0/IamRolePolicy",
                   },
@@ -361,6 +1046,7 @@ exports[`queue with a consumer function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Queue-SetConsumer0/IamRolePolicyAttachment",
                   },
@@ -369,6 +1055,7 @@ exports[`queue with a consumer function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "S3Object",
                     "path": "root/Default/Queue-SetConsumer0/S3Object",
                   },
@@ -389,6 +1076,7 @@ exports[`queue with a consumer function 3`] = `
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -397,6 +1085,7 @@ exports[`queue with a consumer function 3`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -405,6 +1094,7 @@ exports[`queue with a consumer function 3`] = `
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -413,6 +1103,7 @@ exports[`queue with a consumer function 3`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -421,6 +1112,7 @@ exports[`queue with a consumer function 3`] = `
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -457,6 +1149,7 @@ exports[`queue with custom retention 2`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
                   },
@@ -477,6 +1170,7 @@ exports[`queue with custom retention 2`] = `
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -485,6 +1179,7 @@ exports[`queue with custom retention 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -493,6 +1188,7 @@ exports[`queue with custom retention 2`] = `
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -501,6 +1197,7 @@ exports[`queue with custom retention 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -509,6 +1206,7 @@ exports[`queue with custom retention 2`] = `
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -545,6 +1243,7 @@ exports[`queue with custom timeout 2`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
                   },
@@ -565,6 +1264,7 @@ exports[`queue with custom timeout 2`] = `
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -573,6 +1273,7 @@ exports[`queue with custom timeout 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -581,6 +1282,7 @@ exports[`queue with custom timeout 2`] = `
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -589,6 +1291,7 @@ exports[`queue with custom timeout 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -597,6 +1300,7 @@ exports[`queue with custom timeout 2`] = `
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -633,6 +1337,7 @@ exports[`replace invalid character from queue name 2`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/The*Incredible$Queue/Default",
                   },
@@ -653,6 +1358,7 @@ exports[`replace invalid character from queue name 2`] = `
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -661,6 +1367,7 @@ exports[`replace invalid character from queue name 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -669,6 +1376,7 @@ exports[`replace invalid character from queue name 2`] = `
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -677,6 +1385,7 @@ exports[`replace invalid character from queue name 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -685,6 +1394,7 @@ exports[`replace invalid character from queue name 2`] = `
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },

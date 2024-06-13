@@ -18,6 +18,10 @@
       "type": "build"
     },
     {
+      "name": "@types/glob",
+      "type": "build"
+    },
+    {
       "name": "@types/mime-types",
       "type": "build"
     },
@@ -32,16 +36,12 @@
     },
     {
       "name": "@typescript-eslint/eslint-plugin",
-      "version": "^5",
+      "version": "^7",
       "type": "build"
     },
     {
       "name": "@typescript-eslint/parser",
-      "version": "^5",
-      "type": "build"
-    },
-    {
-      "name": "@vitest/coverage-v8",
+      "version": "^7",
       "type": "build"
     },
     {
@@ -102,7 +102,7 @@
     },
     {
       "name": "eslint",
-      "version": "^8",
+      "version": "^8.56.0",
       "type": "build"
     },
     {
@@ -132,11 +132,6 @@
       "type": "build"
     },
     {
-      "name": "npm-check-updates",
-      "version": "^16",
-      "type": "build"
-    },
-    {
       "name": "prettier",
       "type": "build"
     },
@@ -150,7 +145,7 @@
       "type": "build"
     },
     {
-      "name": "ts-node",
+      "name": "tsx",
       "type": "build"
     },
     {
@@ -167,57 +162,56 @@
     },
     {
       "name": "@aws-sdk/client-cloudwatch-logs",
-      "version": "3.449.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-dynamodb",
-      "version": "3.449.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-elasticache",
-      "version": "3.449.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-lambda",
-      "version": "3.449.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-s3",
-      "version": "3.449.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-secrets-manager",
-      "version": "3.449.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sns",
-      "version": "3.449.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sqs",
-      "version": "3.449.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/s3-request-presigner",
-      "version": "3.449.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/types",
-      "version": "3.449.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/util-dynamodb",
-      "version": "3.449.0",
+      "version": "3.577.0",
       "type": "bundled"
     },
     {
@@ -264,6 +258,11 @@
       "type": "bundled"
     },
     {
+      "name": "@winglang/wingtunnels",
+      "version": "workspace:^",
+      "type": "bundled"
+    },
+    {
       "name": "ajv",
       "type": "bundled"
     },
@@ -277,7 +276,15 @@
       "type": "bundled"
     },
     {
+      "name": "cron-validator",
+      "type": "bundled"
+    },
+    {
       "name": "express",
+      "type": "bundled"
+    },
+    {
+      "name": "glob",
       "type": "bundled"
     },
     {
@@ -289,7 +296,7 @@
       "type": "bundled"
     },
     {
-      "name": "jsonschema",
+      "name": "jiti",
       "type": "bundled"
     },
     {
@@ -328,11 +335,11 @@
       "type": "bundled"
     },
     {
-      "name": "undici",
+      "name": "uuid",
       "type": "bundled"
     },
     {
-      "name": "uuid",
+      "name": "vlq",
       "type": "bundled"
     },
     {

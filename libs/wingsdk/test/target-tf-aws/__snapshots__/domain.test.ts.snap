@@ -1,739 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`cloud.Domain for tf-aws > react website with a domain when passing values from file 1`] = `
-{
-  "data": {
-    "aws_iam_policy_document": {
-      "Website_Website-host_AllowDistributionReadOnly_BEA9DA33": {
-        "statement": [
-          {
-            "actions": [
-              "s3:GetObject",
-            ],
-            "condition": [
-              {
-                "test": "StringEquals",
-                "values": [
-                  "\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.arn}",
-                ],
-                "variable": "AWS:SourceArn",
-              },
-            ],
-            "principals": [
-              {
-                "identifiers": [
-                  "cloudfront.amazonaws.com",
-                ],
-                "type": "Service",
-              },
-            ],
-            "resources": [
-              "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.arn}/*",
-            ],
-          },
-        ],
-      },
-    },
-  },
-  "output": {
-    "Website_Website-host_Endpoint_Url_82B41E68": {
-      "value": "https://\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
-    },
-  },
-  "resource": {
-    "aws_cloudfront_distribution": {
-      "Website_Website-host_Distribution_16BBCB7A": {
-        "aliases": [
-          "www.example.com",
-        ],
-        "custom_error_response": [
-          {
-            "error_code": 404,
-            "response_code": 200,
-            "response_page_path": "/index.html",
-          },
-          {
-            "error_code": 403,
-            "response_code": 200,
-            "response_page_path": "/index.html",
-          },
-        ],
-        "default_cache_behavior": {
-          "allowed_methods": [
-            "GET",
-            "HEAD",
-          ],
-          "cached_methods": [
-            "GET",
-            "HEAD",
-          ],
-          "compress": true,
-          "default_ttl": 3600,
-          "forwarded_values": {
-            "cookies": {
-              "forward": "none",
-            },
-            "query_string": false,
-          },
-          "max_ttl": 86400,
-          "min_ttl": 0,
-          "target_origin_id": "s3Origin",
-          "viewer_protocol_policy": "redirect-to-https",
-        },
-        "default_root_object": "index.html",
-        "enabled": true,
-        "origin": [
-          {
-            "domain_name": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket_regional_domain_name}",
-            "origin_access_control_id": "\${aws_cloudfront_origin_access_control.Website_Website-host_CloudfrontOac_E7FC4CB7.id}",
-            "origin_id": "s3Origin",
-          },
-        ],
-        "price_class": "PriceClass_100",
-        "restrictions": {
-          "geo_restriction": {
-            "locations": [],
-            "restriction_type": "none",
-          },
-        },
-        "viewer_certificate": {
-          "acm_certificate_arn": "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
-          "cloudfront_default_certificate": true,
-          "ssl_support_method": "sni-only",
-        },
-      },
-    },
-    "aws_cloudfront_origin_access_control": {
-      "Website_Website-host_CloudfrontOac_E7FC4CB7": {
-        "name": "Website--c8d109e4-cloudfront-oac",
-        "origin_access_control_origin_type": "s3",
-        "signing_behavior": "always",
-        "signing_protocol": "sigv4",
-      },
-    },
-    "aws_route53_record": {
-      "Website_Website-host_Route53Record_CC3DD5F0": {
-        "alias": {
-          "evaluate_target_health": false,
-          "name": "\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
-          "zone_id": "\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.hosted_zone_id}",
-        },
-        "name": "www.example.com",
-        "type": "A",
-        "zone_id": "Z0111111111111111111F",
-      },
-    },
-    "aws_s3_bucket": {
-      "Website_Website-host_WebsiteBucket_0ECE7584": {
-        "bucket_prefix": "website-host-c8d109e4-",
-        "force_destroy": false,
-      },
-    },
-    "aws_s3_bucket_policy": {
-      "Website_Website-host_DistributionS3BucketPolicy_AE0CA9BB": {
-        "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.id}",
-        "policy": "\${data.aws_iam_policy_document.Website_Website-host_AllowDistributionReadOnly_BEA9DA33.json}",
-      },
-    },
-    "aws_s3_bucket_website_configuration": {
-      "Website_Website-host_BucketWebsiteConfiguration_6A151F57": {
-        "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
-        "error_document": {
-          "key": "index.html",
-        },
-        "index_document": {
-          "suffix": "index.html",
-        },
-      },
-    },
-    "aws_s3_object": {
-      "Website_Website-host_File--indexhtml_7EB8DC7E": {
-        "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
-        "content_type": "text/html; charset=utf-8",
-        "depends_on": [
-          "aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584",
-        ],
-        "key": "/index.html",
-        "source": "<source>",
-        "source_hash": "\${filemd5(<source>)}",
-      },
-      "Website_Website-host_File-wingjs_CC553473": {
-        "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
-        "content": "// This file is generated by wing
-window.wingEnv = {};",
-        "content_type": "text/javascript",
-        "depends_on": [
-          "aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584",
-        ],
-        "key": "wing.js",
-      },
-    },
-  },
-}
-`;
-
-exports[`cloud.Domain for tf-aws > react website with a domain when passing values from file 2`] = `
-{
-  "tree": {
-    "children": {
-      "root": {
-        "children": {
-          "Default": {
-            "children": {
-              "Domain": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "description": "A cloud domain",
-                  "title": "Domain",
-                },
-                "id": "Domain",
-                "path": "root/Default/Domain",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
-              },
-              "Website": {
-                "children": {
-                  "Website-host": {
-                    "children": {
-                      "AllowDistributionReadOnly": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformDataSource",
-                          "version": "0.20.3",
-                        },
-                        "id": "AllowDistributionReadOnly",
-                        "path": "root/Default/Website/Website-host/AllowDistributionReadOnly",
-                      },
-                      "BucketWebsiteConfiguration": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "BucketWebsiteConfiguration",
-                        "path": "root/Default/Website/Website-host/BucketWebsiteConfiguration",
-                      },
-                      "CloudfrontOac": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "CloudfrontOac",
-                        "path": "root/Default/Website/Website-host/CloudfrontOac",
-                      },
-                      "Distribution": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "Distribution",
-                        "path": "root/Default/Website/Website-host/Distribution",
-                      },
-                      "DistributionS3BucketPolicy": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "DistributionS3BucketPolicy",
-                        "path": "root/Default/Website/Website-host/DistributionS3BucketPolicy",
-                      },
-                      "Endpoint": {
-                        "children": {
-                          "Url": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformOutput",
-                              "version": "0.20.3",
-                            },
-                            "id": "Url",
-                            "path": "root/Default/Website/Website-host/Endpoint/Url",
-                          },
-                        },
-                        "constructInfo": {
-                          "fqn": "constructs.Construct",
-                          "version": "10.3.0",
-                        },
-                        "display": {
-                          "description": "Website root/Default/Website/Website-host",
-                          "hidden": true,
-                          "title": "Endpoint",
-                        },
-                        "id": "Endpoint",
-                        "path": "root/Default/Website/Website-host/Endpoint",
-                      },
-                      "File--index.html": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "File--index.html",
-                        "path": "root/Default/Website/Website-host/File--index.html",
-                      },
-                      "File-wing.js": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "File-wing.js",
-                        "path": "root/Default/Website/Website-host/File-wing.js",
-                      },
-                      "Route53Record": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "Route53Record",
-                        "path": "root/Default/Website/Website-host/Route53Record",
-                      },
-                      "WebsiteBucket": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "WebsiteBucket",
-                        "path": "root/Default/Website/Website-host/WebsiteBucket",
-                      },
-                    },
-                    "constructInfo": {
-                      "fqn": "constructs.Construct",
-                      "version": "10.3.0",
-                    },
-                    "display": {
-                      "description": "A static website",
-                      "title": "Website",
-                    },
-                    "id": "Website-host",
-                    "path": "root/Default/Website/Website-host",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "description": "A deployable React App",
-                  "title": "React App",
-                },
-                "id": "Website",
-                "path": "root/Default/Website",
-              },
-              "aws": {
-                "constructInfo": {
-                  "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
-                },
-                "id": "aws",
-                "path": "root/Default/aws",
-              },
-            },
-            "constructInfo": {
-              "fqn": "constructs.Construct",
-              "version": "10.3.0",
-            },
-            "id": "Default",
-            "path": "root/Default",
-          },
-          "backend": {
-            "constructInfo": {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-        },
-        "constructInfo": {
-          "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
-        },
-        "id": "root",
-        "path": "root",
-      },
-    },
-    "constructInfo": {
-      "fqn": "cdktf.App",
-      "version": "0.20.3",
-    },
-    "id": "App",
-    "path": "",
-  },
-  "version": "tree-0.1",
-}
-`;
-
-exports[`cloud.Domain for tf-aws > react website with a domain when passing values on the command line 1`] = `
-{
-  "data": {
-    "aws_iam_policy_document": {
-      "Website_Website-host_AllowDistributionReadOnly_BEA9DA33": {
-        "statement": [
-          {
-            "actions": [
-              "s3:GetObject",
-            ],
-            "condition": [
-              {
-                "test": "StringEquals",
-                "values": [
-                  "\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.arn}",
-                ],
-                "variable": "AWS:SourceArn",
-              },
-            ],
-            "principals": [
-              {
-                "identifiers": [
-                  "cloudfront.amazonaws.com",
-                ],
-                "type": "Service",
-              },
-            ],
-            "resources": [
-              "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.arn}/*",
-            ],
-          },
-        ],
-      },
-    },
-  },
-  "output": {
-    "Website_Website-host_Endpoint_Url_82B41E68": {
-      "value": "https://\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
-    },
-  },
-  "resource": {
-    "aws_cloudfront_distribution": {
-      "Website_Website-host_Distribution_16BBCB7A": {
-        "aliases": [
-          "www.example.com",
-        ],
-        "custom_error_response": [
-          {
-            "error_code": 404,
-            "response_code": 200,
-            "response_page_path": "/index.html",
-          },
-          {
-            "error_code": 403,
-            "response_code": 200,
-            "response_page_path": "/index.html",
-          },
-        ],
-        "default_cache_behavior": {
-          "allowed_methods": [
-            "GET",
-            "HEAD",
-          ],
-          "cached_methods": [
-            "GET",
-            "HEAD",
-          ],
-          "compress": true,
-          "default_ttl": 3600,
-          "forwarded_values": {
-            "cookies": {
-              "forward": "none",
-            },
-            "query_string": false,
-          },
-          "max_ttl": 86400,
-          "min_ttl": 0,
-          "target_origin_id": "s3Origin",
-          "viewer_protocol_policy": "redirect-to-https",
-        },
-        "default_root_object": "index.html",
-        "enabled": true,
-        "origin": [
-          {
-            "domain_name": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket_regional_domain_name}",
-            "origin_access_control_id": "\${aws_cloudfront_origin_access_control.Website_Website-host_CloudfrontOac_E7FC4CB7.id}",
-            "origin_id": "s3Origin",
-          },
-        ],
-        "price_class": "PriceClass_100",
-        "restrictions": {
-          "geo_restriction": {
-            "locations": [],
-            "restriction_type": "none",
-          },
-        },
-        "viewer_certificate": {
-          "acm_certificate_arn": "arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
-          "cloudfront_default_certificate": true,
-          "ssl_support_method": "sni-only",
-        },
-      },
-    },
-    "aws_cloudfront_origin_access_control": {
-      "Website_Website-host_CloudfrontOac_E7FC4CB7": {
-        "name": "Website--c8d109e4-cloudfront-oac",
-        "origin_access_control_origin_type": "s3",
-        "signing_behavior": "always",
-        "signing_protocol": "sigv4",
-      },
-    },
-    "aws_route53_record": {
-      "Website_Website-host_Route53Record_CC3DD5F0": {
-        "alias": {
-          "evaluate_target_health": false,
-          "name": "\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
-          "zone_id": "\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.hosted_zone_id}",
-        },
-        "name": "www.example.com",
-        "type": "A",
-        "zone_id": "Z0111111111111111111F",
-      },
-    },
-    "aws_s3_bucket": {
-      "Website_Website-host_WebsiteBucket_0ECE7584": {
-        "bucket_prefix": "website-host-c8d109e4-",
-        "force_destroy": false,
-      },
-    },
-    "aws_s3_bucket_policy": {
-      "Website_Website-host_DistributionS3BucketPolicy_AE0CA9BB": {
-        "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.id}",
-        "policy": "\${data.aws_iam_policy_document.Website_Website-host_AllowDistributionReadOnly_BEA9DA33.json}",
-      },
-    },
-    "aws_s3_bucket_website_configuration": {
-      "Website_Website-host_BucketWebsiteConfiguration_6A151F57": {
-        "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
-        "error_document": {
-          "key": "index.html",
-        },
-        "index_document": {
-          "suffix": "index.html",
-        },
-      },
-    },
-    "aws_s3_object": {
-      "Website_Website-host_File--indexhtml_7EB8DC7E": {
-        "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
-        "content_type": "text/html; charset=utf-8",
-        "depends_on": [
-          "aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584",
-        ],
-        "key": "/index.html",
-        "source": "<source>",
-        "source_hash": "\${filemd5(<source>)}",
-      },
-      "Website_Website-host_File-wingjs_CC553473": {
-        "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
-        "content": "// This file is generated by wing
-window.wingEnv = {};",
-        "content_type": "text/javascript",
-        "depends_on": [
-          "aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584",
-        ],
-        "key": "wing.js",
-      },
-    },
-  },
-}
-`;
-
-exports[`cloud.Domain for tf-aws > react website with a domain when passing values on the command line 2`] = `
-{
-  "tree": {
-    "children": {
-      "root": {
-        "children": {
-          "Default": {
-            "children": {
-              "Domain": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "description": "A cloud domain",
-                  "title": "Domain",
-                },
-                "id": "Domain",
-                "path": "root/Default/Domain",
-              },
-              "ParameterRegistrar": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "id": "ParameterRegistrar",
-                "path": "root/Default/ParameterRegistrar",
-              },
-              "Website": {
-                "children": {
-                  "Website-host": {
-                    "children": {
-                      "AllowDistributionReadOnly": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformDataSource",
-                          "version": "0.20.3",
-                        },
-                        "id": "AllowDistributionReadOnly",
-                        "path": "root/Default/Website/Website-host/AllowDistributionReadOnly",
-                      },
-                      "BucketWebsiteConfiguration": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "BucketWebsiteConfiguration",
-                        "path": "root/Default/Website/Website-host/BucketWebsiteConfiguration",
-                      },
-                      "CloudfrontOac": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "CloudfrontOac",
-                        "path": "root/Default/Website/Website-host/CloudfrontOac",
-                      },
-                      "Distribution": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "Distribution",
-                        "path": "root/Default/Website/Website-host/Distribution",
-                      },
-                      "DistributionS3BucketPolicy": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "DistributionS3BucketPolicy",
-                        "path": "root/Default/Website/Website-host/DistributionS3BucketPolicy",
-                      },
-                      "Endpoint": {
-                        "children": {
-                          "Url": {
-                            "constructInfo": {
-                              "fqn": "cdktf.TerraformOutput",
-                              "version": "0.20.3",
-                            },
-                            "id": "Url",
-                            "path": "root/Default/Website/Website-host/Endpoint/Url",
-                          },
-                        },
-                        "constructInfo": {
-                          "fqn": "constructs.Construct",
-                          "version": "10.3.0",
-                        },
-                        "display": {
-                          "description": "Website root/Default/Website/Website-host",
-                          "hidden": true,
-                          "title": "Endpoint",
-                        },
-                        "id": "Endpoint",
-                        "path": "root/Default/Website/Website-host/Endpoint",
-                      },
-                      "File--index.html": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "File--index.html",
-                        "path": "root/Default/Website/Website-host/File--index.html",
-                      },
-                      "File-wing.js": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "File-wing.js",
-                        "path": "root/Default/Website/Website-host/File-wing.js",
-                      },
-                      "Route53Record": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "Route53Record",
-                        "path": "root/Default/Website/Website-host/Route53Record",
-                      },
-                      "WebsiteBucket": {
-                        "constructInfo": {
-                          "fqn": "cdktf.TerraformResource",
-                          "version": "0.20.3",
-                        },
-                        "id": "WebsiteBucket",
-                        "path": "root/Default/Website/Website-host/WebsiteBucket",
-                      },
-                    },
-                    "constructInfo": {
-                      "fqn": "constructs.Construct",
-                      "version": "10.3.0",
-                    },
-                    "display": {
-                      "description": "A static website",
-                      "title": "Website",
-                    },
-                    "id": "Website-host",
-                    "path": "root/Default/Website/Website-host",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.3.0",
-                },
-                "display": {
-                  "description": "A deployable React App",
-                  "title": "React App",
-                },
-                "id": "Website",
-                "path": "root/Default/Website",
-              },
-              "aws": {
-                "constructInfo": {
-                  "fqn": "cdktf.TerraformProvider",
-                  "version": "0.20.3",
-                },
-                "id": "aws",
-                "path": "root/Default/aws",
-              },
-            },
-            "constructInfo": {
-              "fqn": "constructs.Construct",
-              "version": "10.3.0",
-            },
-            "id": "Default",
-            "path": "root/Default",
-          },
-          "backend": {
-            "constructInfo": {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.20.3",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-        },
-        "constructInfo": {
-          "fqn": "cdktf.TerraformStack",
-          "version": "0.20.3",
-        },
-        "id": "root",
-        "path": "root",
-      },
-    },
-    "constructInfo": {
-      "fqn": "cdktf.App",
-      "version": "0.20.3",
-    },
-    "id": "App",
-    "path": "",
-  },
-  "version": "tree-0.1",
-}
-`;
-
 exports[`cloud.Domain for tf-aws > website with a domain when passing values from file 1`] = `
 {
   "data": {
@@ -926,6 +192,9 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "display": {
+                  "hidden": true,
+                },
                 "id": "ParameterRegistrar",
                 "path": "root/Default/ParameterRegistrar",
               },
@@ -936,6 +205,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "fqn": "cdktf.TerraformDataSource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "AllowDistributionReadOnly",
                     "path": "root/Default/Website/AllowDistributionReadOnly",
                   },
@@ -944,6 +214,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "BucketWebsiteConfiguration",
                     "path": "root/Default/Website/BucketWebsiteConfiguration",
                   },
@@ -952,6 +223,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CloudfrontOac",
                     "path": "root/Default/Website/CloudfrontOac",
                   },
@@ -960,6 +232,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Distribution",
                     "path": "root/Default/Website/Distribution",
                   },
@@ -968,6 +241,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
@@ -978,6 +252,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                           "fqn": "cdktf.TerraformOutput",
                           "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Url",
                         "path": "root/Default/Website/Endpoint/Url",
                       },
@@ -999,6 +274,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "File--b.html",
                     "path": "root/Default/Website/File--b.html",
                   },
@@ -1007,6 +283,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "File--index.html",
                     "path": "root/Default/Website/File--index.html",
                   },
@@ -1015,6 +292,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "File--inner-folder--a.html",
                     "path": "root/Default/Website/File--inner-folder--a.html",
                   },
@@ -1023,6 +301,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Route53Record",
                     "path": "root/Default/Website/Route53Record",
                   },
@@ -1031,6 +310,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "WebsiteBucket",
                     "path": "root/Default/Website/WebsiteBucket",
                   },
@@ -1051,6 +331,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -1059,6 +340,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -1067,6 +349,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -1075,6 +358,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -1083,6 +367,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -1282,6 +567,9 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
                 },
+                "display": {
+                  "hidden": true,
+                },
                 "id": "ParameterRegistrar",
                 "path": "root/Default/ParameterRegistrar",
               },
@@ -1292,6 +580,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "fqn": "cdktf.TerraformDataSource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "AllowDistributionReadOnly",
                     "path": "root/Default/Website/AllowDistributionReadOnly",
                   },
@@ -1300,6 +589,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "BucketWebsiteConfiguration",
                     "path": "root/Default/Website/BucketWebsiteConfiguration",
                   },
@@ -1308,6 +598,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CloudfrontOac",
                     "path": "root/Default/Website/CloudfrontOac",
                   },
@@ -1316,6 +607,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Distribution",
                     "path": "root/Default/Website/Distribution",
                   },
@@ -1324,6 +616,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
@@ -1334,6 +627,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                           "fqn": "cdktf.TerraformOutput",
                           "version": "0.20.3",
                         },
+                        "display": {},
                         "id": "Url",
                         "path": "root/Default/Website/Endpoint/Url",
                       },
@@ -1355,6 +649,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "File--b.html",
                     "path": "root/Default/Website/File--b.html",
                   },
@@ -1363,6 +658,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "File--index.html",
                     "path": "root/Default/Website/File--index.html",
                   },
@@ -1371,6 +667,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "File--inner-folder--a.html",
                     "path": "root/Default/Website/File--inner-folder--a.html",
                   },
@@ -1379,6 +676,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Route53Record",
                     "path": "root/Default/Website/Route53Record",
                   },
@@ -1387,6 +685,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "WebsiteBucket",
                     "path": "root/Default/Website/WebsiteBucket",
                   },
@@ -1407,6 +706,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -1415,6 +715,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -1423,6 +724,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -1431,6 +733,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -1439,6 +742,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },

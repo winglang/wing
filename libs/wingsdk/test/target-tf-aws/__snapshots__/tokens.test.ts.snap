@@ -1,22 +1,23 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`captures tokens 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+"(await (async () => {
+  const $func = async (ctx) => {
+    console.log(ctx.str, ctx.num, ctx.list);
+    return void 0;
   }
-  async handle(event) {
-    console.log(this.str, this.num, this.list);
-  }
-};
-})())({
-str: JSON.parse(process.env[\\"WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_0_AMAZONAWS_COM_TFTOKEN_TOKEN_9\\"]),
-num: JSON.parse(process.env[\\"WING_TOKEN_8_109562212591388E_298\\"]),
-list: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_11\\"])
-})"
+  const $ctx = {
+  str: JSON.parse(process.env["WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_0_AMAZONAWS_COM_TFTOKEN_TOKEN_9"]),
+num: JSON.parse(process.env["WING_TOKEN_8_109562212591388E_298"]),
+list: JSON.parse(process.env["WING_TOKEN_TFTOKEN_TOKEN_11"])
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
 `;
 
 exports[`captures tokens 2`] = `
@@ -48,7 +49,7 @@ exports[`captures tokens 2`] = `
     },
     "aws_api_gateway_rest_api": {
       "Api_api_91C07D84": {
-        "body": "{\\"openapi\\":\\"3.0.3\\",\\"paths\\":{\\"/\\":{\\"get\\":{\\"operationId\\":\\"get\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_0-c86d29bb/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/{proxy+}\\":{\\"x-amazon-apigateway-any-method\\":{\\"produces\\":[\\"application/json\\"],\\"x-amazon-apigateway-integration\\":{\\"type\\":\\"mock\\",\\"requestTemplates\\":{\\"application/json\\":\\"\\\\n                {\\\\\\"statusCode\\\\\\": 404}\\\\n              \\"},\\"passthroughBehavior\\":\\"never\\",\\"responses\\":{\\"404\\":{\\"statusCode\\":\\"404\\",\\"responseParameters\\":{\\"method.response.header.Content-Type\\":\\"'application/json'\\"},\\"responseTemplates\\":{\\"application/json\\":\\"{\\\\\\"statusCode\\\\\\": 404, \\\\\\"message\\\\\\": \\\\\\"Error: Resource not found\\\\\\"}\\"}},\\"default\\":{\\"statusCode\\":\\"404\\",\\"responseParameters\\":{\\"method.response.header.Content-Type\\":\\"'application/json'\\"},\\"responseTemplates\\":{\\"application/json\\":\\"{\\\\\\"statusCode\\\\\\": 404, \\\\\\"message\\\\\\": \\\\\\"Error: Resource not found\\\\\\"}\\"}}}},\\"responses\\":{\\"404\\":{\\"description\\":\\"404 response\\",\\"headers\\":{\\"Content-Type\\":{\\"type\\":\\"string\\"}}}}}}}}",
+        "body": "{"paths":{"/":{"get":{"operationId":"get","responses":{"200":{"description":"200 response","content":{}}},"parameters":[],"x-amazon-apigateway-integration":{"uri":"arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_0-c86d29bb/invocations","type":"aws_proxy","httpMethod":"POST","responses":{"default":{"statusCode":"200"}},"passthroughBehavior":"when_no_match","contentHandling":"CONVERT_TO_TEXT"}}},"/{proxy+}":{"x-amazon-apigateway-any-method":{"produces":["application/json"],"x-amazon-apigateway-integration":{"type":"mock","requestTemplates":{"application/json":"\\n                {\\"statusCode\\": 404}\\n              "},"passthroughBehavior":"never","responses":{"404":{"statusCode":"404","responseParameters":{"method.response.header.Content-Type":"'application/json'"},"responseTemplates":{"application/json":"{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}"}},"default":{"statusCode":"404","responseParameters":{"method.response.header.Content-Type":"'application/json'"},"responseTemplates":{"application/json":"{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}"}}}},"responses":{"404":{"description":"404 response","headers":{"Content-Type":{"type":"string"}}}}}}},"openapi":"3.0.3"}",
         "lifecycle": {
           "create_before_destroy": true,
         },
@@ -70,12 +71,12 @@ exports[`captures tokens 2`] = `
     },
     "aws_iam_role": {
       "Api_get_0_IamRole_2FAC475D": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Api_get_0_IamRolePolicy_D9FB373B": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Api_get_0_IamRole_2FAC475D.name}",
       },
     },
@@ -95,7 +96,7 @@ exports[`captures tokens 2`] = `
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "get_0-c86d29bb",
             "WING_TOKEN_8_109562212591388E_298": "\${jsonencode(var.Number)}",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_0_AMAZONAWS_COM_TFTOKEN_TOKEN_9": "\${jsonencode(\\"https://\${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.\${data.aws_region.Region.name}.amazonaws.com/\${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}\\")}",
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_0_AMAZONAWS_COM_TFTOKEN_TOKEN_9": "\${jsonencode("https://\${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.\${data.aws_region.Region.name}.amazonaws.com/\${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}")}",
             "WING_TOKEN_TFTOKEN_TOKEN_11": "\${jsonencode(var.List)}",
           },
         },
@@ -154,20 +155,20 @@ exports[`captures tokens 2`] = `
 `;
 
 exports[`captures tokens inside plain objects 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+"(await (async () => {
+  const $func = async (ctx) => {
+    console.log(ctx.foo.str, ctx.foo.num);
   }
-  async handle(event) {
-    console.log(this.foo.str, this.foo.num);
-  }
-};
-})())({
-foo: {\\"str\\": JSON.parse(process.env[\\"WING_TOKEN_HTTPS_TFTOKEN_TOKEN_38_EXECUTE_API_TFTOKEN_TOKEN_30_AMAZONAWS_COM_TFTOKEN_TOKEN_39\\"]),\\"num\\": JSON.parse(process.env[\\"WING_TOKEN_8_109562212591416E_298\\"]),}
-})"
+  const $ctx = {
+  foo: {"str": JSON.parse(process.env["WING_TOKEN_HTTPS_TFTOKEN_TOKEN_38_EXECUTE_API_TFTOKEN_TOKEN_30_AMAZONAWS_COM_TFTOKEN_TOKEN_39"]),"num": JSON.parse(process.env["WING_TOKEN_8_109562212591416E_298"]),}
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
 `;
 
 exports[`captures tokens inside plain objects 2`] = `
@@ -199,7 +200,7 @@ exports[`captures tokens inside plain objects 2`] = `
     },
     "aws_api_gateway_rest_api": {
       "Api_api_91C07D84": {
-        "body": "{\\"openapi\\":\\"3.0.3\\",\\"paths\\":{\\"/\\":{\\"get\\":{\\"operationId\\":\\"get\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_0-c86d29bb/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/{proxy+}\\":{\\"x-amazon-apigateway-any-method\\":{\\"produces\\":[\\"application/json\\"],\\"x-amazon-apigateway-integration\\":{\\"type\\":\\"mock\\",\\"requestTemplates\\":{\\"application/json\\":\\"\\\\n                {\\\\\\"statusCode\\\\\\": 404}\\\\n              \\"},\\"passthroughBehavior\\":\\"never\\",\\"responses\\":{\\"404\\":{\\"statusCode\\":\\"404\\",\\"responseParameters\\":{\\"method.response.header.Content-Type\\":\\"'application/json'\\"},\\"responseTemplates\\":{\\"application/json\\":\\"{\\\\\\"statusCode\\\\\\": 404, \\\\\\"message\\\\\\": \\\\\\"Error: Resource not found\\\\\\"}\\"}},\\"default\\":{\\"statusCode\\":\\"404\\",\\"responseParameters\\":{\\"method.response.header.Content-Type\\":\\"'application/json'\\"},\\"responseTemplates\\":{\\"application/json\\":\\"{\\\\\\"statusCode\\\\\\": 404, \\\\\\"message\\\\\\": \\\\\\"Error: Resource not found\\\\\\"}\\"}}}},\\"responses\\":{\\"404\\":{\\"description\\":\\"404 response\\",\\"headers\\":{\\"Content-Type\\":{\\"type\\":\\"string\\"}}}}}}}}",
+        "body": "{"paths":{"/":{"get":{"operationId":"get","responses":{"200":{"description":"200 response","content":{}}},"parameters":[],"x-amazon-apigateway-integration":{"uri":"arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:\${data.aws_region.Region.name}:\${data.aws_caller_identity.account.account_id}:function:get_0-c86d29bb/invocations","type":"aws_proxy","httpMethod":"POST","responses":{"default":{"statusCode":"200"}},"passthroughBehavior":"when_no_match","contentHandling":"CONVERT_TO_TEXT"}}},"/{proxy+}":{"x-amazon-apigateway-any-method":{"produces":["application/json"],"x-amazon-apigateway-integration":{"type":"mock","requestTemplates":{"application/json":"\\n                {\\"statusCode\\": 404}\\n              "},"passthroughBehavior":"never","responses":{"404":{"statusCode":"404","responseParameters":{"method.response.header.Content-Type":"'application/json'"},"responseTemplates":{"application/json":"{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}"}},"default":{"statusCode":"404","responseParameters":{"method.response.header.Content-Type":"'application/json'"},"responseTemplates":{"application/json":"{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}"}}}},"responses":{"404":{"description":"404 response","headers":{"Content-Type":{"type":"string"}}}}}}},"openapi":"3.0.3"}",
         "lifecycle": {
           "create_before_destroy": true,
         },
@@ -221,12 +222,12 @@ exports[`captures tokens inside plain objects 2`] = `
     },
     "aws_iam_role": {
       "Api_get_0_IamRole_2FAC475D": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Api_get_0_IamRolePolicy_D9FB373B": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Api_get_0_IamRole_2FAC475D.name}",
       },
     },
@@ -246,7 +247,7 @@ exports[`captures tokens inside plain objects 2`] = `
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "get_0-c86d29bb",
             "WING_TOKEN_8_109562212591416E_298": "\${jsonencode(var.Number)}",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_38_EXECUTE_API_TFTOKEN_TOKEN_30_AMAZONAWS_COM_TFTOKEN_TOKEN_39": "\${jsonencode(\\"https://\${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.\${data.aws_region.Region.name}.amazonaws.com/\${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}\\")}",
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_38_EXECUTE_API_TFTOKEN_TOKEN_30_AMAZONAWS_COM_TFTOKEN_TOKEN_39": "\${jsonencode("https://\${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.\${data.aws_region.Region.name}.amazonaws.com/\${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}")}",
           },
         },
         "function_name": "get_0-c86d29bb",

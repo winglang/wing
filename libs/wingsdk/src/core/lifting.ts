@@ -15,6 +15,18 @@ import { IInflightHost, ILiftable, IHostedLiftable } from "../std";
 export const INFLIGHT_INIT_METHOD_NAME = "$inflight_init";
 
 /**
+ * Inflight closures are liftable objects that have a single inflight
+ * method called "handle". This method contains the inflight code
+ * that will be executed by the inflight host.
+ */
+const INFLIGHT_CLOSURE_HANDLE_METHOD = "handle";
+
+/**
+ * The prefix used to name inflight closure object types.
+ */
+const INFLIGHT_CLOSURE_TYPE_PREFIX = "$Closure";
+
+/**
  * Creates a liftable type from a class or enum
  * @param type The type to lift, Should be a class or enum.
  * @param moduleSpec A module specifier that the type can be imported from. e.g. "aws-cdk-lib"
@@ -97,8 +109,8 @@ export function liftObject(obj: any): string {
   throw new Error(`Unable to lift object of type ${obj?.constructor?.name}`);
 }
 
-export type LiftDepsMatrixRaw = Record<string, Array<[any, Array<string>]>>;
-export type LiftDepsMatrix = Record<string, Map<any, Set<string>>>;
+export type LiftMap = Record<string, Array<[any, Array<string>]>>;
+export type LiftMapNormalized = Record<string, Map<any, Set<string>>>;
 
 /**
  * Merge two matrixes of lifting dependencies.
@@ -106,10 +118,10 @@ export type LiftDepsMatrix = Record<string, Map<any, Set<string>>>;
  * See the unit tests in `lifting.test.ts` for examples.
  */
 export function mergeLiftDeps(
-  matrix1: LiftDepsMatrix,
-  matrix2: LiftDepsMatrix
-): LiftDepsMatrix {
-  const result: LiftDepsMatrix = {};
+  matrix1: LiftMapNormalized = {},
+  matrix2: LiftMapNormalized = {}
+): LiftMapNormalized {
+  const result: LiftMapNormalized = {};
   for (const [op, deps] of Object.entries(matrix1)) {
     result[op] = new Map();
     for (const [obj, objDeps] of deps) {
@@ -150,8 +162,8 @@ export function mergeLiftDeps(
  * new Map([obj1, new Set(["op1", "op2"])])
  * ```
  */
-function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
-  const result: LiftDepsMatrix = {};
+function parseMatrix(data: LiftMap): LiftMapNormalized {
+  const result: LiftMapNormalized = {};
   for (const [op, pairs] of Object.entries(data)) {
     result[op] = new Map();
     for (const [obj, objDeps] of pairs) {
@@ -168,7 +180,7 @@ function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
 }
 
 // for debugging
-// function printMatrix(data: LiftDepsMatrix): string {
+// function printMatrix(data: LiftMapNormalized): string {
 //   const lines = [];
 //   for (const [op, pairs] of Object.entries(data)) {
 //     lines.push(`${op}: {`);
@@ -215,7 +227,7 @@ export function collectLifts(
 
   const explored = new Map<any, Set<string>>();
   const queue = new Array<[any, Array<string>]>([initialObj, [...initialOps]]);
-  const matrixCache = new Map<any, LiftDepsMatrix>();
+  const matrixCache = new Map<any, LiftMapNormalized>();
 
   while (queue.length > 0) {
     // `obj` and `ops` are the preflight object and operations requested on it
@@ -246,24 +258,17 @@ export function collectLifts(
     // Currently there are a few ways to do this:
     // - The compiler may generate a _liftMap property on the object
     // - The compiler may generate a static _liftTypeMap method on a class
-    // - The SDK may have a _supportedOps method on a class (TODO: remove this?)
 
-    let matrix: LiftDepsMatrix;
+    let matrix: LiftMapNormalized;
     if (matrixCache.has(obj)) {
       matrix = matrixCache.get(obj)!;
     } else if (typeof obj === "object" && obj._liftMap !== undefined) {
       matrix = parseMatrix(obj._liftMap ?? {});
       matrixCache.set(obj, matrix);
     } else if (
-      typeof obj === "object" &&
-      typeof obj._supportedOps === "function"
+      typeof obj === "function" &&
+      obj._liftTypeMap !== undefined
     ) {
-      matrix = {};
-      for (const op of obj._supportedOps()) {
-        matrix[op] = new Map();
-      }
-      matrixCache.set(obj, matrix);
-    } else if (typeof obj === "function" && obj._liftTypeMap !== undefined) {
       matrix = parseMatrix(obj._liftTypeMap ?? {});
       matrixCache.set(obj, matrix);
     } else {
@@ -277,39 +282,28 @@ export function collectLifts(
       // We can't calculate what ops to put for the collection items (for
       // example, for cases where the items are resources) since the compiler
       // doesn't produce that information yet.
+
+      let items_to_explore: Iterable<any> = [];
       if (Array.isArray(obj)) {
-        for (const item of obj) {
-          if (!explored.has(item)) {
-            queue.push([item, []]);
-          }
-        }
+        items_to_explore = obj;
+      } else if (obj instanceof Set) {
+        items_to_explore = obj;
+      } else if (obj instanceof Map) {
+        items_to_explore = obj.values();
+      } else if (typeof obj === "object" && obj.constructor.name === "Object") {
+        items_to_explore = Object.values(obj);
       }
 
-      if (obj instanceof Set) {
-        for (const item of obj) {
-          if (!explored.has(item)) {
-            queue.push([item, []]);
+      for (const item of items_to_explore) {
+        if (!explored.has(item)) {
+          let item_ops: string[] = [];
+          // If the item is an inflight closure type then implicitly add the "handle" operation
+          if (isInflightClosureObject(item)) {
+            item_ops.push(INFLIGHT_CLOSURE_HANDLE_METHOD);
           }
+          queue.push([item, item_ops]);
         }
       }
-
-      if (obj instanceof Map) {
-        for (const value of obj.values()) {
-          if (!explored.has(value)) {
-            queue.push([value, []]);
-          }
-        }
-      }
-
-      // recurse over ordinary objects
-      if (typeof obj === "object" && obj.constructor.name === "Object") {
-        for (const value of Object.values(obj)) {
-          if (!explored.has(value)) {
-            queue.push([value, []]);
-          }
-        }
-      }
-
       continue;
     }
 
@@ -350,6 +344,20 @@ export function collectLifts(
 }
 
 /**
+ * Returns whether the given item is an inflight closure object.
+ */
+function isInflightClosureObject(item: any): boolean {
+  return (
+    typeof item === "object" &&
+    typeof item.constructor === "function" &&
+    typeof item.constructor.name === "string" &&
+    item.constructor.name.startsWith(INFLIGHT_CLOSURE_TYPE_PREFIX) &&
+    item._liftMap !== undefined &&
+    item._liftMap[INFLIGHT_CLOSURE_HANDLE_METHOD] !== undefined
+  );
+}
+
+/**
  * Represents a type with static methods that may have other things to lift.
  */
 export interface ILiftableType {
@@ -359,7 +367,7 @@ export interface ILiftableType {
    * inflight host.
    * @internal
    */
-  _liftTypeMap?: LiftDepsMatrixRaw;
+  _liftTypeMap?: LiftMap;
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to

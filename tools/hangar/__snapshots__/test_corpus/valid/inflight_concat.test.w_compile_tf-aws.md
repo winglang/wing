@@ -1,21 +1,21 @@
 # [inflight_concat.test.w](../../../../../examples/tests/valid/inflight_concat.test.w) | compile | tf-aws
 
-## inflight.R-1.js
-```js
+## inflight.R-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class R {
-    constructor({ $_this_s1_concat___world___ }) {
-      this.$_this_s1_concat___world___ = $_this_s1_concat___world___;
+    constructor({ $this_s1 }) {
+      this.$this_s1 = $this_s1;
     }
     async foo() {
-      console.log(this.$_this_s1_concat___world___);
+      console.log((await this.$this_s1.concat(" world")));
     }
   }
   return R;
 }
-//# sourceMappingURL=inflight.R-1.js.map
+//# sourceMappingURL=inflight.R-1.cjs.map
 ```
 
 ## main.tf.json
@@ -37,8 +37,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -46,6 +46,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -57,7 +58,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.R-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.R-1.cjs")({
           })
         `;
       }
@@ -66,7 +67,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const RClient = ${R._toInflightType()};
             const client = new RClient({
-              $_this_s1_concat___world___: ${$stdlib.core.liftObject((this.s1.concat(" world")))},
+              $this_s1: ${$stdlib.core.liftObject(this.s1)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -76,10 +77,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "foo": [
-            [(this.s1.concat(" world")), []],
+            [this.s1, ["concat"]],
           ],
           "$inflight_init": [
-            [(this.s1.concat(" world")), []],
+            [this.s1, []],
           ],
         });
       }
@@ -90,6 +91,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_concat.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

@@ -3,11 +3,12 @@ import fsPromises from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
-import { TestResult, TraceType } from "@winglang/sdk/lib/std";
+import { LogLevel, TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
 import { describe, test, expect, beforeEach, afterEach, vi, SpyInstance } from "vitest";
 import { filterTests, renderTestReport, collectTestFiles, test as wingTest } from ".";
 import * as resultsFn from "./results";
+import { SnapshotMode } from "./snapshots";
 
 const defaultChalkLevel = chalk.level;
 const cwd = process.cwd();
@@ -22,14 +23,14 @@ describe("printing test reports", () => {
     process.chdir(cwd);
   });
 
-  test("resource traces are not shown if debug mode is disabled", async () => {
+  test("verbose traces are not shown if debug mode is disabled", async () => {
     const testReport = await renderTestReport("hello.w", EXAMPLE_TEST_RESULTS);
 
     expect(testReport).toMatchSnapshot();
     expect(testReport).not.toContain("Push (message=cool)");
   });
 
-  test("resource traces are shown if debug mode is enabled", async () => {
+  test("verbose traces are shown if debug mode is enabled", async () => {
     const oldDebug = process.env.DEBUG;
     process.env.DEBUG = "1";
 
@@ -82,7 +83,11 @@ describe("wing test (custom platform)", () => {
       module.exports = { Platform }`
     );
 
-    await wingTest([], { clean: true, platform: ["./custom-platform.js"] });
+    await wingTest([], {
+      clean: true,
+      platform: ["./custom-platform.js"],
+      snapshots: SnapshotMode.NEVER,
+    });
 
     expect(logSpy).toHaveBeenCalledWith(
       expect.stringMatching(/^pass ─ foo\.test\.tfaws\.\d+ \(no tests\)$/)
@@ -290,7 +295,7 @@ describe("test-filter option", () => {
   });
 });
 
-describe("retry option", () => {
+describe("retry and parallel options", () => {
   let logSpy: SpyInstance;
 
   beforeEach(() => {
@@ -353,6 +358,88 @@ describe("retry option", () => {
     const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
     expect(retryLogs.length).toBe(3);
   });
+
+  test("wing test --parallel [batch]", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
+
+    process.chdir(outDir);
+
+    fs.writeFileSync(
+      "t1.test.w",
+      `
+bring util;
+
+test "t1" {
+  util.sleep(1s);
+  log("t1 ends");
+  assert(true);
+}
+  `
+    );
+    fs.writeFileSync(
+      "t2.test.w",
+      `
+bring util;
+
+test "t2" {
+  log("t2 ends");
+  assert(true);
+}
+  `
+    );
+
+    await wingTest(["t1.test.w", "t2.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      parallel: 1,
+    });
+    // we are running the tests one by one so first t1 should log and then t2
+    const t1Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t1 ends"));
+    const t2Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t2 ends"));
+
+    expect(t2Ends).toBeGreaterThan(t1Ends);
+  });
+
+  test("wing test --parallel 2", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-batch-test"));
+
+    process.chdir(outDir);
+
+    fs.writeFileSync(
+      "t1.test.w",
+      `
+bring util;
+
+test "t1" {
+util.sleep(1s);
+log("t1 ends");
+assert(true);
+}
+  `
+    );
+    fs.writeFileSync(
+      "t2.test.w",
+      `
+bring util;
+
+test "t2" {
+  log("t2 ends");
+  assert(true);
+}
+  `
+    );
+
+    await wingTest(["t1.test.w", "t2.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      parallel: 2,
+    });
+    // we are running the tests in parallel so first t2 should log and then t1
+    const t2Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t2 ends"));
+    const t1Ends = logSpy.mock.calls.findIndex((args) => args[0].includes("t1 ends"));
+
+    expect(t2Ends).toBeLessThan(t1Ends);
+  });
 });
 
 const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
@@ -364,6 +451,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: "Push (message=cool).", status: "success" },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         timestamp: "2023-05-15T16:20:46.886Z",
@@ -371,6 +459,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: { message: "sleeping for 500 ms" },
         type: TraceType.LOG,
+        level: LogLevel.INFO,
         sourcePath: "root/env0/test:test/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:46.887Z",
@@ -378,6 +467,7 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         type: TraceType.RESOURCE,
         data: { message: 'Sending messages (messages=["cool"], subscriber=sim-4).' },
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         timestamp: "2023-05-15T16:20:46.961Z",
@@ -385,10 +475,9 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
       {
         data: {
           message: 'Invoke (payload="{\\"messages\\":[\\"cool\\"]}").',
-          status: "failure",
-          error: {},
         },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/MyProcessor/cloud.Queue-AddConsumer-0088483a",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:46.966Z",
@@ -401,18 +490,21 @@ const EXAMPLE_TEST_RESULTS: Array<TestResult> = [
         sourcePath: "root/env0/MyProcessor/cloud.Queue",
         sourceType: "@winglang/sdk.cloud.Queue",
         type: TraceType.RESOURCE,
+        level: LogLevel.ERROR,
         timestamp: "2023-05-15T16:20:46.966Z",
       },
       {
-        data: { message: "Get (key=file.txt).", status: "failure", error: {} },
+        data: { message: "Get (key=file.txt)." },
         type: TraceType.RESOURCE,
-        sourcePath: "root/env0/MyProcessor/cloud.Bucket",
+        level: LogLevel.VERBOSE,
+        sourcePath: "root/env0/MyProcessor/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
         timestamp: "2023-05-15T16:20:47.388Z",
       },
       {
-        data: { message: 'Invoke (payload="").', status: "failure", error: {} },
+        data: { message: 'Invoke (payload="").' },
         type: TraceType.RESOURCE,
+        level: LogLevel.VERBOSE,
         sourcePath: "root/env0/test:test/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
         timestamp: "2023-05-15T16:20:47.388Z",
@@ -439,13 +531,13 @@ const BUCKET_TEST_RESULT = [
       {
         data: { message: "Put (key=test1.txt).", status: "success" },
         type: "resource",
-        sourcePath: "root/env0/cloud.Bucket",
+        sourcePath: "root/env0/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
       },
       {
         data: { message: "Get (key=test1.txt).", status: "success", result: '"Foo"' },
         type: "resource",
-        sourcePath: "root/env0/cloud.Bucket",
+        sourcePath: "root/env0/Bucket",
         sourceType: "@winglang/sdk.cloud.Bucket",
       },
       {
@@ -471,7 +563,7 @@ const OUTPUT_FILE = {
               status: "success",
             },
             type: "resource",
-            sourcePath: "root/env0/cloud.Bucket",
+            sourcePath: "root/env0/Bucket",
             sourceType: "@winglang/sdk.cloud.Bucket",
           },
           {
@@ -481,7 +573,7 @@ const OUTPUT_FILE = {
               result: '"Foo"',
             },
             type: "resource",
-            sourcePath: "root/env0/cloud.Bucket",
+            sourcePath: "root/env0/Bucket",
             sourceType: "@winglang/sdk.cloud.Bucket",
           },
           {

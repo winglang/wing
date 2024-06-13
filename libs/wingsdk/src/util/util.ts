@@ -4,11 +4,48 @@ import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
 import { ulid } from "ulid";
 import { v4 } from "uuid";
+import { ChildProcess } from "./child-process";
 import { InflightClient } from "../core";
 import { Duration, IInflight } from "../std";
 
 const execPromise = promisify(exec);
 const execFilePromise = promisify(execFile);
+
+/**
+ * Describes what to do with a standard I/O stream for a child process.
+ */
+export enum Stdio {
+  /**
+   * The child inherits from the corresponding parent descriptor.
+   */
+  INHERIT = "inherit",
+  /**
+   * A new pipe should be arranged to connect the parent and child processes.
+   */
+  PIPED = "pipe",
+  /**
+   * This stream will be ignored. This is the equivalent of attaching the stream to /dev/null.
+   */
+  NULL = "ignore",
+}
+
+/**
+ * Output of a finished process.
+ */
+export interface Output {
+  /**
+   * The standard output of a finished process.
+   */
+  readonly stdout: string;
+  /**
+   * The standard error of a finished process.
+   */
+  readonly stderr: string;
+  /**
+   * A process's exit status.
+   */
+  readonly status: number;
+}
 
 /**
  * Base command options.
@@ -32,6 +69,11 @@ export interface CommandOptions {
 }
 
 /**
+ * Additional options for `util.exec()`
+ */
+export interface ExecOptions extends CommandOptions {}
+
+/**
  * Additional options for `util.shell()`
  */
 export interface ShellOptions extends CommandOptions {
@@ -43,26 +85,24 @@ export interface ShellOptions extends CommandOptions {
 }
 
 /**
- * Additional options for `util.exec()`
+ * Additional options for `util.spawn()`
  */
-export interface ExecOptions extends CommandOptions {}
-
-/**
- * Output of a finished process.
- */
-export interface Output {
+export interface SpawnOptions extends CommandOptions {
   /**
-   * The standard output of a finished process.
+   * Configuration for the process's standard input stream.
+   * @default - Stdio.INHERIT
    */
-  readonly stdout: string;
+  readonly stdin?: Stdio;
   /**
-   * The standard error of a finished process.
+   * Configuration for the process's standard output stream.
+   * @default - Stdio.INHERIT
    */
-  readonly stderr: string;
+  readonly stdout?: Stdio;
   /**
-   * A process's exit status.
+   * Configuration for the process's standard error stream.
+   * @default - Stdio.INHERIT
    */
-  readonly status: number;
+  readonly stderr?: Stdio;
 }
 
 /**
@@ -79,6 +119,11 @@ export interface WaitUntilProps {
    * @default 0.1s
    */
   readonly interval?: Duration;
+  /**
+   * Whether to throw an error if the timeout elapses.
+   * @default true
+   */
+  readonly throws?: boolean;
 }
 
 /**
@@ -214,6 +259,23 @@ export class Util {
   }
 
   /**
+   * Execute a program with the given arguments, and return a `ChildProcess`
+   * object that can be used to interact with the process while it is running.
+   * @param program - The program to execute.
+   * @param args - An array of arguments to pass to the program.
+   * @param opts - Spawn options including working directory, environment variables, and stdio configurations.
+   * @returns The `ChildProcess` instance associated with the spawned process.
+   * @inflight
+   */
+  public static spawn(
+    program: string,
+    args: Array<string>,
+    opts?: SpawnOptions
+  ): ChildProcess {
+    return new ChildProcess(program, args, opts);
+  }
+
+  /**
    * Returns the value of an environment variable. Throws if not found or empty.
    * @param name The name of the environment variable.
    */
@@ -232,6 +294,15 @@ export class Util {
    */
   public static tryEnv(name: string): string | undefined {
     return process.env[name];
+  }
+
+  /**
+   * Sets the given name and value as an environment variable.
+   * @param name The name of the environment variable.
+   * @param value The value of the environment variable.
+   */
+  public static setEnv(name: string, value: string) {
+    process.env[name] = value;
   }
 
   /**
@@ -267,6 +338,11 @@ export class Util {
 
   /**
    * Run a predicate repeatedly, waiting until it returns true or until the timeout elapses.
+   * If the timeout elapses, the function throws an error.
+   *
+   * Alternatively, you can pass `throws: false` to suppress the error, and instead return a boolean
+   * indicating whether the predicate returned true within the timeout.
+   *
    * @param predicate The function that will be evaluated.
    * @param props Timeout and interval values, default to one 1m timeout and 0.1sec interval.
    * @throws Will throw if the given predicate throws.
@@ -289,6 +365,9 @@ export class Util {
       // it might be that predicate takes a long time and it is not considered inside timeout
       elapsed += interval.seconds;
       await this.sleep(interval);
+    }
+    if (props.throws !== false) {
+      throw new Error("Timeout elapsed");
     }
     return false;
   }

@@ -3,17 +3,8 @@ import { relative, resolve } from "node:path";
 
 import { CompileError, PreflightError } from "@winglang/compiler";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
-import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
-
-function offsetFromLineAndColumn(source: string, line: number, column: number) {
-  const lines = source.split("\n");
-  let offset = 0;
-  for (let index = 0; index < line; index++) {
-    offset += lines[index]!.length + 1;
-  }
-  offset += column;
-  return offset;
-}
+import type { File, Label } from "codespan-wasm";
+import { CHARS_ASCII, emitDiagnostic } from "codespan-wasm";
 
 export const formatWingError = async (error: unknown, entryPoint?: string) => {
   try {
@@ -32,23 +23,15 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
         if (span !== null && span !== undefined && span.file_id) {
           // `span` should only be null if source file couldn't be read etc.
           const source = await readFile(span.file_id, "utf8");
-          const start = offsetFromLineAndColumn(
-            source,
-            span.start.line,
-            span.start.col,
-          );
-          const end = offsetFromLineAndColumn(
-            source,
-            span.end.line,
-            span.end.col,
-          );
+          const start = span.start_offset;
+          const end = span.end_offset;
           const filePath = relative(cwd, span.file_id);
           files.push({ name: filePath, source });
           labels.push({
             fileId: filePath,
             rangeStart: start,
             rangeEnd: end,
-            message,
+            message: "",
             style: "primary",
           });
         }
@@ -59,16 +42,8 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
             continue;
           }
           const source = await readFile(annotation.span.file_id, "utf8");
-          const start = offsetFromLineAndColumn(
-            source,
-            annotation.span.start.line,
-            annotation.span.start.col,
-          );
-          const end = offsetFromLineAndColumn(
-            source,
-            annotation.span.end.line,
-            annotation.span.end.col,
-          );
+          const start = annotation.span.start_offset;
+          const end = annotation.span.end_offset;
           const filePath = relative(cwd, annotation.span.file_id);
           files.push({ name: filePath, source });
           labels.push({
@@ -102,6 +77,7 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
       output.push(
         await prettyPrintError(error.causedBy, {
           sourceEntrypoint: resolve(entryPoint ?? "."),
+          resetCache: true,
         }),
       );
 
@@ -132,7 +108,7 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
 };
 
 export const formatTraceError = async (error: string): Promise<string> => {
-  let output = await prettyPrintError(error);
+  let output = await prettyPrintError(error, { resetCache: true });
 
   // Remove ANSI color codes
   const regex =

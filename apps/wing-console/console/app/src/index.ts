@@ -1,14 +1,13 @@
-import {
-  createConsoleServer,
+import type {
   CreateConsoleServerOptions,
   LogInterface,
   Updater,
   Config,
   HostUtils,
   Trace,
-  isTermsAccepted,
   LayoutConfig,
 } from "@wingconsole/server";
+import { createConsoleServer, isTermsAccepted } from "@wingconsole/server";
 import express from "express";
 
 import { createAnalytics } from "./analytics.js";
@@ -40,6 +39,8 @@ export interface CreateConsoleAppOptions {
   layoutConfig?: LayoutConfig;
   platform?: string[];
   stateDir?: string;
+  open?: boolean;
+  watchGlobs?: string[];
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -133,6 +134,7 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     log: options.log ?? {
       info() {},
       error: console.error,
+      warning() {},
       verbose() {},
     },
     config: options.config ?? {
@@ -144,5 +146,11 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
       set(key, value) {},
     },
   });
+
+  if (options.open) {
+    const { openBrowser } = await import("./open.js");
+    openBrowser(`http://localhost:${server.port}/`);
+  }
+
   return server;
 };

@@ -1,7 +1,7 @@
 # [json.test.w](../../../../../examples/tests/valid/json.test.w) | compile | tf-aws
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -11,7 +11,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-//# sourceMappingURL=inflight.Foo-1.js.map
+//# sourceMappingURL=inflight.Foo-1.cjs.map
 ```
 
 ## main.tf.json
@@ -32,14 +32,24 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "cloudBucket": {
+      "B1InList": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/B1InList/Default",
+            "uniqueId": "B1InList"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "b1inlist-c8cc4391-",
+        "force_destroy": false
+      },
+      "Bucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
+          }
+        },
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       }
     }
@@ -47,8 +57,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -56,6 +66,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -67,7 +78,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
           })
         `;
       }
@@ -209,20 +220,21 @@ class $Root extends $stdlib.std.Resource {
     const notSpecified = ({"foo": "bar"});
     $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(notSpecified, "foo"), "bar"), "notSpecified.get(\"foo\") == \"bar\"");
     const empty = ({});
-    $helpers.assert($helpers.eq(((json, key) => { return json.hasOwnProperty(key); })(empty, "something"), false), "Json.has(empty, \"something\") == false");
+    $helpers.assert($helpers.eq(((obj, key) => { return obj.hasOwnProperty(key); })(empty,"something"), false), "empty.has(\"something\") == false");
     const arrayStruct = [({"foo": "", "stuff": []})];
     const setStruct = new Set([({"foo": "", "stuff": []})]);
     const mapStruct = ({["1"]: ({"foo": "", "stuff": []})});
     const deepCollectionStruct = ({["1"]: [new Set([({"foo": "", "stuff": []})])]});
     const notJsonMissingField = ({"foo": "bar", "stuff": []});
+    const notJsonWithInnerArray = ({"foo": "bar", "stuff": [], "buckets": [this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "B1InList")]});
     const notJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
     let mutableJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
-    const hasBucket = ({"a": ({"a": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket")})});
+    const hasBucket = ({"a": ({"a": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket")})});
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "json.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

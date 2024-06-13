@@ -3,7 +3,6 @@ title: json
 id: json
 ---
 
-
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 
@@ -22,6 +21,7 @@ Immutable Json.
 | <code><a href="#@winglang/sdk.std.Json.asStr">asStr</a></code> | Convert Json element to string if possible. |
 | <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.Json.getAt">getAt</a></code> | Returns a specified element at a given index from Json Array. |
+| <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsNum">tryAsNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsStr">tryAsStr</a></code> | Convert Json element to string if possible. |
@@ -86,10 +86,26 @@ The index of the element in the Json Array to return.
 
 ---
 
+##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
+
+```wing
+has(key: str): bool
+```
+
+Checks if a Json object has a given key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.has.parameter.key"></a>
+
+- *Type:* str
+
+The key to check.
+
+---
+
 ##### `tryAsBool` <a name="tryAsBool" id="@winglang/sdk.std.Json.tryAsBool"></a>
 
 ```wing
-tryAsBool(): bool
+tryAsBool(): bool?
 ```
 
 Convert Json element to boolean if possible.
@@ -97,7 +113,7 @@ Convert Json element to boolean if possible.
 ##### `tryAsNum` <a name="tryAsNum" id="@winglang/sdk.std.Json.tryAsNum"></a>
 
 ```wing
-tryAsNum(): num
+tryAsNum(): num?
 ```
 
 Convert Json element to number if possible.
@@ -105,7 +121,7 @@ Convert Json element to number if possible.
 ##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.Json.tryAsStr"></a>
 
 ```wing
-tryAsStr(): str
+tryAsStr(): str?
 ```
 
 Convert Json element to string if possible.
@@ -113,7 +129,7 @@ Convert Json element to string if possible.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.Json.tryGet"></a>
 
 ```wing
-tryGet(key: str): Json
+tryGet(key: str): Json?
 ```
 
 Optionally returns an specified element from the Json.
@@ -129,7 +145,7 @@ The key of the element to return.
 ##### `tryGetAt` <a name="tryGetAt" id="@winglang/sdk.std.Json.tryGetAt"></a>
 
 ```wing
-tryGetAt(index: num): Json
+tryGetAt(index: num): Json?
 ```
 
 Optionally returns a specified element at a given index from Json Array.
@@ -150,7 +166,6 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
 | <code><a href="#@winglang/sdk.std.Json.entries">entries</a></code> | Returns the entries from the Json. |
-| <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
@@ -228,30 +243,6 @@ Returns the entries from the Json.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 map to get the entries from.
-
----
-
-##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
-
-```wing
-Json.has(json: Json, key: str);
-```
-
-Checks if a Json object has a given key.
-
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.has.parameter.json"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-The json object to inspect.
-
----
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.has.parameter.key"></a>
-
-- *Type:* str
-
-The key to check.
 
 ---
 
@@ -418,8 +409,10 @@ Mutable Json.
 | <code><a href="#@winglang/sdk.std.MutJson.asBool">asBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asNum">asNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asStr">asStr</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns the value associated with the specified Json key. |
 | <code><a href="#@winglang/sdk.std.MutJson.getAt">getAt</a></code> | Returns a specified element at a given index from MutJson Array. |
+| <code><a href="#@winglang/sdk.std.MutJson.has">has</a></code> | Checks if a Json object has a given key. |
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
@@ -454,6 +447,22 @@ asStr(): str
 
 Convert Json element to string if possible.
 
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutJson.delete"></a>
+
+```wing
+delete(key: str): bool
+```
+
+Removes the specified element from a map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.delete.parameter.key"></a>
+
+- *Type:* str
+
+The key.
+
+---
+
 ##### `get` <a name="get" id="@winglang/sdk.std.MutJson.get"></a>
 
 ```wing
@@ -483,6 +492,22 @@ Returns a specified element at a given index from MutJson Array.
 - *Type:* num
 
 The index of the element in the MutJson Array to return.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutJson.has"></a>
+
+```wing
+has(key: str): bool
+```
+
+Checks if a Json object has a given key.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.has.parameter.key"></a>
+
+- *Type:* str
+
+The key to check.
 
 ---
 
@@ -535,7 +560,7 @@ The value of the element to set.
 ##### `tryAsBool` <a name="tryAsBool" id="@winglang/sdk.std.MutJson.tryAsBool"></a>
 
 ```wing
-tryAsBool(): bool
+tryAsBool(): bool?
 ```
 
 Convert Json element to boolean if possible.
@@ -543,7 +568,7 @@ Convert Json element to boolean if possible.
 ##### `tryAsNum` <a name="tryAsNum" id="@winglang/sdk.std.MutJson.tryAsNum"></a>
 
 ```wing
-tryAsNum(): num
+tryAsNum(): num?
 ```
 
 Convert Json element to number if possible.
@@ -551,7 +576,7 @@ Convert Json element to number if possible.
 ##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.MutJson.tryAsStr"></a>
 
 ```wing
-tryAsStr(): str
+tryAsStr(): str?
 ```
 
 Convert Json element to string if possible.
@@ -559,7 +584,7 @@ Convert Json element to string if possible.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.std.MutJson.tryGet"></a>
 
 ```wing
-tryGet(key: str): MutJson
+tryGet(key: str): MutJson?
 ```
 
 Optionally returns an specified element from the Json.
@@ -575,7 +600,7 @@ The key of the element to return.
 ##### `tryGetAt` <a name="tryGetAt" id="@winglang/sdk.std.MutJson.tryGetAt"></a>
 
 ```wing
-tryGetAt(index: num): MutJson
+tryGetAt(index: num): MutJson?
 ```
 
 Optionally returns a specified element at a given index from Json Array.

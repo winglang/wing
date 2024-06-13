@@ -1,13 +1,11 @@
-import { inferRouterOutputs } from "@trpc/server";
-import { Router } from "@wingconsole/server";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { Router } from "@wingconsole/server";
 import { useContext, useEffect, useState } from "react";
 
-import { TestItem, TestStatus } from "../shared/test-item.js";
+import type { TestItem, TestStatus } from "../shared/test-item.js";
 import { TestsContext } from "../tests-context.js";
 
 import { trpc } from "./trpc.js";
-
-type RouterOutput = inferRouterOutputs<Router>;
 
 export const useTests = () => {
   const [testList, setTestList] = useState<TestItem[]>([]);

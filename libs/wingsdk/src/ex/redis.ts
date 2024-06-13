@@ -1,10 +1,11 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { LiftMap } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource } from "../std";
 
 /**
- * Global identifier for `Bucket`.
+ * Global identifier for `Redis`.
  */
 export const REDIS_FQN = fqnForType("ex.Redis");
 
@@ -27,6 +28,11 @@ export class Redis extends Resource {
 
     Node.of(this).title = "Redis";
     Node.of(this).description = "A Redis server";
+  }
+
+  /** @internal */
+  public get _liftMap(): LiftMap {
+    return {};
   }
 }
 

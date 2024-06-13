@@ -6,6 +6,7 @@ import {
   DeleteObjectCommand,
   GetBucketLocationCommand,
   GetObjectCommand,
+  GetObjectCommandInput,
   GetObjectOutput,
   GetPublicAccessBlockCommand,
   GetPublicAccessBlockCommandOutput,
@@ -16,11 +17,12 @@ import {
   NoSuchKey,
   PutObjectCommand,
   S3Client,
+  HeadBucketCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import mime from "mime-types";
+import { IAwsBucketClient } from "./bucket";
 import {
-  IBucketClient,
   ObjectMetadata,
   BucketPutOptions,
   BucketDeleteOptions,
@@ -31,11 +33,27 @@ import {
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
-export class BucketClient implements IBucketClient {
+export class BucketClient implements IAwsBucketClient {
   constructor(
     private readonly bucketName: string,
     private readonly s3Client: S3Client = new S3Client({})
   ) {}
+
+  public async bucketRegion(): Promise<string> {
+    const res = await this.s3Client.send(
+      new HeadBucketCommand({
+        Bucket: this.bucketName,
+      })
+    );
+
+    if (!res.BucketRegion) {
+      throw new Error(
+        `Failed to get region of the bucket (bucket=${this.bucketName}).`
+      );
+    }
+
+    return res.BucketRegion;
+  }
 
   /**
    * Check if an object exists in the bucket
@@ -99,13 +117,19 @@ export class BucketClient implements IBucketClient {
     key: string,
     options?: BucketGetOptions
   ): Promise<string | undefined> {
-    const command = new GetObjectCommand({
+    const getObjectParams: GetObjectCommandInput = {
       Bucket: this.bucketName,
       Key: key,
-      Range: `bytes=${
-        options?.startByte !== undefined ? options.startByte : 0
-      }-${options?.endByte !== undefined ? options.endByte : ""}`,
-    });
+    };
+
+    // Conditionally add the `Range` parameter
+    if (options?.startByte !== undefined || options?.endByte !== undefined) {
+      const startByte = options?.startByte ?? 0;
+      const endByte = options?.endByte ?? "";
+      getObjectParams.Range = `bytes=${startByte}-${endByte}`;
+    }
+
+    const command = new GetObjectCommand(getObjectParams);
 
     try {
       const resp: GetObjectOutput = await this.s3Client.send(command);

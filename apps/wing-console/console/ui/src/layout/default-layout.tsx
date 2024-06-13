@@ -23,6 +23,7 @@ import { LogsWidget } from "../widgets/logs.js";
 import { SignInModal } from "./sign-in.js";
 import { StatusBar } from "./status-bar.js";
 import { useLayout } from "./use-layout.js";
+import { WebSocketState } from "./websocket-state.js";
 
 export interface LayoutProps {
   cloudAppState: State;
@@ -57,7 +58,6 @@ const defaultLayoutConfig: LayoutConfig = {
   },
   errorScreen: {
     position: "default",
-    displayTitle: true,
     displayLinks: true,
   },
   panels: {
@@ -77,6 +77,7 @@ export const DefaultLayout = ({
     expandedItems,
     setExpandedItems,
     expand,
+    collapse,
     expandAll,
     collapseAll,
     theme,
@@ -196,9 +197,15 @@ export const DefaultLayout = ({
     [expand, setSelectedItems],
   );
 
+  const setSelectedItemSingle = useCallback(
+    (nodeId: string | undefined) => setSelectedItems(nodeId ? [nodeId] : []),
+    [setSelectedItems],
+  );
+
   return (
     <>
       <SignInModal />
+      <WebSocketState />
 
       <div className={classNames("w-full h-full", theme.bg1)}>
         <div
@@ -214,12 +221,7 @@ export const DefaultLayout = ({
             {cloudAppState === "error" &&
               layout.errorScreen?.position === "default" && (
                 <div className="flex-1 flex relative">
-                  <BlueScreenOfDeath
-                    title={"An error has occurred:"}
-                    error={errorMessage.data ?? ""}
-                    displayLinks={layout.errorScreen?.displayLinks}
-                    displayWingTitle={layout.errorScreen?.displayTitle}
-                  />
+                  <BlueScreenOfDeath error={errorMessage.data ?? ""} />
                 </div>
               )}
 
@@ -260,7 +262,7 @@ export const DefaultLayout = ({
                               return (
                                 <TopResizableWidget
                                   key={component.type}
-                                  className="h-1/3"
+                                  className="h-1/5"
                                 >
                                   {panelComponent}
                                 </TopResizableWidget>
@@ -295,63 +297,64 @@ export const DefaultLayout = ({
                         data-testid="map-view"
                       >
                         <MapView
-                          showTests={showTests}
                           selectedNodeId={selectedItems[0]}
-                          onSelectedNodeIdChange={(nodeId) =>
-                            setSelectedItems(nodeId ? [nodeId] : [])
-                          }
+                          onSelectedNodeIdChange={setSelectedItemSingle}
                           selectedEdgeId={selectedEdgeId}
                           onSelectedEdgeIdChange={setSelectedEdgeId}
+                          onExpand={expand}
+                          onCollapse={collapse}
+                          expandedItems={expandedItems}
                         />
                       </div>
-
-                      <LeftResizableWidget
-                        className={classNames(
-                          theme.border4,
-                          "flex-shrink w-80 min-w-[10rem] z-10",
-                          USE_EXTERNAL_THEME_COLOR,
-                        )}
-                      >
-                        <div
+                      {!layout.rightPanel?.hide && (
+                        <LeftResizableWidget
                           className={classNames(
-                            "w-full h-full relative",
-                            theme.bg3,
-                            layout.panels?.rounded &&
-                              "rounded-lg overflow-hidden",
+                            theme.border4,
+                            "flex-shrink w-80 min-w-[10rem] z-10",
+                            USE_EXTERNAL_THEME_COLOR,
                           )}
                         >
                           <div
                             className={classNames(
-                              "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
-                              "transition-all",
-                              deferredLoading && "opacity-100 z-50",
-                              !deferredLoading && "opacity-100 -z-10",
+                              "w-full h-full relative",
+                              theme.bg3,
+                              layout.panels?.rounded &&
+                                "rounded-lg overflow-hidden",
                             )}
                           >
-                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                              <SpinnerLoader data-testid="main-view-loader" />
+                            <div
+                              className={classNames(
+                                "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
+                                "transition-all",
+                                deferredLoading && "opacity-100 z-50",
+                                !deferredLoading && "opacity-100 -z-10",
+                              )}
+                            >
+                              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <SpinnerLoader data-testid="main-view-loader" />
+                              </div>
                             </div>
+
+                            {metadata.data && (
+                              <ResourceMetadata
+                                node={metadata.data?.node}
+                                inbound={metadata.data?.inbound}
+                                outbound={metadata.data?.outbound}
+                                onConnectionNodeClick={onConnectionNodeClick}
+                              />
+                            )}
+
+                            {selectedEdgeId && edgeMetadata.data && (
+                              <EdgeMetadata
+                                source={edgeMetadata.data.source}
+                                target={edgeMetadata.data.target}
+                                inflights={edgeMetadata.data.inflights}
+                                onConnectionNodeClick={onConnectionNodeClick}
+                              />
+                            )}
                           </div>
-
-                          {metadata.data && (
-                            <ResourceMetadata
-                              node={metadata.data?.node}
-                              inbound={metadata.data?.inbound}
-                              outbound={metadata.data?.outbound}
-                              onConnectionNodeClick={onConnectionNodeClick}
-                            />
-                          )}
-
-                          {selectedEdgeId && edgeMetadata.data && (
-                            <EdgeMetadata
-                              source={edgeMetadata.data.source}
-                              target={edgeMetadata.data.target}
-                              inflights={edgeMetadata.data.inflights}
-                              onConnectionNodeClick={onConnectionNodeClick}
-                            />
-                          )}
-                        </div>
-                      </LeftResizableWidget>
+                        </LeftResizableWidget>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -422,10 +425,8 @@ export const DefaultLayout = ({
                       )}
                     >
                       <BlueScreenOfDeath
-                        title={"An error has occurred:"}
                         error={errorMessage.data ?? ""}
                         displayLinks={layout.errorScreen?.displayLinks}
-                        displayWingTitle={layout.errorScreen?.displayTitle}
                       />
                     </TopResizableWidget>
                   </div>

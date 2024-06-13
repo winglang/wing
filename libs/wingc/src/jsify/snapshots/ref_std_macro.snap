@@ -13,12 +13,12 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1-1.js
+## inflight.$Closure1-1.cjs
 
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $arr_length }) {
+module.exports = function({ $arr }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -26,15 +26,15 @@ module.exports = function({ $arr_length }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($arr_length, 3), "arr.length == 3");
+      $helpers.assert($helpers.eq($arr.length, 3), "arr.length == 3");
     }
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -44,6 +44,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -55,8 +56,8 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
-            $arr_length: ${$stdlib.core.liftObject(arr.length)},
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+            $arr: ${$stdlib.core.liftObject(arr)},
           })
         `;
       }
@@ -74,10 +75,10 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [arr.length, []],
+            [arr, ["length"]],
           ],
           "$inflight_init": [
-            [arr.length, []],
+            [arr, []],
           ],
         });
       }
@@ -89,6 +90,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

@@ -10,7 +10,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-/// Result of using the [SymbolLocato]
+/// Result of using the [SymbolLocator]
 pub enum SymbolLocatorResult {
 	NotFound,
 	/// Simple symbol reference
@@ -42,6 +42,11 @@ pub enum SymbolLocatorResult {
 		object: TypeRef,
 		field_type: TypeRef,
 		field: Symbol,
+	},
+	/// Intrinsic
+	Intrinsic {
+		name: Symbol,
+		kind: IntrinsicKind,
 	},
 }
 
@@ -121,7 +126,8 @@ impl<'a> SymbolLocator<'a> {
 			| Type::Unresolved
 			| Type::Inferred(_)
 			| Type::Function(_)
-			| Type::Enum(_) => None,
+			| Type::Enum(_)
+			| Type::Stringable => None,
 
 			Type::Array(_)
 			| Type::MutArray(_)
@@ -184,6 +190,7 @@ impl<'a> SymbolLocator<'a> {
 			}
 			SymbolLocatorResult::StructField { struct_type, field } => self.lookup_property_on_type(&struct_type, field),
 			SymbolLocatorResult::LooseField { .. } => None,
+			SymbolLocatorResult::Intrinsic { name, .. } => Some(self.types.intrinsics.lookup_ext(name, None)),
 		}
 	}
 
@@ -194,9 +201,10 @@ impl<'a> SymbolLocator<'a> {
 			SymbolLocatorResult::Symbol(symbol) => Some(&symbol.span),
 			SymbolLocatorResult::StructField { field, .. } => Some(&field.span),
 			SymbolLocatorResult::LooseField { field, .. } => Some(&field.span),
-			SymbolLocatorResult::TypePropertyReference { span, .. }
-			| SymbolLocatorResult::ObjectPropertyReference { span, .. }
-			| SymbolLocatorResult::TypeReference { span, .. } => Some(&span),
+			SymbolLocatorResult::TypePropertyReference { property, .. }
+			| SymbolLocatorResult::ObjectPropertyReference { property, .. } => Some(&property.span),
+			SymbolLocatorResult::TypeReference { span, .. } => Some(&span),
+			SymbolLocatorResult::Intrinsic { name, .. } => Some(&name.span),
 		}
 	}
 }
@@ -217,7 +225,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			return;
 		}
 
-		self.ctx.push_stmt(node.idx);
+		self.ctx.push_stmt(node);
 
 		// Handle situations where symbols are actually defined in inner scopes
 		match &node.kind {
@@ -297,7 +305,34 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 		self.ctx.push_expr(&node);
 
 		match &node.kind {
-			ExprKind::New(new_expr) => {
+			ExprKind::New(new_expr) => 'new_expr: {
+				let class_type = self.types.get_expr_type(node);
+				let Some(class_type) = class_type.as_class() else {
+					break 'new_expr;
+				};
+				let Some(class_phase) = self.types.get_expr_phase(node) else {
+					break 'new_expr;
+				};
+				let init_symb = Symbol::new(
+					match class_phase {
+						Phase::Inflight => CLASS_INFLIGHT_INIT_NAME,
+						Phase::Preflight | Phase::Independent => CLASS_INIT_NAME,
+					},
+					new_expr.class.span(),
+				);
+
+				if new_expr.class.span.contains_location(&self.location) {
+					let class_env = class_type.get_env().get_ref();
+
+					self.ctx.push_env(class_env);
+
+					self.set_result(SymbolLocatorResult::Symbol(init_symb));
+
+					self.ctx.pop_env();
+
+					return;
+				}
+
 				let found_named_arg = new_expr
 					.arg_list
 					.named_args
@@ -306,18 +341,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 
 				if let Some((arg_name, ..)) = found_named_arg {
 					// we need to get the struct type from the class constructor
-					let class_type = self.types.get_expr_type(node);
-					let Some(class_phase) = self.types.get_expr_phase(node) else {
-						return;
-					};
-					let Some(class_type) = class_type.as_class() else {
-						return;
-					};
-					let init_info = match class_phase {
-						Phase::Inflight => class_type.get_method(&Symbol::global(CLASS_INFLIGHT_INIT_NAME)),
-						Phase::Preflight => class_type.get_method(&Symbol::global(CLASS_INIT_NAME)),
-						Phase::Independent => panic!("Cannot get hover info for independent class"),
-					};
+					let init_info = class_type.get_method(&init_symb);
 					if let Some(var_info) = init_info {
 						if let Some(func) = var_info.type_.maybe_unwrap_option().as_function_sig() {
 							if let Some(arg) = func.parameters.last() {
@@ -329,6 +353,14 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 							}
 						}
 					}
+				}
+			}
+			ExprKind::Intrinsic(intrinsic) => {
+				if intrinsic.name.span.contains_location(&self.location) {
+					self.set_result(SymbolLocatorResult::Intrinsic {
+						kind: intrinsic.kind.clone(),
+						name: intrinsic.name.clone(),
+					});
 				}
 			}
 			ExprKind::Call { arg_list, callee } => {
@@ -401,6 +433,13 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			return;
 		}
 
+		// if let Some(name) = &node.name {
+		// 	self.visit_symbol(name);
+		// 	if self.is_found() {
+		// 		return;
+		// 	}
+		// }
+
 		if let FunctionBody::Statements(scope) = &node.body {
 			self.push_scope_env(scope);
 			for param in &node.signature.parameters {
@@ -428,6 +467,14 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 		}
 		for method in &node.methods {
 			self.visit_symbol(&method.0);
+		}
+
+		if let Some(ctor_name) = &node.initializer.name {
+			self.visit_symbol(ctor_name);
+		}
+
+		if let Some(ctor_name) = &node.inflight_initializer.name {
+			self.visit_symbol(ctor_name);
 		}
 
 		self.ctx.pop_env();
@@ -463,6 +510,9 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 				} else {
 					self.visit_user_defined_type(type_name);
 				}
+			}
+			Reference::ElementAccess { object, .. } => {
+				self.visit_expr(object);
 			}
 		}
 

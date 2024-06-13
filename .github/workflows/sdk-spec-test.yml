@@ -1,0 +1,207 @@
+name: SDK Spec Tests
+run-name: SDK Spec Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
+on:
+  release:
+    types:
+      - published # runs only unstable targets
+  workflow_call: {}
+  workflow_dispatch:
+    inputs:
+      repo:
+        type: string
+        default: winglang/wing
+        description: "Full repo name (owner/name)"
+      ref:
+        type: string
+        default: main
+        description: "Ref to checkout. Must be present in the repo input."
+      target:
+        type: choice
+        default: all
+        description: "target to run at, can be one or all of them"
+        options:
+          - all-stable # tf-aws and sim
+          - all-unstable # tf-azure and soon tf-gcp
+          - all
+          - tf-aws
+          - tf-azure
+          - sim
+env:
+  AWS_REGION: "us-east-1"
+  NODE_VERSION: "20.11.1"
+  # this variable indicates wheater to use wing cli from a local version (using the current repo code)
+  # or use the latest remote npm version
+  LOCAL_BUILD: ${{ github.workflow == 'build' }}
+  # indicates if the action triggered from a workflow_dispatch
+  MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+  REPO: ${{ inputs.repo || github.repository }}
+  REF: ${{ inputs.ref || github.ref }}
+  TARGET: ${{ inputs.target || (github.workflow == 'build' && 'all-stable') || (github.event_name == 'release' && 'all-unstable')  || 'all' }} #the build runs only stable targets, realease only unstable
+  PNPM_VERSION: "8.15.1"
+  AZURE_LOCATION: "East US"
+  GOOGLE_PROJECT_ID: "sdk-spec-tests" # for the future
+  GOOGLE_REGION: "us-central1" # for the future
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test if is maintainer
+        uses: tspascoal/get-user-teams-membership@v3
+        id: testUserGroup
+        if: ${{ env.MANUAL == 'true' }}
+        with:
+          username: ${{ github.actor }}
+          team: "maintainers"
+          GITHUB_TOKEN: ${{ secrets.GH_GROUPS_READ_TOKEN }}
+      - name: cancel run if not allowed
+        if: ${{ env.MANUAL == 'true' && steps.testUserGroup.outputs.isTeamMember == 'false' }}
+        run: |
+          echo "User ${{github.actor}} is not allowed to dispatch this action."
+          exit 1
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{env.REPO}}
+          ref: ${{env.REF}}
+
+      - name: Get list of directories and save them to the output
+        id: setdirs
+        shell: bash
+        run: | # TODO: skipping std and external folders, when https://github.com/winglang/wing/issues/3168 is resolve- we'll skip only the external folder.
+          dirs=$(ls -d examples/tests/sdk_tests/*/ | sed 's/\/$//' | grep -v "external\|std" | jq -R -s -c 'split("\n")[:-1]')
+          processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
+          wrapped_dirs=$(echo $processed_dirs | jq -c .)
+          echo "dirs=$wrapped_dirs" >> $GITHUB_OUTPUT
+      - name: Get targets list
+        id: settargets
+        run: |
+          if [ "${{env.TARGET}}" = "all" ]; then
+            target='["tf-aws", "tf-azure"]'
+          elif [ "${{env.TARGET}}" = "all-stable" ]; then
+            target='["tf-aws", "sim"]'
+          elif [ "${{env.TARGET}}" = "all-unstable" ]; then
+            target='["tf-azure"]'
+          else
+           target='["${{env.TARGET}}"]'
+          fi
+          echo "targets=$target" >> $GITHUB_OUTPUT
+    outputs:
+      tests: ${{ steps.setdirs.outputs.dirs }}
+      targets: ${{ steps.settargets.outputs.targets }}
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix:
+        test: ${{ fromJson(needs.setup.outputs.tests) }}
+        target: ${{ fromJson(needs.setup.outputs.targets) }}
+    name: ${{ matrix.test.name }} - ${{ matrix.target }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{env.REPO}}
+          ref: ${{env.REF}}
+
+      - name: Setup pnpm
+        if: ${{ env.MANUAL ==  'true' }}
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js v18
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      ##################### install a local wing version #########################
+      - name: Download Dist Artifacts
+        if: ${{ env.LOCAL_BUILD ==  'true' }}
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      - name: Install Wing from Dist
+        if: ${{ env.LOCAL_BUILD ==  'true' }}
+        run: |
+          mkdir localwing
+          cd localwing
+          npm init --yes
+          npm install ../dist/*-[0-9]*.[0-9]*.[0-9]*.tgz
+          ./node_modules/.bin/wing --version
+
+      #################### install a remote wing version ########################
+      - name: Install winglang globally
+        if: ${{ env.LOCAL_BUILD == 'false' && env.MANUAL == 'false'}}
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          retry_on: error
+          timeout_minutes: 5
+          command: npm install -g winglang
+      ########################################################################
+      - name: Installing external js modules
+        run: |
+          cd examples/tests/sdk_tests
+          npm install
+
+      - name: Configure AWS credentials
+        if: ${{ matrix.target == 'tf-aws' }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Configure azure credentials
+        if: ${{ matrix.target == 'tf-azure' }}
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Execute wing test in matrix directory
+        uses: nick-fields/retry@v3
+        env:
+          TF_LOG: info
+          TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
+        with:
+          max_attempts: 3
+          retry_on: error
+          timeout_minutes: 60
+          command: |
+            if  ${{ env.MANUAL == 'true' }}
+            then
+              pnpm install
+              pnpm turbo compile -F=winglang
+              WING_CLI=$(realpath apps/wing/bin/wing)
+            elif ${{ env.LOCAL_BUILD == 'false'}}
+            then 
+              WING_CLI=$(which wing)
+              # COMPATIBILITY="-t @winglang/compatibility-spy" //TODO: will be handled in a following PR
+            else
+              WING_CLI=$(realpath localwing/node_modules/.bin/wing)
+              COMPATIBILITY="-t  ../../../../localwing/node_modules/@winglang/compatibility-spy/lib"
+              echo $COMPATIBILITY
+            fi
+            cd ${{ matrix.test.directory }}
+            $WING_CLI test --snapshots=deploy -t ${{ matrix.target }} -p 10 $COMPATIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
+
+      - name: Upload Artifacts
+        if: ${{ env.LOCAL_BUILD ==  'true' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: out
+          path: out/*
+
+      - name: Output Terraform log
+        if: failure()
+        run: cat ${{ runner.workspace }}/terraform.log
+
+  update-matrix:
+    needs: test
+    if: ${{ github.workflow == 'build' }}
+    uses: ./.github/workflows/matrix-update.yml
+    secrets: inherit

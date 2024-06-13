@@ -3,7 +3,7 @@ on:
   workflow_call: {}
 
 env:
-  NODE_VERSION: "20.11.0"
+  NODE_VERSION: "20.11.1"
   PNPM_VERSION: "8.15.1"
 
 jobs:
@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v3
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -38,7 +38,7 @@ jobs:
           TEST_OUTPUT_FOLDER=../../out npx update-matrix
 
       - name: Create a PR
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           title: "chore(docs): compatibility matrix update"

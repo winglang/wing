@@ -26,7 +26,7 @@ Queues by default are not FIFO (first in, first out) - so the order of messages 
 
 ### Setting a Queue Consumer
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let q = new cloud.Queue();
@@ -43,9 +43,9 @@ new cloud.Function(inflight () => {
 
 ### Using Queue inflight api
 
-Pusing messages, popping them, and purge
+Pushing messages, popping them, and purging.
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let q = new cloud.Queue();
@@ -54,13 +54,54 @@ new cloud.Function(inflight () => {
   q.push("message a");
   q.push("message b", "message c", "message d");
   log("approxSize is ${q.approxSize()}");
-  log("popping message ${q.pop()}");
-  log("popping message ${q.pop()}");
+  log("popping message ${q.pop()!}");
+  log("popping message ${q.pop()!}");
   log("approxSize is ${q.approxSize()}");
   q.purge();
   log("approxSize is ${q.approxSize()}");
 });
 ```
+
+### Adding a dead-letter queue
+
+Creating a queue and adding a dead-letter queue with the maximum number of attempts configured
+
+```ts playground example
+bring cloud;
+
+let dlq = new cloud.Queue() as "dead-letter queue";
+let q = new cloud.Queue(
+  dlq: { 
+    queue: dlq,
+    maxDeliveryAttempts: 2
+  }
+);
+```
+
+### Referencing an external queue
+
+If you would like to reference an existing queue from within your application you can use the
+`QueueRef` classes in the target-specific namespaces.
+
+> This is currently only supported for `aws`.
+
+The following example defines a reference to an Amazon SQS queue with a specific ARN and sends a
+message to the queue from the function:
+
+```js example
+bring cloud;
+bring aws;
+
+let outbox = new aws.QueueRef("arn:aws:sqs:us-east-1:111111111111:Outbox");
+
+new cloud.Function(inflight () => {
+  outbox.push("send an email");
+});
+```
+
+This works both when running in the simulator (requires AWS credentials on the developer's machine)
+and when deployed to AWS. When this is deployed to AWS, the AWS Lambda IAM policy will include the
+needed permissions.
 
 ## Target-specific details
 
@@ -155,7 +196,7 @@ Retrieve the approximate number of messages in the queue.
 ##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
 
 ```wing
-inflight pop(): str
+inflight pop(): str?
 ```
 
 Pop a message from the queue.
@@ -191,6 +232,7 @@ Each message must be non-empty.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Queue.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.cloud.Queue.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -222,6 +264,24 @@ other capabilities to the inflight host.
 
 ---
 
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.cloud.Queue.toInflight"></a>
+
+```wing
+bring cloud;
+
+cloud.Queue.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Queue.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
@@ -246,6 +306,52 @@ The tree node.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
+### DeadLetterQueueProps <a name="DeadLetterQueueProps" id="@winglang/sdk.cloud.DeadLetterQueueProps"></a>
+
+Dead letter queue options.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.DeadLetterQueueProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let DeadLetterQueueProps = cloud.DeadLetterQueueProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.queue">queue</a></code> | <code><a href="#@winglang/sdk.cloud.Queue">Queue</a></code> | Queue to receive messages that failed processing. |
+| <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps.property.maxDeliveryAttempts">maxDeliveryAttempts</a></code> | <code>num</code> | Number of times a message will be processed before being sent to the dead-letter queue. |
+
+---
+
+##### `queue`<sup>Required</sup> <a name="queue" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.queue"></a>
+
+```wing
+queue: Queue;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
+
+Queue to receive messages that failed processing.
+
+---
+
+##### `maxDeliveryAttempts`<sup>Optional</sup> <a name="maxDeliveryAttempts" id="@winglang/sdk.cloud.DeadLetterQueueProps.property.maxDeliveryAttempts"></a>
+
+```wing
+maxDeliveryAttempts: num;
+```
+
+- *Type:* num
+- *Default:* 1
+
+Number of times a message will be processed before being sent to the dead-letter queue.
+
+---
+
 ### QueueProps <a name="QueueProps" id="@winglang/sdk.cloud.QueueProps"></a>
 
 Options for `Queue`.
@@ -262,8 +368,22 @@ let QueueProps = cloud.QueueProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.dlq">dlq</a></code> | <code><a href="#@winglang/sdk.cloud.DeadLetterQueueProps">DeadLetterQueueProps</a></code> | A dead-letter queue. |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue retains a message. |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue's consumers have to process a message. |
+
+---
+
+##### `dlq`<sup>Optional</sup> <a name="dlq" id="@winglang/sdk.cloud.QueueProps.property.dlq"></a>
+
+```wing
+dlq: DeadLetterQueueProps;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.DeadLetterQueueProps">DeadLetterQueueProps</a>
+- *Default:* no dead letter queue
+
+A dead-letter queue.
 
 ---
 
@@ -309,11 +429,25 @@ let QueueSetConsumerOptions = cloud.QueueSetConsumerOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.QueueSetConsumerOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
 
 ---
 

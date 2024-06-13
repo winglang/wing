@@ -241,7 +241,7 @@ exports[`api configured for cors 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006f966b9f7cd9b2b432eb5c29bb54b87c6": {
+    "Apiapideployment63AA9006a9350fdefb39f2c9c8b6f14c6d2d6da7": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -291,7 +291,7 @@ exports[`api configured for cors 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006f966b9f7cd9b2b432eb5c29bb54b87c6",
+          "Ref": "Apiapideployment63AA9006a9350fdefb39f2c9c8b6f14c6d2d6da7",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -551,7 +551,7 @@ exports[`api url can be used as environment variable 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA900631e48b71dd3d2a7c890c7b7740417862": {
+    "Apiapideployment63AA9006910767f1701c246578b56528c67217b8": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -567,7 +567,7 @@ exports[`api url can be used as environment variable 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA900631e48b71dd3d2a7c890c7b7740417862",
+          "Ref": "Apiapideployment63AA9006910767f1701c246578b56528c67217b8",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -809,7 +809,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
                 },
               },
             },
-            "/{proxy+}": {
+            "/{name}/{age}/{proxy+}": {
               "x-amazon-apigateway-any-method": {
                 "produces": [
                   "application/json",
@@ -910,7 +910,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90062f077666b7a242470d5f0af6cb54e2fa": {
+    "Apiapideployment63AA90060cf4119fbf39ca17a86ecca447cf30c8": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -960,7 +960,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90062f077666b7a242470d5f0af6cb54e2fa",
+          "Ref": "Apiapideployment63AA90060cf4119fbf39ca17a86ecca447cf30c8",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -1170,7 +1170,7 @@ exports[`api with 'name' parameter 1`] = `
                 },
               },
             },
-            "/{proxy+}": {
+            "/{name}/{proxy+}": {
               "x-amazon-apigateway-any-method": {
                 "produces": [
                   "application/json",
@@ -1271,7 +1271,7 @@ exports[`api with 'name' parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006af4d0414e5191b586ce98d28f6b78244": {
+    "Apiapideployment63AA9006e77e5fce96817943615e86914e22fe63": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -1321,7 +1321,7 @@ exports[`api with 'name' parameter 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006af4d0414e5191b586ce98d28f6b78244",
+          "Ref": "Apiapideployment63AA9006e77e5fce96817943615e86914e22fe63",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -1623,7 +1623,7 @@ exports[`api with CONNECT route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90062eecb976b06b1a8aede012adc45cedd4": {
+    "Apiapideployment63AA90068c14f6305292724800daf2c66d8aab90": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -1673,7 +1673,7 @@ exports[`api with CONNECT route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90062eecb976b06b1a8aede012adc45cedd4",
+          "Ref": "Apiapideployment63AA90068c14f6305292724800daf2c66d8aab90",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -1975,7 +1975,7 @@ exports[`api with DELETE route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006f5b6f478b64f41255a52bc405b0b1f59": {
+    "Apiapideployment63AA900652590e04c0874a94e1360f4a4761e33a": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -2025,7 +2025,7 @@ exports[`api with DELETE route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006f5b6f478b64f41255a52bc405b0b1f59",
+          "Ref": "Apiapideployment63AA900652590e04c0874a94e1360f4a4761e33a",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -2327,7 +2327,7 @@ exports[`api with GET route at root 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90065584d3a19d622308711306be2c779d45": {
+    "Apiapideployment63AA9006a3eb210ab6f4ad239a1e2ab7e70baf6c": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -2377,7 +2377,7 @@ exports[`api with GET route at root 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90065584d3a19d622308711306be2c779d45",
+          "Ref": "Apiapideployment63AA9006a3eb210ab6f4ad239a1e2ab7e70baf6c",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -2721,7 +2721,7 @@ exports[`api with GET routes with common prefix 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90067fe01ea071d08877f82be426b7fa297b": {
+    "Apiapideployment63AA9006628157807bd818497ef5f0c02bf60a24": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -2805,7 +2805,7 @@ exports[`api with GET routes with common prefix 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90067fe01ea071d08877f82be426b7fa297b",
+          "Ref": "Apiapideployment63AA9006628157807bd818497ef5f0c02bf60a24",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -3225,7 +3225,7 @@ exports[`api with GET routes with different prefix 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006add14f5c19c807f63950eb89ae528da3": {
+    "Apiapideployment63AA90069af77ebae27120f9cb146237ccc602f1": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -3309,7 +3309,7 @@ exports[`api with GET routes with different prefix 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006add14f5c19c807f63950eb89ae528da3",
+          "Ref": "Apiapideployment63AA90069af77ebae27120f9cb146237ccc602f1",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -3687,7 +3687,7 @@ exports[`api with HEAD route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90064c4722c2255408b195925a72a6c54a91": {
+    "Apiapideployment63AA9006189f3dead8ebb5853ed30011eebac22c": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -3737,7 +3737,7 @@ exports[`api with HEAD route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90064c4722c2255408b195925a72a6c54a91",
+          "Ref": "Apiapideployment63AA9006189f3dead8ebb5853ed30011eebac22c",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -4039,7 +4039,7 @@ exports[`api with OPTIONS route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006c72b16e492265df5697b564498a0bda0": {
+    "Apiapideployment63AA900640e913fb7156d92826ccb4d88cf00d94": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -4089,7 +4089,7 @@ exports[`api with OPTIONS route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006c72b16e492265df5697b564498a0bda0",
+          "Ref": "Apiapideployment63AA900640e913fb7156d92826ccb4d88cf00d94",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -4391,7 +4391,7 @@ exports[`api with PATCH route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA900622411480af77d5aa223a4a205574ac7a": {
+    "Apiapideployment63AA90064f5d9980a974eff1e3d61429956660fb": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -4441,7 +4441,7 @@ exports[`api with PATCH route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA900622411480af77d5aa223a4a205574ac7a",
+          "Ref": "Apiapideployment63AA90064f5d9980a974eff1e3d61429956660fb",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -4743,7 +4743,7 @@ exports[`api with POST route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006b51b5d701a7af604832597fab4d8cceb": {
+    "Apiapideployment63AA9006528a36383aa0f54328f5727d0d594f86": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -4793,7 +4793,7 @@ exports[`api with POST route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006b51b5d701a7af604832597fab4d8cceb",
+          "Ref": "Apiapideployment63AA9006528a36383aa0f54328f5727d0d594f86",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -5095,7 +5095,7 @@ exports[`api with PUT route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA900643b5463773184a42423009af11510ad4": {
+    "Apiapideployment63AA90062b5c6b2567f30a68924df13648507424": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -5145,7 +5145,7 @@ exports[`api with PUT route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA900643b5463773184a42423009af11510ad4",
+          "Ref": "Apiapideployment63AA90062b5c6b2567f30a68924df13648507424",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -5489,7 +5489,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006b8d83dac42ae9c9165969e69aa7ca2c6": {
+    "Apiapideployment63AA90062edea4fc086bea068dac779a93873489": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -5573,7 +5573,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006b8d83dac42ae9c9165969e69aa7ca2c6",
+          "Ref": "Apiapideployment63AA90062edea4fc086bea068dac779a93873489",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -5917,7 +5917,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006797d89cd0cd50502221d9b261ead2166": {
+    "Apiapideployment63AA9006ae7d6e4a6052298d2abfbe41d9e1e06e": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -6001,7 +6001,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006797d89cd0cd50502221d9b261ead2166",
+          "Ref": "Apiapideployment63AA9006ae7d6e4a6052298d2abfbe41d9e1e06e",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -6421,7 +6421,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006a3018bfd9f41f9f0d3210e1e3fbf2b66": {
+    "Apiapideployment63AA90065e7c510d60086ba47477ff050abadbc9": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -6505,7 +6505,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006a3018bfd9f41f9f0d3210e1e3fbf2b66",
+          "Ref": "Apiapideployment63AA90065e7c510d60086ba47477ff050abadbc9",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -6847,7 +6847,7 @@ exports[`api with multiple methods on same route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90069d73ac8bd0a03c2fa1129cdb39ac09e2": {
+    "Apiapideployment63AA9006b1eeaaafc7f642195ca45ff4c51112c7": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -6931,7 +6931,7 @@ exports[`api with multiple methods on same route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90069d73ac8bd0a03c2fa1129cdb39ac09e2",
+          "Ref": "Apiapideployment63AA9006b1eeaaafc7f642195ca45ff4c51112c7",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -7242,7 +7242,7 @@ exports[`api with path parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006a7a2bebf9e729cdf383b0ef6e3972bac": {
+    "Apiapideployment63AA90067964adf987057a6a86baf23dd82e2513": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -7292,7 +7292,7 @@ exports[`api with path parameter 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006a7a2bebf9e729cdf383b0ef6e3972bac",
+          "Ref": "Apiapideployment63AA90067964adf987057a6a86baf23dd82e2513",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",

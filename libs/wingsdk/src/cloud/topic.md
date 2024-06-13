@@ -22,7 +22,7 @@ Topics are a staple of event-driven architectures, especially those that rely on
 
 ### Creating a topic
 
-```js
+```js example
 bring cloud;
 
 let topic = new cloud.Topic();
@@ -30,7 +30,7 @@ let topic = new cloud.Topic();
 
 ### Subscribing to a topic
 
-```js
+```js example
 bring cloud;
 
 let topic = new cloud.Topic();
@@ -40,17 +40,34 @@ topic.onMessage(inflight (message: str) => {
 });
 ```
 
+### Subscribing a Queue to a Topic
+
+```js example
+bring cloud;
+
+let queue = new cloud.Queue();
+queue.setConsumer(inflight (message: str) => {
+  log("Topic published message: {message}");
+});
+
+let topic = new cloud.Topic();
+topic.subscribeQueue(queue);
+```
+
 ### Publishing to a topic
 
-The inflight method `publish` sends a message to all of the topic's subscribers.
+The inflight method `publish` sends messages to all of the topic's subscribers.
 
-```js
+```js example
 bring cloud;
 
 let topic = new cloud.Topic();
 
 inflight () => {
-  topic.publish("Hello World!");
+  topic.publish(
+    "Topics can now publish",
+    "multiple messages at once"
+  );
 };
 ```
 
@@ -59,7 +76,7 @@ inflight () => {
 Here is an example of combining the preflight and inflight apis for a topic and creating an adorable
 simple pub-sub application.
 
-```js
+```js example
 bring cloud;
 
 // First we create a topic

@@ -34,6 +34,7 @@
   "dependencies": {
     "@npmcli/arborist": "^7.2.0",
     "@segment/analytics-node": "^1.1.0",
+    "@supercharge/promise-pool": "^3.2.0",
     "@wingconsole/app": "workspace:^",
     "@wingconsole/server": "workspace:^",
     "@winglang/compiler": "workspace:^",
@@ -47,6 +48,7 @@
     "dotenv-expand": "^10.0.0",
     "glob": "^10.3.10",
     "inquirer": "^8",
+    "lodash.once": "^4.1.1",
     "nanoid": "^3.3.6",
     "npm-packlist": "^8.0.0",
     "open": "^8.4.2",
@@ -59,6 +61,7 @@
   "devDependencies": {
     "@types/debug": "^4.1.8",
     "@types/inquirer": "^9.0.7",
+    "@types/lodash.once": "^4.1.9",
     "@types/node": "^20.11.0",
     "@types/node-persist": "^3.1.4",
     "@types/npm-packlist": "^7.0.1",

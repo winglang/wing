@@ -1,6 +1,4 @@
 import { createHash } from "crypto";
-import { join } from "path";
-
 import { Fn, Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -15,14 +13,13 @@ import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { VpcEndpoint } from "../.gen/providers/aws/vpc-endpoint";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IAwsApi, STAGE_NAME } from "../shared-aws";
-import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
+import { ApiEndpointHandler, IAwsApi, STAGE_NAME } from "../shared-aws";
+import { createApiDefaultResponse } from "../shared-aws/api.default";
 import { IInflightHost, Node } from "../std";
 
 /**
@@ -46,9 +43,12 @@ export class Api extends cloud.Api implements IAwsApi {
       getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
+
     this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
       label: `Api ${this.node.path}`,
     });
+
+    Node.of(this.endpoint).hidden = true;
   }
 
   protected get _endpoint(): cloud.Endpoint {
@@ -67,23 +67,22 @@ export class Api extends cloud.Api implements IAwsApi {
     method: string,
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetOptions
+    props?: cloud.ApiEndpointOptions
   ): void {
     const lowerMethod = method.toLowerCase();
     const upperMethod = method.toUpperCase();
 
-    if (props) {
-      console.warn(`Api.${lowerMethod} does not support props yet`);
-    }
     this._validatePath(path);
 
-    const fn = this.addHandler(inflight, method, path);
+    const fn = this.addHandler(inflight, method, path, props);
     const apiSpecEndpoint = this.api.addEndpoint(path, upperMethod, fn);
     this._addToSpec(path, upperMethod, apiSpecEndpoint, this.corsOptions);
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ApiInflightMethods.REQUEST,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: `${lowerMethod}()`,
     });
   }
@@ -202,9 +201,10 @@ export class Api extends cloud.Api implements IAwsApi {
   private addHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
+    props?: cloud.ApiEndpointOptions
   ): Function {
-    let fn = this.addInflightHandler(inflight, method, path);
+    let fn = this.addInflightHandler(inflight, method, path, props);
     if (!(fn instanceof Function)) {
       throw new Error("Api only supports creating tfaws.Function right now");
     }
@@ -220,27 +220,21 @@ export class Api extends cloud.Api implements IAwsApi {
   private addInflightHandler(
     inflight: cloud.IApiEndpointHandler,
     method: string,
-    path: string
+    path: string,
+    props?: cloud.ApiEndpointOptions
   ): Function {
     let handler = this.handlers[inflight._id];
     if (!handler) {
-      const newInflight = convertBetweenHandlers(
+      const newInflight = ApiEndpointHandler.toFunctionHandler(
         inflight,
-        join(
-          __dirname.replace("target-tf-aws", "shared-aws"),
-          "api.onrequest.inflight.js"
-        ),
-        "ApiOnRequestHandlerClient",
-        {
-          corsHeaders: this._generateCorsHeaders(this.corsOptions)
-            ?.defaultResponse,
-        }
+        cloud.Api.renderCorsHeaders(this.corsOptions)?.defaultResponse
       );
       const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}`;
       handler = new Function(
         this,
         App.of(this).makeId(this, prefix),
-        newInflight
+        newInflight,
+        props
       );
       Node.of(handler).hidden = true;
       this.handlers[inflight._id] = handler;
@@ -251,12 +245,7 @@ export class Api extends cloud.Api implements IAwsApi {
 
   /** @internal */
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("apis can only be bound by tfaws.Function for now");
-    }
-
     host.addEnvironment(this.urlEnvName(), this.url);
-
     super.onLift(host, ops);
   }
 
@@ -304,18 +293,19 @@ export class Api extends cloud.Api implements IAwsApi {
 }
 
 /**
- * Encapsulates the API Gateway REST API as a abstraction for Terraform.
+ * Encapsulates the API Gateway REST API as an abstraction for Terraform.
  */
 class WingRestApi extends Construct {
+  private readonly id: string;
+  private readonly region: string;
+  private readonly accountId: string;
   public readonly url: string;
   public readonly api: ApiGatewayRestApi;
   public readonly stage: ApiGatewayStage;
   public readonly deployment: ApiGatewayDeployment;
+  public readonly privateVpc: boolean = false;
   public readonly securityGroup?: SecurityGroup;
-  public readonly privateVpc: boolean;
   public readonly vpcEndpoint?: VpcEndpoint;
-  private readonly region: string;
-  private readonly accountId: string;
 
   constructor(
     scope: Construct,
@@ -327,77 +317,124 @@ class WingRestApi extends Construct {
   ) {
     super(scope, id);
     const app = App.of(this) as App;
+    this.id = id;
     this.region = app.region;
     this.accountId = app.accountId;
-    this.privateVpc = false;
 
-    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
-    const parameters = app.platformParameters;
-
-    let privateApiGateway = parameters.getParameterValue(
-      "tf-aws/vpc_api_gateway"
-    );
+    // Check for PRIVATE API Gateway configuration
+    let privateApiGateway = app.parameters.value("tf-aws/vpc_api_gateway");
     if (privateApiGateway === true) {
-      let vpc = app.vpc;
       this.privateVpc = true;
-      this.securityGroup = new SecurityGroup(this, `${id}SecurityGroup`, {
-        vpcId: vpc.id,
-        ingress: [
-          {
-            cidrBlocks: ["0.0.0.0/0"],
-            fromPort: 0,
-            toPort: 0,
-            protocol: "-1",
-          },
-        ],
-      });
-
-      const service = new DataAwsVpcEndpointService(
-        this,
-        `${id}ServiceLookup`,
-        {
-          service: "execute-api",
-        }
-      );
-
-      this.vpcEndpoint = new VpcEndpoint(this, `${id}-vpc-endpoint`, {
-        vpcId: vpc.id,
-        serviceName: service.serviceName,
-        privateDnsEnabled: true,
-        vpcEndpointType: "Interface",
-        subnetIds: [...app.subnets.private.map((s) => s.id)],
-        securityGroupIds: [this.securityGroup.id],
-      });
+      const vpcResources = this._initVpcResources(app);
+      this.securityGroup = vpcResources.securityGroup;
+      this.vpcEndpoint = vpcResources.vpcEndpoint;
     }
 
-    this.api = new ApiGatewayRestApi(this, `${id}`, {
+    // Create the API Gateway and configure it
+    this.api = this._initApiGatewayRestApi(id, props);
+    this.deployment = this._initApiGatewayDeployment();
+    this.stage = this._initApiGatewayStage();
+
+    // Construct the URL for the deployed API Gateway stage
+    this.url = this._constructInvokeUrl();
+  }
+
+  private _initVpcResources(app: App): {
+    securityGroup: SecurityGroup;
+    vpcEndpoint: VpcEndpoint;
+  } {
+    const vpcId: string = app.vpc.id;
+    const subnetIds: string[] = [...app.subnets.private.map((s) => s.id)];
+
+    const securityGroup = new SecurityGroup(this, `${this.id}SecurityGroup`, {
+      vpcId: vpcId,
+      ingress: [
+        {
+          cidrBlocks: ["0.0.0.0/0"],
+          fromPort: 0,
+          toPort: 0,
+          protocol: "-1",
+        },
+      ],
+    });
+
+    const service = new DataAwsVpcEndpointService(
+      this,
+      `${this.id}ServiceLookup`,
+      {
+        service: "execute-api",
+      }
+    );
+
+    const vpcEndpoint = new VpcEndpoint(this, `${this.id}-vpc-endpoint`, {
+      vpcId: vpcId,
+      serviceName: service.serviceName,
+      privateDnsEnabled: true,
+      vpcEndpointType: "Interface",
+      subnetIds: subnetIds,
+      securityGroupIds: [securityGroup.id],
+    });
+
+    return { securityGroup, vpcEndpoint };
+  }
+
+  private _initApiGatewayRestApi(
+    id: string,
+    props: {
+      getApiSpec: () => OpenApiSpec;
+      cors?: cloud.ApiCorsOptions;
+    }
+  ): ApiGatewayRestApi {
+    /**
+     * Configures the default response for requests to undefined routes (`/{proxy+}`).
+     * - If CORS options are defined, `defaultResponse` sets up CORS-compliant mock responses:
+     *   - 204 (No Content) for OPTIONS requests.
+     *   - 404 (Not Found) for other HTTP methods.
+     * - If CORS options are undefined, `defaultResponse` set up a mock 404 response for any HTTP method.
+     */
+
+    /**
+     * BASIC API Gateway properties
+     */
+    let apiProps: any = {
       name: ResourceNames.generateName(this, NAME_OPTS),
+      lifecycle: { createBeforeDestroy: true },
+
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
-          const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
-            openApiSpec.paths = {
-              ...openApiSpec.paths,
-              ...defaultResponse,
-            };
-            return openApiSpec;
-          };
-          return JSON.stringify(injectGreedy404Handler(props.getApiSpec()));
+          // Retrieves the API specification.
+          const apiSpec = props.getApiSpec();
+          const defaultResponse = createApiDefaultResponse(
+            Object.keys(apiSpec.paths),
+            props.cors
+          );
+
+          // Merges the specification with `defaultResponse` to handle requests to undefined routes (`/{proxy+}`).
+          // This integration ensures comprehensive route handling:
+          // - Predefined paths are maintained as specified.
+          // - Requests to paths not explicitly defined are managed by `defaultResponse`.
+          return JSON.stringify({
+            ...apiSpec,
+            paths: { ...apiSpec.paths, ...defaultResponse },
+          });
         },
       }),
-      lifecycle: {
-        createBeforeDestroy: true,
-      },
-    });
+    };
 
-    if (privateApiGateway === true) {
-      this.api.endpointConfiguration.types = ["PRIVATE"];
-      this.api.endpointConfiguration.vpcEndpointIds = [this.vpcEndpoint!.id];
+    /**
+     * PRIVATE API Gateway properties
+     */
+    if (this.privateVpc && this.vpcEndpoint) {
+      apiProps.endpointConfiguration = {
+        types: ["PRIVATE"],
+        vpcEndpointIds: [this.vpcEndpoint.id],
+      };
 
       // This policy will explicitly deny all requests that don't come from the VPC endpoint
       // which means only requests that come from the same vpc on the same private subnet and security group
       // will be allowed to access the API Gateway
-      this.api.policy = JSON.stringify({
+      apiProps.policy = JSON.stringify({
         Version: "2012-10-17",
         Statement: [
           {
@@ -413,7 +450,7 @@ class WingRestApi extends Construct {
             Resource: ["*"],
             Condition: {
               StringNotEquals: {
-                "aws:sourceVpce": this.vpcEndpoint!.id,
+                "aws:sourceVpce": this.vpcEndpoint.id,
               },
             },
           },
@@ -421,28 +458,32 @@ class WingRestApi extends Construct {
       });
     }
 
-    this.deployment = new ApiGatewayDeployment(this, "deployment", {
-      restApiId: this.api.id,
-      lifecycle: {
-        createBeforeDestroy: true,
-      },
-      triggers: {
-        // Trigger redeployment when the api spec changes
-        redeployment: Fn.sha256(this.api.body),
-      },
-    });
+    return new ApiGatewayRestApi(this, id, apiProps);
+  }
 
-    this.stage = new ApiGatewayStage(this, "stage", {
+  private _initApiGatewayDeployment(): ApiGatewayDeployment {
+    return new ApiGatewayDeployment(this, "deployment", {
+      restApiId: this.api.id,
+      lifecycle: { createBeforeDestroy: true },
+      // Trigger redeployment when the api spec changes
+      triggers: { redeployment: Fn.sha256(this.api.body) },
+    });
+  }
+
+  private _initApiGatewayStage(): ApiGatewayStage {
+    return new ApiGatewayStage(this, "stage", {
       restApiId: this.api.id,
       stageName: STAGE_NAME,
       deploymentId: this.deployment.id,
     });
+  }
 
-    // Intentionally not using `this.stage.invokeUrl`, it looks like it's shared with
-    // the `invokeUrl` from the api deployment, which gets recreated on every deployment.
-    // When this `invokeUrl` is referenced somewhere else in the stack, it can cause cyclic dependencies
-    // in Terraform. Hence, we're creating our own url here.
-    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${this.stage.stageName}`;
+  // Intentionally not using `this.stage.invokeUrl`, it looks like it's shared with
+  // the `invokeUrl` from the api deployment, which gets recreated on every deployment.
+  // When this `invokeUrl` is referenced somewhere else in the stack, it can cause cyclic dependencies
+  // in Terraform. Hence, we're creating our own url here.
+  private _constructInvokeUrl(): string {
+    return `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${this.stage.stageName}`;
   }
 
   /**
@@ -453,8 +494,8 @@ class WingRestApi extends Construct {
    * @returns OpenApi spec extension for the endpoint
    */
   public addEndpoint(path: string, method: string, handler: Function) {
-    const endpointExtension = this.createApiSpecExtension(handler);
-    this.addHandlerPermissions(path, method, handler);
+    const endpointExtension = this._createApiSpecExtension(handler);
+    this._addHandlerPermissions(path, method, handler);
     return endpointExtension;
   }
 
@@ -463,7 +504,7 @@ class WingRestApi extends Construct {
    * @param handler Lambda function to handle the endpoint
    * @returns OpenApi extension object for the endpoint and handler
    */
-  private createApiSpecExtension(handler: Function) {
+  private _createApiSpecExtension(handler: Function) {
     // The ARN of the Lambda function is constructed by hand so that it can be calculated
     // during preflight, instead of being resolved at deploy time.
     //
@@ -496,7 +537,7 @@ class WingRestApi extends Construct {
    * @param method Method of the endpoint
    * @param handler Lambda function to handle the endpoint
    */
-  private addHandlerPermissions = (
+  private _addHandlerPermissions = (
     path: string,
     method: string,
     handler: Function
@@ -508,7 +549,7 @@ class WingRestApi extends Construct {
       action: "lambda:InvokeFunction",
       functionName: handler.functionName,
       principal: "apigateway.amazonaws.com",
-      sourceArn: `${this.api.executionArn}/*/${method}${Api._toOpenApiPath(
+      sourceArn: `${this.api.executionArn}/*/${method}${Api.renderOpenApiPath(
         path
       )}`,
     });

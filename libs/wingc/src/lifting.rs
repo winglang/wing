@@ -1,6 +1,9 @@
+use itertools::Itertools;
+
 use crate::{
 	ast::{
-		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, Symbol, UserDefinedType,
+		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+		UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic},
@@ -13,13 +16,17 @@ use crate::{
 		ClassLike, ResolveSource, SymbolKind, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
-	visit_context::{VisitContext, VisitorWithContext},
+	visit_context::{PropertyObject, VisitContext, VisitorWithContext},
 };
 
 pub struct LiftVisitor<'a> {
 	ctx: VisitContext,
 	jsify: &'a JSifier<'a>,
 	lifts_stack: Vec<Lifts>,
+	// Used during visiting to track whether we're inside an explicit `lift` qualification block
+	in_disable_lift_qual_err: usize,
+	// Used during visiting to track whether we're inside an inner inflight class
+	in_inner_inflight_class: usize,
 }
 
 impl<'a> LiftVisitor<'a> {
@@ -28,6 +35,8 @@ impl<'a> LiftVisitor<'a> {
 			jsify: jsifier,
 			ctx: VisitContext::new(),
 			lifts_stack: vec![],
+			in_inner_inflight_class: 0,
+			in_disable_lift_qual_err: 0,
 		}
 	}
 
@@ -152,23 +161,34 @@ impl<'a> LiftVisitor<'a> {
 			udt_js
 		}
 	}
+
+	// Used for generating a js array represtining a lift qualificaiton (an operation done on a lifted preflight object)
+	// lift qualifcations are in array format so multiple ops can be bunched together in some cases.
+	fn jsify_symbol_to_op_array(&self, symb: &Symbol) -> String {
+		format!("[\"{symb}\"]")
+	}
 }
 
 impl<'a> Visit<'a> for LiftVisitor<'a> {
 	fn visit_reference(&mut self, node: &'a Reference) {
 		match node {
-			Reference::InstanceMember { property, .. } => {
-				self.ctx.push_property(property);
+			Reference::InstanceMember { property, object, .. } => {
+				self.ctx.push_property(PropertyObject::Instance(object.id), property);
 				visit::visit_reference(self, &node);
 				self.ctx.pop_property();
 			}
-			Reference::TypeMember { property, .. } => {
-				self.ctx.push_property(property);
+			Reference::TypeMember { property, type_name } => {
+				self
+					.ctx
+					.push_property(PropertyObject::UserDefinedType(type_name.clone()), property);
 				visit::visit_reference(self, &node);
 				self.ctx.pop_property();
 			}
 			Reference::Identifier(symb) => {
 				self.verify_defined_in_current_env(symb);
+				visit::visit_reference(self, &node);
+			}
+			Reference::ElementAccess { .. } => {
 				visit::visit_reference(self, &node);
 			}
 		}
@@ -182,8 +202,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 	fn visit_expr(&mut self, node: &'a Expr) {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
-		self.with_expr(&node, |v|	{
-			let expr_phase = self.jsify.types.get_expr_phase(&node).unwrap();
+		self.with_expr(&node, |v| {
+			let expr_phase = v.jsify.types.get_expr_phase(&node).unwrap();
 			let expr_type = v.jsify.types.get_expr_type(&node);
 
 			// Skip expressions of an unresoved type (type errors)
@@ -201,54 +221,38 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			// Inflight expressions that evaluate to a preflight type are currently unsupported because
 			// we can't determine exactly which preflight object is being accessed and therefore can't
 			// qualify the original lift expression.
-			if expr_phase == Phase::Inflight {
-				// The more explicit case is when the inflight expression is a reference to a preflight class
-				if expr_type.is_preflight_class() && (
-						// Normal access to a property which acan't be qualified
-						v.ctx.current_property().is_some() /*||
-						// Calling an inflight closure is an implicit access to `handle`, which can't qualify this either
-						matches!(node.kind, ExprKind::Call { .. })
-					*/) {
-						report_diagnostic(Diagnostic {
-							message: format!(
-								"Expression of type \"{expr_type}\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)"
-							),
-							span: Some(node.span.clone()),
-							annotations: vec![],
-							hints: vec![],
-						});
-				}
-
-				// There's also a case when the inflight expression is a call on an inflight closure that's defined as
-				// a preflght class (a class with an inflight `handle` method`). In that case we can't qualify which preflight
-				// object is being accessed.
-				// if expr_type.is_closure_class() && node.is_callee {
-				// 		report_diagnostic(Diagnostic {
-				// 			message: format!(
-				// 				"Expression of type \"{expr_type}\" references an unknown inflight closure, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)"
-				// 			),
-				// 			span: Some(node.span.clone()),
-				// 			annotations: vec![],
-				// 			hints: vec![],
-				// 		});
-				// 	}
+			if expr_phase == Phase::Inflight
+				&& expr_type.is_preflight_object_type()
+				&& v.ctx.current_property().is_some()
+				&& v.in_disable_lift_qual_err == 0
+			{
+				Diagnostic::new(
+					format!(
+						"Expression of type \"{expr_type}\" references an unknown preflight object, can't qualify its capabilities"
+					),
+					node,
+				)
+				.hint("Use a `lift` block to explicitly qualify the preflight object and disable this error")
+				.hint("For details see: https://www.winglang.io/docs/concepts/inflights#explicit-lift-qualification")
+				.report();
 			}
 
 			//---------------
 			// LIFT
 			if expr_phase == Phase::Preflight {
-				// jsify the expression so we can get the preflight code
-				let code = v.jsify_expr(&node);
-
-				let property = if let Some(property) = v.ctx.current_property() {
-					Some(property)
-				} else if expr_type.is_closure() {
-					// this is the case where we are lifting a "closure class" (a preflight class that has an inflight `handle`
-					// method is being called) the reason we might not have "property" set is because closure classes might be
-					// syntheticaly generated by the compiler from closures.
-					Some(Symbol::global(CLOSURE_CLASS_HANDLE_METHOD))
-				} else {
-					None
+				// Get the property being accessed on the preflight expression, this is used to qualify the lift
+				let property = match v.ctx.current_property() {
+					Some((PropertyObject::Instance(prop_expr_id), property)) if node.id == prop_expr_id => Some(property),
+					_ => {
+						if expr_type.is_closure() {
+							// this is the case where we are lifting a "closure class" (a preflight class that has an inflight `handle`
+							// method is being called) the reason we might not have "property" set is because closure classes might be
+							// syntheticaly generated by the compiler from closures.
+							Some(Symbol::global(CLOSURE_CLASS_HANDLE_METHOD))
+						} else {
+							None
+						}
+					}
 				};
 
 				// if this is an inflight field of "this" no need to lift it
@@ -256,9 +260,16 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 					return;
 				}
 
+				// jsify the expression so we can get the preflight code
+				let code = v.jsify_expr(&node);
+
 				let mut lifts = v.lifts_stack.pop().unwrap();
 				let is_field = code.contains("this."); // TODO: starts_with?
-				lifts.lift(v.ctx.current_method().map(|(m,_)|m).expect("a method"), property, &code);
+				lifts.lift(
+					v.ctx.current_method().map(|(m, _)| m).expect("a method"),
+					property.map(|p| v.jsify_symbol_to_op_array(&p)),
+					&code,
+				);
 				lifts.capture(&Liftable::Expr(node.id), &code, is_field);
 				v.lifts_stack.push(lifts);
 				return;
@@ -352,7 +363,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.lift(
 				self.ctx.current_method().map(|(m, _)| m).expect("a method"),
-				property,
+				property.map(|(_, p)| self.jsify_symbol_to_op_array(&p)),
 				&code,
 			);
 			self.lifts_stack.push(lifts);
@@ -379,66 +390,60 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 	fn visit_function_definition(&mut self, node: &'a FunctionDefinition) {
 		match &node.body {
 			FunctionBody::Statements(scope) => {
-				self.ctx.push_function_definition(
-					node.name.as_ref(),
-					&node.signature,
-					node.is_static,
-					self.jsify.types.get_scope_env(&scope),
-				);
+				// If we're in an inner inflight class then we don't need to track this inner method since lifts are
+				// collected for methods of classes defined preflight.
+				if self.in_inner_inflight_class == 0 {
+					self.ctx.push_function_definition(
+						node.name.as_ref(),
+						&node.signature,
+						node.is_static,
+						self.jsify.types.get_scope_env(&scope),
+					);
+				}
 
 				visit::visit_function_definition(self, node);
-				self.ctx.pop_function_definition();
+
+				if self.in_inner_inflight_class == 0 {
+					self.ctx.pop_function_definition();
+				}
 			}
 			FunctionBody::External(_) => visit::visit_function_definition(self, node),
 		}
 	}
 
 	fn visit_class(&mut self, node: &'a Class) {
-		// nothing to do if we are emitting an inflight class from within an inflight scope
-		if self.ctx.current_phase() == Phase::Inflight && node.phase == Phase::Inflight {
-			self.visit_symbol(&node.name);
+		let in_inner_inflight_class = self.ctx.current_phase() == Phase::Inflight && node.phase == Phase::Inflight;
+		if in_inner_inflight_class {
+			// nothing to do if we are emitting an inflight class from within an inflight scope:
+			// inner inflight classes collect lifts in their outer class, just mark we're in such a class and do nothing
+			self.in_inner_inflight_class += 1;
+		} else {
+			self.ctx.push_class(node);
 
-			visit::visit_function_definition(self, &node.initializer);
-			visit::visit_function_definition(self, &node.inflight_initializer);
+			self.lifts_stack.push(Lifts::new());
 
-			for field in node.fields.iter() {
-				self.visit_symbol(&field.name);
-				self.visit_type_annotation(&field.member_type);
-			}
-			for (name, def) in node.methods.iter() {
-				self.visit_symbol(&name);
-				visit::visit_function_definition(self, &def);
-			}
 			if let Some(parent) = &node.parent {
-				self.visit_user_defined_type(&parent);
+				let mut lifts = self.lifts_stack.pop().unwrap();
+				lifts.capture(&Liftable::Type(parent.clone()), &self.jsify_udt(&parent), false);
+				self.lifts_stack.push(lifts);
 			}
-			for interface in node.implements.iter() {
-				self.visit_user_defined_type(&interface);
-			}
-			return;
-		}
-
-		self.ctx.push_class(node);
-
-		self.lifts_stack.push(Lifts::new());
-
-		if let Some(parent) = &node.parent {
-			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.capture(&Liftable::Type(parent.clone()), &self.jsify_udt(&parent), false);
-			self.lifts_stack.push(lifts);
 		}
 
 		visit::visit_class(self, node);
 
-		self.ctx.pop_class();
+		if in_inner_inflight_class {
+			self.in_inner_inflight_class -= 1;
+		} else {
+			let lifts = self.lifts_stack.pop().expect("Unable to pop class tokens");
 
-		let lifts = self.lifts_stack.pop().expect("Unable to pop class tokens");
-
-		if let Some(env) = self.ctx.current_env() {
-			if let Some(mut t) = resolve_user_defined_type(&UserDefinedType::for_class(node), env, 0).ok() {
-				let mut_class = t.as_class_mut().unwrap();
-				mut_class.set_lifts(lifts);
+			if let Some(env) = self.ctx.current_env() {
+				if let Some(mut t) = resolve_user_defined_type(&UserDefinedType::for_class(node), env, 0).ok() {
+					let mut_class = t.as_class_mut().unwrap();
+					mut_class.set_lifts(lifts);
+				}
 			}
+
+			self.ctx.pop_class();
 		}
 	}
 
@@ -451,8 +456,35 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 	fn visit_stmt(&mut self, node: &'a Stmt) {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
 
-		self.ctx.push_stmt(node.idx);
+		self.ctx.push_stmt(node);
+
+		// If this is an explicit lift statement then add the explicit lift
+		if let StmtKind::ExplicitLift(explicit_lift) = &node.kind {
+			// Mark that within this scope we should ignore unknown preflight objects
+			self.in_disable_lift_qual_err += 1;
+
+			// Add the explicit lifts
+			let mut lifts = self.lifts_stack.pop().unwrap();
+			for qual in explicit_lift.qualifications.iter() {
+				// jsify the reference to the preflight object so we can get the preflight code
+				let preflight_code = self.jsify_expr(&qual.obj);
+
+				let ops_str = format!(
+					"[{}]",
+					qual.ops.iter().map(|op| format!("\"{op}\"")).collect_vec().join(", ")
+				);
+				lifts.lift(
+					self.ctx.current_method().map(|(m, _)| m).expect("a method"),
+					Some(ops_str),
+					&preflight_code,
+				);
+			}
+			self.lifts_stack.push(lifts);
+		}
 		visit::visit_stmt(self, node);
+		if let StmtKind::ExplicitLift(_) = &node.kind {
+			self.in_disable_lift_qual_err -= 1;
+		}
 		self.ctx.pop_stmt();
 	}
 }

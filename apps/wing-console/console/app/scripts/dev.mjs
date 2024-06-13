@@ -1,3 +1,4 @@
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
@@ -5,7 +6,8 @@ import { createConsoleServer } from "@wingconsole/server";
 import { createServer as createViteServer } from "vite";
 
 import { viteConfig } from "./config.mjs";
-import { openBrowser } from "./open.mjs";
+
+const require = createRequire(import.meta.url);
 
 const options = parseArgs({
   options: {
@@ -15,45 +17,54 @@ const options = parseArgs({
   },
 });
 
-const consoleServer = await createConsoleServer({
-  wingfile:
-    options.values.wingfile ??
-    fileURLToPath(new URL("../demo/main.w", import.meta.url)),
-  requestedPort: 1214,
-  log: {
-    info: console.log,
-    error: console.error,
-    verbose: console.log,
-  },
-  config: {
-    addEventListener(event, listener) {},
-    removeEventListener(event, listener) {},
-    get(key) {
-      return;
+(async () => {
+  const consoleServer = await createConsoleServer({
+    wingfile:
+      options.values.wingfile ??
+      fileURLToPath(new URL("../demo/main.w", import.meta.url)),
+    requestedPort: 1214,
+    log: {
+      info: console.log,
+      error: console.error,
+      verbose: console.log,
     },
-    set(key, value) {},
-  },
-  hostUtils: {
-    async openExternal(url) {
-      openBrowser(url, {});
+    config: {
+      addEventListener(event, listener) {},
+      removeEventListener(event, listener) {},
+      get(key) {},
+      set(key, value) {},
     },
-  },
-  requireAcceptTerms: true,
-  analyticsAnonymousId: undefined,
-});
-
-const vite = await createViteServer({
-  ...viteConfig,
-  server: {
-    proxy: {
-      "/trpc": {
-        target: `http://localhost:${consoleServer.port}`,
-        changeOrigin: true,
-        ws: true,
+    hostUtils: {
+      async openExternal(url) {
+        const { openBrowser } = require("../src/open.js");
+        openBrowser(url);
       },
     },
-    open: true,
-  },
-});
+    requireAcceptTerms: true,
+    analyticsAnonymousId: undefined,
+    async requireSignIn() {
+      // Return `true` if you want to show the sign in prompt.
+      return false;
+    },
+  });
 
-await vite.listen();
+  const vite = await createViteServer({
+    ...viteConfig,
+    server: {
+      proxy: {
+        "/trpc": {
+          target: `http://localhost:${consoleServer.port}`,
+          changeOrigin: true,
+          ws: true,
+        },
+      },
+      open: true,
+    },
+  });
+
+  await vite.listen();
+})().catch((error) => {
+  console.error(error);
+  // eslint-disable-next-line unicorn/no-process-exit
+  process.exit(1);
+});

@@ -1,3 +1,5 @@
+bring expect; 
+
 interface IFoo {
   // other types can reference structs before they are defined
   field0(): A;
@@ -87,4 +89,24 @@ struct M1 {
 
 struct M2 {
   m1: M1?;
+}
+
+// Self referential struct
+struct Node {
+	val: str;
+	next: Node?;
+}
+
+let aNode = Node {val: "someval"};
+let bNode = Node {val: "otherval", next: aNode};
+
+expect.equal(Json.stringify(bNode), "\{\"val\":\"otherval\",\"next\":\{\"val\":\"someval\"\}\}");
+
+// A documented struct (should be parsed without errors)
+/// Struct documentation
+/// blah blah blah
+struct DocumentedStruct {
+    /// Field documentation
+    /// blah blah blah
+    field: str;
 }

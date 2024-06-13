@@ -9,17 +9,17 @@ source: libs/wingc/src/jsify/tests.rs
     let a = [new cloud.Bucket()];
 
     test "test" {
-      a.at(0).put("hello", "world");
+      a[0].put("hello", "world");
     }
     
 ```
 
-## inflight.$Closure1-1.js
+## inflight.$Closure1-1.cjs
 
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_ }) {
+module.exports = function({ $_helpers_lookup_a__0_ }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -27,15 +27,15 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
       return $obj;
     }
     async handle() {
-      (await $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_.put("hello", "world"));
+      (await $_helpers_lookup_a__0_.put("hello", "world"));
     }
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -45,6 +45,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -57,8 +58,8 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0))},
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+            $_helpers_lookup_a__0_: ${$stdlib.core.liftObject($helpers.lookup(a, 0))},
           })
         `;
       }
@@ -76,21 +77,21 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0), ["put"]],
+            [$helpers.lookup(a, 0), ["put"]],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0), []],
+            [$helpers.lookup(a, 0), []],
           ],
         });
       }
     }
-    const a = [this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket")];
+    const a = [this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket")];
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

@@ -22,6 +22,7 @@ exports[`provides raw tree data 1`] = `
       "fqn": "constructs.Construct",
       "version": "10.3.0",
     },
+    "display": {},
     "id": "root",
     "path": "root",
   },
@@ -40,6 +41,7 @@ exports[`run all tests > single test 1`] = `
         "data": {
           "message": "hi",
         },
+        "level": "info",
         "sourcePath": "root/test/Handler",
         "sourceType": "@winglang/sdk.cloud.Function",
         "timestamp": "<TIMESTAMP>",
@@ -50,6 +52,7 @@ exports[`run all tests > single test 1`] = `
           "message": "Invoke (payload=undefined).",
           "status": "success",
         },
+        "level": "verbose",
         "sourcePath": "root/test/Handler",
         "sourceType": "@winglang/sdk.cloud.Function",
         "timestamp": "<TIMESTAMP>",
@@ -70,6 +73,7 @@ exports[`run single test > happy path 1`] = `
       "data": {
         "message": "hi",
       },
+      "level": "info",
       "sourcePath": "root/test/Handler",
       "sourceType": "@winglang/sdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
@@ -80,6 +84,7 @@ exports[`run single test > happy path 1`] = `
         "message": "Invoke (payload=undefined).",
         "status": "success",
       },
+      "level": "verbose",
       "sourcePath": "root/test/Handler",
       "sourceType": "@winglang/sdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
@@ -91,17 +96,7 @@ exports[`run single test > happy path 1`] = `
 
 exports[`run single test > test failure 1`] = `
 {
-  "error": "Error: test failed
-<sanitized>
-<sanitized>
-<sanitized>
-    at Script.runInContext (node:vm:<sanitized>)
-    at Object.runInContext (node:vm:<sanitized>)
-<sanitized>
-    at new Promise (<anonymous>)
-<sanitized>
-<sanitized>
-<sanitized>",
+  "error": "Error: test failed",
   "pass": false,
   "path": "root/test",
   "traces": [
@@ -109,6 +104,7 @@ exports[`run single test > test failure 1`] = `
       "data": {
         "message": "I am about to fail",
       },
+      "level": "info",
       "sourcePath": "root/test/Handler",
       "sourceType": "@winglang/sdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
@@ -117,9 +113,10 @@ exports[`run single test > test failure 1`] = `
     {
       "data": {
         "error": {},
-        "message": "Invoke (payload=undefined).",
+        "message": "Error: test failed (Invoke (payload=undefined).)",
         "status": "failure",
       },
+      "level": "verbose",
       "sourcePath": "root/test/Handler",
       "sourceType": "@winglang/sdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",

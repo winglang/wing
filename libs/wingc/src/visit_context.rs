@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::{
-	ast::{Class, Expr, ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
+	ast::{Class, ExprId, FunctionSignature, Phase, Stmt, StmtKind, Symbol, UserDefinedType},
 	type_check::symbol_env::SymbolEnvRef,
 };
 
@@ -13,14 +13,26 @@ pub struct FunctionContext {
 }
 
 #[derive(Clone)]
+pub enum PropertyObject {
+	UserDefinedType(UserDefinedType),
+	Instance(ExprId),
+}
+
+#[derive(Clone)]
+pub struct StmtContext {
+	pub idx: usize,
+	pub super_call: bool,
+}
+
+#[derive(Clone)]
 pub struct VisitContext {
 	phase: Vec<Phase>,
 	env: Vec<SymbolEnvRef>,
 	function_env: Vec<SymbolEnvRef>,
-	property: Vec<Symbol>,
+	property: Vec<(PropertyObject, Symbol)>,
 	function: Vec<FunctionContext>,
 	class: Vec<UserDefinedType>,
-	statement: Vec<usize>,
+	statement: Vec<StmtContext>,
 	in_json: Vec<bool>,
 	in_type_annotation: Vec<bool>,
 	expression: Vec<ExprId>,
@@ -58,8 +70,11 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_stmt(&mut self, stmt: usize) {
-		self.statement.push(stmt);
+	pub fn push_stmt(&mut self, stmt: &Stmt) {
+		self.statement.push(StmtContext {
+			idx: stmt.idx,
+			super_call: matches!(stmt.kind, StmtKind::SuperConstructor { .. }),
+		});
 	}
 
 	pub fn pop_stmt(&mut self) {
@@ -67,7 +82,11 @@ impl VisitContext {
 	}
 
 	pub fn current_stmt_idx(&self) -> usize {
-		*self.statement.last().unwrap_or(&0)
+		self.statement.last().map_or(0, |s| s.idx)
+	}
+
+	pub fn current_stmt_is_super_call(&self) -> bool {
+		self.statement.last().map_or(false, |s| s.super_call)
 	}
 
 	// --
@@ -164,15 +183,15 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_property(&mut self, property: &Symbol) {
-		self.property.push(property.clone());
+	pub fn push_property(&mut self, property_object: PropertyObject, property: &Symbol) {
+		self.property.push((property_object, property.clone()));
 	}
 
 	pub fn pop_property(&mut self) {
 		self.property.pop();
 	}
 
-	pub fn current_property(&self) -> Option<Symbol> {
+	pub fn current_property(&self) -> Option<(PropertyObject, Symbol)> {
 		self.property.last().cloned()
 	}
 
@@ -224,7 +243,7 @@ pub trait VisitorWithContext {
 		self.ctx().pop_expr();
 	}
 
-	fn with_stmt(&mut self, stmt: usize, f: impl FnOnce(&mut Self)) {
+	fn with_stmt(&mut self, stmt: &Stmt, f: impl FnOnce(&mut Self)) {
 		self.ctx().push_stmt(stmt);
 		f(self);
 		self.ctx().pop_stmt();

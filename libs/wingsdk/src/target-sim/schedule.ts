@@ -1,8 +1,7 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
+import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { ScheduleSchema } from "./schema-resources";
 import {
@@ -10,9 +9,10 @@ import {
   makeSimulatorJsClient,
   convertDurationToCronExpression,
 } from "./util";
+import { Function } from "../cloud";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
-import { BaseResourceSchema } from "../simulator";
+import { lift } from "../core";
+import { ToSimulatorOutput } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
@@ -22,24 +22,21 @@ import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
  */
 export class Schedule extends cloud.Schedule implements ISimulatorResource {
   private readonly cronExpression: string;
+  private readonly policy: Policy;
 
   constructor(scope: Construct, id: string, props: cloud.ScheduleProps = {}) {
     super(scope, id, props);
     const { rate, cron } = props;
 
     this.cronExpression = cron ?? convertDurationToCronExpression(rate!);
+    this.policy = new Policy(this, "Policy", { principal: this });
   }
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
     props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "schedule.ontick.inflight.js"),
-      "ScheduleOnTickHandlerClient"
-    );
-
+    const functionHandler = ScheduleOnTickHandler.toFunctionHandler(inflight);
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnTick"),
@@ -47,7 +44,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = "onTick()";
+    Node.of(fn).title = "Tick";
 
     new EventMapping(this, App.of(this).makeId(this, "OnTickMapping"), {
       subscriber: fn,
@@ -57,24 +54,24 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ScheduleInflightMethods.TICK,
       target: fn,
-      name: "onTick()",
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
+      name: "tick",
     });
+    this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);
 
     return fn;
   }
 
-  public toSimulator(): BaseResourceSchema {
-    const schema: ScheduleSchema = {
-      type: cloud.SCHEDULE_FQN,
-      path: this.node.path,
-      addr: this.node.addr,
-      props: {
-        cronExpression: this.cronExpression,
-      },
-      attrs: {} as any,
+  public toSimulator(): ToSimulatorOutput {
+    const props: ScheduleSchema = {
+      cronExpression: this.cronExpression,
     };
-    return schema;
+    return {
+      type: cloud.SCHEDULE_FQN,
+      props,
+    };
   }
 
   /** @internal */
@@ -83,7 +80,26 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    bindSimulatorResource(__filename, this, host);
+    bindSimulatorResource(__filename, this, host, ops);
     super.onLift(host, ops);
+  }
+}
+
+/**
+ * Utility class to work with schedule on tick handlers.
+ */
+export class ScheduleOnTickHandler {
+  /**
+   * Converts a `cloud.IScheduleOnTickHandler` to a `cloud.IFunctionHandler`.
+   * @param handler the handler to convert
+   * @returns the function handler
+   */
+  public static toFunctionHandler(
+    handler: cloud.IScheduleOnTickHandler
+  ): cloud.IFunctionHandler {
+    return lift({ handler }).inflight(async (ctx) => {
+      await ctx.handler();
+      return undefined;
+    });
   }
 }

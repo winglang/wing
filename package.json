@@ -2,10 +2,10 @@
   "name": "@winglang/monorepo",
   "private": true,
   "devDependencies": {
+    "@winglang/compatibility-spy": "workspace:^",
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
-    "@winglang/compatibility-spy": "workspace:^",
-    "turbo": "^1.12.4"
+    "turbo": "^1.13.3"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",
@@ -20,7 +20,7 @@
     "wing": "turbo compile --filter=winglang --output-logs=errors-only && ./apps/wing/bin/wing"
   },
   "volta": {
-    "node": "20.11.0",
+    "node": "20.11.1",
     "pnpm": "8.15.1"
   },
   "pnpm": {

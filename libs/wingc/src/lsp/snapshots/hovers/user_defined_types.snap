@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nclass Foo\n```\n---\n\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `onLiftType` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+  value: "```wing\nclass Foo {\n  // No public members\n}\n```"
 range:
   start:
     line: 1

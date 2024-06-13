@@ -2,17 +2,43 @@
 
 exports[`publishing messages to topic 1`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "@winglang/sdk.cloud.Function created.",
-  "Publish (message=ABC).",
-  "Sending message (message=ABC, subscriber=sim-0).",
-  "InvokeAsync (payload=\\"ABC\\").",
-  "Invoke (payload=\\"ABC\\").",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
+  "root/TopicTester/MyTopic started",
+  "root/TopicTester/MyTopic/OnMessage0 started",
+  "root/TopicTester/MyTopic/Policy started",
+  "root/TopicTester/MyTopic/TopicEventMapping0 started",
+  "root/TopicTester/Function started",
+  "Sending message (message=ABC, subscriber=sim-1).",
+  "InvokeAsync (payload="ABC").",
+  "Publish (messages=ABC).",
+  "Invoke (payload="ABC").",
+  "Message received",
+  "root/TopicTester/MyTopic/Policy stopped",
+  "root/TopicTester/MyTopic/TopicEventMapping0 stopped",
+  "root/TopicTester/MyTopic/OnMessage0 stopped",
+  "root/TopicTester/Function stopped",
+  "root/TopicTester/MyTopic stopped",
+]
+`;
+
+exports[`publishing multiple messages to topic 1`] = `
+[
+  "root/TopicTester/MyTopic started",
+  "root/TopicTester/MyTopic/OnMessage0 started",
+  "root/TopicTester/MyTopic/Policy started",
+  "root/TopicTester/MyTopic/TopicEventMapping0 started",
+  "root/TopicTester/Function started",
+  "Sending message (message=A, subscriber=sim-1).",
+  "Sending message (message=B, subscriber=sim-1).",
+  "Sending message (message=C, subscriber=sim-1).",
+  "InvokeAsync (payload="A").",
+  "InvokeAsync (payload="B").",
+  "InvokeAsync (payload="C").",
+  "Publish (messages=A,B,C).",
+  "Invoke (payload="ABC").",
+  "root/TopicTester/MyTopic/Policy stopped",
+  "root/TopicTester/MyTopic/TopicEventMapping0 stopped",
+  "root/TopicTester/MyTopic/OnMessage0 stopped",
+  "root/TopicTester/Function stopped",
+  "root/TopicTester/MyTopic stopped",
 ]
 `;

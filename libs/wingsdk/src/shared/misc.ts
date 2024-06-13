@@ -1,7 +1,8 @@
-import { execFile } from "child_process";
+import { ExecOptions, ExecFileOptions, exec, execFile } from "child_process";
 import { readFileSync } from "fs";
 import { promisify } from "util";
 
+const execPromise = promisify(exec);
 const execFilePromise = promisify(execFile);
 
 export function readJsonSync(file: string) {
@@ -26,47 +27,29 @@ export function normalPath(path: string) {
 /**
  * Just a helpful wrapper around `execFile` that returns a promise.
  */
-export async function runCommand(cmd: string, args: string[]): Promise<any> {
-  const { stdout } = await execFilePromise(cmd, args);
+export async function runCommand(
+  cmd: string,
+  args: string[],
+  options?: ExecFileOptions
+): Promise<any> {
+  const { stdout } = await execFilePromise(cmd, args, options);
   return stdout;
 }
 
-export interface runDockerImageProps {
-  imageName: string;
-  containerName: string;
-  containerPort: string;
+/**
+ * Just a helpful wrapper around `exec` that returns a promise.
+ * This will run commands through the shell, while `runCommand` doesn't.
+ */
+export async function shell(
+  cmd: string,
+  args: string[],
+  options?: ExecOptions
+): Promise<any> {
+  const { stdout } = await execPromise(cmd + " " + args.join(" "), options);
+  return stdout;
 }
 
-/**
- * Runs a given docker image and returns the host port for the new container.
- */
-export async function runDockerImage({
-  imageName,
-  containerName,
-  containerPort,
-}: runDockerImageProps): Promise<{ hostPort: string }> {
-  // Pull docker image
-  try {
-    await runCommand("docker", ["inspect", imageName]);
-  } catch {
-    await runCommand("docker", ["pull", imageName]);
-  }
-  // Run the container and allow docker to assign a host port dynamically
-  await runCommand("docker", [
-    "run",
-    "--detach",
-    "--name",
-    containerName,
-    "-p",
-    containerPort,
-    imageName,
-  ]);
-
-  // Inspect the container to get the host port
-  const out = await runCommand("docker", ["inspect", containerName]);
-  const hostPort =
-    JSON.parse(out)[0].NetworkSettings.Ports[`${containerPort}/tcp`][0]
-      .HostPort;
-
-  return { hostPort };
+export function isPath(s: string) {
+  s = normalPath(s);
+  return s.startsWith("./") || s.startsWith("../") || s.startsWith("/");
 }

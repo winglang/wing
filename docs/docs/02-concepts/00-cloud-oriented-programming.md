@@ -15,14 +15,14 @@ cloud without having to worry about the underlying infrastructure.
 It's best explained through an example:
 
 
-```js
+```js example
 bring cloud;
 
 let queue = new cloud.Queue(timeout: 2m);
 let bucket = new cloud.Bucket();
 let counter = new cloud.Counter(initial: 100);
 
-queue.setConsumer(inflight (body: str): str => {
+queue.setConsumer(inflight (body: str) => {
   let next = counter.inc();
   let key = "myfile-{next}.txt";
   bucket.put(key, body);
@@ -93,7 +93,7 @@ We are working hard to make this a great tool, but there's still a pretty good
 chance you'll encounter missing pieces, rough edges, performance issues and even,
 god forbid, bugs 🐞. 
 
-Please don't hesitate to ping us on [Slack](https://t.winglang.io/slack) or 
+Please don't hesitate to ping us on [Discord](https://t.winglang.io/discord) or 
 [file an issue](https://github.com/winglang/wing). We promise to do our best to
 respond quickly and help out.
 

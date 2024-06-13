@@ -1,5 +1,4 @@
-import { KeyValueItem } from "@wingconsole/design-system";
-import { OpenApiSpec } from "@wingconsole/server/src/wingsdk";
+import type { OpenApiSpec } from "@wingconsole/server/src/wingsdk";
 
 export const HTTP_METHODS = [
   "GET",
@@ -83,6 +82,11 @@ export const getHeaderValues = (header: string): string[] => {
 
 export const getRoutesFromOpenApi = (openApi: OpenApiSpec): ApiRoute[] => {
   let routes: ApiRoute[] = [];
+
+  if (!openApi?.paths) {
+    return routes;
+  }
+
   for (const route of Object.keys(openApi.paths)) {
     const methods = Object.keys(openApi.paths[route]);
     for (const method of methods) {
@@ -93,4 +97,101 @@ export const getRoutesFromOpenApi = (openApi: OpenApiSpec): ApiRoute[] => {
     }
   }
   return routes;
+};
+
+export interface Parameter {
+  key: string;
+  value: string;
+  type: string;
+  required: boolean;
+  description?: string;
+}
+
+export interface GetParametersFromOpenApiProps {
+  path: string;
+  method?: string;
+  openApi: OpenApiSpec;
+  type: "query" | "header" | "path";
+}
+
+export const getParametersFromOpenApi = ({
+  path,
+  method = "",
+  openApi,
+  type,
+}: GetParametersFromOpenApiProps): Parameter[] => {
+  try {
+    if (!openApi?.paths[path]) {
+      return [];
+    }
+    const pathParameters = openApi.paths[path].parameters;
+    const methodParameters =
+      openApi.paths[path][method.toLowerCase()]?.parameters;
+
+    const parametersList = [
+      ...(pathParameters || []),
+      ...(methodParameters || []),
+    ];
+
+    let parameters = [];
+    for (const parameter of parametersList) {
+      if (parameter.in === type) {
+        const required = parameter.required || false;
+        const type = parameter.schema?.type || "string";
+        parameters.push({
+          key: parameter.name,
+          value: "",
+          type: type as string,
+          required: required,
+          description: parameter.description,
+        });
+      }
+    }
+
+    return parameters;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getRequestBodyFromOpenApi = (
+  path: string,
+  method: string,
+  openApi: OpenApiSpec,
+): Record<string, string> | undefined => {
+  try {
+    const requestBody =
+      openApi?.paths[path]?.[method.toLowerCase()]?.requestBody;
+    if (!requestBody) {
+      return undefined;
+    }
+
+    const jsonContentType = requestBody.content?.["application/json"];
+    if (!jsonContentType) {
+      return undefined;
+    }
+
+    const schema = jsonContentType.schema;
+    if (!schema) {
+      return undefined;
+    }
+
+    const bodyProperties = schema.properties;
+
+    let response = {} as Record<string, string>;
+    for (const key in bodyProperties) {
+      const type = bodyProperties[key].type;
+      const required = schema.required?.includes(key) ? "required" : "optional";
+      const description = bodyProperties[key].description;
+      response[key] = `${type} (${required}) ${
+        description ? `- ${description}` : ""
+      }`;
+    }
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
 };

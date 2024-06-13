@@ -1,6 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import classNames from "classnames";
-import { Fragment, ReactNode } from "react";
+import type { ReactNode } from "react";
+import { Fragment } from "react";
 
 import { useTheme } from "./theme-provider.js";
 
@@ -23,7 +24,7 @@ export const Modal = ({
     <Transition.Root show={visible} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-10"
+        className="relative z-50"
         onClose={() => setVisible?.(false)}
       >
         <Transition.Child

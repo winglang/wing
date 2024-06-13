@@ -13,6 +13,7 @@ import { AppContext } from "../AppContext.js";
 import { trpc } from "../services/trpc.js";
 
 import { GithubIcon } from "./github-icon.js";
+import { GoogleIcon } from "./google-icon.js";
 
 /**
  * The name of the query parameter that is passed from
@@ -66,17 +67,31 @@ const useNotifyAfterSigningIn = () => {
  * Returns a function that can be used to sign in the user.
  */
 const useSignIn = () => {
-  const { wingCloudSignInUrl } = useContext(AppContext);
+  const { githubSignInURL, googleSignInURL } = useContext(AppContext);
   const { mutateAsync: reportSignInClicked } =
     trpc["app.analytics.signInClicked"].useMutation();
   const analytics = trpc["app.analytics"].useQuery();
-  return useCallback(async () => {
+
+  const signInWithGithub = useCallback(async () => {
     await reportSignInClicked();
-    const url = new URL(wingCloudSignInUrl!);
+    const url = new URL(githubSignInURL!);
     url.searchParams.append("port", location.port);
     url.searchParams.append("anonymousId", `${analytics.data?.anonymousId}`);
     location.href = url.toString();
-  }, [reportSignInClicked, wingCloudSignInUrl, analytics.data?.anonymousId]);
+  }, [reportSignInClicked, githubSignInURL, analytics.data?.anonymousId]);
+
+  const signInWithGoogle = useCallback(async () => {
+    await reportSignInClicked();
+    const url = new URL(googleSignInURL!);
+    url.searchParams.append("port", location.port);
+    url.searchParams.append("anonymousId", `${analytics.data?.anonymousId}`);
+    location.href = url.toString();
+  }, [reportSignInClicked, googleSignInURL, analytics.data?.anonymousId]);
+
+  return {
+    signInWithGithub,
+    signInWithGoogle,
+  };
 };
 
 /**
@@ -105,14 +120,23 @@ export interface SignInModalProps {}
 
 export const SignInModal = (props: SignInModalProps) => {
   const { theme } = useTheme();
-  const signIn = useSignIn();
+  const { signInWithGithub, signInWithGoogle } = useSignIn();
   const signInRequired = useSignInRequired();
   useNotifyAfterSigningIn();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const [githubIsLoading, setGithubIsLoading] = useState(false);
+  const [googleIsLoading, setGoogleIsLoading] = useState(false);
+
+  const isLoading = useMemo(() => {
+    return githubIsLoading || googleIsLoading;
+  }, [githubIsLoading, googleIsLoading]);
 
   return (
     <Modal visible={signInRequired}>
-      <div className="flex flex-col gap-4 max-w-lg items-center">
+      <div
+        className="flex flex-col gap-4 max-w-lg items-center"
+        data-testid="signin-modal"
+      >
         <h3
           className={classNames(
             theme.text1,
@@ -123,25 +147,44 @@ export const SignInModal = (props: SignInModalProps) => {
         </h3>
 
         <p className={classNames(theme.text2, "text-sm text-center")}>
-          Please sign up with your GitHub credentials to help us improve your
-          experience in Wing Console and Wing CLI.
+          Please sign in to help us improve your experience in Wing Console and
+          Wing CLI.
         </p>
 
-        <div className="flex justify-around gap-2">
-          <Button
-            disabled={isLoading}
-            onClick={() => {
-              setIsLoading(true);
-              void signIn();
-            }}
-          >
-            {isLoading ? (
-              <Loader size="xs" className={"mr-1"} />
-            ) : (
-              <GithubIcon className="w-4 h-4" />
-            )}
-            <span className="text-sm">Sign In</span>
-          </Button>
+        <div className="flex justify-around">
+          <div className="flex flex-col gap-2.5">
+            <Button
+              disabled={isLoading}
+              onClick={() => {
+                setGithubIsLoading(true);
+                void signInWithGithub();
+              }}
+              dataTestid="signin-github-button"
+            >
+              {githubIsLoading ? (
+                <Loader size="xs" />
+              ) : (
+                <GithubIcon className="w-4 h-4" />
+              )}
+              <span className="text-sm">Continue with GitHub</span>
+            </Button>
+
+            <Button
+              disabled={isLoading}
+              onClick={() => {
+                setGoogleIsLoading(true);
+                void signInWithGoogle();
+              }}
+              dataTestid="signin-google-button"
+            >
+              {googleIsLoading ? (
+                <Loader size="xs" />
+              ) : (
+                <GoogleIcon className="w-4 h-4" />
+              )}
+              <span className="text-sm">Continue with Google</span>
+            </Button>
+          </div>
         </div>
 
         <div className="flex justify-around">
@@ -150,6 +193,7 @@ export const SignInModal = (props: SignInModalProps) => {
             <Link href={TERMS_AND_CONDITIONS_URL} target="_blank">
               Terms and Conditions
             </Link>
+            .
           </p>
         </div>
       </div>

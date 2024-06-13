@@ -1,4 +1,5 @@
 bring cloud;
+bring util;
 
 let globalBucket = new cloud.Bucket();
 let globalCounter = new cloud.Counter();
@@ -7,7 +8,7 @@ let globalBool = true;
 let globalNum = 42;
 let globalArrayOfStr = ["hello", "world"];
 let globalMapOfNum = Map<num>{ "a" => -5, "b" => 2 };
-let globalSetOfStr = Set<str>{ "a", "b" };
+let globalSetOfStr = Set<str>[ "a", "b" ];
 
 class First {
   pub myResource: cloud.Bucket;
@@ -72,7 +73,9 @@ class MyResource {
     globalAnother.first.myResource.put("key", "value");
     assert(globalAnother.myMethod() > 0);
     assert(Another.myStaticMethod() > 0);
-    //assert(this.localCounter.peek() > 0); // TODO: this fails, why?
+    util.waitUntil(inflight () => {
+      return this.localCounter.peek() > 0;
+    });
   }
 }
 

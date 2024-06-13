@@ -11,7 +11,9 @@ use ast::{Scope, Symbol};
 use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
+use const_format::formatcp;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
+use dtsify::extern_dtsify::{is_extern_file, ExternDTSifier};
 use file_graph::FileGraph;
 use files::Files;
 use fold::Fold;
@@ -20,6 +22,7 @@ use jsify::JSifier;
 
 use lifting::LiftVisitor;
 use parser::{is_entrypoint_file, parse_wing_project};
+use serde::Serialize;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::SymbolEnvKind;
@@ -37,7 +40,7 @@ use std::mem;
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
-use crate::type_check::{TypeChecker, Types};
+use crate::type_check::{SymbolEnvOrNamespace, TypeChecker, Types};
 
 #[macro_use]
 #[cfg(test)]
@@ -59,6 +62,7 @@ mod lifting;
 pub mod lsp;
 pub mod parser;
 pub mod struct_schema;
+mod ts_traversal;
 pub mod type_check;
 mod type_check_assert;
 mod valid_json_visitor;
@@ -110,10 +114,14 @@ const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "std.Resource";
+const WINGSDK_IRESOURCE: &'static str = "std.IResource";
 const WINGSDK_AUTOID_RESOURCE: &'static str = "std.AutoIdResource";
 const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 const WINGSDK_NODE: &'static str = "std.Node";
+
+const WINGSDK_SIM_IRESOURCE: &'static str = "sim.IResource";
+const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_SIM_IRESOURCE);
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
@@ -124,7 +132,10 @@ const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
 pub const TRUSTED_LIBRARY_NPM_NAMESPACE: &'static str = "@winglibs";
 
-pub struct CompilerOutput {}
+#[derive(Serialize)]
+pub struct CompilerOutput {
+	imported_namespaces: Vec<String>,
+}
 
 /// Exposes an allocation function to the WASM host
 ///
@@ -200,10 +211,11 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 
 	let results = compile(project_dir, source_path, None, output_dir);
-	if results.is_err() {
-		WASM_RETURN_ERROR
+
+	if let Ok(results) = results {
+		string_to_combined_ptr(serde_json::to_string(&results).unwrap())
 	} else {
-		string_to_combined_ptr("".to_string())
+		WASM_RETURN_ERROR
 	}
 }
 
@@ -283,7 +295,7 @@ pub fn compile(
 	// Type check all files in topological order (start with files that don't bring any other
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
-		let mut scope = asts.remove(file).expect("matching AST not found");
+		let mut scope = asts.swap_remove(file).expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,
@@ -342,7 +354,7 @@ pub fn compile(
 	asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
-			let mut reference_visitor = StructSchemaVisitor::new(&jsifier);
+			let mut reference_visitor = StructSchemaVisitor::new(&path, &jsifier);
 			reference_visitor.visit_scope(&scope);
 			(path, scope)
 		})
@@ -354,9 +366,11 @@ pub fn compile(
 		let scope = asts.get_mut(file).expect("matching AST not found");
 		jsifier.jsify(file, &scope);
 	}
-	match jsifier.output_files.borrow().emit_files(out_dir) {
-		Ok(()) => {}
-		Err(err) => report_diagnostic(err.into()),
+	if !found_errors() {
+		match jsifier.output_files.borrow().emit_files(out_dir) {
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
 	}
 
 	// -- DTSIFICATION PHASE --
@@ -367,10 +381,25 @@ pub fn compile(
 			let scope = asts.get_mut(file).expect("matching AST not found");
 			dtsifier.dtsify(file, &scope);
 		}
-		let output_files = dtsifier.output_files.borrow();
-		match output_files.emit_files(out_dir) {
-			Ok(()) => {}
-			Err(err) => report_diagnostic(err.into()),
+		if !found_errors() {
+			let output_files = dtsifier.output_files.borrow();
+			match output_files.emit_files(out_dir) {
+				Ok(()) => {}
+				Err(err) => report_diagnostic(err.into()),
+			}
+		}
+	}
+
+	// -- EXTERN DTSIFICATION PHASE --
+	for source_files_env in &types.source_file_envs {
+		if is_extern_file(source_files_env.0) {
+			let mut extern_dtsifier = ExternDTSifier::new(&types);
+			if !found_errors() {
+				match extern_dtsifier.dtsify(source_files_env.0, source_files_env.1) {
+					Ok(()) => {}
+					Err(err) => report_diagnostic(err.into()),
+				};
+			}
 		}
 	}
 
@@ -378,7 +407,16 @@ pub fn compile(
 		return Err(());
 	}
 
-	return Ok(CompilerOutput {});
+	let imported_namespaces = types
+		.source_file_envs
+		.iter()
+		.filter_map(|(k, v)| match v {
+			SymbolEnvOrNamespace::Namespace(_) => Some(k.to_string()),
+			_ => None,
+		})
+		.collect::<Vec<String>>();
+
+	Ok(CompilerOutput { imported_namespaces })
 }
 
 pub fn is_absolute_path(path: &Utf8Path) -> bool {

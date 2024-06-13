@@ -7,6 +7,7 @@ import Emittery from "emittery";
 import type { Express } from "express";
 
 import type { Config } from "./config.js";
+import type { LogSource } from "./consoleLogger.js";
 import { type ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
 import type { HostUtils } from "./hostUtils.js";
@@ -16,7 +17,7 @@ import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
 import type { Analytics } from "./utils/analytics.js";
 import { createCompiler } from "./utils/compiler.js";
-import {
+import type {
   FileLink,
   LayoutConfig,
   TestItem,
@@ -42,6 +43,7 @@ export type { Config } from "./config.js";
 export type { Router } from "./router/index.js";
 export type { HostUtils } from "./hostUtils.js";
 export type { RouterContext } from "./utils/createRouter.js";
+export type { RouterMeta } from "./utils/createRouter.js";
 export type { MapNode, MapEdge } from "./router/app.js";
 export type { InternalTestResult } from "./router/test.js";
 export type { Column } from "./router/table.js";
@@ -57,6 +59,10 @@ export * from "@winglang/sdk/lib/ex/index.js";
 export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
 export { isTermsAccepted } from "./utils/terms-and-conditions.js";
+
+const enableSimUpdates =
+  process.env.WING_ENABLE_INPLACE_UPDATES === "true" ||
+  process.env.WING_ENABLE_INPLACE_UPDATES === "1";
 
 export interface CreateConsoleServerOptions {
   wingfile: string;
@@ -76,6 +82,7 @@ export interface CreateConsoleServerOptions {
   analytics?: Analytics;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
+  watchGlobs?: string[];
 }
 
 export const createConsoleServer = async ({
@@ -96,6 +103,7 @@ export const createConsoleServer = async ({
   analytics,
   requireSignIn,
   notifySignedIn,
+  watchGlobs,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -129,11 +137,15 @@ export const createConsoleServer = async ({
     platform,
     testing: false,
     stateDir,
+    watchGlobs,
   });
   let isStarting = false;
   let isStopping = false;
 
-  const simulator = createSimulator({ stateDir });
+  const simulator = createSimulator({
+    stateDir,
+    enableSimUpdates,
+  });
   if (onTrace) {
     simulator.on("trace", onTrace);
   }
@@ -148,8 +160,9 @@ export const createConsoleServer = async ({
     wingfile,
     platform,
     testing: true,
+    watchGlobs,
   });
-  const testSimulator = createSimulator();
+  const testSimulator = createSimulator({ enableSimUpdates });
   testCompiler.on("compiled", ({ simfile }) => {
     testSimulator.start(simfile);
   });
@@ -196,6 +209,9 @@ export const createConsoleServer = async ({
   });
   simulator.on("started", () => {
     appState = "success";
+
+    // Clear tests when simulator is restarted
+    testsStateManager().setTests([]);
     invalidateQuery(undefined);
     isStarting = false;
   });
@@ -210,23 +226,44 @@ export const createConsoleServer = async ({
     const message = `${
       trace.data.message ?? JSON.stringify(trace.data, undefined, 2)
     }`;
-    if (trace.type === "log") {
-      consoleLogger.log(message, "simulator", {
-        sourceType: trace.sourceType,
-        sourcePath: trace.sourcePath,
-      });
-    } else {
-      consoleLogger.verbose(message, "simulator", {
-        sourceType: trace.sourceType,
-        sourcePath: trace.sourcePath,
-      });
-    }
-    if (trace.data.status === "failure") {
-      let output = await formatTraceError(trace.data.error);
-      consoleLogger.error(output, "user", {
-        sourceType: trace.sourceType,
-        sourcePath: trace.sourcePath,
-      });
+
+    const source = logSourceFromTraceType(trace);
+
+    switch (trace.level) {
+      case "verbose": {
+        consoleLogger.verbose(message, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+        break;
+      }
+
+      case "info": {
+        consoleLogger.log(message, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+        break;
+      }
+
+      case "warning": {
+        consoleLogger.warning(message, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+        break;
+      }
+
+      case "error": {
+        const output = trace.data.error
+          ? await formatTraceError(trace.data.error)
+          : message;
+
+        consoleLogger.error(output, source, {
+          sourceType: trace.sourceType,
+          sourcePath: trace.sourcePath,
+        });
+      }
     }
 
     if (
@@ -314,3 +351,17 @@ export const createConsoleServer = async ({
     close,
   };
 };
+
+function logSourceFromTraceType(trace: Trace): LogSource {
+  switch (trace.type) {
+    case "simulator": {
+      return "simulator";
+    }
+
+    case "resource": {
+      return "compiler";
+    }
+  }
+
+  return "user";
+}

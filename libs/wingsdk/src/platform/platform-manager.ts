@@ -1,9 +1,11 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { basename, dirname, join } from "path";
 import { cwd } from "process";
 import * as vm from "vm";
 import { IPlatform } from "./platform";
+import { scanDirForPlatformFile } from "./util";
 import { App, AppProps, SynthHooks } from "../core";
+import { SECRET_SYMBOL } from "../core/types";
 
 interface PlatformManagerOptions {
   /**
@@ -15,12 +17,51 @@ interface PlatformManagerOptions {
 const BUILTIN_PLATFORMS = ["tf-aws", "tf-azure", "tf-gcp", "sim"];
 
 /** @internal */
+export const SECRETS_FILE_NAME = "secrets.json";
+
+/** @internal */
 export class PlatformManager {
   private readonly platformPaths: string[];
-  private readonly platformInstances: IPlatform[] = [];
+  private platformInstances: IPlatform[] = [];
 
   constructor(options: PlatformManagerOptions) {
     this.platformPaths = options.platformPaths ?? [];
+    this.retrieveImplicitPlatforms();
+    this.createPlatformInstances();
+  }
+
+  /**
+   * Retrieve all implicit platform declarations.
+   *
+   * These are platforms that are not explicitly declared in the cli options
+   * but are implicitly available to the app.
+   *
+   * We look for platforms in the following locations:
+   * - The source directory
+   * - Any imported namespaces (provided by the wingc compiler output)
+   *
+   * To determine if a directory contains a platform, we check if it contains a file ending in "wplatform.js"
+   * TODO: Support platforms defined in Wing (platform.w) https://github.com/winglang/wing/issues/4937
+   */
+  private retrieveImplicitPlatforms() {
+    const importedNamespaces = process.env.WING_IMPORTED_NAMESPACES?.split(";");
+    const sourceDir = process.env.WING_SOURCE_DIR!;
+
+    if (sourceDir) {
+      const sourceDirPlatformFile = scanDirForPlatformFile(sourceDir);
+      if (sourceDirPlatformFile) {
+        this.platformPaths.push(...sourceDirPlatformFile);
+      }
+    }
+
+    if (importedNamespaces) {
+      importedNamespaces.forEach((namespaceDir) => {
+        const namespaceDirPlatformFile = scanDirForPlatformFile(namespaceDir);
+        if (namespaceDirPlatformFile) {
+          this.platformPaths.push(...namespaceDirPlatformFile);
+        }
+      });
+    }
   }
 
   private loadPlatformPath(platformPath: string) {
@@ -56,16 +97,16 @@ export class PlatformManager {
   }
 
   private createPlatformInstances() {
+    this.platformInstances = [];
     this.platformPaths.forEach((platformPath) => {
       this.loadPlatformPath(platformPath);
     });
   }
 
-  // This method is called from preflight.js in order to return an App instance
+  // This method is called from preflight.cjs in order to return an App instance
   // that can be synthesized
   public createApp(appProps: AppProps): App {
     this.createPlatformInstances();
-
     let appCall = this.platformInstances[0].newApp;
 
     if (!appCall) {
@@ -74,51 +115,46 @@ export class PlatformManager {
       );
     }
 
-    let synthHooks: SynthHooks = {
-      preSynthesize: [],
-      postSynthesize: [],
-      validate: [],
-    };
-
-    let newInstanceOverrides: any[] = [];
-
-    let parameterSchemas: any[] = [];
-
-    this.platformInstances.forEach((instance) => {
-      if (instance.parameters) {
-        parameterSchemas.push(instance.parameters);
-      }
-
-      if (instance.preSynth) {
-        synthHooks.preSynthesize!.push(instance.preSynth.bind(instance));
-      }
-
-      if (instance.postSynth) {
-        synthHooks.postSynthesize!.push(instance.postSynth.bind(instance));
-      }
-
-      if (instance.validate) {
-        synthHooks.validate!.push(instance.validate.bind(instance));
-      }
-
-      if (instance.newInstance) {
-        newInstanceOverrides.push(instance.newInstance.bind(instance));
-      }
-    });
+    let hooks = collectHooks(this.platformInstances);
 
     const app = appCall!({
       ...appProps,
-      synthHooks,
-      newInstanceOverrides,
+      synthHooks: hooks.synthHooks,
+      newInstanceOverrides: hooks.newInstanceOverrides,
     }) as App;
 
-    let registrar = app.platformParameters;
+    let secretNames = [];
+    for (const c of app.node.findAll()) {
+      if ((c as any)[SECRET_SYMBOL]) {
+        const secret = c as any;
+        secretNames.push(secret.name);
+      }
+    }
 
-    parameterSchemas.forEach((schema) => {
-      registrar.addParameterSchema(schema);
+    if (secretNames.length > 0) {
+      writeFileSync(
+        join(app.outdir, SECRETS_FILE_NAME),
+        JSON.stringify(secretNames)
+      );
+    }
+
+    let registrar = app.parameters;
+
+    hooks.parameterSchemas.forEach((schema) => {
+      registrar.addSchema(schema);
     });
 
     return app;
+  }
+
+  public async storeSecrets(secrets: Record<string, string>): Promise<void> {
+    const hooks = collectHooks(this.platformInstances);
+    if (!hooks.storeSecretsHook) {
+      throw new Error(
+        `Cannot find a platform or platform extension that supports storing secrets`
+      );
+    }
+    await hooks.storeSecretsHook(secrets);
   }
 }
 
@@ -196,9 +232,62 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
     script.runInContext(context);
     return new (platformModule.exports as any).Platform();
   } catch (error) {
+    if (process.env.DEBUG) {
+      console.error(error);
+    }
+    const hint = customPlatformPath.includes(".")
+      ? "Ensure the path to the platform is correct"
+      : `Ensure you have installed the platform provider by running 'npm install ${customPlatformPath}'`;
     console.error(
-      "An error occurred while loading the custom platform:",
-      error
+      `An error occurred while loading the custom platform: ${customPlatformPath}\n\n(hint: ${hint})`
     );
   }
+}
+
+interface CollectHooksResult {
+  synthHooks: SynthHooks;
+  newInstanceOverrides: any[];
+  parameterSchemas: any[];
+  storeSecretsHook?: any;
+}
+
+function collectHooks(platformInstances: IPlatform[]) {
+  let result: CollectHooksResult = {
+    synthHooks: {
+      preSynthesize: [],
+      postSynthesize: [],
+      validate: [],
+    },
+    newInstanceOverrides: [],
+    parameterSchemas: [],
+    storeSecretsHook: undefined,
+  };
+
+  platformInstances.forEach((instance) => {
+    if (instance.parameters) {
+      result.parameterSchemas.push(instance.parameters);
+    }
+
+    if (instance.preSynth) {
+      result.synthHooks.preSynthesize!.push(instance.preSynth.bind(instance));
+    }
+
+    if (instance.postSynth) {
+      result.synthHooks.postSynthesize!.push(instance.postSynth.bind(instance));
+    }
+
+    if (instance.validate) {
+      result.synthHooks.validate!.push(instance.validate.bind(instance));
+    }
+
+    if (instance.newInstance) {
+      result.newInstanceOverrides.push(instance.newInstance.bind(instance));
+    }
+
+    if (instance.storeSecrets) {
+      result.storeSecretsHook = instance.storeSecrets.bind(instance);
+    }
+  });
+
+  return result;
 }

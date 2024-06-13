@@ -18,11 +18,11 @@
   },
   "resource": {
     "aws_dynamodb_table": {
-      "exTable": {
+      "Table": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.Table/Default",
-            "uniqueId": "exTable"
+            "path": "root/Default/Default/Table/Default",
+            "uniqueId": "Table"
           }
         },
         "attribute": [
@@ -33,7 +33,10 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "name",
-        "name": "usersex.Table-c840a49c"
+        "name": "usersTable-c89b2d37",
+        "point_in_time_recovery": {
+          "enabled": true
+        }
       }
     }
   }

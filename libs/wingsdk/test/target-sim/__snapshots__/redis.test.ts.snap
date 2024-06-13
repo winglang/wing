@@ -3,19 +3,38 @@
 exports[`create a Redis resource 1`] = `
 {
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "<ref>",
+        "source": "root/my_redis",
+        "target": "root/my_redis/Container",
+        "targetOp": "host_port",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_redis": {
         "addr": "c84bd402f6d507613026d171fe74fc8ce07ced29ae",
-        "attrs": {},
         "path": "root/my_redis",
-        "props": {},
+        "props": {
+          "port": "\${wsim#root/my_redis/Container#attrs.host_port}",
+        },
         "type": "@winglang/sdk.ex.Redis",
       },
-    ],
+      "root/my_redis/Container": {
+        "addr": "c80acc96b1d952059eb0beee72912b94d23302fa03",
+        "path": "root/my_redis/Container",
+        "props": {
+          "containerPort": 6379,
+          "cwd": "<ABSOLUTE PATH>/test",
+          "image": "redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0",
+          "imageTag": "redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0",
+        },
+        "type": "@winglang/sdk.sim.Container",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -25,10 +44,6 @@ exports[`create a Redis resource 1`] = `
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -70,14 +85,6 @@ exports[`create a Redis resource 1`] = `
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -86,9 +93,21 @@ exports[`create a Redis resource 1`] = `
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -104,6 +123,17 @@ exports[`create a Redis resource 1`] = `
     "tree": {
       "children": {
         "my_redis": {
+          "children": {
+            "Container": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.3.0",
+              },
+              "display": {},
+              "id": "Container",
+              "path": "root/my_redis/Container",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
@@ -120,6 +150,7 @@ exports[`create a Redis resource 1`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

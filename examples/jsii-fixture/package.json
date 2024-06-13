@@ -6,9 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "compile": "jsii -vvv",
-    "build:watch": "jsii -w",
-    "package": "jsii-pacmak -vvv",
-    "test": "echo 'No tests here...'"
+    "build:watch": "jsii -w"
   },
   "jsii": {
     "outdir": "dist",
@@ -32,9 +30,7 @@
   "private": true,
   "homepage": "https://github.com/winglang/wing",
   "devDependencies": {
-    "jsii": "~5.3.11",
-    "jsii-pacmak": "^1.94.0",
-    "jsii-release": "^0.2.778"
+    "jsii": "~5.3.11"
   },
   "volta": {
     "extends": "../../package.json"

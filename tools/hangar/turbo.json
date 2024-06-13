@@ -10,18 +10,29 @@
         "src/generated_test_targets.ts"
       ],
       "dependsOn": [
+        "@winglang/docs#compile",
         "examples-valid#topo",
         "examples-invalid#topo",
         "examples-error#topo",
-        "examples-sdk#topo"
+        "examples-sdk#topo",
+        "examples-docs#topo"
       ],
       "outputs": ["src/test_corpus/**"]
     },
     "test": {
-      "dependsOn": ["^package", "test:generate"]
+      "dependsOn": ["^package", "test:generate"],
+      "env": ["CI"]
+    },
+    "test:doc_examples": {
+      "dependsOn": [
+        "^package", 
+        "test:generate"
+      ],
+      "env": ["CI"]
     },
     "bench": {
-      "dependsOn": ["^package", "examples-valid#topo"]
+      "dependsOn": ["^package", "examples-valid#topo"],
+      "env": ["CI"]
     }
   }
 }

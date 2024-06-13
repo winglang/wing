@@ -1,10 +1,10 @@
 # [std_string.test.w](../../../../../examples/tests/valid/std_string.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index_______s1_split________1_, $_s1_concat_s2__, $s1_indexOf__s__ }) {
+module.exports = function({ $s1, $s2 }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,14 +12,14 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
       return $obj;
     }
     async handle() {
-      console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1_indexOf__s__));
-      console.log($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index_______s1_split________1_);
-      console.log($_s1_concat_s2__);
+      console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1.indexOf("s")));
+      console.log(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((await $s1.split(" ")), 1));
+      console.log((await $s1.concat($s2)));
     }
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -41,8 +41,8 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -50,6 +50,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -61,10 +62,9 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index_______s1_split________1_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((s1.split(" ")), 1))},
-            $_s1_concat_s2__: ${$stdlib.core.liftObject((s1.concat(s2)))},
-            $s1_indexOf__s__: ${$stdlib.core.liftObject(s1.indexOf("s"))},
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+            $s1: ${$stdlib.core.liftObject(s1)},
+            $s2: ${$stdlib.core.liftObject(s2)},
           })
         `;
       }
@@ -82,14 +82,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((s1.split(" ")), 1), []],
-            [(s1.concat(s2)), []],
-            [s1.indexOf("s"), []],
+            [s1, [].concat(["indexOf"], ["split"], ["concat"])],
+            [s2, []],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((s1.split(" ")), 1), []],
-            [(s1.concat(s2)), []],
-            [s1.indexOf("s"), []],
+            [s1, []],
+            [s2, []],
           ],
         });
       }
@@ -124,6 +122,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "std_string.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

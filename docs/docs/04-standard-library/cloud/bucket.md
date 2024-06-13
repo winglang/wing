@@ -26,7 +26,7 @@ Unlike other kinds of storage like file storage, data is not stored in a hierarc
 
 ### Defining a bucket
 
-```js
+```js example
 bring cloud;
 
 let bucket = new cloud.Bucket(
@@ -38,7 +38,7 @@ let bucket = new cloud.Bucket(
 
 If you have static data that you want to upload to the bucket each time your app is deployed, you can call the preflight method `addObject`:
 
-```js
+```js example
 bring cloud;
 
 let bucket = new cloud.Bucket();
@@ -48,7 +48,7 @@ bucket.addObject("my-file.txt", "Hello, world!");
 
 ### Using a bucket inflight
 
-```js playground
+```js playground example
 bring cloud;
 
 let bucket = new cloud.Bucket();
@@ -80,7 +80,7 @@ Use the `onEvent` method for responding to any event.
 
 Each method creates a new `cloud.Function` resource which will be triggered by the given event type.
 
-```js playground
+```js playground example
 bring cloud;
 
 let store = new cloud.Bucket();
@@ -597,7 +597,7 @@ Key of the object.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
 
 ```wing
-inflight tryGet(key: str, options?: BucketTryGetOptions): str
+inflight tryGet(key: str, options?: BucketTryGetOptions): str?
 ```
 
 Get an object from the bucket if it exists If the bytes returned are not a valid UTF-8 string, an error is thrown.
@@ -621,7 +621,7 @@ Additional get options.
 ##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
 
 ```wing
-inflight tryGetJson(key: str): Json
+inflight tryGetJson(key: str): Json?
 ```
 
 Gets an object from the bucket if it exists, parsing it as Json.
@@ -639,6 +639,7 @@ Key of the object.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Bucket.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.cloud.Bucket.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -667,6 +668,24 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Bucket.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.cloud.Bucket.toInflight"></a>
+
+```wing
+bring cloud;
+
+cloud.Bucket.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Bucket.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 ---
 

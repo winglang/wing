@@ -38,11 +38,8 @@
     }
   },
   "ignorePatterns": [
-    "*.js",
-    "*.d.ts",
-    "node_modules/",
-    "*.generated.ts",
-    "coverage",
+    "src/.gen/",
+    "**/*.d.ts",
     "!.projenrc.ts",
     "!projenrc/**/*.ts"
   ],
@@ -58,7 +55,7 @@
       {
         "devDependencies": [
           "**/test/**",
-          "**/build-tools/**",
+          "**/scripts/**",
           ".projenrc.ts",
           "projenrc/**/*.ts"
         ],
@@ -182,6 +179,19 @@
           "error",
           {
             "sortDir": "asc"
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "vitest.config.mts"
+      ],
+      "rules": {
+        "import/no-extraneous-dependencies": [
+          "error",
+          {
+            "devDependencies": true
           }
         ]
       }

@@ -19,11 +19,13 @@ The `cloud.Secret` class represents a secret value (like an API key, certificate
 Secrets are encrypted at rest and in transit, and are only decrypted when they are used in a task.
 Storing a secret allows you to use the value in different compute tasks while only having to rotate or revoke it in one place.
 
+You can use the [`wing secrets`](https://www.winglang.io/docs/tools/cli#store-secrets-wing-secrets) command to store secrets in the target platform.
+
 ## Usage
 
 ### Defining a secret
 
-```js
+```js example
 bring cloud;
 
 let secret = new cloud.Secret(
@@ -35,7 +37,7 @@ Before deploying your application, you will be expected to store the secret valu
 
 ### Retrieving secret values
 
-```js
+```js example
 bring cloud;
 
 let secret = new cloud.Secret(
@@ -52,15 +54,14 @@ new cloud.Function(inflight () => {
 
 ### Simulator (`sim`)
 
-When using a secret in Wing's simulator, a secrets file must be added to your home directory at `~/.wing/secrets.json`.
+When using a secret in Wing's simulator, a secrets file must be added to your project in a file called: `.env`.
 The simulator will look up secrets in this file by their `name`.
-Secrets should be saved in a JSON format:
+Secrets should be saved in a key=value format:
 
 ```json
-// secrets.json
-{
-  "my-api-key": "1234567890"
-}
+// .env
+my-api-key=1234567890
+secret-key=secret-value
 ```
 
 ### AWS (`tf-aws` and `awscdk`)

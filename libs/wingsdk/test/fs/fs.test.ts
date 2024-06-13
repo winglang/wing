@@ -30,6 +30,11 @@ test("write, read and remove file", async () => {
   const text = fs.readFile(filename);
   expect(text).toEqual(text);
 
+  fs.appendFile(filename, data);
+
+  const text2 = fs.readFile(filename);
+  expect(text2).toEqual(data + data);
+
   fs.remove(filename);
   const exist2 = fs.exists(filename);
   expect(exist2).toEqual(false);

@@ -1,11 +1,12 @@
 import { existsSync } from "fs";
-import { resolve } from "path";
+import { dirname, resolve } from "path";
 import { createConsoleApp } from "@wingconsole/app";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { debug } from "debug";
 import { glob } from "glob";
-import open from "open";
+import { loadEnvVariables } from "../env";
 import { parseNumericString } from "../util";
+import { beforeShutdown } from "../util.before-shutdown.js";
 
 /**
  * Options for the `run` command.
@@ -30,6 +31,11 @@ export interface RunOptions {
    * @default wingCompiler.BuiltinPlatform.SIM
    */
   readonly platform?: string[];
+
+  /**
+   * Additional paths to watch or ignore for changes. Supports globs.
+   */
+  readonly watch?: string[];
 }
 
 /**
@@ -62,6 +68,8 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     throw new Error(entrypoint + " doesn't exist");
   }
 
+  loadEnvVariables({ cwd: resolve(dirname(entrypoint)) });
+
   if (options?.platform && options?.platform[0] !== BuiltinPlatform.SIM) {
     throw new Error(
       `The first platform in the list must be the sim platform (try "-t sim -t ${options.platform.join(
@@ -78,23 +86,18 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     requestedPort,
     hostUtils: {
       async openExternal(url: string) {
-        await open(url);
+        open(url);
       },
     },
     platform: options?.platform,
     requireAcceptTerms: !!process.stdin.isTTY,
+    open: openBrowser,
+    watchGlobs: options?.watch,
   });
   const url = `http://localhost:${port}/`;
-  if (openBrowser) {
-    await open(url);
-  }
   console.log(`The Wing Console is running at ${url}`);
 
-  const onExit = async (exitCode: number) => {
-    await close(() => process.exit(exitCode));
-  };
-
-  process.once("exit", (c) => void onExit(c));
-  process.once("SIGTERM", () => void onExit(0));
-  process.once("SIGINT", () => void onExit(0));
+  beforeShutdown(async () => {
+    await close();
+  });
 }

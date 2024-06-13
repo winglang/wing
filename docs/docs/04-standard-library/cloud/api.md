@@ -29,7 +29,7 @@ When a client invokes a route, the corresponding event handler function executes
 
 The following example shows a complete REST API implementation using `cloud.Api`, `ex.Table` & `cloud.Counter`
 
-```ts playground
+```ts playground example
 bring cloud;
 bring ex;
 
@@ -421,6 +421,9 @@ Options for the route.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Api.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.cloud.Api.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
+| <code><a href="#@winglang/sdk.cloud.Api.renderCorsHeaders">renderCorsHeaders</a></code> | Generates an object containing default CORS response headers and OPTIONS response headers. |
+| <code><a href="#@winglang/sdk.cloud.Api.renderOpenApiPath">renderOpenApiPath</a></code> | Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`). |
 
 ---
 
@@ -449,6 +452,60 @@ other capabilities to the inflight host.
 ###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Api.onLiftType.parameter.ops"></a>
 
 - *Type:* MutArray&lt;str&gt;
+
+---
+
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.cloud.Api.toInflight"></a>
+
+```wing
+bring cloud;
+
+cloud.Api.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Api.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
+##### `renderCorsHeaders` <a name="renderCorsHeaders" id="@winglang/sdk.cloud.Api.renderCorsHeaders"></a>
+
+```wing
+bring cloud;
+
+cloud.Api.renderCorsHeaders(corsOptions?: ApiCorsOptions);
+```
+
+Generates an object containing default CORS response headers and OPTIONS response headers.
+
+###### `corsOptions`<sup>Optional</sup> <a name="corsOptions" id="@winglang/sdk.cloud.Api.renderCorsHeaders.parameter.corsOptions"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a>
+
+The CORS options to generate the headers from.
+
+---
+
+##### `renderOpenApiPath` <a name="renderOpenApiPath" id="@winglang/sdk.cloud.Api.renderOpenApiPath"></a>
+
+```wing
+bring cloud;
+
+cloud.Api.renderOpenApiPath(path: str);
+```
+
+Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`).
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.renderOpenApiPath.parameter.path"></a>
+
+- *Type:* str
+
+The path to convert (assumes path is valid).
 
 ---
 
@@ -501,6 +558,84 @@ bring cloud;
 let ApiConnectOptions = cloud.ApiConnectOptions{ ... };
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiConnectOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
+| <code><a href="#@winglang/sdk.cloud.ApiConnectOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ApiConnectOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ApiConnectOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ApiConnectOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ApiConnectOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ApiConnectOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ApiConnectOptions.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ApiConnectOptions.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 1024
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ApiConnectOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
 
 ### ApiCorsOptions <a name="ApiCorsOptions" id="@winglang/sdk.cloud.ApiCorsOptions"></a>
 
@@ -521,7 +656,7 @@ let ApiCorsOptions = cloud.ApiCorsOptions{ ... };
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowCredentials">allowCredentials</a></code> | <code>bool</code> | Whether to allow credentials. |
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowHeaders">allowHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed headers. |
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowMethods">allowMethods</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>&gt;</code> | The list of allowed methods. |
-| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin">allowOrigin</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed allowOrigin. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin">allowOrigin</a></code> | <code>str</code> | The allowed origin. |
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.exposeHeaders">exposeHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of exposed headers. |
 | <code><a href="#@winglang/sdk.cloud.ApiCorsOptions.property.maxAge">maxAge</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long the browser should cache preflight request results. |
 
@@ -583,20 +718,20 @@ The list of allowed methods.
 ##### `allowOrigin`<sup>Optional</sup> <a name="allowOrigin" id="@winglang/sdk.cloud.ApiCorsOptions.property.allowOrigin"></a>
 
 ```wing
-allowOrigin: MutArray<str>;
+allowOrigin: str;
 ```
 
-- *Type:* MutArray&lt;str&gt;
-- *Default:* ["*"]
+- *Type:* str
+- *Default:* "*"
 
-The list of allowed allowOrigin.
+The allowed origin.
 
 ---
 
 *Example*
 
 ```wing
-["https://example.com"]
+"https://example.com"
 ```
 
 
@@ -645,6 +780,175 @@ bring cloud;
 let ApiDeleteOptions = cloud.ApiDeleteOptions{ ... };
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiDeleteOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
+| <code><a href="#@winglang/sdk.cloud.ApiDeleteOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ApiDeleteOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ApiDeleteOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ApiDeleteOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ApiDeleteOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ApiDeleteOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ApiDeleteOptions.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ApiDeleteOptions.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 1024
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ApiDeleteOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
+
+### ApiEndpointOptions <a name="ApiEndpointOptions" id="@winglang/sdk.cloud.ApiEndpointOptions"></a>
+
+Base options for Api endpoints.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiEndpointOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let ApiEndpointOptions = cloud.ApiEndpointOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiEndpointOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
+| <code><a href="#@winglang/sdk.cloud.ApiEndpointOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ApiEndpointOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ApiEndpointOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ApiEndpointOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ApiEndpointOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ApiEndpointOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ApiEndpointOptions.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ApiEndpointOptions.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 1024
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ApiEndpointOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
 
 ### ApiGetOptions <a name="ApiGetOptions" id="@winglang/sdk.cloud.ApiGetOptions"></a>
 
@@ -658,6 +962,84 @@ bring cloud;
 let ApiGetOptions = cloud.ApiGetOptions{ ... };
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiGetOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
+| <code><a href="#@winglang/sdk.cloud.ApiGetOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ApiGetOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ApiGetOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ApiGetOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ApiGetOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ApiGetOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ApiGetOptions.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ApiGetOptions.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 1024
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ApiGetOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
 
 ### ApiHeadOptions <a name="ApiHeadOptions" id="@winglang/sdk.cloud.ApiHeadOptions"></a>
 
@@ -671,6 +1053,84 @@ bring cloud;
 let ApiHeadOptions = cloud.ApiHeadOptions{ ... };
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiHeadOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
+| <code><a href="#@winglang/sdk.cloud.ApiHeadOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ApiHeadOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ApiHeadOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ApiHeadOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ApiHeadOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ApiHeadOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ApiHeadOptions.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ApiHeadOptions.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 1024
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ApiHeadOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
 
 ### ApiOptionsOptions <a name="ApiOptionsOptions" id="@winglang/sdk.cloud.ApiOptionsOptions"></a>
 
@@ -684,6 +1144,84 @@ bring cloud;
 let ApiOptionsOptions = cloud.ApiOptionsOptions{ ... };
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiOptionsOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
+| <code><a href="#@winglang/sdk.cloud.ApiOptionsOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ApiOptionsOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ApiOptionsOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ApiOptionsOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ApiOptionsOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ApiOptionsOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ApiOptionsOptions.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ApiOptionsOptions.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 1024
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ApiOptionsOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
 
 ### ApiPatchOptions <a name="ApiPatchOptions" id="@winglang/sdk.cloud.ApiPatchOptions"></a>
 
@@ -697,6 +1235,84 @@ bring cloud;
 let ApiPatchOptions = cloud.ApiPatchOptions{ ... };
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiPatchOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
+| <code><a href="#@winglang/sdk.cloud.ApiPatchOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ApiPatchOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ApiPatchOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ApiPatchOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ApiPatchOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ApiPatchOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ApiPatchOptions.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ApiPatchOptions.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 1024
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ApiPatchOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
 
 ### ApiPostOptions <a name="ApiPostOptions" id="@winglang/sdk.cloud.ApiPostOptions"></a>
 
@@ -710,6 +1326,84 @@ bring cloud;
 let ApiPostOptions = cloud.ApiPostOptions{ ... };
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiPostOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
+| <code><a href="#@winglang/sdk.cloud.ApiPostOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ApiPostOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ApiPostOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ApiPostOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ApiPostOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ApiPostOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ApiPostOptions.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ApiPostOptions.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 1024
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ApiPostOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
 
 ### ApiProps <a name="ApiProps" id="@winglang/sdk.cloud.ApiProps"></a>
 
@@ -763,7 +1457,7 @@ corsOptions: ApiCorsOptions;
 ```
 
 - *Type:* <a href="#@winglang/sdk.cloud.ApiCorsOptions">ApiCorsOptions</a>
-- *Default:* Default CORS options are applied when `cors` is set to `true` allowOrigin: ["*"], allowMethods: [ HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS, ], allowHeaders: ["Content-Type", "Authorization"], exposeHeaders: [], allowCredentials: false,
+- *Default:* Default CORS options are applied when `cors` is set to `true` allowOrigin: "*", allowMethods: [ HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS, ], allowHeaders: ["Content-Type", "Authorization"], exposeHeaders: [], allowCredentials: false,
 
 Options for configuring the API's CORS behavior across all routes.
 
@@ -774,7 +1468,7 @@ Options can also be overridden on a per-route basis. (not yet implemented)
 *Example*
 
 ```wing
-{ allowOrigin: ["https://example.com"] }
+{ allowOrigin: "https://example.com" }
 ```
 
 
@@ -790,6 +1484,84 @@ bring cloud;
 let ApiPutOptions = cloud.ApiPutOptions{ ... };
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiPutOptions.property.concurrency">concurrency</a></code> | <code>num</code> | The maximum concurrent invocations that can run at one time. |
+| <code><a href="#@winglang/sdk.cloud.ApiPutOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ApiPutOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ApiPutOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ApiPutOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+
+---
+
+##### `concurrency`<sup>Optional</sup> <a name="concurrency" id="@winglang/sdk.cloud.ApiPutOptions.property.concurrency"></a>
+
+```wing
+concurrency: num;
+```
+
+- *Type:* num
+- *Default:* platform specific limits (100 on the simulator)
+
+The maximum concurrent invocations that can run at one time.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ApiPutOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ApiPutOptions.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ApiPutOptions.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 1024
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ApiPutOptions.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
 
 ### ApiRequest <a name="ApiRequest" id="@winglang/sdk.cloud.ApiRequest"></a>
 
@@ -949,6 +1721,51 @@ The response's status code.
 
 ---
 
+### CorsHeaders <a name="CorsHeaders" id="@winglang/sdk.cloud.CorsHeaders"></a>
+
+Type definition for CORS headers which includes default and options headers.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.CorsHeaders.Initializer"></a>
+
+```wing
+bring cloud;
+
+let CorsHeaders = cloud.CorsHeaders{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.CorsHeaders.property.defaultResponse">defaultResponse</a></code> | <code>MutMap&lt;str&gt;</code> | Default CORS response headers. |
+| <code><a href="#@winglang/sdk.cloud.CorsHeaders.property.optionsResponse">optionsResponse</a></code> | <code>MutMap&lt;str&gt;</code> | CORS options response headers. |
+
+---
+
+##### `defaultResponse`<sup>Required</sup> <a name="defaultResponse" id="@winglang/sdk.cloud.CorsHeaders.property.defaultResponse"></a>
+
+```wing
+defaultResponse: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+Default CORS response headers.
+
+---
+
+##### `optionsResponse`<sup>Required</sup> <a name="optionsResponse" id="@winglang/sdk.cloud.CorsHeaders.property.optionsResponse"></a>
+
+```wing
+optionsResponse: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+CORS options response headers.
+
+---
+
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### IApiEndpointHandler <a name="IApiEndpointHandler" id="@winglang/sdk.cloud.IApiEndpointHandler"></a>
@@ -980,7 +1797,7 @@ Inflight client for `IApiEndpointHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IApiEndpointHandlerClient.handle"></a>
 
 ```wing
-inflight handle(request: ApiRequest): ApiResponse
+inflight handle(request: ApiRequest): ApiResponse?
 ```
 
 Inflight that will be called when a request is made to the endpoint.

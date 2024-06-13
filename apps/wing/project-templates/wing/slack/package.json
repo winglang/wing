@@ -1,0 +1,10 @@
+{
+  "name": "my-slack-app",
+  "version": "0.0.0",
+  "description": "A simple Slack app",
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@winglibs/slack": "0.1.0"
+  }
+}

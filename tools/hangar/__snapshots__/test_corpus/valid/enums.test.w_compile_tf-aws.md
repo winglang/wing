@@ -1,7 +1,7 @@
 # [enums.test.w](../../../../../examples/tests/valid/enums.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $SomeEnum, $one, $two }) {
@@ -18,7 +18,29 @@ module.exports = function({ $SomeEnum, $one, $two }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
+```
+
+## inflight.$Closure2-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $SomeEnum }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $SomeEnum.ONE), "ONE"), "\"{SomeEnum.ONE}\" == \"ONE\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $SomeEnum.TWO), "TWO"), "\"{SomeEnum.TWO}\" == \"TWO\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $SomeEnum.THREE), "THREE"), "\"{SomeEnum.THREE}\" == \"THREE\"");
+    }
+  }
+  return $Closure2;
+}
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
 ## main.tf.json
@@ -40,8 +62,8 @@ module.exports = function({ $SomeEnum, $one, $two }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -49,14 +71,21 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     const SomeEnum =
       (function (tmp) {
-        tmp[tmp["ONE"] = 0] = ",ONE";
-        tmp[tmp["TWO"] = 1] = ",TWO";
-        tmp[tmp["THREE"] = 2] = ",THREE";
+        tmp["ONE"] = "ONE";
+        tmp["TWO"] = "TWO";
+        tmp["THREE"] = "THREE";
+        return tmp;
+      })({})
+    ;
+    const DocumentedEnum =
+      (function (tmp) {
+        tmp["VARIANT"] = "VARIANT";
         return tmp;
       })({})
     ;
@@ -68,7 +97,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $SomeEnum: ${$stdlib.core.liftObject(SomeEnum)},
             $one: ${$stdlib.core.liftObject(one)},
             $two: ${$stdlib.core.liftObject(two)},
@@ -101,16 +130,53 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
+            $SomeEnum: ${$stdlib.core.liftObject(SomeEnum)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType()};
+            const client = new $Closure2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
     const opt = undefined;
     const three = SomeEnum.THREE;
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight", new $Closure1(this, "$Closure1"));
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, SomeEnum.ONE), "ONE"), "\"{SomeEnum.ONE}\" == \"ONE\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, SomeEnum.TWO), "TWO"), "\"{SomeEnum.TWO}\" == \"TWO\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, SomeEnum.THREE), "THREE"), "\"{SomeEnum.THREE}\" == \"THREE\"");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:toStr inflight", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "enums.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

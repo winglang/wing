@@ -2,46 +2,56 @@
 
 exports[`create a service with on start method 1`] = `
 {
-  ".wing/my_service_c815f66e.js": "\\"use strict\\";
-let $obj;
-async function $initOnce() {
-  $obj = $obj || (await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle() {
-  console.log(\\"start!\\");
+  ".wing/my_service_c815f66e.cjs": "      "use strict";
+      let $stop;
+      exports.start = async function() {
+        if ($stop) {
+          throw Error('service already started');
+        }
+        const client = await (await (async () => {
+  const $func = async () => {
+  console.log("start!");
 }
-};
-})())({
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+        const noop = () => {};
+        $stop = (await client.handle()) ?? noop;
+      };
 
-})));
-  return $obj;
-};
-exports.handle = async function() {
-  return (await $initOnce()).handle();
-};",
+      exports.stop = async function() {
+        if (!$stop) {
+          throw Error('service not started');
+        }
+        await $stop();
+        $stop = undefined;
+      };
+      ",
   "connections.json": {
     "connections": [],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_service": {
         "addr": "c815f66e1cb1ce843a78fc0ecb05e6fc56e3b51516",
-        "attrs": {},
         "path": "root/my_service",
+        "policy": [],
         "props": {
           "autoStart": true,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_service_c815f66e.js",
+          "sourceCodeFile": ".wing/my_service_c815f66e.cjs",
         },
         "type": "@winglang/sdk.cloud.Service",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -51,10 +61,6 @@ exports.handle = async function() {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -96,14 +102,6 @@ exports.handle = async function() {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -112,9 +110,21 @@ exports.handle = async function() {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -146,6 +156,7 @@ exports.handle = async function() {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

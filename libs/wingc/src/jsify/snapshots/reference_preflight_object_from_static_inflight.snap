@@ -17,7 +17,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.MyType-1.js
+## inflight.MyType-1.cjs
 
 ```js
 "use strict";
@@ -32,10 +32,10 @@ module.exports = function({ $q }) {
   }
   return MyType;
 }
-//# sourceMappingURL=inflight.MyType-1.js.map
+//# sourceMappingURL=inflight.MyType-1.cjs.map
 ```
 
-## preflight.js
+## preflight.cjs
 
 ```js
 "use strict";
@@ -45,6 +45,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -55,7 +56,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.MyType-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyType-1.cjs")({
             $q: ${$stdlib.core.liftObject(q)},
           })
         `;
@@ -86,12 +87,12 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+    const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

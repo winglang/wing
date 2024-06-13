@@ -114,7 +114,8 @@ pub enum LookupResult<'a> {
 	/// A matching symbol was found but it's not public
 	NotPublic(reference([a], [SymbolKind]), SymbolLookupInfo),
 	/// The symbol was not found in the environment, contains the name of the symbol or part of it that was not found
-	NotFound(Symbol),
+	/// If the lookup environment was a type environment (SymbolEnvKind::Type) such as a class, the type is also included
+	NotFound(Symbol, Option<TypeRef>),
 	/// A symbol with a matching name was found in multiple environments.
 	MultipleFound,
 	/// The symbol exists in the environment but it's not defined yet (based on the statement
@@ -134,7 +135,7 @@ impl<'a> LookupResult<'a> {
 		match self {
 			LookupResult::Found(kind, info) => (kind, info),
 			LookupResult::NotPublic(x, _) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotPublic"),
-			LookupResult::NotFound(x) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotFound"),
+			LookupResult::NotFound(x, ..) => panic!("LookupResult::unwrap({x}) called on LookupResult::NotFound"),
 			LookupResult::MultipleFound => panic!("LookupResult::unwrap() called on LookupResult::MultipleFound"),
 			LookupResult::DefinedLater(_) => panic!("LookupResult::unwrap() called on LookupResult::DefinedLater"),
 			LookupResult::ExpectedNamespace(symbol) => panic!(
@@ -336,13 +337,26 @@ impl SymbolEnv {
 			);
 		}
 
+		// Get the type of this env (if it's a type env) to include in the result
+		let env_type = if let SymbolEnvKind::Type(t) = self.kind {
+			Some(t)
+		} else {
+			None
+		};
+
 		// we couldn't find the symbol in the current environment, let's look up in the parent
 		// environment.
 		if let Some(ref_annotation([parent_env])) = self.parent {
-			return parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx));
+			let res = parent_env.lookup_ext(symbol, not_after_stmt_idx.map(|_| self.statement_idx));
+			// The `NotFound` result needs to include the type of the original (non-parent) environment (if applicable)
+			let res = match res {
+				LookupResult::NotFound(s, ..) => LookupResult::NotFound(s, env_type),
+				_ => res,
+			};
+			return res;
 		}
 
-		LookupResult::NotFound(symbol.clone())
+		LookupResult::NotFound(symbol.clone(), env_type)
 	}
 
 	#[allow(clippy::needless_arbitrary_self_type)]
@@ -384,7 +398,7 @@ impl SymbolEnv {
 
 			// Look up the result in each env. If there are multiple results, throw a special error
 			// otherwise proceed normally
-			let mut lookup_result = LookupResult::NotFound((*next_symb).clone());
+			let mut lookup_result = LookupResult::NotFound((*next_symb).clone(), None);
 			for env in ns.envs.vec_iter() {
 				// invariant: lookup_result is never "ExpectedNamespace" or "MultipleFound"
 
@@ -416,7 +430,7 @@ impl SymbolEnv {
 				if (matches!(partial_result, LookupResult::Found(_, _))
 					|| matches!(partial_result, LookupResult::DefinedLater(_)))
 					&& (matches!(lookup_result, LookupResult::NotPublic(_, _))
-						|| matches!(lookup_result, LookupResult::NotFound(_)))
+						|| matches!(lookup_result, LookupResult::NotFound(..)))
 				{
 					lookup_result = partial_result;
 				}
@@ -424,7 +438,7 @@ impl SymbolEnv {
 				// result if we're currently "NotFound". "Found", "DefinedLater", and any
 				// existing "NotPublic" results take precedence.
 				else if (matches!(partial_result, LookupResult::NotPublic(_, _)))
-					&& (matches!(lookup_result, LookupResult::NotFound(_)))
+					&& (matches!(lookup_result, LookupResult::NotFound(..)))
 				{
 					lookup_result = partial_result;
 				}
@@ -610,7 +624,7 @@ mod tests {
 		// Lookup non-existent variable
 		assert!(matches!(
 			parent_env.lookup_nested_str("non_existent_var", None),
-			LookupResult::NotFound(_)
+			LookupResult::NotFound(..)
 		));
 
 		// Lookup globally visible variable
@@ -658,7 +672,7 @@ mod tests {
 		// Lookup for a child var in the parent env
 		assert!(matches!(
 			parent_env.lookup_nested_str("child_global_var", None),
-			LookupResult::NotFound(_)
+			LookupResult::NotFound(..)
 		));
 
 		// Lookup for a var in the child env
@@ -690,13 +704,11 @@ mod tests {
 		let ns1 = types.add_namespace(Namespace {
 			name: "ns1".to_string(),
 			envs: vec![ns1_env],
-			loaded: false,
 			module_path: ResolveSource::WingFile,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
 			envs: vec![ns2_env],
-			loaded: false,
 			module_path: ResolveSource::WingFile,
 		});
 
@@ -770,7 +782,7 @@ mod tests {
 		// Perform a nested lookup for a non-existent var
 		let res = child_env.lookup_nested_str("ns1.ns2.non_existent", None);
 		match res {
-			LookupResult::NotFound(s) => {
+			LookupResult::NotFound(s, ..) => {
 				assert!(s.name == "non_existent")
 			}
 			_ => panic!("Expected LookupResult::NotFount(_) but got {:?}", res),
@@ -779,7 +791,7 @@ mod tests {
 		// Perform a nested lookup through a non-existent namespace
 		let res = child_env.lookup_nested_str("ns1.non_existent.ns2_var", None);
 		match res {
-			LookupResult::NotFound(s) => {
+			LookupResult::NotFound(s, ..) => {
 				assert!(s.name == "non_existent")
 			}
 			_ => panic!("Expected LookupResult::NotFount(_) but got {:?}", res),

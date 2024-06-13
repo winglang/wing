@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { Endpoint } from "./endpoint";
+import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
@@ -16,11 +17,11 @@ export const API_FQN = fqnForType("cloud.Api");
  */
 export interface ApiCorsOptions {
   /**
-   * The list of allowed allowOrigin.
-   * @example ["https://example.com"]
-   * @default - ["*"]
+   * The allowed origin.
+   * @example "https://example.com"
+   * @default - "*"
    */
-  readonly allowOrigin?: Array<string>;
+  readonly allowOrigin?: string;
 
   /**
    * The list of allowed methods.
@@ -75,9 +76,9 @@ export interface ApiProps {
    * Options for configuring the API's CORS behavior across all routes.
    * Options can also be overridden on a per-route basis. (not yet implemented)
    *
-   * @example { allowOrigin: ["https://example.com"] }
+   * @example { allowOrigin: "https://example.com" }
    * @default - Default CORS options are applied when `cors` is set to `true`
-   *  allowOrigin: ["*"],
+   *  allowOrigin: "*",
    *  allowMethods: [
    *   HttpMethod.GET,
    *   HttpMethod.POST,
@@ -112,64 +113,36 @@ export type OpenApiCorsHeaders = Record<string, { schema: { type: string } }>;
 
 /**
  * Type definition for default CORS headers.
+ * @property {string} "Access-Control-Allow-Origin" - Specifies the origin that is allowed to access the resource. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin}
+ * @property {string} "Access-Control-Expose-Headers" - Lists the headers that the client can access. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers}
+ * @property {string} "Access-Control-Allow-Credentials" - Indicates whether the response to the request can be exposed when the credentials flag is true. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials}
  */
-type CorsDefaultResponseHeaders = {
-  /**
-   * Specifies the origin that is allowed to access the resource.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
-   */
-  "Access-Control-Allow-Origin": string;
-
-  /**
-   * Lists the headers that the client can access.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
-   */
-  "Access-Control-Expose-Headers": string;
-
-  /**
-   * Indicates whether the response to the request can
-   * be exposed when the credentials flag is true.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
-   */
-  "Access-Control-Allow-Credentials": string;
-};
+type CorsDefaultResponseHeaders = { [key: string]: string };
 
 /**
  * Type definition for CORS option headers.
+ * @property {string} "Access-Control-Allow-Origin" - Specifies the origin that is allowed to access the resource. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin}
+ * @property {string} "Access-Control-Allow-Headers" - Specifies the headers that are allowed in a request. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers}
+ * @property {string} "Access-Control-Allow-Methods" - Specifies the methods that are allowed in a request. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods}
+ * @property {string} "Access-Control-Max-Age" - Indicates how long the results of a preflight request can be cached. See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age}
  */
-type CorsOptionsResponseHeaders = {
-  /**
-   * Specifies the origin that is allowed to access the resource.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
-   */
-  "Access-Control-Allow-Origin": string;
-
-  /**
-   * Specifies the headers that are allowed in a request.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
-   */
-  "Access-Control-Allow-Headers": string;
-
-  /**
-   * Specifies the methods that are allowed in a request.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
-   */
-  "Access-Control-Allow-Methods": string;
-
-  /**
-   * Indicates how long the results of a preflight request can be cached.
-   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
-   */
-  "Access-Control-Max-Age": string;
-};
+type CorsOptionsResponseHeaders = { [key: string]: string };
 
 /**
  * Type definition for CORS headers which includes default and options headers.
  */
-export type CorsHeaders = {
-  defaultResponse: CorsDefaultResponseHeaders; // Default CORS headers for all requests.
-  optionsResponse: CorsOptionsResponseHeaders; // CORS option headers for OPTIONS requests.
-};
+export interface CorsHeaders {
+  /**
+   * Default CORS response headers.
+   */
+  readonly defaultResponse: CorsDefaultResponseHeaders;
+
+  /**
+   * CORS options response headers.
+   */
+  readonly optionsResponse: CorsOptionsResponseHeaders;
+}
+
 /**
  * Functionality shared between all `Api` implementations.
  * @inflight `@winglang/sdk.cloud.IApiClient`
@@ -181,10 +154,49 @@ export class Api extends Resource {
    * Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`)
    * @param path The path to convert (assumes path is valid)
    * @returns OpenAPI path
-   * @internal
    */
-  public static _toOpenApiPath(path: string) {
+  public static renderOpenApiPath(path: string) {
     return path.replace(/\/:([A-Za-z0-9_-]+)/g, "/{$1}");
+  }
+
+  /**
+   * Generates an object containing default CORS response headers and OPTIONS response headers.
+   * @param corsOptions The CORS options to generate the headers from.
+   * @returns An object containing default CORS response headers and OPTIONS response headers.
+   */
+  public static renderCorsHeaders(
+    corsOptions?: ApiCorsOptions
+  ): CorsHeaders | undefined {
+    if (corsOptions == undefined) {
+      return;
+    }
+
+    const {
+      allowOrigin = "*",
+      allowHeaders = [],
+      allowMethods = [],
+      exposeHeaders = [],
+      allowCredentials = false,
+      maxAge = Duration.fromMinutes(5),
+    } = corsOptions;
+
+    const defaultHeaders: CorsDefaultResponseHeaders = {
+      "Access-Control-Allow-Origin": allowOrigin || "*",
+      "Access-Control-Expose-Headers": exposeHeaders.join(",") || "",
+      "Access-Control-Allow-Credentials": allowCredentials ? "true" : "false",
+    };
+
+    const optionsHeaders: CorsOptionsResponseHeaders = {
+      "Access-Control-Allow-Origin": allowOrigin || "*",
+      "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
+      "Access-Control-Allow-Methods": allowMethods.join(",") || "",
+      "Access-Control-Max-Age": maxAge.seconds.toString(),
+    };
+
+    return {
+      defaultResponse: defaultHeaders,
+      optionsResponse: optionsHeaders,
+    };
   }
 
   /**
@@ -209,7 +221,7 @@ export class Api extends Resource {
   };
 
   private corsDefaultValues: ApiCorsOptions = {
-    allowOrigin: ["*"],
+    allowOrigin: "*",
     allowMethods: [
       HttpMethod.GET,
       HttpMethod.POST,
@@ -397,9 +409,7 @@ export class Api extends Resource {
    */
   protected _validatePath(path: string) {
     if (
-      !/^(\/[a-zA-Z0-9_\-\.]+(\/\:[a-zA-Z0-9_\-]+|\/[a-zA-Z0-9_\-\.]+)*(?:\?[^#]*)?)?$|^(\/\:[a-zA-Z0-9_\-]+)*\/?$/g.test(
-        path
-      )
+      !/^((\/\:[a-zA-Z0-9_\-]+|\/[a-zA-Z0-9_\-\.]*)*(?:\?[^#]*)?)?$/g.test(path)
     ) {
       throw new Error(
         `Invalid path ${path}. Url parts can only contain alpha-numeric chars, "-", "_" and ".". Params can only contain alpha-numeric chars and "_".`
@@ -418,6 +428,42 @@ export class Api extends Resource {
       ...this.corsDefaultValues,
       ...props,
     };
+  }
+
+  /**
+   * Checks if two given paths are siblings.
+   * @param pathA
+   * @param pathB
+   * @returns A boolean value indicating if provided paths are siblings.
+   * @internal
+   */
+
+  protected _arePathsSiblings(pathA: string, pathB: string): boolean {
+    const partsA = pathA.split("/");
+    const partsB = pathB.split("/");
+
+    let shorter = partsA.length < partsB.length ? partsA : partsB;
+
+    for (let i = 0; i < shorter.length; i++) {
+      const partA = partsA[i];
+      const partB = partsB[i];
+      if (
+        (!partA.match(/^:.+?$/) || !partB.match(/^:.+?$/)) &&
+        partA[i] !== partB[i]
+      ) {
+        return false;
+      }
+
+      if (
+        partA.match(/^:.+?$/) &&
+        partB.match(/^:.+?$/) &&
+        partA[i] !== partB[i]
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -468,6 +514,20 @@ export class Api extends Resource {
   }
 
   /**
+   * Checks if provided path is a sibling of paths already defined in the api spec- i.e "/:username" and "/:id".
+   * @param path Path to be checked
+   * @returns A boolean value indicating if provided path has a sibling.
+   * @internal
+   */
+  private _findSiblingPath(path: string): string | undefined {
+    const existingPaths = Object.keys(this.apiSpec.paths);
+
+    return existingPaths.find((existingPath) =>
+      this._arePathsSiblings(existingPath, path)
+    );
+  }
+
+  /**
    * Generates the OpenAPI schema for CORS headers based on the provided CORS options.
    * @param corsOptions The CORS options to generate the schema from.
    * @returns An object representing the OpenAPI schema for CORS headers.
@@ -486,47 +546,6 @@ export class Api extends Resource {
       corsHeaders["Access-Control-Max-Age"] = corsHeaderSchema;
     }
     return corsHeaders;
-  }
-
-  /**
-   * Generates an object containing default CORS response headers and OPTIONS response headers.
-   * @param corsOptions The CORS options to generate the headers from.
-   * @returns An object containing default CORS response headers and OPTIONS response headers.
-   * @internal
-   */
-  protected _generateCorsHeaders(
-    corsOptions?: ApiCorsOptions
-  ): CorsHeaders | undefined {
-    if (corsOptions == undefined) {
-      return;
-    }
-
-    const {
-      allowOrigin = [],
-      allowHeaders = [],
-      allowMethods = [],
-      exposeHeaders = [],
-      allowCredentials = false,
-      maxAge = Duration.fromMinutes(5),
-    } = corsOptions;
-
-    const defaultHeaders: CorsDefaultResponseHeaders = {
-      "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
-      "Access-Control-Expose-Headers": exposeHeaders.join(",") || "",
-      "Access-Control-Allow-Credentials": allowCredentials ? "true" : "false",
-    };
-
-    const optionsHeaders: CorsOptionsResponseHeaders = {
-      "Access-Control-Allow-Origin": allowOrigin.join(",") || "",
-      "Access-Control-Allow-Headers": allowHeaders.join(",") || "",
-      "Access-Control-Allow-Methods": allowMethods.join(",") || "",
-      "Access-Control-Max-Age": maxAge.seconds.toString(),
-    };
-
-    return {
-      defaultResponse: defaultHeaders,
-      optionsResponse: optionsHeaders,
-    };
   }
 
   /**
@@ -552,6 +571,12 @@ export class Api extends Resource {
     if (!!ambiguousPath) {
       throw new Error(
         `Endpoint for path '${path}' and method '${method}' is ambiguous - it conflicts with existing endpoint for path '${ambiguousPath}'`
+      );
+    }
+    const siblingPath = this._findSiblingPath(path);
+    if (!!siblingPath) {
+      throw new Error(
+        `Endpoint for path '${path}' and method '${method}' conflicts with existing sibling endpoint for path '${siblingPath}'- try to match the parameter names to avoid this error.`
       );
     }
     const operationId = `${method.toLowerCase()}${
@@ -602,11 +627,12 @@ export class Api extends Resource {
     // Convert our paths to valid OpenAPI paths
     let paths: { [key: string]: any } = {};
     Object.keys(this.apiSpec.paths).forEach((key) => {
-      paths[Api._toOpenApiPath(key)] = this.apiSpec.paths[key];
+      paths[Api.renderOpenApiPath(key)] = this.apiSpec.paths[key];
     });
 
     // https://spec.openapis.org/oas/v3.0.3
     return {
+      ...this.apiSpec,
       openapi: "3.0.3",
       paths: paths,
     };
@@ -614,49 +640,63 @@ export class Api extends Resource {
 }
 
 /**
+ * Base options for Api endpoints.
+ */
+export interface ApiEndpointOptions extends FunctionProps {}
+
+/**
  * Options for Api get endpoint.
  */
-export interface ApiGetOptions {}
+export interface ApiGetOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api post endpoint.
  */
-export interface ApiPostOptions {}
+export interface ApiPostOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiPutOptions {}
+export interface ApiPutOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiDeleteOptions {}
+export interface ApiDeleteOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiPatchOptions {}
+export interface ApiPatchOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiOptionsOptions {}
+export interface ApiOptionsOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiHeadOptions {}
+export interface ApiHeadOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiConnectOptions {}
+export interface ApiConnectOptions extends ApiEndpointOptions {}
 
 /**
  * Inflight methods and members of `cloud.Api`.
  */
 export interface IApiClient {}
+
+/**
+ * List of inflight operations available for `Api`.
+ * @internal
+ */
+export enum ApiInflightMethods {
+  /** When the API endpoint receives a request. */
+  REQUEST = "request",
+}
 
 /**
  * Allowed HTTP methods for a endpoint.

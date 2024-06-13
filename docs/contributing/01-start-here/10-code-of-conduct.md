@@ -6,8 +6,8 @@ keywords: [coc, code of conduct]
 
 The Wing community follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
 
-Please review it before contributing issues, pull requests, or joining the [Wing Slack].
+Please review it before contributing issues, pull requests, or joining the [Wing Discord].
 
-[Wing Slack]: https://t.winglang.io/slack
+[Wing Discord]: https://t.winglang.io/discord
 
 

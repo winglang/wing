@@ -1,3 +1,6 @@
+
+
+
 <div align="center">
   <img src="./apps/wing/logo/banner.gif" alt="Wing Banner" >
 </div>
@@ -8,7 +11,7 @@
 ▪︎
 <a href="https://www.winglang.io/docs/">Getting Started</a>
 ▪︎
-<a href="http://t.winglang.io/slack">Join Slack</a>
+<a href="http://t.winglang.io/discord">Join Discord</a>
 ▪︎
 <a href="https://www.winglang.io/docs/category/faq">FAQ</a>
 ▪︎
@@ -37,7 +40,7 @@ We also provide you with a set of tools that let you test your code locally, sig
   <img src="./apps/wing/logo/demo.gif" alt="Wing Demo" height="400px">
 </div>
 
-Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at the [Wing Cloud team](https://www.wing.cloud/) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
+Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at the [Wing Cloud team](https://www.wing.cloud/) and an amazing [community](https://t.winglang.io/discord) of contributors (also known as Wingnuts).
 
 Click [here](https://www.youtube.com/watch?v=5_RhWwgGue0) to watch a short video introduction to the Wing language.
 
@@ -125,7 +128,7 @@ Here are some questions we're commonly asked that are covered by our [FAQ](https
 
 ## Community 💬
 
-Join our flock in the [Wing Slack](https://t.winglang.io/slack) community.
+Join our flock in the [Wing Discord](https://t.winglang.io/discord) community.
 We're here to help each other, answer questions, and share our cloud adventures.
 Alternatively, post any questions on [GitHub Discussions](https://github.com/winglang/wing/discussions).
 
@@ -150,4 +153,4 @@ Contributions are made under our [contribution license](./CONTRIBUTION_LICENSE.m
 
 Happy coding, and remember: the sky's the limit with Wing (yes, another pun)! 🌤️🚀
 
-[wing slack]: https://t.winglang.io/slack
+[wing discord]: https://t.winglang.io/discord

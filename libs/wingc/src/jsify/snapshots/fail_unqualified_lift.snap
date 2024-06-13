@@ -2,4 +2,4 @@
 source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
-Expression of type "Queue" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details) 7:6
+Expression of type "Queue" references an unknown preflight object, can't qualify its capabilities 7:6

@@ -41,16 +41,6 @@
       "type": "build"
     },
     {
-      "name": "@wingconsole/app",
-      "version": "workspace:^",
-      "type": "build"
-    },
-    {
-      "name": "@wingconsole/server",
-      "version": "workspace:^",
-      "type": "build"
-    },
-    {
       "name": "eslint-config-prettier",
       "type": "build"
     },
@@ -81,11 +71,6 @@
       "type": "build"
     },
     {
-      "name": "npm-check-updates",
-      "version": "^16",
-      "type": "build"
-    },
-    {
       "name": "open",
       "type": "build"
     },
@@ -98,11 +83,11 @@
       "type": "build"
     },
     {
-      "name": "ts-node",
+      "name": "tsup",
       "type": "build"
     },
     {
-      "name": "tsup",
+      "name": "tsx",
       "type": "build"
     },
     {

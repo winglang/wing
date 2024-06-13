@@ -92,6 +92,10 @@ pub struct WingSpan {
 	pub end: WingLocation,
 	/// Relative path to the file based on the entrypoint file
 	pub file_id: String,
+	/// Byte-level offsets into the file.
+	/// Not used for comparisons (start/end are used instead)
+	pub start_offset: usize,
+	pub end_offset: usize,
 }
 
 impl WingSpan {
@@ -213,11 +217,28 @@ impl WingSpan {
 			other.start
 		};
 		let end = if self.end > other.end { self.end } else { other.end };
+		let start_offset = if self.start_offset < other.start_offset {
+			self.start_offset
+		} else {
+			other.start_offset
+		};
+		let end_offset = if self.end_offset > other.end_offset {
+			self.end_offset
+		} else {
+			other.end_offset
+		};
+
 		Self {
 			start,
 			end,
 			file_id: self.file_id.clone(),
+			start_offset,
+			end_offset,
 		}
+	}
+
+	pub fn byte_size(&self) -> usize {
+		self.end_offset - self.start_offset
 	}
 
 	/// Checks if this span is the default span. This means the span is covers nothing by ending at (0,0).
@@ -279,8 +300,24 @@ impl Diagnostic {
 		});
 	}
 
-	pub fn report(&self) {
-		report_diagnostic(self.clone());
+	pub fn add_hint(&mut self, hint: impl ToString) {
+		self.hints.push(hint.to_string());
+	}
+
+	pub fn annotate(self, msg: impl ToString, span: impl Spanned) -> Self {
+		let mut new = self;
+		new.add_anotation(msg, span);
+		new
+	}
+
+	pub fn hint(self, hint: impl ToString) -> Self {
+		let mut new = self;
+		new.add_hint(hint);
+		new
+	}
+
+	pub fn report(self) {
+		report_diagnostic(self);
 	}
 }
 
@@ -433,6 +470,8 @@ mod tests {
 			start: WingLocation { line: 0, col: 0 },
 			end: WingLocation { line: 1, col: 10 },
 			file_id: "test".to_string(),
+			start_offset: 0,
+			end_offset: 10,
 		};
 
 		let in_position = Position { line: 0, character: 5 };
@@ -450,17 +489,23 @@ mod tests {
 			start: WingLocation { line: 0, col: 0 },
 			end: WingLocation { line: 1, col: 10 },
 			file_id: file_id.to_string(),
+			start_offset: 0,
+			end_offset: 10,
 		};
 
 		let in_span = WingSpan {
 			start: WingLocation { line: 0, col: 5 },
 			end: WingLocation { line: 1, col: 5 },
 			file_id: file_id.to_string(),
+			start_offset: 0,
+			end_offset: 10,
 		};
 		let out_span = WingSpan {
 			start: WingLocation { line: 2, col: 0 },
 			end: WingLocation { line: 2, col: 5 },
 			file_id: file_id.to_string(),
+			start_offset: 0,
+			end_offset: 10,
 		};
 
 		assert!(span.contains_span(&in_span));
@@ -473,6 +518,8 @@ mod tests {
 			start: WingLocation { line: 0, col: 0 },
 			end: WingLocation { line: 1, col: 10 },
 			file_id: "test".to_string(),
+			start_offset: 0,
+			end_offset: 10,
 		};
 
 		let in_location = WingLocation { line: 0, col: 5 };
@@ -488,6 +535,8 @@ mod tests {
 			start: WingLocation { line: 1, col: 5 },
 			end: WingLocation { line: 1, col: 10 },
 			file_id: "test".to_string(),
+			start_offset: 0,
+			end_offset: 10,
 		};
 
 		let like_span1 = span1.clone();
@@ -496,11 +545,15 @@ mod tests {
 			start: WingLocation { line: 0, col: 0 },
 			end: WingLocation { line: 1, col: 1 },
 			file_id: "test".to_string(),
+			start_offset: 0,
+			end_offset: 10,
 		};
 		let later = WingSpan {
 			start: WingLocation { line: 2, col: 0 },
 			end: WingLocation { line: 2, col: 5 },
 			file_id: "test".to_string(),
+			start_offset: 0,
+			end_offset: 10,
 		};
 
 		assert!(span1 == like_span1);

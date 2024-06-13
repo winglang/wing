@@ -19,7 +19,7 @@ const findClass = (): reflect.ClassType => {
   throw new Error("Assembly does not contain a class");
 };
 
-test.each(Language.values())("%s snapshot", (language) => {
+test.each(Language.values().map((l) => l.name))("%s snapshot", (language) => {
   const { transpile } = LANGUAGE_SPECIFIC[language.toString()];
   const markdown = new MarkdownRenderer({ language, ...metadata });
   const klass = new Class(transpile, findClass()).toJson();

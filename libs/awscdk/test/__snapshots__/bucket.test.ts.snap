@@ -984,12 +984,56 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mybucketAllowBucketNotificationsTomyprojectmybucketOnEvent02929E14ED42BAD44": {
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnCreate0523E7CD109C74964": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "mybucketOnEvent02DE25E3B",
+            "mybucketOnCreate071865324",
+            "Arn",
+          ],
+        },
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId",
+        },
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "mybucketD601CBAA",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnDelete07E2A93E8688C7533": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketOnDelete0BC86CC27",
+            "Arn",
+          ],
+        },
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId",
+        },
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "mybucketD601CBAA",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnUpdate036B5F47FED7981DE": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "mybucketOnUpdate06503D6F0",
             "Arn",
           ],
         },
@@ -1030,7 +1074,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
     },
     "mybucketNotificationsB76B6B79": {
       "DependsOn": [
-        "mybucketAllowBucketNotificationsTomyprojectmybucketOnEvent02929E14ED42BAD44",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnCreate0523E7CD109C74964",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnDelete07E2A93E8688C7533",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnUpdate036B5F47FED7981DE",
       ],
       "Properties": {
         "BucketName": {
@@ -1045,7 +1091,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnEvent02DE25E3B",
+                  "mybucketOnCreate071865324",
                   "Arn",
                 ],
               },
@@ -1056,7 +1102,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnEvent02DE25E3B",
+                  "mybucketOnDelete0BC86CC27",
                   "Arn",
                 ],
               },
@@ -1067,7 +1113,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnEvent02DE25E3B",
+                  "mybucketOnUpdate06503D6F0",
                   "Arn",
                 ],
               },
@@ -1083,9 +1129,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::S3BucketNotifications",
     },
-    "mybucketOnEvent02DE25E3B": {
+    "mybucketOnCreate071865324": {
       "DependsOn": [
-        "mybucketOnEvent0ServiceRole1D46FF9D",
+        "mybucketOnCreate0ServiceRole8EB9AE15",
       ],
       "Properties": {
         "Architectures": [
@@ -1105,13 +1151,13 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "Handler": "index.handler",
         "LoggingConfig": {
           "LogGroup": {
-            "Ref": "mybucketOnEvent0LogGroupBE45837D",
+            "Ref": "mybucketOnCreate0LogGroup8E3C4A72",
           },
         },
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "mybucketOnEvent0ServiceRole1D46FF9D",
+            "mybucketOnCreate0ServiceRole8EB9AE15",
             "Arn",
           ],
         },
@@ -1120,7 +1166,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketOnEvent0LogGroupBE45837D": {
+    "mybucketOnCreate0LogGroup8E3C4A72": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RetentionInDays": 30,
@@ -1128,7 +1174,159 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       "Type": "AWS::Logs::LogGroup",
       "UpdateReplacePolicy": "Retain",
     },
-    "mybucketOnEvent0ServiceRole1D46FF9D": {
+    "mybucketOnCreate0ServiceRole8EB9AE15": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mybucketOnDelete0BC86CC27": {
+      "DependsOn": [
+        "mybucketOnDelete0ServiceRole57A03DE1",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
+        "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "mybucketOnDelete0LogGroup44992347",
+          },
+        },
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "mybucketOnDelete0ServiceRole57A03DE1",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "mybucketOnDelete0LogGroup44992347": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mybucketOnDelete0ServiceRole57A03DE1": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mybucketOnUpdate06503D6F0": {
+      "DependsOn": [
+        "mybucketOnUpdate0ServiceRoleAF91E9C7",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
+        "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "mybucketOnUpdate0LogGroupFDC75EA3",
+          },
+        },
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "mybucketOnUpdate0ServiceRoleAF91E9C7",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "mybucketOnUpdate0LogGroupFDC75EA3": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mybucketOnUpdate0ServiceRoleAF91E9C7": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [

@@ -19,11 +19,13 @@ The `cloud.Secret` class represents a secret value (like an API key, certificate
 Secrets are encrypted at rest and in transit, and are only decrypted when they are used in a task.
 Storing a secret allows you to use the value in different compute tasks while only having to rotate or revoke it in one place.
 
+You can use the [`wing secrets`](https://www.winglang.io/docs/tools/cli#store-secrets-wing-secrets) command to store secrets in the target platform.
+
 ## Usage
 
 ### Defining a secret
 
-```js
+```js example
 bring cloud;
 
 let secret = new cloud.Secret(
@@ -35,7 +37,7 @@ Before deploying your application, you will be expected to store the secret valu
 
 ### Retrieving secret values
 
-```js
+```js example
 bring cloud;
 
 let secret = new cloud.Secret(
@@ -52,15 +54,14 @@ new cloud.Function(inflight () => {
 
 ### Simulator (`sim`)
 
-When using a secret in Wing's simulator, a secrets file must be added to your home directory at `~/.wing/secrets.json`.
+When using a secret in Wing's simulator, a secrets file must be added to your project in a file called: `.env`.
 The simulator will look up secrets in this file by their `name`.
-Secrets should be saved in a JSON format:
+Secrets should be saved in a key=value format:
 
 ```json
-// secrets.json
-{
-  "my-api-key": "1234567890"
-}
+// .env
+my-api-key=1234567890
+secret-key=secret-value
 ```
 
 ### AWS (`tf-aws` and `awscdk`)
@@ -153,6 +154,7 @@ Retrieve the Json value of the secret.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Secret.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+| <code><a href="#@winglang/sdk.cloud.Secret.toInflight">toInflight</a></code> | Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource. |
 
 ---
 
@@ -184,11 +186,30 @@ other capabilities to the inflight host.
 
 ---
 
+##### `toInflight` <a name="toInflight" id="@winglang/sdk.cloud.Secret.toInflight"></a>
+
+```wing
+bring cloud;
+
+cloud.Secret.toInflight(obj: IResource);
+```
+
+Generates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.
+
+NOTE: This statement must be executed within an async context.
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Secret.toInflight.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+---
+
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Secret.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Secret.property.name">name</a></code> | <code>str</code> | Get secret name. |
 
 ---
 
@@ -201,6 +222,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.cloud.Secret.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+
+Get secret name.
 
 ---
 

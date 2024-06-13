@@ -223,7 +223,7 @@ fn preflight_collection_of_preflight_objects() {
     ];
     test "test" {
       assert(arr.length == 2);
-      arr.at(0).put("hello", "world");
+      arr[0].put("hello", "world");
     }
     "#
 	);
@@ -1396,7 +1396,7 @@ fn lift_element_from_collection_of_objects() {
     let a = [new cloud.Bucket()];
 
     test "test" {
-      a.at(0).put("hello", "world");
+      a[0].put("hello", "world");
     }
     "#
 	);
@@ -1414,7 +1414,7 @@ fn lift_element_from_collection_as_field() {
       }
 
       inflight foo() {
-        this.arr.at(0).put("hello", "world");
+        this.arr[0].put("hello", "world");
       }
     }
     "#
@@ -2060,6 +2060,23 @@ fn entrypoint_this() {
 	assert_compile_ok!(
 		r#"
     this;
+    "#
+	);
+}
+
+#[test]
+fn allow_type_def_before_super() {
+	assert_compile_ok!(
+		r#"
+    class Foo {
+      new(x: num) {}
+    }
+    class Bar extends Foo {
+      new() {
+        class Baz {}
+        super(1);
+      }
+    }
     "#
 	);
 }

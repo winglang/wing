@@ -1,10 +1,10 @@
 import { initTRPC } from "@trpc/server";
-import { simulator } from "@winglang/sdk";
+import type { simulator } from "@winglang/sdk";
 import type Emittery from "emittery";
 
-import { Config } from "../config.js";
-import { ConsoleLogger } from "../consoleLogger.js";
-import { HostUtils } from "../hostUtils.js";
+import type { Config } from "../config.js";
+import type { ConsoleLogger } from "../consoleLogger.js";
+import type { HostUtils } from "../hostUtils.js";
 import type { State, Trace } from "../types.js";
 import type { Updater } from "../updater.js";
 
@@ -41,13 +41,13 @@ export interface LayoutPanel {
 export interface LayoutConfig {
   leftPanel?: LayoutPanel;
   bottomPanel?: LayoutPanel;
+  rightPanel?: LayoutPanel;
   statusBar?: {
     hide?: boolean;
     showThemeToggle?: boolean;
   };
   errorScreen?: {
     position?: "default" | "bottom";
-    displayTitle?: boolean;
     displayLinks?: boolean;
   };
   panels?: {
@@ -61,6 +61,7 @@ export interface TestItem {
   id: string;
   label: string;
   status: TestStatus;
+  datetime: number;
   time?: number;
 }
 
@@ -74,6 +75,13 @@ export interface FileLink {
   path: string;
   line?: number;
   column?: number;
+}
+
+export interface RouterMeta {
+  analytics?: {
+    action: string;
+    resource: string;
+  };
 }
 
 export interface RouterContext {
@@ -105,7 +113,7 @@ export interface RouterContext {
   analytics?: Analytics;
 }
 
-const t = initTRPC.context<RouterContext>().create();
+const t = initTRPC.context<RouterContext>().meta<RouterMeta>().create();
 export const createRouter = t.router;
 export const mergeRouters = t.mergeRouters;
 export const middleware = t.middleware;
@@ -120,6 +128,20 @@ const invalidateQueriesAfterMutation = middleware(async (options) => {
   return result;
 });
 
-export const createProcedure = t.procedure.use(
-  invalidateQueriesAfterMutation,
-) as typeof t.procedure;
+const sendUserResourceInteractionAnalyticsEvent = middleware(
+  async (options) => {
+    const analytics = options.ctx.analytics;
+    const meta = options.meta?.analytics;
+    if (analytics && meta) {
+      analytics.track("user_resource_interaction", {
+        resource: meta.resource,
+        action: meta.action,
+      });
+    }
+    return await options.next();
+  },
+);
+
+export const createProcedure = t.procedure
+  .use(invalidateQueriesAfterMutation)
+  .use(sendUserResourceInteractionAnalyticsEvent) as typeof t.procedure;

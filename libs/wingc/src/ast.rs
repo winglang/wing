@@ -3,7 +3,7 @@ use std::hash::{Hash, Hasher};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use camino::Utf8PathBuf;
-use indexmap::{Equivalent, IndexMap, IndexSet};
+use indexmap::{Equivalent, IndexMap};
 use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
@@ -12,6 +12,7 @@ use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
+static ARGLIST_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -279,7 +280,7 @@ pub enum FunctionBody {
 	/// The function body implemented within a Wing scope.
 	Statements(Scope),
 	/// The `extern` modifier value, pointing to an external implementation file
-	External(String),
+	External(Utf8PathBuf),
 }
 
 #[derive(Debug)]
@@ -294,6 +295,8 @@ pub struct FunctionDefinition {
 	pub is_static: bool,
 	/// Function's access modifier. In case of a closure, this is always public.
 	pub access: AccessModifier,
+	/// Function's documentation
+	pub doc: Option<String>,
 	pub span: WingSpan,
 }
 
@@ -302,37 +305,7 @@ pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
 	pub idx: usize,
-}
-
-#[derive(Debug)]
-pub enum UtilityFunctions {
-	Log,
-	Assert,
-	UnsafeCast,
-	Nodeof,
-}
-
-impl UtilityFunctions {
-	/// Returns all utility functions.
-	pub fn all() -> Vec<UtilityFunctions> {
-		vec![
-			UtilityFunctions::Log,
-			UtilityFunctions::Assert,
-			UtilityFunctions::UnsafeCast,
-			UtilityFunctions::Nodeof,
-		]
-	}
-}
-
-impl Display for UtilityFunctions {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		match self {
-			UtilityFunctions::Log => write!(f, "log"),
-			UtilityFunctions::Assert => write!(f, "assert"),
-			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
-			UtilityFunctions::Nodeof => write!(f, "nodeof"),
-		}
-	}
+	pub doc: Option<String>,
 }
 
 #[derive(Debug)]
@@ -421,9 +394,11 @@ impl Class {
 #[derive(Debug)]
 pub struct Interface {
 	pub name: Symbol,
-	pub methods: Vec<(Symbol, FunctionSignature)>,
+	// Each method has a symbol, a signature, and an optional documentation string
+	pub methods: Vec<(Symbol, FunctionSignature, Option<String>)>,
 	pub extends: Vec<UserDefinedType>,
 	pub access: AccessModifier,
+	pub phase: Phase,
 }
 
 #[derive(Debug)]
@@ -437,7 +412,8 @@ pub struct Struct {
 #[derive(Debug)]
 pub struct Enum {
 	pub name: Symbol,
-	pub values: IndexSet<Symbol>,
+	// Each value has a symbol and an optional documenation string
+	pub values: IndexMap<Symbol, Option<String>>,
 	pub access: AccessModifier,
 }
 
@@ -450,9 +426,9 @@ pub enum BringSource {
 	WingLibrary(Symbol, Utf8PathBuf),
 	JsiiModule(Symbol),
 	/// Refers to a relative path to a file
-	WingFile(Symbol),
+	WingFile(Utf8PathBuf),
 	/// Refers to a relative path to a directory
-	Directory(Symbol),
+	Directory(Utf8PathBuf),
 }
 
 #[derive(Debug)]
@@ -530,6 +506,28 @@ pub enum StmtKind {
 		finally_statements: Option<Scope>,
 	},
 	CompilerDebugEnv,
+	ExplicitLift(ExplicitLift),
+}
+
+impl StmtKind {
+	pub fn is_type_def(&self) -> bool {
+		matches!(
+			self,
+			StmtKind::Class(_) | StmtKind::Interface(_) | StmtKind::Struct(_) | StmtKind::Enum(_)
+		)
+	}
+}
+
+#[derive(Debug)]
+pub struct ExplicitLift {
+	pub qualifications: Vec<LiftQualification>,
+	pub statements: Scope,
+}
+
+#[derive(Debug)]
+pub struct LiftQualification {
+	pub obj: Expr,
+	pub ops: Vec<Symbol>,
 }
 
 #[derive(Debug)]
@@ -546,6 +544,7 @@ pub struct ClassField {
 	pub phase: Phase,
 	pub is_static: bool,
 	pub access: AccessModifier,
+	pub doc: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -569,6 +568,62 @@ impl Display for AccessModifier {
 pub struct StructField {
 	pub name: Symbol,
 	pub member_type: TypeAnnotation,
+	pub doc: Option<String>,
+}
+
+#[derive(Debug)]
+pub struct Intrinsic {
+	pub name: Symbol,
+	pub arg_list: Option<ArgList>,
+	pub kind: IntrinsicKind,
+}
+
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+pub enum IntrinsicKind {
+	/// Error state
+	Unknown,
+	Dirname,
+	Inflight,
+}
+
+impl Display for IntrinsicKind {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			IntrinsicKind::Unknown => write!(f, "@"),
+			IntrinsicKind::Dirname => write!(f, "@dirname"),
+			IntrinsicKind::Inflight => write!(f, "@inflight"),
+		}
+	}
+}
+
+impl IntrinsicKind {
+	pub fn from_str(s: &str) -> Self {
+		match s {
+			"@dirname" => IntrinsicKind::Dirname,
+			"@inflight" => IntrinsicKind::Inflight,
+			_ => IntrinsicKind::Unknown,
+		}
+	}
+
+	pub fn is_valid_phase(&self, phase: &Phase) -> bool {
+		match self {
+			IntrinsicKind::Unknown => true,
+			IntrinsicKind::Dirname => match phase {
+				Phase::Preflight => true,
+				_ => false,
+			},
+			IntrinsicKind::Inflight => match phase {
+				Phase::Preflight => true,
+				_ => false,
+			},
+		}
+	}
+}
+
+impl Into<Symbol> for IntrinsicKind {
+	fn into(self) -> Symbol {
+		Symbol::global(self.to_string())
+	}
 }
 
 #[derive(Debug)]
@@ -581,6 +636,7 @@ pub enum ExprKind {
 		end: Box<Expr>,
 	},
 	Reference(Reference),
+	Intrinsic(Intrinsic),
 	Call {
 		callee: CalleeKind,
 		arg_list: ArgList,
@@ -678,7 +734,23 @@ impl Expr {
 			span,
 		}
 	}
+
+	pub fn as_static_string(&self) -> Option<&str> {
+		match &self.kind {
+			ExprKind::Literal(Literal::String(s)) => {
+				// strip the quotes ("data")
+				Some(&s[1..s.len() - 1])
+			}
+			ExprKind::Literal(Literal::NonInterpolatedString(s)) => {
+				// strip the quotes (#"data")
+				Some(&s[2..s.len() - 1])
+			}
+			_ => None,
+		}
+	}
 }
+
+pub type ArgListId = usize;
 
 #[derive(Debug)]
 pub struct New {
@@ -692,21 +764,28 @@ pub struct New {
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
 	pub named_args: IndexMap<Symbol, Expr>,
+	pub id: ArgListId,
 	pub span: WingSpan,
 }
 
 impl ArgList {
-	pub fn new(span: WingSpan) -> Self {
+	pub fn new(pos_args: Vec<Expr>, named_args: IndexMap<Symbol, Expr>, span: WingSpan) -> Self {
 		ArgList {
-			pos_args: vec![],
-			named_args: IndexMap::new(),
+			pos_args,
+			named_args,
 			span,
+			id: ARGLIST_COUNTER.fetch_add(1, Ordering::Relaxed),
 		}
+	}
+
+	pub fn new_empty(span: WingSpan) -> Self {
+		Self::new(vec![], IndexMap::new(), span)
 	}
 }
 
 #[derive(Debug)]
 pub enum Literal {
+	NonInterpolatedString(String),
 	String(String),
 	InterpolatedString(InterpolatedString),
 	Number(f64),
@@ -789,6 +868,10 @@ pub enum Reference {
 		property: Symbol,
 		optional_accessor: bool,
 	},
+	/// A reference to an accessed member of an object `expression[x]`
+	///
+	/// TODO: should this be a separate type of Expr? (this would require changing how `Assignment` statements are modeled)
+	ElementAccess { object: Box<Expr>, index: Box<Expr> },
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember {
 		type_name: UserDefinedType,
@@ -805,6 +888,7 @@ impl Clone for Reference {
 				type_name: type_name.clone(),
 				property: property.clone(),
 			},
+			Reference::ElementAccess { .. } => panic!("Unable to clone reference to element access"),
 		}
 	}
 }
@@ -819,6 +903,14 @@ impl Spanned for Reference {
 				optional_accessor: _,
 			} => object.span().merge(&property.span()),
 			Reference::TypeMember { type_name, property } => type_name.span().merge(&property.span()),
+			Reference::ElementAccess { object, index } => {
+				let mut span = object.span().merge(&index.span());
+				// Add one to include the closing bracket.
+				// TODO: store a dedicated span field?
+				span.end.col += 1;
+				span.end_offset += 1;
+				span
+			}
 		}
 	}
 }
@@ -840,6 +932,9 @@ impl Display for Reference {
 			}
 			Reference::TypeMember { type_name, property } => {
 				write!(f, "{}.{}", type_name, property.name)
+			}
+			Reference::ElementAccess { .. } => {
+				write!(f, "element access") // TODO!
 			}
 		}
 	}
@@ -887,6 +982,12 @@ impl Spanned for UserDefinedType {
 }
 
 impl Spanned for Scope {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl Spanned for FunctionDefinition {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}

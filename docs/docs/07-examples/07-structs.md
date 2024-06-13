@@ -7,7 +7,7 @@ keywords: [Wing example]
 ## Deceleration and Initialization
 
 ### Required fields
-```ts playground
+```ts playground example
 struct Example {
   a: str;
   b: num;
@@ -19,7 +19,7 @@ log(example.a); // prints "a"
 ```
 
 ### Optional fields
-```ts playground
+```ts playground example
 struct Example {
   a: str?;
   b: num?;
@@ -33,7 +33,7 @@ if ! example.a? {
 ```
 
 ### Composition
-```ts playground
+```ts playground example
 struct Another {
   hello: str;
 }
@@ -57,7 +57,7 @@ log(data.c.hello); // prints two
 
 
 ## Struct expansion in function calls
-```ts playground
+```ts playground example
 struct Options {
   prefix: str?;
   delim: str;

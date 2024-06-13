@@ -2,82 +2,235 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/setconsumer0_c8e82e9f.js": "\\"use strict\\";
+  ".wing/consumer0_c8a319bc.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) {
-          let next = await this.counter.inc();
-          let key = \\"file-\\" + next + \\".txt\\";
-          await this.bucket.put(key, event);
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (ctx, event) => {
+            const batchItemFailures = [];
+            let parsed = JSON.parse(event !== null && event !== void 0 ? event : "{}");
+            if (!parsed.messages)
+                throw new Error('No "messages" field in event.');
+            for (const $message of parsed.messages) {
+                try {
+                    await ctx.handler($message.payload);
+                }
+                catch (error) {
+                    // TODO: an error from user code is getting dropped - bad! https://github.com/winglang/wing/issues/6445
+                    batchItemFailures.push($message);
+                }
+            }
+            return batchItemFailures.length > 0
+                ? JSON.stringify(batchItemFailures)
+                : undefined;
         }
-};
-})())({
-counter: (function() {
-  let handle = process.env.COUNTER_HANDLE_4ecd8d46;
+  const $ctx = {
+  handler: (await (async () => {
+  const $func = async (ctx, event) => {
+            let next = await ctx.counter.inc();
+            let key = "file-" + next + ".txt";
+            await ctx.bucket.put(key, event);
+          }
+  const $ctx = {
+  counter: (function() {
+  let handle = process.env.COUNTER_HANDLE_87e2e6cc;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: COUNTER_HANDLE_4ecd8d46\\");
+    throw new Error("Missing environment variable: COUNTER_HANDLE_87e2e6cc");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
-    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
   }
-  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+  const caller = process.env.WING_SIMULATOR_CALLER;
+  if (!caller) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+  }
+  const backend = require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
+  const client = new Proxy(backend, {
+    get: function(target, prop, receiver) {
+      return async function(...args) {
+        return backend.call(prop, args);
+      };
+    },
+  });
+  return client;
 })(),
 bucket: (function() {
   let handle = process.env.BUCKET_HANDLE_5f2a41c8;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_5f2a41c8\\");
+    throw new Error("Missing environment variable: BUCKET_HANDLE_5f2a41c8");
   }
   const simulatorUrl = process.env.WING_SIMULATOR_URL;
   if (!simulatorUrl) {
-    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+    throw new Error("Missing environment variable: WING_SIMULATOR_URL");
   }
-  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+  const caller = process.env.WING_SIMULATOR_CALLER;
+  if (!caller) {
+    throw new Error("Missing environment variable: WING_SIMULATOR_CALLER");
+  }
+  return require("@winglang/sdk/lib/simulator/client").makeSimulatorClient(simulatorUrl, handle, caller);
 })()
-}), args: {} }));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
+  ".wing/resource_c81e2103.cjs": "        "use strict";
+        let $klass;
+        exports.start = async function(statedir) {
+          if ($klass) {
+            throw Error('resource already started');
+          }
+          const attrs = {};
+          const ctx = {};
+          ctx.statedir = () => statedir;
+          ctx.resolveToken = (name, value) => attrs[name] = value;
+          ctx.log = (message, level) => {
+            if (!level) level = 'info';
+            console.log(level + ':' + message);
+          };
+          const client = (await (async () => {
+  const $func = async (ctx, simContext) => {
+            // TODO: make CounterBackend liftable so we can add it to the list of captures
+            const CounterBackend = 
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            require("@winglang/sdk/lib/target-sim/counter.inflight").CounterBackend;
+            const backend = new CounterBackend(simContext, { initial: ctx.initial });
+            await backend.onStart();
+            return backend;
+        }
+  const $ctx = {
+  initial: 1000
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)());
+          const noop = () => {};
+          const klass = (await client.handle(ctx)) ?? noop;
+          ctx.resolveToken = () => {
+            throw Error('cannot resolve attributes outside of onStop method');
+          };
+          $klass = klass;
+          return attrs;
+        };
+
+        exports.call = async function(propName, ...args) {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          if (propName === 'onStop') {
+            throw Error('Cannot call "onStop"');
+          }
+          const prop = $klass[propName];
+          if (!prop) {
+            throw Error('Method or property "' + propName + '" not found');
+          }
+          if (typeof prop !== 'function') {
+            if (args.length > 0) {
+              throw Error('Property "' + propName + '" is not a function');
+            }
+            return prop;
+          }
+          return await prop.call($klass, ...args);
+        };
+
+        exports.stop = async function() {
+          if (!$klass) {
+            throw Error('Resource is not running (it may have crashed or stopped)');
+          }
+          await $klass.onStop();
+          $klass = undefined;
+        };
+        ",
   "connections.json": {
     "connections": [
       {
-        "name": "setConsumer()",
+        "name": "consumer",
         "source": "root/HelloWorld/Queue",
-        "target": "root/HelloWorld/Queue/SetConsumer0",
+        "sourceOp": "push",
+        "target": "root/HelloWorld/Queue/Consumer0",
+        "targetOp": "invoke",
       },
       {
-        "name": "inc()",
-        "source": "root/HelloWorld/Queue/SetConsumer0",
+        "name": "call",
+        "source": "root/HelloWorld/Counter",
+        "sourceOp": "inc",
+        "target": "root/HelloWorld/Counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Counter",
+        "sourceOp": "dec",
+        "target": "root/HelloWorld/Counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Counter",
+        "sourceOp": "peek",
+        "target": "root/HelloWorld/Counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Counter",
+        "sourceOp": "set",
+        "target": "root/HelloWorld/Counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Queue/Consumer0",
+        "sourceOp": "invoke",
         "target": "root/HelloWorld/Counter",
+        "targetOp": "inc",
       },
       {
-        "name": "put()",
-        "source": "root/HelloWorld/Queue/SetConsumer0",
+        "name": "call",
+        "source": "root/HelloWorld/Queue/Consumer0",
+        "sourceOp": "invoke",
         "target": "root/HelloWorld/Bucket",
+        "targetOp": "put",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Queue/Consumer0",
+        "sourceOp": "invokeAsync",
+        "target": "root/HelloWorld/Counter",
+        "targetOp": "inc",
+      },
+      {
+        "name": "call",
+        "source": "root/HelloWorld/Queue/Consumer0",
+        "sourceOp": "invokeAsync",
+        "target": "root/HelloWorld/Bucket",
+        "targetOp": "put",
       },
     ],
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c87855e817fa3df0d5ce8ae290bf53c8ce4ecd8d46",
-        "attrs": {},
-        "path": "root/HelloWorld/Counter",
-        "props": {
-          "initial": 1000,
-        },
-        "type": "@winglang/sdk.cloud.Counter",
-      },
-      {
+    "resources": {
+      "root/HelloWorld/Bucket": {
         "addr": "c80e3625bbefd53d8c61fbb978711d410b5f2a41c8",
-        "attrs": {},
         "path": "root/HelloWorld/Bucket",
         "props": {
           "initialObjects": {},
@@ -86,24 +239,28 @@ bucket: (function() {
         },
         "type": "@winglang/sdk.cloud.Bucket",
       },
-      {
-        "addr": "c8e82e9fd83d9e59c5af169a3042b9ed0b40e91185",
-        "attrs": {},
-        "path": "root/HelloWorld/Queue/SetConsumer0",
+      "root/HelloWorld/Bucket/Policy": {
+        "addr": "c86eb36bbe6e764a632afaaea5db2d4bd693c92624",
+        "path": "root/HelloWorld/Bucket/Policy",
         "props": {
-          "environmentVariables": {
-            "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
-            "COUNTER_HANDLE_4ecd8d46": "\${wsim#root/HelloWorld/Counter#attrs.handle}",
-          },
-          "sourceCodeFile": ".wing/setconsumer0_c8e82e9f.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
+          "principal": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
+          "statements": [],
         },
-        "type": "@winglang/sdk.cloud.Function",
+        "type": "@winglang/sdk.sim.Policy",
       },
-      {
+      "root/HelloWorld/Counter/Resource": {
+        "addr": "c81e2103dbfc2359abccf4774cbfa2f49287e2e6cc",
+        "path": "root/HelloWorld/Counter/Resource",
+        "policy": [],
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/resource_c81e2103.cjs",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "@winglang/sdk.sim.Resource",
+      },
+      "root/HelloWorld/Queue": {
         "addr": "c8de0494647ac0bdaec85a77e2a164cfbcfecc5ca1",
-        "attrs": {},
         "path": "root/HelloWorld/Queue",
         "props": {
           "retentionPeriod": 3600,
@@ -111,20 +268,76 @@ bucket: (function() {
         },
         "type": "@winglang/sdk.cloud.Queue",
       },
-      {
+      "root/HelloWorld/Queue/Consumer0": {
+        "addr": "c8a319bcb354a5e6d231ddfa543d3b95df95586b71",
+        "deps": [
+          "root/HelloWorld/Counter/Resource",
+          "root/HelloWorld/Bucket",
+        ],
+        "path": "root/HelloWorld/Queue/Consumer0",
+        "policy": [
+          {
+            "operation": "inc",
+            "resourceHandle": "\${wsim#root/HelloWorld/Counter/Resource#attrs.handle}",
+          },
+          {
+            "operation": "put",
+            "resourceHandle": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
+          },
+          {
+            "operation": "call",
+            "resourceHandle": "\${wsim#root/HelloWorld/Counter/Resource#attrs.handle}",
+          },
+        ],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {
+            "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
+            "COUNTER_HANDLE_87e2e6cc": "\${wsim#root/HelloWorld/Counter/Resource#attrs.handle}",
+            "RESOURCE_HANDLE_87e2e6cc": "\${wsim#root/HelloWorld/Counter/Resource#attrs.handle}",
+          },
+          "sourceCodeFile": ".wing/consumer0_c8a319bc.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      "root/HelloWorld/Queue/Policy": {
+        "addr": "c86b009930462795eeb90e647a56dbfc5356d9ea80",
+        "path": "root/HelloWorld/Queue/Policy",
+        "props": {
+          "principal": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
+          "statements": [
+            {
+              "operation": "invoke",
+              "resourceHandle": "\${wsim#root/HelloWorld/Queue/Consumer0#attrs.handle}",
+            },
+            {
+              "operation": "hasAvailableWorkers",
+              "resourceHandle": "\${wsim#root/HelloWorld/Queue/Consumer0#attrs.handle}",
+            },
+          ],
+        },
+        "type": "@winglang/sdk.sim.Policy",
+      },
+      "root/HelloWorld/Queue/QueueEventMapping0": {
         "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
-        "attrs": {},
+        "deps": [
+          "root/HelloWorld/Queue/Consumer0",
+          "root/HelloWorld/Queue",
+          "root/HelloWorld/Queue/Policy",
+        ],
         "path": "root/HelloWorld/Queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
-          "subscriber": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
+          "subscriber": "\${wsim#root/HelloWorld/Queue/Consumer0#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -134,10 +347,6 @@ bucket: (function() {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -179,14 +388,6 @@ bucket: (function() {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -195,9 +396,21 @@ bucket: (function() {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -215,6 +428,21 @@ bucket: (function() {
         "HelloWorld": {
           "children": {
             "Bucket": {
+              "children": {
+                "Policy": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A simulated resource policy",
+                    "hidden": true,
+                    "title": "Policy",
+                  },
+                  "id": "Policy",
+                  "path": "root/HelloWorld/Bucket/Policy",
+                },
+              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -227,6 +455,22 @@ bucket: (function() {
               "path": "root/HelloWorld/Bucket",
             },
             "Counter": {
+              "children": {
+                "Resource": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "color": "emerald",
+                    "description": "A simulated resource",
+                    "hidden": true,
+                    "title": "Resource",
+                  },
+                  "id": "Resource",
+                  "path": "root/HelloWorld/Counter/Resource",
+                },
+              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.3.0",
@@ -240,6 +484,32 @@ bucket: (function() {
             },
             "Queue": {
               "children": {
+                "Consumer0": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A cloud function (FaaS)",
+                    "sourceModule": "@winglang/sdk",
+                    "title": "Consumer",
+                  },
+                  "id": "Consumer0",
+                  "path": "root/HelloWorld/Queue/Consumer0",
+                },
+                "Policy": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.3.0",
+                  },
+                  "display": {
+                    "description": "A simulated resource policy",
+                    "hidden": true,
+                    "title": "Policy",
+                  },
+                  "id": "Policy",
+                  "path": "root/HelloWorld/Queue/Policy",
+                },
                 "QueueEventMapping0": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
@@ -250,19 +520,6 @@ bucket: (function() {
                   },
                   "id": "QueueEventMapping0",
                   "path": "root/HelloWorld/Queue/QueueEventMapping0",
-                },
-                "SetConsumer0": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.3.0",
-                  },
-                  "display": {
-                    "description": "A cloud function (FaaS)",
-                    "sourceModule": "@winglang/sdk",
-                    "title": "setConsumer()",
-                  },
-                  "id": "SetConsumer0",
-                  "path": "root/HelloWorld/Queue/SetConsumer0",
                 },
               },
               "constructInfo": {
@@ -281,6 +538,7 @@ bucket: (function() {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "display": {},
           "id": "HelloWorld",
           "path": "root/HelloWorld",
         },
@@ -289,6 +547,7 @@ bucket: (function() {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

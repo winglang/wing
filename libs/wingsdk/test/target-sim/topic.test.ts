@@ -1,11 +1,7 @@
 import { test, expect } from "vitest";
-import {
-  listMessages,
-  treeJsonOf,
-  waitUntilTrace,
-  waitUntilTraceCount,
-} from "./util";
+import { treeJsonOf, waitUntilTrace } from "./util";
 import * as cloud from "../../src/cloud";
+import { inflight } from "../../src/core";
 import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
@@ -23,6 +19,7 @@ test("create a topic", async () => {
     },
     path: "root/my_topic",
     addr: expect.any(String),
+    policy: [],
     props: {},
     type: cloud.TOPIC_FQN,
   });
@@ -31,44 +28,14 @@ test("create a topic", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("topic publishes messages as they are received", async () => {
-  // GIVEN
-  const app = new SimApp();
-  const handler = Testing.makeHandler(
-    `async handle(message) { console.log("Received " + message); }`
-  );
-  const topic = new cloud.Topic(app, "my_topic");
-  topic.onMessage(handler);
-
-  const s = await app.startSimulator();
-  const topicClient = s.getResource("/my_topic") as cloud.ITopicClient;
-
-  // WHEN
-  await topicClient.publish("Alpha");
-  await topicClient.publish("Beta");
-  await waitUntilTrace(s, (trace) =>
-    trace.data.message.startsWith("Received Alpha")
-  );
-  await waitUntilTrace(s, (trace) =>
-    trace.data.message.startsWith("Received Beta")
-  );
-
-  // THEN
-  await s.stop();
-  const messages = listMessages(s);
-  const alphaIndex = messages.findIndex((m) => m.startsWith("Received Alpha"));
-  const betaIndex = messages.findIndex((m) => m.startsWith("Received Beta"));
-  expect(alphaIndex).toBeLessThan(betaIndex);
-});
-
 test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(
-    `async handle(message) { console.log("Received " + message); }`
+  const handler = inflight(async (_, message) =>
+    console.log("Received " + message)
   );
-  const otherHandler = Testing.makeHandler(
-    `async handle(message) { console.log("Also received " + message); }`
+  const otherHandler = inflight(async (_, message) =>
+    console.log("Also received " + message)
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);

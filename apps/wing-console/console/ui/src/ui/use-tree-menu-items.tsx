@@ -1,4 +1,5 @@
-import { ReactNode, useCallback, useState } from "react";
+import type { ReactNode } from "react";
+import { useCallback, useState } from "react";
 
 export interface TreeMenuItem {
   id: string;
@@ -6,6 +7,7 @@ export interface TreeMenuItem {
   label: string;
   secondaryLabel?: string | ReactNode | ((item: TreeMenuItem) => ReactNode);
   children?: TreeMenuItem[];
+  expanded?: boolean;
 }
 
 export function useTreeMenuItems(options?: {
@@ -21,6 +23,7 @@ export function useTreeMenuItems(options?: {
   const [expandedItems, setExpandedItems] = useState(
     options?.openMenuItemIds ?? [],
   );
+
   const toggle = useCallback((itemId: string) => {
     setExpandedItems(([...openedMenuItems]) => {
       const index = openedMenuItems.indexOf(itemId);
@@ -69,6 +72,18 @@ export function useTreeMenuItems(options?: {
     });
   }, []);
 
+  const collapse = useCallback((itemId: string) => {
+    setExpandedItems(([...openedMenuItems]) => {
+      const index = openedMenuItems.indexOf(itemId);
+      if (index === -1) {
+        return openedMenuItems;
+      }
+
+      openedMenuItems.splice(index, 1);
+      return openedMenuItems;
+    });
+  }, []);
+
   return {
     items,
     setItems,
@@ -80,5 +95,6 @@ export function useTreeMenuItems(options?: {
     expandAll,
     collapseAll,
     expand,
+    collapse,
   };
 }

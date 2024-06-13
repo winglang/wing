@@ -5,6 +5,7 @@ import { NotImplementedError } from "../core/errors";
 
 /**
  * AWS implementation of `cloud.Domain`.
+ * @inflight `@winglang/sdk.cloud.IDomainClient`
  */
 export class Domain extends cloud.Domain {
   /** @internal */
@@ -17,7 +18,7 @@ export class Domain extends cloud.Domain {
   constructor(scope: Construct, id: string, props: cloud.DomainProps) {
     super(scope, id, props);
 
-    const parameters = App.of(scope).platformParameters;
+    const parameters = App.of(scope).parameters;
 
     // Domain requires parameters from the user, so we need to add the parameter schemas to the registrar
     let schema = {
@@ -44,17 +45,13 @@ export class Domain extends cloud.Domain {
       },
     };
 
-    parameters.addParameterSchemaAtPath(schema, this.node.path, true);
+    parameters.addSchemaAtPath(schema, this.node.path, true);
 
-    const iamCertificate = parameters.getParameterValue(
-      `${this.node.path}/iamCertificate`
-    );
-    const acmCertificateArn = parameters.getParameterValue(
+    const iamCertificate = parameters.value(`${this.node.path}/iamCertificate`);
+    const acmCertificateArn = parameters.value(
       `${this.node.path}/acmCertificateArn`
     );
-    const hostedZoneId = parameters.getParameterValue(
-      `${this.node.path}/hostedZoneId`
-    );
+    const hostedZoneId = parameters.value(`${this.node.path}/hostedZoneId`);
 
     this._iamCertificate = iamCertificate;
     this._hostedZoneId = hostedZoneId;

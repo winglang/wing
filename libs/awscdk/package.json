@@ -28,11 +28,12 @@
   "devDependencies": {
     "bump-pack": "workspace:^",
     "typescript": "^5.3.3",
-    "tsup": "^6.7.0",
+    "tsup": "^8.0.2",
     "vitest": "^0.34.6"
   },
   "scripts": {
     "compile": "tsc",
+    "watch": "tsc --watch",
     "package": "bump-pack -b",
     "test": "vitest run --passWithNoTests --update"
   },

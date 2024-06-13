@@ -27,6 +27,7 @@ exports[`default topic behavior 2`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Topic/Default",
                   },
@@ -47,6 +48,7 @@ exports[`default topic behavior 2`] = `
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -55,6 +57,7 @@ exports[`default topic behavior 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -63,6 +66,7 @@ exports[`default topic behavior 2`] = `
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -71,6 +75,7 @@ exports[`default topic behavior 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -79,6 +84,7 @@ exports[`default topic behavior 2`] = `
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -113,6 +119,7 @@ exports[`replace invalid character from queue name 2`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/The%Spectacular@Topic/Default",
                   },
@@ -133,6 +140,7 @@ exports[`replace invalid character from queue name 2`] = `
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -141,6 +149,7 @@ exports[`replace invalid character from queue name 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -149,6 +158,7 @@ exports[`replace invalid character from queue name 2`] = `
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -157,6 +167,7 @@ exports[`replace invalid character from queue name 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -165,6 +176,7 @@ exports[`replace invalid character from queue name 2`] = `
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -199,6 +211,7 @@ exports[`topic name valid 2`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/The-Spectacular_Topic-01/Default",
                   },
@@ -219,6 +232,7 @@ exports[`topic name valid 2`] = `
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -227,6 +241,7 @@ exports[`topic name valid 2`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -235,6 +250,7 @@ exports[`topic name valid 2`] = `
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -243,6 +259,7 @@ exports[`topic name valid 2`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -251,6 +268,7 @@ exports[`topic name valid 2`] = `
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },
@@ -259,18 +277,20 @@ exports[`topic name valid 2`] = `
 `;
 
 exports[`topic with subscriber function 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
+"(await (async () => {
+  const $func = async (_, event) => {
+    console.log("Received: ", event);
   }
-  async handle(event) { console.log(\\"Received: \\", event); }
-};
-})())({
-
-})"
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)())"
 `;
 
 exports[`topic with subscriber function 2`] = `
@@ -284,12 +304,12 @@ exports[`topic with subscriber function 2`] = `
     },
     "aws_iam_role": {
       "Topic-OnMessage0_IamRole_64DD36FA": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Topic-OnMessage0_IamRolePolicy_F5EE09D8": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Topic-OnMessage0_IamRole_64DD36FA.name}",
       },
     },
@@ -374,6 +394,7 @@ exports[`topic with subscriber function 3`] = `
                   "fqn": "cdktf.TerraformResource",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "Code",
                 "path": "root/Default/Code",
               },
@@ -381,6 +402,9 @@ exports[`topic with subscriber function 3`] = `
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.3.0",
+                },
+                "display": {
+                  "hidden": true,
                 },
                 "id": "ParameterRegistrar",
                 "path": "root/Default/ParameterRegistrar",
@@ -392,6 +416,7 @@ exports[`topic with subscriber function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Topic/Default",
                   },
@@ -400,6 +425,7 @@ exports[`topic with subscriber function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "TopicSubscription0",
                     "path": "root/Default/Topic/TopicSubscription0",
                   },
@@ -422,6 +448,7 @@ exports[`topic with subscriber function 3`] = `
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Asset",
                     "path": "root/Default/Topic-OnMessage0/Asset",
                   },
@@ -430,6 +457,7 @@ exports[`topic with subscriber function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Topic-OnMessage0/CloudwatchLogGroup",
                   },
@@ -438,6 +466,7 @@ exports[`topic with subscriber function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "Default",
                     "path": "root/Default/Topic-OnMessage0/Default",
                   },
@@ -446,6 +475,7 @@ exports[`topic with subscriber function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRole",
                     "path": "root/Default/Topic-OnMessage0/IamRole",
                   },
@@ -454,6 +484,7 @@ exports[`topic with subscriber function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicy",
                     "path": "root/Default/Topic-OnMessage0/IamRolePolicy",
                   },
@@ -462,6 +493,7 @@ exports[`topic with subscriber function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Topic-OnMessage0/IamRolePolicyAttachment",
                   },
@@ -470,6 +502,7 @@ exports[`topic with subscriber function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
                     "path": "root/Default/Topic-OnMessage0/InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
                   },
@@ -478,6 +511,7 @@ exports[`topic with subscriber function 3`] = `
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.20.3",
                     },
+                    "display": {},
                     "id": "S3Object",
                     "path": "root/Default/Topic-OnMessage0/S3Object",
                   },
@@ -498,6 +532,7 @@ exports[`topic with subscriber function 3`] = `
                   "fqn": "cdktf.TerraformProvider",
                   "version": "0.20.3",
                 },
+                "display": {},
                 "id": "aws",
                 "path": "root/Default/aws",
               },
@@ -506,6 +541,7 @@ exports[`topic with subscriber function 3`] = `
               "fqn": "constructs.Construct",
               "version": "10.3.0",
             },
+            "display": {},
             "id": "Default",
             "path": "root/Default",
           },
@@ -514,6 +550,7 @@ exports[`topic with subscriber function 3`] = `
               "fqn": "cdktf.LocalBackend",
               "version": "0.20.3",
             },
+            "display": {},
             "id": "backend",
             "path": "root/backend",
           },
@@ -522,6 +559,7 @@ exports[`topic with subscriber function 3`] = `
           "fqn": "cdktf.TerraformStack",
           "version": "0.20.3",
         },
+        "display": {},
         "id": "root",
         "path": "root",
       },
@@ -530,6 +568,7 @@ exports[`topic with subscriber function 3`] = `
       "fqn": "cdktf.App",
       "version": "0.20.3",
     },
+    "display": {},
     "id": "App",
     "path": "",
   },

@@ -1,11 +1,74 @@
 # [class.test.w](../../../../../examples/tests/valid/class.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      class C1 {
+      }
+      (await (async () => {const o = new C1(); await o.$inflight_init?.(); return o; })());
+      class C1Ext1 extends C1 {
+      }
+      class C1Ext2 extends C1Ext1 {
+        constructor(){
+          super();
+          this.super_$inflight_init = this.$inflight_init;
+          this.$inflight_init = async () => {
+            await this.super_$inflight_init?.();
+          }
+        }
+      }
+      class C1Ext3 extends C1Ext2 {
+      }
+      class C2 {
+        constructor(){
+          this.$inflight_init = async () => {
+            this.x = 1;
+          }
+        }
+      }
+      const c2 = (await (async () => {const o = new C2(); await o.$inflight_init?.(); return o; })());
+      $helpers.assert($helpers.eq(c2.x, 1), "c2.x == 1");
+      class C2Ext1 extends C2 {
+      }
+      const c2Ext1 = (await (async () => {const o = new C2Ext1(); await o.$inflight_init?.(); return o; })());
+      $helpers.assert($helpers.eq(c2Ext1.x, 1), "c2Ext1.x == 1");
+      class C2Ext2 extends C2 {
+      }
+      const c2Ext2 = (await (async () => {const o = new C2Ext2(); await o.$inflight_init?.(); return o; })());
+      $helpers.assert($helpers.eq(c2Ext2.x, 1), "c2Ext2.x == 1");
+      class C2Ext3 extends C2 {
+        constructor(){
+          super();
+          this.super_$inflight_init = this.$inflight_init;
+          this.$inflight_init = async () => {
+            await this.super_$inflight_init?.();
+          }
+        }
+      }
+      const c2Ext3 = (await (async () => {const o = new C2Ext3(); await o.$inflight_init?.(); return o; })());
+      $helpers.assert($helpers.eq(c2Ext3.x, 1), "c2Ext3.x == 1");
+    }
+  }
+  return $Closure1;
+}
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
+```
+
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $c5 }) {
-  class $Closure1 {
+  class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -18,17 +81,17 @@ module.exports = function({ $c5 }) {
       $helpers.assert($helpers.eq($c5.y, 111), "c5.y == 111");
     }
   }
-  return $Closure1;
+  return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $student_hrlyWage, $student_major, $student_name }) {
-  class $Closure2 {
+  class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -40,17 +103,17 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
       $helpers.assert($helpers.eq($student_hrlyWage, 38), "student.hrlyWage == 38");
     }
   }
-  return $Closure2;
+  return $Closure3;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure3-1.cjs.map
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $ta_hrlyWage }) {
-  class $Closure3 {
+  class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -60,17 +123,17 @@ module.exports = function({ $ta_hrlyWage }) {
       $helpers.assert($helpers.eq($ta_hrlyWage, 10), "ta.hrlyWage == 10");
     }
   }
-  return $Closure3;
+  return $Closure4;
 }
-//# sourceMappingURL=inflight.$Closure3-1.js.map
+//# sourceMappingURL=inflight.$Closure4-1.cjs.map
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure5-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $B }) {
-  class $Closure4 {
+  class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -81,13 +144,13 @@ module.exports = function({ $B }) {
       $helpers.assert($helpers.eq(b.sound, "ba"), "b.sound == \"ba\"");
     }
   }
-  return $Closure4;
+  return $Closure5;
 }
-//# sourceMappingURL=inflight.$Closure4-1.js.map
+//# sourceMappingURL=inflight.$Closure5-1.cjs.map
 ```
 
-## inflight.A-1.js
-```js
+## inflight.A-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -100,11 +163,11 @@ module.exports = function({  }) {
   }
   return A;
 }
-//# sourceMappingURL=inflight.A-1.js.map
+//# sourceMappingURL=inflight.A-1.cjs.map
 ```
 
-## inflight.B-1.js
-```js
+## inflight.B-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $A }) {
@@ -119,11 +182,11 @@ module.exports = function({ $A }) {
   }
   return B;
 }
-//# sourceMappingURL=inflight.B-1.js.map
+//# sourceMappingURL=inflight.B-1.cjs.map
 ```
 
-## inflight.Bam-1.js
-```js
+## inflight.Bam-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Boom }) {
@@ -134,11 +197,11 @@ module.exports = function({ $Boom }) {
   }
   return Bam;
 }
-//# sourceMappingURL=inflight.Bam-1.js.map
+//# sourceMappingURL=inflight.Bam-1.cjs.map
 ```
 
-## inflight.Bar-1.js
-```js
+## inflight.Bar-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -148,11 +211,11 @@ module.exports = function({  }) {
   }
   return Bar;
 }
-//# sourceMappingURL=inflight.Bar-1.js.map
+//# sourceMappingURL=inflight.Bar-1.cjs.map
 ```
 
-## inflight.Baz-1.js
-```js
+## inflight.Baz-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Bar }) {
@@ -163,11 +226,11 @@ module.exports = function({ $Bar }) {
   }
   return Baz;
 }
-//# sourceMappingURL=inflight.Baz-1.js.map
+//# sourceMappingURL=inflight.Baz-1.cjs.map
 ```
 
-## inflight.Boom-1.js
-```js
+## inflight.Boom-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -177,11 +240,11 @@ module.exports = function({  }) {
   }
   return Boom;
 }
-//# sourceMappingURL=inflight.Boom-1.js.map
+//# sourceMappingURL=inflight.Boom-1.cjs.map
 ```
 
-## inflight.C1-1.js
-```js
+## inflight.C1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -191,11 +254,56 @@ module.exports = function({  }) {
   }
   return C1;
 }
-//# sourceMappingURL=inflight.C1-1.js.map
+//# sourceMappingURL=inflight.C1-1.cjs.map
 ```
 
-## inflight.C2-1.js
-```js
+## inflight.C1Ext1-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $C1 }) {
+  class C1Ext1 extends $C1 {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return C1Ext1;
+}
+//# sourceMappingURL=inflight.C1Ext1-1.cjs.map
+```
+
+## inflight.C1Ext2-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $C1Ext1 }) {
+  class C1Ext2 extends $C1Ext1 {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return C1Ext2;
+}
+//# sourceMappingURL=inflight.C1Ext2-1.cjs.map
+```
+
+## inflight.C1Ext3-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $C1Ext2 }) {
+  class C1Ext3 extends $C1Ext2 {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return C1Ext3;
+}
+//# sourceMappingURL=inflight.C1Ext3-1.cjs.map
+```
+
+## inflight.C2-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -205,11 +313,56 @@ module.exports = function({  }) {
   }
   return C2;
 }
-//# sourceMappingURL=inflight.C2-1.js.map
+//# sourceMappingURL=inflight.C2-1.cjs.map
 ```
 
-## inflight.C3-1.js
-```js
+## inflight.C2Ext1-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $C2 }) {
+  class C2Ext1 extends $C2 {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return C2Ext1;
+}
+//# sourceMappingURL=inflight.C2Ext1-1.cjs.map
+```
+
+## inflight.C2Ext2-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $C2 }) {
+  class C2Ext2 extends $C2 {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return C2Ext2;
+}
+//# sourceMappingURL=inflight.C2Ext2-1.cjs.map
+```
+
+## inflight.C2Ext3-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $C2 }) {
+  class C2Ext3 extends $C2 {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return C2Ext3;
+}
+//# sourceMappingURL=inflight.C2Ext3-1.cjs.map
+```
+
+## inflight.C3-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -219,11 +372,11 @@ module.exports = function({  }) {
   }
   return C3;
 }
-//# sourceMappingURL=inflight.C3-1.js.map
+//# sourceMappingURL=inflight.C3-1.cjs.map
 ```
 
-## inflight.C4-1.js
-```js
+## inflight.C4-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -233,11 +386,11 @@ module.exports = function({  }) {
   }
   return C4;
 }
-//# sourceMappingURL=inflight.C4-1.js.map
+//# sourceMappingURL=inflight.C4-1.cjs.map
 ```
 
-## inflight.C5-1.js
-```js
+## inflight.C5-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -254,11 +407,25 @@ module.exports = function({  }) {
   }
   return C5;
 }
-//# sourceMappingURL=inflight.C5-1.js.map
+//# sourceMappingURL=inflight.C5-1.cjs.map
 ```
 
-## inflight.Foo-1.js
-```js
+## inflight.DocClass-1.cjs
+```cjs
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class DocClass {
+    constructor({  }) {
+    }
+  }
+  return DocClass;
+}
+//# sourceMappingURL=inflight.DocClass-1.cjs.map
+```
+
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Bar }) {
@@ -271,11 +438,11 @@ module.exports = function({ $Bar }) {
   }
   return Foo;
 }
-//# sourceMappingURL=inflight.Foo-1.js.map
+//# sourceMappingURL=inflight.Foo-1.cjs.map
 ```
 
-## inflight.PaidStudent-1.js
-```js
+## inflight.PaidStudent-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student }) {
@@ -286,11 +453,11 @@ module.exports = function({ $Student }) {
   }
   return PaidStudent;
 }
-//# sourceMappingURL=inflight.PaidStudent-1.js.map
+//# sourceMappingURL=inflight.PaidStudent-1.cjs.map
 ```
 
-## inflight.Person-1.js
-```js
+## inflight.Person-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
@@ -300,11 +467,11 @@ module.exports = function({  }) {
   }
   return Person;
 }
-//# sourceMappingURL=inflight.Person-1.js.map
+//# sourceMappingURL=inflight.Person-1.cjs.map
 ```
 
-## inflight.Student-1.js
-```js
+## inflight.Student-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Person }) {
@@ -315,11 +482,11 @@ module.exports = function({ $Person }) {
   }
   return Student;
 }
-//# sourceMappingURL=inflight.Student-1.js.map
+//# sourceMappingURL=inflight.Student-1.cjs.map
 ```
 
-## inflight.TeacherAid-1.js
-```js
+## inflight.TeacherAid-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $PaidStudent }) {
@@ -330,7 +497,7 @@ module.exports = function({ $PaidStudent }) {
   }
   return TeacherAid;
 }
-//# sourceMappingURL=inflight.TeacherAid-1.js.map
+//# sourceMappingURL=inflight.TeacherAid-1.cjs.map
 ```
 
 ## main.tf.json
@@ -352,8 +519,8 @@ module.exports = function({ $PaidStudent }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -361,6 +528,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $extern = $helpers.createExternRequire(__dirname);
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -371,7 +539,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.C1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.C1-1.cjs")({
           })
         `;
       }
@@ -393,6 +561,93 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class C1Ext1 extends C1 {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.C1Ext1-1.cjs")({
+            $C1: ${$stdlib.core.liftObject(C1)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const C1Ext1Client = ${C1Ext1._toInflightType()};
+            const client = new C1Ext1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class C1Ext2 extends C1Ext1 {
+      constructor($scope, $id, ) {
+        super($scope, $id, );
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.C1Ext2-1.cjs")({
+            $C1Ext1: ${$stdlib.core.liftObject(C1Ext1)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const C1Ext2Client = ${C1Ext2._toInflightType()};
+            const client = new C1Ext2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class C1Ext3 extends C1Ext2 {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.C1Ext3-1.cjs")({
+            $C1Ext2: ${$stdlib.core.liftObject(C1Ext2)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const C1Ext3Client = ${C1Ext3._toInflightType()};
+            const client = new C1Ext3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
     class C2 extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -400,7 +655,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.C2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.C2-1.cjs")({
           })
         `;
       }
@@ -422,6 +677,125 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class C2Ext1 extends C2 {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.C2Ext1-1.cjs")({
+            $C2: ${$stdlib.core.liftObject(C2)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const C2Ext1Client = ${C2Ext1._toInflightType()};
+            const client = new C2Ext1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class C2Ext2 extends C2 {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.C2Ext2-1.cjs")({
+            $C2: ${$stdlib.core.liftObject(C2)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const C2Ext2Client = ${C2Ext2._toInflightType()};
+            const client = new C2Ext2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class C2Ext3 extends C2 {
+      constructor($scope, $id, ) {
+        super($scope, $id, );
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.C2Ext3-1.cjs")({
+            $C2: ${$stdlib.core.liftObject(C2)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const C2Ext3Client = ${C2Ext3._toInflightType()};
+            const client = new C2Ext3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure1Client = ${$Closure1._toInflightType()};
+            const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
     class C3 extends $stdlib.std.Resource {
       constructor($scope, $id, a, b) {
         super($scope, $id);
@@ -432,7 +806,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.C3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.C3-1.cjs")({
           })
         `;
       }
@@ -458,12 +832,12 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static m() {
+      static m($scope) {
         return 1;
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.C4-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.C4-1.cjs")({
           })
         `;
       }
@@ -491,7 +865,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.C5-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.C5-1.cjs")({
           })
         `;
       }
@@ -519,7 +893,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    class $Closure1 extends $stdlib.std.AutoIdResource {
+    class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -527,7 +901,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $c5: ${$stdlib.core.liftObject(c5)},
           })
         `;
@@ -535,8 +909,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
+            const $Closure2Client = ${$Closure2._toInflightType()};
+            const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -546,7 +920,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [c5, ["set", "x", "y"]],
+            [c5, [].concat(["x"], ["y"], ["set"])],
           ],
           "$inflight_init": [
             [c5, []],
@@ -561,7 +935,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Person-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Person-1.cjs")({
           })
         `;
       }
@@ -590,7 +964,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Student-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Student-1.cjs")({
             $Person: ${$stdlib.core.liftObject(Person)},
           })
         `;
@@ -620,7 +994,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.PaidStudent-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.PaidStudent-1.cjs")({
             $Student: ${$stdlib.core.liftObject(Student)},
           })
         `;
@@ -643,7 +1017,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    class $Closure2 extends $stdlib.std.AutoIdResource {
+    class $Closure3 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -651,7 +1025,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.cjs")({
             $student_hrlyWage: ${$stdlib.core.liftObject(student.hrlyWage)},
             $student_major: ${$stdlib.core.liftObject(student.major)},
             $student_name: ${$stdlib.core.liftObject(student.name)},
@@ -661,8 +1035,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType()};
-            const client = new $Closure2Client({
+            const $Closure3Client = ${$Closure3._toInflightType()};
+            const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -691,7 +1065,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.TeacherAid-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.TeacherAid-1.cjs")({
             $PaidStudent: ${$stdlib.core.liftObject(PaidStudent)},
           })
         `;
@@ -714,7 +1088,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    class $Closure3 extends $stdlib.std.AutoIdResource {
+    class $Closure4 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -722,7 +1096,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
             $ta_hrlyWage: ${$stdlib.core.liftObject(ta.hrlyWage)},
           })
         `;
@@ -730,8 +1104,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType()};
-            const client = new $Closure3Client({
+            const $Closure4Client = ${$Closure4._toInflightType()};
+            const client = new $Closure4Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -755,7 +1129,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.A-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.A-1.cjs")({
           })
         `;
       }
@@ -787,7 +1161,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.B-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.B-1.cjs")({
             $A: ${$stdlib.core.liftObject(A)},
           })
         `;
@@ -810,8 +1184,12 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+<<<<<<< HEAD
     const $B_13 = new B(this, "$B_13");
     class $Closure4 extends $stdlib.std.AutoIdResource {
+=======
+    class $Closure5 extends $stdlib.std.AutoIdResource {
+>>>>>>> main
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -819,7 +1197,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.cjs")({
             $B: ${$stdlib.core.liftObject(B)},
           })
         `;
@@ -827,8 +1205,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType()};
-            const client = new $Closure4Client({
+            const $Closure5Client = ${$Closure5._toInflightType()};
+            const client = new $Closure5Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -854,7 +1232,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Bar-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Bar-1.cjs")({
           })
         `;
       }
@@ -882,7 +1260,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
             $Bar: ${$stdlib.core.liftObject(Bar)},
           })
         `;
@@ -913,7 +1291,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Baz-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Baz-1.cjs")({
             $Bar: ${$stdlib.core.liftObject(Bar)},
           })
         `;
@@ -942,7 +1320,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Boom-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Boom-1.cjs")({
           })
         `;
       }
@@ -970,7 +1348,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Bam-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Bam-1.cjs")({
             $Boom: ${$stdlib.core.liftObject(Boom)},
           })
         `;
@@ -993,20 +1371,58 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    class DocClass extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.docField = 0;
+      }
+      docMethod() {
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.DocClass-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const DocClassClient = ${DocClass._toInflightType()};
+            const client = new DocClassClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+    }
     new C1(this, "C1");
     const c2 = new C2(this, "C2");
     $helpers.assert($helpers.eq(c2.x, 1), "c2.x == 1");
+    const c2Ext1 = new C2Ext1(this, "C2Ext1");
+    $helpers.assert($helpers.eq(c2Ext1.x, 1), "c2Ext1.x == 1");
+    const c2Ext2 = new C2Ext2(this, "C2Ext2");
+    $helpers.assert($helpers.eq(c2Ext2.x, 1), "c2Ext2.x == 1");
+    const c2Ext3 = new C2Ext3(this, "C2Ext3");
+    $helpers.assert($helpers.eq(c2Ext3.x, 1), "c2Ext3.x == 1");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight classes with no ctor or ctor args", new $Closure1(this, "$Closure1"));
     const c3 = new C3(this, "C3", 1, 2);
     $helpers.assert($helpers.eq(c3.x, 1), "c3.x == 1");
     $helpers.assert($helpers.eq(c3.y, 2), "c3.y == 2");
-    $helpers.assert($helpers.eq((C4.m()), 1), "C4.m() == 1");
+    $helpers.assert($helpers.eq((C4.m(this)), 1), "C4.m() == 1");
     const c5 = new C5(this, "C5");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access inflight field", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access inflight field", new $Closure2(this, "$Closure2"));
     const student = new PaidStudent(this, "PaidStudent", "Tom", "MySpace", 38);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:check derived class instance variables", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:check derived class instance variables", new $Closure3(this, "$Closure3"));
     const ta = new TeacherAid(this, "TeacherAid", "John", "Rock'n Roll", 50);
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:devived class init body happens after super", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight super constructor", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:devived class init body happens after super", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight super constructor", new $Closure5(this, "$Closure5"));
     new Foo(this, "Foo");
     new Baz(this, "Baz");
   }
@@ -1014,6 +1430,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "class.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

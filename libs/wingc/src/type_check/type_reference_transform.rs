@@ -19,13 +19,13 @@ impl<'a> Fold for TypeReferenceTransformer<'a> {
 	fn fold_reference(&mut self, node: Reference) -> Reference {
 		match node {
 			Reference::InstanceMember { ref object, .. } => {
-				if let Some(new_ref) = self.types.type_expressions.remove(&object.id) {
+				if let Some(new_ref) = self.types.type_expressions.swap_remove(&object.id) {
 					new_ref
 				} else {
 					fold::fold_reference(self, node)
 				}
 			}
-			Reference::Identifier(..) | Reference::TypeMember { .. } => node,
+			Reference::Identifier(..) | Reference::TypeMember { .. } | Reference::ElementAccess { .. } => node,
 		}
 	}
 }

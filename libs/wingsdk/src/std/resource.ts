@@ -1,7 +1,6 @@
 import { Construct, IConstruct } from "constructs";
-import { App, LiftDepsMatrixRaw } from "../core";
+import { App, LiftMap } from "../core";
 import { AbstractMemberError } from "../core/errors";
-import { log } from "../shared/log";
 import { Node } from "../std";
 
 /**
@@ -86,7 +85,7 @@ export interface IHostedLiftable extends ILiftable {
    * inflight host.
    * @internal
    */
-  _liftMap?: LiftDepsMatrixRaw;
+  _liftMap?: LiftMap;
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
@@ -97,20 +96,16 @@ export interface IHostedLiftable extends ILiftable {
    * other capabilities to the inflight host.
    */
   onLift(host: IInflightHost, ops: string[]): void;
+}
 
-  /**
-   * Return a list of all inflight operations that are supported by this resource.
-   *
-   * If this method doesn't exist, the resource is assumed to not support any inflight operations.
-   *
-   * @internal
-   */
-  _supportedOps(): string[];
+function hasLiftMap(x: any): x is { _liftMap: LiftMap } {
+  return x != null && typeof x._liftMap === "object";
 }
 
 /**
  * Abstract interface for `Resource`.
  * @skipDocs
+ * @noinflight
  */
 export interface IResource extends IConstruct, IHostedLiftable {
   /**
@@ -127,6 +122,7 @@ export interface IResource extends IConstruct, IHostedLiftable {
 /**
  * Shared behavior between all Wing SDK resources.
  * @skipDocs
+ * @noinflight
  */
 export abstract class Resource extends Construct implements IResource {
   /**
@@ -138,10 +134,18 @@ export abstract class Resource extends Construct implements IResource {
    * other capabilities to the inflight host.
    */
   public static onLiftType(host: IInflightHost, ops: string[]): void {
-    log(
-      `onLiftType called on a resource type (${this.constructor.name
-      }) with a host (${host.node.path}) and ops: ${JSON.stringify(ops)}`
-    );
+    host;
+    ops;
+  }
+
+  /**
+   * Generates an asynchronous JavaScript statement which can be used to create an inflight client
+   * for a resource.
+   *
+   * NOTE: This statement must be executed within an async context.
+   */
+  public static toInflight(obj: IResource) {
+    return obj._toInflight();
   }
 
   /**
@@ -171,13 +175,6 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
-   * @internal
-   * */
-  public _supportedOps(): string[] {
-    return [];
-  }
-
-  /**
    * Return a code snippet that can be used to reference this resource inflight.
    *
    * @internal
@@ -197,19 +194,8 @@ export abstract class Resource extends Construct implements IResource {
    * actually bound.
    */
   public onLift(host: IInflightHost, ops: string[]): void {
-    log(
-      `onLift called on a resource (${this.node.path}) with a host (${host.node.path
-      }) and ops: ${JSON.stringify(ops)}`
-    );
-
-    for (const op of ops) {
-      // Add connection metadata
-      Node.of(this).addConnection({
-        source: host,
-        target: this,
-        name: op.endsWith("()") ? op : `${op}()`,
-      });
-    }
+    host;
+    ops;
   }
 
   /**
@@ -221,7 +207,35 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _preSynthesize(): void {
-    // do nothing by default
+    if (hasLiftMap(this) && !(this instanceof AutoIdResource)) {
+      addConnectionsFromLiftMap(this, this._liftMap);
+    }
+  }
+}
+
+function addConnectionsFromLiftMap(
+  construct: IConstruct,
+  liftData: LiftMap,
+  baseOp?: string
+) {
+  for (const [op, liftEntries] of Object.entries(liftData)) {
+    for (const [dep, depOps] of liftEntries) {
+      if (Construct.isConstruct(dep) && !(dep instanceof AutoIdResource)) {
+        // case 1: dep is an ordinary resource
+        for (const depOp of depOps) {
+          Node.of(construct).addConnection({
+            source: construct,
+            sourceOp: baseOp ?? op,
+            target: dep,
+            targetOp: depOp,
+            name: "call",
+          });
+        }
+      } else if (hasLiftMap(dep)) {
+        // case 2: dep is an inflight
+        addConnectionsFromLiftMap(construct, dep._liftMap, baseOp ?? op);
+      }
+    }
   }
 
 
@@ -260,6 +274,7 @@ export abstract class Resource extends Construct implements IResource {
  * A resource that has an automatically generated id.
  * Used by the Wing compiler to generate unique ids for auto generated resources
  * from inflight function closures.
+ * @noinflight
  */
 export abstract class AutoIdResource extends Resource {
   constructor(scope: Construct, idPrefix: string = "") {
@@ -269,18 +284,38 @@ export abstract class AutoIdResource extends Resource {
 }
 
 /**
- * Annotations about what resources an inflight operation may access.
- *
- * The following example says that the operation may call "put" on a resource
- * at "this.inner", or it may call "get" on a resource passed as an argument named
- * "other".
- * @example
- * { "this.inner": { ops: ["put"] }, "other": { ops: ["get"] } }
- *
- * @internal
+ * Annotations about preflight data and desired inflight operations.
  */
-export interface OperationAnnotation {
-  [resource: string]: {
-    ops: string[];
-  };
+export interface LiftAnnotation {
+  /**
+   * Preflight object to lift
+   */
+  readonly obj: any;
+
+  /**
+   * Name of the object in the inflight context.
+   * Required if the object provided is not an identifier.
+   * @default "obj" If the object is a simple identifier, it will be used as the alias
+   */
+  readonly alias?: string;
+
+  /**
+   * Operations to lift on the object.
+   * @default * All possible operations will be available
+   */
+  readonly ops?: string[];
+}
+
+/** Options for the `@inflight` intrinsic */
+export interface ImportInflightOptions {
+  /**
+   * Name of exported function
+   * @default "default"
+   * */
+  readonly export?: string;
+  /**
+   * Mapping of available symbols to a lift declaration
+   * @default * All possible operations will be available
+   */
+  readonly lifts?: LiftAnnotation[];
 }

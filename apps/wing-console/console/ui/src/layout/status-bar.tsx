@@ -1,9 +1,10 @@
 import { useTheme, Loader } from "@wingconsole/design-system";
-import { State } from "@wingconsole/server";
+import type { State } from "@wingconsole/server";
 import classNames from "classnames";
 
 import { AutoUpdater } from "../features/auto-updater.js";
 
+import { DiscordButton } from "./discord-button.js";
 import { ThemeToggle } from "./theme-toggle.js";
 
 export interface StatusBarProps {
@@ -52,6 +53,7 @@ export const StatusBar = ({
           <span>Status:</span>
           <span className={classNames(theme.text2)}>
             <span
+              data-testid="app-state"
               className={classNames([
                 isError ? "text-red-500" : theme.text2,
                 "flex",
@@ -64,8 +66,9 @@ export const StatusBar = ({
         </div>
       </div>
       {/*right side*/}
-      <div className="w-full flex space-x-0 justify-end">
+      <div className="w-full flex space-x-1 justify-end">
         <AutoUpdater />
+        <DiscordButton />
         {showThemeToggle && <ThemeToggle />}
       </div>
     </footer>

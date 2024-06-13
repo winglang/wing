@@ -4,23 +4,20 @@ source: libs/wingc/src/lsp/completions.rs
 - label: a
   kind: 6
   detail: num
-  documentation:
-    kind: markdown
-    value: "```wing\npreflight a: num\n```"
   sortText: bb|a
 - label: this
   kind: 6
   detail: Construct
   documentation:
     kind: markdown
-    value: "```wing\npreflight this: Construct\nclass Construct impl IConstruct\n```\n---\nRepresents the building block of the construct graph.\n\n### Remarks\nAll constructs besides the root construct must be created within the scope of\nanother construct.\n\n### Fields\n- `node` — `Node` — The tree node.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+    value: "Represents the building block of the construct graph.\n\n#### Remarks\nAll constructs besides the root construct must be created within the scope of\nanother construct."
   sortText: bb|this
 - label: nodeof
   kind: 3
   detail: "preflight (construct: IConstruct): Node"
   documentation:
     kind: markdown
-    value: "```wing\nnodeof: preflight (construct: IConstruct): Node\n```\n---\nObtain the tree node of a preflight resource.\n### Parameters\n- `construct` — `IConstruct` — The construct to obtain the tree node of"
+    value: Obtain the tree node of a preflight resource.
   sortText: cc|nodeof
   insertText: nodeof($1)
   insertTextFormat: 2
@@ -32,7 +29,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(value: any): any"
   documentation:
     kind: markdown
-    value: "```wing\nunsafeCast: (value: any): any\n```\n---\nCasts a value into a different type. This is unsafe and can cause runtime errors\n### Parameters\n- `value` — `any` — The value to cast into a different type"
+    value: Casts a value into a different type. This is unsafe and can cause runtime errors
   sortText: cc|unsafeCast
   insertText: unsafeCast($1)
   insertTextFormat: 2
@@ -48,12 +45,18 @@ source: libs/wingc/src/lsp/completions.rs
 - label: bool
   kind: 14
   sortText: kl|zybool
+- label: datetime
+  kind: 14
+  sortText: kl|zydatetime
 - label: duration
   kind: 14
   sortText: kl|zyduration
 - label: num
   kind: 14
   sortText: kl|zynum
+- label: regex
+  kind: 14
+  sortText: kl|zyregex
 - label: str
   kind: 14
   sortText: kl|zystr

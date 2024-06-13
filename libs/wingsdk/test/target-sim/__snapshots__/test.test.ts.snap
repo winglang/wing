@@ -2,24 +2,21 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c86fc180.js": "\\"use strict\\";
+  ".wing/handler_c86fc180.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => console.log("this test should pass!")
+  const $ctx = {
   
-async handle(event) {
-  console.log(\\"this test should pass!\\");
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
-};
-})())({
-
-}));
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -27,22 +24,12 @@ async handle(event) {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
-        "addr": "c86fc1804106bd848769cb0ddbcb872aa1e47943f4",
-        "attrs": {},
-        "path": "root/env0/test:my_test/Handler",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/handler_c86fc180.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
+    "resources": {
+      "root/cloud.TestRunner": {
         "addr": "c8647dd8d2adabe83cc081ebe0ccbefe4a068ef3bf",
-        "attrs": {},
+        "deps": [
+          "root/env0/test:my_test/Handler",
+        ],
         "path": "root/cloud.TestRunner",
         "props": {
           "tests": {
@@ -51,7 +38,20 @@ async handle(event) {
         },
         "type": "@winglang/sdk.std.TestRunner",
       },
-    ],
+      "root/env0/test:my_test/Handler": {
+        "addr": "c86fc1804106bd848769cb0ddbcb872aa1e47943f4",
+        "path": "root/env0/test:my_test/Handler",
+        "policy": [],
+        "props": {
+          "concurrency": 100,
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/handler_c86fc180.cjs",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -61,10 +61,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -106,14 +102,6 @@ async handle(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -122,9 +110,21 @@ async handle(event) {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -185,6 +185,7 @@ async handle(event) {
             "fqn": "constructs.Construct",
             "version": "10.3.0",
           },
+          "display": {},
           "id": "env0",
           "path": "root/env0",
         },
@@ -193,6 +194,7 @@ async handle(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

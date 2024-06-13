@@ -47,8 +47,12 @@ export class Service extends Resource implements IInflightHost {
    */
   protected readonly entrypoint!: string;
 
+  /**
+   * Reference to the service's handler - an inflight closure.
+   */
+  protected readonly handler!: IServiceHandler;
+
   private readonly _env: Record<string, string> = {};
-  private readonly handler!: IServiceHandler;
 
   constructor(
     scope: Construct,
@@ -77,7 +81,7 @@ export class Service extends Resource implements IInflightHost {
 
     const workdir = App.of(this).workdir;
     mkdirSync(workdir, { recursive: true });
-    const entrypoint = join(workdir, `${assetName}.js`);
+    const entrypoint = join(workdir, `${assetName}.cjs`);
     this.entrypoint = entrypoint;
 
     if (process.env.WING_TARGET) {
@@ -92,20 +96,28 @@ export class Service extends Resource implements IInflightHost {
     super._preSynthesize();
 
     const inflightClient = this.handler._toInflight();
-    const lines = new Array<string>();
+    const code = `\
+      "use strict";
+      let $stop;
+      exports.start = async function() {
+        if ($stop) {
+          throw Error('service already started');
+        }
+        const client = await ${inflightClient};
+        const noop = () => {};
+        $stop = (await client.handle()) ?? noop;
+      };
 
-    lines.push('"use strict";');
-    lines.push("let $obj;");
+      exports.stop = async function() {
+        if (!$stop) {
+          throw Error('service not started');
+        }
+        await $stop();
+        $stop = undefined;
+      };
+      `;
 
-    lines.push("async function $initOnce() {");
-    lines.push(`  $obj = $obj || (await (${inflightClient}));`);
-    lines.push("  return $obj;");
-    lines.push("};");
-
-    lines.push("exports.handle = async function() {");
-    lines.push("  return (await $initOnce()).handle();");
-    lines.push("};");
-    writeFileSync(this.entrypoint, lines.join("\n"));
+    writeFileSync(this.entrypoint, code);
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
@@ -181,7 +193,7 @@ export interface IServiceHandlerClient {
    * DO NOT BLOCK! This handler should return as quickly as possible. If you need to run a long
    * running process, start it asynchronously.
    *
-   *
+   * @inflight
    * @returns an optional function that can be used to cleanup any resources when the service is
    * stopped.
    *
@@ -195,7 +207,6 @@ export interface IServiceHandlerClient {
    *     log("stoping service...");
    *   };
    * });
-   *
    */
   handle(): Promise<IServiceStopHandler | undefined>;
 }

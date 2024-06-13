@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: "20.11.0"
+  NODE_VERSION: "20.11.1"
   PNPM_VERSION: "8.15.1"
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -41,12 +41,12 @@ jobs:
       bench-changed: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#bench'].changes }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v3
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -102,10 +102,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v3
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -129,7 +129,9 @@ jobs:
 
       - name: Install Playwright
         working-directory: apps/wing-console/console/app
-        run: pnpm exec playwright install --with-deps
+        run: |
+          sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+          pnpm exec playwright install --with-deps
 
       - name: Test
         run: pnpm test:ci
@@ -153,7 +155,7 @@ jobs:
       - build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v3
@@ -162,7 +164,7 @@ jobs:
           path: dist
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v3
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -221,10 +223,10 @@ jobs:
             full_run: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v3
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -272,7 +274,7 @@ jobs:
     needs:
       - build
     if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
-    uses: ./.github/workflows/tf-aws-test.yml
+    uses: ./.github/workflows/sdk-spec-test.yml
     secrets: inherit
 
   console-preview:
@@ -287,7 +289,7 @@ jobs:
     if: ${{ needs.build.outputs.console-changed == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'mergify/merge-queue/') }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download Dist Artifacts
         uses: actions/download-artifact@v3
@@ -296,7 +298,7 @@ jobs:
           path: dist
 
       - name: Install flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@1.4
+        uses: superfly/flyctl-actions/setup-flyctl@1.5
         with:
           version: ${{ env.FLY_VERSION }}
 
@@ -308,7 +310,7 @@ jobs:
             flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest -o personal
             popd
           fi
-          flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
+          flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 1024 --strategy immediate
           flyctl scale count 1 --yes --app "$APP_NAME"
           echo "deploytime=$(TZ=UTC date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
 
@@ -334,8 +336,12 @@ jobs:
       - sdk-spec-test
     steps:
       - name: Check failure
-        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.sdk-spec-test.result == 'failure'
-        run: exit 1
+        # All jobs must either be sucessful or skipped
+        if: contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'failure') || contains(needs.*.result, 'action_required')|| contains(needs.*.result, 'stale')|| contains(needs.*.result, 'null')
+        run: |
+          echo "One or more jobs failed or were cancelled. Please check the logs."
+          echo '${{ toJson(needs) }}'
+          exit 1
       - name: Download patches
         uses: actions/download-artifact@v3
       - name: Check patches
@@ -374,7 +380,7 @@ jobs:
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
       - name: Publish NPM packages
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         env:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         with:
@@ -384,7 +390,7 @@ jobs:
             set -o pipefail
 
             cd dist
-            PACKAGES=("@winglang/sdk" "@wingcloud/framework" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang" "@winglang/platform-awscdk" "@winglang/compatibility-spy")
+            PACKAGES=("@winglang/sdk" "@wingcloud/framework" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang" "@winglang/platform-awscdk" "@winglang/compatibility-spy" "@winglang/wingtunnels")
             for PACKAGE in "${PACKAGES[@]}"; do
               # Check if already published
               VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version --verbose || true)
@@ -414,7 +420,7 @@ jobs:
           dependencies: false
 
       - name: Write Changelog
-        uses: DamianReeves/write-file-action@v1.2
+        uses: DamianReeves/write-file-action@v1.3
         with:
           path: "CHANGELOG.md"
           contents: ${{ needs.build.outputs.changelog }}

@@ -3,7 +3,7 @@ export { cloud, ex } from "@winglang/sdk";
 export { Construct } from "@winglang/sdk/lib/core/types";
 
 // typescript workflow primitives
-export { inflight, lift } from "./inflight";
+export { inflight, lift } from "@winglang/sdk/lib/core";
 export { main } from "./main";
 
 // used internally by wing compiler

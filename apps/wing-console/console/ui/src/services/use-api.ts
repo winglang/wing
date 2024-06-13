@@ -1,36 +1,19 @@
 import { useCallback, useEffect, useMemo } from "react";
 
-import { ApiRequest } from "../shared/api.js";
+import type { ApiRequest } from "../shared/api.js";
 
 import { trpc } from "./trpc.js";
 
 export interface UseApiOptions {
-  resourcePath: string;
   onFetchDataUpdate: (data: any) => void;
-  onSchemaDataUpdate: (data: any) => void;
 }
 
-export const useApi = ({
-  resourcePath,
-  onFetchDataUpdate,
-  onSchemaDataUpdate,
-}: UseApiOptions) => {
+export const useApi = ({ onFetchDataUpdate }: UseApiOptions) => {
   const fetch = trpc["api.fetch"].useMutation();
-  const schema = trpc["api.schema"].useQuery({ resourcePath });
 
   useEffect(() => {
-    // if (!fetch.data?.textResponse) {
-    //   return;
-    // }
     onFetchDataUpdate(fetch.data);
   }, [fetch.data, onFetchDataUpdate]);
-
-  useEffect(() => {
-    if (!schema.data) {
-      return;
-    }
-    onSchemaDataUpdate(schema.data);
-  }, [onSchemaDataUpdate, schema.data]);
 
   const callFetch = useCallback(
     async ({ url, route, method, variables, headers, body }: ApiRequest) => {
@@ -50,8 +33,8 @@ export const useApi = ({
   );
 
   const isLoading = useMemo(() => {
-    return fetch.isLoading || schema.isLoading;
-  }, [fetch.isLoading, schema.isLoading]);
+    return fetch.isLoading;
+  }, [fetch.isLoading]);
 
   return {
     isLoading,

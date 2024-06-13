@@ -1,10 +1,5 @@
-import {
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useState,
-  KeyboardEvent,
-} from "react";
+import type { PropsWithChildren, KeyboardEvent } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useControlled } from "../utils/use-controlled.js";
 

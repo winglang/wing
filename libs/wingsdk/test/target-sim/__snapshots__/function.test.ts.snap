@@ -2,34 +2,33 @@
 
 exports[`create a function 1`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -37,22 +36,23 @@ async handle(event) {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_function": {
         "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
-        "attrs": {},
         "path": "root/my_function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {
             "ENV_VAR1": "true",
           },
-          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -62,10 +62,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -107,14 +103,6 @@ async handle(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -123,9 +111,21 @@ async handle(event) {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -157,6 +157,7 @@ async handle(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -167,42 +168,41 @@ async handle(event) {
 
 exports[`invoke function fails 1`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"alice\\\\\\"}\\").",
-  "@winglang/sdk.cloud.Function deleted.",
+  "root/my_function started",
+  "Error: Name must start with uppercase letter (Invoke (payload="{\\"name\\":\\"alice\\"}").)",
+  "root/my_function stopped",
 ]
 `;
 
 exports[`invoke function fails 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -210,20 +210,21 @@ async handle(event) {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_function": {
         "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
-        "attrs": {},
         "path": "root/my_function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -233,10 +234,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -278,14 +275,6 @@ async handle(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -294,9 +283,21 @@ async handle(event) {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -328,6 +329,7 @@ async handle(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -338,42 +340,41 @@ async handle(event) {
 
 exports[`invoke function succeeds 1`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
-  "@winglang/sdk.cloud.Function deleted.",
+  "root/my_function started",
+  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
+  "root/my_function stopped",
 ]
 `;
 
 exports[`invoke function succeeds 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -381,20 +382,21 @@ async handle(event) {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_function": {
         "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
-        "attrs": {},
         "path": "root/my_function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -404,10 +406,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -449,14 +447,6 @@ async handle(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -465,9 +455,21 @@ async handle(event) {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -499,6 +501,7 @@ async handle(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -509,42 +512,41 @@ async handle(event) {
 
 exports[`invoke function with environment variables 1`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
-  "@winglang/sdk.cloud.Function deleted.",
+  "root/my_function started",
+  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
+  "root/my_function stopped",
 ]
 `;
 
 exports[`invoke function with environment variables 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async (_, event) => {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -552,22 +554,23 @@ async handle(event) {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_function": {
         "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
-        "attrs": {},
         "path": "root/my_function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {
             "PIG_LATIN": "true",
           },
-          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -577,10 +580,6 @@ async handle(event) {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -622,14 +621,6 @@ async handle(event) {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -638,9 +629,21 @@ async handle(event) {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -672,6 +675,7 @@ async handle(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -682,32 +686,31 @@ async handle(event) {
 
 exports[`invoke function with process.exit(1) 1`] = `
 [
-  "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{}\\").",
-  "@winglang/sdk.cloud.Function deleted.",
+  "root/my_function started",
+  "Error: Process exited with code 1, signal null (Invoke (payload="{}").)",
+  "root/my_function stopped",
 ]
 `;
 
 exports[`invoke function with process.exit(1) 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle() {
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
   process.exit(1);
 }
-};
-})())({
-
-}));
+  const $ctx = {
+  
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -715,20 +718,21 @@ async handle() {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/my_function": {
         "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
-        "attrs": {},
         "path": "root/my_function",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -738,10 +742,6 @@ async handle() {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -783,14 +783,6 @@ async handle() {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -799,9 +791,21 @@ async handle() {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -833,6 +837,7 @@ async handle() {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -843,92 +848,86 @@ async handle() {
 
 exports[`runtime environment tests 1`] = `
 {
-  ".wing/function.0_c8d5fca2.js": "\\"use strict\\";
+  ".wing/function.0_c8d5fca2.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const query = "q=URLUtils.searchParams&topic=api";
+      const p = new URLSearchParams(query);
+      const value = p.get("topic");
+      if (!value) {
+        throw new Error("URLSearchParams failed");
+      }
+      return value;
     }
-  }
-  async handle() {
-          
-    const query = \\"q=URLUtils.searchParams&topic=api\\";
-    const p = new URLSearchParams(query);
-    return p.get(\\"topic\\");
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
-  ".wing/function.1_c89ed254.js": "\\"use strict\\";
+  ".wing/function.1_c89ed254.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle() {
-          
-    return typeof fetch;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => typeof fetch
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
-  ".wing/function.2_c8cd6c39.js": "\\"use strict\\";
+  ".wing/function.2_c8cd6c39.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const c = require("crypto");
+      return typeof c.createHash;
     }
-  }
-  async handle() {
-          
-    const c = require(\\"crypto\\");
-    return typeof c.createHash;
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
-  ".wing/function.3_c8badafa.js": "\\"use strict\\";
+  ".wing/function.3_c8badafa.cjs": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
-  $handler = $handler ?? (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
+  $handler = $handler ?? ((await (async () => {
+  const $func = async () => {
+      const { nanoid } = require("nanoid");
+      return nanoid();
     }
-  }
-  async handle() {
-          
-    const { nanoid } = await import(\\"nanoid\\");
-    return nanoid();
+  const $ctx = {
   
-        }
-};
-})())({
-
-}));
+  };
+  let newFunction = async (...args) => {
+    return $func($ctx, ...args);
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
+}
+)()));
   return await $handler.handle(event);
 };",
   "connections.json": {
@@ -936,56 +935,60 @@ return class Handler {
     "version": "connections-0.1",
   },
   "simulator.json": {
-    "resources": [
-      {
+    "resources": {
+      "root/Function.0": {
         "addr": "c8d5fca2ff1b96bd65cc21384259b53ae9f3d4971c",
-        "attrs": {},
         "path": "root/Function.0",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function.0_c8d5fca2.js",
+          "sourceCodeFile": ".wing/function.0_c8d5fca2.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
+      "root/Function.1": {
         "addr": "c89ed254f66166d83153cc0a4952a15be63d47b0d2",
-        "attrs": {},
         "path": "root/Function.1",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function.1_c89ed254.js",
+          "sourceCodeFile": ".wing/function.1_c89ed254.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
+      "root/Function.2": {
         "addr": "c8cd6c39da22910102d0cfeb2cb96f2160fa79e517",
-        "attrs": {},
         "path": "root/Function.2",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function.2_c8cd6c39.js",
+          "sourceCodeFile": ".wing/function.2_c8cd6c39.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-      {
+      "root/Function.3": {
         "addr": "c8badafa75a67ff66740e0c5fbbb392ab574b52b3c",
-        "attrs": {},
         "path": "root/Function.3",
+        "policy": [],
         "props": {
+          "concurrency": 100,
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/function.3_c8badafa.js",
+          "sourceCodeFile": ".wing/function.3_c8badafa.cjs",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
         "type": "@winglang/sdk.cloud.Function",
       },
-    ],
+    },
     "sdkVersion": "0.0.0",
     "types": {
       "@winglang/sdk.cloud.Api": {
@@ -995,10 +998,6 @@ return class Handler {
       "@winglang/sdk.cloud.Bucket": {
         "className": "Bucket",
         "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
       },
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
@@ -1040,14 +1039,6 @@ return class Handler {
         "className": "Website",
         "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
       },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
       "@winglang/sdk.ex.Redis": {
         "className": "Redis",
         "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
@@ -1056,9 +1047,21 @@ return class Handler {
         "className": "Table",
         "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
       },
+      "@winglang/sdk.sim.Container": {
+        "className": "Container",
+        "sourcePath": "<ABSOLUTE PATH>/container.inflight.js",
+      },
       "@winglang/sdk.sim.EventMapping": {
         "className": "EventMapping",
         "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.Policy": {
+        "className": "Policy",
+        "sourcePath": "<ABSOLUTE PATH>/policy.inflight.js",
+      },
+      "@winglang/sdk.sim.Resource": {
+        "className": "Resource",
+        "sourcePath": "<ABSOLUTE PATH>/resource.inflight.js",
       },
       "@winglang/sdk.sim.State": {
         "className": "State",
@@ -1126,6 +1129,7 @@ return class Handler {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

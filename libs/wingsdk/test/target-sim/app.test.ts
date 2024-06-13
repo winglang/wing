@@ -3,16 +3,15 @@ import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { simulatorJsonOf } from "./util";
 import { Bucket } from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { Test } from "../../src/std";
 import { App } from "../../src/target-sim/app";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
 
-const TEST_CODE = `
-async handle(event) {
+const TEST_CODE = inflight(async () => {
   console.log("this test should pass!");
-}`;
+});
 
 test("app name can be customized", () => {
   // GIVEN
@@ -35,9 +34,8 @@ test("tests do not synthesize functions when test mode is off", async () => {
     constructor(scope: Construct, id: string) {
       super(scope, id);
       new Bucket(this, "my_bucket");
-      const handler = Testing.makeHandler(TEST_CODE);
-      new Test(this, "test:my_test1", handler);
-      new Test(this, "test:my_test2", handler);
+      new Test(this, "test:my_test1", TEST_CODE);
+      new Test(this, "test:my_test2", TEST_CODE);
     }
   }
   const app = new SimApp({ isTestEnvironment: false, rootConstruct: Root });
@@ -48,7 +46,10 @@ test("tests do not synthesize functions when test mode is off", async () => {
   await s.stop();
 
   // THEN
-  expect(resources.sort()).toEqual(["root/Default/my_bucket"]);
+  expect(resources.sort()).toEqual([
+    "root/Default/my_bucket",
+    "root/Default/my_bucket/Policy",
+  ]);
 });
 
 test("tests are synthesized into individual environments when test mode is on", async () => {
@@ -57,9 +58,8 @@ test("tests are synthesized into individual environments when test mode is on", 
     constructor(scope: Construct, id: string) {
       super(scope, id);
       new Bucket(this, "my_bucket");
-      const handler = Testing.makeHandler(TEST_CODE);
-      new Test(this, "test:my_test1", handler);
-      new Test(this, "test:my_test2", handler);
+      new Test(this, "test:my_test1", TEST_CODE);
+      new Test(this, "test:my_test2", TEST_CODE);
     }
   }
   const app = new SimApp({ isTestEnvironment: true, rootConstruct: Root });
@@ -73,8 +73,10 @@ test("tests are synthesized into individual environments when test mode is on", 
   expect(resources.sort()).toEqual([
     "root/cloud.TestRunner",
     "root/env0/my_bucket",
+    "root/env0/my_bucket/Policy",
     "root/env0/test:my_test1/Handler",
     "root/env1/my_bucket",
+    "root/env1/my_bucket/Policy",
     "root/env1/test:my_test2/Handler",
   ]);
 });

@@ -1,16 +1,15 @@
 import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { SimApp } from "../sim-app";
 
-const INFLIGHT_CODE = `async handle() { console.log("super duper success"); }`;
+const INFLIGHT_CODE = inflight(async () => console.log("super duper success"));
 
 test("create an OnDeploy", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
-  new cloud.OnDeploy(app, "my_on_deploy", handler);
+  new cloud.OnDeploy(app, "my_on_deploy", INFLIGHT_CODE);
   const s = await app.startSimulator();
 
   // THEN
@@ -18,8 +17,10 @@ test("create an OnDeploy", async () => {
     attrs: {
       handle: expect.any(String),
     },
+    deps: ["root/my_on_deploy/Function"],
     path: "root/my_on_deploy",
     addr: expect.any(String),
+    policy: [],
     props: {
       functionHandle: expect.any(String),
     },

@@ -4,8 +4,5 @@ source: libs/wingc/src/lsp/completions.rs
 - label: s
   kind: 5
   detail: str
-  documentation:
-    kind: markdown
-    value: "```wing\ns: str\n```"
   sortText: ab|s
 

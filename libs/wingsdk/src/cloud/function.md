@@ -29,13 +29,13 @@ A function can be invoked in two ways:
 * **invoke()** - Executes the function with a payload and waits for the result.
 * **invokeAsync()** - Kicks off the execution of the function with a payload and returns immediately while the function is running.
 
-```ts playground
+```ts playground example
 bring cloud;
 bring util;
 
 // defining a cloud.Function resource
-let countWords = new cloud.Function(inflight (s: str): str => {
-  return "${s.split(" ").length}";
+let countWords = new cloud.Function(inflight (s: str?): str => {
+  return "{s?.split(" ")?.length ?? 0}";
 }) as "countWords";
 
 let longTask = new cloud.Function(inflight () => {
@@ -47,7 +47,7 @@ new cloud.Function(inflight () => {
   let sentence = "I am a sentence with 7 words";
   // invoking cloud.Function from inflight context
   let wordsCount = countWords.invoke(sentence);
-  log("'${sentence}' has ${wordsCount} words");
+  log("'{sentence}' has {wordsCount ?? "0"} words");
 
   longTask.invokeAsync("");
   log("task started");
@@ -56,12 +56,12 @@ new cloud.Function(inflight () => {
 
 ## Function container reuse
 
-Most cloud providers will opportunistically reuse the function's container in additional invocations. It is possible
-to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
+Most cloud providers will opportunistically reuse the function's container in additional invocations.
+It is possible to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
 
 The following example reads the `bigdata.json` file once and reuses it every time `query()` is called.
 
-```js
+```ts playground example
 bring cloud;
 
 let big = new cloud.Bucket();
@@ -95,13 +95,23 @@ new cloud.Function(inflight () => {
 
 The sim implementation of `cloud.Function` runs the inflight code as a JavaScript function.
 
+By default, a maximum of 10 workers can be processing requests sent to a `cloud.Function` concurrently, but this number can be adjusted with the `concurrency` property:
+
+```ts playground
+bring cloud;
+
+new cloud.Function(inflight () => {
+  // ... code that shouldn't run concurrently ...
+}, concurrency: 1);
+```
+
 ### AWS (`tf-aws` and `awscdk`)
 
 The AWS implementation of `cloud.Function` uses [AWS Lambda](https://aws.amazon.com/lambda/).
 
 To add extra IAM permissions to the function, you can use the `aws.Function` class as shown below.
 
-```ts playground
+```ts playground example
 bring aws;
 bring cloud;
 
@@ -118,6 +128,25 @@ if let lambdaFn = aws.Function.from(f) {
   );
 }
 ```
+
+To access the AWS Lambda context object, you can use the `aws.Function` class as shown below.
+
+```ts playground example
+bring aws;
+bring cloud;
+
+let f = new cloud.Function(inflight () => {
+  if let ctx = aws.Function.context() {
+    log(ctx.logGroupName); // prints the log group name
+    log(ctx.logStreamName); // prints the log stream name
+
+    let remainingTime = ctx.remainingTimeInMillis();
+    assert(remainingTime > 0);
+  }
+});
+```
+
+The `context()` method returns `nil` when ran on non-AWS targets.
 
 ### Azure (`tf-azure`)
 

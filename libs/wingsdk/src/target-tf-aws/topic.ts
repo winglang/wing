@@ -1,16 +1,17 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
+import { Queue } from "./queue";
 import { SnsTopic } from "../.gen/providers/aws/sns-topic";
 import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
 import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
+import { SqsQueuePolicy } from "../.gen/providers/aws/sqs-queue-policy";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { AwsInflightHost } from "../shared-aws";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IAwsTopic } from "../shared-aws/topic";
+import { IAwsTopic, TopicOnMessageHandler } from "../shared-aws/topic";
 import { IInflightHost, Node, Resource } from "../std";
 
 /**
@@ -48,15 +49,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname.replace("target-tf-aws", "shared-aws"),
-        "topic.onmessage.inflight.js"
-      ),
-      "TopicOnMessageHandlerClient"
-    );
-
+    const functionHandler = TopicOnMessageHandler.toFunctionHandler(inflight);
     let fn = this.handlers[inflight._id];
     if (fn) {
       return fn;
@@ -80,7 +73,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       this,
       App.of(this).makeId(this, "TopicSubscription"),
       {
-        topicArn: this.topic.arn,
+        topicArn: this.topicArn,
         protocol: "lambda",
         endpoint: fn.functionArn,
       }
@@ -90,11 +83,54 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
-      name: "onMessage()",
+      targetOp: cloud.FunctionInflightMethods.INVOKE_ASYNC,
+      name: "subscriber",
     });
 
     return fn;
+  }
+
+  public subscribeQueue(queue: cloud.Queue): void {
+    if (!(queue instanceof Queue)) {
+      throw new Error(
+        "'subscribeQueue' allows only tfaws.Queue to be subscribed to the Topic"
+      );
+    }
+
+    new SnsTopicSubscription(
+      this,
+      App.of(this).makeId(this, "TopicSubscription"),
+      {
+        topicArn: this.topicArn,
+        protocol: "sqs",
+        endpoint: queue.queueArn,
+        rawMessageDelivery: true,
+      }
+    );
+
+    new SqsQueuePolicy(this, `SqsQueuePolicy-${queue.node.addr}`, {
+      queueUrl: queue.queueUrl,
+      policy: JSON.stringify({
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Effect: "Allow",
+            Principal: {
+              Service: "sns.amazonaws.com",
+            },
+            Action: "sqs:SendMessage",
+            Resource: `${queue.queueArn}`,
+            Condition: {
+              ArnEquals: {
+                "aws:SourceArn": `${this.topicArn}`,
+              },
+            },
+          },
+        ],
+      }),
+    });
   }
 
   /**
@@ -135,8 +171,8 @@ export class Topic extends cloud.Topic implements IAwsTopic {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("topics can only be bound by tfaws.Function for now");
+    if (!AwsInflightHost.isAwsInflightHost(host)) {
+      throw new Error("Host is expected to implement `IAwsInfightHost`");
     }
 
     host.addPolicyStatements(...calculateTopicPermissions(this.topic.arn, ops));
@@ -156,8 +192,10 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     );
   }
   /** @internal */
-  public _supportedOps(): string[] {
-    return [cloud.TopicInflightMethods.PUBLISH];
+  public get _liftMap(): core.LiftMap {
+    return {
+      [cloud.TopicInflightMethods.PUBLISH]: [],
+    };
   }
 
   private envName(): string {

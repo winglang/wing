@@ -1,4 +1,5 @@
-import { SpinnerLoader, SpinnerLoaderSize } from "./spinner-loader.js";
+import type { SpinnerLoaderSize } from "./spinner-loader.js";
+import { SpinnerLoader } from "./spinner-loader.js";
 
 export const Loader = ({
   size,

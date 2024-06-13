@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { expect, test } from "vitest";
 import * as cloud from "../../src/cloud";
-import { Testing } from "../../src/simulator";
+import { inflight } from "../../src/core";
 import { Resource } from "../../src/std";
 import * as ui from "../../src/ui";
 import { SimApp } from "../sim-app";
@@ -16,19 +16,18 @@ test("can obtain ui components", async () => {
       super(scope, id);
 
       const section = new ui.Section(this, "Section", { label: "Overview" });
-      const buttonHandler = Testing.makeHandler(
-        `async handle() { return "button worked"; }`
-      );
       const button = new ui.Button(
         this,
         "Button",
         "Button Label",
-        buttonHandler
+        inflight(async () => "button worked")
       );
-      const fieldHandler = Testing.makeHandler(
-        `async handle() { return "field worked"; }`
+      const field = new ui.Field(
+        this,
+        "Field",
+        "Field Label",
+        inflight(async () => "field worked")
       );
-      const field = new ui.Field(this, "Field", "Field Label", fieldHandler);
       section.add(button, field);
     }
   }
