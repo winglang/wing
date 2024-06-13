@@ -330,20 +330,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			let code = self.jsify_udt(&node);
 
 			let property = self.ctx.current_property();
-
-			// check that we can qualify the lift (e.g. determine which property is being accessed)
-			// if property.is_none() {
-			// 	report_diagnostic(Diagnostic {
-			// 		message: format!(
-			// 			"Cannot qualify access to a lifted type \"{udt_type}\" (see https://github.com/winglang/wing/issues/76 for more details)"),
-			// 		span: Some(node.span.clone()),
-			// 		annotations: vec![],
-			// 		hints: vec![],
-			// 	});
-
-			// 	return;
-			// }
-
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.lift(
 				self.ctx.current_method().map(|(m, _)| m).expect("a method"),
