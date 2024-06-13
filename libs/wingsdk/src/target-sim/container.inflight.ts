@@ -142,7 +142,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       LogLevel.VERBOSE
     );
 
-    let hostPort: number | undefined;
+    let hostPort: string | undefined;
     await waitUntil(async () => {
       if (!this.child?.running) {
         throw new Error(`Container ${this.imageTag} stopped unexpectedly`);
@@ -154,7 +154,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       if (this.props.containerPort) {
         // when using the host network, the host port is the same as the container port
         if (this.props.network === "host") {
-          hostPort = this.props.containerPort;
+          hostPort = this.props.containerPort.toString();
           return (
             container?.[0]?.Config?.ExposedPorts?.[`${hostPort}/tcp`] !==
             undefined
