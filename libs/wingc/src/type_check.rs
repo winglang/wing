@@ -326,7 +326,9 @@ pub struct Class {
 	pub phase: Phase,
 	pub docs: Docs,
 	pub lifts: Option<Lifts>,
-	pub defined_in_phase: Phase, // TODO: naming: maybe this should just be `phase` while `phase` should be `default_member_phase`?
+
+	// The phase in which this class was defined (this should be the same as the env.phase where the class name is defined)
+	pub defined_in_phase: Phase,
 
 	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
 	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
