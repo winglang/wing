@@ -1248,7 +1248,7 @@ impl TypeRef {
 			Type::MutArray(t) => t.is_serializable(),
 			Type::Map(t) => t.is_serializable(),
 			Type::MutMap(t) => t.is_serializable(),
-			Type::Struct(s) => s.fields(true).map(|(_, t)| t).all(|t| t.is_serializable()),
+			Type::Struct(s) => s.fields(true).map(|(_, v)| v.type_).all(|t| t.is_serializable()),
 			Type::Enum(_) => true,
 			// not serializable
 			Type::Duration => false,
@@ -2273,29 +2273,29 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		op: &BinaryOperator,
 		exp: &Expr,
 	) -> (TypeRef, Phase) {
-					let (ltype, ltype_phase) = self.type_check_exp(left, env);
-					let (rtype, rtype_phase) = self.type_check_exp(right, env);
+		let (ltype, ltype_phase) = self.type_check_exp(left, env);
+		let (rtype, rtype_phase) = self.type_check_exp(right, env);
 
-					// Resolve the phase
-					let phase = combine_phases(ltype_phase, rtype_phase);
+		// Resolve the phase
+		let phase = combine_phases(ltype_phase, rtype_phase);
 
-					match op {
-						BinaryOperator::LogicalAnd | BinaryOperator::LogicalOr => {
-							self.validate_type(ltype, self.types.bool(), left);
-							self.validate_type(rtype, self.types.bool(), right);
-							(self.types.bool(), phase)
-						}
-						BinaryOperator::AddOrConcat => {
-							if ltype.is_subtype_of(&self.types.number()) && rtype.is_subtype_of(&self.types.number()) {
-								(self.types.number(), phase)
-							} else if ltype.is_subtype_of(&self.types.string()) && rtype.is_subtype_of(&self.types.string()) {
-								(self.types.string(), phase)
-							} else {
-								// If any of the types are unresolved (error) then don't report this assuming the error has already been reported
-								if !ltype.is_unresolved() && !rtype.is_unresolved() {
-									self.spanned_error(
-										exp,
-										format!(
+		match op {
+			BinaryOperator::LogicalAnd | BinaryOperator::LogicalOr => {
+				self.validate_type(ltype, self.types.bool(), left);
+				self.validate_type(rtype, self.types.bool(), right);
+				(self.types.bool(), phase)
+			}
+			BinaryOperator::AddOrConcat => {
+				if ltype.is_subtype_of(&self.types.number()) && rtype.is_subtype_of(&self.types.number()) {
+					(self.types.number(), phase)
+				} else if ltype.is_subtype_of(&self.types.string()) && rtype.is_subtype_of(&self.types.string()) {
+					(self.types.string(), phase)
+				} else {
+					// If any of the types are unresolved (error) then don't report this assuming the error has already been reported
+					if !ltype.is_unresolved() && !rtype.is_unresolved() {
+						self.spanned_error(
+							exp,
+							format!(
 											"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
 											ltype,
 											rtype,
@@ -2304,7 +2304,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 											self.types.string(),
 											self.types.string(),
 										),
-									);
+						);
 					}
 					self.resolved_error()
 				}
@@ -3046,7 +3046,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 
 	pub fn all_optional_struct(t: TypeRef) -> bool {
 		match &*t {
-			Type::Struct(s) => s.fields(true).all(|(_, t)| t.is_option()),
+			Type::Struct(s) => s.fields(true).all(|(_, v)| v.type_.is_option()),
 			_ => false,
 		}
 	}

@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::{
-	ast::{Class, ExprId, FunctionSignature, Phase, Stmt, StmtKind, Symbol, UserDefinedType},
+	ast::{Class, Expr, ExprId, FunctionSignature, Phase, Stmt, StmtKind, Symbol, UserDefinedType},
 	type_check::symbol_env::SymbolEnvRef,
 };
 

@@ -290,7 +290,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			// 	}
 			// }
 
-
 			// Before we continue lets dive into this (non-preflight) expression to see if we need to lift any parts of it
 			visit::visit_expr(v, node);
 
@@ -298,13 +297,13 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			if expr_phase == Phase::Inflight {
 				if let Some(class) = expr_type.as_class() {
 					if class.phase == Phase::Inflight && class.defined_in_phase == Phase::Preflight {
-						if let Some(property) = v.ctx.current_property() {
-							let m = v.ctx.current_method().map(|(m,_)|m).expect("a method");
+						if let Some((_, property)) = v.ctx.current_property() {
+							let m = v.ctx.current_method().map(|(m, _)| m).expect("a method");
 							let mut lifts = v.lifts_stack.pop().unwrap();
 							// Get preflight code that references the type of the class so we can qualify the lift, note we use a unique
 							// type alias here since we might not have the actual type name available in scope here.
 							let code = &v.jsify.class_singleton(expr_type);
-							lifts.lift(m, Some(property), code);
+							lifts.lift(m, Some(property.to_string()), code);
 							v.lifts_stack.push(lifts);
 							return;
 						}
