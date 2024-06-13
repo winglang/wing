@@ -277,7 +277,7 @@ export interface IResourceFactoryClient {
    * Function that will be called to create the resource.
    * @inflight
    */
-  handle(context: IResourceContext): Promise<IResource>;
+  handle(context: IResourceContext): Promise<IResource | undefined>;
 }
 
 /**
