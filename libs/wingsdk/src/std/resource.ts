@@ -211,6 +211,29 @@ export abstract class Resource extends Construct implements IResource {
       addConnectionsFromLiftMap(this, this._liftMap);
     }
   }
+
+  /**
+   * Create a singleton of this resource. This uses `this` in a static context
+   * to create a singleton of any subclass of `Resource`.
+   * This helper function is used to create a single dummy instance of `inflight class`es
+   * defined in preflight code. This instances are needed to create a lift qualification
+   * map for such classes.
+   * 
+   * @internal
+   */
+  public static _singleton(scope: Construct, id: string): Resource {
+    const root: any = Node.of(scope).root;
+    let t: any = this;
+    if (root.resourceSingletons === undefined) {
+      root.resourceSingletons = {};
+    }
+    const instance = root.resourceSingletons[t];
+    if (instance) {
+      return instance;
+    }
+    root.resourceSingletons[t] = new t(root, id);
+    return root.resourceSingletons[t];
+  }
 }
 
 function addConnectionsFromLiftMap(
@@ -237,45 +260,14 @@ function addConnectionsFromLiftMap(
       }
     }
   }
-
-
-  /**
-   * A singleton instance of this resource. Specifically used for inflight classes defined in preflight code.
-   * see `singleton` method for more details.
-   * @internal
-   */
-  //private static _singletonInstance: Resource;
-
-  /**
-   * Create a singleton of this resource. This uses `this` in a static context
-   * to create a singleton of any subclass of `Resource`.
-   * This helper function is used to create a single dummy instance of `inflight class`es
-   * defined in preflight code. This instances are needed to creaete a lift qualification
-   * map for such classes.
-   * 
-   * @internal
-   */
-  public static _singleton(scope: Construct, id: string): Resource {
-    const root: any = Node.of(scope).root;
-    let t: any = this;
-    if (root.resourceSingletons === undefined) {
-      root.resourceSingletons = {};
-    }
-    const instance = root.resourceSingletons[t];
-    if (instance) {
-      return instance;
-    }
-    root.resourceSingletons[t] = new t(root, id);
-    return root.resourceSingletons[t];
-  }
 }
 
 /**
- * A resource that has an automatically generated id.
- * Used by the Wing compiler to generate unique ids for auto generated resources
- * from inflight function closures.
- * @noinflight
- */
+* A resource that has an automatically generated id.
+* Used by the Wing compiler to generate unique ids for auto generated resources
+* from inflight function closures.
+* @noinflight
+*/
 export abstract class AutoIdResource extends Resource {
   constructor(scope: Construct, idPrefix: string = "") {
     const id = App.of(scope).makeId(scope, idPrefix ? `${idPrefix}_` : "");
