@@ -2,7 +2,7 @@ use lsp_types::{Position, PrepareRenameResponse, Range, TextEdit};
 
 use crate::diagnostic::WingLocation;
 use crate::type_check::symbol_env::{LookupResult, SymbolEnv};
-use crate::type_check::{SymbolKind, Types, UnsafeRef};
+use crate::type_check::{SymbolKind, Types, UnsafeRef, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::visit::{visit_scope, Visit};
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::{ast::*, visit_context};
@@ -181,14 +181,8 @@ impl<'a> Visit<'a> for RenameVisitor<'a> {
 		match node {
 			Reference::InstanceMember { property, object, .. } => {
 				let object_type = self.types.get_expr_id_type_ref(object.id);
-				if let Some(expr_type) = object_type.as_class() {
-					self.add_reference_symbol(property, Some(&UnsafeRef::from(&expr_type.env)));
-				}
-				if let Some(expr_type) = object_type.as_struct() {
-					self.add_reference_symbol(property, Some(&UnsafeRef::from(&expr_type.env)));
-				}
-				if let Some(expr_type) = object_type.as_interface() {
-					self.add_reference_symbol(property, Some(&UnsafeRef::from(&expr_type.env)));
+				if let Some(inner_env) = object_type.as_env() {
+					self.add_reference_symbol(property, Some(&UnsafeRef::from(inner_env)));
 				}
 			}
 			_ => {}
@@ -226,7 +220,7 @@ impl<'a> Visit<'a> for RenameVisitor<'a> {
 			}
 			StmtKind::Class(c) => {
 				for (m, ..) in &c.methods {
-					if m.name == "new" {
+					if m.name == CLASS_INIT_NAME || m.name == CLASS_INFLIGHT_INIT_NAME {
 						continue;
 					}
 					self.linked_symbols.push(LinkedSymbol {

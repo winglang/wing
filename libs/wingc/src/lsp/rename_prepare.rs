@@ -323,6 +323,43 @@ class User {
 	);
 
 	test_rename_prepare!(
+		cant_rename_super,
+		r#"
+   class A {}
+   class B extends A {
+    new() {
+      super();
+      //^
+    }
+   }
+    "#
+	);
+
+	test_rename_prepare!(
+		cant_rename_new,
+		r#"
+   class A {}
+   class B extends A {
+    new() {
+   //^
+      super();
+    }
+   }
+    "#
+	);
+
+	test_rename_prepare!(
+		cant_rename_inflight_new,
+		r#"
+   inflight class A {
+    inflight new() {
+     //^
+    }
+   }
+    "#
+	);
+
+	test_rename_prepare!(
 		cant_rename_json_key,
 		r#"
  let a = {name: "a"};
