@@ -81,8 +81,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[89]) { throw new Error("A is already in type map"); }
-    $preflightTypesMap[89] = A;
+    if ($preflightTypesMap[88]) { throw new Error("A is already in type map"); }
+    $preflightTypesMap[88] = A;
     class B extends A {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -112,8 +112,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[90]) { throw new Error("B is already in type map"); }
-    $preflightTypesMap[90] = B;
+    if ($preflightTypesMap[89]) { throw new Error("B is already in type map"); }
+    $preflightTypesMap[89] = B;
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

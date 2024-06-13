@@ -114,8 +114,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[163]) { throw new Error("A is already in type map"); }
-    $preflightTypesMap[163] = A;
+    if ($preflightTypesMap[166]) { throw new Error("A is already in type map"); }
+    $preflightTypesMap[166] = A;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
