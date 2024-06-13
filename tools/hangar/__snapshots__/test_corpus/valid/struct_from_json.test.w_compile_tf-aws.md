@@ -177,12 +177,16 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const externalStructs = require("./preflight.structs-1.cjs");
-const otherExternalStructs = require("./preflight.structs2-2.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const externalStructs = require("./preflight.structs-1.cjs");
+    Object.assign($preflightTypesMap, externalStructs.$preflightTypesMap);
+    const otherExternalStructs = require("./preflight.structs2-2.cjs");
+    Object.assign($preflightTypesMap, otherExternalStructs.$preflightTypesMap);
     const Bar = $stdlib.std.Struct._createJsonSchema({$id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
     const Foo = $stdlib.std.Struct._createJsonSchema({$id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
     const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});
@@ -190,6 +194,7 @@ class $Root extends $stdlib.std.Resource {
     const Student = $stdlib.std.Struct._createJsonSchema({$id:"/Student",type:"object",properties:{additionalData:{type:["object","string","boolean","number","array"]},advisor:{type:"object",properties:{dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},employeeID:{type:"string"},firstName:{type:"string"},lastName:{type:"string"},},required:["dob","employeeID","firstName","lastName",]},coursesTaken:{type:"array",items:{type:"object",properties:{course:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]},dateTaken:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},grade:{type:"string"},},required:["course","dateTaken","grade",]}},dob:{type:"object",properties:{day:{type:"number"},month:{type:"number"},year:{type:"number"},},required:["day","month","year",]},enrolled:{type:"boolean"},enrolledCourses:{type:"array",uniqueItems:true,items:{type:"object",properties:{credits:{type:"number"},name:{type:"string"},},required:["credits","name",]}},firstName:{type:"string"},lastName:{type:"string"},schoolId:{type:"string"},},required:["dob","enrolled","firstName","lastName","schoolId",]});
     const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({$id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
     const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({$id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -332,23 +337,15 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-<<<<<<< HEAD
             [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["stringify"]],
-            [(schema.asStr()), []],
             [MyStruct, ["schema"]],
-=======
->>>>>>> main
             [expectedSchema, []],
             [jMyStruct, []],
             [schema, ["asStr"]],
           ],
           "$inflight_init": [
-<<<<<<< HEAD
             [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
-            [(schema.asStr()), []],
             [MyStruct, []],
-=======
->>>>>>> main
             [expectedSchema, []],
             [jMyStruct, []],
             [schema, []],
@@ -538,7 +535,8 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-module.exports = {  };
+let $preflightTypesMap = {};
+module.exports = { $preflightTypesMap,  };
 //# sourceMappingURL=preflight.structs-1.cjs.map
 ```
 
@@ -549,6 +547,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 const SomeStruct = $stdlib.std.Struct._createJsonSchema({$id:"/SomeStruct",type:"object",properties:{foo:{type:"string"},},required:["foo",]});
 class UsesStructInImportedFile extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
@@ -579,7 +578,7 @@ class UsesStructInImportedFile extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { UsesStructInImportedFile };
+module.exports = { $preflightTypesMap, UsesStructInImportedFile };
 //# sourceMappingURL=preflight.structs2-2.cjs.map
 ```
 

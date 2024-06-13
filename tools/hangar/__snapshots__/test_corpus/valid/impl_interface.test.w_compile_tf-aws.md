@@ -266,11 +266,14 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const jsii_fixture = require("jsii-fixture");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const jsii_fixture = require("jsii-fixture");
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class A extends $stdlib.std.Resource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -626,6 +629,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    if ($preflightTypesMap[10]) { throw new Error("ImplInflightIfaceInInflightClass is already in type map"); }
+    $preflightTypesMap[10] = ImplInflightIfaceInInflightClass;
     class ImplInflightIfaceInPreflightClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);

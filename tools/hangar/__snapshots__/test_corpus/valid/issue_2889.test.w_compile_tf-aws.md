@@ -278,11 +278,14 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const http = $stdlib.http;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -310,7 +313,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["parse", "stringify"]],
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), [].concat(["parse"], ["stringify"])],
           ],
           "$inflight_init": [
             [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],

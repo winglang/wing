@@ -1,7 +1,7 @@
 # [inflight_class_capture_preflight_object.test.w](../../../../../examples/tests/valid/inflight_class_capture_preflight_object.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Foo }) {
@@ -18,11 +18,11 @@ module.exports = function({ $Foo }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.$Closure2-1.js
-```js
+## inflight.$Closure2-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Foo }) {
@@ -38,11 +38,11 @@ module.exports = function({ $Foo }) {
   }
   return $Closure2;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure2-1.cjs.map
 ```
 
-## inflight.$Closure3-1.js
-```js
+## inflight.$Closure3-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Foo }) {
@@ -58,11 +58,11 @@ module.exports = function({ $Foo }) {
   }
   return $Closure3;
 }
-//# sourceMappingURL=inflight.$Closure3-1.js.map
+//# sourceMappingURL=inflight.$Closure3-1.cjs.map
 ```
 
-## inflight.$Closure4-1.js
-```js
+## inflight.$Closure4-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $getFoo }) {
@@ -79,11 +79,11 @@ module.exports = function({ $getFoo }) {
   }
   return $Closure4;
 }
-//# sourceMappingURL=inflight.$Closure4-1.js.map
+//# sourceMappingURL=inflight.$Closure4-1.cjs.map
 ```
 
-## inflight.$Closure5-1.js
-```js
+## inflight.$Closure5-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $b }) {
@@ -106,11 +106,11 @@ module.exports = function({ $b }) {
   }
   return $Closure5;
 }
-//# sourceMappingURL=inflight.$Closure5-1.js.map
+//# sourceMappingURL=inflight.$Closure5-1.cjs.map
 ```
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $b }) {
@@ -125,7 +125,7 @@ module.exports = function({ $b }) {
   }
   return Foo;
 }
-//# sourceMappingURL=inflight.Foo-1.js.map
+//# sourceMappingURL=inflight.Foo-1.cjs.map
 ```
 
 ## main.tf.json
@@ -146,14 +146,14 @@ module.exports = function({ $b }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "cloudBucket": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       }
     }
@@ -170,21 +170,21 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-<<<<<<< HEAD
-const cloud = $stdlib.cloud;
-=======
 const $extern = $helpers.createExternRequire(__dirname);
->>>>>>> main
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.cjs")({
             $b: ${$stdlib.core.liftObject(b)},
           })
         `;
@@ -203,7 +203,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "uploadToBucket": [
-            [b, ["get", "put"]],
+            [b, [].concat(["put"], ["get"])],
           ],
           "$inflight_init": [
             [b, []],
@@ -218,7 +218,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $Foo_0 = new Foo(this, "$Foo_0");
+    if ($preflightTypesMap[0]) { throw new Error("Foo is already in type map"); }
+    $preflightTypesMap[0] = Foo;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -227,7 +228,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.cjs")({
             $Foo: ${$stdlib.core.liftObject(Foo)},
           })
         `;
@@ -246,11 +247,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$Foo_0, ["uploadToBucket"]],
+            [$helpers.nodeof(this).root.$preflightTypesMap[0]._singleton(this,"Foo_singleton_0"), ["uploadToBucket"]],
             [Foo, []],
           ],
           "$inflight_init": [
-            [$Foo_0, []],
+            [$helpers.nodeof(this).root.$preflightTypesMap[0]._singleton(this,"Foo_singleton_0"), []],
             [Foo, []],
           ],
         });
@@ -264,7 +265,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.cjs")({
             $Foo: ${$stdlib.core.liftObject(Foo)},
           })
         `;
@@ -299,7 +300,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.cjs")({
             $Foo: ${$stdlib.core.liftObject(Foo)},
           })
         `;
@@ -334,7 +335,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.cjs")({
             $getFoo: ${$stdlib.core.liftObject(getFoo)},
           })
         `;
@@ -353,11 +354,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$Foo_0, ["uploadToBucket"]],
+            [$helpers.nodeof(this).root.$preflightTypesMap[0]._singleton(this,"Foo_singleton_0"), ["uploadToBucket"]],
             [getFoo, ["handle"]],
           ],
           "$inflight_init": [
-            [$Foo_0, []],
+            [$helpers.nodeof(this).root.$preflightTypesMap[0]._singleton(this,"Foo_singleton_0"), []],
             [getFoo, []],
           ],
         });
@@ -371,7 +372,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.cjs")({
             $b: ${$stdlib.core.liftObject(b)},
           })
         `;
@@ -390,7 +391,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [b, ["get", "put"]],
+            [b, [].concat(["put"], ["get"])],
           ],
           "$inflight_init": [
             [b, []],
@@ -398,7 +399,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class captures preflight resource", new $Closure1(this, "$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class type captures preflight resource", new $Closure2(this, "$Closure2"));
     const getFoo = new $Closure3(this, "$Closure3");

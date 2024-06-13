@@ -55,12 +55,15 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
-const cx = require("constructs");
-const aws = require("@cdktf/provider-aws");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    const cx = require("constructs");
+    const aws = require("@cdktf/provider-aws");
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class WingResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
