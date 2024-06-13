@@ -5,7 +5,7 @@ import {
 } from "@wingconsole/design-system";
 import type { LogEntry, LogLevel } from "@wingconsole/server";
 import classNames from "classnames";
-import { useState, useRef, useEffect, useCallback, memo, useMemo } from "react";
+import { useState, useRef, useEffect, useCallback, memo } from "react";
 
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
