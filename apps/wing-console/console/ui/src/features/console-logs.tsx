@@ -229,7 +229,7 @@ export const ConsoleLogs = memo(
             showIcons={showIcons}
           />
         ))}
-        {logs.length === 0 && hiddenLogs == 0 && (
+        {logs.length === 0 && hiddenLogs === 0 && (
           <div className={classNames(theme.text1, "text-2xs px-2 select-none")}>
             No logs
           </div>
