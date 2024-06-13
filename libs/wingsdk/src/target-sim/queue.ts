@@ -164,7 +164,7 @@ export class QueueSetConsumerHandler {
       const batchItemFailures = [];
 
       const eventWithMessages = event as unknown as {
-        messages: { payload: Json }[];
+        messages: { payload: string }[];
       };
       if (eventWithMessages.messages) {
         for (const $message of eventWithMessages.messages) {

@@ -232,14 +232,14 @@ Add an environment variable to the function.
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-inflight invoke(payload?: str): str?
+inflight invoke(payload?: Json): Json?
 ```
 
 Invokes the function with a payload and waits for the result.
 
 ###### `payload`<sup>Optional</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 payload to pass to the function.
 
@@ -250,14 +250,14 @@ If not defined, an empty string will be passed.
 ##### `invokeAsync` <a name="invokeAsync" id="@winglang/sdk.cloud.IFunctionClient.invokeAsync"></a>
 
 ```wing
-inflight invokeAsync(payload?: str): void
+inflight invokeAsync(payload?: Json): void
 ```
 
 Kicks off the execution of the function with a payload and returns immediately while the function is running.
 
 ###### `payload`<sup>Optional</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invokeAsync.parameter.payload"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 payload to pass to the function.
 
@@ -479,14 +479,14 @@ Inflight client for `IFunctionHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle"></a>
 
 ```wing
-inflight handle(event?: str): str?
+inflight handle(event?: Json): Json?
 ```
 
 Entrypoint function that will be called when the cloud function is invoked.
 
 ###### `event`<sup>Optional</sup> <a name="event" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle.parameter.event"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 ---
 

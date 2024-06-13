@@ -3,7 +3,7 @@ import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
-import { Duration, IInflight, Json, Node, Resource } from "../std";
+import { Duration, IInflight, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Queue`.
@@ -152,7 +152,7 @@ export interface IQueueSetConsumerHandlerClient {
    * Function that will be called when a message is received from the queue.
    * @inflight
    */
-  handle(message: Json): Promise<void>;
+  handle(message: string): Promise<void>;
 }
 
 /**
