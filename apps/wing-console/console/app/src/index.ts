@@ -65,7 +65,7 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     analyticsAnonymousId: analyticsStorage.getAnonymousId(),
     analytics,
     async requireSignIn() {
-      if (options.requireSignIn) {
+      if (options.requireSignIn !== undefined) {
         return options.requireSignIn;
       }
 
