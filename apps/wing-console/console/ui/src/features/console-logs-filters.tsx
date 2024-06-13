@@ -77,6 +77,15 @@ export const ConsoleLogsFilters = memo(
       debouncedOnSearch(searchText);
     }, [debouncedOnSearch, searchText]);
 
+    const resetFiltersDisabled = useMemo(() => {
+      return (
+        selectedLogTypeFilters.length === 3 &&
+        selectedLogTypeFilters.includes("verbose") === false &&
+        selectedResourceIds.length === 0 &&
+        selectedResourceTypes.length === 0
+      );
+    }, [selectedLogTypeFilters, selectedResourceIds, selectedResourceTypes]);
+
     const [defaultLogTypeSelection] = useState(selectedLogTypeFilters);
 
     const logTypeLabel = useMemo(() => {
@@ -239,6 +248,7 @@ export const ConsoleLogsFilters = memo(
           />
 
           <Button
+            disabled={resetFiltersDisabled}
             onClick={onResetFilters}
             title="Reset filters"
             className="truncate"
