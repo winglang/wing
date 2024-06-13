@@ -249,27 +249,25 @@ export const ConsoleLogsFilters = memo(
             defaultSelection={[]}
           />
 
-          <div className="pl-2">
-            <button
-              disabled={resetFiltersDisabled}
-              onClick={onResetFilters}
-              title="Reset filters"
-              className={classNames(
-                "inline-flex gap-2 items-center text-xs font-normal outline-none rounded",
-                "border shadow-sm px-2.5 py-1.5",
-                theme.borderInput,
-                theme.textInput,
-                resetFiltersDisabled && "cursor-not-allowed opacity-50",
-                !resetFiltersDisabled && [
-                  "cursor-pointer",
-                  theme.bgInputHover,
-                  theme.focusInput,
-                ],
-              )}
-            >
-              Reset filters
-            </button>
-          </div>
+          <button
+            disabled={resetFiltersDisabled}
+            onClick={onResetFilters}
+            title="Reset filters"
+            className={classNames(
+              "inline-flex gap-2 items-center text-xs font-normal outline-none rounded",
+              "border shadow-sm px-2.5 py-1.5",
+              theme.borderInput,
+              theme.textInput,
+              resetFiltersDisabled && "cursor-not-allowed opacity-50",
+              !resetFiltersDisabled && [
+                "cursor-pointer",
+                theme.bgInputHover,
+                theme.focusInput,
+              ],
+            )}
+          >
+            Reset filters
+          </button>
         </div>
 
         {(showIncompatibleResourceTypeWarning || showAllLogsHiddenWarning) && (
