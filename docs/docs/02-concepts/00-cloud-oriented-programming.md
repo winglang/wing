@@ -15,14 +15,14 @@ cloud without having to worry about the underlying infrastructure.
 It's best explained through an example:
 
 
-```js
+```js example
 bring cloud;
 
 let queue = new cloud.Queue(timeout: 2m);
 let bucket = new cloud.Bucket();
 let counter = new cloud.Counter(initial: 100);
 
-queue.setConsumer(inflight (body: str): str => {
+queue.setConsumer(inflight (body: str) => {
   let next = counter.inc();
   let key = "myfile-{next}.txt";
   bucket.put(key, body);

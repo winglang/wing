@@ -22,6 +22,7 @@ const createTreeMenuItemFromExplorerTreeItem = (
         icon={item.display?.icon}
       />
     ) : undefined,
+    expanded: item.display?.expanded,
     children: item.childItems?.map((item) =>
       createTreeMenuItemFromExplorerTreeItem(item),
     ),
@@ -83,6 +84,32 @@ export const useExplorer = () => {
     }
     setSelectedItems([selectedNode]);
   }, [selectedNode, setSelectedItems]);
+
+  useEffect(() => {
+    setExpandedItems(() => {
+      if (items.length === 1 && items[0] && items[0].expanded !== false) {
+        return [items[0].id];
+      }
+
+      const getExpandedNodes = (items: TreeMenuItem[]): string[] => {
+        let expandedNodes: string[] = [];
+        for (const item of items) {
+          if (item.expanded === true) {
+            expandedNodes.push(item.id);
+          }
+          if (item.children && item.children.length > 0) {
+            expandedNodes = [
+              ...expandedNodes,
+              ...getExpandedNodes(item.children),
+            ];
+          }
+        }
+        return expandedNodes;
+      };
+
+      return getExpandedNodes(items);
+    });
+  }, [items, setExpandedItems]);
 
   return {
     items,
