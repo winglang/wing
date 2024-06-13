@@ -272,6 +272,7 @@ Invokes the `validate()` method on all validations added through
 | <code><a href="#@winglang/sdk.std.Node.property.color">color</a></code> | <code>str</code> | The color of the construct for display purposes. |
 | <code><a href="#@winglang/sdk.std.Node.property.defaultChild">defaultChild</a></code> | <code>constructs.IConstruct</code> | Returns the child construct that has the id `Default` or `Resource"`. |
 | <code><a href="#@winglang/sdk.std.Node.property.description">description</a></code> | <code>str</code> | Description of the construct for display purposes. |
+| <code><a href="#@winglang/sdk.std.Node.property.expanded">expanded</a></code> | <code>bool</code> | Whether the node is expanded or collapsed by default in the UI. |
 | <code><a href="#@winglang/sdk.std.Node.property.hidden">hidden</a></code> | <code>bool</code> | Whether the construct should be hidden by default in tree visualizations. |
 | <code><a href="#@winglang/sdk.std.Node.property.icon">icon</a></code> | <code>str</code> | The icon of the construct for display purposes. |
 | <code><a href="#@winglang/sdk.std.Node.property.sourceModule">sourceModule</a></code> | <code>str</code> | The source file or library where the construct was defined. |
@@ -497,6 +498,21 @@ description: str;
 - *Type:* str
 
 Description of the construct for display purposes.
+
+---
+
+##### `expanded`<sup>Optional</sup> <a name="expanded" id="@winglang/sdk.std.Node.property.expanded"></a>
+
+```wing
+expanded: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Whether the node is expanded or collapsed by default in the UI.
+
+By default, nodes are collapsed. Set this to `true` if you want the node to be expanded by default.
 
 ---
 

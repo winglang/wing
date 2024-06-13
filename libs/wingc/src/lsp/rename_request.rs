@@ -46,7 +46,7 @@ pub fn on_rename_request(params: RenameParams) -> WorkspaceEdit {
 mod tests {
 	use crate::lsp::rename_request::*;
 	use crate::lsp::sync::test_utils::*;
-	use lsp_types::{Range, Url};
+	use lsp_types::Range;
 
 	/// Creates a snapshot test for a given wing program's rename_request at a given position
 	/// In the wing program, place a comment "//^" into the text where the "^" is pointing to the desired character position
@@ -75,31 +75,6 @@ mod tests {
 					work_done_progress_params: Default::default(),
           new_name: String::from($new_word)
 				});
-
-				insta::with_settings!(
-					{
-						prepend_module_to_snapshot => false,
-						omit_expression => true,
-						snapshot_path => "./snapshots/rename_request",
-					}, {
-
-            let mut changes = HashMap::new();
-            // There is only one file, therefore we change only the first one
-            let new_key = Url::parse("file:///main.w").expect("invalid url");
-            if let Some(c) =  &$name.changes {
-            let text_edits = c.values().next().unwrap().clone();
-            changes.insert(new_key, text_edits);
-            }
-
-            insta::assert_yaml_snapshot!(WorkspaceEdit {
-              changes: Some(changes),
-              document_changes: None,
-				      change_annotations: None,
-            });
-
-
-					}
-				);
 
       let mut text_edit_ranges: Vec<Range> = vec![];
       if let Some(changes) = &$name.changes {
@@ -343,16 +318,36 @@ test "pow" {
 		"t1"
 	);
 
-	// TODO: not supported yet
 	test_rename_request!(
 		rename_struct_key,
 		r#"
-    struct user {
+    struct User {
       name: str;
-      //^
+    //---^
     }
  
- let a: user = {name: "a"};
+ let a: User = {name: "a"};
+              //----
+
+ log(a.name);
+     //----
+		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		rename_struct_key_usage,
+		r#"
+    struct User {
+      name: str;
+    //----
+    }
+ 
+ let a: User = {name: "a"};
+              //----
+
+ log(a.name);
+     //---^
 		"#,
 		"t1"
 	);
@@ -417,6 +412,219 @@ test "pow" {
       hershy.stepOnKeyboard();
     }
 		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		rename_class_property,
+		r#"
+class Cat {
+  pub name: str;
+    //---^
+  new(name: str) {
+    this.name = name;
+       //----
+  }
+
+  inflight pub jump(height: num) {}
+  pub sleep(d: duration) {
+    log("{this.name} sleeps");
+             //----
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+b.sleep(24h);
+log(b.name);
+    //----
+
+test "a cat scares b cat" {
+  a.jump(5);
+  b.jump(-5);
+}
+		"#,
+		"t1"
+	);
+	test_rename_request!(
+		rename_class_property_from_usage,
+		r#"
+class Cat {
+  pub name: str;
+    //----
+  new(name: str) {
+    this.name = name;
+       //----
+  }
+
+  inflight pub jump(height: num) {}
+  pub sleep(d: duration) {
+    log("{this.name} sleeps");
+             //----
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+b.sleep(24h);
+log(b.name);
+    //---^
+
+test "a cat scares b cat" {
+  a.jump(5);
+  b.jump(-5);
+}
+		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		rename_class_inflight_method,
+		r#"
+class Cat {
+  pub name: str;
+  new(name: str) {
+    this.name = name;
+  }
+
+  inflight pub jump(height: num) {}
+             //---^
+  pub sleep(d: duration) {
+    log("{this.name} sleeps");
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+b.sleep(24h);
+log(b.name);
+
+test "a cat scares b cat" {
+  a.jump(5);
+  //----
+  b.jump(-5);
+  //----
+}
+		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		rename_class_inflight_method_from_usage,
+		r#"
+class Cat {
+  pub name: str;
+  new(name: str) {
+    this.name = name;
+  }
+
+  inflight pub jump(height: num) {}
+             //----
+  pub sleep(d: duration) {
+    log("{this.name} sleeps");
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+b.sleep(24h);
+log(b.name);
+
+test "a cat scares b cat" {
+  a.jump(5);
+  //----
+  b.jump(-5);
+  //---^
+}
+		"#,
+		"t1"
+	);
+	test_rename_request!(
+		rename_class_preflight_method,
+		r#"
+class Cat {
+  pub name: str;
+  new(name: str) {
+    this.name = name;
+  }
+
+  inflight pub jump(height: num) {}
+  pub sleep(d: duration) {
+    //----^
+    log("{this.name} sleeps");
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+//-----
+b.sleep(24h);
+//-----
+log(b.name);
+
+test "a cat scares b cat" {
+  a.jump(5);
+  b.jump(-5);
+}
+		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		rename_class_preflight_method_from_usage,
+		r#"
+class Cat {
+  pub name: str;
+  new(name: str) {
+    this.name = name;
+  }
+
+  inflight pub jump(height: num) {}
+  pub sleep(d: duration) {
+    //-----
+    log("{this.name} sleeps");
+  }
+}
+
+let a = new Cat("A") as "a cat";
+let b = new Cat("B") as "b cat";
+
+a.sleep(18h);
+//----^
+b.sleep(24h);
+//-----
+log(b.name);
+
+test "a cat scares b cat" {
+  a.jump(5);
+  b.jump(-5);
+}
+		"#,
+		"t1"
+	);
+
+	test_rename_request!(
+		new_scope_args,
+		r#"
+	  class Cat {
+	    pub name: str;
+	    new(name: str) {
+	      //---^
+	      this.name = name;
+	                //----
+	    }
+	  }
+	  "#,
 		"t1"
 	);
 }

@@ -6,13 +6,13 @@ keywords: [Wing example]
 
 ## Definition 
 
-```ts playground
+```ts playground example
 let s1: str? = "Hello"; // type str? (optional), value "Hello"
 let s2: str? = nil; // type str? (optional), value nil
 ```
 
 ## Testing existence  
-```ts playground
+```ts playground example
 let s1: str? = "Hello"; // type str? (optional), value "Hello"
 let s2: str? = nil; // type str? (optional), value nil
 
@@ -25,7 +25,7 @@ if !s2? {
 ```
 
 ## Using if let
-```ts playground
+```ts playground example
 let s1: str? = "Hello"; // type str? (optional), value "Hello"
 
 // unwrap optional s1 and create s from type str
@@ -46,7 +46,7 @@ log("s1 type is optional str");
 
 ## Using ?? 
 
-```ts playground
+```ts playground example
 let s1: str? = nil; // type str? (optional), value nil
 let s2 = s1 ?? "default value";  // s2 is of type str
 log(s2); // prints default value
@@ -54,7 +54,7 @@ log(s2); // prints default value
 
 ## Optional Chaining 
 
-```ts playground
+```ts playground example
 let j  = Json {
   working: {
     a: {
@@ -77,7 +77,7 @@ if let value = j.tryGet("broken")?.tryGet("a")?.tryGet("b")?.tryAsStr() {
 
 ## Optional bool
 
-```ts playground
+```ts playground example
 let b3: bool? = false; 
 
 if b3? {

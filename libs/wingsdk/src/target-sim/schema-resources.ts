@@ -259,6 +259,8 @@ export interface ContainerSchema {
   readonly volumes?: string[];
   readonly args?: string[];
   readonly cwd: string;
+  readonly network?: string;
+  readonly entrypoint?: string;
 }
 
 /** Runtime attributes for sim.Container */

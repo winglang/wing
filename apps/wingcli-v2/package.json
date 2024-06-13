@@ -6,7 +6,8 @@
   },
   "dependencies": {
     "@winglang/wingii": "workspace:^",
-    "@winglang/wingc": "workspace:^"
+    "@winglang/wingc": "workspace:^",
+    "@winglang/sdk": "workspace:^"
   },
   "volta": {
     "extends": "../../package.json"

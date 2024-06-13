@@ -1,0 +1,17 @@
+{
+  "name": "@winglang/docs",
+  "version": "0.0.0",
+  "author": {
+    "name": "Wing Cloud",
+    "email": "ping@wing.cloud",
+    "organization": true
+  },
+  "scripts": {
+    "compile": "tsx src/generate_examples_files.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.11.2",
+    "typescript": "^5.4.5"
+  }
+}
