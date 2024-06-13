@@ -186,7 +186,7 @@ impl Fold for ClosureTransformer {
 				// ```
 				let std_display_of_this = Expr::new(
 					ExprKind::Call {
-						callee: CalleeKind::Expr(Box::new(Expr::new_callee(
+						callee: CalleeKind::Expr(Box::new(Expr::new(
 							ExprKind::Reference(Reference::Identifier(Symbol::new(
 								"nodeof",
 								WingSpan::for_file(file_id),

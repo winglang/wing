@@ -400,7 +400,6 @@ where
 		id: node.id,
 		kind,
 		span: node.span,
-		is_callee: node.is_callee,
 	}
 }
 

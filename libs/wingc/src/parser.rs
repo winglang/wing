@@ -537,7 +537,7 @@ impl<'s> Parser<'s> {
 		// represent duration literals as the AST equivalent of `duration.fromSeconds(value)`
 		Ok(Expr::new(
 			ExprKind::Call {
-				callee: CalleeKind::Expr(Box::new(Expr::new_callee(
+				callee: CalleeKind::Expr(Box::new(Expr::new(
 					ExprKind::Reference(Reference::InstanceMember {
 						object: Box::new(Expr::new(
 							ExprKind::Reference(Reference::Identifier(Symbol {
@@ -2309,9 +2309,7 @@ impl<'s> Parser<'s> {
 				let callee = if caller_node.kind() == "super_call" {
 					CalleeKind::SuperCall(self.node_symbol(&caller_node.child_by_field_name("method").unwrap())?)
 				} else {
-					let mut callee_expr = self.build_expression(&caller_node, phase)?;
-					callee_expr.is_callee = true;
-					CalleeKind::Expr(Box::new(callee_expr))
+					CalleeKind::Expr(Box::new(self.build_expression(&caller_node, phase)?))
 				};
 				Ok(Expr::new(
 					ExprKind::Call {

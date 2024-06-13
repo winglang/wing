@@ -710,29 +710,12 @@ pub struct Expr {
 	pub kind: ExprKind,
 	/// The span of the expression.
 	pub span: WingSpan,
-	/// The expression is a callee in a call expression
-	pub is_callee: bool,
 }
 
 impl Expr {
 	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
 		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
-		Self {
-			id,
-			kind,
-			is_callee: false,
-			span,
-		}
-	}
-
-	pub fn new_callee(kind: ExprKind, span: WingSpan) -> Self {
-		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
-		Self {
-			id,
-			kind,
-			is_callee: true,
-			span,
-		}
+		Self { id, kind, span }
 	}
 
 	pub fn as_static_string(&self) -> Option<&str> {
