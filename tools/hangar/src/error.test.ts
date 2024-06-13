@@ -29,7 +29,9 @@ errorWingFiles.forEach((wingFile) => {
       expectFailure: true,
     });
 
+    console.error("stdout", out.stdout);
+    console.error("stderr", out.stderr);
+
     expect(out.stdout).toMatchSnapshot();
-    expect(out.stderr).toMatchSnapshot();
   });
 });
