@@ -167,13 +167,20 @@ export function resolveDirname(
   return normalPath(path.resolve(outdir, relativeSourceDir));
 }
 
-export function bringJs(moduleFile: string, preflightTypesObjectName: string, outPreflightTypesObject: Object): Object {
-  return Object.fromEntries(Object.entries(require(moduleFile)).filter(([k, v]) => {
-    // If this is the preflight types array then update the input object and skip it
-    if (k === preflightTypesObjectName) {
-      Object.assign(outPreflightTypesObject, v);
-      return false;
-    }
-    return true;
-  }));
+export function bringJs(
+  moduleFile: string,
+  preflightTypesObjectName: string,
+  outPreflightTypesObject: Object
+): Object {
+  /* eslint-disable @typescript-eslint/no-require-imports */
+  return Object.fromEntries(
+    Object.entries(require(moduleFile)).filter(([k, v]) => {
+      // If this is the preflight types array then update the input object and skip it
+      if (k === preflightTypesObjectName) {
+        Object.assign(outPreflightTypesObject, v);
+        return false;
+      }
+      return true;
+    })
+  );
 }

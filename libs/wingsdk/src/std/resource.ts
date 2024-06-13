@@ -154,7 +154,7 @@ export abstract class Resource extends Construct implements IResource {
    * This helper function is used to create a single dummy instance of `inflight class`es
    * defined in preflight code. This instances are needed to create a lift qualification
    * map for such classes.
-   * 
+   *
    * @internal
    */
   public static _singleton(scope: Construct, id: string): Resource {
@@ -263,11 +263,11 @@ function addConnectionsFromLiftMap(
 }
 
 /**
-* A resource that has an automatically generated id.
-* Used by the Wing compiler to generate unique ids for auto generated resources
-* from inflight function closures.
-* @noinflight
-*/
+ * A resource that has an automatically generated id.
+ * Used by the Wing compiler to generate unique ids for auto generated resources
+ * from inflight function closures.
+ * @noinflight
+ */
 export abstract class AutoIdResource extends Resource {
   constructor(scope: Construct, idPrefix: string = "") {
     const id = App.of(scope).makeId(scope, idPrefix ? `${idPrefix}_` : "");

@@ -265,10 +265,7 @@ export function collectLifts(
     } else if (typeof obj === "object" && obj._liftMap !== undefined) {
       matrix = parseMatrix(obj._liftMap ?? {});
       matrixCache.set(obj, matrix);
-    } else if (
-      typeof obj === "function" &&
-      obj._liftTypeMap !== undefined
-    ) {
+    } else if (typeof obj === "function" && obj._liftTypeMap !== undefined) {
       matrix = parseMatrix(obj._liftTypeMap ?? {});
       matrixCache.set(obj, matrix);
     } else {
