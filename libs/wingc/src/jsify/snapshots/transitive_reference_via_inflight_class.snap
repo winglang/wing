@@ -71,10 +71,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class MyInflightClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -108,7 +111,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $MyInflightClass_0 = new MyInflightClass(this, "$MyInflightClass_0");
+    if ($preflightTypesMap[180]) { throw new Error("MyInflightClass is already in type map"); }
+    $preflightTypesMap[180] = MyInflightClass;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -136,11 +140,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$MyInflightClass_0, ["putInBucket"]],
+            [$helpers.nodeof(this).root.$preflightTypesMap[180]._singleton(this,"MyInflightClass_singleton_180"), ["putInBucket"]],
             [MyInflightClass, []],
           ],
           "$inflight_init": [
-            [$MyInflightClass_0, []],
+            [$helpers.nodeof(this).root.$preflightTypesMap[180]._singleton(this,"MyInflightClass_singleton_180"), []],
             [MyInflightClass, []],
           ],
         });

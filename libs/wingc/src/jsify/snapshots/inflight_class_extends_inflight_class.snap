@@ -50,6 +50,9 @@ const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class A extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -78,7 +81,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $A_0 = new A(this, "$A_0");
+    if ($preflightTypesMap[89]) { throw new Error("A is already in type map"); }
+    $preflightTypesMap[89] = A;
     class B extends A {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -108,7 +112,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $B_1 = new B(this, "$B_1");
+    if ($preflightTypesMap[90]) { throw new Error("B is already in type map"); }
+    $preflightTypesMap[90] = B;
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

@@ -64,6 +64,9 @@ const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Base extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -92,7 +95,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $Base_0 = new Base(this, "$Base_0");
+    if ($preflightTypesMap[55]) { throw new Error("Base is already in type map"); }
+    $preflightTypesMap[55] = Base;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
