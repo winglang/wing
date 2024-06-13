@@ -6,7 +6,6 @@ import { Json, Node } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 const INFLIGHT_CODE = inflight(async (_, event) => {
-  event = JSON.parse(event);
   let msg: string;
   if (event.name[0] !== event.name[0].toUpperCase()) {
     throw new Error("Name must start with uppercase letter");
@@ -16,7 +15,7 @@ const INFLIGHT_CODE = inflight(async (_, event) => {
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return JSON.stringify({ msg });
+  return { msg };
 });
 
 const INFLIGHT_PANIC = inflight(async () => {
@@ -68,7 +67,7 @@ test("invoke function succeeds", async () => {
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
-  const response = await client.invoke(PAYLOAD as unknown as Json);
+  const response = await client.invoke(Json._fromAny(PAYLOAD));
 
   // THEN
   expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
@@ -124,7 +123,7 @@ test("invoke function with environment variables", async () => {
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
-  const response = await client.invoke(PAYLOAD as unknown as Json);
+  const response = await client.invoke(Json._fromAny(PAYLOAD));
 
   // THEN
   expect(response).toEqual({
@@ -146,7 +145,7 @@ test("invoke function fails", async () => {
 
   // WHEN
   const PAYLOAD = { name: "alice" };
-  await expect(client.invoke(PAYLOAD as unknown as Json)).rejects.toThrow(
+  await expect(client.invoke(Json._fromAny(PAYLOAD))).rejects.toThrow(
     "Name must start with uppercase letter"
   );
 

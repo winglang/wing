@@ -269,7 +269,7 @@ export class Api
 
           try {
             const response = ((await fnClient.invoke(
-              apiRequest as unknown as Json
+              Json._fromAny(apiRequest)
             )) ?? {}) as ApiResponse;
 
             const status = response.status ?? DEFAULT_RESPONSE_STATUS;

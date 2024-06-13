@@ -99,7 +99,7 @@ test("api.url is resolved in website config", async () => {
   const website = new cloud.Website(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
-  website.addJson("config.json", { apiUrl: api.url } as unknown as Json);
+  website.addJson("config.json", Json._fromAny({ apiUrl: api.url }));
 
   // WHEN
   const s = await app.startSimulator();
@@ -133,10 +133,13 @@ test("multiple tokens are resolved in website config", async () => {
   const website = new cloud.Website(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
-  website.addJson("config.json", {
-    api1: api1.url,
-    api2: api2.url,
-  } as unknown as Json);
+  website.addJson(
+    "config.json",
+    Json._fromAny({
+      api1: api1.url,
+      api2: api2.url,
+    })
+  );
 
   // WHEN
   const s = await app.startSimulator();

@@ -1,6 +1,7 @@
 import { test, expect, vi, afterEach } from "vitest";
 import { Util as http } from "../../src/http";
 import { FunctionClient } from "../../src/shared-azure/function.inflight";
+import { Json } from "../../src/std";
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -12,20 +13,19 @@ test("invoke with successful response", async () => {
   const PAYLOAD = "PAYLOAD";
   const RESPONSE = "RESPONSE";
 
-  const post = vi.spyOn(http, "post").mockResolvedValue({
-    body: RESPONSE,
+  const globalFetch = vi.spyOn(globalThis, "fetch").mockResolvedValue({
     status: 200,
     ok: true,
-    headers: {},
-    url: "",
-  });
+    text: async () => RESPONSE,
+    json: async () => RESPONSE,
+  } as any);
 
   // WHEN
   const client = new FunctionClient(FUNCTION_NAME);
-  const response = await client.invoke(PAYLOAD);
+  const response = await client.invoke(Json._fromAny(PAYLOAD));
 
   // THEN
-  expect(post).toBeCalledTimes(1);
+  expect(globalFetch).toBeCalledTimes(1);
   expect(response).toEqual(RESPONSE);
 });
 
@@ -35,15 +35,17 @@ test("invoke with unsuccessful response", async () => {
   const PAYLOAD = "PAYLOAD";
   const ERROR = `Error while invoking the function ${FUNCTION_NAME}:\nexpected test error`;
 
-  vi.spyOn(http, "post").mockResolvedValue({
-    body: "expected test error",
-    status: 500,
+  const globalFetch = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+    status: 200,
     ok: false,
-    headers: {},
-    url: "",
-  });
+    text: async () => ERROR,
+    json: async () => ERROR,
+  } as any);
+
   // THEN
   const client = new FunctionClient(FUNCTION_NAME);
 
-  await expect(() => client.invoke(PAYLOAD)).rejects.toThrowError(ERROR);
+  await expect(() =>
+    client.invoke(Json._fromAny(PAYLOAD))
+  ).rejects.toThrowError(ERROR);
 });

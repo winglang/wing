@@ -203,7 +203,7 @@ export class Queue
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
         void fnClient
-          .invoke({ messages: messages } as unknown as Json)
+          .invoke(Json._fromAny({ messages: messages }))
           .then((result) => {
             if (this.dlq && result) {
               const errorList = result as any;

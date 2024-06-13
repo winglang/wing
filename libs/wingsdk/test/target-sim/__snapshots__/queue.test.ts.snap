@@ -963,7 +963,7 @@ exports.handler = async function(event) {
                 throw new Error('No "messages" field in event.');
             }
             return batchItemFailures.length > 0
-                ? batchItemFailures
+                ? std_1.Json._fromAny(batchItemFailures)
                 : undefined;
         }
   const $ctx = {
@@ -1353,7 +1353,7 @@ exports.handler = async function(event) {
                 throw new Error('No "messages" field in event.');
             }
             return batchItemFailures.length > 0
-                ? batchItemFailures
+                ? std_1.Json._fromAny(batchItemFailures)
                 : undefined;
         }
   const $ctx = {
