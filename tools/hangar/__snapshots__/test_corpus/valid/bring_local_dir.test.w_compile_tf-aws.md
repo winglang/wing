@@ -85,11 +85,16 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const w = require("./preflight.widget-1.cjs");
-const subdir = require("./preflight.subdir2-5.cjs");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const w = require("./preflight.widget-1.cjs");
+    Object.assign($preflightTypesMap, w.$preflightTypesMap);
+    const subdir = require("./preflight.subdir2-5.cjs");
+    Object.assign($preflightTypesMap, subdir.$preflightTypesMap);
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const widget1 = new w.Widget(this, "widget1");
     $helpers.assert($helpers.eq((widget1.compute()), 42), "widget1.compute() == 42");
     const foo = new subdir.Foo(this, "Foo");
@@ -114,7 +119,9 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 const blah = require("./preflight.inner-2.cjs");
+Object.assign($preflightTypesMap, blah.$preflightTypesMap);
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 class Foo extends $stdlib.std.Resource {
@@ -151,7 +158,7 @@ class Foo extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { Foo };
+module.exports = { $preflightTypesMap, Foo };
 //# sourceMappingURL=preflight.file1-3.cjs.map
 ```
 
@@ -162,6 +169,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 const util = $stdlib.util;
 class Bar extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
@@ -223,7 +231,7 @@ class Foo extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { Bar };
+module.exports = { $preflightTypesMap, Bar };
 //# sourceMappingURL=preflight.file2-4.cjs.map
 ```
 
@@ -234,9 +242,9 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-module.exports = {
-  ...require("./preflight.widget-1.cjs"),
-};
+let $preflightTypesMap = {};
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.widget-1.cjs`, "$preflightTypesMap", $preflightTypesMap));
+module.exports = { ...module.exports, $preflightTypesMap };
 //# sourceMappingURL=preflight.inner-2.cjs.map
 ```
 
@@ -247,11 +255,11 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-module.exports = {
-  get inner() { return require("./preflight.inner-2.cjs") },
-  ...require("./preflight.file2-4.cjs"),
-  ...require("./preflight.file1-3.cjs"),
-};
+let $preflightTypesMap = {};
+Object.assign(module.exports, { get inner() { return $helpers.bringJs(`${__dirname}/preflight.inner-2.cjs`, "$preflightTypesMap", $preflightTypesMap); } });
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.file2-4.cjs`, "$preflightTypesMap", $preflightTypesMap));
+Object.assign(module.exports, $helpers.bringJs(`${__dirname}/preflight.file1-3.cjs`, "$preflightTypesMap", $preflightTypesMap));
+module.exports = { ...module.exports, $preflightTypesMap };
 //# sourceMappingURL=preflight.subdir2-5.cjs.map
 ```
 
@@ -262,6 +270,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+let $preflightTypesMap = {};
 class Widget extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -296,7 +305,7 @@ class Widget extends $stdlib.std.Resource {
     });
   }
 }
-module.exports = { Widget };
+module.exports = { $preflightTypesMap, Widget };
 //# sourceMappingURL=preflight.widget-1.cjs.map
 ```
 

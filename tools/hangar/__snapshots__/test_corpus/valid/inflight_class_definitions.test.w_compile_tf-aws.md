@@ -182,6 +182,9 @@ const $extern = $helpers.createExternRequire(__dirname);
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class A extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -245,7 +248,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $B_1 = new B(this, "$B_1");
+    if ($preflightTypesMap[1]) { throw new Error("B is already in type map"); }
+    $preflightTypesMap[1] = B;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -344,11 +348,8 @@ class $Root extends $stdlib.std.Resource {
             });
           }
         }
-<<<<<<< HEAD
-        const $F_7 = new F(this, "$F_7");
-        const __parent_this_2 = this;
-=======
->>>>>>> main
+        if ($preflightTypesMap[7]) { throw new Error("F is already in type map"); }
+        $preflightTypesMap[7] = F;
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
@@ -376,11 +377,11 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
-                [$F_7, ["foo"]],
+                [$helpers.nodeof(this).root.$preflightTypesMap[7]._singleton(this,"F_singleton_7"), ["foo"]],
                 [F, ["foo"]],
               ],
               "$inflight_init": [
-                [$F_7, []],
+                [$helpers.nodeof(this).root.$preflightTypesMap[7]._singleton(this,"F_singleton_7"), []],
                 [F, []],
               ],
             });
@@ -451,7 +452,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$B_1, ["foo"]],
+            [$helpers.nodeof(this).root.$preflightTypesMap[1]._singleton(this,"B_singleton_1"), ["foo"]],
             [B, []],
             [a, ["goo"]],
             [d, ["callInner"]],
@@ -459,7 +460,7 @@ class $Root extends $stdlib.std.Resource {
             [innerD, ["handle"]],
           ],
           "$inflight_init": [
-            [$B_1, []],
+            [$helpers.nodeof(this).root.$preflightTypesMap[1]._singleton(this,"B_singleton_1"), []],
             [B, []],
             [a, []],
             [d, []],

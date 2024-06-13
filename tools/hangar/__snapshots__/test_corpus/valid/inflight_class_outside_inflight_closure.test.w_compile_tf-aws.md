@@ -71,10 +71,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    $helpers.nodeof(this).root.$preflightTypesMap = { };
+    let $preflightTypesMap = {};
+    const cloud = $stdlib.cloud;
+    $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class BinaryOperation extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -111,7 +114,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $BinaryOperation_0 = new BinaryOperation(this, "$BinaryOperation_0");
+    if ($preflightTypesMap[0]) { throw new Error("BinaryOperation is already in type map"); }
+    $preflightTypesMap[0] = BinaryOperation;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -139,11 +143,11 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$BinaryOperation_0, ["add"]],
+            [$helpers.nodeof(this).root.$preflightTypesMap[0]._singleton(this,"BinaryOperation_singleton_0"), ["add"]],
             [BinaryOperation, []],
           ],
           "$inflight_init": [
-            [$BinaryOperation_0, []],
+            [$helpers.nodeof(this).root.$preflightTypesMap[0]._singleton(this,"BinaryOperation_singleton_0"), []],
             [BinaryOperation, []],
           ],
         });
