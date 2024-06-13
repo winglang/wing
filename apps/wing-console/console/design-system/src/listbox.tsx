@@ -146,28 +146,30 @@ export const Listbox = ({
                 )}
               >
                 {showSearch && (
-                  <div className="px-1 relative pb-1">
-                    <div className="pointer-events-none absolute inset-y-0 left-1 flex items-center pl-2">
-                      <MagnifyingGlassIcon
-                        className={classNames("size-4", theme.text2)}
-                        aria-hidden="true"
+                  <div className="pb-1">
+                    <div className="px-1 relative">
+                      <div className="pointer-events-none absolute inset-y-0 left-1 flex items-center pl-2">
+                        <MagnifyingGlassIcon
+                          className={classNames("size-4", theme.text2)}
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <input
+                        type="text"
+                        className={classNames(
+                          theme.borderInput,
+                          "pl-8",
+                          "inline-flex gap-2 items-center px-2.5 py-1.5 border text-xs rounded",
+                          "outline-none w-full shadow-inner",
+                          theme.bg3,
+                          theme.textInput,
+                          theme.focusInput,
+                        )}
+                        placeholder="Search..."
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
                       />
                     </div>
-                    <input
-                      type="text"
-                      className={classNames(
-                        theme.borderInput,
-                        "pl-8",
-                        "inline-flex gap-2 items-center px-2.5 py-1.5 border text-xs rounded",
-                        "outline-none w-full shadow-inner",
-                        theme.bg3,
-                        theme.textInput,
-                        theme.focusInput,
-                      )}
-                      placeholder="Search..."
-                      value={search}
-                      onChange={(event) => setSearch(event.target.value)}
-                    />
                   </div>
                 )}
 
