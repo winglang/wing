@@ -2,7 +2,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-export const RestartButton = ({
+export const ResetButton = ({
   onClick,
   disabled,
 }: {
@@ -23,7 +23,7 @@ export const RestartButton = ({
       disabled={disabled}
     >
       <ArrowPathIcon className="size-3.5" />
-      <span>Restart</span>
+      <span>Reset</span>
     </button>
   );
 };

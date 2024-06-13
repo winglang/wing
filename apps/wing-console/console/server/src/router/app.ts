@@ -53,12 +53,12 @@ export const createAppRouter = () => {
         config: ctx.layoutConfig,
       };
     }),
-    "app.restart": createProcedure.mutation(async ({ ctx }) => {
-      ctx.logger.verbose("Restarting simulator...", "console", {
+    "app.reset": createProcedure.mutation(async ({ ctx }) => {
+      ctx.logger.verbose("Resetting simulator...", "console", {
         messageType: "info",
       });
       await ctx.restartSimulator();
-      ctx.logger.verbose("Simulator restarted.", "console", {
+      ctx.logger.verbose("Simulator reset.", "console", {
         messageType: "info",
       });
     }),

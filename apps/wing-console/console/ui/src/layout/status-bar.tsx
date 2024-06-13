@@ -8,7 +8,7 @@ import { AutoUpdater } from "../features/auto-updater.js";
 import { trpc } from "../services/trpc.js";
 
 import { DiscordButton } from "./discord-button.js";
-import { RestartButton } from "./restart-button.js";
+import { ResetButton } from "./reset-button.js";
 import { ThemeToggle } from "./theme-toggle.js";
 
 export interface StatusBarProps {
@@ -34,13 +34,13 @@ export const StatusBar = ({
     error: "error",
   };
 
-  const restartMutation = trpc["app.restart"].useMutation();
+  const resetMutation = trpc["app.reset"].useMutation();
   const [showRestartModal, setShowRestartModal] = useState(false);
 
   const restart = useCallback(async () => {
     setShowRestartModal(false);
-    await restartMutation.mutateAsync();
-  }, [restartMutation]);
+    await resetMutation.mutateAsync();
+  }, [resetMutation]);
 
   return (
     <footer
@@ -53,9 +53,9 @@ export const StatusBar = ({
     >
       {/*left side*/}
       <div className="w-full flex gap-4 items-center">
-        <RestartButton
+        <ResetButton
           onClick={() => setShowRestartModal(true)}
-          disabled={restartMutation.isLoading || loading}
+          disabled={resetMutation.isLoading || loading}
         />
         <div title={wingVersion} className="truncate space-x-1">
           {wingVersion && (
