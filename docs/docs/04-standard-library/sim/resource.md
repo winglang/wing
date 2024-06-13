@@ -537,7 +537,7 @@ A resource with an inflight "handle" method that can be passed to the `sim.Resou
 ##### `handle` <a name="handle" id="@winglang/sdk.sim.IResourceFactoryClient.handle"></a>
 
 ```wing
-inflight handle(context: IResourceContext): IResource
+inflight handle(context: IResourceContext): IResource?
 ```
 
 Function that will be called to create the resource.
