@@ -30,5 +30,6 @@ errorWingFiles.forEach((wingFile) => {
     });
 
     expect(out.stdout).toMatchSnapshot();
+    expect(out.stderr).toMatchSnapshot();
   });
 });
