@@ -1,4 +1,5 @@
 bring cloud;
+bring "./subdir2" as subdir;
 
 let b = new cloud.Bucket();
 
@@ -9,7 +10,8 @@ inflight class Foo {
   }
 
   static pub fooStatic() {
-    b.list();
+    b.put("a", "b");
+    assert(b.list() == ["a"]);
   }
 }
 
@@ -44,4 +46,9 @@ test "inflight class defined inflight captures preflight object" {
 
   let f = new Foo2();
   f.uploadToBucket();
+}
+
+test "bring inflight class from subdir" {
+  let x = new subdir.InflightClass();
+  assert(x.method() == "What did you expect?");
 }
