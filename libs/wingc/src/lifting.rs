@@ -274,21 +274,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				v.lifts_stack.push(lifts);
 				return;
 			}
-			// else if expr_phase == Phase::Inflight && expr_type.is_closure() {
-			// 	// We assume any reference to a closure means it might be called and therefore we need to lift it if it's
-			// 	// a method of a class defined preflight.
-
-			// 	if let Some(sig) = expr_type.as_deep_function_sig() {
-			// 		if let Some(class_type) = sig.this_type {
-			// 			if let Some(class) = class_type.as_class() {
-			// 				if class.defined_in_phase == Phase::Preflight && class.phase == Phase::Inflight {
-			// 					println!("A reference to a method {:?} of an inflight class {class_type}!", v.ctx.current_property());
-
-			// 				}
-			// 			}
-			// 		}
-			// 	}
-			// }
 
 			// Before we continue lets dive into this (non-preflight) expression to see if we need to lift any parts of it
 			visit::visit_expr(v, node);

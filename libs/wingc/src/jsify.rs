@@ -41,8 +41,8 @@ const PREFLIGHT_FILE_NAME: &str = "preflight.cjs";
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE: &str = formatcp!("{STDLIB}.core");
-const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
-const STDLIB_CORE_AUTOID_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_AUTOID_RESOURCE);
+const STDLIB_CORE_RESOURCE: &str = formatcp!("{STDLIB}.{WINGSDK_RESOURCE}");
+const STDLIB_CORE_AUTOID_RESOURCE: &str = formatcp!("{STDLIB}.{WINGSDK_AUTOID_RESOURCE}");
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
@@ -59,8 +59,6 @@ const __DIRNAME: &str = "__dirname";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
-//const PREFLIGHT_TYPES_MAP: &str = "globalThis.$preflightTypesMap";
-//const PREFLIGHT_TYPES_MAP: &str = "this.node.root.$preflightTypesMap";
 const PREFLIGHT_TYPES_MAP: &str = "$helpers.nodeof(this).root.$preflightTypesMap";
 const MODULE_PREFLIGHT_TYPES_MAP: &str = "$preflightTypesMap";
 
@@ -230,38 +228,13 @@ impl<'a> JSifier<'a> {
 			let directory_children = self.source_file_graph.dependencies_of(source_path);
 			let preflight_file_map = self.preflight_file_map.borrow();
 
-			// supposing a directory has two files and two subdirectories in it,
+			// supposing a directory has a file and a subdirectory in it,
 			// we generate code like this:
 			// ```
-			// module.exports = {
-			//   get inner_directory1() { return require("./preflight.inner-directory1.cjs") },
-			//   get inner_directory2() { return require("./preflight.inner-directory2.cjs") },
-			//   ...require("./preflight.inner-file1.cjs"),
-			//   ...require("./preflight.inner-file2.cjs"),
-			// };
-			// ```
-			// output.open("module.exports = {");
-			// for file in directory_children {
-			// 	let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
-			// 	if file.is_dir() {
-			// 		let directory_name = file.file_stem().unwrap();
-			// 		output.line(format!(
-			// 			"get {directory_name}() {{ return require(\"./{preflight_file_name}\") }},"
-			// 		));
-			// 	} else {
-			// 		output.line(format!("...require(\"./{preflight_file_name}\"),"));
-			// 	}
-			// }
-			// output.close("};");
-
-			// supposing a directory has a files and a subdirectory in it,
-			// we generate code like this:
-			// ```
-			// let $brought;
-			// $brought = $helpers.bringJs("./preflight.inner-file1.js", "$preflightTypesMap", $preflightTypesMap);
-			// module.exports = { ...module.export, ...$brought };
-			// $brought = $helpers.bringJs("./preflight.inner-directory1.js", "$preflightTypesMap", $preflightTypesMap);
-			// module.exports = { ...module.export, get inner_directory1() { return $brought; } };
+			// let $preflightTypesMap = {};
+			// Object.assign(module.exports, $helpers.bringJs("./preflight.inner-file1.js", "$preflightTypesMap", $preflightTypesMap));
+			// Object.assign(module.exports, { get inner_directory1() { $helpers.bringJs("./preflight.inner-directory1.js", "$preflightTypesMap", $preflightTypesMap); } });
+			// module.exports = { ...module.exports, $preflightTypesMap };
 			// ```
 
 			// This module's preflight type map
@@ -1888,17 +1861,6 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
 			code.close("}");
-
-			// Inflight classes might need their type to be lift-qualified (onLift), but their type name might not be necessarily avaialble
-			// at the scope when they are qualified (it might even be shadowed by another type name). Here we generate a unique
-			// type name to be used in such cases.
-			// if class.phase == Phase::Inflight {
-			// 	let inflight_class_unique_instance = self.unique_class_alias(class_type);
-			// 	code.line(format!(
-			// 		"const {inflight_class_unique_instance} = new {}(this, \"{inflight_class_unique_instance}\");",
-			// 		class.name,
-			// 	));
-			// }
 
 			// Inflight classes might need to be lift-qualified (onLift), but their type name might not be necessarily available
 			// at the scope when they are qualified (it might even be shadowed by another type name). We store a reference to these
