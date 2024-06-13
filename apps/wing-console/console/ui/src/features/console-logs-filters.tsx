@@ -112,7 +112,7 @@ export const ConsoleLogsFilters = memo(
 
     const renderResourceIdsLabel = useCallback((selected?: string[]) => {
       if (!selected || selected.length === 0) {
-        return <span className="truncate">All resource Ids</span>;
+        return <span className="truncate">All resource</span>;
       }
 
       const type = selected[0] as string;
@@ -246,7 +246,7 @@ export const ConsoleLogsFilters = memo(
             items={resourceIdItems}
             selected={selectedResourceIds}
             onChange={setSelectedResourceIds}
-            defaultLabel="All resource Ids"
+            defaultLabel="All resource"
             defaultSelection={[]}
             showSearch
           />
