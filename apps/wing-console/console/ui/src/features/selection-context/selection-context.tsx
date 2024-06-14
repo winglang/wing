@@ -33,18 +33,18 @@ export interface SelectionContext {
 }
 
 const Context = createContext<SelectionContext>({
-  setAvailableItems(items: SelectionItem[]) {},
-  selectedItems: new Array<string>(),
-  setSelectedItems(items: string[]) {},
-  expandedItems: new Array<string>(),
+  setAvailableItems() {},
+  selectedItems: [],
+  setSelectedItems() {},
+  expandedItems: [],
   setExpandedItems() {},
-  toggle(itemId: string) {},
+  toggle() {},
   expandAll() {},
   collapseAll() {},
-  expand(itemId: string) {},
-  collapse(itemId: string) {},
-  selectedEdgeId: undefined as string | undefined,
-  setSelectedEdgeId(edgeId: string | undefined) {},
+  expand() {},
+  collapse() {},
+  selectedEdgeId: undefined,
+  setSelectedEdgeId() {},
 });
 
 export const SelectionContextProvider: FunctionComponent<PropsWithChildren> = (
