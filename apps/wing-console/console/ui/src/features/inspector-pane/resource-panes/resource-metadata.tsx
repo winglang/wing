@@ -20,6 +20,7 @@ import type { FunctionComponent } from "react";
 import { memo, useCallback, useMemo, useState } from "react";
 
 import { trpc } from "../../../trpc.js";
+import { RunningStateIndicator } from "../../running-state-indicator/running-state-indicator.js";
 
 import { BucketMetadata } from "./bucket-metadata.js";
 import { CounterMetadata } from "./counter-metadata.js";
@@ -27,7 +28,6 @@ import { CustomResourceUiItem } from "./custom-resource-item.js";
 import { FunctionMetadata } from "./function-metadata.js";
 import { QueueMetadataView } from "./queue-metadata-view.js";
 import { ResourceInteractionView } from "./resource-interaction-view.js";
-import { RunningStateIndicator } from "./running-state-indicator.js";
 import { ScheduleMetadata } from "./schedule-metadata.js";
 
 interface AttributeGroup {

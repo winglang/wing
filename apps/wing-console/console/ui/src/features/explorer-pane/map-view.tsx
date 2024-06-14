@@ -12,6 +12,8 @@ import type { FunctionComponent, PropsWithChildren } from "react";
 import { memo, useCallback, useMemo } from "react";
 import { useKeyPressEvent } from "react-use";
 
+import { RunningStateIndicator } from "../running-state-indicator/running-state-indicator.js";
+
 import { assert } from "./elk-flow/assert.js";
 import { Graph } from "./elk-flow/graph.js";
 import { NodeChildren } from "./elk-flow/node-children.js";
@@ -19,7 +21,6 @@ import { Node } from "./elk-flow/node.js";
 import { Port } from "./elk-flow/port.js";
 import type { EdgeComponent, EdgeComponentProps } from "./elk-flow/types.js";
 import { useMap } from "./use-map.js";
-import { RunningStateIndicator } from "../ui/running-state-indicator.js";
 
 const Z_INDICES = {
   EDGE: "z-[1000]",

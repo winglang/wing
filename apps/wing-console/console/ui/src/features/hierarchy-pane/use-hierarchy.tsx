@@ -4,6 +4,7 @@ import uniqBy from "lodash.uniqby";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { trpc } from "../../trpc.js";
 import { RunningStateIndicator } from "../running-state-indicator/running-state-indicator.js";
 import { useSelectionContext } from "../selection-context/selection-context.js";
 
@@ -11,7 +12,7 @@ export interface TreeMenuItem {
   id: string;
   icon?: React.ReactNode;
   label: string;
-  secondaryLabel?: string | ReactNode | ((item: TreeMenuItem) => ReactNode);
+  secondaryLabel?: string | ReactNode | (() => ReactNode);
   children?: TreeMenuItem[];
   expanded?: boolean;
 }
@@ -102,7 +103,7 @@ export const useHierarchy = () => {
       }
       return expandedNodes;
     };
-    const defaultExpandedItems = getDefaultExpandedItems(items);
+    const defaultExpandedItems = getDefaultExpandedItems(items ?? []);
 
     const shouldExpandItems = defaultExpandedItems.filter(
       (id) => !processedItems.current.includes(id),

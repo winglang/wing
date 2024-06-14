@@ -1,4 +1,9 @@
-import type { FunctionComponent, PropsWithChildren } from "react";
+import type {
+  FunctionComponent,
+  PropsWithChildren,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import {
   createContext,
   useCallback,
@@ -12,12 +17,27 @@ export interface SelectionItem {
   children?: SelectionItem[];
 }
 
-const Context = createContext({
+export interface SelectionContext {
+  setAvailableItems(items: SelectionItem[]): void;
+  selectedItems: string[];
+  setSelectedItems(items: string[]): void;
+  expandedItems: string[];
+  setExpandedItems: Dispatch<SetStateAction<string[]>>;
+  toggle(itemId: string): void;
+  expandAll(): void;
+  collapseAll(): void;
+  expand(itemId: string): void;
+  collapse(itemId: string): void;
+  selectedEdgeId: string | undefined;
+  setSelectedEdgeId(edgeId: string | undefined): void;
+}
+
+const Context = createContext<SelectionContext>({
   setAvailableItems(items: SelectionItem[]) {},
   selectedItems: new Array<string>(),
   setSelectedItems(items: string[]) {},
   expandedItems: new Array<string>(),
-  setExpandedItems(items: string[]) {},
+  setExpandedItems() {},
   toggle(itemId: string) {},
   expandAll() {},
   collapseAll() {},
