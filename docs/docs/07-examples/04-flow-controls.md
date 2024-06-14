@@ -6,7 +6,7 @@ keywords: [Wing example]
 
 ### For in
 
-```ts playground
+```ts playground example
 let iterable = ["a", "b", "c", "d", "e", "f", "g", "h"];
 for value in iterable {
   if value == "g" {
@@ -31,7 +31,7 @@ for value in iterable {
 
 ### For through a range
 
-```ts playground
+```ts playground example
 // print numbers from 0 to 9
 for value in 0..10 {
   log("{value}");
@@ -50,7 +50,7 @@ for value in 1..=5 {
 
 ### If elif else
 
-```ts playground
+```ts playground example
 let grade = (score: num): str => {
     // Parentheses are optional in conditions.
     // However, curly braces are required in `if/else` statements.
@@ -76,7 +76,7 @@ log("101 is {grade(101)}"); // 101 is Invalid grade
 
 ### While 
 
-```ts playground
+```ts playground example
 let var i = 0;
 while i < 100 {
   i = i + 1;

@@ -26,7 +26,7 @@ Unlike other kinds of storage like file storage, data is not stored in a hierarc
 
 ### Defining a bucket
 
-```js
+```js example
 bring cloud;
 
 let bucket = new cloud.Bucket(
@@ -38,7 +38,7 @@ let bucket = new cloud.Bucket(
 
 If you have static data that you want to upload to the bucket each time your app is deployed, you can call the preflight method `addObject`:
 
-```js
+```js example
 bring cloud;
 
 let bucket = new cloud.Bucket();
@@ -48,7 +48,7 @@ bucket.addObject("my-file.txt", "Hello, world!");
 
 ### Using a bucket inflight
 
-```js playground
+```js playground example
 bring cloud;
 
 let bucket = new cloud.Bucket();
@@ -80,7 +80,7 @@ Use the `onEvent` method for responding to any event.
 
 Each method creates a new `cloud.Function` resource which will be triggered by the given event type.
 
-```js playground
+```js playground example
 bring cloud;
 
 let store = new cloud.Bucket();

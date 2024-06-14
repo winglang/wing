@@ -19,7 +19,7 @@ The `cloud.Endpoint` represents a publicly accessible endpoint and outputs it as
 
 ## Usage
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let endpoint = new cloud.Endpoint("https://example.com");
@@ -54,7 +54,7 @@ represents a publicly accessible endpoint and outputs it as part of the compilat
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Endpoint.Initializer"></a>
 
-```wing
+```wing example
 bring cloud;
 
 new cloud.Endpoint("https://example.com");

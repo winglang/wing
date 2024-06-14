@@ -33,7 +33,7 @@ Usage:
 $ wing new <template>
 ```
 
-Run `wing new` without any arguments to view the available templates.
+Run `wing new` without any arguments to view the available templates or you can [view the templates on GitHub](https://github.com/winglang/wing/tree/main/apps/wing/project-templates/wing).
 
 ## Run: `wing run|it`
 
@@ -98,7 +98,7 @@ In the following example
 ([test_bucket.test.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.test.w)),
 the application consists of a single `cloud.Bucket` and two tests `"put"` and `"get"`.
 
-```js
+```js example
 bring cloud;
 
 let b = new cloud.Bucket();
@@ -247,7 +247,7 @@ The `wing secrets` command can be used to store secrets needed by your applicati
 
 Take the following Wing application:
 
-```js
+```js example
 // main.w
 bring cloud;
 

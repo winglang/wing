@@ -84,19 +84,18 @@ fn command_build(source_file: Utf8PathBuf, target: Option<Target>) -> Result<(),
 	print_compiling(source_file.as_str());
 
 	let sdk_root = WING_CACHE_DIR.join("node_modules").join("@winglang").join("sdk");
-	if !sdk_root.exists() {
+
+	// Skip installing the SDK here if we're in a unit test since tests may run in parallel
+	// TODO: check if the SDK is up to date
+	if !sdk_root.exists() && !cfg!(test) {
 		install_sdk()?;
-	} else {
-		// TODO: check that the SDK version matches the CLI version
-		if cfg!(test) {
-			// For now, always reinstall the SDK in tests
-			install_sdk()?;
-		}
 	}
 	tracing::info!("Using SDK at {}", sdk_root);
 
 	// Special pragma used by wingc to find the SDK types
-	std::env::set_var("WINGSDK_MANIFEST_ROOT", &sdk_root);
+	if !cfg!(test) {
+		std::env::set_var("WINGSDK_MANIFEST_ROOT", &sdk_root);
+	}
 
 	let result = compile(&project_dir, &source_file, None, &work_dir);
 
@@ -120,15 +119,16 @@ fn install_sdk() -> Result<(), Box<dyn Error>> {
 	std::fs::create_dir_all(WING_CACHE_DIR.as_str())?;
 	let mut install_command = std::process::Command::new("npm");
 	install_command.arg("install").arg("esbuild"); // TODO: should this not be an optional dependency?
-	if cfg!(test) {
-		install_command.arg(format!("file:{}/../../libs/wingsdk", env!("CARGO_MANIFEST_DIR")));
-	} else {
+
+	// No need to install the latest verison of SDK from npm in tests
+	if !cfg!(test) {
 		install_command.arg(format!("@winglang/sdk@{}", env!("CARGO_PKG_VERSION")));
 	}
-
 	install_command.current_dir(WING_CACHE_DIR.as_str());
 	install_command.stdout(std::process::Stdio::piped());
 	install_command.stderr(std::process::Stdio::piped());
+
+	tracing::info!("Running command: {:?}", install_command);
 
 	let output = install_command.output()?;
 	if !output.status.success() {
@@ -137,6 +137,7 @@ fn install_sdk() -> Result<(), Box<dyn Error>> {
 		let error_message = format!("Failed to install SDK. stdout: {}. stderr: {}", stdout, stderr);
 		return Err(error_message.into());
 	}
+
 	Ok(())
 }
 
@@ -146,7 +147,19 @@ fn run_javascript_node(source_file: &Utf8Path, target_dir: &Utf8Path, target: Ta
 
 	let mut command = std::process::Command::new("node");
 	command.arg(target_dir.join(".wing").join("preflight.cjs"));
-	command.env("NODE_PATH", WING_CACHE_DIR.join("node_modules").as_str());
+
+	let mut node_path = WING_CACHE_DIR.join("node_modules").to_string();
+
+	// For tests, add the local version of the SDK to the NODE_PATH
+	if cfg!(test) {
+		node_path = format!(
+			"{}:{}",
+			Utf8Path::new(env!("CARGO_MANIFEST_DIR")).join("node_modules"),
+			node_path
+		);
+	}
+
+	command.env("NODE_PATH", node_path);
 	command.env("WING_PLATFORMS", target.to_string());
 	command.env("WING_SOURCE_DIR", source_dir);
 	command.env("WING_SYNTH_DIR", target_dir);
@@ -205,6 +218,7 @@ mod test {
 
 	fn initialize() {
 		INIT.call_once(|| {
+			initialize_logger();
 			install_sdk().expect("Failed to install SDK");
 		});
 	}
@@ -213,13 +227,13 @@ mod test {
 	fn test_compile_sim() {
 		initialize();
 		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::Sim));
-		assert!(res.is_ok());
+		res.expect("Failed to compile to sim");
 	}
 
 	#[test]
 	fn test_compile_tfaws() {
 		initialize();
 		let res = command_build("../../examples/tests/valid/hello.test.w".into(), Some(Target::TfAws));
-		assert!(res.is_ok());
+		res.expect("Failed to compile to tf-aws");
 	}
 }
