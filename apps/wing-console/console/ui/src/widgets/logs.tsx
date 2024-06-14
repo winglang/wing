@@ -7,7 +7,10 @@ import type { LogEntry, LogLevel } from "@wingconsole/server";
 import classNames from "classnames";
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 
-import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
+import {
+  ConsoleLogsFilters,
+  LOG_LEVELS,
+} from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
 import { trpc } from "../services/trpc.js";
 
@@ -25,7 +28,14 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
   );
   const [searchText, setSearchText] = useState("");
 
+  const [selectedResourceIds, setSelectedResourceIds] = useState<string[]>([]);
+  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>(
+    [],
+  );
+
   const [logsTimeFilter, setLogsTimeFilter] = useState(0);
+
+  const filters = trpc["app.logsFilters"].useQuery();
 
   const logs = trpc["app.logs"].useQuery(
     {
@@ -38,6 +48,8 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         },
         text: searchText,
         timestamp: logsTimeFilter,
+        resourceIds: selectedResourceIds,
+        resourceTypes: selectedResourceTypes,
       },
     },
     {
@@ -80,15 +92,30 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
 
   const clearLogs = useCallback(() => setLogsTimeFilter(Date.now()), []);
 
+  const resetFilters = useCallback(() => {
+    setSelectedLogTypeFilters(DEFAULT_LOG_LEVELS);
+    setSelectedResourceIds([]);
+    setSelectedResourceTypes([]);
+    setSearchText("");
+  }, []);
+
   return (
     <div className="relative h-full flex flex-col gap-2">
       <ConsoleLogsFilters
         selectedLogTypeFilters={selectedLogTypeFilters}
         setSelectedLogTypeFilters={setSelectedLogTypeFilters}
         clearLogs={clearLogs}
-        isLoading={false} // display logs also while in loading state
         onSearch={setSearchText}
+        resources={filters.data?.resources ?? []}
+        selectedResourceIds={selectedResourceIds}
+        setSelectedResourceIds={setSelectedResourceIds}
+        selectedResourceTypes={selectedResourceTypes}
+        setSelectedResourceTypes={setSelectedResourceTypes}
+        onResetFilters={resetFilters}
+        shownLogs={logs.data?.logs.length ?? 0}
+        hiddenLogs={logs.data?.hiddenLogs ?? 0}
       />
+
       <div className="relative h-full">
         <ScrollableArea
           ref={scrollableRef}
@@ -101,7 +128,11 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
           )}
           onScrolledToBottomChange={setScrolledToBottom}
         >
-          <ConsoleLogs logs={logs.data ?? []} onResourceClick={onLogClick} />
+          <ConsoleLogs
+            logs={logs.data?.logs ?? []}
+            hiddenLogs={logs.data?.hiddenLogs ?? 0}
+            onResourceClick={onLogClick}
+          />
         </ScrollableArea>
       </div>
     </div>
