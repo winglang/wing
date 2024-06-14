@@ -106,8 +106,8 @@ class PaidStudent extends Student {
   
   new(name: str, major: str, hrlyWage: num) {
     this.hrlyWage = hrlyWage;
+//  ^^^^^^^^^^^^^^^^^^^^^^^^^ super() call should be made before an instance member is used
     super(name, major);
-//  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
   }
 
   something() {

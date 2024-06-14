@@ -4635,8 +4635,9 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 						.enumerate()
 						.find(|(_, s)| matches!(s.kind, StmtKind::SuperConstructor { .. }))
 					{
+						// Check if one of the statements before the super() call is invalid
 						for i in 0..idx {
-							if self.type_check_called_parent_class_method(&ctor_body.statements[i]) {
+							if self.type_check_call_parent_class_method(&ctor_body.statements[i]) {
 								self.spanned_error(
 									&ctor_body.statements[i],
 									"super() call should be made before a parent class method".to_string(),
@@ -4741,7 +4742,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			_ => false,
 		}
 	}
-	fn type_check_called_parent_class_method(&mut self, stmt: &Stmt) -> bool {
+	fn type_check_call_parent_class_method(&mut self, stmt: &Stmt) -> bool {
 		match &stmt.kind {
 			StmtKind::Let { initial_value, .. } => self.type_check_expr_has_supercall(&initial_value),
 			StmtKind::Expression(expr) => self.type_check_expr_has_supercall(expr),

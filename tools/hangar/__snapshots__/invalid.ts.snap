@@ -880,11 +880,11 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^
 
 
-error: super() call must be the first statement of PaidStudent's constructor
-    --> ../../../examples/tests/invalid/class.test.w:109:5
+error: super() call should be made before an instance member is used
+    --> ../../../examples/tests/invalid/class.test.w:108:5
     |
-109 |     super(name, major);
-    |     ^^^^^^^^^^^^^^^^^^^
+108 |     this.hrlyWage = hrlyWage;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot instantiate abstract class \\"Resource\\"
@@ -1280,35 +1280,35 @@ Duration <DURATION>"
 `;
 
 exports[`ctor_super.test.w 1`] = `
-"error: Missing super() call as first statement of PreflighChild1's constructor
+"error: Missing super() call in PreflighChild1's constructor
   --> ../../../examples/tests/invalid/ctor_super.test.w:9:7
   |
 9 | class PreflighChild1 extends PreflightBaseWithCtorParam {}
   |       ^^^^^^^^^^^^^^
 
 
-error: Missing super() call as first statement of PreflighChild2's constructor
+error: Missing super() call in PreflighChild2's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:13:15
    |
 13 |   new(a: num) {}
    |               ^^
 
 
-error: Missing super() call as first statement of InflightChild1's constructor
+error: Missing super() call in InflightChild1's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:29:16
    |
 29 | inflight class InflightChild1 extends InflightBaseWithCtorParam {}
    |                ^^^^^^^^^^^^^^
 
 
-error: Missing super() call as first statement of InflightChild2's constructor
+error: Missing super() call in InflightChild2's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:33:15
    |
 33 |   new(a: num) {}
    |               ^^
 
 
-error: Missing super() call as first statement of InflightChild4's constructor
+error: Missing super() call in InflightChild4's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:45:9
    |
 45 |   new() {}
@@ -1329,21 +1329,21 @@ error: Expected 1 positional argument(s) but got 0
    |     ^^^^^^^^
 
 
-error: Missing super() call as first statement of InflightChild1's constructor
+error: Missing super() call in InflightChild1's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:55:9
    |
 55 |   class InflightChild1 extends InflightBaseWithCtorParam {}
    |         ^^^^^^^^^^^^^^
 
 
-error: Missing super() call as first statement of InflightChild2's constructor
+error: Missing super() call in InflightChild2's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:59:17
    |
 59 |     new(a: num) {}
    |                 ^^
 
 
-error: Missing super() call as first statement of InflightChild4's constructor
+error: Missing super() call in InflightChild4's constructor
    --> ../../../examples/tests/invalid/ctor_super.test.w:71:11
    |
 71 |     new() {}
@@ -2773,6 +2773,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`instance_member_before_super.w 1`] = `
+"error: super() call should be made before an instance member is used
+   --> ../../../examples/tests/invalid/instance_member_before_super.w:12:5
+   |
+12 |     this.b = 3;
+   |     ^^^^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`interface.test.w 1`] = `
 "error: Properties are not supported in interfaces
    --> ../../../examples/tests/invalid/interface.test.w:32:3
@@ -3544,6 +3559,21 @@ exports[`parameters.test.w 1`] = `
 
 (hint: make sure to use --values to provide the required parameters file)
         
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`parent_class_method_before_super.w 1`] = `
+"error: super() call should be made before a parent class method
+   --> ../../../examples/tests/invalid/parent_class_method_before_super.w:11:5
+   |
+11 |     super.get();
+   |     ^^^^^^^^^^^^
+
+
 
 Tests 1 failed (1)
 Snapshots 1 skipped
