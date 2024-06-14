@@ -86,36 +86,54 @@ export const createAppRouter = () => {
         }),
       )
       .query(async ({ ctx, input }) => {
-        // filter by timestamp
-        const logs = ctx.logger.messages.filter(
-          (entry) =>
-            entry.timestamp && entry.timestamp >= input.filters.timestamp,
-        );
+        const filters = input.filters;
+        const lowerCaseText = filters.text?.toLowerCase();
+        let noVerboseLogsCount = 0;
 
-        const filteredLogs = logs.filter(
-          (entry) =>
-            // filter by level
-            input.filters.level[entry.level] &&
-            // filter by resourceIds
-            (input.filters.resourceIds.length === 0 ||
-              (entry.ctx?.sourcePath &&
-                input.filters.resourceIds.includes(entry.ctx?.sourcePath))) &&
-            // filter by resourceTypes
-            (input.filters.resourceTypes.length === 0 ||
-              (entry.ctx?.sourceType &&
-                input.filters.resourceTypes.includes(entry.ctx.sourceType))) &&
-            // filter by text
-            (!input.filters.text ||
-              `${entry.message}${entry.ctx?.sourcePath}`
-                .toLowerCase()
-                .includes(input.filters.text.toLowerCase())),
-        );
+        const filteredLogs = ctx.logger.messages.filter((entry) => {
+          if (entry.level !== "verbose") {
+            noVerboseLogsCount++;
+          }
 
-        const noVerboseLogs = logs.filter((entry) => entry.level !== "verbose");
+          // Filter by timestamp
+          if (entry.timestamp && entry.timestamp < filters.timestamp) {
+            return false;
+          }
+          // Filter by level
+          if (!filters.level[entry.level]) {
+            return false;
+          }
+          // Filter by resourceIds
+          if (
+            filters.resourceIds.length > 0 &&
+            (!entry.ctx?.sourcePath ||
+              !filters.resourceIds.includes(entry.ctx.sourcePath))
+          ) {
+            return false;
+          }
+          // Filter by resourceTypes
+          if (
+            filters.resourceTypes.length > 0 &&
+            (!entry.ctx?.sourceType ||
+              !filters.resourceTypes.includes(entry.ctx.sourceType))
+          ) {
+            return false;
+          }
+          // Filter by text
+          if (
+            lowerCaseText &&
+            !`${entry.message}${entry.ctx?.sourcePath}`
+              .toLowerCase()
+              .includes(lowerCaseText)
+          ) {
+            return false;
+          }
+          return true;
+        });
 
         return {
           logs: filteredLogs,
-          hiddenLogs: noVerboseLogs.length - filteredLogs.length,
+          hiddenLogs: noVerboseLogsCount - filteredLogs.length,
         };
       }),
     "app.error": createProcedure.query(({ ctx }) => {
