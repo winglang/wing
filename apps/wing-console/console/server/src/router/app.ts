@@ -97,13 +97,16 @@ export const createAppRouter = () => {
       .query(async ({ ctx, input }) => {
         const filters = input.filters;
         const lowerCaseText = filters.text?.toLowerCase();
-        let noVerboseLogsCount = 0;
 
-        const filteredLogs = ctx.logger.messages.filter((entry) => {
-          // Filter by timestamp
+        const filteredByTime = ctx.logger.messages.filter((entry) => {
           if (entry.timestamp && entry.timestamp < filters.timestamp) {
             return false;
           }
+          return true;
+        });
+
+        let noVerboseLogsCount = 0;
+        const filteredLogs = filteredByTime.filter((entry) => {
           if (entry.level !== "verbose") {
             noVerboseLogsCount++;
           }
