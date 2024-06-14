@@ -880,7 +880,7 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^
 
 
-error: super() call should be made before an instance member is used
+error: This command cannot be executed before calling super()
     --> ../../../examples/tests/invalid/class.test.w:108:5
     |
 108 |     this.hrlyWage = hrlyWage;
@@ -2954,20 +2954,20 @@ exports[`invalid_call_before_super.w 1`] = `
 
 
 error: Call to super constructor can only be done from within class constructor
-   --> ../../../examples/tests/invalid/invalid_call_before_super.w:29:9
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:30:9
    |
-29 |         super(2);
+30 |         super(2);
    |         ^^^^^^^^^
 
 
-error: super() call should be made before an instance member is used
+error: This command cannot be executed before calling super()
    --> ../../../examples/tests/invalid/invalid_call_before_super.w:10:5
    |
 10 |     this.b = 3;
    |     ^^^^^^^^^^^
 
 
-error: super() call should be made before a parent class method
+error: This command cannot be executed before calling super()
    --> ../../../examples/tests/invalid/invalid_call_before_super.w:18:5
    |
 18 |     super.get_a();
@@ -2981,11 +2981,18 @@ error: Missing super() call in D's constructor
    | /------------------^
 26 | |       if x {
 27 | |         super(1);
-28 | |       } else {
-29 | |         super(2);
-30 | |       }
-31 | |     }
+28 | | //      ^^^^^^^^^ Call to super constructor can only be done from within class constructor
+   . |
+32 | |       }
+33 | |     }
    | \\\\-----^
+
+
+error: This command cannot be executed before calling super()
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:39:5
+   |
+39 |     this.hello();
+   |     ^^^^^^^^^^^^^
 
 
 
