@@ -110,9 +110,12 @@ export const createAppRouter = () => {
                 .toLowerCase()
                 .includes(input.filters.text.toLowerCase())),
         );
+
+        const noVerboseLogs = logs.filter((entry) => entry.level !== "verbose");
+
         return {
           logs: filteredLogs,
-          hiddenLogs: logs.length - filteredLogs.length,
+          hiddenLogs: noVerboseLogs.length - filteredLogs.length,
         };
       }),
     "app.error": createProcedure.query(({ ctx }) => {

@@ -99,13 +99,6 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
     setSearchText("");
   }, []);
 
-  const clearFilters = useCallback(() => {
-    setSelectedLogTypeFilters(LOG_LEVELS);
-    setSelectedResourceIds([]);
-    setSelectedResourceTypes([]);
-    setSearchText("");
-  }, []);
-
   return (
     <div className="relative h-full flex flex-col gap-2">
       <ConsoleLogsFilters
@@ -119,7 +112,6 @@ export const LogsWidget = memo(({ onResourceClick }: LogsWidgetProps) => {
         selectedResourceTypes={selectedResourceTypes}
         setSelectedResourceTypes={setSelectedResourceTypes}
         onResetFilters={resetFilters}
-        onClearFilters={clearFilters}
         shownLogs={logs.data?.logs.length ?? 0}
         hiddenLogs={logs.data?.hiddenLogs ?? 0}
       />

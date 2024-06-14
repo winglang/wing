@@ -41,7 +41,6 @@ export interface ConsoleLogsFiltersProps {
   selectedResourceTypes: string[];
   setSelectedResourceTypes: (types: string[]) => void;
   onResetFilters: () => void;
-  onClearFilters: () => void;
   shownLogs: number;
   hiddenLogs: number;
 }
@@ -63,7 +62,6 @@ export const ConsoleLogsFilters = memo(
     selectedResourceTypes,
     setSelectedResourceTypes,
     onResetFilters,
-    onClearFilters,
     shownLogs,
     hiddenLogs,
   }: ConsoleLogsFiltersProps) => {
@@ -77,7 +75,7 @@ export const ConsoleLogsFilters = memo(
       debouncedOnSearch(searchText);
     }, [debouncedOnSearch, searchText]);
 
-    const [defaultLogTypeSelection] = useState(selectedLogTypeFilters);
+    const [defaultLogTypeSelection] = useState(selectedLogTypeFilters.sort());
     const resetFiltersDisabled = useMemo(() => {
       return (
         selectedLogTypeFilters === defaultLogTypeSelection &&
@@ -299,17 +297,20 @@ export const ConsoleLogsFilters = memo(
               )}
               {!showIncompatibleResourceTypeWarning &&
                 showAllLogsHiddenWarning && (
-                  <span>
-                    All logs entries are hidden by the current filters.
-                  </span>
+                  <>
+                    <span>
+                      All logs entries are hidden by the current filters.
+                    </span>
+                    <span className="italic opacity-80">
+                      ({hiddenLogs} hidden{" "}
+                      {hiddenLogs > 1 ? "entries" : "entry"})
+                    </span>
+                  </>
                 )}
-              <span className="italic opacity-80">
-                ({hiddenLogs} hidden entries)
-              </span>
             </div>
 
             <button
-              onClick={onClearFilters}
+              onClick={onResetFilters}
               className={classNames(
                 "text-xs underline cursor-pointer rounded",
                 "px-1 outline-none transition-all",
@@ -318,7 +319,7 @@ export const ConsoleLogsFilters = memo(
                 theme.text1Hover,
               )}
             >
-              Clear filters
+              Reset filters
             </button>
           </div>
         )}
