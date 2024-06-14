@@ -59,14 +59,14 @@ export const StatusBar = ({
         />
         <div title={wingVersion} className="truncate space-x-1">
           {wingVersion && (
-            <div className="px-1 py-0.5">
+            <div className="flex gap-1 px-1 py-0.5">
               <span>Wing</span>
               <span className={classNames(theme.text2)}>v{wingVersion}</span>
             </div>
           )}
         </div>
 
-        <div className="flex space-x-1 px-1 py-0.5">
+        <div className="flex gap-1 px-1 py-0.5">
           <span>Status:</span>
           <span className={classNames(theme.text2)}>
             <span
