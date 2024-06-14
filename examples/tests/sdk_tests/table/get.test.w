@@ -32,7 +32,7 @@ test "get" {
     table.get(NON_EXISTENT_KEY);
   });
 
-  let var result: Json? = table.tryGet(VALID_KEY);
-  assert(result?.get(COLUMN_NAME) == COLUMN_VALUE);
+  let var result: Json = table.tryGet(VALID_KEY);
+  assert(result.get(COLUMN_NAME) == COLUMN_VALUE);
   assert(table.tryGet(NON_EXISTENT_KEY) == nil);
 }
