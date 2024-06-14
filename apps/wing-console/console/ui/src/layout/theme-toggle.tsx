@@ -58,7 +58,7 @@ export const ThemeToggle = () => {
   return (
     <button
       className={classNames(
-        theme.textInput,
+        "text-slate-800 dark:text-slate-250",
         "font-medium flex focus:outline-none",
         "transition-color duration-300 cursor-pointer",
         "gap-x-1 p-1",

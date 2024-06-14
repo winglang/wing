@@ -18,7 +18,7 @@ export const DiscordButton = () => {
         "font-medium flex focus:outline-none",
         "transition-color duration-300 cursor-pointer",
         "gap-x-1.5 p-1 items-center justify-center",
-        theme.textInput,
+        "text-slate-800 dark:text-slate-250",
         theme.bg2Hover,
       )}
       onClick={() => openDiscordLink()}
