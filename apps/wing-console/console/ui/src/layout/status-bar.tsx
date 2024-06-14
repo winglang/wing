@@ -1,11 +1,8 @@
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { useTheme, Loader, Button, Modal } from "@wingconsole/design-system";
+import { useTheme, Loader } from "@wingconsole/design-system";
 import type { State } from "@wingconsole/server";
 import classNames from "classnames";
-import { useState, useCallback } from "react";
 
 import { AutoUpdater } from "../features/auto-updater.js";
-import { trpc } from "../services/trpc.js";
 
 import { DiscordButton } from "./discord-button.js";
 import { ResetButton } from "./reset-button.js";
@@ -34,14 +31,6 @@ export const StatusBar = ({
     error: "error",
   };
 
-  const resetMutation = trpc["app.reset"].useMutation();
-  const [showRestartModal, setShowRestartModal] = useState(false);
-
-  const restart = useCallback(async () => {
-    setShowRestartModal(false);
-    await resetMutation.mutateAsync();
-  }, [resetMutation]);
-
   return (
     <footer
       className={classNames(
@@ -53,10 +42,7 @@ export const StatusBar = ({
     >
       {/*left side*/}
       <div className="flex gap-2 items-center">
-        <ResetButton
-          onClick={() => setShowRestartModal(true)}
-          disabled={resetMutation.isLoading || loading}
-        />
+        <ResetButton disabled={loading} />
         <div title={wingVersion} className="truncate space-x-1">
           {wingVersion && (
             <div className="flex gap-1 px-1 py-0.5">
@@ -90,28 +76,6 @@ export const StatusBar = ({
         <DiscordButton />
         {showThemeToggle && <ThemeToggle />}
       </div>
-      <Modal visible={showRestartModal}>
-        <div className="flex flex-col gap-4 max-w-lg items-center">
-          <h3
-            className={classNames(
-              theme.text1,
-              "text-base font-semibold leading-6",
-            )}
-          >
-            Reset Application
-          </h3>
-          <p className={classNames(theme.text2, "text-sm text-center")}>
-            Are you sure you want to reset all state and restart the
-            application?
-          </p>
-          <div className="flex justify-around gap-2">
-            <Button onClick={() => setShowRestartModal(false)}>Cancel</Button>{" "}
-            <Button onClick={restart} dataTestid="restart-simulator-button">
-              Reset
-            </Button>
-          </div>
-        </div>
-      </Modal>
     </footer>
   );
 };
