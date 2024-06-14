@@ -5,13 +5,7 @@ import { useCallback, useState } from "react";
 
 import { trpc } from "../services/trpc.js";
 
-export const ResetButton = ({
-  onClick,
-  disabled,
-}: {
-  onClick?: () => void;
-  disabled?: boolean;
-}) => {
+export const ResetButton = ({ disabled }: { disabled?: boolean }) => {
   const { theme } = useTheme();
 
   const resetMutation = trpc["app.reset"].useMutation();
