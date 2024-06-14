@@ -23,10 +23,10 @@ The timezone used in cron expressions is always UTC.
 
 ### From cron
 
-```ts playground
+```ts playground example
 bring cloud;
 
-let schedule = new cloud.Schedule(cron: "* * * * ?");
+let schedule = new cloud.Schedule(cron: "* * * * *");
 
 schedule.onTick(inflight () => {
   log("schedule: triggered");
@@ -35,7 +35,7 @@ schedule.onTick(inflight () => {
 
 ### From rate
 
-```ts playground
+```ts playground example
 bring cloud;
 
 let schedule = new cloud.Schedule(rate: 1m);
