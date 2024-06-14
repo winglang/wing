@@ -38,7 +38,7 @@ test "validates the AWS Function" {
   }
 }
 
-let fn = new cloud.Function(inflight (msg: str?) => {
+let fn = new cloud.Function(inflight (msg: Json?) => {
   if msg == "error" {
     throw "fake error";
   }

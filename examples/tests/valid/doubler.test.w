@@ -38,6 +38,6 @@ let f = Doubler2.makeFunc(inflight (x: num): num => {
 });
 
 test "f(2) == 8" {
-  let result = f.invoke("2");
-  assert(result == "8");
+  let result = f.invoke(2);
+  assert(result == 8);
 }

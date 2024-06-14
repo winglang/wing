@@ -1059,7 +1059,7 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"preflight (name: str): str\\" instead
+"error: Expected type to be \\"inflight (event: Json?): Json?\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
@@ -4591,7 +4591,7 @@ error: \\"notAField\\" is not a field of \\"ApiResponse\\"
    | \\\\-^
 
 
-error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (event: str): unknown\\" instead
+error: Expected type to be \\"inflight (event: Json?): Json?\\", but got \\"inflight (event: str): unknown\\" instead
    --> ../../../examples/tests/invalid/struct_expansion.test.w:27:3
    |
 27 |   handler, 
@@ -4781,7 +4781,7 @@ error: Cannot call super method because class Construct has no parent
    |           ^^^^^^
 
 
-error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (s: str): str\\" instead
+error: Expected type to be \\"inflight (event: Json?): Json?\\", but got \\"inflight (s: str): str\\" instead
    --> ../../../examples/tests/invalid/super_call.test.w:55:31
    |
 55 |     return new cloud.Function(inflight_closure);
@@ -5125,8 +5125,15 @@ Duration <DURATION>"
 `;
 
 exports[`unresolved_state.test.w 1`] = `
-"[ERROR] (no test) | Error: Unable to resolve attribute 'my_unresolved_token' for resource \\"root/env0/State\\" referenced by \\"root/env0/Function\\"
-Failed to start resources: \\"root/env0/Function\\"
+"error: Expected type to be \\"inflight (event: Json?): Json?\\", but got \\"inflight (): str\\" instead
+   --> ../../../examples/tests/invalid/unresolved_state.test.w:10:3
+   |  
+10 | /   inflight (): str => {
+11 | |     return util.env(\\"FOO_VALUE\\");
+12 | |   },
+   | \\\\---^
+
+
 
 Tests 1 failed (1)
 Snapshots 1 skipped
