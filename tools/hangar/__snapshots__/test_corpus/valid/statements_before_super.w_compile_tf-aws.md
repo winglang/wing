@@ -41,9 +41,6 @@ class A extends $stdlib.std.Resource {
     super($scope, $id);
     this.a = a;
   }
-  get() {
-    return this.a;
-  }
   static _toInflightType() {
     return `
       require("${$helpers.normalPath(__dirname)}/inflight.A-1.cjs")({

@@ -3,7 +3,6 @@ class A {
   new(a: num) {
     this.a = a;
   }
-  get():num {return this.a;}
 }
 
 class B extends A {

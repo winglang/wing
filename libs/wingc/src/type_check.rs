@@ -4629,6 +4629,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			if let FunctionBody::Statements(ctor_body) = &ctor_def.body {
 				// Make sure there's a `super()` call to the parent ctor
 				if parent_ctor_sig.min_parameters() > 0 {
+					// Find the `super()` call
 					if let Some((idx, _super_call)) = ctor_body
 						.statements
 						.iter()
