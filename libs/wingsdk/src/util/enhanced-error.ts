@@ -4,6 +4,12 @@ import type Chalk from "chalk";
 import type StackTracey from "stacktracey";
 import { normalPath } from "../shared/misc";
 
+function debugLog(...args: any[]) {
+  if (process.env.WING_ERROR_TEST) {
+    console.error(...args);
+  }
+}
+
 export interface PrettyPrintErrorOptions {
   /**
    * The source entrypoint. If provided, the stack trace will only show source files that are in the same directory or its subdirectories.
@@ -35,6 +41,8 @@ export async function prettyPrintError(
   options?: PrettyPrintErrorOptions
 ): Promise<string> {
   const StackTracey = await import("stacktracey").then((m) => m.default);
+
+  debugLog("error:", error);
 
   const chalk = options?.chalk;
   const fRed = (s: string) => (chalk ? chalk.red(s) : s);
@@ -73,6 +81,8 @@ export async function prettyPrintError(
     originalMessage = error.message;
   }
 
+  debugLog("originalMessage:", originalMessage);
+
   const message = fBold(fRed("Error: ")) + fRed(originalMessage);
 
   st = await st
@@ -94,11 +104,15 @@ export async function prettyPrintError(
 
   let traceWithSources = st.items;
 
+  debugLog("traceWithSources:", traceWithSources);
+
   if (traceWithSources.length === 0) {
     return message;
   }
 
   let interestingRoot = options?.sourceEntrypoint;
+
+  debugLog("interestingRoot:", interestingRoot);
 
   if (
     interestingRoot !== undefined &&
@@ -123,6 +137,8 @@ export async function prettyPrintError(
     );
   }
 
+  debugLog("traceWithSources updated:", traceWithSources);
+
   let output = [];
 
   // use only the first item with a source
@@ -133,6 +149,8 @@ export async function prettyPrintError(
       !item.native &&
       !item.thirdParty
   );
+
+  debugLog("firstGoodItem:", firstGoodItem);
 
   if (firstGoodItem) {
     const sourceFile = firstGoodItem.sourceFile!;
