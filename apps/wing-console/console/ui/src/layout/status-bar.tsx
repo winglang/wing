@@ -48,7 +48,7 @@ export const StatusBar = ({
         theme.bg1,
         theme.text1,
         theme.border3,
-        "px-4 flex items-center text-2xs w-full relative z-10",
+        "px-4 flex gap-2 items-center text-2xs w-full relative z-10",
       )}
     >
       {/*left side*/}
