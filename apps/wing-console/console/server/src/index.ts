@@ -290,6 +290,9 @@ export const createConsoleServer = async ({
     simulatorInstance() {
       return simulator.instance();
     },
+    restartSimulator() {
+      return simulator.reload();
+    },
     errorMessage() {
       return lastErrorMessage;
     },
