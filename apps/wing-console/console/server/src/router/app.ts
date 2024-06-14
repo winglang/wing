@@ -27,25 +27,6 @@ const matchTest = (path: string) => {
   return isTest.test(path) || isTestHandler.test(path);
 };
 
-const getHierarchicalError = (
-  path: string,
-  nodeMap: ConstructTreeNodeMap,
-): boolean => {
-  const node = nodeMap.get(path);
-  if (node?.resourceConfig?.attrs?.["runningState"] === "error") {
-    return true;
-  }
-  return (
-    node?.children?.some((childPath) => {
-      const childNode = nodeMap.get(childPath);
-      if (childNode?.resourceConfig?.attrs?.["runningState"] === "error") {
-        return true;
-      }
-      return getHierarchicalError(childPath, nodeMap);
-    }) ?? false
-  );
-};
-
 export interface ExplorerItem {
   id: string;
   label: string;
