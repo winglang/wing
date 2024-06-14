@@ -28,6 +28,14 @@ function logText(log: LogEntry, expanded: boolean) {
   return expanded ? log.message : log.message?.split("\n")?.[0];
 }
 
+function nodePathBaseName(nodePath: string) {
+  return nodePath.split("/").at(-1);
+}
+
+function nodePathParentName(nodePath: string) {
+  return nodePath.split("/").slice(2, -1).join("/");
+}
+
 const LogEntryRow = memo(
   ({ log, showIcons = true, onRowClick, onResourceClick }: LogEntryProps) => {
     const { theme } = useTheme();
@@ -63,6 +71,16 @@ const LogEntryRow = memo(
     const ChevronIcon = useMemo(
       () => (expanded ? ChevronDownIcon : ChevronRightIcon),
       [expanded],
+    );
+
+    const resourceName = useMemo(
+      () => log.ctx?.label || nodePathBaseName(log.ctx?.sourcePath ?? ""),
+      [log.ctx?.label, log.ctx?.sourcePath],
+    );
+
+    const parentName = useMemo(
+      () => nodePathParentName(log.ctx?.sourcePath ?? ""),
+      [log.ctx?.sourcePath],
     );
 
     return (
@@ -167,7 +185,10 @@ const LogEntryRow = memo(
           </div>
 
           {onResourceClick && (
-            <div className="justify-end ml-1 flex space-x-1 select-none">
+            <div className="ml-1 flex gap-1 select-none">
+              {parentName && (
+                <span className="text-slate-400">{parentName}/</span>
+              )}
               {log.ctx?.sourceType && (
                 <span className="p-0.5">
                   <ResourceIcon
@@ -185,7 +206,7 @@ const LogEntryRow = memo(
                   theme.text3Hover,
                 )}
               >
-                {log.ctx?.label || log.ctx?.sourcePath}
+                {resourceName}
               </button>
             </div>
           )}
