@@ -1,6 +1,6 @@
 import * as path from "path";
 import { test } from "vitest";
-import { invalidTestDir, invalidWingFiles, tmpDir } from "./paths";
+import { invalidDocExampleWingFiles, invalidTestDir, invalidWingFiles, tmpDir } from "./paths";
 import { runWingCommand } from "./utils";
 import { parseMetaCommentFromPath } from "./meta_comment";
 
@@ -32,6 +32,26 @@ invalidWingFiles.forEach((wingFile) => {
     }
   });
 });
+
+invalidDocExampleWingFiles.forEach((wingFile) => {
+  test(wingFile, async ({ expect }) => {
+    const platforms = ["sim"];
+    const args = ["test"];
+
+    const absoluteWingFile = path.join(invalidTestDir, wingFile);
+    const relativeWingFile = path.relative(tmpDir, absoluteWingFile);
+
+    const out = await runWingCommand({
+      cwd: tmpDir,
+      wingFile: relativeWingFile,
+      platforms,
+      args,
+      expectFailure: true
+    });
+
+    expect(out.stdout).toMatchSnapshot();
+  });
+})
 
 const invalidLibDir = path.join(invalidTestDir, "lib");
 test("invalid compile directory", async ({ expect }) => {

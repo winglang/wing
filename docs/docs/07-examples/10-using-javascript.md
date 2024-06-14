@@ -8,7 +8,7 @@ keywords: [example, javascript, extern, typescript, js, ts]
 
 Inflight closures are an extremely important Wing functionality. Consider the following simple wing program:
 
-```wing
+```wing example
 // main.w
 bring cloud;
 let bucket = new cloud.Bucket();
