@@ -4629,35 +4629,29 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			if let FunctionBody::Statements(ctor_body) = &ctor_def.body {
 				// Make sure there's a `super()` call to the parent ctor
 				if parent_ctor_sig.min_parameters() > 0 {
-					// Find the `super()` call
-					if let Some((idx, super_call)) = ctor_body
+					if let Some((idx, _super_call)) = ctor_body
 						.statements
 						.iter()
 						.enumerate()
 						.find(|(_, s)| matches!(s.kind, StmtKind::SuperConstructor { .. }))
 					{
-						// We have a super call, make sure it's the first statement (after any type defs)
-						let expected_idx = ctor_body
-							.statements
-							.iter()
-							.position(|s| !s.kind.is_type_def())
-							.expect("at least the super call stmt");
-						if idx != expected_idx {
-							self.spanned_error(
-								super_call,
-								format!(
-									"super() call must be the first statement of {}'s constructor",
-									ast_class.name
-								),
-							);
+						for i in 0..idx {
+							if self.type_check_called_parent_class_method(&ctor_body.statements[i]) {
+								self.spanned_error(
+									&ctor_body.statements[i],
+									"super() call should be made before a parent class method".to_string(),
+								);
+							} else if self.type_check_call_instance_member(&ctor_body.statements[i]) {
+								self.spanned_error(
+									&ctor_body.statements[i],
+									"super() call should be made before an instance member is used".to_string(),
+								);
+							}
 						}
 					} else {
 						self.spanned_error(
 							ctor_body,
-							format!(
-								"Missing super() call as first statement of {}'s constructor",
-								ast_class.name
-							),
+							format!("Missing super() call in {}'s constructor", ast_class.name),
 						);
 					}
 				}
@@ -4739,6 +4733,27 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		self.ctx.pop_class();
+	}
+
+	fn type_check_expr_has_supercall(&mut self, expr: &Expr) -> bool {
+		match &expr.kind {
+			ExprKind::Call { callee, .. } => matches!(callee, CalleeKind::SuperCall(_)),
+			_ => false,
+		}
+	}
+	fn type_check_called_parent_class_method(&mut self, stmt: &Stmt) -> bool {
+		match &stmt.kind {
+			StmtKind::Let { initial_value, .. } => self.type_check_expr_has_supercall(&initial_value),
+			StmtKind::Expression(expr) => self.type_check_expr_has_supercall(expr),
+			StmtKind::Assignment { value, .. } => self.type_check_expr_has_supercall(value),
+			_ => false,
+		}
+	}
+	fn type_check_call_instance_member(&mut self, stmt: &Stmt) -> bool {
+		match &stmt.kind {
+			StmtKind::Assignment { variable, .. } => matches!(variable, Reference::InstanceMember { .. }),
+			_ => false,
+		}
 	}
 
 	fn check_method_is_resource_compatible(&mut self, method_type: TypeRef, method_def: &FunctionDefinition) {
