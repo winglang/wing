@@ -30,6 +30,26 @@ import { QueueMetadataView } from "./queue-metadata-view.js";
 import { ResourceInteractionView } from "./resource-interaction-view.js";
 import { ScheduleMetadata } from "./schedule-metadata.js";
 
+const runningStateToText = (runningState: ResourceRunningState) => {
+  switch (runningState) {
+    case "error": {
+      return "Error";
+    }
+    case "started": {
+      return "Started";
+    }
+    case "starting": {
+      return "Starting";
+    }
+    case "stopped": {
+      return "Stopped";
+    }
+    case "stopping": {
+      return "Stopping";
+    }
+  }
+};
+
 interface AttributeGroup {
   groupName: string;
   actionName?: string;
@@ -250,30 +270,37 @@ export const ResourceMetadata = memo(
         )}
         dataTestid={`resource-metadata:${node.path}`}
       >
-        <div className="flex items-center gap-2 px-2 py-2">
-          <div className="flex-shrink-0">
-            <ResourceIcon
-              className="w-6 h-6"
-              resourceType={node.type}
-              resourcePath={node.path}
-              color={node.display?.color}
-              icon={node.display?.icon}
-            />
-          </div>
+        <div className="flex flex-col gap-2 py-2">
+          <div className="flex items-center gap-2 px-2 ">
+            <div className="flex-shrink-0">
+              <ResourceIcon
+                className="w-6 h-6"
+                resourceType={node.type}
+                resourcePath={node.path}
+                color={node.display?.color}
+                icon={node.display?.icon}
+              />
+            </div>
 
-          <div className="flex flex-col min-w-0">
-            <div className="text-sm font-medium truncate">{nodeLabel}</div>
-            <div className="flex">
-              <Pill>{node.type}</Pill>
+            <div className="flex flex-col min-w-0">
+              <div className="text-sm font-medium truncate">{nodeLabel}</div>
+              <div className="flex">
+                <Pill>{node.type}</Pill>
+              </div>
             </div>
           </div>
 
-          <div className="grow"></div>
-
-          <div>
-            <RunningStateIndicator
-              runningState={node.hierarchichalRunningState}
-            />
+          <div className="flex items-center gap-2 px-2">
+            <Attribute className="grow" name="Running Status">
+              <div className="flex gap-2 items-center">
+                <span>
+                  {runningStateToText(node.hierarchichalRunningState)}
+                </span>
+                <RunningStateIndicator
+                  runningState={node.hierarchichalRunningState}
+                />
+              </div>
+            </Attribute>
           </div>
         </div>
 

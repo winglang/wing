@@ -3,12 +3,9 @@ import type {
   UIField,
   UIButton,
   UISection,
-} from "@winglang/sdk/lib/core";
-
-import type {
   UIFileBrowser,
   UIHttpClient,
-} from "../../../../../../libs/wingsdk/lib/core/index.js";
+} from "@winglang/sdk/lib/core";
 
 import { CustomResourceFileBrowser } from "./custom-resource-file-browser.js";
 import { CustomResourceHttpClientItem } from "./custom-resource-http-client.js";
