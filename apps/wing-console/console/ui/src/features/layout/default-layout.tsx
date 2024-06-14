@@ -276,19 +276,6 @@ export const DefaultLayout = ({
                                   "rounded-lg overflow-hidden",
                               )}
                             >
-                              <div
-                                className={classNames(
-                                  "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
-                                  "transition-all",
-                                  deferredLoading && "opacity-100 z-50",
-                                  !deferredLoading && "opacity-100 -z-10",
-                                )}
-                              >
-                                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                  <SpinnerLoader data-testid="main-view-loader" />
-                                </div>
-                              </div>
-
                               <Inspector />
                             </div>
                           </LeftResizableWidget>
