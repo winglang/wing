@@ -1,22 +1,16 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import { Function, IFunctionClient, Queue } from "../../src/cloud";
 import { inflight, lift } from "../../src/core";
 import { QueueRef } from "../../src/shared-aws";
 import * as std from "../../src/std";
-import * as tfaws from "../../src/target-tf-aws";
 import { SimApp } from "../sim-app";
-import {
-  mkdtemp,
-  sanitizeCode,
-  tfResourcesOf,
-  tfSanitize,
-  treeJsonOf,
-} from "../util";
+import { sanitizeCode, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default queue behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new Queue(app, "Queue");
   const output = app.synth();
 
@@ -28,7 +22,7 @@ test("default queue behavior", () => {
 
 test("queue with custom timeout", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
@@ -42,7 +36,7 @@ test("queue with custom timeout", () => {
 
 test("queue with custom retention", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new Queue(app, "Queue", {
     retentionPeriod: std.Duration.fromMinutes(30),
   });
@@ -56,7 +50,7 @@ test("queue with custom retention", () => {
 
 test("queue with a consumer function", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const queue = new Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
@@ -86,7 +80,7 @@ test("queue with a consumer function", () => {
 
 test("queue name valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const queue = new Queue(app, "The-Incredible_Queue-01");
   const output = app.synth();
 
@@ -102,7 +96,7 @@ test("queue name valid", () => {
 
 test("replace invalid character from queue name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const queue = new Queue(app, "The*Incredible$Queue");
   const output = app.synth();
 
@@ -166,7 +160,7 @@ test("QueueRef in a SimApp can be used to reference an existing queue within a s
 
 test("QueueRef in an TFAWS app can be used to reference an existing queue", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const queue = new QueueRef(
     app,
     "QueueRef",

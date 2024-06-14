@@ -1,24 +1,14 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { AzureApp } from "./azure-util";
 import * as cloud from "../../src/cloud";
 import { lift } from "../../src/core";
 import * as tfAzure from "../../src/target-tf-azure";
 import { StorageAccountPermissions } from "../../src/target-tf-azure/counter";
-import {
-  mkdtemp,
-  sanitizeCode,
-  tfResourcesOf,
-  tfSanitize,
-  treeJsonOf,
-} from "../util";
-
-const appProps = {
-  location: "East US",
-  entrypointDir: __dirname,
-};
+import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default counter behavior", () => {
-  const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
+  const app = new AzureApp();
   new cloud.Counter(app, "Counter");
   const output = app.synth();
 
@@ -31,7 +21,7 @@ test("default counter behavior", () => {
 });
 
 test("counter with initial value", () => {
-  const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
+  const app = new AzureApp();
   new cloud.Counter(app, "Counter", {
     initial: 9991,
   });
@@ -47,7 +37,7 @@ test("counter with initial value", () => {
 });
 
 test("function with a counter binding", () => {
-  const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
+  const app = new AzureApp();
   const counter = new cloud.Counter(app, "Counter");
   new cloud.Function(
     app,
@@ -78,7 +68,7 @@ test("function with a counter binding", () => {
 });
 
 test("inc() policy statement", () => {
-  const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
+  const app = new AzureApp();
   const counter = new cloud.Counter(app, "Counter");
   new cloud.Function(
     app,
@@ -98,7 +88,7 @@ test("inc() policy statement", () => {
 });
 
 test("dec() policy statement", () => {
-  const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
+  const app = new AzureApp();
   const counter = new cloud.Counter(app, "Counter");
   new cloud.Function(
     app,
@@ -118,7 +108,7 @@ test("dec() policy statement", () => {
 });
 
 test("peek() policy statement", () => {
-  const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
+  const app = new AzureApp();
   const counter = new cloud.Counter(app, "Counter");
   new cloud.Function(
     app,
@@ -138,7 +128,7 @@ test("peek() policy statement", () => {
 });
 
 test("set() policy statement", () => {
-  const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
+  const app = new AzureApp();
   const counter = new cloud.Counter(app, "Counter");
   new cloud.Function(
     app,
@@ -158,7 +148,7 @@ test("set() policy statement", () => {
 
 test("counter name valid", () => {
   // GIVEN
-  const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
+  const app = new AzureApp();
   const counter = new cloud.Counter(app, "wingcounter");
   const output = app.synth();
   // THEN
@@ -177,7 +167,7 @@ test("counter name valid", () => {
 
 test("replace invalid character from counter name", () => {
   // GIVEN
-  const app = new tfAzure.App({ outdir: mkdtemp(), ...appProps });
+  const app = new AzureApp();
   const counter = new cloud.Counter(app, "The*Amazing%Counter@01");
   const output = app.synth();
 

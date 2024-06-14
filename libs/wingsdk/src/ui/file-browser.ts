@@ -2,9 +2,9 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, UIComponent, lift } from "../core";
+import { UIComponent, lift } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
-import { IInflight } from "../std";
+import { IInflight, Resource } from "../std";
 
 /**
  * Global identifier for `FileBrowser`.
@@ -48,7 +48,7 @@ export class FileBrowser extends VisualComponent {
     label: string,
     handlers: FileBrowserHandlers
   ): FileBrowser {
-    return App.of(scope).newAbstract(
+    return Resource._newFromFactory(
       FILE_BROWSER_FQN,
       scope,
       id,

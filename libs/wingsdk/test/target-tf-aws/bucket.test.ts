@@ -1,10 +1,9 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import { Bucket } from "../../src/cloud";
 import { inflight } from "../../src/core";
-import * as tfaws from "../../src/target-tf-aws";
 import {
-  mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,
@@ -14,7 +13,7 @@ import {
 
 test("create a bucket", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new Bucket(app, "my_bucket");
   const output = app.synth();
 
@@ -28,11 +27,7 @@ test("create a bucket", () => {
 
 test("bucket has force_destroy if App is a test environment", () => {
   // GIVEN
-  const app = new tfaws.App({
-    outdir: mkdtemp(),
-    isTestEnvironment: true,
-    entrypointDir: __dirname,
-  });
+  const app = new AwsApp({ isTestEnvironment: true });
   new Bucket(app, "my_bucket");
   const output = app.synth();
 
@@ -44,7 +39,7 @@ test("bucket has force_destroy if App is a test environment", () => {
 
 test("bucket is public", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new Bucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
@@ -60,7 +55,7 @@ test("bucket is public", () => {
 
 test("bucket with two preflight objects", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
@@ -80,7 +75,7 @@ test("bucket with two preflight objects", () => {
 
 test("bucket with two preflight files", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.addFile("file1.txt", "../test-files/test1.txt");
   bucket.addFile("file2.txt", "../test-files/test2.txt");
@@ -100,7 +95,7 @@ test("bucket with two preflight files", () => {
 
 test("bucket prefix valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const bucket = new Bucket(app, "the-uncanny.bucket");
   const output = app.synth();
 
@@ -116,7 +111,7 @@ test("bucket prefix valid", () => {
 
 test("bucket prefix must be lowercase", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const bucket = new Bucket(app, "The-Uncanny.Bucket");
   const output = app.synth();
 
@@ -132,7 +127,7 @@ test("bucket prefix must be lowercase", () => {
 
 test("bucket prefix must begin with an alphanumeric character", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   // THEN
   expect(() => new Bucket(app, "(%?#$The-Uncanny-Bucket.*!@¨)")).toThrow(
@@ -142,7 +137,7 @@ test("bucket prefix must begin with an alphanumeric character", () => {
 
 test("bucket prefix can not begining with 'xn--'", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   // THEN
   expect(() => new Bucket(app, "xn--The-Uncanny-Bucket")).toThrow(
@@ -152,7 +147,7 @@ test("bucket prefix can not begining with 'xn--'", () => {
 
 test("bucket with onCreate method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.onCreate(inflight(async () => {}));
   const output = app.synth();
@@ -190,7 +185,7 @@ test("bucket with onCreate method", () => {
 
 test("bucket with onDelete method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.onDelete(inflight(async () => {}));
   const output = app.synth();
@@ -228,7 +223,7 @@ test("bucket with onDelete method", () => {
 
 test("bucket with onUpdate method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.onUpdate(inflight(async () => {}));
   const output = app.synth();
@@ -266,7 +261,7 @@ test("bucket with onUpdate method", () => {
 
 test("bucket with onEvent method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.onEvent(inflight(async () => {}));
   const output = app.synth();

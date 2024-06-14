@@ -54,6 +54,12 @@ export class Counter extends cloud.Counter {
     super(scope, id, props);
 
     const app = App.of(this) as App;
+    if (app._target !== "tf-azure") {
+      throw new Error(
+        `Bucket can only be created in a tf-azure app, got ${app._target}`
+      );
+    }
+
     this.storageAccount = app.storageAccount;
 
     const storageTableName = ResourceNames.generateName(this, TABLE_NAME_OPTS);

@@ -1,9 +1,10 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { AzureApp } from "./azure-util";
 import { Function } from "../../src/cloud";
 import { inflight } from "../../src/core";
 import * as tfazure from "../../src/target-tf-azure";
-import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const INFLIGHT_CODE = inflight(async (_, name) => {
   console.log("Hello, " + name);
@@ -11,11 +12,7 @@ const INFLIGHT_CODE = inflight(async (_, name) => {
 
 test("basic function", () => {
   // GIVEN
-  const app = new tfazure.App({
-    outdir: mkdtemp(),
-    location: "East US",
-    entrypointDir: __dirname,
-  });
+  const app = new AzureApp();
 
   // WHEN
   new Function(app, "Function", INFLIGHT_CODE);
@@ -39,11 +36,7 @@ test("basic function", () => {
 
 test("basic function with environment variables", () => {
   // GIVEN
-  const app = new tfazure.App({
-    outdir: mkdtemp(),
-    location: "East US",
-    entrypointDir: __dirname,
-  });
+  const app = new AzureApp();
 
   // WHEN
   new Function(app, "Function", INFLIGHT_CODE, {
@@ -73,11 +66,7 @@ test("basic function with environment variables", () => {
 
 test("permissions resources are added to function after constructor has been initialized", () => {
   // GIVEN
-  const app = new tfazure.App({
-    outdir: mkdtemp(),
-    location: "East US",
-    entrypointDir: __dirname,
-  });
+  const app = new AzureApp();
 
   const func = new tfazure.Function(app, "Function", INFLIGHT_CODE, {});
 
@@ -102,11 +91,7 @@ test("permissions resources are added to function after constructor has been ini
 
 test("replace invalid character from function name", () => {
   // GIVEN
-  const app = new tfazure.App({
-    outdir: mkdtemp(),
-    location: "East US",
-    entrypointDir: __dirname,
-  });
+  const app = new AzureApp();
 
   // WHEN
   const func = new Function(app, "someFunction01", INFLIGHT_CODE);

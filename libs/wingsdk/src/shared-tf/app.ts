@@ -8,7 +8,6 @@ import {
 } from "fs";
 import { join, resolve } from "path";
 import * as cdktf from "cdktf";
-import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { CdkTfTokens } from "./tokens";
 import {
@@ -59,25 +58,6 @@ export abstract class CdktfApp extends App {
     this.outdir = outdir;
     registerTokenResolver(new CdkTfTokens());
     this._synthHooks = props.synthHooks;
-
-    // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
-    // we can intercept the creation of resources and replace them with our own.
-    (cdktfApp as any).new = (
-      fqn: string,
-      ctor: any,
-      scope: Construct,
-      id: string,
-      ...args: any[]
-    ) => this.new(fqn, ctor, scope, id, ...args);
-
-    (cdktfApp as any).newAbstract = (
-      fqn: string,
-      scope: Construct,
-      id: string,
-      ...args: any[]
-    ) => this.newAbstract(fqn, scope, id, ...args);
-
-    (cdktfApp as any).typeForFqn = (fqn: string) => this.typeForFqn(fqn);
 
     this.outdir = outdir;
     this.cdktfApp = cdktfApp;

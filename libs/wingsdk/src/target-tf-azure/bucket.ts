@@ -60,6 +60,12 @@ export class Bucket extends cloud.Bucket {
     this.public = props.public ?? false;
 
     const app = App.of(this) as App;
+    if (app._target !== "tf-azure") {
+      throw new Error(
+        `Bucket can only be created in a tf-azure app, got ${app._target}`
+      );
+    }
+
     this.storageAccount = app.storageAccount;
 
     const storageContainerName = ResourceNames.generateName(

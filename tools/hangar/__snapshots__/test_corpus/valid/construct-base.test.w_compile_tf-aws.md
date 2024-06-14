@@ -55,6 +55,8 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
 const cloud = $stdlib.cloud;
 const cx = require("constructs");
 const aws = require("@cdktf/provider-aws");
@@ -96,7 +98,7 @@ class $Root extends $stdlib.std.Resource {
     const getDisplayName = ((r) => {
       return $helpers.nodeof(r).title;
     });
-    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "SqsQueue");
+    const q = globalThis.$PolyconFactory.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "SqsQueue");
     const wr = new WingResource(this, "WingResource");
     const another_resource = wr;
     console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))));
@@ -105,8 +107,7 @@ class $Root extends $stdlib.std.Resource {
     console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "construct-base.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "construct-base.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

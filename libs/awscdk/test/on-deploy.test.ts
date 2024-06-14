@@ -1,19 +1,16 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { expect, test } from "vitest";
-import { cloud, simulator } from "@winglang/sdk";
-import * as awscdk from "../src";
-import { mkdtemp } from "@winglang/sdk/test/util";
-import { awscdkSanitize, CDK_APP_OPTS } from "./util";
+import { cloud } from "@winglang/sdk";
+import { AwsCdkApp, awscdkSanitize } from "./util";
 import { inflight } from "@winglang/sdk/lib/core";
 
-const INFLIGHT_CODE = inflight(async (_, name) => console.log("Hello, " + name));
+const INFLIGHT_CODE = inflight(async (_, name) =>
+  console.log("Hello, " + name)
+);
 
 test("create an OnDeploy", () => {
   // GIVEN
-  const app = new awscdk.App({
-    outdir: mkdtemp(),
-    ...CDK_APP_OPTS,
-  });
+  const app = new AwsCdkApp();
 
   new cloud.OnDeploy(app, "my_on_deploy", INFLIGHT_CODE);
   const output = app.synth();
@@ -26,10 +23,7 @@ test("create an OnDeploy", () => {
 
 test("execute OnDeploy after other resources", () => {
   // GIVEN
-  const app = new awscdk.App({
-    outdir: mkdtemp(),
-    ...CDK_APP_OPTS,
-  });
+  const app = new AwsCdkApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
   new cloud.OnDeploy(app, "my_on_deploy", INFLIGHT_CODE, {
     executeAfter: [bucket],
@@ -47,10 +41,7 @@ test("execute OnDeploy after other resources", () => {
 
 test("execute OnDeploy before other resources", () => {
   // GIVEN
-  const app = new awscdk.App({
-    outdir: mkdtemp(),
-    ...CDK_APP_OPTS,
-  });
+  const app = new AwsCdkApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
   new cloud.OnDeploy(app, "my_on_deploy", INFLIGHT_CODE, {
     executeBefore: [bucket],

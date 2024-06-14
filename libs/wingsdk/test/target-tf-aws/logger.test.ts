@@ -1,11 +1,11 @@
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import { Function } from "../../src/cloud";
 import { inflight } from "../../src/core";
-import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
+import { sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
 test("inflight function uses a logger", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   const handler = inflight(async () => console.log("hello world!"));
 

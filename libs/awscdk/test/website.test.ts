@@ -2,18 +2,11 @@ import path from "path";
 import { Template } from "aws-cdk-lib/assertions";
 import { expect, test } from "vitest";
 import { cloud } from "@winglang/sdk";
-import * as awscdk from "../src";
-import { mkdtemp } from "@winglang/sdk/test/util";
-import { awscdkSanitize } from "./util";
-
-const CDK_APP_OPTS = {
-  stackName: "my-project",
-  entrypointDir: __dirname,
-};
+import { AwsCdkApp, awscdkSanitize } from "./util";
 
 test("default website behaviour", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   new cloud.Website(app, "Website", {
     path: path.resolve(__dirname, "website"),
   });
@@ -35,7 +28,7 @@ test("default website behaviour", () => {
 test("website with invalid path should throw error", () => {
   // GIVEN
   expect(() => {
-    const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+    const app = new AwsCdkApp();
     new cloud.Website(app, "Website", {
       path: path.resolve(__dirname, "/absolute/non-existent"),
     });
@@ -45,7 +38,7 @@ test("website with invalid path should throw error", () => {
 
 test("website with addJson", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const website = new cloud.Website(app, "Website", {
     path: path.resolve(__dirname, "website"),
   });
@@ -67,11 +60,13 @@ test("website with addJson", () => {
 
 test("website with addFile", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const website = new cloud.Website(app, "Website", {
     path: path.resolve(__dirname, "website"),
   });
-  website.addFile("addition.html", "<html>Hello world!</html>", {contentType: "text/html"});
+  website.addFile("addition.html", "<html>Hello world!</html>", {
+    contentType: "text/html",
+  });
   const output = app.synth();
 
   // THEN
@@ -90,7 +85,7 @@ test("website with addFile", () => {
 test("website with invalid path should throw error", () => {
   // GIVEN
   expect(() => {
-    const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+    const app = new AwsCdkApp();
     const website = new cloud.Website(app, "Website", {
       path: path.resolve(__dirname, "website"),
     });

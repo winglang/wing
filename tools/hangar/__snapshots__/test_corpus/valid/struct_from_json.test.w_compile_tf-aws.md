@@ -177,6 +177,8 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
 const cloud = $stdlib.cloud;
 const externalStructs = require("./preflight.structs-1.cjs");
 const otherExternalStructs = require("./preflight.structs2-2.cjs");
@@ -377,7 +379,7 @@ class $Root extends $stdlib.std.Resource {
     const j = ({"public": false});
     const x = cloud_BucketProps._fromJson(j);
     $helpers.assert($helpers.eq(x.public, false), "x.public == false");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight jsii struct conversion", new $Closure1(this, "$Closure1"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight jsii struct conversion", new $Closure1(this, "$Closure1"));
     const jFoo = ({"f": "bar"});
     $helpers.assert($helpers.eq(Foo._fromJson(jFoo).f, "bar"), "Foo.fromJson(jFoo).f == \"bar\"");
     const jFoosible = ({});
@@ -477,8 +479,8 @@ class $Root extends $stdlib.std.Resource {
         $helpers.assert(false, "false");
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:flight school student :)", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lifting a student", new $Closure3(this, "$Closure3"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:flight school student :)", new $Closure2(this, "$Closure2"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:lifting a student", new $Closure3(this, "$Closure3"));
     const jj1 = ({"data": ({"val": 10})});
     const externalBar = externalStructs_MyOtherStruct._fromJson(jj1);
     $helpers.assert($helpers.eq(externalBar.data.val, 10), "externalBar.data.val == 10");
@@ -490,17 +492,16 @@ class $Root extends $stdlib.std.Resource {
     (schema.validate(jMyStruct));
     const expectedSchema = ({"$id": "/MyStruct", "type": "object", "properties": ({"m1": ({"type": "object", "properties": ({"val": ({"type": "number"})}), "required": ["val"]}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"]})}), "required": ["m1", "m2"]});
     $helpers.assert($helpers.eq((schema.asStr()), ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
     (std.String.fromJson(10, { unsafe: true }));
     (std.Boolean.fromJson(10, { unsafe: true }));
     (std.Number.fromJson("cool", { unsafe: true }));
     Student._fromJson(({"obviously": "not a student"}), { unsafe: true });
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:unsafe flight", new $Closure5(this, "$Closure5"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:unsafe flight", new $Closure5(this, "$Closure5"));
     new otherExternalStructs.UsesStructInImportedFile(this, "UsesStructInImportedFile");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "struct_from_json.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "struct_from_json.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

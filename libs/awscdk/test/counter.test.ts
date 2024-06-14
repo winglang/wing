@@ -1,13 +1,11 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import { cloud, simulator } from "@winglang/sdk";
-import * as awscdk from "../src";
-import { mkdtemp } from "@winglang/sdk/test/util";
-import { sanitizeCode, awscdkSanitize, CDK_APP_OPTS } from "./util";
+import { cloud } from "@winglang/sdk";
+import { sanitizeCode, awscdkSanitize, AwsCdkApp } from "./util";
 import { lift } from "@winglang/sdk/lib/core";
 
 test("default counter behavior", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   new cloud.Counter(app, "Counter");
   const output = app.synth();
 
@@ -24,7 +22,7 @@ test("default counter behavior", () => {
 });
 
 test("counter with initial value", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   new cloud.Counter(app, "Counter", {
     initial: 9991,
   });
@@ -43,12 +41,14 @@ test("counter with initial value", () => {
 });
 
 test("function with a counter binding", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const counter = new cloud.Counter(app, "Counter");
-  const handler = lift({ my_counter: counter }).grant({my_counter: [cloud.CounterInflightMethods.INC]}).inflight(async (ctx) => {
-    const val = await ctx.my_counter.inc(2);
-    console.log(val);
-  });
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [cloud.CounterInflightMethods.INC] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.inc(2);
+      console.log(val);
+    });
 
   new cloud.Function(app, "Function", handler);
   const output = app.synth();
@@ -63,13 +63,14 @@ test("function with a counter binding", () => {
 });
 
 test("inc() policy statement", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const counter = new cloud.Counter(app, "Counter");
 
-
-  const handler = lift({ my_counter: counter }).grant({my_counter: [cloud.CounterInflightMethods.INC]}).inflight(async (ctx) => {
-    const val = await ctx.my_counter.inc(2);
-    console.log(val);
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [cloud.CounterInflightMethods.INC] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.inc(2);
+      console.log(val);
     });
 
   new cloud.Function(app, "Function", handler);
@@ -91,13 +92,15 @@ test("inc() policy statement", () => {
 });
 
 test("dec() policy statement", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const counter = new cloud.Counter(app, "Counter");
 
-  const handler = lift({ my_counter: counter }).grant({my_counter: [cloud.CounterInflightMethods.DEC]}).inflight(async (ctx) => {
-    const val = await ctx.my_counter.dec(2);
-    console.log(val);
-  });
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [cloud.CounterInflightMethods.DEC] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.dec(2);
+      console.log(val);
+    });
 
   new cloud.Function(app, "Function", handler);
   const output = app.synth();
@@ -118,13 +121,15 @@ test("dec() policy statement", () => {
 });
 
 test("peek() policy statement", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const counter = new cloud.Counter(app, "Counter");
 
-  const handler = lift({ my_counter: counter }).grant({my_counter: [cloud.CounterInflightMethods.PEEK]}).inflight(async (ctx) => {
-    const val = await ctx.my_counter.peek();
-    console.log(val);
-  });
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [cloud.CounterInflightMethods.PEEK] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.peek();
+      console.log(val);
+    });
 
   new cloud.Function(app, "Function", handler);
   const output = app.synth();
@@ -145,13 +150,15 @@ test("peek() policy statement", () => {
 });
 
 test("set() policy statement", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new AwsCdkApp();
   const counter = new cloud.Counter(app, "Counter");
 
-  const handler = lift({ my_counter: counter }).grant({my_counter: [cloud.CounterInflightMethods.SET]}).inflight(async (ctx) => {
-    const val = await ctx.my_counter.set(12);
-    console.log(val);
-  });
+  const handler = lift({ my_counter: counter })
+    .grant({ my_counter: [cloud.CounterInflightMethods.SET] })
+    .inflight(async (ctx) => {
+      const val = await ctx.my_counter.set(12);
+      console.log(val);
+    });
 
   new cloud.Function(app, "Function", handler);
   const output = app.synth();

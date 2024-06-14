@@ -1,11 +1,10 @@
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import * as cloud from "../../src/cloud";
 import { inflight } from "../../src/core";
-import * as tfaws from "../../src/target-tf-aws";
 import {
   getTfDataSource,
   getTfResource,
-  mkdtemp,
   tfDataSourcesOfCount,
   tfSanitize,
   treeJsonOf,
@@ -17,7 +16,7 @@ const INFLIGHT_CODE = inflight(async () => {
 
 test("create an OnDeploy", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
 
   new cloud.OnDeploy(app, "my_on_deploy", INFLIGHT_CODE);
   const output = app.synth();
@@ -30,7 +29,7 @@ test("create an OnDeploy", () => {
 
 test("execute OnDeploy after other resources", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
 
   new cloud.OnDeploy(app, "my_on_deploy", INFLIGHT_CODE, {
@@ -50,7 +49,7 @@ test("execute OnDeploy after other resources", () => {
 
 test("execute OnDeploy before other resources", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
   new cloud.OnDeploy(app, "my_on_deploy", INFLIGHT_CODE, {
     executeBefore: [bucket],

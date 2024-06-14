@@ -298,6 +298,8 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
 const file1 = require("./preflight.store-2.cjs");
 const file2 = require("./preflight.subfile-3.cjs");
 const file3 = require("./preflight.empty-1.cjs");
@@ -439,16 +441,15 @@ class $Root extends $stdlib.std.Resource {
     const store = new file1.Store(this, "Store");
     const q = new file2.Q(this, "Q");
     (expect.Util.equal((file2.Q.preflightGreet("foo")), "Hello foo"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:add data to store", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:greet", new $Closure2(this, "$Closure2"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:add data to store", new $Closure1(this, "$Closure1"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:greet", new $Closure2(this, "$Closure2"));
     const s = ({"x": 1, "y": 2});
     const c = file1.Color.BLUE;
     $helpers.assert($helpers.neq(c, file1.Color.RED), "c != file1.Color.RED");
     const t = new Triangle(this, "Triangle");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```
@@ -513,7 +514,7 @@ class Util extends $stdlib.std.Resource {
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-    this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+    this.b = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
     const __parent_this_1 = this;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
@@ -550,7 +551,7 @@ class Store extends $stdlib.std.Resource {
         });
       }
     }
-    const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "OnDeploy", new $Closure1(this, "$Closure1"));
+    const prefill = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "OnDeploy", new $Closure1(this, "$Closure1"));
   }
   static _toInflightType() {
     return `

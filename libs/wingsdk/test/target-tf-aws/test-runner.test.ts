@@ -1,9 +1,8 @@
 import { Construct } from "constructs";
 import { describe, expect, test } from "vitest";
+import { AwsApp } from "./aws-util";
 import { inflight } from "../../src/core";
 import { Test } from "../../src/std";
-import { App } from "../../src/target-tf-aws/app";
-import { mkdtemp } from "../util";
 
 const NOOP = inflight(async () => {});
 
@@ -16,12 +15,7 @@ describe("Single test", () => {
   }
 
   test("No function handlers should exist in a non test environment", () => {
-    const app = new App({
-      entrypointDir: __dirname,
-      outdir: mkdtemp(),
-      isTestEnvironment: false,
-      rootConstruct: Root,
-    });
+    const app = new AwsApp({ rootConstruct: Root });
 
     //@ts-expect-error
     const testList = app._testRunner?.getTestFunctionArns() ?? new Map();
@@ -29,12 +23,7 @@ describe("Single test", () => {
   });
 
   test("A single function handler should exist in a test environment", () => {
-    const app = new App({
-      entrypointDir: __dirname,
-      outdir: mkdtemp(),
-      isTestEnvironment: true,
-      rootConstruct: Root,
-    });
+    const app = new AwsApp({ isTestEnvironment: true, rootConstruct: Root });
 
     //@ts-expect-error
     const testList = app._testRunner?.getTestFunctionArns() ?? new Map();
@@ -53,12 +42,7 @@ describe("Multiple tests", () => {
   }
 
   test("Multiple function handlers should exist in a test environment", () => {
-    const app = new App({
-      entrypointDir: __dirname,
-      outdir: mkdtemp(),
-      isTestEnvironment: true,
-      rootConstruct: Root,
-    });
+    const app = new AwsApp({ isTestEnvironment: true, rootConstruct: Root });
 
     //@ts-expect-error
     const testList = app._testRunner?.getTestFunctionArns() ?? new Map();

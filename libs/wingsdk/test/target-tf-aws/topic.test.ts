@@ -1,11 +1,10 @@
 import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import * as cloud from "../../src/cloud";
 import { inflight } from "../../src/core";
 import { Duration } from "../../src/std";
-import * as tfaws from "../../src/target-tf-aws";
 import {
-  mkdtemp,
   sanitizeCode,
   tfResourcesOf,
   tfResourcesOfCount,
@@ -15,7 +14,7 @@ import {
 
 test("default topic behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new cloud.Topic(app, "Topic");
   const output = app.synth();
 
@@ -27,7 +26,7 @@ test("default topic behavior", () => {
 
 test("topic with subscriber function", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const topic = new cloud.Topic(app, "Topic");
   const subscriber = inflight(async (_, event) => {
     console.log("Received: ", event);
@@ -56,7 +55,7 @@ test("topic with subscriber function", () => {
 
 test("topic with multiple subscribers", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const topic = new cloud.Topic(app, "Topic");
 
   // WHEN
@@ -86,7 +85,7 @@ test("topic with multiple subscribers", () => {
 
 test("topic name valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const topic = new cloud.Topic(app, "The-Spectacular_Topic-01");
   const output = app.synth();
 
@@ -102,7 +101,7 @@ test("topic name valid", () => {
 
 test("replace invalid character from queue name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const topic = new cloud.Topic(app, "The%Spectacular@Topic");
   const output = app.synth();
 
@@ -118,7 +117,7 @@ test("replace invalid character from queue name", () => {
 
 test("topic with subscriber function timeout", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const topic = new cloud.Topic(app, "Topic");
   const subscriber = inflight(async (_, event) => {
     console.log("Received: ", event);

@@ -1,18 +1,12 @@
 import { test, expect } from "vitest";
+import { AwsApp } from "./aws-util";
 import * as cloud from "../../src/cloud";
 import { lift } from "../../src/core";
 import * as ex from "../../src/ex";
-import * as tfaws from "../../src/target-tf-aws";
-import {
-  mkdtemp,
-  sanitizeCode,
-  tfResourcesOf,
-  tfSanitize,
-  treeJsonOf,
-} from "../util";
+import { sanitizeCode, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default table behavior", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   new ex.Table(app, "Table", {
     columns: { name: ex.ColumnType.STRING },
     primaryKey: "id",
@@ -25,7 +19,7 @@ test("default table behavior", () => {
 });
 
 test("function with a table binding", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = new AwsApp();
   const table = new ex.Table(app, "Table", {
     columns: { name: ex.ColumnType.STRING },
     primaryKey: "id",

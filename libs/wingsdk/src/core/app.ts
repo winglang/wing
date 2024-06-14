@@ -1,6 +1,4 @@
 import { Construct, IConstruct } from "constructs";
-import { NotImplementedError } from "./errors";
-import { SDK_PACKAGE_NAME } from "../constants";
 import { ParameterRegistrar } from "../platform";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
 import { type IResource } from "../std/resource";
@@ -56,10 +54,9 @@ export interface AppProps {
   readonly synthHooks?: SynthHooks;
 
   /**
-   * Hooks for overriding newInstance calls
-   * @default - []
+   * Factory for instantiating new classes defined by the platform.
    */
-  readonly newInstanceOverrides?: any[];
+  readonly polyconFactory: PolyconFactory;
 
   /**
    * ParameterRegistrar of composed platforms
@@ -134,12 +131,6 @@ export abstract class App extends Construct implements IApp {
   public readonly isTestEnvironment: boolean;
 
   /**
-   * NewInstance hooks for defining resource implementations.
-   * @internal
-   */
-  public readonly _newInstanceOverrides: any[];
-
-  /**
    * The test runner for this app. Only created if `isTestEnvironment` is true.
    * @internal
    */
@@ -169,9 +160,13 @@ export abstract class App extends Construct implements IApp {
     }
 
     this.entrypointDir = props.entrypointDir;
-    this._newInstanceOverrides = props.newInstanceOverrides ?? [];
     this._synthHooks = props.synthHooks;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
+
+    if (!props.polyconFactory) {
+      throw new Error("PolyconFactory is required");
+    }
+    props.polyconFactory.register(this);
   }
 
   /**
@@ -199,15 +194,48 @@ export abstract class App extends Construct implements IApp {
    */
   public abstract synth(): string;
 
+  public makeId(scope: IConstruct, prefix: string = "") {
+    const key = `${scope.node.addr}|${prefix}`;
+
+    this._idCounters[key] = this._idCounters[key] ?? 0;
+
+    return `${prefix}${this._idCounters[key]++}`;
+  }
+}
+
+// TODO: Move this to a separate file
+
+const POLYCON_FACTORY_SYMBOL = Symbol("@winglang/sdk.core.PolyconFactory");
+
+/**
+ * A factory for instantiating new classes defined by platform(s).
+ */
+export class PolyconFactory {
   /**
-   * Creates a new object of the given FQN.
-   * @param fqn the fqn of the class to instantiate
-   * @param ctor the constructor of the class to instantiate (undefined for abstract classes)
-   * @param scope the scope of the resource
-   * @param id the id of the resource
-   * @param args the arguments to pass to the resource
-   * @returns the new instance
-   * @throws if the FQN is not supported
+   * Returns the PolyconFactory for the given scope.
+   * @param scope the scope to get the PolyconFactory for
+   * @returns the PolyconFactory for the given scope
+   */
+  public static of(scope: IConstruct): PolyconFactory {
+    const app = Node.of(scope).app;
+    const factory = (app as any)[POLYCON_FACTORY_SYMBOL];
+    if (!factory) {
+      throw new Error("PolyconFactory not found");
+    }
+    return factory;
+  }
+
+  private readonly newInstanceOverrides: any[];
+  private readonly resolveTypeOverrides: any[];
+
+  public constructor(newInstanceOverrides: any[], resolveTypeOverrides: any[]) {
+    this.newInstanceOverrides = newInstanceOverrides;
+    this.resolveTypeOverrides = resolveTypeOverrides;
+  }
+
+  /**
+   * Instantiates a new object of the given type.
+   * Throws an error if the type is not supported by any of the registered platforms.
    */
   public new(
     fqn: string,
@@ -216,87 +244,75 @@ export abstract class App extends Construct implements IApp {
     id: string,
     ...args: any[]
   ): any {
-    // delegate to "tryNew" first, which will allow derived classes to inject
-    const instance = this.tryNew(fqn, scope, id, ...args);
+    const instance = this.tryNewInstance(fqn, scope, id, ...args);
     if (instance) {
       return instance;
     }
 
-    // no injection, so we'll just create a new instance
-    return new ctor(scope, id, ...args);
-  }
-
-  /**
-   * Creates a new object of the given abstract class FQN.
-   */
-  public newAbstract(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
-    // next delegate to "tryNew", which will allow derived classes to inject
-    const instance = this.tryNew(fqn, scope, id, ...args);
-    if (!instance) {
-      const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
-      const typeNameParts = typeName.split(".");
-      throw new NotImplementedError(
-        `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`,
-        { resource: typeNameParts[typeNameParts.length - 1] }
-      );
+    if (ctor) {
+      return new ctor(scope, id, ...args);
     }
 
-    return instance;
-  }
-
-  public makeId(scope: IConstruct, prefix: string = "") {
-    const key = `${scope.node.addr}|${prefix}`;
-
-    this._idCounters[key] = this._idCounters[key] ?? 0;
-
-    return `${prefix}${this._idCounters[key]++}`;
+    throw new Error(`Unsupported resource type: ${fqn}`);
   }
 
   /**
-   * Can be overridden by derived classes to inject dependencies.
+   * Provides a new instance of an object if an override exists.
    *
-   * @param fqn The fully qualified name of the class we want the type for (jsii).
-   *
-   * @returns The dependency injected specific target type for the given FQN, or undefined if not found.
+   * @param fqn string fqn of the resource type
+   * @param scope construct scope
+   * @param id unique string id for resource
+   * @param args args to pass to the resource
    */
-  protected typeForFqn(fqn: string): any {
-    fqn;
-    return undefined;
-  }
-
-  /**
-   * Can be overridden by derived classes to inject dependencies.
-   *
-   * @param fqn The fully qualified name of the class to instantiate (jsii).
-   * @param scope The construct scope.
-   * @param id The construct id.
-   * @param args The arguments to pass to the constructor.
-   */
-  private tryNew(
+  public tryNewInstance(
     fqn: string,
     scope: Construct,
     id: string,
     ...args: any[]
   ): any {
-    // first check if overrides have been provided
-    for (const override of this._newInstanceOverrides) {
+    for (const override of this.newInstanceOverrides) {
       const instance = override(fqn, scope, id, ...args);
       if (instance) {
         return instance;
       }
     }
 
-    const type = this.typeForFqn(fqn);
-    if (!type) {
-      return undefined;
+    const ctor = this.resolveType(fqn);
+    if (ctor) {
+      return new ctor(scope, id, ...args);
     }
 
-    return new type(scope, id, ...args);
+    return undefined;
+  }
+
+  /**
+   * Provides the type for an fqn (fully qualified name) if an override exists.
+   *
+   * @param fqn string fqn of the resource type
+   */
+  public resolveType(fqn: string): any {
+    for (const override of this.resolveTypeOverrides) {
+      const type = override(fqn);
+      if (type) {
+        return type;
+      }
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Registers the PolyconFactory to an App, so that given any construct,
+   * its PolyconFactory can be retrieved.
+   *
+   * @param app the App to register to
+   */
+  public register(app: App) {
+    const existing = (app as any)[POLYCON_FACTORY_SYMBOL];
+    if (existing && existing !== this) {
+      throw new Error("PolyconFactory already registered");
+    }
+    (app as any)[POLYCON_FACTORY_SYMBOL] = this;
   }
 }
 

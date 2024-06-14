@@ -4,7 +4,7 @@ import { cwd } from "process";
 import * as vm from "vm";
 import { IPlatform } from "./platform";
 import { scanDirForPlatformFile } from "./util";
-import { App, AppProps, SynthHooks } from "../core";
+import { App, AppProps, PolyconFactory, SynthHooks } from "../core";
 import { SECRET_SYMBOL } from "../core/types";
 
 interface PlatformManagerOptions {
@@ -103,10 +103,31 @@ export class PlatformManager {
     });
   }
 
-  // This method is called from preflight.cjs in order to return an App instance
+  public createPolyconFactory(): PolyconFactory {
+    this.createPlatformInstances();
+    const newInstanceOverrides: any[] = [];
+    const resolveTypeOverrides: any[] = [];
+
+    this.platformInstances.forEach((instance) => {
+      if (instance.newInstance) {
+        newInstanceOverrides.push(instance.newInstance.bind(instance));
+      }
+      if (instance.resolveType) {
+        resolveTypeOverrides.push(instance.resolveType.bind(instance));
+      }
+    });
+
+    // Reverse the overrides so that the last platform's newInstance
+    // method is attempted first, then the second to last, etc.
+    newInstanceOverrides.reverse();
+    resolveTypeOverrides.reverse();
+
+    return new PolyconFactory(newInstanceOverrides, resolveTypeOverrides);
+  }
+
+  // This method is called from preflight.js in order to return an App instance
   // that can be synthesized
   public createApp(appProps: AppProps): App {
-    this.createPlatformInstances();
     let appCall = this.platformInstances[0].newApp;
 
     if (!appCall) {
@@ -120,7 +141,6 @@ export class PlatformManager {
     const app = appCall!({
       ...appProps,
       synthHooks: hooks.synthHooks,
-      newInstanceOverrides: hooks.newInstanceOverrides,
     }) as App;
 
     let secretNames = [];
@@ -288,6 +308,10 @@ function collectHooks(platformInstances: IPlatform[]) {
       result.storeSecretsHook = instance.storeSecrets.bind(instance);
     }
   });
+
+  // Reverse the newInstanceOverrides so that the last platform's newInstance
+  // method is attempted first, then the second to last, etc.
+  result.newInstanceOverrides = result.newInstanceOverrides.reverse();
 
   return result;
 }

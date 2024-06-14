@@ -23,9 +23,16 @@ export interface IPlatform {
    * @param type string fqn of the resource type
    * @param scope construct scope
    * @param id unique string id for resource
-   * @param props props to pass to the resource
+   * @param args args to pass to the resource
    */
-  newInstance?(type: string, scope: Construct, id: string, props: any): any;
+  newInstance?(type: string, scope: Construct, id: string, ...args: any[]): any;
+
+  /**
+   * Hook for getting the type for an fqn
+   *
+   * @param fqn string fqn of the resource type
+   */
+  resolveType?(fqn: string): any;
 
   /**
    * New App Method

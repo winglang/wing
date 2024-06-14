@@ -79,10 +79,17 @@ describe("wing test (custom platform)", () => {
         newApp(appProps) {
           return new tfaws.App(appProps);
         }
+
+        newInstance(fqn, scope, id, ...args) {
+          if (fqn === "@winglang/sdk.std.TestRunner") {
+            return new tfaws.TestRunner(scope, id, ...args);
+          }
+        }
       }
       module.exports = { Platform }`
     );
 
+    // entrypoint array is empty because foo.test.w is inferred as the only entrypoint
     await wingTest([], {
       clean: true,
       platform: ["./custom-platform.js"],

@@ -477,6 +477,8 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -555,7 +557,7 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
+        this.api = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
         const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
@@ -618,16 +620,15 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
-    const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
+    const api = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Api", cloud.Api, this, "Api");
+    const counter = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
     const handler = new $Closure1(this, "$Closure1");
     (api.get("/hello/world", handler));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:api url", new $Closure2(this, "$Closure2"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:api url", new $Closure2(this, "$Closure2"));
     new A(this, "A");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

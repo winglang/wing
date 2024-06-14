@@ -240,6 +240,8 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+globalThis.$PolyconFactory = $PlatformManager.createPolyconFactory();
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -247,7 +249,7 @@ class $Root extends $stdlib.std.Resource {
     class PreflightClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
+        this.b = globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket");
       }
       preflight_method() {
         const __parent_this_1 = this;
@@ -287,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         const inflight_closure = new $Closure1(this, "$Closure1");
-        return this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", inflight_closure);
+        return globalThis.$PolyconFactory.new("@winglang/sdk.cloud.Function", cloud.Function, this, "Function", inflight_closure);
       }
       static _toInflightType() {
         return `
@@ -382,12 +384,11 @@ class $Root extends $stdlib.std.Resource {
     }
     const p = new PreflightClass(this, "PreflightClass");
     const f = (p.preflight_method());
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:it works", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class inside closure captures from closure", new $Closure3(this, "$Closure3"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:it works", new $Closure2(this, "$Closure2"));
+    globalThis.$PolyconFactory.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class inside closure captures from closure", new $Closure3(this, "$Closure3"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_class_inside_inflight_closure.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_class_inside_inflight_closure.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], polyconFactory: globalThis.$PolyconFactory });
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```

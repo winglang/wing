@@ -2,8 +2,8 @@ import { Construct } from "constructs";
 import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
-import { App, UIComponent } from "../core";
-import { IInflight } from "../std";
+import { UIComponent } from "../core";
+import { IInflight, Resource } from "../std";
 
 /**
  * Global identifier for `HttpClient`.
@@ -26,7 +26,7 @@ export class HttpClient extends VisualComponent {
     getUrlHandler: IHttpClientGetUrlHandler,
     getApiSpecHandler: IHttpClientGetApiSpecHandler
   ): HttpClient {
-    return App.of(scope).newAbstract(
+    return Resource._newFromFactory(
       API_FQN,
       scope,
       id,

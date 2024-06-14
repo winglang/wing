@@ -1,9 +1,9 @@
 import { test, expect } from "vitest";
+import { GcpApp } from "./gcp-util";
 import { Schedule } from "../../src/cloud";
 import { inflight } from "../../src/core";
 import { Duration } from "../../src/std";
-import * as tfgcp from "../../src/target-tf-gcp";
-import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const GCP_APP_OPTS = {
   projectId: "my-project",
@@ -19,7 +19,7 @@ const CODE_LOG_EVENT = inflight(async (_, event) =>
 
 test("create a schedule", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = new GcpApp();
   const schedule = new Schedule(app, "Schedule", {
     rate: Duration.fromMinutes(2),
   });

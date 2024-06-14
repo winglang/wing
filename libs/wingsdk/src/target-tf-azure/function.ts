@@ -67,6 +67,12 @@ export class Function extends cloud.Function {
     super(scope, id, inflight, props);
 
     const app = App.of(this) as App;
+    if (app._target !== "tf-azure") {
+      throw new Error(
+        `Bucket can only be created in a tf-azure app, got ${app._target}`
+      );
+    }
+
     this.storageAccount = app.storageAccount;
     this.resourceGroup = app.resourceGroup;
     this.servicePlan = app.servicePlan;
