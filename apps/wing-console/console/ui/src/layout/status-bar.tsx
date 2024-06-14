@@ -52,7 +52,7 @@ export const StatusBar = ({
       )}
     >
       {/*left side*/}
-      <div className="w-full flex gap-4 items-center">
+      <div className="flex gap-2 items-center">
         <ResetButton
           onClick={() => setShowRestartModal(true)}
           disabled={resetMutation.isLoading || loading}
