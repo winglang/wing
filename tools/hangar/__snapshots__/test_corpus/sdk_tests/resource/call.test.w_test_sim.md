@@ -1,5 +1,20 @@
 # [call.test.w](../../../../../../examples/tests/sdk_tests/resource/call.test.w) | test | sim
 
+## stderr.log
+```log
+error: an error log
+originalMessage: an error log
+traceWithSources: []
+error: Error: Resource is not running (it may have crashed or stopped)
+    at exports.stop (<ABSOLUTE>:LINE:COL)
+    at process.<anonymous> (<ABSOLUTE>:LINE:COL)
+    at process.emit (node:events:519:28)
+    at emit (node:internal/child_process:951:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+originalMessage: Resource is not running (it may have crashed or stopped)
+traceWithSources: []
+```
+
 ## stdout.log
 ```log
 [INFO] resource can log messages at different levels | a regular (info) log
