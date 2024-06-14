@@ -1,14 +1,8 @@
 import { stat } from "node:fs/promises";
-import { relative, resolve, sep, join } from "node:path";
+import { join, dirname } from "node:path/posix";
 import type Chalk from "chalk";
 import type StackTracey from "stacktracey";
 import { normalPath } from "../shared/misc";
-
-function debugLog(...args: any[]) {
-  if (process.env.WING_ERROR_TEST) {
-    console.error(...args);
-  }
-}
 
 export interface PrettyPrintErrorOptions {
   /**
@@ -41,8 +35,6 @@ export async function prettyPrintError(
   options?: PrettyPrintErrorOptions
 ): Promise<string> {
   const StackTracey = await import("stacktracey").then((m) => m.default);
-
-  debugLog("error:", error);
 
   const chalk = options?.chalk;
   const fRed = (s: string) => (chalk ? chalk.red(s) : s);
@@ -81,8 +73,6 @@ export async function prettyPrintError(
     originalMessage = error.message;
   }
 
-  debugLog("originalMessage:", originalMessage);
-
   const message = fBold(fRed("Error: ")) + fRed(originalMessage);
 
   st = await st
@@ -104,15 +94,14 @@ export async function prettyPrintError(
 
   let traceWithSources = st.items;
 
-  debugLog("traceWithSources:", traceWithSources);
-
   if (traceWithSources.length === 0) {
     return message;
   }
 
   let interestingRoot = options?.sourceEntrypoint;
-
-  debugLog("interestingRoot:", interestingRoot);
+  if (interestingRoot !== undefined) {
+    interestingRoot = normalPath(interestingRoot);
+  }
 
   if (
     interestingRoot !== undefined &&
@@ -120,24 +109,22 @@ export async function prettyPrintError(
       .then((s) => !s.isDirectory())
       .catch(() => true))
   ) {
-    interestingRoot = resolve(interestingRoot, "..");
+    interestingRoot = dirname(interestingRoot);
   }
 
   if (interestingRoot !== undefined) {
-    interestingRoot = interestingRoot + sep;
+    interestingRoot = join(interestingRoot, "/");
   }
 
   if (interestingRoot !== undefined) {
     traceWithSources = traceWithSources.filter((item) =>
       (item.sourceFile?.path ?? item.file).startsWith(interestingRoot!)
     );
-    const targetDir = join(interestingRoot, "target") + sep;
+    const targetDir = join(interestingRoot, "target", "/");
     traceWithSources = traceWithSources.filter(
       (item) => !(item.sourceFile?.path ?? item.file).startsWith(targetDir)
     );
   }
-
-  debugLog("traceWithSources updated:", traceWithSources);
 
   let output = [];
 
@@ -149,8 +136,6 @@ export async function prettyPrintError(
       !item.native &&
       !item.thirdParty
   );
-
-  debugLog("firstGoodItem:", firstGoodItem);
 
   if (firstGoodItem) {
     const sourceFile = firstGoodItem.sourceFile!;
@@ -165,9 +150,8 @@ export async function prettyPrintError(
     // print line and its surrounding lines
     output.push(
       " ".repeat(maxDigits + 1) +
-        `--> ${relative(
-          process.cwd(),
-          sourceFile.path
+        `--> ${normalPath(
+          firstGoodItem.fileRelative
         )}:${originLine}:${originColumn}`
     );
 

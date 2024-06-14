@@ -21,8 +21,6 @@ errorWingFiles.forEach((wingFile) => {
       return;
     }
 
-    process.env["WING_ERROR_TEST"] = "1";
-
     const out = await runWingCommand({
       cwd: tmpDir,
       wingFile: relativeWingFile,

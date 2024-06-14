@@ -162,9 +162,6 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
         chalk,
         sourceEntrypoint: resolve(entrypoint ?? "."),
       });
-      if (process.env.WING_ERROR_TEST) {
-        console.error(`output >>>${output}<<<`);
-      }
 
       if (process.env.DEBUG) {
         output +=
