@@ -83,7 +83,7 @@ export const StatusBar = ({
         </div>
       </div>
       {/*center*/}
-      <div className="w-full flex justify-center items-center"></div>
+      <div className="grow"></div>
       {/*right side*/}
       <div className="w-full flex gap-2 items-center justify-end">
         <AutoUpdater />
