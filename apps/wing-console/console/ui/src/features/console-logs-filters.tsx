@@ -77,56 +77,43 @@ export const ConsoleLogsFilters = memo(
       debouncedOnSearch(searchText);
     }, [debouncedOnSearch, searchText]);
 
-    const [defaultLogTypes] = useState(selectedLogTypeFilters);
+    const [defaultLogTypeSelection] = useState(selectedLogTypeFilters);
     const resetFiltersDisabled = useMemo(() => {
       return (
-        selectedLogTypeFilters === defaultLogTypes &&
+        selectedLogTypeFilters === defaultLogTypeSelection &&
         selectedResourceIds.length === 0 &&
         selectedResourceTypes.length === 0
       );
     }, [
-      defaultLogTypes,
+      defaultLogTypeSelection,
       selectedLogTypeFilters,
       selectedResourceIds,
       selectedResourceTypes,
     ]);
 
-    const [defaultLogTypeSelection] = useState(selectedLogTypeFilters);
+    const renderResourceIdsLabel = useCallback(
+      (selected?: string[]) => {
+        if (!selected || selected.length === 0) {
+          return <span className="truncate">All resources</span>;
+        }
 
-    const logTypeLabel = useMemo(() => {
-      if (selectedLogTypeFilters.length === 4) {
-        return "All levels";
-      } else if (selectedLogTypeFilters === defaultLogTypes) {
-        return "Default levels";
-      } else if (selectedLogTypeFilters.length === 0) {
-        return "Hide all";
-      } else if (
-        selectedLogTypeFilters.length === 1 &&
-        selectedLogTypeFilters[0]
-      ) {
-        return `${logLevelNames[selectedLogTypeFilters[0]]} only`;
-      } else {
-        return "Custom levels";
-      }
-    }, [selectedLogTypeFilters, defaultLogTypes]);
-
-    const renderResourceIdsLabel = useCallback((selected?: string[]) => {
-      if (!selected || selected.length === 0) {
-        return <span className="truncate">All resources</span>;
-      }
-
-      const type = selected[0] as string;
-      const Icon = getResourceIconComponent(type);
-      return (
-        <span className="flex items-center truncate gap-1">
-          <Icon className={classNames("size-4 shrink-0", theme.text2)} />
-          <span className="truncate">{getResourceIdLabel(type)}</span>
-          {selected.length > 1 && (
-            <span className="opacity-80"> and {selected.length - 1} more</span>
-          )}
-        </span>
-      );
-    }, []);
+        const type = selected[0] as string;
+        const Icon = getResourceIconComponent(type);
+        return (
+          <span className="flex items-center truncate gap-1">
+            <Icon className={classNames("size-4 shrink-0", theme.text2)} />
+            <span className="truncate">{getResourceIdLabel(type)}</span>
+            {selected.length > 1 && (
+              <span className="opacity-80">
+                {" "}
+                and {selected.length - 1} more
+              </span>
+            )}
+          </span>
+        );
+      },
+      [theme.text2],
+    );
 
     const renderResourceTypesLabel = useCallback((selected?: string[]) => {
       if (!selected || selected.length === 0) {
@@ -186,6 +173,31 @@ export const ConsoleLogsFilters = memo(
         icon: getResourceIconComponent(resource.type),
       }));
     }, [resources]);
+
+    const logTypeLabel = useMemo(() => {
+      console.log("selectedLogTypeFilters", selectedLogTypeFilters.toString());
+      console.log(
+        "defaultLogTypeSelection",
+        defaultLogTypeSelection.toString(),
+      );
+      if (selectedLogTypeFilters.length === resourceTypeItems.length) {
+        return "All levels";
+      } else if (
+        selectedLogTypeFilters.sort().toString() ===
+        defaultLogTypeSelection.sort().toString()
+      ) {
+        return "Default levels";
+      } else if (selectedLogTypeFilters.length === 0) {
+        return "Hide all";
+      } else if (
+        selectedLogTypeFilters.length === 1 &&
+        selectedLogTypeFilters[0]
+      ) {
+        return `${logLevelNames[selectedLogTypeFilters[0]]} only`;
+      } else {
+        return "Custom levels";
+      }
+    }, [resourceTypeItems, selectedLogTypeFilters, defaultLogTypeSelection]);
 
     const showIncompatibleResourceTypeWarning = useMemo(() => {
       if (!resources || selectedResourceTypes.length === 0) {
