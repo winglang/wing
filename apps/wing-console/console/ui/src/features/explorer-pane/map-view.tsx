@@ -4,7 +4,8 @@ import {
   SpinnerLoader,
   useTheme,
 } from "@wingconsole/design-system";
-import type { ConstructTreeNode } from "@winglang/sdk/lib/core/index.js";
+import type { MapItem } from "@wingconsole/server";
+import type { ResourceRunningState } from "@winglang/sdk/lib/simulator/index.js";
 import clsx from "classnames";
 import { type ElkPoint, type LayoutOptions } from "elkjs";
 import type { FunctionComponent, PropsWithChildren } from "react";
@@ -18,6 +19,7 @@ import { Node } from "./elk-flow/node.js";
 import { Port } from "./elk-flow/port.js";
 import type { EdgeComponent, EdgeComponentProps } from "./elk-flow/types.js";
 import { useMap } from "./use-map.js";
+import { RunningStateIndicator } from "../ui/running-state-indicator.js";
 
 const Z_INDICES = {
   EDGE: "z-[1000]",
@@ -45,6 +47,7 @@ interface WrapperProps {
   icon?: string;
   collapsed?: boolean;
   onCollapse?: (value: boolean) => void;
+  hierarchichalRunningState: ResourceRunningState;
 }
 
 const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
@@ -58,6 +61,7 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
     children,
     color,
     icon,
+    hierarchichalRunningState,
   }) => {
     /* eslint-disable jsx-a11y/no-static-element-interactions */
     /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -81,52 +85,55 @@ const Wrapper: FunctionComponent<PropsWithChildren<WrapperProps>> = memo(
           onClick?.();
         }}
       >
-        <div
-          className={clsx(
-            "px-2.5 py-1 flex items-center gap-1.5",
-            "border-b border-slate-200 dark:border-slate-800",
-            "cursor-pointer",
-          )}
-        >
-          <ResourceIcon
-            className="size-4 -ml-0.5"
-            resourceType={fqn}
-            icon={icon}
-            color={color}
-          />
-
-          <span
+        <div className="relative">
+          <div
             className={clsx(
-              "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
-              !highlight && " text-slate-600 dark:text-slate-300",
-              highlight && "text-sky-600 dark:text-sky-300",
+              "px-2.5 py-1 flex items-center gap-1.5",
+              "border-b border-slate-200 dark:border-slate-800",
+              "cursor-pointer",
             )}
           >
-            {name}
-          </span>
-          <div className="flex grow justify-end">
-            <div
-              className="pl-1"
-              onClick={() => {
-                onCollapse(!collapsed);
-              }}
+            <ResourceIcon
+              className="size-4 -ml-0.5"
+              resourceType={fqn}
+              icon={icon}
+              color={color}
+            />
+
+            <span
+              className={clsx(
+                "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
+                !highlight && " text-slate-600 dark:text-slate-300",
+                highlight && "text-sky-600 dark:text-sky-300",
+              )}
             >
-              {collapsed && (
-                <ChevronRightIcon
-                  className={clsx(
-                    "size-4",
-                    "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
-                  )}
-                />
-              )}
-              {!collapsed && (
-                <ChevronDownIcon
-                  className={clsx(
-                    "size-4",
-                    "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
-                  )}
-                />
-              )}
+              {name}
+            </span>
+            <RunningStateIndicator runningState={hierarchichalRunningState} />
+            <div className="flex grow justify-end">
+              <div
+                className="pl-1"
+                onClick={() => {
+                  onCollapse(!collapsed);
+                }}
+              >
+                {collapsed && (
+                  <ChevronRightIcon
+                    className={clsx(
+                      "size-4",
+                      "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                    )}
+                  />
+                )}
+                {!collapsed && (
+                  <ChevronDownIcon
+                    className={clsx(
+                      "size-4",
+                      "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                    )}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -147,6 +154,7 @@ interface ContainerNodeProps {
   onCollapse?: (value: boolean) => void;
   color?: string;
   icon?: string;
+  hierarchichalRunningState: ResourceRunningState;
 }
 
 const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
@@ -172,6 +180,7 @@ const ContainerNode: FunctionComponent<PropsWithChildren<ContainerNodeProps>> =
             collapsed={props.collapsed}
             color={props.color}
             icon={props.icon}
+            hierarchichalRunningState={props.hierarchichalRunningState}
           >
             <div className="p-4">
               <NodeChildren>
@@ -201,6 +210,7 @@ interface ConstructNodeProps {
   onCollapse: (value: boolean) => void;
   collapsed: boolean;
   icon?: string;
+  hierarchichalRunningState: ResourceRunningState;
 }
 
 const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
@@ -218,11 +228,14 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
       onCollapse,
       collapsed,
       icon,
+      hierarchichalRunningState,
     }) => {
       const select = useCallback(
         () => onSelectedNodeIdChange(id),
         [onSelectedNodeIdChange, id],
       );
+
+      const hasError = hierarchichalRunningState === "error";
 
       const renderedNode = (
         <Node
@@ -250,9 +263,15 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
                 "bg-white dark:bg-slate-700",
                 highlight && "bg-sky-50 dark:bg-sky-900",
                 "border",
-                "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
-                !highlight && "border-slate-200 dark:border-slate-800",
-                highlight && "outline-4 border-sky-400 dark:border-sky-500",
+                "outline outline-0",
+                !highlight &&
+                  !hasError &&
+                  "border-slate-200 dark:border-slate-800",
+                highlight && !hasError && "border-sky-400 dark:border-sky-500",
+                highlight && "outline-4",
+                !hasError && "outline-sky-200/50 dark:outline-sky-500/50",
+                hasError &&
+                  "border-red-500 dark:border-red-500 outline-red-200/50 dark:outline-red-500/50",
                 "shadow",
                 "transition-all",
               ],
@@ -283,47 +302,59 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             />
 
             {!hasChildNodes && (
-              // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-              <div
-                className={clsx(
-                  "px-2.5 py-1 flex items-center gap-1.5",
-                  inflights.length > 0 &&
-                    "border-b border-slate-200 dark:border-slate-800",
-                )}
-              >
-                <ResourceIcon
-                  className="size-4 -ml-0.5"
-                  resourceType={fqn}
-                  color={color}
-                  icon={icon}
-                />
-
-                <span
+              // eslint-disable-next-line react/jsx-no-comment-textnodes
+              <div className="relative">
+                <div
                   className={clsx(
-                    "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
-                    !highlight && " text-slate-600 dark:text-slate-300",
-                    highlight && "text-sky-600 dark:text-sky-300",
+                    "px-2.5 py-1 flex items-center gap-1.5",
+                    inflights.length > 0 &&
+                      "border-b border-slate-200 dark:border-slate-800",
                   )}
                 >
-                  {name}
-                </span>
-                {collapsed && (
-                  <div
-                    className="flex grow justify-end pl-1"
-                    onClick={() => {
-                      if (collapsed) {
-                        onCollapse(false);
-                      }
-                    }}
+                  <ResourceIcon
+                    className="size-4 -ml-0.5"
+                    resourceType={fqn}
+                    color={color}
+                    icon={icon}
+                  />
+
+                  <span
+                    className={clsx(
+                      "text-xs font-medium leading-relaxed tracking-wide whitespace-nowrap",
+                      !highlight &&
+                        !hasError &&
+                        "text-slate-600 dark:text-slate-300",
+                      hasError && "text-red-600 dark:text-red-500",
+                      highlight &&
+                        !hasError &&
+                        "text-sky-600 dark:text-sky-300",
+                    )}
                   >
-                    <ChevronRightIcon
-                      className={clsx(
-                        "size-4",
-                        "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
-                      )}
-                    />
-                  </div>
-                )}
+                    {name}
+                  </span>
+
+                  <RunningStateIndicator
+                    runningState={hierarchichalRunningState}
+                  />
+
+                  {collapsed && (
+                    <div
+                      className="flex grow justify-end pl-1"
+                      onClick={() => {
+                        if (collapsed) {
+                          onCollapse(false);
+                        }
+                      }}
+                    >
+                      <ChevronRightIcon
+                        className={clsx(
+                          "size-4",
+                          "hover:text-sky-600 dark:hover:text-sky-300 transition-colors",
+                        )}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
@@ -394,6 +425,7 @@ const ConstructNode: FunctionComponent<PropsWithChildren<ConstructNodeProps>> =
             collapsed={collapsed}
             color={color}
             icon={icon}
+            hierarchichalRunningState={hierarchichalRunningState}
           >
             <NodeChildren>
               {inflights.length > 0 && renderedNode}
@@ -641,7 +673,7 @@ export const MapView = memo(
 
     const RenderNode = useCallback<
       FunctionComponent<{
-        constructTreeNode: ConstructTreeNode;
+        constructTreeNode: MapItem;
         selectedNodeId: string | undefined;
         onSelectedNodeIdChange: (id: string | undefined) => void;
       }>
@@ -694,6 +726,9 @@ export const MapView = memo(
                 onExpand(node.path);
               }
             }}
+            hierarchichalRunningState={
+              props.constructTreeNode.hierarchichalRunningState
+            }
           >
             {childNodes.map((child) => (
               <RenderNode

@@ -6,10 +6,8 @@ import {
   TreeItem,
   TreeView,
   useTheme,
-  ResourceIcon,
   ScrollableArea,
 } from "@wingconsole/design-system";
-import type { ExplorerItem } from "@wingconsole/server";
 import classNames from "classnames";
 import { memo } from "react";
 
@@ -26,6 +24,7 @@ const renderTreeItems = (items: TreeMenuItem[]) => {
         itemId={item.id}
         label={item.label}
         icon={item.icon}
+        secondaryLabel={item.secondaryLabel}
       >
         {item.children &&
           item.children.length > 0 &&
@@ -35,28 +34,7 @@ const renderTreeItems = (items: TreeMenuItem[]) => {
   });
 };
 
-const createTreeMenuItemFromExplorerTreeItem = (
-  item: ExplorerItem,
-): TreeMenuItem => {
-  return {
-    id: item.id,
-    label: item.label,
-    icon: item.type ? (
-      <ResourceIcon
-        resourceType={item.type}
-        resourcePath={item.label}
-        className="w-4 h-4"
-        color={item.display?.color}
-        icon={item.display?.icon}
-      />
-    ) : undefined,
-    children: item.childItems?.map((item) =>
-      createTreeMenuItemFromExplorerTreeItem(item),
-    ),
-  };
-};
-
-export interface HierarchyProps {
+export interface ExplorerProps {
   loading?: boolean;
   "data-testid"?: string;
 }

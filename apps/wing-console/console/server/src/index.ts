@@ -36,7 +36,7 @@ export type {
 export type { Trace, State } from "./types.js";
 export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
-export type { ExplorerItem } from "./router/app.js";
+export type { ExplorerItem, MapItem } from "./router/app.js";
 export type { WingSimulatorSchema, BaseResourceSchema } from "./wingsdk.js";
 export type { Updater, UpdaterStatus } from "./updater.js";
 export type { Config } from "./config.js";
@@ -44,7 +44,7 @@ export type { Router } from "./router/index.js";
 export type { HostUtils } from "./hostUtils.js";
 export type { RouterContext } from "./utils/createRouter.js";
 export type { RouterMeta } from "./utils/createRouter.js";
-export type { MapNode, MapEdge } from "./router/app.js";
+export type { MapEdge } from "./router/app.js";
 export type { InternalTestResult } from "./router/test.js";
 export type { Column } from "./router/table.js";
 export type { NodeDisplay } from "./utils/constructTreeNodeMap.js";
@@ -149,6 +149,13 @@ export const createConsoleServer = async ({
   if (onTrace) {
     simulator.on("trace", onTrace);
   }
+  simulator.on("resourceLifecycleEvent", async (event) => {
+    await Promise.all([
+      invalidateQuery("app.map"),
+      invalidateQuery("app.explorerTree"),
+      invalidateQuery("app.nodeMetadata"),
+    ]);
+  });
   compiler.on("compiled", ({ simfile }) => {
     if (!isStarting) {
       simulator.start(simfile);

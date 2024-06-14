@@ -1,7 +1,7 @@
 import { simulator } from "@winglang/sdk";
 import Emittery from "emittery";
 
-import type { Trace } from "../types.js";
+import type { ResourceLifecycleEvent, Trace } from "../types.js";
 
 import { formatWingError } from "./format-wing-error.js";
 
@@ -11,6 +11,7 @@ export interface SimulatorEvents {
   error: Error;
   stopping: undefined;
   trace: Trace;
+  resourceLifecycleEvent: ResourceLifecycleEvent;
 }
 
 export interface Simulator {
@@ -73,6 +74,11 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
         instance.onTrace({
           callback(trace) {
             events.emit("trace", trace);
+          },
+        });
+        instance.onResourceLifecycleEvent({
+          callback(event) {
+            events.emit("resourceLifecycleEvent", event);
           },
         });
         await events.emit("starting", { instance });
