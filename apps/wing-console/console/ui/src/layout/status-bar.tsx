@@ -89,30 +89,29 @@ export const StatusBar = ({
         <AutoUpdater />
         <DiscordButton />
         {showThemeToggle && <ThemeToggle />}
-
-        <Modal visible={showRestartModal}>
-          <div className="flex flex-col gap-4 max-w-lg items-center">
-            <h3
-              className={classNames(
-                theme.text1,
-                "text-base font-semibold leading-6",
-              )}
-            >
-              Reset Application
-            </h3>
-            <p className={classNames(theme.text2, "text-sm text-center")}>
-              Are you sure you want to reset all state and restart the
-              application?
-            </p>
-            <div className="flex justify-around gap-2">
-              <Button onClick={() => setShowRestartModal(false)}>Cancel</Button>{" "}
-              <Button onClick={restart} dataTestid="restart-simulator-button">
-                Reset
-              </Button>
-            </div>
-          </div>
-        </Modal>
       </div>
+      <Modal visible={showRestartModal}>
+        <div className="flex flex-col gap-4 max-w-lg items-center">
+          <h3
+            className={classNames(
+              theme.text1,
+              "text-base font-semibold leading-6",
+            )}
+          >
+            Reset Application
+          </h3>
+          <p className={classNames(theme.text2, "text-sm text-center")}>
+            Are you sure you want to reset all state and restart the
+            application?
+          </p>
+          <div className="flex justify-around gap-2">
+            <Button onClick={() => setShowRestartModal(false)}>Cancel</Button>{" "}
+            <Button onClick={restart} dataTestid="restart-simulator-button">
+              Reset
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </footer>
   );
 };

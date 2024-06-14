@@ -20,7 +20,6 @@ import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 import { LogsWidget } from "../widgets/logs.js";
 
-import { Header } from "./header.js";
 import { SignInModal } from "./sign-in.js";
 import { StatusBar } from "./status-bar.js";
 import { useLayout } from "./use-layout.js";
