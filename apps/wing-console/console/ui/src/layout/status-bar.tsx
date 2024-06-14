@@ -85,7 +85,7 @@ export const StatusBar = ({
       {/*center*/}
       <div className="grow"></div>
       {/*right side*/}
-      <div className="w-full flex gap-2 items-center justify-end">
+      <div className="flex gap-2 items-center">
         <AutoUpdater />
         <DiscordButton />
         {showThemeToggle && <ThemeToggle />}
