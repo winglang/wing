@@ -30,7 +30,6 @@ export interface ListboxProps {
   selected?: string[];
   onChange?: (selected: string[]) => void;
   disabled?: boolean;
-  title?: string;
   defaultLabel?: string;
   showSearch?: boolean;
   notFoundLabel?: string;
@@ -47,7 +46,6 @@ export const Listbox = ({
   selected,
   onChange,
   disabled = false,
-  title = "",
   defaultLabel = "Default",
   showSearch = false,
   notFoundLabel = "No results found",
@@ -103,7 +101,6 @@ export const Listbox = ({
             )}
             icon={icon}
             transparent={transparent}
-            title={title}
           >
             {renderLabel && (
               <span className="block truncate">{renderLabel(selected)}</span>
