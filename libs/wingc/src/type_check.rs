@@ -4637,15 +4637,10 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 					{
 						// Check if one of the statements before the super() call is invalid
 						for i in 0..idx {
-							if self.type_check_call_parent_class_method(&ctor_body.statements[i]) {
+							if self.type_check_invalid_stmt_before_super(&ctor_body.statements[i]) {
 								self.spanned_error(
 									&ctor_body.statements[i],
-									"super() call should be made before a parent class method".to_string(),
-								);
-							} else if self.type_check_call_instance_member(&ctor_body.statements[i]) {
-								self.spanned_error(
-									&ctor_body.statements[i],
-									"super() call should be made before an instance member is used".to_string(),
+									"This command cannot be executed before calling super()".to_string(),
 								);
 							}
 						}
@@ -4736,23 +4731,34 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		self.ctx.pop_class();
 	}
 
-	fn type_check_expr_has_supercall(&mut self, expr: &Expr) -> bool {
+	fn type_check_invalid_expr_before_super(&mut self, expr: &Expr) -> bool {
 		match &expr.kind {
-			ExprKind::Call { callee, .. } => matches!(callee, CalleeKind::SuperCall(_)),
+			ExprKind::Call { callee, .. } => {
+				// callee is SuperCall return true
+				if matches!(callee, CalleeKind::SuperCall(_)) {
+					return true;
+				}
+				// if callee is an expression checks if has an instante member
+				return match callee {
+					CalleeKind::Expr(e) => {
+						matches!(e.kind, ast::ExprKind::Reference(Reference::InstanceMember { .. }))
+					}
+					_ => false,
+				};
+			}
 			_ => false,
 		}
 	}
-	fn type_check_call_parent_class_method(&mut self, stmt: &Stmt) -> bool {
+	fn type_check_invalid_stmt_before_super(&mut self, stmt: &Stmt) -> bool {
 		match &stmt.kind {
-			StmtKind::Let { initial_value, .. } => self.type_check_expr_has_supercall(&initial_value),
-			StmtKind::Expression(expr) => self.type_check_expr_has_supercall(expr),
-			StmtKind::Assignment { value, .. } => self.type_check_expr_has_supercall(value),
-			_ => false,
-		}
-	}
-	fn type_check_call_instance_member(&mut self, stmt: &Stmt) -> bool {
-		match &stmt.kind {
-			StmtKind::Assignment { variable, .. } => matches!(variable, Reference::InstanceMember { .. }),
+			StmtKind::Let { initial_value, .. } => self.type_check_invalid_expr_before_super(&initial_value),
+			StmtKind::Expression(expr) => self.type_check_invalid_expr_before_super(expr),
+			StmtKind::Assignment { value, variable, .. } => {
+				if matches!(variable, Reference::InstanceMember { .. }) {
+					return true;
+				}
+				return self.type_check_invalid_expr_before_super(value);
+			}
 			_ => false,
 		}
 	}

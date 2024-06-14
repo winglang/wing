@@ -2773,21 +2773,6 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`instance_member_before_super.w 1`] = `
-"error: super() call should be made before an instance member is used
-   --> ../../../examples/tests/invalid/instance_member_before_super.w:12:5
-   |
-12 |     this.b = 3;
-   |     ^^^^^^^^^^^
-
-
-
-Tests 1 failed (1)
-Snapshots 1 skipped
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
 exports[`interface.test.w 1`] = `
 "error: Properties are not supported in interfaces
    --> ../../../examples/tests/invalid/interface.test.w:32:3
@@ -2958,6 +2943,56 @@ exports[`invalid compile directory 1`] = `
   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 "
+`;
+
+exports[`invalid_call_before_super.w 1`] = `
+"error: Call to super constructor can only be done from within class constructor
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:27:9
+   |
+27 |         super(1);
+   |         ^^^^^^^^^
+
+
+error: Call to super constructor can only be done from within class constructor
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:29:9
+   |
+29 |         super(2);
+   |         ^^^^^^^^^
+
+
+error: super() call should be made before an instance member is used
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:10:5
+   |
+10 |     this.b = 3;
+   |     ^^^^^^^^^^^
+
+
+error: super() call should be made before a parent class method
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:18:5
+   |
+18 |     super.get_a();
+   |     ^^^^^^^^^^^^^^
+
+
+error: Missing super() call in D's constructor
+   --> ../../../examples/tests/invalid/invalid_call_before_super.w:25:18
+   |  
+25 |       new(x: bool) {
+   | /------------------^
+26 | |       if x {
+27 | |         super(1);
+28 | |       } else {
+29 | |         super(2);
+30 | |       }
+31 | |     }
+   | \\\\-----^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`issue_2767.test.w 1`] = `
@@ -3559,21 +3594,6 @@ exports[`parameters.test.w 1`] = `
 
 (hint: make sure to use --values to provide the required parameters file)
         
-
-Tests 1 failed (1)
-Snapshots 1 skipped
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`parent_class_method_before_super.w 1`] = `
-"error: super() call should be made before a parent class method
-   --> ../../../examples/tests/invalid/parent_class_method_before_super.w:11:5
-   |
-11 |     super.get();
-   |     ^^^^^^^^^^^^
-
-
 
 Tests 1 failed (1)
 Snapshots 1 skipped
