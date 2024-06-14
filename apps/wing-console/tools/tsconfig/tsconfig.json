@@ -5,7 +5,7 @@
     "moduleResolution": "Node",
     "lib": ["ESNext"],
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "resolveJsonModule": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
