@@ -5,7 +5,7 @@ bring expect;
 let payload = "hello";
 log("log preflight");
 
-let f = new cloud.Function(inflight (input): str => {
+let f = new cloud.Function(inflight (input) => {
   log("log inside function\ncontains 2 lines");
   let target = util.tryEnv("WING_TARGET");
   assert(target?); // make sure WING_TARGET is defined in all environments
