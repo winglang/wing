@@ -33,6 +33,7 @@ export interface ListboxProps {
   title?: string;
   defaultLabel?: string;
   showSearch?: boolean;
+  notFoundLabel?: string;
 }
 
 export const Listbox = ({
@@ -49,6 +50,7 @@ export const Listbox = ({
   title = "",
   defaultLabel = "Default",
   showSearch = false,
+  notFoundLabel = "No results found",
 }: ListboxProps) => {
   const { theme } = useTheme();
 
@@ -81,13 +83,6 @@ export const Listbox = ({
       item.label.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
     );
   }, [search, items]);
-
-  const showDefaultOption = useMemo(() => {
-    return (
-      defaultSelection &&
-      defaultLabel.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-    );
-  }, [defaultSelection, defaultLabel, search]);
 
   return (
     <HeadlessListbox
@@ -174,7 +169,7 @@ export const Listbox = ({
                 )}
 
                 <div className="overflow-auto max-h-80">
-                  {showDefaultOption && (
+                  {defaultSelection && (
                     <>
                       {/* TODO: Fix a11y */}
                       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
@@ -184,7 +179,7 @@ export const Listbox = ({
                           theme.bgInputHover,
                           theme.text1,
                         )}
-                        onClick={() => onChange?.(defaultSelection ?? [])}
+                        onClick={() => onChange?.(defaultSelection)}
                       >
                         <span
                           className={classNames("block truncate font-normal")}
@@ -210,19 +205,17 @@ export const Listbox = ({
                     </>
                   )}
 
-                  {filteredItems.length === 0 &&
-                    search !== "" &&
-                    !showDefaultOption && (
-                      <div
-                        className={classNames(
-                          theme.text2,
-                          "py-2",
-                          "w-full text-center",
-                        )}
-                      >
-                        No items found
-                      </div>
-                    )}
+                  {filteredItems.length === 0 && search !== "" && (
+                    <div
+                      className={classNames(
+                        theme.text2,
+                        "py-2 px-4",
+                        "w-full text-center",
+                      )}
+                    >
+                      {notFoundLabel}
+                    </div>
+                  )}
 
                   {filteredItems.map((item, index) => (
                     <HeadlessListbox.Option

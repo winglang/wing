@@ -238,6 +238,7 @@ export const ConsoleLogsFilters = memo(
             defaultLabel="All types"
             defaultSelection={[]}
             showSearch
+            notFoundLabel="No types found for the given query"
           />
 
           <Listbox
@@ -249,6 +250,7 @@ export const ConsoleLogsFilters = memo(
             defaultLabel="All resources"
             defaultSelection={[]}
             showSearch
+            notFoundLabel="No resources found for the given query"
           />
 
           <button
