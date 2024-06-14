@@ -195,10 +195,24 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
     "version": "tree-0.1",
   },
+}
+`;
+
+exports[`source can be omitted from \`nodeof(x).addConnection()\` 1`] = `
+{
+  "connections": [
+    {
+      "name": "my_connection",
+      "source": "root/B1",
+      "target": "root/B2",
+    },
+  ],
+  "version": "connections-0.1",
 }
 `;

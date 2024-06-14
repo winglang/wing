@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { Endpoint } from "./endpoint";
+import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
 import { INFLIGHT_SYMBOL } from "../core/types";
@@ -408,9 +409,7 @@ export class Api extends Resource {
    */
   protected _validatePath(path: string) {
     if (
-      !/^(\/[a-zA-Z0-9_\-\.]+(\/\:[a-zA-Z0-9_\-]+|\/[a-zA-Z0-9_\-\.]+)*(?:\?[^#]*)?)?$|^(\/\:[a-zA-Z0-9_\-]+)*\/?$/g.test(
-        path
-      )
+      !/^((\/\:[a-zA-Z0-9_\-]+|\/[a-zA-Z0-9_\-\.]*)*(?:\?[^#]*)?)?$/g.test(path)
     ) {
       throw new Error(
         `Invalid path ${path}. Url parts can only contain alpha-numeric chars, "-", "_" and ".". Params can only contain alpha-numeric chars and "_".`
@@ -429,6 +428,42 @@ export class Api extends Resource {
       ...this.corsDefaultValues,
       ...props,
     };
+  }
+
+  /**
+   * Checks if two given paths are siblings.
+   * @param pathA
+   * @param pathB
+   * @returns A boolean value indicating if provided paths are siblings.
+   * @internal
+   */
+
+  protected _arePathsSiblings(pathA: string, pathB: string): boolean {
+    const partsA = pathA.split("/");
+    const partsB = pathB.split("/");
+
+    let shorter = partsA.length < partsB.length ? partsA : partsB;
+
+    for (let i = 0; i < shorter.length; i++) {
+      const partA = partsA[i];
+      const partB = partsB[i];
+      if (
+        (!partA.match(/^:.+?$/) || !partB.match(/^:.+?$/)) &&
+        partA[i] !== partB[i]
+      ) {
+        return false;
+      }
+
+      if (
+        partA.match(/^:.+?$/) &&
+        partB.match(/^:.+?$/) &&
+        partA[i] !== partB[i]
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -479,6 +514,20 @@ export class Api extends Resource {
   }
 
   /**
+   * Checks if provided path is a sibling of paths already defined in the api spec- i.e "/:username" and "/:id".
+   * @param path Path to be checked
+   * @returns A boolean value indicating if provided path has a sibling.
+   * @internal
+   */
+  private _findSiblingPath(path: string): string | undefined {
+    const existingPaths = Object.keys(this.apiSpec.paths);
+
+    return existingPaths.find((existingPath) =>
+      this._arePathsSiblings(existingPath, path)
+    );
+  }
+
+  /**
    * Generates the OpenAPI schema for CORS headers based on the provided CORS options.
    * @param corsOptions The CORS options to generate the schema from.
    * @returns An object representing the OpenAPI schema for CORS headers.
@@ -522,6 +571,12 @@ export class Api extends Resource {
     if (!!ambiguousPath) {
       throw new Error(
         `Endpoint for path '${path}' and method '${method}' is ambiguous - it conflicts with existing endpoint for path '${ambiguousPath}'`
+      );
+    }
+    const siblingPath = this._findSiblingPath(path);
+    if (!!siblingPath) {
+      throw new Error(
+        `Endpoint for path '${path}' and method '${method}' conflicts with existing sibling endpoint for path '${siblingPath}'- try to match the parameter names to avoid this error.`
       );
     }
     const operationId = `${method.toLowerCase()}${
@@ -585,44 +640,49 @@ export class Api extends Resource {
 }
 
 /**
+ * Base options for Api endpoints.
+ */
+export interface ApiEndpointOptions extends FunctionProps {}
+
+/**
  * Options for Api get endpoint.
  */
-export interface ApiGetOptions {}
+export interface ApiGetOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api post endpoint.
  */
-export interface ApiPostOptions {}
+export interface ApiPostOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiPutOptions {}
+export interface ApiPutOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiDeleteOptions {}
+export interface ApiDeleteOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiPatchOptions {}
+export interface ApiPatchOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiOptionsOptions {}
+export interface ApiOptionsOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiHeadOptions {}
+export interface ApiHeadOptions extends ApiEndpointOptions {}
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiConnectOptions {}
+export interface ApiConnectOptions extends ApiEndpointOptions {}
 
 /**
  * Inflight methods and members of `cloud.Api`.

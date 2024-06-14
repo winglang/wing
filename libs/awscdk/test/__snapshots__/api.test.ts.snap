@@ -809,7 +809,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
                 },
               },
             },
-            "/{proxy+}": {
+            "/{name}/{age}/{proxy+}": {
               "x-amazon-apigateway-any-method": {
                 "produces": [
                   "application/json",
@@ -910,7 +910,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90064db664b7f484d24bf9fd7531027f96a0": {
+    "Apiapideployment63AA90060cf4119fbf39ca17a86ecca447cf30c8": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -960,7 +960,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90064db664b7f484d24bf9fd7531027f96a0",
+          "Ref": "Apiapideployment63AA90060cf4119fbf39ca17a86ecca447cf30c8",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",
@@ -1170,7 +1170,7 @@ exports[`api with 'name' parameter 1`] = `
                 },
               },
             },
-            "/{proxy+}": {
+            "/{name}/{proxy+}": {
               "x-amazon-apigateway-any-method": {
                 "produces": [
                   "application/json",
@@ -1271,7 +1271,7 @@ exports[`api with 'name' parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90062896733bcfed3fd7fed219dcae5c3b08": {
+    "Apiapideployment63AA9006e77e5fce96817943615e86914e22fe63": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -1321,7 +1321,7 @@ exports[`api with 'name' parameter 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90062896733bcfed3fd7fed219dcae5c3b08",
+          "Ref": "Apiapideployment63AA9006e77e5fce96817943615e86914e22fe63",
         },
         "RestApiId": {
           "Ref": "Apiapi93AB445C",

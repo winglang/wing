@@ -145,6 +145,7 @@ exports[`create a schedule 1`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -191,9 +192,11 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "onTick()",
+        "name": "tick",
         "source": "root/my_schedule",
+        "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -347,7 +350,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "onTick()",
+                "title": "Tick",
               },
               "id": "OnTick0",
               "path": "root/my_schedule/OnTick0",
@@ -393,6 +396,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -439,9 +443,11 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "onTick()",
+        "name": "tick",
         "source": "root/my_schedule",
+        "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -595,7 +601,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "onTick()",
+                "title": "Tick",
               },
               "id": "OnTick0",
               "path": "root/my_schedule/OnTick0",
@@ -641,6 +647,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -687,9 +694,11 @@ exports.handler = async function(event) {
   "connections.json": {
     "connections": [
       {
-        "name": "onTick()",
+        "name": "tick",
         "source": "root/my_schedule",
+        "sourceOp": "tick",
         "target": "root/my_schedule/OnTick0",
+        "targetOp": "invoke",
       },
     ],
     "version": "connections-0.1",
@@ -843,7 +852,7 @@ exports.handler = async function(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "onTick()",
+                "title": "Tick",
               },
               "id": "OnTick0",
               "path": "root/my_schedule/OnTick0",
@@ -889,6 +898,7 @@ exports.handler = async function(event) {
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

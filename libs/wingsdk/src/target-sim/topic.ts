@@ -1,11 +1,11 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { Function } from "../cloud";
 import * as cloud from "../cloud";
 import { lift, LiftMap } from "../core";
 import { ToSimulatorOutput } from "../simulator";
@@ -35,7 +35,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = "onMessage()";
+    Node.of(fn).title = "Subscriber";
 
     new EventMapping(this, App.of(this).makeId(this, "TopicEventMapping"), {
       subscriber: fn,
@@ -45,8 +45,10 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
-      name: "onMessage()",
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
+      name: "subscriber",
     });
 
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE_ASYNC);
@@ -67,7 +69,8 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       {}
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = "subscribeQueue()";
+    Node.of(fn).title = "QueueSubscriber";
+    Node.of(fn).hidden = true;
 
     new EventMapping(this, App.of(this).makeId(this, "TopicEventMapping"), {
       subscriber: fn,
@@ -77,8 +80,10 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
-      name: "subscribeQueue()",
+      targetOp: cloud.FunctionInflightMethods.INVOKE_ASYNC,
+      name: "push",
     });
 
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE_ASYNC);

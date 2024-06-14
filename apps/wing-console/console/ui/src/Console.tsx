@@ -6,9 +6,9 @@ import { useEffect, useMemo, useState } from "react";
 
 import { App } from "./App.js";
 import { AppContext } from "./AppContext.js";
-import { LayoutType } from "./layout/layout-provider.js";
-import { trpc } from "./services/trpc.js";
-import { WebSocketProvider } from "./services/use-websocket.js";
+import { LayoutType } from "./features/layout/layout-provider.js";
+import { WebSocketProvider } from "./features/websocket-state/use-websocket.js";
+import { trpc } from "./trpc.js";
 
 export const Console = ({
   trpcUrl,

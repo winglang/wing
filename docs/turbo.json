@@ -1,0 +1,14 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "compile": {
+      "inputs": [
+        "./docs/**/*.md"
+      ],
+      "outputs": [
+        "../examples/tests/doc_examples/**/*.w"
+      ]
+    }
+  }
+}

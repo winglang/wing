@@ -114,8 +114,10 @@ export class Queue extends cloud.Queue implements IAwsQueue {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.QueueInflightMethods.PUSH,
       target: fn,
-      name: "setConsumer()",
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
+      name: "consumer",
     });
 
     return fn;

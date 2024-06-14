@@ -17,6 +17,7 @@ export interface Simulator {
   instance(statedir?: string): Promise<simulator.Simulator>;
   start(simfile: string): Promise<void>;
   stop(): Promise<void>;
+  reload(): Promise<void>;
   on<T extends keyof SimulatorEvents>(
     event: T,
     listener: (event: SimulatorEvents[T]) => void | Promise<void>,
@@ -84,6 +85,16 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
     }
   };
 
+  const reload = async () => {
+    if (instance) {
+      await events.emit("starting", { instance });
+      await instance.reload(true);
+      await events.emit("started");
+    } else {
+      throw new Error("Simulator not started");
+    }
+  };
+
   return {
     async instance() {
       return (
@@ -95,6 +106,9 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
     },
     async stop() {
       await instance?.stop();
+    },
+    async reload() {
+      await reload();
     },
     on(event, listener) {
       events.on(event, listener);

@@ -55,7 +55,12 @@ module.exports = grammar({
       choice(braced(optional(repeat($._statement))), $.AUTOMATIC_BLOCK),
     _semicolon: ($) => choice(";", $.AUTOMATIC_SEMICOLON),
     comment: ($) =>
-      token(choice(seq(/\/\/[^\/]/, /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))),
+      token(
+        choice(
+          seq(/\/\/[^\/]/, /.*/),
+          seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/")
+        )
+      ),
 
     doc: ($) => seq("///", field("content", $.doc_content)),
     doc_content: ($) => /.*/,
@@ -69,6 +74,7 @@ module.exports = grammar({
       ),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
+    parenthesized_identifier: ($) => seq("(", $.identifier, ")"),
     _type_identifier: ($) => alias($.identifier, $.type_identifier),
     _member_identifier: ($) => alias($.identifier, $.member_identifier),
     _reference_identifier: ($) => alias($.identifier, $.reference_identifier),
@@ -127,7 +133,7 @@ module.exports = grammar({
         $.compiler_dbg_env,
         $.super_constructor_statement,
         $.throw_statement,
-        $.lift_statement,
+        $.lift_statement
       ),
 
     import_statement: ($) =>
@@ -164,11 +170,24 @@ module.exports = grammar({
       seq("throw", optional(field("expression", $.expression)), $._semicolon),
 
     lift_statement: ($) =>
-      seq("lift", field("lift_qualifications", $.lift_qualifications), field("block", $.block)),
+      seq(
+        "lift",
+        field("lift_qualifications", $.lift_qualifications),
+        field("block", $.block)
+      ),
 
-    lift_qualifications: ($) => seq("{", field("qualification", commaSep1($.lift_qualification)), "}"),
+    lift_qualifications: ($) =>
+      seq("{", field("qualification", commaSep1($.lift_qualification)), "}"),
 
-    lift_qualification: ($) => seq(field("obj", $.expression), ":", choice(field("ops", $.identifier), field("ops", seq("[", commaSep1($.identifier), "]")))),
+    lift_qualification: ($) =>
+      seq(
+        field("obj", $.expression),
+        ":",
+        choice(
+          field("ops", $.identifier),
+          field("ops", seq("[", commaSep1($.identifier), "]"))
+        )
+      ),
 
     assignment_operator: ($) => choice("=", "+=", "-="),
 
@@ -334,7 +353,15 @@ module.exports = grammar({
         optional(
           seq(
             "catch",
-            optional(field("exception_identifier", $.identifier)),
+            optional(
+              choice(
+                field("exception_identifier", $.identifier),
+                field(
+                  "parenthesized_exception_identifier",
+                  $.parenthesized_identifier
+                )
+              )
+            ),
             field("catch_block", $.block)
           )
         ),

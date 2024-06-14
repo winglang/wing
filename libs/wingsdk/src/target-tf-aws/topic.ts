@@ -83,8 +83,10 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.TopicInflightMethods.PUBLISH,
       target: fn,
-      name: "onMessage()",
+      targetOp: cloud.FunctionInflightMethods.INVOKE_ASYNC,
+      name: "subscriber",
     });
 
     return fn;

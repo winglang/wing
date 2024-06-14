@@ -1,12 +1,12 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { EventMapping } from "./event-mapping";
-import { Function } from "./function";
 import { Policy } from "./policy";
 import { ISimulatorResource } from "./resource";
 import { ApiRoute, ApiSchema } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { Function } from "../cloud";
 import * as cloud from "../cloud";
 import { lift } from "../core";
 import { ToSimulatorOutput } from "../simulator/simulator";
@@ -87,7 +87,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
     ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = `${method.toUpperCase()} ${pathPattern}`;
-    Node.of(fn).hidden = true;
 
     const eventMapping = new EventMapping(
       this,
@@ -126,7 +125,9 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const fn = this.createOrGetFunction(inflight, props, path, method);
     Node.of(this).addConnection({
       source: this,
+      sourceOp: cloud.ApiInflightMethods.REQUEST,
       target: fn,
+      targetOp: cloud.FunctionInflightMethods.INVOKE,
       name: `${method.toLowerCase()} ${path}`,
     });
     this.policy.addStatement(fn, cloud.FunctionInflightMethods.INVOKE);

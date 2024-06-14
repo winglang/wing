@@ -4,45 +4,6 @@ source: libs/wingc/src/lsp/completions.rs
 - label: hello
   kind: 2
   detail: "preflight (): void"
-  documentation:
-    kind: markdown
-    value: "```wing\nstatic preflight hello: preflight (): void\n```"
   sortText: ff|hello
   insertText: hello()
-- label: isConstruct
-  kind: 2
-  detail: "preflight (x: any): bool"
-  documentation:
-    kind: markdown
-    value: "```wing\nstatic preflight isConstruct: preflight (x: any): bool\n```\n---\nChecks if `x` is a construct.\n### Parameters\n- `x` — `any` — Any object.\n\n### Returns\ntrue if `x` is an object created from a class which extends `Construct`.\n\n### Remarks\nUse this method instead of `instanceof` to properly detect `Construct`\ninstances, even when the construct library is symlinked.\n\nExplanation: in JavaScript, multiple copies of the `constructs` library on\ndisk are seen as independent, completely different libraries. As a\nconsequence, the class `Construct` in each copy of the `constructs` library\nis seen as a different class, and an instance of one class will not test as\n`instanceof` the other class. `npm install` will not create installations\nlike this, but users may manually symlink construct libraries together or\nuse a monorepo tool: in those cases, multiple copies of the `constructs`\nlibrary can be accidentally installed, and `instanceof` will behave\nunpredictably. It is safest to avoid using `instanceof`, and using\nthis type-testing method instead."
-  sortText: ff|isConstruct
-  insertText: isConstruct($1)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
-- label: onLiftType
-  kind: 2
-  detail: "preflight (host: IInflightHost, ops: Array<str>): void"
-  documentation:
-    kind: markdown
-    value: "```wing\nstatic preflight onLiftType: preflight (host: IInflightHost, ops: Array<str>): void\n```\n---\nA hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n### Parameters\n- `host` — `IInflightHost`\n- `ops` — `Array<str>`\n\n### Remarks\nThe list of requested inflight methods\nneeded by the inflight host are given by `ops`.\n\nThis method is commonly used for adding permissions, environment variables, or\nother capabilities to the inflight host."
-  sortText: ff|onLiftType
-  insertText: onLiftType($1)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
-- label: toInflight
-  kind: 2
-  detail: "preflight (obj: IResource): str"
-  documentation:
-    kind: markdown
-    value: "```wing\nstatic preflight toInflight: preflight (obj: IResource): str\n```\n---\nGenerates an asynchronous JavaScript statement which can be used to create an inflight client for a resource.\n### Parameters\n- `obj` — `IResource`\n\n### Remarks\nNOTE: This statement must be executed within an async context."
-  sortText: ff|toInflight
-  insertText: toInflight($1)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
 

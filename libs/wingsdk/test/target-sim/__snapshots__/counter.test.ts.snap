@@ -74,7 +74,36 @@ exports[`create a counter 1`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -211,6 +240,7 @@ exports[`create a counter 1`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -304,7 +334,36 @@ exports[`dec 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -441,6 +500,7 @@ exports[`dec 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -534,7 +594,36 @@ exports[`inc 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -671,6 +760,7 @@ exports[`inc 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -764,7 +854,36 @@ exports[`key dec 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -901,6 +1020,7 @@ exports[`key dec 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -994,7 +1114,36 @@ exports[`key inc 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1131,6 +1280,7 @@ exports[`key inc 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1222,7 +1372,36 @@ exports[`key set to new value 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1359,6 +1538,7 @@ exports[`key set to new value 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },
@@ -1450,7 +1630,36 @@ exports[`set to new value 2`] = `
         };
         ",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "inc",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "dec",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "peek",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+      {
+        "name": "call",
+        "source": "root/my_counter",
+        "sourceOp": "set",
+        "target": "root/my_counter/Resource",
+        "targetOp": "call",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1587,6 +1796,7 @@ exports[`set to new value 2`] = `
         "fqn": "constructs.Construct",
         "version": "10.3.0",
       },
+      "display": {},
       "id": "root",
       "path": "root",
     },

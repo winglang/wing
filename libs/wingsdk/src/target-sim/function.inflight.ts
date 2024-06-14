@@ -1,7 +1,7 @@
 import * as path from "path";
 import { FunctionAttributes, FunctionSchema } from "./schema-resources";
 import { FUNCTION_FQN, IFunctionClient } from "../cloud";
-import { Bundle } from "../shared/bundling";
+import { Bundle, isBundleInvalidated } from "../shared/bundling";
 import { Sandbox, SandboxTimeoutError } from "../shared/sandbox";
 import {
   ISimulatorContext,
@@ -56,10 +56,26 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   public async save(): Promise<void> {}
 
-  public async plan(): Promise<UpdatePlan> {
-    // for now, always replace because we can't determine if the function code
-    // has changed since the last update. see https://github.com/winglang/wing/issues/6116
-    return UpdatePlan.REPLACE;
+  public async plan(invalidated: boolean): Promise<UpdatePlan> {
+    // If our function config changed, always replace
+    if (invalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    // Make sure that we don't have an ongoing bundle operation
+    await this.ensureBundled();
+
+    // Check if any of the bundled files have changed since the last bundling
+    const bundleInvalidated = await isBundleInvalidated(
+      this.originalFile,
+      this.bundle!,
+      (msg) => this.addTrace(msg, TraceType.SIMULATOR, LogLevel.VERBOSE)
+    );
+    if (bundleInvalidated) {
+      return UpdatePlan.REPLACE;
+    }
+
+    return UpdatePlan.SKIP;
   }
 
   public async invoke(payload: string): Promise<string> {
@@ -130,6 +146,13 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     );
   }
 
+  private async ensureBundled(): Promise<void> {
+    await this.createBundlePromise;
+    if (!this.bundle) {
+      throw new Error("Bundle not created");
+    }
+  }
+
   // Used internally by cloud.Queue to apply backpressure
   public async hasAvailableWorkers(): Promise<boolean> {
     return (
@@ -155,13 +178,9 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
   private async initWorker(): Promise<Sandbox> {
     // ensure inflight code is bundled before we create any workers
-    await this.createBundlePromise;
+    await this.ensureBundled();
 
-    if (!this.bundle) {
-      throw new Error("Bundle not created");
-    }
-
-    return new Sandbox(this.bundle.outfilePath, {
+    return new Sandbox(this.bundle!.outfilePath, {
       env: {
         ...this.env,
         WING_SIMULATOR_CALLER: this.context.resourceHandle,

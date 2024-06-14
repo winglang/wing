@@ -726,13 +726,6 @@ exports[`class.test.w 1`] = `
    |     ^^^^^^^^
 
 
-error: Call to super constructor must be first statement in constructor
-    --> ../../../examples/tests/invalid/class.test.w:109:5
-    |
-109 |     super(name, major);
-    |     ^^^^^^^^^^^^^^^^^^^
-
-
 error: Call to super constructor can only be done from within class constructor
     --> ../../../examples/tests/invalid/class.test.w:114:5
     |
@@ -887,16 +880,11 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^
 
 
-error: Missing super() call as first statement of PaidStudent's constructor
-    --> ../../../examples/tests/invalid/class.test.w:107:45
-    |  
-107 |     new(name: str, major: str, hrlyWage: num) {
-    | /---------------------------------------------^
-108 | |     this.hrlyWage = hrlyWage;
-109 | |     super(name, major);
-110 | | //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
-111 | |   }
-    | \\\\---^
+error: super() call must be the first statement of PaidStudent's constructor
+    --> ../../../examples/tests/invalid/class.test.w:109:5
+    |
+109 |     super(name, major);
+    |     ^^^^^^^^^^^^^^^^^^^
 
 
 error: Cannot instantiate abstract class \\"Resource\\"
@@ -1488,6 +1476,121 @@ error: Property not found
   |
 8 | let two = SomeEnum.TWO.TWO;
   |                        ^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`equality.test.w 1`] = `
+"error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
+  --> ../../../examples/tests/invalid/equality.test.w:8:8
+  |
+8 | assert([1,2] == [\\"a\\", \\"b\\"]);
+  |        ^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<str>\\", but got \\"Array<num>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:11:8
+   |
+11 | assert([\\"a\\", \\"b\\"] == [1,2]);
+   |        ^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<str>\\", but got \\"Array<Json>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:18:8
+   |
+18 | assert([\\"1\\", \\"2\\"] == [{a: 1}]);
+   |        ^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<Array<str>>\\", but got \\"Array<Array<Json>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:21:8
+   |
+21 | assert([[\\"1\\", \\"2\\"]] == [[{a: 1}]]);
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Map<Array<str>>\\", but got \\"Map<Array<num>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:24:8
+   |
+24 | assert({\\"a\\" => [\\"a\\"]} == {\\"a\\" => [1]});
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<Map<Array<num>>>\\", but got \\"Array<Map<Array<str>>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:27:8
+   |
+27 | assert([{\\"a\\" => [1]}] == [{\\"a\\" => [\\"a\\"]}]);
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<bool>?\\", but got \\"Array<str>?\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:33:8
+   |
+33 | assert(a1 == a2);
+   |        ^^^^^^^^
+
+
+error: Expected type to be \\"Array<str>\\", but got \\"Array<str>?\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:39:8
+   |
+39 | assert(b1 == b2);
+   |        ^^^^^^^^
+
+
+error: Expected type to be \\"Array<nil>\\", but got \\"Array<str>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:42:8
+   |
+42 | assert([nil] == [\\"a\\"]);
+   |        ^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Json\\", but got \\"nil\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:45:20
+   |
+45 | assert(Array<Json>[nil] == [\\"a\\"]);
+   |                    ^^^
+   |
+   = hint: to allow \\"nil\\" assignment use optional type: \\"Json?\\"
+
+
+error: Expected type to be \\"Array<num?>\\", but got \\"Array<str?>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:54:8
+   |
+54 | assert([c1] == [c2]);
+   |        ^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<Array<num>>\\", but got \\"Array<Array<str>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:58:8
+   |
+58 | assert([[1]] == [[\\"1\\"]]);
+   |        ^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Array<Array<str>>\\", but got \\"Array<Array<num>>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:61:8
+   |
+61 | assert([[\\"1\\"]] == [[1]]);
+   |        ^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:66:8
+   |
+66 | assert(d1 == d2);
+   |        ^^^^^^^^
+
+
+error: Expected type to be \\"MutSet<bool>\\", but got \\"Set<num>\\" instead
+   --> ../../../examples/tests/invalid/equality.test.w:72:8
+   |
+72 | assert(e1 == e2);
+   |        ^^^^^^^^
 
 
 
@@ -2316,7 +2419,7 @@ error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1
    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
   --> ../../../examples/tests/invalid/inference.test.w:4:29
   |
 4 | let preflightClosureArgs = (nice) => { return true; };
@@ -2330,7 +2433,7 @@ error: Property not found
    |                   ^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:60:23
    |
 60 | let func2 = inflight (request) => {
@@ -2369,7 +2472,7 @@ error: Property not found
     |              ^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
     --> ../../../examples/tests/invalid/inference.test.w:107:19
     |
 107 | let unknownArg = (arg) => {
@@ -2390,42 +2493,42 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
     |          ^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:69:5
    |
 69 | let anotherEmptyArray = [];
    |     ^^^^^^^^^^^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:21:5
    |
 21 | let clonedArray = emptyArray.copyMut();
    |     ^^^^^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:16:5
    |
 16 | let emptyArray = [];
    |     ^^^^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:60:5
    |
 60 | let func2 = inflight (request) => {
    |     ^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
    --> ../../../examples/tests/invalid/inference.test.w:18:5
    |
 18 | let numArray = emptyArray;
    |     ^^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
   --> ../../../examples/tests/invalid/inference.test.w:4:5
   |
 4 | let preflightClosureArgs = (nice) => { return true; };
@@ -2520,6 +2623,28 @@ exports[`inflight_class_interface_structural_typing.test.w 1`] = `
    |
 26 |   let x: IGoo = new NotGoo();
    |                 ^^^^^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`inflight_intrinsic.test.w 1`] = `
+"error: Must specify an \\"alias\\" to lift this expression
+  --> ../../../examples/tests/invalid/inflight_intrinsic.test.w:4:10
+  |
+4 |   { obj: [1, 2, 3] }
+  |          ^^^^^^^^^
+
+
+error: Inflight path must be a non-interpolated string literal
+  --> ../../../examples/tests/invalid/inflight_intrinsic.test.w:2:40
+  |
+2 | let func: inflight (): str = @inflight(funkPath, lifts: [
+  |                                        ^^^^^^^^
 
 
 
@@ -4707,6 +4832,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`try_catch_parenthesis.test.w 1`] = `
+"error: Unexpected parentheses in catch block. Use 'catch e' instead of 'catch (e)'.
+  --> ../../../examples/tests/invalid/try_catch_parenthesis.test.w:3:9
+  |
+3 | } catch (e) {
+  |         ^^^
+
+
+error: Unexpected parentheses in catch block. Use 'catch longError' instead of 'catch (longError)'.
+   --> ../../../examples/tests/invalid/try_catch_parenthesis.test.w:10:9
+   |
+10 | } catch (longError) {
+   |         ^^^^^^^^^^^
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`try_no_catch_or_finally.test.w 1`] = `
 "error: Missing \`catch\` or \`finally\` blocks for this try statement
   --> ../../../examples/tests/invalid/try_no_catch_or_finally.test.w:1:1
@@ -4855,7 +5002,7 @@ error: expression \\"await_expression\\" is not supported yet - see https://gith
   |         ^^^^^^^
 
 
-error: Unable to infer type
+error: Unable to infer type by usage, an explicit type annotation is required
   --> ../../../examples/tests/invalid/unimplemented_grammar.test.w:2:5
   |
 2 | let somePromise = Promise<str>{};

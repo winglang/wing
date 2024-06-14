@@ -204,6 +204,9 @@ export const createConsoleServer = async ({
   });
   simulator.on("started", () => {
     appState = "success";
+
+    // Clear tests when simulator is restarted
+    testsStateManager().setTests([]);
     invalidateQuery(undefined);
     isStarting = false;
   });
@@ -281,6 +284,9 @@ export const createConsoleServer = async ({
     },
     simulatorInstance() {
       return simulator.instance();
+    },
+    restartSimulator() {
+      return simulator.reload();
     },
     errorMessage() {
       return lastErrorMessage;

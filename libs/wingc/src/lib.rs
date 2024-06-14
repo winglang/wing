@@ -354,7 +354,7 @@ pub fn compile(
 	asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
-			let mut reference_visitor = StructSchemaVisitor::new(&jsifier);
+			let mut reference_visitor = StructSchemaVisitor::new(&path, &jsifier);
 			reference_visitor.visit_scope(&scope);
 			(path, scope)
 		})
@@ -393,9 +393,9 @@ pub fn compile(
 	// -- EXTERN DTSIFICATION PHASE --
 	for source_files_env in &types.source_file_envs {
 		if is_extern_file(source_files_env.0) {
-			let mut extern_dtsifier = ExternDTSifier::new(source_files_env.0, source_files_env.1, &types.libraries);
+			let mut extern_dtsifier = ExternDTSifier::new(&types);
 			if !found_errors() {
-				match extern_dtsifier.dtsify() {
+				match extern_dtsifier.dtsify(source_files_env.0, source_files_env.1) {
 					Ok(()) => {}
 					Err(err) => report_diagnostic(err.into()),
 				};

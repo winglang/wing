@@ -98,6 +98,10 @@ export interface IHostedLiftable extends ILiftable {
   onLift(host: IInflightHost, ops: string[]): void;
 }
 
+function hasLiftMap(x: any): x is { _liftMap: LiftMap } {
+  return x != null && typeof x._liftMap === "object";
+}
+
 /**
  * Abstract interface for `Resource`.
  * @skipDocs
@@ -190,14 +194,8 @@ export abstract class Resource extends Construct implements IResource {
    * actually bound.
    */
   public onLift(host: IInflightHost, ops: string[]): void {
-    for (const op of ops) {
-      // Add connection metadata
-      Node.of(this).addConnection({
-        source: host,
-        target: this,
-        name: op.endsWith("()") ? op : `${op}()`,
-      });
-    }
+    host;
+    ops;
   }
 
   /**
@@ -209,7 +207,35 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _preSynthesize(): void {
-    // do nothing by default
+    if (hasLiftMap(this) && !(this instanceof AutoIdResource)) {
+      addConnectionsFromLiftMap(this, this._liftMap);
+    }
+  }
+}
+
+function addConnectionsFromLiftMap(
+  construct: IConstruct,
+  liftData: LiftMap,
+  baseOp?: string
+) {
+  for (const [op, liftEntries] of Object.entries(liftData)) {
+    for (const [dep, depOps] of liftEntries) {
+      if (Construct.isConstruct(dep) && !(dep instanceof AutoIdResource)) {
+        // case 1: dep is an ordinary resource
+        for (const depOp of depOps) {
+          Node.of(construct).addConnection({
+            source: construct,
+            sourceOp: baseOp ?? op,
+            target: dep,
+            targetOp: depOp,
+            name: "call",
+          });
+        }
+      } else if (hasLiftMap(dep)) {
+        // case 2: dep is an inflight
+        addConnectionsFromLiftMap(construct, dep._liftMap, baseOp ?? op);
+      }
+    }
   }
 }
 
@@ -227,18 +253,38 @@ export abstract class AutoIdResource extends Resource {
 }
 
 /**
- * Annotations about what resources an inflight operation may access.
- *
- * The following example says that the operation may call "put" on a resource
- * at "this.inner", or it may call "get" on a resource passed as an argument named
- * "other".
- * @example
- * { "this.inner": { ops: ["put"] }, "other": { ops: ["get"] } }
- *
- * @internal
+ * Annotations about preflight data and desired inflight operations.
  */
-export interface OperationAnnotation {
-  [resource: string]: {
-    ops: string[];
-  };
+export interface LiftAnnotation {
+  /**
+   * Preflight object to lift
+   */
+  readonly obj: any;
+
+  /**
+   * Name of the object in the inflight context.
+   * Required if the object provided is not an identifier.
+   * @default "obj" If the object is a simple identifier, it will be used as the alias
+   */
+  readonly alias?: string;
+
+  /**
+   * Operations to lift on the object.
+   * @default * All possible operations will be available
+   */
+  readonly ops?: string[];
+}
+
+/** Options for the `@inflight` intrinsic */
+export interface ImportInflightOptions {
+  /**
+   * Name of exported function
+   * @default "default"
+   * */
+  readonly export?: string;
+  /**
+   * Mapping of available symbols to a lift declaration
+   * @default * All possible operations will be available
+   */
+  readonly lifts?: LiftAnnotation[];
 }

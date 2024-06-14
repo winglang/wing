@@ -14,7 +14,7 @@ import type {
 import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
 import type { FileLink } from "../utils/createRouter.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import type { IFunctionClient, Simulator } from "../wingsdk.js";
+import type { Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
@@ -53,6 +53,30 @@ export const createAppRouter = () => {
         config: ctx.layoutConfig,
       };
     }),
+    "app.reset": createProcedure.mutation(async ({ ctx }) => {
+      ctx.logger.verbose("Resetting simulator...", "console", {
+        messageType: "info",
+      });
+      await ctx.restartSimulator();
+      ctx.logger.verbose("Simulator reset.", "console", {
+        messageType: "info",
+      });
+    }),
+    "app.logsFilters": createProcedure.query(async ({ ctx }) => {
+      const simulator = await ctx.simulator();
+
+      const resources = simulator.listResources().map((resourceId) => {
+        const config = simulator.tryGetResourceConfig(resourceId);
+        return {
+          id: resourceId,
+          type: config?.type,
+        };
+      });
+
+      return {
+        resources,
+      };
+    }),
     "app.logs": createProcedure
       .input(
         z.object({
@@ -65,20 +89,60 @@ export const createAppRouter = () => {
             }),
             timestamp: z.number(),
             text: z.string(),
+            resourceIds: z.array(z.string()),
+            resourceTypes: z.array(z.string()),
           }),
         }),
       )
       .query(async ({ ctx, input }) => {
-        return ctx.logger.messages.filter(
-          (entry) =>
-            input.filters.level[entry.level] &&
-            entry.timestamp &&
-            entry.timestamp >= input.filters.timestamp &&
-            (!input.filters.text ||
-              `${entry.message}${entry.ctx?.sourcePath}`
-                .toLowerCase()
-                .includes(input.filters.text.toLowerCase())),
-        );
+        const filters = input.filters;
+        const lowerCaseText = filters.text?.toLowerCase();
+        let noVerboseLogsCount = 0;
+
+        const filteredLogs = ctx.logger.messages.filter((entry) => {
+          // Filter by timestamp
+          if (entry.timestamp && entry.timestamp < filters.timestamp) {
+            return false;
+          }
+          if (entry.level !== "verbose") {
+            noVerboseLogsCount++;
+          }
+          // Filter by level
+          if (!filters.level[entry.level]) {
+            return false;
+          }
+          // Filter by resourceIds
+          if (
+            filters.resourceIds.length > 0 &&
+            (!entry.ctx?.sourcePath ||
+              !filters.resourceIds.includes(entry.ctx.sourcePath))
+          ) {
+            return false;
+          }
+          // Filter by resourceTypes
+          if (
+            filters.resourceTypes.length > 0 &&
+            (!entry.ctx?.sourceType ||
+              !filters.resourceTypes.includes(entry.ctx.sourceType))
+          ) {
+            return false;
+          }
+          // Filter by text
+          if (
+            lowerCaseText &&
+            !`${entry.message}${entry.ctx?.sourcePath}`
+              .toLowerCase()
+              .includes(lowerCaseText)
+          ) {
+            return false;
+          }
+          return true;
+        });
+
+        return {
+          logs: filteredLogs,
+          hiddenLogs: noVerboseLogsCount - filteredLogs.length,
+        };
       }),
     "app.error": createProcedure.query(({ ctx }) => {
       return ctx.errorMessage();
@@ -283,18 +347,21 @@ export const createAppRouter = () => {
       .input(
         z.object({
           edgeId: z.string(),
-          showTests: z.boolean().optional(),
         }),
       )
       .query(async ({ ctx, input }) => {
-        const { edgeId, showTests } = input;
+        const { edgeId } = input;
         const simulator = await ctx.simulator();
 
         const { tree } = simulator.tree().rawData();
         const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
 
-        const sourcePath = edgeId.split("->")[0]?.trim();
-        const targetPath = edgeId.split("->")[1]?.trim();
+        let [, sourcePath, _sourceInflight, , targetPath, targetInflight] =
+          edgeId.match(/^(.+?)#(.*?)#(.*?)#(.+?)#(.*?)#(.*?)$/i) ?? [];
+
+        targetPath = targetPath?.startsWith("#")
+          ? targetPath.slice(1)
+          : targetPath;
 
         const sourceNode = nodeMap.get(sourcePath);
         if (!sourceNode) {
@@ -312,51 +379,26 @@ export const createAppRouter = () => {
           });
         }
 
-        const connections = simulator.connections();
-
-        const inflights = sourceNode.display?.hidden
-          ? []
-          : connections
-              ?.filter(({ source, target, name }) => {
-                if (!isFoundInPath(sourceNode, nodeMap, source, true)) {
-                  return false;
-                }
-
-                if (!isFoundInPath(targetNode, nodeMap, target, true)) {
-                  return false;
-                }
-
-                if (name === "$inflight_init()") {
-                  return false;
-                }
-
-                if (
-                  !showTests &&
-                  (matchTest(sourceNode.path) || matchTest(targetNode.path))
-                ) {
-                  return false;
-                }
-
-                return true;
-              })
-              .map((connection) => {
-                return {
-                  name: connection.name,
-                };
-              }) ?? [];
-
         return {
           source: {
             id: sourceNode.id,
             path: sourceNode.path,
             type: getResourceType(sourceNode, simulator),
+            display: sourceNode.display,
           },
           target: {
             id: targetNode?.id ?? "",
             path: targetNode?.path ?? "",
             type: (targetNode && getResourceType(targetNode, simulator)) ?? "",
+            display: targetNode.display,
           },
-          inflights,
+          inflights: targetInflight
+            ? [
+                {
+                  name: targetInflight,
+                },
+              ]
+            : [],
         };
       }),
     "app.invalidateQuery": createProcedure.subscription(({ ctx }) => {
@@ -375,42 +417,17 @@ export const createAppRouter = () => {
         };
       });
     }),
-    "app.map": createProcedure
-      .input(
-        z
-          .object({
-            showTests: z.boolean().optional(),
-          })
-          .optional(),
-      )
-      .query(async ({ ctx, input }) => {
-        const simulator = await ctx.simulator();
+    "app.map": createProcedure.query(async ({ ctx }) => {
+      const simulator = await ctx.simulator();
 
-        const { tree } = simulator.tree().rawData();
-        const connections = simulator.connections();
-        const shakedTree = shakeTree(tree);
-        const nodeMap = buildConstructTreeNodeMap(shakedTree);
-        const nodes = [
-          createMapNodeFromConstructTreeNode(
-            shakedTree,
-            simulator,
-            input?.showTests,
-          ),
-        ];
-        const edges = uniqby(
-          createMapEdgesFromConnectionData(
-            nodeMap,
-            connections,
-            input?.showTests,
-          ),
-          (edge) => edge.id,
-        );
+      const { tree } = simulator.tree().rawData();
+      const connections = simulator.connections();
 
-        return {
-          nodes,
-          edges,
-        };
-      }),
+      return {
+        tree,
+        connections,
+      };
+    }),
     "app.state": createProcedure.query(async ({ ctx }) => {
       return ctx.appState();
     }),
@@ -589,45 +606,6 @@ export interface MapEdge {
   id: string;
   source: string;
   target: string;
-}
-
-function createMapEdgesFromConnectionData(
-  nodeMap: ConstructTreeNodeMap,
-  connections: NodeConnection[],
-  showTests = false,
-): MapEdge[] {
-  return [
-    ...connections
-      .filter((connection) => {
-        return connectionsBasicFilter(connection, nodeMap, showTests);
-      })
-      ?.map((connection: NodeConnection) => {
-        const source = getVisualNodePath(connection.source, nodeMap);
-        const target = getVisualNodePath(connection.target, nodeMap);
-        return {
-          id: `${source} -> ${target}`,
-          source,
-          target,
-        };
-      })
-      ?.filter(({ source, target }) => {
-        // Remove redundant connections to a parent resource if there's already a connection to a child resource.
-        if (
-          connections.some((connection) => {
-            if (
-              connection.source === source &&
-              connection.target.startsWith(`${target}/`)
-            ) {
-              return true;
-            }
-          })
-        ) {
-          return false;
-        }
-
-        return true;
-      }),
-  ].flat();
 }
 
 function getResourceType(

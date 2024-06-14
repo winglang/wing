@@ -8,7 +8,7 @@ pub(crate) mod type_reference_transform;
 
 use crate::ast::{
 	self, AccessModifier, ArgListId, AssignmentKind, BringSource, CalleeKind, ClassField, ExplicitLift, ExprId,
-	FunctionDefinition, IfLet, Intrinsic, New, TypeAnnotationKind,
+	FunctionDefinition, IfLet, Intrinsic, IntrinsicKind, New, TypeAnnotationKind,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
@@ -1117,6 +1117,11 @@ impl TypeRef {
 		matches!(**self, Type::Optional(_) | Type::Anything)
 	}
 
+	/// Same as is_option, but does not consider `anything` as an optional
+	pub fn is_strict_option(&self) -> bool {
+		matches!(**self, Type::Optional(_))
+	}
+
 	pub fn is_immutable_collection(&self) -> bool {
 		matches!(**self, Type::Array(_) | Type::Map(_) | Type::Set(_))
 	}
@@ -1358,6 +1363,7 @@ pub struct Types {
 	/// all of the symbol environments of the files (or subdirectories) in that directory
 	pub source_file_envs: IndexMap<Utf8PathBuf, SymbolEnvOrNamespace>,
 	pub libraries: SymbolEnv,
+	pub intrinsics: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
 	bool_idx: usize,
@@ -1410,14 +1416,11 @@ impl Types {
 		types.push(Box::new(Type::Stringable));
 		let stringable_idx = types.len() - 1;
 
-		let libraries = SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0);
-
 		Self {
 			types,
 			namespaces: Vec::new(),
 			symbol_envs: Vec::new(),
 			source_file_envs: IndexMap::new(),
-			libraries,
 			numeric_idx,
 			string_idx,
 			bool_idx,
@@ -1435,6 +1438,8 @@ impl Types {
 			inferences: Vec::new(),
 			type_expressions: IndexMap::new(),
 			append_empty_struct_to_arglist: HashSet::new(),
+			libraries: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
+			intrinsics: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0),
 		}
 	}
 
@@ -2057,6 +2062,92 @@ impl<'a> TypeChecker<'a> {
 			}),
 			scope,
 		);
+
+		// Intrinsics
+		let _ = self.types.intrinsics.define(
+			&Symbol::global(IntrinsicKind::Dirname.to_string()),
+			SymbolKind::Variable(VariableInfo {
+				access: AccessModifier::Public,
+				name: Symbol::global(IntrinsicKind::Dirname.to_string()),
+				docs: Some(Docs::with_summary(r#"Get the normalized absolute path of the current source file's directory.
+
+The resolved path represents a path during preflight only and is not guaranteed to be valid while inflight.
+It should primarily be used in preflight or in inflights that are guaranteed to be executed in the same filesystem where preflight executed."#)),
+				kind: VariableKind::StaticMember,
+				phase: Phase::Preflight,
+				type_: self.types.string(),
+				reassignable: false,
+			}),
+			AccessModifier::Public,
+			StatementIdx::Top,
+		);
+
+		let import_inflight_options_fqn = format!("{}.std.ImportInflightOptions", WINGSDK_ASSEMBLY_NAME);
+		let import_inflight_options = self
+			.types
+			.libraries
+			.lookup_nested_str(&import_inflight_options_fqn, None)
+			.expect("std.ImportInflightOptions not found in type system")
+			.0
+			.as_type()
+			.expect("std.ImportInflightOptions was found but it's not a type");
+		let inflight_t = Type::Function(FunctionSignature {
+			this_type: None,
+			parameters: vec![
+				FunctionParameter {
+					name: "file".into(),
+					typeref: self.types.string(),
+					docs: Docs::with_summary("Path to extern file to create inflight. Relative to the current wing file."),
+					variadic: false,
+				},
+				FunctionParameter {
+					name: "options".into(),
+					typeref: self.types.make_option(import_inflight_options),
+					docs: import_inflight_options.as_struct().unwrap().docs.clone(),
+					variadic: false,
+				},
+			],
+			// In practice, this function returns an inferred type upon each use
+			return_type: self.types.anything(),
+			phase: Phase::Preflight,
+			// The emitted JS is dynamic
+			js_override: None,
+			docs: Docs::with_summary(
+				r#"Create an inflight function from the given file.
+The file must be a JavaScript or TypeScript file with a default export that matches the inferred return where `@inflight` is used.
+
+For example:
+
+```wing
+bring cloud;
+new cloud.Function(@inflight("./handler.ts"));
+```
+
+`./handler.ts` Must default export an `async ({}, string?) => string?` function. The first argument is anything lifted into that function, e.g.:
+
+```wing
+let bucket = new cloud.Bucket();
+new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
+```
+"#,
+			),
+			implicit_scope_param: false,
+		});
+		let inflight_t = self.types.add_type(inflight_t);
+		let _ = self.types.intrinsics.define(
+			&IntrinsicKind::Inflight.clone().into(),
+			SymbolKind::Variable(VariableInfo {
+				access: AccessModifier::Public,
+				name: IntrinsicKind::Inflight.into(),
+				docs: None,
+				kind: VariableKind::StaticMember,
+				phase: Phase::Preflight,
+				type_: inflight_t,
+				reassignable: false,
+			}),
+			AccessModifier::Public,
+			StatementIdx::Top,
+		);
 	}
 
 	fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
@@ -2130,7 +2221,7 @@ impl<'a> TypeChecker<'a> {
 					if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 						let (exp_type, p) = self.type_check_exp(interpolated_expr, env);
 						phase = combine_phases(phase, p);
-						self.validate_type_in(exp_type, &[self.types.stringable()], interpolated_expr);
+						self.validate_type_in(exp_type, &[self.types.stringable()], interpolated_expr, None, None);
 					}
 				});
 				(self.types.string(), phase)
@@ -2195,7 +2286,7 @@ impl<'a> TypeChecker<'a> {
 				(self.types.number(), phase)
 			}
 			BinaryOperator::Equal | BinaryOperator::NotEqual => {
-				self.validate_type_binary_equality(rtype, ltype, exp);
+				self.validate_type_binary_equality(rtype, ltype, exp, None, None);
 				(self.types.bool(), phase)
 			}
 			BinaryOperator::Less | BinaryOperator::LessOrEqual | BinaryOperator::Greater | BinaryOperator::GreaterOrEqual => {
@@ -2545,7 +2636,14 @@ impl<'a> TypeChecker<'a> {
 			let (t, item_phase) = self.type_check_exp(item, env);
 			phase = combine_phases(phase, item_phase);
 
-			if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
+			if t.is_json()
+				&& !matches!(
+					*t,
+					Type::Json(Some(JsonData {
+						kind: JsonDataKind::List(_),
+						..
+					}))
+				) {
 				// This is an array of JSON, change the element type to reflect that
 				let json_data = JsonData {
 					expression_id: exp.id,
@@ -2564,7 +2662,7 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 
-			if !self.ctx.in_json() {
+			if !self.ctx.in_json() && !t.is_json() {
 				// If we're not in a Json literal, validate the type of each element
 				self.validate_type(t, element_type, item);
 				element_type = self.types.maybe_unwrap_inference(element_type);
@@ -2616,7 +2714,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// Make sure this is a function signature type
-		let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
+		let func_sig = if let Some(func_sig) = func_type.as_deep_function_sig() {
 			func_sig.clone()
 		} else if let Some(class) = func_type.as_preflight_class() {
 			// return the signature of the "handle" method
@@ -2700,16 +2798,33 @@ impl<'a> TypeChecker<'a> {
 		if !intrinsic.kind.is_valid_phase(&env.phase) {
 			self.spanned_error(exp, format!("{} cannot be used in {}", intrinsic.kind, env.phase));
 		}
-		if let Some(intrinsic_type) = intrinsic.kind.get_type(&self.types) {
+		let arg_list = intrinsic
+			.arg_list
+			.as_ref()
+			.map(|arg_list| (arg_list, self.type_check_arg_list(arg_list, env)));
+
+		if let Some(intrinsic_type) = self
+			.types
+			.intrinsics
+			.lookup(&intrinsic.kind.clone().into(), None)
+			.and_then(|x| x.as_variable())
+			.map(|x| x.type_)
+		{
 			if let Some(sig) = intrinsic_type.as_function_sig() {
-				if let Some(arg_list) = &intrinsic.arg_list {
-					let arg_list_types = self.type_check_arg_list(arg_list, env);
+				if let Some((arg_list, arg_list_types)) = arg_list {
 					self.type_check_arg_list_against_function_sig(arg_list, &sig, exp, arg_list_types);
 				} else {
 					self.spanned_error(exp, format!("{} requires arguments", intrinsic.kind));
 				}
 
-				return (sig.return_type, sig.phase);
+				match intrinsic.kind {
+					IntrinsicKind::Inflight => {
+						return (self.types.make_inference(), Phase::Preflight);
+					}
+					IntrinsicKind::Dirname | IntrinsicKind::Unknown => {
+						return (sig.return_type, sig.phase);
+					}
+				}
 			} else {
 				if let Some(arg_list) = &intrinsic.arg_list {
 					self.spanned_error(&arg_list.span, format!("{} does not expect arguments", intrinsic.kind));
@@ -3133,27 +3248,53 @@ impl<'a> TypeChecker<'a> {
 		actual_type: TypeRef,
 		expected_type: TypeRef,
 		span: &impl Spanned,
+		actual_original_type: Option<TypeRef>,
+		expected_original_type: Option<TypeRef>,
 	) -> TypeRef {
 		if let (
 			Type::Array(inner_actual) | Type::MutArray(inner_actual),
 			Type::Array(inner_expected) | Type::MutArray(inner_expected),
 		) = (&*actual_type, &*expected_type)
 		{
-			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
+			self.validate_type_binary_equality(
+				*inner_actual,
+				*inner_expected,
+				span,
+				Some(actual_original_type.unwrap_or(actual_type)),
+				Some(expected_original_type.unwrap_or(expected_type)),
+			)
 		} else if let (
 			Type::Map(inner_actual) | Type::MutMap(inner_actual),
 			Type::Map(inner_expected) | Type::MutMap(inner_expected),
 		) = (&*actual_type, &*expected_type)
 		{
-			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
+			self.validate_type_binary_equality(
+				*inner_actual,
+				*inner_expected,
+				span,
+				Some(actual_original_type.unwrap_or(actual_type)),
+				Some(expected_original_type.unwrap_or(expected_type)),
+			)
 		} else if let (
 			Type::Set(inner_actual) | Type::MutSet(inner_actual),
 			Type::Set(inner_expected) | Type::MutSet(inner_expected),
 		) = (&*actual_type, &*expected_type)
 		{
-			self.validate_type_binary_equality(*inner_actual, *inner_expected, span)
+			self.validate_type_binary_equality(
+				*inner_actual,
+				*inner_expected,
+				span,
+				Some(actual_original_type.unwrap_or(actual_type)),
+				Some(expected_original_type.unwrap_or(expected_type)),
+			)
 		} else {
-			self.validate_type(actual_type, expected_type, span)
+			self.validate_nested_type(
+				actual_type,
+				expected_type,
+				span,
+				actual_original_type,
+				expected_original_type,
+			)
 		}
 	}
 
@@ -3240,13 +3381,45 @@ impl<'a> TypeChecker<'a> {
 	///
 	/// Returns the given type on success, otherwise returns the expected type.
 	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl Spanned) -> TypeRef {
-		self.validate_type_in(actual_type, &[expected_type], span)
+		self.validate_type_in(actual_type, &[expected_type], span, None, None)
+	}
+
+	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
+	/// to the diagnostics- based on the parent type.
+	///
+	/// Returns the given type on success, otherwise returns the expected type.
+	fn validate_nested_type(
+		&mut self,
+		actual_type: TypeRef,
+		expected_type: TypeRef,
+		span: &impl Spanned,
+		actual_original_type: Option<TypeRef>,
+		expected_original_type: Option<TypeRef>,
+	) -> TypeRef {
+		if let Some(expected_original_t) = expected_original_type {
+			self.validate_type_in(
+				actual_type,
+				&[expected_type],
+				span,
+				actual_original_type,
+				Some(&[expected_original_t]),
+			)
+		} else {
+			self.validate_type_in(actual_type, &[expected_type], span, actual_original_type, None)
+		}
 	}
 
 	/// Validate that the given type is a subtype (or same) as the one of the expected types. If not, add
 	/// an error to the diagnostics.
 	/// Returns the given type on success, otherwise returns one of the expected types.
-	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl Spanned) -> TypeRef {
+	fn validate_type_in(
+		&mut self,
+		actual_type: TypeRef,
+		expected_types: &[TypeRef],
+		span: &impl Spanned,
+		actual_original_type: Option<TypeRef>,
+		expected_original_types: Option<&[TypeRef]>,
+	) -> TypeRef {
 		assert!(expected_types.len() > 0);
 		let first_expected_type = expected_types[0];
 		let mut return_type = actual_type;
@@ -3295,18 +3468,20 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 
-		let expected_type_str = if expected_types.len() > 1 {
-			let expected_types_list = expected_types
+		let expected_type_origin = expected_original_types.unwrap_or(expected_types);
+		let expected_type_str = if expected_type_origin.len() > 1 {
+			let expected_types_list = expected_type_origin
 				.iter()
 				.map(|t| format!("{}", t))
 				.collect::<Vec<String>>()
 				.join(",");
 			format!("one of \"{}\"", expected_types_list)
 		} else {
-			format!("\"{}\"", first_expected_type)
+			format!("\"{}\"", expected_type_origin[0])
 		};
 
-		let message = format!("Expected type to be {expected_type_str}, but got \"{return_type}\" instead");
+		let return_type_str = actual_original_type.unwrap_or(return_type);
+		let message = format!("Expected type to be {expected_type_str}, but got \"{return_type_str}\" instead");
 		let mut hints: Vec<String> = vec![];
 		if return_type.is_nil() && expected_types.len() == 1 {
 			hints.push(format!(
@@ -3516,7 +3691,10 @@ impl<'a> TypeChecker<'a> {
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
 				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
 				if !var_info.name.span.file_id.is_empty() && self.check_for_inferences(&var_info.type_) {
-					self.spanned_error(&var_info.name, "Unable to infer type");
+					self.spanned_error(
+						&var_info.name,
+						"Unable to infer type by usage, an explicit type annotation is required",
+					);
 				}
 			}
 		}
@@ -3946,7 +4124,7 @@ impl<'a> TypeChecker<'a> {
 		CompilationContext::set(CompilationPhase::TypeChecking, &stmt.span);
 
 		// Set the current statement index for symbol lookup checks.
-		self.with_stmt(stmt.idx, |tc| match &stmt.kind {
+		self.with_stmt(stmt, |tc| match &stmt.kind {
 			StmtKind::Let {
 				reassignable,
 				var_name,
@@ -4449,21 +4627,39 @@ impl<'a> TypeChecker<'a> {
 				.as_function_sig()
 				.expect("ctor to be a function");
 			if let FunctionBody::Statements(ctor_body) = &ctor_def.body {
-				if parent_ctor_sig.min_parameters() > 0
-					&& !matches!(
-						ctor_body.statements.first(),
-						Some(Stmt {
-							kind: StmtKind::SuperConstructor { .. },
-							..
-						})
-					) {
-					self.spanned_error(
-						ctor_body,
-						format!(
-							"Missing super() call as first statement of {}'s constructor",
-							ast_class.name
-						),
-					);
+				// Make sure there's a `super()` call to the parent ctor
+				if parent_ctor_sig.min_parameters() > 0 {
+					// Find the `super()` call
+					if let Some((idx, super_call)) = ctor_body
+						.statements
+						.iter()
+						.enumerate()
+						.find(|(_, s)| matches!(s.kind, StmtKind::SuperConstructor { .. }))
+					{
+						// We have a super call, make sure it's the first statement (after any type defs)
+						let expected_idx = ctor_body
+							.statements
+							.iter()
+							.position(|s| !s.kind.is_type_def())
+							.expect("at least the super call stmt");
+						if idx != expected_idx {
+							self.spanned_error(
+								super_call,
+								format!(
+									"super() call must be the first statement of {}'s constructor",
+									ast_class.name
+								),
+							);
+						}
+					} else {
+						self.spanned_error(
+							ctor_body,
+							format!(
+								"Missing super() call as first statement of {}'s constructor",
+								ast_class.name
+							),
+						);
+					}
 				}
 			}
 		}
@@ -4723,8 +4919,8 @@ impl<'a> TypeChecker<'a> {
 		// ```
 		match kind {
 			AssignmentKind::AssignIncr => {
-				self.validate_type_in(exp_type, &[self.types.number(), self.types.string()], value);
-				self.validate_type_in(var_type, &[self.types.number(), self.types.string()], value);
+				self.validate_type_in(exp_type, &[self.types.number(), self.types.string()], value, None, None);
+				self.validate_type_in(var_type, &[self.types.number(), self.types.string()], value, None, None);
 			}
 			AssignmentKind::AssignDecr => {
 				self.validate_type(exp_type, self.types.number(), value);
@@ -6068,11 +6264,23 @@ impl<'a> TypeChecker<'a> {
 				let res = match *instance_type {
 					// TODO: it might be possible to look at Type::Json's inner data to give a more specific type
 					Type::Json(_) => {
-						self.validate_type_in(index_type, &[self.types.number(), self.types.string()], index);
+						self.validate_type_in(
+							index_type,
+							&[self.types.number(), self.types.string()],
+							index,
+							None,
+							None,
+						);
 						ResolveReferenceResult::Location(instance_type, self.types.json()) // indexing into a Json object returns a Json object
 					}
 					Type::MutJson => {
-						self.validate_type_in(index_type, &[self.types.number(), self.types.string()], index);
+						self.validate_type_in(
+							index_type,
+							&[self.types.number(), self.types.string()],
+							index,
+							None,
+							None,
+						);
 						ResolveReferenceResult::Location(instance_type, self.types.mut_json()) // indexing into a MutJson object returns a MutJson object
 					}
 					Type::Array(inner_type) | Type::MutArray(inner_type) => {

@@ -190,7 +190,7 @@ impl<'a> SymbolLocator<'a> {
 			}
 			SymbolLocatorResult::StructField { struct_type, field } => self.lookup_property_on_type(&struct_type, field),
 			SymbolLocatorResult::LooseField { .. } => None,
-			SymbolLocatorResult::Intrinsic { .. } => None,
+			SymbolLocatorResult::Intrinsic { name, .. } => Some(self.types.intrinsics.lookup_ext(name, None)),
 		}
 	}
 
@@ -225,7 +225,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			return;
 		}
 
-		self.ctx.push_stmt(node.idx);
+		self.ctx.push_stmt(node);
 
 		// Handle situations where symbols are actually defined in inner scopes
 		match &node.kind {

@@ -423,7 +423,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 	fn visit_stmt(&mut self, node: &'a Stmt) {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
 
-		self.ctx.push_stmt(node.idx);
+		self.ctx.push_stmt(node);
 
 		// If this is an explicit lift statement then add the explicit lift
 		if let StmtKind::ExplicitLift(explicit_lift) = &node.kind {

@@ -1,8 +1,8 @@
-use lsp_types::{Position, Range, TextEdit};
+use lsp_types::{Position, PrepareRenameResponse, Range, TextEdit};
 
 use crate::diagnostic::WingLocation;
-use crate::type_check::symbol_env::LookupResult;
-use crate::type_check::{SymbolKind, Types};
+use crate::type_check::symbol_env::{LookupResult, SymbolEnv};
+use crate::type_check::{SymbolKind, Types, UnsafeRef, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::visit::{visit_scope, Visit};
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::{ast::*, visit_context};
@@ -29,17 +29,17 @@ impl<'a> RenameVisitor<'a> {
 		self
 			.linked_symbols
 			.iter()
-			.any(|s: &LinkedSymbol<'a>| symbol.same(&s.symbol))
+			.any(|s: &LinkedSymbol<'a>| symbol.same(&s.symbol) || s.references.iter().any(|r| symbol.same(r)))
 	}
 
-	fn add_reference_symbol(&mut self, symbol: &'a Symbol) {
+	fn add_reference_symbol(&mut self, symbol: &'a Symbol, symbol_env: Option<&UnsafeRef<SymbolEnv>>) {
 		// symbols that appear in let/if lef statements will point to a prev declaration of a variable of the same name if exists
 		// this is why we add them in advance during visit_statement
 		// the other condition is for "this" that points to the "new" keyword for some reason
-		if self.is_symbol_linked(symbol) {
+		if self.is_symbol_linked(symbol) || symbol.name == "this" {
 			return;
 		}
-		if let Some(env) = self.ctx.current_env() {
+		if let Some(env) = symbol_env.or(self.ctx.current_env()) {
 			match env.lookup_ext(symbol, None) {
 				LookupResult::Found(symbol_kind, lookup_info) | LookupResult::NotPublic(symbol_kind, lookup_info) => {
 					// TODO: remove to support rename-refactor of namespaces - after adjusting the edit
@@ -100,6 +100,44 @@ impl<'a> RenameVisitor<'a> {
 		}
 		vec![]
 	}
+
+	fn prepare_symbol_rename(&self, symbol: &Symbol) -> PrepareRenameResponse {
+		return PrepareRenameResponse::RangeWithPlaceholder {
+			range: Range {
+				start: Position {
+					line: symbol.span.start.line,
+					character: symbol.span.start.col,
+				},
+				end: Position {
+					line: symbol.span.end.line,
+					character: symbol.span.end.col,
+				},
+			},
+			placeholder: symbol.name.clone(),
+		};
+	}
+
+	pub fn prepare_rename(&mut self, position: Position) -> PrepareRenameResponse {
+		let location = WingLocation {
+			line: position.line,
+			col: position.character,
+		};
+		for symbol in &self.linked_symbols {
+			if symbol.symbol.span.contains_location(&location) {
+				return self.prepare_symbol_rename(&symbol.symbol);
+			}
+
+			// to remove the lock we must get out of the for loop
+			for child in symbol.references.iter() {
+				if child.span.contains_location(&location) {
+					return self.prepare_symbol_rename(child);
+				}
+			}
+		}
+		PrepareRenameResponse::DefaultBehavior {
+			default_behavior: false,
+		}
+	}
 }
 
 impl<'a> VisitorWithContext for RenameVisitor<'a> {
@@ -116,8 +154,41 @@ impl<'a> Visit<'a> for RenameVisitor<'a> {
 	}
 
 	fn visit_symbol(&mut self, node: &'a Symbol) {
-		self.add_reference_symbol(node);
+		self.add_reference_symbol(node, None);
 		crate::visit::visit_symbol(self, node);
+	}
+
+	fn visit_expr(&mut self, node: &'a Expr) {
+		if let ExprKind::JsonMapLiteral { fields, .. } = &node.kind {
+			let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));
+			let type_ = *if let Some(type_) = self.types.get_type_from_json_cast(node.id) {
+				*type_
+			} else {
+				type_
+			}
+			.maybe_unwrap_option();
+
+			if let Some(c) = type_.as_struct() {
+				for (field, ..) in fields {
+					self.add_reference_symbol(field, Some(&UnsafeRef::from(&c.env)));
+				}
+			}
+		}
+		crate::visit::visit_expr(self, node);
+	}
+
+	fn visit_reference(&mut self, node: &'a Reference) {
+		match node {
+			Reference::InstanceMember { property, object, .. } => {
+				let object_type = self.types.get_expr_id_type_ref(object.id);
+				if let Some(inner_env) = object_type.as_env() {
+					self.add_reference_symbol(property, Some(&UnsafeRef::from(inner_env)));
+				}
+			}
+			_ => {}
+		}
+
+		crate::visit::visit_reference(self, node);
 	}
 
 	fn visit_stmt(&mut self, stmt: &'a Stmt) {
@@ -130,6 +201,40 @@ impl<'a> Visit<'a> for RenameVisitor<'a> {
 				symbol: var_name.clone(),
 				references: vec![],
 			}),
+			//TODO: to be handled in a following PR, renaming interface fields is not supported yet
+			// StmtKind::Interface(c) => {
+			// for field in &c.methods {
+			// 	self.linked_symbols.push(LinkedSymbol {
+			// 		symbol: field.0.clone(),
+			// 		references: vec![],
+			// 	})
+			// }
+			// }
+			StmtKind::Struct(s) => {
+				for field in &s.fields {
+					self.linked_symbols.push(LinkedSymbol {
+						symbol: field.name.clone(),
+						references: vec![],
+					})
+				}
+			}
+			StmtKind::Class(c) => {
+				for (m, ..) in &c.methods {
+					if m.name == CLASS_INIT_NAME || m.name == CLASS_INFLIGHT_INIT_NAME {
+						continue;
+					}
+					self.linked_symbols.push(LinkedSymbol {
+						symbol: m.clone(),
+						references: vec![],
+					})
+				}
+				for f in &c.fields {
+					self.linked_symbols.push(LinkedSymbol {
+						symbol: f.name.clone(),
+						references: vec![],
+					})
+				}
+			}
 			_ => {}
 		}
 		crate::visit::visit_stmt(self, stmt);
