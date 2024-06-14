@@ -7,7 +7,7 @@ bring util;
 let state = new sim.State();
 
 let fn = new cloud.Function(
-  inflight (): str => {
+  inflight (): Json => {
     return util.env("FOO_VALUE");
   },
   env: {

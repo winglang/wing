@@ -35,7 +35,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(): void;\n  inflight invoke(): str?;\n  inflight invokeAsync(): void;\n}\n```\n---\nA function."
+    value: "```wing\nclass Function impl IInflightHost {\n  env: Map<str>;\n  addEnvironment(): void;\n  inflight invoke(): Json?;\n  inflight invokeAsync(): void;\n}\n```\n---\nA function."
   sortText: gg|Function
 - label: OnDeploy
   kind: 7
@@ -419,19 +419,19 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IFunctionClient {\n  inflight invoke(): str?;\n  inflight invokeAsync(): void;\n}\n```\n---\nInflight interface for `Function`."
+    value: "```wing\ninterface IFunctionClient {\n  inflight invoke(): Json?;\n  inflight invokeAsync(): void;\n}\n```\n---\nInflight interface for `Function`."
   sortText: ii|IFunctionClient
 - label: IFunctionHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninflight (event: str?): str?\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`."
+    value: "```wing\ninflight (event: Json?): Json?\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`."
   sortText: ii|IFunctionHandler
 - label: IFunctionHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninflight (event: str?): str?\n```\n---\nInflight client for `IFunctionHandler`."
+    value: "```wing\ninflight (event: Json?): Json?\n```\n---\nInflight client for `IFunctionHandler`."
   sortText: ii|IFunctionHandlerClient
 - label: IOnDeployClient
   kind: 8
@@ -533,13 +533,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninflight (event: str): void\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`."
+    value: "```wing\ninflight (message: str): void\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`."
   sortText: ii|ITopicOnMessageHandler
 - label: ITopicOnMessageHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninflight (event: str): void\n```\n---\nInflight client for `ITopicOnMessageHandler`."
+    value: "```wing\ninflight (message: str): void\n```\n---\nInflight client for `ITopicOnMessageHandler`."
   sortText: ii|ITopicOnMessageHandlerClient
 - label: IWebsite
   kind: 8

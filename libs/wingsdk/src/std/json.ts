@@ -38,6 +38,14 @@ export class Json {
   }
 
   /**
+   * Helper for casting JavaScript values into Json.
+   * @internal
+   */
+  public static _fromAny(value: any): Json {
+    return value as unknown as Json;
+  }
+
+  /**
    * Returns the keys from the Json.
    *
    * @macro Object.keys($args$)

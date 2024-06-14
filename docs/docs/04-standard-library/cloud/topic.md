@@ -493,12 +493,12 @@ Inflight client for `ITopicOnMessageHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.ITopicOnMessageHandlerClient.handle"></a>
 
 ```wing
-inflight handle(event: str): void
+inflight handle(message: str): void
 ```
 
 Function that will be called when a message is received from the topic.
 
-###### `event`<sup>Required</sup> <a name="event" id="@winglang/sdk.cloud.ITopicOnMessageHandlerClient.handle.parameter.event"></a>
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.ITopicOnMessageHandlerClient.handle.parameter.message"></a>
 
 - *Type:* str
 

@@ -19,7 +19,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { LogLevel, TraceType } from "../std";
+import { LogLevel, Json, TraceType } from "../std";
 
 export class Queue
   implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
@@ -203,10 +203,10 @@ export class Queue
         // we don't use invokeAsync here because we want to wait for the function to finish
         // and requeue the messages if it fails
         void fnClient
-          .invoke(JSON.stringify({ messages: messages }))
+          .invoke(Json._fromAny({ messages: messages }))
           .then((result) => {
             if (this.dlq && result) {
-              const errorList = JSON.parse(result);
+              const errorList = result as any;
               let retriesMessages = [];
               for (const msg of errorList) {
                 if (

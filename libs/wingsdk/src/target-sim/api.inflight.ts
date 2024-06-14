@@ -26,7 +26,7 @@ import {
   ISimulatorResourceInstance,
   UpdatePlan,
 } from "../simulator/simulator";
-import { LogLevel, TraceType } from "../std";
+import { LogLevel, Json, TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -268,10 +268,9 @@ export class Api
           const apiRequest = transformRequest(req);
 
           try {
-            const responseString = await fnClient.invoke(
-              JSON.stringify(apiRequest)
-            );
-            const response: ApiResponse = JSON.parse(responseString ?? "{}");
+            const response = ((await fnClient.invoke(
+              Json._fromAny(apiRequest)
+            )) ?? {}) as ApiResponse;
 
             const status = response.status ?? DEFAULT_RESPONSE_STATUS;
             res.status(status);

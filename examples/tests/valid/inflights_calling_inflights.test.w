@@ -6,8 +6,8 @@ let storeInBucket = inflight (event: str, file: str) => {
   globalBucket.put(file, event);
 };
 
-let handler1 = inflight (event: str?) => {
-  if let event = event {
+let handler1 = inflight (event: Json?) => {
+  if let event = event?.tryAsStr() {
     storeInBucket(event, "file1");
   }
 };
