@@ -307,7 +307,7 @@ export const DefaultLayout = ({
                           className={classNames(
                             layout.panels?.rounded &&
                               "rounded-lg overflow-hidden",
-                            "flex grow",
+                            "flex grow w-full",
                           )}
                         >
                           {renderLayoutComponent(component)}
