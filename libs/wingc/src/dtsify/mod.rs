@@ -416,8 +416,18 @@ pub interface ClassInterface {
 	inflight bar(): void;
 }
 
+pub inflight interface InflightInterface {
+  somethingFun(): void;
+}
+
+pub inflight class InflightClass impl InflightInterface {
+  pub somethingFun() {}
+}
+
 pub class ParentClass impl ClassInterface {
-	pub static inflight static_method() {}
+	pub static inflight static_method(): InflightClass {
+	  return new InflightClass();
+	}
 
 	inflight foo() {}
 	pub inflight bar() {}
@@ -425,9 +435,8 @@ pub class ParentClass impl ClassInterface {
 	pub addHandler(handler: inflight (str): str) {}
 }
 
-pub class Child extends ParentClass impl ClassInterface {
-	
-}"#
+pub class Child extends ParentClass impl ClassInterface {}
+"#
 	);
 }
 
