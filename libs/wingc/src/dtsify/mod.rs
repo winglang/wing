@@ -202,7 +202,7 @@ impl<'a> DTSifier<'a> {
 			code.line(format!("constructor({constructor_params});"));
 		}
 
-		if !as_inflight && matches!(class.phase, Phase::Preflight) {
+		if !as_inflight {
 			// Emit special preflight marks to tie the inflight side together
 			let inflight_class_name = format!("{class_name}{TYPE_INFLIGHT_POSTFIX}");
 			code.line(format!(
@@ -310,9 +310,7 @@ impl<'a> DTSifier<'a> {
 			}
 			StmtKind::Class(class) => {
 				code.line(self.dtsify_class(class, false));
-				if class.phase == Phase::Preflight {
-					code.line(self.dtsify_class(class, true));
-				}
+				code.line(self.dtsify_class(class, true));
 			}
 
 			// No need to emit anything for these
@@ -418,8 +416,18 @@ pub interface ClassInterface {
 	inflight bar(): void;
 }
 
+pub inflight interface InflightInterface {
+  somethingFun(): void;
+}
+
+pub inflight class InflightClass impl InflightInterface {
+  pub somethingFun() {}
+}
+
 pub class ParentClass impl ClassInterface {
-	pub static inflight static_method() {}
+	pub static inflight static_method(): InflightClass {
+	  return new InflightClass();
+	}
 
 	inflight foo() {}
 	pub inflight bar() {}
@@ -427,9 +435,8 @@ pub class ParentClass impl ClassInterface {
 	pub addHandler(handler: inflight (str): str) {}
 }
 
-pub class Child extends ParentClass impl ClassInterface {
-	
-}"#
+pub class Child extends ParentClass impl ClassInterface {}
+"#
 	);
 }
 
