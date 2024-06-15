@@ -310,9 +310,7 @@ impl<'a> DTSifier<'a> {
 			}
 			StmtKind::Class(class) => {
 				code.line(self.dtsify_class(class, false));
-				if class.phase == Phase::Preflight {
-					code.line(self.dtsify_class(class, true));
-				}
+				code.line(self.dtsify_class(class, true));
 			}
 
 			// No need to emit anything for these
