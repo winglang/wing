@@ -7,6 +7,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator/simulator";
 import { LogLevel, TraceType } from "../std";
 
@@ -130,6 +131,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
               sourcePath: this.context.resourcePath,
               sourceType: FUNCTION_FQN,
               timestamp: new Date().toISOString(),
+              sourceCode: getCallerLocation(),
             });
           });
         });
@@ -205,6 +207,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       sourcePath: this.context.resourcePath,
       sourceType: FUNCTION_FQN,
       timestamp: new Date().toISOString(),
+      sourceCode: getCallerLocation(),
     });
   }
 }

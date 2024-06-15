@@ -7,6 +7,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator";
 import { LogLevel, TraceType } from "../std";
 
@@ -163,6 +164,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       sourcePath: this.context.resourcePath,
       sourceType: SERVICE_FQN,
       timestamp: new Date().toISOString(),
+      sourceCode: getCallerLocation(),
       level,
     });
   }

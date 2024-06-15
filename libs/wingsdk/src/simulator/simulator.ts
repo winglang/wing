@@ -217,6 +217,12 @@ export class Simulator {
     this._policyRegistry = new PolicyRegistry();
     this._traces = new Array();
     this._traceSubscribers = new Array();
+
+    this.onTrace({
+      callback: (trace) => {
+        console.error(trace);
+      },
+    });
   }
 
   private _loadApp(simdir: string): Model {
@@ -345,6 +351,7 @@ export class Simulator {
       sourceType: "Simulator",
       level: LogLevel.VERBOSE,
       timestamp: new Date().toISOString(),
+      sourceCode: getCallerLocation(),
     });
 
     // stop all *deleted* and *updated* resources
@@ -440,6 +447,7 @@ export class Simulator {
       sourcePath: resourceConfig.path,
       sourceType: resourceConfig.type,
       timestamp: new Date().toISOString(),
+      sourceCode: getCallerLocation(),
     });
   }
 
@@ -921,6 +929,7 @@ export class Simulator {
             sourcePath: resourceConfig.path,
             sourceType: resourceConfig.type,
             timestamp: new Date().toISOString(),
+            sourceCode: getCallerLocation(),
           });
           return result;
         } catch (err: any) {
@@ -935,6 +944,7 @@ export class Simulator {
             sourcePath: resourceConfig.path,
             sourceType: resourceConfig.type,
             timestamp: new Date().toISOString(),
+            sourceCode: getCallerLocation(),
           });
           throw err;
         }
@@ -1352,4 +1362,34 @@ class PolicyRegistry {
     }
     return false;
   }
+}
+
+export function getCallerLocation(): string {
+  const err = new Error();
+  if (!err.stack) {
+    return "<unknown>";
+  }
+  const regex = /\((.*):(\d+):(\d+)\)$/;
+  const stack = err.stack.split("\n");
+  console.error(stack);
+  for (let i = 2; i < stack.length; i++) {
+    if (/^at .*\.addSimulatorTrace/.test(stack[i].trim())) {
+      continue;
+    }
+    if (/^at .*\.addTrace/.test(stack[i].trim())) {
+      continue;
+    }
+    if (/^at .*\.withTrace/.test(stack[i].trim())) {
+      continue;
+    }
+    if (/\(node:internal/.test(stack[i].trim())) {
+      continue;
+    }
+
+    const match = regex.exec(stack[i]);
+    if (match) {
+      return `${match[1]}:${match[2]}:${match[3]}`;
+    }
+  }
+  return "<unknown>";
 }

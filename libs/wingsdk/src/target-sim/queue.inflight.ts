@@ -18,6 +18,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator/simulator";
 import { LogLevel, TraceType } from "../std";
 
@@ -198,6 +199,7 @@ export class Queue
           sourcePath: this.context.resourcePath,
           sourceType: QUEUE_FQN,
           timestamp: new Date().toISOString(),
+          sourceCode: getCallerLocation(),
         });
 
         // we don't use invokeAsync here because we want to wait for the function to finish
@@ -229,6 +231,7 @@ export class Queue
                       sourcePath: this.context.resourcePath,
                       sourceType: QUEUE_FQN,
                       timestamp: new Date().toISOString(),
+                      sourceCode: getCallerLocation(),
                     });
                   });
                 }
@@ -255,6 +258,7 @@ export class Queue
               type: TraceType.RESOURCE,
               level: LogLevel.ERROR,
               timestamp: new Date().toISOString(),
+              sourceCode: getCallerLocation(),
             });
             this.pushMessagesBackToQueue(messages);
           });
@@ -279,6 +283,7 @@ export class Queue
         type: TraceType.RESOURCE,
         level: LogLevel.WARNING,
         timestamp: new Date().toISOString(),
+        sourceCode: getCallerLocation(),
       });
     }, this.timeoutSeconds * 1000);
   }

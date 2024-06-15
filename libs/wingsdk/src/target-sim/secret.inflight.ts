@@ -4,6 +4,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator/simulator";
 import { Json, LogLevel, TraceType } from "../std";
 
@@ -45,6 +46,7 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
       sourceType: SECRET_FQN,
       type: TraceType.RESOURCE,
       timestamp: new Date().toISOString(),
+      sourceCode: getCallerLocation(),
     });
 
     const secretValue = process.env[this.name];

@@ -8,6 +8,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator/simulator";
 import { LogLevel, TraceType } from "../std";
 
@@ -98,6 +99,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
       sourcePath: this.context.resourcePath,
       sourceType: WEBSITE_FQN,
       timestamp: new Date().toISOString(),
+      sourceCode: getCallerLocation(),
       level,
     });
   }

@@ -25,6 +25,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator/simulator";
 import { LogLevel, TraceType } from "../std";
 
@@ -307,6 +308,7 @@ export class Api
       sourcePath: this.context.resourcePath,
       sourceType: API_FQN,
       timestamp: new Date().toISOString(),
+      sourceCode: getCallerLocation(),
     });
   }
 }

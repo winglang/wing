@@ -22,6 +22,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator/simulator";
 import { Datetime, Json, LogLevel, TraceType } from "../std";
 
@@ -395,6 +396,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       sourcePath: this.context.resourcePath,
       sourceType: BUCKET_FQN,
       timestamp: new Date().toISOString(),
+      sourceCode: getCallerLocation(),
     });
   }
 }

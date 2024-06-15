@@ -11,6 +11,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator";
 import { Json, LogLevel, TraceType } from "../std";
 
@@ -91,6 +92,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
         sourcePath: this.context.resourcePath,
         sourceType: SIM_RESOURCE_FQN,
         timestamp: new Date().toISOString(),
+        sourceCode: getCallerLocation(),
       });
       return {};
     }
@@ -128,6 +130,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
         sourcePath: this.context.resourcePath,
         sourceType: SIM_RESOURCE_FQN,
         timestamp: new Date().toISOString(),
+        sourceCode: getCallerLocation(),
       });
     } finally {
       await this.sandbox!.cleanup();
@@ -214,6 +217,7 @@ export class Resource implements IResourceClient, ISimulatorResourceInstance {
       sourcePath: this.context.resourcePath,
       sourceType: SIM_RESOURCE_FQN,
       timestamp: new Date().toISOString(),
+      sourceCode: getCallerLocation(),
     });
   }
 }

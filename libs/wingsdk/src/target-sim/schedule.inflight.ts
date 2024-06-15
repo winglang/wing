@@ -11,6 +11,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator";
 import { LogLevel, TraceType } from "../std";
 
@@ -98,6 +99,7 @@ export class Schedule
         sourcePath: this.context.resourcePath,
         sourceType: SCHEDULE_FQN,
         timestamp: new Date().toISOString(),
+        sourceCode: getCallerLocation(),
       });
 
       void fnClient.invoke().catch((err) => {
@@ -108,6 +110,7 @@ export class Schedule
           sourcePath: this.context.resourcePath,
           sourceType: SCHEDULE_FQN,
           timestamp: new Date().toISOString(),
+          sourceCode: getCallerLocation(),
           type: TraceType.RESOURCE,
           level: LogLevel.ERROR,
         });

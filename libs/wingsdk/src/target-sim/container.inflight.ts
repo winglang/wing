@@ -10,6 +10,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator/simulator";
 import { Duration, LogLevel, TraceType } from "../std";
 import { Util } from "../util";
@@ -451,6 +452,7 @@ export class Container implements IContainerClient, ISimulatorResourceInstance {
       sourcePath: this.context.resourcePath,
       sourceType: "container",
       timestamp: new Date().toISOString(),
+      sourceCode: getCallerLocation(),
       type,
       level,
     });

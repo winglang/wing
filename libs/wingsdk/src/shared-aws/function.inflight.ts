@@ -7,6 +7,7 @@ import {
 import { fromUtf8, toUtf8 } from "@smithy/util-utf8";
 import { ILambdaContext } from "./function";
 import { IFunctionClient } from "../cloud";
+import { getCallerLocation } from "../simulator";
 import { LogLevel, Trace, TraceType } from "../std";
 
 export class FunctionClient implements IFunctionClient {
@@ -167,6 +168,7 @@ export function parseLogs(logs: string, sourcePath: string) {
         sourcePath,
         type: TraceType.LOG,
         level: LogLevel.INFO,
+        sourceCode: getCallerLocation(),
       };
       traces.push(trace);
     }

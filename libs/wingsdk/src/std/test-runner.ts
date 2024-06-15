@@ -216,6 +216,11 @@ export interface Trace {
   readonly sourcePath: string;
 
   /**
+   * The location in the source code where the trace was emitted.
+   */
+  readonly sourceCode: string;
+
+  /**
    * The type of a trace.
    */
   readonly type: TraceType;

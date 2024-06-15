@@ -11,6 +11,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
   UpdatePlan,
+  getCallerLocation,
 } from "../simulator/simulator";
 import { LogLevel, TraceType } from "../std";
 
@@ -56,6 +57,7 @@ export class Topic
         sourcePath: this.context.resourcePath,
         sourceType: TOPIC_FQN,
         timestamp: new Date().toISOString(),
+        sourceCode: getCallerLocation(),
       });
 
       await fnClient.invokeAsync(message);
