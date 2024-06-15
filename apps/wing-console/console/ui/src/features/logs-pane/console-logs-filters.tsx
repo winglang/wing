@@ -208,7 +208,7 @@ export const ConsoleLogsFilters = memo(
 
     return (
       <div className="flex flex-col gap-1">
-        <div className="flex px-2 space-x-2 pt-1 overflow-x-auto">
+        <div className="flex px-2 space-x-2 py-1 overflow-x-auto">
           <Button
             icon={NoSymbolIcon}
             className="px-1.5"
