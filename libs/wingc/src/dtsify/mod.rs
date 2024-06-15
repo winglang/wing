@@ -202,7 +202,7 @@ impl<'a> DTSifier<'a> {
 			code.line(format!("constructor({constructor_params});"));
 		}
 
-		if !as_inflight && matches!(class.phase, Phase::Preflight) {
+		if !as_inflight {
 			// Emit special preflight marks to tie the inflight side together
 			let inflight_class_name = format!("{class_name}{TYPE_INFLIGHT_POSTFIX}");
 			code.line(format!(
