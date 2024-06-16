@@ -41,7 +41,6 @@ use std::cmp;
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
-use std::sync::atomic::{AtomicUsize, Ordering};
 use symbol_env::{StatementIdx, SymbolEnv};
 use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
@@ -1395,6 +1394,8 @@ pub struct Types {
 	type_expressions: IndexMap<ExprId, Reference>,
 	/// Append empty struct to end of arg list
 	pub append_empty_struct_to_arglist: HashSet<ArgListId>,
+	/// Class counter, used to generate unique ids for class types
+	pub class_counter: usize,
 }
 
 impl Types {
@@ -1447,6 +1448,7 @@ impl Types {
 			append_empty_struct_to_arglist: HashSet::new(),
 			libraries: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0),
 			intrinsics: SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Independent, 0),
+			class_counter: 0,
 		}
 	}
 
@@ -1820,9 +1822,6 @@ pub struct TypeChecker<'a> {
 
 	ctx: VisitContext,
 }
-
-/// Class counter, used to generate unique names class types
-static CLASS_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 impl<'a> TypeChecker<'a> {
 	pub fn new(
@@ -4484,8 +4483,9 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 			docs: stmt.doc.as_ref().map_or(Docs::default(), |s| Docs::with_summary(s)),
 			std_construct_args: ast_class.phase == Phase::Preflight,
 			lifts: None,
-			uid: CLASS_COUNTER.fetch_add(1, Ordering::Relaxed),
+			uid: self.types.class_counter,
 		};
+		self.types.class_counter += 1;
 		let mut class_type = self.types.add_type(Type::Class(class_spec));
 		match env.define(
 			&ast_class.name,

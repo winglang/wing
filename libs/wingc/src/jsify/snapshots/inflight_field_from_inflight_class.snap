@@ -88,8 +88,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    if ($preflightTypesMap[95]) { throw new Error("MyType is already in type map"); }
-    $preflightTypesMap[95] = MyType;
+    if ($preflightTypesMap[0]) { throw new Error("MyType is already in type map"); }
+    $preflightTypesMap[0] = MyType;
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
