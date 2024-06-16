@@ -1,8 +1,12 @@
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from "fs";
-import { appWithParamsDir, sdkTestsDir, validTestDir, docsRoot, docsExamplesDir, validDocExamplesDir } from "./paths";
+import {
+  appWithParamsDir,
+  sdkTestsDir,
+  validTestDir,
+  validDocExamplesDir,
+} from "./paths";
 import { join, extname } from "path";
-import { parseMetaCommentFromPath } from "./meta_comment";
-import { searchDirectoryForWingExamples } from "./test_examples";
+import { parseMetaCommentFromPath, shouldSkipTest } from "./meta_comment";
 
 const generatedTestDir = join(__dirname, "test_corpus", "valid");
 const generatedSDKTestDir = join(__dirname, "test_corpus", "sdk_tests");
@@ -43,7 +47,7 @@ function generateTests(options: GenerateTestsOptions) {
         isRecursive,
         level: level + 1,
         includeJavaScriptInSnapshots,
-        skipMarkdownSnapshot
+        skipMarkdownSnapshot,
       });
       continue;
     }
@@ -55,18 +59,7 @@ function generateTests(options: GenerateTestsOptions) {
 
     const metaComment = parseMetaCommentFromPath(join(sourceDir, filename));
 
-    let skipText = "";
-
-    if (metaComment?.skip) {
-      continue;
-    }
-
-    if (
-      metaComment?.skipPlatforms?.includes(process.platform) &&
-      process.env.CI
-    ) {
-      skipText = ".skip";
-    }
+    let skipText = shouldSkipTest(metaComment) ? ".skip" : "";
 
     // ensure windows paths are escaped
     const escapedSourceDir = sourceDir.replace(/\\/g, "\\\\");
@@ -101,7 +94,7 @@ generateTests({
   destination: generatedWingExamplesDir,
   isRecursive: true,
   includeJavaScriptInSnapshots: false,
-  skipMarkdownSnapshot: true
+  skipMarkdownSnapshot: true,
 });
 generateTests({
   sourceDir: validTestDir,

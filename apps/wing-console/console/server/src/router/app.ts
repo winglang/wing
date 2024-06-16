@@ -14,7 +14,7 @@ import type {
 import { buildConstructTreeNodeMap } from "../utils/constructTreeNodeMap.js";
 import type { FileLink } from "../utils/createRouter.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import type { IFunctionClient, Simulator } from "../wingsdk.js";
+import type { Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
@@ -53,6 +53,30 @@ export const createAppRouter = () => {
         config: ctx.layoutConfig,
       };
     }),
+    "app.reset": createProcedure.mutation(async ({ ctx }) => {
+      ctx.logger.verbose("Resetting simulator...", "console", {
+        messageType: "info",
+      });
+      await ctx.restartSimulator();
+      ctx.logger.verbose("Simulator reset.", "console", {
+        messageType: "info",
+      });
+    }),
+    "app.logsFilters": createProcedure.query(async ({ ctx }) => {
+      const simulator = await ctx.simulator();
+
+      const resources = simulator.listResources().map((resourceId) => {
+        const config = simulator.tryGetResourceConfig(resourceId);
+        return {
+          id: resourceId,
+          type: config?.type,
+        };
+      });
+
+      return {
+        resources,
+      };
+    }),
     "app.logs": createProcedure
       .input(
         z.object({
@@ -65,20 +89,60 @@ export const createAppRouter = () => {
             }),
             timestamp: z.number(),
             text: z.string(),
+            resourceIds: z.array(z.string()),
+            resourceTypes: z.array(z.string()),
           }),
         }),
       )
       .query(async ({ ctx, input }) => {
-        return ctx.logger.messages.filter(
-          (entry) =>
-            input.filters.level[entry.level] &&
-            entry.timestamp &&
-            entry.timestamp >= input.filters.timestamp &&
-            (!input.filters.text ||
-              `${entry.message}${entry.ctx?.sourcePath}`
-                .toLowerCase()
-                .includes(input.filters.text.toLowerCase())),
-        );
+        const filters = input.filters;
+        const lowerCaseText = filters.text?.toLowerCase();
+        let noVerboseLogsCount = 0;
+
+        const filteredLogs = ctx.logger.messages.filter((entry) => {
+          // Filter by timestamp
+          if (entry.timestamp && entry.timestamp < filters.timestamp) {
+            return false;
+          }
+          if (entry.level !== "verbose") {
+            noVerboseLogsCount++;
+          }
+          // Filter by level
+          if (!filters.level[entry.level]) {
+            return false;
+          }
+          // Filter by resourceIds
+          if (
+            filters.resourceIds.length > 0 &&
+            (!entry.ctx?.sourcePath ||
+              !filters.resourceIds.includes(entry.ctx.sourcePath))
+          ) {
+            return false;
+          }
+          // Filter by resourceTypes
+          if (
+            filters.resourceTypes.length > 0 &&
+            (!entry.ctx?.sourceType ||
+              !filters.resourceTypes.includes(entry.ctx.sourceType))
+          ) {
+            return false;
+          }
+          // Filter by text
+          if (
+            lowerCaseText &&
+            !`${entry.message}${entry.ctx?.sourcePath}`
+              .toLowerCase()
+              .includes(lowerCaseText)
+          ) {
+            return false;
+          }
+          return true;
+        });
+
+        return {
+          logs: filteredLogs,
+          hiddenLogs: noVerboseLogsCount - filteredLogs.length,
+        };
       }),
     "app.error": createProcedure.query(({ ctx }) => {
       return ctx.errorMessage();

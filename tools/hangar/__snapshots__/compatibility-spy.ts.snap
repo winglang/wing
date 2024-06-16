@@ -188,7 +188,7 @@ exports[`dec.test.w 1`] = `
         "traces": [
           {
             "data": {
-              "message": "dec(5, \\"custom-key\\")",
+              "message": "dec(5, "custom-key")",
               "result": "-1",
               "status": "success",
             },
@@ -200,7 +200,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "-6",
               "status": "success",
             },
@@ -212,7 +212,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "dec(-4, \\"custom-key\\")",
+              "message": "dec(-4, "custom-key")",
               "result": "-6",
               "status": "success",
             },
@@ -224,7 +224,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "-2",
               "status": "success",
             },
@@ -236,7 +236,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "dec(0, \\"custom-key\\")",
+              "message": "dec(0, "custom-key")",
               "result": "-2",
               "status": "success",
             },
@@ -248,7 +248,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "-2",
               "status": "success",
             },
@@ -426,7 +426,7 @@ exports[`inc.test.w 1`] = `
         "traces": [
           {
             "data": {
-              "message": "inc(5, \\"custom-key\\")",
+              "message": "inc(5, "custom-key")",
               "result": "-1",
               "status": "success",
             },
@@ -438,7 +438,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "4",
               "status": "success",
             },
@@ -450,7 +450,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "inc(-4, \\"custom-key\\")",
+              "message": "inc(-4, "custom-key")",
               "result": "4",
               "status": "success",
             },
@@ -462,7 +462,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "0",
               "status": "success",
             },
@@ -474,7 +474,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "inc(0, \\"custom-key\\")",
+              "message": "inc(0, "custom-key")",
               "result": "0",
               "status": "success",
             },
@@ -486,7 +486,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "0",
               "status": "success",
             },
@@ -674,7 +674,7 @@ exports[`peek.test.w 1`] = `
         "traces": [
           {
             "data": {
-              "message": "peek(\\"my-key\\")",
+              "message": "peek("my-key")",
               "result": "0",
               "status": "success",
             },
@@ -686,7 +686,7 @@ exports[`peek.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"my-key\\")",
+              "message": "peek("my-key")",
               "result": "0",
               "status": "success",
             },
@@ -698,7 +698,7 @@ exports[`peek.test.w 1`] = `
           },
           {
             "data": {
-              "message": "inc(nil, \\"my-key\\")",
+              "message": "inc(nil, "my-key")",
               "result": "0",
               "status": "success",
             },
@@ -710,7 +710,7 @@ exports[`peek.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"my-key\\")",
+              "message": "peek("my-key")",
               "result": "1",
               "status": "success",
             },
@@ -937,7 +937,7 @@ exports[`set.test.w 1`] = `
         "traces": [
           {
             "data": {
-              "message": "set(42, \\"custom-key\\")",
+              "message": "set(42, "custom-key")",
               "status": "success",
             },
             "level": "verbose",
@@ -948,7 +948,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "42",
               "status": "success",
             },
@@ -960,7 +960,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "set(-100, \\"custom-key\\")",
+              "message": "set(-100, "custom-key")",
               "status": "success",
             },
             "level": "verbose",
@@ -971,7 +971,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "-100",
               "status": "success",
             },
@@ -983,7 +983,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "set(0, \\"custom-key\\")",
+              "message": "set(0, "custom-key")",
               "status": "success",
             },
             "level": "verbose",
@@ -994,7 +994,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "0",
               "status": "success",
             },
