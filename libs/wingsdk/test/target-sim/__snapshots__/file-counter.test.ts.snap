@@ -122,7 +122,7 @@ bucket: (function() {
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
