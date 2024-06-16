@@ -13,10 +13,11 @@ class Simple {
   }
 }
 
-let s = new Simple();
+// Only run these tests in the simulator
+if util.env("WING_TARGET") == "sim" {
+  let s = new Simple();
 
-test "token is resolved" {
-  if (util.tryEnv("WING_TARGET") == "sim") {
+  test "token is resolved" {
     expect.equal(s.foo, "bar");
   }
 }
