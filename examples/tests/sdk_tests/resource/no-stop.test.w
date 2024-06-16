@@ -15,5 +15,5 @@ class Simple {
 let s = new Simple();
 
 test "token is resolved" {
-  expect(s.foo, "bar");
+  expect.equal(s.foo, "bar");
 }
