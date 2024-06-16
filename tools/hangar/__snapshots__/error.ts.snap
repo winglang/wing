@@ -7,7 +7,7 @@ exports[`bool_from_json.test.w 1`] = `
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
   | let j = Json { a: 123 };
   | 
-5 | let a: bool = bool.fromJson(j.get(\\"a\\"));
+5 | let a: bool = bool.fromJson(j.get("a"));
   |               ^
 at <ABSOLUTE>/bool_from_json.test.w:5:15
 
@@ -18,10 +18,10 @@ Duration <DURATION>"
 `;
 
 exports[`fail_to_start_simulator.test.w 1`] = `
-"[ERROR] dep_on_failing_resource | Error: Failed to start container: Command \\"docker pull\\" exited with non-zero code 1 (see verbose logs)
-[ERROR] dep_on_failing_resource | Error: Unable to resolve attribute 'host_port' for resource \\"root/env0/Container\\" referenced by \\"root/env0/test:dep_on_failing_resource/Handler\\"
-[ERROR] (no test) | Error: Unable to resolve attribute 'host_port' for resource \\"root/env0/Container\\" referenced by \\"root/env0/test:dep_on_failing_resource/Handler\\"
-Failed to start resources: \\"root/env0/test:dep_on_failing_resource/Handler\\", \\"root/cloud.TestRunner\\"
+"[ERROR] dep_on_failing_resource | Error: Failed to start container: Command "docker pull" exited with non-zero code 1 (see verbose logs)
+[ERROR] dep_on_failing_resource | Error: Unable to resolve attribute 'host_port' for resource "root/env0/Container" referenced by "root/env0/test:dep_on_failing_resource/Handler"
+[ERROR] (no test) | Error: Unable to resolve attribute 'host_port' for resource "root/env0/Container" referenced by "root/env0/test:dep_on_failing_resource/Handler"
+Failed to start resources: "root/env0/test:dep_on_failing_resource/Handler", "root/cloud.TestRunner"
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -35,7 +35,7 @@ exports[`inflight_stacktraces.test.w 1`] = `
      │   --> ../../../examples/tests/error/inflight_stacktraces.test.w:7:3
      │   | let bucket = new cloud.Bucket();
      │   | 
-     │   | test \\"assert\\" {
+     │   | test "assert" {
      │ 7 |   assert(false);
      │   |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:7:3
@@ -47,7 +47,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:11:3
      │    | }
      │    | 
-     │    | test \\"expect.equal\\" {
+     │    | test "expect.equal" {
      │ 11 |   expect.equal(1,2 );
      │    |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:11:3
@@ -56,17 +56,17 @@ fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed delete
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:15:3
      │    | }
      │    | 
-     │    | test \\"bucket failed delete\\" {
-     │ 15 |   bucket.delete(\\"doesn't exist\\", mustExist: true);
+     │    | test "bucket failed delete" {
+     │ 15 |   bucket.delete("doesn't exist", mustExist: true);
      │    |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:15:3
 fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure  
      │ Error: ouch
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:20:5
      │    | 
-     │    | test \\"throw from closure\\" {
+     │    | test "throw from closure" {
      │    |   let closure = inflight () => {
-     │ 20 |     throw \\"ouch\\";
+     │ 20 |     throw "ouch";
      │    |     ^
      │ at closure <ABSOLUTE>/inflight_stacktraces.test.w:20:5
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:22:3
@@ -74,9 +74,9 @@ fail ┌ inflight_stacktraces.test.wsim » root/env4/test:assert with message
      │ Error: assertion failed: x is false
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:27:3
      │    | 
-     │    | test \\"assert with message\\" {
+     │    | test "assert with message" {
      │    |   let x = false;
-     │ 27 |   assert(x, \\"x is false\\");
+     │ 27 |   assert(x, "x is false");
      │    |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:27:3
 
@@ -87,9 +87,9 @@ Duration <DURATION>"
 `;
 
 exports[`invalid-token.test.w 1`] = `
-"[ERROR] test cannot access unresolved token | Error: Unable to resolve attribute 'fake-attr' for resource \\"root/env0/MyResource/Resource\\" referenced by \\"root/env0/test:test cannot access unresolved token/Handler\\"
-[ERROR] (no test) | Error: Unable to resolve attribute 'fake-attr' for resource \\"root/env0/MyResource/Resource\\" referenced by \\"root/env0/test:test cannot access unresolved token/Handler\\"
-Failed to start resources: \\"root/env0/test:test cannot access unresolved token/Handler\\", \\"root/cloud.TestRunner\\"
+"[ERROR] test cannot access unresolved token | Error: Unable to resolve attribute 'fake-attr' for resource "root/env0/MyResource/Resource" referenced by "root/env0/test:test cannot access unresolved token/Handler"
+[ERROR] (no test) | Error: Unable to resolve attribute 'fake-attr' for resource "root/env0/MyResource/Resource" referenced by "root/env0/test:test cannot access unresolved token/Handler"
+Failed to start resources: "root/env0/test:test cannot access unresolved token/Handler", "root/cloud.TestRunner"
 
 Tests 1 failed (1)
 Snapshots 1 skipped
@@ -98,11 +98,11 @@ Duration <DURATION>"
 `;
 
 exports[`num_from_str.test.w 1`] = `
-"Error: unable to parse \\"123a\\" as a number
+"Error: unable to parse "123a" as a number
   --> ../../../examples/tests/error/num_from_str.test.w:3:14
   | // Note that this test has to be alone because it needs to compile successfully and fail at preflight.
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
-3 | let a: num = num.fromStr(\\"123a\\");
+3 | let a: num = num.fromStr("123a");
   |              ^
 at <ABSOLUTE>/num_from_str.test.w:3:14
 
@@ -117,9 +117,9 @@ exports[`number_from_json.test.w 1`] = `
 - num must be number
   --> ../../../examples/tests/error/number_from_json.test.w:5:14
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
-  | let j = Json { a: \\"apples\\" };
+  | let j = Json { a: "apples" };
   | 
-5 | let a: num = num.fromJson(j.get(\\"a\\"));
+5 | let a: num = num.fromJson(j.get("a"));
   |              ^
 at <ABSOLUTE>/number_from_json.test.w:5:14
 
@@ -134,7 +134,7 @@ exports[`repeat_construct_id.test.w 1`] = `
 
 hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:
 
-> new cloud.Bucket() as \\"MyBucket\\";
+> new cloud.Bucket() as "MyBucket";
 
 For more information, see https://www.winglang.io/docs/concepts/application-tree
   --> ../../../examples/tests/error/repeat_construct_id.test.w:4:15
@@ -156,14 +156,14 @@ exports[`repeat_construct_id2.test.w 1`] = `
 
 hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:
 
-> new cloud.Bucket() as \\"MyBucket\\";
+> new cloud.Bucket() as "MyBucket";
 
 For more information, see https://www.winglang.io/docs/concepts/application-tree
   --> ../../../examples/tests/error/repeat_construct_id2.test.w:8:15
   | };
   | 
-  | let bucket1 = new cloud.Bucket() as \\"{make_name()}\\";
-8 | let bucket2 = new cloud.Bucket() as \\"{make_name()}\\";
+  | let bucket1 = new cloud.Bucket() as "{make_name()}";
+8 | let bucket2 = new cloud.Bucket() as "{make_name()}";
   |               ^
 at <ABSOLUTE>/repeat_construct_id2.test.w:8:15
 
@@ -180,7 +180,7 @@ exports[`string_from_json.test.w 1`] = `
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
   | let j = Json { a: 123 };
   | 
-5 | let a: str = str.fromJson(j.get(\\"a\\"));
+5 | let a: str = str.fromJson(j.get("a"));
   |              ^
 at <ABSOLUTE>/string_from_json.test.w:5:14
 
@@ -195,7 +195,7 @@ exports[`struct_from_json_1.test.w 1`] = `
 - Person/age must be number
    --> ../../../examples/tests/error/struct_from_json_1.test.w:11:1
    | 
-   | let j = {name: \\"cool\\", age: \\"not a number\\"};
+   | let j = {name: "cool", age: "not a number"};
    | 
 11 | Person.fromJson(j);
    | ^
@@ -212,7 +212,7 @@ exports[`struct_from_json_2.test.w 1`] = `
 - Student must have required property 'advisor'
 - Student/age must be number
    --> ../../../examples/tests/error/struct_from_json_2.test.w:22:1
-   |   age: \\"not a number\\"
+   |   age: "not a number"
    | };
    | 
 22 | Student.fromJson(missingAdvisor);

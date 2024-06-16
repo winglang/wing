@@ -36,5 +36,5 @@ if util.env("WING_TARGET") == "sim" {
     log(response.body);
     expect.equal("Hello, Wingnuts!", response.body);
   }
-  
+
 }

@@ -36,7 +36,7 @@ exports[`create a counter 1`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -296,7 +296,7 @@ exports[`dec 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -556,7 +556,7 @@ exports[`inc 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -816,7 +816,7 @@ exports[`key dec 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -1076,7 +1076,7 @@ exports[`key inc 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -1334,7 +1334,7 @@ exports[`key set to new value 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -1592,7 +1592,7 @@ exports[`set to new value 2`] = `
   return newFunction;
 }
 )());
-          const noop = () => {};
+          const noop = { onStop: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');

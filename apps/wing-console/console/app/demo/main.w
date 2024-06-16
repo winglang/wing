@@ -43,6 +43,7 @@ class myBucket {
 }
 
 let myB = new myBucket() as "MyUIComponentBucket";
+
 let putfucn = new cloud.Function(inflight () => {
     myB.put("test", "Test");
 }) as "PutFileInCustomBucket";
@@ -106,6 +107,7 @@ let table = new ex.Table(
 let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
   rate: 5m
 }) as "Rate Schedule";
+nodeof(rateSchedule).expanded = true;
 
 rateSchedule.onTick(inflight () => {
   log("Rate schedule ticked!");

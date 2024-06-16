@@ -1,5 +1,5 @@
 import { stat } from "node:fs/promises";
-import { relative, resolve, sep, join } from "node:path";
+import { join, dirname } from "node:path/posix";
 import type Chalk from "chalk";
 import type StackTracey from "stacktracey";
 import { normalPath } from "../shared/misc";
@@ -99,6 +99,9 @@ export async function prettyPrintError(
   }
 
   let interestingRoot = options?.sourceEntrypoint;
+  if (interestingRoot !== undefined) {
+    interestingRoot = normalPath(interestingRoot);
+  }
 
   if (
     interestingRoot !== undefined &&
@@ -106,18 +109,18 @@ export async function prettyPrintError(
       .then((s) => !s.isDirectory())
       .catch(() => true))
   ) {
-    interestingRoot = resolve(interestingRoot, "..");
+    interestingRoot = dirname(interestingRoot);
   }
 
   if (interestingRoot !== undefined) {
-    interestingRoot = interestingRoot + sep;
+    interestingRoot = join(interestingRoot, "/");
   }
 
   if (interestingRoot !== undefined) {
     traceWithSources = traceWithSources.filter((item) =>
       (item.sourceFile?.path ?? item.file).startsWith(interestingRoot!)
     );
-    const targetDir = join(interestingRoot, "target") + sep;
+    const targetDir = join(interestingRoot, "target", "/");
     traceWithSources = traceWithSources.filter(
       (item) => !(item.sourceFile?.path ?? item.file).startsWith(targetDir)
     );
@@ -147,9 +150,8 @@ export async function prettyPrintError(
     // print line and its surrounding lines
     output.push(
       " ".repeat(maxDigits + 1) +
-        `--> ${relative(
-          process.cwd(),
-          sourceFile.path
+        `--> ${normalPath(
+          firstGoodItem.fileRelative
         )}:${originLine}:${originColumn}`
     );
 

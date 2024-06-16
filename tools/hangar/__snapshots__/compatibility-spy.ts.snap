@@ -172,7 +172,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "-6",
               "status": "success",
             },
@@ -184,7 +184,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "dec(-4, \\"custom-key\\")",
+              "message": "dec(-4, "custom-key")",
               "result": "-6",
               "status": "success",
             },
@@ -196,7 +196,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "-2",
               "status": "success",
             },
@@ -208,7 +208,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "dec(0, \\"custom-key\\")",
+              "message": "dec(0, "custom-key")",
               "result": "-2",
               "status": "success",
             },
@@ -220,7 +220,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "-2",
               "status": "success",
             },
@@ -382,7 +382,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "4",
               "status": "success",
             },
@@ -394,7 +394,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "inc(-4, \\"custom-key\\")",
+              "message": "inc(-4, "custom-key")",
               "result": "4",
               "status": "success",
             },
@@ -406,7 +406,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "0",
               "status": "success",
             },
@@ -418,7 +418,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "inc(0, \\"custom-key\\")",
+              "message": "inc(0, "custom-key")",
               "result": "0",
               "status": "success",
             },
@@ -430,7 +430,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "0",
               "status": "success",
             },
@@ -780,7 +780,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "42",
               "status": "success",
             },
@@ -792,7 +792,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "set(-100, \\"custom-key\\")",
+              "message": "set(-100, "custom-key")",
               "status": "success",
             },
             "level": "verbose",
@@ -803,7 +803,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "-100",
               "status": "success",
             },
@@ -815,7 +815,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "set(0, \\"custom-key\\")",
+              "message": "set(0, "custom-key")",
               "status": "success",
             },
             "level": "verbose",
@@ -826,7 +826,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "peek(\\"custom-key\\")",
+              "message": "peek("custom-key")",
               "result": "0",
               "status": "success",
             },

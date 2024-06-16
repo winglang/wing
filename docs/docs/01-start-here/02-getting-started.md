@@ -68,7 +68,7 @@ You can use the CLI to bootstrap a new project: Use the `new` command and then m
 wing new empty
 ```
 
-```js
+```js example
 bring cloud;
 
 // define a queue, a bucket and a counter

@@ -136,7 +136,7 @@ export class Resource
   /** @internal */
   public _preSynthesize(): void {
     super._preSynthesize();
-
+    const onStopMethod = "onStop";
     const inflightClient = this.factory._toInflight();
     const code = `\
         "use strict";
@@ -154,7 +154,7 @@ export class Resource
             console.log(level + ':' + message);
           };
           const client = ${inflightClient};
-          const noop = () => {};
+          const noop = { ${onStopMethod}: () => {} };
           const klass = (await client.handle(ctx)) ?? noop;
           ctx.resolveToken = () => {
             throw Error('cannot resolve attributes outside of onStop method');
@@ -167,8 +167,8 @@ export class Resource
           if (!$klass) {
             throw Error('Resource is not running (it may have crashed or stopped)');
           }
-          if (propName === 'onStop') {
-            throw Error('Cannot call "onStop"');
+          if (propName === '${onStopMethod}') {
+            throw Error('Cannot call "${onStopMethod}"');
           }
           const prop = $klass[propName];
           if (!prop) {
@@ -187,7 +187,7 @@ export class Resource
           if (!$klass) {
             throw Error('Resource is not running (it may have crashed or stopped)');
           }
-          await $klass.onStop();
+          await $klass.${onStopMethod}();
           $klass = undefined;
         };
         `;
@@ -274,10 +274,13 @@ export interface IResourceFactory extends IInflight {}
  */
 export interface IResourceFactoryClient {
   /**
-   * Function that will be called to create the resource.
+   * Function that will be called to initialize the simulator resource.
+   *
+   * To implement a shutdown sequence, return an object that implements the `IResource` inflight interface with an `onStop()` method.
+   *
    * @inflight
    */
-  handle(context: IResourceContext): Promise<IResource>;
+  handle(context: IResourceContext): Promise<IResource | undefined>;
 }
 
 /**
