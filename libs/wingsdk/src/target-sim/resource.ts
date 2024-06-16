@@ -274,7 +274,10 @@ export interface IResourceFactory extends IInflight {}
  */
 export interface IResourceFactoryClient {
   /**
-   * Function that will be called to create the resource.
+   * Function that will be called to initialize the simulator resource.
+   * 
+   * To implement a shutdown sequence, return an object that implements the `IResource` inflight interface with an `onStop()` method.
+   *
    * @inflight
    */
   handle(context: IResourceContext): Promise<IResource | undefined>;
