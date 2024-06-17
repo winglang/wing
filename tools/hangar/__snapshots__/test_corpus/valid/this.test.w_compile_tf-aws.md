@@ -33,12 +33,12 @@ const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const path = this.node.path;
-    for (const c of this.node.children) {
-      console.log(c.node.path);
+    const path = $helpers.nodeof(this).path;
+    for (const c of $helpers.nodeof(this).children) {
+      console.log($helpers.nodeof(c).path);
     }
-    (expect.Util.notNil(this.node));
-    (expect.Util.equal(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((this.node.path.split("/")), 0), "root"));
+    (expect.Util.notNil($helpers.nodeof(this)));
+    (expect.Util.equal(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(($helpers.nodeof(this).path.split("/")), 0), "root"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

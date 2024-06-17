@@ -125,6 +125,7 @@ const WINGSDK_SIM_IRESOURCE_FQN: &'static str = formatcp!("{}.{}", WINGSDK_ASSEM
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
+const CONSTRUCT_NODE_PROPERTY: &'static str = "node";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
@@ -240,6 +241,7 @@ pub fn type_check(
 		None,
 	);
 	tc.add_builtins(scope);
+	tc.patch_constructs();
 
 	// If the file is an entrypoint file, we add "this" to its symbol environment
 	if is_entrypoint_file(file_path) {

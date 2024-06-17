@@ -64,7 +64,7 @@ class $Root extends $stdlib.std.Resource {
     class WingResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id));
+        console.log(String.raw({ raw: ["my id is ", ""] }, $helpers.nodeof(this).id));
       }
       static _toInflightType() {
         return `
@@ -91,7 +91,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const getPath = ((c) => {
-      return c.node.path;
+      return $helpers.nodeof(c).path;
     });
     const getDisplayName = ((r) => {
       return $helpers.nodeof(r).title;
@@ -103,6 +103,7 @@ class $Root extends $stdlib.std.Resource {
     console.log(String.raw({ raw: ["path of wing resource: ", ""] }, (getPath(wr))));
     const title = ((getDisplayName(wr)) ?? "no display name");
     console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title));
+    console.log((cx.Node.of(wr)).path);
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

@@ -389,14 +389,14 @@ error: Cannot access static property "m" from instance
    |     ^
 
 
-error: Member "instanceField" doesn't exist in "Construct"
+error: Member "instanceField" does not exist in "Construct"
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:10
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
   |          ^^^^^^^^^^^^^
 
 
-error: Member "f" doesn't exist in "Construct"
+error: Member "f" does not exist in "Construct"
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:10
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
@@ -1089,6 +1089,32 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`constructs.test.w 1`] = `
+"error: Member "node" does not exist in "A"
+  --> ../../../examples/tests/invalid/constructs.test.w:5:10
+  |
+5 |     this.node.hidden;
+  |          ^^^^
+  |
+  = hint: use nodeof(x) to access the tree node on a preflight class
+
+
+error: Member "node" does not exist in "IConstruct"
+   --> ../../../examples/tests/invalid/constructs.test.w:10:23
+   |
+10 |     nodeof(this).root.node;
+   |                       ^^^^
+   |
+   = hint: use nodeof(x) to access the tree node on a preflight class
+
+
+
+Tests 1 failed (1)
+Snapshots 1 skipped
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`container_types.test.w 1`] = `
 "error: Unknown parser error
    --> ../../../examples/tests/invalid/container_types.test.w:14:25
@@ -1132,7 +1158,7 @@ error: Expected type to be "Array<num>", but got "Array<str>" instead
   |                        ^^^^
 
 
-error: Member "someRandomMethod" doesn't exist in "Array"
+error: Member "someRandomMethod" does not exist in "Array"
   --> ../../../examples/tests/invalid/container_types.test.w:6:6
   |
 6 | arr1.someRandomMethod();
@@ -1167,7 +1193,7 @@ error: Expected type to be "Map<num>", but got "Map<str>" instead
    |                    ^^
 
 
-error: Member "someRandomMethod" doesn't exist in "Map"
+error: Member "someRandomMethod" does not exist in "Map"
    --> ../../../examples/tests/invalid/container_types.test.w:17:4
    |
 17 | m1.someRandomMethod();
@@ -1223,7 +1249,7 @@ error: Expected type to be "Set<str>", but got "Set<num>" instead
    |                    ^^
 
 
-error: Member "someRandomMethod" doesn't exist in "Set"
+error: Member "someRandomMethod" does not exist in "Set"
    --> ../../../examples/tests/invalid/container_types.test.w:29:4
    |
 29 | s1.someRandomMethod();
@@ -1244,7 +1270,7 @@ error: Expected type to be "MutMap<num>", but got "Map<num>" instead
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-error: Member "copyMut" doesn't exist in "MutMap"
+error: Member "copyMut" does not exist in "MutMap"
    --> ../../../examples/tests/invalid/container_types.test.w:37:15
    |
 37 | let mm3 = mm2.copyMut();
@@ -1265,7 +1291,7 @@ error: Expected type to be "num", but got "bool" instead
    |                                    ^^^^
 
 
-error: Member "copyMut" doesn't exist in "MutSet"
+error: Member "copyMut" does not exist in "MutSet"
    --> ../../../examples/tests/invalid/container_types.test.w:46:15
    |
 46 | let ss4 = ss3.copyMut();
@@ -2123,7 +2149,7 @@ Duration <DURATION>"
 `;
 
 exports[`immutable_container_types.test.w 1`] = `
-"error: Member "set" doesn't exist in "Map"
+"error: Member "set" does not exist in "Map"
   --> ../../../examples/tests/invalid/immutable_container_types.test.w:3:4
   |
 3 | m1.set("a", "bye");
@@ -2144,28 +2170,28 @@ error: Expected type to be "bool", but got "str" instead
   |                             ^^^
 
 
-error: Member "set" doesn't exist in "Map"
+error: Member "set" does not exist in "Map"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
    |
 11 | m4.set("2", 3);
    |    ^^^
 
 
-error: Member "copy" doesn't exist in "Map"
+error: Member "copy" does not exist in "Map"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:13:13
    |
 13 | let m5 = m4.copy();
    |             ^^^^
 
 
-error: Member "delete" doesn't exist in "Map"
+error: Member "delete" does not exist in "Map"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:15:4
    |
 15 | m4.delete("1");
    |    ^^^^^^
 
 
-error: Member "clear" doesn't exist in "Map"
+error: Member "clear" does not exist in "Map"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:17:4
    |
 17 | m4.clear();
@@ -2179,28 +2205,28 @@ error: Expected type to be "Set<Array<num>>", but got "MutSet<Array<num>>" inste
    |                           ^^^^^^^^^^^^^^^^^^^^^^^
 
 
-error: Member "delete" doesn't exist in "Set"
+error: Member "delete" does not exist in "Set"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:24:4
    |
 24 | s2.delete("a");
    |    ^^^^^^
 
 
-error: Member "add" doesn't exist in "Set"
+error: Member "add" does not exist in "Set"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:26:4
    |
 26 | s2.add("d");
    |    ^^^
 
 
-error: Member "copy" doesn't exist in "Set"
+error: Member "copy" does not exist in "Set"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:28:13
    |
 28 | let s3 = s2.copy();
    |             ^^^^
 
 
-error: Member "clear" doesn't exist in "Set"
+error: Member "clear" does not exist in "Set"
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:30:4
    |
 30 | s2.clear();
@@ -3020,7 +3046,7 @@ error: Expected type to be "Array<str>", but got "str" instead
    |                     ^
 
 
-error: Member "set" doesn't exist in "Json"
+error: Member "set" does not exist in "Json"
    --> ../../../examples/tests/invalid/json.test.w:19:13
    |
 19 | foreverJson.set("a", "world!");
@@ -3142,7 +3168,7 @@ Duration <DURATION>"
 `;
 
 exports[`json_static.test.w 1`] = `
-"error: Member "set" doesn't exist in "Json"
+"error: Member "set" does not exist in "Json"
   --> ../../../examples/tests/invalid/json_static.test.w:4:10
   |
 4 | immutObj.set("a", "foo");
@@ -3266,7 +3292,7 @@ error: Expected type to be "MutArray<num>", but got "MutArray<str>" instead
   |                           ^^^^
 
 
-error: Member "someMethod" doesn't exist in "MutArray"
+error: Member "someMethod" does not exist in "MutArray"
   --> ../../../examples/tests/invalid/mut_container_types.test.w:6:6
   |
 6 | arr1.someMethod();
@@ -3294,7 +3320,7 @@ error: Expected type to be "MutSet<num>", but got "MutSet<str>" instead
    |                       ^^
 
 
-error: Member "someMethod" doesn't exist in "MutSet"
+error: Member "someMethod" does not exist in "MutSet"
    --> ../../../examples/tests/invalid/mut_container_types.test.w:14:4
    |
 14 | s3.someMethod();
@@ -3618,14 +3644,14 @@ Duration <DURATION>"
 `;
 
 exports[`primitives.test.w 1`] = `
-"error: Member "blabla" doesn't exist in "Array"
+"error: Member "blabla" does not exist in "Array"
   --> ../../../examples/tests/invalid/primitives.test.w:6:16
   |
 6 | let join = arr.blabla(",");
   |                ^^^^^^
 
 
-error: Member "push" doesn't exist in "Array"
+error: Member "push" does not exist in "Array"
   --> ../../../examples/tests/invalid/primitives.test.w:8:5
   |
 8 | arr.push(4);
@@ -4696,7 +4722,7 @@ error: Struct fields must have immutable types
    |   ^
 
 
-error: Member "badField" doesn't exist in "A"
+error: Member "badField" does not exist in "A"
    --> ../../../examples/tests/invalid/structs.test.w:32:7
    |
 32 | log(a.badField);
@@ -4908,7 +4934,7 @@ Duration <DURATION>"
 `;
 
 exports[`un_mut_lifted_objects.test.w 1`] = `
-"error: Member "push" doesn't exist in "Array"
+"error: Member "push" does not exist in "Array"
    --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:22:6
    |
 22 |   ar.push(2); // Error: push doesn't exist in Array
@@ -4924,42 +4950,42 @@ error: Cannot update elements of an immutable Array
    = hint: Consider using MutArray instead
 
 
-error: Member "set" doesn't exist in "Json"
+error: Member "set" does not exist in "Json"
    --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:24:5
    |
 24 |   j.set("a", 3); // Error: set doesn't exist in Json
    |     ^^^
 
 
-error: Member "add" doesn't exist in "Set"
+error: Member "add" does not exist in "Set"
    --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:25:6
    |
 25 |   st.add(4); // Error: add doesn't exist in Set
    |      ^^^
 
 
-error: Member "set" doesn't exist in "Map"
+error: Member "set" does not exist in "Map"
    --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:26:6
    |
 26 |   mp.set("a", 3); // Error: set doesn't exist in Map
    |      ^^^
 
 
-error: Member "push" doesn't exist in "Array"
+error: Member "push" does not exist in "Array"
    --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:27:11
    |
 27 |   opt_ar?.push(2); // Error: push doesn't exist in Array
    |           ^^^^
 
 
-error: Member "push" doesn't exist in "Array"
+error: Member "push" does not exist in "Array"
    --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:28:16
    |
 28 |   recursive_ar.push(MutArray<num>[2]); // Error: push doesn't exist in Array
    |                ^^^^
 
 
-error: Member "push" doesn't exist in "Array"
+error: Member "push" does not exist in "Array"
    --> ../../../examples/tests/invalid/un_mut_lifted_objects.test.w:29:22
    |
 29 |   recursive_ar.at(0).push(3); // Error: push doesn't exist in Array
@@ -5017,7 +5043,7 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_field.test.w 1`] = `
-"error: Member "a" doesn't exist in "String"
+"error: Member "a" does not exist in "String"
   --> ../../../examples/tests/invalid/unknown_field.test.w:1:12
   |
 1 | std.String.a.b.c.fromJson();
@@ -5082,7 +5108,7 @@ error: Unknown symbol "B"
    |                 ^
 
 
-error: Member "dodo" doesn't exist in "SomeResourceChild"
+error: Member "dodo" does not exist in "SomeResourceChild"
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:37:5
    |
 37 | src.dodo();
@@ -5103,14 +5129,14 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
    |                        ^^^^^^^
 
 
-error: Member "assert" doesn't exist in "Bucket"
+error: Member "assert" does not exist in "Bucket"
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
    |
 20 |     this.bucket.assert(2 + "2");
    |                 ^^^^^^
 
 
-error: Member "methodWhichIsNotPartOfBucketApi" doesn't exist in "Bucket"
+error: Member "methodWhichIsNotPartOfBucketApi" does not exist in "Bucket"
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:23:24
    |
 23 |     return this.bucket.methodWhichIsNotPartOfBucketApi(id);

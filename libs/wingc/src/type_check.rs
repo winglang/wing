@@ -25,10 +25,11 @@ use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE,
-	WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, UTIL_CLASS_NAME,
+	WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC,
+	WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
+	WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -969,7 +970,7 @@ impl TypeRef {
 		}
 	}
 
-	pub fn as_mut_struct(&mut self) -> Option<&mut Struct> {
+	pub fn as_struct_mut(&mut self) -> Option<&mut Struct> {
 		if let Type::Struct(ref mut st) = **self {
 			Some(st)
 		} else {
@@ -984,7 +985,7 @@ impl TypeRef {
 			None
 		}
 	}
-	fn as_mut_interface(&mut self) -> Option<&mut Interface> {
+	fn as_interface_mut(&mut self) -> Option<&mut Interface> {
 		if let Type::Interface(ref mut iface) = **self {
 			Some(iface)
 		} else {
@@ -1008,7 +1009,7 @@ impl TypeRef {
 		}
 	}
 
-	pub fn as_mut_function_sig(&mut self) -> Option<&mut FunctionSignature> {
+	pub fn as_function_sig_mut(&mut self) -> Option<&mut FunctionSignature> {
 		if let Type::Function(ref mut sig) = **self {
 			Some(sig)
 		} else {
@@ -1935,12 +1936,13 @@ impl<'a> TypeChecker<'a> {
 			message,
 			span,
 			annotations,
+			hints,
 		} = type_error;
 		report_diagnostic(Diagnostic {
 			message,
 			span: Some(span),
 			annotations,
-			hints: vec![],
+			hints,
 		});
 
 		self.types.error()
@@ -1968,6 +1970,40 @@ impl<'a> TypeChecker<'a> {
 				StatementIdx::Top,
 			)
 			.expect("Failed to add this");
+	}
+
+	/// Patch some of the types from the "constructs" package to provide a better DX
+	pub fn patch_constructs(&mut self) {
+		// Hide the "node" field from constructs so that users go through
+		// the `nodeof` utility function to get the tree node of a construct.
+		// The `Node` instance provided by Wing has some extra methods not
+		// available in the constructs package, and also modifies how the
+		// root node is obtained.
+		let mut constructs_iface = self
+			.types
+			.libraries
+			.lookup_nested_str(&CONSTRUCT_BASE_INTERFACE, None)
+			.expect("constructs.IConstruct not found in type system")
+			.0
+			.as_type()
+			.expect("constructs.IConstruct was found but it's not a type");
+		let iface = constructs_iface
+			.as_interface_mut()
+			.expect("constructs.IConstruct was found but it's not a class");
+		iface.env.symbol_map.remove(CONSTRUCT_NODE_PROPERTY);
+
+		let mut constructs_class = self
+			.types
+			.libraries
+			.lookup_nested_str(&CONSTRUCT_BASE_CLASS, None)
+			.expect("constructs.Construct not found in type system")
+			.0
+			.as_type()
+			.expect("constructs.Construct was found but it's not a type");
+		let class = constructs_class
+			.as_class_mut()
+			.expect("constructs.Construct was found but it's not a class");
+		class.env.symbol_map.remove(CONSTRUCT_NODE_PROPERTY);
 	}
 
 	pub fn add_builtins(&mut self, scope: &mut Scope) {
@@ -2191,6 +2227,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 						message: "Panic expression".to_string(),
 						span: exp.span.clone(),
 						annotations: vec![],
+						hints: vec![],
 					}),
 					env.phase,
 				)
@@ -4333,7 +4370,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		// Replace the dummy struct environment with the real one
-		struct_type.as_mut_struct().unwrap().env = struct_env;
+		struct_type.as_struct_mut().unwrap().env = struct_env;
 	}
 
 	fn type_check_interface(&mut self, ast_iface: &AstInterface, env: &mut SymbolEnv) {
@@ -4417,11 +4454,11 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		// Replace the dummy interface environment with the real one
-		interface_type.as_mut_interface().unwrap().env = interface_env;
+		interface_type.as_interface_mut().unwrap().env = interface_env;
 
 		if need_to_add_base_iresource {
 			let base_resource = self.types.resource_base_interface();
-			interface_type.as_mut_interface().unwrap().extends.push(base_resource);
+			interface_type.as_interface_mut().unwrap().extends.push(base_resource);
 		}
 	}
 
@@ -5428,7 +5465,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 	) {
 		// Modify the method's type based on the fact we know it's a method and not just a function
 		let method_sig = method_type
-			.as_mut_function_sig()
+			.as_function_sig_mut()
 			.expect("Expected method type to be a function");
 
 		// use the class type as the function's "this" type (or None if static)
@@ -6678,6 +6715,7 @@ fn add_parent_members_to_struct_env(
 				),
 				span: name.span.clone(),
 				annotations: vec![],
+				hints: vec![],
 			});
 		};
 		// Add each member of current parent to the struct's environment (if it wasn't already added by a previous parent)
@@ -6701,6 +6739,7 @@ fn add_parent_members_to_struct_env(
 							name, parent_type, parent_member_name, parent_member_type, existing_type
 						),
 						annotations: vec![],
+						hints: vec![],
 					});
 				}
 			} else {
@@ -6746,6 +6785,7 @@ fn add_parent_members_to_iface_env(
 				),
 				span: name.span.clone(),
 				annotations: vec![],
+				hints: vec![],
 			});
 		};
 		// Add each member of current parent to the interface's environment (if it wasn't already added by a previous parent)
@@ -6766,6 +6806,7 @@ fn add_parent_members_to_iface_env(
 						),
 						span: name.span.clone(),
 						annotations: vec![],
+						hints: vec![],
 					});
 				}
 			} else {
@@ -6805,14 +6846,19 @@ where
 	match lookup_result {
 		LookupResult::NotFound(s, maybe_t) => {
 			let message = if let Some(env_type) = maybe_t {
-				format!("Member \"{s}\" doesn't exist in \"{env_type}\"")
+				format!("Member \"{s}\" does not exist in \"{env_type}\"")
 			} else {
 				format!("Unknown symbol \"{s}\"")
 			};
+			let mut hints = vec![];
+			if s.name == CONSTRUCT_NODE_PROPERTY {
+				hints.push("use nodeof(x) to access the tree node on a preflight class".to_string());
+			}
 			TypeError {
 				message,
 				span: s.span(),
 				annotations: vec![],
+				hints,
 			}
 		}
 		LookupResult::NotPublic(kind, lookup_info) => TypeError {
@@ -6841,11 +6887,13 @@ where
 				message: "defined here".to_string(),
 				span: lookup_info.span,
 			}],
+			hints: vec![],
 		},
 		LookupResult::MultipleFound => TypeError {
 			message: format!("Ambiguous symbol \"{looked_up_object}\""),
 			span: looked_up_object.span(),
 			annotations: vec![],
+			hints: vec![],
 		},
 		LookupResult::DefinedLater(span) => TypeError {
 			message: format!("Symbol \"{looked_up_object}\" used before being defined"),
@@ -6854,11 +6902,13 @@ where
 				message: "defined later here".to_string(),
 				span,
 			}],
+			hints: vec![],
 		},
 		LookupResult::ExpectedNamespace(ns_name) => TypeError {
 			message: format!("Expected \"{ns_name}\" in \"{looked_up_object}\" to be a namespace"),
 			span: ns_name.span(),
 			annotations: vec![],
+			hints: vec![],
 		},
 		LookupResult::Found(..) => panic!("Expected a lookup error, but found a successful lookup"),
 	}
@@ -6893,6 +6943,7 @@ pub fn resolve_user_defined_type_ref<'a>(
 				message: format!("Expected \"{}\" to be a type but it's a {symb_kind}", symb.name),
 				span: symb.span.clone(),
 				annotations: vec![],
+				hints: vec![],
 			})
 		}
 	} else {
@@ -6923,6 +6974,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 						.to_string(),
 				span: method.span.clone(),
 				annotations: vec![],
+				hints: vec![],
 			});
 		}
 		// Get the parent type of "this" (if it's a preflight class that's directly derived from `std.Resource` it's an implicit derive so we'll treat it as if there's no parent)
@@ -6942,6 +6994,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 					),
 					span: method.span.clone(),
 					annotations: vec![],
+					hints: vec![],
 				})
 			}
 		} else {
@@ -6949,6 +7002,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 				message: format!("Cannot call super method because class {} has no parent", type_),
 				span: method.span.clone(),
 				annotations: vec![],
+				hints: vec![],
 			})
 		}
 	} else {
@@ -6961,6 +7015,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 			.to_string(),
 			span: method.span.clone(),
 			annotations: vec![],
+			hints: vec![],
 		})
 	}
 }
