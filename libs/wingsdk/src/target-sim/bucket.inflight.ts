@@ -357,6 +357,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     throw new Error("Multipart upload not implemented yet on sim");
   }
 
+  public async completeMultipartUpload(_uploadId: string): Promise<void> {
+    throw new Error("Multipart upload not implemented yet on sim");
+  }
+
   private async addFile(
     key: string,
     value: string,

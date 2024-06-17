@@ -477,6 +477,13 @@ export interface IBucketClient {
    * @inflight
    */
   multipartUpload(key: string): Promise<string>;
+
+  /**
+   * Complete a multipart upload to a given key in the bucket.
+   * @param uploadId The upload id for the multipart upload
+   * @inflight
+   */
+  completeMultipartUpload(uploadId: string): Promise<void>;
 }
 
 /**
@@ -592,4 +599,6 @@ export enum BucketInflightMethods {
   RENAME = "rename",
   /** `Bucket.multipartUpload` */
   MULTIPART_UPLOAD = "multipartUpload",
+  /** `Bucket.completeMultipartUpload */
+  COMPLETE_MULTIPART_UPLOAD = "completeMultipartUpload",
 }

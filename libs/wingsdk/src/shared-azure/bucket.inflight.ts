@@ -327,4 +327,10 @@ export class BucketClient implements IBucketClient {
       `multipartUpload is not implemented yet for tf-azure)`
     );
   }
+
+  public async completeMultipartUpload(_uploadId: string): Promise<void> {
+    throw new Error(
+      `completeMultipartUpload is not implemented yet for tf-azure)`
+    );
+  }
 }

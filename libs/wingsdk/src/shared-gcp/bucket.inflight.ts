@@ -277,4 +277,8 @@ export class BucketClient implements IBucketClient {
   public async multipartUpload(_key: string): Promise<string> {
     throw new Error("Multipart upload is not supported yet for GCP");
   }
+
+  public async completeMultipartUpload(_uploadId: string): Promise<void> {
+    throw new Error("Multipart upload is not supported yet for GCP");
+  }
 }

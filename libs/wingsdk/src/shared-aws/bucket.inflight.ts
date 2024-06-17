@@ -20,6 +20,7 @@ import {
   S3Client,
   HeadBucketCommand,
   CreateMultipartUploadCommand,
+  CompleteMultipartUploadCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import mime from "mime-types";
@@ -494,5 +495,16 @@ export class BucketClient implements IAwsBucketClient {
     }
     return response.UploadId;
   }
+
+  /**
+ * Complete a multipart upload to a given key in the bucket.
+ * @param uploadId The upload id for the multipart upload
+ * @inflight
+ */
+  public async completeMultipartUpload(uploadId: string): Promise<void> {
+    let req = new CompleteMultipartUploadCommand({ Bucket: this.bucketName, Key: "x", UploadId: uploadId });
+    await this.s3Client.send(req);
+  }
+
 }
 
