@@ -413,7 +413,9 @@ export class BucketClient implements IAwsBucketClient {
       case BucketSignedUrlAction.UPLOAD:
         if (opts?.uploadId !== undefined) {
           if (opts.partNumber === undefined) {
-            throw new Error("partNumber must be provided for multipart uploads");
+            throw new Error(
+              "partNumber must be provided for multipart uploads"
+            );
           }
 
           s3Command = new UploadPartCommand({

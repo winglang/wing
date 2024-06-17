@@ -221,7 +221,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketSignedUrlOptions {\n  action?: BucketSignedUrlAction;\n  duration?: duration;\n}\n```\n---\nOptions for `Bucket.signedUrl()`."
+    value: "```wing\nstruct BucketSignedUrlOptions {\n  action?: BucketSignedUrlAction;\n  duration?: duration;\n  partNumber?: num;\n  uploadId?: str;\n}\n```\n---\nOptions for `Bucket.signedUrl()`."
   sortText: hh|BucketSignedUrlOptions
 - label: BucketTryGetOptions
   kind: 22
