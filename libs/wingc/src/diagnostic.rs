@@ -452,6 +452,7 @@ pub struct TypeError {
 	pub message: String,
 	pub span: WingSpan,
 	pub annotations: Vec<DiagnosticAnnotation>,
+	pub hints: Vec<String>,
 }
 
 impl std::fmt::Display for TypeError {

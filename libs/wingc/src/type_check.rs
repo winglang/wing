@@ -1935,12 +1935,13 @@ impl<'a> TypeChecker<'a> {
 			message,
 			span,
 			annotations,
+			hints,
 		} = type_error;
 		report_diagnostic(Diagnostic {
 			message,
 			span: Some(span),
 			annotations,
-			hints: vec![],
+			hints,
 		});
 
 		self.types.error()
@@ -2225,6 +2226,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 						message: "Panic expression".to_string(),
 						span: exp.span.clone(),
 						annotations: vec![],
+						hints: vec![],
 					}),
 					env.phase,
 				)
@@ -6712,6 +6714,7 @@ fn add_parent_members_to_struct_env(
 				),
 				span: name.span.clone(),
 				annotations: vec![],
+				hints: vec![],
 			});
 		};
 		// Add each member of current parent to the struct's environment (if it wasn't already added by a previous parent)
@@ -6735,6 +6738,7 @@ fn add_parent_members_to_struct_env(
 							name, parent_type, parent_member_name, parent_member_type, existing_type
 						),
 						annotations: vec![],
+						hints: vec![],
 					});
 				}
 			} else {
@@ -6780,6 +6784,7 @@ fn add_parent_members_to_iface_env(
 				),
 				span: name.span.clone(),
 				annotations: vec![],
+				hints: vec![],
 			});
 		};
 		// Add each member of current parent to the interface's environment (if it wasn't already added by a previous parent)
@@ -6800,6 +6805,7 @@ fn add_parent_members_to_iface_env(
 						),
 						span: name.span.clone(),
 						annotations: vec![],
+						hints: vec![],
 					});
 				}
 			} else {
@@ -6843,10 +6849,15 @@ where
 			} else {
 				format!("Unknown symbol \"{s}\"")
 			};
+			let mut hints = vec![];
+			if s.name == "node" {
+				hints.push("use nodeof(x) to access the tree node on a preflight class".to_string());
+			}
 			TypeError {
 				message,
 				span: s.span(),
 				annotations: vec![],
+				hints,
 			}
 		}
 		LookupResult::NotPublic(kind, lookup_info) => TypeError {
@@ -6875,11 +6886,13 @@ where
 				message: "defined here".to_string(),
 				span: lookup_info.span,
 			}],
+			hints: vec![],
 		},
 		LookupResult::MultipleFound => TypeError {
 			message: format!("Ambiguous symbol \"{looked_up_object}\""),
 			span: looked_up_object.span(),
 			annotations: vec![],
+			hints: vec![],
 		},
 		LookupResult::DefinedLater(span) => TypeError {
 			message: format!("Symbol \"{looked_up_object}\" used before being defined"),
@@ -6888,11 +6901,13 @@ where
 				message: "defined later here".to_string(),
 				span,
 			}],
+			hints: vec![],
 		},
 		LookupResult::ExpectedNamespace(ns_name) => TypeError {
 			message: format!("Expected \"{ns_name}\" in \"{looked_up_object}\" to be a namespace"),
 			span: ns_name.span(),
 			annotations: vec![],
+			hints: vec![],
 		},
 		LookupResult::Found(..) => panic!("Expected a lookup error, but found a successful lookup"),
 	}
@@ -6927,6 +6942,7 @@ pub fn resolve_user_defined_type_ref<'a>(
 				message: format!("Expected \"{}\" to be a type but it's a {symb_kind}", symb.name),
 				span: symb.span.clone(),
 				annotations: vec![],
+				hints: vec![],
 			})
 		}
 	} else {
@@ -6957,6 +6973,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 						.to_string(),
 				span: method.span.clone(),
 				annotations: vec![],
+				hints: vec![],
 			});
 		}
 		// Get the parent type of "this" (if it's a preflight class that's directly derived from `std.Resource` it's an implicit derive so we'll treat it as if there's no parent)
@@ -6976,6 +6993,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 					),
 					span: method.span.clone(),
 					annotations: vec![],
+					hints: vec![],
 				})
 			}
 		} else {
@@ -6983,6 +7001,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 				message: format!("Cannot call super method because class {} has no parent", type_),
 				span: method.span.clone(),
 				annotations: vec![],
+				hints: vec![],
 			})
 		}
 	} else {
@@ -6995,6 +7014,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 			.to_string(),
 			span: method.span.clone(),
 			annotations: vec![],
+			hints: vec![],
 		})
 	}
 }

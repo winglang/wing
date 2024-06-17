@@ -267,6 +267,7 @@ impl SymbolEnv {
 					message: "previous definition".to_string(),
 					span: self.symbol_map[&symbol.name].span.clone(),
 				}],
+				hints: vec![],
 			});
 		}
 
