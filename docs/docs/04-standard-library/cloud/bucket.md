@@ -161,6 +161,7 @@ new cloud.Bucket(props?: BucketProps);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.completeMultipartUpload">completeMultipartUpload</a></code> | Complete a multipart upload to a given key in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.copy">copy</a></code> | Copy an object to a new location in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
@@ -314,6 +315,22 @@ Run an inflight whenever a file is updated in the bucket.
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onUpdate.parameter.opts"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.BucketOnUpdateOptions">BucketOnUpdateOptions</a>
+
+---
+
+##### `completeMultipartUpload` <a name="completeMultipartUpload" id="@winglang/sdk.cloud.IBucketClient.completeMultipartUpload"></a>
+
+```wing
+inflight completeMultipartUpload(uploadId: str): void
+```
+
+Complete a multipart upload to a given key in the bucket.
+
+###### `uploadId`<sup>Required</sup> <a name="uploadId" id="@winglang/sdk.cloud.IBucketClient.completeMultipartUpload.parameter.uploadId"></a>
+
+- *Type:* str
+
+The upload id for the multipart upload.
 
 ---
 

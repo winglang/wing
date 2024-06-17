@@ -501,13 +501,16 @@ export class BucketClient implements IAwsBucketClient {
   }
 
   /**
- * Complete a multipart upload to a given key in the bucket.
- * @param uploadId The upload id for the multipart upload
- * @inflight
- */
+   * Complete a multipart upload to a given key in the bucket.
+   * @param uploadId The upload id for the multipart upload
+   * @inflight
+   */
   public async completeMultipartUpload(uploadId: string): Promise<void> {
-    let req = new CompleteMultipartUploadCommand({ Bucket: this.bucketName, Key: "x", UploadId: uploadId });
+    let req = new CompleteMultipartUploadCommand({
+      Bucket: this.bucketName,
+      Key: "x",
+      UploadId: uploadId,
+    });
     await this.s3Client.send(req);
   }
-
 }

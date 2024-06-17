@@ -1,6 +1,18 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: completeMultipartUpload
+  kind: 2
+  detail: "inflight (uploadId: str): void"
+  documentation:
+    kind: markdown
+    value: Complete a multipart upload to a given key in the bucket.
+  sortText: ff|completeMultipartUpload
+  insertText: completeMultipartUpload($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: copy
   kind: 2
   detail: "inflight (srcKey: str, dstKey: str): void"
