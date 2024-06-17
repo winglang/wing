@@ -263,7 +263,7 @@ export interface BucketGetOptions {
 /**
  * Options for `Bucket.tryGet()`.
  */
-export interface BucketTryGetOptions extends BucketGetOptions {}
+export interface BucketTryGetOptions extends BucketGetOptions { }
 
 /**
  * Options for `Bucket.put()`.
@@ -469,27 +469,35 @@ export interface IBucketClient {
    * @inflight
    */
   rename(srcKey: string, dstKey: string): Promise<void>;
+
+  /**
+   * Initiate a multipart upload to a given key in the bucket.
+   * @param key The key to upload to
+   * @returns The upload id for the multipart upload
+   * @inflight
+   */
+  multipartUpload(key: string): Promise<string>;
 }
 
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateOptions {}
+export interface BucketOnCreateOptions { }
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteOptions {}
+export interface BucketOnDeleteOptions { }
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateOptions {}
+export interface BucketOnUpdateOptions { }
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventOptions {}
+export interface BucketOnEventOptions { }
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -582,4 +590,6 @@ export enum BucketInflightMethods {
   COPY = "copy",
   /** `Bucket.rename` */
   RENAME = "rename",
+  /** `Bucket.multipartUpload` */
+  MULTIPART_UPLOAD = "multipartUpload",
 }

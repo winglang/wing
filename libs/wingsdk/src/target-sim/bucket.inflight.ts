@@ -89,7 +89,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return {};
   }
 
-  public async cleanup(): Promise<void> {}
+  public async cleanup(): Promise<void> { }
 
   public async plan() {
     return UpdatePlan.AUTO;
@@ -190,8 +190,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           return new TextDecoder("utf8", { fatal: true }).decode(buffer);
         } catch (e) {
           throw new Error(
-            `Object content could not be read as text (key=${key}): ${
-              (e as Error).stack
+            `Object content could not be read as text (key=${key}): ${(e as Error).stack
             })}`
           );
         }
@@ -352,6 +351,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
     await this.copy(srcKey, dstKey);
     await this.delete(srcKey);
+  }
+
+  public async multipartUpload(_key: string): Promise<string> {
+    throw new Error("Multipart upload not implemented yet on sim");
   }
 
   private async addFile(

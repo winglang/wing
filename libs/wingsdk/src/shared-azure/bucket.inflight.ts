@@ -115,8 +115,7 @@ export class BucketClient implements IBucketClient {
       );
     } catch (e) {
       throw new Error(
-        `Object contents could not be read as text (key=${key}): ${
-          (e as Error).stack
+        `Object contents could not be read as text (key=${key}): ${(e as Error).stack
         })}`
       );
     }
@@ -321,5 +320,11 @@ export class BucketClient implements IBucketClient {
       });
       stream.on("error", reject);
     });
+  }
+
+  public async multipartUpload(_key: string): Promise<string> {
+    throw new Error(
+      `multipartUpload is not implemented yet for tf-azure)`
+    );
   }
 }

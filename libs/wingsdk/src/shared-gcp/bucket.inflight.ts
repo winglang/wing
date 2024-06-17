@@ -132,8 +132,7 @@ export class BucketClient implements IBucketClient {
       return new TextDecoder("utf8", { fatal: true }).decode(body[0]);
     } catch (e) {
       throw new Error(
-        `Object content could not be read as text (key=${key}): ${
-          (e as Error).stack
+        `Object content could not be read as text (key=${key}): ${(e as Error).stack
         })}`
       );
     }
@@ -273,5 +272,9 @@ export class BucketClient implements IBucketClient {
     });
 
     return signedUrl;
+  }
+
+  public async multipartUpload(_key: string): Promise<string> {
+    throw new Error("Multipart upload is not supported yet for GCP");
   }
 }

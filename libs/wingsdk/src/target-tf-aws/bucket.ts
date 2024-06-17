@@ -90,6 +90,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
       [cloud.BucketInflightMethods.METADATA]: [],
       [cloud.BucketInflightMethods.COPY]: [],
       [cloud.BucketInflightMethods.RENAME]: [],
+      [cloud.BucketInflightMethods.MULTIPART_UPLOAD]: [],
     };
   }
 
