@@ -183,8 +183,7 @@ class $Root extends $stdlib.std.Resource {
     const cloud = $stdlib.cloud;
     const c = require("constructs");
     const jsii_fixture = require("jsii-fixture");
-    const new_in_static_lib = require("./preflight.newinstaticlib-1.cjs");
-    Object.assign($preflightTypesMap, new_in_static_lib.$preflightTypesMap);
+    const new_in_static_lib = $helpers.bringJs(`${__dirname}/preflight.newinstaticlib-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class MyClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {

@@ -60,8 +60,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
-const file3 = require("./preflight.empty-1.cjs");
-Object.assign($preflightTypesMap, file3.$preflightTypesMap);
+const file3 = $helpers.bringJs(`${__dirname}/preflight.empty-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
 const Color =

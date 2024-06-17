@@ -1502,11 +1502,7 @@ impl<'a> JSifier<'a> {
 		let var_name = identifier.as_ref().expect("bring wing module requires an alias");
 		let preflight_file_map = self.preflight_file_map.borrow();
 		let preflight_file_name = preflight_file_map.get(path).unwrap();
-		code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"));
-		// Add brought preflight types to this module's preflight types
-		code.line(format!(
-			"Object.assign({MODULE_PREFLIGHT_TYPES_MAP}, {var_name}.{MODULE_PREFLIGHT_TYPES_MAP});"
-		));
+		code.line(format!("const {var_name} = $helpers.bringJs(`${{__dirname}}/{preflight_file_name}`,\"{MODULE_PREFLIGHT_TYPES_MAP}\", {MODULE_PREFLIGHT_TYPES_MAP});"));
 		code
 	}
 

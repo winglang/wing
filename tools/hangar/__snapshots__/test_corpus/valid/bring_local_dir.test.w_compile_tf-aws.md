@@ -105,10 +105,8 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const w = require("./preflight.widget-1.cjs");
-    Object.assign($preflightTypesMap, w.$preflightTypesMap);
-    const subdir = require("./preflight.subdir2-6.cjs");
-    Object.assign($preflightTypesMap, subdir.$preflightTypesMap);
+    const w = $helpers.bringJs(`${__dirname}/preflight.widget-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
+    const subdir = $helpers.bringJs(`${__dirname}/preflight.subdir2-6.cjs`,"$preflightTypesMap", $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const widget1 = new w.Widget(this, "widget1");
     $helpers.assert($helpers.eq((widget1.compute()), 42), "widget1.compute() == 42");
@@ -135,8 +133,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
-const blah = require("./preflight.inner-2.cjs");
-Object.assign($preflightTypesMap, blah.$preflightTypesMap);
+const blah = $helpers.bringJs(`${__dirname}/preflight.inner-2.cjs`,"$preflightTypesMap", $preflightTypesMap);
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 class Foo extends $stdlib.std.Resource {

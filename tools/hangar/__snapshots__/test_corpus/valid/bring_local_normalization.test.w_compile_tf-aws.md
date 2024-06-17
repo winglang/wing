@@ -165,12 +165,9 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const foo = require("./preflight.foo-3.cjs");
-    Object.assign($preflightTypesMap, foo.$preflightTypesMap);
-    const bar = require("./preflight.bar-1.cjs");
-    Object.assign($preflightTypesMap, bar.$preflightTypesMap);
-    const baz = require("./preflight.baz-2.cjs");
-    Object.assign($preflightTypesMap, baz.$preflightTypesMap);
+    const foo = $helpers.bringJs(`${__dirname}/preflight.foo-3.cjs`,"$preflightTypesMap", $preflightTypesMap);
+    const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
+    const baz = $helpers.bringJs(`${__dirname}/preflight.baz-2.cjs`,"$preflightTypesMap", $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     $helpers.assert($helpers.eq((foo.Foo.foo(this)), "foo"), "foo.Foo.foo() == \"foo\"");
     $helpers.assert($helpers.eq((foo.Foo.bar(this)), "bar"), "foo.Foo.bar() == \"bar\"");
@@ -193,10 +190,8 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
-const bar = require("./preflight.bar-1.cjs");
-Object.assign($preflightTypesMap, bar.$preflightTypesMap);
-const baz = require("./preflight.baz-2.cjs");
-Object.assign($preflightTypesMap, baz.$preflightTypesMap);
+const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
+const baz = $helpers.bringJs(`${__dirname}/preflight.baz-2.cjs`,"$preflightTypesMap", $preflightTypesMap);
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);

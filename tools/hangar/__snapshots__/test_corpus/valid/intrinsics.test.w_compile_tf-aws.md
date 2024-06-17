@@ -285,8 +285,7 @@ class $Root extends $stdlib.std.Resource {
     const expect = $stdlib.expect;
     const cloud = $stdlib.cloud;
     const util = $stdlib.util;
-    const bar = require("./preflight.bar-1.cjs");
-    Object.assign($preflightTypesMap, bar.$preflightTypesMap);
+    const bar = $helpers.bringJs(`${__dirname}/preflight.bar-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class Example extends $stdlib.std.Resource {
       constructor($scope, $id, ) {

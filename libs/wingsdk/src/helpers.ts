@@ -167,6 +167,15 @@ export function resolveDirname(
   return normalPath(path.resolve(outdir, relativeSourceDir));
 }
 
+/**
+ * Helper function to `require` a compiled preflight wing file (js) into another compiled (js) wing file.
+ * We need this instead of simply calling `require` because in addition to returning the imported module's exports,
+ * we also need to update the current module's preflight types map with the brought module's preflight types map.
+ * @param moduleFile - the file to `require`
+ * @param preflightTypesObjectName - this should always be $preflightTypesMap (based on the wingc jsify rust code)
+ * @param outPreflightTypesObject - the current module's $preflightTypesMap
+ * @returns all symbols exported by the `moduleFile` except `$preflightTypesMap`
+ */
 export function bringJs(
   moduleFile: string,
   preflightTypesObjectName: string,

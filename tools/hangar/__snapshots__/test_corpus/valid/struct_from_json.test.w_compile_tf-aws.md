@@ -183,10 +183,8 @@ class $Root extends $stdlib.std.Resource {
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
     const cloud = $stdlib.cloud;
-    const externalStructs = require("./preflight.structs-1.cjs");
-    Object.assign($preflightTypesMap, externalStructs.$preflightTypesMap);
-    const otherExternalStructs = require("./preflight.structs2-2.cjs");
-    Object.assign($preflightTypesMap, otherExternalStructs.$preflightTypesMap);
+    const externalStructs = $helpers.bringJs(`${__dirname}/preflight.structs-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
+    const otherExternalStructs = $helpers.bringJs(`${__dirname}/preflight.structs2-2.cjs`,"$preflightTypesMap", $preflightTypesMap);
     const Bar = $stdlib.std.Struct._createJsonSchema({$id:"/Bar",type:"object",properties:{b:{type:"number"},f:{type:"string"},},required:["b","f",]});
     const Foo = $stdlib.std.Struct._createJsonSchema({$id:"/Foo",type:"object",properties:{f:{type:"string"},},required:["f",]});
     const Foosible = $stdlib.std.Struct._createJsonSchema({$id:"/Foosible",type:"object",properties:{f:{type:"string"},},required:[]});

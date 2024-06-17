@@ -113,12 +113,9 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const fixture = require("./preflight.testfixture-5.cjs");
-    Object.assign($preflightTypesMap, fixture.$preflightTypesMap);
-    const testfixture = require("./preflight.testfixture-5.cjs");
-    Object.assign($preflightTypesMap, testfixture.$preflightTypesMap);
-    const testfixture2 = require("./preflight.testfixture-5.cjs");
-    Object.assign($preflightTypesMap, testfixture2.$preflightTypesMap);
+    const fixture = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`,"$preflightTypesMap", $preflightTypesMap);
+    const testfixture = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`,"$preflightTypesMap", $preflightTypesMap);
+    const testfixture2 = $helpers.bringJs(`${__dirname}/preflight.testfixture-5.cjs`,"$preflightTypesMap", $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
@@ -197,8 +194,7 @@ const $helpers = $stdlib.helpers;
 const $extern = $helpers.createExternRequire(__dirname);
 let $preflightTypesMap = {};
 const cloud = $stdlib.cloud;
-const myutil = require("./preflight.util-2.cjs");
-Object.assign($preflightTypesMap, myutil.$preflightTypesMap);
+const myutil = $helpers.bringJs(`${__dirname}/preflight.util-2.cjs`,"$preflightTypesMap", $preflightTypesMap);
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, options) {
     super($scope, $id);

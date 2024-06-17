@@ -49,8 +49,7 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     $helpers.nodeof(this).root.$preflightTypesMap = { };
     let $preflightTypesMap = {};
-    const lib = require("./preflight.extendnonentrypoint-1.cjs");
-    Object.assign($preflightTypesMap, lib.$preflightTypesMap);
+    const lib = $helpers.bringJs(`${__dirname}/preflight.extendnonentrypoint-1.cjs`,"$preflightTypesMap", $preflightTypesMap);
     $helpers.nodeof(this).root.$preflightTypesMap = $preflightTypesMap;
     const f = new lib.Foo(this, "Foo");
   }
