@@ -976,6 +976,8 @@ let BucketSignedUrlOptions = cloud.BucketSignedUrlOptions{ ... };
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.action">action</a></code> | <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction">BucketSignedUrlAction</a></code> | The action allowed by the signed URL. |
 | <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed URL to expire. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.partNumber">partNumber</a></code> | <code>num</code> | The upload part number, if the signed url is a multipart upload. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.uploadId">uploadId</a></code> | <code>str</code> | The upload id, if the signed url is a multipart upload. |
 
 ---
 
@@ -1002,6 +1004,32 @@ duration: duration;
 - *Default:* 15m
 
 The duration for the signed URL to expire.
+
+---
+
+##### `partNumber`<sup>Optional</sup> <a name="partNumber" id="@winglang/sdk.cloud.BucketSignedUrlOptions.property.partNumber"></a>
+
+```wing
+partNumber: num;
+```
+
+- *Type:* num
+- *Default:* undefined
+
+The upload part number, if the signed url is a multipart upload.
+
+---
+
+##### `uploadId`<sup>Optional</sup> <a name="uploadId" id="@winglang/sdk.cloud.BucketSignedUrlOptions.property.uploadId"></a>
+
+```wing
+uploadId: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+The upload id, if the signed url is a multipart upload.
 
 ---
 
