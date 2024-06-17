@@ -5,6 +5,7 @@ import {
   buildTheme,
 } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
+import { PersistentStateProvider } from "@wingconsole/use-persistent-state";
 
 import type { LayoutType } from "./features/layout/layout-provider.js";
 import { LayoutProvider } from "./features/layout/layout-provider.js";
@@ -49,14 +50,16 @@ export const App = ({ layout, theme, color, onTrace }: AppProps) => {
       <NotificationsProvider>
         <TestsContextProvider>
           <SelectionContextProvider>
-            <LayoutProvider
-              layoutType={layout}
-              layoutProps={{
-                cloudAppState: appState.data ?? "compiling",
-                wingVersion: appDetails.data?.wingVersion,
-                layoutConfig: layoutConfig.data?.config,
-              }}
-            />
+            <PersistentStateProvider>
+              <LayoutProvider
+                layoutType={layout}
+                layoutProps={{
+                  cloudAppState: appState.data ?? "compiling",
+                  wingVersion: appDetails.data?.wingVersion,
+                  layoutConfig: layoutConfig.data?.config,
+                }}
+              />
+            </PersistentStateProvider>
           </SelectionContextProvider>
         </TestsContextProvider>
       </NotificationsProvider>
