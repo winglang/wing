@@ -29,7 +29,7 @@ class DynamoTable {
     }
 
     this.table = new awscdk.aws_dynamodb.Table(
-      tableName: this.node.addr,
+      tableName: nodeof(this).addr,
       billingMode: awscdk.aws_dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: awscdk.RemovalPolicy.DESTROY,
       partitionKey: awscdk.aws_dynamodb.Attribute {

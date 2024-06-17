@@ -1,16 +1,15 @@
 bring cloud;
-// bring cloud;
 bring "constructs" as cx;
 bring "@cdktf/provider-aws" as aws;
 
 class WingResource {
   new() {
-    log("my id is {this.node.id}");
+    log("my id is {nodeof(this).id}");
   }
 }
 
 let getPath = (c: cx.Construct): str => {
-  return c.node.path;
+  return nodeof(c).path;
 };
 
 let getDisplayName = (r: std.Resource): str? => {
@@ -27,5 +26,4 @@ log("path of wing resource: {getPath(wr)}");
 let title = getDisplayName(wr) ?? "no display name";
 log("display name of wing resource: {title}");
 
-//TODO: Expected type to be "IConstruct", but got "WingResource" instead
-// log(cx.Node.of(wr).path);
+log(cx.Node.of(wr).path);
