@@ -163,9 +163,7 @@ export function calculateBucketPermissions(
   }
 
   // multipart upload signed url
-  if (
-    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
-  ) {
+  if (ops.includes(cloud.BucketInflightMethods.SIGNED_URL)) {
     actions.push("s3:UploadPart");
   }
 

@@ -263,7 +263,7 @@ export interface BucketGetOptions {
 /**
  * Options for `Bucket.tryGet()`.
  */
-export interface BucketTryGetOptions extends BucketGetOptions { }
+export interface BucketTryGetOptions extends BucketGetOptions {}
 
 /**
  * Options for `Bucket.put()`.
@@ -482,22 +482,22 @@ export interface IBucketClient {
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateOptions { }
+export interface BucketOnCreateOptions {}
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteOptions { }
+export interface BucketOnDeleteOptions {}
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateOptions { }
+export interface BucketOnUpdateOptions {}
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventOptions { }
+export interface BucketOnEventOptions {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to

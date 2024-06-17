@@ -39,7 +39,7 @@ export class BucketClient implements IAwsBucketClient {
   constructor(
     private readonly bucketName: string,
     private readonly s3Client: S3Client = new S3Client({})
-  ) { }
+  ) {}
 
   public async bucketRegion(): Promise<string> {
     const res = await this.s3Client.send(
@@ -142,7 +142,8 @@ export class BucketClient implements IAwsBucketClient {
         );
       } catch (e) {
         throw new Error(
-          `Object content could not be read as text (key=${key}): ${(e as Error).stack
+          `Object content could not be read as text (key=${key}): ${
+            (e as Error).stack
           })}`
         );
       }
@@ -486,7 +487,10 @@ export class BucketClient implements IAwsBucketClient {
    * @inflight
    */
   public async multipartUpload(key: string): Promise<string> {
-    let req = new CreateMultipartUploadCommand({ Bucket: this.bucketName, Key: key });
+    let req = new CreateMultipartUploadCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
     let response = await this.s3Client.send(req);
 
     if (!response.UploadId) {
@@ -495,4 +499,3 @@ export class BucketClient implements IAwsBucketClient {
     return response.UploadId;
   }
 }
-
