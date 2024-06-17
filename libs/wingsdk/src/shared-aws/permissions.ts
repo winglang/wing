@@ -162,6 +162,12 @@ export function calculateBucketPermissions(
   ) {
     actions.push("s3:CopyObject");
   }
+
+  // multipart upload signed url
+  if (ops.includes(cloud.BucketInflightMethods.SIGNED_URL)) {
+    actions.push("s3:UploadPart");
+  }
+
   if (actions.length === 0) {
     return [];
   }

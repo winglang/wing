@@ -168,6 +168,7 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.metadata">metadata</a></code> | Get the metadata of an object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.multipartUpload">multipartUpload</a></code> | Initiate a multipart upload to a given key in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
@@ -454,6 +455,22 @@ Get the metadata of an object in the bucket.
 - *Type:* str
 
 Key of the object.
+
+---
+
+##### `multipartUpload` <a name="multipartUpload" id="@winglang/sdk.cloud.IBucketClient.multipartUpload"></a>
+
+```wing
+inflight multipartUpload(key: str): str
+```
+
+Initiate a multipart upload to a given key in the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.multipartUpload.parameter.key"></a>
+
+- *Type:* str
+
+The key to upload to.
 
 ---
 

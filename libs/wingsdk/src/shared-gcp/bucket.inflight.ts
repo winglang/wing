@@ -132,7 +132,8 @@ export class BucketClient implements IBucketClient {
       return new TextDecoder("utf8", { fatal: true }).decode(body[0]);
     } catch (e) {
       throw new Error(
-        `Object content could not be read as text (key=${key}): ${(e as Error).stack
+        `Object content could not be read as text (key=${key}): ${
+          (e as Error).stack
         })}`
       );
     }

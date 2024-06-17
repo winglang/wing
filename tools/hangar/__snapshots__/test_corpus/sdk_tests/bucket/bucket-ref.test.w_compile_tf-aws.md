@@ -162,7 +162,7 @@
             "uniqueId": "BucketRef_AwsConsoleField_Handler_IamRolePolicy_CE523926"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\",\"s3:CopyObject\"],\"Resource\":[\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}\",\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\",\"s3:CopyObject\",\"s3:UploadPart\"],\"Resource\":[\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}\",\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.BucketRef_AwsConsoleField_Handler_IamRole_BF718408.name}"
       },
       "BucketRef_BucketArnField_Handler_IamRolePolicy_566A37EB": {
@@ -192,7 +192,7 @@
             "uniqueId": "BucketRef_FileBrowser_delete_IamRolePolicy_A19F20B1"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\",\"s3:CopyObject\"],\"Resource\":[\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}\",\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\",\"s3:CopyObject\",\"s3:UploadPart\"],\"Resource\":[\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}\",\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.BucketRef_FileBrowser_delete_IamRole_A66062FE.name}"
       },
       "BucketRef_FileBrowser_get_IamRolePolicy_E6B24E15": {
@@ -202,7 +202,7 @@
             "uniqueId": "BucketRef_FileBrowser_get_IamRolePolicy_E6B24E15"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\",\"s3:CopyObject\"],\"Resource\":[\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}\",\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\",\"s3:CopyObject\",\"s3:UploadPart\"],\"Resource\":[\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}\",\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.BucketRef_FileBrowser_get_IamRole_8E0DB684.name}"
       },
       "BucketRef_FileBrowser_list_IamRolePolicy_B923CA4C": {
@@ -212,7 +212,7 @@
             "uniqueId": "BucketRef_FileBrowser_list_IamRolePolicy_B923CA4C"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\",\"s3:CopyObject\"],\"Resource\":[\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}\",\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\",\"s3:CopyObject\",\"s3:UploadPart\"],\"Resource\":[\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}\",\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.BucketRef_FileBrowser_list_IamRole_DC0C9222.name}"
       },
       "BucketRef_FileBrowser_put_IamRolePolicy_F4928644": {
@@ -222,7 +222,7 @@
             "uniqueId": "BucketRef_FileBrowser_put_IamRolePolicy_F4928644"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\",\"s3:CopyObject\"],\"Resource\":[\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}\",\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\",\"s3:CopyObject\",\"s3:UploadPart\"],\"Resource\":[\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}\",\"arn:aws:s3:::${aws_s3_bucket.Bucket.bucket}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.BucketRef_FileBrowser_put_IamRole_9C4230CD.name}"
       }
     },

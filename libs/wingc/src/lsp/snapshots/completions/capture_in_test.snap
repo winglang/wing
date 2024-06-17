@@ -85,6 +85,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: multipartUpload
+  kind: 2
+  detail: "inflight (key: str): str"
+  documentation:
+    kind: markdown
+    value: "Initiate a multipart upload to a given key in the bucket.\n\n#### Returns\nThe upload id for the multipart upload"
+  sortText: ff|multipartUpload
+  insertText: multipartUpload($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: publicUrl
   kind: 2
   detail: "inflight (key: str): str"
