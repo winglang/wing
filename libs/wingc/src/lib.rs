@@ -240,6 +240,7 @@ pub fn type_check(
 		None,
 	);
 	tc.add_builtins(scope);
+	tc.patch_constructs();
 
 	// If the file is an entrypoint file, we add "this" to its symbol environment
 	if is_entrypoint_file(file_path) {

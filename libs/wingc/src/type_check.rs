@@ -969,7 +969,7 @@ impl TypeRef {
 		}
 	}
 
-	pub fn as_mut_struct(&mut self) -> Option<&mut Struct> {
+	pub fn as_struct_mut(&mut self) -> Option<&mut Struct> {
 		if let Type::Struct(ref mut st) = **self {
 			Some(st)
 		} else {
@@ -984,7 +984,7 @@ impl TypeRef {
 			None
 		}
 	}
-	fn as_mut_interface(&mut self) -> Option<&mut Interface> {
+	fn as_interface_mut(&mut self) -> Option<&mut Interface> {
 		if let Type::Interface(ref mut iface) = **self {
 			Some(iface)
 		} else {
@@ -1008,7 +1008,7 @@ impl TypeRef {
 		}
 	}
 
-	pub fn as_mut_function_sig(&mut self) -> Option<&mut FunctionSignature> {
+	pub fn as_function_sig_mut(&mut self) -> Option<&mut FunctionSignature> {
 		if let Type::Function(ref mut sig) = **self {
 			Some(sig)
 		} else {
@@ -1968,6 +1968,40 @@ impl<'a> TypeChecker<'a> {
 				StatementIdx::Top,
 			)
 			.expect("Failed to add this");
+	}
+
+	/// Patch some of the types from the "constructs" package to provide a better DX
+	pub fn patch_constructs(&mut self) {
+		// Hide the "node" field from constructs so that users go through
+		// the `nodeof` utility function to get the tree node of a construct.
+		// The `Node` instance provided by Wing has some extra methods not
+		// available in the constructs package, and also modifies how the
+		// root node is obtained.
+		let mut constructs_iface = self
+			.types
+			.libraries
+			.lookup_nested_str(&CONSTRUCT_BASE_INTERFACE, None)
+			.expect("constructs.IConstruct not found in type system")
+			.0
+			.as_type()
+			.expect("constructs.IConstruct was found but it's not a type");
+		let iface = constructs_iface
+			.as_interface_mut()
+			.expect("constructs.IConstruct was found but it's not a class");
+		iface.env.symbol_map.remove("node");
+
+		let mut constructs_class = self
+			.types
+			.libraries
+			.lookup_nested_str(&CONSTRUCT_BASE_CLASS, None)
+			.expect("constructs.Construct not found in type system")
+			.0
+			.as_type()
+			.expect("constructs.Construct was found but it's not a type");
+		let class = constructs_class
+			.as_class_mut()
+			.expect("constructs.Construct was found but it's not a class");
+		class.env.symbol_map.remove("node");
 	}
 
 	pub fn add_builtins(&mut self, scope: &mut Scope) {
@@ -4333,7 +4367,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		// Replace the dummy struct environment with the real one
-		struct_type.as_mut_struct().unwrap().env = struct_env;
+		struct_type.as_struct_mut().unwrap().env = struct_env;
 	}
 
 	fn type_check_interface(&mut self, ast_iface: &AstInterface, env: &mut SymbolEnv) {
@@ -4417,11 +4451,11 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 		}
 
 		// Replace the dummy interface environment with the real one
-		interface_type.as_mut_interface().unwrap().env = interface_env;
+		interface_type.as_interface_mut().unwrap().env = interface_env;
 
 		if need_to_add_base_iresource {
 			let base_resource = self.types.resource_base_interface();
-			interface_type.as_mut_interface().unwrap().extends.push(base_resource);
+			interface_type.as_interface_mut().unwrap().extends.push(base_resource);
 		}
 	}
 
@@ -5428,7 +5462,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 	) {
 		// Modify the method's type based on the fact we know it's a method and not just a function
 		let method_sig = method_type
-			.as_mut_function_sig()
+			.as_function_sig_mut()
 			.expect("Expected method type to be a function");
 
 		// use the class type as the function's "this" type (or None if static)
@@ -6805,7 +6839,7 @@ where
 	match lookup_result {
 		LookupResult::NotFound(s, maybe_t) => {
 			let message = if let Some(env_type) = maybe_t {
-				format!("Member \"{s}\" doesn't exist in \"{env_type}\"")
+				format!("Member \"{s}\" does not exist in \"{env_type}\"")
 			} else {
 				format!("Unknown symbol \"{s}\"")
 			};

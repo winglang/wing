@@ -35,6 +35,7 @@ pub struct SymbolEnv {
 	statement_idx: usize,
 }
 
+#[derive(Debug)]
 pub struct SymbolEnvEntry {
 	pub statement_idx: StatementIdx,
 	pub span: WingSpan,
