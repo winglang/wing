@@ -25,10 +25,11 @@ use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_IRESOURCE, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE,
-	WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, CONSTRUCT_NODE_PROPERTY, UTIL_CLASS_NAME,
+	WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC,
+	WINGSDK_IRESOURCE, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
+	WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_SIM_IRESOURCE_FQN, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -1989,7 +1990,7 @@ impl<'a> TypeChecker<'a> {
 		let iface = constructs_iface
 			.as_interface_mut()
 			.expect("constructs.IConstruct was found but it's not a class");
-		iface.env.symbol_map.remove("node");
+		iface.env.symbol_map.remove(CONSTRUCT_NODE_PROPERTY);
 
 		let mut constructs_class = self
 			.types
@@ -2002,7 +2003,7 @@ impl<'a> TypeChecker<'a> {
 		let class = constructs_class
 			.as_class_mut()
 			.expect("constructs.Construct was found but it's not a class");
-		class.env.symbol_map.remove("node");
+		class.env.symbol_map.remove(CONSTRUCT_NODE_PROPERTY);
 	}
 
 	pub fn add_builtins(&mut self, scope: &mut Scope) {
@@ -6850,7 +6851,7 @@ where
 				format!("Unknown symbol \"{s}\"")
 			};
 			let mut hints = vec![];
-			if s.name == "node" {
+			if s.name == CONSTRUCT_NODE_PROPERTY {
 				hints.push("use nodeof(x) to access the tree node on a preflight class".to_string());
 			}
 			TypeError {
