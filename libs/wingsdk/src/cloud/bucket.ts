@@ -318,6 +318,18 @@ export interface BucketSignedUrlOptions {
    * @default BucketSignedUrlAction.DOWNLOAD
    */
   readonly action?: BucketSignedUrlAction;
+
+  /**
+   * The upload id, if the signed url is a multipart upload.
+   * @default undefined
+   */
+  readonly uploadId?: string;
+
+  /**
+   * The upload part number, if the signed url is a multipart upload.
+   * @default undefined
+   */
+  readonly partNumber?: number;
 }
 
 /**

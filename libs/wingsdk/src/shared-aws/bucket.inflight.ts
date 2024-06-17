@@ -16,6 +16,7 @@ import {
   NotFound,
   NoSuchKey,
   PutObjectCommand,
+  UploadPartCommand,
   S3Client,
   HeadBucketCommand,
 } from "@aws-sdk/client-s3";
@@ -391,7 +392,7 @@ export class BucketClient implements IAwsBucketClient {
     key: string,
     opts?: BucketSignedUrlOptions
   ): Promise<string> {
-    let s3Command: GetObjectCommand | PutObjectCommand;
+    let s3Command: GetObjectCommand | PutObjectCommand | UploadPartCommand;
 
     // Set default action to DOWNLOAD if not provided
     const action = opts?.action ?? BucketSignedUrlAction.DOWNLOAD;
@@ -410,6 +411,19 @@ export class BucketClient implements IAwsBucketClient {
         });
         break;
       case BucketSignedUrlAction.UPLOAD:
+        if (opts?.uploadId !== undefined) {
+          if (opts.partNumber === undefined) {
+            throw new Error("partNumber must be provided for multipart uploads");
+          }
+
+          s3Command = new UploadPartCommand({
+            Bucket: this.bucketName,
+            Key: key,
+            UploadId: opts.uploadId,
+            PartNumber: opts.partNumber,
+          });
+        }
+
         s3Command = new PutObjectCommand({
           Bucket: this.bucketName,
           Key: key,
