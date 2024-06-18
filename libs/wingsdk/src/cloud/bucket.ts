@@ -22,6 +22,36 @@ export interface BucketProps {
    * @default false
    */
   readonly public?: boolean;
+  /**
+   * The CORS rules for the bucket.
+   */
+  readonly corsRules?: BucketCorsRule[];
+}
+
+/**
+ * CORS rules for a bucket.
+ */
+export interface BucketCorsRule {
+  /**
+   * The HTTP methods that are allowed.
+   */
+  readonly allowedMethods?: string[];
+  /**
+   * The origins that are allowed.
+   */
+  readonly allowedOrigins?: string[];
+  /**
+   * The headers that are allowed.
+   */
+  readonly allowedHeaders?: string[];
+  /**
+   * The time in seconds that the preflight request is valid.
+   */
+  readonly maxAgeSeconds?: number;
+  /**
+   * The headers that are exposed.
+   */
+  readonly exposeHeaders?: string[];
 }
 
 /**
@@ -263,7 +293,7 @@ export interface BucketGetOptions {
 /**
  * Options for `Bucket.tryGet()`.
  */
-export interface BucketTryGetOptions extends BucketGetOptions { }
+export interface BucketTryGetOptions extends BucketGetOptions {}
 
 /**
  * Options for `Bucket.put()`.
@@ -515,28 +545,32 @@ export interface IBucketClient {
    * Put a part of an object in a multipart upload.
    * @inflight
    */
-  putPart(multipartUpload: MultipartUpload, partNumber: number, body: string): Promise<void>;
+  putPart(
+    multipartUpload: MultipartUpload,
+    partNumber: number,
+    body: string
+  ): Promise<void>;
 }
 
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateOptions { }
+export interface BucketOnCreateOptions {}
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteOptions { }
+export interface BucketOnDeleteOptions {}
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateOptions { }
+export interface BucketOnUpdateOptions {}
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventOptions { }
+export interface BucketOnEventOptions {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
