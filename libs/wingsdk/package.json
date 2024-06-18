@@ -91,7 +91,7 @@
     "@azure/core-paging": "^1.5.0",
     "@azure/data-tables": "13.2.2",
     "@azure/identity": "4.0.1",
-    "@azure/storage-blob": "12.23.0",
+    "@azure/storage-blob": "12.14.0",
     "@google-cloud/datastore": "8.4.0",
     "@google-cloud/storage": "6.9.5",
     "@smithy/util-stream": "2.0.17",
