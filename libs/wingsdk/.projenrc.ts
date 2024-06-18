@@ -64,7 +64,7 @@ const project = new cdk.JsiiProject({
     "mime-types",
     "mime@^3.0.0",
     // azure client dependencies
-    "@azure/storage-blob@12.23.0",
+    "@azure/storage-blob@12.14.0",
     "@azure/data-tables@13.2.2",
     "@azure/identity@4.0.1",
     "@azure/core-paging",
