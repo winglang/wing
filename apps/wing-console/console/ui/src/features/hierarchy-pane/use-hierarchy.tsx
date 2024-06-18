@@ -80,6 +80,10 @@ export const useHierarchy = () => {
   }, [selectedNode, setSelectedItems]);
 
   useEffect(() => {
+    // Expand automatically if there is only one item and it is not explicitly set to be collapsed.
+    if (items?.length === 1 && items[0] && items[0].expanded !== false) {
+      setExpandedItems([items[0].id]);
+    }
     const getExpandedNodes = (items: TreeMenuItem[]): string[] => {
       let expandedNodes: string[] = [];
       for (const item of items) {
