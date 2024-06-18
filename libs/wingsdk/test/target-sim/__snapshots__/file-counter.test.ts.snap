@@ -96,9 +96,9 @@ bucket: (function() {
           }
           const attrs = {};
           const ctx = {};
-          ctx.statedir = () => statedir;
-          ctx.resolveToken = (name, value) => attrs[name] = value;
-          ctx.log = (message, level) => {
+          ctx.statedir = async () => statedir;
+          ctx.resolveToken = async (name, value) => attrs[name] = value;
+          ctx.log = async (message, level) => {
             if (!level) level = 'info';
             console.log(level + ':' + message);
           };
