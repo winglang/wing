@@ -320,10 +320,10 @@ export interface BucketSignedUrlOptions {
   readonly action?: BucketSignedUrlAction;
 
   /**
-   * The upload id, if the signed url is a multipart upload.
+   * The multipart upload, , if the signed url is a multipart upload.
    * @default undefined
    */
-  readonly uploadId?: string;
+  readonly multipartUpload?: MultipartUpload;
 
   /**
    * The upload part number, if the signed url is a multipart upload.
@@ -337,34 +337,21 @@ export interface BucketSignedUrlOptions {
  * Created using `multipartUpload()` and then passed
  * to `completeMultipartUpload()` to finish the upload.
  */
-export class MultipartUpload {
+export interface MultipartUpload {
   /**
    * The upload id for the multipart upload.
    */
-  uploadId: string;
+  readonly uploadId: string;
 
   /**
    * The key of the object being uploaded.
    */
-  key: string;
+  readonly key: string;
 
   /**
    * The parts that have been uploaded.
    */
-  parts: UploadedPart[];
-
-  constructor(uploadId: string, key: string) {
-    this.uploadId = uploadId;
-    this.key = key;
-    this.parts = [];
-  }
-
-  /**Parts
-   * Add information about a part that has been uploaded.
-   */
-  addPart(num: number, etag: string): void {
-    this.parts.push({ num, etag });
-  }
+  readonly parts: UploadedPart[];
 }
 
 export interface UploadedPart {

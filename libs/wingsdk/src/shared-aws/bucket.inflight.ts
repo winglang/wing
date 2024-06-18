@@ -413,7 +413,7 @@ export class BucketClient implements IAwsBucketClient {
         });
         break;
       case BucketSignedUrlAction.UPLOAD:
-        if (opts?.uploadId !== undefined) {
+        if (opts?.multipartUpload !== undefined) {
           if (opts.partNumber === undefined) {
             throw new Error(
               "partNumber must be provided for multipart uploads"
@@ -423,7 +423,7 @@ export class BucketClient implements IAwsBucketClient {
           s3Command = new UploadPartCommand({
             Bucket: this.bucketName,
             Key: key,
-            UploadId: opts.uploadId,
+            UploadId: opts.multipartUpload.uploadId,
             PartNumber: opts.partNumber,
           });
         }
@@ -497,7 +497,9 @@ export class BucketClient implements IAwsBucketClient {
     if (!response.UploadId) {
       throw new Error(`Failed to create multipart upload for key: ${key}`);
     }
-    return new MultipartUpload(response.UploadId, key);
+    return {
+      uploadId: response.UploadId, key, parts: []
+    };
   }
 
   /**
