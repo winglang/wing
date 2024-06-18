@@ -426,12 +426,15 @@ export class BucketClient implements IAwsBucketClient {
             UploadId: opts.multipartUpload.uploadId,
             PartNumber: opts.partNumber,
           });
+          return await getSignedUrl(this.s3Client, s3Command, {
+            expiresIn: opts?.duration?.seconds ?? 900,
+          });
+        } else {
+          s3Command = new PutObjectCommand({
+            Bucket: this.bucketName,
+            Key: key,
+          });
         }
-
-        s3Command = new PutObjectCommand({
-          Bucket: this.bucketName,
-          Key: key,
-        });
         break;
       default:
         throw new Error(`Invalid action: ${opts?.action}`);
