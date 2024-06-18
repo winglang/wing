@@ -92,6 +92,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
       [cloud.BucketInflightMethods.RENAME]: [],
       [cloud.BucketInflightMethods.MULTIPART_UPLOAD]: [],
       [cloud.BucketInflightMethods.COMPLETE_MULTIPART_UPLOAD]: [],
+      [cloud.BucketInflightMethods.PUT_PART]: [],
     };
   }
 

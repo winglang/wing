@@ -127,6 +127,7 @@ export class BucketRef extends Resource {
       [cloud.BucketInflightMethods.RENAME]: [],
       [cloud.BucketInflightMethods.MULTIPART_UPLOAD]: [],
       [cloud.BucketInflightMethods.COMPLETE_MULTIPART_UPLOAD]: [],
+      [cloud.BucketInflightMethods.PUT_PART]: [],
       bucketRegion: [],
     };
   }

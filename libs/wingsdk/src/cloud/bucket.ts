@@ -263,7 +263,7 @@ export interface BucketGetOptions {
 /**
  * Options for `Bucket.tryGet()`.
  */
-export interface BucketTryGetOptions extends BucketGetOptions {}
+export interface BucketTryGetOptions extends BucketGetOptions { }
 
 /**
  * Options for `Bucket.put()`.
@@ -330,6 +330,46 @@ export interface BucketSignedUrlOptions {
    * @default undefined
    */
   readonly partNumber?: number;
+}
+
+/**
+ * Object representing a multipart upload operation
+ * Created using `multipartUpload()` and then passed
+ * to `completeMultipartUpload()` to finish the upload.
+ */
+export class MultipartUpload {
+  /**
+   * The upload id for the multipart upload.
+   */
+  uploadId: string;
+
+  /**
+   * The key of the object being uploaded.
+   */
+  key: string;
+
+  /**
+   * The parts that have been uploaded.
+   */
+  parts: UploadedPart[];
+
+  constructor(uploadId: string, key: string) {
+    this.uploadId = uploadId;
+    this.key = key;
+    this.parts = [];
+  }
+
+  /**Parts
+   * Add information about a part that has been uploaded.
+   */
+  addPart(num: number, etag: string): void {
+    this.parts.push({ num, etag });
+  }
+}
+
+export interface UploadedPart {
+  readonly num: number;
+  readonly etag: string;
 }
 
 /**
@@ -476,35 +516,40 @@ export interface IBucketClient {
    * @returns The upload id for the multipart upload
    * @inflight
    */
-  multipartUpload(key: string): Promise<string>;
+  multipartUpload(key: string): Promise<MultipartUpload>;
 
   /**
    * Complete a multipart upload to a given key in the bucket.
-   * @param uploadId The upload id for the multipart upload
    * @inflight
    */
-  completeMultipartUpload(uploadId: string): Promise<void>;
+  completeMultipartUpload(multipartUpload: MultipartUpload): Promise<void>;
+
+  /**
+   * Put a part of an object in a multipart upload.
+   * @inflight
+   */
+  putPart(multipartUpload: MultipartUpload, partNumber: number, body: string): Promise<void>;
 }
 
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateOptions {}
+export interface BucketOnCreateOptions { }
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteOptions {}
+export interface BucketOnDeleteOptions { }
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateOptions {}
+export interface BucketOnUpdateOptions { }
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventOptions {}
+export interface BucketOnEventOptions { }
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -601,4 +646,6 @@ export enum BucketInflightMethods {
   MULTIPART_UPLOAD = "multipartUpload",
   /** `Bucket.completeMultipartUpload */
   COMPLETE_MULTIPART_UPLOAD = "completeMultipartUpload",
+  /** `Bucket.putPart` */
+  PUT_PART = "putPart",
 }

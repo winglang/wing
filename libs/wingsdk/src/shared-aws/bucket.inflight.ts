@@ -33,6 +33,7 @@ import {
   BucketSignedUrlAction,
   BucketGetOptions,
   BucketTryGetOptions,
+  MultipartUpload,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -40,7 +41,7 @@ export class BucketClient implements IAwsBucketClient {
   constructor(
     private readonly bucketName: string,
     private readonly s3Client: S3Client = new S3Client({})
-  ) {}
+  ) { }
 
   public async bucketRegion(): Promise<string> {
     const res = await this.s3Client.send(
@@ -143,8 +144,7 @@ export class BucketClient implements IAwsBucketClient {
         );
       } catch (e) {
         throw new Error(
-          `Object content could not be read as text (key=${key}): ${
-            (e as Error).stack
+          `Object content could not be read as text (key=${key}): ${(e as Error).stack
           })}`
         );
       }
@@ -484,10 +484,10 @@ export class BucketClient implements IAwsBucketClient {
   /**
    * Create a multipart upload for the given key.
    * @param key The key of the object in the bucket.
-   * @returns The upload ID of the multipart upload.
+   * @returns Object representing the multipart upload.
    * @inflight
    */
-  public async multipartUpload(key: string): Promise<string> {
+  public async multipartUpload(key: string): Promise<MultipartUpload> {
     let req = new CreateMultipartUploadCommand({
       Bucket: this.bucketName,
       Key: key,
@@ -497,20 +497,43 @@ export class BucketClient implements IAwsBucketClient {
     if (!response.UploadId) {
       throw new Error(`Failed to create multipart upload for key: ${key}`);
     }
-    return response.UploadId;
+    return new MultipartUpload(response.UploadId, key);
   }
 
   /**
    * Complete a multipart upload to a given key in the bucket.
-   * @param uploadId The upload id for the multipart upload
+   * @param multipartUpload The multipart upload to complete
    * @inflight
    */
-  public async completeMultipartUpload(uploadId: string): Promise<void> {
+  public async completeMultipartUpload(multipartUpload: MultipartUpload): Promise<void> {
     let req = new CompleteMultipartUploadCommand({
       Bucket: this.bucketName,
-      Key: "x",
-      UploadId: uploadId,
+      Key: multipartUpload.key,
+      UploadId: multipartUpload.uploadId,
+      MultipartUpload: {
+        Parts: multipartUpload.parts.map((part) => ({ ETag: part.etag, PartNumber: part.num })),
+      },
     });
     await this.s3Client.send(req);
   }
+
+  /** 
+   * Put a part of a multipart upload to the bucket.
+   * @inflight
+   */
+  public async putPart(multipartUpload: MultipartUpload, partNumber: number, body: string): Promise<void> {
+    let req = new UploadPartCommand({
+      Bucket: this.bucketName,
+      Key: multipartUpload.key,
+      UploadId: multipartUpload.uploadId,
+      PartNumber: partNumber,
+      Body: body,
+    });
+    let response = await this.s3Client.send(req);
+    if (!response.ETag) {
+      throw new Error(`Failed to upload part ${partNumber} for key: ${multipartUpload.key}`);
+    }
+    multipartUpload.parts.push({ num: partNumber, etag: response.ETag });
+  }
 }
+
