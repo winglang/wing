@@ -426,9 +426,6 @@ export class BucketClient implements IAwsBucketClient {
             UploadId: opts.multipartUpload.uploadId,
             PartNumber: opts.partNumber,
           });
-          return await getSignedUrl(this.s3Client, s3Command, {
-            expiresIn: opts?.duration?.seconds ?? 900,
-          });
         } else {
           s3Command = new PutObjectCommand({
             Bucket: this.bucketName,
@@ -441,7 +438,8 @@ export class BucketClient implements IAwsBucketClient {
     }
 
     // Generate the presigned URL
-    const signedUrl = await getSignedUrl(this.s3Client, s3Command, {
+    // doing `s3Command as any` because `UploadPartCommand` doesn't work here together with `GetObjectCommand`/`PutObjectCommand`
+    const signedUrl = await getSignedUrl(this.s3Client, s3Command as any, {
       expiresIn: opts?.duration?.seconds ?? 900,
     });
 
@@ -538,6 +536,7 @@ export class BucketClient implements IAwsBucketClient {
     if (!response.ETag) {
       throw new Error(`Failed to upload part ${partNumber} for key: ${multipartUpload.key}`);
     }
+    console.log(`got etag: ${response.ETag}`);
     multipartUpload.parts.push({ num: partNumber, etag: response.ETag });
   }
 }
