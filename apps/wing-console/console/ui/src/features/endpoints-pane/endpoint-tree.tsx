@@ -5,7 +5,10 @@ import {
   EyeSlashIcon,
 } from "@heroicons/react/24/outline";
 import {
+  Button,
   ScrollableArea,
+  SpinnerIcon,
+  SpinnerLoader,
   Toolbar,
   TreeItem,
   TreeView,
@@ -21,6 +24,20 @@ export interface EndpointTreeProps {
   exposeEndpoint: (resourcePath: string) => void;
   hideEndpoint: (resourcePath: string) => void;
 }
+
+const getEndpointTitle = (exposeStatus: EndpointItem["exposeStatus"]) => {
+  switch (exposeStatus) {
+    case "disconnected": {
+      return "Endpoint is not exposed";
+    }
+    case "connecting": {
+      return "Connecting";
+    }
+    case "connected": {
+      return "Endpoint is exposed";
+    }
+  }
+};
 
 export const EndpointTree = ({
   endpointList,
@@ -54,59 +71,65 @@ export const EndpointTree = ({
                     key={endpoint.id}
                     itemId={endpoint.id}
                     selectable={false}
+                    title={getEndpointTitle(endpoint.exposeStatus)}
+                    icon={
+                      <>
+                        {endpoint.exposeStatus === "disconnected" && (
+                          <EyeSlashIcon
+                            className={classNames("size-4", theme.text1)}
+                          />
+                        )}
+                        {endpoint.exposeStatus === "connecting" && (
+                          <SpinnerLoader size="xs" />
+                        )}
+                        {endpoint.exposeStatus === "connected" && (
+                          <GlobeAltIcon
+                            className={classNames("size-4", theme.text1)}
+                          />
+                        )}
+                      </>
+                    }
                     label={
                       <a
                         href={endpoint.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="hover:underline text-sky-500 hover:text-sky-600"
+                        title={endpoint.url}
+                        aria-disabled={endpoint.exposeStatus === "connecting"}
+                        className={classNames(
+                          endpoint.exposeStatus !== "connecting" &&
+                            "hover:underline text-sky-500 hover:text-sky-600",
+                          endpoint.exposeStatus === "connecting" &&
+                            "text-slate-400 cursor-not-allowed",
+                        )}
                       >
                         {endpoint.label}
                       </a>
                     }
-                    title={endpoint.url}
-                    icon={
-                      <>
-                        {endpoint.browserSupport && (
-                          <GlobeAltIcon
-                            className={classNames("w-4 h-4", theme.text1)}
-                          />
-                        )}
-                        {!endpoint.browserSupport && (
-                          <LinkIcon
-                            className={classNames("w-4 h-4", theme.text1)}
-                          />
-                        )}
-                      </>
-                    }
                     secondaryLabel={
                       <>
-                        {endpoint.exposeStatus !== "connected" && (
-                          <ShareIcon
-                            className={classNames(
-                              "w-4 h-4",
-                              theme.text1,
-                              endpoint.exposeStatus === "connecting"
-                                ? "cursor-not-allowed"
-                                : "cursor-pointer",
-                            )}
-                            title="Open a tunnel for this endpoint"
+                        {(endpoint.exposeStatus === "disconnected" ||
+                          endpoint.exposeStatus === "connecting") && (
+                          <Button
+                            small
+                            transparent
+                            disabled={endpoint.exposeStatus === "connecting"}
                             onClick={() => {
                               exposeEndpoint(endpoint.id);
                             }}
-                          />
+                          >
+                            Open
+                          </Button>
                         )}
-                        {endpoint.exposeStatus === "connected" && (
-                          <EyeSlashIcon
-                            className={classNames(
-                              "w-4 h-4 cursor-pointer",
-                              theme.text1,
-                            )}
-                            title="Close the tunnel for this endpoint"
+                        {endpoint.exposeStatus == "connected" && (
+                          <Button
+                            small
                             onClick={() => {
                               hideEndpoint(endpoint.id);
                             }}
-                          />
+                          >
+                            Close
+                          </Button>
                         )}
                       </>
                     }
