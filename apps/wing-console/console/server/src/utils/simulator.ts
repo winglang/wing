@@ -14,7 +14,8 @@ export interface SimulatorEvents {
 }
 
 export interface Simulator {
-  instance(statedir?: string): Promise<simulator.Simulator>;
+  waitForInstance(statedir?: string): Promise<simulator.Simulator>;
+  instance(): simulator.Simulator;
   start(simfile: string): Promise<void>;
   stop(): Promise<void>;
   reload(): Promise<void>;
@@ -103,10 +104,16 @@ export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
   };
 
   return {
-    async instance() {
+    async waitForInstance() {
       return (
         instance ?? events.once("starting").then(({ instance }) => instance)
       );
+    },
+    instance() {
+      if (!instance) {
+        throw new Error("Simulator is not available yet");
+      }
+      return instance;
     },
     async start(simfile: string) {
       await start(simfile);

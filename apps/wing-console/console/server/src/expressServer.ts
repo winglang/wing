@@ -24,7 +24,7 @@ import { getWingVersion } from "./utils/getWingVersion.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 
 export interface CreateExpressServerOptions {
-  simulatorInstance(): Promise<simulator.Simulator>;
+  simulatorInstance(): simulator.Simulator;
   restartSimulator(): Promise<void>;
   testSimulatorInstance(): Promise<simulator.Simulator>;
   consoleLogger: ConsoleLogger;
