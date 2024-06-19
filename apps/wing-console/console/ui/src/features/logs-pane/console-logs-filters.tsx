@@ -190,7 +190,7 @@ export const ConsoleLogsFilters = memo(
       } else {
         return "Custom levels";
       }
-    }, [resourceTypeItems, selectedLogTypeFilters, defaultLogTypeSelection]);
+    }, [selectedLogTypeFilters, defaultLogTypeSelection]);
 
     const showIncompatibleResourceTypeWarning = useMemo(() => {
       if (!resources || selectedResourceTypes.length === 0) {
