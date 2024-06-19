@@ -173,7 +173,7 @@ export const ConsoleLogsFilters = memo(
     }, [resources]);
 
     const logTypeLabel = useMemo(() => {
-      if (selectedLogTypeFilters.length === resourceTypeItems.length) {
+      if (selectedLogTypeFilters.length === LOG_LEVELS.length) {
         return "All levels";
       } else if (
         selectedLogTypeFilters.sort().toString() ===
