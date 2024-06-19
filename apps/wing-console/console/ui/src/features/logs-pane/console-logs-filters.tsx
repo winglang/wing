@@ -173,7 +173,7 @@ export const ConsoleLogsFilters = memo(
     }, [resources]);
 
     const logTypeLabel = useMemo(() => {
-      if (selectedLogTypeFilters.length === resourceTypeItems.length) {
+      if (selectedLogTypeFilters.length === LOG_LEVELS.length) {
         return "All levels";
       } else if (
         selectedLogTypeFilters.sort().toString() ===
@@ -190,7 +190,7 @@ export const ConsoleLogsFilters = memo(
       } else {
         return "Custom levels";
       }
-    }, [resourceTypeItems, selectedLogTypeFilters, defaultLogTypeSelection]);
+    }, [selectedLogTypeFilters, defaultLogTypeSelection]);
 
     const showIncompatibleResourceTypeWarning = useMemo(() => {
       if (!resources || selectedResourceTypes.length === 0) {
