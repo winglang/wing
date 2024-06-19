@@ -17,6 +17,8 @@ test "get range of an object" {
 
   b.put("test1.txt", "12345");
 
+  expect.equal(b.get("test1.txt"), "12345");
+
   expect.equal(b.get("test1.txt", startByte: 1, endByte: 3), "234");
   expect.equal(b.get("test1.txt", startByte: 1), "2345");
   expect.equal(b.get("test1.txt", endByte: 3), "1234");
@@ -28,9 +30,8 @@ test "get range of an object" {
   assertThrows("The encoded data was not valid for encoding utf-8", () => {
     b.get("test2.txt", startByte: 0, endByte: 2);
   });
-}
 
-test "get empty object" {
+// "get empty object" 
   b.put("empty.txt", "");
 
   expect.equal(b.get("empty.txt"), "");

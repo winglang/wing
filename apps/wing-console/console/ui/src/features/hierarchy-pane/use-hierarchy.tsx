@@ -91,7 +91,11 @@ export const useHierarchy = () => {
     const getDefaultExpandedItems = (items: TreeMenuItem[]): string[] => {
       let expandedNodes: string[] = [];
       for (const item of items) {
-        if (item.expanded === true) {
+        // Expand if explicitely set to be expanded, or if there is only one item and it is not explicitly set to be collapsed.
+        if (
+          item.expanded === true ||
+          (items.length === 1 && item.expanded !== false)
+        ) {
           expandedNodes.push(item.id);
         }
         if (item.children && item.children.length > 0) {

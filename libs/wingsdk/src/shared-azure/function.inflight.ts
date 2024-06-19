@@ -18,7 +18,7 @@ export class FunctionClient implements IFunctionClient {
       if (!res.ok) {
         throw new Error(res.body || "Invocation Error");
       }
-      return res.body;
+      return res.body || undefined;
     } catch (error) {
       throw new Error(
         `Error while invoking the function ${this.functionName}:\n${

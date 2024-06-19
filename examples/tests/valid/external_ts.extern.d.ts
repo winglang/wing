@@ -16,6 +16,36 @@ those constructs are deployed before the resources depending ON them are
 deployed. */
 export interface IDependable {
 }
+/** Represents a construct. */
+export interface IConstruct extends IDependable {
+}
+/** Represents the building block of the construct graph.
+All constructs besides the root construct must be created within the scope of
+another construct. */
+export class Construct implements IConstruct {
+  /** Returns a string representation of this construct. */
+  readonly toString: () => string;
+}
+/** Data that can be lifted into inflight. */
+export interface ILiftable {
+}
+/** A resource that can run inflight code. */
+export interface IInflightHost extends IResource {
+  /** Adds an environment variable to the host. */
+  readonly addEnvironment: (name: string, value: string) => void;
+}
+/** A liftable object that needs to be registered on the host as part of the lifting process.
+This is generally used so the host can set up permissions
+to access the lifted object inflight. */
+export interface IHostedLiftable extends ILiftable {
+  /** A hook called by the Wing compiler once for each inflight host that needs to use this object inflight.
+  The list of requested inflight methods
+  needed by the inflight host are given by `ops`.
+  
+  This method is commonly used for adding permissions, environment variables, or
+  other capabilities to the inflight host. */
+  readonly onLift: (host: IInflightHost, ops: (readonly (string)[])) => void;
+}
 /** Options for `construct.addMetadata()`. */
 export interface MetadataOptions {
   /** Include stack trace with metadata entry. */
@@ -150,40 +180,6 @@ export class Node {
   @returns an array of validation error messages associated with this
   construct. */
   readonly validate: () => (readonly (string)[]);
-}
-/** Represents a construct. */
-export interface IConstruct extends IDependable {
-  /** The tree node. */
-  readonly node: Node;
-}
-/** Represents the building block of the construct graph.
-All constructs besides the root construct must be created within the scope of
-another construct. */
-export class Construct implements IConstruct {
-  /** The tree node. */
-  readonly node: Node;
-  /** Returns a string representation of this construct. */
-  readonly toString: () => string;
-}
-/** Data that can be lifted into inflight. */
-export interface ILiftable {
-}
-/** A resource that can run inflight code. */
-export interface IInflightHost extends IResource {
-  /** Adds an environment variable to the host. */
-  readonly addEnvironment: (name: string, value: string) => void;
-}
-/** A liftable object that needs to be registered on the host as part of the lifting process.
-This is generally used so the host can set up permissions
-to access the lifted object inflight. */
-export interface IHostedLiftable extends ILiftable {
-  /** A hook called by the Wing compiler once for each inflight host that needs to use this object inflight.
-  The list of requested inflight methods
-  needed by the inflight host are given by `ops`.
-  
-  This method is commonly used for adding permissions, environment variables, or
-  other capabilities to the inflight host. */
-  readonly onLift: (host: IInflightHost, ops: (readonly (string)[])) => void;
 }
 /** Abstract interface for `Resource`. */
 export interface IResource extends IConstruct, IHostedLiftable {

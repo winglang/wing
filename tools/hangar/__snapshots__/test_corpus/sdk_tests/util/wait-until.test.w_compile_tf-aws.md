@@ -18,11 +18,11 @@
   },
   "resource": {
     "aws_dynamodb_table": {
-      "Counter": {
+      "invoke-counter1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Counter/Default",
-            "uniqueId": "Counter"
+            "path": "root/Default/Default/invoke-counter1/Default",
+            "uniqueId": "invoke-counter1"
           }
         },
         "attribute": [
@@ -33,7 +33,41 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-Counter-c824ef62"
+        "name": "wing-counter-invoke-counter1-c8df96b3"
+      },
+      "invoke-counter2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/invoke-counter2/Default",
+            "uniqueId": "invoke-counter2"
+          }
+        },
+        "attribute": [
+          {
+            "name": "id",
+            "type": "S"
+          }
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "hash_key": "id",
+        "name": "wing-counter-invoke-counter2-c8400881"
+      },
+      "invoke-counter3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/invoke-counter3/Default",
+            "uniqueId": "invoke-counter3"
+          }
+        },
+        "attribute": [
+          {
+            "name": "id",
+            "type": "S"
+          }
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "hash_key": "id",
+        "name": "wing-counter-invoke-counter3-c8668bff"
       }
     }
   }

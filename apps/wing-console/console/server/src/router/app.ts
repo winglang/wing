@@ -110,13 +110,12 @@ export const createAppRouter = () => {
         let noVerboseLogsCount = 0;
 
         const filteredLogs = ctx.logger.messages.filter((entry) => {
-          if (entry.level !== "verbose") {
-            noVerboseLogsCount++;
-          }
-
           // Filter by timestamp
           if (entry.timestamp && entry.timestamp < filters.timestamp) {
             return false;
+          }
+          if (entry.level !== "verbose") {
+            noVerboseLogsCount++;
           }
           // Filter by level
           if (!filters.level[entry.level]) {
