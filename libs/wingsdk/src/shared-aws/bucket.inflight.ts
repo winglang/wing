@@ -488,7 +488,7 @@ export class BucketClient implements IAwsBucketClient {
    * @returns Object representing the multipart upload.
    * @inflight
    */
-  public async multipartUpload(key: string): Promise<MultipartUpload> {
+  public async startUpload(key: string): Promise<MultipartUpload> {
     let req = new CreateMultipartUploadCommand({
       Bucket: this.bucketName,
       Key: key,
@@ -508,7 +508,7 @@ export class BucketClient implements IAwsBucketClient {
    * @param multipartUpload The multipart upload to complete
    * @inflight
    */
-  public async completeMultipartUpload(multipartUpload: MultipartUpload): Promise<void> {
+  public async completeUpload(multipartUpload: MultipartUpload): Promise<void> {
     let req = new CompleteMultipartUploadCommand({
       Bucket: this.bucketName,
       Key: multipartUpload.key,
@@ -524,7 +524,7 @@ export class BucketClient implements IAwsBucketClient {
    * Put a part of a multipart upload to the bucket.
    * @inflight
    */
-  public async putPart(multipartUpload: MultipartUpload, partNumber: number, body: string): Promise<void> {
+  public async uploadPart(multipartUpload: MultipartUpload, partNumber: number, body: string): Promise<void> {
     let req = new UploadPartCommand({
       Bucket: this.bucketName,
       Key: multipartUpload.key,
@@ -536,7 +536,6 @@ export class BucketClient implements IAwsBucketClient {
     if (!response.ETag) {
       throw new Error(`Failed to upload part ${partNumber} for key: ${multipartUpload.key}`);
     }
-    console.log(`got etag: ${response.ETag}`);
     multipartUpload.parts.push({ num: partNumber, etag: response.ETag });
   }
 }

@@ -354,17 +354,17 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     await this.delete(srcKey);
   }
 
-  public async multipartUpload(_key: string): Promise<MultipartUpload> {
+  public async startUpload(_key: string): Promise<MultipartUpload> {
     throw new Error("Multipart upload not implemented yet on sim");
   }
 
-  public async completeMultipartUpload(_multipartUpload: MultipartUpload): Promise<void> {
+  public async completeUpload(_multipartUpload: MultipartUpload): Promise<void> {
     throw new Error("Multipart upload not implemented yet on sim");
   }
 
-  public async putPart(_multipartUpload: MultipartUpload, _partNumber: number, _body: string): Promise<void> {
+  public async uploadPart(_multipartUpload: MultipartUpload, _partNumber: number, _body: string): Promise<void> {
     throw new Error(
-      `putPart is not implemented yet for sim`
+      `uploadPart is not implemented yet for sim`
     );
   }
 

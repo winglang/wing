@@ -323,19 +323,19 @@ export class BucketClient implements IBucketClient {
     });
   }
 
-  public async multipartUpload(_key: string): Promise<MultipartUpload> {
-    throw new Error(`multipartUpload is not implemented yet for tf-azure)`);
+  public async startUpload(_key: string): Promise<MultipartUpload> {
+    throw new Error(`startUpload is not implemented yet for tf-azure)`);
   }
 
-  public async completeMultipartUpload(_multipartUpload: MultipartUpload): Promise<void> {
+  public async completeUpload(_multipartUpload: MultipartUpload): Promise<void> {
     throw new Error(
-      `completeMultipartUpload is not implemented yet for tf-azure)`
+      `completeUpload is not implemented yet for tf-azure)`
     );
   }
 
-  public async putPart(_multipartUpload: MultipartUpload, _partNumber: number, _body: string): Promise<void> {
+  public async uploadPart(_multipartUpload: MultipartUpload, _partNumber: number, _body: string): Promise<void> {
     throw new Error(
-      `putPart is not implemented yet for tf-azure`
+      `uploadPart is not implemented yet for tf-azure`
     );
   }
 }

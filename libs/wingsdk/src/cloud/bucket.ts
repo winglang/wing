@@ -293,7 +293,7 @@ export interface BucketGetOptions {
 /**
  * Options for `Bucket.tryGet()`.
  */
-export interface BucketTryGetOptions extends BucketGetOptions {}
+export interface BucketTryGetOptions extends BucketGetOptions { }
 
 /**
  * Options for `Bucket.put()`.
@@ -364,8 +364,8 @@ export interface BucketSignedUrlOptions {
 
 /**
  * Object representing a multipart upload operation
- * Created using `multipartUpload()` and then passed
- * to `completeMultipartUpload()` to finish the upload.
+ * Created using `startUpload()` and then passed
+ * to `completeUpload()` to finish the upload.
  */
 export interface MultipartUpload {
   /**
@@ -533,19 +533,19 @@ export interface IBucketClient {
    * @returns The upload id for the multipart upload
    * @inflight
    */
-  multipartUpload(key: string): Promise<MultipartUpload>;
+  startUpload(key: string): Promise<MultipartUpload>;
 
   /**
    * Complete a multipart upload to a given key in the bucket.
    * @inflight
    */
-  completeMultipartUpload(multipartUpload: MultipartUpload): Promise<void>;
+  completeUpload(multipartUpload: MultipartUpload): Promise<void>;
 
   /**
    * Put a part of an object in a multipart upload.
    * @inflight
    */
-  putPart(
+  uploadPart(
     multipartUpload: MultipartUpload,
     partNumber: number,
     body: string
@@ -555,22 +555,22 @@ export interface IBucketClient {
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateOptions {}
+export interface BucketOnCreateOptions { }
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteOptions {}
+export interface BucketOnDeleteOptions { }
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateOptions {}
+export interface BucketOnUpdateOptions { }
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventOptions {}
+export interface BucketOnEventOptions { }
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -663,10 +663,10 @@ export enum BucketInflightMethods {
   COPY = "copy",
   /** `Bucket.rename` */
   RENAME = "rename",
-  /** `Bucket.multipartUpload` */
-  MULTIPART_UPLOAD = "multipartUpload",
-  /** `Bucket.completeMultipartUpload */
-  COMPLETE_MULTIPART_UPLOAD = "completeMultipartUpload",
-  /** `Bucket.putPart` */
-  PUT_PART = "putPart",
+  /** `Bucket.startUpload` */
+  START_UPLOAD = "startUpload",
+  /** `Bucket.completeUpload */
+  COMPLETE_UPLOAD = "completeUpload",
+  /** `Bucket.uploadPart` */
+  UPLOAD_PART = "uploadPart",
 }
