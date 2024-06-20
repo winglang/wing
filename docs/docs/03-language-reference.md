@@ -213,6 +213,13 @@ The `Json` keyword can be omitted from `Json` object literals:
 let jsonObj = { boom: 123, bam: [4, 5, 6] };
 ```
 
+You may use "punning" to define the literals with implicit keys:
+```TS
+let boom = 123;
+let bam = [4,5,6];
+let jsonObj = { boom, bam };
+```
+
 Every value within a `Json` array or object also has a type of `Json`.
 
 ##### 1.1.4.2 JSON objects
@@ -1392,6 +1399,17 @@ Structs can inherit from multiple other structs.
 >   field4: false,
 >   field5: "sample"
 > };
+> ```
+
+A struct literal initialization may use "punning" syntax:
+> ```TS
+> struct MyData {
+>   someNum: num;
+>   someStr: str;
+> }
+> let someNum = 1;
+> let someStr = "string cheese";
+> let myData = MyData {someNum, someStr};
 > ```
 
 [`▲ top`][top]
