@@ -123,3 +123,10 @@ let objInsteadOfArray: StructyJson = {
   }
 };
 
+// Unkonwn variable in json object punning
+{"x":1, y: 2, unknownVar};
+// Unknown variable in explicitly typed json object punning
+Json {"x":1, y: 2, unknownVar};
+// Dupplicate field in punned json
+let numField = 1;
+{numField, numField};

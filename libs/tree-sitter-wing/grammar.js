@@ -754,8 +754,7 @@ module.exports = grammar({
     json_map_literal: ($) =>
       braced(commaSep(field("member", $.json_literal_member))),
     json_literal_member: ($) =>
-      seq(choice($.identifier, $.string), ":", $.expression),
-
+      choice($.identifier, seq(choice($.identifier, $.string), ":", $.expression)),
     json_container_type: ($) => $._json_types,
 
     _json_types: ($) => choice("Json", "MutJson"),

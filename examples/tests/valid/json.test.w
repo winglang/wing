@@ -274,3 +274,17 @@ let hasBucket: HasInnerBucket = {
     a: new cloud.Bucket()
   }
 };
+
+let numVar = 1;
+let strVar = "s";
+let punnedJson1 = {numVar, strVar};
+assert(punnedJson1["numVar"] == 1);
+assert(punnedJson1["strVar"] == "s");
+
+struct StructToPun {
+  numVar: num;
+  strVar: str;
+}
+let structToPunFromJson: StructToPun = Json {numVar, strVar};
+assert(structToPunFromJson.numVar == 1);
+assert(structToPunFromJson.strVar == "s");

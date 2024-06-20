@@ -2504,11 +2504,15 @@ impl<'s> Parser<'s> {
 				"identifier" => self.node_symbol(&key_node)?,
 				other => panic!("Unexpected map key type {} at {:?}", other, key_node),
 			};
-			let value_node = field_node.named_child(1).unwrap();
+			let value = if let Some(value_node) = field_node.named_child(1) {
+				self.build_expression(&value_node, phase)?
+			} else {
+				Expr::new(ExprKind::Reference(Reference::Identifier(key.clone())), key.span())
+			};
 			if fields.contains_key(&key) {
 				self.add_error(format!("Duplicate key {} in map literal", key), &key_node);
 			} else {
-				fields.insert(key, self.build_expression(&value_node, phase)?);
+				fields.insert(key, value);
 			}
 		}
 		Ok(fields)
