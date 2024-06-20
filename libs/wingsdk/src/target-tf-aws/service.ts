@@ -1,22 +1,26 @@
 import { writeFileSync } from "fs";
 import { join, resolve } from "path";
+import { Lazy } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
-import * as cloud from "../cloud";
-import * as core from "../core";
-import { createBundle } from "../shared/bundling";
-import { AwsInflightHost, IAwsInflightHost, NetworkConfig, PolicyStatement } from "../shared-aws";
-import { EcsTaskDefinition } from "../.gen/providers/aws/ecs-task-definition";
+import { CloudwatchLogGroup } from "../.gen/providers/aws/cloudwatch-log-group";
 import { EcsService } from "../.gen/providers/aws/ecs-service";
-import { RegistryImage } from "../.gen/providers/docker/registry-image";
+import { EcsTaskDefinition } from "../.gen/providers/aws/ecs-task-definition";
 import { IamRole } from "../.gen/providers/aws/iam-role";
 import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { Image } from "../.gen/providers/docker/image";
-import { CloudwatchLogGroup } from "../.gen/providers/aws/cloudwatch-log-group";
-import { IInflightHost } from "../std";
-import { Lazy } from "cdktf";
+import { RegistryImage } from "../.gen/providers/docker/registry-image";
+import * as cloud from "../cloud";
+import * as core from "../core";
 import { LiftMap } from "../core";
-
+import { createBundle } from "../shared/bundling";
+import {
+  AwsInflightHost,
+  IAwsInflightHost,
+  NetworkConfig,
+  PolicyStatement,
+} from "../shared-aws";
+import { IInflightHost } from "../std";
 
 export class Service extends cloud.Service implements IAwsInflightHost {
   private workdir: string;
@@ -25,6 +29,9 @@ export class Service extends cloud.Service implements IAwsInflightHost {
   private dockerFileName: string;
   private service: EcsService;
 
+  /** @internal */
+  public _liftMap?: LiftMap | undefined;
+
   constructor(
     scope: Construct,
     id: string,
@@ -32,7 +39,6 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     props: cloud.ServiceProps = {}
   ) {
     super(scope, id, handler, props);
-    // We probably need to create the ECR per app (App.of(this).ecr)
 
     this.workdir = App.of(this).workdir;
     this.wrapperEntrypoint = join(this.workdir, `${this.assetName}_wrapper.js`);
@@ -40,22 +46,23 @@ export class Service extends cloud.Service implements IAwsInflightHost {
     let app = App.of(this) as App;
 
     // This forces the lazy loading of the properties (TODO: find a better way to do this)
-    app.ecrAuth;
+    // app.ecrAuth;
     app.dockerProvider;
-    app.vpc;
-    
+
     let image = new Image(this, "DockerImage", {
       name: `${app.ecr.repositoryUrl}:${this.assetName}`,
       buildAttribute: {
         context: ".wing",
         dockerfile: this.dockerFileName,
         platform: "linux/amd64",
-      }
+      },
     });
 
-    new RegistryImage(this, "RegistryImage", {
-      name: image.name
+    const registryImage = new RegistryImage(this, "RegistryImage", {
+      name: image.name,
     });
+
+    registryImage;
 
     let executionRole = new IamRole(this, "ExecutionRole", {
       assumeRolePolicy: JSON.stringify({
@@ -70,32 +77,34 @@ export class Service extends cloud.Service implements IAwsInflightHost {
           },
         ],
       }),
-      inlinePolicy: [{
-        name: `${this.assetName}-inline-policy`,
-        policy: JSON.stringify({
-          Version: "2012-10-17",
-          Statement: [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-                "logs:CreateLogGroup"
-              ],
-              "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "ecr:BatchGetImage",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:GetAuthorizationToken"
-              ],
-              "Resource": "*"
-            }
-          ],
-        }),
-      }]
+      inlinePolicy: [
+        {
+          name: `${this.assetName}-inline-policy`,
+          policy: JSON.stringify({
+            Version: "2012-10-17",
+            Statement: [
+              {
+                Effect: "Allow",
+                Action: [
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents",
+                  "logs:CreateLogGroup",
+                ],
+                Resource: "*",
+              },
+              {
+                Effect: "Allow",
+                Action: [
+                  "ecr:BatchGetImage",
+                  "ecr:GetDownloadUrlForLayer",
+                  "ecr:GetAuthorizationToken",
+                ],
+                Resource: "*",
+              },
+            ],
+          }),
+        },
+      ],
     });
 
     let taskRole = new IamRole(this, "TaskRole", {
@@ -111,32 +120,34 @@ export class Service extends cloud.Service implements IAwsInflightHost {
           },
         ],
       }),
-      inlinePolicy: [{
-        name: `${this.assetName}-inline-policy`,
-        policy: Lazy.stringValue({
-          produce: () => {
-            this.policyStatments = this.policyStatments ?? [];
-            
-            if (this.policyStatments.length !== 0) {
+      inlinePolicy: [
+        {
+          name: `${this.assetName}-inline-policy`,
+          policy: Lazy.stringValue({
+            produce: () => {
+              this.policyStatments = this.policyStatments ?? [];
+
+              if (this.policyStatments.length !== 0) {
+                return JSON.stringify({
+                  Version: "2012-10-17",
+                  Statement: this.policyStatments,
+                });
+              }
+
               return JSON.stringify({
                 Version: "2012-10-17",
-                Statement: this.policyStatments
+                Statement: [
+                  {
+                    Effect: "Allow",
+                    Action: "none:null",
+                    Resource: "*",
+                  },
+                ],
               });
-            }
-
-            return JSON.stringify({
-              Version: "2012-10-17",
-              Statement: [
-                {
-                  Effect: "Allow",
-                  Action: "none:null",
-                  Resource: "*"
-                }
-              ]
-            })
-          }
-        }),
-      }]
+            },
+          }),
+        },
+      ],
     });
 
     let logGroup = new CloudwatchLogGroup(this, "LogGroup", {
@@ -149,7 +160,8 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       executionRoleArn: executionRole.arn,
       taskRoleArn: taskRole.arn,
       containerDefinitions: Lazy.anyValue({
-        produce: () => JSON.stringify([
+        produce: () =>
+          JSON.stringify([
             {
               name: this.assetName,
               image: image.name,
@@ -158,18 +170,17 @@ export class Service extends cloud.Service implements IAwsInflightHost {
                   name: key,
                   value: value,
                 };
-              }
-              ),
+              }),
               logConfiguration: {
                 logDriver: "awslogs",
                 options: {
                   "awslogs-group": `/ecs/${this.assetName}`,
                   "awslogs-region": "us-east-1", // TODO: Can I ignore this?
                   "awslogs-stream-prefix": logGroup.name,
-                }
-              }
-          }
-        ])
+                },
+              },
+            },
+          ]),
       }) as any,
       networkMode: "awsvpc",
       requiresCompatibilities: ["FARGATE"],
@@ -177,7 +188,7 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       cpu: "256",
     });
 
-    let subnetIds = app.subnets["private"].map((subnet) => subnet.id);
+    let subnetIds = app.subnets.private.map((subnet) => subnet.id);
 
     let sg = new SecurityGroup(this, "SecurityGroup", {
       vpcId: app.vpc.id,
@@ -187,16 +198,17 @@ export class Service extends cloud.Service implements IAwsInflightHost {
           toPort: 0,
           protocol: "-1",
           cidrBlocks: ["0.0.0.0/0"],
-        }
+        },
       ],
       ingress: [
-        { // TODO: Support network config
+        {
+          // TODO: Support network config
           fromPort: 0,
           toPort: 0,
           protocol: "-1",
-          cidrBlocks: ["0.0.0.0/0"]
-        }
-      ]
+          cidrBlocks: ["0.0.0.0/0"],
+        },
+      ],
     });
 
     this.service = new EcsService(this, "Service", {
@@ -209,14 +221,12 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       enableExecuteCommand: true,
       networkConfiguration: {
         subnets: subnetIds,
-        securityGroups: [
-          sg.id
-        ]
-      }
+        securityGroups: [sg.id],
+      },
     });
   }
-  
-  addPolicyStatements(...policies: PolicyStatement[]): void {
+
+  public addPolicyStatements(...policies: PolicyStatement[]): void {
     if (!this.policyStatments) {
       this.policyStatments = [];
     }
@@ -225,17 +235,15 @@ export class Service extends cloud.Service implements IAwsInflightHost {
       this.policyStatments.push({
         Action: policy.actions,
         Effect: policy.effect ?? "Allow",
-        Resource: policy.resources
-      })
+        Resource: policy.resources,
+      });
     }
   }
 
-  addNetwork(config: NetworkConfig): void {
+  public addNetwork(config: NetworkConfig): void {
     // TODO: handle networking
     console.log("Adding network", config);
   }
-
-  _liftMap?: LiftMap | undefined;
 
   /** @internal */
   public _preSynthesize(): void {
@@ -305,13 +313,15 @@ process.on('SIGINT', handleShutdown);
       });
     }
 
-
     host.addEnvironment(this.envName(), this.service.name);
-    host.addEnvironment("ECS_CLUSTER_NAME", (App.of(this) as App).ecsCluster.name); // TODO: Should I add hash to name?
+    host.addEnvironment(
+      "ECS_CLUSTER_NAME",
+      (App.of(this) as App).ecsCluster.name
+    ); // TODO: Should I add hash to name?
   }
 
   /**
-   * Add an environment variable to the function 
+   * Add an environment variable to the function
    */
   public addEnvironment(name: string, value: string): void {
     if (this._env[name] !== undefined && this._env[name] !== value) {
@@ -329,7 +339,7 @@ process.on('SIGINT', handleShutdown);
       __filename,
       "ServiceClient",
       [`process.env["ECS_CLUSTER_NAME"]`, `process.env["${this.envName()}"]`]
-    )
+    );
   }
 
   private envName(): string {

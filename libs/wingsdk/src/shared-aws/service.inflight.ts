@@ -1,6 +1,9 @@
+import {
+  DescribeServicesCommand,
+  ECSClient,
+  UpdateServiceCommand,
+} from "@aws-sdk/client-ecs";
 import { IServiceClient } from "../cloud";
-
-import { DescribeServicesCommand, ECSClient, UpdateServiceCommand } from "@aws-sdk/client-ecs";
 
 export class ServiceClient implements IServiceClient {
   constructor(
@@ -8,7 +11,7 @@ export class ServiceClient implements IServiceClient {
     public readonly serviceName: string,
     public readonly client = new ECSClient({})
   ) {}
-  
+
   public async start(): Promise<void> {
     const command = new UpdateServiceCommand({
       cluster: this.clusterName,
@@ -45,5 +48,4 @@ export class ServiceClient implements IServiceClient {
 
     return false;
   }
-
 }

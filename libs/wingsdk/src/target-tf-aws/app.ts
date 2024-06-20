@@ -6,6 +6,8 @@ import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
 import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
 import { DataAwsVpc } from "../.gen/providers/aws/data-aws-vpc";
 import { EcrRepository } from "../.gen/providers/aws/ecr-repository";
+import { EcsCluster } from "../.gen/providers/aws/ecs-cluster";
+import { EcsClusterCapacityProviders } from "../.gen/providers/aws/ecs-cluster-capacity-providers";
 import { Eip } from "../.gen/providers/aws/eip";
 import { InternetGateway } from "../.gen/providers/aws/internet-gateway";
 import { NatGateway } from "../.gen/providers/aws/nat-gateway";
@@ -13,12 +15,10 @@ import { AwsProvider } from "../.gen/providers/aws/provider";
 import { RouteTable } from "../.gen/providers/aws/route-table";
 import { RouteTableAssociation } from "../.gen/providers/aws/route-table-association";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
-import { EcsCluster } from "../.gen/providers/aws/ecs-cluster";
-import { EcsClusterCapacityProviders } from "../.gen/providers/aws/ecs-cluster-capacity-providers";
 import { Subnet } from "../.gen/providers/aws/subnet";
-import { DockerProvider } from "../.gen/providers/docker/provider";
 import { Vpc } from "../.gen/providers/aws/vpc";
 import { AppProps } from "../core";
+import { DockerProvider } from "../.gen/providers/docker/provider";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
 
@@ -325,8 +325,8 @@ export class App extends CdktfApp {
           address: this.ecrAuth.proxyEndpoint,
           username: this.ecrAuth.userName,
           password: this.ecrAuth.password,
-        }
-      ]
+        },
+      ],
     });
 
     return this._dockerProvider;
