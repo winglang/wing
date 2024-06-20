@@ -120,13 +120,20 @@ struct SomeStruct2 {
 }
 struct SomeStruct3 extends SomeStruct2 {
   boolField: bool;
+  otherField: str;
 }
 let numField = 1337;
 let strField = "leet";
 let boolField = true;
 let structField = SomeStruct1 { numField };
 // Struct literal initialization with punning
-let someStruct3 = SomeStruct3 { boolField, strField, structField };
+let someStruct3 = SomeStruct3 { 
+  boolField, 
+  strField, 
+  otherField: "good",
+  structField 
+};
 assert(someStruct3.boolField == true);
 assert(someStruct3.strField == "leet");
 assert(someStruct3.structField.numField == 1337);
+assert(someStruct3.otherField == "good");
