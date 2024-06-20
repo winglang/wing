@@ -2430,7 +2430,19 @@ impl<'s> Parser<'s> {
 						continue;
 					}
 					let field_name = self.node_symbol(&field.named_child(0).unwrap());
-					let field_value = self.build_expression(&field.named_child(1).unwrap(), phase);
+					let field_value = if let Some(field_expr_node) = field.named_child(1) {
+						self.build_expression(&field_expr_node, phase)
+					} else {
+						if let Ok(field_name) = &field_name {
+							Ok(Expr::new(
+								ExprKind::Reference(Reference::Identifier(field_name.clone())),
+								self.node_span(&field),
+							))
+						} else {
+							Err(())
+						}
+					};
+
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
 					if let (Ok(k), Ok(v)) = (field_name, field_value) {
 						if fields.contains_key(&k) {
