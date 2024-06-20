@@ -128,5 +128,5 @@ let structField = SomeStruct1 { numField };
 // Struct literal initialization with punning
 let someStruct3 = SomeStruct3 { boolField, strField, structField };
 assert(someStruct3.boolField == true);
-assert(someStruct3.strField = "leet");
+assert(someStruct3.strField == "leet");
 assert(someStruct3.structField.numField == 1337);
