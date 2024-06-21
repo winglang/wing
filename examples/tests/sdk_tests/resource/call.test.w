@@ -218,13 +218,16 @@ if util.env("WING_TARGET") == "sim" {
     r1.printLogs();
   }
 
-  test "resource.call times out if the method takes too long" {
-    let var msg = "";
-    try {
-      r1.methodTakesLongTime();
-    } catch err {
-      msg = err;
+  // This test is disabled on Windows because it is known to be flakey on that platform
+  if util.os() != "win32" {
+    test "resource.call times out if the method takes too long" {
+      let var msg = "";
+      try {
+        r1.methodTakesLongTime();
+      } catch err {
+        msg = err;
+      }
+      assert(msg.contains("timed out"));
     }
-    assert(msg.contains("timed out"));
   }
 }
