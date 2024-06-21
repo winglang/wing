@@ -3011,6 +3011,20 @@ exports[`json.test.w 1`] = `
    |                          ^
 
 
+error: Duplicate key numField in json object literal
+    --> ../../../examples/tests/invalid/json.test.w:132:12
+    |
+132 | {numField, numField};
+    |            ^^^^^^^^
+
+
+error: Duplicate key numField in json object literal
+    --> ../../../examples/tests/invalid/json.test.w:133:15
+    |
+133 | {numField: 5, numField};
+    |               ^^^^^^^^
+
+
 error: Expected type to be "num", but got "str" instead
   --> ../../../examples/tests/invalid/json.test.w:6:14
   |
@@ -3132,6 +3146,20 @@ error: Expected type to be "Array<num>", but got "Json" instead
     |          ^^^^^^
 
 
+error: Unknown symbol "unknownVar"
+    --> ../../../examples/tests/invalid/json.test.w:127:15
+    |
+127 | {"x":1, y: 2, unknownVar};
+    |               ^^^^^^^^^^
+
+
+error: Unknown symbol "unknownVar"
+    --> ../../../examples/tests/invalid/json.test.w:129:20
+    |
+129 | Json {"x":1, y: 2, unknownVar};
+    |                    ^^^^^^^^^^
+
+
 error: "Array<Json>" is not a legal JSON value
    --> ../../../examples/tests/invalid/json.test.w:23:17
    |
@@ -3158,6 +3186,13 @@ error: "Bucket" is not a legal JSON value
     |
 115 | let isBucket = Json new cloud.Bucket();
     |                     ^^^^^^^^^^^^^^^^^^
+
+
+error: "Bucket" is not a legal JSON value
+    --> ../../../examples/tests/invalid/json.test.w:137:8
+    |
+137 | Json { bucket };
+    |        ^^^^^^
 
 
 
@@ -4741,6 +4776,27 @@ error: Cannot instantiate type "BucketProps" because it is a struct and not a cl
    |
 47 | let x = new cloud.BucketProps(1);
    |             ^^^^^^^^^^^^^^^^^
+
+
+error: Expected type to be "num", but got "str" instead
+   --> ../../../examples/tests/invalid/structs.test.w:70:15
+   |
+70 | SomeStruct1 { numField }; // Wrong type when using punning
+   |               ^^^^^^^^
+
+
+error: "numField" is not initialized
+   --> ../../../examples/tests/invalid/structs.test.w:71:1
+   |
+71 | SomeStruct1 { noSuchField }; // Wrong field when using punning
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+error: "noSuchField" is not a field of "SomeStruct1"
+   --> ../../../examples/tests/invalid/structs.test.w:71:1
+   |
+71 | SomeStruct1 { noSuchField }; // Wrong field when using punning
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 error: struct "PreflightStruct" must be declared at the top-level of a file
