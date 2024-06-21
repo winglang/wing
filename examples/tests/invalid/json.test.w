@@ -127,6 +127,11 @@ let objInsteadOfArray: StructyJson = {
 {"x":1, y: 2, unknownVar};
 // Unknown variable in explicitly typed json object punning
 Json {"x":1, y: 2, unknownVar};
-// Dupplicate field in punned json
+// Duplicate field in punned json
 let numField = 1;
 {numField, numField};
+{numField: 5, numField};
+
+// Wrong type when using punning
+let bucket = new cloud.Bucket();
+Json { bucket };

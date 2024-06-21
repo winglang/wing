@@ -1401,7 +1401,7 @@ Structs can inherit from multiple other structs.
 > };
 > ```
 
-A struct literal initialization may use "punning" syntax:
+A struct literal initialization may use "punning" syntax to initialize fields using variables of the same names:
 > ```TS
 > struct MyData {
 >   someNum: num;
