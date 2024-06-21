@@ -3011,7 +3011,7 @@ error: Missing super() call in D's constructor
    . |
 32 | |       }
 33 | |     }
-   | \\\\-----^
+   | \\-----^
 
 
 error: This command cannot be executed before calling super()
