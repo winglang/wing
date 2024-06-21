@@ -1096,15 +1096,15 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         const d1 = new Dummy(this, "Dummy");
-        $helpers.assert(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"), "d1.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy\")");
+        $helpers.assert($helpers.nodeof(d1).path.endsWith("/ScopeAndIdTestClass/Dummy"), "nodeof(d1).path.endsWith(\"/ScopeAndIdTestClass/Dummy\")");
         const d2 = new Dummy(d1, "Dummy");
-        $helpers.assert(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"), "d2.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")");
+        $helpers.assert($helpers.nodeof(d2).path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"), "nodeof(d2).path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")");
         const d3 = new Dummy((Dummy.getInstance(this, d2)), "Dummy");
-        $helpers.assert(d3.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"), "d3.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy\")");
+        $helpers.assert($helpers.nodeof(d3).path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"), "nodeof(d3).path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy\")");
         for (const i of $helpers.range(0,3,false)) {
           const x = new Dummy(this, String.raw({ raw: ["tc", ""] }, i));
           const expected_path = String.raw({ raw: ["/ScopeAndIdTestClass/tc", ""] }, i);
-          $helpers.assert(x.node.path.endsWith(expected_path), "x.node.path.endsWith(expected_path)");
+          $helpers.assert($helpers.nodeof(x).path.endsWith(expected_path), "nodeof(x).path.endsWith(expected_path)");
         }
       }
       static _toInflightType() {

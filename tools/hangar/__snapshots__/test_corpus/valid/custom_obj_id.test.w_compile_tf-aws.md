@@ -76,8 +76,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const foo1 = new Foo(this, "Foo");
     const bar2 = new Foo(this, "bar2");
-    $helpers.assert($helpers.eq(foo1.node.id, "Foo"), "foo1.node.id == \"Foo\"");
-    $helpers.assert($helpers.eq(bar2.node.id, "bar2"), "bar2.node.id == \"bar2\"");
+    $helpers.assert($helpers.eq($helpers.nodeof(foo1).id, "Foo"), "nodeof(foo1).id == \"Foo\"");
+    $helpers.assert($helpers.eq($helpers.nodeof(bar2).id, "bar2"), "nodeof(bar2).id == \"bar2\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

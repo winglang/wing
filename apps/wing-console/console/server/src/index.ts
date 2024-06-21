@@ -284,8 +284,9 @@ export const createConsoleServer = async ({
   const { server, port } = await createExpressServer({
     consoleLogger,
     testSimulatorInstance() {
-      const statedir = mkdtempSync(join(tmpdir(), "wing-console-test-"));
-      return testSimulator.instance(statedir);
+      // TODO: The test simulator instance isn't using the statedir anyway. Fix this later.
+      // const statedir = mkdtempSync(join(tmpdir(), "wing-console-test-"));
+      return testSimulator.waitForInstance();
     },
     simulatorInstance() {
       return simulator.instance();

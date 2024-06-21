@@ -1,6 +1,6 @@
 import { readFileSync, appendFileSync } from "fs";
 import { parseRoundedJson } from "./util";
-import { getBenchForBranch, upsertPRComment } from "./github";
+import { upsertPRComment } from "./github";
 import { createTable } from "./table_report";
 
 const MINIMUM_INTERESTING_PERCENTAGE = 3;
@@ -10,6 +10,20 @@ interface ProcessedBenchData {
   moe: number;
   sd: number;
   name: string;
+}
+
+interface Deltas {
+  meanBefore: number;
+  moeBefore: number;
+  meanAfter: number;
+  moeAfter: number;
+  maxSD: number;
+  meanDiff: number;
+  meanPercentDiff: number;
+}
+
+interface DifferentialBenches {
+  [testName: string]: Deltas;
 }
 
 function avgBenches(
@@ -51,27 +65,19 @@ function avgBenches(
 function getLocalBench(filename: string) {
   try {
     const benchData = parseRoundedJson(readFileSync(filename, "utf-8"));
-    return [benchData.testResults.compile];
+    return [benchData.files[0].groups[0].benchmarks];
   } catch (e) {
     console.warn(`Could not find local bench file ${filename}`);
     return [];
   }
 }
 
-async function getDataFromSource(source: string) {
-  if (source.startsWith(".") || source.startsWith("/")) {
-    return getLocalBench(source);
-  } else {
-    return await getBenchForBranch(source);
-  }
-}
-
 export async function compareBenchmarks(
   previousSource: string,
   targetSource: string
-) {
-  const previousResult = await getDataFromSource(previousSource);
-  const targetResult = await getDataFromSource(targetSource);
+): Promise<DifferentialBenches> {
+  const previousResult = getLocalBench(previousSource);
+  const targetResult = getLocalBench(targetSource);
 
   const previousBench = avgBenches(previousResult);
   const targetBench = avgBenches(targetResult);
@@ -88,22 +94,23 @@ export async function compareBenchmarks(
     }
   };
 
-  const differences: Record<string, any> = {};
+  const differences: DifferentialBenches = {};
 
   for (const [itemName, newData] of Object.entries(targetBench)) {
     const oldData = previousBench[itemName];
 
-    differences[itemName] = {};
+    differences[itemName] = {} as Deltas;
+
     differences[itemName].moeBefore = oldData?.moe ?? NaN;
     differences[itemName].meanBefore = oldData?.mean ?? NaN;
 
     differences[itemName].moeAfter = newData?.moe ?? NaN;
     differences[itemName].meanAfter = newData?.mean ?? NaN;
 
-    differences[itemName].maxSD = Math.max(
+    differences[itemName].maxSD = Math.round(Math.max(
       newData?.sd ?? NaN,
       oldData?.sd ?? NaN
-    ) * 1.5;
+    ) * 1.5);
 
     differences[itemName].meanDiff =
       Math.round(
@@ -212,4 +219,21 @@ ${createTable(targetResult[0])}
   }
 
   return differences;
+}
+
+export async function checkThreshold(differences: DifferentialBenches, threshold: number) {
+  let hasFailures = false;
+  for (const testName in differences) {
+    const diff = differences[testName];
+    if (diff.meanPercentDiff > threshold) {
+      console.error(
+        `(Above ${threshold}%) "${testName}" increased by ${diff.meanPercentDiff}%`
+      );
+      hasFailures = true;
+    }
+  }
+
+  if (hasFailures) {
+    process.exit(1);
+  }
 }

@@ -283,9 +283,13 @@ export class Function extends cloud.Function {
     lines.push('"use strict";');
     lines.push("module.exports = async function(context, req) {");
     lines.push(
-      `  const body = await (${inflightClient}).handle(context.req.body ?? "");`
+      `try {  
+        const body = await (${inflightClient}).handle(context.req.body);
+        context.res = { body };
+     } catch (error) {
+        context.res = { body: error.message, status: 500 };
+    }`
     );
-    lines.push(`  context.res = { body };`);
     lines.push(`};`);
 
     return lines;

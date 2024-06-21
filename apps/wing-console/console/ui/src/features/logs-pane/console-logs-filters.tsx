@@ -173,7 +173,7 @@ export const ConsoleLogsFilters = memo(
     }, [resources]);
 
     const logTypeLabel = useMemo(() => {
-      if (selectedLogTypeFilters.length === resourceTypeItems.length) {
+      if (selectedLogTypeFilters.length === LOG_LEVELS.length) {
         return "All levels";
       } else if (
         selectedLogTypeFilters.sort().toString() ===
@@ -190,7 +190,7 @@ export const ConsoleLogsFilters = memo(
       } else {
         return "Custom levels";
       }
-    }, [resourceTypeItems, selectedLogTypeFilters, defaultLogTypeSelection]);
+    }, [selectedLogTypeFilters, defaultLogTypeSelection]);
 
     const showIncompatibleResourceTypeWarning = useMemo(() => {
       if (!resources || selectedResourceTypes.length === 0) {
@@ -208,7 +208,7 @@ export const ConsoleLogsFilters = memo(
 
     return (
       <div className="flex flex-col gap-1">
-        <div className="flex px-2 space-x-2 pt-1">
+        <div className="flex px-2 space-x-2 py-1 overflow-x-auto">
           <Button
             icon={NoSymbolIcon}
             className="px-1.5"
@@ -217,7 +217,7 @@ export const ConsoleLogsFilters = memo(
           />
           <Input
             value={searchText}
-            className="min-w-[14rem]"
+            className="max-w-[8rem] md:min-w-[14rem]"
             leftIcon={MagnifyingGlassIcon}
             type="text"
             placeholder="Filter..."
@@ -235,7 +235,7 @@ export const ConsoleLogsFilters = memo(
           />
 
           <Listbox
-            className="max-w-[14rem]"
+            className="max-w-[8rem] md:max-w-[14rem]"
             renderLabel={renderResourceTypesLabel}
             items={resourceTypeItems}
             selected={selectedResourceTypes}
@@ -247,7 +247,7 @@ export const ConsoleLogsFilters = memo(
           />
 
           <Listbox
-            className="max-w-[14rem]"
+            className="max-w-[8rem] md:max-w-[14rem]"
             renderLabel={renderResourceIdsLabel}
             items={resourceIdItems}
             selected={selectedResourceIds}
@@ -264,6 +264,7 @@ export const ConsoleLogsFilters = memo(
             title="Reset filters"
             className={classNames(
               "inline-flex gap-2 items-center text-xs font-normal outline-none rounded",
+              "whitespace-nowrap",
               "border shadow-sm px-2.5 py-1.5",
               theme.borderInput,
               theme.textInput,

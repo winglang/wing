@@ -5,6 +5,6 @@
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
-    "@winglibs/slack": "0.1.0"
+    "@winglibs/slack": "0.1.1"
   }
 }

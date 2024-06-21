@@ -119,29 +119,29 @@ import json
 import logging
 import urllib.request
 
-s3 = boto3.client(\\"s3\\")
+s3 = boto3.client("s3")
 
 EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
-CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+CONFIGURATION_TYPES = ["TopicConfigurations", "QueueConfigurations", "LambdaFunctionConfigurations"]
 
 def handler(event: dict, context):
-  response_status = \\"SUCCESS\\"
-  error_message = \\"\\"
+  response_status = "SUCCESS"
+  error_message = ""
   try:
-    props = event[\\"ResourceProperties\\"]
-    notification_configuration = props[\\"NotificationConfiguration\\"]
+    props = event["ResourceProperties"]
+    notification_configuration = props["NotificationConfiguration"]
     managed = props.get('Managed', 'true').lower() == 'true'
     stack_id = event['StackId']
-    old = event.get(\\"OldResourceProperties\\", {}).get(\\"NotificationConfiguration\\", {})
+    old = event.get("OldResourceProperties", {}).get("NotificationConfiguration", {})
     if managed:
-      config = handle_managed(event[\\"RequestType\\"], notification_configuration)
+      config = handle_managed(event["RequestType"], notification_configuration)
     else:
-      config = handle_unmanaged(props[\\"BucketName\\"], stack_id, event[\\"RequestType\\"], notification_configuration, old)
-    s3.put_bucket_notification_configuration(Bucket=props[\\"BucketName\\"], NotificationConfiguration=config)
+      config = handle_unmanaged(props["BucketName"], stack_id, event["RequestType"], notification_configuration, old)
+    s3.put_bucket_notification_configuration(Bucket=props["BucketName"], NotificationConfiguration=config)
   except Exception as e:
-    logging.exception(\\"Failed to put bucket notification configuration\\")
-    response_status = \\"FAILED\\"
-    error_message = f\\"Error: {str(e)}. \\"
+    logging.exception("Failed to put bucket notification configuration")
+    response_status = "FAILED"
+    error_message = f"Error: {str(e)}. "
   finally:
     submit_response(event, context, response_status, error_message)
 
@@ -152,7 +152,7 @@ def handle_managed(request_type, notification_configuration):
 
 def handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):
   def with_id(n):
-    n['Id'] = f\\"{stack_id}-{hash(json.dumps(n, sort_keys=True))}\\"
+    n['Id'] = f"{stack_id}-{hash(json.dumps(n, sort_keys=True))}"
     return n
 
   external_notifications = {}
@@ -186,26 +186,26 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration,
 def submit_response(event: dict, context, response_status: str, error_message: str):
   response_body = json.dumps(
     {
-      \\"Status\\": response_status,
-      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
-      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
-      \\"StackId\\": event[\\"StackId\\"],
-      \\"RequestId\\": event[\\"RequestId\\"],
-      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
-      \\"NoEcho\\": False,
+      "Status": response_status,
+      "Reason": f"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}",
+      "PhysicalResourceId": event.get("PhysicalResourceId") or event["LogicalResourceId"],
+      "StackId": event["StackId"],
+      "RequestId": event["RequestId"],
+      "LogicalResourceId": event["LogicalResourceId"],
+      "NoEcho": False,
     }
-  ).encode(\\"utf-8\\")
-  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  ).encode("utf-8")
+  headers = {"content-type": "", "content-length": str(len(response_body))}
   try:
-    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    req = urllib.request.Request(url=event["ResponseURL"], headers=headers, data=response_body, method="PUT")
     with urllib.request.urlopen(req) as response:
-      print(response.read().decode(\\"utf-8\\"))
-    print(\\"Status code: \\" + response.reason)
+      print(response.read().decode("utf-8"))
+    print("Status code: " + response.reason)
   except Exception as e:
-      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+      print("send(..) failed executing request.urlopen(..): " + str(e))
 ",
         },
-        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Description": "AWS CloudFormation handler for "Custom::S3BucketNotifications" resources (@aws-cdk/aws-s3)",
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
@@ -476,29 +476,29 @@ import json
 import logging
 import urllib.request
 
-s3 = boto3.client(\\"s3\\")
+s3 = boto3.client("s3")
 
 EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
-CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+CONFIGURATION_TYPES = ["TopicConfigurations", "QueueConfigurations", "LambdaFunctionConfigurations"]
 
 def handler(event: dict, context):
-  response_status = \\"SUCCESS\\"
-  error_message = \\"\\"
+  response_status = "SUCCESS"
+  error_message = ""
   try:
-    props = event[\\"ResourceProperties\\"]
-    notification_configuration = props[\\"NotificationConfiguration\\"]
+    props = event["ResourceProperties"]
+    notification_configuration = props["NotificationConfiguration"]
     managed = props.get('Managed', 'true').lower() == 'true'
     stack_id = event['StackId']
-    old = event.get(\\"OldResourceProperties\\", {}).get(\\"NotificationConfiguration\\", {})
+    old = event.get("OldResourceProperties", {}).get("NotificationConfiguration", {})
     if managed:
-      config = handle_managed(event[\\"RequestType\\"], notification_configuration)
+      config = handle_managed(event["RequestType"], notification_configuration)
     else:
-      config = handle_unmanaged(props[\\"BucketName\\"], stack_id, event[\\"RequestType\\"], notification_configuration, old)
-    s3.put_bucket_notification_configuration(Bucket=props[\\"BucketName\\"], NotificationConfiguration=config)
+      config = handle_unmanaged(props["BucketName"], stack_id, event["RequestType"], notification_configuration, old)
+    s3.put_bucket_notification_configuration(Bucket=props["BucketName"], NotificationConfiguration=config)
   except Exception as e:
-    logging.exception(\\"Failed to put bucket notification configuration\\")
-    response_status = \\"FAILED\\"
-    error_message = f\\"Error: {str(e)}. \\"
+    logging.exception("Failed to put bucket notification configuration")
+    response_status = "FAILED"
+    error_message = f"Error: {str(e)}. "
   finally:
     submit_response(event, context, response_status, error_message)
 
@@ -509,7 +509,7 @@ def handle_managed(request_type, notification_configuration):
 
 def handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):
   def with_id(n):
-    n['Id'] = f\\"{stack_id}-{hash(json.dumps(n, sort_keys=True))}\\"
+    n['Id'] = f"{stack_id}-{hash(json.dumps(n, sort_keys=True))}"
     return n
 
   external_notifications = {}
@@ -543,26 +543,26 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration,
 def submit_response(event: dict, context, response_status: str, error_message: str):
   response_body = json.dumps(
     {
-      \\"Status\\": response_status,
-      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
-      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
-      \\"StackId\\": event[\\"StackId\\"],
-      \\"RequestId\\": event[\\"RequestId\\"],
-      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
-      \\"NoEcho\\": False,
+      "Status": response_status,
+      "Reason": f"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}",
+      "PhysicalResourceId": event.get("PhysicalResourceId") or event["LogicalResourceId"],
+      "StackId": event["StackId"],
+      "RequestId": event["RequestId"],
+      "LogicalResourceId": event["LogicalResourceId"],
+      "NoEcho": False,
     }
-  ).encode(\\"utf-8\\")
-  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  ).encode("utf-8")
+  headers = {"content-type": "", "content-length": str(len(response_body))}
   try:
-    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    req = urllib.request.Request(url=event["ResponseURL"], headers=headers, data=response_body, method="PUT")
     with urllib.request.urlopen(req) as response:
-      print(response.read().decode(\\"utf-8\\"))
-    print(\\"Status code: \\" + response.reason)
+      print(response.read().decode("utf-8"))
+    print("Status code: " + response.reason)
   except Exception as e:
-      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+      print("send(..) failed executing request.urlopen(..): " + str(e))
 ",
         },
-        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Description": "AWS CloudFormation handler for "Custom::S3BucketNotifications" resources (@aws-cdk/aws-s3)",
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
@@ -833,29 +833,29 @@ import json
 import logging
 import urllib.request
 
-s3 = boto3.client(\\"s3\\")
+s3 = boto3.client("s3")
 
 EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
-CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+CONFIGURATION_TYPES = ["TopicConfigurations", "QueueConfigurations", "LambdaFunctionConfigurations"]
 
 def handler(event: dict, context):
-  response_status = \\"SUCCESS\\"
-  error_message = \\"\\"
+  response_status = "SUCCESS"
+  error_message = ""
   try:
-    props = event[\\"ResourceProperties\\"]
-    notification_configuration = props[\\"NotificationConfiguration\\"]
+    props = event["ResourceProperties"]
+    notification_configuration = props["NotificationConfiguration"]
     managed = props.get('Managed', 'true').lower() == 'true'
     stack_id = event['StackId']
-    old = event.get(\\"OldResourceProperties\\", {}).get(\\"NotificationConfiguration\\", {})
+    old = event.get("OldResourceProperties", {}).get("NotificationConfiguration", {})
     if managed:
-      config = handle_managed(event[\\"RequestType\\"], notification_configuration)
+      config = handle_managed(event["RequestType"], notification_configuration)
     else:
-      config = handle_unmanaged(props[\\"BucketName\\"], stack_id, event[\\"RequestType\\"], notification_configuration, old)
-    s3.put_bucket_notification_configuration(Bucket=props[\\"BucketName\\"], NotificationConfiguration=config)
+      config = handle_unmanaged(props["BucketName"], stack_id, event["RequestType"], notification_configuration, old)
+    s3.put_bucket_notification_configuration(Bucket=props["BucketName"], NotificationConfiguration=config)
   except Exception as e:
-    logging.exception(\\"Failed to put bucket notification configuration\\")
-    response_status = \\"FAILED\\"
-    error_message = f\\"Error: {str(e)}. \\"
+    logging.exception("Failed to put bucket notification configuration")
+    response_status = "FAILED"
+    error_message = f"Error: {str(e)}. "
   finally:
     submit_response(event, context, response_status, error_message)
 
@@ -866,7 +866,7 @@ def handle_managed(request_type, notification_configuration):
 
 def handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):
   def with_id(n):
-    n['Id'] = f\\"{stack_id}-{hash(json.dumps(n, sort_keys=True))}\\"
+    n['Id'] = f"{stack_id}-{hash(json.dumps(n, sort_keys=True))}"
     return n
 
   external_notifications = {}
@@ -900,26 +900,26 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration,
 def submit_response(event: dict, context, response_status: str, error_message: str):
   response_body = json.dumps(
     {
-      \\"Status\\": response_status,
-      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
-      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
-      \\"StackId\\": event[\\"StackId\\"],
-      \\"RequestId\\": event[\\"RequestId\\"],
-      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
-      \\"NoEcho\\": False,
+      "Status": response_status,
+      "Reason": f"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}",
+      "PhysicalResourceId": event.get("PhysicalResourceId") or event["LogicalResourceId"],
+      "StackId": event["StackId"],
+      "RequestId": event["RequestId"],
+      "LogicalResourceId": event["LogicalResourceId"],
+      "NoEcho": False,
     }
-  ).encode(\\"utf-8\\")
-  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  ).encode("utf-8")
+  headers = {"content-type": "", "content-length": str(len(response_body))}
   try:
-    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    req = urllib.request.Request(url=event["ResponseURL"], headers=headers, data=response_body, method="PUT")
     with urllib.request.urlopen(req) as response:
-      print(response.read().decode(\\"utf-8\\"))
-    print(\\"Status code: \\" + response.reason)
+      print(response.read().decode("utf-8"))
+    print("Status code: " + response.reason)
   except Exception as e:
-      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+      print("send(..) failed executing request.urlopen(..): " + str(e))
 ",
         },
-        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Description": "AWS CloudFormation handler for "Custom::S3BucketNotifications" resources (@aws-cdk/aws-s3)",
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
@@ -1410,29 +1410,29 @@ import json
 import logging
 import urllib.request
 
-s3 = boto3.client(\\"s3\\")
+s3 = boto3.client("s3")
 
 EVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'
-CONFIGURATION_TYPES = [\\"TopicConfigurations\\", \\"QueueConfigurations\\", \\"LambdaFunctionConfigurations\\"]
+CONFIGURATION_TYPES = ["TopicConfigurations", "QueueConfigurations", "LambdaFunctionConfigurations"]
 
 def handler(event: dict, context):
-  response_status = \\"SUCCESS\\"
-  error_message = \\"\\"
+  response_status = "SUCCESS"
+  error_message = ""
   try:
-    props = event[\\"ResourceProperties\\"]
-    notification_configuration = props[\\"NotificationConfiguration\\"]
+    props = event["ResourceProperties"]
+    notification_configuration = props["NotificationConfiguration"]
     managed = props.get('Managed', 'true').lower() == 'true'
     stack_id = event['StackId']
-    old = event.get(\\"OldResourceProperties\\", {}).get(\\"NotificationConfiguration\\", {})
+    old = event.get("OldResourceProperties", {}).get("NotificationConfiguration", {})
     if managed:
-      config = handle_managed(event[\\"RequestType\\"], notification_configuration)
+      config = handle_managed(event["RequestType"], notification_configuration)
     else:
-      config = handle_unmanaged(props[\\"BucketName\\"], stack_id, event[\\"RequestType\\"], notification_configuration, old)
-    s3.put_bucket_notification_configuration(Bucket=props[\\"BucketName\\"], NotificationConfiguration=config)
+      config = handle_unmanaged(props["BucketName"], stack_id, event["RequestType"], notification_configuration, old)
+    s3.put_bucket_notification_configuration(Bucket=props["BucketName"], NotificationConfiguration=config)
   except Exception as e:
-    logging.exception(\\"Failed to put bucket notification configuration\\")
-    response_status = \\"FAILED\\"
-    error_message = f\\"Error: {str(e)}. \\"
+    logging.exception("Failed to put bucket notification configuration")
+    response_status = "FAILED"
+    error_message = f"Error: {str(e)}. "
   finally:
     submit_response(event, context, response_status, error_message)
 
@@ -1443,7 +1443,7 @@ def handle_managed(request_type, notification_configuration):
 
 def handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):
   def with_id(n):
-    n['Id'] = f\\"{stack_id}-{hash(json.dumps(n, sort_keys=True))}\\"
+    n['Id'] = f"{stack_id}-{hash(json.dumps(n, sort_keys=True))}"
     return n
 
   external_notifications = {}
@@ -1477,26 +1477,26 @@ def handle_unmanaged(bucket, stack_id, request_type, notification_configuration,
 def submit_response(event: dict, context, response_status: str, error_message: str):
   response_body = json.dumps(
     {
-      \\"Status\\": response_status,
-      \\"Reason\\": f\\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\\",
-      \\"PhysicalResourceId\\": event.get(\\"PhysicalResourceId\\") or event[\\"LogicalResourceId\\"],
-      \\"StackId\\": event[\\"StackId\\"],
-      \\"RequestId\\": event[\\"RequestId\\"],
-      \\"LogicalResourceId\\": event[\\"LogicalResourceId\\"],
-      \\"NoEcho\\": False,
+      "Status": response_status,
+      "Reason": f"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}",
+      "PhysicalResourceId": event.get("PhysicalResourceId") or event["LogicalResourceId"],
+      "StackId": event["StackId"],
+      "RequestId": event["RequestId"],
+      "LogicalResourceId": event["LogicalResourceId"],
+      "NoEcho": False,
     }
-  ).encode(\\"utf-8\\")
-  headers = {\\"content-type\\": \\"\\", \\"content-length\\": str(len(response_body))}
+  ).encode("utf-8")
+  headers = {"content-type": "", "content-length": str(len(response_body))}
   try:
-    req = urllib.request.Request(url=event[\\"ResponseURL\\"], headers=headers, data=response_body, method=\\"PUT\\")
+    req = urllib.request.Request(url=event["ResponseURL"], headers=headers, data=response_body, method="PUT")
     with urllib.request.urlopen(req) as response:
-      print(response.read().decode(\\"utf-8\\"))
-    print(\\"Status code: \\" + response.reason)
+      print(response.read().decode("utf-8"))
+    print("Status code: " + response.reason)
   except Exception as e:
-      print(\\"send(..) failed executing request.urlopen(..): \\" + str(e))
+      print("send(..) failed executing request.urlopen(..): " + str(e))
 ",
         },
-        "Description": "AWS CloudFormation handler for \\"Custom::S3BucketNotifications\\" resources (@aws-cdk/aws-s3)",
+        "Description": "AWS CloudFormation handler for "Custom::S3BucketNotifications" resources (@aws-cdk/aws-s3)",
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
