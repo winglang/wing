@@ -235,6 +235,9 @@ class $Root extends $stdlib.std.Resource {
     const punnedJson1 = ({"numVar": numVar, "strVar": strVar});
     $helpers.assert($helpers.eq($helpers.lookup(punnedJson1, "numVar"), 1), "punnedJson1[\"numVar\"] == 1");
     $helpers.assert($helpers.eq($helpers.lookup(punnedJson1, "strVar"), "s"), "punnedJson1[\"strVar\"] == \"s\"");
+    const punnedMutJson1 = ({"numVar": numVar});
+    ((obj, key, value) => { obj[key] = value; })(punnedMutJson1, "numVar", (((arg) => { if (typeof arg !== "number") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a number")}; return JSON.parse(JSON.stringify(arg)) })($helpers.lookup(punnedMutJson1, "numVar")) + 1));
+    $helpers.assert($helpers.eq($helpers.lookup(punnedMutJson1, "numVar"), 2), "punnedMutJson1[\"numVar\"] == 2");
     const structToPunFromJson = ({"numVar": numVar, "strVar": strVar});
     $helpers.assert($helpers.eq(structToPunFromJson.numVar, 1), "structToPunFromJson.numVar == 1");
     $helpers.assert($helpers.eq(structToPunFromJson.strVar, "s"), "structToPunFromJson.strVar == \"s\"");
