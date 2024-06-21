@@ -2510,7 +2510,7 @@ impl<'s> Parser<'s> {
 				Expr::new(ExprKind::Reference(Reference::Identifier(key.clone())), key.span())
 			};
 			if fields.contains_key(&key) {
-				self.add_error(format!("Duplicate key {} in map literal", key), &key_node);
+				self.add_error(format!("Duplicate key {} in json object literal", key), &key_node);
 			} else {
 				fields.insert(key, value);
 			}
