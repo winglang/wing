@@ -3011,11 +3011,18 @@ exports[`json.test.w 1`] = `
    |                          ^
 
 
-error: Duplicate key numField in map literal
+error: Duplicate key numField in json object literal
     --> ../../../examples/tests/invalid/json.test.w:132:12
     |
 132 | {numField, numField};
     |            ^^^^^^^^
+
+
+error: Duplicate key numField in json object literal
+    --> ../../../examples/tests/invalid/json.test.w:133:15
+    |
+133 | {numField: 5, numField};
+    |               ^^^^^^^^
 
 
 error: Expected type to be "num", but got "str" instead
@@ -3179,6 +3186,13 @@ error: "Bucket" is not a legal JSON value
     |
 115 | let isBucket = Json new cloud.Bucket();
     |                     ^^^^^^^^^^^^^^^^^^
+
+
+error: "Bucket" is not a legal JSON value
+    --> ../../../examples/tests/invalid/json.test.w:137:8
+    |
+137 | Json { bucket };
+    |        ^^^^^^
 
 
 
