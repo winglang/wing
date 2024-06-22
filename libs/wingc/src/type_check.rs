@@ -4678,7 +4678,7 @@ new cloud.Function(@inflight("./handler.ts"), lifts: { bucket: ["put"] });
 							if self.type_check_invalid_stmt_before_super(&ctor_body.statements[i]) {
 								self.spanned_error(
 									&ctor_body.statements[i],
-									"This command cannot be executed before calling super()".to_string(),
+									"This command cannot be executed before calling super()",
 								);
 							}
 						}
