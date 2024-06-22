@@ -1870,12 +1870,10 @@ impl<'a> JSifier<'a> {
 
 		// Check if some of the statements is the super constructor call, if not we need to add one
 		// as the first statement.
-		let mut super_called = false;
-		for s in init_statements.statements.iter() {
-			if matches!(s.kind, StmtKind::SuperConstructor { .. }) {
-				super_called = true;
-			}
-		}
+		let super_called = init_statements
+			.statements
+			.iter()
+			.any(|s| matches!(s.kind, StmtKind::SuperConstructor { .. }));
 
 		let mut body_code = CodeMaker::with_source(&class.name.span);
 
