@@ -2430,7 +2430,19 @@ impl<'s> Parser<'s> {
 						continue;
 					}
 					let field_name = self.node_symbol(&field.named_child(0).unwrap());
-					let field_value = self.build_expression(&field.named_child(1).unwrap(), phase);
+					let field_value = if let Some(field_expr_node) = field.named_child(1) {
+						self.build_expression(&field_expr_node, phase)
+					} else {
+						if let Ok(field_name) = &field_name {
+							Ok(Expr::new(
+								ExprKind::Reference(Reference::Identifier(field_name.clone())),
+								self.node_span(&field),
+							))
+						} else {
+							Err(())
+						}
+					};
+
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
 					if let (Ok(k), Ok(v)) = (field_name, field_value) {
 						if fields.contains_key(&k) {
@@ -2492,11 +2504,15 @@ impl<'s> Parser<'s> {
 				"identifier" => self.node_symbol(&key_node)?,
 				other => panic!("Unexpected map key type {} at {:?}", other, key_node),
 			};
-			let value_node = field_node.named_child(1).unwrap();
-			if fields.contains_key(&key) {
-				self.add_error(format!("Duplicate key {} in map literal", key), &key_node);
+			let value = if let Some(value_node) = field_node.named_child(1) {
+				self.build_expression(&value_node, phase)?
 			} else {
-				fields.insert(key, self.build_expression(&value_node, phase)?);
+				Expr::new(ExprKind::Reference(Reference::Identifier(key.clone())), key.span())
+			};
+			if fields.contains_key(&key) {
+				self.add_error(format!("Duplicate key {} in json object literal", key), &key_node);
+			} else {
+				fields.insert(key, value);
 			}
 		}
 		Ok(fields)
